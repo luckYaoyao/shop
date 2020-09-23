@@ -39,25 +39,30 @@
 
 ## 推荐项目
 
-JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
-
-知识付费：https://gitee.com/ZhongBangKeJi/crmeb_zzff_class
-
 公众号前端：https://gitee.com/ZhongBangKeJi/CRMEB-H5
 
 微信小程序前端：https://gitee.com/ZhongBangKeJi/CRMEB_WechatApplet
+不要再说假开源了，公众号、小程序、H5前端代码都开源着
+
+JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
+感谢大家对CRMEB的支持，为了感谢java开发者对CRMEB的支持，特别推出CRMEB java版
+
+知识付费：https://gitee.com/ZhongBangKeJi/crmeb_zzff_class
+CRMEB知识付费系统是基于ThinkPhp5.0+Vue开发的一套新零售直播/点播知识付费系统，CRMEB系统就是集分销推广关系管理+营销+直播的知识类电商系统，能够快速积累客户、会员数据分析、智能转化客户、 有效提高销售、吸引流量、网络营销、品牌推广的一款应用，且更适合企业二次开发；
+
+form-builder : https://github.com/xaboy/form-builder
+tp PHP表单生成器，快速生成现代化的form表单。包含复选框、单选框、输入框、下拉选择框等元素以及,省市区三级联动,时间选择,日期选择,颜色选择,文件/图片上传等功能。
 
 
-##  前后台演示
+##  系统演示
+
 ![前端演示](/readme/images/演示二维码.jpg)
-
-##   :fire:  演示站后台:[<a href='http://demo32.crmeb.net' target="_blank"> 查看 </a>]       
-<a href='http://demo32.crmeb.net/admin' target="_blank">http://demo32.crmeb.net/admin</a>  账号：demo  密码：crmeb.com
-
+      
 ## 演示小程序：![开源演示二维码](/readme/images/开源演示二维码.jpg)
 
+http://demo32.crmeb.net/admin  账号：demo  密码：crmeb.com
 
-## CRMEB推荐阿里云服务器配置
+## 推荐服务器配置
 
 阿里云领取2000元代金劵：[<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z">https://www.aliyun.com</a>]
  
@@ -170,13 +175,6 @@ JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
    :satisfied: 微信扫码联系客服，发送“体验”，获取商业版源码免费体验，赶紧来体验吧！ :wink: 
 
 官方网站：http://www.crmeb.com
-
-##  系统组件开源项目
-
- form-builder
-
-tp5 PHP表单生成器，快速生成现代化的form表单。包含复选框、单选框、输入框、下拉选择框等元素以及,省市区三级联动,时间选择,日期选择,颜色选择,文件/图片上传等功能。
-form-builder : https://github.com/xaboy/form-builder
 
 ## 参与开发
 
