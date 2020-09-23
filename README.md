@@ -26,16 +26,41 @@
 
     码云开源项目php语言排名第一的开源GVP项目，感谢码云提供的平台！
 
-   CRMEB系统就是集客户关系管理+营销电商系统，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销等功能，有着详细文档，十几个开发交流群，专业售后技术团队，让您二开无忧。
+   CRMEB系统就是集客户关系管理+营销电商系统，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销等功能。
+
+   系统采用TP6+Vue+Layui+Mysql核心技术，系统功能介绍[<a href="http://help.crmeb.net/crmeb_30/1345181">查看</a>]，有着详细文档（文档地址：http://help.crmeb.net/crmeb_30/），十几个开发交流群，专业售后技术团队，让您二开无忧。
 <p align="center">    
     <b>CRMEB赋能开发者，加速企业数字化。</b>
 <br/>
 
-QQ群
-CRMEB微信开发群（116279623）2000人已满 CRMEB微信开发3群（69741389）2000人已满｜CRMEB微信开发4群（710729856）2000人已满｜CRMEB微信开发6群（341864990）2000人已满｜CRMEB微信开发10群（862316758）3000人群可加｜ CRMEB微信开发11群（824195682）500人群可加 ｜CRMEB官方二开交流群（943955364）2000人群可加
+## QQ群
 
 会员群全部加满，请加客服微信，会员专属微信群
-CRMEB会员群（156535570）已满｜CRMEB会员2群（68808391）已满｜CRMEB会员5群（609480511）已满｜CRMEB会员8群（1030955182）已满｜CRMEB会员9群（633569634）已满
+
+CRMEB会员群（156535570）已满
+
+CRMEB会员2群（68808391）已满
+
+CRMEB会员5群（609480511）已满
+
+CRMEB会员8群（1030955182）已满
+
+CRMEB会员9群（633569634）已满
+
+CRMEB微信开发群（116279623）2000人已满 
+
+CRMEB微信开发3群（69741389）2000人已满
+
+CRMEB微信开发4群（710729856）2000人已满
+
+CRMEB微信开发6群（341864990）2000人已满
+
+CRMEB微信开发10群（862316758）3000人群可加
+
+CRMEB微信开发11群（824195682）500人群可加 
+
+CRMEB官方二开交流群（943955364）2000人群可加
+
 
 ## 导航栏目
 
@@ -171,16 +196,18 @@ http://demo32.crmeb.net/admin  账号：demo  密码：crmeb.com
 
 ## 商业版
 
-商业版演示站后台:[<a href='http://demo.crmeb.net' target="_blank"> 查看 </a>]       
-<a href='http://demo.crmeb.net/admin' target="_blank">http://demo.crmeb.net/admin</a>  账号：demo  密码：crmeb.com
-
- 商业高级版仅需598[<a href='https://s.click.taobao.com/W7hVkLw' target="_blank"> 去支持一下 </a>]
-
-[![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/114739_a48f5bfd_892944.gif "tasheng jo(1).gif")](https://s.click.taobao.com/W7hVkLw)
-
 商业版与 :tw-1f19a: 开源版差异
 
 ![系统功能](/readme/images/商业版对比.jpg)
+
+扫描公众号二维码，回复“4.0体验”免费下载商业版源码
+
+商业版演示站后台: http://demo.crmeb.net/admin  账号：demo  密码：crmeb.com
+
+### 仅需598
+
+[<a href='https://s.click.taobao.com/W7hVkLw' target="_blank"> 商业版去支持一下 </a>]
+
 
 ## 联系我们
 
