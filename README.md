@@ -48,11 +48,6 @@ JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
 微信小程序前端：https://gitee.com/ZhongBangKeJi/CRMEB_WechatApplet
 
 
-## 联系我们
-
-![有问题？联系CRMEB官方客服](https://images.gitee.com/uploads/images/2020/0828/111207_87f408c4_1491977.jpeg "微信图片_20200828111018.jpg")
-   :satisfied: 微信扫码联系客服，发送“体验”，获取商业版源码免费体验，赶紧来体验吧！ :wink: 
-
 ##  前后台演示
 ![前端演示](/readme/images/演示二维码.jpg)
 
@@ -61,8 +56,6 @@ JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
 
 ## 演示小程序：![开源演示二维码](/readme/images/开源演示二维码.jpg)
 
-##   :fire:  4.0演示站后台:[<a href='http://demo.crmeb.net' target="_blank"> 查看 </a>]       
-<a href='http://demo.crmeb.net/admin' target="_blank">http://demo.crmeb.net/admin</a>  账号：demo  密码：crmeb.com
 
 ## CRMEB推荐阿里云服务器配置
 
@@ -112,18 +105,6 @@ JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
    </tr></table>
  
 
-##   :tw-1f50a: 开源版使用须知
-1.允许用于个人学习、毕业设计、教学案例、公益事业;
-
-2.如果商用必须保留版权信息，请自觉遵守;
-
-3.禁止将本项目的代码和资源进行任何形式的出售，产生的一切任何后果责任由侵权者自负。
-
-## 商业版
- 商业高级版仅需598[<a href='https://s.click.taobao.com/W7hVkLw' target="_blank"> 去支持一下 </a>]
-
-[![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/114739_a48f5bfd_892944.gif "tasheng jo(1).gif")](https://s.click.taobao.com/W7hVkLw)
-
 ## 技术亮点
 ~~~
     1.后台应用form-builder PHP快速生成现代化表单；
@@ -168,9 +149,25 @@ JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
 ## 获得荣誉
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0805/111208_eb4fe823_892944.jpeg "WechatIMG2434.jpeg")
 
-## 商业版与 :tw-1f19a: 开源版差异
+
+
+## 商业版
+
+商业版演示站后台:[<a href='http://demo.crmeb.net' target="_blank"> 查看 </a>]       
+<a href='http://demo.crmeb.net/admin' target="_blank">http://demo.crmeb.net/admin</a>  账号：demo  密码：crmeb.com
+
+ 商业高级版仅需598[<a href='https://s.click.taobao.com/W7hVkLw' target="_blank"> 去支持一下 </a>]
+
+[![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/114739_a48f5bfd_892944.gif "tasheng jo(1).gif")](https://s.click.taobao.com/W7hVkLw)
+
+商业版与 :tw-1f19a: 开源版差异
 
 ![系统功能](/readme/images/商业版对比.jpg)
+
+## 联系我们
+
+![有问题？联系CRMEB官方客服](https://images.gitee.com/uploads/images/2020/0828/111207_87f408c4_1491977.jpeg "微信图片_20200828111018.jpg")
+   :satisfied: 微信扫码联系客服，发送“体验”，获取商业版源码免费体验，赶紧来体验吧！ :wink: 
 
 官方网站：http://www.crmeb.com
 
@@ -187,6 +184,14 @@ form-builder : https://github.com/xaboy/form-builder
 
 
 ## 版权信息
+
+开源版使用须知
+
+1.允许用于个人学习、毕业设计、教学案例、公益事业;
+
+2.如果商用必须保留版权信息，请自觉遵守;
+
+3.禁止将本项目的代码和资源进行任何形式的出售，产生的一切任何后果责任由侵权者自负。
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
