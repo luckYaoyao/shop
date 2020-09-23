@@ -31,7 +31,11 @@
     <b>CRMEB赋能开发者，加速企业数字化。</b>
 <br/>
 
-    
+QQ群
+CRMEB微信开发群（116279623）2000人已满 CRMEB微信开发3群（69741389）2000人已满｜CRMEB微信开发4群（710729856）2000人已满｜CRMEB微信开发6群（341864990）2000人已满｜CRMEB微信开发10群（862316758）3000人群可加｜ CRMEB微信开发11群（824195682）2000人群可加 ｜CRMEB官方二开交流群（943955364）2000人群可加
+
+会员群全部加满，请加客服微信，会员专属微信群
+CRMEB会员群（156535570）已满｜CRMEB会员2群（68808391）已满｜CRMEB会员5群（609480511）已满｜CRMEB会员8群（1030955182）已满｜CRMEB会员9群（633569634）已满
 
 ## 导航栏目
 
@@ -42,7 +46,7 @@
  | [官网地址](https://www.crmeb.com)
  | [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
  | [服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
- | [授权价格](https://s.click.taobao.com/W7hVkLw)
+ | [授权价格](http://crmeb.com/web/index/price.html)
 - - -
 
 ## 相关项目
