@@ -28,7 +28,7 @@
 
    CRMEB系统就是集客户关系管理+营销电商系统，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销等功能，有着详细文档，十几个开发交流群，专业售后技术团队，让您二开无忧。
 <p align="center">    
-    <b>我们的使命是：“用互联网帮助企业做大做强坐久”。CRMEB赋能开发者，加速企业数字化。</b>
+    <b>CRMEB赋能开发者，加速企业数字化。</b>
 <br/>
 
     
@@ -66,11 +66,11 @@ tp PHP表单生成器，快速生成现代化的form表单。包含复选框、�
 
 ![前端演示](/readme/images/演示二维码.jpg)
       
-## 演示小程序：![开源演示二维码](/readme/images/开源演示二维码.jpg)
+演示小程序：![开源演示二维码](/readme/images/开源演示二维码.jpg)
 
 http://demo32.crmeb.net/admin  账号：demo  密码：crmeb.com
 
-## 推荐服务器配置
+## 推荐服务器
 
 阿里云领取2000元代金劵：[<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z">https://www.aliyun.com</a>]
  
