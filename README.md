@@ -45,11 +45,12 @@
  | [授权价格](https://s.click.taobao.com/W7hVkLw)
 - - -
 
-## 推荐项目
+## 相关项目
 
 公众号前端：https://gitee.com/ZhongBangKeJi/CRMEB-H5
 
 微信小程序前端：https://gitee.com/ZhongBangKeJi/CRMEB_WechatApplet
+
 不要再说假开源了，公众号、小程序、H5前端代码都开源着
 
 JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
@@ -188,9 +189,6 @@ http://demo32.crmeb.net/admin  账号：demo  密码：crmeb.com
 
 请提交 [CRMEB](https://gitee.com/ZhongBangKeJi/CRMEB/pulls)。
 
-
-## 版权信息
-
 开源版使用须知
 
 1.允许用于个人学习、毕业设计、教学案例、公益事业;
@@ -198,6 +196,9 @@ http://demo32.crmeb.net/admin  账号：demo  密码：crmeb.com
 2.如果商用必须保留版权信息，请自觉遵守;
 
 3.禁止将本项目的代码和资源进行任何形式的出售，产生的一切任何后果责任由侵权者自负。
+
+## 版权信息
+
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
