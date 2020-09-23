@@ -27,7 +27,7 @@
 
    CRMEB系统就是集客户关系管理+营销电商系统，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销等功能。
 
-   系统采用TP6+Vue+Layui+Mysql核心技术，系统功能介绍[<a href="http://help.crmeb.net/crmeb_30/1345181">查看</a>]，有着详细文档（文档地址：http://help.crmeb.net/crmeb_30/），十几个开发交流群，专业售后技术团队，让您二开无忧。
+   系统采用TP6+Vue+Layui+Mysql核心技术，系统功能介绍[<a href="http://help.crmeb.net/crmeb_30/1345181">查看</a>]，有着详细文档地址：http://help.crmeb.net/crmeb_30/，十几个开发交流群，专业售后技术团队，让您二开无忧。
 <p align="center">    
     <b>CRMEB赋能开发者，加速企业数字化。</b>
 <br/>
@@ -207,11 +207,9 @@ http://demo32.crmeb.net/admin  账号：demo  密码：crmeb.com
 商业版演示站后台: http://demo.crmeb.net/admin  账号：demo  密码：crmeb.com
 
 
-<p align="center">    
+<b>去了解商业版 <a href='https://s.click.taobao.com/W7hVkLw' target="_blank"> 支持一下 </a></b>
 
-    <h2>去了解商业版 <a href='https://s.click.taobao.com/W7hVkLw' target="_blank"> 支持一下 </a></h2>
 
-</p>
 
 
 
