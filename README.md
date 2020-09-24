@@ -22,10 +22,47 @@
 </p>
 
 ## 项目介绍
-   CRMEB商城系统是基于ThinkPhp6.0+Vue开发的一套新零售移动电商系统，CRMEB系统就是集客户关系管理+营销电商系统，能够快速积累客户、会员数据分析、智能转化客户、
-   有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销等功能，更适合企业二次开发；
 
-### 导航栏目
+    码云开源项目php语言排名第一的开源GVP项目，感谢码云提供的平台！
+
+   CRMEB系统就是集客户关系管理+营销电商系统，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销等功能。
+
+   系统采用TP6+Vue+Layui+Mysql核心技术，系统功能介绍[<a href="http://help.crmeb.net/crmeb_30/1345181">查看</a>]，十几个开发交流群，专业售后技术团队，让您二开无忧。
+    有着详细文档地址：http://help.crmeb.net/crmeb_30
+<p align="center">    
+    <b>CRMEB赋能开发者，加速企业数字化。</b>
+<br/>
+
+## QQ群
+
+会员群全部加满，请加客服微信，会员专属微信群
+
+CRMEB会员群（156535570）已满
+
+CRMEB会员2群（68808391）已满
+
+CRMEB会员5群（609480511）已满
+
+CRMEB会员8群（1030955182）已满
+
+CRMEB会员9群（633569634）已满
+
+CRMEB微信开发群（116279623）2000人已满 
+
+CRMEB微信开发3群（69741389）2000人已满
+
+CRMEB微信开发4群（710729856）2000人已满
+
+CRMEB微信开发6群（341864990）2000人已满
+
+CRMEB微信开发10群（862316758）3000人群可加
+
+CRMEB微信开发11群（824195682）500人群可加 
+
+CRMEB官方二开交流群（943955364）2000人群可加
+
+
+## 导航栏目
 
 [前端下载](/readme/前端下载地址.md)
  | [使用手册](https://help.crmeb.net)
@@ -34,37 +71,36 @@
  | [官网地址](https://www.crmeb.com)
  | [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
  | [服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
- | [授权价格](https://s.click.taobao.com/W7hVkLw)
+ | [授权价格](http://crmeb.com/web/index/price.html)
 - - -
 
-### 推荐项目
-
-JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
-
-知识付费：https://gitee.com/ZhongBangKeJi/crmeb_zzff_class
+## 相关项目
 
 公众号前端：https://gitee.com/ZhongBangKeJi/CRMEB-H5
 
 微信小程序前端：https://gitee.com/ZhongBangKeJi/CRMEB_WechatApplet
 
+不要再说假开源了，公众号、小程序、H5前端代码都开源着
 
-### 联系我们
+JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
+感谢大家对CRMEB的支持，为了感谢java开发者对CRMEB的支持，特别推出CRMEB java版
 
-![有问题？联系CRMEB官方客服](https://images.gitee.com/uploads/images/2020/0828/111207_87f408c4_1491977.jpeg "微信图片_20200828111018.jpg")
-####   :satisfied: 微信扫码联系客服，发送“体验”，获取商业版源码免费体验，赶紧来体验吧！ :wink: 
+知识付费：https://gitee.com/ZhongBangKeJi/crmeb_zzff_class
+CRMEB知识付费系统是基于ThinkPhp5.0+Vue开发的一套新零售直播/点播知识付费系统，CRMEB系统就是集分销推广关系管理+营销+直播的知识类电商系统，能够快速积累客户、会员数据分析、智能转化客户、 有效提高销售、吸引流量、网络营销、品牌推广的一款应用，且更适合企业二次开发；
 
-###  前后台演示
+form-builder : https://github.com/xaboy/form-builder
+tp PHP表单生成器，快速生成现代化的form表单。包含复选框、单选框、输入框、下拉选择框等元素以及,省市区三级联动,时间选择,日期选择,颜色选择,文件/图片上传等功能。
+
+
+##  系统演示
+
 ![前端演示](/readme/images/演示二维码.jpg)
+      
+演示小程序：![开源演示二维码](/readme/images/开源演示二维码.jpg)
 
-####   :fire:  演示站后台:[<a href='http://demo32.crmeb.net' target="_blank"> 查看 </a>]       
-<a href='http://demo32.crmeb.net/admin' target="_blank">http://demo32.crmeb.net/admin</a>  账号：demo  密码：crmeb.com
+http://demo32.crmeb.net/admin  账号：demo  密码：crmeb.com
 
-### 演示小程序：![开源演示二维码](/readme/images/开源演示二维码.jpg)
-
-####   :fire:  4.0演示站后台:[<a href='http://demo.crmeb.net' target="_blank"> 查看 </a>]       
-<a href='http://demo.crmeb.net/admin' target="_blank">http://demo.crmeb.net/admin</a>  账号：demo  密码：crmeb.com
-
-### CRMEB推荐阿里云服务器配置
+## 推荐服务器
 
 阿里云领取2000元代金劵：[<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z">https://www.aliyun.com</a>]
  
@@ -112,18 +148,7 @@ JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
    </tr></table>
  
 
-###   :tw-1f50a: 开源版使用须知
-1.允许用于个人学习、毕业设计、教学案例、公益事业;
-
-2.如果商用必须保留版权信息，请自觉遵守;
-
-3.禁止将本项目的代码和资源进行任何形式的出售，产生的一切任何后果责任由侵权者自负。
-
-### 商业高级版仅需598[<a href='https://s.click.taobao.com/W7hVkLw' target="_blank"> 去支持一下 </a>]
-
-[![输入图片说明](https://images.gitee.com/uploads/images/2019/0122/114739_a48f5bfd_892944.gif "tasheng jo(1).gif")](https://s.click.taobao.com/W7hVkLw)
-
-### 技术亮点
+## 技术亮点
 ~~~
     1.后台应用form-builder PHP快速生成现代化表单；
     2.前端以Vue + RequireJS模块化开发；
@@ -146,10 +171,10 @@ JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
     19.支持队列降低流量高峰，解除耦合，高可用;
     16.一键安装自动检查系统环境一键安装；
 ~~~
-### 系统功能
+## 系统功能
 ![系统功能](/readme/images/系统功能.jpg)
 
-### 页面展示
+## 页面展示
 ![展示图](/readme/images/展示图_01.jpg "展示图.png")
 ![展示图](/readme/images/展示图_02.jpg "展示图.png")
 ![展示图](/readme/images/展示图_03.jpg "展示图.png")
@@ -164,28 +189,52 @@ JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
 ![后台数据备份](/readme/images/后台数据备份.png "后台数据备份.png")
 ![后台文件管理](/readme/images/后台文件管理.png "后台文件管理.png")
 
-### 获得荣誉
+## 获得荣誉
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0805/111208_eb4fe823_892944.jpeg "WechatIMG2434.jpeg")
 
-### 商业版与 :tw-1f19a: 开源版差异
+
+
+## 商业版
+
+<p align="center">    
+    <b>商业版与开源版区别</b>
+</p>
+
 
 ![系统功能](/readme/images/商业版对比.jpg)
 
+扫描公众号二维码，回复“4.0体验”免费下载商业版源码
+
+商业版演示站后台: http://demo.crmeb.net/admin  账号：demo  密码：crmeb.com
+
+
+<b>去了解商业版 <a href='https://s.click.taobao.com/W7hVkLw' target="_blank"> 支持一下 </a></b>
+
+
+
+
+
+## 联系我们
+
+![有问题？联系CRMEB官方客服](https://images.gitee.com/uploads/images/2020/0828/111207_87f408c4_1491977.jpeg "微信图片_20200828111018.jpg")
+   :satisfied: 微信扫码联系客服，发送“体验”，获取商业版源码免费体验，赶紧来体验吧！ :wink: 
+
 官方网站：http://www.crmeb.com
 
-###  系统组件开源项目
-
-#### form-builder
-
-tp5 PHP表单生成器，快速生成现代化的form表单。包含复选框、单选框、输入框、下拉选择框等元素以及,省市区三级联动,时间选择,日期选择,颜色选择,文件/图片上传等功能。
-form-builder : https://github.com/xaboy/form-builder
-
-### 参与开发
+## 参与开发
 
 请提交 [CRMEB](https://gitee.com/ZhongBangKeJi/CRMEB/pulls)。
 
+开源版使用须知
 
-### 版权信息
+1.允许用于个人学习、毕业设计、教学案例、公益事业;
+
+2.如果商用必须保留版权信息，请自觉遵守;
+
+3.禁止将本项目的代码和资源进行任何形式的出售，产生的一切任何后果责任由侵权者自负。
+
+## 版权信息
+
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
