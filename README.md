@@ -1,6 +1,6 @@
 
 <p align="center">
-<a href="http://bbs.crmeb.net/forum.php?mod=viewthread&tid=4732&page=1&extra=#pid39073" target="_blank" >
+<a href="http://bbs.crmeb.net/forum.php?mod=viewthread&tid=4864&page=1&extra=#pid42012" target="_blank" >
     <img src="https://images.gitee.com/uploads/images/2020/1103/161801_46bb022b_1491977.png" />
 </a>
 </p>
@@ -101,7 +101,7 @@ tp PHP表单生成器，快速生成现代化的form表单。包含复选框、�
 
 ![前端演示](https://images.gitee.com/uploads/images/2020/1103/161837_52d08017_1491977.png "屏幕截图.png")
 
-http://demo32.crmeb.net/admin  账号：demo  密码：crmeb.com
+开源演示站： http://demo32.crmeb.net/admin  账号：demo  密码：crmeb.com
 
 ## 推荐服务器
 
