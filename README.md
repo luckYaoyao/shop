@@ -35,7 +35,7 @@
    系统采用TP6+Vue+Layui+Mysql核心技术，系统功能介绍[<a href="http://help.crmeb.net/crmeb_30/1345181">查看</a>]，十几个开发交流群，专业售后技术团队，让您二开无忧。
     有着详细文档地址：http://help.crmeb.net/crmeb_30
 <p align="center">    
-    <b>CRMEB赋能开发者，加速企业数字化。</b>
+    <b>CRMEB赋能开发者，提速企业数字化。</b>
 <br/>
 
 ## QQ群
