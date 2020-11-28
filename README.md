@@ -219,8 +219,7 @@ tp PHP表单生成器，快速生成现代化的form表单。包含复选框、�
 
 
 ## 联系我们
-
-![有问题？联系CRMEB官方客服]![输入图片说明](https://images.gitee.com/uploads/images/2020/1103/190941_dd6acebb_892944.jpeg "客服二维码.jpg")
+![有问题？联系CRMEB官方客服](https://images.gitee.com/uploads/images/2020/1128/154416_441805ca_1491977.png "屏幕截图.png")
    :satisfied: 微信扫码联系客服，发送“体验”，获取商业版源码免费体验，赶紧来体验吧！ :wink: 
 
 官方网站：http://www.crmeb.com
