@@ -1,7 +1,4 @@
 <p align="center">
-    <img src="https://images.gitee.com/uploads/images/2020/1202/153909_19b8ab89_1491977.png" />
-</p>
-<p align="center">
     <img src="https://images.gitee.com/uploads/images/2018/1214/151026_2299df23_892944.gif" />
 </p>
 <h1 align="center"> CRMEB客户管理+电商营销系统</h1> 
@@ -184,7 +181,9 @@ tp PHP表单生成器，快速生成现代化的form表单。包含复选框、�
 
 ## 获得荣誉
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0805/111208_eb4fe823_892944.jpeg "WechatIMG2434.jpeg")
-
+<p align="center">
+    <img src="https://images.gitee.com/uploads/images/2020/1202/153909_19b8ab89_1491977.png" />
+</p>
 
 
 ## 商业版
