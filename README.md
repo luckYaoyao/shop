@@ -28,14 +28,6 @@
 
    系统采用TP6+Vue+Layui+Mysql核心技术，系统功能介绍[<a href="http://help.crmeb.net/crmeb_30/1345181">查看</a>]，十几个开发交流群，专业售后技术团队，让您二开无忧。
     有着详细文档地址：http://help.crmeb.net/crmeb_30
-<p align="center">
-<a href="http://bbs.crmeb.net/forum.php?mod=viewthread&tid=4864&page=1&extra=#pid42012" target="_blank" >
-    <img src="https://images.gitee.com/uploads/images/2020/1103/161801_46bb022b_1491977.png" />
-</a>
-</p>
-<p align="center">    
-    <b>CRMEB赋能开发者，提速企业数字化。</b>
-<br/>
 
 ## QQ群
 
@@ -60,12 +52,6 @@ CRMEB微信开发4群（710729856）2000人已满
 CRMEB微信开发6群（341864990）2000人已满
 
 CRMEB微信开发10群（862316758）3000人群可加
-
-CRMEB微信开发11群（824195682）2000人群可加 
-
-CRMEB微信开发12群（1025263163）2000人群可加 
-
-CRMEB官方二开交流群（943955364）2000人群可加
 
 
 ## 导航栏目
