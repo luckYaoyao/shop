@@ -180,6 +180,7 @@ tp PHP表单生成器，快速生成现代化的form表单。包含复选框、�
 ![后台文件管理](/readme/images/后台文件管理.png "后台文件管理.png")
 
 ## 获得荣誉
+CSDN开源技术选型秀优秀项目：[点击查看直播](https://codechina.csdn.net/groups/xazbkj/-/lives/164)
 ![输入图片说明](https://images.gitee.com/uploads/images/2019/0805/111208_eb4fe823_892944.jpeg "WechatIMG2434.jpeg")
 <p align="center">
     <img src="https://images.gitee.com/uploads/images/2020/1202/153909_19b8ab89_1491977.png" />
