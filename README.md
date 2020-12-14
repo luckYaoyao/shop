@@ -209,7 +209,7 @@ CSDN开源技术选型秀优秀项目：[点击查看直播](https://codechina.c
 
 ## 联系我们
 ![有问题？联系CRMEB官方客服](https://images.gitee.com/uploads/images/2020/1128/154416_441805ca_1491977.png "屏幕截图.png")
-   :satisfied: 微信扫码联系客服，发送“体验”，获取商业版源码免费体验，赶紧来体验吧！ :wink: 
+ 
 
 官方网站：http://www.crmeb.com
 
