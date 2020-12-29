@@ -1,6 +1,6 @@
 <p align="center">
-    <a href="https://gitee.com/ZhongBangKeJi/CRMEB-Min">
-        <img src="https://images.gitee.com/uploads/images/2020/1228/172437_dbbaebbf_5516386.jpeg" />
+    <a href="http://github.crmeb.net/u/giteedt">
+        <img src="https://images.gitee.com/uploads/images/2020/1229/120019_5afce26f_5516386.jpeg" />
     </a>
 </p>
 <p align="center">
