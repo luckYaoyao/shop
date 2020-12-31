@@ -23,7 +23,8 @@
     </p>
 <p align="center">    
     <b>如果对您有帮助，您可以点右上角 "Star" 支持一下 谢谢！</b>
-    最新发布前后端分离版：https://gitee.com/ZhongBangKeJi/CRMEB-Min
+
+     :collision: 最新发布前后端分离版：https://gitee.com/ZhongBangKeJi/CRMEB-Min
 </p>
 
 ## 项目介绍
