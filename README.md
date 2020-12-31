@@ -22,12 +22,13 @@
     </a>
     </p>
 <p align="center">    
-    <b>如果对您有帮助，您可以点右上角 "Star" 支持一下 谢谢！</b>
-
-     :collision: 最新发布前后端分离版：https://gitee.com/ZhongBangKeJi/CRMEB-Min
+    <b>如果对您有帮助，您可以点右上角 "Star" 支持一下 谢谢！</b>  
 </p>
 
-## 项目介绍
+
+## 项目介绍  
+
+### :collision: 最新发布前后端分离版：https://gitee.com/ZhongBangKeJi/CRMEB-Min
 
     码云开源项目php语言排名第一的开源GVP项目，感谢码云提供的平台！
 
