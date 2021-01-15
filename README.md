@@ -218,7 +218,7 @@ CSDN开源技术选型秀优秀项目：[点击查看直播](https://codechina.c
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
-版权所有Copyright © 2017-2020 by CRMEB (http://www.crmeb.com)
+版权所有Copyright © 2017-2021 by CRMEB (http://www.crmeb.com)
 
 All rights reserved。
 
