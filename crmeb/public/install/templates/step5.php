@@ -34,7 +34,7 @@ $(function(){
 	$.ajax({
 	type: "POST",
 	url: "http://shop.crmeb.net/index.php/admin/server.upgrade_api/updatewebinfo",
-	data: {host:'<?php echo $host;?>',https:'<?php echo 'http://'.$host;?>',version:<?php echo json_encode($curent_version['version']);?>',ip:<?php echo json_encode($ip);?>},
+	data: {host:'<?php echo $host;?>',https:'<?php echo 'http://'.$host;?>',version:<?php echo json_encode($curent_version['version']);?>,ip:<?php echo json_encode($ip);?>},
 	dataType: 'json',
 	success: function(){}
 	});
