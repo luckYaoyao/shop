@@ -61,7 +61,7 @@ class AuthController extends SystemBasic
         if ($module === null) $module = app('http')->getName();
         if ($controller === null) $controller = $this->request->controller();
         if ($action === null) $action = $this->request->action();
-        if (!count($route)) $route = $this->request->param();
+        if (!count($route)) $route = $this->request->route();
         array_shift($route);
         if (in_array(strtolower($controller), $this->skipLogController, true)) return true;
         $nowAuthName = SystemMenus::getAuthName($action, $controller, $module, $route);
