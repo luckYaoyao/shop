@@ -8,12 +8,8 @@
 namespace app\models\store;
 
 use app\admin\model\store\StoreProductAttrValue;
-use app\admin\model\store\StoreProductAttrValue as StoreProductAttrValueModel;
-use crmeb\services\SystemConfigService;
-use crmeb\services\UtilService;
 use crmeb\traits\ModelTrait;
 use crmeb\basic\BaseModel;
-use app\models\store\StoreProduct;
 
 /**
  * TODO 拼团产品Model
@@ -188,15 +184,19 @@ class StoreCombination extends BaseModel
     public static function incCombinationStock($num, $CombinationId, $unique = '')
     {
 
-        $combination = self::where('id', $CombinationId)->field(['stock', 'sales'])->find();
+        $combination = self::where('id', $CombinationId)->field(['product_id', 'stock', 'sales', 'quota'])->find();
         if (!$combination) return true;
         if ($combination->sales > 0) $combination->sales = bcsub($combination->sales, $num, 0);
         if ($combination->sales < 0) $combination->sales = 0;
+        $res = true;
         if ($unique) {
-            $res = false !== StoreProductAttrValueModel::incProductAttrStock($CombinationId, $unique, $num, 3);
+            $res = false !== StoreProductAttrValue::incProductAttrStock($CombinationId, $unique, $num, 3);
+            $sku = StoreProductAttrValue::where('product_id', $CombinationId)->where('unique', $unique)->where('type', 3)->value('suk');
+            $res = $res && StoreProductAttrValue::where('product_id', $combination['product_id'])->where('suk', $sku)->where('type', 0)->inc('stock', $num)->dec('sales', $num)->update();
         }
         $combination->stock = bcadd($combination->stock, $num, 0);
-        $res = $res && $combination->save();
+        $combination->quota = bcadd($combination->quota, $num, 0);
+        $res = $res && $combination->save() && StoreProduct::where('id', $combination['product_id'])->inc('stock', $num)->dec('sales', $num)->update();
         return $res;
     }
 

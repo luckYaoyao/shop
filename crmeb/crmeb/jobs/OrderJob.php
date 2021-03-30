@@ -43,12 +43,6 @@ class OrderJob implements JobInterface
 
     public function doDefaultJod($data): bool
     {
-        try {
-            [$order, $formId] = $data;
-            Db::name('cache')->insert(['key'=>'test_'.rand(10,20),'result'=>json_encode($order)]);
-            event('OrderPaySuccess', [$order, $formId]);
-        } catch (\Throwable $e) {
-        }
-        return true;
+        return Db::name('cache')->insert(['key'=>'test_'.rand(10,30),'result'=>json_encode($data)]);
     }
 }

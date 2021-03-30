@@ -10,6 +10,7 @@ use crmeb\services\{
     JsonService as Json,
     UtilService as Util
 };
+use EasyWeChat\Js\Js;
 use think\facade\Route as Url;
 use app\admin\model\system\{
     SystemAttachment, SystemGroup as GroupModel, SystemGroupData as GroupDataModel
@@ -226,10 +227,21 @@ class SystemGroupData extends AuthController
     public function update($id)
     {
         $GroupData = GroupDataModel::get($id);
-        $Fields = GroupModel::getField($GroupData["gid"]);
+        $group = GroupModel::where('id', $GroupData['gid'])->find();
+        if(!$GroupData || !$group){
+            return Json::fail('请检查配置');
+        }
         $params = request()->post();
+        //秒杀
+        if($group['config_name'] == 'routine_seckill_time'){
+            if((int)($params['time'] + $params['continued']) > 24){
+                return Json::fail('请重新填写持续时间或者开始时间（时间跨度超过了一天）');
+            }
+        }
+        $Fields = json_decode( $group['fields'],true) ?? [];
+
         foreach ($params as $key => $param) {
-            foreach ($Fields['fields'] as $index => $field) {
+            foreach ($Fields as $index => $field) {
                 if ($key == $field["title"]) {
                     if (trim($param) == '')
                         return Json::fail($field["name"] . "不能为空！");

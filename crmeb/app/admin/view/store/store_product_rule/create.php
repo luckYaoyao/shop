@@ -158,20 +158,22 @@
                             </div>
                             <div class="layui-form-item rules">
                                 <label class="layui-form-label"></label>
-                                <button type="button" class="layui-btn layui-btn-primary layui-btn-sm"
-                                        v-for="(val,inx) in item.detail">
-                                    {{val}}
-                                    <i class="layui-icon layui-icon-close"
-                                       @click="deleteValue(item,inx)"></i>
-                                </button>
-                                <div class="rules rulesBox">
-                                    <div class="rules-btn-sm">
-                                        <input type="text" v-model="item.detailValue" name="title"
-                                               autocomplete="off" placeholder="请输入">
-                                    </div>
-                                    <button class="layui-btn layui-btn-sm" type="button"
-                                            @click="addDetail(item)">添加
+                                <div style="overflow: visible;text-overflow: inherit;white-space: normal;">
+                                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm"
+                                            v-for="(val,inx) in item.detail">
+                                        {{val}}
+                                        <i class="layui-icon layui-icon-close"
+                                           @click="deleteValue(item,inx)"></i>
                                     </button>
+                                    <div class="rules rulesBox">
+                                        <div class="rules-btn-sm">
+                                            <input type="text" v-model="item.detailValue" name="title"
+                                                   autocomplete="off" placeholder="请输入">
+                                        </div>
+                                        <button class="layui-btn layui-btn-sm" type="button"
+                                                @click="addDetail(item)">添加
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

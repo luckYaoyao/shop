@@ -38,6 +38,7 @@ class PublicController
      */
     public function index(Request $request)
     {
+        $filing_info = sys_config('filing_info') ?? '';
         $banner = sys_data('routine_home_banner') ?: [];//TODO 首页banner图
         $menus = sys_data('routine_home_menus') ?: [];//TODO 首页按钮
         $roll = sys_data('routine_home_roll_news') ?: [];//TODO 首页滚动新闻
@@ -71,7 +72,7 @@ class PublicController
         }
         $newGoodsBananr = sys_config('new_goods_bananr');
         $tengxun_map_key = sys_config('tengxun_map_key');
-        return app('json')->successful(compact('banner', 'menus', 'roll', 'info', 'activity', 'lovely', 'benefit', 'likeInfo', 'logoUrl', 'couponList', 'site_name', 'subscribe', 'newGoodsBananr', 'tengxun_map_key', 'explosive_money'));
+        return app('json')->successful(compact('filing_info','banner', 'menus', 'roll', 'info', 'activity', 'lovely', 'benefit', 'likeInfo', 'logoUrl', 'couponList', 'site_name', 'subscribe', 'newGoodsBananr', 'tengxun_map_key', 'explosive_money'));
     }
 
     /**

@@ -32,7 +32,7 @@
             </div>
         </div>
         <div class="logistics-info" style="background-color: inherit;">
-            <?php if(!$express || $express['status'] != 0){ ?>
+            <?php if(!$express || count($express['result']) == 0){ ?>
                 <div class="empty">
                     <img src="{__ADMIN_PATH}images/empty_address.png">
                     <p>暂无查询记录</p>
@@ -42,8 +42,8 @@
                     {volist name="express.result.list" id="vo"}
                     <li class="clearfix">
                         <div class="right-wrapper fl">
-                            <p>{$vo.status}</p>
                             <span>{$vo.time}</span>
+                            <span>{$vo.status}</span>
                         </div>
                     </li>
                     {/volist}

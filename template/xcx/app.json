@@ -61,6 +61,7 @@
     "components/address-window/index",
     "components/home/index",
     "components/write-off/index",
+    "components/price-change/index",
     "components/general-window/index"
   ],
   "subPackages": [
@@ -68,8 +69,28 @@
       "root": "pages/activity",
       "name": "activity",
       "pages": [
+        "goods_combination/index",
+        "goods_combination_details/index",
+        "goods_combination_status/index",
         "goods_seckill_details/index",
-        "goods_seckill/index"
+        "goods_seckill/index",
+        "goods_bargain_details/index",
+        "goods_bargain/index",
+        "poster-poster/index",
+        "user_goods_bargain_list/index"
+      ]
+    },
+    {
+      "root": "pages/admin",
+      "name": "admin",
+      "pages": [
+        "order_cancellation/index",
+        "order/index",
+        "order_list/index",
+        "order_details/index",
+        "order_deliver/index",
+        "order_statistics/index",
+        "order_statistics_time/index"
       ]
     }
   ],

@@ -186,23 +186,23 @@ class SystemclearData extends AuthController
                 if (!verify_domain($value))
                     return Json::fail('域名不合法');
                 $siteUrl = SystemConfigService::get('site_url', true);
-                $siteUrlJosn = str_replace('http://', 'http:\\/\\/', $siteUrl);
-                $valueJosn = str_replace('http://', 'http:\\/\\/', $value);
+                $siteUrlJosn = str_replace('http://', 'http:\\\/\\\/', $siteUrl);
+                $valueJosn = str_replace('http://', 'http:\\\/\\\/', $value);
                 $prefix = Config::get('database.connections.' . Config::get('database.default') . '.prefix');
                 $sql = [
-                    "UPDATE `{$prefix}system_attachment` SET `att_dir` = replace(att_dir ,'{$siteUrl}','{$value}'),`satt_dir` = replace(satt_dir ,'{$siteUrl}','{$value}')",
-                    "UPDATE `{$prefix}store_product` SET `image` = replace(image ,'{$siteUrl}','{$value}'),`slider_image` = replace(slider_image ,'{$siteUrl}','{$value}')",
-                    "UPDATE `{$prefix}store_product_attr_value` SET `image` = replace(image ,'{$siteUrl}','{$value}')",
-                    "UPDATE `{$prefix}store_seckill` SET `image` = replace(image ,'{$siteUrl}','{$value}'),`images` = replace(images,'{$siteUrl}','{$value}')",
-                    "UPDATE `{$prefix}store_combination` SET `image` = replace(image ,'{$siteUrl}','{$value}'),`images` = replace(images,'{$siteUrl}','{$value}')",
-                    "UPDATE `{$prefix}store_bargain` SET `image` = replace(image ,'{$siteUrl}','{$value}'),`images` = replace(images,'{$siteUrl}','{$value}')",
-                    "UPDATE `{$prefix}system_config` SET `value` = replace(value ,'{$siteUrlJosn}','{$valueJosn}')",
+                    "UPDATE `{$prefix}system_attachment` SET `att_dir` = replace(`att_dir` ,'{$siteUrl}','{$value}'),`satt_dir` = replace(`satt_dir` ,'{$siteUrl}','{$value}')",
+                    "UPDATE `{$prefix}store_product` SET `image` = replace(`image` ,'{$siteUrl}','{$value}'),`slider_image` = replace(`slider_image` ,'{$siteUrlJosn}','{$valueJosn}')",
+                    "UPDATE `{$prefix}store_product_attr_value` SET `image` = replace(`image` ,'{$siteUrl}','{$value}')",
+                    "UPDATE `{$prefix}store_seckill` SET `image` = replace(`image` ,'{$siteUrl}','{$value}'),`images` = replace(`images`,'{$siteUrlJosn}','{$valueJosn}')",
+                    "UPDATE `{$prefix}store_combination` SET `image` = replace(`image` ,'{$siteUrl}','{$value}'),`images` = replace(`images`,'{$siteUrlJosn}','{$valueJosn}')",
+                    "UPDATE `{$prefix}store_bargain` SET `image` = replace(`image` ,'{$siteUrl}','{$value}'),`images` = replace(`images`,'{$siteUrlJosn}','{$valueJosn}')",
+                    "UPDATE `{$prefix}system_config` SET `value` = replace(`value` ,'{$siteUrlJosn}','{$valueJosn}')",
                     "UPDATE `{$prefix}article_category` SET `image` = replace(`image` ,'{$siteUrl}','{$value}')",
                     "UPDATE `{$prefix}article` SET `image_input` = replace(`image_input` ,'{$siteUrl}','{$value}')",
                     "UPDATE `{$prefix}article_content` SET `content` = replace(`content` ,'{$siteUrl}','{$value}')",
                     "UPDATE `{$prefix}store_category` SET `pic` = replace(`pic` ,'{$siteUrl}','{$value}')",
-                    "UPDATE `{$prefix}system_group_data` SET `value` = replace(value ,'{$siteUrlJosn}','{$valueJosn}')",
-                    "UPDATE `{$prefix}store_product_description` SET `description`= replace(description,'{$siteUrl}','{$value}')"
+                    "UPDATE `{$prefix}system_group_data` SET `value` = replace(`value` ,'{$siteUrlJosn}','{$valueJosn}')",
+                    "UPDATE `{$prefix}store_product_description` SET `description`= replace(`description`,'{$siteUrl}','{$value}')"
                 ];
                 try {
                     foreach ($sql as $item) {

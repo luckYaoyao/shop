@@ -5,7 +5,6 @@ namespace crmeb\services\sms\storage;
 use crmeb\basic\BaseSms;
 use crmeb\services\HttpService;
 
-
 /**
  * 云信短信服务
  * Class SMSService
@@ -246,6 +245,11 @@ class Yunxin extends BaseSms
     public function getStatus(array $record_id)
     {
         $data['record_id'] = json_encode($record_id);
-        return json_decode(HttpService::postRequest($this->smsUrl . 'sms/status', $data), true);
+        $res = json_decode(HttpService::postRequest($this->smsUrl . 'sms/status', $data), true);
+        if ($res['status'] != 200) {
+            return $this->setError('查询失败');
+        } else {
+            return $res['data'] ?? [];
+        }
     }
 }

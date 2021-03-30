@@ -90,6 +90,7 @@ class UserController
         $user['like'] = StoreProductRelation::getUserIdCollect($user['uid']);
         $user['orderStatusNum'] = StoreOrder::getOrderData($user['uid']);
         $user['notice'] = UserNotice::getNotice($user['uid']);
+//        $user['brokerage'] = UserBill::getBrokerage($user['uid']);//获取总佣金
         $user['recharge'] = UserBill::getRecharge($user['uid']);//累计充值
         $user['orderStatusSum'] = StoreOrder::getOrderStatusSum($user['uid']);//累计消费
         $user['extractTotalPrice'] = UserExtract::userExtractTotalPrice($user['uid']);//累计提现

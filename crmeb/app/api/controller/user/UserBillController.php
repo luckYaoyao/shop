@@ -184,6 +184,7 @@ class UserBillController
                     if ($uploadRes === false) {
                         return app('json')->fail($upload->getError());
                     }
+                    $upload->delete($name);
                     $imageInfo = $upload->getUploadInfo();
                     $imageInfo['image_type'] = $uploadType;
                     SystemAttachment::attachmentAdd($imageInfo['name'], $imageInfo['size'], $imageInfo['type'], $imageInfo['dir'], $imageInfo['thumb_path'], 1, $imageInfo['image_type'], $imageInfo['time'], 2);

@@ -6,6 +6,7 @@
 
 namespace app\admin\model\system;
 
+use crmeb\services\upload\Upload;
 use crmeb\traits\ModelTrait;
 use crmeb\basic\BaseModel;
 
@@ -124,20 +125,36 @@ class SystemAttachment extends BaseModel
      */
     public static function emptyYesterdayAttachment()
     {
-        $list = self::whereTime('time', 'yesterday')->where(['module_type' => 2])->column('att_dir', 'att_id');
-        foreach ($list as $att_id => $att_dir) {
-            try {
-                if ($att_dir && strstr($att_dir, 'uploads') !== false) {
-                    if (strstr($att_dir, 'http') === false)
-                        @unlink(substr($att_dir, 1));
-                    else {
-                        $filedir = substr($att_dir, strpos($att_dir, 'uploads'));
-                        @unlink($filedir);
+        $list = self::whereTime('time', 'yesterday')->where('module_type',2)->field('name,att_dir,att_id,image_type')->select();
+        try {
+            $uploadType = (int)sys_config('upload_type', 1);
+            $upload = new Upload($uploadType, [
+                'accessKey' => sys_config('accessKey'),
+                'secretKey' => sys_config('secretKey'),
+                'uploadUrl' => sys_config('uploadUrl'),
+                'storageName' => sys_config('storage_name'),
+                'storageRegion' => sys_config('storage_region'),
+            ]);
+            foreach ($list as $key => $item) {
+                if ($item['image_type'] == 1) {
+                    $att_dir = $item['att_dir'];
+                    if ($att_dir && strstr($att_dir, 'uploads') !== false) {
+                        if (strstr($att_dir, 'http') === false)
+                            $upload->delete($att_dir);
+                        else {
+                            $filedir = substr($att_dir, strpos($att_dir, 'uploads'));
+                            if ($filedir) $upload->delete($filedir);
+                        }
                     }
+                } else {
+                    if ($item['name']) $upload->delete($item['name']);
                 }
-            } catch (\Throwable $e) {
             }
-            self::del($att_id);
+            self::whereTime('time', 'yesterday')->where('module_type', 2)->delete();
+            return true;
+        } catch (\Exception $e) {
+            self::whereTime('time', 'yesterday')->where('module_type', 2)->delete();
+            return true;
         }
     }
 }

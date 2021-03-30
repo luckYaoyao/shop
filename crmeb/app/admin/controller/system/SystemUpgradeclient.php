@@ -4,6 +4,7 @@ namespace app\admin\controller\system;
 
 use app\admin\controller\AuthController;
 use crmeb\services\JsonService as Json;
+use crmeb\services\MysqlBackupService;
 use crmeb\services\UpgradeService as uService;
 use think\facade\Db;
 
@@ -69,6 +70,24 @@ class SystemUpgradeclient extends AuthController
         Json::successful('ok', ['list' => $list, 'page' => input('post.page/d') + 1]);
     }
 
+    //删除备份文件
+    public function setcopydel()
+    {
+        $post = input('post.');
+        if (!isset($post['id'])) Json::fail('删除备份文件失败，缺少参数ID');
+        if (!isset($post['ids'])) Json::fail('删除备份文件失败，缺少参数IDS');
+        $fileservice = new uService;
+        if (is_array($post['ids'])) {
+            foreach ($post['ids'] as $file) {
+                $fileservice->del_dir(app()->getRootPath() . 'public' . DS . 'copyfile' . $file);
+            }
+        }
+        if ($post['id']) {
+            $copyFile = app()->getRootPath() . 'public' . DS . 'copyfile' . $post['id'];
+            $fileservice->del_dir($copyFile);
+        }
+        Json::successful('删除成功');
+    }
 
     public function get_new_version_conte()
     {
@@ -79,6 +98,280 @@ class SystemUpgradeclient extends AuthController
             return Json::successful(['count' => $versionInfo['data']['count']]);
         } else {
             return Json::fail('服务器异常');
+        }
+    }
+
+    //一键升级
+    public function auto_upgrad()
+    {
+        $prefix = config('database.prefix');
+        $fileservice = new uService;
+        $post = $this->request->post();
+        if (!isset($post['id'])) Json::fail('缺少参数ID');
+        $versionInfo = $fileservice->request_post(uService::$isNowVersion, ['id' => $post['id']]);
+        if ($versionInfo === null) Json::fail('服务器异常，请稍后再试');
+        if (isset($versionInfo['code']) && $versionInfo['code'] == 400) Json::fail(isset($versionInfo['msg']) ? $versionInfo['msg'] : '您暂时没有权限升级，请联系管理员！');
+        if (is_array($versionInfo) && isset($versionInfo['data'])) {
+            $list = $versionInfo['data'];
+            $id = [];
+            foreach ($list as $key => $val) {
+                $savefile = app()->getRootPath() . 'public' . DS . 'upgrade_lv';
+                //1，检查远程下载文件，并下载
+                if (($save_path = $fileservice->check_remote_file_exists($val['zip_name'], $savefile)) === false) Json::fail('远程升级包不存在');
+                //2，首先解压文件
+                $savename = app()->getRootPath() . 'public' . DS . 'upgrade_lv' . DS . time();
+                $fileservice->zipopen($save_path, $savename);
+                //3，执行SQL文件
+                Db::startTrans();
+                try {
+                    //参数3不介意大小写的
+                    $sqlfile = $fileservice->list_dir_info($savename . DS, true, 'sql');
+                    if (is_array($sqlfile) && !empty($sqlfile)) {
+                        foreach ($sqlfile as $file) {
+                            if (file_exists($file)) {
+                                //为一键安装做工作记得表前缀要改为[#DB_PREFIX#]哦
+                                $execute_sql = explode(";\r", str_replace(['[#DB_PREFIX#]', "\n"], [$prefix, "\r"], file_get_contents($file)));
+                                foreach ($execute_sql as $_sql) {
+                                    if ($query_string = trim(str_replace(array(
+                                        "\r",
+                                        "\n",
+                                        "\t"
+                                    ), '', $_sql))) Db::execute($query_string);
+                                }
+                                //执行完sql记得删掉哦
+                                $fileservice->unlink_file($file);
+                            }
+                        }
+                    }
+                    Db::commit();
+                } catch (\Exception $e) {
+                    Db::rollback();
+                    //删除解压下的文件
+                    $fileservice->del_dir(app()->getRootPath() . 'public' . DS . 'upgrade_lv');
+                    //删除压缩包
+                    $fileservice->unlink_file($save_path);
+                    //升级失败发送错误信息
+                    $fileservice->request_post(uService::$isInsertLog, [
+                        'content' => '升级失败，错误信息为:' . $e->getMessage(),
+                        'add_time' => time(),
+                        'ip' => $this->request->ip(),
+                        'http' => $this->request->domain(),
+                        'type' => 'error',
+                        'version' => $val['version']
+                    ]);
+                    return Json::fail('升级失败SQL文件执行有误');
+                }
+                //4,备份文件
+                $copyFile = app()->getRootPath() . 'public' . DS . 'copyfile' . $val['id'];
+                $copyList = $fileservice->get_dirs($savename . DS);
+                if (isset($copyList['dir'])) {
+                    if ($copyList['dir'][0] == '.' && $copyList['dir'][1] == '..') {
+                        array_shift($copyList['dir']);
+                        array_shift($copyList['dir']);
+                    }
+                    foreach ($copyList['dir'] as $dir) {
+                        if (file_exists(app()->getRootPath() . $dir, $copyFile . DS . $dir)) {
+                            $fileservice->copy_dir(app()->getRootPath() . $dir, $copyFile . DS . $dir);
+                        }
+                    }
+                }
+                //5，覆盖文件
+                $fileservice->handle_dir($savename, app()->getRootPath());
+                //6,删除升级生成的目录
+                $fileservice->del_dir(app()->getRootPath() . 'public' . DS . 'upgrade_lv');
+                //7,删除压缩包
+                $fileservice->unlink_file($save_path);
+                //8,改写本地升级文件
+                $handle = fopen(app()->getRootPath() . '.version', 'w+');
+                if ($handle === false) Json::fail(app()->getRootPath() . '.version' . '无法写入打开');
+                $content = <<<EOT
+version={$val['version']}
+version_code={$val['id']}
+EOT;
+                if (fwrite($handle, $content) === false) Json::fail('升级包写入失败');
+                fclose($handle);
+                //9,向服务端发送升级日志
+                $posts = [
+                    'ip' => $this->request->ip(),
+                    'https' => $this->request->domain(),
+                    'update_time' => time(),
+                    'content' => '一键升级成功，升级版本号为：' . $val['version'] . '。版本code为：' . $val['id'],
+                    'type' => 'log',
+                    'versionbefor' => $this->serverweb['version'],
+                    'versionend' => $val['version']
+                ];
+                $inset = $fileservice->request_post(uService::$isInsertLog, $posts);
+                $id[] = $val['id'];
+            }
+            //10,升级完成
+            Json::successful('升级成功', ['code' => end($id), 'version' => $val['version']]);
+        } else {
+            Json::fail('服务器异常，请稍后再试');
+        }
+    }
+
+    //在线升级
+    public function online_upgrad()
+    {
+        $prefix = config('database.prefix');
+        $fileservice = new uService;
+        $post = $this->request->post();
+        if (!isset($post['id'])) Json::fail('缺少参数ID');
+        //获取升级列表
+        $versionInfo = $fileservice->request_post(uService::$isNowVersion, ['id' => 18]);
+        if ($versionInfo === null) Json::fail('服务器异常，请稍后再试');
+        //检测授权
+        if(!$fileservice->isauth()) Json::fail('请先去授权后在升级');
+        if (isset($versionInfo['code']) && $versionInfo['code'] == 400) Json::fail(isset($versionInfo['msg']) ? $versionInfo['msg'] : '您暂时没有权限升级，请联系管理员！');
+        if(!is_array($versionInfo) || !isset($versionInfo['data'])) Json::fail('服务器异常，请稍后再试');
+        $rootpath = app()->getRootPath();
+        $list = $versionInfo['data'];
+        $id = [];
+        $savefile = $rootpath . 'public' . DS . 'upgrade_lv';
+        foreach ($list as $key => $val) {
+
+            //1，检查远程下载文件，并下载
+            if (($save_path = $fileservice->check_remote_file_exists($val['zip_name'], $savefile)) === false) Json::fail('远程升级包不存在');
+            //2，首先解压文件
+            $savename = $rootpath . 'public' . DS . 'upgrade_lv' . DS . time();
+            $fileservice->zipopen($save_path, $savename);
+        }
+        //3,备份文件
+        $saveDir = $rootpath . 'backup\\'.date('Ymd',time()).'\\';
+        $filepath = $saveDir . 'crmeb_'.time().'.zip';
+        $zip = new \ZipArchive();
+        if(!$zip->open($filepath,\ZIPARCHIVE::CREATE))
+        {
+            Json::fail("创建[$filepath]失败");
+        }
+        try{
+            $this->createZip($rootpath,$zip);
+        }catch (\think\Exception $e){
+            $message  = '[异常时间]: '. date('Y-m-d H:i:s') . PHP_EOL;
+            $message .= '[异常消息]: '. $e->getMessage() . PHP_EOL;
+            $message .= '[异常文件]: '. $e->getFile() . PHP_EOL;
+            $message .= '[异常行数]: '. $e->getLine() . PHP_EOL;
+            Json::fail($message);
+        }
+        $zip->close();
+        //4 备份sql
+        if(!$this->backupSql($saveDir)){
+            Json::fail('备份数据库失败');
+        }
+        //5 执行SQL文件
+        Db::startTrans();
+        try {
+            //参数3不介意大小写的
+            $sqlfile = $fileservice->list_dir_info($savename . DS, true, 'sql');
+            if (is_array($sqlfile) && !empty($sqlfile)) {
+                foreach ($sqlfile as $file) {
+                    if (file_exists($file)) {
+                        //为一键安装做工作记得表前缀要改为[#DB_PREFIX#]哦
+                        $execute_sql = explode(";\r", str_replace(['[#DB_PREFIX#]', "\n"], [$prefix, "\r"], file_get_contents($file)));
+                        foreach ($execute_sql as $_sql) {
+                            if ($query_string = trim(str_replace(array(
+                                "\r",
+                                "\n",
+                                "\t"
+                            ), '', $_sql))) Db::execute($query_string);
+                        }
+                        //执行完sql记得删掉哦
+                        $fileservice->unlink_file($file);
+                    }
+                }
+            }
+            Db::commit();
+        } catch (\Exception $e) {
+            Db::rollback();
+            //删除解压下的文件
+            $fileservice->del_dir(app()->getRootPath() . 'public' . DS . 'upgrade_lv');
+            //删除压缩包
+            $fileservice->unlink_file($save_path);
+            //升级失败发送错误信息
+            $fileservice->request_post(uService::$isInsertLog, [
+                'content' => '升级失败，错误信息为:' . $e->getMessage(),
+                'add_time' => time(),
+                'ip' => $this->request->ip(),
+                'http' => $this->request->domain(),
+                'type' => 'error',
+                'version' => $val['version']
+            ]);
+            return Json::fail('升级失败SQL文件执行有误');
+        }
+
+        //6 覆盖文件
+        $fileservice->handle_dir($savename, app()->getRootPath());
+        //7 删除升级生成的目录
+        $fileservice->del_dir(app()->getRootPath() . 'public' . DS . 'upgrade_lv');
+        //8 删除压缩包
+        $fileservice->unlink_file($save_path);
+        //9 改写本地升级文件
+        $handle = fopen(app()->getRootPath() . '.version', 'w+');
+        if ($handle === false) Json::fail(app()->getRootPath() . '.version' . '无法写入打开');
+        $content = <<<EOT
+version={$val['version']}
+version_code={$val['id']}
+EOT;
+        if (fwrite($handle, $content) === false) Json::fail('升级包写入失败');
+        fclose($handle);
+        //10 向服务端发送升级日志
+        $posts = [
+            'ip' => $this->request->ip(),
+            'https' => $this->request->domain(),
+            'update_time' => time(),
+            'content' => '一键升级成功，升级版本号为：' . $val['version'] . '。版本code为：' . $val['id'],
+            'type' => 'log',
+            'versionbefor' => $this->serverweb['version'],
+            'versionend' => $val['version']
+        ];
+        $inset = $fileservice->request_post(uService::$isInsertLog, $posts);
+        $id[] = $val['id'];
+
+        //11 升级完成
+        Json::successful('升级成功', ['code' => end($id), 'version' => $val['version']]);
+
+    }
+    //备份sql
+    public function backupSql($saveDir)
+    {
+        $config = array(
+            'path'=>$saveDir,
+            //数据库备份卷大小
+            'compress' => 1,
+            //数据库备份文件是否启用压缩 0不压缩 1 压缩
+            'level' => 5,
+        );
+        $back = new MysqlBackupService($config);
+        $list = $back->dataList(null);
+        $tables = array_column($list,'name');
+        $back->setFile(['name'=>'crmeb','part'=>time()]);
+        $data = '';
+        foreach ($tables as $t) {
+            $res = $back->backup($t, 0);
+            if ($res == false && $res != 0) {
+                $data .= $t . '|';
+            }
+        }
+        return $data ? false : true;
+    }
+    //创建zip
+    private function createZip($dir,$zipObj)
+    {
+        $dir_source = opendir($dir);
+        while(($file = readdir($dir_source)) != false)
+        {
+            if($file=="." || $file==".." ) continue;
+
+            $sub_file = $dir.'/'.$file;
+            if(is_dir($sub_file) && $file != 'backup' && $file != 'runtime' && $file = 'uploads')
+            {
+                $zipObj->addEmptyDir($sub_file);
+                $this->createZip($sub_file,$zipObj);
+            }
+            if(is_file($sub_file))
+            {
+                $zipObj->addFile($sub_file);
+            }
         }
     }
 }

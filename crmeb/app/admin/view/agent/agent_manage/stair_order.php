@@ -15,7 +15,7 @@
                                     <div class="layui-input-block" data-type="data" v-cloak="">
                                         <button class="layui-btn layui-btn-sm" type="button" v-for="item in dataList" @click="setData(item)" :class="{'layui-btn-primary':where.data!=item.value}">{{item.name}}</button>
                                         <button class="layui-btn layui-btn-sm" type="button" ref="time" @click="setData({value:'zd',is_zd:true})" :class="{'layui-btn-primary':where.data!='zd'}">自定义</button>
-                                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" v-show="showtime==true" ref="date_time">{year.0} - {$year.1}</button>
+                                        <button type="button" class="layui-btn layui-btn-sm layui-btn-primary" v-show="showtime==true" ref="date_time">{$year.0} - {$year.1}</button>
                                     </div>
                                 </div>
                                 <div class="layui-col-lg12">
@@ -76,8 +76,8 @@
                     </div>
                     <table class="layui-hide" id="userList" lay-filter="userList"></table>
                     <script type="text/html" id="time">
-                        <p>下单：{{d._add_time}}</p>
-                        <p>支付：{{d._pay_time}}</p>
+                        <p>下单：{{d._add_time}}</p><br/>
+                        <p>支付：{{d._pay_time}}</p><br/>
                         <p>收货：{{d.take_time}}</p>
                     </script>
                     <script type="text/html" id="user_info">
@@ -189,6 +189,7 @@
                 }
             },
             mounted:function () {
+                that = this;
                 this.getBadge();
                 layList.laydate.render({
                     elem:this.$refs.date_time,

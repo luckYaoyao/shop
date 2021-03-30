@@ -212,15 +212,19 @@ class StoreBargain extends BaseModel
      */
     public static function IncBargainStock($num, $bargainId, $unique = '')
     {
-        $bargain = self::where('id', $bargainId)->field(['stock', 'sales'])->find();
+        $bargain = self::where('id', $bargainId)->field(['product_id', 'stock', 'sales', 'quota'])->find();
         if (!$bargain) return true;
         if ($bargain->sales > 0) $bargain->sales = bcsub($bargain->sales, $num, 0);
         if ($bargain->sales < 0) $bargain->sales = 0;
+        $res = true;
         if ($unique) {
             $res = false !== StoreProductAttrValueModel::incProductAttrStock($bargainId, $unique, $num, 2);
+            $sku = StoreProductAttrValue::where('product_id',$bargainId)->where('unique',$unique)->where('type',2)->value('suk');
+            $res = $res && StoreProductAttrValue::where('product_id',$bargain['product_id'])->where('suk',$sku)->where('type',0)->inc('stock',$num)->dec('sales',$num)->update();
         }
         $bargain->stock = bcadd($bargain->stock, $num, 0);
-        $res = $res && $bargain->save();
+        $bargain->quota = bcadd($bargain->quota, $num, 0);
+        $res = $res && $bargain->save() && StoreProduct::where('id',$bargain['product_id'])->inc('stock', $num)->dec('sales', $num)->update();
         return $res;
     }
 

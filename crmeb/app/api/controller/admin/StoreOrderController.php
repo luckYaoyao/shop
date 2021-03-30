@@ -426,6 +426,22 @@ class StoreOrderController
                     User::bcDec($item['uid'], 'brokerage_price', $item['number'], 'uid');
                     UserBill::expend('退款退佣金', $item['uid'], 'now_money', 'brokerage', $item['number'], $orderId, bcsub($usermoney, $item['number'], 2), '订单退款扣除佣金' . floatval($item['number']) . '元');
                 }
+            //退款扣除用户积分
+            //购买赠送的积分
+            $bill_integral = UserBill::where('category', 'integral')
+                ->where('type', 'gain')
+                ->where('link_id', $orderId)
+                ->where('pm', 1)
+                ->find();
+            if ($bill_integral) {
+                $bill_integral = $bill_integral->toArray();
+                //用户积分
+                $user_integral = User::where('uid', $bill_integral['uid'])->value('integral');
+                if ($bill_integral['number'] > $user_integral)
+                    $bill_integral['number'] = $user_integral;
+                User::bcDec($bill_integral['uid'], 'integral', $bill_integral['number'], 'uid');
+                UserBill::expend('退款扣除积分', $bill_integral['uid'], 'integral', 'gain', $bill_integral['number'], $orderId, bcsub($user_integral, $bill_integral['number'], 2), '订单退款扣除积分' . floatval($bill_integral['number']) . '积分');
+            }
             return app('json')->successful('修改成功!');
         } else {
             StoreOrderStatus::status($orderInfo['id'], 'refund_price', '退款给用户' . $price . '元失败');

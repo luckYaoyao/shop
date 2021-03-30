@@ -43,6 +43,10 @@ class RoutineCode
      */
     public static function getPageCode($page = '', $pramam = "?uid=1&product=1", $width = 280)
     {
-        return MiniProgramService::qrcodeService()->appCodeUnlimit($pramam, $page, $width);
+        try{
+            return MiniProgramService::qrcodeService()->appCodeUnlimit($pramam, $page, $width);
+        }catch (\Exception $e){
+            return false;
+        }
     }
 }

@@ -32,6 +32,7 @@ use think\facade\Route as Url;
 use app\admin\model\order\StoreOrder as StoreOrderModel;
 use crmeb\services\YLYService;
 use think\facade\Log;
+use app\models\store\StoreOrder as StoreOrderModels;
 
 /**
  * 订单管理控制器 同一个订单表放在一个控制器
@@ -114,7 +115,7 @@ class StoreOrder extends AuthController
                 $value['productInfo']['store_name'] = StoreOrderCartInfo::getSubstrUTf8($value['productInfo']['store_name'], 10, 'UTF-8', '');
                 $product[] = $value;
             }
-            if(!$product){
+            if (!$product) {
                 return JsonService::fail('订单商品获取失败,无法打印!');
             }
             $res = YLYService::instance()->setContent(sys_config('site_name'), is_object($order) ? $order->toArray() : $order, $product)->orderPrinting();
@@ -297,9 +298,14 @@ class StoreOrder extends AuthController
      * */
     public function order_goods($id = 0)
     {
-        $list = Express::where('is_show', 1)->order('sort desc')->column('name', 'id');
+//        $list = Express::where('is_show', 1)->order('sort desc')->column('name', 'id');
+        try {
+            $list = ExpressService::init()->express(1, 1, 1000);
+        } catch (\Throwable $e) {
+            $list = [];
+        }
         $this->assign([
-            'list' => $list,
+            'list' => $list['data'] ?? [],
             'id' => $id
         ]);
         return $this->fetch();
@@ -626,7 +632,8 @@ class StoreOrder extends AuthController
                 User::bcDec($bill_integral['uid'], 'integral', $bill_integral['number'], 'uid');
                 UserBill::expend('退款扣除积分', $bill_integral['uid'], 'integral', 'gain', $bill_integral['number'], $id, bcsub($user_integral, $bill_integral['number'], 2), '订单退款扣除积分' . floatval($bill_integral['number']) . '积分');
             }
-
+            //回退库存
+            StoreOrderModels::RegressionStock($product);
             BaseModel::commitTrans();
             return Json::successful('修改成功!');
         } else {
@@ -657,13 +664,18 @@ class StoreOrder extends AuthController
         $cacheName = $order['order_id'] . $order['delivery_id'];
         $result = CacheService::get($cacheName, null);
         if ($result === null) {
-            $result = ExpressService::query($order['delivery_id']);
-            if (is_array($result) &&
-                isset($result['result']) &&
-                isset($result['result']['deliverystatus']) &&
-                $result['result']['deliverystatus'] >= 3)
-                $cacheTime = 0;
-            else
+            try {
+                $result = ExpressService::query($order['delivery_id'], $order['delivery_name']);
+            } catch (\Throwable $e) {
+                $result = [];
+            }
+            if (is_array($result) && (isset($result['result']) || isset($result['content']))) {
+                $cacheTime = 1200;
+                if(isset($result['content'])){
+                    $result['result'] = $result['content'];
+                    unset($result['content']);
+                }
+            }else
                 $cacheTime = 1800;
             CacheService::set($cacheName, $result, $cacheTime);
         }
@@ -691,10 +703,17 @@ class StoreOrder extends AuthController
             $f[] = Form::input('delivery_id', '送货人电话', $product->getData('delivery_id'));
         } else if ($product['delivery_type'] == 'express') {
             $f[] = Form::select('delivery_name', '快递公司', $product->getData('delivery_name'))->setOptions(function () {
-                $list = Express::where('is_show', 1)->column('name', 'id');
+//                $list = Express::where('is_show', 1)->column('name', 'id');
+                try {
+                    $list = ExpressService::init()->express(1, 1, 1000);
+                    $list = $list['data'] ?? [];
+                } catch (\Throwable $e) {
+                    $list = [];
+                }
+
                 $menus = [];
                 foreach ($list as $k => $v) {
-                    $menus[] = ['value' => $v, 'label' => $v];
+                    $menus[] = ['value' => $v['name'], 'label' => $v['name']];
                 }
                 return $menus;
             });

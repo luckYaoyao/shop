@@ -363,22 +363,27 @@
                                                                                                  @click="deleteItem(index)">&#x1007;</i>
                                                 </div>
                                                 <div class="layui-form-item rules">
-                                                    <label class="layui-form-label"></label>
-                                                    <button type="button" class="layui-btn layui-btn-primary layui-btn-sm"
-                                                            v-for="(val,inx) in item.detail">
-                                                        {{val}}
-                                                        <i class="layui-icon layui-icon-close"
-                                                           @click="deleteValue(item,inx)"></i>
-                                                    </button>
-                                                    <div class="rules rulesBox">
-                                                        <div class="rules-btn-sm">
-                                                            <input type="text" v-model="item.detailValue" name="title"
-                                                                   autocomplete="off" placeholder="请输入">
+<!--                                                    <label class="layui-form-label"></label>-->
+                                                    <div class="layui-input-block">
+                                                        <div  style="overflow: visible;text-overflow: inherit;white-space: normal;border-left: 0;">
+                                                            <button type="button" class="layui-btn layui-btn-primary layui-btn-sm"
+                                                                    v-for="(val,inx) in item.detail" >
+                                                                {{val}}
+                                                                <i class="layui-icon layui-icon-close"
+                                                                   @click="deleteValue(item,inx)"></i>
+                                                            </button>
                                                         </div>
-                                                        <button class="layui-btn layui-btn-sm" type="button"
-                                                                @click="addDetail(item)">添加
-                                                        </button>
+                                                        <div class="rules rulesBox">
+                                                            <div class="rules-btn-sm">
+                                                                <input type="text" v-model="item.detailValue" name="title"
+                                                                       autocomplete="off" placeholder="请输入">
+                                                            </div>
+                                                            <button class="layui-btn layui-btn-sm" type="button"
+                                                                    @click="addDetail(item)">添加
+                                                            </button>
+                                                        </div>
                                                     </div>
+
                                                 </div>
                                             </div>
                                             <div class="grid-demo grid-demo-bg1 rules" style="margin-top: 24px;" v-if="newRule">
@@ -1618,3 +1623,9 @@
 </script>
 </body>
 </html>
+<script>
+    import Layout from "../../../../../public/static/plug/iview/dist/iview";
+    export default {
+        components: {Layout}
+    }
+</script>

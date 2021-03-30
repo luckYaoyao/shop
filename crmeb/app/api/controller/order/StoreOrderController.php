@@ -135,8 +135,8 @@ class StoreOrderController
             StoreBargainUser::setBargainUserStatus($bargainId, $uid); //修改砍价状态
         }
         if ($pinkId) {
-            $cache_pink = Cache::get(md5('store_pink_'.$pinkId));
-            if($cache_pink && bcsub($cache_pink['people'], $cache_pink['now_people'], 0) <= 0){
+            $cache_pink = Cache::get(md5('store_pink_' . $pinkId));
+            if ($cache_pink && bcsub($cache_pink['people'], $cache_pink['now_people'], 0) <= 0) {
                 return app('json')->status('ORDER_EXIST', '订单生成失败，该团人员已满', ['orderId' => StoreOrder::getStoreIdPink($pinkId, $request->uid())]);
             }
             if (StorePink::getIsPinkUid($pinkId, $request->uid()))
@@ -182,8 +182,8 @@ class StoreOrderController
             StoreBargainUser::setBargainUserStatus($bargainId, $uid); //修改砍价状态
         }
         if ($pinkId) {
-            $cache_pink = Cache::get(md5('store_pink_'.$pinkId));
-            if($cache_pink && bcsub($cache_pink['people'], $cache_pink['now_people'], 0) <= 0){
+            $cache_pink = Cache::get(md5('store_pink_' . $pinkId));
+            if ($cache_pink && bcsub($cache_pink['people'], $cache_pink['now_people'], 0) <= 0) {
                 return app('json')->status('ORDER_EXIST', '订单生成失败，该团人员已满', ['orderId' => StoreOrder::getStoreIdPink($pinkId, $request->uid())]);
             }
             if (StorePink::getIsPinkUid($pinkId, $request->uid()))
@@ -304,9 +304,9 @@ class StoreOrderController
             return app('json')->fail('订单不存在!');
         if ($order['paid'])
             return app('json')->fail('该订单已支付!');
-        if ($order['pink_id']){
-            $cache_pink = Cache::get(md5('store_pink_'.$order['pink_id']));
-            if(StorePink::isPinkStatus($order['pink_id'])  || ($cache_pink && bcsub($cache_pink['people'], $cache_pink['now_people'], 0) <= 0)){
+        if ($order['pink_id']) {
+            $cache_pink = Cache::get(md5('store_pink_' . $order['pink_id']));
+            if (StorePink::isPinkStatus($order['pink_id']) || ($cache_pink && bcsub($cache_pink['people'], $cache_pink['now_people'], 0) <= 0)) {
                 return app('json')->fail('该订单已失效!');
             }
         }
@@ -482,15 +482,21 @@ class StoreOrderController
         if (!$uni || !($order = StoreOrder::getUserOrderDetail($request->uid(), $uni))) return app('json')->fail('查询订单不存在!');
         if ($order['delivery_type'] != 'express' || !$order['delivery_id']) return app('json')->fail('该订单不存在快递单号!');
         $cacheName = $uni . $order['delivery_id'];
-        $result = CacheService::get($cacheName, null);
-        if ($result === NULL) {
-            $result = ExpressService::query($order['delivery_id']);
-            if (is_array($result) &&
-                isset($result['result']) &&
-                isset($result['result']['deliverystatus']) &&
-                $result['result']['deliverystatus'] >= 3)
-                $cacheTime = 0;
-            else
+        $result = CacheService::get($cacheName);
+//        if (!$result) {
+        if (true) {
+            try {
+                $result = ExpressService::query($order['delivery_id'], $order['delivery_name']);
+            } catch (\Throwable $e) {
+                $result = [];
+            }
+            if (is_array($result) && (isset($result['result']) || isset($result['content']))) {
+                $cacheTime = 1200;
+                if(isset($result['content'])){
+                    $result['result'] = $result['content'];
+                    unset($result['content']);
+                }
+            }else
                 $cacheTime = 1800;
             CacheService::set($cacheName, $result, $cacheTime);
         }

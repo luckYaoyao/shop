@@ -210,14 +210,17 @@ class WechatUser extends BaseModel
         $couponIds = StoreCouponIssue::where('status', 1)
             ->where('is_full_give', 1)
             ->where('is_del', 0)
-            ->column('id,cid,full_reduction,remain_count');
+            ->where('status', 1)
+            ->where('start_time', '<=', time())
+            ->where('end_time', '>=', time())
+            ->column('id,cid,full_reduction,remain_count,is_permanent');
         if ($couponIds) {
             $couponIssueIds = StoreCouponIssueUser::where('uid', $uid)
                 ->whereIn('issue_coupon_id', array_column($couponIds, 'id'))
                 ->column('issue_coupon_id');
             foreach ($couponIds as $couponId)
                 if ($couponId && !in_array($couponId['id'], $couponIssueIds))
-                    if ($total_price >= $couponId['full_reduction'] && $couponId['remain_count'] >= 1) {
+                    if ($total_price >= $couponId['full_reduction'] && (!$couponId['is_permanent'] || $couponId['remain_count'] >= 1)) {
                         StoreCouponUser::addUserCoupon($uid, $couponId['cid']);
                         StoreCouponIssueUser::addUserIssue($uid, $couponId['id']);
                         StoreCouponIssue::where('id', $couponId['id'])->update(['remain_count' => $couponId['remain_count'] - 1]);

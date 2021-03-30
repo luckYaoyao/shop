@@ -103,8 +103,8 @@ class StoreStatistics extends BaseModel
      */
     public static function getTime($where,$model=null,$prefix='add_time'){
         if ($model == null) $model = new self;
-        if(!$where['date']) return $model;
-        if ($where['data'] == '') {
+        if(!$where['date'] && !$where['data']) return $model;
+        if ($where['data'] == '' && $where['date']) {
             $limitTimeList = [
                 'today'=>implode(' - ',[date('Y/m/d'),date('Y/m/d',strtotime('+1 day'))]),
                 'week'=>implode(' - ',[
@@ -123,8 +123,8 @@ class StoreStatistics extends BaseModel
             $where['data'] = $limitTimeList[$where['date']];
         }
         list($startTime, $endTime) = explode(' - ', $where['data']);
-        $model = $model->where($prefix, '>', strtotime($startTime));
-        $model = $model->where($prefix, '<', strtotime($endTime));
+        $model = $model->where($prefix, '>=', strtotime($startTime . ' 00:00:00'));
+        $model = $model->where($prefix, '<=', strtotime($endTime . ' 23:59:59'));
         return $model;
     }
     /**

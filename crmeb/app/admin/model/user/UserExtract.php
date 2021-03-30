@@ -50,8 +50,12 @@ class UserExtract extends BaseModel
     {
         //待提现金额
         $data['price'] = floatval(self::where('status', 0)->sum('extract_price'));
+        //总获得
+        $sum = UserBill::getBrokerageCount();
+        //退款扣除
+        $lose = UserBill::loseBrokerageCount();
         //佣金总金额
-        $data['brokerage_count'] = floatval(UserBill::getBrokerageCount());
+        $data['brokerage_count'] = $sum > $lose ? floatval($sum - $lose) : 0;
         //已提现金额
         $data['priced'] = floatval(self::where('status', 1)->sum('extract_price'));
         //未提现金额

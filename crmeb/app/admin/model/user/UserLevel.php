@@ -74,7 +74,7 @@ class UserLevel extends BaseModel
         $res = false !== self::where('uid', $uid)->update(['is_del' => 1]);
         $res = $res && UserTaskFinish::where('uid', $uid)->delete();
         if ($res) {
-            User::where('uid', $uid)->update(['clean_time' => time()]);
+            User::where('uid', $uid)->update(['level'=>0,'clean_time' => time()]);
             self::commitTrans();
             return true;
         } else {

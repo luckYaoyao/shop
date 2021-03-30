@@ -98,12 +98,25 @@ class SystemStore extends BaseModel
         if ($latitude && $longitude) {
             foreach ($list as &$value) {
                 //计算距离
-                $value['distance'] = sqrt((pow((($latitude - $value['latitude']) * 111000), 2)) + (pow((($longitude - $value['longitude']) * 111000), 2)));
+                $value['distance'] = self::getDistance($latitude, $longitude, $value['latitude'], $value['longitude']);
                 //转换单位
                 $value['range'] = bcdiv($value['distance'], 1000, 1);
             }
         }
         return $list;
     }
-
+    public static function getDistance($lat1, $lng1, $lat2, $lng2)
+    {
+        $earthRadius = 6367000; //approximate radius of earth in meters
+        $lat1 = ($lat1 * pi() ) / 180;
+        $lng1 = ($lng1 * pi() ) / 180;
+        $lat2 = ($lat2 * pi() ) / 180;
+        $lng2 = ($lng2 * pi() ) / 180;
+        $calcLongitude = $lng2 - $lng1;
+        $calcLatitude = $lat2 - $lat1;
+        $stepOne = pow(sin($calcLatitude / 2), 2) + cos($lat1) * cos($lat2) * pow(sin($calcLongitude / 2), 2);
+        $stepTwo = 2 * asin(min(1, sqrt($stepOne)));
+        $calculatedDistance = $earthRadius * $stepTwo;
+        return round($calculatedDistance);
+    }
 }

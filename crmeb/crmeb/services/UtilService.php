@@ -85,6 +85,8 @@ class UtilService
      */
     public static function setShareMarketingPoster($data = array(), $path)
     {
+        if (!@fopen($data['image'], 'r')) exception('缺少商品图片');
+        if (!@fopen($data['url'], 'r')) exception('缺少二维码图片');
         $config = array(
             'text' => array(
                 array(

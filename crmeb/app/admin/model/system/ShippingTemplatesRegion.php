@@ -46,7 +46,7 @@ class ShippingTemplatesRegion extends BaseModel
         $regionList = [];
         foreach ($regionInfo as $item) {
             if (isset($item['region']) && is_array($item['region'])) {
-                $uniqid = uniqid(true);
+                $uniqid = uniqid(true) . rand(1000, 9999);
                 foreach ($item['region'] as $value) {
                     if (isset($value['children']) && is_array($value['children'])) {
                         foreach ($value['children'] as $vv) {
@@ -115,7 +115,6 @@ class ShippingTemplatesRegion extends BaseModel
                 ];
             }
         }
-
         foreach ($regionData as &$item) {
             if (!$item['regionName']) {
                 $item['regionName'] = array_map(function ($val) {
@@ -136,7 +135,7 @@ class ShippingTemplatesRegion extends BaseModel
             $childrenData[] = [
                 'city_id' => $item['province_id'],
                 'name' => $item['name'] ?? '全国',
-                'children' => self::getCityTemp($uniqid, $provinceId)
+                'children' => self::getCityTemp($uniqid, $item['province_id'])
             ];
         }
         return $childrenData;

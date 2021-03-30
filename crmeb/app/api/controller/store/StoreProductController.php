@@ -87,6 +87,7 @@ class StoreProductController
                             'storageName' => sys_config('storage_name'),
                             'storageRegion' => sys_config('storage_region'),
                         ]);
+                        $upload->delete($name);
                         $res = $upload->to('routine/product')->validate()->stream($res, $name);
                         if ($res === false) {
                             return app('json')->fail($upload->getError());

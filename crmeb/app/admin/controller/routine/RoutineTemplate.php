@@ -9,6 +9,7 @@ use crmeb\services\UtilService as Util;
 use crmeb\services\JsonService as Json;
 use think\facade\Route as Url;
 use app\admin\model\routine\RoutineTemplate as RoutineTemplateModel;
+use crmeb\services\MiniProgramService;
 
 /**
  * 小程序模板消息控制器
@@ -118,5 +119,57 @@ class RoutineTemplate extends AuthController
         }
     }
 
+    /**
+     * 同步订阅消息
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function syncSubscribe()
+    {
+        $all = RoutineTemplateModel::where(['status' => 1, 'type' => 0])->select();
+        $errData = [];
+        if ($all) {
+            $time = time();
+            foreach ($all as $template) {
+                if ($template['tempkey']) {
+                    if (!isset($template['kid'])) {
+                        return Json::fail('数据库模版表(template_message)缺少字段：kid');
+                    }
+                    $works = [];
+                    try {
+                        $works = MiniProgramService::getSubscribeTemplateKeyWords($template['tempkey']);
+                    } catch (\Throwable $e) {
+                        $errData[] = $template['name'] . '获取关键词列表失败';
+                    }
+                    $kid = [];
+                    if ($works) {
+                        $works = array_combine(array_column($works, 'name'), $works);
+                        $content = is_array($template['content']) ? $template['content'] : explode("\n", $template['content']);
+                        foreach ($content as $c) {
+                            $name = explode('{{', $c)[0] ?? '';
+                            if ($name && isset($works[$name])) {
+                                $kid[] = $works[$name]['kid'];
+                            }
+                        }
+                    }
+                    if ($kid && isset($template['kid']) && !$template['kid']) {
+                        $tempid = '';
+                        try {
+                            $tempid = MiniProgramService::addSubscribeTemplate($template['tempkey'], $kid, $template['name']);
+                        } catch (\Throwable $e) {
+                            $errData[] = $template['name'] . '添加订阅消息模版失败';
+                        }
+                        if ($tempid != $template['tempid']) {
+                            RoutineTemplateModel::update(['tempid' => $tempid, 'kid' => json_encode($kid), 'add_time' => $time], ['id' => $template['id']]);
+                        }
+                    }
+                }
 
+            }
+        }
+        $msg = $errData ? implode('\n', $errData) : '同步成功';
+        return Json::success($msg);
+    }
 }

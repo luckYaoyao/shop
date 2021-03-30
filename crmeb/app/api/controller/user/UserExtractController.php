@@ -68,6 +68,8 @@ class UserExtractController
             ['weixin', ''],
         ], $request);
         if (!preg_match('/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/', $extractInfo['money'])) return app('json')->fail('提现金额输入有误');
+        //提现设置最低金额
+        if($extractInfo['money'] < sys_config('user_extract_min_price')) return app('json')->fail('金额小于最低提现金额');
         $user = $request->user();
         $broken_time = intval(sys_config('extract_time'));
         $search_time = time() - 86400 * $broken_time;

@@ -501,7 +501,7 @@ class StoreOrder extends BaseModel
      */
     public static function RegressionStock($order)
     {
-        if ($order['paid'] || $order['status'] == -2 || $order['is_del']) return true;
+        if ($order['status'] == -2 || $order['is_del']) return true;
         $combinationId = $order['combination_id'];
         $seckill_id = $order['seckill_id'];
         $bargain_id = $order['bargain_id'];
@@ -509,9 +509,9 @@ class StoreOrder extends BaseModel
         $cartInfo = StoreOrderCartInfo::where('cart_id', 'in', $order['cart_id'])->select();
         foreach ($cartInfo as $cart) {
             //增库存减销量
-            if ($combinationId) $res5 = $res5 && StoreCombination::incCombinationStock($cart['cart_info']['cart_num'], $combinationId, isset($cart['productInfo']['attrInfo']) ? $cart['productInfo']['attrInfo']['unique'] : '');
-            else if ($seckill_id) $res5 = $res5 && StoreSeckill::incSeckillStock($cart['cart_info']['cart_num'], $seckill_id, isset($cart['productInfo']['attrInfo']) ? $cart['productInfo']['attrInfo']['unique'] : '');
-            else if ($bargain_id) $res5 = $res5 && StoreBargain::incBargainStock($cart['cart_info']['cart_num'], $bargain_id, isset($cart['productInfo']['attrInfo']) ? $cart['productInfo']['attrInfo']['unique'] : '');
+            if ($combinationId) $res5 = $res5 && StoreCombination::incCombinationStock($cart['cart_info']['cart_num'], $combinationId, isset($cart['cart_info']['productInfo']['attrInfo']) ? $cart['cart_info']['productInfo']['attrInfo']['unique'] : '');
+            else if ($seckill_id) $res5 = $res5 && StoreSeckill::incSeckillStock($cart['cart_info']['cart_num'], $seckill_id, isset($cart['cart_info']['productInfo']['attrInfo']) ? $cart['cart_info']['productInfo']['attrInfo']['unique'] : '');
+            else if ($bargain_id) $res5 = $res5 && StoreBargain::incBargainStock($cart['cart_info']['cart_num'], $bargain_id, isset($cart['cart_info']['productInfo']['attrInfo']) ? $cart['cart_info']['productInfo']['attrInfo']['unique'] : '');
             else $res5 = $res5 && StoreProduct::incProductStock($cart['cart_info']['cart_num'], $cart['cart_info']['productInfo']['id'], isset($cart['cart_info']['productInfo']['attrInfo']) ? $cart['cart_info']['productInfo']['attrInfo']['unique'] : '');
         }
         return $res5;
@@ -757,9 +757,7 @@ class StoreOrder extends BaseModel
         $oid = self::where('order_id', $orderId)->value('id');
         StoreOrderStatus::status($oid, 'pay_success', '用户付款成功');
         $now_money = User::where('uid', $order['uid'])->value('now_money');
-        if ($order->combination_id == 0 && $order->seckill_id == 0 && $order->bargain_id == 0) {
-            UserBill::expend('购买商品', $order['uid'], 'now_money', 'pay_money', $order['pay_price'], $order['id'], $now_money, '支付' . floatval($order['pay_price']) . '元购买商品');
-        }
+        UserBill::expend('购买商品', $order['uid'], 'now_money', 'pay_money', $order['pay_price'], $order['id'], $now_money, '支付' . floatval($order['pay_price']) . '元购买商品');
         //支付成功后
         event('OrderPaySuccess', [$order, $formId]);
         $res = $res1 && $resPink;
@@ -1563,7 +1561,7 @@ class StoreOrder extends BaseModel
         $model = $model->alias('o');
         $model = $model->join('StoreOrderStatus s', 's.oid=o.id');
         $model = $model->where('o.paid', 1);
-        $model = $model->where('s.change_type', 'delivery_goods');
+        $model = $model->where('s.change_type', 'IN', ['delivery_goods', 'delivery_fictitious', 'delivery']);
         $model = $model->where('s.change_time', '<', $sevenDay);
         $model = $model->where('o.status', 1);
         $model = $model->where('o.refund_status', 0);

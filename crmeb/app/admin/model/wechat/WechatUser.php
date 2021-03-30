@@ -231,11 +231,13 @@ class WechatUser extends BaseModel
         }
         if ($where['data']) $model = self::getModelTime($where, $model, 'u.add_time');
         $count = $model->count();
-        $data = $model->field(['avatar as headimgurl', 'brokerage_price as new_money', 'u.*', 'o.*', 'e.*', 'b.*'])
-            ->page((int)$where['page'], (int)$where['limit'])
-            ->order('u.uid desc')
-            ->select();
-        $data = count($data) ? $data->toArray() : [];
+        $model = $model->field(['avatar as headimgurl', 'brokerage_price as new_money', 'u.*', 'o.*', 'e.*', 'b.*'])->order('u.uid desc');
+
+        if (isset($where['excel']) && $where['excel'] == 1) {
+            $data = ($data = $model->select()) && count($data) ? $data->toArray() : [];
+        } else {
+            $data = ($data = $model->page((int)$where['page'], (int)$where['limit'])->select()) && count($data) ? $data->toArray() : [];
+        }
         $export = [];
         $broken_time = intval(sys_config('extract_time'));
         $search_time = time() - 86400 * $broken_time;
@@ -331,7 +333,7 @@ class WechatUser extends BaseModel
             }
         }
         if (isset($where['data']) && $where['data']) $model = self::getModelTime($where, $model, "{$alias}add_time");
-        return $model->where("{$alias}is_del", 0)->where("{$alias}is_system_del", 0)->where($alias . 'paid', 1);
+        return $model->where("{$alias}is_del", 0)->where("{$alias}is_system_del", 0)->where($alias . 'paid', 1)->where('seckill_id&bargain_id&combination_id','=',0);
     }
 
     /*

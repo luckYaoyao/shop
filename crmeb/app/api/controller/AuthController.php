@@ -337,6 +337,8 @@ class AuthController
         $token = UserToken::createToken($user, 'user');
         if ($token) {
             event('UserLogin', [$user, $token]);
+            //退出上一个账号
+            $request->tokenData()->delete();
             return app('json')->success('登录成功', ['userInfo' => $user, 'token' => $token->token, 'expires_time' => $token->expires_time, 'time' => strtotime($token->expires_time)]);
         } else
             return app('json')->fail('登录失败');
@@ -378,7 +380,7 @@ class AuthController
         if (!$userInfo) return app('json')->fail('用户不存在');
         if ($userInfo->phone) return app('json')->fail('您的账号已经绑定过手机号码！');
         if (User::where('phone', $phone)->where('user_type', '<>', 'h5')->count())
-            return app('json')->success('此手机已经绑定，无法多次绑定！');
+            return app('json')->fail('此手机已经绑定，无法多次绑定！');
         if (User::where('account', $phone)->where('phone', $phone)->where('user_type', 'h5')->find()) {
             if (!$step) return app('json')->success('H5已有账号是否绑定此账号上', ['is_bind' => 1]);
             $userInfo->phone = $phone;

@@ -10,9 +10,7 @@ namespace app\admin\controller\store;
 use app\admin\controller\AuthController;
 use think\exception\PDOException;
 use crmeb\traits\CurdControllerTrait;
-use crmeb\services\{
-    HttpService, JsonService, UtilService
-};
+use crmeb\services\{CacheService, HttpService, JsonService, UtilService};
 use app\admin\model\system\{
     SystemAttachment, SystemAttachmentCategory
 };
@@ -20,6 +18,7 @@ use app\admin\model\store\{
     StoreCategory as CategoryModel, StoreDescription, StoreProduct as ProductModel, StoreProductAttr, StoreProductCate
 };
 use crmeb\services\upload\Upload;
+use crmeb\services\product\Product;
 
 /**
  * 产品管理
@@ -96,6 +95,43 @@ class CopyTaobao extends AuthController
         return $this->fetch();
     }
 
+    /**
+     * 付费采集页面
+     * @return html
+     */
+    public function product()
+    {
+        $list = CategoryModel::getTierList(null, 1);
+        $menus = [];
+        foreach ($list as $menu) {
+            $menus[] = ['value' => $menu['id'], 'label' => $menu['html'] . $menu['cate_name'], 'disabled' => $menu['pid'] == 0];//,'disabled'=>$menu['pid']== 0];
+        }
+        $this->assign('menus', $menus);
+        $this->assign('is_layui', 1);
+        return $this->fetch();
+    }
+
+    /**
+     * 付费采集请求
+     */
+    public function get_product_info()
+    {
+        list($link, $type) = UtilService::postMore([
+            ['link', ''],
+            ['type', '']
+        ], $this->request, true);
+        $cache = app()->make(CacheService::class);
+        $product = new Product('copy', ['account' => sys_config('sms_account'), 'secret' => sys_config('sms_token')]);
+        $key = md5($link);
+        $info = $cache->get($key);
+        if(!$info){
+            $info = $product->goods($link);
+            $cache->set($key,$info,7200);
+        }
+        $info = array_merge($this->productInfo,$info);
+        return JsonService::successful($info);
+    }
+
     /*
      * 设置错误信息
      * @param string $msg 错误信息
@@ -114,12 +150,12 @@ class CopyTaobao extends AuthController
     public function Utf8String($str)
     {
         $encode = mb_detect_encoding($str, array("ASCII", 'UTF-8', "GB2312", "GBK", 'BIG5'));
-        if(strtoupper($encode) == 'UTF-8'){
+        if (strtoupper($encode) == 'UTF-8') {
 
-        }else if(strtolower($encode) == 'cp936'){
+        } else if (strtolower($encode) == 'cp936') {
 //            $str = iconv('latin1//IGNORE', 'utf-8', $str);
             $str = mb_convert_encoding($str, 'utf-8', 'GBK');
-        }else{
+        } else {
             $str = mb_convert_encoding($str, 'utf-8', $encode);
         }
         return $str;
@@ -357,6 +393,7 @@ class CopyTaobao extends AuthController
             ['soure_link', ''],
             ['temp_id', 0],
         ]);
+
         if (!$data['cate_id']) return JsonService::fail('请选择分类！');
         if (!$data['store_name']) return JsonService::fail('请填写产品名称');
         if (!$data['unit_name']) return JsonService::fail('请填写产品单位');

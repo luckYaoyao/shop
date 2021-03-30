@@ -10,7 +10,8 @@ use crmeb\services\{ExpressService,
     CacheService,
     UtilService as Util,
     JsonService as Json,
-    FormBuilder as Form};
+    FormBuilder as Form
+};
 use crmeb\basic\BaseModel;
 use think\facade\Route as Url;
 use app\admin\controller\AuthController;
@@ -418,13 +419,18 @@ class CombinationOrder extends AuthController
         $cacheName = $order['order_id'] . $order['delivery_id'];
         $result = CacheService::get($cacheName, null);
         if ($result === null) {
-            $result = ExpressService::query($order['delivery_id']);
-            if (is_array($result) &&
-                isset($result['result']) &&
-                isset($result['result']['deliverystatus']) &&
-                $result['result']['deliverystatus'] >= 3)
-                $cacheTime = 0;
-            else
+            try {
+                $result = ExpressService::query($order['delivery_id'], $order['delivery_name']);
+            } catch (\Throwable $e) {
+                $result = [];
+            }
+            if (is_array($result) && (isset($result['result']) || isset($result['content']))) {
+                $cacheTime = 1200;
+                if(isset($result['content'])){
+                    $result['result'] = $result['content'];
+                    unset($result['content']);
+                }
+            }else
                 $cacheTime = 1800;
             CacheService::set($cacheName, $result, $cacheTime);
         }

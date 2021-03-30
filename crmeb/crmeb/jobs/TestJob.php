@@ -27,7 +27,7 @@ class TestJob implements JobInterface
     {
         [$order, $formId] = $data;
         Db::name('cache')->insert(['key'=>'test_'.rand(10,20),'result'=>json_encode($order)]);
-        event('OrderPaySuccess', [$order, $formId]);
+//        event('OrderPaySuccess', [$order, $formId]);
         return true;
     }
 }

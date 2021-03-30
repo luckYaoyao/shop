@@ -160,7 +160,7 @@ class UserBill extends BaseModel
     {
         if (!$limit) return [];
         $model = self::where('uid', $uid)->where('category', 'now_money')->order('add_time desc')->where('number', '<>', 0)
-            ->field('FROM_UNIXTIME(add_time,"%Y-%m") as time,group_concat(id SEPARATOR ",") ids')->group('time');
+            ->field('FROM_UNIXTIME(add_time,"%Y-%m") as time,group_concat(DISTINCT id ORDER BY id DESC SEPARATOR ",") ids')->group('time');
         switch ((int)$type) {
             case 0:
                 $model = $model->where('type', 'in', 'recharge,brokerage,pay_money,system_add,pay_product_refund,system_sub');
