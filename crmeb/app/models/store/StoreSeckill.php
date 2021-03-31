@@ -8,11 +8,8 @@
 namespace app\models\store;
 
 use app\admin\model\store\StoreProductAttrValue as StoreProductAttrValueModel;
-use app\admin\model\ump\StoreSeckillTime;
 use crmeb\basic\BaseModel;
-use crmeb\services\GroupDataService;
 use app\admin\model\store\StoreProductAttrValue;
-use app\models\store\StoreProduct;
 
 /**
  * TODO 秒杀产品Model
@@ -214,15 +211,19 @@ class StoreSeckill extends BaseModel
      */
     public static function incSeckillStock($num = 0, $seckillId = 0, $unique = '')
     {
-        $seckill = self::where('id', $seckillId)->field(['stock', 'sales'])->find();
+        $seckill = self::where('id', $seckillId)->field(['product_id', 'stock', 'sales', 'quota'])->find();
         if (!$seckill) return true;
         if ($seckill->sales > 0) $seckill->sales = bcsub($seckill->sales, $num, 0);
         if ($seckill->sales < 0) $seckill->sales = 0;
+        $res = true;
         if ($unique) {
             $res = false !== StoreProductAttrValueModel::incProductAttrStock($seckillId, $unique, $num, 1);
+            $sku = StoreProductAttrValue::where('product_id', $seckillId)->where('unique', $unique)->where('type', 1)->value('suk');
+            $res = $res && StoreProductAttrValue::where('product_id', $seckill['product_id'])->where('suk', $sku)->where('type', 0)->inc('stock', $num)->dec('sales', $num)->update();
         }
         $seckill->stock = bcadd($seckill->stock, $num, 0);
-        $res = $res && $seckill->save();
+        $seckill->quota = bcadd($seckill->quota, $num, 0);
+        $res = $res && $seckill->save() && StoreProduct::where('id', $seckill['product_id'])->inc('stock', $num)->dec('sales', $num)->update();
         return $res;
     }
 

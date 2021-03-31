@@ -150,7 +150,7 @@
         </div>
         <!--底部版权-->
         <div class="footer"  @touchmove.prevent>
-            <div class="pull-right">© 2017-2020 <a href="http://www.crmeb.com/" target="_blank">CRMEB</a>
+            <div class="pull-right">© 2017-2021 <a href="http://www.crmeb.com/" target="_blank">CRMEB</a>
             </div>
         </div>
     </div>

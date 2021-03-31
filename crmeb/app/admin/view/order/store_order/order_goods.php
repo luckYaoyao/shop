@@ -17,7 +17,7 @@
                     <select name="delivery_name">
                         <option value="">请选择</option>
                         {volist name='$list' id='item' key='k'}
-                        <option value="{$item}">{$item}</option>
+                        <option value="{$item['name']}">{$item['name']}</option>
                         {/volist}
                     </select>
                 </div>

@@ -87,7 +87,7 @@ class StoreCart extends BaseModel
     public static function getUserCartNum($uid, $type, $numType)
     {
         if ($numType) {
-            return self::where('c.uid', $uid)->alias('c')->join('store_product p', 'p.id = c.product_id')->where('p.is_del',0)->where('c.type', $type)->where('c.is_pay', 0)->where('c.is_del', 0)->where('c.is_new', 0)->count();
+            return self::where('c.uid', $uid)->alias('c')->join('store_product p', 'p.id = c.product_id')->where('c.type', $type)->where('c.is_pay', 0)->where('c.is_del', 0)->where('c.is_new', 0)->count();
         } else {
             return self::where('c.uid', $uid)->alias('c')->join('store_product p', 'p.id = c.product_id')->where('c.type', $type)->where('c.is_pay', 0)->where('c.is_del', 0)->where('c.is_new', 0)->sum('c.cart_num');
         }
@@ -244,6 +244,7 @@ class StoreCart extends BaseModel
         foreach ($valid as $k => $cart) {
             if ($cart['trueStock'] < $cart['cart_num']) {
                 $cart['cart_num'] = $cart['trueStock'];
+                $model = new self();
                 $model->where('id', $cart['id'])->update(['cart_num' => $cart['cart_num']]);
                 $valid[$k] = $cart;
             }

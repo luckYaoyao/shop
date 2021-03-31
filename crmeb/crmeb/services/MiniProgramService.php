@@ -193,6 +193,45 @@ class MiniProgramService
         return self::SubscribenoticeService()->to($touser)->template($templateId)->andData($data)->withUrl($link)->send();
     }
 
+    /**
+     * 添加订阅消息模版
+     * @param string $tid
+     * @param array $kidList
+     * @param string $sceneDesc
+     * @return mixed
+     */
+    public static function addSubscribeTemplate(string $tid, array $kidList, string $sceneDesc = '')
+    {
+        try {
+            $res = self::SubscribenoticeService()->addTemplate($tid, $kidList, $sceneDesc);
+            if (isset($res['errcode']) && $res['errcode'] == 0 && isset($res['priTmplId'])) {
+                return $res['priTmplId'];
+            } else {
+                exception($res['errmsg']);
+            }
+        } catch (\Throwable $e) {
+            exception($e->getMessage());
+        }
+    }
+
+    /**
+     * 获取模版标题的关键词列表
+     * @param string $tid
+     * @return mixed
+     */
+    public static function getSubscribeTemplateKeyWords(string $tid)
+    {
+        try {
+            $res = self::SubscribenoticeService()->getPublicTemplateKeywords($tid);
+            if (isset($res['errcode']) && $res['errcode'] == 0 && isset($res['data'])) {
+                return $res['data'];
+            } else {
+                exception($res['errmsg']);
+            }
+        } catch (\Throwable $e) {
+            exception($e->getMessage());
+        }
+    }
 
     /**
      * 支付

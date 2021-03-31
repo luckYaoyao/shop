@@ -70,8 +70,9 @@ class FinanceModel extends BaseModel
 
     public static function getBillList($where)
     {
-        $data = ($data = self::setWhereList($where)->page((int)$where['page'], (int)$where['limit'])->select()) && count($data) ? $data->toArray() : [];
-        $count = self::setWhereList($where)->count();
+        $whereModel = self::setWhereList($where);
+        $data = ($data = $whereModel->page((int)$where['page'], (int)$where['limit'])->select()) && count($data) ? $data->toArray() : [];
+        $count = $whereModel->count();
         return compact('data', 'count');
     }
 

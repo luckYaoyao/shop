@@ -266,6 +266,17 @@ if (!function_exists('check_card')) {
         return true;/* 身份证格式正确*/
     }
 }
+if (!function_exists('check_phone')) {
+    /**
+     * 手机号验证
+     * @param $phone
+     * @return false|int
+     */
+    function check_phone($phone)
+    {
+        return preg_match( "/^1[3456789]\d{9}$/", $phone);
+    }
+}
 if (!function_exists('anonymity')) {
     /**
      * 匿名处理处理用户昵称

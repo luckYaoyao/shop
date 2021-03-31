@@ -36,9 +36,9 @@ class UserLevel extends AuthController
         $field[] = Form::radio('is_forever', '是否为永久', isset($vipinfo) ? $vipinfo->is_forever : 0)->options([['label' => '永久', 'value' => 1], ['label' => '非永久', 'value' => 0]])->col(24);
         //$field[]= Form::number('money','等级价格',isset($vipinfo) ? $vipinfo->money : 0)->min(0)->col(24);
         //$field[]= Form::radio('is_pay','是否需要购买',isset($vipinfo) ? $vipinfo->is_pay : 0)->options([['label'=>'需要','value'=>1],['label'=>'免费','value'=>0]])->col(24);
-        $field[] = Form::number('valid_date', '有效时间(天)', isset($vipinfo) ? $vipinfo->valid_date : 0)->min(0)->col(8);
-        $field[] = Form::number('grade', '等级', isset($vipinfo) ? $vipinfo->grade : 0)->min(0)->col(8);
-        $field[] = Form::number('discount', '享受折扣', isset($vipinfo) ? $vipinfo->discount : 0)->min(0)->col(8);
+        $field[] = Form::number('valid_date', '有效时间(天)', isset($vipinfo) ? $vipinfo->valid_date : 0)->min(0)->col(12);
+        $field[] = Form::number('grade', '等级', isset($vipinfo) ? $vipinfo->grade : 0)->min(0)->col(12);
+        $field[] = Form::number('discount', "享受折扣\n(输入折扣数100代表原价，90代表9折)", isset($vipinfo) ? $vipinfo->discount : 100)->min(0)->col(8);
         $field[] = Form::frameImageOne('icon', '图标', Url::buildUrl('admin/widget.images/index', array('fodder' => 'icon')), isset($vipinfo) ? $vipinfo->icon : '')->icon('image')->width('100%')->height('500px');
         $field[] = Form::frameImageOne('image', '会员背景', Url::buildUrl('admin/widget.images/index', array('fodder' => 'image')), isset($vipinfo) ? $vipinfo->image : '')->icon('image')->width('100%')->height('500px');
         $field[] = Form::radio('is_show', '是否显示', isset($vipinfo) ? $vipinfo->is_show : 0)->options([['label' => '显示', 'value' => 1], ['label' => '隐藏', 'value' => 0]])->col(8);

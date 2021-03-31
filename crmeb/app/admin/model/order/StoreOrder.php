@@ -40,6 +40,11 @@ class StoreOrder extends BaseModel
 
     use ModelTrait;
 
+    protected function getCartIdAttr($value)
+    {
+        return json_decode($value, true);
+    }
+    
     public static function orderCount()
     {
         $data['ys'] = self::statusByWhere(9, new self())->where(['is_system_del' => 0])->count();
@@ -445,11 +450,13 @@ HTML;
      */
     public static function updateOffline($id)
     {
-        $count = self::where('id', $id)->count();
-        if (!$count) return self::setErrorInfo('订单不存在');
-        $count = self::where('id', $id)->where('paid', 0)->count();
-        if (!$count) return self::setErrorInfo('订单已支付');
-        $res = self::where('id', $id)->update(['paid' => 1, 'pay_time' => time()]);
+        $order = self::where('id', $id)->find();
+        if (!$order) return self::setErrorInfo('订单不存在');
+        if ($order->paid == 1) return self::setErrorInfo('订单已支付');
+        if ($order->is_del == 1) return self::setErrorInfo('订单已取消');
+        $order->paid = 1;
+        $order->pay_time = time();
+        $res = $order->save();
         return $res;
     }
 

@@ -22,6 +22,7 @@
                             <Alert type="warning">除门店简介外其他选项都是必填项</Alert>
                             <Form-Item>
                                 <Row>
+
                                     <i-Col span="13">
                                         <span>门店名称：</span>
                                         <i-Input placeholder="门店名称" v-model="form.name" style="width: 80%" type="text"></i-Input>
@@ -96,9 +97,9 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <Modal title="查看图片" :visible.sync="visible">
-                                            <img :src="form.image" v-if="visible" style="width: 100%">
-                                        </Modal>
+                                        <div style="width: 670px; height: 320px;bottom:10%;display: block; position: absolute;z-index: 999999" v-if="visible" @click="visible = false ">
+                                            <img :src="form.image"   style="max-width: 100%;max-height: 100%;width:auto;height:auto;position: absolute;left: 50%;top: 50%;transform: translate3d(-50%,-50%,0);-webkit-transform: translate3d(-50%,-50%,0);" >
+                                        </div>
                                     </i-Col>
                                 </Row>
                             </Form-Item>
@@ -129,6 +130,8 @@
     </div>
 </div>
 <script src="{__PLUG_PATH}city.js"></script>
+<script src="{__ADMIN_PATH}js/layuiList.js"></script>
+
 <script>
     var storeData={:json_encode($store)};
     mpFrame.start(function(Vue) {

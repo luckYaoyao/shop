@@ -220,8 +220,8 @@
                         {{# } }}
                     </script>
                     <script type="text/html" id="data_time">
-                        <p>首次：{{d.add_time}}</p>
-                        <p>最近：{{d.last_time}}</p>
+                        <div >首次：{{d.add_time}}</div>
+                        <div >最近：{{d.last_time}}</div>
                     </script>
                     <script type="text/html" id="checkboxstatus">
                         <input type='checkbox' name='status' lay-skin='switch' value="{{d.uid}}" lay-filter='status' lay-text='正常|禁止'  {{ d.status == 1 ? 'checked' : '' }}>
@@ -308,6 +308,7 @@
             {field: 'uid', title: '编号',event:'uid',width:'4%',align:'center'},
             {field: 'avatar', title: '头像', event:'open_image', width: '6%',align:'center', templet: '<p lay-event="open_image"><img class="avatar" style="cursor: pointer" class="open_image" data-image="{{d.avatar}}" src="{{d.avatar}}" alt="{{d.nickname}}"></p>'},
             {field: 'nickname', title: '姓名',templet:'#nickname',align:'center'},
+            {field: 'group_name', title: '分组',templet:'#group_name',align:'center'},
             {field: 'phone', title: '手机号',align:'center',width:'8%'},
             {field: 'now_money', title: '余额',width:'6%',sort:true,event:'now_money',align:'center'},
             {field: 'pay_count', title: '购买次数',align:'center',width:'6%'},

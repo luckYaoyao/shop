@@ -127,7 +127,7 @@ class User extends BaseModel
             else if ($where['country'] == 'abroad') $model = $model->where('w.country', '<>', '中国');
         }
         if ($where['level'] !== '') {
-            $model = $model->where('level', $where['level'])->where('clean_time',0);
+            $model = $model->where('level', $where['level']);
         }
         if ($where['group_id'] !== '') {
             $model = $model->where('group_id', $where['group_id']);
@@ -149,6 +149,11 @@ class User extends BaseModel
             ->page((int)$where['page'], (int)$where['limit'])
             ->select()
             ->each(function ($item) {
+                $item['group_name'] = '';
+                if($item['group_id']){
+                    $group = UserGroup::where('id',$item['group_id'])->find();
+                    $item['group_name'] = $group ? $group['group_name'] : '';
+                }
                 $item['add_time'] = date('Y-m-d H:i:s', $item['add_time']);
                 if ($item['last_time']) $item['last_time'] = date('Y-m-d H:i:s', $item['last_time']);//最近一次访问日期
                 else $item['last_time'] = '无访问';//最近一次访问日期

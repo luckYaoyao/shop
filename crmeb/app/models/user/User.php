@@ -53,7 +53,9 @@ class User extends BaseModel
 
     public static function setWechatUser($wechatUser, $spread_uid = 0)
     {
-        return self::create([
+        $res1 = true;
+        if ($spread_uid) $res1 = self::where('uid', $spread_uid)->inc('spread_count', 1)->update();
+        $res2 = self::create([
             'account' => 'wx' . $wechatUser['uid'] . time(),
             'pwd' => md5(123456),
             'nickname' => $wechatUser['nickname'] ?: '',
@@ -66,6 +68,9 @@ class User extends BaseModel
             'uid' => $wechatUser['uid'],
             'user_type' => 'wechat'
         ]);
+        $res = $res1 && $res2;
+        self::checkTrans($res);
+        return $res2;
     }
 
 

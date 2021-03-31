@@ -327,4 +327,13 @@ class UserBill extends BaseModel
     {
         return self::where('type', 'brokerage')->where('category', 'now_money')->where('status', 1)->where('pm', 1)->sum('number');
     }
+
+    /**
+     * 用户扣除的金额
+     * @return float
+     */
+    public static function loseBrokerageCount()
+    {
+        return self::where('type', 'brokerage')->where('category', 'now_money')->where('status', 1)->where('pm', 0)->sum('number');
+    }
 }

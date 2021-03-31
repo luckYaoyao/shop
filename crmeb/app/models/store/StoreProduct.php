@@ -355,7 +355,7 @@ class StoreProduct extends BaseModel
      */
     public static function getSingleAttrUnique(int $productId, int $id = 0, int $type = 0)
     {
-        if (self::be(['id' => $productId, 'spec_type' => 1])) {
+        if ($type != 2  && self::be(['id' => $productId, 'spec_type' => 1])) {
             return false;
         } else {
             $unique = StoreProductAttr::storeProductAttrValueDb()->where(['product_id' => $id ?: $productId, 'type' => $type])->value('unique');
@@ -443,12 +443,6 @@ class StoreProduct extends BaseModel
         }
         if ($minPrice == 0 && $maxPrice == 0)
             return 0;
-        else if ($minPrice == 0 && $maxPrice)
-            return $maxPrice;
-        else if ($maxPrice == 0 && $minPrice)
-            return $minPrice;
-        else if ($maxPrice == $minPrice && $minPrice)
-            return $maxPrice;
         else
             return $minPrice . '~' . $maxPrice;
     }

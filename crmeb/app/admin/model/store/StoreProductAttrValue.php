@@ -41,11 +41,15 @@ class StoreProductAttrValue extends BaseModel
      * */
     public static function incProductAttrStock($productId, $unique, $num, $type = 0)
     {
-        $productAttr = self::where('unique', $unique)->where('product_id', $productId)->where('type', $type)->field('stock,sales')->find();
+        $productAttr = self::where('unique', $unique)->where('product_id', $productId)->where('type', $type)->field('stock,sales,quota')->find();
         if (!$productAttr) return true;
         if ($productAttr->sales > 0) $productAttr->sales = bcsub($productAttr->sales, $num, 0);
         if ($productAttr->sales < 0) $productAttr->sales = 0;
         $productAttr->stock = bcadd($productAttr->stock, $num, 0);
+        //活动商品有限量数
+        if($type > 0){
+            $productAttr->quota = bcadd($productAttr->quota, $num, 0);
+        }
         return $productAttr->save();
     }
 

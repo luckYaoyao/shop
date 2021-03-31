@@ -62,10 +62,12 @@ class AuthController extends SystemBasic
         if ($controller === null) $controller = $this->request->controller();
         if ($action === null) $action = $this->request->action();
         if (!count($route)) $route = $this->request->route();
+        array_shift($route);
         if (in_array(strtolower($controller), $this->skipLogController, true)) return true;
         $nowAuthName = SystemMenus::getAuthName($action, $controller, $module, $route);
         $baseNowAuthName = SystemMenus::getAuthName($action, $controller, $module, []);
-        if ((in_array($nowAuthName, $allAuth) && !in_array($nowAuthName, $this->auth)) || (in_array($baseNowAuthName, $allAuth) && !in_array($baseNowAuthName, $this->auth)))
+        //积分设置的父类 不是系统设置  但是 $baseNowAuthName   确实验证得 系统设置权限
+        if ((in_array($nowAuthName, $allAuth) && !in_array($nowAuthName, $this->auth)) || (in_array($baseNowAuthName, $allAuth) && ($nowAuthName != 'admin/setting.systemconfig/index/type/3/tab_id/11' && !in_array($baseNowAuthName, $this->auth))))
             exit($this->failed('没有权限访问!'));
         return true;
     }

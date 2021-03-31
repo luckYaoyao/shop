@@ -72,6 +72,7 @@ class ChatHandle
         $connections = $this->service->user();
         $online = isset($connections[$to_uid]) && isset($connections[$to_uid]->chatToUid) && $connections[$to_uid]->chatToUid == $uid;
         $data['type'] = $online ? 1 : 0;
+        StoreServiceLog::query('set wait_timeout=24*3600');
         StoreServiceLog::create($data);
 
         $_userInfo = User::getUserInfo($data['uid'], 'nickname,avatar');

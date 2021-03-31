@@ -254,7 +254,7 @@
                             </li>
                         </ul>
                         {{#  }else if(d._status==1){ }}
-                        {{# if(d.paid == 0 && d.pay_type == 'offline'){ }}
+                        {{# if(d.paid == 0 && d.pay_type == 'offline' && d.is_del == 0){ }}
                         <button class="btn btn-danger btn-xs" type="button" lay-event="order_paid">
                             <i class="fa fa-calendar"></i> 立即支付
                         </button>

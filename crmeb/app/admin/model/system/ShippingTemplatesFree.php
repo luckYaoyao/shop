@@ -46,7 +46,7 @@ class ShippingTemplatesFree extends BaseModel
         $placeList = [];
         foreach ($appointInfo as $item) {
             if (isset($item['place']) && is_array($item['place'])) {
-                $uniqid = uniqid(true);
+                $uniqid = uniqid(true) . rand(1000, 9999);
                 foreach ($item['place'] as $value) {
                     if (isset($value['children']) && is_array($value['children'])) {
                         foreach ($value['children'] as $vv) {

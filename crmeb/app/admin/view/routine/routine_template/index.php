@@ -5,6 +5,7 @@
         <div class="ibox">
             <div class="ibox-title">
                 <button type="button" class="btn btn-w-m btn-primary" onclick="$eb.createModalFrame(this.innerText,'{:Url('create')}')">添加模板消息</button>
+                <button type="button" class="layui-btn  btn btn-w-m btn-primary" onclick="syncTemplate()">一键同步</button>
                 <div class="ibox-tools">
 
                 </div>
@@ -79,6 +80,7 @@
     </div>
 </div>
 {/block}
+<script src="{__ADMIN_PATH}js/layuiList.js"></script>
 {block name="script"}
 <script>
     $('.btn-danger').on('click',function(){
@@ -97,5 +99,37 @@
             });
         });
     });
+    function syncTemplate(){
+        // var url = layList.U({c: 'routine.routine_template', a: 'syncSubscribe'});
+        var url = "{:Url('routine.routine_template/syncSubscribe')}";
+        // var url = "{__ADMIN_PATH}js/layuiList.js";
+        console.log(url);
+        $eb.axios.get(url).then(function (res) {
+            if (res.status == 200 && res.data.code == 200) {
+                $eb.$swal('success', res.data.msg);
+            } else
+                return Promise.reject(res.data.msg || '同步失败')
+        }).catch(function (err) {
+            $eb.$swal('error', err);
+        });
+    }
+    // require(['vue'], function (Vue) {
+    //     new Vue({
+    //         el: "#app",
+    //         data:{},
+    //         methods: {
+    //             syncTemplate: function() {
+    //                 console.log(layList.Url({c: 'routine.routine_template', a: 'syncSubscribe'}));
+    //                 // layList.baseGet(layList.Url({c: 'routine.routine_template', a: 'syncSubscribe'}), function (rem) {
+    //                 //     if(res.status == 200) {
+    //                 //         $eb.$swal('success',res.data.msg);
+    //                 //     }else
+    //                 //         return Promise.reject(res.data.msg || '同步失败')
+    //                 // });
+    //             }
+    //         },
+    //         mounted: function () {}
+    //     })
+    // });
 </script>
 {/block}

@@ -70,6 +70,7 @@
                             {case value="1"}
                                 <a class="layui-btn layui-btn-sm" href="{:Url('create')}">添加商品</a>
                                 <button class="layui-btn layui-btn-sm" onclick="$eb.createModalFrame(this.innerText,'{:Url('store.copy_taobao/index')}',{h:700,w:1100});">复制淘宝、天猫、1688、京东</button>
+                                <button class="layui-btn layui-btn-sm" onclick="$eb.createModalFrame(this.innerText,'{:Url('store.copy_taobao/product')}',{h:700,w:1100});">付费采集商品（淘宝、天猫、1688、京东、苏宁）</button>
                             {/case}
                             {case value="2"}
                                 <button class="layui-btn layui-btn-sm" data-type="show">批量上架</button>

@@ -184,7 +184,7 @@ class StoreProduct extends AuthController
             $productInfo['description'] = htmlspecialchars_decode(StoreDescription::getDescription($id));
             $productInfo['slider_image'] = is_string($productInfo['slider_image']) ? json_decode($productInfo['slider_image'], true) : [];
             if ($productInfo['spec_type'] == 1) {
-                $result = StoreProductAttrResult::getResult($id);
+                $result = StoreProductAttrResult::getResult($id, 0);
                 foreach ($result['value'] as $k => $v) {
                     $num = 1;
                     foreach ($v['detail'] as $dv) {
@@ -196,7 +196,7 @@ class StoreProduct extends AuthController
                 $productInfo['attrs'] = $result['value'];
                 $productInfo['attr'] = ['pic' => '', 'price' => 0, 'cost' => 0, 'ot_price' => 0, 'stock' => 0, 'bar_code' => '', 'weight' => 0, 'volume' => 0, 'brokerage' => 0, 'brokerage_two' => 0];
             } else {
-                $result = StoreProductAttrValue::where('product_id', $id)->find();
+                $result = StoreProductAttrValue::where('product_id', $id)->where('type', 0)->find();
                 if ($result) {
                     $single = $result->toArray();
                 } else {
