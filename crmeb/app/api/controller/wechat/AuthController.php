@@ -68,7 +68,7 @@ class AuthController
             if ($e->getCode() == '-41003') return app('json')->fail('获取会话密匙失败');
         }
         if (!isset($userInfoCong['openid'])) return app('json')->fail('openid获取失败');
-        if (!isset($userInfo['unionId'])) $userInfo['unionId'] = '';
+        $userInfo['unionId'] = isset($userInfoCong['unionid']) ? $userInfoCong['unionid'] : '';
         $userInfo['openId'] = $userInfoCong['openid'];
         $userInfo['spid'] = $data['spread_spid'];
         $userInfo['code'] = $data['spread_code'];
