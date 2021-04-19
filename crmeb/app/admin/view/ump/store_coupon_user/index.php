@@ -21,7 +21,7 @@
                                 <option value="2" {eq name="where.status" value="2"}selected="selected"{/eq}>已过期</option>
                             </select>
                             <div class="input-group">
-                                <input type="text" name="nickname" value="{$where.nickname}" placeholder="请输入发放人姓名" class="input-sm form-control"> <span class="input-group-btn">
+                                <input type="text" name="nickname" value="{$where.nickname}" placeholder="请输入领取人姓名" class="input-sm form-control"> <span class="input-group-btn">
                             </div>
                             <div class="input-group">
                                 <input type="text" name="coupon_title" value="{$where.coupon_title}" placeholder="请输入优惠券名称" class="input-sm form-control"> <span class="input-group-btn">
@@ -38,7 +38,7 @@
 
                             <th class="text-center">编号</th>
                             <th class="text-center">优惠券名称</th>
-                            <th class="text-center">发放人</th>
+                            <th class="text-center">领取人</th>
                             <th class="text-center">优惠券面值</th>
                             <th class="text-center">优惠券最低消费</th>
                             <th class="text-center">优惠券开始使用时间</th>
