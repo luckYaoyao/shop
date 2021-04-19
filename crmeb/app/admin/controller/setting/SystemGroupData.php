@@ -114,10 +114,46 @@ class SystemGroupData extends AuthController
     {
         $Fields = GroupModel::getField($gid);
         $params = request()->post();
+        $config_name = GroupModel::get(['id' => $gid])['config_name'];
+        //秒杀时间短判断
+        if ($config_name == 'routine_seckill_time') {
+            if ($params['time'] == '') {
+                return Json::fail('请输入开始时间');
+            }
+            if (!$params['continued']) {
+                return Json::fail('请输入持续时间');
+            }
+            if (!preg_match('/^(\d|1\d|2[0-3])$/', $params['time'])) {
+                return Json::fail('请输入0-23点之前的整点数');
+            }
+            if (!preg_match('/^([1-9]|1\d|2[0-4])$/', $params['continued'])) {
+                return Json::fail('请输入1-24点之前的持续时间');
+            }
+            if (($params['time'] + $params['continued']) > 24) {
+                return Json::fail('开始时间+持续时间不能大于24小时');
+            }
+            $list = GroupDataModel::where('gid', $gid)->column('value', 'id');
+            $times = $time = [];
+            foreach ($list as $item) {
+                $info = json_decode($item, true);
+                for ($i = 0; $i < $info['continued']['value']; $i++) {
+                    $times[] = $info['time']['value'] + $i;
+                }
+            }
+            for ($i = 0; $i < $params['continued']; $i++) {
+                $time[] = $params['time'] + $i;
+            }
+            foreach ($time as $v) {
+                if (in_array($v, $times)) return Json::fail('时段已占用');
+            }
+        }
+        //活动区域图片最多为3个
+        if ($config_name == 'routine_home_activity') {
+            if (GroupDataModel::where('gid', $gid)->count() >= 3) return Json::fail('获取区域图片不能大于三个');
+        }
         foreach ($params as $key => $param) {
             foreach ($Fields['fields'] as $index => $field) {
                 if ($key == $field["title"]) {
-//                    if($param == "" || count($param) == 0)
                     if ($param == "")
                         return Json::fail($field["name"] . "不能为空！");
                     else {
@@ -228,17 +264,44 @@ class SystemGroupData extends AuthController
     {
         $GroupData = GroupDataModel::get($id);
         $group = GroupModel::where('id', $GroupData['gid'])->find();
-        if(!$GroupData || !$group){
+        if (!$GroupData || !$group) {
             return Json::fail('请检查配置');
         }
         $params = request()->post();
         //秒杀
-        if($group['config_name'] == 'routine_seckill_time'){
-            if((int)($params['time'] + $params['continued']) > 24){
-                return Json::fail('请重新填写持续时间或者开始时间（时间跨度超过了一天）');
+        if ($group['config_name'] == 'routine_seckill_time') {
+            if ($params['time'] == '') {
+                return Json::fail('请输入开始时间');
+            }
+            if (!$params['continued']) {
+                return Json::fail('请输入持续时间');
+            }
+            if (!preg_match('/^(\d|1\d|2[0-3])$/', $params['time'])) {
+                return Json::fail('请输入0-23点之前的整点数');
+            }
+            if (!preg_match('/^([1-9]|1\d|2[0-4])$/', $params['continued'])) {
+                return Json::fail('请输入1-24点之前的持续时间');
+            }
+            if (($params['time'] + $params['continued']) > 24) {
+                return Json::fail('开始时间+持续时间不能大于24小时');
+            }
+            $list = GroupDataModel::where('gid', $GroupData['gid'])->column('value', 'id');
+            $times = $time = [];
+            if ($id) unset($list[$id]);
+            foreach ($list as $item) {
+                $info = json_decode($item, true);
+                for ($i = 0; $i < $info['continued']['value']; $i++) {
+                    $times[] = $info['time']['value'] + $i;
+                }
+            }
+            for ($i = 0; $i < $params['continued']; $i++) {
+                $time[] = $params['time'] + $i;
+            }
+            foreach ($time as $v) {
+                if (in_array($v, $times)) return Json::fail('时段已占用');
             }
         }
-        $Fields = json_decode( $group['fields'],true) ?? [];
+        $Fields = json_decode($group['fields'], true) ?? [];
 
         foreach ($params as $key => $param) {
             foreach ($Fields as $index => $field) {
