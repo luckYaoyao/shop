@@ -24,7 +24,7 @@
                                 </div>
                             </div>
                             <div class="layui-inline">
-                                <label class="layui-form-label">订单id</label>
+                                <label class="layui-form-label">订单号</label>
                                 <div class="layui-input-block">
                                     <input type="text" name="order_id" class="layui-input">
                                 </div>
@@ -116,10 +116,12 @@
                                     </button>
                                 </td>
                             </tr>
-
+                            <tr v-if="messageList.length == 0">
+                                <td colspan="8" style="text-align: center;padding: 15px;color: #999;line-height: 26px;">无数据</td>
+                            </tr>
                             </tbody>
                         </table>
-                        <div ref="pages" style="text-align: right;" v-if="count > where.limit"></div>
+                        <div ref="pages" style="text-align: right;"></div>
                     </div>
                 </div>
             </div>
