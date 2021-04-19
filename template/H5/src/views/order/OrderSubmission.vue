@@ -145,6 +145,7 @@
         <textarea
           placeholder="请添加备注（150字以内）"
           v-model="mark"
+          :maxlength="150"
         ></textarea>
       </div>
     </div>
@@ -228,13 +229,6 @@
       </div>
       <div
         class="item acea-row row-between-wrapper"
-        v-if="orderPrice.pay_postage > 0"
-      >
-        <div>运费：</div>
-        <div class="money">+￥{{ orderPrice.pay_postage }}</div>
-      </div>
-      <div
-        class="item acea-row row-between-wrapper"
         v-if="orderPrice.coupon_price > 0"
       >
         <div>优惠券抵扣：</div>
@@ -246,6 +240,13 @@
       >
         <div>积分抵扣：</div>
         <div class="money">-￥{{ orderPrice.deduction_price }}</div>
+      </div>
+      <div
+          class="item acea-row row-between-wrapper"
+          v-if="orderPrice.pay_postage > 0"
+      >
+        <div>运费：</div>
+        <div class="money">+￥{{ orderPrice.pay_postage }}</div>
       </div>
     </div>
 
