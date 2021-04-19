@@ -111,15 +111,15 @@ class User extends BaseModel
         }
         if ($userInfo->spread_uid) {
             return self::edit([
-                'nickname' => $wechatUser['nickname'] ?: '',
-                'avatar' => $wechatUser['headimgurl'] ?: '',
+                'nickname' => $userInfo['nickname'] == '' ? $wechatUser['nickname'] ?: '' : $userInfo['nickname'],
+                'avatar' => $userInfo['avatar'] == '' ? $wechatUser['headimgurl'] ?: '' : $userInfo['avatar'],
                 'is_promoter' => $status ? 1 : $userInfo->is_promoter,
                 'login_type' => isset($wechatUser['login_type']) ? $wechatUser['login_type'] : $userInfo->login_type,
             ], $uid, 'uid');
         } else {
             $data = [
-                'nickname' => $wechatUser['nickname'] ?: '',
-                'avatar' => $wechatUser['headimgurl'] ?: '',
+                'nickname' => $userInfo['nickname'] == '' ? $wechatUser['nickname'] ?: '' : $userInfo['nickname'],
+                'avatar' => $userInfo['avatar'] == '' ? $wechatUser['headimgurl'] ?: '' : $userInfo['avatar'],
                 'is_promoter' => $status ? 1 : $userInfo->is_promoter,
                 'login_type' => isset($wechatUser['login_type']) ? $wechatUser['login_type'] : $userInfo->login_type,
                 'spread_uid' => 0,
@@ -455,7 +455,7 @@ class User extends BaseModel
         if ($orderBy === '') $orderBy = 'u.add_time desc';
         $model = $model->alias(' u');
         $sql = StoreOrder::where('o.paid', 1)->group('o.uid')->field(['SUM(o.pay_price) as numberCount', 'o.uid', 'o.order_id'])
-            ->where('o.is_del', 0)->where('o.refund_status', 'in', [0,1])->where('o.is_system_del', 0)->alias('o')->fetchSql(true)->select();
+            ->where('o.is_del', 0)->where('o.refund_status', 'in', [0, 1])->where('o.is_system_del', 0)->alias('o')->fetchSql(true)->select();
         $model = $model->join("(" . $sql . ") p", 'u.uid = p.uid', 'LEFT');
         $model = $model->where('u.uid', 'IN', $uid);
         $model = $model->field("u.uid,u.nickname,u.avatar,from_unixtime(u.add_time,'%Y/%m/%d') as time,u.spread_count as childCount,u.pay_count as orderCount,p.numberCount");

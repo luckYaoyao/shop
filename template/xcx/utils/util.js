@@ -214,7 +214,7 @@ const chekWxLogin = function() {
 						fail() {
 							getCodeLogin((code) => {
 								wxgetUserInfo().then(userInfo => {
-									userInfo.code = code;
+									userInfo.code = code.code;
 									return resolve({
 										userInfo: userInfo,
 										isLogin: false
