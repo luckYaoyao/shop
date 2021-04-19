@@ -154,11 +154,10 @@ class StoreProduct extends BaseModel
                     '￥' . $item['price'],
                     $item['stock'],
                     $item['sales'],
-                    $item['like'],
                     $item['collect']
                 ];
             }
-            PHPExcelService::setExcelHeader(['产品名称', '产品简介', '产品分类', '价格', '库存', '销量', '点赞人数', '收藏人数'])
+            PHPExcelService::setExcelHeader(['产品名称', '产品简介', '产品分类', '价格', '库存', '销量', '收藏人数'])
                 ->setExcelTile('产品导出', '产品信息' . time(), ' 生成时间：' . date('Y-m-d H:i:s', time()))
                 ->setExcelContent($export)
                 ->ExcelSave();
