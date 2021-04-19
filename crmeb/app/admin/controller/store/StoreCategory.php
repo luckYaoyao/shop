@@ -118,6 +118,7 @@ class StoreCategory extends AuthController
         ], $request);
         if ($data['pid'] == '') return Json::fail('请选择父类');
         if (!$data['cate_name']) return Json::fail('请输入分类名称');
+        if (strlen($data['cate_name'])>12) return Json::fail('分类名称太长（4个汉字或者12个字母）');
         if (count($data['pic']) < 1) return Json::fail('请上传分类图标');
         if ($data['sort'] < 0) $data['sort'] = 0;
         $data['pic'] = $data['pic'][0];
