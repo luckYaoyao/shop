@@ -153,7 +153,7 @@ const getUserProfile = function(code) {
 		wx.getUserProfile({
 			lang: 'zh_CN',
 			desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
-			success(user) {
+			success(res) {
 				resolve(res);
 			},
 			fail(res) {
@@ -214,7 +214,7 @@ const chekWxLogin = function() {
 						fail() {
 							getCodeLogin((code) => {
 								wxgetUserInfo().then(userInfo => {
-									userInfo.code = code.code;
+									userInfo.code = code;
 									return resolve({
 										userInfo: userInfo,
 										isLogin: false

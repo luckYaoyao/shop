@@ -36,11 +36,12 @@ class AuthController
     public function mp_auth(Request $request)
     {
         $cache_key = '';
-        list($code, $post_cache_key, $login_type) = UtilService::postMore([
+        list($codes, $post_cache_key, $login_type) = UtilService::postMore([
             ['code', ''],
             ['cache_key', ''],
             ['login_type', '']
         ], $request, true);
+        $code = isset($codes['code']) ? $codes['code'] : $codes;
         $session_key = Cache::get('eb_api_code_' . $post_cache_key);
         if (!$code && !$session_key)
             return app('json')->fail('授权失败,参数有误');
@@ -54,7 +55,6 @@ class AuthController
                 return app('json')->fail('获取session_key失败，请检查您的配置！', ['line' => $e->getLine(), 'message' => $e->getMessage()]);
             }
         }
-
         $data = UtilService::postMore([
             ['spread_spid', 0],
             ['spread_code', ''],
@@ -68,6 +68,10 @@ class AuthController
             if ($e->getCode() == '-41003') return app('json')->fail('获取会话密匙失败');
         }
         if (!isset($userInfoCong['openid'])) return app('json')->fail('openid获取失败');
+
+        if(isset($codes['code']) && !WechatUser::where('routine_openid', $userInfoCong['openid'])->value('uid')){
+            return app('json')->fail('请先授权');
+        }
         $userInfo['unionId'] = isset($userInfoCong['unionid']) ? $userInfoCong['unionid'] : '';
         $userInfo['openId'] = $userInfoCong['openid'];
         $userInfo['spid'] = $data['spread_spid'];
@@ -81,6 +85,7 @@ class AuthController
         else
             $token = UserToken::createToken($userInfo, 'routine');
         if ($token) {
+            User::updateWechatUser(['code' => $data['spread_spid']], $uid);
             event('UserLogin', [$userInfo, $token]);
             return app('json')->successful('登陆成功！', [
                 'token' => $token->token,
