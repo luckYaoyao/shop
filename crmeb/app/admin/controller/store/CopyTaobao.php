@@ -124,11 +124,11 @@ class CopyTaobao extends AuthController
         $product = new Product('copy', ['account' => sys_config('sms_account'), 'secret' => sys_config('sms_token')]);
         $key = md5($link);
         $info = $cache->get($key);
-        if(!$info){
+        if (!$info) {
             $info = $product->goods($link);
-            $cache->set($key,$info,7200);
+            $cache->set($key, $info, 7200);
         }
-        $info = array_merge($this->productInfo,$info);
+        $info = array_merge($this->productInfo, $info);
         return JsonService::successful($info);
     }
 
@@ -842,14 +842,18 @@ class CopyTaobao extends AuthController
     public function downloadImage($url = '', $name = '', $type = 0, $timeout = 30, $w = 0, $h = 0)
     {
         if (!strlen(trim($url))) return '';
+
         if (!strlen(trim($name))) {
             //TODO 获取要下载的文件名称
             $downloadImageInfo = $this->getImageExtname($url);
-            if (!$this->checkExtname($url, $downloadImageInfo['ext_name'])) {
-                return JsonService::fail('文件后缀不合法');
-            }
+            $ext = $downloadImageInfo['ext_name'];
             $name = $downloadImageInfo['file_name'];
             if (!strlen(trim($name))) return '';
+        } else {
+            $ext = substr(strrchr($name, '.'), 1);
+        }
+        if (!$this->checkExtname($url, $ext)) {
+            return JsonService::fail('文件后缀不合法');
         }
         //TODO 获取远程文件所采用的方法
         if ($type) {
