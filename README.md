@@ -52,7 +52,7 @@ CRMEB微信开发10群（862316758）3000人群可加
  | [官网地址](https://www.crmeb.com)
  | [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
  | [服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
- | [授权价格](http://crmeb.com/web/index/price.html)
+ | [授权价格](http://s.crmeb.com/self/?pid=-999)
 - - -
 
 ## 相关项目
