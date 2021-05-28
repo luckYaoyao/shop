@@ -185,8 +185,6 @@ CSDN开源技术选型秀优秀项目：[点击查看直播](https://codechina.c
 
 ![系统功能](/readme/images/商业版对比.jpg)
 
-扫描公众号二维码，回复“4.0体验”免费下载商业版源码
-
 商业版演示站后台: http://demo.crmeb.net/admin  账号：demo  密码：crmeb.com
 
 
