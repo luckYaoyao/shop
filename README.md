@@ -44,8 +44,7 @@ CRMEB微信开发10群（862316758）3000人群可加
 
 ## 导航栏目
 
-[前端下载](/readme/前端下载地址.md)
- | [使用手册](https://help.crmeb.net)
+[使用手册](https://help.crmeb.net)
  | [安装说明](/readme/安装说明.md)
  | [论坛地址](http://bbs.crmeb.net)
  | [官网地址](https://www.crmeb.com)
@@ -55,12 +54,6 @@ CRMEB微信开发10群（862316758）3000人群可加
 - - -
 
 ## 相关项目
-
-公众号前端：https://gitee.com/ZhongBangKeJi/CRMEB-H5
-
-微信小程序前端：https://gitee.com/ZhongBangKeJi/CRMEB_WechatApplet
-
-不要再说假开源了，公众号、小程序、H5前端代码都开源着
 
 JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
 感谢大家对CRMEB的支持，为了感谢java开发者对CRMEB的支持，特别推出CRMEB java版
@@ -76,7 +69,7 @@ tp PHP表单生成器，快速生成现代化的form表单。包含复选框、�
 
 ![前端演示](https://images.gitee.com/uploads/images/2020/1103/161837_52d08017_1491977.png "屏幕截图.png")
 
-开源演示站： http://demo32.crmeb.net/admin  账号：demo  密码：crmeb.com
+v4演示站： http://v4.crmeb.net/admin  账号：demo  密码：crmeb.com
 
 ## 推荐服务器
 
@@ -184,7 +177,7 @@ CSDN开源技术选型秀优秀项目：[点击查看直播](https://codechina.c
 
 ![系统功能](/readme/images/商业版对比.jpg)
 
-商业版演示站后台: http://demo.crmeb.net/admin  账号：demo  密码：crmeb.com
+v4演示站后台: http://v4.crmeb.net/admin  账号：demo  密码：crmeb.com
 
 
 <b>去了解商业版 <a href='https://s.click.taobao.com/W7hVkLw' target="_blank"> 支持一下 </a></b>
