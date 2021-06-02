@@ -67,7 +67,7 @@ tp PHP表单生成器，快速生成现代化的form表单。包含复选框、�
 
 ##  系统演示
 
-![前端演示](https://images.gitee.com/uploads/images/2020/1103/161837_52d08017_1491977.png "屏幕截图.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0602/181542_49e7c3d6_5516386.png "WechatIMG1207.png")
 
 v4演示站： http://v4.crmeb.net/admin  账号：demo  密码：crmeb.com
 
