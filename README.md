@@ -1,4 +1,4 @@
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0402/124436_92cd75a0_892944.png "QQ20210402-124353@2x.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0602/164307_80425ea3_5516386.png "屏幕截图.png")
 <p align="center">
     <a href="http://github.crmeb.net/u/giteedt">
         <img src="https://images.gitee.com/uploads/images/2020/1229/120019_5afce26f_5516386.jpeg" />
