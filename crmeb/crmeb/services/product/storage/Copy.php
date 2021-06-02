@@ -1,10 +1,13 @@
 <?php
-/**
- * Created by PhpStorm
- * User: song
- * Date: 2020/9/28/0028
- * Time: 16:14
- */
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\services\product\storage;
 
@@ -46,7 +49,7 @@ class Copy extends BaseProduct
     /** 复制商品
      * @return mixed
      */
-    public function goods($url)
+    public function goods(string $url)
     {
         $param['url'] = $url;
         return $this->accessToken->httpRequest(self::PRODUCT_GOODS, $param);

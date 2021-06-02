@@ -1,12 +1,17 @@
 <?php
-/**
- * Created by PhpStorm
- * User: song
- * Date: 2020/9/29/0029
- * Time: 16:45
- */
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\services\express\storage;
+
+use app\services\shipping\ExpressServices;
 use crmeb\basic\BaseExpress;
 use crmeb\exceptions\ApiException;
 use crmeb\services\AccessTokenServeService;
@@ -15,7 +20,6 @@ use crmeb\services\AccessTokenServeService;
  * Class Express
  * @package crmeb\services\express\storage
  */
-
 class Express extends BaseExpress
 {
     /**
@@ -42,6 +46,7 @@ class Express extends BaseExpress
      * 面单打印
      */
     const EXPRESS_DUMP = 'expr/dump';
+
     /** 初始化
      * @param array $config
      * @return mixed|void
@@ -68,12 +73,10 @@ class Express extends BaseExpress
      * @param int $limit
      * @return bool|mixed
      */
-    public function temp($com, $page = 0, $limit = 10)
+    public function temp(string $com)
     {
         $param = [
-            'com' => $com,
-            'page' => $page,
-            'limit' => $limit
+            'com' => $com
         ];
 
         return $this->accessToken->httpRequest(self::EXPRESS_TEMP, $param);
@@ -84,15 +87,21 @@ class Express extends BaseExpress
      * @param int $type 快递类型：1，国内运输商；2，国际运输商；3，国际邮政
      * @return bool|mixed
      */
-    public function express(int $type = 1, int $page = 0, int $limit = 10)
+    public function express(int $type = 0, int $page = 0, int $limit = 20)
     {
-        $param = [
-            'type' => $type,
-            'page' => $page,
-            'limit' => $limit
-        ];
+        if ($type) {
+            $param = [
+                'type' => $type,
+                'page' => $page,
+                'limit' => $limit
+            ];
+        } else {
+            $param = [];
+        }
+
         return $this->accessToken->httpRequest(self::EXPRESS_LIST, $param);
     }
+
     /**
      * 查询物流信息
      * @param $com
@@ -102,12 +111,15 @@ class Express extends BaseExpress
      * @return 物流状态：status 0在途，1揽收，2疑难，3签收，4退签，5派件，6退回，7转单，10待清关，11清关中，12已清关，13清关异常，14收件人拒签
      * @return 物流详情 content
      */
-    public function query($com, $num)
+    public function query(string $num, string $com = '')
     {
         $param = [
             'com' => $com,
             'num' => $num
         ];
+        if ($com === null) {
+            unset($param['com']);
+        }
         return $this->accessToken->httpRequest(self::EXPRESS_QUERY, $param);
     }
 
@@ -123,6 +135,7 @@ class Express extends BaseExpress
         if (!$param['com']) throw new ApiException('快递公司编码缺失');
         $param['to_name'] = $data['to_name'] ?? '';
         $param['to_tel'] = $data['to_tel'] ?? '';
+        $param['order_id'] = $data['order_id'] ?? '';
         $param['to_addr'] = $data['to_addr'] ?? '';
         if (!$param['to_addr'] || !$param['to_tel'] || !$param['to_name']) throw new ApiException('寄件人信息缺失');
         $param['from_name'] = $data['from_name'] ?? '';
@@ -130,16 +143,26 @@ class Express extends BaseExpress
         $param['from_addr'] = $data['from_addr'] ?? '';
         if (!$param['from_name'] || !$param['from_tel'] || !$param['from_addr']) throw new ApiException('收件人信息缺失');
         $param['temp_id'] = $data['temp_id'] ?? '';
-        if (!$param['temp_id']) throw new ApiException('电子面单模板ID缺失');
-        $param['siid'] = $data['siid'] ?? '';
-        if (!$param['siid']) throw new ApiException('云打印机编号缺失');
+        if (!$param['temp_id']) {
+            throw new ApiException('电子面单模板ID缺失');
+        }
+        $param['siid'] = sys_config('config_export_siid');
+        if (!$param['siid']) {
+            throw new ApiException('云打印机编号缺失');
+        }
         $param['count'] = $data['count'] ?? '';
-        if (!$param['count']) throw new ApiException('商品数量缺失');
         $param['cargo'] = $data['cargo'] ?? '';
-        $param['partner_id'] = $data['partner_id'] ?? 0;
-        $param['partner_key'] = $data['partner_key'] ?? '';
-        $param['net'] = $data['net'] ?? '';
-        return $this->accessToken->httpRequest(self::EXPRESS_DUMP, $param);
+        if (!$param['count']) {
+            throw new ApiException('商品数量缺失');
+        }
+        /** @var ExpressServices $expressServices */
+        $expressServices = app()->make(ExpressServices::class);
+        $expressData = $expressServices->getOneByWhere(['code'=>$param['com']])->toArray();
+        if (isset($data['cargo'])) $param['cargo'] = $data['cargo'];
+        if ($expressData['partner_id'] == 1) $param['partner_id'] = $expressData['account'];
+        if ($expressData['partner_key'] == 1) $param['partner_key'] = $expressData['key'];
+        if ($expressData['net'] == 1) $param['net'] = $expressData['net_name'];
+        return $this->accessToken->httpRequest(self::EXPRESS_DUMP, $param, 'POST');
     }
 
 }

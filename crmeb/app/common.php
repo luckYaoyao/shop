@@ -1,15 +1,19 @@
 <?php
 // +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006-2016 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
-// | Author: 流年 <liu21st@gmail.com>
+// | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
 // 应用公共文件
+
+use think\exception\ValidateException;
+use crmeb\services\FormBuilder as Form;
+use crmeb\services\UploadService;
 
 
 if (!function_exists('exception')) {
@@ -40,8 +44,15 @@ if (!function_exists('sys_config')) {
     {
         if (empty($name))
             return $default;
-
-        $config = trim(app('sysConfig')->get($name));
+        $sysConfig = app('sysConfig')->get($name);
+        if(is_array($sysConfig)){
+            foreach ($sysConfig as &$item){
+                if (strpos($item,'/uploads/system/') !== false) $item = set_file_url($item);
+            }
+        }else{
+            if (strpos($sysConfig,'/uploads/system/') !== false) $sysConfig = set_file_url($sysConfig);
+        }
+        $config = is_array($sysConfig) ? $sysConfig : trim($sysConfig);
         if ($config === '' || $config === false) {
             return $default;
         } else {
@@ -107,7 +118,7 @@ if (!function_exists('sensitive_words_filter')) {
     function sensitive_words_filter($str)
     {
         if (!$str) return '';
-        $file = app()->getAppPath() . 'public/static/plug/censorwords/CensorWords';
+        $file = app()->getAppPath() . 'public/statics/plug/censorwords/CensorWords';
         $words = file($file);
         foreach ($words as $word) {
             $word = str_replace(array("\r\n", "\r", "\n", "/", "<", ">", "=", " "), '', $word);
@@ -191,10 +202,19 @@ if (!function_exists('set_file_url')) {
     function set_file_url($image, $siteUrl = '')
     {
         if (!strlen(trim($siteUrl))) $siteUrl = sys_config('site_url');
-        $domainTop = substr($image, 0, 4);
-        if ($domainTop == 'http') return $image;
-        $image = str_replace('\\', '/', $image);
-        return $siteUrl . $image;
+        if (!$image) return $image;
+        if (is_array($image)){
+            foreach ($image as &$item){
+                $domainTop = substr($item, 0, 4);
+                if ($domainTop != 'http')
+                    $item = $siteUrl . str_replace('\\', '/', $item);
+            }
+        }else{
+            $domainTop = substr($image, 0, 4);
+            if ($domainTop != 'http')
+                $image = $siteUrl . str_replace('\\', '/', $image);
+        }
+        return $image;
     }
 }
 
@@ -266,6 +286,17 @@ if (!function_exists('check_card')) {
         return true;/* 身份证格式正确*/
     }
 }
+if (!function_exists('check_link')) {
+    /**
+     * 地址验证
+     * @param string $link
+     * @return false|int
+     */
+    function check_link(string $link)
+    {
+        return preg_match("/^(http|https|ftp):\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+[\/=\?%\-&_~`@[\]\’:+!]*([^<>\”])*$/", $link);
+    }
+}
 if (!function_exists('check_phone')) {
     /**
      * 手机号验证
@@ -274,7 +305,7 @@ if (!function_exists('check_phone')) {
      */
     function check_phone($phone)
     {
-        return preg_match( "/^1[3456789]\d{9}$/", $phone);
+        return preg_match("/^1[3456789]\d{9}$/", $phone);
     }
 }
 if (!function_exists('anonymity')) {
@@ -283,16 +314,20 @@ if (!function_exists('anonymity')) {
      * @param $name
      * @return string
      */
-    function anonymity($name)
+    function anonymity($name, $type = 1)
     {
-        $strLen = mb_strlen($name, 'UTF-8');
-        $min = 3;
-        if ($strLen <= 1)
-            return '*';
-        if ($strLen <= $min)
-            return mb_substr($name, 0, 1, 'UTF-8') . str_repeat('*', $min - 1);
-        else
-            return mb_substr($name, 0, 1, 'UTF-8') . str_repeat('*', $strLen - 1) . mb_substr($name, -1, 1, 'UTF-8');
+        if ($type == 1) {
+            return mb_substr($name, 0, 1, 'UTF-8') . '**' . mb_substr($name, -1, 1, 'UTF-8');
+        } else {
+            $strLen = mb_strlen($name, 'UTF-8');
+            $min = 3;
+            if ($strLen <= 1)
+                return '*';
+            if ($strLen <= $min)
+                return mb_substr($name, 0, 1, 'UTF-8') . str_repeat('*', $min - 1);
+            else
+                return mb_substr($name, 0, 1, 'UTF-8') . str_repeat('*', $strLen - 1) . mb_substr($name, -1, 1, 'UTF-8');
+        }
     }
 }
 if (!function_exists('sort_list_tier')) {
@@ -320,6 +355,32 @@ if (!function_exists('sort_list_tier')) {
             }
         }
         return $list;
+    }
+}
+
+if (!function_exists('sort_city_tier')) {
+    /**
+     * 城市数据整理
+     * @param $data
+     * @param int $pid
+     * @param string $field
+     * @param string $pk
+     * @param string $html
+     * @param int $level
+     * @param bool $clear
+     * @return array
+     */
+    function sort_city_tier($data, $pid = 0, $navList = [])
+    {
+        foreach ($data as $k => $menu) {
+            if ($menu['parent_id'] == $pid) {
+                unset($menu['parent_id']);
+                unset($data[$k]);
+                $menu['c'] = sort_city_tier($data, $menu['v']);
+                $navList[] = $menu;
+            }
+        }
+        return $navList;
     }
 }
 
@@ -384,6 +445,7 @@ if (!function_exists('image_to_base64')) {
      */
     function image_to_base64($avatar = '', $timeout = 9)
     {
+        $avatar = str_replace('https', 'http', $avatar);
         try {
             $url = parse_url($avatar);
             $url = $url['host'];
@@ -497,8 +559,13 @@ if (!function_exists('is_brokerage_statu')) {
      */
     function is_brokerage_statu(float $price)
     {
+        if (!sys_config('brokerage_func_status')) {
+            return false;
+        }
         $storeBrokerageStatus = sys_config('store_brokerage_statu', 1);
         if ($storeBrokerageStatus == 1) {
+            return false;
+        } else if ($storeBrokerageStatus == 2) {
             return false;
         } else {
             $storeBrokeragePrice = sys_config('store_brokerage_price', 0);
@@ -525,3 +592,210 @@ if (!function_exists('array_unique_fb')) {
         return $out;
     }
 }
+
+
+if (!function_exists('get_crmeb_version')) {
+    /**
+     * 获取CRMEB系统版本号
+     * @param string $default
+     * @return string
+     */
+    function get_crmeb_version($default = 'v1.0.0')
+    {
+        try {
+            $version = parse_ini_file(app()->getRootPath() . '.version');
+            return $version['version'] ?? $default;
+        } catch (\Throwable $e) {
+            return $default;
+        }
+    }
+}
+
+if (!function_exists('get_crmeb_version_code')) {
+    /**
+     * 获取CRMEB系统版本号
+     * @param string $default
+     * @return string
+     */
+    function get_crmeb_version_code($default = '410')
+    {
+        try {
+            $version = parse_ini_file(app()->getRootPath() . '.version');
+            return $version['version_code'] ?? $default;
+        } catch (\Throwable $e) {
+            return $default;
+        }
+    }
+}
+
+if (!function_exists('get_file_link')) {
+    /**
+     * 获取文件带域名的完整路径
+     * @param string $link
+     * @return string
+     */
+    function get_file_link(string $link)
+    {
+        if (!$link) {
+            return '';
+        }
+        if (strstr('http', $link) === false) {
+            return app()->request->domain() . $link;
+        } else {
+            return $link;
+        }
+    }
+}
+
+if (!function_exists('tidy_tree')) {
+    /**
+     * 格式化分类
+     * @param $menusList
+     * @param int $pid
+     * @param array $navList
+     * @return array
+     */
+    function tidy_tree($menusList, $pid = 0, $navList = [])
+    {
+        foreach ($menusList as $k => $menu) {
+            if ($menu['parent_id'] == $pid) {
+                unset($menusList[$k]);
+                $menu['children'] = tidy_tree($menusList, $menu['id']);
+                if ($menu['children']) $menu['expand'] = true;
+                $navList[] = $menu;
+            }
+        }
+        return $navList;
+    }
+}
+
+if (!function_exists('create_form')) {
+    /**
+     * 表单生成方法
+     * @param string $title
+     * @param array $field
+     * @param $url
+     * @param string $method
+     * @return array
+     * @throws \FormBuilder\Exception\FormBuilderException
+     */
+    function create_form(string $title, array $field, $url, string $method = 'POST')
+    {
+        $form = Form::createForm((string)$url);//提交地址
+        $form->setMethod($method);//提交方式
+        $form->setRule($field);//表单字段
+        $form->setTitle($title);//表单标题
+        $rules = $form->formRule();
+        $title = $form->getTitle();
+        $action = $form->getAction();
+        $method = $form->getMethod();
+        $info = '';
+        $status = true;
+        $methodData = ['POST', 'PUT', 'GET', 'DELETE'];
+        if (!in_array(strtoupper($method), $methodData)) {
+            throw new ValidateException('请求方式有误');
+        }
+        return compact('rules', 'title', 'action', 'method', 'info', 'status');
+    }
+}
+
+if (!function_exists('msectime')) {
+    /**
+     * 获取毫秒数
+     * @return float
+     */
+    function msectime()
+    {
+        list($msec, $sec) = explode(' ', microtime());
+        return (float)sprintf('%.0f', (floatval($msec) + floatval($sec)) * 1000);
+    }
+}
+
+
+if (!function_exists('array_bc_sum')) {
+    /**
+     * 获取一维数组的总合高精度
+     * @param array $data
+     * @return string
+     */
+    function array_bc_sum(array $data)
+    {
+        $sum = '0';
+        foreach ($data as $item) {
+            $sum = bcadd($sum, (string)$item, 2);
+        }
+        return $sum;
+    }
+}
+
+if (!function_exists('get_tree_children')) {
+    /**
+     * tree 子菜单
+     * @param array $data 数据
+     * @param string $childrenname 子数据名
+     * @param string $keyName 数据key名
+     * @param string $pidName 数据上级key名
+     * @return array
+     */
+    function get_tree_children(array $data, string $childrenname = 'children', string $keyName = 'id', string $pidName = 'pid')
+    {
+        $list = array();
+        foreach ($data as $value) {
+            $list[$value[$keyName]] = $value;
+        }
+        static $tree = array(); //格式化好的树
+        foreach ($list as $item) {
+            if (isset($list[$item[$pidName]])) {
+                $list[$item[$pidName]][$childrenname][] = &$list[$item[$keyName]];
+            } else {
+                $tree[] = &$list[$item[$keyName]];
+            }
+        }
+        return $tree;
+    }
+}
+
+if (!function_exists('get_tree_children_value')) {
+
+    function get_tree_children_value(array $data, $value, string $childrenname = 'children', string $keyName = 'id')
+    {
+        static $childrenValue = [];
+        foreach ($data as $item) {
+            $childrenData = $item[$childrenname] ?? [];
+            if (count($childrenData)) {
+                return get_tree_children_value($childrenData, $childrenname, $keyName);
+            } else {
+                if ($item[$keyName] == $value) {
+                    $childrenValue[] = $item['value'];
+                }
+            }
+        }
+        return $childrenValue;
+    }
+}
+
+
+if (!function_exists('get_tree_value')) {
+    /**
+     * 获取
+     * @param array $data
+     * @param int|string $value
+     * @return array
+     */
+    function get_tree_value(array $data, $value)
+    {
+        static $childrenValue = [];
+        foreach ($data as &$item) {
+            if ($item['value'] == $value) {
+                $childrenValue[] = $item['value'];
+                if ($item['pid']) {
+                    $value = $item['pid'];
+                    unset($item);
+                    return get_tree_value($data, $value);
+                }
+            }
+        }
+        return $childrenValue;
+    }
+}
+

@@ -1,10 +1,22 @@
 <?php
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\basic;
 
-use crmeb\services\UtilService;
 use think\facade\Config;
 
+/**
+ * Class BaseUpload
+ * @package crmeb\basic
+ */
 abstract class BaseUpload extends BaseStorage
 {
 
@@ -166,6 +178,7 @@ abstract class BaseUpload extends BaseStorage
             $headers = $this->getFileHeaders($url);
             return [
                 'name' => $this->fileInfo->fileName,
+                'real_name' => $this->fileInfo->realName ?? '',
                 'size' => $headers['size'] ?? 0,
                 'type' => $headers['type'] ?? 'image/jpeg',
                 'dir' => $this->fileInfo->filePath,
@@ -200,5 +213,11 @@ abstract class BaseUpload extends BaseStorage
      * @return mixed
      */
     abstract protected function app();
+
+    /**
+     * 获取上传密钥
+     * @return mixed
+     */
+    abstract public function getTempKeys();
 
 }

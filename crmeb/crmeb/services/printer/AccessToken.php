@@ -1,10 +1,18 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 namespace crmeb\services\printer;
 
 
+use app\services\other\CacheServices;
 use crmeb\services\HttpService;
-use app\models\system\Cache as CacheModel;
 use think\facade\Config;
 use think\helper\Str;
 
@@ -89,7 +97,7 @@ class AccessToken extends HttpService
         if (method_exists($this, $action)) {
             return $this->{$action}();
         } else {
-            throw new \RuntimeException(__CLASS__ . '->' . $action . 'Method not worn in');
+            throw new \RuntimeException(__CLASS__ . '->' . $action . '(),Method not worn in');
         }
     }
 
@@ -100,7 +108,9 @@ class AccessToken extends HttpService
      */
     protected function getYiLianYunAccessToken()
     {
-        $this->accessToken[$this->name] = CacheModel::getDbCache('YLY_access_token', function () {
+        /** @var CacheServices $cacheServices */
+        $cacheServices = app()->make(CacheServices::class);
+        $this->accessToken[$this->name] = $cacheServices->getDbCache('YLY_access_token', function () {
             $request = self::postRequest($this->apiUrl . 'oauth/oauth', [
                 'client_id' => $this->clientId,
                 'grant_type' => 'client_credentials',
@@ -116,7 +126,7 @@ class AccessToken extends HttpService
                 return $request['body']['access_token'] ?? '';
             }
             return '';
-        }, 18 * 86400);
+        },86400);
         if (!$this->accessToken[$this->name])
             throw new \Exception('获取access_token获取失败');
 
@@ -149,7 +159,7 @@ class AccessToken extends HttpService
      */
     public function __get($name)
     {
-        if (in_array($name, ['clientId', 'apiKey', 'accessToken', 'partner', 'terminal'])) {
+        if (in_array($name, ['clientId', 'apiKey', 'accessToken', 'partner', 'terminal', 'machineCode'])) {
             return $this->{$name};
         }
     }

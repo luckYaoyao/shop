@@ -1,62 +1,19 @@
 <?php
-/**
- *
- * @author: xaboy<365615158@qq.com>
- * @day: 2017/10/24
- */
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 namespace crmeb\services;
 
-
-use app\admin\model\system\SystemAttachment;
-use app\admin\model\wechat\WechatQrcode as QrcodeModel;
+use app\services\system\attachment\SystemAttachmentServices;
 
 class QrcodeService
 {
-
-    /**
-     * 获取临时二维码  单个
-     * @param $type
-     * @param $id
-     * @return array
-     */
-    public static function getTemporaryQrcode($type, $id)
-    {
-        return QrcodeModel::getTemporaryQrcode($type, $id)->toArray();
-    }
-
-    /**
-     * 获取永久二维码  单个
-     * @param $type
-     * @param $id
-     * @return array
-     */
-    public static function getForeverQrcode($type, $id)
-    {
-        return QrcodeModel::getForeverQrcode($type, $id)->toArray();
-    }
-
-    /**
-     * 从数据库获取二维码
-     * @param $id
-     * @param string $type
-     * @return array|\think\Model|null
-     */
-    public static function getQrcode($id, $type = 'id')
-    {
-        return QrcodeModel::getQrcode($id, $type);
-    }
-
-    /**
-     * 增加某个二维码扫描的次数
-     * @param $id
-     * @param string $type
-     * @return mixed
-     */
-    public static function scanQrcode($id, $type = 'id')
-    {
-        return QrcodeModel::scanQrcode($id, $type);
-    }
 
     /**
      * 获取二维码完整路径，不存在则自动生成
@@ -66,18 +23,20 @@ class QrcodeService
      * @param bool $force 是否返回false
      * @return bool|mixed|string
      */
-    public static function getWechatQrcodePath(string $name, string $link, int $type = 1, bool $force = false)
+    public static function getWechatQrcodePath(string $name, string $link, bool $force = false)
     {
+        /** @var SystemAttachmentServices $systemAttchment */
+        $systemAttchment = app()->make(SystemAttachmentServices::class);
         try {
-            $imageInfo = SystemAttachment::getInfo($name, 'name');
+            $imageInfo = $systemAttchment->getInfo(['name'=>$name]);
             $siteUrl = sys_config('site_url');
             if (!$imageInfo) {
-                $codeUrl = UtilService::setHttpType($siteUrl . $link, $type);//二维码链接
+                $codeUrl = UtilService::setHttpType($siteUrl . $link, request()->isSsl() ? 0 : 1);//二维码链接
                 $imageInfo = UtilService::getQRCodePath($codeUrl, $name);
                 if (is_string($imageInfo) && $force)
                     return false;
                 if (is_array($imageInfo)) {
-                    SystemAttachment::attachmentAdd($imageInfo['name'], $imageInfo['size'], $imageInfo['type'], $imageInfo['dir'], $imageInfo['thumb_path'], 1, $imageInfo['image_type'], $imageInfo['time'], 2);
+                    $systemAttchment->attachmentAdd($imageInfo['name'], $imageInfo['size'], $imageInfo['type'], $imageInfo['dir'], $imageInfo['thumb_path'], 1, $imageInfo['image_type'], $imageInfo['time'], 2);
                     $url = $imageInfo['dir'];
                 } else {
                     $url = '';
@@ -94,4 +53,59 @@ class QrcodeService
         }
     }
 
+    /**
+     * 获取小程序分享二维码
+     * @param int $id
+     * @param int $uid
+     * @param int $type 1 = 拼团,2 = 秒杀
+     * @return bool|string
+     */
+    public static function getRoutineQrcodePath(int $id, int $uid, int $type, array $parame = [])
+    {
+        $page = '';
+        $namePath = '';
+        $data = 'id=' . $id . '&pid=' . $uid;
+        switch ($type) {
+            case 1:
+                $page = 'pages/activity/goods_combination_details/index';
+                $namePath = 'combination_' . $id . '_' . $uid . '.jpg';
+                break;
+            case 2:
+                $page = 'pages/activity/goods_seckill_details/index';
+                $namePath = 'seckill_' . $id . '_' . $uid . '.jpg';
+                if (isset($parame['stop_time']) && $parame['stop_time']) {
+                    $data .= '&time=' . $parame['stop_time'];
+                    $namePath = $parame['stop_time'] . $namePath;
+                }
+                break;
+        }
+        if (!$page || !$namePath) {
+            return false;
+        }
+        try {
+            $imageInfo = SystemAttachment::getInfo($namePath, 'name');
+            $siteUrl = sys_config('site_url');
+            if (!$imageInfo) {
+                $res = MiniProgramService::qrcodeService()->appCodeUnlimit($page, $data, 280);
+                if (!$res) return false;
+                $uploadType = (int)sys_config('upload_type', 1);
+                $upload = UploadService::init();
+                $res = $upload->to('routine/product')->validate()->stream($res, $namePath);
+                if ($res === false) {
+                    return false;
+                }
+                $imageInfo = $upload->getUploadInfo();
+                $imageInfo['image_type'] = $uploadType;
+                if ($imageInfo['image_type'] == 1) $remoteImage = UtilService::remoteImage($siteUrl . $imageInfo['dir']);
+                else $remoteImage = UtilService::remoteImage($imageInfo['dir']);
+                if (!$remoteImage['status']) return false;
+                SystemAttachment::attachmentAdd($imageInfo['name'], $imageInfo['size'], $imageInfo['type'], $imageInfo['dir'], $imageInfo['thumb_path'], 1, $imageInfo['image_type'], $imageInfo['time'], 2);
+                $url = $imageInfo['dir'];
+            } else $url = $imageInfo['att_dir'];
+            if ($imageInfo['image_type'] == 1) $url = $siteUrl . $url;
+            return $url;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
 }

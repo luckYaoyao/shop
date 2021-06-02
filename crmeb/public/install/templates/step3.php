@@ -60,6 +60,34 @@
           	<td colspan="2"><input style="width:18px;height:18px;" type="checkbox" id="demo" name="demo" value="demo" checked></td>
           </tr>
         </table>
+          <table width="100%">
+              <tr>
+                  <td class="td1" width="100">reids数据库信息</td>
+                  <td class="td1" width="200">&nbsp;</td>
+                  <td class="td1">&nbsp;</td>
+              </tr>
+              <tr>
+                  <td class="tar">服务器地址：</td>
+                  <td><input type="text" name="rbhost" id="rbhost" value="127.0.0.1" class="input"></td>
+                  <td><div id="J_install_rbhost"><span class="gray">reids服务器地址，一般为127.0.0.1</span></div></td>
+              </tr>
+              <tr>
+                  <td class="tar">端口号：</td>
+                  <td><input type="text" name="rbport" id="rbport" value="6379" class="input" autoComplete="off"></td>
+                  <td><div id="J_install_tip_manager_pwd"><span class="gray">reids端口,默认为6379</span></div></td>
+              </tr>
+              <tr>
+                  <td class="tar">数据库：</td>
+                  <td><input type="text" name="rbselect" id="rbselect" value="0" class="input" autoComplete="off"></td>
+                  <td><div id="J_install_tip_manager_ckpwd"><span class="gray">reids数据库，默认为0,一般不做更改</span></div></td>
+              </tr>
+              <tr>
+                  <td class="tar">数据库密码：</td>
+                  <td><input type="password" name="rbpw" onBlur="TestDbPwd(0)" id="rbpw" value="" class="input" autoComplete="off"></td>
+                  <td><div id="J_install_tip_dbpw"></div><span class="gray">reids数据库密码</span></td>
+              </tr>
+
+          </table>
         <table width="100%">
           <tr>
             <td class="td1" width="100">管理员信息</td>
@@ -91,11 +119,11 @@
     </form>
   </section>
   <div  style="width:0;height:0;overflow:hidden;"> <img src="./images/install/pop_loading.gif"> </div>
-  <script src="./js/jquery.js?v=9.0"></script> 
-  <script src="./js/validate.js?v=9.0"></script> 
-  <script src="./js/ajaxForm.js?v=9.0"></script> 
+  <script src="./js/jquery.js?v=9.0"></script>
+  <script src="./js/validate.js?v=9.0"></script>
+  <script src="./js/ajaxForm.js?v=9.0"></script>
   <script>
-   
+
   function TestDbPwd(connect_db)
     {
         var dbHost = $('#dbhost').val();
@@ -104,34 +132,49 @@
         var dbName = $('#dbname').val();
         var dbport = $('#dbport').val();
 		var demo  =  $('#demo').val();
-        data={'dbHost':dbHost,'dbUser':dbUser,'dbPwd':dbPwd,'dbName':dbName,'dbport':dbport,'demo':demo};
+        var data={
+            'dbHost': dbHost,
+            'dbUser': dbUser,
+            'dbPwd': dbPwd,
+            'dbName': dbName,
+            'dbport': dbport,
+            'demo': demo,
+            rbhost: $('#rbhost').val(),
+            rbport: $("#rbport").val(),
+            rbselect: $("#rbselect").val(),
+            rbpw: $('#rbpw').val(),
+        };
         var url =  "<?php echo $_SERVER['PHP_SELF']; ?>?step=3&testdbpwd=1";
         $.ajax({
             type: "POST",
             url: url,
             data: data,
             dataType:'JSON',
-            beforeSend:function(){				 
+            beforeSend:function(){
             },
-            success: function(msg){			
+            success: function(msg){
                 if(msg == 1){
-                     
+
 					if(connect_db == 1)
 					{
 						$("#J_install_form").submit(); // ajax 验证通过后再提交表单
-					}		
+					}
 					$('#J_install_tip_dbpw').html('');
-					$('#J_install_tip_dbname').html('');							
+					$('#J_install_tip_dbname').html('');
+					$('#J_install_rbhost').html('');
                 }
 				else if(msg == -1)
-				{				    
+				{
                     $('#J_install_tip_dbpw').html('<span for="dbname" generated="true" class="tips_error" style="">请在mysql配置文件修sql-mode或sql_mode为NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION</span>');
 				}
 				else if(msg == -2)
-				{				    
+				{
                     $('#J_install_tip_dbname').html('<span for="dbname" generated="true" class="tips_error" style="">你的不是空数据库, 请更换一个数据库名字</span>');
-				}
-				else{
+				} else if(msg == -3){
+                    $('#J_install_tip_dbpw').html('');
+                    $('#J_install_tip_dbname').html('');
+                    $('#J_install_rbhost').html('<span for="dbname" generated="true" class="tips_error" style="">Redis数据库没有启动或者密码错误</span>');
+                }else{
 				    $('#dbpw').val("");
                     $('#J_install_tip_dbpw').html('<span for="dbname" generated="true" class="tips_error" style="">数据库链接配置失败</span>');
                 }
@@ -139,41 +182,45 @@
             complete:function(){
             },
             error:function(){
-                $('#J_install_tip_dbpw').html('<span for="dbname" generated="true" class="tips_error" style="">数据库链接配置失败</span>');		
+                $('#J_install_tip_dbpw').html('<span for="dbname" generated="true" class="tips_error" style="">数据库链接配置失败</span>');
 				$('#dbpw').val("");
             }
         });
     }
-	
- 
+
+
 
 	function checkForm()
 	{
 			manager = $.trim($('#manager').val());				//用户名表单
 			manager_pwd = $.trim($('#manager_pwd').val());				//密码表单
 			manager_ckpwd = $.trim($('#manager_ckpwd').val());		//密码提示区
-			 
+
 			if(manager.length == 0 )
 			{
 				alert('管理员账号不能为空');
 				return false;
 			}
+            if(!(/^[a-zA-Z]{0,}$/.test(manager))){
+                alert('账号必须为英文或者数字');
+                return false;
+            }
 			if(manager_pwd.length < 6 )
 			{
 				alert('管理员密码必须6位数以上');
 				return false;
-			}	
+			}
 			if(manager_ckpwd !=  manager_pwd)
 			{
 				alert('两次密码不一致');
 				return false;
-			}				
-			TestDbPwd(1);		
+			}
+			TestDbPwd(1);
 	}
- 
 
 
-</script> 
+
+</script>
 </div>
 <?php require './templates/footer.php';?>
 </body>

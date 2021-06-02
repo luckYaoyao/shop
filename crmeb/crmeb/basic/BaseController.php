@@ -1,22 +1,20 @@
 <?php
 // +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK ]
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006~2019 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
-// | Author: liu21st <liu21st@gmail.com>
+// | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 declare (strict_types=1);
 
 namespace crmeb\basic;
 
-use think\facade\App;
-use think\exception\HttpResponseException;
+use crmeb\services\HttpService;
 use think\exception\ValidateException;
-use think\facade\View;
-use think\facade\Validate;
+use think\facade\App;
 
 /**
  * 控制器基础类
@@ -25,7 +23,7 @@ abstract class BaseController
 {
     /**
      * Request实例
-     * @var \think\Request
+     * @var \app\Request
      */
     protected $request;
 
@@ -36,16 +34,21 @@ abstract class BaseController
     protected $app;
 
     /**
-     * 是否批量验证
-     * @var bool
-     */
-    protected $batchValidate = false;
-
-    /**
      * 控制器中间件
      * @var array
      */
     protected $middleware = [];
+
+    /**
+     * @var
+     */
+    protected $services;
+
+    /**
+     * 需要授权的接口地址
+     * @var string[]
+     */
+    private $authRule = ['marketing/bargain/<id>', 'marketing/combination/<id>', 'marketing/seckill/<id>'];
 
     /**
      * 构造方法
@@ -55,80 +58,74 @@ abstract class BaseController
     public function __construct(App $app)
     {
         $this->app = $app;
-//        $this->request = $this->app->request;
         $this->request = app('request');
+        $this->init();
+    }
 
-        // 控制器初始化
+    /**
+     * 初始化
+     */
+    final private function init()
+    {
+        try {
+            $this->authorizationDecryptCrmeb();
+        } catch (\Throwable $e) {
+            if (in_array($this->request->rule()->getRule(), $this->authRule)) {
+                throw new ValidateException($e->getMessage());
+            }
+        }
         $this->initialize();
     }
 
-    // 初始化
+    /**
+     * @return mixed
+     */
     protected function initialize()
     {
+
     }
 
+
     /**
-     * 验证数据
-     * @access protected
-     * @param array $data 数据
-     * @param string|array $validate 验证器名或者验证规则数组
-     * @param array $message 提示信息
-     * @param bool $batch 是否批量验证
-     * @return array|string|true
-     * @throws ValidateException
+     * @param bool $bool
+     * @param callable|null $callable
+     * @return array|bool
      */
-    protected function validate(array $data, $validate, array $message = [], bool $batch = false)
+    protected function authorizationDecryptCrmeb()
     {
-        if (is_array($validate)) {
-            $v = new Validate();
-            $v->rule($validate);
-        } else {
-            if (strpos($validate, '.')) {
-                // 支持场景
-                list($validate, $scene) = explode('.', $validate);
-            }
-            $class = false !== strpos($validate, '\\') ? $validate : $this->app->parseClass('validate', $validate);
-            $v = new $class();
-            if (!empty($scene)) {
-                $v->scene($scene);
-            }
+        $path = app()->getRootPath() . 'public' . DS . 'install' . DS . 'install.lock';
+        if (!is_file($path)) {
+            $path = app()->getRootPath() . ".constant";
         }
-
-        $v->message($message);
-
-        // 是否批量验证
-        if ($batch || $this->batchValidate) {
-            $v->batch(true);
+        if (!is_file($path)) {
+            throw new \RuntimeException('授权文件丢失', 42010);
         }
-
-        return $v->failException(true)->check($data);
-    }
-
-    /**
-     * 模板赋值
-     * @param mixed ...$vars
-     */
-    protected function assign(...$vars)
-    {
-        View::assign(...$vars);
-    }
-
-    /**
-     * 解析和获取模板内容
-     * @param string $template
-     * @return string
-     * @throws \Exception
-     */
-    protected function fetch(string $template = '')
-    {
-        return View::fetch($template);
-    }
-
-    /**
-     * 重定向
-     * @param mixed ...$args
-     */
-    protected function redirect(...$args){
-        throw new HttpResponseException(redirect(...$args));
+        $installtime = (int)@filectime($path);
+        $time = $installtime;
+        if (!$time) {
+            $time = time() - 10;
+        }
+        if (date('m', $time) < date('m', time())) {
+            $time = time() - 10;
+        }
+        $encryptStr = app()->db->name('system_config')->where('menu_name', 'cert_crmeb')->value('value');
+        $encryptStr = $encryptStr ? json_decode($encryptStr, true) : null;
+        $res = ['id' => '-1', 'key' => 'crmeb'];
+        if (in_array(date('d'), [5, 10, 15, 20, 25, 30]) && rand(1000, 100000) < 4000 && $encryptStr && $time < time()) {
+            $res = HttpService::request('http://store.crmeb.net/api/web/auth/get_id', 'POST', [
+                'domain_name' => request()->host(true),
+                'label' => 23,
+            ]);
+            if (!isset($res['id']) || !$res['id']) {
+                $res = json_decode($res, true);
+                if (!$res['data']['id'] && $encryptStr) {
+                    app()->db->name('system_config')->where('menu_name', 'cert_crmeb')->delete();
+                    throw new \Exception('您的授权已到期,请联系CRMEB官方进行授权认证');
+                }
+            }
+            file_put_contents($path, time() + 86400);
+            $installtime = $installtime + 86400;
+        }
+        return [$res, $installtime, $encryptStr];
     }
 }

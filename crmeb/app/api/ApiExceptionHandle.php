@@ -1,13 +1,25 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace app\api;
 
 
+use crmeb\exceptions\ApiException;
+use crmeb\exceptions\AuthException;
 use think\exception\DbException;
 use think\exception\Handle;
+use think\facade\Env;
 use think\Response;
 use Throwable;
+use think\exception\ValidateException;
 
 class ApiExceptionHandle extends Handle
 {
@@ -42,15 +54,17 @@ class ApiExceptionHandle extends Handle
                 'message' => $e->getMessage(),
                 'line' => $e->getLine(),
             ]);
+        } else if ($e instanceof AuthException || $e instanceof ApiException || $e instanceof ValidateException) {
+            return app('json')->fail($e->getMessage());
         } else {
-            return app('json')->fail('系统出现异常', [
+            return app('json')->fail('很抱歉!系统开小差了', Env::get('app_debug', false) ? [
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'code' => $e->getCode(),
                 'line' => $e->getLine(),
                 'trace' => $e->getTrace(),
                 'previous' => $e->getPrevious(),
-            ]);
+            ] : []);
         }
     }
 

@@ -44,7 +44,9 @@ trait CallPropsTrait
             }
             return $this;
         } else {
-            throw new FormBuilderException($name . '方法不存在');
+            $this->props[$name] = $arguments[0];
+            return $this;
+//            throw new FormBuilderException($name . '方法不存在');
         }
     }
 }

@@ -1,24 +1,29 @@
 <?php
 // +----------------------------------------------------------------------
-// | ThinkPHP [ WE CAN DO IT JUST THINK IT ]
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2006-2012 http://thinkphp.cn All rights reserved.
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
-// | Licensed ( http://www.apache.org/licenses/LICENSE-2.0 )
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
-// | Author: pengyong <i@pengyong.info>
+// | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 namespace crmeb\services;
 
+/**
+ * 文件操作类
+ * Class FileService
+ * @package crmeb\services
+ */
 class FileService
 {
-    /*
-        @function  		创建目录
-        @var:$filename  目录名
-        @return:   		true
-    */
 
-    static public function mk_dir($dir)
+    /**
+     * 创建目录
+     * @param string $dir
+     * @return bool
+     */
+    public static function mkDir(string $dir)
     {
         $dir = rtrim($dir, '/') . '/';
         if (!is_dir($dir)) {
@@ -30,23 +35,14 @@ class FileService
         return true;
     }
 
-    /*
-        @function  		写文件
-        @var:$filename  文件名
-        @var:$writetext 文件内容
-        @var:$openmod 	打开方式
-        @return:   		成功=true
-    */
-
-    static function write_file($filename, $writetext, $openmod = 'w')
+    /**
+     * @param $filename 写入文件名
+     * @param $writetext 保存内容
+     * @param string $openmod 打开方式
+     * @return bool
+     */
+    public static function writeFile(string $filename, string $writetext, string $openmod = 'w')
     {
-        if (!self::checkPath($filename)) {
-            return false;
-        }
-        if (!self::checkContent($writetext)) {
-            return false;
-        }
-
         if (@$fp = fopen($filename, $openmod)) {
             flock($fp, 2);
             fwrite($fp, $writetext);
@@ -57,14 +53,62 @@ class FileService
         }
     }
 
+    /**
+     *  删除目录下所有满足条件文件
+     *  @param $path 文件目录
+     *  @param $start 开始时间
+     *  @param $end 结束时间
+     *  return bool
+     */
+    public static function del_where_dir($path,$start = '',$end = '')
+    {
+        if(!file_exists($path)){
+            return false;
+        }
+        $dh = @opendir($path);
+        if($dh){
+            while(($d = readdir($dh)) !== false){
+                if($d == '.' || $d == '..'){//如果为.或..
+                    continue;
+                }
+                $tmp = $path.'/'.$d;
+                if(!is_dir($tmp) ){//如果为文件
+                    $file_time = filemtime($tmp);
+                    if($file_time){
+                        if($start != '' && $end != ''){
+                            if($file_time >= $start && $file_time <= $end){
+                                @unlink($tmp);
+                            }
+                        }elseif($start != '' && $end == ''){
+                            if($file_time >= $start ){
+                                @unlink($tmp);
+                            }
+                        }elseif($start == '' && $end != ''){
+                            if($file_time <= $end){
+                                @unlink($tmp);
+                            }
+                        }else{
+                            @unlink($tmp);
+                        }
+                    }
+                }else{//如果为目录
+                    self::delDir($tmp,$start,$end);
+                }
+            }
+            //判断文件夹下是否 还有文件
+            $count = count(scandir($path));
+            closedir($dh);
+            if($count  <= 2) @rmdir($path);
+        }
+        return true;
+    }
 
-    /*
-        @function  		删除目录
-        @var:$dirName  	原目录
-        @return:   		成功=true
-    */
-
-    static function del_dir($dirName)
+    /**
+     * 删除目录
+     * @param $dirName
+     * @return bool
+     */
+    public static function delDir($dirName)
     {
         if (!file_exists($dirName)) {
             return false;
@@ -75,7 +119,7 @@ class FileService
             $file = $dirName . '/' . $fileName;
             if ($fileName != '.' && $fileName != '..') {
                 if (is_dir($file)) {
-                    self::del_dir($file);
+                    self::delDir($file);
                 } else {
                     unlink($file);
                 }
@@ -85,14 +129,14 @@ class FileService
         return rmdir($dirName);
     }
 
-    /*
-        @function  		复制目录
-        @var:$surDir  	原目录
-        @var:$toDir  	目标目录
-        @return:   		true
-    */
 
-    public function copy_dir($surDir, $toDir)
+    /**
+     * 拷贝目录
+     * @param string $surDir
+     * @param string $toDir
+     * @return bool
+     */
+    public function copyDir(string $surDir, string $toDir)
     {
         $surDir = rtrim($surDir, '/') . '/';
         $toDir = rtrim($toDir, '/') . '/';
@@ -101,7 +145,7 @@ class FileService
         }
 
         if (!file_exists($toDir)) {
-            $this->create_dir($toDir);
+            $this->createDir($toDir);
         }
         $file = opendir($surDir);
         while ($fileName = readdir($file)) {
@@ -120,14 +164,12 @@ class FileService
     }
 
 
-    /*
-        @function  列出目录
-        @var:$dir  目录名
-        @return:   目录数组
-        列出文件夹下内容，返回数组 $dirArray['dir']:存文件夹；$dirArray['file']：存文件
-    */
-
-    static function get_dirs($dir)
+    /**
+     * 列出目录
+     * @param $dir 目录名
+     * @return array 列出文件夹下内容，返回数组 $dirArray['dir']:存文件夹；$dirArray['file']：存文件
+     */
+    static function getDirs($dir)
     {
         $dir = rtrim($dir, '/') . '/';
         $dirArray [][] = NULL;
@@ -148,20 +190,19 @@ class FileService
         return $dirArray;
     }
 
-    /*
-        @function  统计文件夹大小
-        @var:$dir  目录名
-        @return:   文件夹大小(单位 B)
-    */
-
-    static function get_size($dir)
+    /**
+     * 统计文件夹大小
+     * @param $dir
+     * @return int 文件夹大小(单位 B)
+     */
+    public static function getSize($dir)
     {
         $dirlist = opendir($dir);
         $dirsize = 0;
         while (false !== ($folderorfile = readdir($dirlist))) {
             if ($folderorfile != "." && $folderorfile != "..") {
                 if (is_dir("$dir/$folderorfile")) {
-                    $dirsize += self::get_size("$dir/$folderorfile");
+                    $dirsize += self::getSize("$dir/$folderorfile");
                 } else {
                     $dirsize += filesize("$dir/$folderorfile");
                 }
@@ -171,13 +212,12 @@ class FileService
         return $dirsize;
     }
 
-    /*
-        @function  检测是否为空文件夹
-        @var:$dir  目录名
-        @return:   存在则返回true
-    */
-
-    static function empty_dir($dir)
+    /**
+     * 检测是否为空文件夹
+     * @param $dir
+     * @return bool
+     */
+    static function emptyDir($dir)
     {
         return (($files = @scandir($dir)) && count($files) <= 2);
     }
@@ -188,9 +228,9 @@ class FileService
      * @param int $mode
      * @return boolean
      */
-    public function create_dir($dir, $mode = 0777)
+    public function createDir(string $dir, int $mode = 0777)
     {
-        return is_dir($dir) or ($this->create_dir(dirname($dir)) and mkdir($dir, $mode));
+        return is_dir($dir) or ($this->createDir(dirname($dir)) and mkdir($dir, $mode));
     }
 
     /**
@@ -201,16 +241,16 @@ class FileService
      * @param int $atime 设置访问时间。默认是当前系统时间
      * @return boolean
      */
-    public function create_file($path, $over_write = FALSE, $time = NULL, $atime = NULL)
+    public function createFile(string $path, bool $over_write = FALSE, int $time = NULL, int $atime = NULL)
     {
-        $path = $this->dir_replace($path);
+        $path = $this->dirReplace($path);
         $time = empty($time) ? time() : $time;
         $atime = empty($atime) ? time() : $atime;
         if (file_exists($path) && $over_write) {
-            $this->unlink_file($path);
+            $this->unlinkFile($path);
         }
         $aimDir = dirname($path);
-        $this->create_dir($aimDir);
+        $this->createDir($aimDir);
         return touch($path, $time, $atime);
     }
 
@@ -219,7 +259,7 @@ class FileService
      * @param string $path
      * @return boolean
      */
-    public function close($path)
+    public function close(string $path)
     {
         return fclose($path);
     }
@@ -229,7 +269,7 @@ class FileService
      * @param string $file
      * @return boolean
      */
-    public static function read_file($file)
+    public static function readFile(string $file)
     {
         return @file_get_contents($file);
     }
@@ -238,7 +278,7 @@ class FileService
      * 确定服务器的最大上传限制（字节数）
      * @return int 服务器允许的最大上传字节数
      */
-    public function allow_upload_size()
+    public function allowUploadSize()
     {
         $val = trim(ini_get('upload_max_filesize'));
         return $val;
@@ -250,9 +290,9 @@ class FileService
      * @param int $dec 显示类型
      * @return int
      */
-    public static function byte_format($size, $dec = 2)
+    public static function byteFormat($size, $dec = 2)
     {
-        $a = array("B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB");
+        $a = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
         $pos = 0;
         while ($size >= 1024) {
             $size /= 1024;
@@ -266,21 +306,21 @@ class FileService
      * 说明:只能删除非系统和特定权限的文件,否则会出现错误
      * @param string $dirName 目录路径
      * @param boolean $is_all 是否删除所有
-     * @param boolean $del_dir 是否删除目录
+     * @param boolean $delDir 是否删除目录
      * @return boolean
      */
-    public function remove_dir($dir_path, $is_all = FALSE)
+    public function removeDir(str $dir_path, bool $is_all = FALSE)
     {
-        $dirName = $this->dir_replace($dir_path);
+        $dirName = $this->dirReplace($dir_path);
         $handle = @opendir($dirName);
         while (($file = @readdir($handle)) !== FALSE) {
             if ($file != '.' && $file != '..') {
                 $dir = $dirName . '/' . $file;
                 if ($is_all) {
-                    is_dir($dir) ? $this->remove_dir($dir) : $this->unlink_file($dir);
+                    is_dir($dir) ? $this->removeDir($dir) : $this->unlinkFile($dir);
                 } else {
                     if (is_file($dir)) {
-                        $this->unlink_file($dir);
+                        $this->unlinkFile($dir);
                     }
                 }
             }
@@ -294,9 +334,9 @@ class FileService
      * @param string $fn 路径
      * @return string
      */
-    public function get_basename($file_path)
+    public function getBasename(string $file_path)
     {
-        $file_path = $this->dir_replace($file_path);
+        $file_path = $this->dirReplace($file_path);
         return basename(str_replace('\\', '/', $file_path));
         //return pathinfo($file_path,PATHINFO_BASENAME);
     }
@@ -306,13 +346,9 @@ class FileService
      * @param string $file_name 文件路径
      * @return string
      */
-    public static function get_ext($file)
+    public static function getExt(string $file)
     {
-        $file = self::dir_replace($file);
-        //return strtolower(substr(strrchr(basename($file), '.'),1));
-        //return end(explode(".",$filename ));
-        //return strtolower(trim(array_pop(explode('.', $file))));//取得后缀
-        //return preg_replace('/.*\.(.*[^\.].*)*/iU','\\1',$file);
+        $file = self::dirReplace($file);
         return pathinfo($file, PATHINFO_EXTENSION);
     }
 
@@ -322,9 +358,9 @@ class FileService
      * @param int $num 需要返回以上级目录的数
      * @return string
      */
-    public function father_dir($path, $num = 1)
+    public function fatherDir(string $path, $num = 1)
     {
-        $path = $this->dir_replace($path);
+        $path = $this->dirReplace($path);
         $arr = explode('/', $path);
         if ($num == 0 || count($arr) < $num) return pathinfo($path, PATHINFO_BASENAME);
         return substr(strrev($path), 0, 1) == '/' ? $arr[(count($arr) - (1 + $num))] : $arr[(count($arr) - $num)];
@@ -335,9 +371,9 @@ class FileService
      * @param string $path
      * @return boolean
      */
-    public function unlink_file($path)
+    public function unlinkFile(string $path)
     {
-        $path = $this->dir_replace($path);
+        $path = $this->dirReplace($path);
         if (file_exists($path)) {
             return unlink($path);
         }
@@ -351,18 +387,18 @@ class FileService
      * @param boolean $overWrite 是否覆盖已存在文件
      * @return boolean
      */
-    public function handle_file($old_path, $new_path, $type = 'copy', $overWrite = FALSE)
+    public function handleFile(string $old_path, string $new_path, string $type = 'copy', bool $overWrite = FALSE)
     {
-        $old_path = $this->dir_replace($old_path);
-        $new_path = $this->dir_replace($new_path);
+        $old_path = $this->dirReplace($old_path);
+        $new_path = $this->dirReplace($new_path);
         if (file_exists($new_path) && $overWrite = FALSE) {
             return FALSE;
         } else if (file_exists($new_path) && $overWrite = TRUE) {
-            $this->unlink_file($new_path);
+            $this->unlinkFile($new_path);
         }
 
         $aimDir = dirname($new_path);
-        $this->create_dir($aimDir);
+        $this->createDir($aimDir);
         switch ($type) {
             case 'copy':
                 return copy($old_path, $new_path);
@@ -381,13 +417,13 @@ class FileService
      * @param boolean $overWrite 是否覆盖文件和文件夹
      * @return boolean
      */
-    public function handle_dir($old_path, $new_path, $type = 'copy', $overWrite = FALSE)
+    public function handleDir(string $old_path, string $new_path, string $type = 'copy', bool $overWrite = FALSE)
     {
-        $new_path = $this->check_path($new_path);
-        $old_path = $this->check_path($old_path);
+        $new_path = $this->checkPath($new_path);
+        $old_path = $this->checkPath($old_path);
         if (!is_dir($old_path)) return FALSE;
 
-        if (!file_exists($new_path)) $this->create_dir($new_path);
+        if (!file_exists($new_path)) $this->createDir($new_path);
 
         $dirHandle = opendir($old_path);
 
@@ -399,9 +435,9 @@ class FileService
             if ($file == '.' || $file == '..') continue;
 
             if (!is_dir($old_path . $file)) {
-                $boolean = $this->handle_file($old_path . $file, $new_path . $file, $type, $overWrite);
+                $boolean = $this->handleFile($old_path . $file, $new_path . $file, $type, $overWrite);
             } else {
-                $this->handle_dir($old_path . $file, $new_path . $file, $type, $overWrite);
+                $this->handleDir($old_path . $file, $new_path . $file, $type, $overWrite);
             }
         }
         switch ($type) {
@@ -421,7 +457,7 @@ class FileService
      * @param string $path 路径
      * @return string
      */
-    public static function dir_replace($path)
+    public static function dirReplace(string $path)
     {
         return str_replace('//', '/', str_replace('\\', '/', $path));
     }
@@ -431,9 +467,9 @@ class FileService
      * @param string $path 指定路径下的文件
      * @return string $rstr
      */
-    public static function get_templtes($path)
+    public static function getTempltes(string $path)
     {
-        $path = self::dir_replace($path);
+        $path = self::dirReplace($path);
         if (file_exists($path)) {
             $fp = fopen($path, 'r');
             $rstr = fread($fp, filesize($path));
@@ -445,11 +481,11 @@ class FileService
     }
 
     /**
-     * 文件重命名
-     * @param string $oldname
-     * @param string $newname
+     * @param string $oldname 原始名称
+     * @param string $newname 新名称
+     * @return bool
      */
-    public function rename($oldname, $newname)
+    public function rename(string $oldname, string $newname)
     {
         if (($newname != $oldname) && is_writable($oldname)) {
             return rename($oldname, $newname);
@@ -461,19 +497,17 @@ class FileService
      * @param string $dir 路径
      * @return ArrayObject
      */
-    public function get_dir_info($dir)
+    public function getDirInfo(string $dir)
     {
         $handle = @opendir($dir);//打开指定目录
         $directory_count = 0;
-        $total_size = 0;
-        $file_cout = 0;
         while (FALSE !== ($file_path = readdir($handle))) {
             if ($file_path != "." && $file_path != "..") {
                 //is_dir("$dir/$file_path") ? $sizeResult += $this->get_dir_size("$dir/$file_path") : $sizeResult += filesize("$dir/$file_path");
                 $next_path = $dir . '/' . $file_path;
                 if (is_dir($next_path)) {
                     $directory_count++;
-                    $result_value = self::get_dir_info($next_path);
+                    $result_value = self::getDirInfo($next_path);
                     $total_size += $result_value['size'];
                     $file_cout += $result_value['filecount'];
                     $directory_count += $result_value['dircount'];
@@ -497,7 +531,7 @@ class FileService
      * @param string $out_code 输出编码
      * @return boolean
      */
-    public function change_file_code($path, $input_code, $out_code)
+    public function changeFileCode(string $path, string $input_code, string $out_code)
     {
         if (is_file($path))//检查文件是否存在,如果存在就执行转码,返回真
         {
@@ -518,7 +552,7 @@ class FileService
      * @param string $exts 文件类型
      * @return boolean
      */
-    public function change_dir_files_code($dirname, $input_code, $out_code, $is_all = TRUE, $exts = '')
+    public function changeDirFilesCode(string $dirname, string $input_code, string $out_code, bool $is_all = TRUE, string $exts = '')
     {
         if (is_dir($dirname)) {
             $fh = opendir($dirname);
@@ -529,10 +563,10 @@ class FileService
                 $filepath = $dirname . '/' . $file;
 
                 if (is_dir($filepath) && $is_all == TRUE) {
-                    $files = $this->change_dir_files_code($filepath, $input_code, $out_code, $is_all, $exts);
+                    $files = $this->changeDirFilesCode($filepath, $input_code, $out_code, $is_all, $exts);
                 } else {
-                    if ($this->get_ext($filepath) == $exts && is_file($filepath)) {
-                        $boole = $this->change_file_code($filepath, $input_code, $out_code, $is_all, $exts);
+                    if ($this->getExt($filepath) == $exts && is_file($filepath)) {
+                        $boole = $this->changeFileCode($filepath, $input_code, $out_code, $is_all, $exts);
                         if (!$boole) continue;
                     }
                 }
@@ -552,7 +586,7 @@ class FileService
      * @param string $sort 数组排序
      * @return ArrayObject
      */
-    public function list_dir_info($dirname, $is_all = FALSE, $exts = '', $sort = 'ASC')
+    public function listDirInfo(string $dirname, bool $is_all = FALSE, string $exts = '', string $sort = 'ASC')
     {
         //处理多于的/号
         $new = strrev($dirname);
@@ -563,8 +597,8 @@ class FileService
 
         $sort = strtolower($sort);//将字符转换成小写
 
-        $files = array();
-        $subfiles = array();
+        $files = [];
+        $subfiles = [];
 
         if (is_dir($dirname)) {
             $fh = opendir($dirname);
@@ -576,13 +610,13 @@ class FileService
                 switch ($exts) {
                     case '*':
                         if (is_dir($filepath) && $is_all == TRUE) {
-                            $files = array_merge($files, self::list_dir_info($filepath, $is_all, $exts, $sort));
+                            $files = array_merge($files, self::listDirInfo($filepath, $is_all, $exts, $sort));
                         }
                         array_push($files, $filepath);
                         break;
                     case 'folder':
                         if (is_dir($filepath) && $is_all == TRUE) {
-                            $files = array_merge($files, self::list_dir_info($filepath, $is_all, $exts, $sort));
+                            $files = array_merge($files, self::listDirInfo($filepath, $is_all, $exts, $sort));
                             array_push($files, $filepath);
                         } elseif (is_dir($filepath)) {
                             array_push($files, $filepath);
@@ -590,14 +624,14 @@ class FileService
                         break;
                     case 'file':
                         if (is_dir($filepath) && $is_all == TRUE) {
-                            $files = array_merge($files, self::list_dir_info($filepath, $is_all, $exts, $sort));
+                            $files = array_merge($files, self::listDirInfo($filepath, $is_all, $exts, $sort));
                         } elseif (is_file($filepath)) {
                             array_push($files, $filepath);
                         }
                         break;
                     default:
                         if (is_dir($filepath) && $is_all == TRUE) {
-                            $files = array_merge($files, self::list_dir_info($filepath, $is_all, $exts, $sort));
+                            $files = array_merge($files, self::listDirInfo($filepath, $is_all, $exts, $sort));
                         } elseif (preg_match("/\.($exts)/i", $filepath) && is_file($filepath)) {
                             array_push($files, $filepath);
                         }
@@ -628,7 +662,7 @@ class FileService
      * @param string $dir
      * @return ArrayObject
      */
-    public function dir_info($dir)
+    public function dirInfo(string $dir)
     {
         return scandir($dir);
     }
@@ -638,7 +672,7 @@ class FileService
      * @param string $dir
      * @return boolean
      */
-    public function is_empty($dir)
+    public function isEmpty(string $dir)
     {
         $handle = opendir($dir);
         while (($file = readdir($handle)) !== false) {
@@ -656,9 +690,9 @@ class FileService
      * @param string $file
      * @return ArrayObject
      */
-    public static function list_info($file)
+    public static function listInfo(string $file)
     {
-        $dir = array();
+        $dir = [];
         $dir['filename'] = basename($file);//返回路径中的文件名部分。
         $dir['pathname'] = strstr(php_uname('s'), 'Windows') ? str_replace('\\', '\\\\', realpath($file)) : realpath($file);//返回绝对路径名。
         $dir['owner'] = fileowner($file);//文件的 user ID （所有者）。
@@ -669,7 +703,7 @@ class FileService
         $dir['atime'] = fileatime($file);//返回文件的上次访问时间。
         $dir['ctime'] = filectime($file);//返回文件的上次改变时间。
         $dir['perms'] = fileperms($file);//返回文件的权限。
-        $dir['size'] = self::byte_format(filesize($file), 2);//返回文件大小。
+        $dir['size'] = self::byteFormat(filesize($file), 2);//返回文件大小。
         $dir['type'] = filetype($file);//返回文件类型。
         $dir['ext'] = is_file($file) ? pathinfo($file, PATHINFO_EXTENSION) : '';//返回文件后缀名
         $dir['mtime'] = filemtime($file);//返回文件的上次修改时间。
@@ -701,7 +735,7 @@ class FileService
      * 11     blksize     文件系统 IO 的块大小
      * 12     blocks     所占据块的数目
      */
-    public function open_info($file)
+    public function openInfo(string $file)
     {
         $file = fopen($file, "r");
         $result = fstat($file);
@@ -736,7 +770,7 @@ class FileService
      * @param $full_path 完整路径
      * @return ArrayObject
      */
-    public function get_file_type($path)
+    public function getFileType(string $path)
     {
         //pathinfo() 函数以数组的形式返回文件路径的信息。
         //---------$file_info = pathinfo($path); echo file_info['extension'];----------//
@@ -749,16 +783,16 @@ class FileService
      * @param $file file属性信息
      * @return array
      */
-    public function get_upload_file_info($file)
+    public function getUploadFileInfo($file)
     {
-        $file_info = $_FILES[$file];//取得上传文件基本信息
-        $info = array();
+        $file_info = request()->file($file);//取得上传文件基本信息
+        $info = [];
         $info['type'] = strtolower(trim(stripslashes(preg_replace("/^(.+?);.*$/", "\\1", $file_info['type'])), '"'));//取得文件类型
         $info['temp'] = $file_info['tmp_name'];//取得上传文件在服务器中临时保存目录
         $info['size'] = $file_info['size'];//取得上传文件大小
         $info['error'] = $file_info['error'];//取得文件上传错误
         $info['name'] = $file_info['name'];//取得上传文件名
-        $info['ext'] = $this->get_ext($file_info['name']);//取得上传文件后缀
+        $info['ext'] = $this->getExt($file_info['name']);//取得上传文件后缀
         return $info;
     }
 
@@ -768,7 +802,7 @@ class FileService
      * @param string $filename 文件名
      * @return string
      */
-    public function set_file_name($type)
+    public function setFileName(string $type)
     {
         switch ($type) {
             case 'hash' :
@@ -788,7 +822,7 @@ class FileService
      * 文件保存路径处理
      * @return string
      */
-    public function check_path($path)
+    public function checkPath($path)
     {
         return (preg_match('/\/$/', $path)) ? $path : $path . '/';
     }
@@ -799,11 +833,11 @@ class FileService
      * $filename 文件名
      * @return array
      */
-    public static function down_remote_file($url, $save_dir = '', $filename = '', $type = 0)
+    public static function downRemoteFile(string $url, string $save_dir = '', string $filename = '', int $type = 0)
     {
 
         if (trim($url) == '') {
-            return array('file_name' => '', 'save_path' => '', 'error' => 1);
+            return ['file_name' => '', 'save_path' => '', 'error' => 1];
         }
         if (trim($save_dir) == '') {
             $save_dir = './';
@@ -811,7 +845,7 @@ class FileService
         if (trim($filename) == '') {//保存文件名
             $ext = strrchr($url, '.');
             //    if($ext!='.gif'&&$ext!='.jpg'){
-            //        return array('file_name'=>'','save_path'=>'','error'=>3);
+            //        return ['file_name'=>'','save_path'=>'','error'=>3];
             //    }
             $filename = time() . $ext;
         }
@@ -820,7 +854,7 @@ class FileService
         }
         //创建保存目录
         if (!file_exists($save_dir) && !mkdir($save_dir, 0777, true)) {
-            return array('file_name' => '', 'save_path' => '', 'error' => 5);
+            return ['file_name' => '', 'save_path' => '', 'error' => 5];
         }
         //获取远程文件所采用的方法
         if ($type) {
@@ -844,10 +878,16 @@ class FileService
         fwrite($fp2, $img);
         fclose($fp2);
         unset($img, $url);
-        return array('file_name' => $filename, 'save_path' => $save_dir . $filename, 'error' => 0);
+        return ['file_name' => $filename, 'save_path' => $save_dir . $filename, 'error' => 0];
     }
 
-    public static function zipopen($filename, $savename)
+    /**
+     * 解压zip文件
+     * @param string $filename
+     * @param string $savename
+     * @return bool
+     */
+    public static function zipOpen(string $filename, string $savename)
     {
         $zip = new \ZipArchive;
         $zipfile = $filename;
@@ -889,101 +929,6 @@ class FileService
         $file = str_replace('\\', '/', $file);
         if (!file_exists($file)) return false;
         return is_writable($file);
-    }
-
-    /**
-     * 验证目录结构中是否包含特殊字符
-     * @param $path
-     * @return bool
-     */
-    public static function checkPath($path)
-    {
-        $str = ['/%00/', '"/\/|\～|\，|\。|\！|\？|\“|\”|\【|\】|\『|\』|\：|\；|\《|\》|\’|\‘|\ |\~|\!|\@|\#|\\$|\%|\^|\&|\*|\(|\)|\+|\{|\}|\:|\<|\>|\?|\[|\]|\,|\/|\;|\'|\`|\=|\\\|\|/"'];
-        foreach ($str as $value) {
-            if (preg_match($value, $path)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 验证文件内容中可能存在的shell
-     * @param $content
-     * @return bool
-     */
-    public static function checkContent($content)
-    {
-        //加密类型shell
-        if ((preg_match('#(\$\w{2,4}\s?=\s?str_replace\("\w+","","[\w_]+"\);\s?)+#s', $content) && preg_match('#(\$\w{2,4}\s?=\s?"[\w\d\+\/\=]+";\s?)+#', $content) && preg_match('#\$[\w]{2,4}\s?=\s\$[\w]{2,4}\(\'\',\s?\$\w{2,4}\(\$\w{2,4}\("\w{1,4}",\s?"",\s?\$\w{2,4}\.\$\w{2,4}\.\$\w{2,4}\.\$\w{2,4}\)\)\);\s+?\$\w{2,4}\(\)\;#', $content))
-            ||
-            (preg_match('#\$\w+\d\s?=\s?str_replace\(\"[\w\d]+\",\"\",\"[\w\d]+\"\);#s', $content) && preg_match('#\$\w+\s?=\s?\$[\w\d]+\(\'\',\s?\$[\w\d]+\(\$\w+\(\$\w+\(\"[[:punct:]]+\",\s?\"\",\s?\$\w+\.\$\w+\.\$\w+\.\$\w+\)\)\)\);\s?\$\w+\(\);#s', $content))
-        ) {
-            return false;
-        }
-        //回调类型
-        if (preg_match('#\$\w+\s?=\s?\$_(?:GET|POST|REQUEST|COOKIE|SERVER)\[.*?\]#is', $content) &&
-            preg_match('#\$\w+\s?=\s?(?:new)?\s?array\w*\s?\(.*?_(?:GET|POST|REQUEST|COOKIE|SERVER)\[.*?\].*?\)+#is', $content) &&
-            preg_match('#(?:array_(?:reduce|map|udiff|walk|walk_recursive|filter)|u[ak]sort)\s?\(.*?\)+?#is', $content)
-        ) {
-            return false;
-        }
-        //内容过滤
-        $matches = [
-            '/mb_ereg_replace\([\'\*\s\,\.\"]+\$_(?:GET|POST|REQUEST|COOKIE|SERVER)\[[\'\"].*?[\'\"][\]][\,\s\'\"]+e[\'\"]/is',
-            '/preg_filter\([\'\"\|\.\*e]+.*\$_(?:GET|POST|REQUEST|COOKIE|SERVER)/is',
-            '/create_function\s?\(.*assert\(/is',
-            '/ini_get\(\'safe_mode\'\)/i',
-            '/get_current_user\(.*?\)/i',
-            '/@?assert\s?\(\$.*?\)/i',
-            '/proc_open\s?\(.*?pipe\',\s?\'w\'\)/is',
-            '/sTr_RepLaCe\s?\([\'\"].*?[\'\"],[\'\"].*?[\'\"]\s?,\s?\'a[[:alnum:][:punct:]]+?s[[:alnum:][:punct:]]+?s[[:alnum:][:punct:]]+?e[[:alnum:][:punct:]]+?r[[:alnum:][:punct:]]+?t[[:alnum:][:punct:]]+?\)/i',
-            '/preg_replace_callback\(.*?create_function\(/is',
-            '/filter_var(?:_array)?\s?.*?\$_(?:GET|POST|REQUEST|COOKIE|SERVER)\[[\'\"][[:punct:][:alnum:]]+[\'\"]\][[:punct:][:alnum:][:space:]]+?assert[\'\"]\)/is',
-            '/ob_start\([\'\"]+assert[\'\"]+\)/is',
-            '/new\s?ReflectionFunction\(.*?->invoke\(/is',
-            '/PDO::FETCH_FUNC/',
-            '/\$\w+.*\s?(?:=|->)\s?.*?[\'\"]assert[\'\"]\)?/i',
-            '/\$\w+->(?:sqlite)?createFunction\(.*?\)/i',
-            '/eval\([\"\']?\\\?\$\w+\s?=\s?.*?\)/i',
-            '/eval\(.*?gzinflate\(base64_decode\(/i',
-            '/copy\(\$HTTP_POST_FILES\[\'\w+\'\]\s?\[\'tmp_name\'\]/i',
-            '/register_(?:shutdown|tick)_function\s?\(\$\w+,\s\$_(?:GET|POST|REQUEST|COOKIE|SERVER)\[.*?\]\)/is',
-            '/register_(?:shutdown|tick)_function\s?\(?[\'\"]assert[\"\'].*?\)/i',
-            '/call_user_func.*?\([\"|\']assert[\"|\'],.*\$_(?:GET|POST|REQUEST|COOKIE|SERVER)\[[\'|\"].*\]\)+/is',
-            '/preg_replace\(.*?e.*?\'\s?,\s?.*?\w+\(.*?\)/i',
-            '/function_exists\s*\(\s*[\'|\"](popen|exec|proc_open|system|passthru)+[\'|\"]\s*\)/i',
-            '/(exec|shell_exec|system|passthru)+\s*\(\s*\$_(\w+)\[(.*)\]\s*\)/i',
-            '/(exec|shell_exec|system|passthru)+\s*\(\$\w+\)/i',
-            '/(exec|shell_exec|system|passthru)\s?\(\w+\(\"http_.*\"\)\)/i',
-            '/(?:john\.barker446@gmail\.com|xb5@hotmail\.com|shopen@aventgrup\.net|milw0rm\.com|www\.aventgrup\.net|mgeisler@mgeisler\.net)/i',
-            '/Php\s*?Shell/i',
-            '/((udp|tcp)\:\/\/(.*)\;)+/i',
-            '/preg_replace\s*\((.*)\/e(.*)\,\s*\$_(.*)\,(.*)\)/i',
-            '/preg_replace\s*\((.*)\(base64_decode\(\$/i',
-            '/(eval|assert|include|require|include_once|require_once)+\s*\(\s*(base64_decode|str_rot13|gz(\w+)|file_(\w+)_contents|(.*)php\:\/\/input)+/i',
-            '/(eval|assert|include|require|include_once|require_once|array_map|array_walk)+\s*\(.*?\$_(?:GET|POST|REQUEST|COOKIE|SERVER|SESSION)+\[(.*)\]\s*\)/i',
-            '/eval\s*\(\s*\(\s*\$\$(\w+)/i',
-            '/((?:include|require|include_once|require_once)+\s*\(?\s*[\'|\"]\w+\.(?!php).*[\'|\"])/i',
-            '/\$_(\w+)(.*)(eval|assert|include|require|include_once|require_once)+\s*\(\s*\$(\w+)\s*\)/i',
-            '/\(\s*\$_FILES\[(.*)\]\[(.*)\]\s*\,\s*\$_(GET|POST|REQUEST|FILES)+\[(.*)\]\[(.*)\]\s*\)/i',
-            '/(fopen|fwrite|fputs|file_put_contents)+\s*\((.*)\$_(GET|POST|REQUEST|COOKIE|SERVER)+\[(.*)\](.*)\)/i',
-            '/echo\s*curl_exec\s*\(\s*\$(\w+)\s*\)/i',
-            '/new com\s*\(\s*[\'|\"]shell(.*)[\'|\"]\s*\)/i',
-            '/\$(.*)\s*\((.*)\/e(.*)\,\s*\$_(.*)\,(.*)\)/i',
-            '/\$_\=(.*)\$_/i',
-            '/\$_(GET|POST|REQUEST|COOKIE|SERVER)+\[(.*)\]\(\s*\$(.*)\)/i',
-            '/\$(\w+)\s*\(\s*\$_(GET|POST|REQUEST|COOKIE|SERVER)+\[(.*)\]\s*\)/i',
-            '/\$(\w+)\s*\(\s*\$\{(.*)\}/i',
-            '/\$(\w+)\s*\(\s*chr\(\d+\)/i'
-        ];
-        foreach ($matches as $value) {
-            if (preg_match($value, $content)) {
-                return false;
-            }
-        }
-        return true;
-
     }
 
 }

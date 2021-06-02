@@ -1,305 +1,254 @@
 <?php
 /**
- * FormBuilder表单生成器
- * Author: xaboy
- * Github: https://github.com/xaboy/form-builder
+ * PHP表单生成器
+ *
+ * @package  FormBuilder
+ * @author   xaboy <xaboy2005@qq.com>
+ * @version  2.0
+ * @license  MIT
+ * @link     https://github.com/xaboy/form-builder
+ * @document http://php.form-create.com
  */
 
 namespace FormBuilder;
 
-use FormBuilder\components\Cascader;
-use FormBuilder\components\FormStyle;
-use FormBuilder\components\Hidden;
-use FormBuilder\components\Row;
-use FormBuilder\exception\FormBuilderException;
-use FormBuilder\traits\form\FormCascaderTrait;
-use FormBuilder\traits\form\FormCheckBoxTrait;
-use FormBuilder\traits\form\FormColorPickerTrait;
-use FormBuilder\traits\form\FormDatePickerTrait;
-use FormBuilder\traits\form\FormFrameTrait;
-use FormBuilder\traits\form\FormHiddenTrait;
-use FormBuilder\traits\form\FormInputNumberTrait;
-use FormBuilder\traits\form\FormInputTrait;
-use FormBuilder\traits\form\FormRadioTrait;
-use FormBuilder\traits\form\FormRateTrait;
-use FormBuilder\traits\form\FormSelectTrait;
-use FormBuilder\traits\form\FormSliderTrait;
-use FormBuilder\traits\form\FormStyleTrait;
-use FormBuilder\traits\form\FormSwitchesTrait;
-use FormBuilder\traits\form\FormTimePickerTrait;
-use FormBuilder\traits\form\FormTreeTrait;
-use FormBuilder\traits\form\FormUploadTrait;
-use FormBuilder\traits\form\FormOptionTrait;
-use FormBuilder\traits\form\FormValidateTrait;
 
-/**
- * Class Form
- *
- * @package FormBuilder
- */
+use FormBuilder\Contract\BootstrapInterface;
+use FormBuilder\Contract\ConfigInterface;
+use FormBuilder\Exception\FormBuilderException;
+use FormBuilder\UI\Iview\Bootstrap as IViewBootstrap;
+use FormBuilder\UI\Elm\Bootstrap as ElmBootstrap;
+
 class Form
 {
-    use FormColorPickerTrait,
-        FormFrameTrait,
-        FormInputNumberTrait,
-        FormRadioTrait,
-        FormRateTrait,
-        FormSelectTrait,
-        FormSwitchesTrait,
-        FormUploadTrait,
-        FormCheckBoxTrait,
-        FormDatePickerTrait,
-        FormInputTrait,
-        FormSliderTrait,
-        FormCascaderTrait,
-        FormHiddenTrait,
-        FormTimePickerTrait,
-        FormTreeTrait,
-        FormStyleTrait,
-        FormOptionTrait,
-        FormValidateTrait;
+    protected $headers = [];
+
+    protected $formContentType = 'application/x-www-form-urlencoded';
 
     /**
-     * 三级联动 加载省市数据
-     *
-     * @var bool
+     * @var BootstrapInterface
      */
-    protected $loadCityData = false;
+    protected $ui;
 
     /**
-     * 三级联动 加载省市区数据
-     *
-     * @var bool
+     * @var array|ConfigInterface
      */
-    protected $loadCityAreaData = false;
+    protected $config;
 
-    /**
-     * @var array
-     */
-    protected $components = [];
+    protected $action;
 
-    /**
-     * @var array
-     */
-    protected $fields = [];
+    protected $method = 'POST';
 
-    /**
-     * @var array
-     */
-    protected $script = [
-        'jq' => '<script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script>',
-        'vue' => '<script src="https://unpkg.com/vue@2.5.13/dist/vue.min.js"></script>',
-        //iview 版本 2.14.3
-        'iview-css' => '<link href="https://unpkg.com/iview@2.14.3/dist/styles/iview.css" rel="stylesheet">',
-        'iview' => '<script src="https://unpkg.com/iview@2.14.3/dist/iview.min.js"></script>',
-        //form-create 版本 1.6.1
-        'form-create' => '<script src="https://unpkg.com/form-create@1.6.1/dist/form-create.min.js"></script>',
-        'city-data' => '<script src="https://unpkg.com/form-create@1.6.1/district/province_city.js"></script>',
-        'city-area-data' => '<script src="https://unpkg.com/form-create@1.6.1/district/province_city_area.js"></script>'
+    protected $title = 'FormBuilder';
+
+    protected $rule;
+
+    protected $formData = [];
+
+    protected $dependScript = [
+        '<script src="https://unpkg.com/jquery@3.3.1/dist/jquery.min.js"></script>',
+        '<script src="https://unpkg.com/vue@2.5.13/dist/vue.min.js"></script>',
+        '<script src="https://unpkg.com/@form-create/data@1.0.0/dist/province_city.js"></script>',
+        '<script src="https://unpkg.com/@form-create/data@1.0.0/dist/province_city_area.js"></script>'
     ];
 
-    /**
-     * 加载 jquery
-     *
-     * @var bool
-     */
-    protected $linkJq = true;
-
-    /**
-     * 加载 vue
-     *
-     * @var bool
-     */
-    protected $linkVue = true;
-
-    /**
-     * 加载 iview
-     *
-     * @var bool
-     */
-    protected $linkIview = true;
-
-    /**
-     * @var string
-     */
-    protected $successScript = '';
-
-    /**
-     * 网页标题
-     *
-     * @var string
-     */
-    protected $title = 'formBuilder';
-
-    /**
-     * 提交地址
-     *
-     * @var string
-     */
-    protected $action = '';
-
-    /**
-     * 表单id
-     *
-     * @var string
-     */
-    protected $id = '';
-
-    /**
-     * 提交方式
-     *
-     * @var string
-     */
-    protected $method = 'post';
-
-    protected $resetBtn = false;
-
-    protected $submitBtn = true;
-
-    /**
-     * 表单配置
-     *
-     * @var array|mixed
-     */
-    protected $config = [
-        'form' => [
-            'inline' => false,
-            'labelPosition' => 'right',
-            'labelWidth' => 125,
-            'showMessage' => true,
-            'autocomplete' => 'off'
-        ],
-        'row' => []
-    ];
+    protected $template;
 
     /**
      * Form constructor.
-     *
-     * @param string $action 提交地址
-     * @param array $components 组件
+     * @param BootstrapInterface $ui
+     * @param string $action
+     * @param array $rule
+     * @param array $config
+     * @throws FormBuilderException
      */
-    public function __construct($action = '', array $components = [])
+    protected function __construct(BootstrapInterface $ui, $action = '', $rule = [], $config = [])
     {
-        $this->components($components);
         $this->action = $action;
-    }
-
-    public static function json()
-    {
-        return new Json();
-    }
-
-    /**
-     * @param bool $linkJq
-     */
-    public function setLinkJq($linkJq)
-    {
-        $this->linkJq = (bool)$linkJq;
-    }
-
-    /**
-     * @param bool $linkVue
-     */
-    public function setLinkVue($linkVue)
-    {
-        $this->linkVue = (bool)$linkVue;
-    }
-
-    /**
-     * @param bool $linkIview
-     */
-    public function setLinkIview($linkIview)
-    {
-        $this->linkIview = (bool)$linkIview;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isLoadCityData()
-    {
-        return $this->loadCityData;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isLoadCityAreaData()
-    {
-        return $this->loadCityAreaData;
-    }
-
-    /**
-     * @param array $components
-     * @return $this
-     */
-    public function components(array $components = [])
-    {
-        foreach ($components as $component) {
-            $this->append($component);
-        }
-        return $this;
-    }
-
-    /**
-     * @param Row $row
-     * @return $this
-     */
-    public function formRow(Row $row)
-    {
-        $this->config['row'] = $row->build();
-        return $this;
-    }
-
-    /**
-     * @param FormStyle $formStyle
-     * @return $this
-     */
-    public function formStyle(FormStyle $formStyle)
-    {
-        $this->config['form'] = $formStyle->build();
-        return $this;
+        $this->rule = $rule;
+        $this->config = $config;
+        $this->ui = $ui;
+        $ui->init($this);
+        $this->checkFieldUnique();
+        $this->template = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Template' . DIRECTORY_SEPARATOR . 'form.php';
     }
 
     /**
      * @return string
      */
-    public function getSuccessScript()
+    public function getFormContentType()
     {
-        return $this->successScript;
+        return $this->formContentType;
     }
 
     /**
-     * 表单提交后成功执行的js地址
-     * formCreate.formSuccess(formData,$f)
+     * @param string $name
+     * @param string $value
+     * @return $this
+     */
+    public function setHeader($name, $value)
+    {
+        $this->headers[$name] = (string)$value;
+
+        return $this;
+    }
+
+    /**
+     * @param array $headers
+     * @return $this
+     */
+    public function headers(array $headers)
+    {
+        $this->headers = $headers;
+
+        return $this;
+    }
+
+    /**
+     * @param array $formData
+     * @return $this
+     */
+    public function formData(array $formData)
+    {
+        $this->formData = $formData;
+        return $this;
+    }
+
+    /**
+     * @param $field
+     * @param $value
+     * @return $this
+     */
+    public function setValue($field, $value)
+    {
+        $this->formData[$field] = $value;
+        return $this;
+    }
+
+    /**
+     * @return false|string
+     */
+    public function parseHeaders()
+    {
+        return json_encode((object)$this->headers);
+    }
+
+    /**
+     * @param $formContentType
+     * @return $this
+     */
+    public function setFormContentType($formContentType)
+    {
+        $this->formContentType = (string)$formContentType;
+
+        return $this;
+    }
+
+    public function setDependScript(array $dependScript)
+    {
+        $this->dependScript = $dependScript;
+
+        return $this;
+    }
+
+    /**
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        $this->title = (string)$title;
+
+        return $this;
+    }
+
+    /**
+     * @param string $method
+     * @return $this
+     */
+    public function setMethod($method)
+    {
+        $this->method = (string)$method;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    /**
+     * @param array $rule
+     * @return $this
+     * @throws FormBuilderException
+     */
+    public function setRule(array $rule)
+    {
+        $this->rule = $rule;
+        $this->checkFieldUnique();
+        return $this;
+    }
+
+    /**
+     * @param array|ConfigInterface $config
+     * @return $this
+     */
+    public function setConfig($config)
+    {
+        if (is_array($config) || $config instanceof ConfigInterface)
+            $this->config = $config;
+        return $this;
+    }
+
+    /**
+     * 追加组件
      *
-     * @param string $successScript
+     * @param $component
      * @return $this
+     * @throws FormBuilderException
      */
-    public function setSuccessScript($successScript)
+    public function append($component)
     {
-        $this->successScript = $successScript;
+        $this->rule[] = $component;
+        $this->checkFieldUnique();
         return $this;
     }
 
     /**
-     * @return string
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $id
+     * 开头插入组件
+     *
+     * @param $component
      * @return $this
+     * @throws FormBuilderException
      */
-    public function setId($id)
+    public function prepend($component)
     {
-        $this->id = $id;
+        array_unshift($this->rule, $component);
+        $this->checkFieldUnique();
         return $this;
     }
 
+    /**
+     * @param $action
+     * @return $this
+     */
+    public function setAction($action)
+    {
+        $this->action = (string)$action;
+        return $this;
+    }
 
     /**
      * @return string
@@ -310,150 +259,170 @@ class Form
     }
 
     /**
-     * 提交地址
+     * 提交按钮显示状态
      *
-     * @param string $action
+     * @param $isShow
      * @return $this
      */
-    public function setAction($action)
+    public function showSubmitBtn($isShow)
     {
-        $this->action = $action;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMethod()
-    {
-        return $this->method;
-    }
-
-    /**
-     * @param string $key
-     * @return array|mixed|null
-     */
-    public function getConfig($key = '')
-    {
-        if ($key == '')
-            return $this->config;
+        if ($this->config instanceof ConfigInterface)
+            $this->config->submitBtn(!!$isShow);
         else
-            return isset($this->config[$key]) ? $this->config[$key] : null;
-    }
-
-    /**
-     * 提交方式
-     *
-     * @param string $method
-     * @return $this
-     */
-    public function setMethod($method)
-    {
-        $this->method = $method;
+            $this->config['submitBtn'] = !!$isShow;
         return $this;
     }
 
     /**
-     * 标题
+     * 重置按钮显示状态
      *
-     * @return string
-     */
-    public function getTitle()
-    {
-        return $this->title;
-    }
-
-    /**
-     * @param string $title
+     * @param $isShow
      * @return $this
      */
-    public function setTitle($title)
+    public function showResetBtn($isShow)
     {
-        $this->title = $title;
-        return $this;
-    }
-
-
-    /**
-     * 追加组件
-     *
-     * @param FormComponentDriver $component
-     * @return $this
-     */
-    public function append(FormComponentDriver $component)
-    {
-        $field = $component->getField();
-        if (!isset($this->components[$field]))
-            $this->fields[] = $field;
-        $this->components[$field] = $component;
-        $this->checkLoadData($component);
+        if ($this->config instanceof ConfigInterface)
+            $this->config->resetBtn(!!$isShow);
+        else
+            $this->config['resetBtn'] = !!$isShow;
         return $this;
     }
 
     /**
-     * 开头插入组件
-     *
-     * @param FormComponentDriver $component
+     * 设置组件全局配置
+     * @param string $componentName
+     * @param array $config
      * @return $this
      */
-    public function prepend(FormComponentDriver $component)
+    public function componentGlobalConfig($componentName, array $config)
     {
-        $field = $component->getField();
-        if (!isset($this->components[$field]))
-            array_unshift($this->fields, $field);
-        $this->components[$field] = $component;
-        $this->checkLoadData($component);
-        return $this;
-    }
-
-    /**
-     * 是否需要引入省市区数据
-     *
-     * @param FormComponentDriver $component
-     */
-    protected function checkLoadData(FormComponentDriver $component)
-    {
-        if (
-            $component instanceof Cascader
-            && ($this->loadCityData == false || $this->loadCityAreaData == false)
-        ) {
-            $type = $component->getType();
-            if ($type == Cascader::TYPE_CITY)
-                $this->loadCityData = true;
-            else if ($type == Cascader::TYPE_CITY_AREA)
-                $this->loadCityAreaData = true;
+        if ($this->config instanceof ConfigInterface)
+            $this->config->componentGlobalConfig($componentName, $config);
+        else {
+            if (!isset($this->config['global'])) $this->config['global'] = [];
+            $this->config['global'][$componentName] = $config;
         }
+        return $this;
+    }
+
+    protected function parseFormComponent($rule)
+    {
+        if (Util::isComponent($rule)) {
+            $rule = $rule->build();
+        } else {
+            if (isset($rule['children']) && is_array($rule['children'])) {
+                foreach ($rule['children'] as $i => $child) {
+                    $rule['children'][$i] = $this->parseFormComponent($child);
+                }
+            }
+            if (isset($rule['control'])) {
+                foreach ($rule['control'] as $i => $child) {
+                    foreach ($child['rule'] as $k => $rule) {
+                        $child['rule'][$k] = Util::isComponent($rule) ? $rule->build() : $rule;
+                    }
+                    $rule['control'][$i] = $child;
+                }
+            }
+        }
+        return $rule;
+    }
+
+    public function getDependScript()
+    {
+        return $this->dependScript;
     }
 
     /**
-     * 获得表单规则
+     * @param array $formData
+     * @param array $rule
+     * @return array
+     */
+    protected function deepSetFormData($formData, $rule)
+    {
+        if (!count($formData)) return $rule;
+        foreach ($rule as $k => $item) {
+            if (is_array($item)) {
+                if (isset($item['field']) && isset($formData[$item['field']])) {
+                    $item['value'] = $formData[$item['field']];
+                }
+                if (isset($item['children']) && is_array($item['children']) && count($item['children'])) {
+                    $item['children'] = $this->deepSetFormData($formData, $item['children']);
+                }
+                if (isset($item['control']) && count($item['control'])) {
+                    foreach ($item['control'] as $_k => $_rule) {
+                        $item['control'][$_k]['rule'] = $this->deepSetFormData($formData, $_rule['rule']);
+                    }
+                }
+            }
+            $rule[$k] = $item;
+        }
+
+        return $rule;
+    }
+
+    /**
+     * 获取表单生成规则
      *
      * @return array
-     * @throws FormBuilderException
      */
-    public function getRules()
+    public function formRule()
     {
         $rules = [];
-        $fields = [];
-        foreach ($this->fields as $field) {
-            $component = $this->components[$field];
-            if (!($component instanceof FormComponentDriver))
-                continue;
-            $field = $component->getField();
-            if (in_array($field, $fields))
-                throw new FormBuilderException($field . '字段已重复,请保证组件 field 无重复');
-
-            $fields[] = $field;
-            $rule = $component->build();
-            if ($component->info)
-                $rule['info'] = $component->info;
-            if (!$component instanceof Hidden)
-                $rule['validate'] = array_merge(isset($rule['validate']) ? $rule['validate'] : [], $component->validate()->build());
-            $rules[] = $rule;
+        foreach ($this->rule as $rule) {
+            $rules[] = $this->parseFormComponent($rule);
         }
-        return $rules;
+        return $this->deepSetFormData($this->formData, $rules);
     }
 
+    /**
+     * @return false|string
+     */
+    public function parseFormRule()
+    {
+        return json_encode($this->formRule());
+    }
+
+    /**
+     * @return false|string
+     */
+    public function parseFormConfig()
+    {
+        return json_encode((object)$this->formConfig());
+    }
+
+    /**
+     * @return string
+     */
+    public function parseDependScript()
+    {
+        return implode("\r\n", $this->dependScript);
+    }
+
+    /**
+     * 获取表单配置
+     *
+     * @return array
+     */
+    public function formConfig()
+    {
+        $config = $this->config;
+        if ($config instanceof ConfigInterface) return $config->getConfig();
+        foreach ($config as $k => $v) {
+            $config[$k] = $this->parseFormComponent($v);
+        }
+        return $config;
+    }
+
+
+    /**
+     * 获取表单创建的 js 代码
+     *
+     * @return false|string
+     */
+    public function formScript()
+    {
+        return $this->template(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'Template' . DIRECTORY_SEPARATOR . 'createScript.min.php');
+    }
 
     /**
      * 获取表单视图
@@ -462,115 +431,105 @@ class Form
      */
     public function view()
     {
+        return $this->template($this->template);
+    }
+
+    /**
+     * 自定义表单页面
+     *
+     * @param $templateDir
+     * @return false|string
+     */
+    public function template($templateDir)
+    {
         ob_start();
         $form = $this;
-        require dirname(__FILE__) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'form.php';
+        require $templateDir;
         $html = ob_get_clean();
         return $html;
     }
 
     /**
-     * 获取表单生成器所需全部js
+     * 设置模板
      *
-     * @return array
+     * @param string $templateDir
+     * @return $this
      */
-    public function script()
+    public function setTemplate($templateDir)
     {
-        return $this->script;
+        $this->template = $templateDir;
+        return $this;
     }
 
     /**
-     * 获取生成表单的js代码
+     * 检查field 是否重复
      *
-     * @return string
-     */
-    public function formScript()
-    {
-        ob_start();
-        $form = $this;
-        require dirname(__FILE__) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'formScript.php';
-        $script = ob_get_clean();
-        return $script;
-
-    }
-
-    /**
-     * 获取表单生成器所需js
-     *
+     * @param null $rules
+     * @param array $fields
      * @return array
+     * @throws FormBuilderException
      */
-    public function getScript()
+    protected function checkFieldUnique($rules = null, $fields = [])
     {
-        $_script = $this->script;
-        $script = [
-            $_script['form-create']
-        ];
-        if ($this->loadCityAreaData == true)
-            $script[] = $_script['city-area-data'];
-        if ($this->loadCityData == true)
-            $script[] = $_script['city-data'];
-        if ($this->linkJq)
-            $script[] = $_script['jq'];
-        if ($this->linkIview) {
-            $script[] = $_script['iview'];
-            $script[] = $_script['iview-css'];
+        if (is_null($rules)) $rules = $this->rule;
+
+        foreach ($rules as $rule) {
+            $rule = $this->parseFormComponent($rule);
+            $field = isset($rule['field']) ? $rule['field'] : null;
+
+            if (isset($rule['children']) && count($rule['children']))
+                $fields = $this->checkFieldUnique($rule['children'], $fields);
+
+            if (is_null($field) || $field === '')
+                continue;
+            else if (isset($fields[$field]))
+                throw new FormBuilderException('组件的 field 不能重复');
+            else
+                $fields[$field] = true;
         }
-        if ($this->linkVue)
-            $script[] = $_script['vue'];
-        return array_reverse($script);
+
+        return $fields;
     }
 
     /**
-     * 是否隐藏提交按钮(默认显示)
-     *
-     * @param bool $isShow
-     * @return Form
-     */
-    public function hiddenSubmitBtn($isShow = false)
-    {
-        $this->submitBtn = !(bool)$isShow;
-
-        return $this;
-    }
-
-    /**
-     * 是否隐藏重置按钮(默认隐藏)
-     *
-     * @param bool $isShow
-     * @return Form
-     */
-    public function hiddenResetBtn($isShow = false)
-    {
-        $this->resetBtn = !(bool)$isShow;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isResetBtn()
-    {
-        return $this->resetBtn;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isSubmitBtn()
-    {
-        return $this->submitBtn;
-    }
-
-    /**
-     * 生成表单快捷方法
+     * Iview 版表单生成器
      *
      * @param string $action
-     * @param array $components
+     * @param array $rule
+     * @param array|ConfigInterface $config
      * @return Form
+     * @throws FormBuilderException
      */
-    public static function create($action, array $components = [])
+    public static function iview($action = '', $rule = [], $config = [])
     {
-        return new self($action, $components);
+        return new self(new IViewBootstrap(), $action, $rule, $config);
+    }
+
+    /**
+     * Iview v4 版表单生成器
+     *
+     * @param string $action
+     * @param array $rule
+     * @param array|ConfigInterface $config
+     * @return Form
+     * @throws FormBuilderException
+     */
+    public static function iview4($action = '', $rule = [], $config = [])
+    {
+        return new self(new IViewBootstrap(4), $action, $rule, $config);
+    }
+
+    /**
+     * element-ui 版表单生成器
+     *
+     * @param string $action
+     * @param array $rule
+     * @param array|ConfigInterface $config
+     * @return Form
+     * @throws FormBuilderException
+     */
+    public static function elm($action = '', $rule = [], $config = [])
+    {
+        return new self(new ElmBootstrap(), $action, $rule, $config);
     }
 }

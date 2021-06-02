@@ -1,11 +1,18 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 namespace crmeb\services\template\storage;
 
+use app\services\other\TemplateMessageServices;
 use crmeb\basic\BaseMessage;
 use crmeb\services\WechatService;
-use crmeb\services\WechatTemplateService;
-use think\facade\Db;
 use think\facade\Log;
 
 class Wechat extends BaseMessage
@@ -21,6 +28,17 @@ class Wechat extends BaseMessage
     }
 
     /**
+     * @param string $templateId
+     * @return mixed
+     */
+    public function getTempId(string $templateId)
+    {
+        /** @var TemplateMessageServices $services */
+        $services = app()->make(TemplateMessageServices::class);
+        return $services->getTempId($templateId, 1);
+    }
+
+    /**
      * 发送消息
      * @param string $templateId
      * @param array $data
@@ -32,7 +50,7 @@ class Wechat extends BaseMessage
         if (!$templateId) {
             return $this->setError('Template number does not exist');
         }
-        $tempid = Db::name('template_message')->where(['tempkey' => $templateId, 'status' => 1, 'type' => 1])->value('tempid');
+        $tempid = $this->getTempId($templateId);
         if (!$tempid) {
             return $this->setError('Template ID does not exist');
         }
@@ -76,5 +94,14 @@ class Wechat extends BaseMessage
     public function delete(string $templateId)
     {
         return WechatService::noticeService()->deletePrivateTemplate($templateId);
+    }
+
+    /**
+     * 返回所有支持的行业列表
+     * @return \EasyWeChat\Support\Collection
+     */
+    public function getIndustry()
+    {
+        return WechatService::noticeService()->getIndustry();
     }
 }

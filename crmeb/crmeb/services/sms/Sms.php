@@ -1,9 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: xurongyao <763569752@qq.com>
- * Date: 2019/11/23 3:46 PM
- */
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\services\sms;
 
@@ -15,7 +19,7 @@ use think\facade\Config;
 
 
 /**
- * Class Sms
+ * Class Sms1
  * @package crmeb\services\sms
  * @mixin Yunxin
  */
@@ -34,7 +38,7 @@ class Sms extends BaseManager
      */
     protected function getDefaultDriver()
     {
-        return Config::get('sms.default', 'sms');
+        return Config::get('sms.default', 'yunxin');
     }
 
 
@@ -53,6 +57,7 @@ class Sms extends BaseManager
         if (!$this->config) {
             $this->config = Config::get($this->configFile . '.stores.' . $this->name, []);
         }
+
         $handleAccessToken = new AccessTokenServeService($this->config['account'] ?? '', $this->config['secret'] ?? '');
         $handle = Container::getInstance()->invokeClass($class, [$this->name, $handleAccessToken, $this->configFile]);
         $this->config = [];

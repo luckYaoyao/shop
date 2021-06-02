@@ -1,18 +1,21 @@
 <?php
-/**
- *
- * @author: xaboy<365615158@qq.com>
- * @day: 2017/11/23
- */
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\services;
 
-use app\admin\model\wechat\WechatMessage;
-use app\admin\model\wechat\WechatReply;
-use app\models\user\User;
-use app\models\user\WechatUser;
-use crmeb\repositories\MessageRepositories;
-use crmeb\repositories\PaymentRepositories;
+use app\services\message\wechat\MessageServices;
+use app\services\wechat\WechatMessageServices;
+use app\services\wechat\WechatReplyServices;
+use crmeb\exceptions\AdminException;
+use app\services\pay\PayNotifyServices;
 use EasyWeChat\Foundation\Application;
 use EasyWeChat\Message\Article;
 use EasyWeChat\Message\Image;
@@ -23,12 +26,17 @@ use EasyWeChat\Message\Video;
 use EasyWeChat\Message\Voice;
 use EasyWeChat\Payment\Order;
 use EasyWeChat\Server\Guard;
+use think\exception\ValidateException;
 use think\Response;
 use crmeb\utils\Hook;
+use think\facade\Cache;
 
 class WechatService
 {
-    private static $instance = null;
+    /**
+     * @var Application
+     */
+    protected static $instance;
 
     public static function options()
     {
@@ -51,7 +59,7 @@ class WechatService
                 'key' => trim($payment['pay_weixin_key']),
                 'cert_path' => realpath('.' . $payment['pay_weixin_client_cert']),
                 'key_path' => realpath('.' . $payment['pay_weixin_client_key']),
-                'notify_url' => sys_config('site_url') . '/api/wechat/notify'
+                'notify_url' => trim(SystemConfigService::get('site_url')) . '/api/wechat/notify'
             ];
         }
         return $config;
@@ -79,88 +87,58 @@ class WechatService
      */
     private static function hook($server)
     {
-        $server->setMessageHandler(function ($message) {
-            event('WechatMessageBefore', [$message]);
+        /** @var MessageServices $messageService */
+        $messageService = app()->make(MessageServices::class);
+        /** @var WechatReplyServices $wechatReplyService */
+        $wechatReplyService = app()->make(WechatReplyServices::class);
+        $server->setMessageHandler(function ($message) use ($messageService, $wechatReplyService) {
+            /** @var WechatMessageServices $wechatMessage */
+            $wechatMessage = app()->make(WechatMessageServices::class);
+            $wechatMessage->wechatMessageBefore($message);
             switch ($message->MsgType) {
                 case 'event':
                     switch (strtolower($message->Event)) {
                         case 'subscribe':
-                            $response = WechatReply::reply('subscribe');
-                            if (isset($message->EventKey)) {
-                                if ($message->EventKey && ($qrInfo = QrcodeService::getQrcode($message->Ticket, 'ticket'))) {
-                                    QrcodeService::scanQrcode($message->Ticket, 'ticket');
-                                    if (strtolower($qrInfo['third_type']) == 'spread') {
-                                        try {
-                                            $spreadUid = $qrInfo['third_id'];
-                                            $uid = WechatUser::openidToUid($message->FromUserName, 'openid');
-                                            if ($spreadUid == $uid) return '自己不能推荐自己';
-                                            $userInfo = User::getUserInfo($uid);
-                                            if ($userInfo['spread_uid']) return '已有推荐人!';
-                                            if (!User::setSpreadUid($userInfo['uid'], $spreadUid)) {
-                                                $response = '绑定推荐人失败!';
-                                            }
-                                        } catch (\Exception $e) {
-                                            $response = $e->getMessage();
-                                        }
-                                    }
-                                }
-                            }
+                            $response = $messageService->wechatEventSubscribe($message);
                             break;
                         case 'unsubscribe':
-                            event('WechatEventUnsubscribeBefore', [$message]);
+                            $messageService->wechatEventUnsubscribe($message);
                             break;
                         case 'scan':
-                            $response = WechatReply::reply('subscribe');
-                            if ($message->EventKey && ($qrInfo = QrcodeService::getQrcode($message->Ticket, 'ticket'))) {
-                                QrcodeService::scanQrcode($message->Ticket, 'ticket');
-                                if (strtolower($qrInfo['third_type']) == 'spread') {
-                                    try {
-                                        $spreadUid = $qrInfo['third_id'];
-                                        $uid = WechatUser::openidToUid($message->FromUserName, 'openid');
-                                        if ($spreadUid == $uid) return '自己不能推荐自己';
-                                        $userInfo = User::getUserInfo($uid);
-                                        if ($userInfo['spread_uid']) return '已有推荐人!';
-                                        if (User::setSpreadUid($userInfo['uid'], $spreadUid)) {
-                                            $response = '绑定推荐人失败!';
-                                        }
-                                    } catch (\Exception $e) {
-                                        $response = $e->getMessage();
-                                    }
-                                }
-                            }
+                            $response = $messageService->wechatEventScan($message);
                             break;
                         case 'location':
-                            $response = MessageRepositories::wechatEventLocation($message);
+                            $response = $messageService->wechatEventLocation($message);
                             break;
                         case 'click':
-                            $response = WechatReply::reply($message->EventKey);
+                            $response = $wechatReplyService->reply($message->EventKey);
                             break;
                         case 'view':
-                            $response = MessageRepositories::wechatEventView($message);
+                            $response = $messageService->wechatEventView($message);
                             break;
                     }
                     break;
                 case 'text':
-                    $response = WechatReply::reply($message->Content);
+                    $response = $wechatReplyService->reply($message->Content, $message->FromUserName);
                     break;
                 case 'image':
-                    $response = MessageRepositories::wechatMessageImage($message);
+                    $response = $messageService->wechatMessageImage($message);
                     break;
                 case 'voice':
-                    $response = MessageRepositories::wechatMessageVoice($message);
+                    $response = $messageService->wechatMessageVoice($message);
                     break;
                 case 'video':
-                    $response = MessageRepositories::wechatMessageVideo($message);
+                    $response = $messageService->wechatMessageVideo($message);
                     break;
                 case 'location':
-                    $response = MessageRepositories::wechatMessageLocation($message);
+                    $response = $messageService->wechatMessageLocation($message);
                     break;
                 case 'link':
-                    $response = MessageRepositories::wechatMessageLink($message);
+                    $response = $messageService->wechatMessageLink($message);
                     break;
                 // ... 其它消息
                 default:
-                    $response = MessageRepositories::wechatMessageOther($message);
+                    $response = $messageService->wechatMessageOther($message);
                     break;
             }
 
@@ -238,25 +216,6 @@ class WechatService
     }
 
     /**
-     * 微信永久二维码生成接口 小于10万个
-     * @return \EasyWeChat\QRCode\QRCode
-     */
-    public static function qrcodeForeverService($sceneValue)
-    {
-        return self::application()->qrcode->forever($sceneValue);
-    }
-
-    /**
-     * 微信临时二维码生成接口 30天有效期
-     * @return \EasyWeChat\QRCode\QRCode
-     */
-    public static function qrcodeTempService($sceneValue, $expireSeconds = 2592000)
-    {
-        return self::application()->qrcode->temporary($sceneValue, $expireSeconds);
-
-    }
-
-    /**
      * 短链接生成接口
      * @return \EasyWeChat\Url\Url
      */
@@ -331,6 +290,39 @@ class WechatService
         return self::application()->user_group;
     }
 
+
+    /**
+     * 企业付款到零钱
+     * @param string $openid openid
+     * @param string $orderId 订单号
+     * @param string $amount 金额
+     * @param string $desc 说明
+     */
+    public static function merchantPay(string $openid, string $orderId, string $amount, string $desc)
+    {
+        $options = self::options();
+        if (!isset($options['payment']['cert_path'])) {
+            throw new ValidateException('企业微信支付到零钱需要支付证书，检测到您没有上传！');
+        }
+        if (!$options['payment']['cert_path']) {
+            throw new ValidateException('企业微信支付到零钱需要支付证书，检测到您没有上传！');
+        }
+        $merchantPayData = [
+            'partner_trade_no' => $orderId, //随机字符串作为订单号，跟红包和支付一个概念。
+            'openid' => $openid, //收款人的openid
+            'check_name' => 'NO_CHECK',  //文档中有三种校验实名的方法 NO_CHECK OPTION_CHECK FORCE_CHECK
+            'amount' => (int)bcmul($amount, '100', 0),  //单位为分
+            'desc' => $desc,
+            'spbill_create_ip' => request()->ip(),  //发起交易的IP地址
+        ];
+        $result = self::application()->merchant_pay->send($merchantPayData);
+        if ($result->return_code == 'SUCCESS' && $result->result_code != 'FAIL') {
+            return true;
+        } else {
+            throw new ValidateException(($result->return_msg ?? '支付失败') . ':' . ($result->err_code_des ?? '发起企业支付到零钱失败'));
+        }
+    }
+
     /**
      * 生成支付订单对象
      * @param $openid
@@ -366,25 +358,27 @@ class WechatService
      */
     public static function paymentPrepare($openid, $out_trade_no, $total_fee, $attach, $body, $detail = '', $trade_type = 'JSAPI', $options = [])
     {
-        $order = self::paymentOrder($openid, $out_trade_no, $total_fee, $attach, $body, $detail, $trade_type, $options);
-        $result = self::paymentService()->prepare($order);
-        if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
-            try {
-                PaymentRepositories::wechatPaymentPrepare($order, $result->prepay_id);
-            } catch (\Exception $e) {
-            }
+        $key = 'pay_' . $out_trade_no;
+        $result = Cache::get($key);
+        if ($result) {
             return $result;
         } else {
-            if ($result->return_code == 'FAIL') {
-                exception('微信支付错误返回：' . $result->return_msg);
-            } else if (isset($result->err_code)) {
-                exception('微信支付错误返回：' . $result->err_code_des);
+            $order = self::paymentOrder($openid, $out_trade_no, $total_fee, $attach, $body, $detail, $trade_type, $options);
+            $result = self::paymentService()->prepare($order);
+            if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
+                Cache::set($key, $result, 7000);
+                return $result;
             } else {
-                exception('没有获取微信支付的预支付ID，请重新发起支付!');
+                if ($result->return_code == 'FAIL') {
+                    exception('微信支付错误返回：' . $result->return_msg);
+                } else if (isset($result->err_code)) {
+                    exception('微信支付错误返回：' . $result->err_code_des);
+                } else {
+                    exception('没有获取微信支付的预支付ID，请重新发起支付!');
+                }
+                exit;
             }
-            exit;
         }
-
     }
 
     /**
@@ -406,6 +400,30 @@ class WechatService
     }
 
     /**
+     * 获得native支付参数
+     * @param $openid
+     * @param $out_trade_no
+     * @param $total_fee
+     * @param $attach
+     * @param $body
+     * @param string $detail
+     * @param string $trade_type
+     * @param array $options
+     * @return array|string
+     */
+    public static function nativePay($openid, $out_trade_no, $total_fee, $attach, $body, $detail = '', $trade_type = 'NATIVE', $options = [])
+    {
+        $data = self::paymentPrepare($openid, $out_trade_no, $total_fee, $attach, $body, $detail, $trade_type, $options);
+        if ($data) {
+            $res['code_url'] = $data['code_url'];
+            $res['invalid'] = time() + 60;
+            $res['logo'] = sys_config('wap_login_logo');
+        } else $res = [];
+        return $res;
+    }
+
+
+    /**
      * 使用商户订单号退款
      * @param $orderNo
      * @param $refundNo
@@ -420,12 +438,16 @@ class WechatService
     {
         $totalFee = floatval($totalFee);
         $refundFee = floatval($refundFee);
-        return self::paymentService()->refund($orderNo, $refundNo, $totalFee, $refundFee, $opUserId, $type, $refundAccount, $refundReason);
+        if ($type == 'out_trade_no') {
+            return self::paymentService()->refund($orderNo, $refundNo, $totalFee, $refundFee, $opUserId, $type, $refundAccount, $refundReason);
+        } else {
+            return self::paymentService()->refundByTransactionId($orderNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundAccount, $refundReason);
+        }
     }
 
     public static function payOrderRefund($orderNo, array $opt)
     {
-        if (!isset($opt['pay_price'])) exception('缺少pay_price');
+        if (!isset($opt['pay_price'])) throw new AdminException('缺少pay_price');
         $totalFee = floatval(bcmul($opt['pay_price'], 100, 0));
         $refundFee = isset($opt['refund_price']) ? floatval(bcmul($opt['refund_price'], 100, 0)) : null;
         $refundReason = isset($opt['desc']) ? $opt['desc'] : '';
@@ -438,28 +460,32 @@ class WechatService
         $refundAccount = isset($opt['refund_account']) ? $opt['refund_account'] : 'REFUND_SOURCE_UNSETTLED_FUNDS';
         try {
             $res = (self::refund($orderNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundReason, $type, $refundAccount));
-            if ($res->return_code == 'FAIL') exception('退款失败:' . $res->return_msg);
-            if (isset($res->err_code)) exception('退款失败:' . $res->err_code_des);
+            if ($res->return_code == 'FAIL') throw new AdminException('退款失败:' . $res->return_msg);
+            if (isset($res->err_code)) throw new AdminException('退款失败:' . $res->err_code_des);
         } catch (\Exception $e) {
-            exception($e->getMessage());
+            throw new AdminException($e->getMessage());
         }
         return true;
     }
 
     /**
      * 微信支付成功回调接口
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \EasyWeChat\Core\Exceptions\FaultException
      */
     public static function handleNotify()
     {
-        self::paymentService()->handleNotify(function ($notify, $successful) {
+        return self::paymentService()->handleNotify(function ($notify, $successful) {
             if ($successful && isset($notify->out_trade_no)) {
                 if (isset($notify->attach) && $notify->attach) {
                     if (($count = strpos($notify->out_trade_no, '_')) !== false) {
                         $notify->out_trade_no = substr($notify->out_trade_no, $count + 1);
                     }
-                    return (new Hook(PaymentRepositories::class, 'wechat'))->listen($notify->attach, $notify->out_trade_no);
+                    return (new Hook(PayNotifyServices::class, 'wechat'))->listen($notify->attach, $notify->out_trade_no, $notify->transaction_id);
                 }
-                WechatMessage::setOnceMessage($notify, $notify->openid, 'payment_success', $notify->out_trade_no);
+                /** @var WechatMessageServices $wechatMessageService */
+                $wechatMessageService = app()->make(WechatMessageServices::class);
+                $wechatMessageService->setOnceMessage($notify, $notify->openid, 'payment_success', $notify->out_trade_no);
                 return false;
             }
         });
@@ -474,9 +500,14 @@ class WechatService
         return self::application()->js;
     }
 
+    /**
+     * 获取js的SDK
+     * @param string $url
+     * @return array|string
+     */
     public static function jsSdk($url = '')
     {
-        $apiList = ['editAddress', 'openAddress', 'updateTimelineShareData', 'updateAppMessageShareData', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone', 'startRecord', 'stopRecord', 'onVoiceRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'onVoicePlayEnd', 'uploadVoice', 'downloadVoice', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'translateVoice', 'getNetworkType', 'openLocation', 'getLocation', 'hideOptionMenu', 'showOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem', 'closeWindow', 'scanQRCode', 'chooseWXPay', 'openProductSpecificView', 'addCard', 'chooseCard', 'openCard'];
+        $apiList = ['openAddress', 'updateTimelineShareData', 'updateAppMessageShareData', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'onMenuShareQQ', 'onMenuShareWeibo', 'onMenuShareQZone', 'startRecord', 'stopRecord', 'onVoiceRecordEnd', 'playVoice', 'pauseVoice', 'stopVoice', 'onVoicePlayEnd', 'uploadVoice', 'downloadVoice', 'chooseImage', 'previewImage', 'uploadImage', 'downloadImage', 'translateVoice', 'getNetworkType', 'openLocation', 'getLocation', 'hideOptionMenu', 'showOptionMenu', 'hideMenuItems', 'showMenuItems', 'hideAllNonBaseMenuItem', 'showAllNonBaseMenuItem', 'closeWindow', 'scanQRCode', 'chooseWXPay', 'openProductSpecificView', 'addCard', 'chooseCard', 'openCard'];
         $jsService = self::jsService();
         if ($url) $jsService->setUrl($url);
         try {
@@ -608,9 +639,42 @@ class WechatService
     public static function getUserInfo($openid)
     {
         $userService = self::userService();
-        $userInfo = is_array($openid) ? $userService->batchGet($openid) : $userService->get($openid);
+        $userInfo = [];
+        try {
+            if (is_array($openid)) {
+                $res = $userService->batchGet($openid);
+                if (isset($res['user_info_list'])) {
+                    $userInfo = $res['user_info_list'];
+                } else {
+                    throw new ValidateException($res['errmsg'] ?? '获取微信粉丝信息失败');
+                }
+            } else {
+                $userInfo = $userService->get($openid);
+            }
+        } catch (\Throwable $e) {
+            throw new ValidateException($e->getMessage());
+        }
         return $userInfo;
     }
 
 
+    /**
+     * 获取用户列表
+     * @param null $next_openid
+     * @return array
+     */
+    public static function getUsersList($next_openid = null)
+    {
+        $userService = self::userService();
+        $list = [];
+        try {
+            $res = $userService->lists($next_openid);
+            $list['data'] = $res['data']['openid'] ?? [];
+            $list['next_openid'] = $res['next_openid'] ?? null;
+            return $list;
+        } catch (\Exception $e) {
+            throw new ValidateException($e->getMessage());
+        }
+        return $list;
+    }
 }

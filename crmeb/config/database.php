@@ -23,11 +23,11 @@ return [
             // 服务器地址
             'hostname'        => Env::get('database.hostname', '127.0.0.1'),
             // 数据库名
-            'database'        => Env::get('database.database', ''),
+            'database'        => Env::get('database.database', 'crmeb31'),
             // 用户名
             'username'        => Env::get('database.username', 'root'),
             // 密码
-            'password'        => Env::get('database.password', ''),
+            'password'        => Env::get('database.password', 'root'),
             // 端口
             'hostport'        => Env::get('database.hostport', '3306'),
             // 连接dsn
@@ -59,21 +59,7 @@ return [
             // 是否需要断线重连
             'break_reconnect' => true,
         ],
-        'redis' =>[
-            'type' => 'redis',
-            // 服务器地址
-            'hostname'        => Env::get('redis.hostname', '127.0.0.1'),
-            // 数据库名
-            'database'        => Env::get('redis.database', ''),
-            // 密码
-            'password'        => Env::get('redis.password', ''),
-            // 端口
-            'hostport'        => Env::get('redis.hostport', '6379'),
 
-            'timeout'         => Env::get('redis.timeout', 0),
-
-            'prefix'          => Env::get('redis.prefix', 'eb_'),
-        ]
         // 更多的数据库配置信息
     ],
 
@@ -83,4 +69,15 @@ return [
     'auto_timestamp'  => 'timestamp',
     // 时间字段取出后的默认时间格式
     'datetime_format' => 'Y-m-d H:i:s',
+    //数据分页配置
+    'page' => [
+        //页码key
+        'pageKey' => 'page',
+        //每页截取key
+        'limitKey' => 'limit',
+        //每页截取最大值
+        'limitMax' => 50,
+        //默认条数
+        'defaultLimit' => 10,
+    ]
 ];

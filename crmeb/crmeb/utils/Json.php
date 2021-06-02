@@ -1,11 +1,27 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\utils;
 
 
+use think\exception\HttpResponseException;
+use think\facade\Config;
+use think\facade\Lang;
 use think\Response;
 
+/**
+ * Json输出类
+ * Class Json
+ * @package crmeb\utils
+ */
 class Json
 {
     private $code = 200;
@@ -18,11 +34,22 @@ class Json
 
     public function make(int $status, string $msg, ?array $data = null): Response
     {
+        $request = app()->request;
         $res = compact('status', 'msg');
 
         if (!is_null($data))
             $res['data'] = $data;
 
+        if ($res['msg'] && !is_numeric($res['msg'])) {
+            if (!$range = $request->get('lang')) {
+                $range = $request->cookie(Config::get('lang.cookie_var'));
+            }
+            $langData = array_values(Config::get('lang.accept_language', []));
+            if (!in_array($range, $langData)) {
+                $range = 'zh-cn';
+            }
+            $res['msg'] = Lang::get($res['msg'], [], $range);
+        }
         return Response::create($res, 'json', $this->code);
     }
 
@@ -38,7 +65,7 @@ class Json
 
     public function successful(...$args): Response
     {
-        return $this->success(...$args);
+        return app('json')->success(...$args);
     }
 
     public function fail($msg = 'fail', ?array $data = null): Response
@@ -58,7 +85,6 @@ class Json
             $result = $msg;
             $msg = 'ok';
         }
-        return $this->success($msg, compact('status', 'result'));
+        return app('json')->success($msg, compact('status', 'result'));
     }
-
 }

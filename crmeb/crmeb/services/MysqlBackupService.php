@@ -1,6 +1,12 @@
 <?php
 // +----------------------------------------------------------------------
-// | origin:tp5er\tp5-databackup
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 namespace crmeb\services;
 
@@ -260,19 +266,24 @@ class MysqlBackupService
      * @param int $part
      * @throws \Exception
      */
-    public function downloadFile($time, $part = 0)
+    public function downloadFile($time, int $part = 0, bool $isFile = false)
     {
         $file = $this->getFile('time', $time);
         $fileName = $file[$part];
         if (file_exists($fileName)) {
+            if ($isFile) {
+                $key = password_hash(time() . $fileName, PASSWORD_DEFAULT);
+                CacheService::set($key, ['path' => $fileName, 'fileName' => substr(strstr($fileName, 'backup'), 7)], 300);
+                return $key;
+            }
             ob_end_clean();
             header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
             header('Content-Description: File Transfer');
-            header('Access-Control-Allow-Origin: '.request()->domain());
+            header('Access-Control-Allow-Origin: ' . request()->domain());
             header('Content-Type: application/octet-stream');
             header('Content-Length: ' . filesize($fileName));
             header('Content-Disposition: attachment; filename=' . basename($fileName));
-            readfile($fileName);
+            return readfile($fileName);
         } else {
             throw new \Exception("{$time} File is abnormal");
         }
@@ -339,21 +350,18 @@ class MysqlBackupService
      * @throws \think\db\exception\BindParamException
      * @throws \think\exception\PDOException
      */
-    public function backup(string $table, int $start)
+    public function backup(string $table, int $start, $sql = '')
     {
         $db = self::connect();
         // 备份表结构
         if (0 == $start) {
             $result = $db->query("SHOW CREATE TABLE `{$table}`");
-            $sql = "\n";
+            $sql .= "\n";
             $sql .= "-- -----------------------------\n";
             $sql .= "-- Table structure for `{$table}`\n";
             $sql .= "-- -----------------------------\n";
             $sql .= "DROP TABLE IF EXISTS `{$table}`;\n";
             $sql .= trim($result[0]['Create Table']) . ";\n\n";
-            if (false === $this->write($sql)) {
-                return false;
-            }
         }
         //数据总数
         $result = $db->query("SELECT COUNT(*) AS count FROM `{$table}`");
@@ -362,19 +370,18 @@ class MysqlBackupService
         if ($count) {
             //写入数据注释
             if (0 == $start) {
-                $sql = "-- -----------------------------\n";
+                $sql .= "-- -----------------------------\n";
                 $sql .= "-- Records of `{$table}`\n";
                 $sql .= "-- -----------------------------\n";
-                $this->write($sql);
             }
             //备份数据记录
             $result = $db->query("SELECT * FROM `{$table}` LIMIT :MIN, 1000", ['MIN' => intval($start)]);
             foreach ($result as $row) {
                 $row = array_map('addslashes', $row);
-                $sql = "INSERT INTO `{$table}` VALUES ('" . str_replace(array("\r", "\n"), array('\\r', '\\n'), implode("', '", $row)) . "');\n";
-                if (false === $this->write($sql)) {
-                    return false;
-                }
+                $sql .= "INSERT INTO `{$table}` VALUES ('" . str_replace(array("\r", "\n"), array('\\r', '\\n'), implode("', '", $row)) . "');\n";
+            }
+            if (false === $this->write($sql)) {
+                return false;
             }
             //还有更多数据
             if ($count > $start + 1000) {
@@ -401,11 +408,12 @@ class MysqlBackupService
                 $tables = implode('`,`', $tables);
                 $list = $db->query("OPTIMIZE TABLE `{$tables}`");
             } else {
-                $list = $db->query("OPTIMIZE TABLE `{$tables}`");
+                $list = $db->query("OPTIMIZE TABLE {$tables}");
             }
             if (!$list) {
                 throw new \Exception("data sheet'{$tables}'Repair mistakes please try again!");
             }
+            return $list;
         } else {
             throw new \Exception("Please specify the table to be repaired!");
         }
@@ -427,7 +435,7 @@ class MysqlBackupService
                 $tables = implode('`,`', $tables);
                 $list = $db->query("REPAIR TABLE `{$tables}`");
             } else {
-                $list = $db->query("REPAIR TABLE `{$tables}`");
+                $list = $db->query("REPAIR TABLE {$tables}");
             }
             if ($list) {
                 return $list;

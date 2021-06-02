@@ -1,9 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: xurongyao <763569752@qq.com>
- * Date: 2019/11/23 3:47 PM
- */
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\services\template;
 
@@ -14,6 +18,7 @@ use think\facade\Config;
  * Class Template
  * @package crmeb\services\template
  * @mixin \crmeb\services\template\storage\Wechat
+ * @mixin \crmeb\services\template\storage\Subscribe
  */
 class Template extends BaseManager
 {

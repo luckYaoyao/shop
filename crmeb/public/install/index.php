@@ -1,8 +1,11 @@
 <?php
 
 include 'auto.php';
-if(IS_SAE)
-header("Location: index_sae.php");
+if (IS_SAE)
+    header("Location: index_sae.php");
+
+define('APP_DIR', _dir_path(substr(dirname(__FILE__), 0, -15)));//项目目录
+define('SITE_DIR', _dir_path(substr(dirname(__FILE__), 0, -8)));//入口文件目录
 
 if (file_exists('./install.lock')) {
     echo '
@@ -11,18 +14,18 @@ if (file_exists('./install.lock')) {
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         </head>
         <body>
-        	你已经安装过该系统，如果想重新安装，请先删除站点install目录下的 install.lock 文件，然后再安装。
+        	你已经安装过该系统，如果想重新安装，请先删除install目录下的 install.lock 文件，然后再安装。
         </body>
         </html>';
     exit;
 }
 @set_time_limit(1000);
 
-if (PHP_EDITION > phpversion()){
-	header("Content-type:text/html;charset=utf-8");
-	exit('您的php版本过低，不能安装本软件，请升级到'.PHP_EDITION.'或更高版本再安装，谢谢！');
+if (PHP_EDITION > phpversion()) {
+    header("Content-type:text/html;charset=utf-8");
+    exit('您的php版本过低，不能安装本软件，请升级到' . PHP_EDITION . '或更高版本再安装，谢谢！');
 }
-if(phpversion() > '7.4'){
+if (phpversion() > '7.4') {
     header("Content-type:text/html;charset=utf-8");
     exit('您的php版本太高，不能安装本软件，兼容php版本7.1~7.3，谢谢！');
 }
@@ -30,8 +33,6 @@ define("CRMEB_VERSION", '20180601');
 date_default_timezone_set('PRC');
 error_reporting(E_ALL & ~E_NOTICE);
 header('Content-Type: text/html; charset=UTF-8');
-define('SITE_DIR', _dir_path(substr(dirname(__FILE__), 0, -8)));//入口文件目录
-define('APP_DIR', _dir_path(substr(dirname(__FILE__), 0, -15)));//项目目录
 //define('SITEDIR2', substr(SITEDIR,0,-7));
 //echo SITEDIR;
 //exit;SITE_DIR
@@ -57,7 +58,7 @@ $step = isset($_GET['step']) ? $_GET['step'] : 1;
 $scriptName = !empty($_SERVER["REQUEST_URI"]) ? $scriptName = $_SERVER["REQUEST_URI"] : $scriptName = $_SERVER["PHP_SELF"];
 $rootpath = @preg_replace("/\/(I|i)nstall\/index\.php(.*)$/", "", $scriptName);
 $domain = empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-if ((int) $_SERVER['SERVER_PORT'] != 80) {
+if ((int)$_SERVER['SERVER_PORT'] != 80) {
     $domain .= ":" . $_SERVER['SERVER_PORT'];
 }
 $domain = $domain . $rootpath;
@@ -65,13 +66,13 @@ $domain = $domain . $rootpath;
 switch ($step) {
 
     case '1':
-        include_once ("./templates/step1.php");
+        include_once("./templates/step1.php");
         exit();
 
     case '2':
 
         if (phpversion() <= PHP_EDITION) {
-            die('本系统需要PHP版本 >= '.PHP_EDITION.'环境，当前PHP版本为：' . phpversion());
+            die('本系统需要PHP版本 >= ' . PHP_EDITION . '环境，当前PHP版本为：' . phpversion());
         }
 
         $phpv = @ phpversion();
@@ -93,6 +94,15 @@ switch ($step) {
         } else {
             $gd = '<font color=green>[√]On</font> ' . $tmp['GD Version'];
         }
+
+
+        if (extension_loaded('redis')) {
+            $redis = '<span class="correct_span">&radic;</span> 已安装';
+        } else {
+            $redis = '<a href="http://help.crmeb.net/crmebpro/1707557" target="_blank"><span class="correct_span error_span">&radic;</span> 点击查看帮助</a>';
+            $err++;
+        }
+
         if (function_exists('mysqli_connect')) {
             $mysql = '<span class="correct_span">&radic;</span> 已安装';
         } else {
@@ -110,29 +120,30 @@ switch ($step) {
             $session = '<span class="correct_span error_span">&radic;</span> 不支持';
             $err++;
         }
-        if(function_exists('curl_init')){
-        	$curl = '<font color=green>[√]支持</font> ';
-        }else{
-        	$curl = '<font color=red>[×]不支持</font>';
-        	$err++;
+        if (function_exists('curl_init')) {
+            $curl = '<font color=green>[√]支持</font> ';
+        } else {
+            $curl = '<font color=red>[×]不支持</font>';
+            $err++;
         }
 
-        if(function_exists('bcadd')){
+        if (function_exists('bcadd')) {
             $bcmath = '<font color=green>[√]支持</font> ';
-        }else{
+        } else {
             $bcmath = '<font color=red>[×]不支持</font>';
             $err++;
         }
-        if(function_exists('openssl_encrypt')){
+        if (function_exists('openssl_encrypt')) {
             $openssl = '<font color=green>[√]支持</font> ';
-        }else{
+        } else {
             $openssl = '<font color=red>[×]不支持</font>';
             $err++;
         }
-        if(function_exists('finfo_open')){
+
+        if (function_exists('finfo_open')) {
             $finfo_open = '<font color=green>[√]支持</font> ';
-        }else{
-            $finfo_open = '<font color=red>[×]不支持</font>';
+        } else {
+            $finfo_open = '<a href="http://help.crmeb.net/crmebpro/1707557" target="_blank"><span class="correct_span error_span">&radic;</span>点击查看帮助</a>';
             $err++;
         }
 
@@ -141,51 +152,77 @@ switch ($step) {
             'public/install',
             'public/uploads',
             'runtime',
-            '.env',
+        );
+        $file = array(
+            '.env'
         );
         //必须开启函数
-        if(function_exists('file_put_contents')){
+        if (function_exists('file_put_contents')) {
             $file_put_contents = '<font color=green>[√]开启</font> ';
-        }else{
+        } else {
             $file_put_contents = '<font color=red>[×]关闭</font>';
             $err++;
         }
-        if(function_exists('imagettftext')){
+        if (function_exists('imagettftext')) {
             $imagettftext = '<font color=green>[√]开启</font> ';
-        }else{
+        } else {
             $imagettftext = '<font color=red>[×]关闭</font>';
             $err++;
         }
 
-        include_once ("./templates/step2.php");
+        include_once("./templates/step2.php");
         exit();
 
     case '3':
-		$dbName = strtolower(trim($_POST['dbName']));
-		$_POST['dbport'] = $_POST['dbport'] ? $_POST['dbport'] : '3306';
+        $dbName = strtolower(trim($_POST['dbName']));
+        $_POST['dbport'] = $_POST['dbport'] ? $_POST['dbport'] : '3306';
         if ($_GET['testdbpwd']) {
             $dbHost = $_POST['dbHost'];
-            $conn = @mysqli_connect($dbHost, $_POST['dbUser'], $_POST['dbPwd'],NULL,$_POST['dbport']);
-            if (mysqli_connect_errno($conn)){
-				die(json_encode(0));
+            $conn = @mysqli_connect($dbHost, $_POST['dbUser'], $_POST['dbPwd'], NULL, $_POST['dbport']);
+            if (mysqli_connect_errno($conn)) {
+                die(json_encode(0));
             } else {
-				$result = mysqli_query($conn,"SELECT @@global.sql_mode");
-				$result = $result->fetch_array();
-				$version = mysqli_get_server_info($conn);
-				if ($version >= 5.7)
-				{
-					if(strstr($result[0],'STRICT_TRANS_TABLES') || strstr($result[0],'STRICT_ALL_TABLES') || strstr($result[0],'TRADITIONAL') || strstr($result[0],'ANSI'))
-						exit(json_encode(-1));
-				}
-				$result = mysqli_query($conn,"select count(table_name) as c from information_schema.`TABLES` where table_schema='$dbName'");
-				$result = $result->fetch_array();
-				if($result['c'] > 0)
-					exit(json_encode(-2));
+                $result = mysqli_query($conn, "SELECT @@global.sql_mode");
+                $result = $result->fetch_array();
+                $version = mysqli_get_server_info($conn);
+                if ($version >= 5.7) {
+                    if (strstr($result[0], 'STRICT_TRANS_TABLES') || strstr($result[0], 'STRICT_ALL_TABLES') || strstr($result[0], 'TRADITIONAL') || strstr($result[0], 'ANSI'))
+                        exit(json_encode(-1));
+                }
+                $result = mysqli_query($conn, "select count(table_name) as c from information_schema.`TABLES` where table_schema='$dbName'");
+                $result = $result->fetch_array();
+                if ($result['c'] > 0)
+                    exit(json_encode(-2));
+            }
 
-                exit(json_encode(1));
+            //redis数据库信息
+            $rbhost = $_POST['rbhost'] ?? '127.0.0.1';
+            $rbport = $_POST['rbport'] ?? 6379;
+            $rbpw = $_POST['rbpw'] ?? '';
+            $rbselect = $_POST['rbselect'] ?? 0;
+
+            try {
+                $redis = new \Redis();
+                $redis->connect($rbhost, $rbport);
+                if ($rbpw) {
+                    $redis->auth($rbpw);
+                }
+                if ($rbselect) {
+                    $redis->select($rbselect);
+                }
+                $res = $redis->set('install', 1, 10);
+                if ($res) {
+                    exit(json_encode(1));
+                } else {
+                    exit(json_encode(-3));
+                }
+            } catch (\Throwable $e) {
+                exit(json_encode(-3));
             }
         }
-        include_once ("./templates/step3.php");
+
+
+        include_once("./templates/step3.php");
         exit();
 
 
@@ -205,16 +242,16 @@ switch ($step) {
 
             $username = trim($_POST['manager']);
             $password = trim($_POST['manager_pwd']);
-            $email	  = trim($_POST['manager_email']);
+            $email = trim($_POST['manager_email']);
 
             if (!function_exists('mysqli_connect')) {
                 $arr['msg'] = "请安装 mysqli 扩展!";
                 echo json_encode($arr);
                 exit;
             }
-            $conn = @mysqli_connect($dbHost, $dbUser, $dbPwd,NULL,$_POST['dbport']);
-            if (mysqli_connect_errno($conn)){
-                $arr['msg'] = "连接数据库失败!".mysqli_connect_error($conn);
+            $conn = @mysqli_connect($dbHost, $dbUser, $dbPwd, NULL, $_POST['dbport']);
+            if (mysqli_connect_errno($conn)) {
+                $arr['msg'] = "连接数据库失败!" . mysqli_connect_error($conn);
                 echo json_encode($arr);
                 exit;
             }
@@ -226,20 +263,20 @@ switch ($step) {
                 exit;
             }
 
-            if (!mysqli_select_db($conn,$dbName)) {
+            if (!mysqli_select_db($conn, $dbName)) {
                 //创建数据时同时设置编码
-                if (!mysqli_query($conn,"CREATE DATABASE IF NOT EXISTS `" . $dbName . "` DEFAULT CHARACTER SET utf8;")) {
+                if (!mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `" . $dbName . "` DEFAULT CHARACTER SET utf8;")) {
                     $arr['msg'] = '数据库 ' . $dbName . ' 不存在，也没权限创建新的数据库！';
                     echo json_encode($arr);
                     exit;
                 }
-                if ($n==-1) {
+                if ($n == -1) {
                     $arr['n'] = 0;
                     $arr['msg'] = "成功创建数据库:{$dbName}<br>";
                     echo json_encode($arr);
                     exit;
                 }
-                mysqli_select_db($conn , $dbName);
+                mysqli_select_db($conn, $dbName);
             }
 
             //读取数据文件
@@ -255,24 +292,24 @@ switch ($step) {
                 $sql = trim($sqlFormat[$i]);
                 if (strstr($sql, 'CREATE TABLE')) {
                     preg_match('/CREATE TABLE (IF NOT EXISTS)? `eb_([^ ]*)`/is', $sql, $matches);
-                    mysqli_query($conn,"DROP TABLE IF EXISTS `$matches[2]");
-                    $sql = str_replace('`eb_','`'.$dbPrefix,$sql);//替换表前缀
-                    $ret = mysqli_query($conn,$sql);
+                    mysqli_query($conn, "DROP TABLE IF EXISTS `$matches[2]");
+                    $sql = str_replace('`eb_', '`' . $dbPrefix, $sql);//替换表前缀
+                    $ret = mysqli_query($conn, $sql);
                     if ($ret) {
-                        $message = '<li><span class="correct_span">&radic;</span>创建数据表['.$dbPrefix.$matches[2] . ']完成!<span style="float: right;">'.date('Y-m-d H:i:s').'</span></li> ';
+                        $message = '<li><span class="correct_span">&radic;</span>创建数据表[' . $dbPrefix . $matches[2] . ']完成!<span style="float: right;">' . date('Y-m-d H:i:s') . '</span></li> ';
                     } else {
                         $err = mysqli_error($conn);
-                        $message = '<li><span class="correct_span error_span">&radic;</span>创建数据表['.$dbPrefix.$matches[2] . ']失败!失败原因：'.$err.'<span style="float: right;">'.date('Y-m-d H:i:s').'</span></li>';
+                        $message = '<li><span class="correct_span error_span">&radic;</span>创建数据表[' . $dbPrefix . $matches[2] . ']失败!失败原因：' . $err . '<span style="float: right;">' . date('Y-m-d H:i:s') . '</span></li>';
                     }
                     $i++;
                     $arr = array('n' => $i, 'msg' => $message);
                     echo json_encode($arr);
                     exit;
                 } else {
-					if(trim($sql) == '')
-					   continue;
-                    $sql = str_replace('`eb_','`'.$dbPrefix,$sql);//替换表前缀
-                    $ret = mysqli_query($conn,$sql);
+                    if (trim($sql) == '')
+                        continue;
+                    $sql = str_replace('`eb_', '`' . $dbPrefix, $sql);//替换表前缀
+                    $ret = mysqli_query($conn, $sql);
                     $message = '';
                     $arr = array('n' => $i, 'msg' => $message);
 //                    echo json_encode($arr); exit;
@@ -280,39 +317,37 @@ switch ($step) {
             }
 
 
-			// 清空测试数据
-			if(!$_POST['demo'])
-			{
-				$result = mysqli_query($conn,"show tables");
-				$tables=mysqli_fetch_all($result);//参数MYSQL_ASSOC、MYSQLI_NUM、MYSQLI_BOTH规定产生数组类型
-				$bl_table = array('eb_system_admin'
-                ,'eb_system_role'
-                ,'eb_system_config'
-                ,'eb_system_config_tab'
-                ,'eb_system_menus'
-                ,'eb_system_file'
-                ,'eb_express'
-                ,'eb_system_group'
-                ,'eb_system_group_data'
-                ,'eb_template_message'
-                ,'eb_shipping_templates'
-                ,"eb_shipping_templates_region"
-                ,"eb_shipping_templates_free"
-                ,'eb_system_city');
-				foreach($bl_table as $k => $v)
-				{
-					$bl_table[$k] = str_replace('eb_',$dbPrefix,$v);
-				}
+            // 清空测试数据
+            if (!$_POST['demo']) {
+                $result = mysqli_query($conn, "show tables");
+                $tables = mysqli_fetch_all($result);//参数MYSQL_ASSOC、MYSQLI_NUM、MYSQLI_BOTH规定产生数组类型
+                $bl_table = array('eb_system_admin'
+                , 'eb_system_role'
+                , 'eb_system_config'
+                , 'eb_system_config_tab'
+                , 'eb_system_menus'
+                , 'eb_system_file'
+                , 'eb_express'
+                , 'eb_system_group'
+                , 'eb_system_group_data'
+                , 'eb_template_message'
+                , 'eb_shipping_templates'
+                , "eb_shipping_templates_region"
+                , "eb_shipping_templates_free"
+                , 'eb_system_city'
+                , 'eb_diy'
+                , 'eb_cache');
+                foreach ($bl_table as $k => $v) {
+                    $bl_table[$k] = str_replace('eb_', $dbPrefix, $v);
+                }
 
-				foreach($tables as $key => $val)
-				{
-					if(!in_array($val[0], $bl_table))
-					{
-						mysqli_query($conn,"truncate table ".$val[0]);
-					}
-				}
-				delFile(APP_DIR.'/uploads'); // 清空测试图片
-			}
+                foreach ($tables as $key => $val) {
+                    if (!in_array($val[0], $bl_table)) {
+                        mysqli_query($conn, "truncate table " . $val[0]);
+                    }
+                }
+                delFile(APP_DIR . '/uploads'); // 清空测试图片
+            }
             //读取配置文件，并替换真实配置数据1
             $strConfig = file_get_contents(SITE_DIR . 'install/' . $configFile);
             $strConfig = str_replace('#DB_HOST#', $dbHost, $strConfig);
@@ -323,7 +358,21 @@ switch ($step) {
             $strConfig = str_replace('#DB_PREFIX#', $dbPrefix, $strConfig);
             $strConfig = str_replace('#DB_CHARSET#', 'utf8', $strConfig);
             // $strConfig = str_replace('#DB_DEBUG#', false, $strConfig);
-            @chmod(APP_DIR . '/.env',0777); //数据库配置文件的地址
+
+            //redis数据库信息
+            $rbhost = $_POST['rbhost'] ?? '127.0.0.1';
+            $rbport = $_POST['rbport'] ?? '6379';
+            $rbpw = $_POST['rbpw'] ?? '';
+            $rbselect = $_POST['rbselect'] ?? 0;
+            $strConfig = str_replace('#RB_HOST#', $rbhost, $strConfig);
+            $strConfig = str_replace('#RB_PORT#', $rbport, $strConfig);
+            $strConfig = str_replace('#RB_PWD#', $rbpw, $strConfig);
+            $strConfig = str_replace('#RB_SELECT#', $rbselect, $strConfig);
+
+            //需改队列名称
+            $strConfig = str_replace('#QUEUE_NAME#', uniqid(), $strConfig);
+
+            @chmod(APP_DIR . '/.env', 0777); //数据库配置文件的地址
             @file_put_contents(APP_DIR . '/.env', $strConfig); //数据库配置文件的地址
 
             //读取配置文件，并替换换配置
@@ -338,64 +387,72 @@ switch ($step) {
             $time = time();
             $ip = get_client_ip();
             $ip = empty($ip) ? "0.0.0.0" : $ip;
-            $password = md5(trim($_POST['manager_pwd']));
-            mysqli_query($conn,"truncate table {$dbPrefix}system_admin");
+            $password = password_hash($_POST['manager_pwd'], PASSWORD_BCRYPT);
+            mysqli_query($conn, "truncate table {$dbPrefix}system_admin");
             $addadminsql = "INSERT INTO `{$dbPrefix}system_admin` (`id`, `account`, `pwd`, `real_name`, `roles`, `last_ip`, `last_time`, `add_time`, `login_count`, `level`, `status`, `is_del`) VALUES
-(1, '".$username."', '".$password."', 'admin', '1', '".$ip."',$time , $time, 0, 0, 1, 0)";
-			$res = mysqli_query($conn,$addadminsql);
+(1, '" . $username . "', '" . $password . "', 'admin', '1', '" . $ip . "',$time , $time, 0, 0, 1, 0)";
+            $res = mysqli_query($conn, $addadminsql);
             $res2 = true;
-			if(isset($_SERVER['SERVER_NAME'])) {
-                $site_url = '\'"http://' . $_SERVER['SERVER_NAME'].'"\'';
-                $res2 = mysqli_query($conn, 'UPDATE `'.$dbPrefix.'system_config` SET `value`=' . $site_url . ' WHERE `menu_name`="site_url"');
+            if (isset($_SERVER['SERVER_NAME'])) {
+                $site_url = '\'"http://' . $_SERVER['SERVER_NAME'] . '"\'';
+                $res2 = mysqli_query($conn, 'UPDATE `' . $dbPrefix . 'system_config` SET `value`=' . $site_url . ' WHERE `menu_name`="site_url"');
             }
-			if($res){
+            if ($res) {
                 $message = '成功添加管理员<br />成功写入配置文件<br>安装完成．';
                 $arr = array('n' => 999999, 'msg' => $message);
-                echo json_encode($arr);exit;
-            }else{
+                echo json_encode($arr);
+                exit;
+            } else {
                 $message = '添加管理员失败<br />成功写入配置文件<br>安装完成．';
                 $arr = array('n' => 999999, 'msg' => $message);
-                echo json_encode($arr);exit;
+                echo json_encode($arr);
+                exit;
             }
 
         }
-        include_once ("./templates/step4.php");
+        include_once("./templates/step4.php");
         exit();
 
     case '5':
-    	$ip = get_client_ip();
-    	$host = $_SERVER['HTTP_HOST'];
+        $ip = get_client_ip();
+        $host = $_SERVER['HTTP_HOST'];
         $curent_version = getversion();
+        $version = trim($curent_version['version']);
         installlog();
-        include_once ("./templates/step5.php");
+        include_once("./templates/step5.php");
         @touch('./install.lock');
         exit();
 }
 //读取版本号
-function getversion(){
+function getversion()
+{
     $version_arr = [];
-    $curent_version = @file(APP_DIR .'.version');
-    foreach ($curent_version as $val){
-        list($k,$v)=explode('=',$val);
-        $version_arr[$k]=$v;
+    $curent_version = @file(APP_DIR . '.version');
+    foreach ($curent_version as $val) {
+        list($k, $v) = explode('=', $val);
+        $version_arr[$k] = $v;
     }
     return $version_arr;
 }
+
 //写入安装信息
-function installlog(){
+function installlog()
+{
     $mt_rand_str = sp_random_string(6);
-    $str_constant = "<?php".PHP_EOL."define('INSTALL_DATE',".time().");".PHP_EOL."define('SERIALNUMBER','".$mt_rand_str."');";
+    $str_constant = "<?php" . PHP_EOL . "define('INSTALL_DATE'," . time() . ");" . PHP_EOL . "define('SERIALNUMBER','" . $mt_rand_str . "');";
     @file_put_contents(APP_DIR . '.constant', $str_constant);
 }
+
 //判断权限
-function testwrite($d) {
-    if(is_file($d)){
-        if(is_writeable($d)){
+function testwrite($d)
+{
+    if (is_file($d)) {
+        if (is_writeable($d)) {
             return true;
         }
         return false;
 
-    }else{
+    } else {
         $tfile = "_test.txt";
         $fp = @fopen($d . "/" . $tfile, "w");
         if (!$fp) {
@@ -412,10 +469,11 @@ function testwrite($d) {
 }
 
 
-function sql_split($sql, $tablepre) {
+function sql_split($sql, $tablepre)
+{
 
     if ($tablepre != "tp_")
-    	$sql = str_replace("tp_", $tablepre, $sql);
+        $sql = str_replace("tp_", $tablepre, $sql);
 
     $sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=utf8", $sql);
 
@@ -438,7 +496,8 @@ function sql_split($sql, $tablepre) {
     return $ret;
 }
 
-function _dir_path($path) {
+function _dir_path($path)
+{
     $path = str_replace('\\', '/', $path);
     if (substr($path, -1) != '/')
         $path = $path . '/';
@@ -446,7 +505,8 @@ function _dir_path($path) {
 }
 
 // 获取客户端IP地址
-function get_client_ip() {
+function get_client_ip()
+{
     static $ip = NULL;
     if ($ip !== NULL)
         return $ip;
@@ -456,7 +516,7 @@ function get_client_ip() {
         if (false !== $pos)
             unset($arr[$pos]);
         $ip = trim($arr[0]);
-    }elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
+    } elseif (isset($_SERVER['HTTP_CLIENT_IP'])) {
         $ip = $_SERVER['HTTP_CLIENT_IP'];
     } elseif (isset($_SERVER['REMOTE_ADDR'])) {
         $ip = $_SERVER['REMOTE_ADDR'];
@@ -466,7 +526,8 @@ function get_client_ip() {
     return $ip;
 }
 
-function dir_create($path, $mode = 0777) {
+function dir_create($path, $mode = 0777)
+{
     if (is_dir($path))
         return TRUE;
     $ftp_enable = 0;
@@ -484,67 +545,73 @@ function dir_create($path, $mode = 0777) {
     return is_dir($path);
 }
 
-function dir_path($path) {
+function dir_path($path)
+{
     $path = str_replace('\\', '/', $path);
     if (substr($path, -1) != '/')
         $path = $path . '/';
     return $path;
 }
 
-function sp_password($pw, $pre){
-	$decor = md5($pre);
-	$mi = md5($pw);
-	return substr($decor,0,12).$mi.substr($decor,-4,4);
+function sp_password($pw, $pre)
+{
+    $decor = md5($pre);
+    $mi = md5($pw);
+    return substr($decor, 0, 12) . $mi . substr($decor, -4, 4);
 }
 
-function sp_random_string($len = 8) {
-	$chars = array(
-			"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
-			"l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
-			"w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G",
-			"H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
-			"S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2",
-			"3", "4", "5", "6", "7", "8", "9"
-	);
-	$charsLen = count($chars) - 1;
-	shuffle($chars);    // 将数组打乱
-	$output = "";
-	for ($i = 0; $i < $len; $i++) {
-		$output .= $chars[mt_rand(0, $charsLen)];
-	}
-	return $output;
+function sp_random_string($len = 8)
+{
+    $chars = array(
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
+        "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
+        "w", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G",
+        "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R",
+        "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2",
+        "3", "4", "5", "6", "7", "8", "9"
+    );
+    $charsLen = count($chars) - 1;
+    shuffle($chars);    // 将数组打乱
+    $output = "";
+    for ($i = 0; $i < $len; $i++) {
+        $output .= $chars[mt_rand(0, $charsLen)];
+    }
+    return $output;
 }
+
 // 递归删除文件夹
-function delFile($dir,$file_type='') {
-	if(is_dir($dir)){
-		$files = scandir($dir);
-		//打开目录 //列出目录中的所有文件并去掉 . 和 ..
-		foreach($files as $filename){
-			if($filename!='.' && $filename!='..'){
-				if(!is_dir($dir.'/'.$filename)){
-					if(empty($file_type)){
-						unlink($dir.'/'.$filename);
-					}else{
-						if(is_array($file_type)){
-							//正则匹配指定文件
-							if(preg_match($file_type[0],$filename)){
-								unlink($dir.'/'.$filename);
-							}
-						}else{
-							//指定包含某些字符串的文件
-							if(false!=stristr($filename,$file_type)){
-								unlink($dir.'/'.$filename);
-							}
-						}
-					}
-				}else{
-					delFile($dir.'/'.$filename);
-					rmdir($dir.'/'.$filename);
-				}
-			}
-		}
-	}else{
-		if(file_exists($dir)) unlink($dir);
-	}
+function delFile($dir, $file_type = '')
+{
+    if (is_dir($dir)) {
+        $files = scandir($dir);
+        //打开目录 //列出目录中的所有文件并去掉 . 和 ..
+        foreach ($files as $filename) {
+            if ($filename != '.' && $filename != '..') {
+                if (!is_dir($dir . '/' . $filename)) {
+                    if (empty($file_type)) {
+                        unlink($dir . '/' . $filename);
+                    } else {
+                        if (is_array($file_type)) {
+                            //正则匹配指定文件
+                            if (preg_match($file_type[0], $filename)) {
+                                unlink($dir . '/' . $filename);
+                            }
+                        } else {
+                            //指定包含某些字符串的文件
+                            if (false != stristr($filename, $file_type)) {
+                                unlink($dir . '/' . $filename);
+                            }
+                        }
+                    }
+                } else {
+                    delFile($dir . '/' . $filename);
+                    rmdir($dir . '/' . $filename);
+                }
+            }
+        }
+    } else {
+        if (file_exists($dir)) unlink($dir);
+    }
 }
+
 ?>
