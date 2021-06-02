@@ -29,14 +29,13 @@
 
 ## 项目介绍  
 
-### :collision: 最新发布前后端分离版：https://gitee.com/ZhongBangKeJi/CRMEB-Min
 
     码云开源项目php语言排名第一的开源GVP项目，感谢码云提供的平台！
 
    CRMEB系统就是集客户关系管理+营销电商系统，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销等功能。
 
-   系统采用TP6+Vue+Layui+Mysql核心技术，系统功能介绍[<a href="http://help.crmeb.net/crmeb_30/1345181">查看</a>]，十几个开发交流群，专业售后技术团队，让您二开无忧。
-    有着详细文档地址：http://help.crmeb.net/crmeb_30
+   系统采用TP6+uni-app+iview核心技术，系统功能介绍[<a href="https://help.crmeb.net/crmeb-v4/1863404">查看</a>]，十几个开发交流群，专业售后技术团队，让您二开无忧。
+    有着详细文档地址：https://help.crmeb.net/crmeb-v4/1863402
 
 ## QQ群
 
