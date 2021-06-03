@@ -163,9 +163,6 @@ v4演示站： http://v4.crmeb.net/admin  账号：demo  密码：crmeb.com
 ## 获得荣誉
 CSDN开源技术选型秀优秀项目：[点击查看直播](https://codechina.csdn.net/groups/xazbkj/-/lives/164)
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0603/090844_5c7b7927_5516386.png "单商户-开源版_15.png")
-<p align="center">
-    <img src="https://images.gitee.com/uploads/images/2020/1202/153909_19b8ab89_1491977.png" />
-</p>
 
 
 ## 商业版
