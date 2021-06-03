@@ -1,8 +1,15 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 namespace crmeb\subscribes;
 
-use think\facade\Db;
 
 /**
  * 素材消息事件
@@ -17,16 +24,5 @@ class MaterialSubscribe
 
     }
 
-    /**
-     * 图片/声音  转media  存入数据库
-     * @param $event
-     */
-    public function onWechatMaterialAfter($event)
-    {
-        list($data, $type) = $event;
-        $data['type'] = $type;
-        $data['add_time'] = time();
-        $data['temporary'] = 0;
-        Db::name('WechatMedia')->insert($data);
-    }
+
 }

@@ -1,51 +1,25 @@
 <?php
-/**
- *
- * @author: xaboy<365615158@qq.com>
- * @day: 2018/01/15
- */
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\services;
 
+use app\services\system\config\SystemGroupDataServices;
 
-use app\admin\model\system\SystemGroupData;
-use think\facade\Cache;
-
+/**
+ * 获取组合数据配置
+ * Class GroupDataService
+ * @package crmeb\services
+ */
 class GroupDataService
 {
-
-    /**
-     * 获取单个组数据
-     * @param string $config_name 配置名称
-     * @param int $limit 获取条数
-     * @param bool $isCaChe 是否读取缓存
-     * @return array
-     */
-    public static function getGroupData(string $config_name, $limit = 0, bool $isCaChe = false): array
-    {
-        $callable = function () use ($config_name, $limit) {
-            try {
-                $data = SystemGroupData::getGroupData($config_name, $limit);
-                if (is_object($data))
-                    $data = $data->toArray();
-                return $data;
-            } catch (\Exception $e) {
-                return [];
-            }
-        };
-        try {
-            $cacheName = $limit ? "group_data_{$config_name}_{$limit}" : "data_{$config_name}";
-
-            if ($isCaChe)
-                return $callable();
-
-            return CacheService::get($cacheName, $callable);
-
-        } catch (\Throwable $e) {
-            return $callable();
-        }
-    }
-
     /**
      * 获取单个值
      * @param string $config_name 配置名称
@@ -57,10 +31,9 @@ class GroupDataService
     {
         $callable = function () use ($config_name, $limit) {
             try {
-                $data = SystemGroupData::getAllValue($config_name, $limit);
-                if (is_object($data))
-                    $data = $data->toArray();
-                return $data;
+                /** @var SystemGroupDataServices $service */
+                $service = app()->make(SystemGroupDataServices::class);
+                return $service->getConfigNameValue($config_name, $limit);
             } catch (\Exception $e) {
                 return [];
             }
@@ -88,7 +61,10 @@ class GroupDataService
     {
         $callable = function () use ($id) {
             try {
-                $data = SystemGroupData::getDateValue($id);
+
+                /** @var SystemGroupDataServices $service */
+                $service = app()->make(SystemGroupDataServices::class);
+                $data = $service->getDateValue($id);
                 if (is_object($data))
                     $data = $data->toArray();
                 return $data;

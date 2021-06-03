@@ -1,5 +1,13 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 namespace crmeb\services\upload\storage;
 
 use crmeb\basic\BaseUpload;
@@ -97,7 +105,12 @@ class Oss extends BaseUpload
         }
         if ($this->validate) {
             try {
-                validate([$file => $this->validate])->check([$file => $fileHandle]);
+                $error = [
+                    $file . '.filesize' => 'Upload filesize error',
+                    $file . '.fileExt' => 'Upload fileExt error',
+                    $file . '.fileMime' => 'Upload fileMine error'
+                ];
+                validate([$file => $this->validate], $error)->check([$file => $fileHandle]);
             } catch (ValidateException $e) {
                 return $this->setError($e->getMessage());
             }
@@ -109,7 +122,8 @@ class Oss extends BaseUpload
                 return $this->setError('Upload failure');
             }
             $this->fileInfo->uploadInfo = $uploadInfo;
-            $this->fileInfo->filePath = $this->uploadUrl .'/'. $key;
+            $this->fileInfo->realName = $fileHandle->getOriginalName();
+            $this->fileInfo->filePath = $this->uploadUrl . '/' . $key;
             $this->fileInfo->fileName = $key;
             return $this->fileInfo;
         } catch (UploadException $e) {
@@ -135,7 +149,8 @@ class Oss extends BaseUpload
                 return $this->setError('Upload failure');
             }
             $this->fileInfo->uploadInfo = $uploadInfo;
-            $this->fileInfo->filePath = $this->uploadUrl .'/'. $key;
+            $this->fileInfo->realName = $key;
+            $this->fileInfo->filePath = $this->uploadUrl . '/' . $key;
             $this->fileInfo->fileName = $key;
             return $this->fileInfo;
         } catch (UploadException $e) {
@@ -157,4 +172,52 @@ class Oss extends BaseUpload
         }
     }
 
+    /**
+     * 获取OSS上传密钥
+     * @return mixed|void
+     */
+    public function getTempKeys($callbackUrl = '', $dir = '')
+    {
+        // TODO: Implement getTempKeys() method.
+        $base64CallbackBody = base64_encode(json_encode([
+            'callbackUrl' => $callbackUrl,
+            'callbackBody' => 'filename=${object}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}',
+            'callbackBodyType' => "application/x-www-form-urlencoded"
+        ]));
+
+        $policy = json_encode([
+            'expiration' => $this->gmtIso8601(time() + 30),
+            'conditions' =>
+                [
+                    [0 => 'content-length-range', 1 => 0, 2 => 1048576000],
+                    [0 => 'starts-with', 1 => '$key', 2 => $dir]
+                ]
+        ]);
+        $base64Policy = base64_encode($policy);
+        $signature = base64_encode(hash_hmac('sha1', $base64Policy, $this->secretKey, true));
+        return [
+            'accessid' => $this->accessKey,
+            'host' => $this->uploadUrl,
+            'policy' => $base64Policy,
+            'signature' => $signature,
+            'expire' => time() + 30,
+            'callback' => $base64CallbackBody,
+            'type' => 'OSS'
+        ];
+    }
+
+    /**
+     * 获取ISO时间格式
+     * @param $time
+     * @return string
+     */
+    protected function gmtIso8601($time)
+    {
+        $dtStr = date("c", $time);
+        $mydatetime = new \DateTime($dtStr);
+        $expiration = $mydatetime->format(\DateTime::ISO8601);
+        $pos = strpos($expiration, '+');
+        $expiration = substr($expiration, 0, $pos);
+        return $expiration . "Z";
+    }
 }

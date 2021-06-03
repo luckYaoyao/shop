@@ -1,81 +1,24 @@
 <?php
-/**
- *
- * @author: xaboy<365615158@qq.com>
- * @day: 2017/11/02
- */
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\services;
 
 use think\facade\Config;
-use dh2y\qrcode\QRcode;
-use crmeb\services\upload\Upload;
 
+/**
+ * Class UtilService
+ * @package crmeb\services
+ */
 class UtilService
 {
-
-    /**
-     * 获取POST请求的数据
-     * @param $params
-     * @param null $request
-     * @param bool $suffix
-     * @return array
-     */
-    public static function postMore($params, $request = null, $suffix = false)
-    {
-        if ($request === null) $request = app('request');
-        $p = [];
-        $i = 0;
-        foreach ($params as $param) {
-            if (!is_array($param)) {
-                $p[$suffix == true ? $i++ : $param] = $request->param($param);
-            } else {
-                if (!isset($param[1])) $param[1] = null;
-                if (!isset($param[2])) $param[2] = '';
-                if (is_array($param[0])) {
-                    $name = is_array($param[1]) ? $param[0][0] . '/a' : $param[0][0] . '/' . $param[0][1];
-                    $keyName = $param[0][0];
-                } else {
-                    $name = is_array($param[1]) ? $param[0] . '/a' : $param[0];
-                    $keyName = $param[0];
-                }
-                $p[$suffix == true ? $i++ : (isset($param[3]) ? $param[3] : $keyName)] = $request->param($name, $param[1], $param[2]);
-            }
-        }
-        return $p;
-    }
-
-    /**
-     * 获取请求的数据
-     * @param $params
-     * @param null $request
-     * @param bool $suffix
-     * @return array
-     */
-    public static function getMore($params, $request = null, $suffix = false)
-    {
-        if ($request === null) $request = app('request');
-        $p = [];
-        $i = 0;
-        foreach ($params as $param) {
-            if (!is_array($param)) {
-                $p[$suffix == true ? $i++ : $param] = $request->param($param);
-            } else {
-                if (!isset($param[1])) $param[1] = null;
-                if (!isset($param[2])) $param[2] = '';
-                if (is_array($param[0])) {
-                    $name = is_array($param[1]) ? $param[0][0] . '/a' : $param[0][0] . '/' . $param[0][1];
-                    $keyName = $param[0][0];
-                } else {
-                    $name = is_array($param[1]) ? $param[0] . '/a' : $param[0];
-                    $keyName = $param[0];
-                }
-                $p[$suffix == true ? $i++ : (isset($param[3]) ? $param[3] : $keyName)] = $request->param($name, $param[1], $param[2]);
-            }
-        }
-        return $p;
-    }
-
     /**
      * TODO 砍价 拼团 分享海报生成
      * @param array $data
@@ -85,15 +28,13 @@ class UtilService
      */
     public static function setShareMarketingPoster($data = array(), $path)
     {
-        if (!@fopen($data['image'], 'r')) exception('缺少商品图片');
-        if (!@fopen($data['url'], 'r')) exception('缺少二维码图片');
         $config = array(
             'text' => array(
                 array(
                     'text' => $data['price'],//TODO 价格
                     'left' => 116,
                     'top' => 200,
-                    'fontPath' => app()->getRootPath() . 'public/static/font/Alibaba-PuHuiTi-Regular.otf',     //字体文件
+                    'fontPath' => app()->getRootPath() . 'public/statics/font/Alibaba-PuHuiTi-Regular.otf',     //字体文件
                     'fontSize' => 50,             //字号
                     'fontColor' => '255,0,0',       //字体颜色
                     'angle' => 0,
@@ -102,7 +43,7 @@ class UtilService
                     'text' => $data['label'],//TODO 标签
                     'left' => 450,
                     'top' => 188,
-                    'fontPath' => app()->getRootPath() . 'public/static/font/Alibaba-PuHuiTi-Regular.otf',     //字体文件
+                    'fontPath' => app()->getRootPath() . 'public/statics/font/Alibaba-PuHuiTi-Regular.otf',     //字体文件
                     'fontSize' => 24,             //字号
                     'fontColor' => '255,255,255',       //字体颜色
                     'angle' => 0,
@@ -111,7 +52,7 @@ class UtilService
                     'text' => $data['msg'],//TODO 简述
                     'left' => 80,
                     'top' => 270,
-                    'fontPath' => app()->getRootPath() . 'public/static/font/Alibaba-PuHuiTi-Regular.otf',     //字体文件
+                    'fontPath' => app()->getRootPath() . 'public/statics/font/Alibaba-PuHuiTi-Regular.otf',     //字体文件
                     'fontSize' => 22,             //字号
                     'fontColor' => '40,40,40',       //字体颜色
                     'angle' => 0,
@@ -141,7 +82,7 @@ class UtilService
                     'opacity' => 100
                 )
             ),
-            'background' => 'static/poster/poster.jpg'
+            'background' => 'statics/poster/poster.jpg'
         );
         if (!file_exists($config['background'])) exception('缺少系统预设背景图片');
         if (strlen($data['title']) < 36) {
@@ -149,7 +90,7 @@ class UtilService
                 'text' => $data['title'],//TODO 标题
                 'left' => 76,
                 'top' => 100,
-                'fontPath' => app()->getRootPath() . 'public/static/font/Alibaba-PuHuiTi-Regular.otf',     //字体文件
+                'fontPath' => app()->getRootPath() . 'public/statics/font/Alibaba-PuHuiTi-Regular.otf',     //字体文件
                 'fontSize' => 32,         //字号
                 'fontColor' => '0,0,0',       //字体颜色
                 'angle' => 0,
@@ -160,7 +101,7 @@ class UtilService
                 'text' => mb_strimwidth($data['title'], 0, 24),//TODO 标题
                 'left' => 76,
                 'top' => 70,
-                'fontPath' => app()->getRootPath() . 'public/static/font/Alibaba-PuHuiTi-Regular.otf',     //字体文件
+                'fontPath' => app()->getRootPath() . 'public/statics/font/Alibaba-PuHuiTi-Regular.otf',     //字体文件
                 'fontSize' => 32,         //字号
                 'fontColor' => '0,0,0',       //字体颜色
                 'angle' => 0,
@@ -169,7 +110,7 @@ class UtilService
                 'text' => mb_strimwidth($data['title'], mb_strlen(mb_strimwidth($data['title'], 0, 24)), 24),//TODO 标题
                 'left' => 76,
                 'top' => 120,
-                'fontPath' => app()->getRootPath() . 'public/static/font/Alibaba-PuHuiTi-Regular.otf',     //字体文件
+                'fontPath' => app()->getRootPath() . 'public/statics/font/Alibaba-PuHuiTi-Regular.otf',     //字体文件
                 'fontSize' => 32,         //字号
                 'fontColor' => '0,0,0',       //字体颜色
                 'angle' => 0,
@@ -187,7 +128,7 @@ class UtilService
      * @return array|bool|string
      * @throws \Exception
      */
-    public static function setSharePoster($config = array(), $path)
+    public static function setSharePoster($config = array(), $path, $name = '')
     {
         $imageDefault = array(
             'left' => 0,
@@ -210,6 +151,7 @@ class UtilService
         if (substr($background, 0, 1) === '/') {
             $background = substr($background, 1);
         }
+        $background = str_replace('https://', 'http://', $background);
         $backgroundInfo = getimagesize($background);
         $background = imagecreatefromstring(file_get_contents($background));
         $backgroundWidth = $backgroundInfo[0];  //背景宽度
@@ -221,6 +163,7 @@ class UtilService
         if (!empty($config['image'])) {
             foreach ($config['image'] as $key => $val) {
                 $val = array_merge($imageDefault, $val);
+                $val['url'] = str_replace('https', 'http', $val['url']);
                 $info = getimagesize($val['url']);
                 $function = 'imagecreatefrom' . image_type_to_extension($info[2], false);
                 if ($val['stream']) {
@@ -253,15 +196,13 @@ class UtilService
         imagedestroy($imageRes);
         $res = ob_get_contents();
         ob_end_clean();
-        $key = substr(md5(rand(0, 9999)), 0, 5) . date('YmdHis') . rand(0, 999999) . '.jpg';
+        if ($name == '') {
+            $key = substr(md5(rand(0, 9999)), 0, 5) . date('YmdHis') . rand(0, 999999) . '.jpg';
+        } else {
+            $key = $name;
+        }
         $uploadType = (int)sys_config('upload_type', 1);
-        $upload = new Upload($uploadType, [
-            'accessKey' => sys_config('accessKey'),
-            'secretKey' => sys_config('secretKey'),
-            'uploadUrl' => sys_config('uploadUrl'),
-            'storageName' => sys_config('storage_name'),
-            'storageRegion' => sys_config('storage_region'),
-        ]);
+        $upload = UploadService::init();
         $res = $upload->to($path)->validate()->stream($res, $key);
         if ($res === false) {
             return $upload->getError();
@@ -324,29 +265,23 @@ class UtilService
             $siteUrl = sys_config('site_url');
             if (!$siteUrl) return '请前往后台设置->系统设置->网站域名 填写您的域名格式为：http://域名';
             $info = [];
-            $outfile = Config::get('qrcode.cache_dir');
-            $code = new QRcode();
-            $wapCodePath = $code->png($url, $outfile . '/' . $name)->getPath(); //获取二维码生成的地址
+            $outfiles = Config::get('qrcode.cache_dir');
+            $code = new \crmeb\utils\QRcode();
+            $wapCodePath = $code->setCacheDir($outfiles)->png($url, $outfiles . '/' . $name)->getPath(); //获取二维码生成的地址
             $content = file_get_contents('.' . $wapCodePath);
             if ($uploadType === 1) {
                 $info["code"] = 200;
                 $info["name"] = $name;
-                $info["dir"] = $wapCodePath;
+                $info["dir"] = '/' . $outfiles . '/' . $name;
                 $info["time"] = time();
                 $info['size'] = 0;
                 $info['type'] = 'image/png';
                 $info["image_type"] = 1;
-                $info['thumb_path'] = $wapCodePath;
+                $info['thumb_path'] = '/' . $outfiles . '/' . $name;
                 return $info;
             } else {
-                $upload = new Upload($uploadType, [
-                    'accessKey' => sys_config('accessKey'),
-                    'secretKey' => sys_config('secretKey'),
-                    'uploadUrl' => sys_config('uploadUrl'),
-                    'storageName' => sys_config('storage_name'),
-                    'storageRegion' => sys_config('storage_region'),
-                ]);
-                $res = $upload->to($outfile)->validate()->stream($content, $name);
+                $upload = UploadService::init($uploadType);
+                $res = $upload->to($outfiles)->validate()->stream($content, $name);
                 if ($res === false) {
                     return $upload->getError();
                 }
@@ -357,5 +292,24 @@ class UtilService
         } catch (\Exception $e) {
             return $e->getMessage();
         }
+    }
+
+    /**分级返回下级所有分类ID
+     * @param $data
+     * @param string $children
+     * @param string $field
+     * @param string $pk
+     * @return string
+     */
+    public static function getChildrenPid($data, $pid, $field = 'pid', $pk = 'id')
+    {
+        static $pids = '';
+        foreach ($data as $k => $res) {
+            if ($res[$field] == $pid) {
+                $pids .= ',' . $res[$pk];
+                self::getChildrenPid($data, $res[$pk], $field, $pk);
+            }
+        }
+        return $pids;
     }
 }

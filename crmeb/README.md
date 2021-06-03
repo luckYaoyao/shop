@@ -1,4 +1,4 @@
-CRMEB 3.0
+CRMEB v4.x
 ===============
 
 > 运行环境要求PHP7.1+。
@@ -73,6 +73,12 @@ DEBUG = true
 
 [LANG]
 default_lang = zh-cn
+
+[REDIS]
+REDIS_HOSTNAME = 127.0.0.1 # redis链接地址
+PORT = 6379 #端口号
+REDIS_PASSWORD = 123456 #密码
+SELECT = 0 #数据库
 ~~~
 3.修改目录权限（linux系统）777
 /public

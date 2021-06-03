@@ -1,5 +1,13 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace app\http\middleware;
 
@@ -16,16 +24,6 @@ use think\Response;
  */
 class AllowOriginMiddleware implements MiddlewareInterface
 {
-    /**
-     * header头
-     * @var array
-     */
-    protected $header = [
-        'Access-Control-Allow-Origin' => '*',
-        'Access-Control-Allow-Headers' => 'Authori-zation,Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since, X-Requested-With',
-        'Access-Control-Allow-Methods' => 'GET,POST,PATCH,PUT,DELETE,OPTIONS,DELETE',
-        'Access-Control-Max-Age' => '1728000'
-    ];
 
     /**
      * 允许跨域的域名
@@ -41,18 +39,17 @@ class AllowOriginMiddleware implements MiddlewareInterface
     public function handle(Request $request, \Closure $next)
     {
         $this->cookieDomain = Config::get('cookie.domain', '');
-        $header = $this->header;
+        $header = Config::get('cookie.header');
         $origin = $request->header('origin');
 
-        if ($origin && ('' != $this->cookieDomain && strpos($origin, $this->cookieDomain)))
+        if ($origin && ('' == $this->cookieDomain || strpos($origin, $this->cookieDomain)))
             $header['Access-Control-Allow-Origin'] = $origin;
-
         if ($request->method(true) == 'OPTIONS') {
             $response = Response::create('ok')->code(200)->header($header);
         } else {
             $response = $next($request)->header($header);
         }
-        $request->filter(['htmlspecialchars', 'strip_tags', 'addslashes', 'trim']);
+        $request->filter(['strip_tags', 'addslashes', 'trim']);
         return $response;
     }
 }

@@ -18,11 +18,11 @@ $host = $_SERVER['HTTP_HOST'];
   <section class="section">
     <div class="">
       <div class="success_tip cc"> <a href="<?php echo $admin;?>" class="f16 b">安装完成，进入后台管理</a>
-		<p>为了您站点的安全，安装完成后即可将网站根目录下的“install”文件夹删除，或者/install/目录下创建install.lock文件防止重复安装。<p>
+		<p>为了您站点的安全，安装完成后即可将网站根目录下的“install”文件夹下的所有文件删除，<span style="color: red">除install.lock文件外</span>防止重复安装。<p>
       </div>
 	        <div class="bottom tac"> 
-	        <a href="<?php echo 'http://'.$host;?>/index.php" class="btn">进入前台</a>
-	        <a href="<?php echo 'http://'.$host;?>/index.php/admin/login/index" class="btn btn_submit J_install_btn">进入后台</a>
+	        <a href="<?php echo 'http://'.$host;?>" class="btn">进入前台</a>
+            <a href="<?php echo 'http://'.$host;?>/admin" class="btn btn_submit J_install_btn">进入后台</a>
       </div>
       <div class=""> </div>
     </div>
@@ -34,7 +34,17 @@ $(function(){
 	$.ajax({
 	type: "POST",
 	url: "http://shop.crmeb.net/index.php/admin/server.upgrade_api/updatewebinfo",
-	data: {host:'<?php echo $host;?>',https:'<?php echo 'http://'.$host;?>',version:<?php echo json_encode($curent_version['version']);?>,ip:<?php echo json_encode($ip);?>},
+        header:{
+            'Access-Control-Allow-Origin':'*',
+            'Access-Control-Allow-Headers':'X-Requested-With',
+            'Access-Control-Allow-Methods':'PUT,POST,GET,DELETE,OPTIONS'
+        },
+	data: {
+	    host:'<?php echo $host;?>',
+        https:'<?php echo 'http://'.$host;?>',
+        version:'<?php echo $version;?>',
+        ip:<?php echo json_encode($ip);?>
+    },
 	dataType: 'json',
 	success: function(){}
 	});

@@ -1,132 +1,215 @@
 <?php
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\services\sms\storage;
 
-use crmeb\basic\BaseSms;
+use crmeb\basic\BaseSmss;
 use crmeb\services\HttpService;
+use think\exception\ValidateException;
+use think\facade\Config;
+
 
 /**
- * 云信短信服务
- * Class SMSService
- * @package crmeb\services
+ * Class Yunxin
+ * @package crmeb\services\sms\storage
  */
-class Yunxin extends BaseSms
+class Yunxin extends BaseSmss
 {
 
     /**
-     * 短信账号
+     * 开通
+     */
+    const SMS_OPEN = 'sms_v2/open';
+
+    /**
+     * 修改签名
+     */
+    const SMS_MODIFY = 'sms_v2/modify';
+
+    /**
+     * 用户信息
+     */
+    const SMS_INFO = 'sms_v2/info';
+
+    /**
+     * 发送短信
+     */
+    const SMS_SEND = 'sms_v2/send';
+
+    /**
+     * 短信模板
+     */
+    const SMS_TEMPS = 'sms_v2/temps';
+
+    /**
+     * 申请模板
+     */
+    const SMS_APPLY = 'sms_v2/apply';
+
+    /**
+     * 模板记录
+     */
+    const SMS_APPLYS = 'sms_v2/applys';
+
+    /**
+     * 发送记录
+     */
+    const SMS_RECORD = 'sms_v2/record';
+
+    /**
+     * 获取短信发送状态
+     */
+    const SMS_STSTUS = 'sms/status';
+
+    /**
+     * 短信签名
      * @var string
      */
-    protected $smsAccount;
+    protected $sign = '';
 
     /**
-     * 短信token
-     * @var string
+     * 模板id
+     * @var array
      */
-    protected $smsToken;
+    protected $templateIds = [];
 
-    /**
-     * 是否登陆
-     * @var bool
-     */
-    protected $status;
-
-    /**
-     * 短信请求地址
-     * @var string
-     */
-    protected $smsUrl = 'https://sms.crmeb.net/api/';
-
-    /**
-     * 短信支付回调地址
-     * @var string
-     */
-    protected $payNotify;
-
-    /**
-     * 初始化
+    /** 初始化
      * @param array $config
-     * @return mixed|void
      */
-    protected function initialize(array $config)
+    protected function initialize(array $config = [])
     {
         parent::initialize($config);
-        $this->smsAccount = $config['sms_account'] ?? null;
-        $this->smsToken = $config['sms_token'] ?? null;
-        $this->payNotify = ($config['site_url'] ?? '') . '/api/sms/pay/notify';
-        if ($this->smsAccount && $this->smsToken) {
-            $this->status = true;
-            $this->smsToken = md5($this->smsAccount . md5($this->smsToken));
-        } else {
-            $this->status = false;
-        }
+        $this->templateIds = Config::get($this->configFile . '.stores.' . $this->name . '.template_id', []);
+
     }
 
     /**
-     * 登陆状态
-     * @return bool
+     * 提取模板code
+     * @param string $templateId
+     * @return null
      */
-    public function isLogin()
+    protected function getTemplateCode(string $templateId)
     {
-        return $this->status;
+        return $this->templateIds[$templateId] ?? null;
     }
 
     /**
-     * 验证码接口
-     * @return string
-     */
-    public function getSmsUrl()
-    {
-        return $this->smsUrl . 'sms/captcha';
-    }
-
-
-    /**
-     * 短信注册
-     * @param $account
-     * @param $password
-     * @param $url
-     * @param $phone
-     * @param $code
+     * 设置签名
      * @param $sign
-     * @return mixed
+     * @return $this
      */
-    public function register($account, $password, $url, $phone, $code, $sign)
+    public function setSign($sign)
     {
-        $data['account'] = $account;
-        $data['password'] = $password;
-        $data['url'] = $url;
-        $data['phone'] = $phone;
-        $data['sign'] = $sign;
-        $data['code'] = $code;
-        return json_decode(HttpService::postRequest($this->smsUrl . 'sms/register', $data), true);
+        $this->sign = $sign;
+        return $this;
     }
 
     /**
-     * 公共短信模板列表
-     * @param array $data
-     * @return mixed
+     * 获取验证码
+     * @param string $phone
+     * @return array|mixed
      */
-    public function publictemp(array $data)
+    public function captcha(string $phone)
     {
-        $data['account'] = $this->smsAccount;
-        $data['token'] = $this->smsToken;
-        return json_decode(HttpService::postRequest($this->smsUrl . 'sms/publictemp', $data), true);
+        $params = [
+            'phone' => $phone
+        ];
+        return $this->accessToken->httpRequest('sms/captcha', $params, 'GET', false);
     }
 
     /**
-     * 公共短信模板添加
-     * @param $id
-     * @param $tempId
-     * @return mixed
+     * 开通服务
+     * @return array|bool|mixed
      */
-    public function use($id, $tempId)
+    public function open()
     {
-        $data['account'] = $this->smsAccount;
-        $data['token'] = $this->smsToken;
-        $data['id'] = $id;
-        $data['tempId'] = $tempId;
-        return json_decode(HttpService::postRequest($this->smsUrl . 'sms/use', $data), true);
+        $param = [
+            'sign' => $this->sign
+        ];
+        return $this->accessToken->httpRequest(self::SMS_OPEN, $param);
+    }
+
+    /**
+     * 修改签名
+     * @param string $sign
+     * @return array|bool|mixed
+     */
+    public function modify(string $sign = null, string $phone, string $code)
+    {
+        $param = [
+            'sign' => $sign ?: $this->sign,
+            'verify_code' => $code,
+            'phone' => $phone
+        ];
+        return $this->accessToken->httpRequest(self::SMS_MODIFY, $param);
+    }
+
+    /**
+     * 获取用户信息
+     * @return array|bool|mixed
+     */
+    public function info()
+    {
+        return $this->accessToken->httpRequest(self::SMS_INFO, []);
+    }
+
+    /**
+     * 获取短信模板
+     * @param int $page
+     * @param int $limit
+     * @param int $type
+     * @return array|mixed
+     */
+    public function temps(int $page = 0, int $limit = 10, int $type = 1)
+    {
+        $param = [
+            'page' => $page,
+            'limit' => $limit,
+            'temp_type' => $type
+        ];
+        return $this->accessToken->httpRequest(self::SMS_TEMPS, $param);
+    }
+
+    /**
+     * 申请模版
+     * @param $title
+     * @param $content
+     * @param $type
+     * @return array|bool|mixed
+     */
+    public function apply(string $title, string $content, int $type)
+    {
+        $param = [
+            'title' => $title,
+            'content' => $content,
+            'type' => $type
+        ];
+        return $this->accessToken->httpRequest(self::SMS_APPLY, $param);
+    }
+
+    /**
+     * 申请记录
+     * @param $temp_type
+     * @param int $page
+     * @param int $limit
+     * @return array|bool|mixed
+     */
+    public function applys(int $tempType, int $page, int $limit)
+    {
+        $param = [
+            'temp_type' => $tempType,
+            'page' => $page,
+            'limit' => $limit
+        ];
+        return $this->accessToken->httpRequest(self::SMS_APPLYS, $param);
     }
 
     /**
@@ -139,117 +222,40 @@ class Yunxin extends BaseSms
     public function send(string $phone, string $templateId, array $data = [])
     {
         if (!$phone) {
-            return $this->setError('Mobile number cannot be empty');
+            throw new ValidateException('手机号不能为空');
         }
-        if (!$this->smsAccount) {
-            return $this->setError('Account does not exist');
+        $param = [
+            'phone' => $phone
+        ];
+        $param['temp_id'] = $this->getTemplateCode($templateId);
+        if (is_null($param['temp_id'])) {
+            throw new ValidateException('模版ID不存在');
         }
-        if (!$this->smsToken) {
-            return $this->setError('Access token does not exist');
-        }
-        $formData['uid'] = $this->smsAccount;
-        $formData['token'] = $this->smsToken;
-        $formData['mobile'] = $phone;
-        $formData['template'] = $this->getTemplateCode($templateId);
-        if (is_null($formData['template'])) {
-            return $this->setError('Missing template number');
-        }
-        $formData['param'] = json_encode($data);
-        $resource = json_decode(HttpService::postRequest($this->smsUrl . 'sms/send', $formData), true);
-        if ($resource['status'] === 400) {
-            return $this->setError($resource['msg']);
-        }
-        return $resource;
+        $param['param'] = json_encode($data);
+        return $this->accessToken->httpRequest(self::SMS_SEND, $param);
     }
 
     /**
-     * 账号信息
-     * @return mixed
-     */
-    public function count()
-    {
-        return json_decode(HttpService::postRequest($this->smsUrl . 'sms/userinfo', [
-            'account' => $this->smsAccount,
-            'token' => $this->smsToken
-        ]), true);
-    }
-
-    /**
-     * 支付套餐
-     * @param $page
-     * @param $limit
-     * @return mixed
-     */
-    public function meal($page, $limit)
-    {
-        return json_decode(HttpService::getRequest($this->smsUrl . 'sms/meal', [
-            'page' => $page,
-            'limit' => $limit
-        ]), true);
-    }
-
-    /**
-     * 支付码
-     * @param $payType
-     * @param $mealId
-     * @param $price
-     * @param $attach
-     * @return mixed
-     */
-    public function pay($payType, $mealId, $price, $attach)
-    {
-        $data['uid'] = $this->smsAccount;
-        $data['token'] = $this->smsToken;
-        $data['payType'] = $payType;
-        $data['mealId'] = $mealId;
-        $data['notify'] = $this->payNotify;
-        $data['price'] = $price;
-        $data['attach'] = $attach;
-        return json_decode(HttpService::postRequest($this->smsUrl . 'sms/mealpay', $data), true);
-    }
-
-    /**
-     * 申请模板消息
-     * @param $title
-     * @param $content
-     * @param $type
-     * @return mixed
-     */
-    public function apply($title, $content, $type)
-    {
-        $data['account'] = $this->smsAccount;
-        $data['token'] = $this->smsToken;
-        $data['title'] = $title;
-        $data['content'] = $content;
-        $data['type'] = $type;
-        return json_decode(HttpService::postRequest($this->smsUrl . 'sms/apply', $data), true);
-    }
-
-    /**
-     * 短信模板列表
-     * @param $data
-     * @return mixed
-     */
-    public function template($data)
-    {
-        return json_decode(HttpService::postRequest($this->smsUrl . 'sms/template', $data + [
-                'account' => $this->smsAccount, 'token' => $this->smsToken
-            ]), true);
-    }
-
-    /**
-     * 获取短息记录状态
+     * 发送记录
      * @param $record_id
-     * @return mixed
+     * @return array|bool|mixed
      */
-    public function getStatus(array $record_id)
+    public function record($record_id)
     {
-        $data['record_id'] = json_encode($record_id);
-        $res = json_decode(HttpService::postRequest($this->smsUrl . 'sms/status', $data), true);
-        if ($res['status'] != 200) {
-            return $this->setError('查询失败');
-        } else {
-            return $res['data'] ?? [];
-        }
+        $param = [
+            'record_id' => $record_id
+        ];
+        return $this->accessToken->httpRequest(self::SMS_RECORD, $param);
+    }
+
+    /**
+     * 获取发送状态
+     * @param array $recordIds
+     * @return array|mixed
+     */
+    public function getStatus(array $recordIds)
+    {
+        $data['record_id'] = json_encode($recordIds);
+        return $this->accessToken->httpRequest(self::SMS_STSTUS, $data, 'POST', false);
     }
 }

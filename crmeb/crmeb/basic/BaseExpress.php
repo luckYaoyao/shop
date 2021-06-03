@@ -1,8 +1,13 @@
 <?php
-/**
- * author:  songtao<375177628@qq.com>
- * Date: 2020/09/21
- */
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\basic;
 
@@ -26,13 +31,14 @@ abstract class BaseExpress extends BaseStorage
     protected $accessToken = NULL;
 
 
-     public function __construct(string $name, AccessTokenServeService $accessTokenServeService, string $configFile)
+    public function __construct(string $name, AccessTokenServeService $accessTokenServeService, string $configFile)
     {
+        parent::__construct($name, [], $configFile);
         $this->accessToken = $accessTokenServeService;
     }
 
     /**
-     * ��ʼ��
+     * 初始化
      * @param array $config
      * @return mixed|void
      */
@@ -43,28 +49,28 @@ abstract class BaseExpress extends BaseStorage
 
 
     /**
-     * ��ͨ����
+     * 开通服务
      * @return mixed
      */
     abstract public function open();
 
-    /**����׷��
+    /**物流追踪
      * @return mixed
      */
-    abstract public function query($com, $num);
+    abstract public function query(string $num, string $com = '');
 
-    /**�����浥
+    /**电子面单
      * @return mixed
      */
     abstract public function dump($data);
 
-    /**��ݹ�˾
+    /**快递公司
      * @return mixed
      */
     //abstract public function express($type, $page, $limit);
 
-    /**�浥ģ��
+    /**面单模板
      * @return mixed
      */
-    abstract public function temp($com, $page, $limit);
+    abstract public function temp(string $com);
 }

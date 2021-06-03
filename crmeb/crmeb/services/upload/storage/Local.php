@@ -1,5 +1,13 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 namespace crmeb\services\upload\storage;
 
 use crmeb\basic\BaseUpload;
@@ -34,6 +42,12 @@ class Local extends BaseUpload
         // TODO: Implement app() method.
     }
 
+    public function getTempKeys()
+    {
+        // TODO: Implement getTempKeys() method.
+        return $this->setError('请检查您的上传配置，视频默认oss上传');
+    }
+
     /**
      * 生成上传文件目录
      * @param $path
@@ -42,8 +56,8 @@ class Local extends BaseUpload
      */
     protected function uploadDir($path, $root = null)
     {
-        if ($root === null) $root = app()->getRootPath() . 'public' . DS;
-        return str_replace('\\', '/', $root . 'uploads' . DS . $path);
+        if ($root === null) $root = app()->getRootPath() . 'public/';
+        return str_replace('\\', '/', $root . 'uploads/' . $path);
     }
 
     /**
@@ -69,7 +83,12 @@ class Local extends BaseUpload
         }
         if ($this->validate) {
             try {
-                validate([$file => $this->validate])->check([$file => $fileHandle]);
+                $error = [
+                    $file . '.filesize' => 'Upload filesize error',
+                    $file . '.fileExt' => 'Upload fileExt error',
+                    $file . '.fileMime' => 'Upload fileMine error'
+                ];
+                validate([$file => $this->validate],$error)->check([$file => $fileHandle]);
             } catch (ValidateException $e) {
                 return $this->setError($e->getMessage());
             }
@@ -79,6 +98,7 @@ class Local extends BaseUpload
             return $this->setError('Upload failure');
         $filePath = Filesystem::path($fileName);
         $this->fileInfo->uploadInfo = new File($filePath);
+        $this->fileInfo->realName = $fileHandle->getOriginalName();
         $this->fileInfo->fileName = $this->fileInfo->uploadInfo->getFilename();
         $this->fileInfo->filePath = $this->defaultPath . '/' . str_replace('\\', '/', $fileName);
         return $this->fileInfo;
@@ -102,8 +122,9 @@ class Local extends BaseUpload
         $fileName = $dir . '/' . $key;
         file_put_contents($fileName, $fileContent);
         $this->fileInfo->uploadInfo = new File($fileName);
+        $this->fileInfo->realName = $key;
         $this->fileInfo->fileName = $key;
-        $this->fileInfo->filePath = '/uploads/' . $this->path . '/' . $key;
+        $this->fileInfo->filePath = $this->defaultPath . '/' . $this->path . '/' . $key;
         return $this->fileInfo;
     }
 

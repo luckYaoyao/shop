@@ -42,35 +42,35 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Class Application.
  *
- * @property \EasyWeChat\Core\AccessToken                    $access_token
- * @property \EasyWeChat\Server\Guard                        $server
- * @property \EasyWeChat\User\User                           $user
- * @property \EasyWeChat\User\Tag                            $user_tag
- * @property \EasyWeChat\User\Group                          $user_group
- * @property \EasyWeChat\Js\Js                               $js
- * @property \Overtrue\Socialite\Providers\WeChatProvider    $oauth
- * @property \EasyWeChat\Menu\Menu                           $menu
- * @property \EasyWeChat\Notice\Notice                       $notice
- * @property \EasyWeChat\Material\Material                   $material
- * @property \EasyWeChat\Material\Temporary                  $material_temporary
- * @property \EasyWeChat\Staff\Staff                         $staff
- * @property \EasyWeChat\Url\Url                             $url
- * @property \EasyWeChat\QRCode\QRCode                       $qrcode
- * @property \EasyWeChat\Semantic\Semantic                   $semantic
- * @property \EasyWeChat\Stats\Stats                         $stats
- * @property \EasyWeChat\Payment\Merchant                    $merchant
- * @property \EasyWeChat\Payment\Payment                     $payment
- * @property \EasyWeChat\Payment\LuckyMoney\LuckyMoney       $lucky_money
- * @property \EasyWeChat\Payment\MerchantPay\MerchantPay     $merchant_pay
- * @property \EasyWeChat\Payment\CashCoupon\CashCoupon       $cash_coupon
- * @property \EasyWeChat\Reply\Reply                         $reply
- * @property \EasyWeChat\Broadcast\Broadcast                 $broadcast
- * @property \EasyWeChat\Card\Card                           $card
- * @property \EasyWeChat\Device\Device                       $device
- * @property \EasyWeChat\Comment\Comment                     $comment
- * @property \EasyWeChat\ShakeAround\ShakeAround             $shakearound
- * @property \EasyWeChat\OpenPlatform\OpenPlatform           $open_platform
- * @property \EasyWeChat\MiniProgram\MiniProgram             $mini_program
+ * @property \EasyWeChat\Core\AccessToken $access_token
+ * @property \EasyWeChat\Server\Guard $server
+ * @property \EasyWeChat\User\User $user
+ * @property \EasyWeChat\User\Tag $user_tag
+ * @property \EasyWeChat\User\Group $user_group
+ * @property \EasyWeChat\Js\Js $js
+ * @property \Overtrue\Socialite\Providers\WeChatProvider $oauth
+ * @property \EasyWeChat\Menu\Menu $menu
+ * @property \EasyWeChat\Notice\Notice $notice
+ * @property \EasyWeChat\Material\Material $material
+ * @property \EasyWeChat\Material\Temporary $material_temporary
+ * @property \EasyWeChat\Staff\Staff $staff
+ * @property \EasyWeChat\Url\Url $url
+ * @property \EasyWeChat\QRCode\QRCode $qrcode
+ * @property \EasyWeChat\Semantic\Semantic $semantic
+ * @property \EasyWeChat\Stats\Stats $stats
+ * @property \EasyWeChat\Payment\Merchant $merchant
+ * @property \EasyWeChat\Payment\Payment $payment
+ * @property \EasyWeChat\Payment\LuckyMoney\LuckyMoney $lucky_money
+ * @property \EasyWeChat\Payment\MerchantPay\MerchantPay $merchant_pay
+ * @property \EasyWeChat\Payment\CashCoupon\CashCoupon $cash_coupon
+ * @property \EasyWeChat\Reply\Reply $reply
+ * @property \EasyWeChat\Broadcast\Broadcast $broadcast
+ * @property \EasyWeChat\Card\Card $card
+ * @property \EasyWeChat\Device\Device $device
+ * @property \EasyWeChat\Comment\Comment $comment
+ * @property \EasyWeChat\ShakeAround\ShakeAround $shakearound
+ * @property \EasyWeChat\OpenPlatform\OpenPlatform $open_platform
+ * @property \EasyWeChat\MiniProgram\MiniProgram $mini_program
  *
  * @method \EasyWeChat\Support\Collection clearQuota()
  * @method \EasyWeChat\Support\Collection getCallbackIp()
@@ -106,8 +106,8 @@ class Application extends Container
         ServiceProviders\OpenPlatformServiceProvider::class,
         ServiceProviders\MiniProgramServiceProvider::class,
         ServiceProviders\CommentServiceProvider::class,
-        \crmeb\services\subscribe\ProgramProvider::class,
-        \crmeb\services\wechatlive\ProgramProvider::class,
+        \crmeb\services\easywechat\subscribe\ProgramProvider::class,
+        \crmeb\services\easywechat\wechatlive\ProgramProvider::class,
     ];
 
     /**
@@ -145,7 +145,7 @@ class Application extends Container
 
         $keys = ['app_id', 'secret', 'open_platform.app_id', 'open_platform.secret', 'mini_program.app_id', 'mini_program.secret'];
         foreach ($keys as $key) {
-            !$config->has($key) || $config[$key] = '***'.substr($config[$key], -5);
+            !$config->has($key) || $config[$key] = '***' . substr($config[$key], -5);
         }
 
         Log::debug('Current config:', $config->toArray());
@@ -205,7 +205,7 @@ class Application extends Container
      * Magic set access.
      *
      * @param string $id
-     * @param mixed  $value
+     * @param mixed $value
      */
     public function __set($id, $value)
     {
@@ -265,10 +265,10 @@ class Application extends Container
             $logger->pushHandler($this['config']['log.handler']);
         } elseif ($logFile = $this['config']['log.file']) {
             $logger->pushHandler(new StreamHandler(
-                $logFile,
-                $this['config']->get('log.level', Logger::WARNING),
-                true,
-                $this['config']->get('log.permission', null))
+                    $logFile,
+                    $this['config']->get('log.level', Logger::WARNING),
+                    true,
+                    $this['config']->get('log.permission', null))
             );
         }
 
@@ -279,7 +279,7 @@ class Application extends Container
      * Magic call.
      *
      * @param string $method
-     * @param array  $args
+     * @param array $args
      *
      * @return mixed
      *

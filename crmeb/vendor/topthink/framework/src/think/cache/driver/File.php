@@ -108,7 +108,7 @@ class File extends Driver
                 $content = gzuncompress($content);
             }
 
-            return ['content' => is_string($content) ? $content : '', 'expire' => $expire];
+            return ['content' => $content, 'expire' => $expire];
         }
     }
 

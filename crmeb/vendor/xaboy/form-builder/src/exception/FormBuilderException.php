@@ -1,20 +1,18 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: xaboy
- * Date: 2018/12/12
- * Time: 19:48
+ * PHP表单生成器
+ *
+ * @package  FormBuilder
+ * @author   xaboy <xaboy2005@qq.com>
+ * @version  2.0
+ * @license  MIT
+ * @link     https://github.com/xaboy/form-builder
+ * @document http://php.form-create.com
  */
 
-namespace FormBuilder\exception;
-
-
-use Throwable;
+namespace FormBuilder\Exception;
 
 class FormBuilderException extends \Exception
 {
-    public function __construct($message = "", $code = 0, Throwable $previous = null)
-    {
-        parent::__construct($message, $code, $previous);
-    }
+
 }

@@ -1,14 +1,17 @@
 <?php
-/**
- *
- * @author: xaboy<365615158@qq.com>
- * @day: 2017/11/23
- */
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\services;
 
 /**
- * curl 请求
  * Class HttpService
  * @package crmeb\services
  */
@@ -33,7 +36,6 @@ class HttpService
     private static $status;
 
     /**
-     * 获取请求错误信息
      * @return string
      */
     public static function getCurlError()
@@ -42,7 +44,6 @@ class HttpService
     }
 
     /**
-     * 获取请求响应状态
      * @return mixed
      */
     public static function getStatus()
@@ -52,10 +53,10 @@ class HttpService
 
     /**
      * 模拟GET发起请求
-     * @param $url 请求地址
-     * @param array $data 请求数据
-     * @param bool $header header头
-     * @param int $timeout 响应超时时间
+     * @param $url
+     * @param array $data
+     * @param bool $header
+     * @param int $timeout
      * @return bool|string
      */
     public static function getRequest($url, $data = array(), $header = false, $timeout = 10)
@@ -70,11 +71,11 @@ class HttpService
 
     /**
      * curl 请求
-     * @param $url 请求地址
-     * @param string $method 请求方式
-     * @param array $data 请求数据
-     * @param bool $header 请求header头
-     * @param int $timeout 超时秒数
+     * @param $url
+     * @param string $method
+     * @param array $data
+     * @param bool $header
+     * @param int $timeout
      * @return bool|string
      */
     public static function request($url, $method = 'get', $data = array(), $header = false, $timeout = 15)
@@ -117,10 +118,10 @@ class HttpService
 
     /**
      * 模拟POST发起请求
-     * @param $url 请求链接
-     * @param array $data 请求参数
-     * @param bool $header header头
-     * @param int $timeout 超时秒数
+     * @param $url
+     * @param array $data
+     * @param bool $header
+     * @param int $timeout
      * @return bool|string
      */
     public static function postRequest($url, array $data = array(), $header = false, $timeout = 10)
@@ -132,7 +133,7 @@ class HttpService
      * 获取header头字符串类型
      * @return mixed
      */
-    public static function getHeaderStr(): string
+    public static function getHeaderStr()
     {
         return self::$headerStr;
     }
@@ -141,7 +142,7 @@ class HttpService
      * 获取header头数组类型
      * @return array
      */
-    public static function getHeader(): array
+    public static function getHeader()
     {
         $headArr = explode("\r\n", self::$headerStr);
         return $headArr;

@@ -1,13 +1,20 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 namespace crmeb\subscribes;
 
-use app\admin\model\system\SystemAttachment;
-use app\models\store\StoreBargainUser;
-use app\models\store\StoreOrder;
-use app\models\store\StorePink;
-use app\models\user\UserToken;
-use think\facade\Db;
+use app\services\activity\StorePinkServices;
+use app\services\message\sms\SmsRecordServices;
+use app\services\order\StoreOrderServices;
+use app\services\order\StoreOrderTakeServices;
+use app\services\system\attachment\SystemAttachmentServices;
 
 /**
  * 定时任务类
@@ -47,34 +54,14 @@ class TaskSubscribe
      */
     public function onTask_30()
     {
-        try {
-            Db::startTrans();
-            StoreBargainUser::startBargainUserStatus();//批量修改砍价状态为 砍价失败
-            Db::commit();
-        } catch (\Exception $e) {
-            Db::rollback();
-        }
-        try {
-            Db::startTrans();
-            StoreOrder::orderUnpaidCancel();//订单未支付默认取消
-            Db::commit();
-        } catch (\Exception $e) {
-            Db::rollback();
-        }
-        try {
-            Db::startTrans();
-            StoreOrder::startTakeOrder();//7天自动收货
-            Db::commit();
-        } catch (\Exception $e) {
-            Db::rollback();
-        }
-        try {
-            Db::startTrans();
-            StorePink::statusPink();//拼团到期修改状态
-            Db::commit();
-        } catch (\Exception $e) {
-            Db::rollback();
-        }
+        //自动收货
+        /** @var StoreOrderTakeServices $services */
+        $services = app()->make(StoreOrderTakeServices::class);
+        $services->autoTakeOrder();
+        //自动取消订单
+        /** @var StoreOrderServices $orderServices */
+        $orderServices = app()->make(StoreOrderServices::class);
+        $orderServices->orderUnpaidCancel();
     }
 
     /**
@@ -82,6 +69,10 @@ class TaskSubscribe
      */
     public function onTask_60()
     {
+        //拼团失败处理
+        /** @var StorePinkServices $storePinkServices */
+        $storePinkServices = app()->make(StorePinkServices::class);
+        $storePinkServices->statusPink();
     }
 
     /**
@@ -96,8 +87,13 @@ class TaskSubscribe
      */
     public function onTask_300()
     {
-        UserToken::delToken();//删除一天前的过期token
-        SystemAttachment::emptyYesterdayAttachment();//清除昨日海报
-        StoreOrder::sendTen();//10分钟未付款发送通知
+        //清除昨日海报
+        /** @var SystemAttachmentServices $attach */
+        $attach = app()->make(SystemAttachmentServices::class);
+        $attach->emptyYesterdayAttachment();
+        //短信状态处理
+        /** @var SmsRecordServices $smsRecord */
+        $smsRecord = app()->make(SmsRecordServices::class);
+        $smsRecord->modifyResultCode();
     }
 }

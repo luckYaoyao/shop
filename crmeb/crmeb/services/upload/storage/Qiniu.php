@@ -1,10 +1,19 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 namespace crmeb\services\upload\storage;
 
 use crmeb\basic\BaseUpload;
 use crmeb\exceptions\UploadException;
 use Qiniu\Auth;
+use function Qiniu\base64_urlSafeEncode;
 use Qiniu\Storage\BucketManager;
 use Qiniu\Storage\UploadManager;
 use Qiniu\Config;
@@ -94,7 +103,12 @@ class Qiniu extends BaseUpload
         }
         if ($this->validate) {
             try {
-                validate([$file => $this->validate])->check([$file => $fileHandle]);
+                $error = [
+                    $file . '.filesize' => 'Upload filesize error',
+                    $file . '.fileExt' => 'Upload fileExt error',
+                    $file . '.fileMime' => 'Upload fileMine error'
+                ];
+                validate([$file => $this->validate], $error)->check([$file => $fileHandle]);
             } catch (ValidateException $e) {
                 return $this->setError($e->getMessage());
             }
@@ -108,6 +122,7 @@ class Qiniu extends BaseUpload
                 return $this->setError($error->message());
             }
             $this->fileInfo->uploadInfo = $result;
+            $this->fileInfo->realName = $fileHandle->getOriginalName();
             $this->fileInfo->filePath = $this->uploadUrl . '/' . $key;
             $this->fileInfo->fileName = $key;
             return $this->fileInfo;
@@ -124,10 +139,10 @@ class Qiniu extends BaseUpload
      */
     public function stream(string $fileContent, string $key = null)
     {
-        $token = $this->app()->uploadToken($this->storageName);
         if (!$key) {
             $key = $this->saveFileName();
         }
+        $token = $this->app()->uploadToken($this->storageName, $key);
         try {
             $uploadMgr = new UploadManager();
             [$result, $error] = $uploadMgr->put($token, $key, $fileContent);
@@ -135,6 +150,7 @@ class Qiniu extends BaseUpload
                 return $this->setError($error->message());
             }
             $this->fileInfo->uploadInfo = $result;
+            $this->fileInfo->realName = $key;
             $this->fileInfo->filePath = $this->uploadUrl . '/' . $key;
             $this->fileInfo->fileName = $key;
             return $this->fileInfo;
@@ -165,5 +181,18 @@ class Qiniu extends BaseUpload
     {
         $bucketManager = new BucketManager($this->app(), new Config());
         return $bucketManager->delete($this->storageName, $key);
+    }
+
+    /**
+     * 获取七牛云上传密钥
+     * @return mixed|string
+     */
+    public function getTempKeys()
+    {
+        $token = $this->app()->uploadToken($this->storageName);
+        $domain = $this->uploadUrl;
+        $key = $this->saveFileName(NULL, 'mp4');
+        $type = 'QINIU';
+        return compact('token', 'domain', 'key', 'type');
     }
 }

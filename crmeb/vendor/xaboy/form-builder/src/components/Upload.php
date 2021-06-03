@@ -141,6 +141,8 @@ class Upload extends FormComponentDriver
      */
     public function build()
     {
+        $this->props['headers'] = (object)$this->props['headers'];
+        $this->props['data'] = (object)$this->props['data'];
         return [
             'type' => $this->name,
             'field' => $this->field,

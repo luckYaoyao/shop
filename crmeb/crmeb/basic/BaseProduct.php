@@ -1,8 +1,13 @@
 <?php
-/**
- * author:  songtao<375177628@qq.com>
- * Date: 2020/09/21
- */
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\basic;
 
@@ -21,9 +26,15 @@ abstract class BaseProduct extends BaseStorage
      */
     protected $accessToken = NULL;
 
-
+    /**
+     * BaseProduct constructor.
+     * @param string $name
+     * @param AccessTokenServeService $accessTokenServeService
+     * @param string $configFile
+     */
     public function __construct(string $name, AccessTokenServeService $accessTokenServeService, string $configFile)
     {
+        parent::__construct($name, [], $configFile);
         $this->accessToken = $accessTokenServeService;
     }
 
@@ -46,5 +57,5 @@ abstract class BaseProduct extends BaseStorage
     /**复制商品
      * @return mixed
      */
-    abstract public function goods($url);
+    abstract public function goods(string $url);
 }

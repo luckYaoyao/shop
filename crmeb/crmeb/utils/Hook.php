@@ -1,5 +1,13 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 namespace crmeb\utils;
 
 use think\helper\Str;
@@ -46,11 +54,11 @@ class Hook
     public function listen(string $hookName, ...$arguments)
     {
         if (class_exists($this->namespace)) {
-            $handle = new $this->namespace;
+            $handle = app()->make($this->namespace);
             $hookName = Str::studly(($this->prefix ?: '') . ucfirst($hookName));
             if (method_exists($handle, $hookName)) {
                 try {
-                    return $handle->{$hookName}(...$arguments);
+                    return call_user_func_array([$handle, $hookName], $arguments);
                 } catch (\Throwable $e) {
                 }
             }

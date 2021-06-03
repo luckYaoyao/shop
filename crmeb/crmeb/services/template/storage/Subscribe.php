@@ -1,11 +1,19 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 namespace crmeb\services\template\storage;
 
+use app\services\other\TemplateMessageServices;
 use crmeb\basic\BaseMessage;
 use crmeb\services\MiniProgramService;
 use think\facade\Log;
-use think\facade\Db;
 
 /**
  * 订阅消息
@@ -21,6 +29,17 @@ class Subscribe extends BaseMessage
     }
 
     /**
+     * @param string $templateId
+     * @return mixed
+     */
+    public function getTempId(string $templateId)
+    {
+        /** @var TemplateMessageServices $services */
+        $services = app()->make(TemplateMessageServices::class);
+        return $services->getTempId($templateId);
+    }
+
+    /**
      * 发送订阅消息
      * @param string $templateId
      * @param array $data
@@ -32,7 +51,7 @@ class Subscribe extends BaseMessage
         if (!$templateId) {
             return $this->setError('Template number does not exist');
         }
-        $tempid = Db::name('template_message')->where(['type' => 0, 'tempkey' => $templateId, 'status' => 1])->value('tempid');
+        $tempid = $this->getTempId($templateId);
         if (!$tempid) {
             return $this->setError('Template ID does not exist');
         }

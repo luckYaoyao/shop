@@ -1,12 +1,20 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 namespace crmeb\services\upload\storage;
 
 use crmeb\basic\BaseUpload;
 use crmeb\exceptions\UploadException;
-use Guzzle\Http\EntityBody;
 use Qcloud\Cos\Client;
 use think\exception\ValidateException;
+use QCloud\COSSTS\Sts;
 
 /**
  * 腾讯云COS文件上传
@@ -97,7 +105,12 @@ class Cos extends BaseUpload
             }
             if ($this->validate) {
                 try {
-                    validate([$file => $this->validate])->check([$file => $fileHandle]);
+                    $error = [
+                        $file . '.filesize' => 'Upload filesize error',
+                        $file . '.fileExt' => 'Upload fileExt error',
+                        $file . '.fileMime' => 'Upload fileMine error'
+                    ];
+                    validate([$file => $this->validate], $error)->check([$file => $fileHandle]);
                 } catch (ValidateException $e) {
                     return $this->setError($e->getMessage());
                 }
@@ -115,6 +128,7 @@ class Cos extends BaseUpload
                 'Body' => $body
             ]);
             $this->fileInfo->filePath = $this->uploadUrl . '/' . $key;
+            $this->fileInfo->realName = isset($fileHandle) ? $fileHandle->getOriginalName() : $key;
             $this->fileInfo->fileName = $key;
             return $this->fileInfo;
         } catch (UploadException $e) {
@@ -158,5 +172,100 @@ class Cos extends BaseUpload
         } catch (\Exception $e) {
             return $this->setError($e->getMessage());
         }
+    }
+
+    /**
+     * 生成签名
+     * @return array|mixed
+     * @throws \Exception
+     */
+    public function getTempKeys()
+    {
+        $sts = new Sts();
+        $config = [
+            'url' => 'https://sts.tencentcloudapi.com/',
+            'domain' => 'sts.tencentcloudapi.com',
+            'proxy' => '',
+            'secretId' => $this->accessKey, // 固定密钥
+            'secretKey' => $this->secretKey, // 固定密钥
+            'bucket' => $this->storageName, // 换成你的 bucket
+            'region' => $this->storageRegion, // 换成 bucket 所在园区
+            'durationSeconds' => 1800, // 密钥有效期
+            'allowPrefix' => '*', // 这里改成允许的路径前缀，可以根据自己网站的用户登录态判断允许上传的具体路径，例子： a.jpg 或者 a/* 或者 * (使用通配符*存在重大安全风险, 请谨慎评估使用)
+            // 密钥的权限列表。简单上传和分片需要以下的权限，其他权限列表请看 https://cloud.tencent.com/document/product/436/31923
+            'allowActions' => [
+                // 简单上传
+                'name/cos:PutObject',
+                'name/cos:PostObject',
+                // 分片上传
+                'name/cos:InitiateMultipartUpload',
+                'name/cos:ListMultipartUploads',
+                'name/cos:ListParts',
+                'name/cos:UploadPart',
+                'name/cos:CompleteMultipartUpload'
+            ]
+        ];
+        // 获取临时密钥，计算签名
+        $result = $sts->getTempKeys($config);
+        $result['url'] = $this->uploadUrl . '/';
+        $result['type'] = 'COS';
+        $result['bucket'] = $this->storageName;
+        $result['region'] = $this->storageRegion;
+        return $result;
+    }
+
+    /**
+     * 计算临时密钥用的签名
+     * @param $opt
+     * @param $key
+     * @param $method
+     * @param $config
+     * @return string
+     */
+    public function getSignature($opt, $key, $method, $config)
+    {
+        $formatString = $method . $config['domain'] . '/?' . $this->json2str($opt, 1);
+        $sign = hash_hmac('sha1', $formatString, $key);
+        $sign = base64_encode($this->_hex2bin($sign));
+        return $sign;
+    }
+
+    public function _hex2bin($data)
+    {
+        $len = strlen($data);
+        return pack("H" . $len, $data);
+    }
+
+    // obj 转 query string
+    public function json2str($obj, $notEncode = false)
+    {
+        ksort($obj);
+        $arr = array();
+        if (!is_array($obj)) {
+            return $this->setError($obj . " must be a array");
+        }
+        foreach ($obj as $key => $val) {
+            array_push($arr, $key . '=' . ($notEncode ? $val : rawurlencode($val)));
+        }
+        return join('&', $arr);
+    }
+
+    // v2接口的key首字母小写，v3改成大写，此处做了向下兼容
+    public function backwardCompat($result)
+    {
+        if (!is_array($result)) {
+            return $this->setError($result . " must be a array");
+        }
+        $compat = array();
+        foreach ($result as $key => $value) {
+            if (is_array($value)) {
+                $compat[lcfirst($key)] = $this->backwardCompat($value);
+            } elseif ($key == 'Token') {
+                $compat['sessionToken'] = $value;
+            } else {
+                $compat[lcfirst($key)] = $value;
+            }
+        }
+        return $compat;
     }
 }

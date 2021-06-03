@@ -54,7 +54,8 @@ class Frame extends FormComponentDriver
      */
     protected $props = [
         'type' => self::TYPE_INPUT,
-        'maxLength' => 0
+        'maxLength' => 0,
+        'modal' => ['footerHide' => true]
     ];
 
     /**

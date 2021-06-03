@@ -1,8 +1,15 @@
 <?php
-
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 namespace crmeb\utils;
 
-use crmeb\traits\LogicTrait;
 
 /**
  * Class Canvas
@@ -31,9 +38,8 @@ use crmeb\traits\LogicTrait;
  */
 class Canvas
 {
-    use LogicTrait;
 
-    const FONT = 'static/font/Alibaba-PuHuiTi-Regular.otf';
+    const FONT = 'statics/font/Alibaba-PuHuiTi-Regular.otf';
 
     /**
      * 背景宽
@@ -114,6 +120,12 @@ class Canvas
         'imageStream' => false,
     ];
 
+    /**
+     * 实例化本身
+     * @var self
+     */
+    protected static $instance;
+
     protected $defaultImage;
 
     protected function __construct()
@@ -123,12 +135,25 @@ class Canvas
     }
 
     /**
+     * 实例化本类
+     * @return Canvas
+     */
+    public static function instance()
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new self();
+        }
+        return self::$instance;
+    }
+
+    /**
      * 创建一个新图象
      * @param string $file
      * @return array
      */
     public function createFrom(string $file): array
     {
+        $file = str_replace('https', 'http', $file);
         $imagesize = getimagesize($file);
         $type = image_type_to_extension($imagesize[2], true);
         switch ($type) {
@@ -243,13 +268,13 @@ class Canvas
             switch ($this->imageType) {
                 case 'jpeg':
                 case 'jpg':
-                    imagejpeg($image, $save_file, 70);
+                    imagejpeg($image, public_path().$save_file, 70);
                     break;
                 case 'png':
-                    imagepng($image, $save_file, 70);
+                    imagepng($image, public_path().$save_file, 70);
                     break;
                 case 'gif':
-                    imagegif($image, $save_file, 70);
+                    imagegif($image, public_path().$save_file, 70);
                     break;
                 default:
                     throw new \RuntimeException('Incorrect type set:' . $this->imageType);

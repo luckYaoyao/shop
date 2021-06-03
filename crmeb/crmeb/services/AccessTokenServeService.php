@@ -1,8 +1,13 @@
 <?php
-/**
- * @author: liaofei<136327134@qq.com>
- * @day: 2020/9/12
- */
+// +----------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +----------------------------------------------------------------------
+// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// +----------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +----------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +----------------------------------------------------------------------
 
 namespace crmeb\services;
 
@@ -10,7 +15,10 @@ namespace crmeb\services;
 use crmeb\exceptions\ApiException;
 use think\exception\ValidateException;
 
-
+/**
+ * Class AccessTokenServeService
+ * @package crmeb\services
+ */
 class AccessTokenServeService extends HttpService
 {
     /**
@@ -44,7 +52,11 @@ class AccessTokenServeService extends HttpService
      */
     protected $apiHost = 'http://sms.crmeb.net/api/';
 
+    /**
+     * 登录接口
+     */
     const USER_LOGIN = "user/login";
+
 
     /**
      * AccessTokenServeService constructor.
@@ -64,6 +76,18 @@ class AccessTokenServeService extends HttpService
     }
 
     /**
+     * 获取配置
+     * @return array
+     */
+    public function getConfig()
+    {
+        return [
+            'account' => $this->account,
+            'secret' => $this->secret
+        ];
+    }
+
+    /**
      * 获取缓存token
      * @return mixed
      * @throws \Psr\SimpleCache\InvalidArgumentException
@@ -74,23 +98,13 @@ class AccessTokenServeService extends HttpService
         $cacheToken = $this->cache->get($accessTokenKey);
         if (!$cacheToken) {
             $getToken = $this->getTokenFromServer();
-            $this->cache->set($accessTokenKey, $getToken['access_token'], $getToken['expires_in'] - time() - 300);
+            $this->cache->set($accessTokenKey, $getToken['access_token'], 300);
             $cacheToken = $getToken['access_token'];
         }
         $this->accessToken = $cacheToken;
+
         return $cacheToken;
 
-    }
-
-    /**
-     * 销毁token
-     * @return bool
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     */
-    public function destroyToken()
-    {
-        $accessTokenKey = md5($this->account . '_' . $this->secret . $this->cacheTokenPrefix);
-        return $this->cache->delete($accessTokenKey);
     }
 
     /**
@@ -101,17 +115,17 @@ class AccessTokenServeService extends HttpService
     {
         $params = [
             'account' => $this->account,
-            'secret' => md5($this->account . md5($this->secret)),
+            'secret' => $this->secret,
         ];
         $response = $this->postRequest($this->get(self::USER_LOGIN), $params);
         $response = json_decode($response, true);
         if (!$response) {
-            throw new ValidateException('获取token失败');
+            throw new ApiException('获取token失败');
         }
         if ($response['status'] === 200) {
             return $response['data'];
         } else {
-            exception($response['msg']);
+            throw new ApiException($response['msg']);
         }
     }
 
@@ -129,23 +143,22 @@ class AccessTokenServeService extends HttpService
         if ($isHeader) {
             $this->getToken();
             if (!$this->accessToken) {
-                throw new ValidateException('配置已更改或token已失效');
+                throw new ApiException('配置已更改或token已失效');
             }
             $header = ['Authorization:Bearer-' . $this->accessToken];
         }
-        try {
-            $res = $this->request($this->get($url), $method, $data, $header);
-            if (!$res) {
-                exception('发生异常，请稍后重试');
-            }
-            $result = json_decode($res, true) ?: false;
-            if (!isset($result['status']) || $result['status'] != 200) {
-                exception($result['msg'] ?? '发生异常，请稍后重试');
-            }
-            return $result['data'] ?? [];
-        } catch (\Throwable $e) {
-            exception($e->getMessage());
+
+        $res = $this->request($this->get($url), $method, $data, $header);
+        if (!$res) {
+            throw new ApiException('平台错误：发生异常，请稍后重试');
+
         }
+        $result = json_decode($res, true) ?: false;
+        if (!isset($result['status']) || $result['status'] != 200) {
+            throw new ApiException(isset($result['msg']) ? '平台错误：' . $result['msg'] : '平台错误：发生异常，请稍后重试');
+        }
+        return $result['data'] ?? [];
+
     }
 
     /**
