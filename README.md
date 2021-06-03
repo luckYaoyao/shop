@@ -172,7 +172,7 @@ CSDN开源技术选型秀优秀项目：[点击查看直播](https://codechina.c
 </p>
 
 
-![系统功能](/readme/images/商业版对比.jpg)
+![输入图片说明](https://images.gitee.com/uploads/images/2021/0603/093842_60edb5ad_5516386.jpeg "单商户-开源版_14.jpg")
 
 v4演示站后台: http://v4.crmeb.net/admin  账号：demo  密码：crmeb.com
 
