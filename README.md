@@ -159,23 +159,9 @@ v4演示站： http://v4.crmeb.net/admin  账号：demo  密码：crmeb.com
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0603/090746_b667d537_5516386.png "单商户-开源版_11.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0603/090758_f502aeab_5516386.png "单商户-开源版_12.png")
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0603/090810_8e57d397_5516386.png "单商户-开源版_13.png")
-![展示图](/readme/images/展示图_01.jpg "展示图.png")
-![展示图](/readme/images/展示图_02.jpg "展示图.png")
-![展示图](/readme/images/展示图_03.jpg "展示图.png")
-![后台首页](/readme/images/后台首页.png "后台首页.png")
-![后台产品管理](/readme/images/后台产品管理.png "后台产品管理.png")
-![后台订单管理](/readme/images/后台订单管理.png "后台订单管理.png")
-![后台订单统计](/readme/images/后台订单统计.png "后台订单统计.png")
-![后台公众号菜单管理](/readme/images/后台公众号菜单管理.png "后台公众号菜单管理.png")
-![后台财务报表](/readme/images/后台财务报表.png "后台财务报表.png")
-![后台用户统计](/readme/images/后台用户统计.png "后台用户统计.png")
-![后台权限管理](/readme/images/后台权限管理.png "后台权限管理.png")
-![后台数据备份](/readme/images/后台数据备份.png "后台数据备份.png")
-![后台文件管理](/readme/images/后台文件管理.png "后台文件管理.png")
 
 ## 获得荣誉
 CSDN开源技术选型秀优秀项目：[点击查看直播](https://codechina.csdn.net/groups/xazbkj/-/lives/164)
-![输入图片说明](https://images.gitee.com/uploads/images/2019/0805/111208_eb4fe823_892944.jpeg "WechatIMG2434.jpeg")
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0603/090844_5c7b7927_5516386.png "单商户-开源版_15.png")
 <p align="center">
     <img src="https://images.gitee.com/uploads/images/2020/1202/153909_19b8ab89_1491977.png" />
