@@ -1,9 +1,3 @@
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0602/164307_80425ea3_5516386.png "屏幕截图.png")
-<p align="center">
-    <a href="http://github.crmeb.net/u/giteedt">
-        <img src="https://images.gitee.com/uploads/images/2020/1229/120019_5afce26f_5516386.jpeg" />
-    </a>
-</p>
 <p align="center">
     <img src="https://images.gitee.com/uploads/images/2018/1214/151026_2299df23_892944.gif" />
 </p>
@@ -26,6 +20,16 @@
     <b>如果对您有帮助，您可以点右上角 "Star" 支持一下 谢谢！</b>  
 </p>
 
+## 导航栏目
+
+[系统功能](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD)
+ | [系统演示](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E6%BC%94%E7%A4%BA)
+ | [程序下载](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%A8%8B%E5%BA%8F%E4%B8%8B%E8%BD%BD)
+ | [使用手册](https://help.crmeb.net/crmeb-v4/1863402)
+ | [论坛地址](http://q.crmeb.net)
+ | [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
+ | [推荐服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
+- - -
 
 ## 项目介绍  
 
@@ -57,18 +61,6 @@
     16.一键安装自动检查系统环境一键安装；
     17.移动端使用uni-app进行开发，方便编译成各种格式的代码；
 ~~~
-
-
-## 导航栏目
-
-[使用手册](https://help.crmeb.net)
- | [安装说明](/readme/安装说明.md)
- | [论坛地址](http://bbs.crmeb.net)
- | [官网地址](https://www.crmeb.com)
- | [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
- | [服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
- | [授权价格](http://s.crmeb.com/self/?pid=-999)
-- - -
 
 
 ## 推荐服务器
