@@ -151,7 +151,7 @@ git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git
 
 新版v4.1.0 下载（当前开源版功能全，前后台分离版，适合二开）
 
-git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git
+git clone -b https://gitee.com/ZhongBangKeJi/CRMEB.git
 
 精简版Min下载(基础商城框架，适合精简需求的客户，适合二开)
 
