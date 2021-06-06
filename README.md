@@ -40,6 +40,7 @@
 
    系统采用TP6+uni-app+iview核心技术，系统功能介绍[<a href="https://help.crmeb.net/crmeb-v4/1863404">查看</a>]，十几个开发交流群，专业售后技术团队，让您二开无忧。
     有着详细文档地址：https://help.crmeb.net/crmeb-v4/1863402
+    二开教程：https://www.bilibili.com/video/BV1GX4y1T7Wd 
 
 ## 技术亮点
 ~~~
