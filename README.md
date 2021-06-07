@@ -202,7 +202,7 @@ v4演示站后台: http://v4.crmeb.net/admin
 密码：crmeb.com
 
 
-<b>去了解商业版 <a href='https://s.click.taobao.com/W7hVkLw' target="_blank"> 支持一下 </a></b>
+<b>去了解商业版 <a href='http://s.crmeb.com/self/?pid=-999' target="_blank"> 支持一下 </a></b>
 
 
 ## 相关项目
