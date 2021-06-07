@@ -152,7 +152,6 @@ CRMEB微信开发10群（862316758）3000人群可加
 
 ## 获得荣誉
 CSDN开源技术选型秀优秀项目：[点击查看直播](https://codechina.csdn.net/groups/xazbkj/-/lives/164)
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0603/090844_5c7b7927_5516386.png "单商户-开源版_15.png")
 
 ##  系统演示
 
