@@ -26,10 +26,11 @@
 
     码云开源项目php语言排名第一的开源GVP项目，感谢码云提供的平台！
 
-   CRMEB系统就是集客户关系管理+营销电商系统，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销等功能。
+    CRMEB系统就是集客户关系管理+营销电商系统，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销等功能。
 
-   系统采用TP6+uni-app+iview核心技术，系统功能介绍[<a href="https://help.crmeb.net/crmeb-v4/1863404">查看</a>]，十几个开发交流群，专业售后技术团队，让您二开无忧。
-    有着详细文档地址：https://help.crmeb.net/crmeb-v4/1863402
+    系统采用TP6+uni-app+iview核心技术，系统功能介绍[<a href="https://help.crmeb.net/crmeb-v4/1863404">查看</a>]，十几个开发交流群，专业售后技术团队，让您二开无忧。
+   
+    详细文档地址：https://help.crmeb.net/crmeb-v4/1863402
 
 ## 技术亮点
 ~~~
@@ -57,7 +58,7 @@
 
 [使用手册](https://help.crmeb.net)
  | [安装说明](/readme/安装说明.md)
- | [论坛地址](http://bbs.crmeb.net)
+ | [论坛地址](http://q.crmeb.net)
  | [官网地址](https://www.crmeb.com)
  | [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
  | [服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
@@ -130,9 +131,12 @@
 
 二开文档：https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670
 
-## QQ群
 
-CRMEB微信开发10群（862316758）3000人群可加
+## 技术交流
+
+#### 技术交流社区：https://q.crmeb.net
+
+#### CRMEB微信开发10群：862316758（3000人群可加）
 
 ## 页面展示
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0603/090323_e2c76620_5516386.png "单商户-开源版_01.png")
@@ -157,7 +161,11 @@ CSDN开源技术选型秀优秀项目：[点击查看直播](https://codechina.c
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0602/181542_49e7c3d6_5516386.png "WechatIMG1207.png")
 
-v4演示站： http://v4.crmeb.net/admin  账号：demo  密码：crmeb.com
+v4演示站： http://v4.crmeb.net/admin  
+
+账号：demo  
+
+密码：crmeb.com
 
 ## 程序下载 
 
@@ -187,7 +195,11 @@ git clone https://gitee.com/ZhongBangKeJi/CRMEB-Min.git
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0604/112335_0829b984_5516386.jpeg "WechatIMG1602.jpg")
 
-v4演示站后台: http://v4.crmeb.net/admin  账号：demo  密码：crmeb.com
+v4演示站后台: http://v4.crmeb.net/admin  
+
+账号：demo  
+
+密码：crmeb.com
 
 
 <b>去了解商业版 <a href='https://s.click.taobao.com/W7hVkLw' target="_blank"> 支持一下 </a></b>
@@ -196,12 +208,15 @@ v4演示站后台: http://v4.crmeb.net/admin  账号：demo  密码：crmeb.com
 ## 相关项目
 
 JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
-感谢大家对CRMEB的支持，为了感谢java开发者对CRMEB的支持，特别推出CRMEB java版
+
+CRMEB商城JAVA版，SpringBoot + Maven + Swagger + Mybatis Plus + Redis + Uniapp +Vue+elementUI 包含移动端、小程序、PC后台、Api接口；有产品、用户、购物车、订单、积分、优惠券、营销、余额、权限、角色、系统设置、组合数据、可拖拉拽的form表单等模块，大量的减少了二开的成本。
 
 知识付费：https://gitee.com/ZhongBangKeJi/crmeb_zzff_class
-CRMEB知识付费系统是基于ThinkPhp5.0+Vue开发的一套新零售直播/点播知识付费系统，CRMEB系统就是集分销推广关系管理+营销+直播的知识类电商系统，能够快速积累客户、会员数据分析、智能转化客户、 有效提高销售、吸引流量、网络营销、品牌推广的一款应用，且更适合企业二次开发；
+
+CRMEB知识付费系统是基于ThinkPhp5.0+Vue开发的全开源知识付费系统。功能包含直播课堂、付费视频、付费音频、付费阅读、会员系统、课程分销、课程拼团、直播带货、直播打赏、商城系统等。能够快速积学员、学员数据分析、智能转化客户、有效提高销售、吸引流量、网络营销、品牌推广的一款应用，且更适合企业二次开发
 
 form-builder : https://github.com/xaboy/form-builder
+
 tp PHP表单生成器，快速生成现代化的form表单。包含复选框、单选框、输入框、下拉选择框等元素以及,省市区三级联动,时间选择,日期选择,颜色选择,文件/图片上传等功能。
 
 
@@ -211,6 +226,8 @@ tp PHP表单生成器，快速生成现代化的form表单。包含复选框、�
  
 
 官方网站：http://www.crmeb.com
+
+交流社区：https://q.crmeb.net
 
 
 
