@@ -123,7 +123,9 @@
 
 数据字典：https://help.crmeb.net/crmeb-v4/1863569
 
-接口文档：http://bbs.crmeb.net/doc/datongapi.html
+后端接口：http://bbs.crmeb.net/doc/datongadminapi.html
+
+前端接口：http://bbs.crmeb.net/doc/datongapi.html
 
 安装教程：https://help.crmeb.net/crmeb-v4/1876709
 
