@@ -26,6 +26,11 @@
 
     码云开源项目php语言排名第一的开源GVP项目，感谢码云提供的平台！
 
+    喜欢v3.2版本的请访问：https://gitee.com/ZhongBangKeJi/CRMEB/tree/v3.2.9/ 
+    
+    下载方式
+    `git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git`    
+
    CRMEB系统就是集客户关系管理+营销电商系统，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销等功能。
 
    系统采用TP6+uni-app+iview核心技术，系统功能介绍[<a href="https://help.crmeb.net/crmeb-v4/1863404">查看</a>]，十几个开发交流群，专业售后技术团队，让您二开无忧。
@@ -56,13 +61,13 @@
 
 ## 导航栏目
 
-[使用手册](https://help.crmeb.net)
- | [安装说明](/readme/安装说明.md)
+[系统功能](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD)
+ | [系统演示](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E6%BC%94%E7%A4%BA)
+ | [程序下载](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%A8%8B%E5%BA%8F%E4%B8%8B%E8%BD%BD)
+ | [使用手册](https://help.crmeb.net/crmeb-v4/1863402)
  | [论坛地址](http://q.crmeb.net)
- | [官网地址](https://www.crmeb.com)
  | [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
- | [服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
- | [授权价格](http://s.crmeb.com/self/?pid=-999)
+ | [推荐服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
 - - -
 
 
