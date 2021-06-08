@@ -170,8 +170,6 @@
 ![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/185243_f4c22d8d_5516386.jpeg "开源版（下）_12.jpg")
 
 
-## 获得荣誉
-CSDN开源技术选型秀优秀项目：[点击查看直播](https://codechina.csdn.net/groups/xazbkj/-/lives/164)
 
 ##  系统演示
 
