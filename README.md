@@ -29,7 +29,8 @@
     喜欢v3.2版本的请访问：https://gitee.com/ZhongBangKeJi/CRMEB/tree/v3.2.9/ 
     
     下载方式
-    `git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git`    
+
+    ` git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git `    
 
    CRMEB系统就是集客户关系管理+营销电商系统，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销等功能。
 
