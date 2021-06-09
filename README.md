@@ -33,7 +33,7 @@
 
 - - -
 
-   :fa-th-list:  [ 首 页 ](https://gitee.com/ZhongBangKeJi/CRMEB)
+   :fa-th-list:  [导航](https://gitee.com/ZhongBangKeJi/CRMEB)
  | [系统功能](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD)
  | [系统演示](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E6%BC%94%E7%A4%BA)
  | [程序下载](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%A8%8B%E5%BA%8F%E4%B8%8B%E8%BD%BD)
