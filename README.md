@@ -1,4 +1,4 @@
-<p align="center">
+<p align="center" >
     <img src="https://images.gitee.com/uploads/images/2018/1214/151026_2299df23_892944.gif" />
 </p>
 <h1 align="center"> CRMEB客户管理+电商营销系统</h1> 
@@ -17,59 +17,65 @@
     </a>
     </p>
 <p align="center">    
-    <b>如果对您有帮助，您可以点右上角 "Star" 支持一下 谢谢！</b>  
+    <b>喜欢的话就点右上角 "Star" 支持一下吧，下次就不会迷路了，谢谢！</b>  
 </p>
 
 
 ## 项目介绍  
 
+~~~ 
+   码云开源项目php语言排名第一的开源GVP项目，感谢码云提供的平台！
 
-    码云开源项目php语言排名第一的开源GVP项目，感谢码云提供的平台！
+   CRMEB就是客户关系管理+营销电商系统，CRMEB打通版系统实现公众号端、微信小程序端、H5端、PC端用户账号同步，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销、客服等功能。我们历经4年时间精心研发，让更多企业快速实现公域流量转私有流量，让企业经营更简单，CRMEB系统赋能更多技术帮助中小企业实现互联网转型发展，减少重复造轮子。我们系统目前服务了几十万家企业，覆盖全球各地，被多所知名大学作为教学课件，荣获“2020年度开源中国最具价值开源项目”，“2021年度TOP20优秀Gitee组织”奖，当然最宝贵的是收获大量用户/企业的认可和支持，感谢大家！！！
 
-    喜欢v3.2版本的请访问：https://gitee.com/ZhongBangKeJi/CRMEB/tree/v3.2.9/ 
+   系统采用TP6+uni-app+iview核心技术，十几个开发交流群，论坛交流，全面系统文档，专业技术服务团队，让您二开/运营无忧。
+~~~
+   ### 努力成为你的最爱 :sparkling_heart: ，还有什么不满意的请留下您宝贵的建议[点击留言](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF) :fist: 
+
+- - -
+
+   :fa-th-list:  [ 首 页 ](https://gitee.com/ZhongBangKeJi/CRMEB)
+ | [系统功能](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD)
+ | [系统演示](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E6%BC%94%E7%A4%BA)
+ | [程序下载](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%A8%8B%E5%BA%8F%E4%B8%8B%E8%BD%BD)
+ | [使用手册](https://help.crmeb.net/crmeb-v4/1863402)
+ | [二开手册](https://gitee.com/ZhongBangKeJi/CRMEB/wikis/%E5%BA%8F%E8%A8%80?sort_id=4100490)
+ | [论坛地址](http://q.crmeb.net)
+ | [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
+ | [推荐服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
+ | [评论](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF)
+- - -
+
+## 经典老板
+
+CRMEB v3.2.9 版本的请访问：https://gitee.com/ZhongBangKeJi/CRMEB/tree/v3.2.9/ 
     
-    下载方式
+~~~
+    //喜欢v3.2.9的朋友下载方式
 
     git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git   
-
-   CRMEB系统就是集客户关系管理+营销电商系统，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销等功能。
-
-   系统采用TP6+uni-app+iview核心技术，系统功能介绍[<a href="https://help.crmeb.net/crmeb-v4/1863404">查看</a>]，十几个开发交流群，专业售后技术团队，让您二开无忧。
-   
-   详细文档地址：https://help.crmeb.net/crmeb-v4/1863402
+~~~
 
 ## 技术亮点
 ~~~
-    1.内置智慧客服系统；
-    2.管理端页面使用iview开发；
+    1.自主研发独立客服系统；
+    2.管理端页面使用iviewUI开发；
     3.PHPExcel数据导出,导出表格更加美观,可视；
     4.EasyWeChat部署微信开发,微信接入更加快捷,简单；
     5.使用强大的workerman实现定时任务和长连接；
-    6.内置强大灵活的权限管理；
+    6.内置强大灵活的权限管理，可以控制到每一个菜单；
     7.内置组合数据,系统配置,管理碎片化数据；
     8.客户端完善的交互效果和动画；
     9.对接公众号和小程序,并且数据同步；
     10.后台应用form-builder PHP快速生成现代化表单；
-    11.高频数据缓存；
-    12.数据备份和恢复；
+    11.高频数据缓存支持高并发；
+    12.数据备份和恢复让数据更安全；
     13.Restful标准接口、前后端分离，内部预留钩子,二次开发更方便;
     14.长连接减少CPU及内存使用及网络堵塞，减少请求响应时长；
     15.支持队列降低流量高峰，解除耦合，高可用;
     16.一键安装自动检查系统环境一键安装；
     17.移动端使用uni-app进行开发，方便编译成各种格式的代码；
 ~~~
-
-
-## 导航栏目
-
-[系统功能](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD)
- | [系统演示](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E6%BC%94%E7%A4%BA)
- | [程序下载](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%A8%8B%E5%BA%8F%E4%B8%8B%E8%BD%BD)
- | [使用手册](https://help.crmeb.net/crmeb-v4/1863402)
- | [论坛地址](http://q.crmeb.net)
- | [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
- | [推荐服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
-- - -
 
 
 ## 推荐服务器
@@ -123,7 +129,9 @@
 
 ## 系统说明
 
-系统功能：https://help.crmeb.net/crmeb-v4/1863405
+系统功能：https://help.crmeb.net/crmeb-v4/1863404
+
+系统脑图：https://help.crmeb.net/crmeb-v4/1863405
 
 目录结构：https://help.crmeb.net/crmeb-v4/2034387
 
