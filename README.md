@@ -30,7 +30,7 @@
     
     下载方式
 
-    ` git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git `    
+    git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git   
 
    CRMEB系统就是集客户关系管理+营销电商系统，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销等功能。
 
@@ -148,34 +148,32 @@
 
 ## 页面展示
 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/184841_1499f18b_5516386.jpeg "单商户-开源版_01.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/184853_c8c27675_5516386.jpeg "单商户-开源版(上）_02.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/184901_6605f55a_5516386.jpeg "单商户-开源版(上）_03.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/184911_7178d4af_5516386.jpeg "单商户-开源版(上）_04.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/184919_d53e62f7_5516386.jpeg "单商户-开源版(上）_05.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/184928_da697521_5516386.jpeg "单商户-开源版(上）_06.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/184935_848704ae_5516386.jpeg "单商户-开源版(上）_07.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/184943_fff401c2_5516386.jpeg "单商户-开源版(上）_08.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/184959_1f03be71_5516386.jpeg "开源版（下）_01.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/185006_bf6e66fd_5516386.jpeg "开源版（下）_02.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/185014_3e2be640_5516386.jpeg "开源版（下）_03.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/185022_f1bebe6b_5516386.jpeg "开源版（下）_04.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/185031_c2385915_5516386.jpeg "开源版（下）_05.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/185053_442cbc86_5516386.jpeg "开源版（下）_06.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/185103_deb598c1_5516386.jpeg "开源版（下）_07.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/185116_fca12d5f_5516386.jpeg "开源版（下）_08.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/185128_719a4db8_5516386.jpeg "开源版（下）_09.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/185224_58812a40_5516386.jpeg "开源版（下）_10.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/185233_e49650a9_5516386.jpeg "开源版（下）_11.jpg")
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0608/185243_f4c22d8d_5516386.jpeg "开源版（下）_12.jpg")
-
+![输入图片说明](readme/images/1主图.jpg)
+![输入图片说明](readme/images/2首页.jpg)
+![输入图片说明](readme/images/3可视化.jpg)
+![输入图片说明](readme/images/4商品.jpg)
+![输入图片说明](readme/images/5订单.jpg)
+![输入图片说明](readme/images/6用户.jpg)
+![输入图片说明](readme/images/7分销.jpg)
+![输入图片说明](readme/images/8客服.jpg)
+![输入图片说明](readme/images/9砍价.jpg)
+![输入图片说明](readme/images/10拼团.jpg)
+![输入图片说明](readme/images/11秒杀.jpg)
+![输入图片说明](readme/images/12签到.jpg)
+![输入图片说明](readme/images/13余额.jpg)
+![输入图片说明](readme/images/14积分.jpg)
+![输入图片说明](readme/images/15优惠券.jpg)
+![输入图片说明](readme/images/16后台管理.jpg)
+![输入图片说明](readme/images/17后台管理.jpg)
+![输入图片说明](readme/images/18模版.jpg)
+![输入图片说明](readme/images/19奖项.jpg)
 
 
 ##  系统演示
 
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0602/181542_49e7c3d6_5516386.png "WechatIMG1207.png")
+![输入图片说明](readme/images/20公众号.jpg)
 
-v4演示站： http://v4.crmeb.net/admin  
+演示站： http://v4.crmeb.net/admin  
 
 账号：demo  
 
@@ -198,26 +196,6 @@ git clone https://gitee.com/ZhongBangKeJi/CRMEB.git
 git clone https://gitee.com/ZhongBangKeJi/CRMEB-Min.git 
 
 ```
-
-
-## 商业版
-
-<p align="center">    
-    <b>商业版与开源版区别</b>
-</p>
-
-
-![输入图片说明](https://images.gitee.com/uploads/images/2021/0604/112335_0829b984_5516386.jpeg "WechatIMG1602.jpg")
-
-v4演示站后台: http://v4.crmeb.net/admin  
-
-账号：demo  
-
-密码：crmeb.com
-
-
-<b>去了解商业版 <a href='http://s.crmeb.com/self/?pid=-999' target="_blank"> 支持一下 </a></b>
-
 
 ## 相关项目
 
