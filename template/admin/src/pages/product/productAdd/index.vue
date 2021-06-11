@@ -488,7 +488,7 @@
                 </FormItem>
                 <Spin size="large" fix v-if="spinShow"></Spin>
             </Form>
-            <Modal v-model="modalPic" width="950px" scrollable  footer-hide closable title='上传商品图' :mask-closable="false" :z-index="999">
+            <Modal v-model="modalPic" width="950px" scrollable  footer-hide closable title='上传商品图' :mask-closable="false" :z-index="1">
                 <uploadPictures :isChoice="isChoice" @getPic="getPic" @getPicD="getPicD" :gridBtn="gridBtn" :gridPic="gridPic" v-if="modalPic"></uploadPictures>
             </Modal>
         </Card>
