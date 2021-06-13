@@ -77,7 +77,7 @@ CRMEB v3.2.9 版本的请访问：https://gitee.com/ZhongBangKeJi/CRMEB/tree/v3.
 ~~~
 
 
-## 推荐服务器
+## 推荐服务器（虚拟空间不支持）
 
 阿里云领取2000元代金劵：[<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z">https://www.aliyun.com</a>]
  
@@ -86,13 +86,13 @@ CRMEB v3.2.9 版本的请访问：https://gitee.com/ZhongBangKeJi/CRMEB/tree/v3.
  入门级配置
  ```
  CPU：1核
- 内存：1G
- 实例规格：突发性能t5实例
+ 内存：2G
+ 实例规格：ECS共享型 n4
  带宽：1M
  系统：CentOS 7.4 64位(推荐)
- 价格：366元/年 933.3元/三年
+ 价格：79.6元/年 226.5元/三年
  ```
- <a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z">学生9.5/月</a>
+ <a href="https://www.aliyun.com/activity/new?spm=5176.23165873.J_5244793720.1.6d3a5420ptDH93&userCode=dligum2z">学生6.6/月</a>
    </td>
  <td>
  
@@ -101,7 +101,7 @@ CRMEB v3.2.9 版本的请访问：https://gitee.com/ZhongBangKeJi/CRMEB/tree/v3.
  CPU：2核
  内存：4G
  实例规格：突发性能t5实例
- 带宽：2M
+ 带宽：5M
  系统：CentOS 7.4 64位(推荐)
  价格：936元/年 2386.8元/三年
  ```
@@ -124,6 +124,18 @@ CRMEB v3.2.9 版本的请访问：https://gitee.com/ZhongBangKeJi/CRMEB/tree/v3.
    </td>
    </tr></table>
  
+服务器环境推荐要求
+* Nignx
+
+* PHP 7.1 ~ 7.3 
+
+* MySQL  5.7
+
+* Redis
+
+推荐使用bt宝塔面板，简单易用。
+服务器推荐阿里云ecs或腾讯云cvm 云服务器。
+
 
 
 ## 系统说明
