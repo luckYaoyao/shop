@@ -255,13 +255,15 @@ CRMEB Min是一款轻量级、高性能开源电商商城系统，采用TP6+Mysq
 
 ## 参与开发
 
-感谢大神们提交代码：感谢（排名不分先后） @yizhisamoye，@bys1123，@xaboy，@youngxj0，@jacklincheung，@392256866
+感谢大神们提交代码（排名不分先后）
+
+### @yizhisamoye，@bys1123，@xaboy，@youngxj0，@jacklincheung，@392256866
 
 欢迎反馈问题 [反馈问题](https://gitee.com/ZhongBangKeJi/CRMEB/issues)。
 
 欢迎提交代码 [提交代码](https://gitee.com/ZhongBangKeJi/CRMEB/pulls)。
 
-开源版使用须知
+## 开源版使用须知
 
 1.允许用于个人学习、毕业设计、教学案例、公益事业;
 
