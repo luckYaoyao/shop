@@ -249,11 +249,17 @@ CRMEB Min是一款轻量级、高性能开源电商商城系统，采用TP6+Mysq
 
 交流社区：https://q.crmeb.net
 
+## 特别鸣谢
 
+排名不分先后，感谢这些软件的开发者：thinkphp、iview、vue、mysql、redis、uniapp、echarts、tree-table-vue、swiper、form-create等，如有遗漏请联系我！
 
 ## 参与开发
 
-请提交 [CRMEB](https://gitee.com/ZhongBangKeJi/CRMEB/pulls)。
+感谢大神们提交代码：感谢（排名不分先后） @yizhisamoye，@bys1123，@xaboy，@youngxj0，@jacklincheung，@392256866
+
+欢迎反馈问题 [反馈问题](https://gitee.com/ZhongBangKeJi/CRMEB/issues)。
+
+欢迎提交代码 [提交代码](https://gitee.com/ZhongBangKeJi/CRMEB/pulls)。
 
 开源版使用须知
 
