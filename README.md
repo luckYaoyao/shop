@@ -1,8 +1,3 @@
-<a href="http://crmeb.com/web/news/detail/319">
-<p align="center" >
-    <img src="https://images.gitee.com/uploads/images/2021/0615/142657_1e89e831_5516386.jpeg"/>
-</p>
-</a>
 
 <p align="center" >
     <img src="https://images.gitee.com/uploads/images/2018/1214/151026_2299df23_892944.gif" />
