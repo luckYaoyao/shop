@@ -6401,7 +6401,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (329, 'routine_contact_type', 'radio', NULL, 7, '1=>小程序客服\n0=>智慧客服系统', NULL, NULL, NULL, NULL, '0', '小程序客服类型', '小程序客服类型', 0, 1),
 (330, 'station_open', 'radio', NULL, 26, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '1', '站点开启', '站点开始|关闭（用于升级等临时关闭）', 11, 1);
 
--- --------------------------------------------------------
+-- ---------------------------------------------------------
 
 --
 -- 表的结构 `eb_system_config_tab`
