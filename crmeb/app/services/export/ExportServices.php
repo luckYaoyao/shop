@@ -37,7 +37,7 @@ class ExportServices extends BaseServices
             ->setExcelTile($title, $name, $info)
             ->setExcelContent($export)
             ->excelSave($filename, $suffix, $is_save);
-        $path = $this->siteUrl() . $path;
+        $path = $this->siteUrl() . '/' . $path;
         return [$path];
     }
 
@@ -572,8 +572,8 @@ HTML;
             $export = [];
             foreach ($data['series'] as $index => $item) {
                 foreach ($data['x'] as $k => $v) {
-                        $export[$v]['time'] = $v;
-                        $export[$v][] = $item['value'][$k];
+                    $export[$v]['time'] = $v;
+                    $export[$v][] = $item['value'][$k];
                 }
             }
         }
