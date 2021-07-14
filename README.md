@@ -50,6 +50,8 @@
 ## 经典老版
 
 CRMEB v3.2.9 版本的请访问：https://gitee.com/ZhongBangKeJi/CRMEB/tree/v3.2.9/ 
+
+v3.2.9 发行版下载地址：https://gitee.com/ZhongBangKeJi/CRMEB/releases/v3.2.9
     
 ~~~
     //喜欢v3.2.9的朋友下载方式
