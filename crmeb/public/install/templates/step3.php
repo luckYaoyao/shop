@@ -62,29 +62,29 @@
         </table>
           <table width="100%">
               <tr>
-                  <td class="td1" width="100">reids数据库信息</td>
+                  <td class="td1" width="100">redis数据库信息</td>
                   <td class="td1" width="200">&nbsp;</td>
                   <td class="td1">&nbsp;</td>
               </tr>
               <tr>
                   <td class="tar">服务器地址：</td>
                   <td><input type="text" name="rbhost" id="rbhost" value="127.0.0.1" class="input"></td>
-                  <td><div id="J_install_rbhost"><span class="gray">reids服务器地址，一般为127.0.0.1</span></div></td>
+                  <td><div id="J_install_rbhost"><span class="gray">redis服务器地址，一般为127.0.0.1</span></div></td>
               </tr>
               <tr>
                   <td class="tar">端口号：</td>
                   <td><input type="text" name="rbport" id="rbport" value="6379" class="input" autoComplete="off"></td>
-                  <td><div id="J_install_tip_manager_pwd"><span class="gray">reids端口,默认为6379</span></div></td>
+                  <td><div id="J_install_tip_manager_pwd"><span class="gray">redis端口,默认为6379</span></div></td>
               </tr>
               <tr>
                   <td class="tar">数据库：</td>
                   <td><input type="text" name="rbselect" id="rbselect" value="0" class="input" autoComplete="off"></td>
-                  <td><div id="J_install_tip_manager_ckpwd"><span class="gray">reids数据库，默认为0,一般不做更改</span></div></td>
+                  <td><div id="J_install_tip_manager_ckpwd"><span class="gray">redis数据库，默认为0,一般不做更改</span></div></td>
               </tr>
               <tr>
                   <td class="tar">数据库密码：</td>
                   <td><input type="password" name="rbpw" onBlur="TestDbPwd(0)" id="rbpw" value="" class="input" autoComplete="off"></td>
-                  <td><div id="J_install_tip_dbpw"></div><span class="gray">reids数据库密码</span></td>
+                  <td><div id="J_install_tip_dbpw"></div><span class="gray">redis数据库密码</span></td>
               </tr>
 
           </table>
