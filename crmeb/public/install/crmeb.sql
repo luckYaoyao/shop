@@ -6509,8 +6509,8 @@ INSERT INTO `eb_system_group` (`id`, `cate_id`, `name`, `info`, `config_name`, `
 (59, 1, '促销单品推荐图片', '促销单品推荐图片', 'routine_home_benefit_banner', '[{"name":"\\u56fe\\u7247","title":"img","type":"upload","param":""},{"name":"\\u63cf\\u8ff0","title":"comment","type":"input","param":""},{"name":"\\u8df3\\u8f6c\\u94fe\\u63a5","title":"link","type":"input","param":""}]'),
 (62, 1, '充值金额设置', '设置充值金额额度选择', 'user_recharge_quota', '[{"name":"\\u552e\\u4ef7","title":"price","type":"input","param":""},{"name":"\\u8d60\\u9001","title":"give_money","type":"input","param":""}]'),
 (65, 1, '后台登录页面幻灯片', '后台登录页面幻灯片', 'admin_login_slide', '[{"name":"\\u5e7b\\u706f\\u7247","title":"slide","type":"upload","param":""}]'),
-(66, 1, '前端页面链接', '前端页面链接', 'uni_app_link', '[{"name":"\\u540d\\u79f0","title":"name","type":"input","param":""},{"name":"\\u5730\\u5740","title":"link","type":"input","param":""},{"name":"\\u53c2\\u6570","title":"param","type":"input","param":""},{"name":"\\u4e8b\\u4f8b","title":"example","type":"input","param":""}]');
-
+(66, 1, '前端页面链接', '前端页面链接', 'uni_app_link', '[{"name":"\\u540d\\u79f0","title":"name","type":"input","param":""},{"name":"\\u5730\\u5740","title":"link","type":"input","param":""},{"name":"\\u53c2\\u6570","title":"param","type":"input","param":""},{"name":"\\u4e8b\\u4f8b","title":"example","type":"input","param":""}]'),
+(67, 1, '拼团列表轮播图', '拼团列表轮播图', 'combination_banner', '[{"name":"\\u56fe\\u7247","title":"img","type":"upload","param":""},{"name":"\\u63cf\\u8ff0","title":"comment","type":"input","param":""},{"name":"\\u8df3\\u8f6c\\u94fe\\u63a5","title":"link","type":"input","param":""}]');
 -- --------------------------------------------------------
 
 --

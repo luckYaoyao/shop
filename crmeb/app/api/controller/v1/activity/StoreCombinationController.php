@@ -119,4 +119,13 @@ class StoreCombinationController
             return app('json')->success(['code' => '']);
         }
     }
+
+    /**
+     * 获取拼团列表轮播图
+     */
+    public function banner_list()
+    {
+        $banner = sys_data('combination_banner') ?? [];
+        return app('json')->success($banner);
+    }
 }

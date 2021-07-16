@@ -236,6 +236,7 @@ Route::group(function () {
     Route::get('bargain/list', 'v1.activity.StoreBargainController/lst')->name('bargainList');//砍价商品列表
     //活动---拼团
     Route::get('combination/list', 'v1.activity.StoreCombinationController/lst')->name('combinationList');//拼团商品列表
+    Route::get('combination/banner_list', 'v1.activity.StoreCombinationController/banner_list')->name('banner_list');//拼团轮播图
     Route::get('combination/detail/:id', 'v1.activity.StoreCombinationController/detail')->name('combinationDetail');//拼团商品详情
     //用户类
     Route::get('user/activity', 'v1.user.UserController/activity')->name('userActivity');//活动状态
