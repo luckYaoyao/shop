@@ -28,10 +28,10 @@
 								   <text class="vip-money">￥{{ storeInfo.vip_price }}</text>
 								   <image src="../../static/images/jvip.png" class="jvip"></image>
 								</view>
-								<view class="dis" v-if="storeInfo.vip_price && storeInfo.vip_price > 0 && storeInfo.is_vip">
+								<!-- <view class="dis" v-if="storeInfo.vip_price && storeInfo.vip_price > 0 && storeInfo.is_vip">
 								   <text class="vip-money">￥{{ storeInfo.vip_price }}</text>
 								   <image src="../../static/images/svip.gif"></image>
-								</view>
+								</view> -->
 							</view>
 							<view class="iconfont icon-fenxiang" @click="listenerActionSheet"></view>
 						</view>
@@ -41,13 +41,13 @@
 							<view v-text="'库存:' + (storeInfo.stock || 0) + (storeInfo.unit_name || '')"></view>
 							<view v-text="'销量:' + (storeInfo.fsales || 0) + (storeInfo.unit_name || '')"></view>
 						</view>
-						<view v-if="!is_money_level && storeInfo.vip_price && storeInfo.is_vip" class="svip acea-row row-between-wrapper">
+						<!-- <view v-if="!is_money_level && storeInfo.vip_price && storeInfo.is_vip" class="svip acea-row row-between-wrapper">
 							<view class="">开通“超级会员”立省{{ diff }}元</view>
 							<navigator url="/pages/annex/vip_paid/index">
 								立即开通
 								<text class="iconfont icon-jiantou"></text>
 							</navigator>
-						</view>
+						</view> -->
 						<!-- <view class='coupon acea-row row-between-wrapper' v-if="storeInfo.give_integral > 0">
 							<view class='hide line1 acea-row'>
 								赠积分：

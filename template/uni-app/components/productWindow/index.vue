@@ -13,7 +13,7 @@
 						<view class="acea-row row-middle">
 							￥<text class="num">{{ attr.productSelect.price }}</text>
 							<text class='vip-money' v-if="is_vip>0 && attr.productSelect.vip_price">￥{{attr.productSelect.vip_price}}</text>
-							<view class="vipImg" v-if="is_vip>0 && attr.productSelect.vip_price"><image src="../../static/images/svip.gif"></image></view>
+							<!-- <view class="vipImg" v-if="is_vip>0 && attr.productSelect.vip_price"><image src="../../static/images/svip.gif"></image></view> -->
 						</view>
 						<text class="stock" v-if='isShow'>库存: {{ attr.productSelect.stock }}</text>
 						<text class='stock' v-if="limitNum">限量: {{attr.productSelect.quota}}</text>
