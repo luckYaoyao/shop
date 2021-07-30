@@ -392,7 +392,9 @@ class StoreOrderController
                 if (!$quitUrl && $from != 'routine') {
                     return app('json')->fail('请传入支付宝支付回调URL');
                 }
-                $jsConfig = $payServices->alipayOrder($order->toArray(), $quitUrl, $from == 'routine');
+                $isCode = $from == 'routine' || $from == 'pc';
+                $jsConfig = $payServices->alipayOrder($order->toArray(), $quitUrl, $isCode);
+                if ($isCode && !($jsConfig->invalid ?? false)) $jsConfig->invalid = time() + 60;
                 $payKey = md5($order['order_id']);
                 CacheService::set($payKey, ['order_id' => $order['order_id'], 'other_pay_type' => false], 300);
                 return app('json')->status(PayServices::ALIAPY_PAY . '_pay', '订单创建成功', ['jsConfig' => $jsConfig, 'order_id' => $order['order_id'], 'pay_key' => $payKey]);
