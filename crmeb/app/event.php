@@ -22,13 +22,6 @@ return [
         'HttpEnd'                             => [],
         'LogLevel'                            => [],
         'LogWrite'                            => [],
-        'task_2'                              => [], //2秒钟执行的方法
-        'task_6'                              => [], //6秒钟执行的方法
-        'task_10'                             => [], //10秒钟执行的方法
-        'task_30'                             => [], //30秒钟执行的方法
-        'task_60'                             => [], //60秒钟执行的方法
-        'task_180'                            => [], //180秒钟执行的方法
-        'task_300'                            => [], //300秒钟执行的方法
         'StoreProductOrderDeliveryAfter'      => [], // OrderSubscribe 送货 发送模板消息 admin模块 order.StoreOrder控制器/order.combinationOrder控制器
         'StoreProductOrderDeliveryGoodsAfter' => [], // OrderSubscribe 发货 发送模板消息 admin模块 order.StoreOrder控制器/order.combinationOrder控制器
         'StoreProductOrderRefundNAfter'       => [], // OrderSubscribe 订单状态不退款 发送模板消息 admin模块 order.StoreOrder控制器/order.combinationOrder控制器
@@ -50,6 +43,9 @@ return [
         'user.userLevel'                      => [\app\listener\user\UserLevel::class], //用户升级事件
         'user.userVisit'                      => [\app\listener\user\UserVisit::class], //用户访问事件
     ],
+    'subscribe' => [
+        crmeb\subscribes\TaskSubscribe::class,//定时任务事件订阅类
+    ]
 ];
 
 
