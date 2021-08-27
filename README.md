@@ -238,7 +238,7 @@ CRMEB Min版商城：https://gitee.com/ZhongBangKeJi/CRMEB-Min
 
 CRMEB Min是一款轻量级、高性能开源电商商城系统，采用TP6+Mysql+Uniapp+iView+Redis等最流行热门技术语言，支持队列、表单生成、长链接、定时任务等，完善的权限管理、会员管理、产品订单管理、CMS管理、支持多端、一键开通短信、产品采集、物流查询等接口。快速简单高效！
 
-## 联系我们
+## 联系我们（在线专业解答、获取功能清单）
 ![有问题？联系CRMEB官方客服](https://images.gitee.com/uploads/images/2020/1128/154416_441805ca_1491977.png "屏幕截图.png")
  
 

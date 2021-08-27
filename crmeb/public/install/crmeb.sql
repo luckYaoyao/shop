@@ -1,25 +1,81 @@
 --
+-- 表的结构 `eb_agent_level`
+--
+
+CREATE TABLE IF NOT EXISTS `eb_agent_level` (
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `name` varchar(50) NOT NULL DEFAULT '' COMMENT '等级名称',
+    `image` varchar(255) NOT NULL DEFAULT '' COMMENT '背景图',
+    `one_brokerage` smallint(5) NOT NULL DEFAULT '0' COMMENT '一级分拥上浮比例',
+    `two_brokerage` smallint(5) NOT NULL DEFAULT '0' COMMENT '二级分拥上浮比例',
+    `grade` smallint(5) NOT NULL DEFAULT '0' COMMENT '等级',
+    `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分销员等级表';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `eb_agent_level_task`
+--
+
+CREATE TABLE IF NOT EXISTS `eb_agent_level_task` (
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `level_id` int(10) NOT NULL DEFAULT '0' COMMENT '分销等级id',
+    `name` varchar(50) NOT NULL DEFAULT '' COMMENT '任务名称',
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '任务类型',
+    `number` int(10) NOT NULL DEFAULT '0' COMMENT '任务限定数',
+    `desc` varchar(255) NOT NULL DEFAULT '' COMMENT '任务描述',
+    `is_must` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否必须达成0:其一1:所有',
+    `sort` smallint(5) NOT NULL DEFAULT '0' COMMENT '排序',
+    `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分销员等级任务表';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `eb_agent_level_task_record`
+--
+
+CREATE TABLE IF NOT EXISTS `eb_agent_level_task_record` (
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `uid` int(10) NOT NULL DEFAULT '0' COMMENT '用户uid',
+    `level_id` int(10) NOT NULL DEFAULT '0' COMMENT '等级id',
+    `task_id` int(10) NOT NULL DEFAULT '0' COMMENT '任务id',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态',
+    `add_time` int(10) NOT NULL DEFAULT '10' COMMENT '添加时间',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分销员完成等级任务表记录表';
+
+-- --------------------------------------------------------
+
+--
 -- 表的结构 `eb_agreement`
 --
 
 CREATE TABLE IF NOT EXISTS `eb_agreement` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '协议类型  1：会员协议',
-  `title` varchar(200) NOT NULL DEFAULT '' COMMENT '协议名称',
-  `content` text NOT NULL DEFAULT '' COMMENT '协议内容',
-  `sort` int(10) NOT NULL DEFAULT '0' COMMENT '排序倒序',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '1：显示：0：不显示',
-  `add_time` int(50) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `type` (`type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员协议';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '协议类型  1：会员协议',
+    `title` varchar(200) NOT NULL DEFAULT '' COMMENT '协议名称',
+    `content` text NOT NULL COMMENT '协议内容',
+    `sort` int(10) NOT NULL DEFAULT '0' COMMENT '排序倒序',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '1：显示：0：不显示',
+    `add_time` int(50) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `type` (`type`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='会员协议' ROW_FORMAT=DYNAMIC;
 
 --
 -- 转存表中的数据 `eb_agreement`
 --
 
 INSERT INTO `eb_agreement` (`id`, `type`, `title`, `content`, `sort`, `status`, `add_time`) VALUES
-(1, 1, '付费会员协议', '<p data-lake-id="320c4cd03b73269621583fdf4a5df156" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">请认真阅读并理解以下内容，</span><span style="color: #000000;">本协议是您与西安众邦网络科技有限公司之间就SVIP会员所订立的契约。请您仔细阅读本协议，会员购买成功后本协议即构成对双方有约束力的法律文件。</span></p><p data-lake-id="cff9244616afb2eee2b277256a09cb34" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><br/></p><h4 data-lake-id="609c6f3f545fba66c8e4a20afddb5f07" id="U0LnZ" data-wording="true" style="padding: 7px 0px; margin: 0px; line-height: 24px;">第1条 相关定义</h4><p data-lake-id="eef67a856ab90e21af7d2acd55249b3b" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;"><br/></span></p><p data-lake-id="52bafc62fdf1aa30a856c2ad5dae9f84" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">1.1 SVIP会员：SVIP 会员是为商城客户打造的高级会员服务，通过提供高品质的客户服务，让网购变的更加方便，省钱和放心。</span></p><p data-lake-id="783e9c18ae83e74c9f5a85cd708d493c" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">1.5 实名信息：用户开通SVIP会员需保证商城用户信息真实，同一自然人如有多个商城账号，可同时开通对应的多个会员。</span></p><p data-lake-id="55a3692740b20ad3fd71f8e406d4927e" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><br/></p><h4 data-lake-id="a4cd947107c5cafd9e2683c721aeff5b" id="vfjFY" data-wording="true" style="padding: 7px 0px; margin: 0px; line-height: 24px;">第2条 本站服务条款的确认和接纳</h4><p data-lake-id="095328072ba578fd4ec7d5f9778c8fbf" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><br/></p><p data-lake-id="95695c3a737b2c0d4fe0f5a2365eb8af" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">2.1 本站所提供的SVIP会员试用期及正式期活动的所有权和运作权归本公司所有。</span></p><p data-lake-id="38eb7502271aab4a4f84aace01d68ddd" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">2.2 用户支付会员成功，即视为用户确认自己同意接受SVIP会员相关服务的条款，且同意按本协议内容履行，如产生用户相关责任的，同意承担相应法律责任。</span></p><p data-lake-id="c1482f5e52290562ff721a6943e48671" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">2.3 如果您在18周岁以下，您只能在父母或监护人的监护参与下方能参与体验该服务。</span></p><p data-lake-id="aa98a6122c43b6c5b5819b0659ba6536" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">2.4 本公司保留在中华人民共和国大陆地区法施行之法律允许的范围内独自决定拒绝服务、关闭用户账户、清除或编辑内容等相关权利。</span></p><p data-lake-id="3a87ed4afbd5056abe2badf30753bbb9" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">2.5 SVIP会员开通后，您在已开通的服务期内不能主动取消服务或终止资格。</span></p><p data-lake-id="58e92a5a056a4b655bb1797812078e35" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><br/></p><h4 data-lake-id="5d6535f5804fda0acc55dd60c8d63179" id="zopV4" data-wording="true" style="padding: 7px 0px; margin: 0px; line-height: 24px;">第3条 SVIP会员权益</h4><p data-lake-id="47b88e6183a78ef2beb0b0ba7a0b8c89" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><br/></p><p data-lake-id="857826f535efdeecf91d088222dd6d71" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">3.1 会员特价：商城部分商品可享受会员特价</span></p><p data-lake-id="a26c54c40dcbbd4aa39e89b79ebb2d68" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">3.2 </span><span style="color: #000000;">会员优惠券：会员每月可领优惠券，会员优惠券用户在会员期间30天内未使用，自动作废；</span></p><p data-lake-id="a8da63dd3de224f70afb978dc8ede2d4" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">3.3 </span><span style="color: #000000;">消费返利：消费返X倍积分</span></p><p data-lake-id="b021aa12165472aa64b10ff98371bbb6" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">3.4 </span><span style="color: #000000;">签到返利：</span><span style="color: #000000;">签到得多倍积分</span></p><p data-lake-id="d3886709183cab508cdf638962b8883a" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">3.5 </span><span style="color: #000000;">运费折扣：享受</span><span style="color: #000000;">运费折扣XX折</span></p><p data-lake-id="3c33d9b508e74af5645a328dbddcbfa9" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">3.6 </span><span style="color: #000000;">支付优惠：线下扫码付款享折扣优惠</span></p><p data-lake-id="a33b0ce31f84219ae4d4521b05722192" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><br/></p><h4 data-lake-id="95306aaa82ab7aee03f9002f44dbb65b" id="xCzIm" data-wording="true" style="padding: 7px 0px; margin: 0px; line-height: 24px;">第4条 用户会员使用注意事项</h4><p data-lake-id="63f3f9ca47509a16fbb52cb6944d3abf" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;"><br/></span></p><p data-lake-id="17a0e2046b2cf0c8b000e4aee0783b84" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">4.1 服务开通后，用户应谨慎合理的保存、使用其用户名和密码，不得将在本站注册获得的账户借给他人使用，否则用户应承担由此产生的全部责任，同时本公司在该种情况下有权做出独立判断，可采取暂停或关闭用户会员资格等措施。</span></p><p data-lake-id="a366dc4c629a0dbe3f38cec434e11e79" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;"></span></p><p data-lake-id="cc26b6ad68fb1969ff58265e322b35e7" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">4.3 用户同意，商城拥有通过邮件、短信电话等形式，向其发送相关活动信息等必要信息的权利。</span></p><p data-lake-id="62db0fc293ff0b12052f5024814167ec" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;"></span></p><p data-lake-id="6589a7e0cbee6227d136ac7255667402" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">4.4 SVIP用户通过账号操作的各项行为应符合法律法规规定、平台规则规定及SVIP会员正式用户协议，当出现违规行为、违规订单及违规账号时，本公司有权按照上述平台内规则对您的账号和订单予以处理，如冻结或关闭账号、取消订单、暂停或停止提供服务、关闭会员开通资格、关停已开通的会员服务，已绑定的或获取的SVIP会员权益被全部/部分取消或暂停使用等操作，且不进行任何赔偿或补偿。如给本公司或相关方造成损失，用户需承担全部责任。从公平合理的角度，您应知晓所有通过该账户实现的操作产生的全部后果由您自行承担。</span></p><p data-lake-id="865a0b3b429e078b38d8e364bd45b8b4" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;"></span></p><p data-lake-id="b1aca4dc4a3e8e4b837c70853f687617" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">4.5 SVIP用户违规行为包含但不限于以下行为时，本公司有权关闭您的SVIP会员开通资格、关停您已开通的SVIP会员服务，已绑定的或获取的SVIP会员权益被全部/部分取消或暂停使用，且不退还已支付的会员服务费用。从公平合理的角度，您应知晓所有通过该账户实现的操作产生的全部后果或损失由您自行承担。</span></p><p data-lake-id="0afca81affc97e48b6782054b8a80759" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">1）利用SVIP会员服务进行盈利或非法获利；</span></p><p data-lake-id="3d14f39d479e9e5bc4f65590322da867" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">2）以任何形式转让或转移SVIP会员服务或SVIP会员权益；</span></p><p data-lake-id="59eceb8bbf3aedc235f98f82792aed05" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">3）将SVIP会员服务或会员权益借给他人使用、代他人下单；</span></p><p data-lake-id="b4218daa96a2ec0bfa27cd2457021a24" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">4）通过任何不正当手段或以违反诚实信用原则的方式开通SVIP会员服务，如恶意绕过正常开通流程；</span></p><p data-lake-id="005b665650f61c56aceb3f8db18886a3" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">5）使用SVIP会员权益获取的商品或服务并非用于个人消费或使用；</span></p><p data-lake-id="23137904b842626f47f06d4442e3a1d6" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">7）用户在使用会员服务时，存在套取优惠利差、虚假下单交易、提供虚假交易信息等扰乱交易秩序、违反交易规则的行为；</span></p><p data-lake-id="84c2e46c2032a964c73b931e3ee9c716" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">8）经本公司判断，SVIP用户行为不符合公平原则或诚实信用原则的情形。</span></p><p data-lake-id="678f1f9eff199af9346263c5f2f7788a" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;"><br/></span></p><p data-lake-id="ba95c10b3bc8c7a6635bf8e7f199e9af" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">4.6 SVIP会员兑换码：即由本公司提供的开通SVIP正式会员识别码，用户可在实体会员卡扫码进入开通入口输入，系统识别成功后该账户便可享受相应期限的SVIP正式会员服务。</span></p><p data-lake-id="b3ae65e8c659f6e007593cb732398cc0" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">4.6.1 每个SVIP会员兑换码仅限兑换一次，一经绑定，仅可用于被绑定的账户，不能解绑或换账户使用。</span></p><p data-lake-id="564c49ec5b780909422430cf255c89cb" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">4.6.2 SVIP会员兑换码一旦兑换，属个人所有，个人应妥善保管，本公司不对SVIP会员兑换码的泄露、丢失、被盗等其他不能使用或不能激活的情况负责。</span></p><p data-lake-id="2ed6030686a78023efaad79a9240c7ce" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">4.6.3 用户通过正当途径获取的SVIP会员兑换码，不得进行销售。若发现立即冻结，兑换码置为失效，通过此码激活开通的账户也将终止SVIP会员资格，用户双方全部加入黑名单。</span></p><p data-lake-id="eb2f9b33d3d3d223d9863d332632cba4" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;"><br/></span></p><h4 data-lake-id="847d132f3ef465c264c018b8e6f87f70" id="6vZYk" data-wording="true" style="padding: 7px 0px; margin: 0px; line-height: 24px;">第6条 法律管辖和适用</h4><p data-lake-id="894615b9685335e7a2fd14ae5d63e76f" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;"><br/></span></p><p data-lake-id="ce739e0c622ccab34ef78b6ac77142f7" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">本公司有权以网站公告的方式进行不定期地制定、修改本协议及/或相关服务规则，暂停、取消和修改本协议条款，修改后的协议一旦被公告在本站上即生效，并代替原来的协议。用户应及时关注不时发布的各项服务规则及本协议的变更。若不同意相关规则及条款修改的，应及时终止与本站的协议。如用户继续使用本网站提供的服务的，即视为同意更新后的协议。建议您在使用本站之前阅读本协议及本站的公告。如缔约方就本协议内容或其执行发生任何争议，双方应尽力友好协商解决；协商不成时，任何一方均可向西安市未央区中级人民法院提起诉讼。</span></p><p data-lake-id="df997715805d889831b446eb97484c70" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><br/></p><h4 data-lake-id="72df6f203ab326c65b15eaf6d6a787e3" id="m1wQJ" data-wording="true" style="padding: 7px 0px; margin: 0px; line-height: 24px;">第7条 其他</h4><p data-lake-id="394ebf7eda9ee806abe165acfedc0de5" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><br/></p><p data-lake-id="a7215b1a449ed7cbfc7079c6d38e90ac" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">7.1 公司网站所有者是指在政府部门依法许可或备案的网站经营主体。</span></p><p data-lake-id="69aab05f23cc3478f0ef821cca66a4b2" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">7.2 &nbsp;如因不可抗力或其它本站无法控制的原因使本站活动服务无法及时提供或无法按本协议进行的，公司会合理地尽力协助处理善后事宜。</span><span style="color: #000000;"></span></p><p data-lake-id="900321fb1fa7885e1d1218fcc44d732d" data-wording="true" style="font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;"><span style="color: #000000;">7.3 本协议自您购买成功SVIP之日起生效</span></p><p><br/></p>', 0, 1, 1605662995);
+(1, 1, '付费会员协议', '<p data-lake-id=\"320c4cd03b73269621583fdf4a5df156\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">请认真阅读并理解以下内容，</span><span style=\"color: #000000;\">本协议是您与西安众邦网络科技有限公司之间就SVIP会员所订立的契约。请您仔细阅读本协议，会员购买成功后本协议即构成对双方有约束力的法律文件。</span></p><p data-lake-id=\"cff9244616afb2eee2b277256a09cb34\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><br/></p><h4 data-lake-id=\"609c6f3f545fba66c8e4a20afddb5f07\" id=\"U0LnZ\" data-wording=\"true\" style=\"padding: 7px 0px; margin: 0px; line-height: 24px;\">第1条 相关定义</h4><p data-lake-id=\"eef67a856ab90e21af7d2acd55249b3b\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\"><br/></span></p><p data-lake-id=\"52bafc62fdf1aa30a856c2ad5dae9f84\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">1.1 SVIP会员：SVIP 会员是为商城客户打造的高级会员服务，通过提供高品质的客户服务，让网购变的更加方便，省钱和放心。</span></p><p data-lake-id=\"783e9c18ae83e74c9f5a85cd708d493c\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">1.5 实名信息：用户开通SVIP会员需保证商城用户信息真实，同一自然人如有多个商城账号，可同时开通对应的多个会员。</span></p><p data-lake-id=\"55a3692740b20ad3fd71f8e406d4927e\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><br/></p><h4 data-lake-id=\"a4cd947107c5cafd9e2683c721aeff5b\" id=\"vfjFY\" data-wording=\"true\" style=\"padding: 7px 0px; margin: 0px; line-height: 24px;\">第2条 本站服务条款的确认和接纳</h4><p data-lake-id=\"095328072ba578fd4ec7d5f9778c8fbf\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><br/></p><p data-lake-id=\"95695c3a737b2c0d4fe0f5a2365eb8af\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">2.1 本站所提供的SVIP会员试用期及正式期活动的所有权和运作权归本公司所有。</span></p><p data-lake-id=\"38eb7502271aab4a4f84aace01d68ddd\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">2.2 用户支付会员成功，即视为用户确认自己同意接受SVIP会员相关服务的条款，且同意按本协议内容履行，如产生用户相关责任的，同意承担相应法律责任。</span></p><p data-lake-id=\"c1482f5e52290562ff721a6943e48671\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">2.3 如果您在18周岁以下，您只能在父母或监护人的监护参与下方能参与体验该服务。</span></p><p data-lake-id=\"aa98a6122c43b6c5b5819b0659ba6536\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">2.4 本公司保留在中华人民共和国大陆地区法施行之法律允许的范围内独自决定拒绝服务、关闭用户账户、清除或编辑内容等相关权利。</span></p><p data-lake-id=\"3a87ed4afbd5056abe2badf30753bbb9\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">2.5 SVIP会员开通后，您在已开通的服务期内不能主动取消服务或终止资格。</span></p><p data-lake-id=\"58e92a5a056a4b655bb1797812078e35\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><br/></p><h4 data-lake-id=\"5d6535f5804fda0acc55dd60c8d63179\" id=\"zopV4\" data-wording=\"true\" style=\"padding: 7px 0px; margin: 0px; line-height: 24px;\">第3条 SVIP会员权益</h4><p data-lake-id=\"47b88e6183a78ef2beb0b0ba7a0b8c89\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><br/></p><p data-lake-id=\"857826f535efdeecf91d088222dd6d71\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">3.1 会员特价：商城部分商品可享受会员特价</span></p><p data-lake-id=\"a26c54c40dcbbd4aa39e89b79ebb2d68\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">3.2 </span><span style=\"color: #000000;\">会员优惠券：会员每月可领优惠券，会员优惠券用户在会员期间30天内未使用，自动作废；</span></p><p data-lake-id=\"a8da63dd3de224f70afb978dc8ede2d4\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">3.3 </span><span style=\"color: #000000;\">消费返利：消费返X倍积分</span></p><p data-lake-id=\"b021aa12165472aa64b10ff98371bbb6\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">3.4 </span><span style=\"color: #000000;\">签到返利：</span><span style=\"color: #000000;\">签到得多倍积分</span></p><p data-lake-id=\"d3886709183cab508cdf638962b8883a\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">3.5 </span><span style=\"color: #000000;\">运费折扣：享受</span><span style=\"color: #000000;\">运费折扣XX折</span></p><p data-lake-id=\"3c33d9b508e74af5645a328dbddcbfa9\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">3.6 </span><span style=\"color: #000000;\">支付优惠：线下扫码付款享折扣优惠</span></p><p data-lake-id=\"a33b0ce31f84219ae4d4521b05722192\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><br/></p><h4 data-lake-id=\"95306aaa82ab7aee03f9002f44dbb65b\" id=\"xCzIm\" data-wording=\"true\" style=\"padding: 7px 0px; margin: 0px; line-height: 24px;\">第4条 用户会员使用注意事项</h4><p data-lake-id=\"63f3f9ca47509a16fbb52cb6944d3abf\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\"><br/></span></p><p data-lake-id=\"17a0e2046b2cf0c8b000e4aee0783b84\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">4.1 服务开通后，用户应谨慎合理的保存、使用其用户名和密码，不得将在本站注册获得的账户借给他人使用，否则用户应承担由此产生的全部责任，同时本公司在该种情况下有权做出独立判断，可采取暂停或关闭用户会员资格等措施。</span></p><p data-lake-id=\"a366dc4c629a0dbe3f38cec434e11e79\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\"></span></p><p data-lake-id=\"cc26b6ad68fb1969ff58265e322b35e7\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">4.3 用户同意，商城拥有通过邮件、短信电话等形式，向其发送相关活动信息等必要信息的权利。</span></p><p data-lake-id=\"62db0fc293ff0b12052f5024814167ec\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\"></span></p><p data-lake-id=\"6589a7e0cbee6227d136ac7255667402\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">4.4 SVIP用户通过账号操作的各项行为应符合法律法规规定、平台规则规定及SVIP会员正式用户协议，当出现违规行为、违规订单及违规账号时，本公司有权按照上述平台内规则对您的账号和订单予以处理，如冻结或关闭账号、取消订单、暂停或停止提供服务、关闭会员开通资格、关停已开通的会员服务，已绑定的或获取的SVIP会员权益被全部/部分取消或暂停使用等操作，且不进行任何赔偿或补偿。如给本公司或相关方造成损失，用户需承担全部责任。从公平合理的角度，您应知晓所有通过该账户实现的操作产生的全部后果由您自行承担。</span></p><p data-lake-id=\"865a0b3b429e078b38d8e364bd45b8b4\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\"></span></p><p data-lake-id=\"b1aca4dc4a3e8e4b837c70853f687617\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">4.5 SVIP用户违规行为包含但不限于以下行为时，本公司有权关闭您的SVIP会员开通资格、关停您已开通的SVIP会员服务，已绑定的或获取的SVIP会员权益被全部/部分取消或暂停使用，且不退还已支付的会员服务费用。从公平合理的角度，您应知晓所有通过该账户实现的操作产生的全部后果或损失由您自行承担。</span></p><p data-lake-id=\"0afca81affc97e48b6782054b8a80759\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">1）利用SVIP会员服务进行盈利或非法获利；</span></p><p data-lake-id=\"3d14f39d479e9e5bc4f65590322da867\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">2）以任何形式转让或转移SVIP会员服务或SVIP会员权益；</span></p><p data-lake-id=\"59eceb8bbf3aedc235f98f82792aed05\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">3）将SVIP会员服务或会员权益借给他人使用、代他人下单；</span></p><p data-lake-id=\"b4218daa96a2ec0bfa27cd2457021a24\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">4）通过任何不正当手段或以违反诚实信用原则的方式开通SVIP会员服务，如恶意绕过正常开通流程；</span></p><p data-lake-id=\"005b665650f61c56aceb3f8db18886a3\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">5）使用SVIP会员权益获取的商品或服务并非用于个人消费或使用；</span></p><p data-lake-id=\"23137904b842626f47f06d4442e3a1d6\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">7）用户在使用会员服务时，存在套取优惠利差、虚假下单交易、提供虚假交易信息等扰乱交易秩序、违反交易规则的行为；</span></p><p data-lake-id=\"84c2e46c2032a964c73b931e3ee9c716\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">8）经本公司判断，SVIP用户行为不符合公平原则或诚实信用原则的情形。</span></p><p data-lake-id=\"678f1f9eff199af9346263c5f2f7788a\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\"><br/></span></p><p data-lake-id=\"ba95c10b3bc8c7a6635bf8e7f199e9af\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">4.6 SVIP会员兑换码：即由本公司提供的开通SVIP正式会员识别码，用户可在实体会员卡扫码进入开通入口输入，系统识别成功后该账户便可享受相应期限的SVIP正式会员服务。</span></p><p data-lake-id=\"b3ae65e8c659f6e007593cb732398cc0\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">4.6.1 每个SVIP会员兑换码仅限兑换一次，一经绑定，仅可用于被绑定的账户，不能解绑或换账户使用。</span></p><p data-lake-id=\"564c49ec5b780909422430cf255c89cb\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">4.6.2 SVIP会员兑换码一旦兑换，属个人所有，个人应妥善保管，本公司不对SVIP会员兑换码的泄露、丢失、被盗等其他不能使用或不能激活的情况负责。</span></p><p data-lake-id=\"2ed6030686a78023efaad79a9240c7ce\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">4.6.3 用户通过正当途径获取的SVIP会员兑换码，不得进行销售。若发现立即冻结，兑换码置为失效，通过此码激活开通的账户也将终止SVIP会员资格，用户双方全部加入黑名单。</span></p><p data-lake-id=\"eb2f9b33d3d3d223d9863d332632cba4\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\"><br/></span></p><h4 data-lake-id=\"847d132f3ef465c264c018b8e6f87f70\" id=\"6vZYk\" data-wording=\"true\" style=\"padding: 7px 0px; margin: 0px; line-height: 24px;\">第6条 法律管辖和适用</h4><p data-lake-id=\"894615b9685335e7a2fd14ae5d63e76f\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\"><br/></span></p><p data-lake-id=\"ce739e0c622ccab34ef78b6ac77142f7\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">本公司有权以网站公告的方式进行不定期地制定、修改本协议及/或相关服务规则，暂停、取消和修改本协议条款，修改后的协议一旦被公告在本站上即生效，并代替原来的协议。用户应及时关注不时发布的各项服务规则及本协议的变更。若不同意相关规则及条款修改的，应及时终止与本站的协议。如用户继续使用本网站提供的服务的，即视为同意更新后的协议。建议您在使用本站之前阅读本协议及本站的公告。如缔约方就本协议内容或其执行发生任何争议，双方应尽力友好协商解决；协商不成时，任何一方均可向西安市未央区中级人民法院提起诉讼。</span></p><p data-lake-id=\"df997715805d889831b446eb97484c70\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><br/></p><h4 data-lake-id=\"72df6f203ab326c65b15eaf6d6a787e3\" id=\"m1wQJ\" data-wording=\"true\" style=\"padding: 7px 0px; margin: 0px; line-height: 24px;\">第7条 其他</h4><p data-lake-id=\"394ebf7eda9ee806abe165acfedc0de5\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><br/></p><p data-lake-id=\"a7215b1a449ed7cbfc7079c6d38e90ac\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">7.1 公司网站所有者是指在政府部门依法许可或备案的网站经营主体。</span></p><p data-lake-id=\"69aab05f23cc3478f0ef821cca66a4b2\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">7.2 &nbsp;如因不可抗力或其它本站无法控制的原因使本站活动服务无法及时提供或无法按本协议进行的，公司会合理地尽力协助处理善后事宜。</span><span style=\"color: #000000;\"></span></p><p data-lake-id=\"900321fb1fa7885e1d1218fcc44d732d\" data-wording=\"true\" style=\"font-size: 14px; color: rgb(38, 38, 38); line-height: 1.74; letter-spacing: 0.05em; outline-style: none; overflow-wrap: break-word; margin-top: 0px; margin-bottom: 0px;\"><span style=\"color: #000000;\">7.3 本协议自您购买成功SVIP之日起生效</span></p><p><br/></p>', 0, 1, 1629194886);
 
 -- --------------------------------------------------------
 
@@ -28,27 +84,27 @@ INSERT INTO `eb_agreement` (`id`, `type`, `title`, `content`, `sort`, `status`, 
 --
 
 CREATE TABLE IF NOT EXISTS `eb_article` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '文章管理ID',
-  `cid` varchar(255) DEFAULT '1' COMMENT '分类id',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '文章标题',
-  `author` varchar(255) DEFAULT NULL COMMENT '文章作者',
-  `image_input` varchar(255) NOT NULL DEFAULT '' COMMENT '文章图片',
-  `synopsis` varchar(255) DEFAULT NULL COMMENT '文章简介',
-  `share_title` varchar(255) DEFAULT NULL COMMENT '文章分享标题',
-  `share_synopsis` varchar(255) DEFAULT NULL COMMENT '文章分享简介',
-  `visit` varchar(255) DEFAULT '0' COMMENT '浏览次数',
-  `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
-  `url` varchar(255) DEFAULT NULL COMMENT '原文链接',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态',
-  `add_time` varchar(255) NOT NULL DEFAULT '' COMMENT '添加时间',
-  `hide` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否隐藏',
-  `admin_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '管理员id',
-  `mer_id` int(10) unsigned DEFAULT '0' COMMENT '商户id',
-  `product_id` int(10) NOT NULL DEFAULT '0' COMMENT '商品关联id',
-  `is_hot` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否热门(小程序)',
-  `is_banner` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否轮播图(小程序)',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='文章管理表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '文章管理ID',
+    `cid` varchar(255) NOT NULL DEFAULT '1' COMMENT '分类id',
+    `title` varchar(255) NOT NULL DEFAULT '' COMMENT '文章标题',
+    `author` varchar(255) NOT NULL DEFAULT '' COMMENT '文章作者',
+    `image_input` varchar(255) NOT NULL DEFAULT '' COMMENT '文章图片',
+    `synopsis` varchar(255) NOT NULL DEFAULT '' COMMENT '文章简介',
+    `share_title` varchar(255) NOT NULL DEFAULT '' COMMENT '文章分享标题',
+    `share_synopsis` varchar(255) NOT NULL DEFAULT '' COMMENT '文章分享简介',
+    `visit` varchar(255) NOT NULL DEFAULT '0' COMMENT '浏览次数',
+    `sort` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '排序',
+    `url` varchar(255) NOT NULL DEFAULT '' COMMENT '原文链接',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '状态',
+    `add_time` varchar(255) NOT NULL DEFAULT '' COMMENT '添加时间',
+    `hide` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否隐藏',
+    `admin_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '管理员id',
+    `mer_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商户id',
+    `product_id` int(10) NOT NULL DEFAULT '0' COMMENT '商品关联id',
+    `is_hot` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否热门(小程序)',
+    `is_banner` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否轮播图(小程序)',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章管理表';
 
 -- --------------------------------------------------------
 
@@ -57,18 +113,18 @@ CREATE TABLE IF NOT EXISTS `eb_article` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_article_category` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '文章分类id',
-  `pid` int(11) NOT NULL DEFAULT '0' COMMENT '父级ID',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '文章分类标题',
-  `intr` varchar(255) DEFAULT NULL COMMENT '文章分类简介',
-  `image` varchar(255) NOT NULL DEFAULT '' COMMENT '文章分类图片',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态',
-  `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
-  `is_del` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '1删除0未删除',
-  `add_time` varchar(255) NOT NULL COMMENT '添加时间',
-  `hidden` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否隐藏',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='文章分类表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '文章分类id',
+    `pid` int(11) NOT NULL DEFAULT '0' COMMENT '父级ID',
+    `title` varchar(255) NOT NULL DEFAULT '' COMMENT '文章分类标题',
+    `intr` varchar(255) NOT NULL DEFAULT '' COMMENT '文章分类简介',
+    `image` varchar(255) NOT NULL DEFAULT '' COMMENT '文章分类图片',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '状态',
+    `sort` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '排序',
+    `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '1删除0未删除',
+    `add_time` varchar(255) NOT NULL DEFAULT '' COMMENT '添加时间',
+    `hidden` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否隐藏',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章分类表';
 
 -- --------------------------------------------------------
 
@@ -77,10 +133,10 @@ CREATE TABLE IF NOT EXISTS `eb_article_category` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_article_content` (
-  `nid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '文章id',
-  `content` text NOT NULL DEFAULT '' COMMENT '文章内容',
-  UNIQUE KEY `nid` (`nid`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章内容表';
+    `nid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '文章id',
+    `content` text NOT NULL COMMENT '文章内容',
+    UNIQUE KEY `nid` (`nid`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文章内容表';
 
 -- --------------------------------------------------------
 
@@ -89,15 +145,15 @@ CREATE TABLE IF NOT EXISTS `eb_article_content` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_auxiliary` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `binding_id` int(10) NOT NULL DEFAULT '0' COMMENT '绑定id',
-  `relation_id` int(10) NOT NULL DEFAULT '0' COMMENT '关联id',
-  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '类型0=客服转接辅助，1=商品和分类辅助，2=优惠券和商品辅助',
-  `other` varchar(500) NOT NULL DEFAULT '' COMMENT '其他数据为json',
-  `update_time` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='辅助表';
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `binding_id` int(10) NOT NULL DEFAULT '0' COMMENT '绑定id',
+    `relation_id` int(10) NOT NULL DEFAULT '0' COMMENT '关联id',
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '类型0=客服转接辅助，1=商品和分类辅助，2=优惠券和商品辅助',
+    `other` varchar(500) NOT NULL DEFAULT '' COMMENT '其他数据为json',
+    `update_time` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='辅助表';
 
 -- --------------------------------------------------------
 
@@ -106,20 +162,20 @@ CREATE TABLE IF NOT EXISTS `eb_auxiliary` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_cache` (
-  `key` varchar(32) NOT NULL DEFAULT '',
-  `result` text COMMENT '缓存数据',
-  `expire_time` int(11) NOT NULL DEFAULT '0' COMMENT '失效时间0=永久',
-  `add_time` int(10) DEFAULT NULL COMMENT '缓存时间',
-  PRIMARY KEY (`key`) USING BTREE,
-  KEY `key` (`key`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信缓存表';
+    `key` varchar(32) NOT NULL DEFAULT '',
+    `result` text NOT NULL COMMENT '缓存数据',
+    `expire_time` int(11) NOT NULL DEFAULT '0' COMMENT '失效时间0=永久',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '缓存时间',
+    PRIMARY KEY (`key`) USING BTREE,
+    KEY `key` (`key`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信缓存表';
 
 --
 -- 转存表中的数据 `eb_cache`
 --
 
 INSERT INTO `eb_cache` (`key`, `result`, `expire_time`, `add_time`) VALUES
-('uni_app_url', '[{"name":"\\u5546\\u57ce\\u9996\\u9875","url":"\\/pages\\/index\\/index","parameter":[],"example":"\\/pages\\/index\\/index"},{"name":"\\u5546\\u57ce\\u5206\\u7c7b","url":"\\/pages\\/goods_cate\\/goods_cate","parameter":[],"example":"\\/pages\\/goods_cate\\/goods_cate"},{"name":"\\u8d2d\\u7269\\u8f66","url":"\\/pages\\/order_addcart\\/order_addcart","parameter":[],"example":"\\/pages\\/order_addcart\\/order_addcart"},{"name":"\\u4e2a\\u4eba\\u4e2d\\u5fc3","url":"\\/pages\\/user\\/index","parameter":[],"example":"\\/pages\\/user\\/index"},{"name":"\\u5206\\u7c7b\\u5546\\u54c1\\u5217\\u8868","url":"\\/pages\\/goods_list\\/index","parameter":{"sid":"\\u5206\\u7c7bID","title":"\\u5206\\u7c7b\\u540d\\u79f0"},"example":"\\/pages\\/goods_list\\/index?sid=1&title=\\u6d4b\\u8bd5\\u5206\\u7c7b\\u540d\\u79f0"},{"name":"\\u5546\\u54c1\\u8be6\\u60c5","url":"\\/pages\\/goods_details\\/index","parameter":{"id":"\\u5546\\u54c1ID"},"example":"\\/pages\\/goods_details\\/index?id=1"},{"name":"\\u6587\\u7ae0\\u5217\\u8868","url":"\\/pages\\/news_list\\/index","parameter":[],"example":"\\/pages\\/news_list\\/index"},{"name":"\\u6587\\u7ae0\\u8be6\\u60c5","url":"\\/pages\\/news_list\\/index","parameter":{"id":"\\u6587\\u7ae0ID"},"example":"\\/pages\\/news_details\\/index?id=1"},{"name":"\\u4f18\\u60e0\\u5238\\u5217\\u8868","url":"\\/pages\\/users\\/user_get_coupon\\/index","parameter":[],"example":"\\/pages\\/users\\/user_get_coupon\\/index"},{"name":"\\u8d85\\u503c\\u7206\\u6b3e\\u5217\\u8868","url":"\\/pages\\/columnGoods\\/HotNewGoods\\/index","parameter":{"type":"\\u7c7b\\u578bID\\uff0c1=\\u7cbe\\u54c1\\u63a8\\u8350\\uff0c2=\\u70ed\\u95e8\\u699c\\u5355\\uff0c3=\\u9996\\u53d1\\u65b0\\u54c1\\uff0c4=\\u4fc3\\u9500\\u5355\\u54c1"},"example":"\\/pages\\/columnGoods\\/HotNewGoods\\/index?type=1"},{"name":"\\u7b7e\\u5230\\u9875\\u9762","url":"\\/pages\\/users\\/user_sgin\\/index","parameter":[],"example":"\\/pages\\/users\\/user_sgin\\/index"},{"name":"\\u6536\\u85cf\\u9875\\u9762","url":"\\/pages\\/users\\/user_goods_collection\\/index","parameter":[],"example":"\\/pages\\/users\\/user_goods_collection\\/index"},{"name":"\\u62fc\\u56e2\\u5217\\u8868","url":"\\/pages\\/activity\\/goods_combination\\/index","parameter":[],"example":"\\/pages\\/activity\\/goods_combination\\/index"},{"name":"\\u62fc\\u56e2\\u8be6\\u60c5","url":"\\/pages\\/activity\\/goods_combination_details\\/index","parameter":{"id":"\\u62fc\\u56e2ID"},"example":"\\/pages\\/activity\\/goods_combination_details\\/index?id=1"},{"name":"\\u79d2\\u6740\\u5217\\u8868","url":"\\/pages\\/activity\\/goods_seckill\\/index","parameter":[],"example":"\\/pages\\/activity\\/goods_seckill\\/index"},{"name":"\\u79d2\\u6740\\u8be6\\u60c5","url":"\\/pages\\/activity\\/goods_seckill_details\\/index","parameter":{"id":"\\u79d2\\u6740ID","time":"\\u8be5\\u79d2\\u6740\\u5546\\u54c1\\u4eca\\u5929\\u7ed3\\u675f\\u65f6\\u95f4\\u6233","status":"\\u5f00\\u542f\\u79d2\\u6740\\u72b6\\u6001"},"example":"\\/pages\\/activity\\/goods_seckill_details\\/index?id=1&time=1595239200&status=1"},{"name":"\\u780d\\u4ef7\\u5217\\u8868","url":"\\/pages\\/activity\\/goods_bargain\\/index","parameter":[],"example":"\\/pages\\/activity\\/goods_bargain\\/index"},{"name":"\\u780d\\u4ef7\\u8be6\\u60c5","url":"\\/pages\\/activity\\/goods_bargain_details\\/index","parameter":{"id":"\\u780d\\u4ef7\\u5546\\u54c1ID","bargain":"\\u780d\\u4ef7ID"},"example":"\\/pages\\/activity\\/goods_bargain_details\\/index?id=1&bargain=1"},{"name":"\\u5730\\u5740\\u5217\\u8868","url":"\\/pages\\/users\\/user_address_list\\/index","parameter":[],"example":"\\/pages\\/users\\/user_address_list\\/index"},{"name":"\\u6211\\u7684\\u8d26\\u6237","url":"\\/pages\\/users\\/user_money\\/index","parameter":[],"example":"\\/pages\\/users\\/user_money\\/index"},{"name":"\\u4e2a\\u4eba\\u8d44\\u6599","url":"\\/pages\\/users\\/user_info\\/index","parameter":[],"example":"\\/pages\\/users\\/user_info\\/index"},{"name":"\\u79ef\\u5206\\u8be6\\u60c5","url":"\\/pages\\/users\\/user_integral\\/index","parameter":[],"example":"\\/pages\\/users\\/user_integral\\/index"},{"name":"\\u6211\\u7684\\u8ba2\\u5355","url":"\\/pages\\/users\\/order_list\\/index","parameter":[],"example":"\\/pages\\/users\\/order_list\\/index"},{"name":"\\u6211\\u7684\\u4f18\\u60e0\\u5238","url":"\\/pages\\/users\\/user_coupon\\/index","parameter":[],"example":"\\/pages\\/users\\/user_coupon\\/index"},{"name":"\\u8ba2\\u5355\\u8be6\\u60c5","url":"\\/pages\\/users\\/order_list\\/index","parameter":{"order_id":"\\u8ba2\\u5355\\u53f7"},"example":"\\/pages\\/order_details\\/index?order_id=wx88888888888888888"},{"name":"\\u9000\\u6b3e\\u5217\\u8868","url":"\\/pages\\/users\\/user_return_list\\/index","parameter":[],"example":"\\/pages\\/users\\/user_return_list\\/index"},{"name":"\\u7528\\u6237\\u7b49\\u7ea7","url":"\\/pages\\/users\\/user_vip\\/index","parameter":[],"example":"\\/pages\\/users\\/user_vip\\/index"},{"name":"\\u780d\\u4ef7\\u8bb0\\u5f55","url":"\\/pages\\/activity\\/bargain\\/index","parameter":[],"example":"\\/pages\\/activity\\/bargain\\/index"},{"name":"\\u6211\\u7684\\u63a8\\u5e7f","url":"\\/pages\\/users\\/user_spread_user\\/index","parameter":[],"example":"\\/pages\\/users\\/user_spread_user\\/index"},{"name":"\\u63d0\\u73b0\\u9875\\u9762","url":"\\/pages\\/users\\/user_cash\\/index","parameter":[],"example":"\\/pages\\/users\\/user_cash\\/index"},{"name":"\\u5206\\u9500\\u6d77\\u62a5","url":"\\/pages\\/users\\/user_spread_code\\/index","parameter":[],"example":"\\/pages\\/users\\/user_spread_code\\/index"},{"name":"\\u63a8\\u5e7f\\u4eba\\u5217\\u8868","url":"\\/pages\\/users\\/promoter-list\\/index","parameter":[],"example":"\\/pages\\/users\\/promoter-list\\/index"},{"name":"\\u63d0\\u73b0\\u8bb0\\u5f55\\uff0c\\u5206\\u4f63\\u8bb0\\u5f55","url":"\\/pages\\/users\\/user_spread_money\\/index","parameter":{"type":"1=\\u63d0\\u73b0\\u8bb0\\u5f55\\uff0c2=\\u5206\\u4f63\\u8bb0\\u5f55"},"example":"\\/pages\\/users\\/user_spread_money\\/index?type=1"},{"name":"\\u63a8\\u5e7f\\u4eba\\u8ba2\\u5355","url":"\\/pages\\/users\\/promoter-order\\/index","parameter":[],"example":"\\/pages\\/users\\/promoter-order\\/index"},{"name":"\\u63a8\\u5e7f\\u4eba\\u6392\\u884c","url":"\\/pages\\/users\\/promoter_rank\\/index","parameter":[],"example":"\\/pages\\/users\\/promoter_rank\\/index"},{"name":"\\u4f63\\u91d1\\u6392\\u884c","url":"\\/pages\\/users\\/commission_rank\\/index","parameter":[],"example":"\\/pages\\/users\\/commission_rank\\/index"},{"name":"\\u8054\\u7cfb\\u5ba2\\u670d","url":"\\/pages\\/customer_list\\/chat","parameter":[],"example":"\\/pages\\/customer_list\\/chat"},{"name":"\\u7edf\\u8ba1\\u7ba1\\u7406","url":"\\/pages\\/admin\\/order\\/index","parameter":[],"example":"\\/pages\\/admin\\/order\\/index"},{"name":"\\u8ba2\\u5355\\u6838\\u9500","url":"\\/pages\\/admin\\/order_cancellation\\/index","parameter":[],"example":"\\/pages\\/admin\\/order_cancellation\\/index"},{"name":"\\u5145\\u503c\\u9875\\u9762","url":"\\/pages\\/users\\/user_payment\\/index","parameter":[],"example":"\\/pages\\/users\\/user_payment\\/index"},{"name":"\\u6536\\u94f6\\u9875\\u9762","url":"\\/pages\\/annex\\/offline_pay\\/index","parameter":[],"example":"\\/pages\\/annex\\/offline_pay\\/index"},{"name":"\\u4ed8\\u8d39\\u4f1a\\u5458","url":"\\/pages\\/annex\\/vip_paid\\/index","parameter":[],"example":"\\/pages\\/annex\\/vip_paid\\/index"}]', 0, 1595300468);
+('kf_adv', '\"<p style=\\\"white-space: normal;\\\"><img src=\\\"https:\\/\\/mer1.crmeb.net\\/uploads\\/def\\/20210601\\/dbc3dfb69927a96ee43728bb0f9bd453.jpg\\\"\\/><\\/p><p style=\\\"white-space: normal;\\\"><br\\/><\\/p><p style=\\\"white-space: normal;\\\"><br\\/><\\/p><p><section data-id=\\\"571\\\" class=\\\"e7editor\\\" style=\\\"font-style: inherit; font-variant: inherit; font-weight: inherit; white-space: normal; -webkit-tap-highlight-color: transparent; margin: 0px; padding: 0px; border: 0px none; font-stretch: inherit; line-height: inherit; font-family: \\u5fae\\u8f6f\\u96c5\\u9ed1; vertical-align: baseline; max-width: 100%; background-color: rgb(255, 255, 255); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><section style=\\\"-webkit-tap-highlight-color: transparent; margin: 0px; padding: 0px; border: 0px none; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><section style=\\\"-webkit-tap-highlight-color: transparent; margin: 0px; padding: 0px; border: 0px none; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; position: static; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><section class=\\\"layout\\\" style=\\\"-webkit-tap-highlight-color: transparent; margin: 0px auto; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><section style=\\\"-webkit-tap-highlight-color: transparent; margin: 8px 0px 0px; padding: 0px; border-right: 0px rgb(255, 241, 12); border-left: 6px solid rgb(255, 241, 12); border-image: initial; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; display: inline-block; max-width: 100%; color: inherit; float: left; border-top: 6px solid transparent !important; border-bottom: 6px solid transparent !important; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><\\/section><section style=\\\"-webkit-tap-highlight-color: transparent; margin: 0px; padding: 0px; border-right: 0px rgb(255, 241, 12); border-left: 20px solid rgb(255, 241, 12); border-image: initial; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; display: inline-block; max-width: 100%; color: inherit; float: left; border-top: 15px solid transparent !important; border-bottom: 15px solid transparent !important; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><\\/section><section style=\\\"-webkit-tap-highlight-color: transparent; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; color: rgb(84, 141, 212); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">\\u666e\\u901a\\u4f1a\\u5458\\u76f4\\u63a5\\u63a8\\u8350\\u5956\\u52b1\\uff0c\\u4f63\\u91d1\\u4e3a\\u8d2d\\u4e70\\u91d1\\u989d\\u7684<\\/span><span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; color: rgb(121, 121, 121); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; color: rgb(255, 0, 0); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">20%<\\/span>\\uff0c\\u5373\\u63a8\\u8350498\\u5143\\u4e00\\u5957\\u5185\\u8863\\uff0c\\u53ef\\u83b7\\u5f97<span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; color: rgb(255, 0, 0); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">99.6\\u5143<\\/span>\\u7684\\u63a8\\u8350\\u5956\\u52b1\\u3002\\uff08\\u6240\\u6709\\u7c89\\u4e1d\\u9ed8\\u8ba4\\u4e3a\\u666e\\u901a\\u4f1a\\u5458\\uff09<\\/span><\\/section><\\/section><\\/section><\\/section><\\/section><\\/p><p style=\\\"white-space: normal;\\\"><br\\/><\\/p><p><section data-id=\\\"571\\\" class=\\\"e7editor\\\" style=\\\"font-style: inherit; font-variant: inherit; font-weight: inherit; white-space: normal; -webkit-tap-highlight-color: transparent; margin: 0px; padding: 0px; border: 0px none; font-stretch: inherit; line-height: inherit; font-family: \\u5fae\\u8f6f\\u96c5\\u9ed1; vertical-align: baseline; max-width: 100%; color: rgb(62, 62, 62); background-color: rgb(255, 255, 255); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><section style=\\\"-webkit-tap-highlight-color: transparent; margin: 0px; padding: 0px; border: 0px none; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><section style=\\\"-webkit-tap-highlight-color: transparent; margin: 0px; padding: 0px; border: 0px none; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; position: static; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><section class=\\\"layout\\\" style=\\\"-webkit-tap-highlight-color: transparent; margin: 0px auto; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><section style=\\\"-webkit-tap-highlight-color: transparent; margin: 8px 0px 0px; padding: 0px; border-right: 0px rgb(255, 241, 12); border-left: 6px solid rgb(255, 241, 12); border-image: initial; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; display: inline-block; max-width: 100%; color: inherit; widows: 1; float: left; border-top: 6px solid transparent !important; border-bottom: 6px solid transparent !important; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><\\/section><section style=\\\"-webkit-tap-highlight-color: transparent; margin: 0px; padding: 0px; border-right: 0px rgb(255, 241, 12); border-left: 20px solid rgb(255, 241, 12); border-image: initial; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; display: inline-block; max-width: 100%; color: inherit; widows: 1; float: left; border-top: 15px solid transparent !important; border-bottom: 15px solid transparent !important; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><\\/section><p style=\\\"margin-top: 0px; margin-bottom: 0px; -webkit-tap-highlight-color: transparent; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; min-height: 1em; white-space: pre-wrap; widows: 1; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline; max-width: 100%; word-break: break-all; color: rgb(121, 121, 121); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">\\u9ad8\\u7ea7\\u4f1a\\u5458\\u76f4\\u63a5\\u63a8\\u8350\\u5956\\u52b1\\uff0c\\u4f63\\u91d1\\u4e3a\\u8d2d\\u4e70\\u91d1\\u989d\\u7684<\\/span><span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline; max-width: 100%; word-break: break-all; color: rgb(255, 0, 0); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">40%\\uff1b<span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline; max-width: 100%; color: rgb(121, 121, 121); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">\\u95f4\\u63a5\\u63a8\\u8350\\u5956\\u52b1\\uff0c\\u4f63\\u91d1\\u4e3a\\u8d2d\\u4e70\\u91d1\\u989d\\u7684<\\/span><span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline; max-width: 100%; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">2%\\uff1b<\\/span><\\/span><span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline; max-width: 100%; word-break: break-all; color: rgb(121, 121, 121); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">\\u5373\\u63a8\\u8350498\\u5143\\u4e00\\u5957\\u5185\\u8863\\uff0c\\u76f4\\u63a5\\u63a8\\u8350\\u8005\\u53ef\\u83b7\\u5f97<span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline; max-width: 100%; color: rgb(255, 0, 0); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">199.2\\u5143<\\/span>\\u7684\\u63a8\\u8350\\u5956\\u52b1\\uff0c\\u95f4\\u63a5\\u63a8\\u8350\\u8005\\u53ef\\u83b7\\u5f97\\u8fd1<span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline; max-width: 100%; color: rgb(255, 0, 0); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">10\\u5143<\\/span>\\u63a8\\u8350\\u5956\\u52b1\\u3002<\\/span><\\/p><p style=\\\"margin-top: 0px; margin-bottom: 0px; -webkit-tap-highlight-color: transparent; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; min-height: 1em; white-space: pre-wrap; widows: 1; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><br style=\\\"-webkit-tap-highlight-color: transparent; max-width: 100%; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"\\/><\\/p><section style=\\\"-webkit-tap-highlight-color: transparent; margin: 8px 0px 0px; padding: 0px; border-right: 0px rgb(255, 241, 12); border-left: 6px solid rgb(255, 241, 12); border-image: initial; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; display: inline-block; max-width: 100%; color: inherit; widows: 1; float: left; border-top: 6px solid transparent !important; border-bottom: 6px solid transparent !important; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><\\/section><section style=\\\"-webkit-tap-highlight-color: transparent; margin: 0px; padding: 0px; border-right: 0px rgb(255, 241, 12); border-left: 20px solid rgb(255, 241, 12); border-image: initial; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; display: inline-block; max-width: 100%; color: inherit; widows: 1; float: left; border-top: 15px solid transparent !important; border-bottom: 15px solid transparent !important; overflow-wrap: break-word !important; box-sizing: border-box !important;\\\"><\\/section><p style=\\\"margin-top: 0px; margin-bottom: 0px; -webkit-tap-highlight-color: transparent; padding: 0px; border: 0px; font-variant-numeric: inherit; font-variant-east-asian: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline; max-width: 100%; overflow-wrap: normal; min-height: 1em; white-space: pre-wrap; widows: 1; box-sizing: border-box !important;\\\"><span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline; max-width: 100%; word-break: break-all; color: rgb(121, 121, 121); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">\\u91d1\\u724c\\u4ee3\\u7406\\u76f4\\u63a5\\u63a8\\u8350\\u5956\\u52b1\\uff0c\\u4f63\\u91d1\\u4e3a\\u8d2d\\u4e70\\u91d1\\u989d\\u7684<\\/span><span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline; max-width: 100%; word-break: break-all; color: rgb(255, 0, 0); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">40%\\uff1b<span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; color: rgb(121, 121, 121); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">\\u95f4\\u63a5\\u63a8\\u8350\\u5956\\u52b1\\uff0c\\u4f63\\u91d1\\u4e3a\\u8d2d\\u4e70\\u91d1\\u989d\\u7684<span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline; max-width: 100%; color: rgb(255, 0, 0); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">10<\\/span><\\/span>%\\uff1b<\\/span><span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline; max-width: 100%; word-break: break-all; color: rgb(121, 121, 121); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">\\u5373\\u63a8\\u8350498\\u5143\\u4e00\\u5957\\u5185\\u8863\\uff0c\\u76f4\\u63a5\\u63a8\\u8350\\u8005\\u53ef\\u83b7\\u5f97<span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; vertical-align: baseline; max-width: 100%; color: rgb(255, 0, 0); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">199.2<\\/span><span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; color: rgb(255, 0, 0); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">\\u5143<\\/span>\\u7684\\u63a8\\u8350\\u5956\\u52b1\\uff0c\\u95f4\\u63a5\\u63a8\\u8350\\u8005\\u53ef\\u83b7\\u5f97\\u8fd1<span style=\\\"-webkit-tap-highlight-color: transparent; cursor: pointer; margin: 0px; padding: 0px; border: 0px; font-style: inherit; font-variant: inherit; font-weight: inherit; font-stretch: inherit; line-height: inherit; font-family: inherit; vertical-align: baseline; max-width: 100%; color: rgb(255, 0, 0); overflow-wrap: break-word !important; box-sizing: border-box !important;\\\">50\\u5143<\\/span>\\u63a8\\u8350\\u5956\\u52b1\\u3002<\\/span><\\/p><p><br\\/><\\/p><\\/section><\\/section><\\/section><\\/section><\\/p><p style=\\\"white-space: normal;\\\"><br\\/><\\/p><p style=\\\"white-space: normal;\\\"><br\\/><\\/p><p style=\\\"white-space: normal;\\\"><span style=\\\"color: rgb(121, 121, 121); font-family: \\u5fae\\u8f6f\\u96c5\\u9ed1; widows: 1; background-color: rgb(255, 255, 255);\\\">\\u60f3\\u5347\\u7ea7\\u6210\\u4e3a\\u9ad8\\u7ea7\\u4f1a\\u5458\\uff0c\\u8bf7\\u8054\\u7cfb\\u62db\\u5546\\u4eba\\u5458\\u2193\\u3002<\\/span><\\/p><p style=\\\"white-space: normal;\\\"><br\\/><\\/p><p style=\\\"white-space: normal;\\\"><span style=\\\"color: rgb(121, 121, 121); font-family: \\u5fae\\u8f6f\\u96c5\\u9ed1; widows: 1; background-color: rgb(255, 255, 255);\\\"><img src=\\\"https:\\/\\/mer1.crmeb.net\\/uploads\\/def\\/20210701\\/0fbce908a623feb45849b07a4df38fe4.png\\\"\\/><\\/span><\\/p><p style=\\\"white-space: normal; widows: 1;\\\"><br\\/><\\/p><p><br\\/><\\/p>\"', 0, 1629427409);
 
 -- --------------------------------------------------------
 
@@ -128,20 +184,20 @@ INSERT INTO `eb_cache` (`key`, `result`, `expire_time`, `add_time`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `eb_category` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `pid` int(10) NOT NULL DEFAULT '0' COMMENT '上级id',
-  `owner_id` int(10) NOT NULL DEFAULT '0' COMMENT '所属人，为全部',
-  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '分类名称',
-  `sort` int(10) NOT NULL DEFAULT '0' COMMENT '排序',
-  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '分类类型0=标签分类，1=快捷短语分类',
-  `other` text COLLATE utf8_unicode_ci NOT NULL COMMENT '其他参数',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`),
-  KEY `pid` (`pid`),
-  KEY `name` (`name`),
-  KEY `is_be` (`owner_id`,`type`,`id`),
-  KEY `cate` (`owner_id`,`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='标签分类';
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `pid` int(10) NOT NULL DEFAULT '0' COMMENT '上级id',
+    `owner_id` int(10) NOT NULL DEFAULT '0' COMMENT '所属人，为全部',
+    `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '分类名称',
+    `sort` int(10) NOT NULL DEFAULT '0' COMMENT '排序',
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '分类类型0=标签分类，1=快捷短语分类',
+    `other` text COLLATE utf8_unicode_ci NOT NULL COMMENT '其他参数',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`),
+    KEY `pid` (`pid`),
+    KEY `name` (`name`),
+    KEY `is_be` (`owner_id`,`type`,`id`),
+    KEY `cate` (`owner_id`,`type`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='标签分类';
 
 -- --------------------------------------------------------
 
@@ -150,15 +206,15 @@ CREATE TABLE IF NOT EXISTS `eb_category` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_delivery_service` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
-  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '配送员uid',
-  `avatar` varchar(250) NOT NULL DEFAULT '' COMMENT '配送员头像',
-  `nickname` varchar(50) NOT NULL DEFAULT '' COMMENT '配送员名称',
-  `phone` varchar(20) NOT NULL DEFAULT '0' COMMENT '手机号码',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0隐藏1显示',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='配送员表';
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'id',
+    `uid` int(11) NOT NULL DEFAULT '0' COMMENT '配送员uid',
+    `avatar` varchar(250) NOT NULL DEFAULT '' COMMENT '配送员头像',
+    `nickname` varchar(50) NOT NULL DEFAULT '' COMMENT '配送员名称',
+    `phone` varchar(20) NOT NULL DEFAULT '0' COMMENT '手机号码',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '0隐藏1显示',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='配送员表' ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -167,25 +223,26 @@ CREATE TABLE IF NOT EXISTS `eb_delivery_service` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_diy` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `version` varchar(255) DEFAULT NULL COMMENT '版本号',
-  `name` varchar(255) DEFAULT NULL COMMENT '页面名称',
-  `template_name` varchar(255) NOT NULL DEFAULT '',
-  `value` longtext COMMENT '页面数据',
-  `default_value` text NOT NULL DEFAULT '',
-  `add_time` int(11) DEFAULT NULL COMMENT '添加时间',
-  `update_time` int(11) DEFAULT NULL COMMENT '更新时间',
-  `status` tinyint(1) DEFAULT '0' COMMENT '是否使用',
-  `type` tinyint(1) DEFAULT NULL COMMENT '页面类型',
-  `is_del` tinyint(1) DEFAULT '0' COMMENT '是否删除',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='DIY数据表';
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `version` varchar(255) NOT NULL DEFAULT '' COMMENT '版本号',
+    `name` varchar(255) NOT NULL DEFAULT '' COMMENT '页面名称',
+    `template_name` varchar(255) NOT NULL DEFAULT '',
+    `value` longtext NOT NULL COMMENT '页面数据',
+    `default_value` text NOT NULL,
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `update_time` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否使用',
+    `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '页面类型',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='DIY数据表';
 
 --
 -- 转存表中的数据 `eb_diy`
 --
+
 INSERT INTO `eb_diy` (`id`, `version`, `name`, `template_name`, `value`, `default_value`, `add_time`, `update_time`, `status`, `type`, `is_del`) VALUES
-(1, '1.0', '默认模板', 'moren', '{\"headerSerch\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2019\\/10\\/20191023\\/db7b7bef9dffdedd27e9a3aa34218cea.png\"},\"hotList\":{\"title\":\"\\u70ed\\u8bcd\\u6700\\u591a20\\u4e2a\\u5b57\\uff0c\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u70ed\\u8bcd\\u987a\\u5e8f\",\"max\":99,\"list\":[{\"val\":\"\",\"maxlength\":20}]}},\"default\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/03d92202104251905299991.png\"},\"hotList\":{\"title\":\"\\u70ed\\u8bcd\\u6700\\u591a20\\u4e2a\\u5b57\\uff0c\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u70ed\\u8bcd\\u987a\\u5e8f\",\"max\":99,\"list\":[{\"val\":\"pro\",\"maxlength\":20},{\"val\":\"\\u4efb\\u5929\\u5802\"},{\"val\":\"\\u6e38\\u620f\\u673a\"},{\"val\":\"\\u978b\\u5b50\"},{\"val\":\"\"}]}}},\"swiperBg\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/a32307fd1043c350932a462839288d38.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/906d46eb6f734eaf1fd820601893af0d.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/84568202104251625592839.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"cc\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/d9cea202104251713283778.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/94289202104251713378235.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"aa\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/05b3c20210425192404421.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}}},\"menus\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a020\\u4e2a\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea696*96px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u56fe\\u6807\\u987a\\u5e8f\",\"max\":20,\"list\":[{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/723bb4d18893a5aa6871c94d19f3bc4d.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/goods_cate\\/goods_cate\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/e908c8f088db07a0f4f6fddc2a7b96f9.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u9886\\u4f18\\u60e0\\u5238\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_get_coupon\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/1a9a1189bf4a1e9970517d31bcb00bbc.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u884c\\u4e1a\\u8d44\\u8baf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/news_list\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/dded4f4779e705d54cf640826d1b5558.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u6211\\u7684\\u6536\\u85cf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_goods_collection\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/f95dd1f3f71fef869e80533df9ccb1a0.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u62fc\\u56e2\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/8bf36e0cd9f9490c1f06abcd7efe8c2d.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/5cbdc6eda8c4a2c92c88abffee50d1ff.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/fdb67663ea188163b0ad863a05f77fbf.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u5730\\u5740\\u7ba1\\u7406\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a020\\u4e2a\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea696*96px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u56fe\\u6807\\u987a\\u5e8f\",\"max\":20,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/84b03202104251552237835.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/goods_cate\\/goods_cate\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9fa37202104251552237481.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u9886\\u4f18\\u60e0\\u5238\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_get_coupon\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/31720202104251552232500.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u884c\\u4e1a\\u8d44\\u8baf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/news_list\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/dbdaa202104251552237627.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u6211\\u7684\\u6536\\u85cf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_goods_collection\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/8f4aa20210425155223447.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u62fc\\u56e2\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/fa747202104251552233138.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/02baa202104251552234519.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/3c0f4202104251552238397.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u6211\\u8981\\u7b7e\\u5230\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_sgin\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}}},\"news\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u4e2a\\u6a21\\u677f\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6124 * 28px\",\"url\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2019\\/10\\/20191023\\/db7b7bef9dffdedd27e9a3aa34218cea.png\"},\"newList\":{\"max\":10,\"list\":[{\"chiild\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"CRMEB_PRO 1.1\\u6b63\\u5f0f\\u516c\\u6d4b\\u5566\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\u94fe\\u63a5\",\"max\":99,\"pla\":\"\\u9009\\u586b\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u4e2a\\u6a21\\u677f\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6124 * 28px\",\"url\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/2b88b202104251554589466.png\"},\"newList\":{\"max\":10,\"list\":[{\"chiild\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"CRMEB v4\\u6807\\u51c6\\u7248 \\u5168\\u201c\\u5fc3\\u201d\\u5347\\u7ea7\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\u94fe\\u63a5\",\"max\":99,\"pla\":\"\\u9009\\u586b\"}]},{\"chiild\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"CRMEB Pro \\u9ad8\\u6027\\u80fd\\uff0c\\u5927\\u6709\\u4e0d\\u540c\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\u94fe\\u63a5\",\"max\":99,\"pla\":\"\\u9009\\u586b\"}]}]}}},\"activity\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"isDelete\":true,\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a03\\u7ec4\\u6a21\\u5757\\uff0c\\u7b2c\\u4e00\\u5f20260*260px,\\u540e\\u4e24\\u5f20416*124px\",\"max\":3,\"list\":[{\"img\":\"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccf7e9f4d0.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u4e00\\u8d77\\u6765\\u62fc\\u56e2\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u4f18\\u60e0\\u591a\\u591a\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccf7e97660.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u4e13\\u533a\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u65b0\\u80fd\\u6e90\\u6c7d\\u8f66\\u4f18\\u60e0\\u591a\\u591a\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccfc86a6c1.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u547c\\u670b\\u5524\\u53cb\\u6765\\u780d\\u4ef7~~\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]}]},\"max\":3},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"isDelete\":true,\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a03\\u7ec4\\u6a21\\u5757\\uff0c\\u7b2c\\u4e00\\u5f20260*260px,\\u540e\\u4e24\\u5f20416*124px\",\"max\":3,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/6a2a9202104251559593280.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u4e00\\u8d77\\u6765\\u62fc\\u56e2\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u4f18\\u60e0\\u591a\\u591a\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/1793c202104251600047761.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u4e13\\u533a\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u9650\\u65f6\\u6298\\u6263\\u901f\\u6765\\uff01\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/76f25202104251559555590.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u547c\\u670b\\u5524\\u53cb\\u6765\\u780d\\u4ef7~~\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]}]},\"max\":3}},\"alive\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u76f4\\u64ad\\u95f4\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u516d\\u4e2a\\u5b57\"}]},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":3}},\"default\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u76f4\\u64ad\\u95f4\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u516d\\u4e2a\\u5b57\"}]},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":3}}},\"scrollBox\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"type\":1,\"activeValue\":\"\",\"list\":[{\"activeValue\":\"\",\"title\":\"\"},{\"activeValue\":\"\",\"title\":\"\"}]},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":6},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":1,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"type\":1,\"list\":[{\"title\":\"\\u70ed\\u95e8\\u63a8\\u8350\",\"pid\":0,\"activeValue\":\"1\"},{\"title\":\"\\u624b\\u673a\\u6570\\u7801\",\"pid\":0,\"activeValue\":\"2\"},{\"title\":\"\\u65e5\\u7528\\u6587\\u521b\",\"pid\":0,\"activeValue\":\"4\"}],\"activeValue\":\"1\"},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":\"5\"},\"goodsList\":{\"max\":20,\"list\":[{\"id\":5,\"cate_name\":\"\\u65b0\\u54c1\\u4e0a\\u7ebf\",\"pid\":1,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/93e49202104251854421481.png\"},{\"id\":6,\"cate_name\":\"\\u70ed\\u95e8\\u4fc3\\u9500\",\"pid\":1,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/3eab3202104251852518777.png\"},{\"id\":7,\"cate_name\":\"\\u4fc3\\u9500\\u6298\\u6263\",\"pid\":1,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/94b9e202104251851515885.png\"},{\"id\":9,\"cate_name\":\"\\u914d\\u4ef6\",\"pid\":2,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/7716a202104251938299616.png\"},{\"id\":17,\"cate_name\":\"\\u5de5\\u5177\",\"pid\":4,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/ecf4c202104251851122727.png\"}]}}},\"adsRecommend\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5c3a\\u5bf8338 * 206px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u7248\\u5757\\u987a\\u5e8f\",\"max\":10,\"list\":[{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/906d46eb6f734eaf1fd820601893af0d.jpg\",\"info\":[{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5c3a\\u5bf8338 * 206px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u7248\\u5757\\u987a\\u5e8f\",\"max\":10,\"list\":[{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/906d46eb6f734eaf1fd820601893af0d.jpg\",\"info\":[{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}}},\"coupon\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"numConfig\":{\"val\":10}},\"default\":{\"isShow\":{\"val\":true},\"numConfig\":{\"val\":10}}},\"seckill\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":2,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u9650\\u65f6\\u79d2\\u6740\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":2,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u9650\\u65f6\\u79d2\\u6740\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"combination\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":3,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u62fc\\u56e2\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":3,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u62fc\\u56e2\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"bargain\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":8,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u780d\\u4ef7\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":8,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u780d\\u4ef7\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"goodList\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"aa\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"7\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"bb\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"7\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"cc\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"7\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"dd\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"7\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"picTxt\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"richText\":{\"val\":\"\"}},\"default\":{\"isShow\":{\"val\":true},\"richText\":{\"val\":\"\"}}},\"titles\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u7cbe\\u54c1\\u63a8\\u8350\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\/pages\\/columnGoods\\/HotNewGoods\\/index?type=1\",\"max\":999,\"pla\":\"\\u9009\\u586b\"}]}},\"default\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u7cbe\\u54c1\\u63a8\\u8350\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\/pages\\/columnGoods\\/HotNewGoods\\/index?type=1\",\"max\":999,\"pla\":\"\\u9009\\u586b\"}]}}},\"customerService\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"\"}},\"default\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"\"}}},\"tabBar\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabBarList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea681*81px\",\"list\":[{\"name\":\"\\u9996\\u9875\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9ebdf202104251644215768.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/44bc420210425164421586.png\"],\"link\":\"\\/pages\\/index\\/index\"},{\"name\":\"\\u5206\\u7c7b\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/b62c8202104251644218412.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9509c202104251644214836.png\"],\"link\":\"\\/pages\\/goods_cate\\/goods_cate\"},{\"name\":\"\\u8d2d\\u7269\\u8f66\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/2e682202104251644216849.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/6b3cb202104251644218211.png\"],\"link\":\"\\/pages\\/order_addcart\\/order_addcart\"},{\"name\":\"\\u6211\\u7684\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/3329c20210425164421428.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/031ce202104251644215432.png\"],\"link\":\"\\/pages\\/user\\/index\"}]}},\"default\":{\"isShow\":{\"val\":true},\"tabBarList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea681*81px\",\"list\":[{\"name\":\"\\u9996\\u9875\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9ebdf202104251644215768.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/44bc420210425164421586.png\"],\"link\":\"\\/pages\\/index\\/index\"},{\"name\":\"\\u5206\\u7c7b\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/b62c8202104251644218412.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9509c202104251644214836.png\"],\"link\":\"\\/pages\\/goods_cate\\/goods_cate\"},{\"name\":\"\\u8d2d\\u7269\\u8f66\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/2e682202104251644216849.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/6b3cb202104251644218211.png\"],\"link\":\"\\/pages\\/order_addcart\\/order_addcart\"},{\"name\":\"\\u6211\\u7684\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/3329c20210425164421428.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/031ce202104251644215432.png\"],\"link\":\"\\/pages\\/user\\/index\"}]}}}}', '{\"headerSerch\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2019\\/10\\/20191023\\/db7b7bef9dffdedd27e9a3aa34218cea.png\"},\"hotList\":{\"title\":\"\\u70ed\\u8bcd\\u6700\\u591a20\\u4e2a\\u5b57\\uff0c\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u70ed\\u8bcd\\u987a\\u5e8f\",\"max\":99,\"list\":[{\"val\":\"\",\"maxlength\":20}]}},\"default\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/03d92202104251905299991.png\"},\"hotList\":{\"title\":\"\\u70ed\\u8bcd\\u6700\\u591a20\\u4e2a\\u5b57\\uff0c\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u70ed\\u8bcd\\u987a\\u5e8f\",\"max\":99,\"list\":[{\"val\":\"pro\",\"maxlength\":20},{\"val\":\"\\u4efb\\u5929\\u5802\"},{\"val\":\"\\u6e38\\u620f\\u673a\"},{\"val\":\"\\u978b\\u5b50\"},{\"val\":\"\"}]}}},\"swiperBg\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/a32307fd1043c350932a462839288d38.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/906d46eb6f734eaf1fd820601893af0d.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/84568202104251625592839.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"cc\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/d9cea202104251713283778.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/94289202104251713378235.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"aa\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/05b3c20210425192404421.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}}},\"menus\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a020\\u4e2a\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea696*96px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u56fe\\u6807\\u987a\\u5e8f\",\"max\":20,\"list\":[{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/723bb4d18893a5aa6871c94d19f3bc4d.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/goods_cate\\/goods_cate\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/e908c8f088db07a0f4f6fddc2a7b96f9.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u9886\\u4f18\\u60e0\\u5238\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_get_coupon\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/1a9a1189bf4a1e9970517d31bcb00bbc.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u884c\\u4e1a\\u8d44\\u8baf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/news_list\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/dded4f4779e705d54cf640826d1b5558.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u6211\\u7684\\u6536\\u85cf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_goods_collection\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/f95dd1f3f71fef869e80533df9ccb1a0.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u62fc\\u56e2\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/8bf36e0cd9f9490c1f06abcd7efe8c2d.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/5cbdc6eda8c4a2c92c88abffee50d1ff.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/fdb67663ea188163b0ad863a05f77fbf.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u5730\\u5740\\u7ba1\\u7406\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a020\\u4e2a\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea696*96px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u56fe\\u6807\\u987a\\u5e8f\",\"max\":20,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/84b03202104251552237835.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/goods_cate\\/goods_cate\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9fa37202104251552237481.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u9886\\u4f18\\u60e0\\u5238\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_get_coupon\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/31720202104251552232500.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u884c\\u4e1a\\u8d44\\u8baf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/news_list\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/dbdaa202104251552237627.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u6211\\u7684\\u6536\\u85cf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_goods_collection\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/8f4aa20210425155223447.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u62fc\\u56e2\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/fa747202104251552233138.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/02baa202104251552234519.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/3c0f4202104251552238397.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u6211\\u8981\\u7b7e\\u5230\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_sgin\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}}},\"news\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u4e2a\\u6a21\\u677f\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6124 * 28px\",\"url\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2019\\/10\\/20191023\\/db7b7bef9dffdedd27e9a3aa34218cea.png\"},\"newList\":{\"max\":10,\"list\":[{\"chiild\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"CRMEB_PRO 1.1\\u6b63\\u5f0f\\u516c\\u6d4b\\u5566\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\u94fe\\u63a5\",\"max\":99,\"pla\":\"\\u9009\\u586b\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u4e2a\\u6a21\\u677f\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6124 * 28px\",\"url\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/2b88b202104251554589466.png\"},\"newList\":{\"max\":10,\"list\":[{\"chiild\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"CRMEB v4\\u6807\\u51c6\\u7248 \\u5168\\u201c\\u5fc3\\u201d\\u5347\\u7ea7\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\u94fe\\u63a5\",\"max\":99,\"pla\":\"\\u9009\\u586b\"}]},{\"chiild\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"CRMEB Pro \\u9ad8\\u6027\\u80fd\\uff0c\\u5927\\u6709\\u4e0d\\u540c\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\u94fe\\u63a5\",\"max\":99,\"pla\":\"\\u9009\\u586b\"}]}]}}},\"activity\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"isDelete\":true,\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a03\\u7ec4\\u6a21\\u5757\\uff0c\\u7b2c\\u4e00\\u5f20260*260px,\\u540e\\u4e24\\u5f20416*124px\",\"max\":3,\"list\":[{\"img\":\"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccf7e9f4d0.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u4e00\\u8d77\\u6765\\u62fc\\u56e2\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u4f18\\u60e0\\u591a\\u591a\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccf7e97660.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u4e13\\u533a\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u65b0\\u80fd\\u6e90\\u6c7d\\u8f66\\u4f18\\u60e0\\u591a\\u591a\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccfc86a6c1.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u547c\\u670b\\u5524\\u53cb\\u6765\\u780d\\u4ef7~~\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]}]},\"max\":3},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"isDelete\":true,\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a03\\u7ec4\\u6a21\\u5757\\uff0c\\u7b2c\\u4e00\\u5f20260*260px,\\u540e\\u4e24\\u5f20416*124px\",\"max\":3,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/6a2a9202104251559593280.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u4e00\\u8d77\\u6765\\u62fc\\u56e2\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u4f18\\u60e0\\u591a\\u591a\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/1793c202104251600047761.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u4e13\\u533a\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u9650\\u65f6\\u6298\\u6263\\u901f\\u6765\\uff01\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/76f25202104251559555590.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u547c\\u670b\\u5524\\u53cb\\u6765\\u780d\\u4ef7~~\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]}]},\"max\":3}},\"alive\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u76f4\\u64ad\\u95f4\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u516d\\u4e2a\\u5b57\"}]},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":3}},\"default\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u76f4\\u64ad\\u95f4\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u516d\\u4e2a\\u5b57\"}]},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":3}}},\"scrollBox\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"type\":1,\"activeValue\":\"\",\"list\":[{\"activeValue\":\"\",\"title\":\"\"},{\"activeValue\":\"\",\"title\":\"\"}]},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":6},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":1,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"type\":1,\"list\":[{\"title\":\"\\u70ed\\u95e8\\u63a8\\u8350\",\"pid\":0,\"activeValue\":\"1\"},{\"title\":\"\\u624b\\u673a\\u6570\\u7801\",\"pid\":0,\"activeValue\":\"2\"},{\"title\":\"\\u65e5\\u7528\\u6587\\u521b\",\"pid\":0,\"activeValue\":\"4\"}],\"activeValue\":\"1\"},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":\"5\"},\"goodsList\":{\"max\":20,\"list\":[{\"id\":5,\"cate_name\":\"\\u65b0\\u54c1\\u4e0a\\u7ebf\",\"pid\":1,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/93e49202104251854421481.png\"},{\"id\":6,\"cate_name\":\"\\u70ed\\u95e8\\u4fc3\\u9500\",\"pid\":1,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/3eab3202104251852518777.png\"},{\"id\":7,\"cate_name\":\"\\u4fc3\\u9500\\u6298\\u6263\",\"pid\":1,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/94b9e202104251851515885.png\"},{\"id\":9,\"cate_name\":\"\\u914d\\u4ef6\",\"pid\":2,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/7716a202104251938299616.png\"},{\"id\":17,\"cate_name\":\"\\u5de5\\u5177\",\"pid\":4,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/ecf4c202104251851122727.png\"}]}}},\"adsRecommend\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5c3a\\u5bf8338 * 206px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u7248\\u5757\\u987a\\u5e8f\",\"max\":10,\"list\":[{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/906d46eb6f734eaf1fd820601893af0d.jpg\",\"info\":[{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5c3a\\u5bf8338 * 206px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u7248\\u5757\\u987a\\u5e8f\",\"max\":10,\"list\":[{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/906d46eb6f734eaf1fd820601893af0d.jpg\",\"info\":[{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}}},\"coupon\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"numConfig\":{\"val\":10}},\"default\":{\"isShow\":{\"val\":true},\"numConfig\":{\"val\":10}}},\"seckill\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":2,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u9650\\u65f6\\u79d2\\u6740\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":2,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u9650\\u65f6\\u79d2\\u6740\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"combination\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":3,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u62fc\\u56e2\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":3,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u62fc\\u56e2\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"bargain\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":8,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u780d\\u4ef7\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":8,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u780d\\u4ef7\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"goodList\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"aa\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"7\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"bb\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"7\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"cc\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"7\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"dd\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"7\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"picTxt\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"richText\":{\"val\":\"\"}},\"default\":{\"isShow\":{\"val\":true},\"richText\":{\"val\":\"\"}}},\"titles\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u7cbe\\u54c1\\u63a8\\u8350\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\/pages\\/columnGoods\\/HotNewGoods\\/index?type=1\",\"max\":999,\"pla\":\"\\u9009\\u586b\"}]}},\"default\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u7cbe\\u54c1\\u63a8\\u8350\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\/pages\\/columnGoods\\/HotNewGoods\\/index?type=1\",\"max\":999,\"pla\":\"\\u9009\\u586b\"}]}}},\"customerService\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"\"}},\"default\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"\"}}},\"tabBar\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabBarList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea681*81px\",\"list\":[{\"name\":\"\\u9996\\u9875\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9ebdf202104251644215768.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/44bc420210425164421586.png\"],\"link\":\"\\/pages\\/index\\/index\"},{\"name\":\"\\u5206\\u7c7b\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/b62c8202104251644218412.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9509c202104251644214836.png\"],\"link\":\"\\/pages\\/goods_cate\\/goods_cate\"},{\"name\":\"\\u8d2d\\u7269\\u8f66\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/2e682202104251644216849.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/6b3cb202104251644218211.png\"],\"link\":\"\\/pages\\/order_addcart\\/order_addcart\"},{\"name\":\"\\u6211\\u7684\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/3329c20210425164421428.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/031ce202104251644215432.png\"],\"link\":\"\\/pages\\/user\\/index\"}]}},\"default\":{\"isShow\":{\"val\":true},\"tabBarList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea681*81px\",\"list\":[{\"name\":\"\\u9996\\u9875\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9ebdf202104251644215768.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/44bc420210425164421586.png\"],\"link\":\"\\/pages\\/index\\/index\"},{\"name\":\"\\u5206\\u7c7b\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/b62c8202104251644218412.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9509c202104251644214836.png\"],\"link\":\"\\/pages\\/goods_cate\\/goods_cate\"},{\"name\":\"\\u8d2d\\u7269\\u8f66\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/2e682202104251644216849.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/6b3cb202104251644218211.png\"],\"link\":\"\\/pages\\/order_addcart\\/order_addcart\"},{\"name\":\"\\u6211\\u7684\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/3329c20210425164421428.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/031ce202104251644215432.png\"],\"link\":\"\\/pages\\/user\\/index\"}]}}}}', 1594949966, 1620275478, 1, 0, 0);
+(1, '1.0', '默认模板', 'moren', '{\"headerSerch\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2019\\/10\\/20191023\\/db7b7bef9dffdedd27e9a3aa34218cea.png\"},\"hotList\":{\"title\":\"\\u70ed\\u8bcd\\u6700\\u591a20\\u4e2a\\u5b57\\uff0c\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u70ed\\u8bcd\\u987a\\u5e8f\",\"max\":99,\"list\":[{\"val\":\"\",\"maxlength\":20}]}},\"default\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/0905015824af0b915bfa652c18f543f6.png\"},\"hotList\":{\"title\":\"\\u70ed\\u8bcd\\u6700\\u591a20\\u4e2a\\u5b57\\uff0c\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u70ed\\u8bcd\\u987a\\u5e8f\",\"max\":99,\"list\":[{\"val\":\"\",\"maxlength\":20}]}}},\"swiperBg\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/a32307fd1043c350932a462839288d38.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/906d46eb6f734eaf1fd820601893af0d.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/7175ab97e5c96c475e6551cf23de2e5a.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"aa\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[]}},\"cc\":{\"isShow\":{\"val\":false},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[]}}},\"menus\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a020\\u4e2a\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea696*96px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u56fe\\u6807\\u987a\\u5e8f\",\"max\":20,\"list\":[{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/723bb4d18893a5aa6871c94d19f3bc4d.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/goods_cate\\/goods_cate\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/e908c8f088db07a0f4f6fddc2a7b96f9.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u9886\\u4f18\\u60e0\\u5238\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_get_coupon\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/1a9a1189bf4a1e9970517d31bcb00bbc.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u884c\\u4e1a\\u8d44\\u8baf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/news_list\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/dded4f4779e705d54cf640826d1b5558.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u6211\\u7684\\u6536\\u85cf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_goods_collection\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/f95dd1f3f71fef869e80533df9ccb1a0.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u62fc\\u56e2\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/8bf36e0cd9f9490c1f06abcd7efe8c2d.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/5cbdc6eda8c4a2c92c88abffee50d1ff.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/fdb67663ea188163b0ad863a05f77fbf.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u5730\\u5740\\u7ba1\\u7406\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a020\\u4e2a\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea696*96px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u56fe\\u6807\\u987a\\u5e8f\",\"max\":20,\"list\":[{\"img\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/7381891b2efd7c62ac2754f7bf126b9e.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/goods_cate\\/goods_cate\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/d188d9ddc0cd6bca0a5bb0c01e764dab.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u9886\\u4f18\\u60e0\\u5238\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_get_coupon\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/ba6ecd80529931bc1329f1fdc3af3e04.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u884c\\u4e1a\\u8d44\\u8baf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/news_list\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/e16ee3cc8893684e320815b4c4169031.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u6211\\u7684\\u6536\\u85cf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_goods_collection\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/56cdf736860254c5faa16314c9795d30.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u62fc\\u56e2\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/74eb475d3ff77dd8e8049376011d2aa0.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/54ecb7a2fbf86243e2eb915c0bfa5df1.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/cc4b2314ff8e2110641982729726cfd9.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u6211\\u8981\\u7b7e\\u5230\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_sgin\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}}},\"news\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u4e2a\\u6a21\\u677f\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6124 * 28px\",\"url\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2019\\/10\\/20191023\\/db7b7bef9dffdedd27e9a3aa34218cea.png\"},\"newList\":{\"max\":10,\"list\":[{\"chiild\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"CRMEB_PRO 1.1\\u6b63\\u5f0f\\u516c\\u6d4b\\u5566\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\u94fe\\u63a5\",\"max\":99,\"pla\":\"\\u9009\\u586b\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u4e2a\\u6a21\\u677f\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6124 * 28px\",\"url\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/7f86e941557e5c9c679376c9ef886f9d.png\"},\"newList\":{\"max\":10,\"list\":[{\"chiild\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"CRMEB v4.2.2 \\u6b63\\u5f0f\\u53d1\\u5e03\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\u94fe\\u63a5\",\"max\":99,\"pla\":\"\\u9009\\u586b\"}]}]}}},\"activity\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"isDelete\":true,\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a03\\u7ec4\\u6a21\\u5757\\uff0c\\u7b2c\\u4e00\\u5f20260*260px,\\u540e\\u4e24\\u5f20416*124px\",\"max\":3,\"list\":[{\"img\":\"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccf7e9f4d0.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u4e00\\u8d77\\u6765\\u62fc\\u56e2\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u4f18\\u60e0\\u591a\\u591a\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccf7e97660.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u4e13\\u533a\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u65b0\\u80fd\\u6e90\\u6c7d\\u8f66\\u4f18\\u60e0\\u591a\\u591a\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccfc86a6c1.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u547c\\u670b\\u5524\\u53cb\\u6765\\u780d\\u4ef7~~\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]}]},\"max\":3},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"isDelete\":true,\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a03\\u7ec4\\u6a21\\u5757\\uff0c\\u7b2c\\u4e00\\u5f20260*260px,\\u540e\\u4e24\\u5f20416*124px\",\"max\":3,\"list\":[{\"img\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/d4b3258e5068372730276d2aa518564e.jpeg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u4e00\\u8d77\\u6765\\u62fc\\u56e2\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u4f18\\u60e0\\u591a\\u591a\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/2c707b598cf3c0c1a2e9b0ff3972ce18.jpeg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u4e13\\u533a\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u65b0\\u80fd\\u6e90\\u6c7d\\u8f66\\u4f18\\u60e0\\u591a\\u591a\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/e783f2bb7b44ff80fcad534426aca5fe.jpeg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u547c\\u670b\\u5524\\u53cb\\u6765\\u780d\\u4ef7~~\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]}]},\"max\":3}},\"alive\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u76f4\\u64ad\\u95f4\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u516d\\u4e2a\\u5b57\"}]},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":3}},\"default\":{\"isShow\":{\"val\":false},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u76f4\\u64ad\\u95f4\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u516d\\u4e2a\\u5b57\"}]},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":3}}},\"scrollBox\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"type\":1,\"activeValue\":\"\",\"list\":[{\"activeValue\":\"\",\"title\":\"\"},{\"activeValue\":\"\",\"title\":\"\"}]},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":6},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"type\":1,\"activeValue\":\"\",\"list\":[{\"title\":\"\\u8fd0\\u52a8\\u4e13\\u67dc\",\"pid\":0,\"activeValue\":\"53\"},{\"title\":\"\\u5bb6\\u7528\\u7535\\u5668\",\"pid\":0,\"activeValue\":\"1\"},{\"title\":\"\\u5bb6\\u5177\\u5bb6\\u88c5\",\"pid\":0,\"activeValue\":\"3\"},{\"title\":\"3C\\u6570\\u7801\",\"pid\":0,\"activeValue\":\"8\"},{\"title\":\"\\u5c45\\u5bb6\\u9910\\u53a8\",\"pid\":0,\"activeValue\":\"4\"},{\"title\":\"\\u7f8e\\u5986\\u4e2a\\u62a4\",\"pid\":0,\"activeValue\":\"6\"},{\"title\":\"\\u6237\\u5916\\u51fa\\u884c\",\"pid\":0,\"activeValue\":\"7\"},{\"title\":\"\\u7535\\u89c6\\u5f71\\u97f3\",\"pid\":0,\"activeValue\":\"2\"},{\"title\":\"\\u65e5\\u7528\\u6587\\u521b\",\"pid\":0,\"activeValue\":\"9\"},{\"title\":\"\\u65f6\\u5c1a\\u670d\\u88c5\",\"pid\":0,\"activeValue\":\"49\"}]},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":6},\"goodsList\":{\"max\":20,\"list\":[]}}},\"adsRecommend\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5c3a\\u5bf8338 * 206px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u7248\\u5757\\u987a\\u5e8f\",\"max\":10,\"list\":[{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/906d46eb6f734eaf1fd820601893af0d.jpg\",\"info\":[{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5c3a\\u5bf8338 * 206px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u7248\\u5757\\u987a\\u5e8f\",\"max\":10,\"list\":[{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/906d46eb6f734eaf1fd820601893af0d.jpg\",\"info\":[{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}}},\"coupon\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"numConfig\":{\"val\":10}},\"default\":{\"isShow\":{\"val\":true},\"numConfig\":{\"val\":10}}},\"seckill\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":2,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u9650\\u65f6\\u79d2\\u6740\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":2,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u9650\\u65f6\\u79d2\\u6740\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"combination\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":3,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u62fc\\u56e2\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":3,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u62fc\\u56e2\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"bargain\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":8,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u780d\\u4ef7\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":8,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u780d\\u4ef7\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"goodList\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"aa\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"picTxt\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"richText\":{\"val\":\"\"}},\"default\":{\"isShow\":{\"val\":true},\"richText\":{\"val\":\"\"}}},\"titles\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u7cbe\\u54c1\\u63a8\\u8350\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\/pages\\/columnGoods\\/HotNewGoods\\/index?type=1\",\"max\":999,\"pla\":\"\\u9009\\u586b\"}]}},\"default\":{\"isShow\":{\"val\":false},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u7cbe\\u54c1\\u63a8\\u8350\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\/pages\\/columnGoods\\/HotNewGoods\\/index?type=1\",\"max\":999,\"pla\":\"\\u9009\\u586b\"}]}}},\"customerService\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"\"}},\"default\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"\"}}},\"tabBar\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabBarList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea681*81px\",\"list\":[{\"name\":\"\\u9996\\u9875\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9ebdf202104251644215768.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/44bc420210425164421586.png\"],\"link\":\"\\/pages\\/index\\/index\"},{\"name\":\"\\u5206\\u7c7b\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/b62c8202104251644218412.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9509c202104251644214836.png\"],\"link\":\"\\/pages\\/goods_cate\\/goods_cate\"},{\"name\":\"\\u8d2d\\u7269\\u8f66\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/2e682202104251644216849.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/6b3cb202104251644218211.png\"],\"link\":\"\\/pages\\/order_addcart\\/order_addcart\"},{\"name\":\"\\u6211\\u7684\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/3329c20210425164421428.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/031ce202104251644215432.png\"],\"link\":\"\\/pages\\/user\\/index\"}]}},\"default\":{\"isShow\":{\"val\":true},\"tabBarList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea681*81px\",\"list\":[{\"name\":\"\\u9996\\u9875\",\"imgList\":[\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/3ae1dcc082c81422d1f799b415e0e763.png\",\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/18ffcc8a89e40c3b40892c6f5c53daa5.png\"],\"link\":\"\\/pages\\/index\\/index\"},{\"name\":\"\\u5206\\u7c7b\",\"imgList\":[\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/b1050f4144b90f7895674593a837d7a7.png\",\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/2554eea34921dd9d6e3bb869e30b23a2.png\"],\"link\":\"\\/pages\\/goods_cate\\/goods_cate\"},{\"name\":\"\\u8d2d\\u7269\\u8f66\",\"imgList\":[\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/87586a4f72f1898a0fb59f998f3e02de.png\",\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/63d813d53a570967871a25dc4360d2d8.png\"],\"link\":\"\\/pages\\/order_addcart\\/order_addcart\"},{\"name\":\"\\u6211\\u7684\",\"imgList\":[\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/dca02a99f5176cc86fe45ea1f9de66c1.png\",\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/5aa50b3c96dc7c65979372fb5a93c051.png\"],\"link\":\"\\/pages\\/user\\/index\"}]}}}}', '{\"headerSerch\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2019\\/10\\/20191023\\/db7b7bef9dffdedd27e9a3aa34218cea.png\"},\"hotList\":{\"title\":\"\\u70ed\\u8bcd\\u6700\\u591a20\\u4e2a\\u5b57\\uff0c\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u70ed\\u8bcd\\u987a\\u5e8f\",\"max\":99,\"list\":[{\"val\":\"\",\"maxlength\":20}]}},\"default\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/03d92202104251905299991.png\"},\"hotList\":{\"title\":\"\\u70ed\\u8bcd\\u6700\\u591a20\\u4e2a\\u5b57\\uff0c\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u70ed\\u8bcd\\u987a\\u5e8f\",\"max\":99,\"list\":[{\"val\":\"pro\",\"maxlength\":20},{\"val\":\"\\u4efb\\u5929\\u5802\"},{\"val\":\"\\u6e38\\u620f\\u673a\"},{\"val\":\"\\u978b\\u5b50\"},{\"val\":\"\"}]}}},\"swiperBg\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/a32307fd1043c350932a462839288d38.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/906d46eb6f734eaf1fd820601893af0d.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/84568202104251625592839.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"cc\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/d9cea202104251713283778.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/94289202104251713378235.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"aa\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u5f20\\u56fe\\u7247\\uff0c\\u5efa\\u8bae\\u5bbd\\u5ea6750px\",\"max\":10,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/05b3c20210425192404421.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\",\"maxlength\":10,\"tips\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u5341\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}}},\"menus\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a020\\u4e2a\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea696*96px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u56fe\\u6807\\u987a\\u5e8f\",\"max\":20,\"list\":[{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/723bb4d18893a5aa6871c94d19f3bc4d.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/goods_cate\\/goods_cate\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/e908c8f088db07a0f4f6fddc2a7b96f9.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u9886\\u4f18\\u60e0\\u5238\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_get_coupon\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/1a9a1189bf4a1e9970517d31bcb00bbc.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u884c\\u4e1a\\u8d44\\u8baf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/news_list\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/dded4f4779e705d54cf640826d1b5558.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u6211\\u7684\\u6536\\u85cf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_goods_collection\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/f95dd1f3f71fef869e80533df9ccb1a0.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u62fc\\u56e2\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/8bf36e0cd9f9490c1f06abcd7efe8c2d.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/5cbdc6eda8c4a2c92c88abffee50d1ff.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200515\\/fdb67663ea188163b0ad863a05f77fbf.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u5730\\u5740\\u7ba1\\u7406\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a020\\u4e2a\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea696*96px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u56fe\\u6807\\u987a\\u5e8f\",\"max\":20,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/84b03202104251552237835.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/goods_cate\\/goods_cate\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9fa37202104251552237481.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u9886\\u4f18\\u60e0\\u5238\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_get_coupon\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/31720202104251552232500.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u884c\\u4e1a\\u8d44\\u8baf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/news_list\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/dbdaa202104251552237627.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u6211\\u7684\\u6536\\u85cf\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_goods_collection\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/8f4aa20210425155223447.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u62fc\\u56e2\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/fa747202104251552233138.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/02baa202104251552234519.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/3c0f4202104251552238397.png\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u6211\\u8981\\u7b7e\\u5230\",\"maxlength\":5,\"tips\":\"\\u8bf7\\u586b\\u5199\\u6807\\u9898\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/users\\/user_sgin\\/index\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}}},\"news\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u4e2a\\u6a21\\u677f\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6124 * 28px\",\"url\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2019\\/10\\/20191023\\/db7b7bef9dffdedd27e9a3aa34218cea.png\"},\"newList\":{\"max\":10,\"list\":[{\"chiild\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"CRMEB_PRO 1.1\\u6b63\\u5f0f\\u516c\\u6d4b\\u5566\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\u94fe\\u63a5\",\"max\":99,\"pla\":\"\\u9009\\u586b\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a010\\u4e2a\\u6a21\\u677f\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6124 * 28px\",\"url\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/2b88b202104251554589466.png\"},\"newList\":{\"max\":10,\"list\":[{\"chiild\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"CRMEB v4\\u6807\\u51c6\\u7248 \\u5168\\u201c\\u5fc3\\u201d\\u5347\\u7ea7\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\u94fe\\u63a5\",\"max\":99,\"pla\":\"\\u9009\\u586b\"}]},{\"chiild\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"CRMEB Pro \\u9ad8\\u6027\\u80fd\\uff0c\\u5927\\u6709\\u4e0d\\u540c\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\u94fe\\u63a5\",\"max\":99,\"pla\":\"\\u9009\\u586b\"}]}]}}},\"activity\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"isDelete\":true,\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a03\\u7ec4\\u6a21\\u5757\\uff0c\\u7b2c\\u4e00\\u5f20260*260px,\\u540e\\u4e24\\u5f20416*124px\",\"max\":3,\"list\":[{\"img\":\"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccf7e9f4d0.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u4e00\\u8d77\\u6765\\u62fc\\u56e2\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u4f18\\u60e0\\u591a\\u591a\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccf7e97660.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u4e13\\u533a\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u65b0\\u80fd\\u6e90\\u6c7d\\u8f66\\u4f18\\u60e0\\u591a\\u591a\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccfc86a6c1.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u547c\\u670b\\u5524\\u53cb\\u6765\\u780d\\u4ef7~~\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]}]},\"max\":3},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"isDelete\":true,\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a03\\u7ec4\\u6a21\\u5757\\uff0c\\u7b2c\\u4e00\\u5f20260*260px,\\u540e\\u4e24\\u5f20416*124px\",\"max\":3,\"list\":[{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/6a2a9202104251559593280.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u4e00\\u8d77\\u6765\\u62fc\\u56e2\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u4f18\\u60e0\\u591a\\u591a\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/1793c202104251600047761.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u79d2\\u6740\\u4e13\\u533a\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u9650\\u65f6\\u6298\\u6263\\u901f\\u6765\\uff01\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]},{\"img\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/76f25202104251559555590.jpg\",\"info\":[{\"title\":\"\\u6807\\u9898\",\"value\":\"\\u780d\\u4ef7\\u6d3b\\u52a8\",\"maxlength\":20,\"tips\":\"\\u6807\\u9898\"},{\"title\":\"\\u63cf\\u8ff0\",\"value\":\"\\u547c\\u670b\\u5524\\u53cb\\u6765\\u780d\\u4ef7~~\",\"maxlength\":20,\"tips\":\"\\u63cf\\u8ff0\"},{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\",\"maxlength\":999,\"tips\":\"\\u94fe\\u63a5\"}]}]},\"max\":3}},\"alive\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u76f4\\u64ad\\u95f4\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u516d\\u4e2a\\u5b57\"}]},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":3}},\"default\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u76f4\\u64ad\\u95f4\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u516d\\u4e2a\\u5b57\"}]},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":3}}},\"scrollBox\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"type\":1,\"activeValue\":\"\",\"list\":[{\"activeValue\":\"\",\"title\":\"\"},{\"activeValue\":\"\",\"title\":\"\"}]},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":6},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":1,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"type\":1,\"list\":[{\"title\":\"\\u70ed\\u95e8\\u63a8\\u8350\",\"pid\":0,\"activeValue\":\"1\"},{\"title\":\"\\u624b\\u673a\\u6570\\u7801\",\"pid\":0,\"activeValue\":\"2\"},{\"title\":\"\\u65e5\\u7528\\u6587\\u521b\",\"pid\":0,\"activeValue\":\"4\"}],\"activeValue\":\"1\"},\"numConfig\":{\"title\":\"\\u663e\\u793a\\u6570\\u91cf\",\"val\":\"5\"},\"goodsList\":{\"max\":20,\"list\":[{\"id\":5,\"cate_name\":\"\\u65b0\\u54c1\\u4e0a\\u7ebf\",\"pid\":1,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/93e49202104251854421481.png\"},{\"id\":6,\"cate_name\":\"\\u70ed\\u95e8\\u4fc3\\u9500\",\"pid\":1,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/3eab3202104251852518777.png\"},{\"id\":7,\"cate_name\":\"\\u4fc3\\u9500\\u6298\\u6263\",\"pid\":1,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/94b9e202104251851515885.png\"},{\"id\":9,\"cate_name\":\"\\u914d\\u4ef6\",\"pid\":2,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/7716a202104251938299616.png\"},{\"id\":17,\"cate_name\":\"\\u5de5\\u5177\",\"pid\":4,\"pic\":\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/ecf4c202104251851122727.png\"}]}}},\"adsRecommend\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5c3a\\u5bf8338 * 206px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u7248\\u5757\\u987a\\u5e8f\",\"max\":10,\"list\":[{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/906d46eb6f734eaf1fd820601893af0d.jpg\",\"info\":[{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}},\"default\":{\"isShow\":{\"val\":true},\"imgList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5c3a\\u5bf8338 * 206px\\uff1b\\u9f20\\u6807\\u62d6\\u62fd\\u5de6\\u4fa7\\u5706\\u70b9\\u53ef\\u8c03\\u6574\\u7248\\u5757\\u987a\\u5e8f\",\"max\":10,\"list\":[{\"img\":\"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2020\\/03\\/20200319\\/906d46eb6f734eaf1fd820601893af0d.jpg\",\"info\":[{\"title\":\"\\u94fe\\u63a5\",\"value\":\"\",\"maxlength\":999,\"tips\":\"\\u8bf7\\u586b\\u5199\\u94fe\\u63a5\"}]}]}}},\"coupon\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"numConfig\":{\"val\":10}},\"default\":{\"isShow\":{\"val\":true},\"numConfig\":{\"val\":10}}},\"seckill\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":2,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u9650\\u65f6\\u79d2\\u6740\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":2,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u9650\\u65f6\\u79d2\\u6740\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"combination\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":3,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u62fc\\u56e2\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":3,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u62fc\\u56e2\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"bargain\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":8,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u780d\\u4ef7\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"titleInfo\":{\"title\":\"\",\"type\":8,\"list\":[{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"val\":\"\\u780d\\u4ef7\\u5217\\u8868\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"goodList\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"default\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"aa\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"7\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"bb\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"7\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"cc\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"7\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}},\"dd\":{\"isShow\":{\"val\":true},\"tabConfig\":{\"tabVal\":0,\"type\":1,\"tabList\":[{\"name\":\"\\u81ea\\u52a8\\u9009\\u62e9\",\"icon\":\"iconzidongxuanze\"},{\"name\":\"\\u624b\\u52a8\\u9009\\u62e9\",\"icon\":\"iconshoudongxuanze\"}]},\"selectSortConfig\":{\"title\":\"\\u5546\\u54c1\\u7c7b\\u578b\",\"activeValue\":\"7\",\"list\":[{\"activeValue\":\"0\",\"title\":\"\\u5546\\u54c1\\u5217\\u8868\"},{\"activeValue\":\"4\",\"title\":\"\\u70ed\\u95e8\\u699c\\u5355\"},{\"activeValue\":\"5\",\"title\":\"\\u9996\\u53d1\\u65b0\\u54c1\"},{\"activeValue\":\"6\",\"title\":\"\\u4fc3\\u9500\\u5355\\u54c1\"},{\"activeValue\":\"7\",\"title\":\"\\u7cbe\\u54c1\\u63a8\\u8350\"}]},\"selectConfig\":{\"title\":\"\\u5546\\u54c1\\u5206\\u7c7b\",\"activeValue\":\"\",\"list\":[]},\"numConfig\":{\"val\":6},\"goodsSort\":{\"title\":\"\\u5546\\u54c1\\u6392\\u5e8f\",\"name\":\"goodsSort\",\"type\":0,\"list\":[{\"val\":\"\\u7cfb\\u7edf\\u6392\\u5e8f\",\"icon\":\"iconComm_whole\"},{\"val\":\"\\u9500\\u91cf\\u6700\\u9ad8\",\"icon\":\"iconComm_number\"},{\"val\":\"\\u6700\\u65b0\\u4e0a\\u67b6\",\"icon\":\"iconzuixin\"}]},\"goodsList\":{\"max\":20,\"list\":[]}}},\"picTxt\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"richText\":{\"val\":\"\"}},\"default\":{\"isShow\":{\"val\":true},\"richText\":{\"val\":\"\"}}},\"titles\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u7cbe\\u54c1\\u63a8\\u8350\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\/pages\\/columnGoods\\/HotNewGoods\\/index?type=1\",\"max\":999,\"pla\":\"\\u9009\\u586b\"}]}},\"default\":{\"isShow\":{\"val\":true},\"titleInfo\":{\"title\":\"\",\"list\":[{\"title\":\"\\u6807\\u9898\",\"val\":\"\\u7cbe\\u54c1\\u63a8\\u8350\",\"max\":20,\"pla\":\"\\u9009\\u586b\\uff0c\\u4e0d\\u8d85\\u8fc7\\u56db\\u4e2a\\u5b57\"},{\"title\":\"\\u94fe\\u63a5\",\"val\":\"\\/pages\\/columnGoods\\/HotNewGoods\\/index?type=1\",\"max\":999,\"pla\":\"\\u9009\\u586b\"}]}}},\"customerService\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"\"}},\"default\":{\"isShow\":{\"val\":true},\"imgUrl\":{\"title\":\"\\u6700\\u591a\\u53ef\\u6dfb\\u52a01\\u5f20\\u56fe\\u7247\\uff0c\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea6128 * 45px\",\"url\":\"\"}}},\"tabBar\":{\"defaultVal\":{\"isShow\":{\"val\":true},\"tabBarList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea681*81px\",\"list\":[{\"name\":\"\\u9996\\u9875\",\"imgList\":[\"\\/admin\\/img\\/foo1-01.003b4be4.png\",\"data:image\\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFEAAABRCAYAAACqj0o2AAAAAXNSR0IArs4c6QAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAUaADAAQAAAABAAAAUQAAAACo7oyGAAAJJUlEQVR4Ae2ceWxVRRSHaelmjVJRVKgVlxgSERERCbggYkDTqpFIXWIMa4FCGjVFDRgtGBMNiQpaSoEGq2g0SjAYTURjVEAWY40IMRqjBmlxAQEtdKX1O+S9x33zpvfNffe+5Y+ZZHJnzjlz5pzfnf3Oe\\/362WARsAhYBCwCFgGLgEXAImARiEUgK5aUOZT169cXtbW1XZCfn9+vo6Pjr8rKyiOZY91pSzIRxKz6+vph2dnZT\\/f29k7LysrKCZl7kufGkydPLp07d+4P0HtPu5HeVMaBuHbt2oeBpNENFsBdUFFRscpNJpW87FRWFq+uNWvWPIuMK4Cig1ZYS2vNGBAzpiUC4GrAqRCMBCiD0NvT0\\/MaXXumgWxSRUwNTqoRdOHNVHBnH5X8BF3Gv2E6Pl17S0tLS2lNTU23jq+jIZs3ZMiQkfBOMCzs08l4oaW1O69cufLsdevW7cRgHYAC3JI5c+YMa25uvpJWuoh8zGQCfXJxcfGOVatWnWPiOADmAOAWyu0m7pUeYFLOTSZtLRHwBtIdxZHLNQZ2wSunq77v5DEOTmbW\\/gBanpMeSv\\/KMmjMwoULD2t4ERKtvorMigiBBC8pH3A7nTQv6bS0xBCAe\\/oCkGXMBBVAcQraFrrvjSS7NE5empeX973o1vAiJF7ObZFMKEHLHKfSvORTDmJdXd0lANEEgMUaQ493d3dPnDdv3g4N7xSJMexrgLgJHf+qMugcDG8PLVbXusPiMT5TzlePjFEYrikZT5wbkZOTIwAN1eiXbnjH\\/Pnzt2t4USRa5C5AnAjx7ygGGXk5dPldjHXXqLxk5VMGIt3sZhz8GkcuVJ0BkIPQbmUS2ary+soDZFNnZ+cEyjZrZM6lriaAjOm6GlnfpJSAiDNlOPsFjuVrLP4D+igA3KPhuZIWLFjwA3qHE\\/drBFGb9QkTyb0aXqCkpINIF5b9r8youvA74A0m\\/qljmtBokccYJ4cCpKwndeFdXmKljhEULakgYvxjjE8bdMbi9FZ4w3W8RGhdXV2j0fmpriwv8WVe5hIdLwha0kAEwKUY\\/zxGxqzpoG\\/s379\\/6axZs\\/4LwgnRQdduBch7SL6l0ZnLC3sGm16gbl8zsUZ3v8BB5I3nMg49R2VPEXPVSmktbwDgQ0ECGK5DgOT8cSb5hjDN8cwFv2rqH+GgBZIMFMTly5efyRt\\/FcsWY7CqW84D69jnTp8xY0Z7INZrlFRVVXWwA6kArBVEdT+djV0lmmK+SOEDT19KpDAtsBAD3yFZqioLOfMiE8ATKi8ZebZwPeh9BJuOYtNi0jE9Ish61daSsG6M3UqMATCksDJVADodYOauIT\\/fSUtG2jeInMTkMwbuBcBrNQb2sg++HwDXangpIbF8amArKOtUaZ3awBjtq0f6mqkaGxuL2TXINi4yzmCsbL3E2E6Mn0pr+FBreR9EumI2BwJlsGWRLHvgi0UUnfvR\\/SvJjUVFRZvLy8tljDUO7JgmUf4jYl7IPmfZf9izj2bL+ZuTaJpOGESMugqDZJtW5KwMmjjciVE3YdRuJy9emjFsBBNTHXI3xJEVvZW0sm\\/iyEWx6TFXY98u7CuIYpCBfoReMwmbv1V58fIJgSjGoHgXMcYYqRCDNtGFp0raNADgWAD8HHmtTo0eaemTaOnbNLw+SdTzMfVM1glgdxtxIjrFN+PgeUxcvXr1FWj\\/jujm7EBjCxBsaGg4C8e+jKNTVSnd8jM5HVcZcfJdffHRdwZ27MSeYX3J6OieQaSSl3SK\\/NBoUXK6E7OziacTp3MLCgq+lyP\\/eLJe+Njj6UuiZxAx3Oubd7WfrZhMItK61XCAMeouZk6ZXC4jltLV9qtC2FPCRORp6FB1aPKefPT8BnlLDRg+jniqLI5tIy1H9p7DtGnT+lNWlj\\/qy9xHPaM44XZ2PZmZhzIeS6u9zlGZjOsraY3vhRbZDpZx8gskJ4Sku\\/FpjXFJBFXj45Zl0G2kS9+C4OvEakCQHUFCoaysTGZ29ZC2A9rt1OMEMKKfuu8mE7VtxIYLSkpKVD2RMgaJGl7ao4D3Bs9Sr+tazy1RDJo9e\\/Z2HhJlu3cjjknSc2hvb8\\/TlP2FpcuBvpRxcNFCa\\/wZ\\/lVOGb70uU10TlFtmpf2spZhQEzMewPFJiIAGOM4rUE9NNCpOqESaY2FKi1V+bSCyG6nTXUUMAapNE1+sIbWqqGlhJRWEAsLC49qvLyQGbtWQz9FgrecRGSbGZZrbW39O5xO9TOtIMq5It33FY3Tc9hWVsrhRpjH2CuHvbNoqQvDtPATHfWLFi06Hs6n+plWEMVZZsIqHlFdEaByAaaWhfQBwHsb8N6EJpPNOqI6jrbzWaAaetpC2kEUz1lWaHdBAHcek899iDxI+nwdSpStlc8COl6qaBkB4sGDB2tweINXp2mtmyj7uNdyQctnBIiy0xgwYMB0QFlm6iCyK\\/heU+5jl2JaVVy5hBbbcbUmIBA6ZJXPmh\\/TdZcB0nieZzhVQZPdzFfEpYylslXLiJAxIIbRABwB6TbJy24IIC+SNM9meHIInHEh40B0IsRWbJszn6npjBgTMxUcU7ssiKZIuchZEF3AMWVZEE2RcpGzILqAY8qyIJoi5SJnQXQBx5RlQTRFykXOgugCjinLgmiKlIucBdEFHFOWBdEUKRc5C6ILOKasZIGofgcxtSfpchypRT5+BVWZbxC5efCbagyGjuXEOeOO2UJ3f8ao9h47dmyvSvOS9w0iP3k4QIVRd2PEAO7GDPdiSCpkp0yZcin1qDcl2qqrqw\\/5qd83iKHK5W5MVOBa3Nba2lo\\/l4yi9PnNcEouv4WW68m5iq4\\/lLznbFBdTj7A1ztrp0ufxT8r\\/cg34ya+jcgv5v9x8lOVxo4i4iTqu54Yc+8Qu6L+yiARu+RuXyABsOSW2PhAlKVOSRM30Eb7rS6o7iwf4B\\/AmBa\\/BqWwvHTje4OoLzAQ+ai0H4PGEvcEYViSdexD\\/3haody+9R0CA1EskcuZ\\/DhxFEm5dSoznqcf7IiOZAXskV9UHeL5JBcFRgYFoNgb2JioOs86MW\\/QoEED+ZsVGSdj1maqfJLz3zDcbOfKyWHs6kxyXVa9RcAiYBGwCFgELAIWAYuARcAiEBQC\\/wOyDhdSORXSEQAAAABJRU5ErkJggg==\"],\"link\":\"\\/pages\\/index\\/index\"},{\"name\":\"\\u5206\\u7c7b\",\"imgList\":[\"data:image\\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFEAAABRCAYAAACqj0o2AAAAAXNSR0IArs4c6QAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAUaADAAQAAAABAAAAUQAAAACo7oyGAAANc0lEQVR4Ae2bf4xcVRXH35s3M7ttty2llF9C2bZrWwo0\\/gg\\/imJMQEgQBCUEgwE0JhpJJAYTRSUYJSYIiI0oCZJIY4iIgqUQE00hVhJQrMRYsm3pL5ZmkRa20C4z897OzLvXz3kzbzvzZubt3Dczxj\\/eTSb33Z\\/n3u8995xz7z1jWWlIEUgRSBFIEUgRSBFIEUgRSBFIEUgRSBFIEUgRiEPAjivstmzt2rW3ZzKZi23bPktrne22XViPdu\\/Qbofv+4+8Rgjzu4mhfRW0P0vdNfwWdNOmsQ60S9Dew2\\/Lrl27nm4s6\\/a7JxCZwMVM4FEGsrpbgnH1mMi0Uup7u3fv\\/nlcPSkbGxtbNjQ09BM+b5qrrkH5E57n3bZ\\/\\/\\/63DdpYGZPKjXXPPvvs0xzH2dovAKVv+lpEnz9lca5opNXuO5\\/P301+PwEUMjewMA+1oxeXlxhEJnwfHc+P6zxhWRYgH4fThjq1B+Srof\\/VTuW95NPvdWvWrLnepI9eQPy8CSGTumzrE9jWw53aIEKu7VTWj\\/xsNms0N2MlIINct27dOUROZMC7mPg1AFD52Ig9ctcpi1+hPG9piyxrRlvKU4pYKc8P0ppYzVDm3f9e+cztZWs07A9usNmuN5N+MMyLxKJEmgK0r4LQ+KmOk900uugftqWXSAX6r5DvqTotoS\\/jUOT5lp7ZO6PtO49WNjR2Rv0Vjem5vhOBCJGFzLOpb\\/LeQLvtlcxXr73ok7bl5PkEJ+UxE1dp29MZ7Voq4zLhIE9bNmnLOzdrD28v61FpGwa47fTwu03cooWhP45CmvjnleefOpzLCIBaK10m32UdoWO7fDOGTIl8D3CDdD7LMkcCc5sXyYpNJgIxtsewEI4MBi2TUEzCspiIDJ5vrZiA7VmK2FJuVeuZsFmfYlk8uBzawc+ClnwDXDAGFYwBVeZWQbdXmoMBUfnsFrtoAVAwaAWAcAMTgyM1XGgR+x4s4Fo+IFpW30BckM3oqlJi+0GP\\/gN6dQC1YhEFQKEPsNp3fV8n1gsh+AMBsaozKqtVQQCTyUhsMyFl1TiCCbi25PsACpBVth1cEY6pt9gDu\\/y8ogAlYmSWvnC\\/jxixMq6vfM\\/WVgk56QH0\\/yeITtWq+rYqIe9qAGpdUiiWIM12gkNL8KqH8GdC2qtoCxD7EwqOo\\/PaKogsrm1lFjLYyiGgCgBZQBExAF22zE9Y0ZEOhBOReSg+K+BE2dJoQ7azHXJAoFhsbQMkE7K1C4hs5\\/5wonYzWg+rYiA2AhECYPUFFJloyxaWBRQupRzJk2s1NKIwxacHAmKFkaHhijJokUnEbJ3awOGAYGv7TIwtJVu8DmL8QLsudSCrR5DH9I24kEWy\\/bpMhDZqxLUDhYa1IKJEzLAew0BA1GU4MZ8poDQEwEA22cikkAOqlgApHGIHshFTrW\\/bWZccrRbqQqBQRFxUUWDhGEjXtTRg1mRkWWlwjJq8ZqgOBERL+bKdiz6KxK5vZ9GKAhy2YcCJbCXKfFdVlTejcn3TzouGcgq2L4nphJXq2iyUCmipEgosWDxA9eBSyrRb9jMMs7cwEBBzuazPkaCE3Cmpak1DB+aGbLGabcgJAoCZSMbJuGUbO7HF5E04sazDdq4ij1ks6CF3A273MeqxEAAXIDGrRDMLwJ5VhXJvnNizem831fzz\\/9pt+f5buqrFVizID9BE2BcBtohcJPYL2GjFKr8jSr\\/brp8kefZzrxzzK3orco\\/+VREtXdS+j8nji6IrIlKCX1YF4qY441tHk9BpbDMQToQDlLXt1TuOXDi2SAlnHMVqdKb0KTlHT+Yz+oxDWW1lJ7Q1BP+NW3qCw3jkFNk4RuPvxS\\/s+LW+cOzpqYD2uwGPLxvOqbfoyT8M\\/eFJtY\\/vscWWuufoWSdZIx0vjLqiPRAQQ8pLX943HX7HxeviChOW2V3SHh21dctB3JBmIhAROmJCRMMZq1ev\\/kClUkHbmQX6u6jNhcbhTr1QV87iTYE7yJUrVqxoyW+q1CaRy+XGotmMR05SXYdEIHJb8uo558ht2PHAxM5lQJP8jmf28DUzM\\/Nop+ZM8jXobYiUPz9\\/ft\\/uiCcifccmEysWJvK72J57KzyKFu9o9kD7md66j28NbaO5JQaxXC5\\/k6EYb5\\/44QelWCXqSxMTEx23FPeWmwFyUxd9GVeh32fZaY+bNEwM4r59+yar1eqnIBpcxJoQ7VSXvqZ5Nv1GN0+XLOK3qP9Yp74S5j8xPT39RdO2fTn1Ix\\/vgvDHmdTpyKoklut7tB9HDm5kccZNJiGPSvImAu0V0Da6kRY6tBOOn5AtbMqBJuNM66YIpAikCKQIpAikCPwvEeiLiSMDxndmFUe+z2FmGJ+9sA1fxqPuT\\/2cOGbXhzBbxO3uw\\/R7It87Gdvkzp077yNtfL6PG1uvIDrcYm2EwM0McFEcobnKsNfkiWB7oVC4+uDBg2I3GodVq1aN4dW1iYZrGc\\/SmA7ehN5TpVLp23Eno5j2TUW9gJgHwK30dgkD7qWfpgGRmHz\\/\\/ffXmwKJq98v4bobad\\/1zRZAHuJ3NyckY3e6xkEnnjzubV\\/h+unhxs76+P3S+Pj4J+hvzveP5cuXLxkZGdnCOl6SkL5s7Xv43Q3NRA9mic\\/OrPoPEw66m2bnc5ybU7auXLlyMQD+uwcAZSxyHXgnHPkD4iRH1qAD6cgoMPjlDPyUxkYMQq6ufkz8Hu4wmVuXzv\\/uMHIJVscBAdclHJyI+akKrnXEWmIe4HRlc9FfyiX+iQ395Viky0hvbsiLfjrIv4cZx5nRAsbAc7b1NmWbUVpbuCg5hqveGHm3kPdRyk8gbtqFJO9gdx3g\\/PxItL+50rIKxmF4ePi0No22ofm+L\\/mVay5ATuZqgh2FwaDldU0cjALvLGANHs7FN0bzmM7j0embSqoRRHE9voCuOoKIDLwaoG+IjgNaZTTx5YDxImWNWvjvpB\\/DihgCUNHQX4+2RTw9NDo6+nuUjdHjVaLtzECbVrE+mOBBKPi2M2wLGDAADpcOXth4uuLHy5uWHy4m8hKnNTGvfzhbRic0VxoARY41Bfqb4orsIwD4VwoaAZytxy3RDIt9G3W\\/PJt5\\/CM7b948AdgoJAJxTgo+D6O4jvB4HjxTBs+WAXiqQAGgKp4wKZOnU3naNPRPxAb8DGNo8Zal7xu7vUoDyF\\/Rx4+ic2EHGLsyDwZEXCDkrRdWhPvEpYN3ZzhO+\\/gsCrDCkXUg5R245tAUnU7nNGB9OlpK3pOYKmJydR34u8XPqHyssQEgntTNvxca2wwGRK1hLi3ubQHXsbFl6\\/KrAYsjU0HAk3LhRDxlTU0LOYU0BZTHvU0ZXSTk\\/yqMq0WRIBsv7aL5bJWBgIhnHXrEAiQBsub5gEdEAaEpHhGSX9vGyEXUaLGMI\\/rsiLr7aDGo4W55mzcOcN5j0UYA+8FoXlw6kXaO61DKKvjWZTLiWid+ODX\\/RHEeYqIePBq4AWNg4NyEtq76LvYOnGhkojVpcqEJJ+KuYh4wgVw4r6khwJ7QlDFHYiAgIgNhReSf+B+KX6KFf6I4FAGgOFwCnjhX8lIYmD5eWWeMOJFJtmheQEy6q9r5kBgtSFLCsWuD7MOHEzMm2LYa+Yc2RqHgbydmTqCxAbho4\\/Bka6eAy6+RTITDp6ID4OH+5Ghel+lz29QzcrAaDIjKEaEYeGIJgPglYsbgmRXEgOcDJACrjCiYSrEsnvwGAU58M1odu1HO2qaBnex8J9qIRXopmheXHgiII68f2w+nTYuBXVMwNS2sqwBp1Tm0ZnCX2OJFhKeREwCTfDY6KcB4gNPIsmh+XBpTRrTweZE64jzwZCQvNjkQmWjjvfD66OjtSytDZw2rrO9VK8p1yirvl3014\\/i67Cg\\/7\\/nVctZf4Ob9XUPOGpM\\/QvA+vZlz80Y4svH\\/fwvIE017ReyM64XyL1m497fRuizQ3zjxHInmx6UHAqIQXLEtcAN5LY54WMa9ZNtzZFgejcW+A4T7AfHOSNnl9PVHTiMtxnhjPTjwPNoKNy9pzJdvtHXLKSZaJ5pOBCLsXmUVo33NeXUVbRCmWf1lTCpMBrGYQ00ZkQT0f0G7r9Gu6Qab9JUA+R+qP8A5ejPHwP31phmu1zaw7eUW\\/gvktdia5P0hyTNF88jr1OaK5CJ04cKFLRqMST1HWyPzQGgxqcuIRuQ7DPg5XrBnz57tYbpdDDdeBJgvUJZrVx7mMa4JaIyG6Q7xAY6BG0z\\/dS99JQJRGnIJsIMoKpSlqB\\/BnZqaWnb48GFRRLGBrXkd3PUbKvXyf5R3aL+em+1DscQ6FLbsyQ712mXf2i6zT3nPdAOg0EIJPOW6rhzTjHeAtIdLDwLeyUkBlD4SgwjRF2l\\/L4M4fo8oPfYYkIXyvnKTSTcHDhw4yMvdGEN50KDdMWjdgtxcbdCmbdXE27nem41cuhS59ADpnrY2ABzhtxGuur+XZ0yUxxrGcwm\\/6xnThfwW18cqXDfB91+I\\/8yL4tbJyckWuR7WNYl7BXGWFk7vJyG815NhLJvgiDf27t27a7azPn9ghJ+Blp7sc7dpdykCKQIpAikCKQIpAikCKQIpAikCKQIpAikCKQJdIvBfrnhpZWMLg\\/4AAAAASUVORK5CYII=\",\"data:image\\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFEAAABRCAYAAACqj0o2AAAAAXNSR0IArs4c6QAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAUaADAAQAAAABAAAAUQAAAACo7oyGAAAIH0lEQVR4Ae2be2iWVRzHd79k6jQ1bOtiOS1SKSLTSElyKqVlyTQsZ0O3uWkzCrpQlDUCSzNZbbrNbf4hmZtmKkFpUQRq4T9lmFgkKmszzbZJm2vXPkf3jOc973M7z\\/uEvHQOvJzzu55zvs+5\\/p7njYnRSSOgEdAIaAQ0AhoBjYBGQCOgEdAIaAQ0AhoBJwRinYReZZWVlc+je39sbOzNfX19CV7tDD3szlM+2tXVVVVUVHTC4HvJqXsueo\\/jYzx1D\\/JiI+m0Q\\/+C7Z6CgoJPJZknMiIQ6YAArpaaxnmqzUWJjlzk9yqd+dBFNaa0tHRkSkrKe9S\\/xE1XQb6ju7u7uLCw8JyCTUycirJZt6KiYjT0AX6BACh8A8gQfu\\/zcGYL2ikBYEnAAIrqFsXHx5c71Wsl8w1iXFzcOjpxjZXTSHj4TOC3nZGWbOdn8+bN89ApsJNHwsfvAgZItooP3yBSyZMqFSnqpiUnJ6fY2fAA59vJguDjX6lvypuAaCTT7U6yeKnBx3t6eh5jTeuS+K5kQkJCCUpPmxQZELE50B+YeANFZOMHiP4CvLlsTMdkvhvN9B2LrViWzGmMmXAr+wKRSgdbOD69YsWKXy34riweykF8mkEU6+MNDoZhu7AAkA3hlIONpaisrKwjKSkpRMZASA1huBCRTGcX1\\/8fsQYxgGetQdQgBoBAAC70SNQgBoBAAC70SNQgBoBAAC70SNQgBoBAAC70SNQgBoBAAC58BSB6e3vbCBfJ1Wds2rQpnYhMtyzwQE+x0PnDgmewLhkFI6feW6uqqsL4htwupy9jZRnBjw6Z50T7ApHw\\/U80WPY7gY40yEy\\/NJ0Trx0sE1GWE3R0qiT8SqI9kRaDIQb\\/pzwZ9yuFDSevxlRU51XXh15LU1PTPw52ex1kEYt4QEp98w0iFb0AkMrTx0MPexiFuWvWrLGdUvn5+bupe6sHX8oq1L0vLy9vu4qhbxCpqIFIdhad8RWItWokvi7Siee8vLrs6Oh4Ed1tVn4i4O1oa2t7RtU+olemRmVEpl9nZD4ACCIaLb82MNRsc2ybER7DfiOjTCnEL14q9b8TGYO9UkRaNIi6O7A7RV6nOgJtO6QFGgGNgEZAI6AR0AhcZQQCOeKIPnDUuI3sCY4byt\\/ncN78nhf\\/nweJBceuu\\/A3l6PL3eTDOcb8TN6QmZm5bsaMGX7u97bNiwjE7Ozs+KysrI14z6GxQ2xr8SboRO0IXzLM4xtFcW5UTlu2bBkLWFsxvJ3fdQ4Ofke2i7v+S7m5ubY3Iwf7EJFvELmWJaWnp4tvWKbx8+0npDVXiAaAnKQKJABWAuBiXIR9YmJRh8E6i00JB3zlz+kMByL33XmiOPnYV5idBVg+tH\\/\\/\\/un19fU9bj7Ly8uHMaL2MBPEw1ROgCim9tq0tLSShQsXitmgnHzfnan8LeXavBvcO2fOHNe1lXV4KF91\\/egXQNEcbMX3kK+1tra+WVdXp3xlFT58xRNp\\/E1UfL1wYCRAFaGrd+Arr2fY5mN3h+GLPJHNZib5bhMvpCg6TMfFTLgxRHCF6CU7x09Ee8QobaUs1sul5PdAp5HLs\\/DllpaWk\\/DDAqXwHJMvEPE4WvZKw77hAv+GzPdCs5OKaVRm1sXfZGhbEJubm+dxElhktukvdwLWrMbGxoOs2+Zd+Dvk28QXuKmpqesoP2thW15bW1vPZtNiIbNl+QKRxstPUVTQZ1uLu0CMHKVEG9bKBoD3J7wHnSJBxcXFYsYUsxH9gH612QcPLoEP3wXAeWa+W9n3mujm+L+UM3Ifxb\\/V17KLnQA0t2n58uU10G+bef3l+RY8R1ZUgsiIecSiVztZTsSRy3Ni1JWiLNZLcxrBQ5ptZriVoxJEOiVuISGJqfluCMMDIf6vgl3YRgLvIQ\\/mAypRCSKdDDtQMzqbBnqlUOCItE1Wx1emzHOioxJEOjlc7tTfJJnnheYoFfayDf\\/iCOQ5RSWI9M58dLnc2cGDB\\/vqC6M6WUYLntID8VWxXOlVoMVRJiQxokaFMDwSHJUmWKj+ZcGzZUUliIwUEYUJSYAxPYThgei\\/5r0iq+LrkMxzoqMSRDq5z6JTG2pqakZa8G1Z3HrELjxRUujhnfZOiedIRiWIhMrEnViOAw7i3Be209r1nvv\\/aB7Gx7Icv4dXrVp1QeY70VEJYv\\/\\/kdfLHWNXnUWI7jOZL9MAOBEAD8MfJsv4qsLqFiOrhdC+7s4s4t2cr0IcQbiGrmQDg6bzVtNQHmmG+uWc0VjGf\\/IKIeQI9sPcOBrhb2BU7eaTlN+EAcGIuIyMjKnwciCf4hd21oT3iZ\\/XFFaBBHw5JxEITUxMDNvBaOCXWCodD0RNgDiT7FpRNhK+JnMPPmLQVjmjbgp632KfaCU3eOiIz0RuMWib\\/CTLwVTVf90LX75AFIY87aM0TF6UhSiIdIn\\/O4\\/Myclpc3NWXV29gCn4EXpJbroO8vOdnZ2TVq5cedZBx1bke03k6RbZeo1QACh7vQAoqlm2bNmu9vb2TNqjPAOEPXZnCFyM8gug8OEbRKbaQRogLv2RxBFFG0ISPsUZbUkI04VYvXr1GWaFiFxb\\/sncxlxEb5ZynBlnI\\/fM9j2d+2uIZVqLs9aGAKb2BUDYSER6PZuA46bi1Dum93jWtmm0Jxu9+8iHGvr4F2vj12yMX\\/By6wAxxbB13dBVySMFcaAujg0jODZMooHKaxM2p5lOxwecBVxgA8pgyjYE7Fa70whoBDQCGgGNgEZAI6AR0AhoBDQCGgGNgEbAIwL\\/Ana4nUj2zDfIAAAAAElFTkSuQmCC\"],\"link\":\"\\/pages\\/goods_cate\\/goods_cate\"},{\"name\":\"\\u8d2d\\u7269\\u8f66\",\"imgList\":[\"\\/admin\\/img\\/foo4-01.b50f04b1.png\",\"data:image\\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFEAAABRCAYAAACqj0o2AAAAAXNSR0IArs4c6QAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAUaADAAQAAAABAAAAUQAAAACo7oyGAAAKQklEQVR4Ae2cfWxeVR3H+94C65rWZNiVCmSILEECMqbRAZMZVDCCCRui0qwvW8PeDJGZ1CgphKnNZFHJsq7bmDbqH50ihkRNeZGIEMg23goapoOysW51mjIMtOsrn1\\/z3GfnnnOe5977POdp67N7kpt7ft\\/zO7\\/zu9\\/7O6\\/3aQsK4hQzEDMQMxAzEDMQMxAzEDMQM2AyUGhCdmT79u3ziouLa2tqat5ctWrVhF3r7ERDkdjZ2bkEAvcnKDpcWFh439TUVO+aNWsGz07a\\/E8dSGJHR0dldXX1uxBX5K86LT0CkbeRm7KUnTVQIIm7du1aDBt\\/T8GIkNc\\/OTm5vLW19UgKnbyHbdHle+hjx44dBjjoA88I8hIuLioqOrhz585PnoHPrlxgJAode\\/bsqZyYmLiXLn07Yr2NIsbIw5C5oqWl5W1beT5joUhUCaB73wJhD0LoIhVP5J9ijFxhwfMaCuzO+tND0h8GBgYuB39KL0O+gaj9vAXPaygyicJGe3v7SFVV1ZeZUI7q7NDtH9axfJczIlFIYcE9ytrxBrr2uEoS3fxCuvxyFcv3fMYkCjFMIjJz\\/1EjqRBif6ZheS1mRSLMTI2MjNzJfVRliWi8oru7+zwVy+d8tiQWbNq06T0IOq6TNDw8\\/BEdy1c5axITxPzbQlCVBctLqMTRU\\/Vj5xrVFpPOlch9iW3j98h\\/hku6eOS1KXVykYYxeogVRgdb1r9k04CTB+rq6rqHcXCr6giTyx7kYq47KCtXy+ZYfhJfn+P6Zqb7fyfdGZJe0IkBu5Nr9RwnUNwuwsdlXPs58rtOf44wshMS6RIHeZOTWoNlmjynRUhcwN7\\/sd27d18Y1VEn3VkapUsfxZELVAcgtgDMg+TY7H0u3+LcK5zhuwwz53LJXU+Ps7W9UQfTya4mFmmjn8tHooCJNEa0Xku+7\\/jx43rEejozdp8\\/f34h29aP4dMTNKr7\\/AWZDCHyH2EdckYiEddPo8vUhiUKicYxrqsZtPvUsjmQfwOyluDH61zqmla6zmauJq5QycmYKC1B1Jt6i9KdSb+bgwROu0q0DeKjjaxF+rOkk52RSCNG+Cci8dl0Dsx22djYmPHpA2IXRPHLGYmMLwaJURyZLd2SkhKZ7HyJlz\\/hAwIEZySeOHHCSiLLhkhdI8Bf58Xj4+PGQQmROBSlIWcTCwe1owzUh2j8UtUBHDpflTPJb9u27ZzKyspbifZbiJJPiA3u8s37z+Xl5bsaGhqMaArbTkVFxXnY9alje3ZIFC8grA8HfCQiRxpf1KfZsWPHArrbFuyuBK8iqtViyX+Ro7itvLzHGNva1q1b94auECRDoG9FIfpgEgyhk+FV6JoWRQh7xQLr6zCLigmxc\\/gcBL5ESQt2U54IUSa96WulpaWvsuCXs82o6Wq9Ai\\/LOjTpep7slEQi5p+eYeW+UMmHykLgVdiSk5UodcsgtJvv3y2hGjmjdM2ZbDL3cjIXIuOURN7gUUublfwY6qMW3ArRhesg8EUKS60KASA+bCcibcTYasrCWr5c+hK7GWPZ41PQBKckMi4d0+xPi2VlZZfZcBvGOeSPbDjEDoO3QdJljFkSoa1g\\/7HoloH92oIbEGOpbbwe4COctBU6OZudpcXBwcF36urqZKrzvRweVrZXT3OlTUTQpXTJb+hK1H\\/m9OnTX9+4ceOAUta1d+\\/eHpYoPwS7S8Fl5l5Et17GTulvKm7J21YOMutHSr6HjVTToswyZ5wH\\/pelaLEFs0GfBfSdrEi0cX1LI3C6bmNj47t8y7kb4ZBmjIAtatcwm2iQSFvqi7LVMTCnJIp1ouBxo5WCgloLZkDUXaqDYFvSnTjzoew0dWQJpKcVvNQKHVRlCDO6M+2dUHXC5J2TiGO2LlQdxhl0Ltb1sBe49uMg4VX05KujL9XX16ednCDMmFQwYByk+IxahFyQ+LqlndCzs16XBw21e0BvVK976tSptCRCvDHhMWn163aCZOck0uAHlkaNsceiIzseY4mUIlp81eX35AA1PhCBLaFBrKZj7Ovx4S1NJ1B0TiJLFFvknMNMmnZ8Ek8hzFisExkNjG1laZ6kkN1KN+W+Z4GMI+vXr38\\/TT0pMoYPZnt9kgowoTUcqB1CgaP3U6hNn8Z66pBTwBryRk9OdecXZcZ4St1ra2trH7DVgdwivtCtQuerlvLvg\\/n8UHVYAtVSTyJYTf\\/bsGHDf1UgTF5W7M4T6713cLBOM7ybCWCNhhkiC2DZrVxlFPB7SGy2EWFvEy1TRPxC5Cb0Nlp0T9KUMfOqerI3x5b+0g5QL+xuJ2muJJlzmMG5Xh6wUTUJZiNGVZnOo9dK5nnq+7onmPyM7wVR4mBCbqnSBENAR6pCDyfqF7OW9ETvHnk8lIqGFc9aNnec69LrQ4ox8Os6Iq9du3Y\\/urfbysJgEP0o68oHg3Tx8SJdh7qv6VgYOSck8rtFiRjfeISDlQETRNLf3t7e3yN8lyvSMT36v6SdhqShNBn0LrIUH7ZggVBOSCSS8HFqRG0drJxJx7elU8vV\\/L59+yYYm7ZS5w7s2LaRqrosjYa4NkF+M1FoW2L59BOCsezCRuQtn9hKO7jYWg6LQYCcsNQr+qWs20KR6NUhovcxiz6KrUYe8GbwS8jXkJeX\\/wF5IfhpTrcfSvxO0qsaeKeuMfGA2X4iGGgrZyTyoO\\/h1LQD5GUNWAGJ6dZ7VmeJrDEKZIw1xllrhfDgBboqE1ZGJOakOyecO+I56ZGJ\\/CUPm8174pDYmOiamppOZuJXzkhk9jNOc1hWtGXipOs67HA26zbpLb06FlbOGYnsUHpwbFx1BGIvZyHepGIznWcxfwVttlja\\/ZUFCwXlZMfitYzDstRZ6snene79C6Lyt8gy+cxI4gXOp6GlvNh22jfmAsrrmpub59bsLMzg8BYcfoSsb1YGX43Tq0VnppMyPntNT7HD+SlLqowIFCM5jURpgO67DcfvlvwcTS9B4Key8S1nY6LnFH9MeQ+Rt9OT59Idv\\/r4e25juInqY84jURzq6ekp5pT5Kzi9l6isjupkjvTb6MY\\/j7DDSenGjJDotQ6ZZUNDQzcxHn4aQj8OocYvsjxd13faGqXNfq4DfH590vb10HWbsb0IDMxoJKp+yc\\/l5s2bJ38odBd4P\\/eHWGI8w913+qPWiZLnj9cXsoz6Dvauo94TRN9PMjm1DtOmsV4KU8mFDgT+hge8NWFrCd3sNtaVzcgPZ2tffs\\/DeCen656pJfyUZSXCJR7g8p7z2dnmLMue6xUCkypgTraFHCT8OGk0kcH2Ij4J3KvjLuRZIZGos\\/77F3D16Cyb55M\\/zjQS0bncAB0As0Iis\\/OBFL5n9I1Dt8XL+KuOiQz+pA3PFpsVEtkhPM8DdWrOy4n0fRqWkUjXvR\\/7+r78IGvCLRkZDKiUHHkD9HJSzBi1kof9NtdJonMzJ9lyUu0scSreCaHys74\\/8QHsB84Mx4ZiBmIGYgZiBmIGYgZiBmIGYgZiBmIG\\/m8Y+BCuM1BAx9eURgAAAABJRU5ErkJggg==\"],\"link\":\"\\/pages\\/order_addcart\\/order_addcart\"},{\"name\":\"\\u6211\\u7684\",\"imgList\":[\"data:image\\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFEAAABRCAYAAACqj0o2AAAAAXNSR0IArs4c6QAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAUaADAAQAAAABAAAAUQAAAACo7oyGAAANLUlEQVR4Ae2baYwcxRWAu3pm1\\/YeXh9rOxhj1usDH4AsnAPCTbiEiYmIQAKkSEkUkYD4QSJFSFGSXwkhipIfkUJCUER+BAgSCEjsOE4Ac4nDYAi+r82yLFfWCT5mzfT0Ufle9bS3p7fX9s7Mjoek25rtqtfVr6u+eq+qul\\/ZsrIjI5ARyAhkBDICGYGMQEYgI5ARyAhkBDICGYGMwAQTUBOsvyb1s2bN6uju7p6ptT4VRY5Sav+OHTsGSfs1Ka7zzU0FccWKFR1BEJwDrDW082bOp4zR3pcA+7Dv+xt37dr11hhlGiZuCojAawXIeblc7nFaPm08rQf6W9x7ze7du9\\/nvmA899arrF0vRbXowar22Lb9NDrGBVCeyX1nt7S09C9fvvyRWupQy70n1RJp+IVUfh1u21FLI6J76YxNjuNcu2\\/fvn9FskacTxpEXPjLNPpBALaO1dApytIzcnYwJ6e8otbqI1\\/bH\\/o6h88eq959gDx37969Q2Pprbc8X2+FJ6Jv6dKl5wHwD2kAkRd7W3J775g5ae75bfmgxbI8y9KepS2fa96QH+i1Ba997bDX1efqtpTn9ba2tr6A\\/Cx+pZTrdRcdq0fr\\/jBROG\\/evBldXV1vkjwt5QFb7pie+97Xp7f9Tgu0EB4AtadlWaMFqIFqgP7xsDf9lwfdnqK2RhkDwJ\\/Zvn37lWH5lCfVUdRwiIyDf8ECr05pw4atlvXF0oKOnXjrJNN44MkZIAA0aeBZLpOwASryf\\/uWWv1B8QJOoyZJZu3P79y586WUZ9VVNOrBddWeUNbT0\\/MpAF6UEEv2WcaxNaWethuxvjzAHAA5WB7noGTyLLYBWNRBUNIB1ywpYzkzbFV4YvakDW3KQlZ5MHM\\/jOVPqZTWP9dIiKqtrW0dTUiOY0eGh4e\\/xETgaEvdamklMBxLYFkCEHhA4wc8nzFOOwpZEJjxzsDstq3CnZ25l5mHKtaJdNj8zs7O6+qPrVJjwyD29vZOpVFL44\\/H2gLP827u7+8\\/ULjiMysBNssCmA+sQKwxhAdcbeABmbTFNQACUsoGwBWwaybb\\/SvyaiCuX9JY4w1JWb3zDYPI28gCoE1ONGCQ17YnRJbLqVUGjA7E0orGAo1Lh65t3BtYQCu7MnKxykDj4mH6linq9YR+RgK9mmEk+dxksZryDYPIW8VXscSKiYzssyO117MxTDPO0fCSWBkWZqwssjpkRi7QxPqMJeLykhfrvHiyeqfd0oURnUxRSk3iuCQuq3e6YRAB8+lk5ZlMfhXJGO9kJgaO\\/Izb4s5W0biruDbQcGVH2eGYKdCMezOG2kwqjIdFFVjOyhZrW6QzOuPSC6L0RJxHra8m4iGiE4uYk9Sdz+c\\/iGRcfxeLKjHjlteCgQ9AD0AeML1AscxhuYOrmyWPnAPWkYD1WPf4WKUHSK\\/VUh9HOqMzHTihM3TDLBFIC6NGRWfWcP1R2vW812hs2U19ljdYllgkskCWObgs45\\/IwwnHuL52bJ8xNAgoG1rrLFuPet1jPE5b2EePrvncMIjA2J2s7aJFi46CnfrUP3YD6G0Z63DTcAaWsc4sZQRcYCYVPn3J0sfAVpxlHRn+LGZ1qzTo667kc8gPpMjqJmoYRCxRvvdVHLhzhYVgjY+aSQKQYnXhOCgAZcxT\\/LA6GfsYB3knLPHeYsZFWVvKpGTzG9aK1+3KgzeXismm8mrtuYZBxILeSFYXsN+My7o2btnIenk\\/C23HVyPrQcqZtxeZTAQer32OFjc2Lk2asoylALWc7Z61Kq5T0njBO0lZPfMNg4g1\\/IbG0M6Rg1nz\\/JEck49MHI7zU7E0W9Z\\/ZYtkigFeUDJWCLwkQKyUL2WWc99wMMNVampcJ48sshZ9Ki6rd7phEHkzeR+LKsYbQAPnnnHGGTfGZe0v7nrPcT7+SWAFB2XSMGtHgSljpWfGP3Hvkmapo7FQ7fmO5\\/klrHLnQ27+4riucvpRzny0mLijYRD7+voOAa3ijQKoNjPn7xcuXDg73sTul3a\\/O3Vw691Y4nOMkYfFyljEGBc38AQgMoWMb7VDedd7\\/qKDdq+n1OVxPZJmGHksKat3Hg9q3LFkyZJuJpM+4HXGnwrcV3H3y3G7w3G5pD84e057vqNreU7nTlVK5xjgbNgfCVy3EFhH+mZueu8dPvL20BmbKT49fj96dxw5cuQc3s0rPCBeph7phkKUCi9btuxRxsLrk5Wnwc8B8to0kMmy8Twds5SOeZOOkW+QFYfrup8lCripQjgBmYa5c1R3gu83kf5nlI\\/OQLgIa9qzePHiZZHseGc65DbeybekAeTeBwH42vF01ON6wy1RKk3jz6Thm\\/ilfV1xscrN\\/H5x+PDhJwcHByte4xg\\/TyOGcivWLJ3RmwaBe7cRGljJNXmFnPDjpECUVjGOXQWIJ8awoqjhwyQ+4ifv2BIVnMHvFH45fqmHACwUChcODAzIfQ05ThpEaR0gV+HCG0gKnJoPAK6nU27Ztm3bf2pWNg4FJxViVE9i0K+SFvcb9coWlTnOucBS5reMt98+TrkJudwUEKVl5Vn2RSxpXFYJvNeBdy4qGjL+pfVC00CUyvFVZxKz7XyS1wPzNn6SHnXgtk9z7V4+6r5MgGtwVIEGC5oKYrLtEu5kDdg1ZcqUbsCVisXiIRbOss+mIqqXvC\\/LZwT+PwnU1Z35ItOJ+81hsF\\/FmLUSF0xbTDcD6X7qJ79X2DhwoNZ367pBZJlyP3RuEnBUruGvk1X2jAS95OvSV5jh11ap45j7\\/E5IJwvms1gwy\\/aQeSd0Q5MWAuQrhw4duobXzHEv1GuyRABeCcA\\/w6XaRXJTIQXkVrxoNW88A+OpWNVuJ19bAPj4\\/wpAgQbAMwH5AMlxxeOrtUSbMfBpHjbqczyVOIS8r3dS7oWr2\\/OXdtlqMSFQYkw64BM\\/+5SIEiv+Evck4EJElE0ixACkAPeJDBUEABTlJEU5PsaS5iYjp4w5Qj3cxT1SlhTlpEyYlnKsJ82Dy89FtZTv963puzw9\\/4BW03j+qI8ZTIy3M0Ye3Z1BvY55VAWx7MZ\\/TWqmAXyB2r5C5N515\\/VT4ekCirrL7gX5SQPLaWSSptGUQSZ54Jkdsnz4D4GGcrkeaNk5a64fLWspQs1cI5bKPwKE4UbQdL1K7qcsm01MfZT\\/92Iw5\\/sF\\/TWelTwGcOnTk8Kx8lW5M5+wrkgqBOAevkzLO6zlXvu5H9PcLmQuFSbEqSUY7\\/IzaVC6oJPvhi4NY5tc4AKJfBT6LMvDDUyUpXxSFwF+7pUdZCWJUUsgC3hlPXG9VlkvuygkYGWC\\/YReA9\\/9Qqt++4dt1r0pbTlNJsykfKx8VRAZO2QvdMWBC9wVfdonCndDCE4LOH6KaJvs6CrDMxvSK+FJOSzSxWsBQXhU9uVYBh4x5bAjCNLLvsQS4VSie2aPYqh3BJ6ApcOkU8JOI9TqYq0uY4krYVf2zVMf0atMDPuylqB\\/vtLb442hfQpDuT0uO1a6Kog0am6KUgkUmQMr3CxQGKppNFYRhycWRV4sj4GvJIF3bjIWiqMBj59sIzEWGsIjDm3gUU6sCtACEB3oovPESgFS7jDg4d4lfNt0iqSlrFi+WKrAkw6wtS9b8ghTW6XLW63nw5qP\\/IXjgpHcsVNVQeQB3Um1zNTvRTLtez+ggsNlN4xBEutjfw3QBARThWxUEhk\\/djyIFRlLMjIaDTygMjyG8LCkEQs3Q4TsejBDhdxvXFXgCUjjtlg0cn5h3PoovPD5NN5cv6pF74zqHp3pmN4ofbxzVRB5wN6kYixiSSSbvP61XbYV3M2sdYCxKgQFLAEEPNe4orirsSLjdiNj41FLLcMTVxTA4pZlyxNgxiLFGsWqBZjopWNkPw6TtIFjm3IS8AeqWB3bmI0VW+IdYpXmvtL9RTVq\\/MNQKmLkUdvSzuNaD8UUyOakRbG8rLEuI781krWu2\\/SAvqTnYSffOTdntc5lItWufDaFqqS5QVs2aXYctpB2xft9ZCI3eWzOZfuhLdexScqJSZsdiso198g16RLAaGU7si9PFnu6VbrJtpHLmf5xCDuTLlJ+Muugjwl9TcvbgUTAnhzyh\\/7W3v4juTV+YCijrDN+PZ6uaonD\\/0X5DtB+FldEusBWkUuZXBoSpkw8u+oskcc7mUR+nlDg8cF3Jh98Zc173KMqd8Z1\\/5SiuYNxcT1Lg2+kXGs6kezGAOB9KQClrm+cKEApXJUlyo1U4B4q8F1Jj3E8g0scHOPayRb34EkSGEs7fDzqYjzqxbSLabKqIfLa1wGkzVRmcZriT6oML7uHV767xlP\\/qiHKQwQkpw\\/5Jf+XlFz+JB7387o37uGoqjExosMDC\\/v3759N\\/rFI9kk9Y4G3055vVVP\\/miwx\\/kAG6gsIDcj24dW4+LT4tWZNMxzto26PEEX8dV9f30C19awbxFgFWth0dDpA5yOT\\/TNNd9DJQ6VSaagWcE3XqKxCGYGMQEYgI5ARyAhkBDICGYGMQEYgI5ARaGIC\\/wVgFqHl8HFnUgAAAABJRU5ErkJggg==\",\"data:image\\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFEAAABRCAYAAACqj0o2AAAAAXNSR0IArs4c6QAAADhlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAAqACAAQAAAABAAAAUaADAAQAAAABAAAAUQAAAACo7oyGAAAIGklEQVR4Ae2ca2wUVRTH6RtNq4iE2mIR8BF8QIhFAlFAfGACBEWiBogkBdralmDSGOtHEuKHJqYmmNIXhBgDIRCICCIlkRajUUDAgKgBQUBoLUVKH9a+6+8atsyenW13Z2Znp8mdZDL3\\/O+9557zn3Mfc2d2R4zQh2ZAM6AZ0AxoBjQDmgHNgGZAM6AZ0AxoBjQDmoEIMxATYf221JeWliYnJSXd39fXN66np6czMTHxRnV19dVdu3b12lLscGVPkahIi4uLe5pzcX9\\/\\/\\/KYmJi0IP5+D76DszY7O\\/t0kDKuwZ4gcf369Ynp6emzIO1zPB8VpvenidIFDQ0N9ejpC7OuI8VjHdFiUwkEnofAw6gJl0DV8lQi9xI6dto0w3L1qEZiVVXVbLrtAQhMtuyBoSK6jvf29i7Ky8u7boAjnowaiZWVlUshbzseJgbzElJaKHOd6xXKjCQ9lvQErvHB6oBfJDJnrlq1qnGQMo5mRYXE8vLyWThagydJJt50gFVDVkVHR8fhdevWdRrLMPk8wCy9FCyLM9OY50tT91xdXd0UxsguHxbJq+sklpSUjE5JSfkJpzKkYzh\\/hnNJbm7uBZlnJhPNbxOVpeSlyHz01EDkfIjskXlOy65PLBC4DSfMCDyUk5MzNVQCFRGU\\/6y1tXUChPlFq8qD3HkZGRnPqHSkD1dJVF0Rh+ZIpyDhCF13scRDkQsLC292dXWNo+wNWZ5JZgeRf5fEnZbdJDGGsewADtxtdAIC2xMSEl6TY5+xzFDptWvX\\/o2elZTrNpYlGscnJye\\/asQikXaNxIqKintwYLJwog9Hl2dlZd0SeNgiXfsriNwvK6L\\/DYk5LbtGIs5MxPiRwoGrPLbtFZhlERKLZWWwhVu3bpXtymK2ZDdJVEsSv9UADh6xZb2ozKR0FKjOCHPzkjo7O583Yk6nXSMRwqZL43Fwk8QckNXs73fc7gV+mJOCayRidKo0nI2DvyRmV2bbrF3qgMSIztCukYgjD0vneMa9JDG7Mk9Cf0gdtB2wLpVl7MiukUh3PicNZcYOIFaWCVcmEifJOmBXJOak7BqJGF0vDY+NjXU8Qoi6gO00sDbZtpOyayTiyClpOBHyjsTsykT8cqmDdv6UmJOyayTiSAWG9xuNJxKfNcp202p\\/kps1xqgHUjvAvjZiTqddIxHD65VDwoF0dmLeFJhlEbLek5XBdrN+9HsclGXsyq6RiCMtGHtCGByLk5+WlZWNFXjYIjdjBdG+wKTiHhPMUcg1ErGaQOxfwrVVeDAyPj5+X3FxccCeoCgXVOQmTCDzE26I34437f167dq1A0ErOpTh9xjmkM5B1bCs2c1Y+LpJoW\\/AF61evVqSbFL0DoS+ydRTm7wBu+SQOIONieN3Skcm5WYk\\/u9BfX39MhIBC2KwOXTH80wOj4fqKl04n+g7Q\\/kAAsG2Q+CPoeqyU871SFTG0v2eogurCAnYXSF61CRwEkI\\/bm9v\\/4JN139VHd\\/Bxm4G+5K5yOpmTPLhxis6zvJqYJobrwZUu1EhUTVMFL3CZS+RZBZFqog6\\/oGQJsqoZ+xE0qNJp5GOU5lBjrPd3d2z8\\/Pzm4LkOw5HjUTlCV1Xva07xDlayQ4cByF5xZo1a246oCtkFVEl0WclZB4jPY0zwYeFeW0jSqsYAwvDrOdIcdcnFjOr2d2ewRg4lbywIwjyTrCMuS9aBCp\\/PBGJPmI3btyYxKQxXi2B6Jb54ON9ecYrxB0mvwzsB27AVWNeNNKeIlESoF538n3ivZA6hn3CLiaMlsbGxuvR+vpL2qdlzYC3GHC0O2\\/ZsiWF8SqVdyeZjFlqtg1YTHvBfWy7pE4W\\/EcvX758i+FB7i6FZaZjJLJ43oxhyyBRfQLniVl\\/KCawtQdbW1gZrGSX6cuhygfLt00iGwBTMER9qPlgsEaGAw6hR9va2haob3vCtdcWiRA4n5lzP41aXSSHa2+ky\\/9MVC4kKq+E09Bgz6CD6rm921JDBA727DuoDg9mqs3haZmZmdtqa2v7QrXPbxMz1EoMxGrMK4PAgJfidAu1g32RczdnwOduYF44nqAHvYitj2CM3+fO+DSPj+hzwDeFaqglEtPS0l6igbmyEYz6hcevJyXuVZktuRlqhjaxrwgsZBItzaLcrZdlw2Dnm5qaZkrcyzJfYBwjIgO+psWXDDVhhmq7JRJRPl82wNrwg6KiorC29qWOaMi8jjjBZCKXN2rCLQjVHqskpssG6MonJTZMZPUuXG1m+B1E40Q\\/YBDBEok04PeCXOnnZ2F+3wUO0qYXs741MWqSCWYKWSIRTb9LbampqY9JbBjJb0lb6VnyHbksMiBbIpEG6gc03E4wy70gseEgq+UaPWuDia2\\/mWCmkCUSadTsO+sP+aXUdNNWPAyyXHsXf9Qie+AgSHr4RLlkABgiYYlEGtlnolf9VvkgGxHZJnmeg1jCjMHWSpY4AWRB6il+EqIeGkI6LD87034xjb0frBWIriGvOVh+NHHsnkD7aqvO7Oglfy5vDL8zyzTDLD2xKEVs1W9gHFzCnXzUTDGGzDPDvY5x8z\\/ivU3IBCp\\/LEeiqqz+boBfQzVAmN+vpFTeMD02Q2DYw5GlMdFHUEFBQVtzc7MalPf4sOF6JQILePWaZ8V+W5FobJCB+jm6tvp8eCHnKGOeV9MQdwHbdnItD3cP0eiTYyT6lEJmAs\\/RD6n3x\\/zKM9GHe+nKKqKR5+VGO8R5yR9ti2ZAM6AZ0AxoBjQDmgHNgGZAM6AZ0AxoBrzOwH+RWo57fkQWoQAAAABJRU5ErkJggg==\"],\"link\":\"\\/pages\\/user\\/index\"}]}},\"default\":{\"isShow\":{\"val\":true},\"tabBarList\":{\"title\":\"\\u56fe\\u7247\\u5efa\\u8bae\\u5bbd\\u5ea681*81px\",\"list\":[{\"name\":\"\\u9996\\u9875\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9ebdf202104251644215768.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/44bc420210425164421586.png\"],\"link\":\"\\/pages\\/index\\/index\"},{\"name\":\"\\u5206\\u7c7b\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/b62c8202104251644218412.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9509c202104251644214836.png\"],\"link\":\"\\/pages\\/goods_cate\\/goods_cate\"},{\"name\":\"\\u8d2d\\u7269\\u8f66\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/2e682202104251644216849.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/6b3cb202104251644218211.png\"],\"link\":\"\\/pages\\/order_addcart\\/order_addcart\"},{\"name\":\"\\u6211\\u7684\",\"imgList\":[\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/3329c20210425164421428.png\",\"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/031ce202104251644215432.png\"],\"link\":\"\\/pages\\/user\\/index\"}]}}}}', 1594949966, 1629717074, 1, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -194,22 +251,22 @@ INSERT INTO `eb_diy` (`id`, `version`, `name`, `template_name`, `value`, `defaul
 --
 
 CREATE TABLE IF NOT EXISTS `eb_express` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '快递公司id',
-  `code` varchar(50) NOT NULL DEFAULT '' COMMENT '快递公司简称',
-  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '快递公司全称',
-  `partner_id` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否需要月结账号',
-  `partner_key` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否需要月结密码',
-  `net` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否需要取件网店',
-  `account` varchar(100) NOT NULL DEFAULT '' COMMENT '账号',
-  `key` varchar(100) NOT NULL DEFAULT '' COMMENT '密码',
-  `net_name` varchar(100) NOT NULL DEFAULT '' COMMENT '网点名称',
-  `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
-  `is_show` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否显示',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否可用',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `code` (`code`) USING BTREE,
-  KEY `is_show` (`is_show`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=566 DEFAULT CHARSET=utf8 COMMENT='快递公司表';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '快递公司id',
+    `code` varchar(50) NOT NULL DEFAULT '' COMMENT '快递公司简称',
+    `name` varchar(50) NOT NULL DEFAULT '' COMMENT '快递公司全称',
+    `partner_id` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否需要月结账号',
+    `partner_key` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否需要月结密码',
+    `net` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否需要取件网店',
+    `account` varchar(100) NOT NULL DEFAULT '' COMMENT '账号',
+    `key` varchar(100) NOT NULL DEFAULT '' COMMENT '密码',
+    `net_name` varchar(100) NOT NULL DEFAULT '' COMMENT '网点名称',
+    `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
+    `is_show` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否显示',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否可用',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `code` (`code`) USING BTREE,
+    KEY `is_show` (`is_show`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=571 DEFAULT CHARSET=utf8 COMMENT='快递公司表';
 
 --
 -- 转存表中的数据 `eb_express`
@@ -217,7 +274,7 @@ CREATE TABLE IF NOT EXISTS `eb_express` (
 
 INSERT INTO `eb_express` (`id`, `code`, `name`, `partner_id`, `partner_key`, `net`, `account`, `key`, `net_name`, `sort`, `is_show`, `status`) VALUES
 (1, 'yunda', '韵达快递', 1, 1, 0, '', '', '', 0, 1, 0),
-(2, 'yuantong', '圆通速递', 1, 1, 0, '123123', '123123', '', 0, 1, 1),
+(2, 'yuantong', '圆通速递', 1, 1, 0, '', '', '', 0, 1, 1),
 (3, 'zhongtong', '中通快递', 1, 1, 0, '', '', '', 0, 1, 0),
 (4, 'shentong', '申通快递', 1, 1, 1, '', '', '', 0, 1, 0),
 (5, 'huitongkuaidi', '百世快递', 1, 1, 0, '', '', '', 0, 1, 0),
@@ -780,7 +837,12 @@ INSERT INTO `eb_express` (`id`, `code`, `name`, `partner_id`, `partner_key`, `ne
 (562, 'zsda56', '转瞬达集运', 0, 0, 0, '', '', '', 0, 0, 1),
 (563, 'zsky123', '准实快运', 0, 0, 0, '', '', '', 0, 0, 1),
 (564, 'zsmhwl', '明辉物流', 0, 0, 0, '', '', '', 0, 0, 1),
-(565, 'zy100', '中远快运', 0, 0, 0, '', '', '', 0, 0, 1);
+(565, 'zy100', '中远快运', 0, 0, 0, '', '', '', 0, 0, 1),
+(566, 'shunfeng', '顺丰速运', 1, 0, 0, '', '', '', 0, 1, 0),
+(567, 'youzhengguonei', '邮政快递包裹', 1, 1, 0, '', '', '', 0, 1, 0),
+(568, 'ems', 'EMS', 1, 1, 0, '', '', '', 0, 1, 0),
+(569, 'youzhengbk', '邮政标准快递', 0, 0, 0, '', '', '', 0, 1, 1),
+(570, 'youzhengguoji', '国际包裹', 0, 0, 0, '', '', '', 0, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -789,16 +851,16 @@ INSERT INTO `eb_express` (`id`, `code`, `name`, `partner_id`, `partner_key`, `ne
 --
 
 CREATE TABLE IF NOT EXISTS `eb_live_anchor` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '主播名称',
-  `cover_img` varchar(255) NOT NULL DEFAULT '' COMMENT '主播图像',
-  `wechat` varchar(50) NOT NULL DEFAULT '' COMMENT '主播微信号',
-  `phone` varchar(32) NOT NULL DEFAULT '' COMMENT '手机号',
-  `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否显示',
-  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
-  `add_time` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `name` varchar(50) NOT NULL DEFAULT '' COMMENT '主播名称',
+    `cover_img` varchar(255) NOT NULL DEFAULT '' COMMENT '主播图像',
+    `wechat` varchar(50) NOT NULL DEFAULT '' COMMENT '主播微信号',
+    `phone` varchar(32) NOT NULL DEFAULT '' COMMENT '手机号',
+    `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否显示',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+    `add_time` int(10) NOT NULL DEFAULT '0',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -807,25 +869,25 @@ CREATE TABLE IF NOT EXISTS `eb_live_anchor` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_live_goods` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `goods_id` int(10) NOT NULL DEFAULT '0' COMMENT '微信商品ID',
-  `audit_id` int(10) NOT NULL DEFAULT '0' COMMENT '审核ID',
-  `product_id` int(10) NOT NULL DEFAULT '0' COMMENT '商品id',
-  `name` varchar(30) NOT NULL DEFAULT '' COMMENT '商品名称',
-  `cover_img` varchar(255) NOT NULL DEFAULT '' COMMENT '商品图片链接',
-  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '商品小程序链接',
-  `price_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '价格类型（1:一口价，此时读price字段; 2:价格区间，此时price字段为左边界，price2字段为右边界; 3:折扣价，此时price字段为原价，price2字段为现价；）',
-  `cost_price` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `price` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `price2` decimal(10,2) NOT NULL DEFAULT '0.00',
-  `audit_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审核状态（0：未审核，1：审核中，2:审核通过，3审核失败）',
-  `third_part_tag` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1、2：表示是为 API 添加商品，否则是直播控制台添加的商品',
-  `sort` smallint(5) NOT NULL DEFAULT '0',
-  `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否显示',
-  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `goods_id` int(10) NOT NULL DEFAULT '0' COMMENT '微信商品ID',
+    `audit_id` int(10) NOT NULL DEFAULT '0' COMMENT '审核ID',
+    `product_id` int(10) NOT NULL DEFAULT '0' COMMENT '商品id',
+    `name` varchar(30) NOT NULL DEFAULT '' COMMENT '商品名称',
+    `cover_img` varchar(255) NOT NULL DEFAULT '' COMMENT '商品图片链接',
+    `url` varchar(255) NOT NULL DEFAULT '' COMMENT '商品小程序链接',
+    `price_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '价格类型（1:一口价，此时读price字段; 2:价格区间，此时price字段为左边界，price2字段为右边界; 3:折扣价，此时price字段为原价，price2字段为现价；）',
+    `cost_price` decimal(10,2) NOT NULL DEFAULT '0.00',
+    `price` decimal(10,2) NOT NULL DEFAULT '0.00',
+    `price2` decimal(10,2) NOT NULL DEFAULT '0.00',
+    `audit_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审核状态（0：未审核，1：审核中，2:审核通过，3审核失败）',
+    `third_part_tag` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1、2：表示是为 API 添加商品，否则是直播控制台添加的商品',
+    `sort` smallint(5) NOT NULL DEFAULT '0',
+    `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否显示',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -834,32 +896,32 @@ CREATE TABLE IF NOT EXISTS `eb_live_goods` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_live_room` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `room_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '直播间 id',
-  `name` varchar(32) NOT NULL DEFAULT '' COMMENT '直播间名字',
-  `cover_img` varchar(255) NOT NULL DEFAULT '' COMMENT '背景图',
-  `share_img` varchar(255) NOT NULL DEFAULT '' COMMENT '分享图',
-  `start_time` int(10) NOT NULL DEFAULT '0' COMMENT '直播计划开始时间',
-  `end_time` int(10) NOT NULL DEFAULT '0' COMMENT '直播计划结束时间',
-  `anchor_name` varchar(50) NOT NULL DEFAULT '' COMMENT '主播昵称',
-  `anchor_wechat` varchar(50) NOT NULL DEFAULT '' COMMENT '主播微信号',
-  `phone` varchar(32) NOT NULL DEFAULT '' COMMENT '主播手机号',
-  `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '直播间类型 【1: 推流，0：手机直播】',
-  `screen_type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '横屏、竖屏 【1：横屏，0：竖屏】',
-  `close_like` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否关闭点赞',
-  `close_goods` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否关闭货架',
-  `close_comment` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否关闭评论',
-  `error_msg` varchar(255) NOT NULL DEFAULT '' COMMENT '未通过原因',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审核状态0=未审核1=微信审核2=审核通过-1=审核未通过',
-  `live_status` smallint(5) unsigned NOT NULL DEFAULT '102' COMMENT '直播状态101：直播中，102：未开始，103已结束，104禁播，105：暂停，106：异常，107：已过期',
-  `mark` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
-  `replay_status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '回放状态',
-  `sort` smallint(5) NOT NULL DEFAULT '0',
-  `is_show` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否显示',
-  `is_del` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`,`phone`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='直播间表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `room_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '直播间 id',
+    `name` varchar(32) NOT NULL DEFAULT '' COMMENT '直播间名字',
+    `cover_img` varchar(255) NOT NULL DEFAULT '' COMMENT '背景图',
+    `share_img` varchar(255) NOT NULL DEFAULT '' COMMENT '分享图',
+    `start_time` int(10) NOT NULL DEFAULT '0' COMMENT '直播计划开始时间',
+    `end_time` int(10) NOT NULL DEFAULT '0' COMMENT '直播计划结束时间',
+    `anchor_name` varchar(50) NOT NULL DEFAULT '' COMMENT '主播昵称',
+    `anchor_wechat` varchar(50) NOT NULL DEFAULT '' COMMENT '主播微信号',
+    `phone` varchar(32) NOT NULL DEFAULT '' COMMENT '主播手机号',
+    `type` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '直播间类型 【1: 推流，0：手机直播】',
+    `screen_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '横屏、竖屏 【1：横屏，0：竖屏】',
+    `close_like` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否关闭点赞',
+    `close_goods` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否关闭货架',
+    `close_comment` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否关闭评论',
+    `error_msg` varchar(255) NOT NULL DEFAULT '' COMMENT '未通过原因',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审核状态0=未审核1=微信审核2=审核通过-1=审核未通过',
+    `live_status` smallint(5) UNSIGNED NOT NULL DEFAULT '102' COMMENT '直播状态101：直播中，102：未开始，103已结束，104禁播，105：暂停，106：异常，107：已过期',
+    `mark` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
+    `replay_status` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '回放状态',
+    `sort` smallint(5) NOT NULL DEFAULT '0',
+    `is_show` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '是否显示',
+    `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否删除',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`,`phone`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='直播间表' ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -868,10 +930,10 @@ CREATE TABLE IF NOT EXISTS `eb_live_room` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_live_room_goods` (
-  `live_room_id` int(10) unsigned NOT NULL DEFAULT '0',
-  `live_goods_id` int(10) unsigned NOT NULL DEFAULT '0',
-  KEY `broadcast_room_id` (`live_room_id`,`live_goods_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='直播间导入商品表';
+    `live_room_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
+    `live_goods_id` int(10) UNSIGNED NOT NULL DEFAULT '0',
+    KEY `broadcast_room_id` (`live_room_id`,`live_goods_id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='直播间导入商品表' ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -880,17 +942,17 @@ CREATE TABLE IF NOT EXISTS `eb_live_room_goods` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_member_card` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `card_batch_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '卡批次id',
-  `card_number` varchar(20) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '卡号',
-  `card_password` char(12) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '密码',
-  `use_uid` int(11) NOT NULL DEFAULT '0' COMMENT '使用用户',
-  `use_time` int(10) NOT NULL DEFAULT '0' COMMENT '使用时间',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '卡状态：0：冻结；1：激活',
-  `add_time` int(10) NOT NULL DEFAULT '0',
-  `update_time` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`,`card_batch_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员卡表';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `card_batch_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '卡批次id',
+    `card_number` varchar(20) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '卡号',
+    `card_password` char(12) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '密码',
+    `use_uid` int(11) NOT NULL DEFAULT '0' COMMENT '使用用户',
+    `use_time` int(10) NOT NULL DEFAULT '0' COMMENT '使用时间',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '卡状态：0：冻结；1：激活',
+    `add_time` int(10) NOT NULL DEFAULT '0',
+    `update_time` int(10) NOT NULL DEFAULT '0',
+    PRIMARY KEY (`id`,`card_batch_id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员卡表' ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -899,21 +961,21 @@ CREATE TABLE IF NOT EXISTS `eb_member_card` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_member_card_batch` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) NOT NULL DEFAULT '0' COMMENT '批次名称',
-  `total_num` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '生成卡数量',
-  `use_start_time` int(10) unsigned NOT NULL DEFAULT '7' COMMENT '体验开始时间',
-  `use_end_time` int(10) NOT NULL DEFAULT '0' COMMENT '体验结束时间',
-  `use_day` int(10) NOT NULL DEFAULT '0' COMMENT '体验天数',
-  `use_num` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '使用',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否生效,控制此批次所有卡0：不生效；1：生效',
-  `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
-  `qrcode` varchar(255) NOT NULL DEFAULT '' COMMENT '二维码图路径',
-  `remark` varchar(512) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '备注',
-  `add_time` int(10) NOT NULL DEFAULT '0',
-  `update_time` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员卡批次表';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `title` varchar(100) NOT NULL DEFAULT '0' COMMENT '批次名称',
+    `total_num` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '生成卡数量',
+    `use_start_time` int(10) UNSIGNED NOT NULL DEFAULT '7' COMMENT '体验开始时间',
+    `use_end_time` int(10) NOT NULL DEFAULT '0' COMMENT '体验结束时间',
+    `use_day` int(10) NOT NULL DEFAULT '0' COMMENT '体验天数',
+    `use_num` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '使用',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否生效,控制此批次所有卡0：不生效；1：生效',
+    `sort` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '排序',
+    `qrcode` varchar(255) NOT NULL DEFAULT '' COMMENT '二维码图路径',
+    `remark` varchar(512) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '备注',
+    `add_time` int(10) NOT NULL DEFAULT '0',
+    `update_time` int(10) NOT NULL DEFAULT '0',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员卡批次表' ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -922,19 +984,19 @@ CREATE TABLE IF NOT EXISTS `eb_member_card_batch` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_member_right` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `right_type` varchar(100) NOT NULL DEFAULT '' COMMENT '权益类别',
-  `title` varchar(200) NOT NULL DEFAULT '' COMMENT ' 权益名称',
-  `show_title` varchar(255) NOT NULL DEFAULT '' COMMENT '显示权益名称',
-  `image` varchar(200) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '权益图标',
-  `explain` varchar(1024) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '权益介绍',
-  `number` int(2) NOT NULL DEFAULT '1' COMMENT '规则数字',
-  `sort` int(10) NOT NULL DEFAULT '0' COMMENT '排序倒序',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0:禁用，1：启用',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`,`right_type`) USING BTREE,
-  KEY `type` (`right_type`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员权益';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `right_type` varchar(100) NOT NULL DEFAULT '' COMMENT '权益类别',
+    `title` varchar(200) NOT NULL DEFAULT '' COMMENT ' 权益名称',
+    `show_title` varchar(255) NOT NULL DEFAULT '' COMMENT '显示权益名称',
+    `image` varchar(200) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '权益图标',
+    `explain` varchar(1024) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '权益介绍',
+    `number` int(2) NOT NULL DEFAULT '1' COMMENT '规则数字',
+    `sort` int(10) NOT NULL DEFAULT '0' COMMENT '排序倒序',
+    `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0:禁用，1：启用',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`,`right_type`) USING BTREE,
+    KEY `type` (`right_type`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='会员权益' ROW_FORMAT=DYNAMIC;
 
 --
 -- 转存表中的数据 `eb_member_right`
@@ -946,7 +1008,7 @@ INSERT INTO `eb_member_right` (`id`, `right_type`, `title`, `show_title`, `image
 (3, 'express', '运费折扣', '运费折扣', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201110/55f5518b80f35386bc7224cfb1ee3700.png', '运费折扣优惠', 90, 0, 1, 0),
 (4, 'sign', '签到返利', '签到返利', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201110/b56f2bc3e92ddf7e306bdd228fae1993.png', '签到得多倍积分', 3, 0, 1, 0),
 (5, 'offline', '线下折扣', '线下折扣', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201110/15ed21e8b1a3eacbac52c30bf8a82bc4.png', '线下付款享受折扣', 90, 0, 1, 0),
-(6, 'coupon', '会员优惠券', '会员优惠券', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201110/47c6046274318574a4840ad4f4c566f1.png', '每月可得优惠券', 1, 0, 1, 0);
+(6, 'coupon', '会员优惠券', '会员优惠券', 'https://test.v4.wuht.net//uploads/attach/2021/08/20210812/5c5b0257adf89228c892ce81f80c9495.png', '每月可得优惠券', 1, 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -955,29 +1017,48 @@ INSERT INTO `eb_member_right` (`id`, `right_type`, `title`, `show_title`, `image
 --
 
 CREATE TABLE IF NOT EXISTS `eb_member_ship` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `type` varchar(20) NOT NULL DEFAULT 'month' COMMENT '会员类别month:月卡会员；quarter:季卡；year:年卡；ever:永久；free:免费',
-  `title` varchar(200) NOT NULL DEFAULT '' COMMENT '会员名称',
-  `vip_day` int(10) NOT NULL DEFAULT '0' COMMENT '会员时间(天)',
-  `price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '原价',
-  `pre_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '优惠后价格',
-  `sort` int(10) NOT NULL DEFAULT '0' COMMENT '排序倒序',
-  `is_del` int(2) NOT NULL DEFAULT '0' COMMENT '删除',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `type` (`type`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员类型';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `type` varchar(20) NOT NULL DEFAULT 'month' COMMENT '会员类别month:月卡会员；quarter:季卡；year:年卡；ever:永久；free:免费',
+    `title` varchar(200) NOT NULL DEFAULT '' COMMENT '会员名称',
+    `vip_day` int(10) NOT NULL DEFAULT '0' COMMENT '会员时间(天)',
+    `price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '原价',
+    `pre_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '优惠后价格',
+    `sort` int(10) NOT NULL DEFAULT '0' COMMENT '排序倒序',
+    `is_del` int(2) NOT NULL DEFAULT '0' COMMENT '删除',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `type` (`type`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='会员类型' ROW_FORMAT=DYNAMIC;
 
 --
 -- 转存表中的数据 `eb_member_ship`
 --
 
 INSERT INTO `eb_member_ship` (`id`, `type`, `title`, `vip_day`, `price`, `pre_price`, `sort`, `is_del`, `add_time`) VALUES
-(1, 'month', '月卡', 30, '30.00', '0.01', 9, 0, 1588129765),
-(2, 'quarter', '季卡', 90, '90.00', '80.00', 8, 0, 1588129794),
-(3, 'year', '年卡', 365, '365.00', '300.00', 6, 0, 1588129818),
-(4, 'ever', '永久', -1, '1000.00', '899.00', 1, 0, 1588129856),
-(5, 'free', '试用', 7, '100.00', '0.00', 11, 0, 1588130680);
+(1, 'free', '试用', 7, '100.00', '0.00', 5, 0, 1588130680),
+(2, 'month', '月卡', 30, '30.00', '25.00', 4, 0, 1588130680),
+(3, 'quarter', '季卡', 90, '90.00', '80.00', 3, 0, 1588130680),
+(4, 'year', '年卡', 365, '365.00', '300.00', 2, 0, 1588130680),
+(5, 'ever', '永久', -1, '1000.00', '900.00', 1, 0, 1588130680);
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `eb_message_system`
+--
+
+CREATE TABLE IF NOT EXISTS `eb_message_system` (
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `mark` varchar(50) NOT NULL DEFAULT '' COMMENT '标识',
+    `uid` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户ID',
+    `title` varchar(256) NOT NULL DEFAULT '' COMMENT '通知标题',
+    `content` varchar(512) NOT NULL DEFAULT '' COMMENT '通知内容',
+    `look` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否查看',
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1:普通用户，2：管理员',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '通知时间',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='系统通知';
 
 -- --------------------------------------------------------
 
@@ -986,28 +1067,28 @@ INSERT INTO `eb_member_ship` (`id`, `type`, `title`, `vip_day`, `price`, `pre_pr
 --
 
 CREATE TABLE IF NOT EXISTS `eb_other_order` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户uid',
-  `type` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '区别 \r\n0：免费领取\r\n1：购买会员卡 \r\n2：卡密领取会员卡',
-  `order_id` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '订单号',
-  `member_type` varchar(10) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '会员类型 \r\n月卡：month\r\n季卡：quarter\r\n年卡：year\r\n永久：ever\r\n免费：free',
-  `code` varchar(20) NOT NULL DEFAULT '' COMMENT '卡号',
-  `pay_type` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '支付方式',
-  `paid` tinyint(1) NOT NULL DEFAULT '0' COMMENT '支付状态 0:  未支付 1：已支付',
-  `pay_price` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '支付金额',
-  `member_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '会员卡价格',
-  `pay_time` int(50) unsigned NOT NULL DEFAULT '0' COMMENT '会员购买时间',
-  `trade_no` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '支付宝支付,支付宝交易订单号',
-  `channel_type` varchar(10) NOT NULL DEFAULT '' COMMENT '支付渠道(微信公众号 h5 小程序)',
-  `is_free` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否免费',
-  `is_permanent` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否永久',
-  `overdue_time` bigint(20) unsigned NOT NULL DEFAULT '0' COMMENT '会员过期时间',
-  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除',
-  `vip_day` int(10) NOT NULL DEFAULT '0' COMMENT '会员有效天数',
-  `add_time` int(50) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `money` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '原价格',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='会员购买记录表';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `uid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户uid',
+    `type` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '区别 \r\n0：免费领取\r\n1：购买会员卡 \r\n2：卡密领取会员卡',
+    `order_id` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '订单号',
+    `member_type` varchar(10) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '会员类型 \r\n月卡：month\r\n季卡：quarter\r\n年卡：year\r\n永久：ever\r\n免费：free',
+    `code` varchar(20) NOT NULL DEFAULT '' COMMENT '卡号',
+    `pay_type` varchar(32) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '支付方式',
+    `paid` tinyint(1) NOT NULL DEFAULT '0' COMMENT '支付状态 0:  未支付 1：已支付',
+    `pay_price` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '支付金额',
+    `member_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '会员卡价格',
+    `pay_time` int(50) UNSIGNED NOT NULL DEFAULT '0' COMMENT '会员购买时间',
+    `trade_no` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '' COMMENT '支付宝支付,支付宝交易订单号',
+    `channel_type` varchar(10) NOT NULL DEFAULT '' COMMENT '支付渠道(微信公众号 h5 小程序)',
+    `is_free` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否免费',
+    `is_permanent` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否永久',
+    `overdue_time` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT '会员过期时间',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除',
+    `vip_day` int(10) NOT NULL DEFAULT '0' COMMENT '会员有效天数',
+    `add_time` int(50) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `money` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '原价格',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='会员购买记录表' ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -1016,14 +1097,14 @@ CREATE TABLE IF NOT EXISTS `eb_other_order` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_other_order_status` (
-  `oid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单id',
-  `change_type` varchar(32) NOT NULL DEFAULT '' COMMENT '操作类型',
-  `change_message` varchar(256) NOT NULL DEFAULT '' COMMENT '操作备注',
-  `shop_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '订单类型 1：会员卡',
-  `change_time` int(10) NOT NULL DEFAULT '0',
-  KEY `oid` (`oid`) USING BTREE,
-  KEY `change_type` (`change_type`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='订单操作记录表';
+    `oid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '订单id',
+    `change_type` varchar(32) NOT NULL DEFAULT '' COMMENT '操作类型',
+    `change_message` varchar(256) NOT NULL DEFAULT '' COMMENT '操作备注',
+    `shop_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '订单类型 1：会员卡',
+    `change_time` int(10) NOT NULL DEFAULT '0',
+    KEY `oid` (`oid`) USING BTREE,
+    KEY `change_type` (`change_type`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单操作记录表' ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -1032,21 +1113,21 @@ CREATE TABLE IF NOT EXISTS `eb_other_order_status` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_qrcode` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '微信二维码ID',
-  `third_type` varchar(32) NOT NULL DEFAULT '' COMMENT '二维码类型',
-  `third_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
-  `ticket` varchar(255) NOT NULL DEFAULT '' COMMENT '二维码参数',
-  `expire_seconds` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '二维码有效时间',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态',
-  `add_time` varchar(255) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '微信访问url',
-  `qrcode_url` varchar(255) NOT NULL DEFAULT '' COMMENT '微信二维码url',
-  `scan` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '被扫的次数',
-  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '二维码所属平台1=小程序，2=公众号，3=H5',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `third_type` (`third_type`,`third_id`) USING BTREE,
-  KEY `ticket` (`ticket`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='微信二维码管理表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '微信二维码ID',
+    `third_type` varchar(32) NOT NULL DEFAULT '' COMMENT '二维码类型',
+    `third_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户id',
+    `ticket` varchar(255) NOT NULL DEFAULT '' COMMENT '二维码参数',
+    `expire_seconds` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '二维码有效时间',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '状态',
+    `add_time` varchar(255) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `url` varchar(255) NOT NULL DEFAULT '' COMMENT '微信访问url',
+    `qrcode_url` varchar(255) NOT NULL DEFAULT '' COMMENT '微信二维码url',
+    `scan` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '被扫的次数',
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '二维码所属平台1=小程序，2=公众号，3=H5',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `third_type` (`third_type`,`third_id`) USING BTREE,
+    KEY `ticket` (`ticket`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信二维码管理表' ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -1055,21 +1136,22 @@ CREATE TABLE IF NOT EXISTS `eb_qrcode` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_shipping_templates` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '模板名称',
-  `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '计费方式',
-  `appoint` tinyint(1) NOT NULL DEFAULT '0' COMMENT '指定包邮',
-  `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='运费模板表';
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+    `name` varchar(255) NOT NULL DEFAULT '' COMMENT '模板名称',
+    `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '计费方式',
+    `appoint` tinyint(1) NOT NULL DEFAULT '0' COMMENT '指定包邮',
+    `no_delivery` tinyint(1) NOT NULL DEFAULT '0' COMMENT '指定不送达',
+    `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='运费模板表';
 
 --
 -- 转存表中的数据 `eb_shipping_templates`
 --
 
-INSERT INTO `eb_shipping_templates` (`id`, `name`, `type`, `appoint`, `sort`, `add_time`) VALUES
-(1, '通用模板', 1, 0, 0, 1589082717);
+INSERT INTO `eb_shipping_templates` (`id`, `name`, `type`, `appoint`, `no_delivery`, `sort`, `add_time`) VALUES
+(1, '默认模版', 1, 0, 0, 0, 1629717148);
 
 -- --------------------------------------------------------
 
@@ -1078,16 +1160,31 @@ INSERT INTO `eb_shipping_templates` (`id`, `name`, `type`, `appoint`, `sort`, `a
 --
 
 CREATE TABLE IF NOT EXISTS `eb_shipping_templates_free` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `province_id` int(11) NOT NULL DEFAULT '0' COMMENT '省ID',
-  `temp_id` int(11) NOT NULL DEFAULT '0' COMMENT '模板ID',
-  `city_id` int(11) NOT NULL DEFAULT '0' COMMENT '城市ID',
-  `number` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '包邮件数',
-  `price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '包邮金额',
-  `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '计费方式',
-  `uniqid` varchar(32) NOT NULL DEFAULT '' COMMENT '分组唯一值',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='运费模板指定包邮关联表';
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+    `province_id` int(11) NOT NULL DEFAULT '0' COMMENT '省ID',
+    `temp_id` int(11) NOT NULL DEFAULT '0' COMMENT '模板ID',
+    `city_id` int(11) NOT NULL DEFAULT '0' COMMENT '城市ID',
+    `number` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '包邮件数',
+    `price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '包邮金额',
+    `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '计费方式',
+    `uniqid` varchar(32) NOT NULL DEFAULT '' COMMENT '分组唯一值',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='运费模板指定包邮关联表';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `eb_shipping_templates_no_delivery`
+--
+
+CREATE TABLE IF NOT EXISTS `eb_shipping_templates_no_delivery` (
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `province_id` int(10) NOT NULL DEFAULT '0' COMMENT '省ID',
+    `temp_id` int(10) NOT NULL DEFAULT '0' COMMENT '模板ID',
+    `city_id` int(10) NOT NULL DEFAULT '0' COMMENT '城市ID',
+    `uniqid` varchar(32) NOT NULL DEFAULT '' COMMENT '分组唯一值',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='运费模板指定不送达表';
 
 -- --------------------------------------------------------
 
@@ -1095,42 +1192,45 @@ CREATE TABLE IF NOT EXISTS `eb_shipping_templates_free` (
 -- 表的结构 `eb_shipping_templates_region`
 --
 
-CREATE TABLE IF NOT EXISTS `eb_shipping_templates_region`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `province_id` int(11) NOT NULL DEFAULT 0 COMMENT '省ID',
-  `temp_id` int(11) NOT NULL DEFAULT 0 COMMENT '模板ID',
-  `city_id` int(11) NOT NULL DEFAULT 0 COMMENT '城市ID',
-  `first` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '首件',
-  `first_price` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '首件运费',
-  `continue` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '续件',
-  `continue_price` decimal(10, 2) NOT NULL DEFAULT 0.00 COMMENT '续件运费',
-  `type` tinyint(1) NOT NULL DEFAULT 1 COMMENT '计费方式',
-  `uniqid` varchar(32) NOT NULL DEFAULT '' COMMENT '分组唯一值',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 CHARACTER SET=utf8  COMMENT='运费模板指定城市运费表';
+CREATE TABLE IF NOT EXISTS `eb_shipping_templates_region` (
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+    `province_id` int(11) NOT NULL DEFAULT '0' COMMENT '省ID',
+    `temp_id` int(11) NOT NULL DEFAULT '0' COMMENT '模板ID',
+    `city_id` int(11) NOT NULL DEFAULT '0' COMMENT '城市ID',
+    `first` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '首件',
+    `first_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '首件运费',
+    `continue` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '续件',
+    `continue_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '续件运费',
+    `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '计费方式',
+    `uniqid` varchar(32) NOT NULL DEFAULT '' COMMENT '分组唯一值',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='运费模板指定城市运费表';
 
--- ----------------------------
--- Records of eb_shipping_templates_region
--- ----------------------------
+--
+-- 转存表中的数据 `eb_shipping_templates_region`
+--
+
 INSERT INTO `eb_shipping_templates_region` (`id`, `province_id`, `temp_id`, `city_id`, `first`, `first_price`, `continue`, `continue_price`, `type`, `uniqid`) VALUES
-(1, 0, 1, 0, 1.00, 0.00, 1.00, 0.00, 1, 'adminapi5fb4c3d03e6b02175');
+(1, 0, 1, 0, '1.00', '0.00', '1.00', '0.00', 1, 'adminapi6123829ca9bef8517');
+
+-- --------------------------------------------------------
 
 --
 -- 表的结构 `eb_sms_record`
 --
 
 CREATE TABLE IF NOT EXISTS `eb_sms_record` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '短信发送记录编号',
-  `uid` varchar(255) NOT NULL DEFAULT '' COMMENT '短信平台账号',
-  `phone` char(11) NOT NULL DEFAULT '' COMMENT '接受短信的手机号',
-  `content` text NOT NULL DEFAULT '' COMMENT '短信内容',
-  `add_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '发送短信时间',
-  `add_ip` varchar(16) NOT NULL DEFAULT '' COMMENT '添加记录ip',
-  `template` varchar(255) NOT NULL DEFAULT '' COMMENT '短信模板ID',
-  `resultcode` int(6) unsigned DEFAULT NULL COMMENT '状态码 100=成功,130=失败,131=空号,132=停机,133=关机,134=无状态',
-  `record_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '发送记录id',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='短信发送记录表';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '短信发送记录编号',
+    `uid` varchar(255) NOT NULL DEFAULT '' COMMENT '短信平台账号',
+    `phone` char(11) NOT NULL DEFAULT '' COMMENT '接受短信的手机号',
+    `content` text NOT NULL COMMENT '短信内容',
+    `add_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '发送短信时间',
+    `add_ip` varchar(16) NOT NULL DEFAULT '' COMMENT '添加记录ip',
+    `template` varchar(255) NOT NULL DEFAULT '' COMMENT '短信模板ID',
+    `resultcode` int(6) UNSIGNED NOT NULL DEFAULT '0' COMMENT '状态码 100=成功,130=失败,131=空号,132=停机,133=关机,134=无状态',
+    `record_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '发送记录id',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='短信发送记录表';
 
 -- --------------------------------------------------------
 
@@ -1139,44 +1239,44 @@ CREATE TABLE IF NOT EXISTS `eb_sms_record` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_bargain` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '砍价商品ID',
-  `product_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '关联商品ID',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '砍价活动名称',
-  `image` varchar(150) NOT NULL DEFAULT '' COMMENT '砍价活动图片',
-  `unit_name` varchar(16) DEFAULT NULL COMMENT '单位名称',
-  `stock` int(11) unsigned DEFAULT '0' COMMENT '库存',
-  `sales` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '销量',
-  `images` varchar(2000) NOT NULL DEFAULT '' COMMENT '砍价商品轮播图',
-  `start_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '砍价开启时间',
-  `stop_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '砍价结束时间',
-  `store_name` varchar(255) DEFAULT NULL COMMENT '砍价商品名称',
-  `price` decimal(8,2) unsigned DEFAULT NULL COMMENT '砍价金额',
-  `min_price` decimal(8,2) unsigned DEFAULT NULL COMMENT '砍价商品最低价',
-  `num` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '可购买砍价商品数量',
-  `bargain_max_price` decimal(8,2) unsigned DEFAULT NULL COMMENT '用户每次砍价的最大金额',
-  `bargain_min_price` decimal(8,2) unsigned DEFAULT NULL COMMENT '用户每次砍价的最小金额',
-  `bargain_num` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '用户帮砍的次数',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '砍价状态 0(到砍价时间不自动开启)  1(到砍价时间自动开启时间)',
-  `give_integral` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '反多少积分',
-  `info` varchar(255) DEFAULT NULL COMMENT '砍价活动简介',
-  `cost` decimal(8,2) unsigned DEFAULT NULL COMMENT '成本价',
-  `sort` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
-  `is_hot` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否推荐0不推荐1推荐',
-  `is_del` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除 0未删除 1删除',
-  `add_time` int(11) unsigned DEFAULT NULL COMMENT '添加时间',
-  `is_postage` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否包邮 0不包邮 1包邮',
-  `postage` decimal(10,2) unsigned DEFAULT NULL COMMENT '邮费',
-  `rule` text COMMENT '砍价规则',
-  `look` int(11) unsigned DEFAULT '0' COMMENT '砍价商品浏览量',
-  `share` int(11) unsigned DEFAULT '0' COMMENT '砍价商品分享量',
-  `temp_id` int(11) DEFAULT NULL COMMENT '运费模板ID',
-  `weight` decimal(8,2) DEFAULT '0.00' COMMENT '重量',
-  `volume` decimal(8,2) DEFAULT '0.00' COMMENT '体积',
-  `quota` int(10) NOT NULL DEFAULT '0' COMMENT '限购总数',
-  `quota_show` int(10) NOT NULL DEFAULT '0' COMMENT '限量总数显示',
-  `people_num` int(11) NOT NULL DEFAULT '1' COMMENT '用户帮砍的次数',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='砍价表';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '砍价商品ID',
+    `product_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '关联商品ID',
+    `title` varchar(255) NOT NULL DEFAULT '' COMMENT '砍价活动名称',
+    `image` varchar(150) NOT NULL DEFAULT '' COMMENT '砍价活动图片',
+    `unit_name` varchar(16) NOT NULL DEFAULT '' COMMENT '单位名称',
+    `stock` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '库存',
+    `sales` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '销量',
+    `images` varchar(2000) NOT NULL DEFAULT '' COMMENT '砍价商品轮播图',
+    `start_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '砍价开启时间',
+    `stop_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '砍价结束时间',
+    `store_name` varchar(255) NOT NULL DEFAULT '' COMMENT '砍价商品名称',
+    `price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '砍价金额',
+    `min_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '砍价商品最低价',
+    `num` int(11) UNSIGNED NOT NULL DEFAULT '1' COMMENT '可购买砍价商品数量',
+    `bargain_max_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '用户每次砍价的最大金额',
+    `bargain_min_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '用户每次砍价的最小金额',
+    `bargain_num` int(11) UNSIGNED NOT NULL DEFAULT '1' COMMENT '用户帮砍的次数',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '砍价状态 0(到砍价时间不自动开启)  1(到砍价时间自动开启时间)',
+    `give_integral` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '反多少积分',
+    `info` varchar(255) NOT NULL DEFAULT '' COMMENT '砍价活动简介',
+    `cost` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '成本价',
+    `sort` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '排序',
+    `is_hot` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否推荐0不推荐1推荐',
+    `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否删除 0未删除 1删除',
+    `add_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `is_postage` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '是否包邮 0不包邮 1包邮',
+    `postage` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '邮费',
+    `rule` text NOT NULL COMMENT '砍价规则',
+    `look` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '砍价商品浏览量',
+    `share` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '砍价商品分享量',
+    `temp_id` int(11) NOT NULL DEFAULT '0' COMMENT '运费模板ID',
+    `weight` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '重量',
+    `volume` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '体积',
+    `quota` int(10) NOT NULL DEFAULT '0' COMMENT '限购总数',
+    `quota_show` int(10) NOT NULL DEFAULT '0'  COMMENT '限量总数显示',
+    `people_num` int(11) NOT NULL DEFAULT '1' COMMENT '用户帮砍的次数',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='砍价表';
 
 -- --------------------------------------------------------
 
@@ -1185,17 +1285,17 @@ CREATE TABLE IF NOT EXISTS `eb_store_bargain` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_bargain_user` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户参与砍价表ID',
-  `uid` int(11) unsigned DEFAULT NULL COMMENT '用户ID',
-  `bargain_id` int(11) unsigned DEFAULT NULL COMMENT '砍价商品id',
-  `bargain_price_min` decimal(8,2) unsigned DEFAULT NULL COMMENT '砍价的最低价',
-  `bargain_price` decimal(8,2) DEFAULT NULL COMMENT '砍价金额',
-  `price` decimal(8,2) unsigned DEFAULT NULL COMMENT '砍掉的价格',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态 1参与中 2 活动结束参与失败 3活动结束参与成功',
-  `add_time` int(11) unsigned DEFAULT NULL COMMENT '参与时间',
-  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否取消',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户参与砍价表';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户参与砍价表ID',
+    `uid` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户ID',
+    `bargain_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '砍价商品id',
+    `bargain_price_min` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '砍价的最低价',
+    `bargain_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '砍价金额',
+    `price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '砍掉的价格',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '状态 1参与中 2 活动结束参与失败 3活动结束参与成功',
+    `add_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '参与时间',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否取消',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户参与砍价表';
 
 -- --------------------------------------------------------
 
@@ -1204,15 +1304,15 @@ CREATE TABLE IF NOT EXISTS `eb_store_bargain_user` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_bargain_user_help` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '砍价用户帮助表ID',
-  `uid` int(11) unsigned DEFAULT NULL COMMENT '帮助的用户id',
-  `bargain_id` int(11) unsigned DEFAULT NULL COMMENT '砍价商品ID',
-  `bargain_user_id` int(11) unsigned DEFAULT NULL COMMENT '用户参与砍价表id',
-  `price` decimal(8,2) unsigned DEFAULT NULL COMMENT '帮助砍价多少金额',
-  `add_time` int(11) unsigned DEFAULT NULL COMMENT '添加时间',
-  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否自己砍价',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='砍价用户帮助表';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '砍价用户帮助表ID',
+    `uid` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '帮助的用户id',
+    `bargain_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '砍价商品ID',
+    `bargain_user_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户参与砍价表id',
+    `price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '帮助砍价多少金额',
+    `add_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否自己砍价',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='砍价用户帮助表';
 
 -- --------------------------------------------------------
 
@@ -1221,28 +1321,28 @@ CREATE TABLE IF NOT EXISTS `eb_store_bargain_user_help` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_cart` (
-  `id` bigint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT '购物车表ID',
-  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
-  `type` varchar(32) NOT NULL DEFAULT '' COMMENT '类型',
-  `product_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品ID',
-  `product_attr_unique` varchar(16) NOT NULL DEFAULT '' COMMENT '商品属性',
-  `cart_num` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '商品数量',
-  `add_time` int(10) unsigned NOT NULL COMMENT '添加时间',
-  `is_pay` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0 = 未购买 1 = 已购买',
-  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
-  `is_new` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为立即购买',
-  `combination_id` int(11) unsigned DEFAULT '0' COMMENT '拼团id',
-  `seckill_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '秒杀商品ID',
-  `bargain_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '砍价id',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '购物车商品状态',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `user_id` (`uid`) USING BTREE,
-  KEY `goods_id` (`product_id`) USING BTREE,
-  KEY `uid` (`uid`,`is_pay`) USING BTREE,
-  KEY `uid_2` (`uid`,`is_del`) USING BTREE,
-  KEY `uid_3` (`uid`,`is_new`) USING BTREE,
-  KEY `type` (`type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='购物车表';
+    `id` bigint(8) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '购物车表ID',
+    `uid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户ID',
+    `type` varchar(32) NOT NULL DEFAULT '' COMMENT '类型',
+    `product_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商品ID',
+    `product_attr_unique` varchar(16) NOT NULL DEFAULT '' COMMENT '商品属性',
+    `cart_num` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商品数量',
+    `add_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `is_pay` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0 = 未购买 1 = 已购买',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+    `is_new` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为立即购买',
+    `combination_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '拼团id',
+    `seckill_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '秒杀商品ID',
+    `bargain_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '砍价id',
+    `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '购物车商品状态',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `user_id` (`uid`) USING BTREE,
+    KEY `goods_id` (`product_id`) USING BTREE,
+    KEY `uid` (`uid`,`is_pay`) USING BTREE,
+    KEY `uid_2` (`uid`,`is_del`) USING BTREE,
+    KEY `uid_3` (`uid`,`is_new`) USING BTREE,
+    KEY `type` (`type`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='购物车表' ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -1251,38 +1351,20 @@ CREATE TABLE IF NOT EXISTS `eb_store_cart` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_category` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品分类表ID',
-  `pid` int(11) NOT NULL DEFAULT '0' COMMENT '父id',
-  `cate_name` varchar(100) NOT NULL DEFAULT '' COMMENT '分类名称',
-  `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
-  `pic` varchar(128) NOT NULL DEFAULT '' COMMENT '图标',
-  `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否推荐',
-  `add_time` int(11) NOT NULL COMMENT '添加时间',
-  `big_pic` varchar(255) NOT NULL DEFAULT '' COMMENT '分类大图',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `pid` (`pid`) USING BTREE,
-  KEY `is_base` (`is_show`) USING BTREE,
-  KEY `sort` (`sort`) USING BTREE,
-  KEY `add_time` (`add_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=180 DEFAULT CHARSET=utf8 COMMENT='商品分类表';
-
---
--- 转存表中的数据 `eb_store_category`
---
-
-INSERT INTO `eb_store_category` (`id`, `pid`, `cate_name`, `sort`, `pic`, `is_show`, `add_time`, `big_pic`) VALUES
-(1, 0, '热门推荐', 9, 'https://qiniu.crmeb.net/attach/2021/04/3eab3202104251852518777.png', 1, 1619324738, ''),
-(2, 0, '手机数码', 8, 'https://qiniu.crmeb.net/attach/2021/04/7716a202104251938299616.png', 1, 1619324834, ''),
-(4, 0, '日用文创', 6, 'https://qiniu.crmeb.net/attach/2021/04/94b9e202104251851515885.png', 1, 1619324921, ''),
-(5, 1, '新品上线', 3, 'https://qiniu.crmeb.net/attach/2021/04/93e49202104251854421481.png', 1, 1619324990, ''),
-(6, 1, '热门促销', 2, 'https://qiniu.crmeb.net/attach/2021/04/3eab3202104251852518777.png', 1, 1619325004, ''),
-(7, 1, '促销折扣', 1, 'https://qiniu.crmeb.net/attach/2021/04/94b9e202104251851515885.png', 1, 1619325018, ''),
-(9, 2, '配件', 8, 'https://qiniu.crmeb.net/attach/2021/04/7716a202104251938299616.png', 1, 1619325060, ''),
-(10, 2, '手机', 9, 'https://qiniu.crmeb.net/attach/2021/04/7716a202104251938299616.png', 1, 1619325081, ''),
-(12, 2, '办公', 7, 'https://qiniu.crmeb.net/attach/2021/04/7716a202104251938299616.png', 1, 1619325131, ''),
-(16, 4, '日杂', 3, 'https://qiniu.crmeb.net/attach/2021/04/3eab3202104251852518777.png', 1, 1619331127, ''),
-(17, 4, '工具', 2, 'https://qiniu.crmeb.net/attach/2021/04/ecf4c202104251851122727.png', 1, 1619331148, ''),
-(18, 4, '居家', 1, 'https://qiniu.crmeb.net/attach/2021/04/94b9e202104251851515885.png', 1, 1619331182, '');
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '商品分类表ID',
+    `pid` int(11) NOT NULL DEFAULT '0' COMMENT '父id',
+    `cate_name` varchar(100) NOT NULL DEFAULT '' COMMENT '分类名称',
+    `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
+    `pic` varchar(128) NOT NULL DEFAULT '' COMMENT '图标',
+    `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否推荐',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `big_pic` varchar(255) NOT NULL DEFAULT '' COMMENT '分类大图',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `pid` (`pid`) USING BTREE,
+    KEY `is_base` (`is_show`) USING BTREE,
+    KEY `sort` (`sort`) USING BTREE,
+    KEY `add_time` (`add_time`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品分类表';
 
 -- --------------------------------------------------------
 
@@ -1291,43 +1373,43 @@ INSERT INTO `eb_store_category` (`id`, `pid`, `cate_name`, `sort`, `pic`, `is_sh
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_combination` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `product_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
-  `mer_id` int(10) unsigned DEFAULT '0' COMMENT '商户id',
-  `image` varchar(255) NOT NULL DEFAULT '' COMMENT '推荐图',
-  `images` varchar(2000) NOT NULL DEFAULT '' COMMENT '轮播图',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '活动标题',
-  `attr` varchar(255) DEFAULT NULL COMMENT '活动属性',
-  `people` int(2) unsigned NOT NULL DEFAULT '0' COMMENT '参团人数',
-  `info` varchar(255) NOT NULL DEFAULT '' COMMENT '简介',
-  `price` decimal(10,2) unsigned NOT NULL DEFAULT '0' COMMENT '价格',
-  `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
-  `sales` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '销量',
-  `stock` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '库存',
-  `add_time` varchar(128) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `is_host` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '推荐',
-  `is_show` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '商品状态',
-  `is_del` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `combination` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  `mer_use` tinyint(1) unsigned DEFAULT NULL COMMENT '商户是否可用1可用0不可用',
-  `is_postage` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否包邮1是0否',
-  `postage` decimal(10,2) unsigned NOT NULL DEFAULT '0' COMMENT '邮费',
-  `start_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '拼团开始时间',
-  `stop_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '拼团结束时间',
-  `effective_time` int(11) NOT NULL DEFAULT '0' COMMENT '拼团订单有效时间',
-  `cost` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '拼图商品成本',
-  `browse` int(11) DEFAULT '0' COMMENT '浏览量',
-  `unit_name` varchar(32) NOT NULL DEFAULT '' COMMENT '单位名',
-  `temp_id` int(11) DEFAULT NULL COMMENT '运费模板ID',
-  `weight` decimal(8,2) DEFAULT '0.00' COMMENT '重量',
-  `volume` decimal(8,2) DEFAULT '0.00' COMMENT '体积',
-  `num` int(11) DEFAULT NULL COMMENT '单次购买数量',
-  `once_num` int(11) NOT NULL DEFAULT '0' COMMENT '每个订单可购买数量',
-  `quota` int(10) NOT NULL DEFAULT '0' COMMENT '限购总数',
-  `quota_show` int(10) NOT NULL DEFAULT '0' COMMENT '限量总数显示',
-  `virtual` int(11) NOT NULL DEFAULT '100' COMMENT '虚拟成团百分比',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='拼团商品表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `product_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商品id',
+    `mer_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商户id',
+    `image` varchar(255) NOT NULL DEFAULT '' COMMENT '推荐图',
+    `images` varchar(2000) NOT NULL DEFAULT '' COMMENT '轮播图',
+    `title` varchar(255) NOT NULL DEFAULT '' COMMENT '活动标题',
+    `attr` varchar(255) NOT NULL DEFAULT '' COMMENT '活动属性',
+    `people` int(2) UNSIGNED NOT NULL DEFAULT '0' COMMENT '参团人数',
+    `info` varchar(255) NOT NULL DEFAULT '' COMMENT '简介',
+    `price` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '价格',
+    `sort` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '排序',
+    `sales` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '销量',
+    `stock` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '库存',
+    `add_time` varchar(128) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `is_host` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '推荐',
+    `is_show` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '商品状态',
+    `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
+    `combination` tinyint(1) UNSIGNED NOT NULL DEFAULT '1',
+    `mer_use` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商户是否可用1可用0不可用',
+    `is_postage` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否包邮1是0否',
+    `postage` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '邮费',
+    `start_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '拼团开始时间',
+    `stop_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '拼团结束时间',
+    `effective_time` int(11) NOT NULL DEFAULT '0' COMMENT '拼团订单有效时间',
+    `cost` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '拼图商品成本',
+    `browse` int(11) NOT NULL DEFAULT '0' COMMENT '浏览量',
+    `unit_name` varchar(32) NOT NULL DEFAULT '' COMMENT '单位名',
+    `temp_id` int(11) NOT NULL DEFAULT '0' COMMENT '运费模板ID',
+    `weight` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '重量',
+    `volume` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '体积',
+    `num` int(11) NOT NULL DEFAULT '0' COMMENT '单次购买数量',
+    `once_num` int(11) NOT NULL DEFAULT '0' COMMENT '每个订单可购买数量',
+    `quota` int(10) NOT NULL DEFAULT '0' COMMENT '限购总数',
+    `quota_show` int(10) NOT NULL DEFAULT '0' COMMENT '限量总数显示',
+    `virtual` int(11) NOT NULL DEFAULT '100' COMMENT '虚拟成团百分比',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='拼团商品表';
 
 -- --------------------------------------------------------
 
@@ -1336,40 +1418,40 @@ CREATE TABLE IF NOT EXISTS `eb_store_combination` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_coupon_issue` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `cid` int(10) DEFAULT NULL COMMENT '优惠券ID',
-  `coupon_title` varchar(255) DEFAULT NULL COMMENT '优惠券名称',
-  `start_time` int(10) DEFAULT NULL COMMENT '优惠券领取开启时间',
-  `end_time` int(10) DEFAULT NULL COMMENT '优惠券领取结束时间',
-  `total_count` int(10) DEFAULT NULL COMMENT '优惠券领取数量',
-  `remain_count` int(10) DEFAULT NULL COMMENT '优惠券剩余领取数量',
-  `is_permanent` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否无限张数',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 正常 0 未开启 -1 已无效',
-  `is_give_subscribe` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否首次关注赠送 0-否(默认) 1-是',
-  `is_full_give` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否满赠0-否(默认) 1-是',
-  `full_reduction` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '消费满多少赠送优惠券',
-  `is_del` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `add_time` int(10) DEFAULT NULL COMMENT '优惠券添加时间',
-  `title` varchar(64) NOT NULL DEFAULT '' COMMENT '优惠券名称',
-  `integral` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '兑换消耗积分值',
-  `coupon_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '兑换的优惠券面值',
-  `use_min_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '最低消费多少金额可用优惠券',
-  `coupon_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '优惠券有效期限（单位：天）',
-  `product_id` varchar(64) NOT NULL DEFAULT '' COMMENT '所属商品id',
-  `category_id` int(11) NOT NULL DEFAULT '0' COMMENT '分类id',
-  `type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '优惠券类型 0-通用 1-品类券 2-商品券',
-  `receive_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1 手动领取，2 新人券，3赠送券，4会员券',
-  `start_use_time` int(11) NOT NULL DEFAULT '0' COMMENT '优惠券使用开始时间',
-  `end_use_time` int(11) NOT NULL DEFAULT '0' COMMENT '优惠券使用结束时间',
-  `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `cid` (`cid`) USING BTREE,
-  KEY `start_time` (`start_time`,`end_time`) USING BTREE,
-  KEY `remain_count` (`remain_count`) USING BTREE,
-  KEY `status` (`status`) USING BTREE,
-  KEY `coupon_time` (`coupon_time`) USING BTREE,
-  KEY `is_del` (`is_del`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='优惠券前台领取表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `cid` int(10) NOT NULL DEFAULT '0' COMMENT '优惠券ID',
+    `coupon_title` varchar(255) NOT NULL DEFAULT '' COMMENT '优惠券名称',
+    `start_time` int(10) NOT NULL DEFAULT '0' COMMENT '优惠券领取开启时间',
+    `end_time` int(10) NOT NULL DEFAULT '0' COMMENT '优惠券领取结束时间',
+    `total_count` int(10) NOT NULL DEFAULT '0' COMMENT '优惠券领取数量',
+    `remain_count` int(10) NOT NULL DEFAULT '0' COMMENT '优惠券剩余领取数量',
+    `is_permanent` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否无限张数',
+    `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 正常 0 未开启 -1 已无效',
+    `is_give_subscribe` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否首次关注赠送 0-否(默认) 1-是',
+    `is_full_give` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否满赠0-否(默认) 1-是',
+    `full_reduction` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '消费满多少赠送优惠券',
+    `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '优惠券添加时间',
+    `title` varchar(64) NOT NULL DEFAULT '' COMMENT '优惠券名称',
+    `integral` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '兑换消耗积分值',
+    `coupon_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '兑换的优惠券面值',
+    `use_min_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '最低消费多少金额可用优惠券',
+    `coupon_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '优惠券有效期限（单位：天）',
+    `product_id` varchar(64) NOT NULL DEFAULT '' COMMENT '所属商品id',
+    `category_id` int(11) NOT NULL DEFAULT '0' COMMENT '分类id',
+    `type` tinyint(2) NOT NULL DEFAULT '0' COMMENT '优惠券类型 0-通用 1-品类券 2-商品券',
+    `receive_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1 手动领取，2 新人券，3赠送券，4会员券',
+    `start_use_time` int(11) NOT NULL DEFAULT '0' COMMENT '优惠券使用开始时间',
+    `end_use_time` int(11) NOT NULL DEFAULT '0' COMMENT '优惠券使用结束时间',
+    `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `cid` (`cid`) USING BTREE,
+    KEY `start_time` (`start_time`,`end_time`) USING BTREE,
+    KEY `remain_count` (`remain_count`) USING BTREE,
+    KEY `status` (`status`) USING BTREE,
+    KEY `coupon_time` (`coupon_time`) USING BTREE,
+    KEY `is_del` (`is_del`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='优惠券前台领取表' ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -1378,11 +1460,11 @@ CREATE TABLE IF NOT EXISTS `eb_store_coupon_issue` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_coupon_issue_user` (
-  `uid` int(10) DEFAULT NULL COMMENT '领取优惠券用户ID',
-  `issue_coupon_id` int(10) DEFAULT NULL COMMENT '优惠券前台领取ID',
-  `add_time` int(10) DEFAULT NULL COMMENT '领取时间',
-  UNIQUE KEY `uid` (`uid`,`issue_coupon_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='优惠券前台用户领取记录表';
+    `uid` int(10) NOT NULL DEFAULT '0' COMMENT '领取优惠券用户ID',
+    `issue_coupon_id` int(10) NOT NULL DEFAULT '0' COMMENT '优惠券前台领取ID',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '领取时间',
+    UNIQUE KEY `uid` (`uid`,`issue_coupon_id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='优惠券前台用户领取记录表';
 
 -- --------------------------------------------------------
 
@@ -1391,10 +1473,10 @@ CREATE TABLE IF NOT EXISTS `eb_store_coupon_issue_user` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_coupon_product` (
-  `coupon_id` int(11) NOT NULL DEFAULT '0' COMMENT '优惠卷模板id',
-  `product_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品id',
-  KEY `coupon_id` (`coupon_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='优惠卷模板关联列表';
+    `coupon_id` int(11) NOT NULL DEFAULT '0' COMMENT '优惠卷模板id',
+    `product_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品id',
+    KEY `coupon_id` (`coupon_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='优惠卷模板关联列表';
 
 -- --------------------------------------------------------
 
@@ -1403,27 +1485,27 @@ CREATE TABLE IF NOT EXISTS `eb_store_coupon_product` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_coupon_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '优惠券发放记录id',
-  `cid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '兑换的项目id',
-  `uid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '优惠券所属用户',
-  `coupon_title` varchar(32) NOT NULL COMMENT '优惠券名称',
-  `coupon_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '优惠券的面值',
-  `use_min_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '最低消费多少金额可用优惠券',
-  `add_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '优惠券创建时间',
-  `start_time` int(11) NOT NULL DEFAULT '0',
-  `end_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '优惠券结束时间',
-  `use_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '使用时间',
-  `type` varchar(32) NOT NULL DEFAULT 'send' COMMENT '获取方式',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态（0：未使用，1：已使用, 2:已过期）',
-  `is_fail` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否有效',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `cid` (`cid`) USING BTREE,
-  KEY `uid` (`uid`) USING BTREE,
-  KEY `add_time` (`add_time`) USING BTREE,
-  KEY `end_time` (`end_time`) USING BTREE,
-  KEY `status` (`status`) USING BTREE,
-  KEY `is_fail` (`is_fail`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='优惠券发放记录表';
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '优惠券发放记录id',
+    `cid` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '兑换的项目id',
+    `uid` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '优惠券所属用户',
+    `coupon_title` varchar(32) NOT NULL DEFAULT '' COMMENT '优惠券名称',
+    `coupon_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '优惠券的面值',
+    `use_min_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '最低消费多少金额可用优惠券',
+    `add_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '优惠券创建时间',
+    `start_time` int(11) NOT NULL DEFAULT '0',
+    `end_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '优惠券结束时间',
+    `use_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '使用时间',
+    `type` varchar(32) NOT NULL DEFAULT 'send' COMMENT '获取方式',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态（0：未使用，1：已使用, 2:已过期）',
+    `is_fail` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否有效',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `cid` (`cid`) USING BTREE,
+    KEY `uid` (`uid`) USING BTREE,
+    KEY `add_time` (`add_time`) USING BTREE,
+    KEY `end_time` (`end_time`) USING BTREE,
+    KEY `status` (`status`) USING BTREE,
+    KEY `is_fail` (`is_fail`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='优惠券发放记录表';
 
 -- --------------------------------------------------------
 
@@ -1432,78 +1514,84 @@ CREATE TABLE IF NOT EXISTS `eb_store_coupon_user` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_order` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '订单ID',
-  `order_id` varchar(32) NOT NULL DEFAULT '0' COMMENT '订单号',
-  `trade_no` varchar(100) NOT NULL DEFAULT '' COMMENT '支付宝订单号',
-  `uid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
-  `real_name` varchar(32) NOT NULL DEFAULT '' COMMENT '用户姓名',
-  `user_phone` varchar(18) NOT NULL DEFAULT '' COMMENT '用户电话',
-  `user_address` varchar(100) NOT NULL DEFAULT '' COMMENT '详细地址',
-  `cart_id` varchar(256) NOT NULL DEFAULT '[]' COMMENT '购物车id',
-  `freight_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '运费金额',
-  `total_num` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '订单商品总数',
-  `total_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '订单总价',
-  `total_postage` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '邮费',
-  `pay_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '实际支付金额',
-  `pay_postage` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '支付邮费',
-  `deduction_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '抵扣金额',
-  `coupon_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '优惠券id',
-  `coupon_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '优惠券金额',
-  `paid` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '支付状态',
-  `pay_time` int(11) unsigned DEFAULT NULL COMMENT '支付时间',
-  `pay_type` varchar(32) NOT NULL COMMENT '支付方式',
-  `add_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单状态（-1 : 申请退款 -2 : 退货成功 0：待发货；1：待收货；2：已收货；3：待评价；-1：已退款）',
-  `refund_status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0 未退款 1 申请中 2 已退款',
-  `refund_reason_wap_img` varchar(2000) DEFAULT NULL COMMENT '退款图片',
-  `refund_reason_wap_explain` varchar(255) DEFAULT NULL COMMENT '退款用户说明',
-  `refund_reason_time` int(11) unsigned DEFAULT NULL COMMENT '退款时间',
-  `refund_reason_wap` varchar(255) DEFAULT NULL COMMENT '前台退款原因',
-  `refund_reason` varchar(255) DEFAULT NULL COMMENT '不退款的理由',
-  `refund_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '退款金额',
-  `delivery_name` varchar(64) DEFAULT NULL COMMENT '快递名称/送货人姓名',
-  `delivery_code` varchar(50) NOT NULL DEFAULT '' COMMENT '快递公司编码',
-  `delivery_type` varchar(32) DEFAULT NULL COMMENT '发货类型',
-  `delivery_id` varchar(64) DEFAULT NULL COMMENT '快递单号/手机号',
-  `fictitious_content` varchar(500) NOT NULL DEFAULT '' COMMENT '虚拟发货内容',
-  `delivery_uid` int(11) NOT NULL DEFAULT '0' COMMENT '配送员id',
-  `gain_integral` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '消费赚取积分',
-  `use_integral` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '使用积分',
-  `back_integral` decimal(8,2) unsigned DEFAULT NULL COMMENT '给用户退了多少积分',
-  `mark` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
-  `is_del` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
-  `unique` char(32) NOT NULL DEFAULT '' COMMENT '唯一id(md5加密)类似id',
-  `remark` varchar(512) DEFAULT NULL COMMENT '管理员备注',
-  `mer_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商户ID',
-  `is_mer_check` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `combination_id` int(11) unsigned DEFAULT '0' COMMENT '拼团商品id0一般商品',
-  `pink_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '拼团id 0没有拼团',
-  `cost` decimal(8,2) unsigned NOT NULL DEFAULT '0' COMMENT '成本价',
-  `seckill_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '秒杀商品ID',
-  `bargain_id` int(11) unsigned DEFAULT '0' COMMENT '砍价id',
-  `verify_code` varchar(12) NOT NULL DEFAULT '' COMMENT '核销码',
-  `store_id` int(11) NOT NULL DEFAULT '0' COMMENT '门店id',
-  `shipping_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '配送方式 1=快递 ，2=门店自提',
-  `clerk_id` int(11) NOT NULL DEFAULT '0' COMMENT '店员id',
-  `is_channel` tinyint(1) unsigned DEFAULT '0' COMMENT '支付渠道(0微信公众号1微信小程序)',
-  `is_remind` tinyint(1) unsigned DEFAULT '0' COMMENT '消息提醒',
-  `is_system_del` tinyint(1) DEFAULT '0' COMMENT '后台是否删除',
-  `channel_type` varchar(255) NOT NULL DEFAULT '' COMMENT '用户访问端标识',
-  `province` varchar(255) NOT NULL DEFAULT '' COMMENT '用户省份',
-  `express_dump` varchar(502) NOT NULL DEFAULT '' COMMENT '订单面单打印信息',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `order_id_2` (`order_id`,`uid`) USING BTREE,
-  UNIQUE KEY `unique` (`unique`) USING BTREE,
-  KEY `uid` (`uid`) USING BTREE,
-  KEY `add_time` (`add_time`) USING BTREE,
-  KEY `pay_price` (`pay_price`) USING BTREE,
-  KEY `paid` (`paid`) USING BTREE,
-  KEY `pay_time` (`pay_time`) USING BTREE,
-  KEY `pay_type` (`pay_type`) USING BTREE,
-  KEY `status` (`status`) USING BTREE,
-  KEY `is_del` (`is_del`) USING BTREE,
-  KEY `coupon_id` (`coupon_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='订单表';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '订单ID',
+    `order_id` varchar(32) NOT NULL DEFAULT '0' COMMENT '订单号',
+    `trade_no` varchar(100) NOT NULL DEFAULT '' COMMENT '支付宝订单号',
+    `uid` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户id',
+    `real_name` varchar(32) NOT NULL DEFAULT '' COMMENT '用户姓名',
+    `user_phone` varchar(18) NOT NULL DEFAULT '' COMMENT '用户电话',
+    `user_address` varchar(100) NOT NULL DEFAULT '' COMMENT '详细地址',
+    `cart_id` varchar(256) NOT NULL DEFAULT '[]' COMMENT '购物车id',
+    `freight_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '运费金额',
+    `total_num` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '订单商品总数',
+    `total_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '订单总价',
+    `total_postage` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '邮费',
+    `pay_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '实际支付金额',
+    `pay_postage` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '支付邮费',
+    `deduction_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '抵扣金额',
+    `coupon_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '优惠券id',
+    `coupon_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '优惠券金额',
+    `paid` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '支付状态',
+    `pay_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '支付时间',
+    `pay_type` varchar(32) NOT NULL DEFAULT '' COMMENT '支付方式',
+    `add_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建时间',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单状态（-1 : 申请退款 -2 : 退货成功 0：待发货；1：待收货；2：已收货；3：待评价；-1：已退款）',
+    `refund_status` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '0 未退款 1 申请中 2 已退款',
+    `refund_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '退款申请类型',
+    `refund_express` varchar(255) NOT NULL DEFAULT '' COMMENT '退货快递单号',
+    `refund_reason_wap_img` varchar(2000) NOT NULL DEFAULT '' COMMENT '退款图片',
+    `refund_reason_wap_explain` varchar(255) NOT NULL DEFAULT '' COMMENT '退款用户说明',
+    `refund_reason_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '退款时间',
+    `refund_reason_wap` varchar(255) NOT NULL DEFAULT '' COMMENT '前台退款原因',
+    `refund_reason` varchar(255) NOT NULL DEFAULT '' COMMENT '不退款的理由',
+    `refund_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '退款金额',
+    `delivery_name` varchar(64) NOT NULL DEFAULT '' COMMENT '快递名称/送货人姓名',
+    `delivery_code` varchar(50) NOT NULL DEFAULT '' COMMENT '快递公司编码',
+    `delivery_type` varchar(32) NOT NULL DEFAULT '' COMMENT '发货类型',
+    `delivery_id` varchar(64) NOT NULL DEFAULT '' COMMENT '快递单号/手机号',
+    `fictitious_content` varchar(500) NOT NULL DEFAULT '' COMMENT '虚拟发货内容',
+    `delivery_uid` int(11) NOT NULL DEFAULT '0' COMMENT '配送员id',
+    `gain_integral` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '消费赚取积分',
+    `use_integral` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '使用积分',
+    `back_integral` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '给用户退了多少积分',
+    `spread_uid` int(10) NOT NULL DEFAULT '0' COMMENT '推广人uid',
+    `spread_two_uid` int(10) NOT NULL DEFAULT '0' COMMENT '二级推广人uid',
+    `one_brokerage` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '一级返佣金额',
+    `two_brokerage` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '二级返佣金额',
+    `mark` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
+    `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否删除',
+    `unique` char(32) NOT NULL DEFAULT '' COMMENT '唯一id(md5加密)类似id',
+    `remark` varchar(512) NOT NULL DEFAULT '' COMMENT '管理员备注',
+    `mer_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商户ID',
+    `is_mer_check` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+    `combination_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '拼团商品id0一般商品',
+    `pink_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '拼团id 0没有拼团',
+    `cost` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '成本价',
+    `seckill_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '秒杀商品ID',
+    `bargain_id` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '砍价id',
+    `verify_code` varchar(12) NOT NULL DEFAULT '' COMMENT '核销码',
+    `store_id` int(11) NOT NULL DEFAULT '0' COMMENT '门店id',
+    `shipping_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '配送方式 1=快递 ，2=门店自提',
+    `clerk_id` int(11) NOT NULL DEFAULT '0' COMMENT '店员id',
+    `is_channel` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '支付渠道(0微信公众号1微信小程序)',
+    `is_remind` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '消息提醒',
+    `is_system_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '后台是否删除',
+    `channel_type` varchar(255) NOT NULL DEFAULT '' COMMENT '用户访问端标识',
+    `province` varchar(255) NOT NULL DEFAULT '' COMMENT '用户省份',
+    `express_dump` varchar(502) NOT NULL DEFAULT '' COMMENT '订单面单打印信息',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `order_id_2` (`order_id`,`uid`) USING BTREE,
+    UNIQUE KEY `unique` (`unique`) USING BTREE,
+    KEY `uid` (`uid`) USING BTREE,
+    KEY `add_time` (`add_time`) USING BTREE,
+    KEY `pay_price` (`pay_price`) USING BTREE,
+    KEY `paid` (`paid`) USING BTREE,
+    KEY `pay_time` (`pay_time`) USING BTREE,
+    KEY `pay_type` (`pay_type`) USING BTREE,
+    KEY `status` (`status`) USING BTREE,
+    KEY `is_del` (`is_del`) USING BTREE,
+    KEY `coupon_id` (`coupon_id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
 
 -- --------------------------------------------------------
 
@@ -1512,15 +1600,15 @@ CREATE TABLE IF NOT EXISTS `eb_store_order` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_order_cart_info` (
-  `oid` int(11) unsigned NOT NULL COMMENT '订单id',
-  `cart_id` varchar(50) NOT NULL DEFAULT '0' COMMENT '购物车id',
-  `product_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品ID',
-  `cart_info` text NOT NULL DEFAULT '' COMMENT '购买东西的详细信息',
-  `unique` char(32) NOT NULL DEFAULT '' COMMENT '唯一id',
-  UNIQUE KEY `oid` (`oid`,`unique`) USING BTREE,
-  KEY `cart_id` (`cart_id`) USING BTREE,
-  KEY `product_id` (`product_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单购物详情表';
+    `oid` int(11) UNSIGNED NOT NULL COMMENT '订单id',
+    `cart_id` varchar(50) NOT NULL DEFAULT '0' COMMENT '购物车id',
+    `product_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商品ID',
+    `cart_info` text NOT NULL COMMENT '购买东西的详细信息',
+    `unique` char(32) NOT NULL DEFAULT '' COMMENT '唯一id',
+    UNIQUE KEY `oid` (`oid`,`unique`) USING BTREE,
+    KEY `cart_id` (`cart_id`) USING BTREE,
+    KEY `product_id` (`product_id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单购物详情表';
 
 -- --------------------------------------------------------
 
@@ -1529,24 +1617,24 @@ CREATE TABLE IF NOT EXISTS `eb_store_order_cart_info` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_order_economize` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '订单ID',
-  `order_id` varchar(32) NOT NULL DEFAULT '' COMMENT '订单号',
-  `uid` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
-  `order_type` tinyint(1) unsigned zerofill NOT NULL DEFAULT '1' COMMENT '配送方式 1=商品订单 ，2=线下订单',
-  `pay_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '实际支付金额',
-  `postage_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '邮费优惠金额',
-  `member_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '会员优惠金额',
-  `offline_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '线下优惠金额',
-  `coupon_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '优惠券优惠金额',
-  `add_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '创建时间',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态',
-  PRIMARY KEY (`id`,`order_id`,`uid`) USING BTREE,
-  UNIQUE KEY `order_id_2` (`order_id`,`uid`) USING BTREE,
-  KEY `uid` (`uid`) USING BTREE,
-  KEY `add_time` (`add_time`) USING BTREE,
-  KEY `pay_price` (`pay_price`) USING BTREE,
-  KEY `status` (`status`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户资金节省表';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '订单ID',
+    `order_id` varchar(32) NOT NULL DEFAULT '' COMMENT '订单号',
+    `uid` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户id',
+    `order_type` tinyint(1) UNSIGNED ZEROFILL NOT NULL DEFAULT '1' COMMENT '配送方式 1=商品订单 ，2=线下订单',
+    `pay_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '实际支付金额',
+    `postage_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '邮费优惠金额',
+    `member_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '会员优惠金额',
+    `offline_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '线下优惠金额',
+    `coupon_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '优惠券优惠金额',
+    `add_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '创建时间',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态',
+    PRIMARY KEY (`id`,`order_id`,`uid`) USING BTREE,
+    UNIQUE KEY `order_id_2` (`order_id`,`uid`) USING BTREE,
+    KEY `uid` (`uid`) USING BTREE,
+    KEY `add_time` (`add_time`) USING BTREE,
+    KEY `pay_price` (`pay_price`) USING BTREE,
+    KEY `status` (`status`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户资金节省表';
 
 -- --------------------------------------------------------
 
@@ -1555,30 +1643,30 @@ CREATE TABLE IF NOT EXISTS `eb_store_order_economize` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_order_invoice` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `uid` int(10) NOT NULL DEFAULT '0' COMMENT '用户uid',
-  `category` varchar(10) NOT NULL DEFAULT 'order' COMMENT '开票分类 order:订单',
-  `order_id` int(10) NOT NULL DEFAULT '0' COMMENT '订单id',
-  `invoice_id` int(10) NOT NULL DEFAULT '0' COMMENT '发票id',
-  `header_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '抬头类型',
-  `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '发票类型',
-  `name` varchar(100) NOT NULL DEFAULT '' COMMENT '名称（发票抬头）',
-  `duty_number` varchar(50) NOT NULL DEFAULT '' COMMENT '税号',
-  `drawer_phone` varchar(30) NOT NULL DEFAULT '' COMMENT '开票人手机号',
-  `email` varchar(100) NOT NULL DEFAULT '' COMMENT '开票人邮箱',
-  `tell` varchar(30) NOT NULL DEFAULT '' COMMENT '注册电话',
-  `address` varchar(255) NOT NULL DEFAULT '' COMMENT '注册地址',
-  `bank` varchar(50) NOT NULL DEFAULT '' COMMENT '开户行',
-  `card_number` varchar(50) NOT NULL DEFAULT '' COMMENT '银行卡号',
-  `is_pay` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否支付',
-  `is_refund` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单是否退款',
-  `is_invoice` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否开票',
-  `invoice_number` varchar(50) NOT NULL DEFAULT '' COMMENT '开票票号',
-  `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
-  `invoice_time` int(10) NOT NULL DEFAULT '0' COMMENT '开票时间',
-  `add_time` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `uid` int(10) NOT NULL DEFAULT '0' COMMENT '用户uid',
+    `category` varchar(10) NOT NULL DEFAULT 'order' COMMENT '开票分类 order:订单',
+    `order_id` int(10) NOT NULL DEFAULT '0' COMMENT '订单id',
+    `invoice_id` int(10) NOT NULL DEFAULT '0' COMMENT '发票id',
+    `header_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '抬头类型',
+    `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '发票类型',
+    `name` varchar(100) NOT NULL DEFAULT '' COMMENT '名称（发票抬头）',
+    `duty_number` varchar(50) NOT NULL DEFAULT '' COMMENT '税号',
+    `drawer_phone` varchar(30) NOT NULL DEFAULT '' COMMENT '开票人手机号',
+    `email` varchar(100) NOT NULL DEFAULT '' COMMENT '开票人邮箱',
+    `tell` varchar(30) NOT NULL DEFAULT '' COMMENT '注册电话',
+    `address` varchar(255) NOT NULL DEFAULT '' COMMENT '注册地址',
+    `bank` varchar(50) NOT NULL DEFAULT '' COMMENT '开户行',
+    `card_number` varchar(50) NOT NULL DEFAULT '' COMMENT '银行卡号',
+    `is_pay` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否支付',
+    `is_refund` tinyint(1) NOT NULL DEFAULT '0' COMMENT '订单是否退款',
+    `is_invoice` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否开票',
+    `invoice_number` varchar(50) NOT NULL DEFAULT '' COMMENT '开票票号',
+    `remark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+    `invoice_time` int(10) NOT NULL DEFAULT '0' COMMENT '开票时间',
+    `add_time` int(10) NOT NULL DEFAULT '0',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1587,13 +1675,13 @@ CREATE TABLE IF NOT EXISTS `eb_store_order_invoice` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_order_status` (
-  `oid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单id',
-  `change_type` varchar(32) NOT NULL DEFAULT '' COMMENT '操作类型',
-  `change_message` varchar(256) NOT NULL DEFAULT '' COMMENT '操作备注',
-  `change_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作时间',
-  KEY `oid` (`oid`) USING BTREE,
-  KEY `change_type` (`change_type`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单操作记录表';
+    `oid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '订单id',
+    `change_type` varchar(32) NOT NULL DEFAULT '' COMMENT '操作类型',
+    `change_message` varchar(256) NOT NULL DEFAULT '' COMMENT '操作备注',
+    `change_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '操作时间',
+    KEY `oid` (`oid`) USING BTREE,
+    KEY `change_type` (`change_type`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单操作记录表';
 
 -- --------------------------------------------------------
 
@@ -1602,27 +1690,27 @@ CREATE TABLE IF NOT EXISTS `eb_store_order_status` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_pink` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
-  `nickname` varchar(64) NOT NULL DEFAULT '' COMMENT '用户昵称',
-  `avatar` varchar(256) NOT NULL DEFAULT '' COMMENT '用户头像',
-  `order_id` varchar(32) NOT NULL DEFAULT '' COMMENT '订单id 生成',
-  `order_id_key` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '订单id  数据库',
-  `total_num` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '购买商品个数',
-  `total_price` decimal(10,2) unsigned NOT NULL DEFAULT '0' COMMENT '购买总金额',
-  `cid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '拼团商品id',
-  `pid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
-  `people` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '拼图总人数',
-  `price` decimal(10,2) unsigned NOT NULL DEFAULT '0' COMMENT '拼团商品单价',
-  `add_time` varchar(24) NOT NULL DEFAULT '0' COMMENT '开始时间',
-  `stop_time` varchar(24) NOT NULL DEFAULT '0',
-  `k_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '团长id 0为团长',
-  `is_tpl` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否发送模板消息0未发送1已发送',
-  `is_refund` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否退款 0未退款 1已退款',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态1进行中2已完成3未完成',
-  `is_virtual` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否虚拟拼团',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='拼团表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `uid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户id',
+    `nickname` varchar(64) NOT NULL DEFAULT '' COMMENT '用户昵称',
+    `avatar` varchar(256) NOT NULL DEFAULT '' COMMENT '用户头像',
+    `order_id` varchar(32) NOT NULL DEFAULT '' COMMENT '订单id 生成',
+    `order_id_key` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '订单id  数据库',
+    `total_num` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '购买商品个数',
+    `total_price` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '购买总金额',
+    `cid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '拼团商品id',
+    `pid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商品id',
+    `people` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '拼图总人数',
+    `price` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '拼团商品单价',
+    `add_time` varchar(24) NOT NULL DEFAULT '0' COMMENT '开始时间',
+    `stop_time` varchar(24) NOT NULL DEFAULT '0',
+    `k_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '团长id 0为团长',
+    `is_tpl` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否发送模板消息0未发送1已发送',
+    `is_refund` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否退款 0未退款 1已退款',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '状态1进行中2已完成3未完成',
+    `is_virtual` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否虚拟拼团',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='拼团表';
 
 -- --------------------------------------------------------
 
@@ -1631,75 +1719,65 @@ CREATE TABLE IF NOT EXISTS `eb_store_pink` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_product` (
-  `id` mediumint(11) NOT NULL AUTO_INCREMENT COMMENT '商品id',
-  `mer_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商户Id(0为总后台管理员创建,不为0的时候是商户后台创建)',
-  `image` varchar(256) NOT NULL DEFAULT '' COMMENT '商品图片',
-  `recommend_image` varchar(256) NOT NULL DEFAULT '' COMMENT '推荐图',
-  `slider_image` varchar(2000) NOT NULL DEFAULT '' COMMENT '轮播图',
-  `store_name` varchar(128) NOT NULL DEFAULT '' COMMENT '商品名称',
-  `store_info` varchar(256) NOT NULL DEFAULT '' COMMENT '商品简介',
-  `keyword` varchar(256) NOT NULL DEFAULT '' COMMENT '关键字',
-  `bar_code` varchar(15) NOT NULL DEFAULT '' COMMENT '商品条码（一维码）',
-  `cate_id` varchar(64) NOT NULL DEFAULT '' COMMENT '分类id',
-  `price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '商品价格',
-  `vip_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '会员价格',
-  `ot_price` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '市场价',
-  `postage` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '邮费',
-  `unit_name` varchar(32) NOT NULL DEFAULT '' COMMENT '单位名',
-  `sort` smallint(11) NOT NULL DEFAULT '0' COMMENT '排序',
-  `sales` mediumint(11) unsigned NOT NULL DEFAULT '0' COMMENT '销量',
-  `stock` mediumint(11) unsigned NOT NULL DEFAULT '0' COMMENT '库存',
-  `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态（0：未上架，1：上架）',
-  `is_hot` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否热卖',
-  `is_benefit` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否优惠',
-  `is_best` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否精品',
-  `is_new` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否新品',
-  `add_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `is_postage` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否包邮',
-  `is_del` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
-  `mer_use` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '商户是否代理 0不可代理1可代理',
-  `give_integral` decimal(8,2) unsigned NOT NULL DEFAULT '0' COMMENT '获得积分',
-  `cost` decimal(8,2) unsigned NOT NULL DEFAULT '0' COMMENT '成本价',
-  `is_seckill` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '秒杀状态 0 未开启 1已开启',
-  `is_bargain` tinyint(1) unsigned DEFAULT NULL COMMENT '砍价状态 0未开启 1开启',
-  `is_good` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否优品推荐',
-  `is_sub` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否单独分佣',
-  `is_vip` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否开启会员价格',
-  `ficti` mediumint(11) DEFAULT '100' COMMENT '虚拟销量',
-  `browse` int(11) DEFAULT '0' COMMENT '浏览量',
-  `code_path` varchar(64) NOT NULL DEFAULT '' COMMENT '商品二维码地址(用户小程序海报)',
-  `soure_link` varchar(255) DEFAULT '' COMMENT '淘宝京东1688类型',
-  `video_link` varchar(500) NOT NULL DEFAULT '' COMMENT '主图视频链接',
-  `temp_id` int(11) NOT NULL DEFAULT '1' COMMENT '运费模板ID',
-  `spec_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '规格 0单 1多',
-  `activity` varchar(255) NOT NULL DEFAULT '' COMMENT '活动显示排序1=秒杀，2=砍价，3=拼团',
-  `spu` char(13) NOT NULL DEFAULT '' COMMENT '商品SPU',
-  `label_id` varchar(64) NOT NULL DEFAULT '' COMMENT '标签ID',
-  `command_word` varchar(255) NOT NULL DEFAULT '' COMMENT '复制口令',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `cate_id` (`cate_id`) USING BTREE,
-  KEY `is_hot` (`is_hot`) USING BTREE,
-  KEY `is_benefit` (`is_benefit`) USING BTREE,
-  KEY `is_best` (`is_best`) USING BTREE,
-  KEY `is_new` (`is_new`) USING BTREE,
-  KEY `toggle_on_sale, is_del` (`is_del`) USING BTREE,
-  KEY `price` (`price`) USING BTREE,
-  KEY `is_show` (`is_show`) USING BTREE,
-  KEY `sort` (`sort`) USING BTREE,
-  KEY `sales` (`sales`) USING BTREE,
-  KEY `add_time` (`add_time`) USING BTREE,
-  KEY `is_postage` (`is_postage`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='商品表';
-
---
--- 转存表中的数据 `eb_store_product`
---
-
-INSERT INTO `eb_store_product` (`id`, `mer_id`, `image`, `recommend_image`, `slider_image`, `store_name`, `store_info`, `keyword`, `bar_code`, `cate_id`, `price`, `vip_price`, `ot_price`, `postage`, `unit_name`, `sort`, `sales`, `stock`, `is_show`, `is_hot`, `is_benefit`, `is_best`, `is_new`, `add_time`, `is_postage`, `is_del`, `mer_use`, `give_integral`, `cost`, `is_seckill`, `is_bargain`, `is_good`, `is_sub`, `is_vip`, `ficti`, `browse`, `code_path`, `soure_link`, `video_link`, `temp_id`, `spec_type`, `activity`, `spu`, `label_id`, `command_word`) VALUES
-(1, 0, 'https://qiniu.crmeb.net/attach/2021/04/25/9b76168a161b00d50ae430f138984994.jpg', 'https://qiniu.crmeb.net/attach/2021/04/25/9b76168a161b00d50ae430f138984994.jpg', '["https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/6e70f6228f96849846c242bfe985f19a.jpg","https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/5a76059e5821a86ef6d0b96ad2313412.jpg","https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/7cc3a1b8d58ff4e45d75cabf173e8b8e.jpg"]', 'Apple iPhone 12 Pro Max (A2412) 256GB 海蓝色 双卡双待手机【测试商品 购买不发货】', '【iPhone的巅峰之作！】限时套装特惠，加9元即可得20W原装快充充电头！', '苹果 iPhone', '', '5,10', '0.01', '0.00', '12999.00', '0.00', '件', 0, 0, 936, 1, 0, 0, 1, 0, 1619338005, 0, 0, 0, '1.00', '0.00', 0, NULL, 1, 0, 0, 10, 0, '', 'https://item.jd.com/100016034372.html', '', 1, 1, '0,1,2,3', '5399975042736', '0', ''),
-(2, 0, 'https://qiniu.crmeb.net/attach/2021/04/9971c202104251641575912.png', 'https://qiniu.crmeb.net/attach/2021/04/9971c202104251641575912.png', '["https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/ef2a7f754686622e3c8f9d2c9788cab3.jpg","https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/4f8eece8ee940fa1bd2b2b0f3fc5ca60.jpg","https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/e34fbe373d936fad79c2127eb145de5e.jpg","https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/4c29bc8190b2832f45b5fc1a6308264b.jpg","https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/357e4d72ee81646376faf8d2faebc464.jpg"]', '华为 HUAWEI Mate 40 RS 保时捷设计超感知徕卡电影五摄 【测试商品 购买不发货】', '【热销爆款，限量抢购】麒麟9000芯片，超感知徕卡电影五摄，立即抢购更多选择', '华为', '', '6,7,10', '1999.00', '1500.00', '10999.00', '0.00', '件', 0, 0, 466, 1, 0, 0, 1, 0, 1619338502, 0, 0, 0, '0.00', '0.00', 0, NULL, 1, 1, 1, 5, 0, '', 'https://item.jd.com/100010667255.html', '', 1, 1, '0,1,2,3', '5199505485528', '0', ''),
-(3, 0, 'https://qiniu.crmeb.net/attach/2021/04/25/5284373aa1e693eda5e04f11e80f9b93.jpg', '', '["https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/b47cd4eb3743a11458fad52100f22cdf.jpg","https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/7337ff55e5ba3dcaaca13e9b8c4370a3.jpg","https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/5284373aa1e693eda5e04f11e80f9b93.jpg","https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/94579b4b69f20a77c147f3602296609e.jpg","https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/df655fbc671930900affefd270cc3775.jpg"]', '小米11 Ultra四曲面柔性屏 陶瓷工艺 游戏手机【测试商品 购买不发货】', '至尊 5G 骁龙888 2K AMOLED四曲面柔性屏 陶瓷工艺 12GB+256GB 黑色 游戏手机', '小米', '', '5,7,10', '999.00', '788.00', '999.00', '0.00', '件', 0, 0, 4000, 1, 0, 0, 1, 0, 1619339587, 0, 0, 0, '0.00', '999.00', 0, NULL, 1, 1, 1, 0, 0, '', 'https://item.jd.com/100019791982.html', '', 1, 1, '0,1,2,3', '5397555097009', '0', ''),
-(5, 0, 'https://qiniu.crmeb.net/attach/2021/04/53156202104251831484878.png', 'https://qiniu.crmeb.net/attach/2021/04/53156202104251831484878.png', '["https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/4c282202104251832286395.jpg"]', '唯智iPhone12皮纹手机保护壳/手机壳/手机套【测试商品 购买不发货】', '', '', '', '9,7', '0.01', '0.00', '190.00', '0.00', '件', 0, 0, 13252, 1, 0, 0, 1, 0, 1619346844, 0, 0, 0, '0.00', '0.00', 0, NULL, 0, 0, 0, 342, 0, '', '', '', 1, 1, '0,1,2,3', '9953539752068', '0', '');
+    `id` mediumint(11) NOT NULL AUTO_INCREMENT COMMENT '商品id',
+    `mer_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商户Id(0为总后台管理员创建,不为0的时候是商户后台创建)',
+    `image` varchar(256) NOT NULL DEFAULT '' COMMENT '商品图片',
+    `recommend_image` varchar(256) NOT NULL DEFAULT '' COMMENT '推荐图',
+    `slider_image` varchar(2000) NOT NULL DEFAULT '' COMMENT '轮播图',
+    `store_name` varchar(128) NOT NULL DEFAULT '' COMMENT '商品名称',
+    `store_info` varchar(256) NOT NULL DEFAULT '' COMMENT '商品简介',
+    `keyword` varchar(256) NOT NULL DEFAULT '' COMMENT '关键字',
+    `bar_code` varchar(15) NOT NULL DEFAULT '' COMMENT '商品条码（一维码）',
+    `cate_id` varchar(64) NOT NULL DEFAULT '' COMMENT '分类id',
+    `price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '商品价格',
+    `vip_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '会员价格',
+    `ot_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '市场价',
+    `postage` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '邮费',
+    `unit_name` varchar(32) NOT NULL DEFAULT '' COMMENT '单位名',
+    `sort` smallint(11) NOT NULL DEFAULT '0' COMMENT '排序',
+    `sales` mediumint(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '销量',
+    `stock` mediumint(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '库存',
+    `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态（0：未上架，1：上架）',
+    `is_hot` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否热卖',
+    `is_benefit` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否优惠',
+    `is_best` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否精品',
+    `is_new` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否新品',
+    `add_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `is_postage` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否包邮',
+    `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否删除',
+    `mer_use` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商户是否代理 0不可代理1可代理',
+    `give_integral` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '获得积分',
+    `cost` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '成本价',
+    `is_seckill` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '秒杀状态 0 未开启 1已开启',
+    `is_bargain` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '砍价状态 0未开启 1开启',
+    `is_good` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否优品推荐',
+    `is_sub` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否单独分佣',
+    `is_vip` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否开启会员价格',
+    `ficti` mediumint(11) NOT NULL DEFAULT '0' COMMENT '虚拟销量',
+    `browse` int(11) NOT NULL DEFAULT '0' COMMENT '浏览量',
+    `code_path` varchar(64) NOT NULL DEFAULT '' COMMENT '商品二维码地址(用户小程序海报)',
+    `soure_link` varchar(255) NOT NULL DEFAULT '' COMMENT '淘宝京东1688类型',
+    `video_link` varchar(500) NOT NULL DEFAULT '' COMMENT '主图视频链接',
+    `temp_id` int(11) NOT NULL DEFAULT '1' COMMENT '运费模板ID',
+    `spec_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '规格 0单 1多',
+    `activity` varchar(255) NOT NULL DEFAULT '' COMMENT '活动显示排序1=秒杀，2=砍价，3=拼团',
+    `spu` char(13) NOT NULL DEFAULT '' COMMENT '商品SPU',
+    `label_id` varchar(64) NOT NULL DEFAULT '' COMMENT '标签ID',
+    `command_word` varchar(255) NOT NULL DEFAULT '' COMMENT '复制口令',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `cate_id` (`cate_id`) USING BTREE,
+    KEY `is_hot` (`is_hot`) USING BTREE,
+    KEY `is_benefit` (`is_benefit`) USING BTREE,
+    KEY `is_best` (`is_best`) USING BTREE,
+    KEY `is_new` (`is_new`) USING BTREE,
+    KEY `toggle_on_sale, is_del` (`is_del`) USING BTREE,
+    KEY `price` (`price`) USING BTREE,
+    KEY `is_show` (`is_show`) USING BTREE,
+    KEY `sort` (`sort`) USING BTREE,
+    KEY `sales` (`sales`) USING BTREE,
+    KEY `add_time` (`add_time`) USING BTREE,
+    KEY `is_postage` (`is_postage`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品表';
 
 -- --------------------------------------------------------
 
@@ -1708,30 +1786,14 @@ INSERT INTO `eb_store_product` (`id`, `mer_id`, `image`, `recommend_image`, `sli
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_product_attr` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `product_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品ID',
-  `attr_name` varchar(32) NOT NULL DEFAULT '' COMMENT '属性名',
-  `attr_values` longtext NOT NULL DEFAULT '' COMMENT '属性值',
-  `type` tinyint(1) DEFAULT '0' COMMENT '活动类型 0=商品，1=秒杀，2=砍价，3=拼团',
-  PRIMARY KEY (`id`),
-  KEY `store_id` (`product_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='商品属性表';
-
---
--- 转存表中的数据 `eb_store_product_attr`
---
-
-INSERT INTO `eb_store_product_attr` (`id`, `product_id`, `attr_name`, `attr_values`, `type`) VALUES
-(41, 4, '颜色', '红蓝主机&健身环套装,红蓝主机&马车8实体卡&128G卡,红蓝主机&舞力全开Token实体套装,红蓝主机&马U实体卡&128G卡', 0),
-(54, 2, '颜色', '陶瓷黑,陶瓷白', 0),
-(55, 2, '版本', '8GB+256GB', 0),
-(56, 2, '选择版本', 'Mate 40 RS标准版', 0),
-(57, 1, '颜色', '海蓝色,石墨色', 0),
-(58, 1, '版本', '128GB', 0),
-(59, 1, '购买方式', '公开版,AirPods套装', 0),
-(61, 5, '颜色', '红色,蓝色', 0),
-(64, 3, '颜色', '陶瓷黑,陶瓷白', 0),
-(65, 3, '版本', '8GB+256GB,12GB+256GB', 0);
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `product_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商品ID',
+    `attr_name` varchar(32) NOT NULL DEFAULT '' COMMENT '属性名',
+    `attr_values` longtext NOT NULL COMMENT '属性值',
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '活动类型 0=商品，1=秒杀，2=砍价，3=拼团',
+    PRIMARY KEY (`id`),
+    KEY `store_id` (`product_id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品属性表';
 
 -- --------------------------------------------------------
 
@@ -1740,23 +1802,12 @@ INSERT INTO `eb_store_product_attr` (`id`, `product_id`, `attr_name`, `attr_valu
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_product_attr_result` (
-  `product_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品ID',
-  `result` longtext NOT NULL DEFAULT '' COMMENT '商品属性参数',
-  `change_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '上次修改时间',
-  `type` tinyint(1) DEFAULT '0' COMMENT '活动类型 0=商品，1=秒杀，2=砍价，3=拼团',
-  KEY `product_id` (`product_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品属性详情表';
-
---
--- 转存表中的数据 `eb_store_product_attr_result`
---
-
-INSERT INTO `eb_store_product_attr_result` (`product_id`, `result`, `change_time`, `type`) VALUES
-(4, '{"attr":[{"value":"\\u989c\\u8272","detail":["\\u7ea2\\u84dd\\u4e3b\\u673a&\\u5065\\u8eab\\u73af\\u5957\\u88c5","\\u7ea2\\u84dd\\u4e3b\\u673a&\\u9a6c\\u8f668\\u5b9e\\u4f53\\u5361&128G\\u5361","\\u7ea2\\u84dd\\u4e3b\\u673a&\\u821e\\u529b\\u5168\\u5f00Token\\u5b9e\\u4f53\\u5957\\u88c5","\\u7ea2\\u84dd\\u4e3b\\u673a&\\u9a6cU\\u5b9e\\u4f53\\u5361&128G\\u5361"]}],"value":[{"value1":"\\u7ea2\\u84dd\\u4e3b\\u673a&\\u5065\\u8eab\\u73af\\u5957\\u88c5","detail":{"\\u989c\\u8272":"\\u7ea2\\u84dd\\u4e3b\\u673a&\\u5065\\u8eab\\u73af\\u5957\\u88c5"},"pic":"http:\\/\\/img30.360buyimg.com\\/popWaterMark\\/jfs\\/t1\\/155538\\/18\\/14325\\/116768\\/5ffdc9e0E7a2568b1\\/96f195754b4d2824.jpg","price":1999,"cost":0,"ot_price":2999,"vip_price":1888,"stock":2343,"bar_code":"","weight":1,"volume":0,"brokerage":5,"brokerage_two":3},{"value1":"\\u7ea2\\u84dd\\u4e3b\\u673a&\\u9a6c\\u8f668\\u5b9e\\u4f53\\u5361&128G\\u5361","detail":{"\\u989c\\u8272":"\\u7ea2\\u84dd\\u4e3b\\u673a&\\u9a6c\\u8f668\\u5b9e\\u4f53\\u5361&128G\\u5361"},"pic":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/7f883ca9d7ae575fa40aab1c32f63333.jpg","price":1999,"cost":0,"ot_price":2999,"vip_price":1888,"stock":2343,"bar_code":"","weight":1,"volume":0,"brokerage":5,"brokerage_two":3},{"value1":"\\u7ea2\\u84dd\\u4e3b\\u673a&\\u821e\\u529b\\u5168\\u5f00Token\\u5b9e\\u4f53\\u5957\\u88c5","detail":{"\\u989c\\u8272":"\\u7ea2\\u84dd\\u4e3b\\u673a&\\u821e\\u529b\\u5168\\u5f00Token\\u5b9e\\u4f53\\u5957\\u88c5"},"pic":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/979aa1f84d183962e0617c795a7f4709.jpg","price":1999,"cost":0,"ot_price":2999,"vip_price":1888,"stock":2343,"bar_code":"","weight":1,"volume":0,"brokerage":5,"brokerage_two":3},{"value1":"\\u7ea2\\u84dd\\u4e3b\\u673a&\\u9a6cU\\u5b9e\\u4f53\\u5361&128G\\u5361","detail":{"\\u989c\\u8272":"\\u7ea2\\u84dd\\u4e3b\\u673a&\\u9a6cU\\u5b9e\\u4f53\\u5361&128G\\u5361"},"pic":"http:\\/\\/img30.360buyimg.com\\/popWaterMark\\/jfs\\/t1\\/155538\\/18\\/14325\\/116768\\/5ffdc9e0E7a2568b1\\/96f195754b4d2824.jpg","price":1999,"cost":0,"ot_price":2999,"vip_price":1888,"stock":2343,"bar_code":"","weight":1,"volume":0,"brokerage":5,"brokerage_two":3}]}', 1619348769, 0),
-(2, '{"attr":[{"value":"\\u989c\\u8272","detail":["\\u9676\\u74f7\\u9ed1","\\u9676\\u74f7\\u767d"]},{"value":"\\u7248\\u672c","detail":["8GB+256GB"]},{"value":"\\u9009\\u62e9\\u7248\\u672c","detail":["Mate 40 RS\\u6807\\u51c6\\u7248"]}],"value":[{"value1":"\\u9676\\u74f7\\u9ed1","value2":"8GB+256GB","value3":"Mate 40 RS\\u6807\\u51c6\\u7248","detail":{"\\u989c\\u8272":"\\u9676\\u74f7\\u9ed1","\\u7248\\u672c":"8GB+256GB","\\u9009\\u62e9\\u7248\\u672c":"Mate 40 RS\\u6807\\u51c6\\u7248"},"pic":"http:\\/\\/img30.360buyimg.com\\/popWaterMark\\/jfs\\/t1\\/170247\\/17\\/12852\\/67106\\/604f1593E65e7d374\\/dc2e256bf9e1a020.jpg","price":1999,"cost":0,"ot_price":10999,"vip_price":1500,"stock":233,"bar_code":"","weight":1,"volume":0,"brokerage":10,"brokerage_two":5},{"value1":"\\u9676\\u74f7\\u767d","value2":"8GB+256GB","value3":"Mate 40 RS\\u6807\\u51c6\\u7248","detail":{"\\u989c\\u8272":"\\u9676\\u74f7\\u767d","\\u7248\\u672c":"8GB+256GB","\\u9009\\u62e9\\u7248\\u672c":"Mate 40 RS\\u6807\\u51c6\\u7248"},"pic":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/e34fbe373d936fad79c2127eb145de5e.jpg","price":2000,"cost":0,"ot_price":10999,"vip_price":1600,"stock":233,"bar_code":"","weight":1,"volume":0,"brokerage":10,"brokerage_two":5}]}', 1619350862, 0),
-(1, '{"attr":[{"value":"\\u989c\\u8272","detail":["\\u6d77\\u84dd\\u8272","\\u77f3\\u58a8\\u8272"]},{"value":"\\u7248\\u672c","detail":["128GB"]},{"value":"\\u8d2d\\u4e70\\u65b9\\u5f0f","detail":["\\u516c\\u5f00\\u7248","AirPods\\u5957\\u88c5"]}],"value":[{"value1":"\\u6d77\\u84dd\\u8272","value2":"128GB","value3":"\\u516c\\u5f00\\u7248","detail":{"\\u989c\\u8272":"\\u6d77\\u84dd\\u8272","\\u7248\\u672c":"128GB","\\u8d2d\\u4e70\\u65b9\\u5f0f":"\\u516c\\u5f00\\u7248"},"pic":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/9b76168a161b00d50ae430f138984994.jpg","price":0.01,"cost":0,"ot_price":12999,"vip_price":0,"stock":234,"bar_code":"","weight":1,"volume":1,"brokerage":0,"brokerage_two":0},{"value1":"\\u6d77\\u84dd\\u8272","value2":"128GB","value3":"AirPods\\u5957\\u88c5","detail":{"\\u989c\\u8272":"\\u6d77\\u84dd\\u8272","\\u7248\\u672c":"128GB","\\u8d2d\\u4e70\\u65b9\\u5f0f":"AirPods\\u5957\\u88c5"},"pic":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/6e70f6228f96849846c242bfe985f19a.jpg","price":0.01,"cost":0,"ot_price":12999,"vip_price":0,"stock":234,"bar_code":"","weight":1,"volume":1,"brokerage":0,"brokerage_two":0},{"value1":"\\u77f3\\u58a8\\u8272","value2":"128GB","value3":"\\u516c\\u5f00\\u7248","detail":{"\\u989c\\u8272":"\\u77f3\\u58a8\\u8272","\\u7248\\u672c":"128GB","\\u8d2d\\u4e70\\u65b9\\u5f0f":"\\u516c\\u5f00\\u7248"},"pic":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/5a76059e5821a86ef6d0b96ad2313412.jpg","price":0.01,"cost":0,"ot_price":12999,"vip_price":0,"stock":234,"bar_code":"","weight":1,"volume":1,"brokerage":0,"brokerage_two":0},{"value1":"\\u77f3\\u58a8\\u8272","value2":"128GB","value3":"AirPods\\u5957\\u88c5","detail":{"\\u989c\\u8272":"\\u77f3\\u58a8\\u8272","\\u7248\\u672c":"128GB","\\u8d2d\\u4e70\\u65b9\\u5f0f":"AirPods\\u5957\\u88c5"},"pic":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/25\\/7cc3a1b8d58ff4e45d75cabf173e8b8e.jpg","price":0.01,"cost":0,"ot_price":12999,"vip_price":0,"stock":234,"bar_code":"","weight":1,"volume":1,"brokerage":0,"brokerage_two":0}]}', 1619350869, 0),
-(5, '{"attr":[{"value":"\\u989c\\u8272","detail":["\\u7ea2\\u8272","\\u84dd\\u8272"]}],"value":[{"value1":"\\u7ea2\\u8272","detail":{"\\u989c\\u8272":"\\u7ea2\\u8272"},"pic":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/53156202104251831484878.png","price":0.01,"cost":0,"ot_price":190,"vip_price":0,"stock":13132,"bar_code":"","weight":0,"volume":0,"brokerage":0,"brokerage_two":0},{"value1":"\\u84dd\\u8272","detail":{"\\u989c\\u8272":"\\u84dd\\u8272"},"pic":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/53156202104251831484878.png","price":0.01,"cost":0,"ot_price":190,"vip_price":0,"stock":120,"bar_code":"","weight":0,"volume":0,"brokerage":0,"brokerage_two":0}]}', 1619350932, 0),
-(3, '{"attr":[{"value":"\\u989c\\u8272","detail":["\\u9676\\u74f7\\u9ed1","\\u9676\\u74f7\\u767d"]},{"value":"\\u7248\\u672c","detail":["8GB+256GB","12GB+256GB"]}],"value":[{"value1":"\\u9676\\u74f7\\u9ed1","value2":"8GB+256GB","detail":{"\\u989c\\u8272":"\\u9676\\u74f7\\u9ed1","\\u7248\\u672c":"8GB+256GB"},"pic":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9971c202104251641575912.png","price":999,"cost":999,"ot_price":999,"vip_price":788,"stock":1000,"bar_code":"","weight":1,"volume":1,"brokerage":20,"brokerage_two":10},{"value1":"\\u9676\\u74f7\\u9ed1","value2":"12GB+256GB","detail":{"\\u989c\\u8272":"\\u9676\\u74f7\\u9ed1","\\u7248\\u672c":"12GB+256GB"},"pic":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9971c202104251641575912.png","price":999,"cost":999,"ot_price":999,"vip_price":788,"stock":1000,"bar_code":"","weight":1,"volume":1,"brokerage":20,"brokerage_two":10},{"value1":"\\u9676\\u74f7\\u767d","value2":"8GB+256GB","detail":{"\\u989c\\u8272":"\\u9676\\u74f7\\u767d","\\u7248\\u672c":"8GB+256GB"},"pic":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9971c202104251641575912.png","price":999,"cost":999,"ot_price":999,"vip_price":788,"stock":1000,"bar_code":"","weight":1,"volume":1,"brokerage":20,"brokerage_two":10},{"value1":"\\u9676\\u74f7\\u767d","value2":"12GB+256GB","detail":{"\\u989c\\u8272":"\\u9676\\u74f7\\u767d","\\u7248\\u672c":"12GB+256GB"},"pic":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/9971c202104251641575912.png","price":999,"cost":999,"ot_price":999,"vip_price":788,"stock":1000,"bar_code":"","weight":1,"volume":1,"brokerage":20,"brokerage_two":10}]}', 1619409293, 0);
+    `product_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商品ID',
+    `result` longtext NOT NULL COMMENT '商品属性参数',
+    `change_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '上次修改时间',
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '活动类型 0=商品，1=秒杀，2=砍价，3=拼团',
+    KEY `product_id` (`product_id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品属性详情表';
 
 -- --------------------------------------------------------
 
@@ -1765,49 +1816,27 @@ INSERT INTO `eb_store_product_attr_result` (`product_id`, `result`, `change_time
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_product_attr_value` (
-  `product_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品ID',
-  `suk` varchar(128) NOT NULL DEFAULT '' COMMENT '商品属性索引值 (attr_value|attr_value[|....])',
-  `stock` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '属性对应的库存',
-  `sales` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '销量',
-  `price` decimal(8,2) unsigned NOT NULL DEFAULT '0' COMMENT '属性金额',
-  `image` varchar(128) DEFAULT NULL COMMENT '图片',
-  `unique` char(8) NOT NULL DEFAULT '' COMMENT '唯一值',
-  `cost` decimal(8,2) unsigned NOT NULL DEFAULT '0' COMMENT '成本价',
-  `bar_code` varchar(50) NOT NULL DEFAULT '' COMMENT '商品条码',
-  `ot_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '原价',
-  `vip_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '会员专享价',
-  `weight` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '重量',
-  `volume` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '体积',
-  `brokerage` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '一级返佣',
-  `brokerage_two` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '二级返佣',
-  `type` tinyint(1) DEFAULT '0' COMMENT '活动类型 0=商品，1=秒杀，2=砍价，3=拼团',
-  `quota` int(11) DEFAULT NULL COMMENT '活动限购数量',
-  `quota_show` int(11) DEFAULT NULL COMMENT '活动限购数量显示',
-  KEY `unique` (`unique`,`suk`) USING BTREE,
-  KEY `store_id` (`product_id`,`suk`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品属性值表';
-
---
--- 转存表中的数据 `eb_store_product_attr_value`
---
-
-INSERT INTO `eb_store_product_attr_value` (`product_id`, `suk`, `stock`, `sales`, `price`, `image`, `unique`, `cost`, `bar_code`, `ot_price`, `vip_price`, `weight`, `volume`, `brokerage`, `brokerage_two`, `type`, `quota`, `quota_show`) VALUES
-(4, '红蓝主机&健身环套装', 2343, 0, '1999.00', 'http://img30.360buyimg.com/popWaterMark/jfs/t1/155538/18/14325/116768/5ffdc9e0E7a2568b1/96f195754b4d2824.jpg', 'ecd8b389', '0.00', '', '2999.00', '1888.00', '1.00', '0.00', '5.00', '3.00', 0, 0, 0),
-(4, '红蓝主机&马车8实体卡&128G卡', 2343, 0, '1999.00', 'https://qiniu.crmeb.net/attach/2021/04/25/7f883ca9d7ae575fa40aab1c32f63333.jpg', 'feb161e5', '0.00', '', '2999.00', '1888.00', '1.00', '0.00', '5.00', '3.00', 0, 0, 0),
-(4, '红蓝主机&舞力全开Token实体套装', 2343, 0, '1999.00', 'https://qiniu.crmeb.net/attach/2021/04/25/979aa1f84d183962e0617c795a7f4709.jpg', 'ea09cd4d', '0.00', '', '2999.00', '1888.00', '1.00', '0.00', '5.00', '3.00', 0, 0, 0),
-(4, '红蓝主机&马U实体卡&128G卡', 2343, 0, '1999.00', 'http://img30.360buyimg.com/popWaterMark/jfs/t1/155538/18/14325/116768/5ffdc9e0E7a2568b1/96f195754b4d2824.jpg', 'e829e12e', '0.00', '', '2999.00', '1888.00', '1.00', '0.00', '5.00', '3.00', 0, 0, 0),
-(2, '陶瓷黑,8GB+256GB,Mate 40 RS标准版', 233, 0, '1999.00', 'http://img30.360buyimg.com/popWaterMark/jfs/t1/170247/17/12852/67106/604f1593E65e7d374/dc2e256bf9e1a020.jpg', 'e16a6f07', '0.00', '', '10999.00', '1500.00', '1.00', '0.00', '10.00', '5.00', 0, 0, 0),
-(2, '陶瓷白,8GB+256GB,Mate 40 RS标准版', 233, 0, '2000.00', 'https://qiniu.crmeb.net/attach/2021/04/25/e34fbe373d936fad79c2127eb145de5e.jpg', '244abbc2', '0.00', '', '10999.00', '1600.00', '1.00', '0.00', '10.00', '5.00', 0, 0, 0),
-(1, '海蓝色,128GB,公开版', 234, 0, '0.01', 'https://qiniu.crmeb.net/attach/2021/04/25/9b76168a161b00d50ae430f138984994.jpg', '0c297d8d', '0.00', '', '12999.00', '0.00', '1.00', '1.00', '0.00', '0.00', 0, 0, 0),
-(1, '海蓝色,128GB,AirPods套装', 234, 0, '0.01', 'https://qiniu.crmeb.net/attach/2021/04/25/6e70f6228f96849846c242bfe985f19a.jpg', '0b2948dd', '0.00', '', '12999.00', '0.00', '1.00', '1.00', '0.00', '0.00', 0, 0, 0),
-(1, '石墨色,128GB,公开版', 234, 0, '0.01', 'https://qiniu.crmeb.net/attach/2021/04/25/5a76059e5821a86ef6d0b96ad2313412.jpg', '37068eb4', '0.00', '', '12999.00', '0.00', '1.00', '1.00', '0.00', '0.00', 0, 0, 0),
-(1, '石墨色,128GB,AirPods套装', 234, 0, '0.01', 'https://qiniu.crmeb.net/attach/2021/04/25/7cc3a1b8d58ff4e45d75cabf173e8b8e.jpg', 'd42709c9', '0.00', '', '12999.00', '0.00', '1.00', '1.00', '0.00', '0.00', 0, 0, 0),
-(5, '红色', 13132, 0, '0.01', 'https://qiniu.crmeb.net/attach/2021/04/53156202104251831484878.png', 'a64303a6', '0.00', '', '190.00', '0.00', '0.00', '0.00', '0.00', '0.00', 0, 0, 0),
-(5, '蓝色', 120, 0, '0.01', 'https://qiniu.crmeb.net/attach/2021/04/53156202104251831484878.png', '9250d130', '0.00', '', '190.00', '0.00', '0.00', '0.00', '0.00', '0.00', 0, 0, 0),
-(3, '陶瓷黑,8GB+256GB', 1000, 0, '999.00', 'https://qiniu.crmeb.net/attach/2021/04/9971c202104251641575912.png', '0366c5d3', '999.00', '', '999.00', '788.00', '1.00', '1.00', '20.00', '10.00', 0, 0, 0),
-(3, '陶瓷黑,12GB+256GB', 1000, 0, '999.00', 'https://qiniu.crmeb.net/attach/2021/04/9971c202104251641575912.png', '0ed2faab', '999.00', '', '999.00', '788.00', '1.00', '1.00', '20.00', '10.00', 0, 0, 0),
-(3, '陶瓷白,8GB+256GB', 1000, 0, '999.00', 'https://qiniu.crmeb.net/attach/2021/04/9971c202104251641575912.png', '6798126e', '999.00', '', '999.00', '788.00', '1.00', '1.00', '20.00', '10.00', 0, 0, 0),
-(3, '陶瓷白,12GB+256GB', 1000, 0, '999.00', 'https://qiniu.crmeb.net/attach/2021/04/9971c202104251641575912.png', 'de21fbd2', '999.00', '', '999.00', '788.00', '1.00', '1.00', '20.00', '10.00', 0, 0, 0);
+    `product_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商品ID',
+    `suk` varchar(128) NOT NULL DEFAULT '' COMMENT '商品属性索引值 (attr_value|attr_value[|....])',
+    `stock` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '属性对应的库存',
+    `sales` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '销量',
+    `price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '属性金额',
+    `image` varchar(128) NOT NULL DEFAULT '' COMMENT '图片',
+    `unique` char(8) NOT NULL DEFAULT '' COMMENT '唯一值',
+    `cost` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '成本价',
+    `bar_code` varchar(50) NOT NULL DEFAULT '' COMMENT '商品条码',
+    `ot_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '原价',
+    `vip_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '会员专享价',
+    `weight` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '重量',
+    `volume` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '体积',
+    `brokerage` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '一级返佣',
+    `brokerage_two` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '二级返佣',
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '活动类型 0=商品，1=秒杀，2=砍价，3=拼团',
+    `quota` int(11) NOT NULL DEFAULT '0' COMMENT '活动限购数量',
+    `quota_show` int(11) NOT NULL DEFAULT '0' COMMENT '活动限购数量显示',
+    KEY `unique` (`unique`,`suk`) USING BTREE,
+    KEY `store_id` (`product_id`,`suk`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品属性值表';
 
 -- --------------------------------------------------------
 
@@ -1816,35 +1845,14 @@ INSERT INTO `eb_store_product_attr_value` (`product_id`, `suk`, `stock`, `sales`
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_product_cate` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `product_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品id',
-  `cate_id` int(11) NOT NULL DEFAULT '0' COMMENT '分类id',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `cate_pid` int(11) NOT NULL DEFAULT '0' COMMENT '一级分类id',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '商品状态',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1237 DEFAULT CHARSET=utf8 COMMENT='商品分类辅助表';
-
---
--- 转存表中的数据 `eb_store_product_cate`
---
-
-INSERT INTO `eb_store_product_cate` (`id`, `product_id`, `cate_id`, `add_time`, `cate_pid`, `status`) VALUES
-(79, 4, 6, 1619348769, 1, 0),
-(80, 4, 7, 1619348769, 1, 0),
-(81, 4, 9, 1619348769, 2, 0),
-(82, 4, 16, 1619348769, 4, 0),
-(83, 4, 18, 1619348769, 4, 0),
-(100, 2, 6, 1619350862, 1, 1),
-(101, 2, 7, 1619350862, 1, 1),
-(102, 2, 10, 1619350862, 2, 1),
-(103, 1, 5, 1619350869, 1, 1),
-(104, 1, 10, 1619350869, 2, 1),
-(107, 5, 9, 1619350932, 2, 1),
-(108, 5, 7, 1619350932, 1, 1),
-(112, 3, 5, 1619409293, 1, 1),
-(113, 3, 7, 1619409293, 1, 1),
-(114, 3, 10, 1619409293, 2, 1);
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `product_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品id',
+    `cate_id` int(11) NOT NULL DEFAULT '0' COMMENT '分类id',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `cate_pid` int(11) NOT NULL DEFAULT '0' COMMENT '一级分类id',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '商品状态',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品分类辅助表';
 
 -- --------------------------------------------------------
 
@@ -1853,13 +1861,13 @@ INSERT INTO `eb_store_product_cate` (`id`, `product_id`, `cate_id`, `add_time`, 
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_product_coupon` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `product_id` int(10) NOT NULL DEFAULT '0' COMMENT '商品id',
-  `issue_coupon_id` int(10) NOT NULL DEFAULT '0' COMMENT '优惠劵id',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '优惠券名称',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `product_id` int(10) NOT NULL DEFAULT '0' COMMENT '商品id',
+    `issue_coupon_id` int(10) NOT NULL DEFAULT '0' COMMENT '优惠劵id',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `title` varchar(255) NOT NULL DEFAULT '' COMMENT '优惠券名称',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -1868,22 +1876,11 @@ CREATE TABLE IF NOT EXISTS `eb_store_product_coupon` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_product_description` (
-  `product_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品ID',
-  `description` text NOT NULL DEFAULT '' COMMENT '商品详情',
-  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '商品类型',
-  KEY `product_id` (`product_id`,`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品详情表';
-
---
--- 转存表中的数据 `eb_store_product_description`
---
-
-INSERT INTO `eb_store_product_description` (`product_id`, `description`, `type`) VALUES
-(1, '&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/da1844ca0741f320ff5170d2348df306.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;script&gt;&lt;/script&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;', 0),
-(2, '&lt;p&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/5dcdf11fa30515c2b63e041c1bdd0263.jpg&quot; width=&quot;750&quot; height=&quot;1000&quot; alt=&quot;&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/5baff40bf41a9368ff2f3571c66e4deb.jpg&quot; width=&quot;750&quot; height=&quot;1000&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/c9bf3c738b3931b26e288e3212a97e20.jpg&quot; width=&quot;750&quot; height=&quot;1000&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/e596d70fc3ec812f35d78d0a3791ca35.jpg&quot; width=&quot;750&quot; height=&quot;1000&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/247b97168144dba7f41082a63a2fd36b.jpg&quot; width=&quot;750&quot; height=&quot;1000&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/36b2ffba4fbfceaccb2d55e54afba497.jpg&quot; width=&quot;750&quot; height=&quot;1000&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/ccaf7c708861a96d26d6042e48dd9dd7.jpg&quot; width=&quot;750&quot; height=&quot;1000&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/0180f3fac0699c455f3eaa810fbdcb1a.jpg&quot; width=&quot;750&quot; height=&quot;1000&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/d707b93c71adb47b42815c93b798b6e0.jpg&quot; width=&quot;750&quot; height=&quot;1000&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/dbeeb47f83640176db77eff781741de2.jpg&quot; width=&quot;750&quot; height=&quot;1000&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/102df2325799c16a75d10469af99991d.jpg&quot; width=&quot;750&quot; height=&quot;1000&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/1a721daf4b296cd479a3d8530ca8ffb7.jpg&quot; width=&quot;750&quot; height=&quot;1000&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/73f145c871e59e63b0597357cc9b8a18.jpg&quot; width=&quot;750&quot; height=&quot;1000&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/a2689962ede6a79308435ec528651277.jpg&quot; width=&quot;750&quot; height=&quot;800&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/c91d482dbecfc8d80d071826542dec20.jpg&quot; width=&quot;750&quot; height=&quot;991&quot; alt=&quot;&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/0d9f9a79944e9b807e9198378819192e.jpg&quot; width=&quot;750&quot; height=&quot;559&quot; alt=&quot;&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;script&gt;&lt;/script&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;', 0),
-(3, '&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/6dcb4a6494101ba1fd90ada51bce23be.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/4aa3b41ed3788e84e0388580b1ef8155.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/f4a776114ffa76214932d4396efce4d1.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/df655fbc671930900affefd270cc3775.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/94579b4b69f20a77c147f3602296609e.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/9c3ea43d273a7a6dfdb33df6308ac924.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/8e4b994f1ee3b578159ce32b5e102182.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/f6b3f02fc8095aa9224c6ab938c1f93c.jpg&quot;/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;', 0),
-(4, '&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/8b649a9781853502e848fea7cf135798.jpg&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/7aca86f09c24daa127676fc3330a5cf6.jpg&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/ff0fcbad78860fcfbd278b1b73219eca.jpg&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/8554c951cc66618cfcf33c3cc9eca2cc.jpg&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/da2667a7b2ee1648732ac204265c43ab.jpg&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/2967805374591d37664f820b849c3329.jpg&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/d4a504aa0267aadb637f1b7f36154fd2.jpg&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/423ea378f49496b97f9c3a8f9b9618b1.jpg&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/7f050392b60abdef67862889600a6efe.jpg&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/25/0811b56cc434bdc649b9c68bf57c1f34.jpg&quot;/&gt;&lt;/p&gt;', 0),
-(5, '&lt;p&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/53156202104251831484878.png&quot;/&gt;&lt;img src=&quot;https://qiniu.crmeb.net/attach/2021/04/4c282202104251832286395.jpg&quot;/&gt;&lt;/p&gt;', 0);
+    `product_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品ID',
+    `description` text NOT NULL COMMENT '商品详情',
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '商品类型',
+    KEY `product_id` (`product_id`,`type`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品详情表';
 
 -- --------------------------------------------------------
 
@@ -1892,23 +1889,23 @@ INSERT INTO `eb_store_product_description` (`product_id`, `description`, `type`)
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_product_log` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `type` enum('visit','cart','order','pay','collect','refund') NOT NULL COMMENT '类型',
-  `product_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品ID',
-  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
-  `visit_num` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否浏览',
-  `cart_num` int(11) NOT NULL DEFAULT '0' COMMENT '加入购物车数量',
-  `order_num` int(11) NOT NULL DEFAULT '0' COMMENT '下单数量',
-  `pay_num` int(11) NOT NULL DEFAULT '0' COMMENT '支付数量',
-  `pay_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '支付金额',
-  `cost_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品成本价',
-  `pay_uid` int(11) NOT NULL DEFAULT '0' COMMENT '支付用户ID',
-  `refund_num` int(11) NOT NULL DEFAULT '0' COMMENT '退款数量',
-  `refund_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '退款金额',
-  `collect_num` tinyint(1) NOT NULL DEFAULT '0' COMMENT '收藏',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='商品统计';
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `type` enum('visit','cart','order','pay','collect','refund') NOT NULL DEFAULT 'visit' COMMENT '类型',
+    `product_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品ID',
+    `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+    `visit_num` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否浏览',
+    `cart_num` int(11) NOT NULL DEFAULT '0' COMMENT '加入购物车数量',
+    `order_num` int(11) NOT NULL DEFAULT '0' COMMENT '下单数量',
+    `pay_num` int(11) NOT NULL DEFAULT '0' COMMENT '支付数量',
+    `pay_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '支付金额',
+    `cost_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品成本价',
+    `pay_uid` int(11) NOT NULL DEFAULT '0' COMMENT '支付用户ID',
+    `refund_num` int(11) NOT NULL DEFAULT '0' COMMENT '退款数量',
+    `refund_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '退款金额',
+    `collect_num` tinyint(1) NOT NULL DEFAULT '0' COMMENT '收藏',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品统计';
 
 -- --------------------------------------------------------
 
@@ -1917,15 +1914,15 @@ CREATE TABLE IF NOT EXISTS `eb_store_product_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_product_relation` (
-  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
-  `product_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品ID',
-  `type` varchar(32) NOT NULL DEFAULT '' COMMENT '类型(收藏(collect）、点赞(like))',
-  `category` varchar(32) NOT NULL DEFAULT '' COMMENT '某种类型的商品(普通商品、秒杀商品)',
-  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  UNIQUE KEY `uid` (`uid`,`product_id`,`type`,`category`) USING BTREE,
-  KEY `type` (`type`) USING BTREE,
-  KEY `category` (`category`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品点赞和收藏表';
+    `uid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户ID',
+    `product_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商品ID',
+    `type` varchar(32) NOT NULL DEFAULT '' COMMENT '类型(收藏(collect）、点赞(like))',
+    `category` varchar(32) NOT NULL DEFAULT '' COMMENT '某种类型的商品(普通商品、秒杀商品)',
+    `add_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
+    UNIQUE KEY `uid` (`uid`,`product_id`,`type`,`category`) USING BTREE,
+    KEY `type` (`type`) USING BTREE,
+    KEY `category` (`category`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品点赞和收藏表';
 
 -- --------------------------------------------------------
 
@@ -1934,31 +1931,31 @@ CREATE TABLE IF NOT EXISTS `eb_store_product_relation` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_product_reply` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '评论ID',
-  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
-  `oid` int(11) NOT NULL DEFAULT '0' COMMENT '订单ID',
-  `unique` char(32) NOT NULL DEFAULT '' COMMENT '唯一id',
-  `product_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品id',
-  `reply_type` varchar(32) NOT NULL DEFAULT 'product' COMMENT '某种商品类型(普通商品、秒杀商品）',
-  `product_score` tinyint(1) NOT NULL DEFAULT '0' COMMENT '商品分数',
-  `service_score` tinyint(1) NOT NULL DEFAULT '0' COMMENT '服务分数',
-  `comment` varchar(512) NOT NULL DEFAULT '' COMMENT '评论内容',
-  `pics` text NOT NULL DEFAULT '' COMMENT '评论图片',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '评论时间',
-  `merchant_reply_content` varchar(300) DEFAULT NULL COMMENT '管理员回复内容',
-  `merchant_reply_time` int(11) DEFAULT NULL COMMENT '管理员回复时间',
-  `is_del` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0未删除1已删除',
-  `is_reply` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未回复1已回复',
-  `nickname` varchar(64) NOT NULL DEFAULT '' COMMENT '用户名称',
-  `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '用户头像',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `order_id_2` (`oid`,`unique`) USING BTREE,
-  KEY `add_time` (`add_time`) USING BTREE,
-  KEY `parent_id` (`reply_type`) USING BTREE,
-  KEY `is_del` (`is_del`) USING BTREE,
-  KEY `product_score` (`product_score`) USING BTREE,
-  KEY `service_score` (`service_score`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='评论表';
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '评论ID',
+    `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+    `oid` int(11) NOT NULL DEFAULT '0' COMMENT '订单ID',
+    `unique` char(32) NOT NULL DEFAULT '' COMMENT '唯一id',
+    `product_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品id',
+    `reply_type` varchar(32) NOT NULL DEFAULT 'product' COMMENT '某种商品类型(普通商品、秒杀商品）',
+    `product_score` tinyint(1) NOT NULL DEFAULT '0' COMMENT '商品分数',
+    `service_score` tinyint(1) NOT NULL DEFAULT '0' COMMENT '服务分数',
+    `comment` varchar(512) NOT NULL DEFAULT '' COMMENT '评论内容',
+    `pics` text NOT NULL COMMENT '评论图片',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '评论时间',
+    `merchant_reply_content` varchar(300) NOT NULL DEFAULT '' COMMENT '管理员回复内容',
+    `merchant_reply_time` int(11) NOT NULL DEFAULT '0' COMMENT '管理员回复时间',
+    `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '0未删除1已删除',
+    `is_reply` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0未回复1已回复',
+    `nickname` varchar(64) NOT NULL DEFAULT '' COMMENT '用户名称',
+    `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '用户头像',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `order_id_2` (`oid`,`unique`) USING BTREE,
+    KEY `add_time` (`add_time`) USING BTREE,
+    KEY `parent_id` (`reply_type`) USING BTREE,
+    KEY `is_del` (`is_del`) USING BTREE,
+    KEY `product_score` (`product_score`) USING BTREE,
+    KEY `service_score` (`service_score`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='评论表';
 
 -- --------------------------------------------------------
 
@@ -1967,11 +1964,11 @@ CREATE TABLE IF NOT EXISTS `eb_store_product_reply` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_product_rule` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `rule_name` varchar(32) NOT NULL DEFAULT '' COMMENT '规格名称',
-  `rule_value` text NOT NULL DEFAULT '' COMMENT '规格值',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='商品规则值(规格)表';
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `rule_name` varchar(32) NOT NULL DEFAULT '' COMMENT '规格名称',
+    `rule_value` text NOT NULL COMMENT '规格值',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品规则值(规格)表';
 
 -- --------------------------------------------------------
 
@@ -1980,48 +1977,47 @@ CREATE TABLE IF NOT EXISTS `eb_store_product_rule` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_seckill` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '商品秒杀商品表id',
-  `product_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商品id',
-  `image` varchar(255) NOT NULL DEFAULT '' COMMENT '推荐图',
-  `images` varchar(2000) NOT NULL DEFAULT '' COMMENT '轮播图',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '活动标题',
-  `info` varchar(255) NOT NULL DEFAULT '' COMMENT '简介',
-  `price` decimal(10,2) unsigned NOT NULL DEFAULT '0' COMMENT '价格',
-  `cost` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '成本',
-  `ot_price` decimal(10,2) unsigned NOT NULL DEFAULT '0' COMMENT '原价',
-  `give_integral` decimal(10,2) unsigned NOT NULL DEFAULT '0' COMMENT '返多少积分',
-  `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
-  `stock` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '库存',
-  `sales` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '销量',
-  `unit_name` varchar(16) NOT NULL DEFAULT '' COMMENT '单位名',
-  `postage` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '邮费',
-  `description` text COMMENT '内容',
-  `start_time` varchar(128) NOT NULL DEFAULT '' COMMENT '开始时间',
-  `stop_time` varchar(128) NOT NULL DEFAULT '' COMMENT '结束时间',
-  `add_time` varchar(128) NOT NULL DEFAULT '' COMMENT '添加时间',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '商品状态',
-  `is_postage` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否包邮',
-  `is_hot` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '热门推荐',
-  `is_del` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '删除 0未删除1已删除',
-  `num` int(11) unsigned NOT NULL DEFAULT '1' COMMENT '最多秒杀几个',
-  `is_show` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '显示',
-  `time_id` int(11) DEFAULT NULL COMMENT '时间段ID',
-  `temp_id` int(11) DEFAULT NULL COMMENT '运费模板ID',
-  `weight` decimal(8,2) DEFAULT '0.00' COMMENT '商品重量',
-  `volume` decimal(8,2) DEFAULT '0.00' COMMENT '商品体积',
-  `quota` int(10) NOT NULL DEFAULT '0' COMMENT '限购总数',
-  `quota_show` int(10) NOT NULL DEFAULT '0' COMMENT '限购总数显示',
-  `once_num` int(11) NOT NULL DEFAULT '0' COMMENT '单次购买个数',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `product_id` (`product_id`) USING BTREE,
-  KEY `start_time` (`start_time`,`stop_time`) USING BTREE,
-  KEY `is_del` (`is_del`) USING BTREE,
-  KEY `is_hot` (`is_hot`) USING BTREE,
-  KEY `is_show` (`status`) USING BTREE,
-  KEY `add_time` (`add_time`) USING BTREE,
-  KEY `sort` (`sort`) USING BTREE,
-  KEY `is_postage` (`is_postage`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='商品秒杀商品表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '商品秒杀商品表id',
+    `product_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商品id',
+    `image` varchar(255) NOT NULL DEFAULT '' COMMENT '推荐图',
+    `images` varchar(2000) NOT NULL DEFAULT '' COMMENT '轮播图',
+    `title` varchar(255) NOT NULL DEFAULT '' COMMENT '活动标题',
+    `info` varchar(255) NOT NULL DEFAULT '' COMMENT '简介',
+    `price` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '价格',
+    `cost` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '成本',
+    `ot_price` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '原价',
+    `give_integral` decimal(10,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '返多少积分',
+    `sort` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '排序',
+    `stock` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '库存',
+    `sales` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '销量',
+    `unit_name` varchar(16) NOT NULL DEFAULT '' COMMENT '单位名',
+    `postage` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '邮费',
+    `start_time` varchar(128) NOT NULL DEFAULT '' COMMENT '开始时间',
+    `stop_time` varchar(128) NOT NULL DEFAULT '' COMMENT '结束时间',
+    `add_time` varchar(128) NOT NULL DEFAULT '' COMMENT '添加时间',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '商品状态',
+    `is_postage` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否包邮',
+    `is_hot` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '热门推荐',
+    `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '删除 0未删除1已删除',
+    `num` int(11) UNSIGNED NOT NULL DEFAULT '1' COMMENT '最多秒杀几个',
+    `is_show` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '显示',
+    `time_id` int(11) NOT NULL DEFAULT '0' COMMENT '时间段ID',
+    `temp_id` int(11) NOT NULL DEFAULT '0' COMMENT '运费模板ID',
+    `weight` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '商品重量',
+    `volume` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '商品体积',
+    `quota` int(10) NOT NULL DEFAULT '0' COMMENT '限购总数',
+    `quota_show` int(10) NOT NULL DEFAULT '0' COMMENT '限购总数显示',
+    `once_num` int(11) NOT NULL DEFAULT '0' COMMENT '单次购买个数',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `product_id` (`product_id`) USING BTREE,
+    KEY `start_time` (`start_time`,`stop_time`) USING BTREE,
+    KEY `is_del` (`is_del`) USING BTREE,
+    KEY `is_hot` (`is_hot`) USING BTREE,
+    KEY `is_show` (`status`) USING BTREE,
+    KEY `add_time` (`add_time`) USING BTREE,
+    KEY `sort` (`sort`) USING BTREE,
+    KEY `is_postage` (`is_postage`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品秒杀商品表';
 
 -- --------------------------------------------------------
 
@@ -2030,9 +2026,9 @@ CREATE TABLE IF NOT EXISTS `eb_store_seckill` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_seckill_time` (
-  `seckill_id` int(10) NOT NULL DEFAULT '0' COMMENT '秒杀活动ID',
-  `time_id` int(10) NOT NULL DEFAULT '0' COMMENT '秒杀时间段ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='秒杀时段表';
+    `seckill_id` int(10) NOT NULL DEFAULT '0' COMMENT '秒杀活动ID',
+    `time_id` int(10) NOT NULL DEFAULT '0' COMMENT '秒杀时间段ID'
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='秒杀时段表';
 
 -- --------------------------------------------------------
 
@@ -2041,22 +2037,22 @@ CREATE TABLE IF NOT EXISTS `eb_store_seckill_time` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_service` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '客服id',
-  `mer_id` int(11) NOT NULL DEFAULT '0' COMMENT '商户id',
-  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '客服uid',
-  `online` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否在线',
-  `account` varchar(255) NOT NULL DEFAULT '' COMMENT '账号',
-  `password` varchar(255) NOT NULL DEFAULT '' COMMENT '密码',
-  `avatar` varchar(250) NOT NULL DEFAULT '' COMMENT '客服头像',
-  `nickname` varchar(50) NOT NULL DEFAULT '' COMMENT '代理名称',
-  `phone` varchar(20) NOT NULL DEFAULT '' COMMENT '客服电话',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0隐藏1显示',
-  `notify` int(2) DEFAULT '0' COMMENT '订单通知1开启0关闭',
-  `customer` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否展示统计管理',
-  `uniqid` varchar(35) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='客服表';
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '客服id',
+    `mer_id` int(11) NOT NULL DEFAULT '0' COMMENT '商户id',
+    `uid` int(11) NOT NULL DEFAULT '0' COMMENT '客服uid',
+    `online` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否在线',
+    `account` varchar(255) NOT NULL DEFAULT '' COMMENT '账号',
+    `password` varchar(255) NOT NULL DEFAULT '' COMMENT '密码',
+    `avatar` varchar(250) NOT NULL DEFAULT '' COMMENT '客服头像',
+    `nickname` varchar(50) NOT NULL DEFAULT '' COMMENT '代理名称',
+    `phone` varchar(20) NOT NULL DEFAULT '' COMMENT '客服电话',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '0隐藏1显示',
+    `notify` int(2) NOT NULL DEFAULT '0' COMMENT '订单通知1开启0关闭',
+    `customer` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否展示统计管理',
+    `uniqid` varchar(35) NOT NULL DEFAULT '',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客服表';
 
 -- --------------------------------------------------------
 
@@ -2065,17 +2061,17 @@ CREATE TABLE IF NOT EXISTS `eb_store_service` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_service_feedback` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(10) NOT NULL DEFAULT '0' COMMENT '用户UID',
-  `rela_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '姓名',
-  `phone` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '电话',
-  `content` varchar(500) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '反馈内容',
-  `make` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '备注',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态0=未查看，1=已查看',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`),
-  KEY `uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='反馈';
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `uid` int(10) NOT NULL DEFAULT '0' COMMENT '用户UID',
+    `rela_name` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '姓名',
+    `phone` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '电话',
+    `content` varchar(500) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '反馈内容',
+    `make` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '备注',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '状态0=未查看，1=已查看',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`),
+    KEY `uid` (`uid`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='反馈';
 
 -- --------------------------------------------------------
 
@@ -2084,19 +2080,19 @@ CREATE TABLE IF NOT EXISTS `eb_store_service_feedback` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_service_log` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '客服用户对话记录表ID',
-  `mer_id` int(11) NOT NULL DEFAULT '0' COMMENT '商户id',
-  `msn` text NOT NULL DEFAULT '' COMMENT '消息内容',
-  `uid` int(11) NOT NULL DEFAULT '1' COMMENT '发送人uid',
-  `to_uid` int(11) NOT NULL DEFAULT '1' COMMENT '接收人uid',
-  `is_tourist` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1=游客模式，0=非游客',
-  `time_node` tinyint(1) NOT NULL DEFAULT '0' COMMENT '时间节点',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '发送时间',
-  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否已读（0：否；1：是；）',
-  `remind` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否提醒过',
-  `msn_type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '消息类型 1=文字 2=表情 3=图片 4=语音',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='客服用户对话记录表';
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '客服用户对话记录表ID',
+    `mer_id` int(11) NOT NULL DEFAULT '0' COMMENT '商户id',
+    `msn` text NOT NULL COMMENT '消息内容',
+    `uid` int(11) NOT NULL DEFAULT '1' COMMENT '发送人uid',
+    `to_uid` int(11) NOT NULL DEFAULT '1' COMMENT '接收人uid',
+    `is_tourist` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1=游客模式，0=非游客',
+    `time_node` tinyint(1) NOT NULL DEFAULT '0' COMMENT '时间节点',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '发送时间',
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否已读（0：否；1：是；）',
+    `remind` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否提醒过',
+    `msn_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '消息类型 1=文字 2=表情 3=图片 4=语音',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='客服用户对话记录表';
 
 -- --------------------------------------------------------
 
@@ -2105,22 +2101,22 @@ CREATE TABLE IF NOT EXISTS `eb_store_service_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_service_record` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) NOT NULL DEFAULT '0' COMMENT '发送人的uid',
-  `to_uid` int(10) NOT NULL DEFAULT '0' COMMENT '送达人的uid',
-  `nickname` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '用户昵称',
-  `avatar` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '用户头像',
-  `is_tourist` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否是游客',
-  `online` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否在线',
-  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0 = pc,1=微信，2=小程序，3=H5',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `update_time` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
-  `mssage_num` int(10) NOT NULL DEFAULT '0' COMMENT '消息条数',
-  `message` text COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '内容',
-  `message_type` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `to_uid` (`to_uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='客服聊天用户记录表';
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `user_id` int(10) NOT NULL DEFAULT '0' COMMENT '发送人的uid',
+    `to_uid` int(10) NOT NULL DEFAULT '0' COMMENT '送达人的uid',
+    `nickname` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '用户昵称',
+    `avatar` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '用户头像',
+    `is_tourist` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否是游客',
+    `online` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否在线',
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0 = pc,1=微信，2=小程序，3=H5',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `update_time` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
+    `mssage_num` int(10) NOT NULL DEFAULT '0' COMMENT '消息条数',
+    `message` text COLLATE utf8_unicode_ci NOT NULL COMMENT '内容',
+    `message_type` tinyint(1) NOT NULL DEFAULT '0',
+    PRIMARY KEY (`id`),
+    KEY `to_uid` (`to_uid`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='客服聊天用户记录表';
 
 -- --------------------------------------------------------
 
@@ -2129,40 +2125,39 @@ CREATE TABLE IF NOT EXISTS `eb_store_service_record` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_service_speechcraft` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `kefu_id` int(10) NOT NULL DEFAULT '0' COMMENT '0为全局话术',
-  `cate_id` int(10) NOT NULL DEFAULT '0' COMMENT '0为不分类全局话术',
-  `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '话术标题',
-  `message` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '话术内容',
-  `sort` int(10) NOT NULL DEFAULT '0' COMMENT '排序',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`),
-  KEY `kefu_id` (`kefu_id`),
-  KEY `cate_id` (`cate_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='客服话术';
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `kefu_id` int(10) NOT NULL DEFAULT '0' COMMENT '0为全局话术',
+    `cate_id` int(10) NOT NULL DEFAULT '0' COMMENT '0为不分类全局话术',
+    `title` varchar(100) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '话术标题',
+    `message` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '话术内容',
+    `sort` int(10) NOT NULL DEFAULT '0' COMMENT '排序',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`),
+    KEY `kefu_id` (`kefu_id`),
+    KEY `cate_id` (`cate_id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='客服话术';
 
 --
 -- 转存表中的数据 `eb_store_service_speechcraft`
 --
 
 INSERT INTO `eb_store_service_speechcraft` (`id`, `kefu_id`, `cate_id`, `title`, `message`, `sort`, `add_time`) VALUES
-(NULL, 0, 0, '官网地址', 'http://www.crmeb.com', 0, 1605588484),
-(NULL, 0, 0, '论坛常见问题地址', 'http://bbs.crmeb.net/thread-4870-1-1.html', 0, 1605588562),
-(NULL, 0, 0, '接待开场白', '亲，您好，非常高兴为您服务了，有什么可以为您效劳的呢?', 0, 1605588671),
-(NULL, 0, 0, '帮助文档地址', 'http://help.crmeb.net', 0, 1605588676),
-(NULL, 0, 0, '论坛地址', 'http://bbs.crmeb.net', 0, 1605588694),
-(NULL, 0, 0, '放心拍', '亲，您看中的这款宝贝是有现货的呢，您可以放心拍哦O(_)O~', 0, 1605588719),
-(NULL, 0, 0, '发货时间', '亲，您拍下的42个小时内就可以为您安排发货的呢', 0, 1605588739),
-(NULL, 0, 0, ' 发什么快递', '亲，默认是发韵达快递哦，您这边可以收到韵达的货吗?韵达不到的地方我们可以为您安排发EMS，EMS是全国通达的，但是EMS是不包邮的呢，需要您补邮费10元，(发顺风的一样要补邮费20)', 0, 1605588758),
-(NULL, 0, 0, '什么时候到货?', '亲，一般韵达发货以后3天左右可以到货的呢，您收到货以后可以仔细检查一下，如有任何质量问题，7天内可以无条件退换货的，邮费也是外面承担。(顺风一般两天内到货，偏远地区会延迟到货时间)(EMS一般3-5天到货，偏远地区7天左右到货)\n', 0, 1605588778),
-(NULL, 0, 0, '可以便宜一点吗', '亲，非常抱歉，我们的定价已经是最低销售价格了呢，没有办法再优惠啦~~~', 0, 1605588794),
-(NULL, 0, 0, '质量问题', '亲，我们是商城正品，质量都是有保证的，您这边可以完全放心拍下哦。。。', 0, 1605588817),
-(NULL, 0, 0, '聊天结束', '亲，非常感谢您的惠顾我们这边会在第一时间为您安排发货的哦，请您耐心等待一下收货，如果有任何问题请您及时联系我们客服为您处理~~祝您购物愉快', 0, 1605588918),
-(NULL, 0, 0, '退货问题', '亲，7天内是可以无条件退换货的，质量问题您退换货单邮费都是我们为您承担，如果是非质量问题呢，您退回来的邮费以及我们给您换货发出的邮费是由您承担的哦', 0, 1605588943),
-(NULL, 0, 0, '单商户基础版演示', '演示后台：http://demo.crmeb.net/admin', 0, 1605589005),
-(NULL, 0, 0, '多商户演示', '演示后台：http://mer.crmeb.net/admin', 0, 1605589052),
-(NULL, 0, 0, '知识付费演示', '演示后台：http://zhishifufei.crmeb.net/admin', 0, 1605589105);
-
+(1, 0, 0, '官网地址', 'http://www.crmeb.com', 0, 1605588484),
+(2, 0, 0, '论坛常见问题地址', 'http://bbs.crmeb.net/thread-4870-1-1.html', 0, 1605588562),
+(3, 0, 0, '接待开场白', '亲，您好，非常高兴为您服务了，有什么可以为您效劳的呢?', 0, 1605588671),
+(4, 0, 0, '帮助文档地址', 'http://help.crmeb.net', 0, 1605588676),
+(5, 0, 0, '论坛地址', 'http://bbs.crmeb.net', 0, 1605588694),
+(6, 0, 0, '放心拍', '亲，您看中的这款宝贝是有现货的呢，您可以放心拍哦O(_)O~', 0, 1605588719),
+(7, 0, 0, '发货时间', '亲，您拍下的42个小时内就可以为您安排发货的呢', 0, 1605588739),
+(8, 0, 0, ' 发什么快递', '亲，默认是发韵达快递哦，您这边可以收到韵达的货吗?韵达不到的地方我们可以为您安排发EMS，EMS是全国通达的，但是EMS是不包邮的呢，需要您补邮费10元，(发顺风的一样要补邮费20)', 0, 1605588758),
+(9, 0, 0, '什么时候到货?', '亲，一般韵达发货以后3天左右可以到货的呢，您收到货以后可以仔细检查一下，如有任何质量问题，7天内可以无条件退换货的，邮费也是外面承担。(顺风一般两天内到货，偏远地区会延迟到货时间)(EMS一般3-5天到货，偏远地区7天左右到货)\n', 0, 1605588778),
+(10, 0, 0, '可以便宜一点吗', '亲，非常抱歉，我们的定价已经是最低销售价格了呢，没有办法再优惠啦~~~', 0, 1605588794),
+(11, 0, 0, '质量问题', '亲，我们是商城正品，质量都是有保证的，您这边可以完全放心拍下哦。。。', 0, 1605588817),
+(12, 0, 0, '聊天结束', '亲，非常感谢您的惠顾我们这边会在第一时间为您安排发货的哦，请您耐心等待一下收货，如果有任何问题请您及时联系我们客服为您处理~~祝您购物愉快', 0, 1605588918),
+(13, 0, 0, '退货问题', '亲，7天内是可以无条件退换货的，质量问题您退换货单邮费都是我们为您承担，如果是非质量问题呢，您退回来的邮费以及我们给您换货发出的邮费是由您承担的哦', 0, 1605588943),
+(14, 0, 0, '单商户基础版演示', '演示后台：http://demo.crmeb.net/admin', 0, 1605589005),
+(15, 0, 0, '多商户演示', '演示后台：http://mer.crmeb.net/admin', 0, 1605589052),
+(16, 0, 0, '知识付费演示', '演示后台：http://zhishifufei.crmeb.net/admin', 0, 1605589105);
 
 -- --------------------------------------------------------
 
@@ -2171,18 +2166,18 @@ INSERT INTO `eb_store_service_speechcraft` (`id`, `kefu_id`, `cate_id`, `title`,
 --
 
 CREATE TABLE IF NOT EXISTS `eb_store_visit` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `product_id` int(11) DEFAULT NULL COMMENT '商品ID',
-  `product_type` varchar(32) DEFAULT NULL COMMENT '商品类型',
-  `cate_id` int(11) DEFAULT NULL COMMENT '商品分类ID',
-  `type` char(50) DEFAULT NULL COMMENT '商品类型',
-  `uid` int(11) DEFAULT NULL COMMENT '用户ID',
-  `count` int(11) DEFAULT NULL COMMENT '访问次数',
-  `content` varchar(255) DEFAULT NULL COMMENT '备注描述',
-  `add_time` int(11) DEFAULT NULL COMMENT '添加时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `product_id` (`product_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='商品浏览分析表';
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `product_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品ID',
+    `product_type` varchar(32) NOT NULL DEFAULT '' COMMENT '商品类型',
+    `cate_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品分类ID',
+    `type` char(50) NOT NULL DEFAULT '' COMMENT '商品类型',
+    `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+    `count` int(11) NOT NULL DEFAULT '0' COMMENT '访问次数',
+    `content` varchar(255) NOT NULL DEFAULT '' COMMENT '备注描述',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `product_id` (`product_id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品浏览分析表';
 
 -- --------------------------------------------------------
 
@@ -2191,30 +2186,30 @@ CREATE TABLE IF NOT EXISTS `eb_store_visit` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_admin` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT COMMENT '后台管理员表ID',
-  `account` varchar(32) NOT NULL DEFAULT '' COMMENT '后台管理员账号',
-  `head_pic` varchar(255) NOT NULL DEFAULT '',
-  `pwd` varchar(100) NOT NULL DEFAULT '' COMMENT '后台管理员密码',
-  `real_name` varchar(16) NOT NULL DEFAULT '' COMMENT '后台管理员姓名',
-  `roles` varchar(128) NOT NULL DEFAULT '' COMMENT '后台管理员权限(menus_id)',
-  `last_ip` varchar(16) DEFAULT NULL COMMENT '后台管理员最后一次登录ip',
-  `last_time` int(10) unsigned DEFAULT NULL COMMENT '后台管理员最后一次登录时间',
-  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '后台管理员添加时间',
-  `login_count` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '登录次数',
-  `level` tinyint(3) unsigned NOT NULL DEFAULT '1' COMMENT '后台管理员级别',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '后台管理员状态 1有效0无效',
-  `is_del` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `account` (`account`) USING BTREE,
-  KEY `status` (`status`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='后台管理员表';
+    `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '后台管理员表ID',
+    `account` varchar(32) NOT NULL DEFAULT '' COMMENT '后台管理员账号',
+    `head_pic` varchar(255) NOT NULL DEFAULT '',
+    `pwd` varchar(100) NOT NULL DEFAULT '' COMMENT '后台管理员密码',
+    `real_name` varchar(16) NOT NULL DEFAULT '' COMMENT '后台管理员姓名',
+    `roles` varchar(128) NOT NULL DEFAULT '' COMMENT '后台管理员权限(menus_id)',
+    `last_ip` varchar(16) NOT NULL DEFAULT '' COMMENT '后台管理员最后一次登录ip',
+    `last_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '后台管理员最后一次登录时间',
+    `add_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '后台管理员添加时间',
+    `login_count` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '登录次数',
+    `level` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '后台管理员级别',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '后台管理员状态 1有效0无效',
+    `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `account` (`account`) USING BTREE,
+    KEY `status` (`status`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='后台管理员表';
 
 --
 -- 转存表中的数据 `eb_system_admin`
 --
 
 INSERT INTO `eb_system_admin` (`id`, `account`, `head_pic`, `pwd`, `real_name`, `roles`, `last_ip`, `last_time`, `add_time`, `login_count`, `level`, `status`, `is_del`) VALUES
-(1, 'admin', '', '$2y$10$q8wMkJ9ckLSI07bDpLudNehyYuooB6DP3wlmxw9eX/1TSX/4BUur2', 'admin', '1', '', 1605680028, 0, 2389, 0, 1, 0);
+(1, 'admin', '', '$2y$10$5Jlje/wU5oruJanWaYfB2eBAxc99RZERb6A3phL5rvXeD66o8RthK', 'admin', '1', '36.44.27.140', 1629716143, 1626423685, 105, 0, 1, 0);
 
 -- --------------------------------------------------------
 
@@ -2223,19 +2218,19 @@ INSERT INTO `eb_system_admin` (`id`, `account`, `head_pic`, `pwd`, `real_name`, 
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_attachment` (
-  `att_id` int(10) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL DEFAULT '' COMMENT '附件名称',
-  `att_dir` varchar(200) NOT NULL DEFAULT '' COMMENT '附件路径',
-  `satt_dir` varchar(200) DEFAULT NULL COMMENT '压缩图片路径',
-  `att_size` char(30) NOT NULL DEFAULT '' COMMENT '附件大小',
-  `att_type` char(30) NOT NULL DEFAULT '' COMMENT '附件类型',
-  `pid` int(10) NOT NULL DEFAULT '0' COMMENT '分类ID0编辑器,1商品图片,2拼团图片,3砍价图片,4秒杀图片,5文章图片,6组合数据图',
-  `time` int(11) NOT NULL DEFAULT '0' COMMENT '上传时间',
-  `image_type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '图片上传类型 1本地 2七牛云 3OSS 4COS ',
-  `module_type` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '图片上传模块类型 1 后台上传 2 用户生成',
-  `real_name` varchar(255) NOT NULL DEFAULT '' COMMENT '原始文件名',
-  PRIMARY KEY (`att_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='附件管理表';
+    `att_id` int(10) NOT NULL AUTO_INCREMENT,
+    `name` varchar(100) NOT NULL DEFAULT '' COMMENT '附件名称',
+    `att_dir` varchar(200) NOT NULL DEFAULT '' COMMENT '附件路径',
+    `satt_dir` varchar(200) NOT NULL DEFAULT '' COMMENT '压缩图片路径',
+    `att_size` char(30) NOT NULL DEFAULT '' COMMENT '附件大小',
+    `att_type` char(30) NOT NULL DEFAULT '' COMMENT '附件类型',
+    `pid` int(10) NOT NULL DEFAULT '0' COMMENT '分类ID0编辑器,1商品图片,2拼团图片,3砍价图片,4秒杀图片,5文章图片,6组合数据图',
+    `time` int(11) NOT NULL DEFAULT '0' COMMENT '上传时间',
+    `image_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '图片上传类型 1本地 2七牛云 3OSS 4COS ',
+    `module_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '图片上传模块类型 1 后台上传 2 用户生成',
+    `real_name` varchar(255) NOT NULL DEFAULT '' COMMENT '原始文件名',
+    PRIMARY KEY (`att_id`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='附件管理表';
 
 -- --------------------------------------------------------
 
@@ -2244,13 +2239,13 @@ CREATE TABLE IF NOT EXISTS `eb_system_attachment` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_attachment_category` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `pid` int(11) DEFAULT '0' COMMENT '父级ID',
-  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '分类名称',
-  `enname` varchar(50) DEFAULT NULL COMMENT '分类目录',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `id` (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='附件分类表';
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `pid` int(11) NOT NULL DEFAULT '0' COMMENT '父级ID',
+    `name` varchar(50) NOT NULL DEFAULT '' COMMENT '分类名称',
+    `enname` varchar(50) NOT NULL DEFAULT '' COMMENT '分类目录',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `id` (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='附件分类表';
 
 -- --------------------------------------------------------
 
@@ -2259,18 +2254,18 @@ CREATE TABLE IF NOT EXISTS `eb_system_attachment_category` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_city` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `city_id` int(11) NOT NULL DEFAULT '0' COMMENT '城市id',
-  `level` int(11) NOT NULL DEFAULT '0' COMMENT '省市级别',
-  `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '父级id',
-  `area_code` varchar(30) NOT NULL DEFAULT '' COMMENT '区号',
-  `name` varchar(100) NOT NULL DEFAULT '' COMMENT '名称',
-  `merger_name` varchar(255) NOT NULL DEFAULT '' COMMENT '合并名称',
-  `lng` varchar(50) NOT NULL DEFAULT '' COMMENT '经度',
-  `lat` varchar(50) NOT NULL DEFAULT '' COMMENT '纬度',
-  `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否展示',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3971 DEFAULT CHARSET=utf8 COMMENT='城市表';
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `city_id` int(11) NOT NULL DEFAULT '0' COMMENT '城市id',
+    `level` int(11) NOT NULL DEFAULT '0' COMMENT '省市级别',
+    `parent_id` int(11) NOT NULL DEFAULT '0' COMMENT '父级id',
+    `area_code` varchar(30) NOT NULL DEFAULT '' COMMENT '区号',
+    `name` varchar(100) NOT NULL DEFAULT '' COMMENT '名称',
+    `merger_name` varchar(255) NOT NULL DEFAULT '' COMMENT '合并名称',
+    `lng` varchar(50) NOT NULL DEFAULT '' COMMENT '经度',
+    `lat` varchar(50) NOT NULL DEFAULT '' COMMENT '纬度',
+    `is_show` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否展示',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=3971 DEFAULT CHARSET=utf8 COMMENT='城市表';
 
 --
 -- 转存表中的数据 `eb_system_city`
@@ -6229,109 +6224,100 @@ INSERT INTO `eb_system_city` (`id`, `city_id`, `level`, `parent_id`, `area_code`
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_config` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '配置id',
-  `menu_name` varchar(255) NOT NULL DEFAULT '' COMMENT '字段名称',
-  `type` varchar(255) NOT NULL DEFAULT '' COMMENT '类型(文本框,单选按钮...)',
-  `input_type` varchar(20) DEFAULT 'input' COMMENT '表单类型',
-  `config_tab_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '配置分类id',
-  `parameter` varchar(255) DEFAULT NULL COMMENT '规则 单选框和多选框',
-  `upload_type` tinyint(1) unsigned DEFAULT NULL COMMENT '上传文件格式1单图2多图3文件',
-  `required` varchar(255) DEFAULT NULL COMMENT '规则',
-  `width` int(10) unsigned DEFAULT NULL COMMENT '多行文本框的宽度',
-  `high` int(10) unsigned DEFAULT NULL COMMENT '多行文框的高度',
-  `value` varchar(5000) DEFAULT NULL COMMENT '默认值',
-  `info` varchar(255) NOT NULL DEFAULT '' COMMENT '配置名称',
-  `desc` varchar(255) DEFAULT NULL COMMENT '配置简介',
-  `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否隐藏',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=328 DEFAULT CHARSET=utf8 COMMENT='配置表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '配置id',
+    `menu_name` varchar(255) NOT NULL DEFAULT '' COMMENT '字段名称',
+    `type` varchar(255) NOT NULL DEFAULT '' COMMENT '类型(文本框,单选按钮...)',
+    `input_type` varchar(20) NOT NULL DEFAULT 'input' COMMENT '表单类型',
+    `config_tab_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '配置分类id',
+    `parameter` varchar(255) NOT NULL DEFAULT '' COMMENT '规则 单选框和多选框',
+    `upload_type` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '上传文件格式1单图2多图3文件',
+    `required` varchar(255) NOT NULL DEFAULT '' COMMENT '规则',
+    `width` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '多行文本框的宽度',
+    `high` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '多行文框的高度',
+    `value` varchar(5000) NOT NULL DEFAULT '' COMMENT '默认值',
+    `info` varchar(255) NOT NULL DEFAULT '' COMMENT '配置名称',
+    `desc` varchar(255) NOT NULL DEFAULT '' COMMENT '配置简介',
+    `sort` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '排序',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否隐藏',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=350 DEFAULT CHARSET=utf8 COMMENT='配置表';
 
 --
 -- 转存表中的数据 `eb_system_config`
 --
 
 INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config_tab_id`, `parameter`, `upload_type`, `required`, `width`, `high`, `value`, `info`, `desc`, `sort`, `status`) VALUES
-(1, 'site_name', 'text', 'input', 26, NULL, NULL, 'required:true', 100, 0, '"CRMEB"', '网站名称', '网站名称很多地方会显示的，建议认真填写', 10, 1),
-(2, 'site_url', 'text', 'input', 26, NULL, NULL, 'required:true,url:true', 100, 0, '"https:\\/\\/v4.crmeb.net"', '网站地址', '安装自动配置，不要轻易修改，更换会影响网站访问、接口请求、本地文件储存、支付回调、微信授权、支付、小程序图片访问、部分二维码、官方授权等', 5, 1),
-(3, 'site_logo', 'upload', NULL, 26, NULL, 1, NULL, 0, 0, '"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/88898202104251734516138.png"', '后台大LOGO', '菜单展开左上角logo,建议尺寸[170*50]', 3, 1),
-(4, 'site_phone', 'text', 'input', 1, '', 0, '', 100, 0, '""', '联系电话', '联系电话', 0, 0),
-(5, 'seo_title', 'text', 'input', 26, NULL, NULL, 'required:true', 100, 0, '"CRMEB"', 'SEO标题', 'SEO标题', 0, 0),
-(6, 'site_email', 'text', 'input', 1, '', 0, 'email:true', 100, 0, '""', '联系邮箱', '联系邮箱', 0, 0),
-(7, 'site_qq', 'text', 'input', 1, '', 0, 'qq:true', 100, 0, '""', '联系QQ', '联系QQ', 0, 0),
-(8, 'site_close', 'radio', 'input', 1, '0=>开启\n1=>PC端关闭\n2=>WAP端关闭(含微信)\n3=>全部关闭', 0, '', 0, 0, '"0"', '网站关闭', '网站后台、商家中心不受影响。关闭网站也可访问', 0, 2),
-(9, 'close_system', 'radio', 'input', 1, '0=>开启\n1=>关闭', 0, '', 0, 0, '"0"', '关闭后台', '关闭后台', 0, 2),
-(13, 'wechat_appid', 'text', 'input', 2, '', 0, 'required:true', 100, 0, '""', 'AppID', 'AppID', 0, 1),
-(14, 'wechat_appsecret', 'text', 'input', 2, '', 0, 'required:true', 100, 0, '""', 'AppSecret', 'AppSecret', 0, 1),
-(15, 'wechat_token', 'text', 'input', 2, '', 0, 'required:true', 100, 0, '""', '微信验证TOKEN', '微信验证TOKEN', 0, 1),
+(1, 'site_name', 'text', 'input', 26, NULL, NULL, 'required:true', 100, 0, '\"CRMEB\"', '网站名称', '网站名称很多地方会显示的，建议认真填写', 10, 1),
+(2, 'site_url', 'text', 'input', 26, NULL, NULL, 'required:true,url:true', 100, 0, '\"https:\\/\\/data.wuht.net\"', '网站地址', '安装自动配置，不要轻易修改，更换会影响网站访问、接口请求、本地文件储存、支付回调、微信授权、支付、小程序图片访问、部分二维码、官方授权等', 5, 1),
+(3, 'site_logo', 'upload', NULL, 26, NULL, 1, NULL, 0, 0, '\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/7b4f66e173eada2c33a5ea3b82879f2a.png\"', '后台大LOGO', '菜单展开左上角logo,建议尺寸[170*50]', 3, 1),
+(4, 'site_phone', 'text', 'input', 1, '', 0, '', 100, 0, '\"\"', '联系电话', '联系电话', 0, 0),
+(5, 'seo_title', 'text', 'input', 26, NULL, NULL, 'required:true', 100, 0, '\"CRMEB\"', 'SEO标题', 'SEO标题', 0, 0),
+(6, 'site_email', 'text', 'input', 1, '', 0, 'email:true', 100, 0, '\"\"', '联系邮箱', '联系邮箱', 0, 0),
+(7, 'site_qq', 'text', 'input', 1, '', 0, 'qq:true', 100, 0, '\"\"', '联系QQ', '联系QQ', 0, 0),
+(8, 'site_close', 'radio', 'input', 1, '0=>开启\n1=>PC端关闭\n2=>WAP端关闭(含微信)\n3=>全部关闭', 0, '', 0, 0, '\"0\"', '网站关闭', '网站后台、商家中心不受影响。关闭网站也可访问', 0, 2),
+(9, 'close_system', 'radio', 'input', 1, '0=>开启\n1=>关闭', 0, '', 0, 0, '\"0\"', '关闭后台', '关闭后台', 0, 2),
+(13, 'wechat_appid', 'text', 'input', 2, '', 0, 'required:true', 100, 0, '\"\"', 'AppID', 'AppID', 0, 1),
+(14, 'wechat_appsecret', 'text', 'input', 2, '', 0, 'required:true', 100, 0, '\"\"', 'AppSecret', 'AppSecret', 0, 1),
+(15, 'wechat_token', 'text', 'input', 2, '', 0, 'required:true', 100, 0, '\"\"', '微信验证TOKEN', '微信验证TOKEN', 0, 1),
 (16, 'wechat_encode', 'radio', 'input', 2, '0=>明文模式\n1=>兼容模式\n2=>安全模式', 0, '', 0, 0, '0', '消息加解密方式', '如需使用安全模式请在管理中心修改，仅限服务号和认证订阅号', 0, 1),
-(17, 'wechat_encodingaeskey', 'text', 'input', 2, '', 0, 'required:true', 100, 0, '""', 'EncodingAESKey', '公众号消息加解密Key,在使用安全模式情况下要填写该值，请先在管理中心修改，然后填写该值，仅限服务号和认证订阅号', 0, 1),
-(18, 'wechat_share_img', 'upload', NULL, 70, NULL, 1, NULL, 0, 0, '""', '微信分享图片', '若填写此图片地址，则分享网页出去时会分享此图片。可有效防止分享图片变形', 0, 1),
-(19, 'wechat_qrcode', 'upload', 'input', 2, '', 1, '', 0, 0, '""', '公众号关注二维码', '公众号关注二维码', 0, 1),
-(21, 'wechat_share_title', 'text', 'input', 70, NULL, NULL, 'required:true', 100, 0, '"CRMEB v4\\u6807\\u51c6\\u7248"', '微信分享标题', '微信分享标题', 0, 1),
-(22, 'wechat_share_synopsis', 'textarea', NULL, 70, NULL, NULL, NULL, 100, 5, '"\\u5b8c\\u5584\\u7684\\u6587\\u6863 \\u5168\\u201c\\u5fc3\\u201d\\u800c\\u6765\\uff01"', '微信分享简介', '微信分享简介', 0, 1),
-(23, 'pay_weixin_appid', 'text', 'input', 4, '', 0, '', 100, 0, '""', 'Appid', '微信公众号身份的唯一标识。审核通过后，在微信发送的邮件中查看。', 0, 1),
-(24, 'pay_weixin_appsecret', 'text', 'input', 4, '', 0, '', 100, 0, '""', 'Appsecret', 'JSAPI接口中获取openid，审核后在公众平台开启开发模式后可查看。', 0, 1),
-(25, 'pay_weixin_mchid', 'text', 'input', 4, '', 0, '', 100, 0, '""', 'Mchid', '受理商ID，身份标识', 0, 1),
-(26, 'pay_weixin_client_cert', 'upload', 'input', 4, '', 3, '', 0, 0, '""', '微信支付证书', '微信支付证书，在微信商家平台中可以下载！文件名一般为apiclient_cert.pem', 0, 1),
-(27, 'pay_weixin_client_key', 'upload', 'input', 4, '', 3, '', 0, 0, '""', '微信支付证书密钥', '微信支付证书密钥，在微信商家平台中可以下载！文件名一般为apiclient_key.pem', 0, 1),
-(28, 'pay_weixin_key', 'text', 'input', 4, '', 0, '', 100, 0, '""', 'Key', '商户支付密钥Key。审核通过后，在微信发送的邮件中查看。', 0, 1),
+(17, 'wechat_encodingaeskey', 'text', 'input', 2, '', 0, 'required:true', 100, 0, '\"\"', 'EncodingAESKey', '公众号消息加解密Key,在使用安全模式情况下要填写该值，请先在管理中心修改，然后填写该值，仅限服务号和认证订阅号', 0, 1),
+(18, 'wechat_share_img', 'upload', NULL, 70, NULL, 1, NULL, 0, 0, '\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/897c753b0a8e7f7e34dc2d500a86c2be.jpeg\"', '微信分享图片', '若填写此图片地址，则分享网页出去时会分享此图片。可有效防止分享图片变形', 0, 1),
+(19, 'wechat_qrcode', 'upload', 'input', 2, '', 1, '', 0, 0, '\"\"', '公众号关注二维码', '公众号关注二维码', 0, 1),
+(21, 'wechat_share_title', 'text', 'input', 70, NULL, NULL, 'required:true', 100, 0, '\"CRMEB v4.2.2\\u6807\\u51c6\\u7248\"', '微信分享标题', '微信分享标题', 0, 1),
+(22, 'wechat_share_synopsis', 'textarea', NULL, 70, NULL, NULL, NULL, 100, 5, '\"\\u5b8c\\u5584\\u7684\\u6587\\u6863 \\u5168\\u201c\\u5fc3\\u201d\\u800c\\u6765\\uff01\"', '微信分享简介', '微信分享简介', 0, 1),
+(25, 'pay_weixin_mchid', 'text', 'input', 4, '', 0, '', 100, 0, '\"\"', 'Mchid', '受理商ID，身份标识', 0, 1),
+(26, 'pay_weixin_client_cert', 'upload', 'input', 4, '', 3, '', 0, 0, '\"\"', '微信支付证书', '微信支付证书，在微信商家平台中可以下载！文件名一般为apiclient_cert.pem', 0, 1),
+(27, 'pay_weixin_client_key', 'upload', 'input', 4, '', 3, '', 0, 0, '\"\"', '微信支付证书密钥', '微信支付证书密钥，在微信商家平台中可以下载！文件名一般为apiclient_key.pem', 0, 1),
+(28, 'pay_weixin_key', 'text', 'input', 4, '', 0, '', 100, 0, '\"\"', 'Key', '商户支付密钥Key。审核通过后，在微信发送的邮件中查看。', 0, 1),
 (29, 'pay_weixin_open', 'radio', 'input', 4, '1=>开启\n0=>关闭', 0, '', 0, 0, '1', '开启', '是否启用微信支付', 0, 1),
-(32, 'store_free_postage', 'text', 'number', 27, NULL, NULL, 'number:true,min:-1', 100, 0, '10000', '满额包邮', '商城商品满多少金额即可包邮', 100, 1),
-(33, 'offline_postage', 'radio', NULL, 27, '0=>不包邮\n1=>包邮', NULL, NULL, 0, 0, '0', '线下支付是否包邮', '用户选择线下支付时是否包邮', 97, 1),
-(34, 'integral_ratio', 'text', 'input', 11, NULL, NULL, 'number:true', 100, 0, '"1"', '积分抵用', '积分抵用比例(1积分抵多少金额)单位：元', 10, 1),
-(35, 'site_service_phone', 'text', 'input', 1, '', 0, '', 100, 0, '""', '客服电话', '客服联系电话', 0, 0),
+(32, 'store_free_postage', 'text', 'number', 27, NULL, NULL, 'number:true,min:-1', 100, 0, '1000', '满额包邮', '商城商品满多少金额即可包邮', 100, 1),
+(33, 'offline_postage', 'radio', NULL, 27, '0=>不包邮\n1=>包邮', NULL, NULL, 0, 0, '1', '线下支付是否包邮', '用户选择线下支付时是否包邮', 97, 1),
+(34, 'integral_ratio', 'text', 'input', 11, NULL, NULL, 'number:true', 100, 0, '\"0.1\"', '积分抵用', '积分抵用比例(1积分抵多少金额)单位：元', 10, 1),
+(35, 'site_service_phone', 'text', 'input', 1, '', 0, '', 100, 0, '\"\"', '客服电话', '客服联系电话', 0, 0),
 (44, 'store_user_min_recharge', 'text', 'number', 28, NULL, NULL, 'required:true,number:true,min:0', 100, 0, '0.01', '用户最低充值金额', '用户单次最低充值金额', 0, 1),
-(46, 'system_express_app_code', 'text', 'input', 64, NULL, NULL, NULL, 100, 0, '""', '快递查询密钥', '阿里云云市场快递查询接口密钥购买地址：https://0x9.me/w9vnq', 0, 1),
-(47, 'main_business', 'text', 'input', 2, '', 0, 'required:true', 100, 0, '" IT\\u79d1\\u6280 \\u4e92\\u8054\\u7f51|\\u7535\\u5b50\\u5546\\u52a1"', '微信模板消息_主营行业', '微信公众号模板消息中选择开通的主营行业', 0, 0),
-(48, 'vice_business', 'text', 'input', 2, '', 0, 'required:true', 100, 0, '"IT\\u79d1\\u6280 IT\\u8f6f\\u4ef6\\u4e0e\\u670d\\u52a1 "', '微信模板消息_副营行业', '微信公众号模板消息中选择开通的副营行业', 0, 0),
-(49, 'store_brokerage_ratio', 'text', 'input', 9, '', 0, 'required:true,min:0,max:100,number:true', 100, 0, '"10"', '一级返佣比例', '订单交易成功后给上级返佣的比例0 - 100,例:5 = 反订单商品金额的5%', 5, 1),
-(53, 'user_extract_min_price', 'text', 'input', 9, NULL, NULL, 'required:true,number:true,min:0', 100, 0, '"1"', '提现最低金额', '用户提现最低金额限制', 0, 1),
-(57, 'about_us', 'upload', NULL, 1, NULL, 1, NULL, 0, 0, '""', '关于我们', '系统的标识', 0, 2),
-(58, 'replenishment_num', 'text', 'number', 27, NULL, NULL, 'required:true,number:true,min:0', 100, 0, '10', '待补货数量', '商品待补货数量低于多少时，提示补货', 0, 1),
-(59, 'routine_appId', 'text', 'input', 7, '', 0, '', 100, 0, '""', 'appId', '小程序appID', 0, 1),
-(60, 'routine_appsecret', 'text', 'input', 7, '', 0, '', 100, 0, '""', 'AppSecret', '小程序AppSecret', 0, 1),
-(61, 'api', 'text', 'input', 2, '', 0, '', 100, 0, '"\\/api\\/wechat\\/serve"', '接口地址', '微信接口例如：http://www.abc.com/api/wechat/serve', 0, 1),
-(62, 'paydir', 'textarea', 'input', 4, '', 0, '', 100, 5, '""', '配置目录', '支付目录配置系统不调用提示作用', 0, 1),
-(73, 'routine_logo', 'upload', NULL, 7, NULL, 1, NULL, 0, 0, '""', '小程序logo', '小程序logo，建议尺寸206x115，建议png格式', 0, 1),
-(74, 'routine_name', 'text', 'input', 7, '', 0, '', 100, 0, '""', '小程序名称', '小程序名称', 0, 1),
-(77, 'store_stock', 'text', 'number', 27, NULL, NULL, NULL, 100, 0, '20', '警戒库存', '警戒库存提醒值', 0, 1),
-(85, 'stor_reason', 'textarea', NULL, 69, NULL, NULL, NULL, 100, 8, '"\\u6536\\u8d27\\u5730\\u5740\\u586b\\u9519\\u4e86\\n\\u4e0e\\u63cf\\u8ff0\\u4e0d\\u7b26\\n\\u4fe1\\u606f\\u586b\\u9519\\u4e86\\uff0c\\u91cd\\u65b0\\u62cd\\n\\u6536\\u5230\\u5546\\u54c1\\u635f\\u574f\\u4e86\\n\\u672a\\u6309\\u9884\\u5b9a\\u65f6\\u95f4\\u53d1\\u8d27\\n\\u5176\\u5b83\\u539f\\u56e0"', '退货理由', '配置退货理由，一行一个理由', 0, 1),
-(87, 'store_brokerage_two', 'text', 'input', 9, '', 0, 'required:true,min:0,max:100,number:true', 100, 0, '"5"', '二级返佣比例', '订单交易成功后给上级返佣的比例0 - 100,例:5 = 反订单商品金额的5%', 4, 1),
-(88, 'store_brokerage_statu', 'radio', NULL, 9, '1=>指定分销\n2=>人人分销\n3=>满额分销', NULL, NULL, 0, 0, '2', '分销模式', '人人分销”默认每个人都可以分销，“指定分销”仅可后台手动设置推广员，“满额分销”指用户购买商品满足消费金额后自动开启分销', 95, 1),
-(89, 'pay_routine_appid', 'text', 'input', 14, '', 0, 'required:true', 100, 0, '""', 'Appid', '小程序Appid', 0, 1),
-(90, 'pay_routine_appsecret', 'text', 'input', 14, '', 0, 'required:true', 100, 0, '""', 'Appsecret', '小程序Appsecret', 0, 1),
-(91, 'pay_routine_mchid', 'text', 'input', 14, '', 0, 'required:true', 100, 0, '""', 'Mchid', '商户号', 0, 1),
-(92, 'pay_routine_key', 'text', 'input', 14, '', 0, 'required:true', 100, 0, '""', 'Key', '商户key', 0, 1),
-(93, 'pay_routine_client_cert', 'upload', 'input', 14, '', 3, '', 0, 0, '""', '小程序支付证书', '小程序支付证书', 0, 1),
-(94, 'pay_routine_client_key', 'upload', 'input', 14, '', 3, '', 0, 0, '""', '小程序支付证书密钥', '小程序支付证书密钥', 0, 1),
-(98, 'wechat_avatar', 'upload', 'input', 2, '', 1, '', 0, 0, '""', 'H5登录logo', 'H5登录logo', 0, 0),
-(99, 'user_extract_bank', 'textarea', NULL, 9, NULL, NULL, NULL, 100, 5, '"\\u4e2d\\u56fd\\u519c\\u884c\\n\\u4e2d\\u56fd\\u5efa\\u8bbe\\u94f6\\u884c\\n\\u5de5\\u5546\\u94f6\\u884c\\n\\u62db\\u5546\\u94f6\\u884c\\n\\u534e\\u590f\\u94f6\\u884c"', '提现银行卡', '配置提现银行卡类型，每个银行换行', 0, 1),
+(46, 'system_express_app_code', 'text', 'input', 64, NULL, NULL, NULL, 100, 0, '\"\"', '快递查询密钥', '阿里云云市场快递查询接口密钥购买地址：https://0x9.me/w9vnq', 0, 1),
+(47, 'main_business', 'text', 'input', 2, '', 0, 'required:true', 100, 0, '\" IT\\u79d1\\u6280 \\u4e92\\u8054\\u7f51|\\u7535\\u5b50\\u5546\\u52a1\"', '微信模板消息_主营行业', '微信公众号模板消息中选择开通的主营行业', 0, 0),
+(48, 'vice_business', 'text', 'input', 2, '', 0, 'required:true', 100, 0, '\"IT\\u79d1\\u6280 IT\\u8f6f\\u4ef6\\u4e0e\\u670d\\u52a1 \"', '微信模板消息_副营行业', '微信公众号模板消息中选择开通的副营行业', 0, 0),
+(49, 'store_brokerage_ratio', 'text', 'input', 73, '', 0, 'required:true,min:0,max:100,number:true', 100, 0, '\"10\"', '一级返佣比例', '订单交易成功后给上级返佣的比例0 - 100,例:5 = 反订单商品金额的5%', 5, 1),
+(53, 'user_extract_min_price', 'text', 'input', 74, NULL, NULL, 'required:true,number:true,min:0', 100, 0, '\"1\"', '提现最低金额', '用户提现最低金额限制', 0, 1),
+(57, 'about_us', 'upload', NULL, 1, NULL, 1, NULL, 0, 0, '\"\"', '关于我们', '系统的标识', 0, 2),
+(58, 'replenishment_num', 'text', 'number', 27, NULL, NULL, 'required:true,number:true,min:0', 100, 0, '10', '待补货数量', '商品待补货数量低于多少时，提示补货', 0, 0),
+(59, 'routine_appId', 'text', 'input', 7, '', 0, '', 100, 0, '\"\"', 'appId', '小程序appID', 0, 1),
+(60, 'routine_appsecret', 'text', 'input', 7, '', 0, '', 100, 0, '\"\"', 'AppSecret', '小程序AppSecret', 0, 1),
+(61, 'api', 'text', 'input', 2, '', 0, '', 100, 0, '\"\\/api\\/wechat\\/serve\"', '接口地址', '微信接口例如：http://www.abc.com/api/wechat/serve', 0, 1),
+(62, 'paydir', 'textarea', 'input', 4, '', 0, '', 100, 5, '\"\"', '配置目录', '支付目录配置系统不调用提示作用', 0, 1),
+(74, 'routine_name', 'text', 'input', 7, '', 0, '', 100, 0, '\"\"', '小程序名称', '小程序名称', 0, 1),
+(77, 'store_stock', 'text', 'number', 27, NULL, NULL, NULL, 100, 0, '50', '警戒库存', '警戒库存提醒值', 0, 1),
+(85, 'stor_reason', 'textarea', NULL, 69, NULL, NULL, NULL, 100, 8, '\"\\u6536\\u8d27\\u5730\\u5740\\u586b\\u9519\\u4e86\\n\\u4e0e\\u63cf\\u8ff0\\u4e0d\\u7b26\\n\\u4fe1\\u606f\\u586b\\u9519\\u4e86\\uff0c\\u91cd\\u65b0\\u62cd\\n\\u6536\\u5230\\u5546\\u54c1\\u635f\\u574f\\u4e86\\n\\u672a\\u6309\\u9884\\u5b9a\\u65f6\\u95f4\\u53d1\\u8d27\\n\\u5176\\u5b83\\u539f\\u56e0\"', '退货理由', '配置退货理由，一行一个理由', 0, 1),
+(87, 'store_brokerage_two', 'text', 'input', 73, '', 0, 'required:true,min:0,max:100,number:true', 100, 0, '\"5\"', '二级返佣比例', '订单交易成功后给上级返佣的比例0 - 100,例:5 = 反订单商品金额的5%', 4, 1),
+(88, 'store_brokerage_statu', 'radio', NULL, 72, '1=>指定分销\n2=>人人分销\n3=>满额分销', NULL, NULL, 0, 0, '1', '分销模式', '人人分销”默认每个人都可以分销，“指定分销”仅可后台手动设置推广员，“满额分销”指用户购买商品满足消费金额后自动开启分销', 95, 1),
+(98, 'wechat_avatar', 'upload', 'input', 2, '', 1, '', 0, 0, '\"\"', 'H5登录logo', 'H5登录logo', 0, 0),
+(99, 'user_extract_bank', 'textarea', NULL, 74, NULL, NULL, NULL, 100, 5, '\"\\u4e2d\\u56fd\\u519c\\u884c\\n\\u4e2d\\u56fd\\u5efa\\u8bbe\\u94f6\\u884c\\n\\u5de5\\u5546\\u94f6\\u884c\\n\\u62db\\u5546\\u94f6\\u884c\\n\\u534e\\u590f\\u94f6\\u884c\\n\\u4e2d\\u56fd\\u56fd\\u5bb6\\u5f00\\u53d1\\u94f6\\u884c\"', '提现银行卡', '配置提现银行卡类型，每个银行换行', 0, 1),
 (108, 'upload_type', 'radio', NULL, 31, '1=>本地存储\n2=>七牛云存储\n3=>阿里云OSS\n4=>腾讯COS', 1, NULL, NULL, NULL, '1', '上传类型', '文件储存配置，注意：一旦配置就不要轻易修改，会导致文件不能使用', 0, 1),
-(109, 'uploadUrl', 'text', 'input', 32, NULL, NULL, 'url:true', 100, NULL, '""', '空间域名 Domain', '空间域名 Domain', 0, 1),
-(110, 'accessKey', 'text', 'input', 32, NULL, NULL, NULL, 100, NULL, '""', 'accessKey', 'accessKey', 0, 1),
-(111, 'secretKey', 'text', 'input', 32, NULL, NULL, NULL, 100, NULL, '""', 'secretKey', 'secretKey', 0, 1),
-(112, 'storage_name', 'text', 'input', 32, NULL, NULL, NULL, 100, NULL, '""', '存储空间名称', '存储空间名称', 0, 1),
+(109, 'uploadUrl', 'text', 'input', 32, NULL, NULL, 'url:true', 100, NULL, '\"http:\\/\\/demo.aliyun.com\"', '空间域名 Domain', '空间域名 Domain', 0, 1),
+(110, 'accessKey', 'text', 'input', 32, NULL, NULL, NULL, 100, NULL, '\"\"', 'accessKey', 'accessKey', 0, 1),
+(111, 'secretKey', 'text', 'input', 32, NULL, NULL, NULL, 100, NULL, '\"\"', 'secretKey', 'secretKey', 0, 1),
+(112, 'storage_name', 'text', 'input', 32, NULL, NULL, NULL, 100, NULL, '\"\"', '存储空间名称', '存储空间名称', 0, 1),
 (113, 'order_cancel_time', 'text', 'number', 27, NULL, NULL, NULL, 100, NULL, '2', '普通商品未支付取消订单时间', '普通商品未支付取消订单时间，单位（小时）', 0, 1),
 (114, 'order_activity_time', 'text', 'number', 27, NULL, NULL, NULL, 100, NULL, '1', '活动商品未支付取消订单时间', '活动商品未支付取消订单时间，单位（小时）', 0, 1),
 (115, 'order_bargain_time', 'text', 'number', 27, NULL, NULL, NULL, 100, NULL, '1', '砍价未支付取消订单时间', '砍价未支付默认取消订单时间，单位（小时），如果为0将使用默认活动取消时间，优先使用单独活动配置', 0, 1),
 (116, 'order_seckill_time', 'text', 'number', 27, NULL, NULL, NULL, 100, NULL, '1', '秒杀未支付订单取消时间', '秒杀未支付订单取消时间，单位（小时），如果为0将使用默认活动取消时间，优先使用单独活动配置', 0, 1),
 (117, 'order_pink_time', 'text', 'number', 27, NULL, NULL, NULL, 100, NULL, '1', '拼团未支付取消订单时间', '拼团未支付取消订单时间,单位（小时），如果为0将使用默认活动取消时间，优先使用单独活动配置', 0, 1),
-(118, 'storage_region', 'text', 'input', 32, NULL, NULL, NULL, 100, NULL, '""', '所属地域', '所属地域', 0, 1),
+(118, 'storage_region', 'text', 'input', 32, NULL, NULL, NULL, 100, NULL, '\"\"', '所属地域', '所属地域', 0, 1),
 (122, 'system_delivery_time', 'text', 'number', 27, NULL, NULL, 'required:true,digits:true,min:0', 100, NULL, '7', '自动收货时间', '系统自动收货时间,单位(天),0为不设置自动收货', 80, 1),
-(123, 'sms_account', 'text', 'input', 18, NULL, NULL, '', 100, NULL, '', '账号', '短信后台的登录账号', 0, 1),
-(137, 'sms_token', 'text', 'input', 18, NULL, NULL, '', 100, NULL, '', 'token/密码', 'token(注册时候的密码)', 0, 1),
-(138, 'h5_avatar', 'upload', NULL, 2, NULL, 1, NULL, 0, 0, '"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2019\\/08\\/20190807\\/723adbdd4e49a0f9394dfc700ab5dba3.png"', '用户H5默认头像', '用户H5默认头像尺寸(80*80)', 0, 1),
+(123, 'sms_account', 'text', 'input', 18, NULL, NULL, '', 100, NULL, '\"\"', '账号', '短信后台的登录账号', 0, 1),
+(137, 'sms_token', 'text', 'input', 18, NULL, NULL, '', 100, NULL, '\"\"', 'token/密码', 'token(注册时候的密码)', 0, 1),
+(138, 'h5_avatar', 'upload', NULL, 2, NULL, 1, NULL, 0, 0, '\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/897c753b0a8e7f7e34dc2d500a86c2be.jpeg\"', '用户H5默认头像', '用户H5默认头像尺寸(80*80)', 0, 1),
 (139, 'offline_pay_status', 'radio', NULL, 29, '1=>开启\n2=>关闭', NULL, NULL, NULL, NULL, '1', '线下支付状态', '线下支付请选择开启或关闭', 0, 1),
 (141, 'recharge_switch', 'radio', NULL, 28, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '0', '小程序充值开关', '小程序提交审核前,需要关闭此功能', 0, 1),
-(142, 'tengxun_map_key', 'text', 'input', 68, NULL, NULL, NULL, 100, NULL, '"SMJBZ-WCHK4-ZPZUA-DSIXI-XDDVQ-XWFX7"', '腾讯地图KEY', '腾讯地图KEY，申请地址：https://lbs.qq.com', 0, 1),
-(143, 'store_self_mention', 'radio', NULL, 27, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '1', '是否开启到店自提', '开启后下单页面支持到店自提，需要在设置->发货设置->提货点设置中添加提货点，关闭则隐藏此功能', 95, 1),
-(144, 'cache_config', 'text', 'input', 1, NULL, NULL, '', 100, NULL, '"86400"', '网站缓存时间', '配置全局缓存时间（秒），默认留空为永久缓存', 0, 0),
+(142, 'tengxun_map_key', 'text', 'input', 68, NULL, NULL, NULL, 100, NULL, '\"\"', '腾讯地图KEY', '腾讯地图KEY，申请地址：https://lbs.qq.com', 0, 1),
+(143, 'store_self_mention', 'radio', NULL, 27, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '0', '是否开启到店自提', '开启后下单页面支持到店自提，需要在设置->发货设置->提货点设置中添加提货点，关闭则隐藏此功能', 95, 1),
+(144, 'cache_config', 'text', 'input', 1, NULL, NULL, '', 100, NULL, '\"86400\"', '网站缓存时间', '配置全局缓存时间（秒），默认留空为永久缓存', 0, 0),
 (145, 'pay_success_printing_switch', 'radio', NULL, 21, '1=>开\n0=>关', NULL, NULL, NULL, NULL, '1', '小票打印开关', '支付成功自动小票打印功能，需要购买易联云K4无线打印机', 0, 1),
-(146, 'develop_id', 'text', 'input', 21, NULL, NULL, '', 100, NULL, '""', '开发者ID', '易联云开发者ID', 0, 1),
-(147, 'printing_api_key', 'text', 'input', 21, NULL, NULL, '', 100, NULL, '""', '应用密钥', '易联应用密钥', 0, 1),
-(148, 'printing_client_id', 'text', 'input', 21, NULL, NULL, '', 100, NULL, '""', '应用ID', '易联应用ID', 0, 1),
-(149, 'terminal_number', 'text', 'input', 21, NULL, NULL, '', 100, NULL, '""', '终端号', '易联云打印机终端号', 0, 1),
+(146, 'develop_id', 'text', 'input', 21, NULL, NULL, '', 100, NULL, '\"\"', '开发者ID', '易联云开发者ID', 0, 1),
+(147, 'printing_api_key', 'text', 'input', 21, NULL, NULL, '', 100, NULL, '\"\"', '应用密钥', '易联应用密钥', 0, 1),
+(148, 'printing_client_id', 'text', 'input', 21, NULL, NULL, '', 100, NULL, '\"\"', '应用ID', '易联应用ID', 0, 1),
+(149, 'terminal_number', 'text', 'input', 21, NULL, NULL, '', 100, NULL, '\"\"', '终端号', '易联云打印机终端号', 0, 1),
 (150, 'lower_order_switch', 'radio', NULL, 20, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '0', '支付成功提醒开关', '支付成功提醒开关', 0, 1),
 (151, 'deliver_goods_switch', 'radio', NULL, 20, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '0', '发货提醒开关', '发货提醒开关', 0, 1),
 (152, 'confirm_take_over_switch', 'radio', NULL, 20, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '0', '确认收货提醒开关', '确认收货提醒开关', 0, 1),
@@ -6339,86 +6325,105 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (154, 'admin_pay_success_switch', 'radio', NULL, 20, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '0', '用户支付成功管理员提醒开关', '用户支付成功管理员提醒开关', 0, 1),
 (155, 'admin_refund_switch', 'radio', NULL, 20, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '0', '用户退款管理员提醒开关', '用户退款管理员提醒开关', 0, 1),
 (156, 'admin_confirm_take_over_switch', 'radio', NULL, 20, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '0', '用户确认收货管理员短信提醒', '用户确认收货管理员短信提醒', 0, 1),
-(158, 'recharge_attention', 'textarea', NULL, 28, NULL, NULL, NULL, 100, 5, '"\\u5145\\u503c\\u540e\\u5e10\\u6237\\u7684\\u91d1\\u989d\\u4e0d\\u80fd\\u63d0\\u73b0\\uff0c\\u53ef\\u7528\\u4e8e\\u5546\\u57ce\\u6d88\\u8d39\\u4f7f\\u7528\\n\\u4f63\\u91d1\\u5bfc\\u5165\\u8d26\\u6237\\u4e4b\\u540e\\u4e0d\\u80fd\\u518d\\u6b21\\u5bfc\\u51fa\\u3001\\u4e0d\\u53ef\\u63d0\\u73b0\\n\\u8d26\\u6237\\u5145\\u503c\\u51fa\\u73b0\\u95ee\\u9898\\u53ef\\u8054\\u7cfb\\u5546\\u57ce\\u5ba2\\u670d\\uff0c\\u4e5f\\u53ef\\u62e8\\u6253\\u5546\\u57ce\\u5ba2\\u670d\\u70ed\\u7ebf\\uff1a4008888888\\n\\n\\n"', '充值注意事项', '充值注意事项', 0, 1),
-(159, 'extract_time', 'text', 'input', 9, NULL, NULL, NULL, 100, NULL, '"0"', '冻结时间', '防止用户退款，佣金被提现了，所以需要设置佣金冻结时间(天)', 0, 1),
-(160, 'store_brokerage_price', 'text', 'input', 9, NULL, NULL, '', 100, NULL, '"10000"', '满额分销最低金额', '满额分销满足金额开通分销权限', 0, 1),
+(158, 'recharge_attention', 'textarea', NULL, 28, NULL, NULL, NULL, 100, 5, '\"\\u5145\\u503c\\u540e\\u5e10\\u6237\\u7684\\u91d1\\u989d\\u4e0d\\u80fd\\u63d0\\u73b0\\uff0c\\u53ef\\u7528\\u4e8e\\u5546\\u57ce\\u6d88\\u8d39\\u4f7f\\u7528\\n\\u4f63\\u91d1\\u5bfc\\u5165\\u8d26\\u6237\\u4e4b\\u540e\\u4e0d\\u80fd\\u518d\\u6b21\\u5bfc\\u51fa\\u3001\\u4e0d\\u53ef\\u63d0\\u73b0\\n\\u8d26\\u6237\\u5145\\u503c\\u51fa\\u73b0\\u95ee\\u9898\\u53ef\\u8054\\u7cfb\\u5546\\u57ce\\u5ba2\\u670d\\uff0c\\u4e5f\\u53ef\\u62e8\\u6253\\u5546\\u57ce\\u5ba2\\u670d\\u70ed\\u7ebf\\uff1a4008888888\\n\\n\\n\"', '充值注意事项', '充值注意事项', 0, 1),
+(159, 'extract_time', 'text', 'input', 73, NULL, NULL, NULL, 100, NULL, '\"0\"', '冻结时间', '防止用户退款，佣金被提现了，所以需要设置佣金冻结时间(天)', 0, 1),
+(160, 'store_brokerage_price', 'text', 'input', 72, NULL, NULL, '', 100, NULL, '\"10000\"', '满额分销最低金额', '满额分销满足金额开通分销权限', 0, 1),
 (162, 'price_revision_switch', 'radio', 'input', 20, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '0', '改价短信提醒开关', '改价短信提醒开关', 0, 1),
-(164, 'wss_open', 'radio', NULL, 24, '1=>开启wss\n0=>关闭wss', NULL, NULL, NULL, NULL, '0', '是否开启wss', '如果使用https访问必须开启wss,使用http访问关闭wss，建议使用http访问(关闭wss)兼容性更好', 0, 1),
-(165, 'wss_local_cert', 'upload', NULL, 24, NULL, 3, NULL, NULL, NULL, '', 'ssl证书PEM', 'ssl证书.pem格式', 0, 1),
-(166, 'wss_local_pk', 'upload', NULL, 24, NULL, 3, NULL, NULL, NULL, '', 'ssl密钥KEY', 'ssl密钥.key格式', 0, 1),
-(168, 'site_logo_square', 'upload', NULL, 26, NULL, 1, NULL, NULL, NULL, '"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/88898202104251734516138.png"', '后台小LOGO', '后台菜单缩进小LOGO，尺寸180*180', 1, 1),
+(164, 'wss_open', 'radio', NULL, 24, '1=>开启wss\n0=>关闭wss', NULL, NULL, NULL, NULL, '1', '是否开启wss', '如果使用https访问必须开启wss,使用http访问关闭wss，建议使用http访问(关闭wss)兼容性更好', 0, 1),
+(165, 'wss_local_cert', 'upload', NULL, 24, NULL, 3, NULL, NULL, NULL, '\"\\/uploads\\/attach\\/2021\\/08\\/20210803\\/4ead7f20c352c6f8667c5129c3021e4c.pem\"', 'ssl证书PEM', 'ssl证书.pem格式', 0, 1),
+(166, 'wss_local_pk', 'upload', NULL, 24, NULL, 3, NULL, NULL, NULL, '\"\\/uploads\\/attach\\/2021\\/08\\/20210803\\/7f1d7ffced21eebd082d6ca915cf9b6d.pem\"', 'ssl密钥KEY', 'ssl密钥.key格式', 0, 1),
+(168, 'site_logo_square', 'upload', NULL, 26, NULL, 1, NULL, NULL, NULL, '\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/511b525c08d14f093ed935e6f5c18678.png\"', '后台小LOGO', '后台菜单缩进小LOGO，尺寸180*180', 1, 1),
 (170, 'yue_pay_status', 'radio', NULL, 30, '1=>开启\n2=>关闭', NULL, NULL, NULL, NULL, '1', '余额支付状态', '余额支付请选择开启或关闭', 0, 1),
-(171, 'login_logo', 'upload', NULL, 26, NULL, 1, NULL, NULL, NULL, '"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/cee7e202104251734196138.png"', '后台登录页LOGO', '后台登录页LOGO，建议尺寸270x75', 4, 1),
+(171, 'login_logo', 'upload', NULL, 26, NULL, 1, NULL, NULL, NULL, '\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/a13c32cca41708c909551cefe533707b.png\"', '后台登录页LOGO', '后台登录页LOGO，建议尺寸270x75', 4, 1),
 (172, 'qiniu_uploadUrl', 'text', 'input', 33, NULL, NULL, '', 100, NULL, '', '空间域名 Domain', '空间域名 Domain', 0, 1),
 (173, 'qiniu_accessKey', 'text', 'input', 33, NULL, NULL, '', 100, NULL, '', 'accessKey', 'accessKey', 0, 1),
 (174, 'qiniu_secretKey', 'text', 'input', 33, NULL, NULL, '', 100, NULL, '', 'secretKey', 'secretKey', 0, 1),
-(175, 'qiniu_storage_name', 'text', 'input', 33, NULL, NULL, '', 100, NULL, '""', '存储空间名称', '存储空间名称', 0, 1),
-(176, 'qiniu_storage_region', 'text', 'input', 33, NULL, NULL, '', 100, NULL, '""', '所属地域', '所属地域', 0, 1),
-(177, 'tengxun_uploadUrl', 'text', 'input', 34, NULL, NULL, '', 100, NULL, '""', '空间域名 Domain', '空间域名 Domain', 0, 1),
-(178, 'tengxun_accessKey', 'text', 'input', 34, NULL, NULL, '', 100, NULL, '""', 'accessKey', 'accessKey', 0, 1),
-(179, 'tengxun_secretKey', 'text', '', 34, NULL, NULL, '', 100, NULL, '""', 'secretKey', 'secretKey', 0, 1),
-(180, 'tengxun_storage_name', 'text', 'input', 34, NULL, NULL, '', 100, NULL, '""', '存储空间名称', '存储空间名称', 0, 1),
-(181, 'tengxun_storage_region', 'text', 'input', 34, NULL, NULL, '', 100, NULL, '""', '所属地域', '所属地域', 0, 1),
-(184, 'coupon_img', 'upload', NULL, 27, NULL, 1, NULL, NULL, NULL, '"https://demo40.crmeb.net\\/uploads\\/attach\\/2020\\/11\\/20201106\\/c560902bec05d70443886e8b0f46d4b7.png"', '首页优惠券弹窗背景图', '首页优惠券弹窗背景图，建议尺寸410*420', 0, 1),
-(187, 'copy_product_apikey', 'text', 'input', 41, NULL, NULL, '', 100, NULL, '""', '99Api apiKey', '复制商品第三方平台接口秘钥', 0, 1),
+(175, 'qiniu_storage_name', 'text', 'input', 33, NULL, NULL, '', 100, NULL, '\"\"', '存储空间名称', '存储空间名称', 0, 1),
+(176, 'qiniu_storage_region', 'text', 'input', 33, NULL, NULL, '', 100, NULL, '\"\"', '所属地域', '所属地域', 0, 1),
+(177, 'tengxun_uploadUrl', 'text', 'input', 34, NULL, NULL, '', 100, NULL, '\"\"', '空间域名 Domain', '空间域名 Domain', 0, 1),
+(178, 'tengxun_accessKey', 'text', 'input', 34, NULL, NULL, '', 100, NULL, '\"\"', 'accessKey', 'accessKey', 0, 1),
+(179, 'tengxun_secretKey', 'text', '', 34, NULL, NULL, '', 100, NULL, '\"\"', 'secretKey', 'secretKey', 0, 1),
+(180, 'tengxun_storage_name', 'text', 'input', 34, NULL, NULL, '', 100, NULL, '\"\"', '存储空间名称', '存储空间名称', 0, 1),
+(181, 'tengxun_storage_region', 'text', 'input', 34, NULL, NULL, '', 100, NULL, '\"\"', '所属地域', '所属地域', 0, 1),
+(184, 'coupon_img', 'upload', NULL, 27, NULL, 1, NULL, NULL, NULL, '\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/fe40d161455af767c9d56a3036b53b6d.png\"', '首页优惠券弹窗背景图', '首页优惠券弹窗背景图，建议尺寸410*420', 0, 1),
+(187, 'copy_product_apikey', 'text', 'input', 41, NULL, NULL, '', 100, NULL, '\"\"', '99Api apiKey', '复制商品第三方平台接口秘钥', 0, 1),
 (189, 'balance_func_status', 'radio', NULL, 28, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '1', '余额功能启用', '商城余额功能启用或者关闭', 5, 1),
-(190, 'brokerage_func_status', 'radio', NULL, 9, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '1', '分销启用', '商城分销功能开启|关闭', 100, 1),
-(191, 'order_give_integral', 'text', 'input', 11, NULL, NULL, NULL, 100, NULL, '"1"', '下单赠送积分', '下单支付金额按比例赠送积分（实际支付1元赠送多少积分）', 0, 1),
+(190, 'brokerage_func_status', 'radio', NULL, 72, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '1', '分销启用', '商城分销功能开启|关闭', 100, 1),
+(191, 'order_give_integral', 'text', 'input', 11, NULL, NULL, NULL, 100, NULL, '\"0.5\"', '下单赠送积分', '下单支付金额按比例赠送积分（实际支付1元赠送多少积分）', 0, 1),
 (193, 'member_func_status', 'radio', NULL, 45, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '1', '用户等级启用', '商城用户等级功能开启|关闭', 0, 1),
-(194, 'member_price_status', 'radio', NULL, 45, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '0', '商品会员折扣价展示启用', '商城商城会员折扣价格展示', 0, 0),
-(195, 'store_user_mobile', 'radio', NULL, 26, '1=>强制\n0=>不强制', NULL, NULL, NULL, NULL, '0', '强制手机号登录', '商城用户强制手机号登录', 0, 1),
-(196, 'order_give_exp', 'text', 'input', 45, NULL, NULL, NULL, 100, NULL, '"1"', '下单赠送用户经验比例（实际支付1元赠送多少经验）', '下单赠送用户经验比例（实际支付1元赠送多少经验）', 0, 1),
-(198, 'sign_give_exp', 'text', 'input', 45, NULL, NULL, NULL, 100, NULL, '"20"', '签到赠送用户经验值', '签到赠送用户经验值', 0, 1),
-(199, 'invite_user_exp', 'text', 'input', 45, NULL, NULL, NULL, 100, NULL, '"50"', '邀请新用户赠送用户经验值', '邀请一个新用户赠送用户经验值', 0, 1),
-(200, 'brokerage_bindind', 'radio', NULL, 9, '1=>所有用户\n2=>新用户', NULL, NULL, NULL, NULL, '1', '分销关系绑定', '所有用户”指所有没有上级推广人的用户点击或扫推广人码绑定分销关系，“新用户”指新注册的用户或首次进入系统的用户才会绑定推广关系', 98, 1),
+(194, 'member_price_status', 'radio', NULL, 67, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '1', '付费会员价是否展示', '付费会员价是否展示', 0, 1),
+(195, 'store_user_mobile', 'radio', NULL, 26, '1=>强制\n0=>不强制', NULL, NULL, NULL, NULL, '1', '强制手机号登录', '商城用户强制手机号登录', 0, 1),
+(196, 'order_give_exp', 'text', 'input', 45, NULL, NULL, NULL, 100, NULL, '\"1\"', '下单赠送用户经验比例（实际支付1元赠送多少经验）', '下单赠送用户经验比例（实际支付1元赠送多少经验）', 0, 1),
+(198, 'sign_give_exp', 'text', 'input', 45, NULL, NULL, NULL, 100, NULL, '\"20\"', '签到赠送用户经验值', '签到赠送用户经验值', 0, 1),
+(199, 'invite_user_exp', 'text', 'input', 45, NULL, NULL, NULL, 100, NULL, '\"50\"', '邀请新用户赠送用户经验值', '邀请一个新用户赠送用户经验值', 0, 1),
+(200, 'brokerage_bindind', 'radio', NULL, 72, '1=>所有用户\n2=>新用户', NULL, NULL, NULL, NULL, '1', '分销关系绑定', '所有用户”指所有没有上级推广人的用户点击或扫推广人码绑定分销关系，“新用户”指新注册的用户或首次进入系统的用户才会绑定推广关系', 98, 1),
 (235, 'unpaid_order_switch', 'radio', NULL, 20, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '0', '未支付短信提醒开关', '未支付短信提醒开关', 0, 1),
-(236, 'verify_expire_time', 'text', 'input', 20, NULL, NULL, NULL, 100, NULL, '"5"', '短信验证码过期时间（分钟）', '短信验证码过期时间（分钟）', 0, 1),
+(236, 'verify_expire_time', 'text', 'input', 20, NULL, NULL, NULL, 100, NULL, '\"5\"', '短信验证码过期时间（分钟）', '短信验证码过期时间（分钟）', 0, 1),
 (246, 'invoice_func_status', 'radio', NULL, 50, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '1', '发票功能启用', '发票功能开启|关闭', 0, 1),
 (247, 'special_invoice_status', 'radio', NULL, 50, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '1', '专用发票启用', '专用发票功能开启|关闭', 0, 1),
 (287, 'ali_pay_status', 'radio', NULL, 63, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '1', '支付宝支付状态', '支付宝支付请选择开启(启用)或关闭(不启用)', 100, 1),
-(288, 'alipay_public_key', 'textarea', NULL, 63, NULL, NULL, NULL, 100, 5, '""', '支付应用公钥', '支付应用公钥', 0, 1),
-(289, 'alipay_merchant_private_key', 'textarea', NULL, 63, NULL, NULL, NULL, 100, 5, '""', '支付应用私钥', '支付应用私钥', 0, 1),
-(290, 'ali_pay_appid', 'text', 'input', 63, NULL, NULL, NULL, 100, NULL, '""', '支付应用Appid', '支付应用Appid', 91, 1),
+(288, 'alipay_public_key', 'textarea', NULL, 63, NULL, NULL, NULL, 100, 5, '\"\"', '支付应用公钥', '支付应用公钥', 0, 1),
+(289, 'alipay_merchant_private_key', 'textarea', NULL, 63, NULL, NULL, NULL, 100, 5, '\"\"', '支付应用私钥', '支付应用私钥', 0, 1),
+(290, 'ali_pay_appid', 'text', 'input', 63, NULL, NULL, NULL, 100, NULL, '\"\"', '支付应用Appid', '支付应用Appid', 91, 1),
 (291, 'logistics_type', 'radio', NULL, 64, '1=>一号通\n2=>阿里云物流查询', NULL, NULL, NULL, NULL, '1', '接口选择', '建议使用一号通更方便不用配置密钥，阿里云云市场购买链接：https://0x9.me/w9vnq', 0, 1),
-(292, 'system_product_copy_type', 'radio', NULL, 41, '1=>一号通\n2=>99Api', NULL, NULL, NULL, NULL, '1', '接口选择', '采集商品接口选择，一号通快速注册开通使用不用配置apikey，或者去99api网址：https://www.99api.com/注册帐号，推荐一号通方便快捷', 999, 1),
+(292, 'system_product_copy_type', 'radio', NULL, 41, '1=>一号通\n2=>99Api', NULL, NULL, NULL, NULL, '2', '接口选择', '采集商品接口选择，一号通快速注册开通使用不用配置apikey，或者去99api网址：https://www.99api.com/注册帐号，推荐一号通方便快捷', 999, 1),
 (299, 'config_export_id', 'text', 'input', 66, NULL, NULL, NULL, NULL, NULL, 'null', '快递公司', '快递公司', 0, 0),
 (300, 'config_export_temp_id', 'text', 'input', 66, NULL, NULL, NULL, NULL, NULL, 'null', '快递模板', '快递模板', 0, 0),
-(301, 'config_export_to_name', 'text', 'input', 66, NULL, NULL, NULL, 100, NULL, '""', '发货人姓名', '快递面单发货人姓名', 0, 1),
-(302, 'config_export_to_tel', 'text', 'input', 66, NULL, NULL, NULL, 100, NULL, '""', '发货人电话', '快递面单发货人电话', 0, 1),
-(303, 'config_export_to_address', 'text', 'input', 66, NULL, NULL, NULL, 100, NULL, '""', '发货人详细地址', '快递面单发货人详细地址', 0, 1),
-(304, 'config_export_siid', 'text', 'input', 66, NULL, NULL, NULL, 100, NULL, '""', '电子面单打印机编号', '请购买快递100电子面单打印机，淘宝地址：https://m.tb.cn/h.437NvI0 官网：https://www.kuaidi100.com/cloud/print/cloudprinterSecond.shtml', 0, 1),
-(305, 'service_feedback', 'textarea', NULL, 69, NULL, NULL, NULL, 100, 7, '"\\u5c0a\\u656c\\u7684\\u7528\\u6237\\uff0c\\u5ba2\\u670d\\u5f53\\u524d\\u4e0d\\u5728\\u7ebf\\uff0c\\u6709\\u95ee\\u9898\\u8bf7\\u7559\\u8a00\\uff0c\\u6211\\u4eec\\u4f1a\\u7b2c\\u4e00\\u65f6\\u95f4\\u8fdb\\u884c\\u5904\\u7406\\uff01\\uff01\\uff01"', '客服反馈', '客服反馈头部文字', 0, 1),
-(307, 'integral_max_num', 'text', 'input', 11, NULL, NULL, NULL, 100, NULL, '"10"', '积分抵扣上限', '单次下单积分使用上限,0不限制', 0, 1),
-(308, 'brokerage_type', 'radio', NULL, 9, '0=>线下手动转账\n1=>自动到微信零钱', NULL, NULL, NULL, NULL, '0', '佣金到账方式', '佣金到账方式支持线下转账和微信零钱自动转账，手动转账更安全，自动转账更方便', 0, 1),
+(301, 'config_export_to_name', 'text', 'input', 66, NULL, NULL, NULL, 100, NULL, '\"\"', '发货人姓名', '快递面单发货人姓名', 0, 1),
+(302, 'config_export_to_tel', 'text', 'input', 66, NULL, NULL, NULL, 100, NULL, '\"\"', '发货人电话', '快递面单发货人电话', 0, 1),
+(303, 'config_export_to_address', 'text', 'input', 66, NULL, NULL, NULL, 100, NULL, '\"\"', '发货人详细地址', '快递面单发货人详细地址', 0, 1),
+(304, 'config_export_siid', 'text', 'input', 66, NULL, NULL, NULL, 100, NULL, '\"\"', '电子面单打印机编号', '请购买快递100电子面单打印机，淘宝地址：https://m.tb.cn/h.437NvI0 官网：https://www.kuaidi100.com/cloud/print/cloudprinterSecond.shtml', 0, 1),
+(305, 'service_feedback', 'textarea', NULL, 69, NULL, NULL, NULL, 100, 7, '\"\\u5c0a\\u656c\\u7684\\u7528\\u6237\\uff0c\\u5ba2\\u670d\\u5f53\\u524d\\u4e0d\\u5728\\u7ebf\\uff0c\\u6709\\u95ee\\u9898\\u8bf7\\u7559\\u8a00\\uff0c\\u6211\\u4eec\\u4f1a\\u7b2c\\u4e00\\u65f6\\u95f4\\u8fdb\\u884c\\u5904\\u7406\\uff01\\uff01\\uff01\"', '客服反馈', '客服反馈头部文字', 0, 1),
+(307, 'integral_max_num', 'text', 'input', 11, NULL, NULL, NULL, 100, NULL, '\"0\"', '积分抵扣上限', '单次下单积分使用上限,0不限制', 0, 1),
+(308, 'brokerage_type', 'radio', NULL, 73, '0=>线下手动转账\n1=>自动到微信零钱', NULL, NULL, NULL, NULL, '1', '佣金到账方式', '佣金到账方式支持线下转账和微信零钱自动转账，手动转账更安全，自动转账更方便', 0, 1),
 (309, 'bargain_subscribe', 'radio', NULL, 27, '1=>是\n0=>否', NULL, NULL, NULL, NULL, '0', '砍价是否需要关注公众号', '砍价是否需要关注公众号', 50, 1),
-(310, 'member_card_status', 'radio', NULL, 67, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '1', '是否开启付费会员', '付费会员开关', 0, 0),
-(323, 'tourist_avatar', 'upload', NULL, 69, NULL, 2, NULL, NULL, NULL, '["https://demo40.crmeb.net\\/uploads\\/attach\\/2020\\/11\\/20201110\\/fcc758713087632dc785fff3d37db928.png","https://demo40.crmeb.net\\/uploads\\/attach\\/2020\\/11\\/20201110\\/d4398c5d36757c1b1ed1f21202bea1c0.png","https://demo40.crmeb.net\\/uploads\\/attach\\/2020\\/11\\/20201110\\/1b244797f8b86b4cc0665d75d160aa30.png","https://demo40.crmeb.net\\/uploads\\/attach\\/2020\\/11\\/20201110\\/1f05bd27a6af2da438dc2bb689995fc5.png"]', '客服游客头像', '客服游客头像', 0, 1),
-(324, 'spread_banner', 'upload', NULL, 9, NULL, 2, NULL, NULL, NULL, '["https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/ed835202104251709094472.jpg","https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/756bc202104251709155325.jpg"]', '分销海报图', '个人中心分销海报图片，建议尺寸600x1000', 0, 1),
+(310, 'member_card_status', 'radio', NULL, 67, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '0', '是否开启付费会员', '付费会员开关', 0, 1),
+(323, 'tourist_avatar', 'upload', NULL, 69, NULL, 2, NULL, NULL, NULL, '[\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/bd26feba8967ddb0edd8e909ce7d4fd8.png\",\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/cce860fb87348e09ea99999e1720ea57.png\",\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/1e570bb04b6b024c77fce3a3043a29d9.png\",\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/bc564fadccc06a94ae1d50286b5d3b49.png\"]', '客服游客头像', '客服游客头像', 0, 1),
+(324, 'spread_banner', 'upload', NULL, 72, NULL, 2, NULL, NULL, NULL, '[\"http:\\/\\/v4.wuht.net\\/uploads\\/attach\\/2021\\/07\\/20210726\\/b2e676295a5035292d8d1b7b93652069.jpeg\",\"https:\\/\\/test.v4.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210810\\/34d6643e1a42f348bdfeccd65e813749.jpeg\"]', '分销海报图', '个人中心分销海报图片，建议尺寸600x1000', 0, 1),
 (325, 'config_export_open', 'radio', NULL, 66, '1=>打开\n0=>关闭', NULL, NULL, NULL, NULL, '1', '电子面单是否开启', '电子面单是否开启', 111, 1),
-(326, 'wap_login_logo', 'upload', NULL, 26, NULL, 1, NULL, NULL, NULL, '"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/cee7e202104251734196138.png"', '移动端登录logo', '移动端登录logo，建议尺寸86x86，建议png格式', 0, 1),
-(327, 'pc_logo', 'upload', NULL, 38, NULL, 1, NULL, NULL, NULL, '"https:\\/\\/demo40.crmeb.net\\/uploads\\/attach\\/2020\\/11\\/20201118\\/d124008c58709b33d8fbbc7e8ca09c75.png"', 'PC端LOGO', 'PC端LOGO', 0, 1),
-(328, 'record_No', 'text', 'input', 26, NULL, NULL, '', 100, NULL, '"Copyright \\u00a9 2021 \\u897f\\u5b89\\u4f17\\u90a6\\u7f51\\u7edc\\u79d1\\u6280"', '备案号', '备案号', 0, 1),
+(326, 'wap_login_logo', 'upload', NULL, 26, NULL, 1, NULL, NULL, NULL, '\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/897c753b0a8e7f7e34dc2d500a86c2be.jpeg\"', '移动端登录logo', '移动端登录logo，建议尺寸86x86，建议png格式', 0, 1),
+(327, 'pc_logo', 'upload', NULL, 75, NULL, 1, NULL, NULL, NULL, '\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/459b7089d992a96897d915df76bd56aa.png\"', 'PC端LOGO', 'PC端LOGO', 0, 1),
+(328, 'record_No', 'text', 'input', 26, NULL, NULL, '', 100, NULL, '\"Copyright \\u00a9 2022 \\u897f\\u5b89\\u4f17\\u90a6\\u7f51\\u7edc\\u79d1\\u6280\"', '备案号', '备案号', 0, 1),
 (329, 'routine_contact_type', 'radio', NULL, 7, '1=>小程序客服\n0=>智慧客服系统', NULL, NULL, NULL, NULL, '0', '小程序客服类型', '小程序客服类型', 0, 1),
-(330, 'station_open', 'radio', NULL, 26, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '1', '站点开启', '站点开始|关闭（用于升级等临时关闭）', 11, 1);
+(330, 'station_open', 'radio', NULL, 26, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '1', '站点开启', '站点开始|关闭（用于升级等临时关闭）', 11, 1),
+(331, 'uni_brokerage_price', 'text', 'input', 73, NULL, NULL, NULL, 100, NULL, '\"5\"', '推广佣金单价（每推广一个用户）', '分销推广佣金单价（每推广一个用户）', 93, 1),
+(332, 'day_brokerage_price_upper', 'text', 'input', 73, NULL, NULL, '', 100, NULL, '\"-1\"', '每日推广佣金上限', '每日推广佣金上限（0:不发佣金-1:不限制；注最好是推广佣金单价的整数倍）', 92, 1),
+(333, 'is_self_brokerage', 'radio', NULL, 73, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '1', '自购返佣', '是否开启自购返佣（开启：分销员自己购买商品，享受一级返佣，上级享受二级返佣； 关闭：分销员自己购买商品没有返佣）', 94, 1),
+(334, 'store_brokerage_binding_status', 'radio', NULL, 72, '1=>永久\n2=>有效期\n3=>临时', NULL, NULL, 0, 0, '2', '绑定模式', '永久”一次绑定永久有效，“有效期”绑定后一段时间内有效，“临时”', 91, 1),
+(335, 'store_brokerage_binding_time', 'text', 'input', 72, NULL, NULL, NULL, 100, NULL, '\"1\"', '绑定有效期', '绑定有效期（绑定后N天内有效）', 90, 1),
+(336, 'refund_name', 'text', 'input', 71, NULL, NULL, NULL, 100, NULL, '\"\"', '退货收货人姓名', '退货收货人姓名', 90, 1),
+(337, 'refund_phone', 'text', 'input', 71, NULL, NULL, NULL, 100, NULL, '\"\"', '退货收货人电话', '退货收货人电话', 90, 1),
+(338, 'refund_address', 'text', 'input', 71, NULL, NULL, NULL, 100, NULL, '\"\"', '退货收货人地址', '退货收货人地址', 90, 1),
+(339, 'brokerage_user_status', 'radio', '', 73, '0=>关闭\n1=>开启', NULL, NULL, 100, NULL, '0', '推广用户返佣', '分销推广用户获取佣金', 94, 1),
+(340, 'wechat_open_app_id', 'text', 'input', 75, NULL, NULL, '', 100, NULL, '\"\"', '开放平台appid', '开放平台appid', 0, 1),
+(341, 'wechat_open_app_secret', 'text', 'input', 75, NULL, NULL, '', 100, NULL, '\"\"', '开放平台secret', '开放平台secret', 0, 1),
+(342, 'contact_number', 'text', 'input', 75, NULL, NULL, '', 100, NULL, '\"13720673941\"', '联系电话', '联系电话', 0, 1),
+(343, 'company_address', 'text', 'input', 75, NULL, NULL, '', 100, NULL, '\"\\u9655\\u897f\\u7701\\u897f\\u5b89\\u5e02\\u672a\\u592e\\u533a\\u542f\\u822a\\u65f6\\u4ee3\\u5e7f\\u573aA\\u5ea71104\\u5ba4\"', '公司地址', '公司地址', 0, 1),
+(344, 'copyright', 'text', 'input', 75, NULL, NULL, '', 100, NULL, '\"\\u5c0f\\u83dc\\u9e21 \"', '版权信息', '版权信息', 0, 1),
+(345, 'site_keywords', 'text', 'input', 75, NULL, NULL, NULL, 100, NULL, '\"CRMEB v4.2.2\"', '关键词', '网站关键词', 0, 1),
+(346, 'site_description', 'textarea', NULL, 75, NULL, NULL, NULL, 100, 5, '\"\\u5c0f\\u83dc\\u9e21\\u5468\\u8fb9\\u8d2d\\u7269\\u5546\\u57ce\"', '网站描述', '网站描述', 0, 1),
+(347, 'product_phone_buy_url', 'radio', NULL, 75, '1=>公众号\n2=>小程序', NULL, NULL, NULL, NULL, '1', '商品手机购买跳转地址', '商品手机购买跳转地址（小程序|公众号）', 0, 1),
+(348, 'bast_number', 'text', 'number', 75, NULL, NULL, 'required:true,digits:true,min:1', 100, NULL, '10', '精品推荐个数', '首页配置精品推荐个数', 0, 1),
+(349, 'first_number', 'text', 'number', 75, NULL, NULL, 'required:true,digits:true,min:1', 100, NULL, '10', '首发新品个数', '首页配置首发新品个数', 0, 1);
 
--- ---------------------------------------------------------
+-- --------------------------------------------------------
 
 --
 -- 表的结构 `eb_system_config_tab`
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_config_tab` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '配置分类id',
-  `pid` int(11) NOT NULL DEFAULT '0' COMMENT '上级分类id',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '配置分类名称',
-  `eng_title` varchar(255) NOT NULL DEFAULT '' COMMENT '配置分类英文名称',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '配置分类状态',
-  `info` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '配置分类是否显示',
-  `icon` varchar(30) DEFAULT NULL COMMENT '图标',
-  `type` int(2) DEFAULT '0' COMMENT '配置类型',
-  `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8 COMMENT='配置分类表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '配置分类id',
+    `pid` int(11) NOT NULL DEFAULT '0' COMMENT '上级分类id',
+    `title` varchar(255) NOT NULL DEFAULT '' COMMENT '配置分类名称',
+    `eng_title` varchar(255) NOT NULL DEFAULT '' COMMENT '配置分类英文名称',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '配置分类状态',
+    `info` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '配置分类是否显示',
+    `icon` varchar(30) NOT NULL DEFAULT '' COMMENT '图标',
+    `type` int(2) NOT NULL DEFAULT '0' COMMENT '配置类型',
+    `sort` int(11) NOT NULL DEFAULT '0' COMMENT '排序',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=utf8 COMMENT='配置分类表';
 
 --
 -- 转存表中的数据 `eb_system_config_tab`
@@ -6427,15 +6432,13 @@ CREATE TABLE IF NOT EXISTS `eb_system_config_tab` (
 INSERT INTO `eb_system_config_tab` (`id`, `pid`, `title`, `eng_title`, `status`, `info`, `icon`, `type`, `sort`) VALUES
 (1, 0, '基础配置', 'basics', 1, 0, 'ios-settings', 0, 100),
 (2, 22, '公众号配置(H5)', 'wechat', 1, 0, 'ios-chatbubbles', 0, 0),
-(4, 23, '公众号支付配置', 'pay', 1, 0, 'ios-chatbubbles', 0, 0),
+(4, 23, '微信支付配置', 'pay', 1, 0, 'ios-chatbubbles', 0, 0),
 (5, 0, '商城配置', 'store', 1, 0, 'md-cart', 0, 90),
 (7, 22, '小程序配置', 'routine', 1, 0, 'logo-android', 0, 0),
 (9, 0, '分销配置', 'fenxiao', 1, 0, 'md-contacts', 3, 0),
 (11, 0, '积分配置', 'point', 1, 0, 'logo-euro', 3, 0),
-(14, 23, '小程序支付配置', 'routine_pay', 1, 0, 'logo-android', 0, 0),
 (17, 0, '文件上传配置', 'upload_set', 1, 0, 'md-cloud-upload', 0, 0),
 (18, 0, '短信配置', 'system_sms', 1, 0, 'ios-chatboxes', 3, 0),
-(20, 65, '短信配置', 'short_letter_switch', 1, 0, 'ios-chatboxes', 0, 0),
 (21, 65, '小票打印配置', 'printing_deploy', 1, 0, 'logo-buffer', 0, 0),
 (22, 0, '应用端配置', 'appconfig', 1, 0, 'ios-analytics', 0, 80),
 (23, 0, '支付配置', 'pay_config', 1, 0, 'logo-usd', 0, 70),
@@ -6456,10 +6459,15 @@ INSERT INTO `eb_system_config_tab` (`id`, `pid`, `title`, `eng_title`, `status`,
 (64, 65, '物流查询', 'logistics_select', 1, 0, '', 0, 0),
 (65, 0, '第三方接口设置', 'system_serve', 1, 0, 'md-briefcase', 0, 0),
 (66, 65, '电子面单', 'electronic_sheet', 1, 0, '', 0, 0),
-(67, 5, '付费会员配置', 'member_card', 0, 0, '', 0, 2),
+(67, 5, '付费会员配置', 'member_card', 1, 0, '', 0, 2),
 (68, 65, '地图配置', 'map', 1, 0, '', 0, 0),
 (69, 22, '客服端配置', 'kefu_config', 1, 0, '', 0, 0),
-(70, 5, '首页分享配置', 'share_index_config', 1, 0, '', 0, 0);
+(70, 5, '首页分享配置', 'share_index_config', 1, 0, '', 0, 0),
+(71, 5, '售后退款配置', 'refund_config', 1, 0, '', 0, 0),
+(72, 9, '分销模式', 'brokerage_type', 1, 0, '', 2, 0),
+(73, 9, '返佣设置', 'brokerage_set', 1, 0, '', 2, 0),
+(74, 9, '提现设置', 'extract_set', 1, 0, '', 2, 0),
+(75, 22, 'PC站点配置', 'system_pc', 1, 0, '', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -6468,14 +6476,14 @@ INSERT INTO `eb_system_config_tab` (`id`, `pid`, `title`, `eng_title`, `status`,
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_file` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '文件对比ID',
-  `cthash` char(32) NOT NULL DEFAULT '' COMMENT '文件内容',
-  `filename` varchar(255) NOT NULL DEFAULT '' COMMENT '文价名称',
-  `atime` char(12) NOT NULL DEFAULT '' COMMENT '上次访问时间',
-  `mtime` char(12) NOT NULL DEFAULT '' COMMENT '上次修改时间',
-  `ctime` char(12) NOT NULL DEFAULT '' COMMENT '上次改变时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='文件对比表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '文件对比ID',
+    `cthash` char(32) NOT NULL DEFAULT '' COMMENT '文件内容',
+    `filename` varchar(255) NOT NULL DEFAULT '' COMMENT '文价名称',
+    `atime` char(12) NOT NULL DEFAULT '' COMMENT '上次访问时间',
+    `mtime` char(12) NOT NULL DEFAULT '' COMMENT '上次修改时间',
+    `ctime` char(12) NOT NULL DEFAULT '' COMMENT '上次改变时间',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='文件对比表';
 
 -- --------------------------------------------------------
 
@@ -6484,33 +6492,35 @@ CREATE TABLE IF NOT EXISTS `eb_system_file` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_group` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '组合数据ID',
-  `cate_id` int(11) NOT NULL DEFAULT '0' COMMENT '分类id',
-  `name` varchar(50) NOT NULL DEFAULT '' COMMENT '数据组名称',
-  `info` varchar(256) NOT NULL DEFAULT '' COMMENT '数据提示',
-  `config_name` varchar(50) NOT NULL DEFAULT '' COMMENT '数据字段',
-  `fields` text COMMENT '数据组字段以及类型（json数据）',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `config_name` (`config_name`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=utf8 COMMENT='组合数据表';
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '组合数据ID',
+    `cate_id` int(11) NOT NULL DEFAULT '0' COMMENT '分类id',
+    `name` varchar(50) NOT NULL DEFAULT '' COMMENT '数据组名称',
+    `info` varchar(256) NOT NULL DEFAULT '' COMMENT '数据提示',
+    `config_name` varchar(50) NOT NULL DEFAULT '' COMMENT '数据字段',
+    `fields` text NOT NULL COMMENT '数据组字段以及类型（json数据）',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `config_name` (`config_name`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=70 DEFAULT CHARSET=utf8 COMMENT='组合数据表';
 
 --
 -- 转存表中的数据 `eb_system_group`
 --
 
 INSERT INTO `eb_system_group` (`id`, `cate_id`, `name`, `info`, `config_name`, `fields`) VALUES
-(49, 0, '秒杀时间段', '秒杀时间段', 'routine_seckill_time', '[{"name":"\\u5f00\\u542f\\u65f6\\u95f4(\\u6574\\u70b9)","title":"time","type":"input","param":""},{"name":"\\u6301\\u7eed\\u65f6\\u95f4(\\u6574\\u6570\\u5c0f\\u65f6)","title":"continued","type":"input","param":""},{"name":"\\u5e7b\\u706f\\u7247","title":"slide","type":"upload","param":"1=>\\u56fe1\\n2=>\\u56fe2\\n3=>\\u56fe3"}]'),
-(52, 1, '首页精品推荐benner图', '首页精品推荐benner图', 'routine_home_bast_banner', '[{"name":"\\u56fe\\u7247","title":"img","type":"upload","param":""},{"name":"\\u63cf\\u8ff0","title":"comment","type":"input","param":""},{"name":"\\u8df3\\u8f6c\\u94fe\\u63a5","title":"link","type":"input","param":""}]'),
-(53, 0, '订单详情状态图', '订单详情状态图', 'order_details_images', '[{"name":"\\u8ba2\\u5355\\u72b6\\u6001","title":"order_status","type":"select","param":"0=>\\u672a\\u652f\\u4ed8\\n1=>\\u5f85\\u53d1\\u8d27\\n2=>\\u5f85\\u6536\\u8d27\\n3=>\\u5f85\\u8bc4\\u4ef7\\n4=>\\u5df2\\u5b8c\\u6210\\n9=>\\u7ebf\\u4e0b\\u4ed8\\u6b3e"},{"name":"\\u56fe\\u6807","title":"pic","type":"upload","param":""}]'),
-(54, 1, '个人中心菜单', '个人中心菜单', 'routine_my_menus', '[{"name":"\\u83dc\\u5355\\u540d","title":"name","type":"input","param":""},{"name":"\\u56fe\\u6807(48*48)","title":"pic","type":"upload","param":""},{"name":"\\u8df3\\u8f6c\\u8def\\u5f84","title":"url","type":"select","param":"\\/pages\\/users\\/user_address_list\\/index=>\\u5730\\u5740\\u7ba1\\u7406\\n\\/pages\\/users\\/user_vip\\/index=>\\u4f1a\\u5458\\u4e2d\\u5fc3\\n\\/pages\\/activity\\/bargain\\/index=>\\u780d\\u4ef7\\u8bb0\\u5f55\\n\\/pages\\/users\\/user_spread_user\\/index=>\\u63a8\\u5e7f\\u4e2d\\u5fc3\\n\\/pages\\/users\\/user_money\\/index=>\\u6211\\u7684\\u4f59\\u989d\\n\\/pages\\/users\\/user_goods_collection\\/index=>\\u6211\\u7684\\u6536\\u85cf\\n\\/pages\\/users\\/user_coupon\\/index=>\\u4f18\\u60e0\\u5238\\n\\/pages\\/admin\\/order\\/index=>\\u540e\\u53f0\\u8ba2\\u5355\\u7ba1\\u7406\\n\\/pages\\/customer_list\\/chat=>\\u8054\\u7cfb\\u5ba2\\u670d\\n\\/pages\\/admin\\/order_cancellation\\/index=>\\u8ba2\\u5355\\u6838\\u9500\\n\\/pages\\/users\\/user_integral\\/index=>\\u79ef\\u5206\\u4e2d\\u5fc3\\n\\/pages\\/users\\/user_invoice_list\\/index=>\\u53d1\\u7968\\u7ba1\\u7406\\n\\/pages\\/annex\\/vip_paid\\/index=>\\u4ed8\\u8d39\\u4f1a\\u5458\\n\\/kefu\\/mobile_list=>\\u5ba2\\u670d\\u63a5\\u5f85"}]'),
-(55, 1, '签到天数配置', '签到天数配置', 'sign_day_num', '[{"name":"\\u7b2c\\u51e0\\u5929","title":"day","type":"input","param":""},{"name":"\\u83b7\\u53d6\\u79ef\\u5206","title":"sign_num","type":"input","param":""}]'),
-(57, 1, '热门榜单推荐图片', '热门榜单推荐图片', 'routine_home_hot_banner', '[{"name":"\\u56fe\\u7247","title":"img","type":"upload","param":""},{"name":"\\u63cf\\u8ff0","title":"comment","type":"input","param":""}]'),
-(58, 1, '首发新品推荐图片', '首发新品推荐图片', 'routine_home_new_banner', '[{"name":"\\u56fe\\u7247","title":"img","type":"upload","param":""},{"name":"\\u63cf\\u8ff0","title":"comment","type":"input","param":""},{"name":"\\u8df3\\u8f6c\\u94fe\\u63a5","title":"link","type":"input","param":""}]'),
-(59, 1, '促销单品推荐图片', '促销单品推荐图片', 'routine_home_benefit_banner', '[{"name":"\\u56fe\\u7247","title":"img","type":"upload","param":""},{"name":"\\u63cf\\u8ff0","title":"comment","type":"input","param":""},{"name":"\\u8df3\\u8f6c\\u94fe\\u63a5","title":"link","type":"input","param":""}]'),
-(62, 1, '充值金额设置', '设置充值金额额度选择', 'user_recharge_quota', '[{"name":"\\u552e\\u4ef7","title":"price","type":"input","param":""},{"name":"\\u8d60\\u9001","title":"give_money","type":"input","param":""}]'),
-(65, 1, '后台登录页面幻灯片', '后台登录页面幻灯片', 'admin_login_slide', '[{"name":"\\u5e7b\\u706f\\u7247","title":"slide","type":"upload","param":""}]'),
-(66, 1, '前端页面链接', '前端页面链接', 'uni_app_link', '[{"name":"\\u540d\\u79f0","title":"name","type":"input","param":""},{"name":"\\u5730\\u5740","title":"link","type":"input","param":""},{"name":"\\u53c2\\u6570","title":"param","type":"input","param":""},{"name":"\\u4e8b\\u4f8b","title":"example","type":"input","param":""}]'),
-(67, 1, '拼团列表轮播图', '拼团列表轮播图', 'combination_banner', '[{"name":"\\u56fe\\u7247","title":"img","type":"upload","param":""},{"name":"\\u63cf\\u8ff0","title":"comment","type":"input","param":""},{"name":"\\u8df3\\u8f6c\\u94fe\\u63a5","title":"link","type":"input","param":""}]');
+(49, 0, '秒杀时间段', '秒杀时间段', 'routine_seckill_time', '[{\"name\":\"\\u5f00\\u542f\\u65f6\\u95f4(\\u6574\\u70b9)\",\"title\":\"time\",\"type\":\"input\",\"param\":\"\"},{\"name\":\"\\u6301\\u7eed\\u65f6\\u95f4(\\u6574\\u6570\\u5c0f\\u65f6)\",\"title\":\"continued\",\"type\":\"input\",\"param\":\"\"},{\"name\":\"\\u5e7b\\u706f\\u7247\",\"title\":\"slide\",\"type\":\"upload\",\"param\":\"1=>\\u56fe1\\n2=>\\u56fe2\\n3=>\\u56fe3\"}]'),
+(52, 1, '首页精品推荐benner图', '首页精品推荐benner图', 'routine_home_bast_banner', '[{\"name\":\"\\u56fe\\u7247\",\"title\":\"img\",\"type\":\"upload\",\"param\":\"\"},{\"name\":\"\\u63cf\\u8ff0\",\"title\":\"comment\",\"type\":\"input\",\"param\":\"\"},{\"name\":\"\\u8df3\\u8f6c\\u94fe\\u63a5\",\"title\":\"link\",\"type\":\"input\",\"param\":\"\"}]'),
+(53, 0, '订单详情状态图', '订单详情状态图', 'order_details_images', '[{\"name\":\"\\u8ba2\\u5355\\u72b6\\u6001\",\"title\":\"order_status\",\"type\":\"select\",\"param\":\"0=>\\u672a\\u652f\\u4ed8\\n1=>\\u5f85\\u53d1\\u8d27\\n2=>\\u5f85\\u6536\\u8d27\\n3=>\\u5f85\\u8bc4\\u4ef7\\n4=>\\u5df2\\u5b8c\\u6210\\n9=>\\u7ebf\\u4e0b\\u4ed8\\u6b3e\"},{\"name\":\"\\u56fe\\u6807\",\"title\":\"pic\",\"type\":\"upload\",\"param\":\"\"}]'),
+(54, 1, '个人中心菜单', '个人中心菜单', 'routine_my_menus', '[{\"name\":\"\\u83dc\\u5355\\u540d\",\"title\":\"name\",\"type\":\"input\",\"param\":\"\"},{\"name\":\"\\u56fe\\u6807(48*48)\",\"title\":\"pic\",\"type\":\"upload\",\"param\":\"\"},{\"name\":\"\\u8df3\\u8f6c\\u8def\\u5f84\",\"title\":\"url\",\"type\":\"select\",\"param\":\"\\/pages\\/users\\/user_address_list\\/index=>\\u5730\\u5740\\u7ba1\\u7406\\n\\/pages\\/users\\/user_vip\\/index=>\\u4f1a\\u5458\\u4e2d\\u5fc3\\n\\/pages\\/activity\\/bargain\\/index=>\\u780d\\u4ef7\\u8bb0\\u5f55\\n\\/pages\\/users\\/user_spread_user\\/index=>\\u63a8\\u5e7f\\u4e2d\\u5fc3\\n\\/pages\\/users\\/user_money\\/index=>\\u6211\\u7684\\u4f59\\u989d\\n\\/pages\\/users\\/user_goods_collection\\/index=>\\u6211\\u7684\\u6536\\u85cf\\n\\/pages\\/users\\/user_coupon\\/index=>\\u4f18\\u60e0\\u5238\\n\\/pages\\/admin\\/order\\/index=>\\u540e\\u53f0\\u8ba2\\u5355\\u7ba1\\u7406\\n\\/pages\\/customer_list\\/chat=>\\u8054\\u7cfb\\u5ba2\\u670d\\n\\/pages\\/admin\\/order_cancellation\\/index=>\\u8ba2\\u5355\\u6838\\u9500\\n\\/pages\\/users\\/user_integral\\/index=>\\u79ef\\u5206\\u4e2d\\u5fc3\\n\\/pages\\/users\\/user_invoice_list\\/index=>\\u53d1\\u7968\\u7ba1\\u7406\\n\\/pages\\/annex\\/vip_paid\\/index=>\\u4ed8\\u8d39\\u4f1a\\u5458\\n\\/kefu\\/mobile_list=>\\u5ba2\\u670d\\u63a5\\u5f85\"}]'),
+(55, 1, '签到天数配置', '签到天数配置', 'sign_day_num', '[{\"name\":\"\\u7b2c\\u51e0\\u5929\",\"title\":\"day\",\"type\":\"input\",\"param\":\"\"},{\"name\":\"\\u83b7\\u53d6\\u79ef\\u5206\",\"title\":\"sign_num\",\"type\":\"input\",\"param\":\"\"}]'),
+(57, 1, '热门榜单推荐图片', '热门榜单推荐图片', 'routine_home_hot_banner', '[{\"name\":\"\\u56fe\\u7247\",\"title\":\"img\",\"type\":\"upload\",\"param\":\"\"},{\"name\":\"\\u63cf\\u8ff0\",\"title\":\"comment\",\"type\":\"input\",\"param\":\"\"}]'),
+(58, 1, '首发新品推荐图片', '首发新品推荐图片', 'routine_home_new_banner', '[{\"name\":\"\\u56fe\\u7247\",\"title\":\"img\",\"type\":\"upload\",\"param\":\"\"},{\"name\":\"\\u63cf\\u8ff0\",\"title\":\"comment\",\"type\":\"input\",\"param\":\"\"},{\"name\":\"\\u8df3\\u8f6c\\u94fe\\u63a5\",\"title\":\"link\",\"type\":\"input\",\"param\":\"\"}]'),
+(59, 1, '促销单品推荐图片', '促销单品推荐图片', 'routine_home_benefit_banner', '[{\"name\":\"\\u56fe\\u7247\",\"title\":\"img\",\"type\":\"upload\",\"param\":\"\"},{\"name\":\"\\u63cf\\u8ff0\",\"title\":\"comment\",\"type\":\"input\",\"param\":\"\"},{\"name\":\"\\u8df3\\u8f6c\\u94fe\\u63a5\",\"title\":\"link\",\"type\":\"input\",\"param\":\"\"}]'),
+(62, 1, '充值金额设置', '设置充值金额额度选择', 'user_recharge_quota', '[{\"name\":\"\\u552e\\u4ef7\",\"title\":\"price\",\"type\":\"input\",\"param\":\"\"},{\"name\":\"\\u8d60\\u9001\",\"title\":\"give_money\",\"type\":\"input\",\"param\":\"\"}]'),
+(65, 1, '后台登录页面幻灯片', '后台登录页面幻灯片', 'admin_login_slide', '[{\"name\":\"\\u5e7b\\u706f\\u7247\",\"title\":\"slide\",\"type\":\"upload\",\"param\":\"\"}]'),
+(66, 1, '前端页面链接', '前端页面链接', 'uni_app_link', '[{\"name\":\"\\u540d\\u79f0\",\"title\":\"name\",\"type\":\"input\",\"param\":\"\"},{\"name\":\"\\u5730\\u5740\",\"title\":\"link\",\"type\":\"input\",\"param\":\"\"},{\"name\":\"\\u53c2\\u6570\",\"title\":\"param\",\"type\":\"input\",\"param\":\"\"},{\"name\":\"\\u4e8b\\u4f8b\",\"title\":\"example\",\"type\":\"input\",\"param\":\"\"}]'),
+(67, 1, '拼团列表轮播图', '拼团列表轮播图', 'combination_banner', '[{\"name\":\"\\u56fe\\u7247\",\"title\":\"img\",\"type\":\"upload\",\"param\":\"\"},{\"name\":\"\\u63cf\\u8ff0\",\"title\":\"comment\",\"type\":\"input\",\"param\":\"\"},{\"name\":\"\\u8df3\\u8f6c\\u94fe\\u63a5\",\"title\":\"link\",\"type\":\"input\",\"param\":\"\"}]'),
+(69, 1, 'PC端首页banner', 'PC端首页banner', 'pc_home_banner', '[{\"name\":\"\\u56fe\\u7247\\u6807\\u9898\",\"title\":\"title\",\"type\":\"input\",\"param\":\"\"},{\"name\":\"\\u56fe\\u7247\",\"title\":\"image\",\"type\":\"upload\",\"param\":\"\"},{\"name\":\"\\u8df3\\u8f6c\\u8def\\u5f84\",\"title\":\"url\",\"type\":\"input\",\"param\":\"\"}]');
+
 -- --------------------------------------------------------
 
 --
@@ -6518,104 +6528,94 @@ INSERT INTO `eb_system_group` (`id`, `cate_id`, `name`, `info`, `config_name`, `
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_group_data` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '组合数据详情ID',
-  `gid` int(11) NOT NULL DEFAULT '0' COMMENT '对应的数据组id',
-  `value` text NOT NULL DEFAULT '' COMMENT '数据组对应的数据值（json数据）',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加数据时间',
-  `sort` int(11) NOT NULL DEFAULT '0' COMMENT '数据排序',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态（1：开启；2：关闭；）',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=312 DEFAULT CHARSET=utf8 COMMENT='组合数据详情表';
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '组合数据详情ID',
+    `gid` int(11) NOT NULL DEFAULT '0' COMMENT '对应的数据组id',
+    `value` text NOT NULL COMMENT '数据组对应的数据值（json数据）',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加数据时间',
+    `sort` int(11) NOT NULL DEFAULT '0' COMMENT '数据排序',
+    `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '状态（1：开启；2：关闭；）',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=384 DEFAULT CHARSET=utf8 COMMENT='组合数据详情表';
 
 --
 -- 转存表中的数据 `eb_system_group_data`
 --
 
 INSERT INTO `eb_system_group_data` (`id`, `gid`, `value`, `add_time`, `sort`, `status`) VALUES
-(127, 52, '{"img":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/00353202104251712149132.jpg"},"comment":{"type":"input","value":"\\u7cbe\\u54c1\\u63a8\\u8350750*282"},"link":{"type":"input","value":"\\/pages\\/first-new-product\\/index"}}', 1552633893, 1, 1),
-(135, 54, '{"name":{"type":"input","value":"\\u6211\\u7684\\u7b49\\u7ea7"},"pic":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/4bd57202104251646233409.png"},"url":{"type":"select","value":"\\/pages\\/users\\/user_vip\\/index"}}', 1553779918, 0, 1),
-(136, 54, '{"name":{"type":"input","value":"\\u780d\\u4ef7\\u8bb0\\u5f55"},"pic":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/dc62b202104251646238019.png"},"url":{"type":"select","value":"\\/pages\\/activity\\/bargain\\/index"}}', 1553779935, 0, 1),
-(137, 54, '{"name":{"type":"input","value":"\\u6211\\u7684\\u63a8\\u5e7f"},"pic":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/99ec2202104251646235502.png"},"url":{"type":"select","value":"\\/pages\\/users\\/user_spread_user\\/index"}}', 1553779950, 1, 1),
-(138, 54, '{"name":{"type":"input","value":"\\u6211\\u7684\\u4f59\\u989d"},"pic":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/bb70a202104251655109619.png"},"url":{"type":"select","value":"\\/pages\\/users\\/user_money\\/index"}}', 1553779973, 1, 1),
-(139, 54, '{"name":{"type":"input","value":"\\u5730\\u5740\\u4fe1\\u606f"},"pic":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/0e40e202104251646236497.png"},"url":{"type":"select","value":"\\/pages\\/users\\/user_address_list\\/index"}}', 1553779988, 1, 1),
-(140, 54, '{"name":{"type":"input","value":"\\u6211\\u7684\\u6536\\u85cf"},"pic":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/b6262202104251646238120.png"},"url":{"type":"select","value":"\\/pages\\/users\\/user_goods_collection\\/index"}}', 1553780003, 1, 1),
-(141, 54, '{"name":{"type":"input","value":"\\u4f18\\u60e0\\u5238"},"pic":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/8af2b202104251646237591.png"},"url":{"type":"select","value":"\\/pages\\/users\\/user_coupon\\/index"}}', 1553780017, 1, 1),
-(147, 55, '{"day":{"type":"input","value":"\\u7b2c\\u4e00\\u5929"},"sign_num":{"type":"input","value":"10"}}', 1553780276, 100, 1),
-(148, 55, '{"day":{"type":"input","value":"\\u7b2c\\u4e8c\\u5929"},"sign_num":{"type":"input","value":"20"},"pp":{"type":"upload","value":"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200519\\/9de2f5eaf006881d3fc5d74292831e15.jpg"},"ll":{"type":"uploads","value":["http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200519\\/c61980f2534413e2d70edea2417cc2ed.jpg"]}}', 1553780292, 99, 1),
-(149, 55, '{"day":{"type":"input","value":"\\u7b2c\\u4e09\\u5929"},"sign_num":{"type":"input","value":"30"},"pp":{"type":"upload","value":"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/06\\/20200603\\/ebb267120fd4b3c2e50f20a29d5966e5.png"},"ll":{"type":"upload","value":"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/06\\/20200603\\/ebb267120fd4b3c2e50f20a29d5966e5.png"}}', 1553780303, 90, 1),
-(150, 55, '{"day":{"type":"input","value":"\\u7b2c\\u56db\\u5929"},"sign_num":{"type":"input","value":"40"}}', 1553780334, 60, 1),
-(151, 55, '{"day":{"type":"input","value":"\\u7b2c\\u4e94\\u5929"},"sign_num":{"type":"input","value":"50"}}', 1553780351, 50, 1),
-(152, 55, '{"day":{"type":"input","value":"\\u7b2c\\u516d\\u5929"},"sign_num":{"type":"input","value":"60"}}', 1553780364, 40, 1),
-(154, 57, '{"img":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/d9cea202104251713283778.png"},"comment":{"type":"input","value":"crmeb\\u7cfb\\u7edf"}}', 1553780856, 1, 1),
-(172, 54, '{"name":{"type":"input","value":"\\u8054\\u7cfb\\u5ba2\\u670d"},"pic":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/0fac5202104251646235466.png"},"url":{"type":"select","value":"\\/pages\\/customer_list\\/chat"}}', 1564482010, 1, 1),
-(174, 54, '{"name":{"type":"input","value":"\\u7edf\\u8ba1\\u7ba1\\u7406"},"pic":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/8e91f202104251646235322.png"},"url":{"type":"select","value":"\\/pages\\/admin\\/order\\/index"}}', 1565259184, 1, 1),
-(176, 54, '{"name":{"type":"input","value":"\\u8ba2\\u5355\\u6838\\u9500"},"pic":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/0b6d3202104251646233921.png"},"url":{"type":"select","value":"\\/pages\\/admin\\/order_cancellation\\/index"}}', 1569382895, 1, 1),
-(177, 62, '{"price":{"type":"input","value":"20.00"},"give_money":{"type":"input","value":"2.00"}}', 1578884735, 1, 1),
-(178, 62, '{"price":{"type":"input","value":"30.00"},"give_money":{"type":"input","value":"3.00"}}', 1578884760, 1, 1),
-(179, 62, '{"price":{"type":"input","value":"50.00"},"give_money":{"type":"input","value":"5.00"}}', 1578884919, 1, 1),
-(180, 62, '{"price":{"type":"input","value":"500.00"},"give_money":{"type":"input","value":"50.00"}}', 1578885008, 1, 1),
-(181, 62, '{"price":{"type":"input","value":"1000.00"},"give_money":{"type":"input","value":"300"}}', 1578885120, 1, 1),
-(219, 54, '{"name":{"type":"input","value":"\\u79ef\\u5206\\u4e2d\\u5fc3"},"pic":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/e45e7202104251646238790.png"},"url":{"type":"select","value":"\\/pages\\/users\\/user_integral\\/index"}}', 1595923258, 1, 1),
-(223, 53, '{"order_status":{"type":"select","value":"1"},"pic":{"type":"upload","value":"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccca12638a.gif"}}', 0, 0, 1),
-(224, 53, '{"order_status":{"type":"select","value":"2"},"pic":{"type":"upload","value":"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccca1c78cd.gif"}}', 0, 0, 1),
-(225, 53, '	{"order_status":{"type":"select","value":"3"},"pic":{"type":"upload","value":"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccca178a67.gif"}}', 0, 0, 1),
-(226, 53, '{"order_status":{"type":"select","value":"4"},"pic":{"type":"upload","value":"http:\\/\\/datong.crmeb.net\\/public\\/uploads\\/attach\\/2019\\/03\\/28\\/5c9ccca1a01b6.gif"}}', 0, 0, 1),
-(227, 53, '{"order_status":{"type":"select","value":"9"},"pic":{"type":"upload","value":"http:\\/\\/kaifa.crmeb.net\\/uploads\\/attach\\/2019\\/08\\/20190809\\/7ba5e7e9bcd1ed480fdd432b49a3161a.gif"}}', 0, 0, 1),
-(229, 55, '{"day":{"type":"input","value":"\\u7b2c\\u4e03\\u5929"},"sign_num":{"type":"input","value":"110"}}', 1596097259, 1, 1),
-(237, 58, '{"img":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/94289202104251713378235.png"},"comment":{"type":"input","value":"\\u65b0\\u54c1\\u9996\\u53d1"},"link":{"type":"input","value":"\\/pages\\/goods_details\\/index?id=118"}}', 1596254733, 1, 1),
-(238, 59, '{"img":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/e4822202104251713242598.png"},"comment":{"type":"input","value":"\\u4fc3\\u9500\\u5355\\u54c1"},"link":{"type":"input","value":"\\/pages\\/goods_details\\/index?id=118"}}', 1596254811, 1, 1),
-(249, 54, '{"name":{"type":"input","value":"\\u53d1\\u7968\\u7ba1\\u7406"},"pic":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/a7ab8202104251646231548.png"},"url":{"type":"select","value":"\\/pages\\/users\\/user_invoice_list\\/index"}}', 1600225808, 1, 1),
-(253, 54, '{"name":{"type":"input","value":"\\u5ba2\\u670d\\u63a5\\u5f85"},"pic":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/e4bee202104251646239799.png"},"url":{"type":"select","value":"https:\\/\\/demo40.crmeb.net\\/kefu\\/mobile_list"}}', 1603955168, 1, 1),
-(276, 49, '{"time":{"type":"input","value":"0"},"continued":{"type":"input","value":"6"},"slide":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/1682e202104291658295445.jpg"}}', 1604566040, 10, 1),
-(280, 49, '{"time":{"type":"input","value":"10"},"continued":{"type":"input","value":"2"},"slide":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/3b0a1202104291705369422.jpg"}}', 1604567509, 1, 1),
-(281, 49, '{"time":{"type":"input","value":"12"},"continued":{"type":"input","value":"2"},"slide":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/f01d5202104291705368486.jpg"}}', 1604567681, 1, 1),
-(282, 49, '{"time":{"type":"input","value":"18"},"continued":{"type":"input","value":"6"},"slide":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/915bc202104291705369876.jpg"}}', 1604567715, 0, 1),
-(283, 49, '{"time":{"type":"input","value":"8"},"continued":{"type":"input","value":"2"},"slide":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/00a8f202104291705362017.jpg"}}', 1604713982, 2, 1),
-(284, 49, '{"time":{"type":"input","value":"14"},"continued":{"type":"input","value":"4"},"slide":{"type":"upload","value":"https:\\/\\/qiniu.crmeb.net\\/attach\\/2021\\/04\\/915bc202104291705369876.jpg"}}', 1604893092, 1, 1),
-(285, 53, '{"order_status":{"type":"select","value":"0"},"pic":{"type":"upload","value":"https://demo40.crmeb.net\\/uploads\\/attach\\/2020\\/11\\/20201110\\/55f5518b80f35386bc7224cfb1ee3700.png"}}', 1605080140, 0, 1),
-(286, 62, '{"price":{"type":"input","value":"0.01"},"give_money":{"type":"input","value":"20"}}', 1605163431, 1, 1),
-(311, 62, '{"price":{"type":"input","value":"10"},"give_money":{"type":"input","value":"5"}}', 1605670012, 1, 1),
-(334, 66, '{"name":{"type":"input","value":"\\u5546\\u57ce\\u9996\\u9875"},"link":{"type":"input","value":"\\/pages\\/index\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/index\\/index"}}', 1618044532, 1, 1),
-(335, 66, '{"name":{"type":"input","value":"\\u5546\\u57ce\\u5206\\u7c7b"},"link":{"type":"input","value":"\\/pages\\/goods_cate\\/goods_cate"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/goods_cate\\/goods_cate"}}', 1618044607, 1, 1),
-(336, 66, '{"name":{"type":"input","value":"\\u8d2d\\u7269\\u8f66"},"link":{"type":"input","value":"\\/pages\\/order_addcart\\/order_addcart"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/order_addcart\\/order_addcart"}}', 1618044648, 1, 1),
-(337, 66, '{"name":{"type":"input","value":"\\u4e2a\\u4eba\\u4e2d\\u5fc3"},"link":{"type":"input","value":"\\/pages\\/user\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/user\\/index"}}', 1618044692, 1, 1),
-(338, 66, '{"name":{"type":"input","value":"\\u5206\\u7c7b\\u5546\\u54c1\\u5217\\u8868"},"link":{"type":"input","value":"\\/pages\\/goods_list\\/index"},"param":{"type":"input","value":"sid=1&title=\\u6d4b\\u8bd5\\u5206\\u7c7b\\u540d\\u79f0"},"example":{"type":"input","value":"\\/pages\\/goods_list\\/index?sid=1&title=\\u6d4b\\u8bd5\\u5206\\u7c7b\\u540d\\u79f0"}}', 1618044726, 1, 1),
-(339, 66, '{"name":{"type":"input","value":"\\u5546\\u54c1\\u8be6\\u60c5"},"link":{"type":"input","value":"\\/pages\\/goods_details\\/index"},"param":{"type":"input","value":"id=\\u5546\\u54c1ID"},"example":{"type":"input","value":"\\/pages\\/goods_details\\/index?id=1"}}', 1618044748, 1, 1),
-(340, 66, '{"name":{"type":"input","value":"\\u6587\\u7ae0\\u5217\\u8868"},"link":{"type":"input","value":"\\/pages\\/news_list\\/index"},"param":{"type":"input","value":"id=\\u6587\\u7ae0ID"},"example":{"type":"input","value":"\\/pages\\/news_details\\/index?id=1"}}', 1618044771, 1, 1),
-(341, 66, '{"name":{"type":"input","value":"\\u4f18\\u60e0\\u5238\\u5217\\u8868"},"link":{"type":"input","value":"\\/pages\\/users\\/user_get_coupon\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_get_coupon\\/index"}}', 1618044788, 1, 1),
-(342, 66, '{"name":{"type":"input","value":"\\u8d85\\u503c\\u7206\\u6b3e\\u5217\\u8868"},"link":{"type":"input","value":"\\/pages\\/columnGoods\\/HotNewGoods\\/index"},"param":{"type":"input","value":"type=\\u7c7b\\u578bID\\uff0c1=\\u7cbe\\u54c1\\u63a8\\u8350\\uff0c2=\\u70ed\\u95e8\\u699c\\u5355\\uff0c3=\\u9996\\u53d1\\u65b0\\u54c1\\uff0c4=\\u4fc3\\u9500\\u5355\\u54c1"},"example":{"type":"input","value":"\\/pages\\/columnGoods\\/HotNewGoods\\/index?type=1"}}', 1618044807, 1, 1),
-(343, 66, '{"name":{"type":"input","value":"\\u7b7e\\u5230\\u9875\\u9762"},"link":{"type":"input","value":"\\/pages\\/users\\/user_sgin\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_sgin\\/index"}}', 1618044822, 1, 1),
-(344, 66, '{"name":{"type":"input","value":"\\u6536\\u85cf\\u9875\\u9762"},"link":{"type":"input","value":"\\/pages\\/users\\/user_goods_collection\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_goods_collection\\/index"}}', 1618044848, 1, 1),
-(345, 66, '{"name":{"type":"input","value":"\\u62fc\\u56e2\\u5217\\u8868"},"link":{"type":"input","value":"\\/pages\\/activity\\/goods_combination\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/activity\\/goods_combination\\/index"}}', 1618044886, 1, 1),
-(346, 66, '{"name":{"type":"input","value":"\\u62fc\\u56e2\\u8be6\\u60c5"},"link":{"type":"input","value":"\\/pages\\/activity\\/goods_combination_details\\/index"},"param":{"type":"input","value":"id=\\u62fc\\u56e2ID"},"example":{"type":"input","value":"\\/pages\\/activity\\/goods_combination_details\\/index?id=1"}}', 1618044903, 1, 1),
-(347, 66, '{"name":{"type":"input","value":"\\u79d2\\u6740\\u5217\\u8868"},"link":{"type":"input","value":"\\/pages\\/activity\\/goods_seckill\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/activity\\/goods_seckill\\/index"}}', 1618045199, 1, 1),
-(348, 66, '{"name":{"type":"input","value":"\\u79d2\\u6740\\u8be6\\u60c5"},"link":{"type":"input","value":"\\/pages\\/activity\\/goods_seckill_details\\/index"},"param":{"type":"input","value":"id=\\u79d2\\u6740ID&time=\\u8be5\\u79d2\\u6740\\u5546\\u54c1\\u4eca\\u5929\\u7ed3\\u675f\\u65f6\\u95f4\\u6233&status=\\u5f00\\u542f\\u79d2\\u6740\\u72b6\\u6001"},"example":{"type":"input","value":"\\/pages\\/activity\\/goods_seckill_details\\/index?id=1&time=1595239200&status=1"}}', 1618045221, 1, 1),
-(349, 66, '{"name":{"type":"input","value":"\\u780d\\u4ef7\\u5217\\u8868"},"link":{"type":"input","value":"\\/pages\\/activity\\/goods_bargain\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/activity\\/goods_bargain\\/index"}}', 1618045233, 1, 1),
-(350, 66, '{"name":{"type":"input","value":"\\u780d\\u4ef7\\u8be6\\u60c5"},"link":{"type":"input","value":"\\/pages\\/activity\\/goods_bargain_details\\/index"},"param":{"type":"input","value":"id=\\u780d\\u4ef7\\u5546\\u54c1ID&bargain=\\u780d\\u4ef7ID"},"example":{"type":"input","value":"\\/pages\\/activity\\/goods_bargain_details\\/index?id=1&bargain=1"}}', 1618045262, 1, 1),
-(351, 66, '{"name":{"type":"input","value":"\\u5730\\u5740\\u5217\\u8868"},"link":{"type":"input","value":"\\/pages\\/users\\/user_address_list\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_address_list\\/index"}}', 1618045294, 1, 1),
-(352, 66, '{"name":{"type":"input","value":"\\u6211\\u7684\\u8d26\\u6237"},"link":{"type":"input","value":"\\/pages\\/users\\/user_info\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_info\\/index"}}', 1618045308, 1, 1),
-(353, 66, '{"name":{"type":"input","value":"\\u4e2a\\u4eba\\u8d44\\u6599"},"link":{"type":"input","value":"\\/pages\\/users\\/user_info\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_info\\/index"}}', 1618045580, 1, 1),
-(354, 66, '{"name":{"type":"input","value":"\\u79ef\\u5206\\u8be6\\u60c5"},"link":{"type":"input","value":"\\/pages\\/users\\/user_integral\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_integral\\/index"}}', 1618045591, 1, 1),
-(355, 66, '{"name":{"type":"input","value":"\\u6211\\u7684\\u8ba2\\u5355"},"link":{"type":"input","value":"\\/pages\\/users\\/order_list\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/order_list\\/index"}}', 1618045605, 1, 1),
-(356, 66, '{"name":{"type":"input","value":"\\u6211\\u7684\\u4f18\\u60e0\\u5238"},"link":{"type":"input","value":"\\/pages\\/users\\/user_coupon\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_coupon\\/index"}}', 1618045615, 1, 1),
-(357, 66, '{"name":{"type":"input","value":"\\u8ba2\\u5355\\u8be6\\u60c5"},"link":{"type":"input","value":"\\/pages\\/order_details\\/index"},"param":{"type":"input","value":"order_id=\\u8ba2\\u5355\\u53f7"},"example":{"type":"input","value":"\\/pages\\/order_details\\/index?order_id=wx88888888888888888"}}', 1618045634, 1, 1),
-(358, 66, '{"name":{"type":"input","value":"\\u9000\\u6b3e\\u5217\\u8868"},"link":{"type":"input","value":"\\/pages\\/users\\/user_return_list\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_return_list\\/index"}}', 1618045644, 1, 1),
-(359, 66, '{"name":{"type":"input","value":"\\u7528\\u6237\\u7b49\\u7ea7"},"link":{"type":"input","value":"\\/pages\\/users\\/user_vip\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_vip\\/index"}}', 1618045654, 1, 1),
-(360, 66, '{"name":{"type":"input","value":"\\u780d\\u4ef7\\u8bb0\\u5f55"},"link":{"type":"input","value":"\\/pages\\/activity\\/bargain\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/activity\\/bargain\\/index"}}', 1618045665, 1, 1),
-(361, 66, '{"name":{"type":"input","value":"\\u6211\\u7684\\u63a8\\u5e7f"},"link":{"type":"input","value":"\\/pages\\/users\\/user_spread_user\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_spread_user\\/index"}}', 1618045676, 1, 1),
-(362, 66, '{"name":{"type":"input","value":"\\u63d0\\u73b0\\u9875\\u9762"},"link":{"type":"input","value":"\\/pages\\/users\\/user_cash\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_cash\\/index"}}', 1618045687, 1, 1),
-(363, 66, '{"name":{"type":"input","value":"\\u5206\\u9500\\u6d77\\u62a5"},"link":{"type":"input","value":"\\/pages\\/users\\/user_spread_code\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_spread_code\\/index"}}', 1618045698, 1, 1),
-(364, 66, '{"name":{"type":"input","value":"\\u63a8\\u5e7f\\u4eba\\u5217\\u8868"},"link":{"type":"input","value":"\\/pages\\/users\\/promoter-list\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/promoter-list\\/index"}}', 1618045708, 1, 1),
-(365, 66, '{"name":{"type":"input","value":"\\u63d0\\u73b0\\u8bb0\\u5f55\\uff0c\\u5206\\u4f63\\u8bb0\\u5f55"},"link":{"type":"input","value":"\\/pages\\/users\\/user_spread_money\\/index"},"param":{"type":"input","value":"ype=1=\\u63d0\\u73b0\\u8bb0\\u5f55\\uff0c2=\\u5206\\u4f63\\u8bb0\\u5f55"},"example":{"type":"input","value":"\\/pages\\/users\\/user_spread_money\\/index?type=1"}}', 1618045729, 1, 1),
-(366, 66, '{"name":{"type":"input","value":"\\u63a8\\u5e7f\\u4eba\\u8ba2\\u5355"},"link":{"type":"input","value":"\\/pages\\/users\\/promoter-order\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/promoter-order\\/index"}}', 1618045745, 1, 1),
-(367, 66, '{"name":{"type":"input","value":"\\u63a8\\u5e7f\\u4eba\\u6392\\u884c"},"link":{"type":"input","value":"\\/pages\\/users\\/promoter_rank\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/promoter_rank\\/index"}}', 1618045757, 1, 1),
-(368, 66, '{"name":{"type":"input","value":"\\u4f63\\u91d1\\u6392\\u884c"},"link":{"type":"input","value":"\\/pages\\/users\\/commission_rank\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/commission_rank\\/index"}}', 1618045770, 1, 1),
-(369, 66, '{"name":{"type":"input","value":"\\u8054\\u7cfb\\u5ba2\\u670d"},"link":{"type":"input","value":"\\/pages\\/customer_list\\/chat"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/customer_list\\/chat"}}', 1618045780, 1, 1),
-(370, 66, '{"name":{"type":"input","value":"\\u7edf\\u8ba1\\u7ba1\\u7406"},"link":{"type":"input","value":"\\/pages\\/admin\\/order\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/admin\\/order\\/index"}}', 1618045789, 1, 1),
-(371, 66, '{"name":{"type":"input","value":"\\u8ba2\\u5355\\u6838\\u9500"},"link":{"type":"input","value":"\\/pages\\/admin\\/order_cancellation\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/admin\\/order_cancellation\\/index"}}', 1618045803, 1, 1),
-(372, 66, '{"name":{"type":"input","value":"\\u5145\\u503c\\u9875\\u9762"},"link":{"type":"input","value":"\\/pages\\/users\\/user_payment\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/users\\/user_payment\\/index"}}', 1618045814, 1, 1),
-(373, 66, '{"name":{"type":"input","value":"\\u6536\\u94f6\\u9875\\u9762"},"link":{"type":"input","value":"\\/pages\\/annex\\/offline_pay\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/annex\\/offline_pay\\/index"}}', 1618045826, 1, 1),
-(374, 66, '{"name":{"type":"input","value":"\\u4ed8\\u8d39\\u4f1a\\u5458"},"link":{"type":"input","value":"\\/pages\\/annex\\/vip_paid\\/index"},"param":{"type":"input","value":" "},"example":{"type":"input","value":"\\/pages\\/annex\\/vip_paid\\/index"}}', 1618045836, 1, 1);
+(135, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u6211\\u7684\\u7b49\\u7ea7\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/dfbcfff77c4b2ef8f75a5dfb8acf6dfe.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/users\\/user_vip\\/index\"}}', 1553779918, 0, 1),
+(136, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u780d\\u4ef7\\u8bb0\\u5f55\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/474442bd96e2dadcc4570b5f028c80b3.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/activity\\/bargain\\/index\"}}', 1553779935, 0, 1),
+(137, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u6211\\u7684\\u63a8\\u5e7f\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/95a5bde40db093a605dbe04dbe32ff98.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/users\\/user_spread_user\\/index\"}}', 1553779950, 1, 1),
+(138, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u6211\\u7684\\u4f59\\u989d\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/168280e984c5b703f26f4c6ba5b14b37.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/users\\/user_money\\/index\"}}', 1553779973, 1, 1),
+(139, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u5730\\u5740\\u4fe1\\u606f\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/5eac28b937b3fcc10a111cad2534e035.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/users\\/user_address_list\\/index\"}}', 1553779988, 1, 1),
+(140, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u6211\\u7684\\u6536\\u85cf\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/f8e9ce4cf7887d52503c1dd0f0f6dc0a.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/users\\/user_goods_collection\\/index\"}}', 1553780003, 1, 1),
+(141, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u4f18\\u60e0\\u5238\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/249e27871ec180748e6441906211b21a.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/users\\/user_coupon\\/index\"}}', 1553780017, 1, 1),
+(147, 55, '{\"day\":{\"type\":\"input\",\"value\":\"\\u7b2c\\u4e00\\u5929\"},\"sign_num\":{\"type\":\"input\",\"value\":\"10\"}}', 1553780276, 100, 1),
+(148, 55, '{\"day\":{\"type\":\"input\",\"value\":\"\\u7b2c\\u4e8c\\u5929\"},\"sign_num\":{\"type\":\"input\",\"value\":\"20\"},\"pp\":{\"type\":\"upload\",\"value\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200519\\/9de2f5eaf006881d3fc5d74292831e15.jpg\"},\"ll\":{\"type\":\"uploads\",\"value\":[\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/05\\/20200519\\/c61980f2534413e2d70edea2417cc2ed.jpg\"]}}', 1553780292, 99, 1),
+(149, 55, '{\"day\":{\"type\":\"input\",\"value\":\"\\u7b2c\\u4e09\\u5929\"},\"sign_num\":{\"type\":\"input\",\"value\":\"30\"},\"pp\":{\"type\":\"upload\",\"value\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/06\\/20200603\\/ebb267120fd4b3c2e50f20a29d5966e5.png\"},\"ll\":{\"type\":\"upload\",\"value\":\"http:\\/\\/admin.crmeb.net\\/uploads\\/attach\\/2020\\/06\\/20200603\\/ebb267120fd4b3c2e50f20a29d5966e5.png\"}}', 1553780303, 90, 1),
+(150, 55, '{\"day\":{\"type\":\"input\",\"value\":\"\\u7b2c\\u56db\\u5929\"},\"sign_num\":{\"type\":\"input\",\"value\":\"40\"}}', 1553780334, 60, 1),
+(151, 55, '{\"day\":{\"type\":\"input\",\"value\":\"\\u7b2c\\u4e94\\u5929\"},\"sign_num\":{\"type\":\"input\",\"value\":\"50\"}}', 1553780351, 50, 1),
+(152, 55, '{\"day\":{\"type\":\"input\",\"value\":\"\\u7b2c\\u516d\\u5929\"},\"sign_num\":{\"type\":\"input\",\"value\":\"60\"}}', 1553780364, 40, 1),
+(172, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u8054\\u7cfb\\u5ba2\\u670d\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/f4eebc4a56615aa7db606d626a06108f.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/customer_list\\/chat\"}}', 1564482010, 1, 1),
+(174, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u7edf\\u8ba1\\u7ba1\\u7406\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/be0306bb121443a87e16e6c2f1075a22.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/admin\\/order\\/index\"}}', 1565259184, 1, 1),
+(176, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u8ba2\\u5355\\u6838\\u9500\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/72fa2606343a751e1a00b0f37854aa94.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/admin\\/order_cancellation\\/index\"}}', 1569382895, 1, 1),
+(177, 62, '{\"price\":{\"type\":\"input\",\"value\":\"20.00\"},\"give_money\":{\"type\":\"input\",\"value\":\"2.00\"}}', 1578884735, 1, 1),
+(178, 62, '{\"price\":{\"type\":\"input\",\"value\":\"30.00\"},\"give_money\":{\"type\":\"input\",\"value\":\"3.00\"}}', 1578884760, 1, 1),
+(179, 62, '{\"price\":{\"type\":\"input\",\"value\":\"50.00\"},\"give_money\":{\"type\":\"input\",\"value\":\"5.00\"}}', 1578884919, 1, 1),
+(180, 62, '{\"price\":{\"type\":\"input\",\"value\":\"500.00\"},\"give_money\":{\"type\":\"input\",\"value\":\"50.00\"}}', 1578885008, 1, 1),
+(219, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u79ef\\u5206\\u4e2d\\u5fc3\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/b3519d9dec6bd68bd55d5a279008a193.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/users\\/user_integral\\/index\"}}', 1595923258, 1, 1),
+(223, 53, '{\"order_status\":{\"type\":\"select\",\"value\":\"1\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/ae45d4c97373701454c63eb93867930c.gif\"}}', 0, 0, 1),
+(224, 53, '{\"order_status\":{\"type\":\"select\",\"value\":\"2\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/575fab90c216cf160c8df24d2679b6ed.gif\"}}', 0, 0, 1),
+(225, 53, '{\"order_status\":{\"type\":\"select\",\"value\":\"3\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/39f0bb99cdb0aed623f376fa38791118.gif\"}}', 0, 0, 1),
+(226, 53, '{\"order_status\":{\"type\":\"select\",\"value\":\"4\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/f386c536c1d0b3648762ad4330eae3ca.gif\"}}', 0, 0, 1),
+(227, 53, '{\"order_status\":{\"type\":\"select\",\"value\":\"9\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/c53fa3bdbc7dd5d0ba87fd93d2e51221.gif\"}}', 0, 0, 1),
+(229, 55, '{\"day\":{\"type\":\"input\",\"value\":\"\\u7b2c\\u4e03\\u5929\"},\"sign_num\":{\"type\":\"input\",\"value\":\"110\"}}', 1596097259, 1, 1),
+(249, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u53d1\\u7968\\u7ba1\\u7406\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/e1d75a4a18be9b85d27f410352111efc.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/users\\/user_invoice_list\\/index\"}}', 1600225808, 1, 1),
+(251, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u4ed8\\u8d39\\u4f1a\\u5458\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/275c71191da32195c787e60efb985e4d.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/pages\\/annex\\/vip_paid\\/index\"}}', 1603093636, 1, 1),
+(253, 54, '{\"name\":{\"type\":\"input\",\"value\":\"\\u5ba2\\u670d\\u63a5\\u5f85\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/313b629739b460266e22c9feadfdd053.png\"},\"url\":{\"type\":\"select\",\"value\":\"\\/kefu\\/mobile_list\"}}', 1603955168, 1, 1),
+(285, 53, '{\"order_status\":{\"type\":\"select\",\"value\":\"0\"},\"pic\":{\"type\":\"upload\",\"value\":\"https:\\/\\/data.wuht.net\\/uploads\\/attach\\/2021\\/08\\/20210823\\/c53fa3bdbc7dd5d0ba87fd93d2e51221.gif\"}}', 1605080140, 0, 1),
+(334, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u5546\\u57ce\\u9996\\u9875\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/index\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/index\\/index\"}}', 1618044532, 1, 1),
+(335, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u5546\\u57ce\\u5206\\u7c7b\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/goods_cate\\/goods_cate\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/goods_cate\\/goods_cate\"}}', 1618044607, 1, 1),
+(336, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u8d2d\\u7269\\u8f66\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/order_addcart\\/order_addcart\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/order_addcart\\/order_addcart\"}}', 1618044648, 1, 1),
+(337, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u4e2a\\u4eba\\u4e2d\\u5fc3\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/user\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/user\\/index\"}}', 1618044692, 1, 1),
+(338, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u5206\\u7c7b\\u5546\\u54c1\\u5217\\u8868\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/goods_list\\/index\"},\"param\":{\"type\":\"input\",\"value\":\"sid=1&title=\\u6d4b\\u8bd5\\u5206\\u7c7b\\u540d\\u79f0\"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/goods_list\\/index?sid=1&title=\\u6d4b\\u8bd5\\u5206\\u7c7b\\u540d\\u79f0\"}}', 1618044726, 1, 1),
+(339, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u5546\\u54c1\\u8be6\\u60c5\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/goods_details\\/index\"},\"param\":{\"type\":\"input\",\"value\":\"id=\\u5546\\u54c1ID\"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/goods_details\\/index?id=1\"}}', 1618044748, 1, 1),
+(340, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u6587\\u7ae0\\u5217\\u8868\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/news_list\\/index\"},\"param\":{\"type\":\"input\",\"value\":\"id=\\u6587\\u7ae0ID\"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/news_details\\/index?id=1\"}}', 1618044771, 1, 1),
+(341, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u4f18\\u60e0\\u5238\\u5217\\u8868\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_get_coupon\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_get_coupon\\/index\"}}', 1618044788, 1, 1),
+(342, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u8d85\\u503c\\u7206\\u6b3e\\u5217\\u8868\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/columnGoods\\/HotNewGoods\\/index\"},\"param\":{\"type\":\"input\",\"value\":\"type=\\u7c7b\\u578bID\\uff0c1=\\u7cbe\\u54c1\\u63a8\\u8350\\uff0c2=\\u70ed\\u95e8\\u699c\\u5355\\uff0c3=\\u9996\\u53d1\\u65b0\\u54c1\\uff0c4=\\u4fc3\\u9500\\u5355\\u54c1\"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/columnGoods\\/HotNewGoods\\/index?type=1\"}}', 1618044807, 1, 1),
+(343, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u7b7e\\u5230\\u9875\\u9762\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_sgin\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_sgin\\/index\"}}', 1618044822, 1, 1),
+(344, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u6536\\u85cf\\u9875\\u9762\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_goods_collection\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_goods_collection\\/index\"}}', 1618044848, 1, 1),
+(345, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u62fc\\u56e2\\u5217\\u8868\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/goods_combination\\/index\"}}', 1618044886, 1, 1),
+(346, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u62fc\\u56e2\\u8be6\\u60c5\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/goods_combination_details\\/index\"},\"param\":{\"type\":\"input\",\"value\":\"id=\\u62fc\\u56e2ID\"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/goods_combination_details\\/index?id=1\"}}', 1618044903, 1, 1),
+(347, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u79d2\\u6740\\u5217\\u8868\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/goods_seckill\\/index\"}}', 1618045199, 1, 1),
+(348, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u79d2\\u6740\\u8be6\\u60c5\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/goods_seckill_details\\/index\"},\"param\":{\"type\":\"input\",\"value\":\"id=\\u79d2\\u6740ID&time=\\u8be5\\u79d2\\u6740\\u5546\\u54c1\\u4eca\\u5929\\u7ed3\\u675f\\u65f6\\u95f4\\u6233&status=\\u5f00\\u542f\\u79d2\\u6740\\u72b6\\u6001\"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/goods_seckill_details\\/index?id=1&time=1595239200&status=1\"}}', 1618045221, 1, 1),
+(349, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u780d\\u4ef7\\u5217\\u8868\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/goods_bargain\\/index\"}}', 1618045233, 1, 1),
+(350, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u780d\\u4ef7\\u8be6\\u60c5\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/goods_bargain_details\\/index\"},\"param\":{\"type\":\"input\",\"value\":\"id=\\u780d\\u4ef7\\u5546\\u54c1ID&bargain=\\u780d\\u4ef7ID\"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/goods_bargain_details\\/index?id=1&bargain=1\"}}', 1618045262, 1, 1),
+(351, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u5730\\u5740\\u5217\\u8868\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_address_list\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_address_list\\/index\"}}', 1618045294, 1, 1),
+(352, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u6211\\u7684\\u8d26\\u6237\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_info\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_info\\/index\"}}', 1618045308, 1, 1),
+(353, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u4e2a\\u4eba\\u8d44\\u6599\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_info\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_info\\/index\"}}', 1618045580, 1, 1),
+(354, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u79ef\\u5206\\u8be6\\u60c5\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_integral\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_integral\\/index\"}}', 1618045591, 1, 1),
+(355, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u6211\\u7684\\u8ba2\\u5355\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/order_list\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/order_list\\/index\"}}', 1618045605, 1, 1),
+(356, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u6211\\u7684\\u4f18\\u60e0\\u5238\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_coupon\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_coupon\\/index\"}}', 1618045615, 1, 1),
+(357, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u8ba2\\u5355\\u8be6\\u60c5\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/order_details\\/index\"},\"param\":{\"type\":\"input\",\"value\":\"order_id=\\u8ba2\\u5355\\u53f7\"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/order_details\\/index?order_id=wx88888888888888888\"}}', 1618045634, 1, 1),
+(358, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u9000\\u6b3e\\u5217\\u8868\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_return_list\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_return_list\\/index\"}}', 1618045644, 1, 1),
+(359, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u7528\\u6237\\u7b49\\u7ea7\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_vip\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_vip\\/index\"}}', 1618045654, 1, 1),
+(360, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u780d\\u4ef7\\u8bb0\\u5f55\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/bargain\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/activity\\/bargain\\/index\"}}', 1618045665, 1, 1),
+(361, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u6211\\u7684\\u63a8\\u5e7f\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_spread_user\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_spread_user\\/index\"}}', 1618045676, 1, 1),
+(362, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u63d0\\u73b0\\u9875\\u9762\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_cash\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_cash\\/index\"}}', 1618045687, 1, 1),
+(363, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u5206\\u9500\\u6d77\\u62a5\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_spread_code\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_spread_code\\/index\"}}', 1618045698, 1, 1),
+(364, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u63a8\\u5e7f\\u4eba\\u5217\\u8868\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/promoter-list\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/promoter-list\\/index\"}}', 1618045708, 1, 1),
+(365, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u63d0\\u73b0\\u8bb0\\u5f55\\uff0c\\u5206\\u4f63\\u8bb0\\u5f55\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_spread_money\\/index\"},\"param\":{\"type\":\"input\",\"value\":\"ype=1=\\u63d0\\u73b0\\u8bb0\\u5f55\\uff0c2=\\u5206\\u4f63\\u8bb0\\u5f55\"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_spread_money\\/index?type=1\"}}', 1618045729, 1, 1),
+(366, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u63a8\\u5e7f\\u4eba\\u8ba2\\u5355\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/promoter-order\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/promoter-order\\/index\"}}', 1618045745, 1, 1),
+(367, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u63a8\\u5e7f\\u4eba\\u6392\\u884c\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/promoter_rank\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/promoter_rank\\/index\"}}', 1618045757, 1, 1),
+(368, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u4f63\\u91d1\\u6392\\u884c\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/commission_rank\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/commission_rank\\/index\"}}', 1618045770, 1, 1),
+(369, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u8054\\u7cfb\\u5ba2\\u670d\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/customer_list\\/chat\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/customer_list\\/chat\"}}', 1618045780, 1, 1),
+(370, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u7edf\\u8ba1\\u7ba1\\u7406\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/admin\\/order\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/admin\\/order\\/index\"}}', 1618045789, 1, 1),
+(371, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u8ba2\\u5355\\u6838\\u9500\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/admin\\/order_cancellation\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/admin\\/order_cancellation\\/index\"}}', 1618045803, 1, 1),
+(372, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u5145\\u503c\\u9875\\u9762\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_payment\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/users\\/user_payment\\/index\"}}', 1618045814, 1, 1),
+(373, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u6536\\u94f6\\u9875\\u9762\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/annex\\/offline_pay\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/annex\\/offline_pay\\/index\"}}', 1618045826, 1, 1),
+(374, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u4ed8\\u8d39\\u4f1a\\u5458\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/annex\\/vip_paid\\/index\"},\"param\":{\"type\":\"input\",\"value\":\" \"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/annex\\/vip_paid\\/index\"}}', 1618045836, 1, 1),
+(375, 67, '{\"img\":{\"type\":\"upload\",\"value\":\"http:\\/\\/v4.wuht.net\\/uploads\\/attach\\/2021\\/07\\/20\\/696cfebdcaaf26db61b94af4276c1ca4.jpg\"},\"comment\":{\"type\":\"input\",\"value\":\"1\"},\"link\":{\"type\":\"input\",\"value\":\"1\"}}', 1626832079, 1, 1),
+(383, 66, '{\"name\":{\"type\":\"input\",\"value\":\"\\u5546\\u54c1\\u8be6\\u60c5\\u9875\"},\"link\":{\"type\":\"input\",\"value\":\"\\/pages\\/goods_details\\/index\"},\"param\":{\"type\":\"input\",\"value\":\"id\"},\"example\":{\"type\":\"input\",\"value\":\"\\/pages\\/goods_details\\/index?id=1\"}}', 1629445934, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -6624,21 +6624,21 @@ INSERT INTO `eb_system_group_data` (`id`, `gid`, `value`, `add_time`, `sort`, `s
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_log` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '管理员操作记录ID',
-  `admin_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '管理员id',
-  `admin_name` varchar(64) NOT NULL DEFAULT '' COMMENT '管理员姓名',
-  `path` varchar(128) NOT NULL DEFAULT '' COMMENT '链接',
-  `page` varchar(64) NOT NULL DEFAULT '' COMMENT '行为',
-  `method` varchar(12) NOT NULL DEFAULT '' COMMENT '访问类型',
-  `ip` varchar(16) NOT NULL DEFAULT '' COMMENT '登录IP',
-  `type` varchar(32) NOT NULL DEFAULT '' COMMENT '类型',
-  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作时间',
-  `merchant_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '商户id',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `admin_id` (`admin_id`) USING BTREE,
-  KEY `add_time` (`add_time`) USING BTREE,
-  KEY `type` (`type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='管理员操作记录表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '管理员操作记录ID',
+    `admin_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '管理员id',
+    `admin_name` varchar(64) NOT NULL DEFAULT '' COMMENT '管理员姓名',
+    `path` varchar(128) NOT NULL DEFAULT '' COMMENT '链接',
+    `page` varchar(64) NOT NULL DEFAULT '' COMMENT '行为',
+    `method` varchar(12) NOT NULL DEFAULT '' COMMENT '访问类型',
+    `ip` varchar(16) NOT NULL DEFAULT '' COMMENT '登录IP',
+    `type` varchar(32) NOT NULL DEFAULT '' COMMENT '类型',
+    `add_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '操作时间',
+    `merchant_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '商户id',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `admin_id` (`admin_id`) USING BTREE,
+    KEY `add_time` (`add_time`) USING BTREE,
+    KEY `type` (`type`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='管理员操作记录表';
 
 -- --------------------------------------------------------
 
@@ -6647,32 +6647,32 @@ CREATE TABLE IF NOT EXISTS `eb_system_log` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_menus` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
-  `pid` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '父级id',
-  `icon` varchar(16) NOT NULL DEFAULT '' COMMENT '图标',
-  `menu_name` varchar(32) NOT NULL DEFAULT '' COMMENT '按钮名',
-  `module` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '模块名',
-  `controller` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '控制器',
-  `action` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '方法名',
-  `api_url` varchar(100) NOT NULL DEFAULT '' COMMENT 'api接口地址',
-  `methods` varchar(10) NOT NULL DEFAULT '' COMMENT '提交方式POST GET PUT DELETE',
-  `params` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '[]' COMMENT '参数',
-  `sort` tinyint(3) NOT NULL DEFAULT '1' COMMENT '排序',
-  `is_show` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否为隐藏菜单0=隐藏菜单,1=显示菜单',
-  `is_show_path` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为隐藏菜单供前台使用',
-  `access` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '子管理员是否可用',
-  `menu_path` varchar(128) NOT NULL DEFAULT '' COMMENT '路由名称 前端使用',
-  `path` varchar(255) NOT NULL DEFAULT '' COMMENT '路径',
-  `auth_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为菜单 1菜单 2功能',
-  `header` varchar(50) NOT NULL DEFAULT '' COMMENT '顶部菜单标示',
-  `is_header` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否顶部菜单1是0否',
-  `unique_auth` varchar(150) NOT NULL DEFAULT '' COMMENT '前台唯一标识',
-  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `pid` (`pid`) USING BTREE,
-  KEY `is_show` (`is_show`) USING BTREE,
-  KEY `access` (`access`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=885 DEFAULT CHARSET=utf8 COMMENT='菜单表';
+    `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
+    `pid` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '父级id',
+    `icon` varchar(16) NOT NULL DEFAULT '' COMMENT '图标',
+    `menu_name` varchar(32) NOT NULL DEFAULT '' COMMENT '按钮名',
+    `module` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '模块名',
+    `controller` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '控制器',
+    `action` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '方法名',
+    `api_url` varchar(100) NOT NULL DEFAULT '' COMMENT 'api接口地址',
+    `methods` varchar(10) NOT NULL DEFAULT '' COMMENT '提交方式POST GET PUT DELETE',
+    `params` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '[]' COMMENT '参数',
+    `sort` tinyint(3) NOT NULL DEFAULT '1' COMMENT '排序',
+    `is_show` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '是否为隐藏菜单0=隐藏菜单,1=显示菜单',
+    `is_show_path` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为隐藏菜单供前台使用',
+    `access` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '子管理员是否可用',
+    `menu_path` varchar(128) NOT NULL DEFAULT '' COMMENT '路由名称 前端使用',
+    `path` varchar(255) NOT NULL DEFAULT '' COMMENT '路径',
+    `auth_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为菜单 1菜单 2功能',
+    `header` varchar(50) NOT NULL DEFAULT '' COMMENT '顶部菜单标示',
+    `is_header` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否顶部菜单1是0否',
+    `unique_auth` varchar(150) NOT NULL DEFAULT '' COMMENT '前台唯一标识',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `pid` (`pid`) USING BTREE,
+    KEY `is_show` (`is_show`) USING BTREE,
+    KEY `access` (`access`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=901 DEFAULT CHARSET=utf8 COMMENT='菜单表';
 
 --
 -- 转存表中的数据 `eb_system_menus`
@@ -6694,12 +6694,12 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (19, 14, '', '角色管理', 'admin', 'setting.system_role', 'index', '', '', '[]', 1, 1, 0, 1, '/admin/setting/system_role/index', '', 1, 'setting', 1, 'setting-system-role', 0),
 (20, 14, '', '管理员列表', 'admin', 'setting.system_admin', 'index', '', '', '[]', 1, 1, 0, 1, '/admin/setting/system_admin/index', '', 1, 'setting', 0, 'setting-system-list', 0),
 (21, 14, '', '权限规则', 'admin', 'setting.system_menus', 'index', '', '', '[]', 1, 1, 0, 1, '/admin/setting/system_menus/index', '', 1, 'setting', 0, 'setting-system-menus', 0),
-(22, 1, '', '产品添加', 'admin', 'store.store_product', 'save', '', '', '[]', 1, 1, 1, 1, '/admin/product/add_product', '', 1, 'product', 1, 'product-product-save', 0),
+(22, 1, '', '产品添加', 'admin', 'store.store_product', 'save', '', '', '[]', 1, 1, 1, 1, '/admin/product/add_product', '1', 1, 'product', 1, 'product-product-save', 0),
 (23, 12, '', '系统设置', 'admin', 'setting.system_config', 'index', '', '', '[]', 10, 1, 0, 1, '/admin/setting/system_config', '', 1, 'setting', 1, 'setting-system-config', 0),
 (25, 0, 'md-hammer', '维护', 'admin', 'system', '', '', '', '[]', -1, 1, 0, 1, '/admin/system', '', 1, 'setting', 1, 'admin-system', 0),
 (26, 0, 'ios-people', '分销', 'admin', 'agent', '', '', '', '[]', 90, 1, 0, 1, '/admin/agent', '', 1, 'user', 1, 'admin-agent', 0),
 (27, 0, 'ios-paper-plane', '营销', 'admin', 'marketing', '', '', '', '[]', 1, 1, 0, 1, '/admin/marketing', '', 1, 'home', 1, 'admin-marketing', 0),
-(28, 26, '', '分销设置', 'admin', 'setting.system_config', '', '', '', '[]', 1, 1, 0, 1, '/admin/setting/system_config_retail/3/9', '', 1, 'setting', 0, 'setting-system-config', 0),
+(28, 26, '', '分销设置', 'admin', 'setting.system_config', '', '', '', '[]', 1, 1, 0, 1, '/admin/setting/system_config_retail/2/9', '', 1, 'setting', 0, 'setting-system-config', 0),
 (29, 26, '', '分销员管理', 'admin', 'agent.agent_manage', 'index', '', '', '[]', 1, 1, 0, 1, '/admin/agent/agent_manage/index', '', 1, 'user', 0, 'agent-agent-manage', 0),
 (30, 27, '', '优惠券', 'admin', 'marketing.store_coupon', '', '', '', '[]', 1, 1, 0, 1, '/admin/marketing/store_coupon', '', 1, 'marketing', 1, 'marketing-store_coupon-index', 0),
 (31, 27, '', '砍价管理', 'admin', 'marketing.store_bargain', '', '', '', '[]', 1, 1, 0, 1, '/admin/marketing/store_bargain', '', 1, 'marketing', 0, 'marketing-store_bargain-index', 0),
@@ -6740,7 +6740,6 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (90, 32, '', '拼团添加', 'admin', 'marketing.store_combination', '', '', '', '[]', 0, 1, 0, 1, '/admin/marketing/store_combination/add_commodity/:id', '', 1, 'marketing', 0, '', 1),
 (91, 69, '', '公众号配置', 'admin', 'application.wechat', '', '', '', '[]', 0, 1, 0, 1, '/admin/app/wechat/setting', '', 1, 'app', 0, '', 1),
 (92, 69, '', '微信菜单', 'admin', 'application.wechat_menus', 'index', '', '', '[]', 0, 1, 0, 1, '/admin/app/wechat/setting/menus/index', '', 1, 'app', 0, 'application-wechat-menus', 0),
-(93, 69, '', '微信模板消息', 'admin', 'application.wechat_template', 'index', '', '', '[]', 0, 1, 0, 1, '/admin/app/wechat/setting/template/index', '', 1, 'app', 0, 'application-wechat-template', 0),
 (94, 12, '', '一号通', 'admin', 'setting.sms_config', '', '', '', '[]', 8, 1, 0, 1, '/admin/setting/sms/sms_config/index', '', 1, 'setting', 1, 'setting-sms', 0),
 (95, 94, '', '账户管理', 'admin', 'sms.sms_config', 'index', '', '', '[]', 0, 0, 0, 1, '/admin/setting/sms/sms_config/index', '', 1, 'setting', 1, 'setting-sms-sms-config', 0),
 (96, 94, '', '短信模板', 'admin', 'sms.sms_template_apply', 'index', '', '', '[]', 0, 0, 0, 1, '/admin/setting/sms/sms_template_apply/index', '', 1, 'setting', 0, 'setting-sms-config-template', 0),
@@ -6759,8 +6758,6 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (125, 56, '', '配置列表', 'admin', 'system.config', 'index', '', '', '[]', 0, 1, 1, 1, '/admin/system/config/system_config_tab/list', '', 1, 'system', 1, 'system-config-system_config_tab-list', 0),
 (126, 56, '', '组合数据列表', 'admin', 'system.system_group', 'list', '', '', '[]', 0, 1, 1, 1, '/admin/system/config/system_group/list', '', 1, 'system', 1, 'system-config-system_config-list', 0),
 (128, 656, '', '数据配置', 'admin', 'setting.system_group_data', 'index', '', '', '[]', 0, 1, 0, 1, '/admin/setting/system_group_data', '', 1, 'system', 1, 'setting-system-group_data', 0),
-(132, 135, '', '小程序', 'admin', 'routine', 'index', '', '', '[]', 0, 1, 0, 1, '/admin/app/routine', '', 1, 'app', 1, 'admin-routine', 0),
-(133, 132, '', '小程序订阅消息', 'admin', 'routine.routine_template', 'index', '', '', '[]', 0, 1, 0, 1, '/admin/app/routine/routine_template/index', '', 1, 'app', 1, 'routine-routine_template', 0),
 (134, 114, '', '关键字添加', 'admin', '', 'index', '', '', '[]', 0, 1, 1, 1, '/admin/app/wechat/reply/keyword/save', '', 1, 'app', 1, 'wechat-wechat-reply-save', 0),
 (135, 0, 'md-cube', '应用', 'admin', 'app', 'index', '', '', '[]', 0, 1, 0, 1, '/admin/app', '', 1, 'app', 1, 'admin-app', 0),
 (144, 303, '', '提货点设置', 'admin', 'merchant.system_store', 'index', '', '', '[]', 5, 1, 0, 1, '/admin/setting/merchant/system_store/index', '', 1, '', 0, 'setting-system-config-merchant', 0),
@@ -7049,10 +7046,10 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (450, 449, '', '修改物流公司状态', 'admin', '', '', 'freight/express/set_status/<id>/<status>', 'PUT', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (451, 449, '', '获取添加物流公司表单', 'admin', '', '', 'freight/express/create', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (452, 449, '', '保存物流公司', 'admin', '', '', 'freight/express', 'POST', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(453, 449, '', '获取编辑物流公司表单', 'admin', '', '', 'freight/express/<id>/edit', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(454, 449, '', '修改物流公司', 'admin', '', '', 'freight/express/<id>', 'PUT', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(455, 449, '', '删除物流公司', 'admin', '', '', 'freight/express/<id>', 'DELETE', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0);
+(453, 449, '', '获取编辑物流公司表单', 'admin', '', '', 'freight/express/<id>/edit', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0);
 INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `controller`, `action`, `api_url`, `methods`, `params`, `sort`, `is_show`, `is_show_path`, `access`, `menu_path`, `path`, `auth_type`, `header`, `is_header`, `unique_auth`, `is_del`) VALUES
+(454, 449, '', '修改物流公司', 'admin', '', '', 'freight/express/<id>', 'PUT', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
+(455, 449, '', '删除物流公司', 'admin', '', '', 'freight/express/<id>', 'DELETE', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (456, 230, '', '运费模板列表', 'admin', '', '', 'setting/shipping_templates/list', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (457, 230, '', '附加权限', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin*', '', 1, '', 0, '', 0),
 (458, 457, '', '运费模板城市数据', 'admin', '', '', 'setting/shipping_templates/city_list', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
@@ -7259,7 +7256,10 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (713, 707, '', '设置直播间是否显示', 'admin', '', '', 'live/room/set_show/<id>/<is_show>', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (714, 707, '', '同步直播间状态', 'admin', '', '', 'live/room/syncRoom', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (715, 133, '', '一键同步订阅消息', 'admin', '', '', 'app/routine/syncSubscribe', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, 'app-wechat-template-sync', 0),
-(719, 71, '', '添加优惠卷', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin/marketing/store_coupon_issue/create', '', 1, '', 0, 'admin-marketing-store_coupon_issue-create', 0),
+(716, 0, 'md-stats', '统计', 'admin', '', '', '', '', '[]', 1, 1, 0, 1, '/admin/statistic', '', 1, '', 0, 'admin-statistic', 0),
+(717, 716, '', '商品统计', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/statistic/product', '', 1, '', 0, 'admin-statistic', 0),
+(718, 716, '', '用户统计', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/statistic/user', '', 1, '', 0, 'admin-statistic', 0),
+(719, 71, '', '添加优惠卷', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin/marketing/store_coupon_issue/create', '27/30/71', 1, '', 0, 'marketing-store_coupon_issue-create', 0),
 (720, 303, '', '配送员管理', 'admin', '', '', '', '', '[]', 10, 1, 0, 1, '/admin/setting/delivery_service/index', '', 1, '', 0, 'setting-delivery-service', 0),
 (721, 729, '', '编辑配送员', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin/setting/delivery_service/edit', '', 1, '', 0, 'setting-delivery_service-edit', 0),
 (722, 720, '', '配送员列表', 'admin', '', '', 'order/delivery/index', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
@@ -7269,8 +7269,8 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (726, 724, '', '保存配送员', 'admin', '', '', 'order/delivery/save', 'POST', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (727, 729, '', '删除配送员', 'admin', '', '', 'order/delivery/del/<id>', 'DELETE', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (728, 729, '', '配送员是否开启', 'admin', '', '', 'order/delivery/set_status/<id>/<status>', 'PUT', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(729, 720, '', '附加权限', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin*', '', 1, '', 0, '', 1),
-(731, 9, '', '付费会员', 'admin', '', '', '', '', '[]', 7, 1, 0, 1, '/admin/user/grade', '', 1, '', 0, 'user-user-grade', 1),
+(729, 720, '', '附加权限', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin*', '', 1, '', 0, '', 0),
+(731, 9, '', '付费会员', 'admin', '', '', '', '', '[]', 7, 1, 0, 1, '/admin/user/grade', '', 1, '', 0, 'user-user-grade', 0),
 (732, 762, '', '附加权限', 'admin', '', '', '', '', '[]', 0, 0, 1, 1, '/admin*', '', 1, '', 0, '', 0),
 (733, 732, '', ' 添加会员批次', 'admin', '', '', 'user/member_batch/save/<id>', 'POST', '[]', 0, 1, 0, 1, '', '', 2, '', 0, '', 0),
 (734, 732, '', '列表字段修改', 'admin', '', '', 'user/member_batch/set_value/<id>', 'GET', '[]', 0, 1, 0, 1, '', '', 2, '', 0, 'user-member_batch-set_value', 0),
@@ -7305,6 +7305,7 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (763, 731, '', '会员记录', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/user/grade/record', '', 1, '', 0, 'admin-user-grade-record', 0),
 (764, 763, '', '会员记录列表', 'admin', '', '', 'user/member/record', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, 'user-member-record', 0),
 (765, 731, '', '会员权益', 'admin', '', '', '', '', '[]', 4, 1, 0, 1, '/admin/user/grade/right', '', 1, '', 0, 'admin-user-grade-right', 0),
+(766, 716, '', '交易统计', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/statistic/transaction', '', 1, '', 0, 'admin-statistic', 0),
 (767, 36, '', '发票管理', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/order/invoice/list', '', 1, '', 0, 'admin-order-startOrderInvoice-index', 0),
 (768, 210, '', '编辑', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '', '', 2, '', 0, 'admin-order-invoice-edit', 0),
 (769, 210, '', '订单信息', 'admin', '', '', 'order/invoice_order_info/<id>', 'GET', '[]', 0, 1, 0, 1, '', '', 2, '', 0, 'admin-order-invoice-orderInfo', 0),
@@ -7390,15 +7391,21 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (884, 128, '', '获取数据分类', 'admin', '', '', 'setting/group_all', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (885, 569, '', '附件名称修改', 'admin', '', '', 'file/file/update/<id>', 'PUT', '[]', 0, 0, 0, 1, '', '25/566/569', 2, '', 0, '', 0),
 (886, 577, '', '用户标签接口', 'admin', '', '', 'user/user_label', 'GET', '[]', 0, 0, 0, 1, '', '1/2/577', 2, '', 0, '', 0),
-(887, 625, '', '获取赠送付费会员时长表单', 'admin', '', '', 'user/give_level_time/<id>', 'GET', '[]', 0, 0, 0, 1, '', '9/10/585/625', 2, '', 0, '', 1),
-(888, 625, '', '保存赠送付费会员时长', 'admin', '', '', 'user/save_give_level_time/<id>', 'PUT', '[]', 0, 0, 0, 1, '', '9/10/585/625', 2, '', 0, '', 1),
+(887, 625, '', '获取赠送付费会员时长表单', 'admin', '', '', 'user/give_level_time/<id>', 'GET', '[]', 0, 0, 0, 1, '', '9/10/585/625', 2, '', 0, '', 0),
+(888, 625, '', '保存赠送付费会员时长', 'admin', '', '', 'user/save_give_level_time/<id>', 'PUT', '[]', 0, 0, 0, 1, '', '9/10/585/625', 2, '', 0, '', 0),
 (889, 663, '', '添加页面', 'admin', '', '', 'diy/create', 'GET', '[]', 0, 0, 0, 1, '', '12/656/657/663', 2, '', 0, 'admin-template', 0),
 (890, 663, '', '保存新增', 'admin', '', '', 'diy/create', 'POST', '[]', 0, 0, 0, 1, '', '12/656/657/663', 2, '', 0, 'admin-template', 0),
 (891, 663, '', '设置默认数据', 'admin', '', '', 'diy/set_recovery/<id?>', 'GET', '[]', 0, 0, 0, 1, '', '12/656/657/663', 2, '', 0, '', 0),
 (892, 663, '', '获取商品列表', 'admin', '', '', 'diy/get_product_list', 'GET', '[]', 0, 0, 0, 1, '', '12/656/657/663', 2, '', 0, '', 0),
 (893, 577, '', '商品活动状态检测', 'admin', '', '', 'product/product/check_activity/<id>', 'GET', '[]', 0, 0, 0, 1, '', '1/2/577', 2, '', 0, '', 0),
 (894, 589, '', '会员标签列表', 'admin', '', '', 'user/user_label', 'GET', '[]', 0, 0, 0, 1, '', '9/589', 2, '', 0, '', 0),
-(895, 585, '', '新增客服选择用户列表', 'admin', '', '', 'app/wechat/kefu/create', 'GET', '[]', 0, 0, 0, 1, '', '9/10/585', 2, '', 0, '', 0);
+(895, 585, '', '新增客服选择用户列表', 'admin', '', '', 'app/wechat/kefu/create', 'GET', '[]', 0, 0, 0, 1, '', '9/10/585', 2, '', 0, '', 0),
+(896, 26, '', '分销等级', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/membership_level/index', '26', 1, '', 0, '', 0),
+(897, 4, '', '售后订单', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/order/refund', '4', 1, '', 0, 'admin-order-refund', 0),
+(898, 12, '', '消息管理', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/notification/index', '12', 1, '', 0, 'setting-notification', 0),
+(899, 656, '', '客服页面广告', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/system_group_data/kf_adv', '', 1, '', 0, 'setting-system-group_data-kf_adv', 0),
+(900, 135, '', 'APP版本管理', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/app/version_list', '135', 1, '', 0, 'app_version_list', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -7406,19 +7413,19 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_notice` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '通知模板id',
-  `title` varchar(64) NOT NULL DEFAULT '' COMMENT '通知标题',
-  `type` varchar(64) NOT NULL DEFAULT '' COMMENT '通知类型',
-  `icon` varchar(16) NOT NULL DEFAULT '' COMMENT '图标',
-  `url` varchar(64) NOT NULL DEFAULT '' COMMENT '链接',
-  `table_title` varchar(256) NOT NULL DEFAULT '' COMMENT '通知数据',
-  `template` varchar(64) NOT NULL DEFAULT '' COMMENT '通知模板',
-  `push_admin` varchar(128) NOT NULL DEFAULT '' COMMENT '通知管理员id',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `type` (`type`) USING BTREE,
-  KEY `status` (`status`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='通知模板表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '通知模板id',
+    `title` varchar(64) NOT NULL DEFAULT '' COMMENT '通知标题',
+    `type` varchar(64) NOT NULL DEFAULT '' COMMENT '通知类型',
+    `icon` varchar(16) NOT NULL DEFAULT '' COMMENT '图标',
+    `url` varchar(64) NOT NULL DEFAULT '' COMMENT '链接',
+    `table_title` varchar(256) NOT NULL DEFAULT '' COMMENT '通知数据',
+    `template` varchar(64) NOT NULL DEFAULT '' COMMENT '通知模板',
+    `push_admin` varchar(128) NOT NULL DEFAULT '' COMMENT '通知管理员id',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '状态',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `type` (`type`) USING BTREE,
+    KEY `status` (`status`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='通知模板表';
 
 -- --------------------------------------------------------
 
@@ -7427,21 +7434,83 @@ CREATE TABLE IF NOT EXISTS `eb_system_notice` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_notice_admin` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '通知记录ID',
-  `notice_type` varchar(64) NOT NULL DEFAULT '' COMMENT '通知类型',
-  `admin_id` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '通知的管理员',
-  `link_id` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '关联ID',
-  `table_data` text NOT NULL DEFAULT '' COMMENT '通知的数据',
-  `is_click` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '点击次数',
-  `is_visit` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT '访问次数',
-  `visit_time` int(11) NOT NULL DEFAULT '0' COMMENT '访问时间',
-  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '通知时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `admin_id` (`admin_id`,`notice_type`) USING BTREE,
-  KEY `add_time` (`add_time`) USING BTREE,
-  KEY `is_visit` (`is_visit`) USING BTREE,
-  KEY `is_click` (`is_click`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='通知记录表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '通知记录ID',
+    `notice_type` varchar(64) NOT NULL DEFAULT '' COMMENT '通知类型',
+    `admin_id` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '通知的管理员',
+    `link_id` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '关联ID',
+    `table_data` text NOT NULL COMMENT '通知的数据',
+    `is_click` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '点击次数',
+    `is_visit` tinyint(3) UNSIGNED NOT NULL DEFAULT '0' COMMENT '访问次数',
+    `visit_time` int(11) NOT NULL DEFAULT '0' COMMENT '访问时间',
+    `add_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '通知时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `admin_id` (`admin_id`,`notice_type`) USING BTREE,
+    KEY `add_time` (`add_time`) USING BTREE,
+    KEY `is_visit` (`is_visit`) USING BTREE,
+    KEY `is_click` (`is_click`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='通知记录表';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `eb_system_notification`
+--
+
+CREATE TABLE IF NOT EXISTS `eb_system_notification` (
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `mark` varchar(50) NOT NULL DEFAULT '' COMMENT '标识',
+    `name` varchar(50) NOT NULL DEFAULT '' COMMENT '通知类型',
+    `title` varchar(100) NOT NULL DEFAULT '' COMMENT '通知场景说明',
+    `is_system` tinyint(1) NOT NULL DEFAULT '0' COMMENT '站内信（0：不存在，1：开启，2：关闭）',
+    `is_app` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'APP推送（0：不存在，1：开启，2：关闭）',
+    `is_wechat` tinyint(1) NOT NULL DEFAULT '0' COMMENT '公众号模板消息（0：不存在，1：开启，2：关闭）',
+    `is_routine` tinyint(1) NOT NULL DEFAULT '0' COMMENT '小程序订阅消息（0：不存在，1：开启，2：关闭）',
+    `is_sms` tinyint(1) NOT NULL DEFAULT '0' COMMENT '发送短信（0：不存在，1：开启，2：关闭）',
+    `is_ent_wechat` tinyint(1) NOT NULL DEFAULT '0' COMMENT '企业微信群通知（0：不存在，1：开启，2：关闭）',
+    `system_title` varchar(256) NOT NULL DEFAULT '' COMMENT '站内信标题',
+    `system_text` varchar(512) NOT NULL DEFAULT '' COMMENT '系统消息id',
+    `app_id` int(11) NOT NULL DEFAULT '0' COMMENT 'app推送id',
+    `wechat_id` varchar(50) NOT NULL DEFAULT '0' COMMENT '模板消息id',
+    `routine_id` varchar(50) NOT NULL DEFAULT '0' COMMENT '订阅消息id',
+    `sms_id` int(11) NOT NULL DEFAULT '0' COMMENT '短信id',
+    `ent_wechat_text` varchar(512) NOT NULL DEFAULT '' COMMENT '企业微信消息',
+    `variable` varchar(256) NOT NULL DEFAULT '' COMMENT '变量',
+    `url` varchar(512) NOT NULL DEFAULT '' COMMENT '群机器人链接',
+    `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '类型（1：用户，2：管理员）',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8 COMMENT='通知设置';
+
+--
+-- 转存表中的数据 `eb_system_notification`
+--
+
+INSERT INTO `eb_system_notification` (`id`, `mark`, `name`, `title`, `is_system`, `is_app`, `is_wechat`, `is_routine`, `is_sms`, `is_ent_wechat`, `system_title`, `system_text`, `app_id`, `wechat_id`, `routine_id`, `sms_id`, `ent_wechat_text`, `variable`, `url`, `type`, `add_time`) VALUES
+(1, 'bind_spread_uid', '绑定推广关系', '注册完成给上级发送', 1, 1, 1, 1, 0, 0, '绑定下级通知', '恭喜，又一员猛将将永久绑定到您的团队，用户{nickname}加入您的队伍！', 0, 'OPENTM412814251', '3801', 0, '0', '{nikename}用户名', '', 1, 0),
+(2, 'order_pay_success', '支付成功给用户发送', '支付成功给用户发送', 1, 1, 1, 1, 1, 0, '购买成功通知', '您购买的商品已支付成功，支付金额{pay_price}元，订单号{order_id},感谢您的光临！', 0, 'OPENTM207791277', '1476', 520268, '0', '{order_id}订单号,{total_num}商品总数,{pay_price}支付金额', '', 1, 0),
+(3, 'oreder_takever', '确认收货提醒发送', '确认收货用户提醒发送', 1, 1, 1, 1, 1, 0, '确认收货通知', '亲，您的订单{order_id},商品{store_name}已确认收货,感谢您的光临！', 0, 'OPENTM413386489', '1481', 520271, '0', '{order_id}订单号,{store_name}商品名称', '', 1, 0),
+(4, 'price_revision', '改价提醒发送', '改价给用户提醒发送', 1, 1, 0, 0, 1, 0, '改价通知', '您的订单{order_id}，实际支付金额已被修改为{pay_price}', 0, '0', '0', 528288, '0', '{order_id}订单号,{pay_price}订单金额', '', 1, 0),
+(5, 'order_refund', '退款成功提醒发送', '退款给用户提醒发送', 1, 1, 1, 1, 0, 0, '退款成功通知', '您的订单{order_id}已同意退款,退款金额{refund_price}元。', 0, 'OPENTM410119152', '1451', 0, '0', '{order_id}订单号,{refund_price}退款金额,{pay_price}订单金额', '', 1, 0),
+(7, 'recharge_success', '充值成功提醒发送', '充值成功给用户提醒发送', 1, 1, 0, 1, 0, 0, '充值成功通知', '您成功充值￥{price}，现剩余余额￥{now_money}元', 0, '0', '755', 0, '0', '{order_id}充值订单,{price}充值金额,{now_money}现有余额', '', 1, 0),
+(8, 'integral_accout', '积分到账提醒发送', '积分到账给用户提醒发送', 1, 1, 0, 1, 0, 0, '积分到账通知', '亲，您成功获得积分{gain_integral}，现有积分{integral}', 0, '0', '335', 0, '0', '{order_id}订单号,{store_name}商品名称,{pay_price}支付金额,{gain_integral}获取积分,{integral}现有积分', '', 1, 0),
+(9, 'order_brokerage', '佣金到账提醒发送', '佣金到账给用户提醒发送', 1, 1, 1, 1, 0, 0, '佣金到账通知', '亲，恭喜您成功获得佣金{brokerage_price}元', 0, 'OPENTM402027183', '14403', 0, '0', '{goods_name}商品名称,{goods_price}商品金额,{brokerage_price}分佣金额', '', 1, 0),
+(10, 'bargain_success', '砍价成功提醒发送', '砍价成功给用户提醒发送', 1, 1, 1, 1, 0, 0, '砍价成功通知', '亲，好腻害！你的朋友们已经帮你砍到底价了，商品名称{title}，底价{min_price}', 0, 'OPENTM410292733', '2727', 0, '0', '{title}活动名称{min_price}最低价', '', 1, 0),
+(11, 'order_user_groups_success', '拼团成功提醒发送', '拼团成功给用户提醒发送', 1, 1, 1, 1, 0, 0, '拼团成功通知', '亲，您的拼团已经完成了，拼团名称{title}，团长{nickname}', 0, 'OPENTM407456411', '3098', 0, '0', '{title}活动名称,{nickname}团长,{count}拼团人数,{pink_time}开团时间', '', 1, 0),
+(12, 'send_order_pink_fial', '拼团失败提醒发送', '拼团失败给用户提醒发送', 1, 1, 1, 1, 0, 0, '拼团失败通知', '亲，您的拼团失败，活动名称{title}', 0, 'OPENTM401113750', '3353', 0, '0', '{title}活动名称{count}拼团人数', '', 1, 0),
+(13, 'open_pink_success', '开团成功提醒发送', '开团成功给用户提醒发送', 1, 1, 1, 1, 0, 0, '开团成功通知', '亲，您已成功参与拼团，活动名称{title}', 0, 'OPENTM414349441', '3353', 0, '0', '{title}活动名称,{nickname}团长,{count}拼团人数,{pink_time}开团时间', '', 1, 0),
+(14, 'user_extract', '提现成功提醒发送', '提现成功给用户提醒发送', 1, 1, 0, 1, 0, 0, '提现成功通知', '亲，您成功提现佣金{extract_number}元', 0, 'OPENTM405847076', '1470', 0, '0', '{extract_number}提现金额,{nickname}用户昵称,{date}提现时间', '', 1, 0),
+(15, 'user_balance_change', '提现失败提醒发送', '提现失败给用户提醒发送', 1, 1, 0, 1, 0, 0, '提现失败通知', '亲，您发起的提现被驳回，返回佣金{extract_number}元', 0, 'OPENTM405847076', '1470', 0, '0', '{extract_number}提现金额,{nickname}用户昵称,{date}提现时间,{message}失败原因', '', 1, 0),
+(16, 'recharge_order_refund_status', '充值退款提醒发送', '充值退款给用户提醒发送', 1, 1, 1, 1, 0, 0, '充值退款通知', '亲，您充值的金额已退款,本次退款{refund_price}元', 0, 'OPENTM410119152', '0', 0, '0', '{refund_price}退款金额,{order_id}充值订单,{price}充值金额', '', 1, 0),
+(17, 'send_order_refund_no_status', '退款申请未通过提醒发送', '退款申请未通过给用户提醒发送', 1, 1, 1, 1, 0, 0, '退款申请拒绝通知', '您好！您的订单{order_id}已拒绝退款。', 0, 'OPENTM410119152', '1451', 0, '0', '{order_id}订单号,{store_name}商品名称,{pay_price}订单金额', '', 1, 0),
+(18, 'send_order_apply_refund', '申请退款给客服发消息', '申请退款给客服发消息', 1, 1, 0, 0, 2, 1, '您有新的退款待处理', '{admin_name}管理员,您有一笔退款订单待处理，订单号{order_id}!', 0, 'OPENTM410119152', '0', 520274, '您有个订单退款请注意查收\\n订单号：{order_id}', '{admin_name}管理员,{order_id}订单号', '', 2, 0),
+(19, 'admin_pay_success_code', '下单给客服发消息', '下单支付给客服发消息', 1, 1, 0, 0, 2, 1, '您有新的订单待处理', '{admin_name}管理员,您有一笔支付成功的订单待处理，订单号{order_id}!', 0, 'OPENTM408237350', '0', 520273, '您有个新订单请注意查收\\n订单号：{order_id}', '{admin_name}管理员,{order_id}订单号', '', 2, 0),
+(20, 'order_deliver_success', '发货提醒发送', '发货用户提醒发送', 1, 1, 1, 1, 1, 0, '发货通知', '亲爱的用户{nickname}您的商品{store_name}，订单号{order_id}已发货，配送人名：{delivery_name}，配送电话：{delivery_id}，请注意查收', 0, 'OPENTM207707249', '1128', 520269, '0', '{nickname}用户昵称,{store_name}商品名称,{order_id}订单号,{delivery_name}配送员姓名,{delivery_id}配送员电话,{user_address}收货地址', '', 1, 0),
+(21, 'order_postage_success', '发货快递提醒发送', '发货快递用户提醒发送', 1, 1, 1, 1, 1, 0, '发货通知', '亲爱的用户{nickname}您的商品{store_name}，订单号{order_id}已发货，快递名称：{delivery_name}，快递单号：{delivery_id}，请注意查收', 0, 'OPENTM200565259', '1458', 520269, '0', '{nickname}用户昵称,{store_name}商品名称,{order_id}订单号,{delivery_name}快递名称,{delivery_id}快递单号,{user_address}收货地址', '', 1, 0),
+(22, 'send_order_pink_clone', '取消拼团提醒发送', '取消拼团给用户提醒发送', 1, 1, 1, 1, 0, 0, '取消拼团通知', '亲，您的拼团取消，活动名称{title}', 0, 'OPENTM401113750', '3353', 0, '0', '{title}活动名称{count}拼团人数', '', 1, 0),
+(23, 'can_pink_success', '参团成功提醒发送', '参团成功给用户提醒发送', 1, 1, 1, 1, 0, 0, '参团成功通知', '亲，您已成功参与拼团，活动名称{title}', 0, 'OPENTM414349441', '3353', 0, '0', '{title}活动名称,{nickname}团长,{count}拼团人数,{pink_time}开团时间', '', 1, 0),
+(24, 'kefu_send_extract_application', '提现申请给客服发消息', '提现申请给客服发消息', 1, 0, 0, 0, 0, 1, '你有个新的提现申请待处理', '{nickname}管理员,您有一笔提现申请待处理，提现金额{money}!', 0, '', '0', 0, '您有个提现申请请注意查收\\n>提现金额{money}', '{nickname}用户昵称,{money}提现金额', '', 2, 0),
+(25, 'send_admin_confirm_take_over', '收货给客服发消息', '收货给客服发消息', 1, 0, 0, 0, 2, 1, '你有个新的用户收货待处理', '您有一笔订单已经确认收货，订单号{order_id}!', 0, '', '0', 520271, '您有个订单确认收货\\n>订单号{order_id}', '{storeTitle}商品名称,{order_id}订单号', '', 2, 0),
+(26, 'order_pay_false', '提醒付款通知', '提醒付款通知用户提醒发送', 1, 1, 0, 0, 1, 0, '提醒付款通知', '您有未付款订单,订单号为:{order_id}，商品数量有限，请及时付款。', 0, '', '', 528116, '0', '', '', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -7450,14 +7519,21 @@ CREATE TABLE IF NOT EXISTS `eb_system_notice_admin` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_role` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '身份管理id',
-  `role_name` varchar(32) NOT NULL DEFAULT '' COMMENT '身份管理名称',
-  `rules` text NOT NULL DEFAULT '' COMMENT '身份管理权限(menus_id)',
-  `level` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `status` (`status`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='身份管理表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '身份管理id',
+    `role_name` varchar(32) NOT NULL DEFAULT '' COMMENT '身份管理名称',
+    `rules` text NOT NULL COMMENT '身份管理权限(menus_id)',
+    `level` tinyint(3) UNSIGNED NOT NULL DEFAULT '0',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '状态',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `status` (`status`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='身份管理表';
+
+--
+-- 转存表中的数据 `eb_system_role`
+--
+
+INSERT INTO `eb_system_role` (`id`, `role_name`, `rules`, `level`, `status`) VALUES
+(1, '订单管理员', '7,369,368,367,366,4,5,597,581,226,219,223,225,800,677,670,220,222,221,216,218,217,215,202,201,214,206,205,213,212,211,209,224,799,798,208,204,207,203,200,199,198,897,760,801,761', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -7466,24 +7542,24 @@ CREATE TABLE IF NOT EXISTS `eb_system_role` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_store` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL DEFAULT '' COMMENT '门店名称',
-  `introduction` varchar(1000) NOT NULL DEFAULT '' COMMENT '简介',
-  `phone` char(25) NOT NULL DEFAULT '' COMMENT '手机号码',
-  `address` varchar(255) NOT NULL DEFAULT '' COMMENT '省市区',
-  `detailed_address` varchar(255) NOT NULL DEFAULT '' COMMENT '详细地址',
-  `image` varchar(255) NOT NULL DEFAULT '' COMMENT '门店logo',
-  `oblong_image` varchar(255) NOT NULL DEFAULT '' COMMENT '门店推荐图',
-  `latitude` char(25) NOT NULL DEFAULT '' COMMENT '纬度',
-  `longitude` char(25) NOT NULL DEFAULT '' COMMENT '经度',
-  `valid_time` varchar(100) NOT NULL DEFAULT '' COMMENT '核销有效日期',
-  `day_time` varchar(100) NOT NULL DEFAULT '' COMMENT '每日营业开关时间',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `is_show` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否显示',
-  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `phone` (`phone`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='门店自提';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` varchar(100) NOT NULL DEFAULT '' COMMENT '门店名称',
+    `introduction` varchar(1000) NOT NULL DEFAULT '' COMMENT '简介',
+    `phone` char(25) NOT NULL DEFAULT '' COMMENT '手机号码',
+    `address` varchar(255) NOT NULL DEFAULT '' COMMENT '省市区',
+    `detailed_address` varchar(255) NOT NULL DEFAULT '' COMMENT '详细地址',
+    `image` varchar(255) NOT NULL DEFAULT '' COMMENT '门店logo',
+    `oblong_image` varchar(255) NOT NULL DEFAULT '' COMMENT '门店推荐图',
+    `latitude` char(25) NOT NULL DEFAULT '' COMMENT '纬度',
+    `longitude` char(25) NOT NULL DEFAULT '' COMMENT '经度',
+    `valid_time` varchar(100) NOT NULL DEFAULT '' COMMENT '核销有效日期',
+    `day_time` varchar(100) NOT NULL DEFAULT '' COMMENT '每日营业开关时间',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `is_show` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否显示',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `phone` (`phone`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='门店自提';
 
 -- --------------------------------------------------------
 
@@ -7492,17 +7568,17 @@ CREATE TABLE IF NOT EXISTS `eb_system_store` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_store_staff` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '微信用户id',
-  `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '店员头像',
-  `store_id` int(11) NOT NULL DEFAULT '0' COMMENT '门店id',
-  `staff_name` varchar(64) DEFAULT '' COMMENT '店员名称',
-  `phone` char(15) DEFAULT NULL COMMENT '手机号码',
-  `verify_status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '核销开关',
-  `status` tinyint(2) DEFAULT '1' COMMENT '状态',
-  `add_time` int(10) DEFAULT NULL COMMENT '添加时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='门店店员表';
+    `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `uid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '微信用户id',
+    `avatar` varchar(255) NOT NULL DEFAULT '' COMMENT '店员头像',
+    `store_id` int(11) NOT NULL DEFAULT '0' COMMENT '门店id',
+    `staff_name` varchar(64) NOT NULL DEFAULT '' COMMENT '店员名称',
+    `phone` char(15) NOT NULL DEFAULT '' COMMENT '手机号码',
+    `verify_status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '核销开关',
+    `status` tinyint(2) NOT NULL DEFAULT '1' COMMENT '状态',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='门店店员表';
 
 -- --------------------------------------------------------
 
@@ -7511,36 +7587,35 @@ CREATE TABLE IF NOT EXISTS `eb_system_store_staff` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_system_user_level` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `mer_id` int(11) NOT NULL DEFAULT '0' COMMENT '商户id',
-  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '会员名称',
-  `money` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '购买金额',
-  `valid_date` int(11) NOT NULL DEFAULT '0' COMMENT '有效时间',
-  `is_forever` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为永久会员',
-  `is_pay` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否购买,1=购买,0=不购买',
-  `is_show` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否显示 1=显示,0=隐藏',
-  `grade` int(11) NOT NULL DEFAULT '0' COMMENT '会员等级',
-  `discount` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '享受折扣',
-  `image` varchar(255) NOT NULL DEFAULT '' COMMENT '会员卡背景',
-  `icon` varchar(255) NOT NULL DEFAULT '' COMMENT '会员图标',
-  `explain` text NOT NULL DEFAULT '' COMMENT '说明',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除.1=删除,0=未删除',
-  `exp_num` int(10) NOT NULL DEFAULT '0' COMMENT '升级经验',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='设置用户等级表';
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `mer_id` int(11) NOT NULL DEFAULT '0' COMMENT '商户id',
+    `name` varchar(255) NOT NULL DEFAULT '' COMMENT '会员名称',
+    `money` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '购买金额',
+    `valid_date` int(11) NOT NULL DEFAULT '0' COMMENT '有效时间',
+    `is_forever` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为永久会员',
+    `is_pay` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否购买,1=购买,0=不购买',
+    `is_show` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否显示 1=显示,0=隐藏',
+    `grade` int(11) NOT NULL DEFAULT '0' COMMENT '会员等级',
+    `discount` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '享受折扣',
+    `image` varchar(255) NOT NULL DEFAULT '' COMMENT '会员卡背景',
+    `icon` varchar(255) NOT NULL DEFAULT '' COMMENT '会员图标',
+    `explain` text NOT NULL COMMENT '说明',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除.1=删除,0=未删除',
+    `exp_num` int(10) NOT NULL DEFAULT '0' COMMENT '升级经验',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='设置用户等级表';
 
 --
 -- 转存表中的数据 `eb_system_user_level`
 --
 
 INSERT INTO `eb_system_user_level` (`id`, `mer_id`, `name`, `money`, `valid_date`, `is_forever`, `is_pay`, `is_show`, `grade`, `discount`, `image`, `icon`, `explain`, `add_time`, `is_del`, `exp_num`) VALUES
-(1, 0, 'V1', '0.00', 0, 1, 0, 1, 1, '99.00', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201110/0c4b29a624e97cb26ff7e4ca473b4c5f.jpg', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201112/fbacd351e606f494431a9c777ce7522c.png', 'V1', 1553824639, 0, 500),
-(2, 0, 'V2', '0.00', 0, 1, 0, 1, 2, '97.00', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201110/d522b58032088f82443f3f94591b0fc0.png', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201112/58908a8c245f422da6e0924dec27c95d.png', 'V2', 1553824742, 0, 1000),
-(3, 0, 'V3', '0.00', 0, 1, 0, 1, 3, '95.00', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201110/f7c1177d4304372134c6c97f70f225ce.jpg', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201112/e3d227d703e847a02655132f223436f8.png', 'V3', 1553824797, 0, 3000),
-(4, 0, 'V4', '0.00', 0, 1, 0, 1, 4, '93.00', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201110/3258440ff097fb3675bb2cd72645585a.jpg', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201112/7adae9b31744480adf98a5c28a4ea095.png', 'V4', 1553824837, 0, 8000),
-(5, 0, 'V5', '0.00', 0, 1, 0, 1, 5, '90.00', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201110/422aabba499263112231b8efecc042be.jpg', 'http://v4.admin.crmeb.net/uploads/attach/2020/11/20201112/f834709c81367d94f5fb67d82a7d34bd.png', 'V5', 1553824871, 0, 15000);
-
+(1, 0, 'V1', '0.00', 0, 1, 0, 1, 1, '99.00', 'http://wuht.oss-cn-beijing.aliyuncs.com/attach/2021/08/9d9c0202108171654482194.jpg', 'http://wuht.oss-cn-beijing.aliyuncs.com/attach/2021/08/b7ae120210817165448257.png', 'V1', 1553824639, 0, 500),
+(2, 0, 'V2', '0.00', 0, 1, 0, 1, 2, '97.00', 'http://wuht.oss-cn-beijing.aliyuncs.com/attach/2021/08/ae037202108171654481172.jpg', 'http://wuht.oss-cn-beijing.aliyuncs.com/attach/2021/08/c9649202108171654485575.png', 'V2', 1553824742, 0, 1000),
+(3, 0, 'V3', '0.00', 0, 1, 0, 1, 3, '95.00', 'http://wuht.oss-cn-beijing.aliyuncs.com/attach/2021/08/2cdb7202108171654481907.jpg', 'http://wuht.oss-cn-beijing.aliyuncs.com/attach/2021/08/88dc220210817165448127.png', 'V3', 1553824797, 1, 3000),
+(4, 0, 'V4', '0.00', 0, 1, 0, 1, 4, '93.00', 'http://wuht.oss-cn-beijing.aliyuncs.com/attach/2021/08/a03f2202108171654484325.jpg', 'http://wuht.oss-cn-beijing.aliyuncs.com/attach/2021/08/153ce202108171654483880.png', 'V4', 1553824837, 0, 8000),
+(5, 0, 'V5', '0.00', 0, 1, 0, 1, 5, '70.00', 'http://wuht.oss-cn-beijing.aliyuncs.com/attach/2021/08/439d9202108171654484169.png', 'http://wuht.oss-cn-beijing.aliyuncs.com/attach/2021/08/f34f7202108171654482750.png', 'V5', 1553824871, 0, 15000);
 -- --------------------------------------------------------
 
 --
@@ -7548,51 +7623,51 @@ INSERT INTO `eb_system_user_level` (`id`, `mer_id`, `name`, `money`, `valid_date
 --
 
 CREATE TABLE IF NOT EXISTS `eb_template_message` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '模板id',
-  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=订阅消息,1=微信模板消息',
-  `tempkey` char(50) NOT NULL DEFAULT '' COMMENT '模板编号',
-  `name` char(100) NOT NULL DEFAULT '' COMMENT '模板名',
-  `kid` varchar(255) NOT NULL DEFAULT '',
-  `content` varchar(1000) NOT NULL DEFAULT '' COMMENT '回复内容',
-  `tempid` char(100) DEFAULT NULL COMMENT '模板ID',
-  `add_time` varchar(15) NOT NULL DEFAULT '' COMMENT '添加时间',
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='微信模板';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '模板id',
+    `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=订阅消息,1=微信模板消息',
+    `tempkey` char(50) NOT NULL DEFAULT '' COMMENT '模板编号',
+    `name` char(100) NOT NULL DEFAULT '' COMMENT '模板名',
+    `kid` varchar(255) NOT NULL DEFAULT '',
+    `content` varchar(1000) NOT NULL DEFAULT '' COMMENT '回复内容',
+    `tempid` char(100) NOT NULL DEFAULT '' COMMENT '模板ID',
+    `add_time` varchar(15) NOT NULL DEFAULT '' COMMENT '添加时间',
+    `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COMMENT='微信模板' ROW_FORMAT=COMPACT;
 
 --
 -- 转存表中的数据 `eb_template_message`
 --
 
 INSERT INTO `eb_template_message` (`id`, `type`, `tempkey`, `name`, `kid`, `content`, `tempid`, `add_time`, `status`) VALUES
-(2, 0, '1470', '提现结果通知', '[1,2,3,4]', '提现状态{{thing1.DATA}}\n提现金额{{amount2.DATA}}\n提现账号{{thing3.DATA}}\n提现时间{{date4.DATA}}', 'xtBEkHdxyFSIQfiNe_CRgeMhkfCNLFnLfhbnDpuSpiE', '1599529000', 1),
-(3, 0, '1481', '收货结果通知', '[1,2,5]', '订单类型{{thing1.DATA}}\n订单商品{{thing2.DATA}}\n收货时间{{date5.DATA}}', 'AVmUHvKandN9a9ms_-5QsERw9lGhGuZyjQGjU4s5xtU', '1604195582', 0),
-(4, 0, '1134', '订单取消通知', '[1,7,2,5]', '取消原因{{thing1.DATA}}\n订单号{{number7.DATA}}\n取消时间{{date2.DATA}}\n订单类型{{thing5.DATA}}', 'xBilsNHAH527HBqrMgNoINpeBUflFs0V8c35SAN2Dks', '1604195582', 1),
-(5, 0, '1458', '发货通知', '[2,1,3,5]', '快递单号{{character_string2.DATA}}\n快递公司{{thing1.DATA}}\n发货时间{{time3.DATA}}\n订单商品{{thing5.DATA}}', 'vBrJgvoj4CgBOUIVQcRfseotM5ad4f-3x3OgM4faK50', '1604195582', 1),
-(6, 0, '3098', '拼团成功通知', '[1,3,5,2]', '活动名称{{thing1.DATA}}\n团长{{name3.DATA}}\n开团时间{{date5.DATA}}\n成团人数{{number2.DATA}}', 'V9fd7ssFZr5_twdgf--RfMsgzCWntFishznJECOHJ7U', '1604195582', 1),
-(7, 0, '2727', '砍价成功通知', '[1,2,3]', '商品名称{{thing1.DATA}}\n底价{{amount2.DATA}}\n备注{{thing3.DATA}}', 'ehNGy-NRBJIENTdlwT8nBVr7oE0nedozb1sr8n5L09w', '1604195582', 1),
-(8, 0, '3116', ' 核销成功通知', '[2,3,4]', '商品名称{{thing2.DATA}}\n订单号{{character_string3.DATA}}\n核销时间{{time4.DATA}}', '5wiR0TK43wguWdGzexocKglibtmdeEHfPOS6mQMv_XY', '1604195582', 1),
-(9, 0, '1476', ' 新订单提醒', '[2,3,4,6,1]', '订单商品{{thing2.DATA}}\n订单金额{{amount3.DATA}}\n订单编号{{character_string4.DATA}}\n订单时间{{date6.DATA}}\n订单类型{{thing1.DATA}}', 'F7ju2FdKqFQ8rXXzkB34HQ5MW0jOaJEZWWGlEh52KyI', '1604195582', 1),
-(10, 0, '1451', ' 退款通知', '[1,2,3,6]', '退款状态{{thing1.DATA}}\n退款商品{{thing2.DATA}}\n退款金额{{amount3.DATA}}\n退款单号{{character_string6.DATA}}', 'aqp6PzdU9vCUOUCHsuGFWnaprqnYyMoUrB8DHdijuCQ', '1604195589', 1),
-(11, 0, '755', ' 充值成功通知', '[1,3,4,5]', '交易单号{{character_string1.DATA}}\n充值金额{{amount3.DATA}}\n账户余额{{amount4.DATA}}\n充值时间{{date5.DATA}}', '_0KAysps9Yj0SM3nacaF_0shWIJW5L37hg_G5qX0t8U', '1604195582', 1),
-(12, 0, '1927', '付款成功通知', '[1,2,3]', '付款单号{{character_string1.DATA}}\n付款金额{{amount2.DATA}}\n付款时间{{date3.DATA}}', 'jY2vT0Fge2srW9Izc-3wEGAWLtBE9t6eTVQKbOJ1_jg', '1604195582', 0),
-(13, 0, '1468', '申请退款通知', '[4,5,2,7,8]', '订单编号{{character_string4.DATA}}\n申请时间{{date5.DATA}}\n订单金额{{amount2.DATA}}\n退款状态{{phrase7.DATA}}\n备注{{thing8.DATA}}', 'NOfT3qoOS3hkSzwt2LJg_IG_y45IK3y-g7rtPE6uEGg', '1604195582', 1),
-(14, 0, '335', '积分到账提醒', '[2,3,4,5,6]', '订单编号{{character_string2.DATA}}\n商品名称{{thing3.DATA}}\n支付金额{{amount4.DATA}}\n获得积分{{number5.DATA}}\n累计积分{{number6.DATA}}', 'TtdbifwMN-6D3hNld8jTcya3ENSlX8zu_aFFl1f_zLs', '1604195582', 1),
-(15, 0, '3353', '拼团状态通知', '', '商品名称{{thing2.DATA}}\n拼团人数{{thing1.DATA}}\n备注{{thing3.DATA}}', '', '1599474334', 1),
-(16, 1, 'OPENTM200565259', '订单发货提醒', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n物流公司：{{keyword2.DATA}}\n物流单号：{{keyword3.DATA}}\n{{remark.DATA}}', '6G3oFa01unicz0wsEeCDwh_thZ80XbtSBrnr5MhvXek', '1515052638', 1),
-(17, 1, 'OPENTM413386489', '订单收货通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n订单状态：{{keyword2.DATA}}\n收货时间：{{keyword3.DATA}}\n商品详情：{{keyword4.DATA}}\n{{remark.DATA}}', 'LWeriiIxQc0VV8-PZ_4hwJgPt4ENuC1vm6hFkLInHIw', '1515052765', 1),
-(18, 1, 'OPENTM410119152', '退款进度通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n订单金额：{{keyword2.DATA}}\n下单时间：{{keyword3.DATA}}\n{{remark.DATA}}', 'wLfgvaR1M_QK2zEzUCC9TUDIsQJEMsdpJttXk2IQLXc', '1515053049', 1),
+(2, 0, '1470', '提现结果通知', '', '提现状态{{thing1.DATA}}\n提现金额{{amount2.DATA}}\n提现账号{{thing3.DATA}}\n提现时间{{date4.DATA}}', 'VIPeRvD97Ly6GYZVv8OpZOIxIeGr59_vKPkmqQ-KhDY', '1623820079', 1),
+(3, 0, '1481', '收货结果通知', '', '订单类型{{thing1.DATA}}\n订单商品{{thing2.DATA}}\n收货时间{{date5.DATA}}', 'bXWR3j5GZjRIskKzVsNlBMXuNp_QkaZKdYfPykwp5Es', '1623820079', 1),
+(4, 0, '1134', '订单取消通知', '', '取消原因{{thing1.DATA}}\n订单号{{number7.DATA}}\n取消时间{{date2.DATA}}\n订单类型{{thing5.DATA}}', 'M-lJ_ZFAFZW2xOR5w0gB1qZ15BnBK9osEASaSuwJ8MY', '1623820079', 1),
+(5, 0, '1458', '发货通知', '', '快递单号{{character_string2.DATA}}\n快递公司{{thing1.DATA}}\n发货时间{{time3.DATA}}\n订单商品{{thing5.DATA}}', '0v_Hk7kDjlME1th_x5fGxm4OZ-WsB6goxTKgDt2TJYA', '1623820079', 1),
+(6, 0, '3098', '拼团成功通知', '', '活动名称{{thing1.DATA}}\n团长{{name3.DATA}}\n开团时间{{date5.DATA}}\n成团人数{{number2.DATA}}', '53X6xKWNXUXNpKYYZAVx_bnT8wsFgnyNwYaLMlOZ9uc', '1623820079', 1),
+(7, 0, '2727', '砍价成功通知', '', '商品名称{{thing1.DATA}}\n底价{{amount2.DATA}}\n备注{{thing3.DATA}}', 'mtgbI1nfw73WHaYkk9zN-Cc2En5ydStGOGKbairWlIo', '1623820079', 1),
+(8, 0, '3116', ' 核销成功通知', '', '商品名称{{thing2.DATA}}\n订单号{{character_string3.DATA}}\n核销时间{{time4.DATA}}', 'ss71j4bMr-4piFuJzvkMY1TFLfS_7ahvVk52WaI0DRw', '1623820079', 1),
+(9, 0, '1476', ' 新订单提醒', '', '订单商品{{thing2.DATA}}\n订单金额{{amount3.DATA}}\n订单编号{{character_string4.DATA}}\n订单时间{{date6.DATA}}\n订单类型{{thing1.DATA}}', '5KidgKPEXRL2si8OVpEmmP3ahBwDRkV9YlkwTrJnpYk333', '1623820079', 1),
+(10, 0, '1451', ' 退款通知', '', '退款状态{{thing1.DATA}}\n退款商品{{thing2.DATA}}\n退款金额{{amount3.DATA}}\n退款单号{{character_string6.DATA}}', 'rVr0iqYg679d7Q27FjUIr-IRzWB7c7X1_fFr4xvVuUE', '1623820079', 1),
+(11, 0, '755', ' 充值成功通知', '', '交易单号{{character_string1.DATA}}\n充值金额{{amount3.DATA}}\n账户余额{{amount4.DATA}}\n充值时间{{date5.DATA}}', 'RQ5MoNo0KNP0l1N-9SlM2pp563q7ERUtTxNpJhf9DsY', '1623820079', 1),
+(12, 0, '1927', '付款成功通知', '', '付款单号{{character_string1.DATA}}\n付款金额{{amount2.DATA}}\n付款时间{{date3.DATA}}', '3arEIzEUZy_w36sSwsbFvBFibbDc14GWxb8g2aN9fJA', '1623820079', 1),
+(13, 0, '1468', '申请退款通知', '', '订单编号{{character_string4.DATA}}\n申请时间{{date5.DATA}}\n订单金额{{amount2.DATA}}\n退款状态{{phrase7.DATA}}\n备注{{thing8.DATA}}', 'yeu9eF9lUXoeSjyvOPCe5Nw4UkVTteoO3DNp5PziugA', '1623820079', 1),
+(14, 0, '335', '积分到账提醒', '', '订单编号{{character_string2.DATA}}\n商品名称{{thing3.DATA}}\n支付金额{{amount4.DATA}}\n获得积分{{number5.DATA}}\n累计积分{{number6.DATA}}', 'UfHb2xZ8z9XpjLADTBhttiamVBEBKQLL8abxcvy0vyk', '1623820079', 1),
+(15, 0, '3353', '拼团状态通知', '', '商品名称{{thing2.DATA}}\n拼团人数{{thing1.DATA}}\n备注{{thing3.DATA}}', 'FQNtrShihUO7QLkM-ge8VX0PraoloDAy_UhJhKgCcrw', '1623820079', 1),
+(16, 1, 'OPENTM200565259', '订单发货提醒', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n物流公司：{{keyword2.DATA}}\n物流单号：{{keyword3.DATA}}\n{{remark.DATA}}', '0v_Hk7kDjlME1th_x5fGxm4OZ-WsB6goxTKgDt2TJYA', '1515052638', 1),
+(17, 1, 'OPENTM413386489', '订单收货通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n订单状态：{{keyword2.DATA}}\n收货时间：{{keyword3.DATA}}\n商品详情：{{keyword4.DATA}}\n{{remark.DATA}}', 'bXWR3j5GZjRIskKzVsNlBMXuNp_QkaZKdYfPykwp5Es', '1515052765', 1),
+(18, 1, 'OPENTM410119152', '退款进度通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n订单金额：{{keyword2.DATA}}\n下单时间：{{keyword3.DATA}}\n{{remark.DATA}}', 'rVr0iqYg679d7Q27FjUIr-IRzWB7c7X1_fFr4xvVuUE', '1515053049', 1),
 (20, 1, 'OPENTM207707249', '订单发货提醒', '', '\n{{first.DATA}}\n商品明细：{{keyword1.DATA}}\n下单时间：{{keyword2.DATA}}\n配送地址：{{keyword3.DATA}}\n配送人：{{keyword4.DATA}}\n联系电话：{{keyword5.DATA}}\n{{remark.DATA}}', 'dag-xZ3QYbbGP6ICOQ4kjx2quBR3XQ8rlHsgonjLR1U', '1515053313', 1),
-(23, 1, 'OPENTM407456411', '拼团成功通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n团购商品：{{keyword2.DATA}}\n{{remark.DATA}}', 'DoaJ7B7GJJ-XWOuscw28gJCdF7vtdaz1k6XrzvcvZuo', '1520063823', 1),
-(24, 1, 'OPENTM401113750', '拼团失败通知', '', '{{first.DATA}}\n拼团商品：{{keyword1.DATA}}\n商品金额：{{keyword2.DATA}}\n退款金额：{{keyword3.DATA}}\n{{remark.DATA}}', 'VAZgBBNUYVL3ZDDCy3aSAlPyHiCElmX6iJLR97EXoUw', '1520064059', 1),
+(23, 1, 'OPENTM407456411', '拼团成功通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n团购商品：{{keyword2.DATA}}\n{{remark.DATA}}', '53X6xKWNXUXNpKYYZAVx_bnT8wsFgnyNwYaLMlOZ9uc', '1520063823', 1),
+(24, 1, 'OPENTM401113750', '拼团失败通知', '', '{{first.DATA}}\n拼团商品：{{keyword1.DATA}}\n商品金额：{{keyword2.DATA}}\n退款金额：{{keyword3.DATA}}\n{{remark.DATA}}', 'FQNtrShihUO7QLkM-ge8VX0PraoloDAy_UhJhKgCcrw', '1520064059', 1),
 (25, 1, 'OPENTM205213550', '订单生成通知', '', '{{first.DATA}}\n时间：{{keyword1.DATA}}\n商品名称：{{keyword2.DATA}}\n订单号：{{keyword3.DATA}}\n{{remark.DATA}}', 'J8u6lFMdoaC0UjpbysZessAo0B2YsGBDFbgGVbAKivU', '1528966701', 1),
-(26, 1, 'OPENTM207791277', '订单支付成功通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n支付金额：{{keyword2.DATA}}\n{{remark.DATA}}', 'HT1UiW2z8hDmWQR_x7DR-Q0KjDWItnPYKjEmTS9Imyk', '1528966759', 1),
-(27, 1, 'OPENTM410292733', '砍价成功提醒', '', '{{first.DATA}}\n商品名称：{{keyword1.DATA}}\n底价：{{keyword2.DATA}}\n{{remark.DATA}}', 'KQLi3VZe1SBFXmcjchBcY8I2l-DxyWMX4m71wGo2E24', '1564566678', 1),
-(28, 1, 'OPENTM414349441', '开团成功通知', '', '{{first.DATA}}\n拼团名称：{{keyword1.DATA}}\n团购价格：{{keyword2.DATA}}\n拼团人数：{{keyword3.DATA}}\n{{remark.DATA}}', 'j4N2IhjtgrHTA9Qi2isyjFBqveMPfLzhuQwi22pHtmw', '1564567037', 1),
-(29, 0, '14403', '佣金到账通知', '[2,4,1]', '商品名称{{thing2.DATA}}\n获得佣金{{amount4.DATA}}\n到账时间{{time1.DATA}}', '', '1605517762', 1),
-(30, 1, 'OPENTM402027183', '佣金到账提醒', '', '{{first.DATA}}\n商品信息：{{keyword1.DATA}}\n商品单价：{{keyword2.DATA}}\n商品佣金：{{keyword3.DATA}}\n分销时间：{{keyword4.DATA}}\n{{remark.DATA}}', 'QMtHCrRVJzTVMHDLeWmpSb6Uw2OqOO8cRgwfZxk4W20', '1602500478', 1),
-(31, 1, 'OPENTM412814251', '下级推广者绑定成功提醒', '', '{{first.DATA}}\n绑定结果：{{keyword1.DATA}}\n绑定时间：{{keyword2.DATA}}\n{{remark.DATA}}', 'XIUoMsA3Zqie9x64s_mqTE6QwBYPdDe0IjvreweTFhk', '1602558146', 1),
-(32, 0, '3801', '绑定下级推广人成功提醒', '[3,4]', '会员姓名{{name3.DATA}}\n邀请时间{{date4.DATA}}', '', '1605517762', 1);
+(26, 1, 'OPENTM207791277', '订单支付成功通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n支付金额：{{keyword2.DATA}}\n{{remark.DATA}}', '5KidgKPEXRL2si8OVpEmmP3ahBwDRkV9YlkwTrJnpYk', '1528966759', 1),
+(27, 1, 'OPENTM410292733', '砍价成功提醒', '', '{{first.DATA}}\n商品名称：{{keyword1.DATA}}\n底价：{{keyword2.DATA}}\n{{remark.DATA}}', 'mtgbI1nfw73WHaYkk9zN-Cc2En5ydStGOGKbairWlIo', '1564566678', 1),
+(28, 1, 'OPENTM414349441', '开团成功通知', '', '{{first.DATA}}\n拼团名称：{{keyword1.DATA}}\n团购价格：{{keyword2.DATA}}\n拼团人数：{{keyword3.DATA}}\n{{remark.DATA}}', 'FQNtrShihUO7QLkM-ge8VX0PraoloDAy_UhJhKgCcrw', '1564567037', 1),
+(29, 0, '14403', '佣金到账通知', '', '商品名称{{thing2.DATA}}\n获得佣金{{amount4.DATA}}\n到账时间{{time1.DATA}}', 'SAFpx37G2Q4Sdbhyx_zmTyxz4b_N_tJJFCo9-zByH6w', '1623820079', 1),
+(30, 1, 'OPENTM402027183', '佣金到账提醒', '', '{{first.DATA}}\n商品信息：{{keyword1.DATA}}\n商品单价：{{keyword2.DATA}}\n商品佣金：{{keyword3.DATA}}\n分销时间：{{keyword4.DATA}}\n{{remark.DATA}}', 'SAFpx37G2Q4Sdbhyx_zmTyxz4b_N_tJJFCo9-zByH6w', '1602500478', 1),
+(31, 1, 'OPENTM412814251', '下级推广者绑定成功提醒', '', '{{first.DATA}}\n绑定结果：{{keyword1.DATA}}\n绑定时间：{{keyword2.DATA}}\n{{remark.DATA}}', 'mUKe36EnWusfHIJdMbPCaXuLVmRjsi6-PXvkrRNIxWM', '1602558146', 1),
+(32, 0, '3801', '绑定下级推广人成功提醒', '', '会员姓名{{name3.DATA}}\n邀请时间{{date4.DATA}}', 'mUKe36EnWusfHIJdMbPCaXuLVmRjsi6-PXvkrRNIxWM', '1623820079', 1);
 
 -- --------------------------------------------------------
 
@@ -7601,52 +7676,53 @@ INSERT INTO `eb_template_message` (`id`, `type`, `tempkey`, `name`, `kid`, `cont
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user` (
-  `uid` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户id',
-  `account` varchar(32) NOT NULL COMMENT '用户账号',
-  `pwd` varchar(32) NOT NULL DEFAULT '' COMMENT '用户密码',
-  `real_name` varchar(25) NOT NULL DEFAULT '' COMMENT '真实姓名',
-  `birthday` int(11) NOT NULL DEFAULT '0' COMMENT '生日',
-  `card_id` varchar(20) NOT NULL DEFAULT '' COMMENT '身份证号码',
-  `mark` varchar(255) NOT NULL DEFAULT '' COMMENT '用户备注',
-  `partner_id` int(11) NOT NULL DEFAULT '0' COMMENT '合伙人id',
-  `group_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户分组id',
-  `nickname` varchar(60) NOT NULL DEFAULT '' COMMENT '用户昵称',
-  `avatar` varchar(256) NOT NULL DEFAULT '' COMMENT '用户头像',
-  `phone` char(15) DEFAULT NULL COMMENT '手机号码',
-  `add_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `add_ip` varchar(16) NOT NULL DEFAULT '' COMMENT '添加ip',
-  `last_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '最后一次登录时间',
-  `last_ip` varchar(16) NOT NULL DEFAULT '' COMMENT '最后一次登录ip',
-  `now_money` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '用户余额',
-  `brokerage_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '佣金金额',
-  `integral` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户剩余积分',
-  `exp` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '会员经验',
-  `sign_num` int(11) NOT NULL DEFAULT '0' COMMENT '连续签到天数',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1为正常，0为禁止',
-  `level` tinyint(2) unsigned NOT NULL DEFAULT '0' COMMENT '等级',
-  `spread_open` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有推广资格',
-  `spread_uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '推广元id',
-  `spread_time` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '推广员关联时间',
-  `user_type` varchar(32) NOT NULL COMMENT '用户类型',
-  `is_promoter` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否为推广员',
-  `pay_count` int(11) unsigned DEFAULT '0' COMMENT '用户购买次数',
-  `spread_count` int(11) DEFAULT '0' COMMENT '下级人数',
-  `clean_time` int(11) DEFAULT '0' COMMENT '清理会员时间',
-  `addres` varchar(255) NOT NULL DEFAULT '' COMMENT '详细地址',
-  `adminid` int(11) unsigned DEFAULT '0' COMMENT '管理员编号 ',
-  `login_type` varchar(36) NOT NULL DEFAULT '' COMMENT '用户登陆类型，h5,wechat,routine',
-  `record_phone` varchar(11) NOT NULL DEFAULT '0' COMMENT '记录临时电话',
-  `is_money_level` tinyint(1) NOT NULL DEFAULT '0' COMMENT '会员来源  0: 购买商品升级   1：花钱购买的会员2: 会员卡领取',
-  `is_ever_level` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否永久性会员  0: 非永久会员  1：永久会员',
-  `overdue_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '会员到期时间',
-  `uniqid` varchar(32) NOT NULL DEFAULT '',
-  PRIMARY KEY (`uid`) USING BTREE,
-  KEY `account` (`account`) USING BTREE,
-  KEY `spreaduid` (`spread_uid`) USING BTREE,
-  KEY `level` (`level`) USING BTREE,
-  KEY `status` (`status`) USING BTREE,
-  KEY `is_promoter` (`is_promoter`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户表';
+    `uid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户id',
+    `account` varchar(32) NOT NULL DEFAULT '' COMMENT '用户账号',
+    `pwd` varchar(32) NOT NULL DEFAULT '' COMMENT '用户密码',
+    `real_name` varchar(25) NOT NULL DEFAULT '' COMMENT '真实姓名',
+    `birthday` int(11) NOT NULL DEFAULT '0' COMMENT '生日',
+    `card_id` varchar(20) NOT NULL DEFAULT '' COMMENT '身份证号码',
+    `mark` varchar(255) NOT NULL DEFAULT '' COMMENT '用户备注',
+    `partner_id` int(11) NOT NULL DEFAULT '0' COMMENT '合伙人id',
+    `group_id` int(11) NOT NULL DEFAULT '0' COMMENT '用户分组id',
+    `nickname` varchar(60) NOT NULL DEFAULT '' COMMENT '用户昵称',
+    `avatar` varchar(256) NOT NULL DEFAULT '' COMMENT '用户头像',
+    `phone` char(15) NOT NULL DEFAULT '' COMMENT '手机号码',
+    `add_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `add_ip` varchar(16) NOT NULL DEFAULT '' COMMENT '添加ip',
+    `last_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '最后一次登录时间',
+    `last_ip` varchar(16) NOT NULL DEFAULT '' COMMENT '最后一次登录ip',
+    `now_money` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '用户余额',
+    `brokerage_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '佣金金额',
+    `integral` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户剩余积分',
+    `exp` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '会员经验',
+    `sign_num` int(11) NOT NULL DEFAULT '0' COMMENT '连续签到天数',
+    `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1为正常，0为禁止',
+    `level` tinyint(2) UNSIGNED NOT NULL DEFAULT '0' COMMENT '等级',
+    `agent_level` int(10) NOT NULL DEFAULT '0' COMMENT '分销等级',
+    `spread_open` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否有推广资格',
+    `spread_uid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '推广元id',
+    `spread_time` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '推广员关联时间',
+    `user_type` varchar(32) NOT NULL COMMENT '用户类型',
+    `is_promoter` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否为推广员',
+    `pay_count` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户购买次数',
+    `spread_count` int(11) NOT NULL DEFAULT '0' COMMENT '下级人数',
+    `clean_time` int(11) NOT NULL DEFAULT '0' COMMENT '清理会员时间',
+    `addres` varchar(255) NOT NULL DEFAULT '' COMMENT '详细地址',
+    `adminid` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '管理员编号 ',
+    `login_type` varchar(36) NOT NULL DEFAULT '' COMMENT '用户登陆类型，h5,wechat,routine',
+    `record_phone` varchar(11) NOT NULL DEFAULT '0' COMMENT '记录临时电话',
+    `is_money_level` tinyint(1) NOT NULL DEFAULT '0' COMMENT '会员来源  0: 购买商品升级   1：花钱购买的会员2: 会员卡领取',
+    `is_ever_level` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否永久性会员  0: 非永久会员  1：永久会员',
+    `overdue_time` bigint(20) NOT NULL DEFAULT '0' COMMENT '会员到期时间',
+    `uniqid` varchar(32) NOT NULL DEFAULT '',
+    PRIMARY KEY (`uid`) USING BTREE,
+    KEY `account` (`account`) USING BTREE,
+    KEY `spreaduid` (`spread_uid`) USING BTREE,
+    KEY `level` (`level`) USING BTREE,
+    KEY `status` (`status`) USING BTREE,
+    KEY `is_promoter` (`is_promoter`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 
 -- --------------------------------------------------------
 
@@ -7655,26 +7731,26 @@ CREATE TABLE IF NOT EXISTS `eb_user` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_address` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户地址id',
-  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户id',
-  `real_name` varchar(32) NOT NULL DEFAULT '' COMMENT '收货人姓名',
-  `phone` varchar(16) NOT NULL DEFAULT '' COMMENT '收货人电话',
-  `province` varchar(64) NOT NULL DEFAULT '' COMMENT '收货人所在省',
-  `city` varchar(64) NOT NULL DEFAULT '' COMMENT '收货人所在市',
-  `city_id` int(11) NOT NULL DEFAULT '0' COMMENT '城市id',
-  `district` varchar(64) NOT NULL DEFAULT '' COMMENT '收货人所在区',
-  `detail` varchar(256) NOT NULL DEFAULT '' COMMENT '收货人详细地址',
-  `post_code` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '邮编',
-  `longitude` varchar(16) NOT NULL DEFAULT '0' COMMENT '经度',
-  `latitude` varchar(16) NOT NULL DEFAULT '0' COMMENT '纬度',
-  `is_default` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否默认',
-  `is_del` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
-  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `uid` (`uid`) USING BTREE,
-  KEY `is_default` (`is_default`) USING BTREE,
-  KEY `is_del` (`is_del`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户地址表';
+    `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户地址id',
+    `uid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户id',
+    `real_name` varchar(32) NOT NULL DEFAULT '' COMMENT '收货人姓名',
+    `phone` varchar(16) NOT NULL DEFAULT '' COMMENT '收货人电话',
+    `province` varchar(64) NOT NULL DEFAULT '' COMMENT '收货人所在省',
+    `city` varchar(64) NOT NULL DEFAULT '' COMMENT '收货人所在市',
+    `city_id` int(11) NOT NULL DEFAULT '0' COMMENT '城市id',
+    `district` varchar(64) NOT NULL DEFAULT '' COMMENT '收货人所在区',
+    `detail` varchar(256) NOT NULL DEFAULT '' COMMENT '收货人详细地址',
+    `post_code` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '邮编',
+    `longitude` varchar(16) NOT NULL DEFAULT '0' COMMENT '经度',
+    `latitude` varchar(16) NOT NULL DEFAULT '0' COMMENT '纬度',
+    `is_default` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否默认',
+    `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否删除',
+    `add_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `uid` (`uid`) USING BTREE,
+    KEY `is_default` (`is_default`) USING BTREE,
+    KEY `is_del` (`is_del`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户地址表';
 
 -- --------------------------------------------------------
 
@@ -7683,26 +7759,26 @@ CREATE TABLE IF NOT EXISTS `eb_user_address` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_bill` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户账单id',
-  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户uid',
-  `link_id` varchar(32) NOT NULL DEFAULT '0' COMMENT '关联id',
-  `pm` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0 = 支出 1 = 获得',
-  `title` varchar(64) NOT NULL DEFAULT '' COMMENT '账单标题',
-  `category` varchar(64) NOT NULL DEFAULT '' COMMENT '明细种类',
-  `type` varchar(64) NOT NULL DEFAULT '' COMMENT '明细类型',
-  `number` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '明细数字',
-  `balance` decimal(8,2) unsigned NOT NULL DEFAULT '0.00' COMMENT '剩余',
-  `mark` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
-  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 = 带确定 1 = 有效 -1 = 无效',
-  `take` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0 = 未收货 1 = 已收货',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `openid` (`uid`) USING BTREE,
-  KEY `status` (`status`) USING BTREE,
-  KEY `add_time` (`add_time`) USING BTREE,
-  KEY `pm` (`pm`) USING BTREE,
-  KEY `type` (`category`,`type`,`link_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户账单表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户账单id',
+    `uid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户uid',
+    `link_id` varchar(32) NOT NULL DEFAULT '0' COMMENT '关联id',
+    `pm` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '0 = 支出 1 = 获得',
+    `title` varchar(64) NOT NULL DEFAULT '' COMMENT '账单标题',
+    `category` varchar(64) NOT NULL DEFAULT '' COMMENT '明细种类',
+    `type` varchar(64) NOT NULL DEFAULT '' COMMENT '明细类型',
+    `number` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '明细数字',
+    `balance` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '剩余',
+    `mark` varchar(512) NOT NULL DEFAULT '' COMMENT '备注',
+    `add_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '0 = 带确定 1 = 有效 -1 = 无效',
+    `take` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0 = 未收货 1 = 已收货',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `openid` (`uid`) USING BTREE,
+    KEY `status` (`status`) USING BTREE,
+    KEY `add_time` (`add_time`) USING BTREE,
+    KEY `pm` (`pm`) USING BTREE,
+    KEY `type` (`category`,`type`,`link_id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户账单表';
 
 -- --------------------------------------------------------
 
@@ -7711,17 +7787,17 @@ CREATE TABLE IF NOT EXISTS `eb_user_bill` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_brokerage_frozen` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `uid` int(10) NOT NULL DEFAULT '0' COMMENT '用户uid',
-  `price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '金额',
-  `uill_id` int(10) NOT NULL DEFAULT '0' COMMENT '关联id',
-  `frozen_time` int(10) NOT NULL COMMENT '冻结到期时间',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否有效',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `order_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '订单id',
-  PRIMARY KEY (`id`),
-  KEY `uid` (`uid`,`status`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='用户佣金冻结记录表';
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `uid` int(10) NOT NULL DEFAULT '0' COMMENT '用户uid',
+    `price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '金额',
+    `uill_id` int(10) NOT NULL DEFAULT '0' COMMENT '关联id',
+    `frozen_time` int(10) NOT NULL DEFAULT '0' COMMENT '冻结到期时间',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否有效',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `order_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '订单id',
+    PRIMARY KEY (`id`),
+    KEY `uid` (`uid`,`status`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='用户佣金冻结记录表';
 
 -- --------------------------------------------------------
 
@@ -7730,31 +7806,31 @@ CREATE TABLE IF NOT EXISTS `eb_user_brokerage_frozen` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_enter` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '商户申请ID',
-  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '用户ID',
-  `province` varchar(32) NOT NULL DEFAULT '' COMMENT '商户所在省',
-  `city` varchar(32) NOT NULL DEFAULT '' COMMENT '商户所在市',
-  `district` varchar(32) NOT NULL DEFAULT '' COMMENT '商户所在区',
-  `address` varchar(256) NOT NULL DEFAULT '' COMMENT '商户详细地址',
-  `merchant_name` varchar(256) NOT NULL DEFAULT '' COMMENT '商户名称',
-  `link_user` varchar(32) NOT NULL DEFAULT '',
-  `link_tel` varchar(16) NOT NULL DEFAULT '' COMMENT '商户电话',
-  `charter` varchar(512) NOT NULL DEFAULT '' COMMENT '商户证书',
-  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `apply_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '审核时间',
-  `success_time` int(11) NOT NULL DEFAULT '0' COMMENT '通过时间',
-  `fail_message` varchar(256) NOT NULL DEFAULT '' COMMENT '未通过原因',
-  `fail_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '未通过时间',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '-1 审核未通过 0未审核 1审核通过',
-  `is_lock` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '0 = 开启 1= 关闭',
-  `is_del` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否删除',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `uid` (`uid`) USING BTREE,
-  KEY `province` (`province`,`city`,`district`) USING BTREE,
-  KEY `is_lock` (`is_lock`) USING BTREE,
-  KEY `is_del` (`is_del`) USING BTREE,
-  KEY `status` (`status`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商户申请表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '商户申请ID',
+    `uid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户ID',
+    `province` varchar(32) NOT NULL DEFAULT '' COMMENT '商户所在省',
+    `city` varchar(32) NOT NULL DEFAULT '' COMMENT '商户所在市',
+    `district` varchar(32) NOT NULL DEFAULT '' COMMENT '商户所在区',
+    `address` varchar(256) NOT NULL DEFAULT '' COMMENT '商户详细地址',
+    `merchant_name` varchar(256) NOT NULL DEFAULT '' COMMENT '商户名称',
+    `link_user` varchar(32) NOT NULL DEFAULT '',
+    `link_tel` varchar(16) NOT NULL DEFAULT '' COMMENT '商户电话',
+    `charter` varchar(512) NOT NULL DEFAULT '' COMMENT '商户证书',
+    `add_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `apply_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '审核时间',
+    `success_time` int(11) NOT NULL DEFAULT '0' COMMENT '通过时间',
+    `fail_message` varchar(256) NOT NULL DEFAULT '' COMMENT '未通过原因',
+    `fail_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '未通过时间',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '-1 审核未通过 0未审核 1审核通过',
+    `is_lock` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '0 = 开启 1= 关闭',
+    `is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否删除',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `uid` (`uid`) USING BTREE,
+    KEY `province` (`province`,`city`,`district`) USING BTREE,
+    KEY `is_lock` (`is_lock`) USING BTREE,
+    KEY `is_del` (`is_del`) USING BTREE,
+    KEY `status` (`status`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商户申请表';
 
 -- --------------------------------------------------------
 
@@ -7763,29 +7839,29 @@ CREATE TABLE IF NOT EXISTS `eb_user_enter` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_extract` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` int(10) unsigned DEFAULT NULL,
-  `real_name` varchar(64) DEFAULT NULL COMMENT '名称',
-  `extract_type` varchar(32) DEFAULT 'bank' COMMENT 'bank = 银行卡 alipay = 支付宝wx=微信',
-  `bank_code` varchar(32) DEFAULT '0' COMMENT '银行卡',
-  `bank_address` varchar(256) DEFAULT '' COMMENT '开户地址',
-  `alipay_code` varchar(64) DEFAULT '' COMMENT '支付宝账号',
-  `extract_price` decimal(8,2) unsigned DEFAULT '0.00' COMMENT '提现金额',
-  `mark` varchar(512) DEFAULT NULL,
-  `balance` decimal(8,2) unsigned DEFAULT '0.00',
-  `fail_msg` varchar(128) DEFAULT NULL COMMENT '无效原因',
-  `fail_time` int(10) unsigned DEFAULT NULL,
-  `add_time` int(10) unsigned DEFAULT NULL COMMENT '添加时间',
-  `status` tinyint(2) DEFAULT '0' COMMENT '-1 未通过 0 审核中 1 已提现',
-  `wechat` varchar(15) DEFAULT NULL COMMENT '微信号',
-  `qrcode_url` varchar(255) NOT NULL DEFAULT '' COMMENT '二维码地址',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `extract_type` (`extract_type`) USING BTREE,
-  KEY `status` (`status`) USING BTREE,
-  KEY `add_time` (`add_time`) USING BTREE,
-  KEY `openid` (`uid`) USING BTREE,
-  KEY `fail_time` (`fail_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户提现表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `uid` int(10) UNSIGNED NOT NULL DEFAULT '0',
+    `real_name` varchar(64) NOT NULL DEFAULT '' COMMENT '名称',
+    `extract_type` varchar(32) NOT NULL DEFAULT 'bank' COMMENT 'bank = 银行卡 alipay = 支付宝wx=微信',
+    `bank_code` varchar(32) NOT NULL DEFAULT '0' COMMENT '银行卡',
+    `bank_address` varchar(256) NOT NULL DEFAULT '' COMMENT '开户地址',
+    `alipay_code` varchar(64) NOT NULL DEFAULT '' COMMENT '支付宝账号',
+    `extract_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '提现金额',
+    `mark` varchar(512) NOT NULL DEFAULT '',
+    `balance` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00',
+    `fail_msg` varchar(128) NOT NULL DEFAULT '' COMMENT '无效原因',
+    `fail_time` int(10) UNSIGNED NOT NULL DEFAULT '0',
+    `add_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '-1 未通过 0 审核中 1 已提现',
+    `wechat` varchar(15) NOT NULL DEFAULT '' COMMENT '微信号',
+    `qrcode_url` varchar(255) NOT NULL DEFAULT '' COMMENT '二维码地址',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `extract_type` (`extract_type`) USING BTREE,
+    KEY `status` (`status`) USING BTREE,
+    KEY `add_time` (`add_time`) USING BTREE,
+    KEY `openid` (`uid`) USING BTREE,
+    KEY `fail_time` (`fail_time`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户提现表';
 
 -- --------------------------------------------------------
 
@@ -7794,13 +7870,13 @@ CREATE TABLE IF NOT EXISTS `eb_user_extract` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_friends` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `uid` int(10) NOT NULL DEFAULT '0' COMMENT '用户uid',
-  `friends_uid` int(10) NOT NULL DEFAULT '0' COMMENT '好友uid',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`),
-  KEY `uid` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='用户好友关系';
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `uid` int(10) NOT NULL DEFAULT '0' COMMENT '用户uid',
+    `friends_uid` int(10) NOT NULL DEFAULT '0' COMMENT '好友uid',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`),
+    KEY `uid` (`uid`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='用户好友关系';
 
 -- --------------------------------------------------------
 
@@ -7809,10 +7885,10 @@ CREATE TABLE IF NOT EXISTS `eb_user_friends` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_group` (
-  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
-  `group_name` varchar(64) DEFAULT NULL COMMENT '用户分组名称',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户分组表';
+    `id` smallint(5) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `group_name` varchar(64) NOT NULL DEFAULT '' COMMENT '用户分组名称',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户分组表';
 
 -- --------------------------------------------------------
 
@@ -7821,23 +7897,23 @@ CREATE TABLE IF NOT EXISTS `eb_user_group` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_invoice` (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `uid` int(10) NOT NULL DEFAULT '0',
-  `header_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '抬头类型1:个人2：企业',
-  `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '发票类型1：普通2：专用',
-  `name` varchar(100) NOT NULL DEFAULT '' COMMENT '名称（发票抬头）',
-  `duty_number` varchar(50) NOT NULL DEFAULT '' COMMENT '税号',
-  `drawer_phone` varchar(30) NOT NULL DEFAULT '' COMMENT '开票人手机号',
-  `email` varchar(100) NOT NULL DEFAULT '' COMMENT '开票人邮箱',
-  `tell` varchar(30) NOT NULL DEFAULT '' COMMENT '注册电话',
-  `address` varchar(255) NOT NULL DEFAULT '' COMMENT '注册地址',
-  `bank` varchar(50) NOT NULL DEFAULT '' COMMENT '注册开户银行',
-  `card_number` varchar(50) NOT NULL DEFAULT '' COMMENT '银行卡号',
-  `is_default` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否默认',
-  `is_del` tinyint(1) NOT NULL DEFAULT '0',
-  `add_time` int(10) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户发票管理表';
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `uid` int(10) NOT NULL DEFAULT '0',
+    `header_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '抬头类型1:个人2：企业',
+    `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '发票类型1：普通2：专用',
+    `name` varchar(100) NOT NULL DEFAULT '' COMMENT '名称（发票抬头）',
+    `duty_number` varchar(50) NOT NULL DEFAULT '' COMMENT '税号',
+    `drawer_phone` varchar(30) NOT NULL DEFAULT '' COMMENT '开票人手机号',
+    `email` varchar(100) NOT NULL DEFAULT '' COMMENT '开票人邮箱',
+    `tell` varchar(30) NOT NULL DEFAULT '' COMMENT '注册电话',
+    `address` varchar(255) NOT NULL DEFAULT '' COMMENT '注册地址',
+    `bank` varchar(50) NOT NULL DEFAULT '' COMMENT '注册开户银行',
+    `card_number` varchar(50) NOT NULL DEFAULT '' COMMENT '银行卡号',
+    `is_default` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否默认',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0',
+    `add_time` int(10) NOT NULL DEFAULT '0',
+    PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户发票管理表' ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -7846,12 +7922,12 @@ CREATE TABLE IF NOT EXISTS `eb_user_invoice` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_label` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `label_cate` int(10) DEFAULT '0' COMMENT '标签分类',
-  `label_name` varchar(255) NOT NULL DEFAULT '' COMMENT '标签名称',
-  PRIMARY KEY (`id`),
-  KEY `label_cate` (`label_cate`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户标签表';
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `label_cate` int(10) NOT NULL DEFAULT '0' COMMENT '标签分类',
+    `label_name` varchar(255) NOT NULL DEFAULT '' COMMENT '标签名称',
+    PRIMARY KEY (`id`),
+    KEY `label_cate` (`label_cate`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户标签表';
 
 -- --------------------------------------------------------
 
@@ -7860,9 +7936,9 @@ CREATE TABLE IF NOT EXISTS `eb_user_label` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_label_relation` (
-  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
-  `label_id` int(11) NOT NULL DEFAULT '0' COMMENT '标签ID'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户标签关联表';
+    `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户ID',
+    `label_id` int(11) NOT NULL DEFAULT '0' COMMENT '标签ID'
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户标签关联表';
 
 -- --------------------------------------------------------
 
@@ -7871,22 +7947,22 @@ CREATE TABLE IF NOT EXISTS `eb_user_label_relation` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_level` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户uid',
-  `level_id` int(11) NOT NULL DEFAULT '0' COMMENT '等级vip',
-  `grade` int(11) NOT NULL DEFAULT '0' COMMENT '会员等级',
-  `valid_time` int(11) NOT NULL DEFAULT '0' COMMENT '过期时间',
-  `is_forever` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否永久',
-  `mer_id` int(11) NOT NULL DEFAULT '0' COMMENT '商户id',
-  `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:禁止,1:正常',
-  `mark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
-  `remind` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否已通知',
-  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除,0=未删除,1=删除',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  `discount` int(11) NOT NULL DEFAULT '0' COMMENT '享受折扣',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `id` (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户等级记录表';
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户uid',
+    `level_id` int(11) NOT NULL DEFAULT '0' COMMENT '等级vip',
+    `grade` int(11) NOT NULL DEFAULT '0' COMMENT '会员等级',
+    `valid_time` int(11) NOT NULL DEFAULT '0' COMMENT '过期时间',
+    `is_forever` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否永久',
+    `mer_id` int(11) NOT NULL DEFAULT '0' COMMENT '商户id',
+    `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:禁止,1:正常',
+    `mark` varchar(255) NOT NULL DEFAULT '' COMMENT '备注',
+    `remind` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否已通知',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除,0=未删除,1=删除',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `discount` int(11) NOT NULL DEFAULT '0' COMMENT '享受折扣',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `id` (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户等级记录表';
 
 -- --------------------------------------------------------
 
@@ -7895,17 +7971,17 @@ CREATE TABLE IF NOT EXISTS `eb_user_level` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_notice` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` text NOT NULL DEFAULT '' COMMENT '接收消息的用户id（类型：json数据）',
-  `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '消息通知类型（1：系统消息；2：用户通知）',
-  `user` varchar(20) NOT NULL DEFAULT '' COMMENT '发送人',
-  `title` varchar(20) NOT NULL DEFAULT '' COMMENT '通知消息的标题信息',
-  `content` varchar(500) NOT NULL DEFAULT '' COMMENT '通知消息的内容',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '通知消息发送的时间',
-  `is_send` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否发送（0：未发送；1：已发送）',
-  `send_time` int(11) NOT NULL DEFAULT '0' COMMENT '发送时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户通知表';
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `uid` text NOT NULL COMMENT '接收消息的用户id（类型：json数据）',
+    `type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '消息通知类型（1：系统消息；2：用户通知）',
+    `user` varchar(20) NOT NULL DEFAULT '' COMMENT '发送人',
+    `title` varchar(20) NOT NULL DEFAULT '' COMMENT '通知消息的标题信息',
+    `content` varchar(500) NOT NULL DEFAULT '' COMMENT '通知消息的内容',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '通知消息发送的时间',
+    `is_send` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否发送（0：未发送；1：已发送）',
+    `send_time` int(11) NOT NULL DEFAULT '0' COMMENT '发送时间',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户通知表';
 
 -- --------------------------------------------------------
 
@@ -7914,12 +7990,12 @@ CREATE TABLE IF NOT EXISTS `eb_user_notice` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_notice_see` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `nid` int(11) NOT NULL DEFAULT '0' COMMENT '查看的通知id',
-  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '查看通知的用户id',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '查看通知的时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户通知发送记录表';
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `nid` int(11) NOT NULL DEFAULT '0' COMMENT '查看的通知id',
+    `uid` int(11) NOT NULL DEFAULT '0' COMMENT '查看通知的用户id',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '查看通知的时间',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户通知发送记录表';
 
 -- --------------------------------------------------------
 
@@ -7928,23 +8004,41 @@ CREATE TABLE IF NOT EXISTS `eb_user_notice_see` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_recharge` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `uid` int(10) DEFAULT NULL COMMENT '充值用户UID',
-  `order_id` varchar(32) DEFAULT NULL COMMENT '订单号',
-  `price` decimal(8,2) DEFAULT NULL COMMENT '充值金额',
-  `give_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '购买赠送金额',
-  `recharge_type` varchar(32) DEFAULT NULL COMMENT '充值类型',
-  `paid` tinyint(1) DEFAULT NULL COMMENT '是否充值',
-  `pay_time` int(10) DEFAULT NULL COMMENT '充值支付时间',
-  `add_time` int(12) DEFAULT NULL COMMENT '充值时间',
-  `refund_price` decimal(10,2) DEFAULT '0.00' COMMENT '退款金额',
-  `channel_type` varchar(255) NOT NULL DEFAULT '' COMMENT '用户访问端标识',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `order_id` (`order_id`) USING BTREE,
-  KEY `uid` (`uid`) USING BTREE,
-  KEY `recharge_type` (`recharge_type`) USING BTREE,
-  KEY `paid` (`paid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户充值表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `uid` int(10) NOT NULL DEFAULT '0' COMMENT '充值用户UID',
+    `order_id` varchar(32) NOT NULL DEFAULT '' COMMENT '订单号',
+    `price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '充值金额',
+    `give_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '购买赠送金额',
+    `recharge_type` varchar(32) NOT NULL DEFAULT '' COMMENT '充值类型',
+    `paid` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否充值',
+    `pay_time` int(10) NOT NULL DEFAULT '0' COMMENT '充值支付时间',
+    `add_time` int(12) NOT NULL DEFAULT '0' COMMENT '充值时间',
+    `refund_price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '退款金额',
+    `channel_type` varchar(255) NOT NULL DEFAULT '' COMMENT '用户访问端标识',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `order_id` (`order_id`) USING BTREE,
+    KEY `uid` (`uid`) USING BTREE,
+    KEY `recharge_type` (`recharge_type`) USING BTREE,
+    KEY `paid` (`paid`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户充值表';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `eb_user_search`
+--
+
+CREATE TABLE IF NOT EXISTS `eb_user_search` (
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `uid` int(10) NOT NULL DEFAULT '0' COMMENT '用户uid',
+    `keyword` varchar(255) NOT NULL DEFAULT '' COMMENT '搜索关键词',
+    `vicword` varchar(1000) NOT NULL DEFAULT '' COMMENT '关键词分词',
+    `num` int(8) NOT NULL DEFAULT '1' COMMENT '搜索次数',
+    `result` text NOT NULL COMMENT '搜索结果',
+    `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '删除',
+    `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '时间',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户搜索记录表';
 
 -- --------------------------------------------------------
 
@@ -7953,15 +8047,31 @@ CREATE TABLE IF NOT EXISTS `eb_user_recharge` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_sign` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户uid',
-  `title` varchar(255) NOT NULL DEFAULT '' COMMENT '签到说明',
-  `number` int(11) NOT NULL DEFAULT '0' COMMENT '获得积分',
-  `balance` int(11) NOT NULL DEFAULT '0' COMMENT '剩余积分',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `uid` (`uid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=362 DEFAULT CHARSET=utf8 COMMENT='签到记录表';
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户uid',
+    `title` varchar(255) NOT NULL DEFAULT '' COMMENT '签到说明',
+    `number` int(11) NOT NULL DEFAULT '0' COMMENT '获得积分',
+    `balance` int(11) NOT NULL DEFAULT '0' COMMENT '剩余积分',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `uid` (`uid`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='签到记录表';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `eb_user_spread`
+--
+
+CREATE TABLE IF NOT EXISTS `eb_user_spread` (
+    `id` int(10) NOT NULL AUTO_INCREMENT,
+    `uid` int(10) NOT NULL DEFAULT '0' COMMENT '用户uid',
+    `spread_uid` int(10) NOT NULL DEFAULT '0' COMMENT '推广人uid',
+    `spread_time` int(10) NOT NULL DEFAULT '0' COMMENT '推广时间',
+    PRIMARY KEY (`id`),
+    KEY `uid` (`uid`) USING BTREE,
+    KEY `spread_uid` (`spread_uid`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户推广关系表';
 
 -- --------------------------------------------------------
 
@@ -7970,35 +8080,17 @@ CREATE TABLE IF NOT EXISTS `eb_user_sign` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_user_visit` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户uid',
-  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '访问路径',
-  `ip` varchar(255) NOT NULL DEFAULT '' COMMENT '用户ip',
-  `stay_time` int(11) NOT NULL DEFAULT '0' COMMENT '页面停留时间(秒)',
-  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '访问时间',
-  `channel_type` varchar(255) NOT NULL DEFAULT '' COMMENT '用户访问端标识',
-  `province` varchar(255) DEFAULT '' COMMENT '用户省份',
-  PRIMARY KEY (`id`),
-  KEY `time` (`channel_type`,`add_time`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户访问表';
-
--- --------------------------------------------------------
-
---
--- 表的结构 `eb_user_search`
---
-
-CREATE TABLE IF NOT EXISTS `eb_user_search`  (
-  `id` int(10) NOT NULL AUTO_INCREMENT,
-  `uid` int(10) NOT NULL DEFAULT 0 COMMENT '用户uid',
-  `keyword` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '搜索关键词',
-  `vicword` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '关键词分词',
-  `num` int(8) NOT NULL DEFAULT 1 COMMENT '搜索次数',
-  `result` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '搜索结果',
-  `is_del` tinyint(1) NOT NULL DEFAULT 0 COMMENT '删除',
-  `add_time` int(10) NOT NULL DEFAULT 0 COMMENT '时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 DEFAULT CHARSET=utf8 COMMENT='用户搜索记录表';
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `uid` int(11) NOT NULL DEFAULT '0' COMMENT '用户uid',
+    `url` varchar(255) NOT NULL DEFAULT '' COMMENT '访问路径',
+    `ip` varchar(255) NOT NULL DEFAULT '' COMMENT '用户ip',
+    `stay_time` int(11) NOT NULL DEFAULT '0' COMMENT '页面停留时间(秒)',
+    `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '访问时间',
+    `channel_type` varchar(255) NOT NULL DEFAULT '' COMMENT '用户访问端标识',
+    `province` varchar(255) NOT NULL DEFAULT '' COMMENT '用户省份',
+    PRIMARY KEY (`id`),
+    KEY `time` (`channel_type`,`add_time`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户访问表';
 
 -- --------------------------------------------------------
 
@@ -8007,11 +8099,11 @@ CREATE TABLE IF NOT EXISTS `eb_user_search`  (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_wechat_key` (
-  `id` mediumint(8) NOT NULL AUTO_INCREMENT,
-  `reply_id` mediumint(8) NOT NULL DEFAULT '0' COMMENT '回复内容id',
-  `keys` varchar(64) NOT NULL DEFAULT '' COMMENT '关键词',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='微信回复关键词辅助表';
+    `id` mediumint(8) NOT NULL AUTO_INCREMENT,
+    `reply_id` mediumint(8) NOT NULL DEFAULT '0' COMMENT '回复内容id',
+    `keys` varchar(64) NOT NULL DEFAULT '' COMMENT '关键词',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='微信回复关键词辅助表' ROW_FORMAT=DYNAMIC;
 
 -- --------------------------------------------------------
 
@@ -8020,17 +8112,17 @@ CREATE TABLE IF NOT EXISTS `eb_wechat_key` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_wechat_media` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '微信视频音频id',
-  `type` varchar(16) NOT NULL DEFAULT '' COMMENT '回复类型',
-  `path` varchar(128) NOT NULL DEFAULT '' COMMENT '文件路径',
-  `media_id` varchar(64) NOT NULL DEFAULT '' COMMENT '微信服务器返回的id',
-  `url` varchar(256) NOT NULL DEFAULT '' COMMENT '地址',
-  `temporary` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否永久或者临时 0永久1临时',
-  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '添加时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `type` (`type`,`media_id`) USING BTREE,
-  KEY `type_2` (`type`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='微信回复表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '微信视频音频id',
+    `type` varchar(16) NOT NULL DEFAULT '' COMMENT '回复类型',
+    `path` varchar(128) NOT NULL DEFAULT '' COMMENT '文件路径',
+    `media_id` varchar(64) NOT NULL DEFAULT '' COMMENT '微信服务器返回的id',
+    `url` varchar(256) NOT NULL DEFAULT '' COMMENT '地址',
+    `temporary` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否永久或者临时 0永久1临时',
+    `add_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    UNIQUE KEY `type` (`type`,`media_id`) USING BTREE,
+    KEY `type_2` (`type`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信回复表';
 
 -- --------------------------------------------------------
 
@@ -8039,16 +8131,16 @@ CREATE TABLE IF NOT EXISTS `eb_wechat_media` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_wechat_message` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '用户行为记录id',
-  `openid` varchar(32) NOT NULL DEFAULT '' COMMENT '用户openid',
-  `type` varchar(32) NOT NULL DEFAULT '' COMMENT '操作类型',
-  `result` varchar(512) NOT NULL DEFAULT '' COMMENT '操作详细记录',
-  `add_time` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '操作时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `openid` (`openid`) USING BTREE,
-  KEY `type` (`type`) USING BTREE,
-  KEY `add_time` (`add_time`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='用户行为记录表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '用户行为记录id',
+    `openid` varchar(32) NOT NULL DEFAULT '' COMMENT '用户openid',
+    `type` varchar(32) NOT NULL DEFAULT '' COMMENT '操作类型',
+    `result` varchar(512) NOT NULL DEFAULT '' COMMENT '操作详细记录',
+    `add_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '操作时间',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `openid` (`openid`) USING BTREE,
+    KEY `type` (`type`) USING BTREE,
+    KEY `add_time` (`add_time`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户行为记录表';
 
 -- --------------------------------------------------------
 
@@ -8057,14 +8149,14 @@ CREATE TABLE IF NOT EXISTS `eb_wechat_message` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_wechat_news_category` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '图文消息管理ID',
-  `cate_name` varchar(255) NOT NULL DEFAULT '' COMMENT '图文名称',
-  `sort` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '排序',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '状态',
-  `new_id` varchar(255) NOT NULL DEFAULT '' COMMENT '文章id',
-  `add_time` varchar(255) NOT NULL DEFAULT '' COMMENT '添加时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='图文消息管理表';
+    `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '图文消息管理ID',
+    `cate_name` varchar(255) NOT NULL DEFAULT '' COMMENT '图文名称',
+    `sort` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '排序',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '状态',
+    `new_id` varchar(255) NOT NULL DEFAULT '' COMMENT '文章id',
+    `add_time` varchar(255) NOT NULL DEFAULT '' COMMENT '添加时间',
+    PRIMARY KEY (`id`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='图文消息管理表';
 
 -- --------------------------------------------------------
 
@@ -8073,16 +8165,16 @@ CREATE TABLE IF NOT EXISTS `eb_wechat_news_category` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_wechat_reply` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT COMMENT '微信关键字回复id',
-  `type` varchar(32) NOT NULL DEFAULT '' COMMENT '回复类型',
-  `data` text NOT NULL COMMENT '回复数据',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '0=不可用  1 =可用',
-  `hide` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否隐藏',
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `type` (`type`) USING BTREE,
-  KEY `status` (`status`) USING BTREE,
-  KEY `hide` (`hide`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='微信关键字回复表';
+    `id` mediumint(8) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '微信关键字回复id',
+    `type` varchar(32) NOT NULL DEFAULT '' COMMENT '回复类型',
+    `data` text NOT NULL COMMENT '回复数据',
+    `status` tinyint(1) UNSIGNED NOT NULL DEFAULT '1' COMMENT '0=不可用  1 =可用',
+    `hide` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '是否隐藏',
+    PRIMARY KEY (`id`) USING BTREE,
+    KEY `type` (`type`) USING BTREE,
+    KEY `status` (`status`) USING BTREE,
+    KEY `hide` (`hide`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信关键字回复表';
 
 -- --------------------------------------------------------
 
@@ -8091,33 +8183,31 @@ CREATE TABLE IF NOT EXISTS `eb_wechat_reply` (
 --
 
 CREATE TABLE IF NOT EXISTS `eb_wechat_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uid` int(10) unsigned NOT NULL DEFAULT '0' COMMENT '微信用户id',
-  `unionid` varchar(30) DEFAULT NULL COMMENT '只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段',
-  `openid` varchar(30) DEFAULT NULL COMMENT '用户的标识，对当前公众号唯一',
-  `nickname` varchar(64) NOT NULL DEFAULT '' COMMENT '用户的昵称',
-  `headimgurl` varchar(256) NOT NULL DEFAULT '' COMMENT '用户头像',
-  `sex` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '用户的性别，值为1时是男性，值为2时是女性，值为0时是未知',
-  `city` varchar(64) NOT NULL DEFAULT '' COMMENT '用户所在城市',
-  `language` varchar(64) NOT NULL DEFAULT '' COMMENT '用户的语言，简体中文为zh_CN',
-  `province` varchar(64) NOT NULL DEFAULT '' COMMENT '用户所在省份',
-  `country` varchar(64) NOT NULL DEFAULT '' COMMENT '用户所在国家',
-  `remark` varchar(256) DEFAULT NULL COMMENT '公众号运营者对粉丝的备注，公众号运营者可在微信公众平台用户管理界面对粉丝添加备注',
-  `groupid` smallint(5) unsigned DEFAULT '0' COMMENT '用户所在的分组ID（兼容旧的用户分组接口）',
-  `tagid_list` varchar(256) DEFAULT NULL COMMENT '用户被打上的标签ID列表',
-  `subscribe` tinyint(3) unsigned DEFAULT '1' COMMENT '用户是否订阅该公众号标识',
-  `subscribe_time` int(10) unsigned DEFAULT NULL COMMENT '关注公众号时间',
-  `add_time` int(10) unsigned DEFAULT NULL COMMENT '添加时间',
-  `second` int(11) unsigned DEFAULT NULL COMMENT '二级推荐人',
-  `user_type` varchar(32) DEFAULT 'wechat' COMMENT '用户类型',
-  `is_complete` tinyint(1) DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `openid` (`openid`) USING BTREE,
-  KEY `groupid` (`groupid`) USING BTREE,
-  KEY `subscribe_time` (`subscribe_time`) USING BTREE,
-  KEY `add_time` (`add_time`) USING BTREE,
-  KEY `subscribe` (`subscribe`) USING BTREE,
-  KEY `unionid` (`unionid`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='微信用户表';
-
--- --------------------------------------------------------
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `uid` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '微信用户id',
+    `unionid` varchar(30) NOT NULL DEFAULT '' COMMENT '只有在用户将公众号绑定到微信开放平台帐号后，才会出现该字段',
+    `openid` varchar(30) NOT NULL DEFAULT '' COMMENT '用户的标识，对当前公众号唯一',
+    `nickname` varchar(64) NOT NULL DEFAULT '' COMMENT '用户的昵称',
+    `headimgurl` varchar(256) NOT NULL DEFAULT '' COMMENT '用户头像',
+    `sex` tinyint(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户的性别，值为1时是男性，值为2时是女性，值为0时是未知',
+    `city` varchar(64) NOT NULL DEFAULT '' COMMENT '用户所在城市',
+    `language` varchar(64) NOT NULL DEFAULT '' COMMENT '用户的语言，简体中文为zh_CN',
+    `province` varchar(64) NOT NULL DEFAULT '' COMMENT '用户所在省份',
+    `country` varchar(64) NOT NULL DEFAULT '' COMMENT '用户所在国家',
+    `remark` varchar(256) NOT NULL DEFAULT '' COMMENT '公众号运营者对粉丝的备注，公众号运营者可在微信公众平台用户管理界面对粉丝添加备注',
+    `groupid` smallint(5) UNSIGNED NOT NULL DEFAULT '0' COMMENT '用户所在的分组ID（兼容旧的用户分组接口）',
+    `tagid_list` varchar(256) NOT NULL DEFAULT '' COMMENT '用户被打上的标签ID列表',
+    `subscribe` tinyint(3) UNSIGNED NOT NULL DEFAULT '1' COMMENT '用户是否订阅该公众号标识',
+    `subscribe_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '关注公众号时间',
+    `add_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
+    `second` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '二级推荐人',
+    `user_type` varchar(32) NOT NULL DEFAULT 'wechat' COMMENT '用户类型',
+    `is_complete` tinyint(1) NOT NULL DEFAULT '0',
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `openid` (`openid`) USING BTREE,
+    KEY `groupid` (`groupid`) USING BTREE,
+    KEY `subscribe_time` (`subscribe_time`) USING BTREE,
+    KEY `add_time` (`add_time`) USING BTREE,
+    KEY `subscribe` (`subscribe`) USING BTREE,
+    KEY `unionid` (`unionid`) USING BTREE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信用户表';
