@@ -62,7 +62,7 @@ class SystemConfigServices extends BaseServices
         ],
         'agent' => [
             'url' => '/agent/config/save_basics',
-            'auth' => ['fenxiao'],
+            'auth' => ['fenxiao','brokerage_type','brokerage_set','extract_set'],
         ],
         'marketing' => [
             'url' => '/marketing/integral_config/save_basics',
