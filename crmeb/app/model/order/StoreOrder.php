@@ -63,10 +63,9 @@ class StoreOrder extends BaseModel
      */
     public function user()
     {
-        return $this->hasOne(User::class, 'uid', 'uid')->field(['uid', 'nickname', 'phone', 'spread_uid'])->bind([
+        return $this->hasOne(User::class, 'uid', 'uid')->field(['uid', 'nickname', 'phone'])->bind([
             'nickname' => 'nickname',
             'phone' => 'phone',
-            'spread_uid' => 'spread_uid',
         ]);
     }
 
