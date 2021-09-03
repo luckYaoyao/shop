@@ -7259,7 +7259,7 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (716, 0, 'md-stats', '统计', 'admin', '', '', '', '', '[]', 1, 1, 0, 1, '/admin/statistic', '', 1, '', 0, 'admin-statistic', 0),
 (717, 716, '', '商品统计', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/statistic/product', '', 1, '', 0, 'admin-statistic', 0),
 (718, 716, '', '用户统计', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/statistic/user', '', 1, '', 0, 'admin-statistic', 0),
-(719, 71, '', '添加优惠卷', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin/marketing/store_coupon_issue/create', '27/30/71', 1, '', 0, 'marketing-store_coupon_issue-create', 0),
+(719, 71, '', '添加优惠卷', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin/marketing/store_coupon_issue/create', '27/30/71', 1, '', 0, 'admin-marketing-store_coupon_issue-create', 0),
 (720, 303, '', '配送员管理', 'admin', '', '', '', '', '[]', 10, 1, 0, 1, '/admin/setting/delivery_service/index', '', 1, '', 0, 'setting-delivery-service', 0),
 (721, 729, '', '编辑配送员', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin/setting/delivery_service/edit', '', 1, '', 0, 'setting-delivery_service-edit', 0),
 (722, 720, '', '配送员列表', 'admin', '', '', 'order/delivery/index', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
