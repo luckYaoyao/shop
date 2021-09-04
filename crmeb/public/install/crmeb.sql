@@ -6386,15 +6386,9 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (328, 'record_No', 'text', 'input', 26, NULL, NULL, '', 100, NULL, '\"Copyright \\u00a9 2022 \\u897f\\u5b89\\u4f17\\u90a6\\u7f51\\u7edc\\u79d1\\u6280\"', '备案号', '备案号', 0, 1),
 (329, 'routine_contact_type', 'radio', NULL, 7, '1=>小程序客服\n0=>智慧客服系统', NULL, NULL, NULL, NULL, '0', '小程序客服类型', '小程序客服类型', 0, 1),
 (330, 'station_open', 'radio', NULL, 26, '1=>开启\n0=>关闭', NULL, NULL, NULL, NULL, '1', '站点开启', '站点开始|关闭（用于升级等临时关闭）', 11, 1),
-(331, 'uni_brokerage_price', 'text', 'input', 73, NULL, NULL, NULL, 100, NULL, '\"5\"', '推广佣金单价（每推广一个用户）', '分销推广佣金单价（每推广一个用户）', 93, 1),
-(332, 'day_brokerage_price_upper', 'text', 'input', 73, NULL, NULL, '', 100, NULL, '\"-1\"', '每日推广佣金上限', '每日推广佣金上限（0:不发佣金-1:不限制；注最好是推广佣金单价的整数倍）', 92, 1),
-(333, 'is_self_brokerage', 'radio', NULL, 73, '0=>关闭\n1=>开启', NULL, NULL, NULL, NULL, '1', '自购返佣', '是否开启自购返佣（开启：分销员自己购买商品，享受一级返佣，上级享受二级返佣； 关闭：分销员自己购买商品没有返佣）', 94, 1),
-(334, 'store_brokerage_binding_status', 'radio', NULL, 72, '1=>永久\n2=>有效期\n3=>临时', NULL, NULL, 0, 0, '2', '绑定模式', '永久”一次绑定永久有效，“有效期”绑定后一段时间内有效，“临时”', 91, 1),
-(335, 'store_brokerage_binding_time', 'text', 'input', 72, NULL, NULL, NULL, 100, NULL, '\"1\"', '绑定有效期', '绑定有效期（绑定后N天内有效）', 90, 1),
 (336, 'refund_name', 'text', 'input', 71, NULL, NULL, NULL, 100, NULL, '\"\"', '退货收货人姓名', '退货收货人姓名', 90, 1),
 (337, 'refund_phone', 'text', 'input', 71, NULL, NULL, NULL, 100, NULL, '\"\"', '退货收货人电话', '退货收货人电话', 90, 1),
 (338, 'refund_address', 'text', 'input', 71, NULL, NULL, NULL, 100, NULL, '\"\"', '退货收货人地址', '退货收货人地址', 90, 1),
-(339, 'brokerage_user_status', 'radio', '', 73, '0=>关闭\n1=>开启', NULL, NULL, 100, NULL, '0', '推广用户返佣', '分销推广用户获取佣金', 94, 1),
 (340, 'wechat_open_app_id', 'text', 'input', 75, NULL, NULL, '', 100, NULL, '\"\"', '开放平台appid', '开放平台appid', 0, 1),
 (341, 'wechat_open_app_secret', 'text', 'input', 75, NULL, NULL, '', 100, NULL, '\"\"', '开放平台secret', '开放平台secret', 0, 1),
 (342, 'contact_number', 'text', 'input', 75, NULL, NULL, '', 100, NULL, '\"13720673941\"', '联系电话', '联系电话', 0, 1),
@@ -7256,9 +7250,6 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (713, 707, '', '设置直播间是否显示', 'admin', '', '', 'live/room/set_show/<id>/<is_show>', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (714, 707, '', '同步直播间状态', 'admin', '', '', 'live/room/syncRoom', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (715, 133, '', '一键同步订阅消息', 'admin', '', '', 'app/routine/syncSubscribe', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, 'app-wechat-template-sync', 0),
-(716, 0, 'md-stats', '统计', 'admin', '', '', '', '', '[]', 1, 1, 0, 1, '/admin/statistic', '', 1, '', 0, 'admin-statistic', 0),
-(717, 716, '', '商品统计', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/statistic/product', '', 1, '', 0, 'admin-statistic', 0),
-(718, 716, '', '用户统计', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/statistic/user', '', 1, '', 0, 'admin-statistic', 0),
 (719, 71, '', '添加优惠卷', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin/marketing/store_coupon_issue/create', '27/30/71', 1, '', 0, 'admin-marketing-store_coupon_issue-create', 0),
 (720, 303, '', '配送员管理', 'admin', '', '', '', '', '[]', 10, 1, 0, 1, '/admin/setting/delivery_service/index', '', 1, '', 0, 'setting-delivery-service', 0),
 (721, 729, '', '编辑配送员', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin/setting/delivery_service/edit', '', 1, '', 0, 'setting-delivery_service-edit', 0),
@@ -7305,7 +7296,6 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (763, 731, '', '会员记录', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/user/grade/record', '', 1, '', 0, 'admin-user-grade-record', 0),
 (764, 763, '', '会员记录列表', 'admin', '', '', 'user/member/record', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, 'user-member-record', 0),
 (765, 731, '', '会员权益', 'admin', '', '', '', '', '[]', 4, 1, 0, 1, '/admin/user/grade/right', '', 1, '', 0, 'admin-user-grade-right', 0),
-(766, 716, '', '交易统计', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/statistic/transaction', '', 1, '', 0, 'admin-statistic', 0),
 (767, 36, '', '发票管理', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/order/invoice/list', '', 1, '', 0, 'admin-order-startOrderInvoice-index', 0),
 (768, 210, '', '编辑', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '', '', 2, '', 0, 'admin-order-invoice-edit', 0),
 (769, 210, '', '订单信息', 'admin', '', '', 'order/invoice_order_info/<id>', 'GET', '[]', 0, 1, 0, 1, '', '', 2, '', 0, 'admin-order-invoice-orderInfo', 0),
@@ -7400,11 +7390,7 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (893, 577, '', '商品活动状态检测', 'admin', '', '', 'product/product/check_activity/<id>', 'GET', '[]', 0, 0, 0, 1, '', '1/2/577', 2, '', 0, '', 0),
 (894, 589, '', '会员标签列表', 'admin', '', '', 'user/user_label', 'GET', '[]', 0, 0, 0, 1, '', '9/589', 2, '', 0, '', 0),
 (895, 585, '', '新增客服选择用户列表', 'admin', '', '', 'app/wechat/kefu/create', 'GET', '[]', 0, 0, 0, 1, '', '9/10/585', 2, '', 0, '', 0),
-(896, 26, '', '分销等级', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/membership_level/index', '26', 1, '', 0, '', 0),
-(897, 4, '', '售后订单', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/order/refund', '4', 1, '', 0, 'admin-order-refund', 0),
-(898, 12, '', '消息管理', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/notification/index', '12', 1, '', 0, 'setting-notification', 0),
-(899, 656, '', '客服页面广告', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/system_group_data/kf_adv', '', 1, '', 0, 'setting-system-group_data-kf_adv', 0),
-(900, 135, '', 'APP版本管理', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/app/version_list', '135', 1, '', 0, 'app_version_list', 0);
+(899, 656, '', '客服页面广告', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/system_group_data/kf_adv', '', 1, '', 0, 'setting-system-group_data-kf_adv', 0);
 
 -- --------------------------------------------------------
 
