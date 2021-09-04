@@ -77,17 +77,23 @@ class SystemConfigServices extends BaseServices
     protected $relatedRule = [
         'brokerage_func_status' => [
             'son_type' => [
-                'brokerage_bindind' => '',
-                'store_brokerage_ratio' => '',
-                'store_brokerage_two' => '',
-                'user_extract_min_price' => '',
-                'user_extract_bank' => '',
-                'extract_time' => '',
-                'spread_banner' => '',
                 'store_brokerage_statu' => [
                     'son_type' => ['store_brokerage_price' => ''],
                     'show_value' => 3
                 ],
+                'brokerage_bindind' => '',
+                'store_brokerage_binding_status' => [
+                    'son_type' => ['store_brokerage_binding_time' => ''],
+                    'show_value' => 2
+                ],
+                'spread_banner' => '',
+            ],
+            'show_value' => 1
+        ],
+        'brokerage_user_status' => [
+            'son_type' => [
+                'uni_brokerage_price' => '',
+                'day_brokerage_price_upper' => '',
             ],
             'show_value' => 1
         ],
@@ -115,7 +121,6 @@ class SystemConfigServices extends BaseServices
         ],
         'member_func_status' => [
             'son_type' => [
-                'member_price_status' => '',
                 'order_give_exp' => '',
                 'sign_give_exp' => '',
                 'invite_user_exp' => ''
@@ -152,13 +157,45 @@ class SystemConfigServices extends BaseServices
         ],
         'pay_weixin_open' => [
             'son_type' => [
-                'paydir' => '',
-                'pay_weixin_key' => '',
-                'pay_weixin_client_key' => '',
-                'pay_weixin_client_cert' => '',
                 'pay_weixin_mchid' => '',
-                'pay_weixin_appsecret' => '',
-                'pay_weixin_appid' => '',
+                'pay_weixin_key' => '',
+                'pay_weixin_client_cert' => '',
+                'pay_weixin_client_key' => '',
+                'paydir' => '',
+            ],
+            'show_value' => 1
+        ],
+        'config_export_open' => [
+            'son_type' => [
+                'config_export_to_name' => '',
+                'config_export_to_tel' => '',
+                'config_export_to_address' => '',
+                'config_export_siid' => '',
+            ],
+            'show_value' => 1
+        ],
+        'image_watermark_status' => [
+            'son_type' => [
+                'watermark_type' => [
+                    'son_type' => [
+                        'watermark_image' => '',
+                        'watermark_opacity' => '',
+                        'watermark_rotate' => '',
+                    ],
+                    'show_value' => 1
+                ],
+                'watermark_position' => '',
+                'watermark_x' => '',
+                'watermark_y' => '',
+                'watermark_type@' => [
+                    'son_type' => [
+                        'watermark_text' => '',
+                        'watermark_text_size' => '',
+                        'watermark_text_color' => '',
+                        'watermark_text_angle' => ''
+                    ],
+                    'show_value' => 2
+                ],
             ],
             'show_value' => 1
         ],
