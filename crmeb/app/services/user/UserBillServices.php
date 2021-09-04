@@ -8,7 +8,7 @@
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-declare (strict_types=1);
+declare (strict_types = 1);
 
 namespace app\services\user;
 
@@ -649,8 +649,8 @@ class UserBillServices extends BaseServices
         if (isset($where['type']) && $where['type'] != '') {
             $where_data['type'] = $where['type'];
         }
-        $where_data['not_category'] = ['integral', 'exp'];
-        $where_data['not_type'] = ['gain', 'system_sub', 'deduction', 'sign'];
+        $where_data['not_category'] = ['integral', 'exp', 'share'];
+        $where_data['not_type'] = ['gain', 'system_sub', 'deduction', 'sign', 'share'];
         if (isset($where['nickname']) && $where['nickname'] != '') {
             $where_data['like'] = $where['nickname'];
         }
