@@ -89,7 +89,7 @@ class MiniProgramService
     public static function options()
     {
         $wechat = SystemConfigService::more(['site_url', 'routine_appId', 'routine_appsecret']);
-        $payment = SystemConfigService::more(['pay_routine_mchid', 'pay_routine_key', 'pay_routine_client_cert', 'pay_routine_client_key', 'pay_weixin_open']);
+        $payment = SystemConfigService::more(['pay_weixin_mchid', 'pay_weixin_key', 'pay_weixin_client_cert', 'pay_weixin_client_key', 'pay_weixin_open']);
         $config = [];
         $config['mini_program'] = [
             'app_id' => isset($wechat['routine_appId']) ? trim($wechat['routine_appId']) : '',
@@ -99,10 +99,10 @@ class MiniProgramService
         ];
         $config['payment'] = [
             'app_id' => isset($wechat['routine_appId']) ? trim($wechat['routine_appId']) : '',
-            'merchant_id' => trim($payment['pay_routine_mchid']),
-            'key' => trim($payment['pay_routine_key']),
-            'cert_path' => realpath('.' . $payment['pay_routine_client_cert']),
-            'key_path' => realpath('.' . $payment['pay_routine_client_key']),
+            'merchant_id' => trim($payment['pay_weixin_mchid']),
+            'key' => trim($payment['pay_weixin_key']),
+            'cert_path' => realpath('.' . $payment['pay_weixin_client_cert']),
+            'key_path' => realpath('.' . $payment['pay_weixin_client_key']),
             'notify_url' => trim($wechat['site_url']) . Url::buildUrl('/api/routine/notify')
         ];
         return $config;
