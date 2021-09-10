@@ -8195,5 +8195,6 @@ CREATE TABLE IF NOT EXISTS `eb_wechat_user` (
     KEY `subscribe_time` (`subscribe_time`) USING BTREE,
     KEY `add_time` (`add_time`) USING BTREE,
     KEY `subscribe` (`subscribe`) USING BTREE,
-    KEY `unionid` (`unionid`) USING BTREE
+    KEY `unionid` (`unionid`) USING BTREE，
+    KEY `uid` (`uid`) USING BTREE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='微信用户表';
