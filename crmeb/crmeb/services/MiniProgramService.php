@@ -383,7 +383,7 @@ class MiniProgramService
     public static function payOrderRefund($orderNo, array $opt)
     {
         if (!isset($opt['pay_price'])) throw new AdminException('缺少pay_price');
-        if (sys_config('pay_routine_client_key') == '' || sys_config('pay_routine_client_cert') == '') throw new AdminException('请配置支付证书');
+        if (sys_config('pay_weixin_client_key') == '' || sys_config('pay_weixin_client_cert') == '') throw new AdminException('请配置支付证书');
         $totalFee = floatval(bcmul($opt['pay_price'], 100, 0));
         $refundFee = isset($opt['refund_price']) ? floatval(bcmul($opt['refund_price'], 100, 0)) : null;
         $refundReason = isset($opt['desc']) ? $opt['desc'] : '';
