@@ -76,7 +76,7 @@ class OrderCreateAfter implements ListenerInterface
         }
         $switch = sys_config('unpaid_order_switch') ? true : false;
         //未支付10分钟后发送短信
-        $switch && UnpaidOrderCancelJob::dispatchSece(600, [$orderId]);
+        $switch && UnpaidOrderSend::dispatchSece(600, [$orderId]);
         //未支付根据系统设置事件取消订单
         UnpaidOrderCancelJob::dispatchSece((int)($secs * 3600), [$orderId]);
     }
