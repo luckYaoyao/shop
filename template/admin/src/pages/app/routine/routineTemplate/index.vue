@@ -222,7 +222,6 @@
                     functon = wechatListApi(this.formValidate)
                 }
                 functon.then(async res => {
-                    console.log(res)
                     let data = res.data
                     this.tabList = data.list
                     this.total = data.count

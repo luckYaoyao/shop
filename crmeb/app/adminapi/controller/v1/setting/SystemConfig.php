@@ -77,20 +77,20 @@ class SystemConfig extends AuthController
     public function save()
     {
         $data = $this->request->postMore([
-            'menu_name',
-            'type',
-            'input_type',
-            'config_tab_id',
-            'parameter',
-            'upload_type',
-            'required',
-            'width',
-            'high',
-            'value',
-            'info',
-            'desc',
-            'sort',
-            'status',
+            ['menu_name', ''],
+            ['type', ''],
+            ['input_type', 'input'],
+            ['config_tab_id', 0],
+            ['parameter', ''],
+            ['upload_type', 1],
+            ['required', ''],
+            ['width', 0],
+            ['high', 0],
+            ['value', ''],
+            ['info', ''],
+            ['desc', ''],
+            ['sort', 0],
+            ['status', 0]
         ]);
         if (!$data['info']) return app('json')->fail('请输入配置名称');
         if (!$data['menu_name']) return app('json')->fail('请输入字段名称');
@@ -164,7 +164,22 @@ class SystemConfig extends AuthController
             $value = request()->post('value/a');
         }
         if (!$value) $value = request()->post(request()->post('menu_name'));
-        $data = $this->request->postMore(['status', 'info', 'desc', 'sort', 'config_tab_id', 'required', 'parameter', ['value', $value], 'upload_type', 'input_type']);
+        $data = $this->request->postMore([
+            ['menu_name', ''],
+            ['type', ''],
+            ['input_type', 'input'],
+            ['config_tab_id', 0],
+            ['parameter', ''],
+            ['upload_type', 1],
+            ['required', ''],
+            ['width', 0],
+            ['high', 0],
+            ['value', $value],
+            ['info', ''],
+            ['desc', ''],
+            ['sort', 0],
+            ['status', 0]
+        ]);
         if (!$this->services->get($id)) {
             return app('json')->fail('编辑的记录不存在!');
         }
@@ -237,8 +252,13 @@ class SystemConfig extends AuthController
                 }
             }
         }
-        validate(\app\adminapi\validate\setting\SystemConfigValidata::class)->check($post);
-        $this->services->checkParam($request->baseUrl(), $post);
+        $this->validate($post, \app\adminapi\validate\setting\SystemConfigValidata::class);
+        if (isset($post['upload_type'])) {
+            $this->services->checkThumbParam($post);
+        }
+        if (isset($post['store_brokerage_binding_status'])) {
+            $this->services->checkBrokerageBinding($post);
+        }
         if (isset($post['store_brokerage_ratio']) && isset($post['store_brokerage_two'])) {
             $num = $post['store_brokerage_ratio'] + $post['store_brokerage_two'];
             if ($num > 100) {
@@ -251,10 +271,12 @@ class SystemConfig extends AuthController
                 return app('json')->fail('分销海报不能多于5张');
             }
         }
-        foreach ($post as $k => $v) {
-            if ($k === 'user_extract_min_price' && !preg_match('/[0-9]$/', $v)) {
+        if (isset($post['user_extract_min_price'])) {
+            if (!preg_match('/[0-9]$/', $post['user_extract_min_price'])) {
                 return app('json')->fail('提现最低金额只能为数字!');
             }
+        }
+        foreach ($post as $k => $v) {
             $config_one = $this->services->getOne(['menu_name' => $k]);
             if ($config_one) {
                 $config_one['value'] = $v;
@@ -264,6 +286,11 @@ class SystemConfig extends AuthController
         }
         if (isset($post['wss_open'])) {
             $this->services->saveSslFilePath((int)$post['wss_open'], $post['wss_local_pk'] ?? '', $post['wss_local_cert'] ?? '');
+        }
+        if (isset($post['weixin_ckeck_file'])) {
+            $from = public_path() . $post['weixin_ckeck_file'];
+            $to = public_path() . explode('/', $post['weixin_ckeck_file'])[2];
+            @copy($from, $to);
         }
         \crmeb\services\CacheService::clear();
         return app('json')->success('修改成功');
@@ -292,4 +319,14 @@ class SystemConfig extends AuthController
         return app('json')->success(compact('config_tab'));
     }
 
+    /**
+     * 获取单个配置的值
+     * @param $name
+     * @return mixed
+     */
+    public function get_system($name)
+    {
+        $value = sys_config($name);
+        return app('json')->success(compact('value'));
+    }
 }

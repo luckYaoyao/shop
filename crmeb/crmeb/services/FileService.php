@@ -10,6 +10,9 @@
 // +----------------------------------------------------------------------
 namespace crmeb\services;
 
+use app\services\shipping\ExpressServices;
+use think\exception\ValidateException;
+
 /**
  * 文件操作类
  * Class FileService
@@ -55,50 +58,50 @@ class FileService
 
     /**
      *  删除目录下所有满足条件文件
-     *  @param $path 文件目录
-     *  @param $start 开始时间
-     *  @param $end 结束时间
+     * @param $path 文件目录
+     * @param $start 开始时间
+     * @param $end 结束时间
      *  return bool
      */
-    public static function del_where_dir($path,$start = '',$end = '')
+    public static function del_where_dir($path, $start = '', $end = '')
     {
-        if(!file_exists($path)){
+        if (!file_exists($path)) {
             return false;
         }
         $dh = @opendir($path);
-        if($dh){
-            while(($d = readdir($dh)) !== false){
-                if($d == '.' || $d == '..'){//如果为.或..
+        if ($dh) {
+            while (($d = readdir($dh)) !== false) {
+                if ($d == '.' || $d == '..') {//如果为.或..
                     continue;
                 }
-                $tmp = $path.'/'.$d;
-                if(!is_dir($tmp) ){//如果为文件
+                $tmp = $path . '/' . $d;
+                if (!is_dir($tmp)) {//如果为文件
                     $file_time = filemtime($tmp);
-                    if($file_time){
-                        if($start != '' && $end != ''){
-                            if($file_time >= $start && $file_time <= $end){
+                    if ($file_time) {
+                        if ($start != '' && $end != '') {
+                            if ($file_time >= $start && $file_time <= $end) {
                                 @unlink($tmp);
                             }
-                        }elseif($start != '' && $end == ''){
-                            if($file_time >= $start ){
+                        } elseif ($start != '' && $end == '') {
+                            if ($file_time >= $start) {
                                 @unlink($tmp);
                             }
-                        }elseif($start == '' && $end != ''){
-                            if($file_time <= $end){
+                        } elseif ($start == '' && $end != '') {
+                            if ($file_time <= $end) {
                                 @unlink($tmp);
                             }
-                        }else{
+                        } else {
                             @unlink($tmp);
                         }
                     }
-                }else{//如果为目录
-                    self::delDir($tmp,$start,$end);
+                } else {//如果为目录
+                    self::delDir($tmp, $start, $end);
                 }
             }
             //判断文件夹下是否 还有文件
             $count = count(scandir($path));
             closedir($dh);
-            if($count  <= 2) @rmdir($path);
+            if ($count <= 2) @rmdir($path);
         }
         return true;
     }
@@ -931,4 +934,54 @@ class FileService
         return is_writable($file);
     }
 
+    /**读取excel文件内容
+     * @param $filePath
+     * @param string $suffix
+     * @return bool
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
+    public function readExcel($filePath, $row_num = 1, $suffix = 'Xlsx')
+    {
+        if (!$filePath) return false;
+        $pathInfo = pathinfo($filePath, PATHINFO_EXTENSION);
+        if (!$pathInfo || $pathInfo != "xlsx") throw new ValidateException('必须上传xlsx格式文件');
+        //加载读取模型
+        $readModel = \PhpOffice\PhpSpreadsheet\IOFactory::createReader($suffix);
+        // 创建读操作
+        // 打开文件 载入excel表格
+        try {
+            $spreadsheet = $readModel->load($filePath);
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->getHighestColumn();
+            $highestRow = $sheet->getHighestRow();
+            $lines = $highestRow - 1;
+            if ($lines <= 0) {
+                throw new ValidateException('数据不能为空');
+            }
+            // 用于存储表格数据
+            $data = [];
+            for ($i = $row_num; $i <= $highestRow; $i++) {
+                $t1 = $this->objToStr($sheet->getCellByColumnAndRow(1, $i)->getValue()) ?? '';
+                $t2 = $this->objToStr($sheet->getCellByColumnAndRow(2, $i)->getValue());
+                if ($t2) {
+                    $data[] = [
+                        'key' => $t1,
+                        'value' => $t2
+                    ];
+                }
+            }
+            return $data;
+        } catch (\Exception $e) {
+            throw new ValidateException($e->getMessage());
+        }
+    }
+
+    /**对象转字符
+     * @param $value
+     * @return mixed
+     */
+    public function objToStr($value)
+    {
+        return is_object($value) ? $value->__toString() : $value;
+    }
 }

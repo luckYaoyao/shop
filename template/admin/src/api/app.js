@@ -33,6 +33,16 @@ export function routineSyncTemplate () {
 }
 
 /**
+ * @description  同步微信模版消息
+ */
+ export function wechatSyncTemplate () {
+    return request({
+        url: `app/wechat/syncSubscribe`,
+        method: 'GET'
+    })
+}
+
+/**
  * @description 小程序模板消息 -- 新增表单
  * @param {Object} param data {Object} 传值参数
  */

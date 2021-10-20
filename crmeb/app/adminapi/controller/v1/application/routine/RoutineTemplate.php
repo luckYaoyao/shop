@@ -11,6 +11,7 @@
 namespace app\adminapi\controller\v1\application\routine;
 
 use app\services\other\TemplateMessageServices;
+use crmeb\exceptions\AdminException;
 use think\facade\App;
 use think\Request;
 use think\facade\Route as Url;
@@ -202,8 +203,25 @@ class RoutineTemplate extends AuthController
      */
     public function syncSubscribe()
     {
+        if (!sys_config('routine_appId') || !sys_config('routine_appsecret')) {
+            throw new AdminException('请先配置小程序appid、appSecret等参数');
+        }
         $all = $this->services->getTemplateList(['status' => 1, 'type' => 0]);
         $errData = [];
+        $errMessage = [
+            '-1' => '系统繁忙，此时请稍候再试',
+            '40001' => 'AppSecret错误或者AppSecret不属于这个小程序，请确认AppSecret 的正确性',
+            '40002' => '请确保grant_type字段值为client_credential',
+            '40013' => '不合法的AppID，请检查AppID的正确性，避免异常字符，注意大小写',
+            '40125' => '小程序配置无效，请检查配置',
+            '41002' => '缺少appid参数',
+            '41004' => '缺少secret参数',
+            '43104' => 'appid与openid不匹配',
+            '45009' => '达到微信api每日限额上限',
+            '200011' => '此账号已被封禁，无法操作',
+            '200012' => '个人模版数已达上限，上限25个',
+            '200014' => '请检查小程序所属类目',
+        ];
         if ($all['list']) {
             $time = time();
             foreach ($all['list'] as $template) {
@@ -211,11 +229,19 @@ class RoutineTemplate extends AuthController
                     if (!isset($template['kid'])) {
                         return app('json')->fail('数据库模版表(template_message)缺少字段：kid');
                     }
+                    if (isset($template['kid']) && $template['kid']) {
+                        continue;
+                    }
                     $works = [];
                     try {
                         $works = MiniProgramService::getSubscribeTemplateKeyWords($template['tempkey']);
                     } catch (\Throwable $e) {
-                        $errData[1] = '获取关键词列表失败：请检查小程序APPID、秘钥配置或者服务器ssl证书以及opennssl、curl扩展';
+                        $wechatErr = $e->getMessage();
+                        if (is_string($wechatErr)) throw new AdminException($wechatErr);
+                        if (in_array($wechatErr->getCode(), array_keys($errMessage))) {
+                            throw new AdminException($errMessage[$wechatErr->getCode()]);
+                        }
+                        $errData[1] = '获取关键词列表失败：' . $wechatErr->getMessage();
                     }
                     $kid = [];
                     if ($works) {
@@ -233,7 +259,12 @@ class RoutineTemplate extends AuthController
                         try {
                             $tempid = MiniProgramService::addSubscribeTemplate($template['tempkey'], $kid, $template['name']);
                         } catch (\Throwable $e) {
-                            $errData[2] = '添加订阅消息模版失败：请去微信小程序后台检查订阅消息添加条数是否上限';
+                            $wechatErr = $e->getMessage();
+                            if (is_string($wechatErr)) throw new AdminException($wechatErr);
+                            if (in_array($wechatErr->getCode(), array_keys($errMessage))) {
+                                throw new AdminException($errMessage[$wechatErr->getCode()]);
+                            }
+                            $errData[2] = '添加订阅消息模版失败：' . $wechatErr->getMessage();
                         }
                         if ($tempid != $template['tempid']) {
                             $this->services->update($template['id'], ['tempid' => $tempid, 'kid' => json_encode($kid), 'add_time' => $time], 'id');

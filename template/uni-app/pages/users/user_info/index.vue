@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<form @submit="formSubmit">
-			<view class='personal-data'>
+			<view class='personal-data' :style="colorStyle">
 				<!-- <view class="wrapper">
 					<view class="title">管理我的账号</view>
 					<view class="wrapList">
@@ -76,6 +76,15 @@
 					</view>
 					<!-- #endif -->
 					
+					<!-- #ifdef APP-PLUS -->
+					<view class="item acea-row row-between-wrapper" v-if="userInfo.phone">
+						<view>密码</view>
+						<navigator url="/pages/users/user_pwd_edit/index" hover-class="none" class="input">
+							点击修改密码<text class="iconfont icon-xiangyou"></text>
+						</navigator>
+					</view>
+					<!-- #endif -->
+
 					<view class="item acea-row row-between-wrapper" v-if="userInfo.phone">
 						<view>更换手机号码</view>
 						<navigator url="/pages/users/user_phone/index?type=1" hover-class="none" class="input">
@@ -85,13 +94,17 @@
 				</view>
 				<button class='modifyBnt bg-color' formType="submit">保存修改</button>
 				<!-- #ifdef H5 -->
-				<view class="logOut cart-color acea-row row-center-wrapper" @click="outLogin" v-if="!this.$wechat.isWeixin()">退出登录</view>
+				<view class="logOut cartcolor acea-row row-center-wrapper" @click="outLogin" v-if="!this.$wechat.isWeixin()">退出登录</view>
+				<!-- #endif -->
+				<!-- #ifdef APP-PLUS -->
+				<view class="logOut cartcolor acea-row row-center-wrapper" @click="outLogin">退出登录</view>
 				<!-- #endif -->
 			</view>
 		</form>
 		<!-- #ifdef MP -->
 		<!-- <authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse"></authorize> -->
 		<!-- #endif -->
+		<canvas canvas-id="canvas" v-if="canvasStatus" :style="{width: canvasWidth + 'px', height: canvasHeight + 'px',position: 'absolute',left:'-100000px',top:'-100000px'}"></canvas>
 	</view>
 </template>
 
@@ -114,12 +127,14 @@
 	// #ifdef MP
 	import authorize from '@/components/Authorize';
 	// #endif
+	import colors from '@/mixins/color.js';
 	export default {
 		components: {
 			// #ifdef MP
 			authorize
 			// #endif
 		},
+		mixins:[colors],
 		data() {
 			return {
 				userInfo: {},
@@ -127,18 +142,21 @@
 				userIndex: 0,
 				switchUserInfo: [],
 				isAuto: false, //没有授权的不会自动授权
-				isShowAuth: false //是否隐藏授权
+				isShowAuth: false, //是否隐藏授权
+				canvasWidth: "",
+				canvasHeight: "",
+				canvasStatus: false
 			};
 		},
 		computed: mapGetters(['isLogin']),
-		watch:{
-			isLogin:{
-				handler:function(newV,oldV){
-					if(newV){
+		watch: {
+			isLogin: {
+				handler: function(newV, oldV) {
+					if (newV) {
 						this.getUserInfo();
 					}
 				},
-				deep:true
+				deep: true
 			}
 		},
 		onLoad() {
@@ -165,7 +183,6 @@
 			Setting: function() {
 				uni.openSetting({
 					success: function(res) {
-						console.log(res.authSetting)
 					}
 				});
 			},
@@ -211,25 +228,24 @@
 				let that = this;
 				if (that.loginType == 'h5') {
 					uni.showModal({
-					    title: '提示',
-					    content: '确认退出登录?',
-					    success: function (res) {
-					        if (res.confirm) {
-					            getLogout()
-					              .then(res => {
-					                that.$store.commit("LOGOUT");
-									uni.reLaunch({
-										url: '/pages/index/index'
+						title: '提示',
+						content: '确认退出登录?',
+						success: function(res) {
+							if (res.confirm) {
+								getLogout()
+									.then(res => {
+										that.$store.commit("LOGOUT");
+										uni.reLaunch({
+											url: '/pages/index/index'
+										})
 									})
-					              })
-					              .catch(err => {
-					                console.log(err);
-					              });
-					        } else if (res.cancel) {
-					            console.log('用户点击取消');
-					        }
-					    }
-					});	
+									.catch(err => {
+									});
+							} else if (res.cancel) {
+								console.log('用户点击取消');
+							}
+						}
+					});
 				}
 			},
 			/**
@@ -261,14 +277,20 @@
 			 */
 			uploadpic: function() {
 				let that = this;
-				that.$util.uploadImageOne('upload/image', function(res){
-					console.log('mmj');
+				this.canvasStatus = true
+				that.$util.uploadImageChange('upload/image', (res) => {
 					let userInfo = that.switchUserInfo[that.userIndex];
 					if (userInfo !== undefined) {
 						that.userInfo.avatar = res.data.url;
 					}
 					that.switchUserInfo[that.userIndex] = userInfo;
-					that.$set(that,'switchUserInfo',that.switchUserInfo);
+					that.$set(that, 'switchUserInfo', that.switchUserInfo);
+					this.canvasStatus = false
+				}, (res) => {
+					this.canvasStatus = false
+				}, (res) => {
+					this.canvasWidth = res.w
+					this.canvasHeight = res.h
 				});
 			},
 
@@ -292,7 +314,7 @@
 						url: 1
 					});
 				}).catch(msg => {
-					return that.$util.Tips({	
+					return that.$util.Tips({
 						title: msg || '保存失败，您并没有修改'
 					}, {
 						tab: 3,
@@ -305,6 +327,10 @@
 </script>
 
 <style scoped lang="scss">
+	.cartcolor{
+		color: var(--view-theme);
+		border: 1px solid var(--view-theme) ;
+	}
 	.personal-data .wrapper {
 		margin: 10rpx 0;
 		background-color: #fff;
@@ -326,7 +352,7 @@
 		padding: 0 30rpx;
 		position: relative;
 		border: 2rpx solid #f8f8f8;
-		box-sizing:border-box;
+		box-sizing: border-box;
 	}
 
 	.personal-data .wrapper .wrapList .item.on {
@@ -465,10 +491,12 @@
 		border-radius: 45rpx;
 		margin: 30rpx auto 0 auto;
 	}
-	.avatar-box{
+
+	.avatar-box {
 		width: 96rpx;
 		height: 96rpx;
-		image{
+
+		image {
 			width: 100%;
 			height: 100%;
 			border-radius: 50%;

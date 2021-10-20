@@ -36,7 +36,7 @@ class StoreCombinationController
     public function lst()
     {
         $list = $this->services->getCombinationList();
-        return app('json')->successful($list);
+        return app('json')->successful(get_thumb_water($list));
     }
 
 
@@ -100,6 +100,18 @@ class StoreCombinationController
         $pinkService = app()->make(StorePinkServices::class);
         $res = $pinkService->getPinkPoster($pinkId, $from, $user);
         return app('json')->successful(['url' => $res]);
+    }
+
+    /**
+     * 获取拼团海报详情
+     * @param Request $request
+     * @param StorePinkServices $services
+     * @param $id
+     * @return mixed
+     */
+    public function posterInfo(Request $request, StorePinkServices $services, $id)
+    {
+        return app('json')->success($services->posterInfo((int)$id, $request->user()));
     }
 
     /**

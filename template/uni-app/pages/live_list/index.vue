@@ -20,7 +20,7 @@
 						<image :src="item.share_img"></image>
 					</view>
 					<view class="info">
-						<view class="title line2">{{item.name}}</view>
+						<view class="title line1">{{item.name}}</view>
 						<view class="people">
 							<image :src="item.anchor_img" alt="">
 							<text>{{item.anchor_name}}</text>
@@ -70,7 +70,6 @@
 						this.liveList =this.liveList.concat(res.data);
 					})
 					.catch(res => {
-						console.log(res.msg);
 					});
 			}
 		},

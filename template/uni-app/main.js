@@ -8,7 +8,6 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-
 import Vue from 'vue'
 import App from './App'
 import store from './store'
@@ -22,7 +21,8 @@ Vue.prototype.$Cache = Cache;
 Vue.prototype.$eventHub = new Vue();
 Vue.prototype.$socket = new socket();
 Vue.config.productionTip = false
-
+import pageLoading from './components/pageLoading.vue'
+Vue.component('pageLoading',pageLoading)
 // #ifdef H5
 
 

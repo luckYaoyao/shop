@@ -1,3 +1,13 @@
+// +---------------------------------------------------------------------
+// | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+// +---------------------------------------------------------------------
+// | Copyright (c) 2016~2021 https://www.crmeb.com All rights reserved.
+// +---------------------------------------------------------------------
+// | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+// +---------------------------------------------------------------------
+// | Author: CRMEB Team <admin@crmeb.com>
+// +---------------------------------------------------------------------
+
 import BasicLayout from '@/components/main'
 
 const pre = 'app_'
@@ -130,6 +140,15 @@ export default {
         title: '小程序订阅消息'
       },
       component: () => import('@/pages/app/routine/routineTemplate/index')
+    },
+    {
+      path: 'version_list',
+      name: `${pre}routineTemplate`,
+      meta: {
+        auth: ['app_version_list'],
+        title: 'APP版本管理'
+      },
+      component: () => import('@/pages/app/version/index')
     }
   ]
 }
