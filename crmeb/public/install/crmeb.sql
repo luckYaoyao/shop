@@ -6895,6 +6895,9 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (159, 'extract_time', 'text', 'input', 73, '', 0, '', 100, 0, '\"0\"', '冻结时间', '防止用户退款，佣金被提现了，所以需要设置佣金冻结时间(天)', 0, 1),
 (160, 'store_brokerage_price', 'text', 'input', 72, '', 0, '', 100, 0, '\"100\"', '满额分销最低金额', '满额分销满足金额开通分销权限', 0, 1),
 (162, 'price_revision_switch', 'radio', 'input', 20, '0=>关闭\n1=>开启', 0, '', 0, 0, '0', '改价短信提醒开关', '改价短信提醒开关', 0, 1),
+(164, 'wss_open', 'radio', '', 24, '1=>使用https\n0=>使用http', 0, '', 0, 0, '0', '是否使用https', '如果使用https访问必须开启wss,使用http访问关闭wss，建议使用http访问(关闭wss)兼容性更好', 0, 1),
+(165, 'wss_local_cert', 'upload', '', 24, '', 3, '', 0, 0, '\"\"', 'ssl证书PEM', 'ssl证书.pem格式', 0, 1),
+(166, 'wss_local_pk', 'upload', '', 24, '', 3, '', 0, 0, '\"\"', 'ssl密钥KEY', 'ssl密钥.key格式', 0, 1),
 (168, 'site_logo_square', 'upload', '', 26, '', 1, '', 0, 0, '\"https:\\/\\/demo43.wuht.net\\/uploads\\/attach\\/2021\\/09\\/20210923\\/510e07c4b0659ec0f7d5865cc7657d78.png\"', '后台小LOGO', '后台菜单缩进小LOGO，尺寸180*180', 1, 1),
 (170, 'yue_pay_status', 'radio', '', 30, '1=>开启\n2=>关闭', 0, '', 0, 0, '1', '余额支付状态', '余额支付请选择开启或关闭', 0, 1),
 (171, 'login_logo', 'upload', '', 26, '', 1, '', 0, 0, '\"https:\\/\\/demo43.wuht.net\\/uploads\\/attach\\/2021\\/09\\/20210923\\/c8b6f81eb9400d90581d10a4d7e6ec31.png\"', '后台登录页LOGO', '后台登录页LOGO，建议尺寸270x75', 4, 1),
@@ -6971,8 +6974,8 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (353, 'wechat_app_appid', 'text', 'input', 77, '', 0, '', 100, 0, '\"\"', '公众平台开放应用APPID', '公众平台开放应用APPID', 0, 1),
 (354, 'wechat_app_appsecret', 'text', 'input', 77, '', 0, '', 100, 0, '\"\"', '微信应用appsecret', '微信应用appsecret', 0, 1),
 (355, 'statistic_script', 'textarea', 'input', 78, '', 0, '', 100, 10, '\"(function() {\\n_s = document.createElement(\'script\');\\n_s.src=\\\"https:\\/\\/chat.crmeb.net\\/customerServer.js\\\"\\n_s.onload = function(){\\nvar option = {\\n        openUrl: \'https:\\/\\/chat.crmeb.net\',\\n        token: \'e8bcc017f50e55c63b5352c4257c8904\'\\n    };\\n    var canCustomerServer = new initCustomerServer(option);\\n    canCustomerServer.init();\\n\\n}\\ndocument.head.appendChild(_s)\\n})();\"', '统计代码', '统计代码', 0, 1),
-(356, 'admin_port', 'text', 'input', 24, '', 1, '', 100, 0, '\"20002\"', '后台监听端口', '后台监听端口', 10, 1),
-(358, 'channel_port', 'text', 'input', 24, '', 1, '', 100, 0, '\"20012\"', '内部通讯监听端口', '内部通讯监听端口', 8, 1),
+(356, 'admin_port', 'text', 'input', 24, '', 1, '', 100, 0, '\"\"', '后台监听域名+端口', '后台监听域名+端口(注：不用填写http)', 10, 1),
+(358, 'channel_port', 'text', 'input', 24, '', 1, '', 100, 0, '\"\"', '内部通讯监听域名+端口', '内部通讯监听域名+端口(注：不用填写http)', 8, 1),
 (359, 'weixin_ckeck_file', 'upload', 'input', 2, '', 3, '', 0, 0, '\"\"', '微信校验文件', '微信校验文件', 0, 1);
 
 -- --------------------------------------------------------

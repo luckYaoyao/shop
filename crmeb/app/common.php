@@ -24,12 +24,10 @@ if (!function_exists('getWorkerManUrl')) {
      */
     function getWorkerManUrl()
     {
-        $res = Config::get('workerman');
-        $ws = sys_config('wss_open', 0) ? 'wss' : 'ws';
-        $site_url = sys_config('site_url');
-        $site = substr($site_url, strpos($site_url, ':'));
-        $data['chat'] = $ws . $site . ':' . $res['chat']['port'];
-        $data['admin'] = $ws . $site . ':' . $res['admin']['port'];
+        $ws = sys_config('wss_open', 0) ? 'wss://' : 'ws://';
+        $data['chat'] = $ws . sys_config('chat_port', '');
+        $data['admin'] = $ws . sys_config('admin_port', '');
+        $data['channel'] = $ws . sys_config('channel_port', '');
         return $data;
     }
 }
