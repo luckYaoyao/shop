@@ -289,7 +289,7 @@ class SystemConfig extends AuthController
         }
         if (isset($post['weixin_ckeck_file'])) {
             $from = public_path() . $post['weixin_ckeck_file'];
-            $to = public_path() . explode('/', $post['weixin_ckeck_file'])[2];
+            $to = public_path() . array_reverse(explode('/', $post['weixin_ckeck_file']))[0];
             @copy($from, $to);
         }
         if (isset($post['admin_port'])) {
