@@ -6859,7 +6859,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (88, 'store_brokerage_statu', 'radio', '', 72, '1=>指定分销\n2=>人人分销\n3=>满额分销', 0, '', 0, 0, '1', '分销模式', '人人分销”默认每个人都可以分销，“指定分销”仅可后台手动设置推广员，“满额分销”指用户购买商品满足消费金额后自动开启分销', 95, 1),
 (98, 'wechat_avatar', 'upload', 'input', 2, '', 1, '', 0, 0, '\"\"', 'H5登录logo', 'H5登录logo', 0, 0),
 (99, 'user_extract_bank', 'textarea', '', 74, '', 0, '', 100, 5, '\"\\u4e2d\\u56fd\\u94f6\\u884c\"', '提现银行卡', '配置提现银行卡类型，每个银行换行', 0, 1),
-(108, 'upload_type', 'radio', '', 31, '1=>本地存储\n2=>七牛云存储\n3=>阿里云OSS\n4=>腾讯COS', 1, '', 0, 0, '1', '上传类型', '文件储存配置，注意：一旦配置就不要轻易修改，会导致文件不能使用', 0, 1),
+(108, 'upload_type', 'radio', '', 31, '1=>本地存储\n2=>七牛云存储\n3=>阿里云OSS\n4=>腾讯COS', 1, '', 0, 0, '1', '上传类型', '文件储存配置，注意：一旦配置就不要轻易修改，会导致文件不能使用', 100, 1),
 (109, 'uploadUrl', 'text', 'input', 32, '', 0, 'url:true', 100, 0, '\"\"', '空间域名 Domain', '空间域名 Domain', 0, 1),
 (110, 'accessKey', 'text', 'input', 32, '', 0, '', 100, 0, '\"\"', 'accessKey', 'accessKey', 0, 1),
 (111, 'secretKey', 'text', 'input', 32, '', 0, '', 100, 0, '\"\"', 'secretKey', 'secretKey', 0, 1),
@@ -6976,7 +6976,25 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (355, 'statistic_script', 'textarea', 'input', 78, '', 0, '', 100, 10, '\"(function() {\\n_s = document.createElement(\'script\');\\n_s.src=\\\"https:\\/\\/chat.crmeb.net\\/customerServer.js\\\"\\n_s.onload = function(){\\nvar option = {\\n        openUrl: \'https:\\/\\/chat.crmeb.net\',\\n        token: \'e8bcc017f50e55c63b5352c4257c8904\'\\n    };\\n    var canCustomerServer = new initCustomerServer(option);\\n    canCustomerServer.init();\\n\\n}\\ndocument.head.appendChild(_s)\\n})();\"', '统计代码', '统计代码', 0, 1),
 (356, 'admin_port', 'text', 'input', 24, '', 1, '', 100, 0, '\"\"', '后台监听域名+端口', '后台监听域名+端口(注：不用填写http)', 10, 1),
 (358, 'channel_port', 'text', 'input', 24, '', 1, '', 100, 0, '\"\"', '内部通讯监听域名+端口', '内部通讯监听域名+端口(注：不用填写http)', 8, 1),
-(359, 'weixin_ckeck_file', 'upload', 'input', 2, '', 3, '', 0, 0, '\"\"', '微信校验文件', '微信校验文件', 0, 1);
+(359, 'weixin_ckeck_file', 'upload', 'input', 2, '', 3, '', 0, 0, '\"\"', '微信校验文件', '微信校验文件', 0, 1),
+(360, 'thumb_big_width', 'text', 'input', 31, '', 0, '', 100, 0, '\"\"', '缩略大图（单位：px）：宽', '缩略大图（单位：px）：宽', 99, 1),
+(361, 'thumb_big_height', 'text', 'input', 31, '', 0, '', 100, 0, '\"\"', '缩略大图（单位：px）：高', '缩略大图（单位：px）：高', 98, 1),
+(362, 'thumb_mid_width', 'text', 'input', 31, '', 0, '', 50, 0, '\"\"', '缩略中图（单位：px）：宽', '缩略中图（单位：px）：宽', 97, 1),
+(363, 'thumb_mid_height', 'text', 'input', 31, '', 0, '', 50, 0, '\"\"', '缩略中图（单位：px）：高', '缩略中图（单位：px）：高', 96, 1),
+(364, 'thumb_small_width', 'text', 'input', 31, '', 0, '', 50, 0, '\"\"', '缩略小图（单位：px）： 宽', '缩略小图（单位：px）： 宽', 95, 1),
+(365, 'thumb_small_height', 'text', 'input', 31, '', 0, '', 50, 0, '\"\"', '缩略小图（单位：px）： 高', '缩略小图（单位：px）： 高', 94, 1),
+(366, 'image_watermark_status', 'radio', '', 31, '1=>开启\n0=>关闭', 0, '', 0, 0, '0', '是否开启水印', '图片水印是否开服', 80, 1),
+(367, 'watermark_type', 'radio', '', 31, '1=>图片\n2=>文字', 0, '', 0, 0, '1', '水印类型', '水印类型：图片、文字', 29, 1),
+(368, 'watermark_image', 'upload', '', 31, '', 1, '', 0, 0, '\"\\/uploads\\/system\\/f817d3954ffc65e14991ccb1ff2f9107.png\"', '水印图片', '水印图片链接', 28, 1),
+(369, 'watermark_position', 'radio', '', 31, '1=>左上\n2=>上中\n3=>右上\n4=>左中\n5=>中\n6=>右中\n7=>左下\n8=>下中\n9=>右下', 0, '', 0, 0, '9', '水印位置', 'watermark_position', 27, 1),
+(370, 'watermark_opacity', 'text', 'input', 31, '', 0, '', 100, 0, '\"80\"', '水印图片透明度', '水印图片透明度', 25, 1),
+(371, 'watermark_rotate', 'text', 'input', 31, '', 0, '', 100, 0, '\"2\"', '水印图片倾斜度', '水印图片倾斜度', 24, 1),
+(372, 'watermark_text', 'text', 'input', 31, '', 0, '', 100, 0, '\"love\"', '水印文字', '水印文字', 28, 1),
+(373, 'watermark_text_size', 'text', 'input', 31, '', 0, '', 100, 0, '\"20\"', '水印文字大小（单位：px）', '水印文字大小（px）', 27, 1),
+(374, 'watermark_text_color', 'text', 'input', 31, '', 0, '', 100, 0, '\"#666666\"', '水印字体颜色', '水印字体颜色', 25, 1),
+(375, 'watermark_text_angle', 'text', 'input', 31, '', 0, '', 100, 0, '\"1\"', '水印字体旋转角度', '水印字体旋转角度', 24, 1),
+(376, 'watermark_x', 'text', 'input', 31, '', 0, '', 100, 0, '\"10\"', '水印横坐标偏移量（单位：px）', '水印横坐标偏移量（单位：px）', 23, 1),
+(377, 'watermark_y', 'text', 'input', 31, '', 0, '', 100, 0, '\"10\"', '水印纵坐标偏移量（单位：px）', '水印纵坐标偏移量（单位：px）', 22, 1);
 
 -- --------------------------------------------------------
 

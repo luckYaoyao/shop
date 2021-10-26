@@ -1306,6 +1306,8 @@ class StoreProductServices extends BaseServices
         $data['productAttr'] = $productAttr;
         $data['productValue'] = $productValue;
         $data['storeInfo'] = get_thumb_water($storeInfo, 'big', ['image', 'slider_image']);
+        $storeInfoNew = get_thumb_water($storeInfo, 'small', ['image']);
+        $data['storeInfo']['small_image'] = $storeInfoNew['image'];
 
         /** @var MemberCardServices $memberCardService */
         $memberCardService = app()->make(MemberCardServices::class);

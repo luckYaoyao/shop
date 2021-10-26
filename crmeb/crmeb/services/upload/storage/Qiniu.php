@@ -109,6 +109,7 @@ class Qiniu extends BaseUpload
     /**
      * 上传文件
      * @param string $file
+     * @param bool $realName
      * @return array|bool|mixed|\StdClass|string
      */
     public function move(string $file = 'file', $realName = false)
@@ -143,7 +144,7 @@ class Qiniu extends BaseUpload
             $this->fileInfo->filePath = $this->uploadUrl . '/' . $key;
             $this->fileInfo->fileName = $key;
             $this->fileInfo->filePathWater = $this->water($this->fileInfo->filePath);
-            $this->thumb($this->fileInfo->filePath);
+            $this->authThumb && $this->thumb($this->fileInfo->filePath);
             return $this->fileInfo;
         } catch (UploadException $e) {
             return $this->setError($e->getMessage());

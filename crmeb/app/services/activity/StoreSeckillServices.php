@@ -483,6 +483,8 @@ class StoreSeckillServices extends BaseServices
 
         //商品详情
         $data['storeInfo'] = get_thumb_water($storeInfo, 'big', ['image', 'images']);
+        $storeInfoNew = get_thumb_water($storeInfo, 'small');
+        $data['storeInfo']['small_image'] = $storeInfoNew['image'];
 
         /** @var StoreProductReplyServices $storeProductReplyService */
         $storeProductReplyService = app()->make(StoreProductReplyServices::class);

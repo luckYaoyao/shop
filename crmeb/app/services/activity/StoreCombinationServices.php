@@ -387,6 +387,8 @@ class StoreCombinationServices extends BaseServices
         $qrcodeService = app()->make(QrcodeServices::class);
         $storeInfo['code_base'] = $qrcodeService->getWechatQrcodePath($id . '_product_combination_detail_wap.jpg', '/pages/activity/goods_combination_details/index?id=' . $id);
         $data['storeInfo'] = get_thumb_water($storeInfo, 'big', ['image', 'images']);
+        $storeInfoNew = get_thumb_water($storeInfo, 'small');
+        $data['storeInfo']['small_image'] = $storeInfoNew['image'];
 
         /** @var StorePinkServices $pinkService */
         $pinkService = app()->make(StorePinkServices::class);

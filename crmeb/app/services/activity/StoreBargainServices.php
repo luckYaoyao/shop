@@ -448,6 +448,8 @@ class StoreBargainServices extends BaseServices
         }
 
         $data['bargain'] = get_thumb_water($bargain);
+        $bargainNew = get_thumb_water($bargain, 'small');
+        $data['bargain']['small_image'] = $bargainNew['image'];
 
         /** @var StoreOrderServices $orderService */
         $orderService = app()->make(StoreOrderServices::class);

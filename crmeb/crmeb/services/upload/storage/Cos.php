@@ -149,7 +149,7 @@ class Cos extends BaseUpload
             $this->fileInfo->realName = isset($fileHandle) ? $fileHandle->getOriginalName() : $key;
             $this->fileInfo->fileName = $key;
             $this->fileInfo->filePathWater = $this->water($this->fileInfo->filePath);
-            $this->thumb($this->fileInfo->filePath);
+            $this->authThumb && $this->thumb($this->fileInfo->filePath);
             return $this->fileInfo;
         } catch (UploadException $e) {
             return $this->setError($e->getMessage());
@@ -173,6 +173,7 @@ class Cos extends BaseUpload
     /**
      * 文件上传
      * @param string $file
+     * @param bool $realName
      * @return array|bool|mixed|\StdClass
      */
     public function move(string $file = 'file', $realName = false)

@@ -170,7 +170,7 @@ class Local extends BaseUpload
         $this->fileInfo->realName = $key;
         $this->fileInfo->fileName = $key;
         $this->fileInfo->filePath = $this->defaultPath . '/' . $this->path . '/' . $key;
-        if ($this->checkImage('.' . $this->fileInfo->filePath)) {
+        if ($this->checkImage('.' . $this->fileInfo->filePath) && $this->authThumb) {
             try {
                 $this->thumb($this->fileInfo->filePath);
             } catch (\Throwable $e) {
@@ -351,6 +351,13 @@ class Local extends BaseUpload
         try {
             if (!file_exists($savePath)) {
                 $Image = Image::open(app()->getRootPath() . 'public' . $filePath);
+                if (strlen($waterConfig['watermark_text_color']) < 7) {
+                    $waterConfig['watermark_text_color'] = substr($waterConfig['watermark_text_color'], 1);
+                    $waterConfig['watermark_text_color'] = '#' . $waterConfig['watermark_text_color'] . $waterConfig['watermark_text_color'];
+                }
+                if (strlen($waterConfig['watermark_text_color']) > 7) {
+                    $waterConfig['watermark_text_color'] = substr($waterConfig['watermark_text_color'], 0, 7);
+                }
                 $Image->text($waterConfig['watermark_text'], $waterConfig['watermark_text_font'], $waterConfig['watermark_text_size'], $waterConfig['watermark_text_color'], $waterConfig['watermark_position'], [$waterConfig['watermark_x'], $waterConfig['watermark_y'], $waterConfig['watermark_text_angle']])->save(root_path() . 'public' . $savePath);
             }
         } catch (\Throwable $e) {

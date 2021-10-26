@@ -11,7 +11,6 @@
 
 namespace crmeb\basic;
 
-use crmeb\services\SystemConfigService;
 use think\facade\Config;
 
 /**
@@ -85,6 +84,12 @@ abstract class BaseUpload extends BaseStorage
      */
     protected $path = '';
 
+    /**
+     * 是否自动裁剪
+     * @var bool
+     */
+    protected $authThumb = true;
+
     protected function initialize(array $config)
     {
         $this->fileInfo = $this->downFileInfo = new \StdClass();
@@ -100,6 +105,17 @@ abstract class BaseUpload extends BaseStorage
     public function setFilepath(string $filePath)
     {
         $this->filePath = substr($filePath, 0, 1) === '.' ? substr($filePath, 1) : $filePath;
+        return $this;
+    }
+
+    /**
+     * 是否自动裁剪
+     * @param bool $auth
+     * @return $this
+     */
+    public function setAuthThumb(bool $auth)
+    {
+        $this->authThumb = $auth;
         return $this;
     }
 
