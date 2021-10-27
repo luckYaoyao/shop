@@ -310,7 +310,10 @@ Route::group(function () {
 
     //获取底部导航
     Route::get('navigation/[:template_name]', 'v1.PublicController/getNavigation')->name('getNavigation');
+    //长链接设置
     Route::get('get_workerman_url', 'v1.PublicController/getWorkerManUrl')->name('getWorkerManUrl');
+    //首页开屏广告
+    Route::get('get_open_adv', 'v1.PublicController/getOpenAdv')->name('getOpenAdv');
 })->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class)->middleware(\app\api\middleware\AuthTokenMiddleware::class, false);
 
 Route::miss(function () {

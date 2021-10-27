@@ -500,4 +500,13 @@ class PublicController
     {
         return app('json')->success(getWorkerManUrl());
     }
+
+    /**
+     * 首页开屏广告
+     * @return mixed
+     */
+    public function getOpenAdv()
+    {
+        return app('json')->success(sys_config('open_adv',''));
+    }
 }
