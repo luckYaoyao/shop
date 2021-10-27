@@ -7691,22 +7691,6 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (505, 499, '', '备份下载', 'admin', '', '', 'backup/download', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (507, 92, '', '微信菜单列表', 'admin', '', '', 'app/wechat/menu', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (508, 92, '', '保存微信菜单', 'admin', '', '', 'app/wechat/menu', 'POST', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(509, 93, '', '微信模板消息列表', 'admin', '', '', 'app/wechat/template', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(510, 93, '', '附加权限', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin*', '', 1, '', 0, '', 0),
-(511, 510, '', '添加模板消息表单', 'admin', '', '', 'app/wechat/template/create', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, 'app-wechat-template-create', 0),
-(512, 510, '', '保存模板消息', 'admin', '', '', 'app/wechat/template', 'POST', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(513, 510, '', '编辑模板消息表单', 'admin', '', '', 'app/wechat/template/<id>/edit', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(514, 510, '', '修改模板消息', 'admin', '', '', 'app/wechat/template/<id>', 'PUT', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(515, 510, '', '修改模板消息状态', 'admin', '', '', 'app/wechat/template/set_status/<id>/<status>', 'PUT', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(516, 510, '', '删除模板消息', 'admin', '', '', 'app/wechat/template/<id>', 'DELETE', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(520, 133, '', '订阅消息列表', 'admin', '', '', 'app/routine', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(521, 133, '', '附加权限', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin*', '', 1, '', 0, '', 0),
-(522, 521, '', '添加模板消息表单', 'admin', '', '', 'app/routine/create', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, 'app-routine-create', 0),
-(523, 521, '', '保存模板消息', 'admin', '', '', 'app/routine', 'POST', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(524, 521, '', '修改订阅消息状态', 'admin', '', '', 'app/routine/set_status/<id>/<status>', 'PUT', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(525, 521, '', '编辑模板消息表单', 'admin', '', '', 'app/routine/<id>/edit', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(526, 521, '', '编辑订阅消息', 'admin', '', '', 'app/routine/<id>', 'PUT', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(527, 521, '', '删除订阅消息', 'admin', '', '', 'app/routine/<id>', 'DELETE', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (553, 109, '', '图文列表', 'admin', '', '', 'app/wechat/news', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (554, 109, '', '附加权限', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin*', '', 1, '', 0, '', 0),
 (555, 554, '', '保存图文', 'admin', '', '', 'app/wechat/news', 'POST', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
@@ -7842,7 +7826,7 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (712, 707, '', '删除直播间', 'admin', '', '', 'live/room/del/<id>', 'DELETE', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (713, 707, '', '设置直播间是否显示', 'admin', '', '', 'live/room/set_show/<id>/<is_show>', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
 (714, 707, '', '同步直播间状态', 'admin', '', '', 'live/room/syncRoom', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, '', 0),
-(715, 133, '', '一键同步订阅消息', 'admin', '', '', 'app/routine/syncSubscribe', 'GET', '[]', 0, 0, 0, 1, '', '', 2, '', 0, 'app-wechat-template-sync', 0),
+(715, 898, '', '一键同步订阅消息', 'admin', '', '', 'app/routine/syncSubscribe', 'GET', '[]', 0, 0, 0, 1, '', '12/898', 2, '', 0, 'app-wechat-template-sync', 0),
 (719, 71, '', '添加优惠卷', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin/marketing/store_coupon_issue/create', '27/30/71', 1, '', 0, 'marketing-store_coupon_issue-create', 0),
 (720, 303, '', '配送员管理', 'admin', '', '', '', '', '[]', 10, 1, 0, 1, '/admin/setting/delivery_service/index', '', 1, '', 0, 'setting-delivery-service', 0),
 (721, 729, '', '编辑配送员', 'admin', '', '', '', '', '[]', 0, 0, 0, 1, '/admin/setting/delivery_service/edit', '', 1, '', 0, 'setting-delivery_service-edit', 0),
@@ -8015,7 +7999,8 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (988, 898, '', '消息管理列表', 'admin', '', '', 'setting/notification/index', 'GET', '[]', 0, 0, 0, 1, '', '12/898', 2, '', 0, '', 0),
 (989, 898, '', '模板消息详情', 'admin', '', '', 'setting/notification/info', 'GET', '[]', 0, 0, 0, 1, '', '12/898', 2, '', 0, '', 0),
 (990, 898, '', '编辑保存', 'admin', '', '', 'setting/notification/save', 'POST', '[]', 0, 0, 0, 1, '', '12/898', 2, '', 0, '', 0),
-(991, 898, '', '模板消息状态修改', 'admin', '', '', 'setting/notification/set_status/<type>/<status>/<id>', 'PUT', '[]', 0, 0, 0, 1, '', '12/898', 2, '', 0, '', 0);
+(991, 898, '', '模板消息状态修改', 'admin', '', '', 'setting/notification/set_status/<type>/<status>/<id>', 'PUT', '[]', 0, 0, 0, 1, '', '12/898', 2, '', 0, '', 0),
+(992, 898, '', '一键同步模版消息', 'admin', '', '', 'app/wechat/syncSubscribe', 'GET', '[]', 0, 0, 0, 1, '', '12/898', 2, '', 0, '', 0);
 
 -- --------------------------------------------------------
 
