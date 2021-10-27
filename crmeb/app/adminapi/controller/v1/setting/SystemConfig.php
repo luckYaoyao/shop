@@ -301,19 +301,6 @@ class SystemConfig extends AuthController
             @copy($from, $toHome);
             @copy($from, $toPublic);
         }
-        if (isset($post['admin_port'])) {
-            $res = include(config_path() . 'workerman.php');
-            $old_admin_port = $res['admin']['port'];
-            $old_channel_port = $res['channel']['port'];
-            $admin_port = substr($post['admin_port'], strrpos($post['admin_port'], ":") + 1);
-            $channel_port = substr($post['channel_port'], strrpos($post['channel_port'], ":") + 1);
-            if ($admin_port == '') $admin_port = 999999;
-            if ($channel_port == '') $channel_port = 999999;
-            $info = file_get_contents(config_path() . 'workerman.php');
-            $info = str_replace($old_admin_port, $admin_port, $info);
-            $info = str_replace($old_channel_port, $channel_port, $info);
-            file_put_contents(config_path() . 'workerman.php', $info);
-        }
         \crmeb\services\CacheService::clear();
         return app('json')->success('修改成功');
 

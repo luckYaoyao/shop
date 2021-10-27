@@ -24,10 +24,10 @@ if (!function_exists('getWorkerManUrl')) {
      */
     function getWorkerManUrl()
     {
-        $ws = sys_config('wss_open', 0) ? 'wss://' : 'ws://';
-        $data['chat'] = $ws . sys_config('chat_port', '');
-        $data['admin'] = $ws . sys_config('admin_port', '');
-        $data['channel'] = $ws . sys_config('channel_port', '');
+        $ws = $_SERVER['HTTPS'] == 'on' ? 'wss://' : 'ws://';
+        $host = $_SERVER['HTTP_HOST'];
+        $data['admin'] = $ws . $host . '/notice';
+        $data['channel'] = $ws . $host . '/msg';
         return $data;
     }
 }
