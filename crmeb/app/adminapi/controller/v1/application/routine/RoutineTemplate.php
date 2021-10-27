@@ -369,31 +369,35 @@ class RoutineTemplate extends AuthController
     public function getDownloadInfo()
     {
         $data['routine_name'] = sys_config('routine_name', '');
-        $name = $data['routine_name'] . '.jpg';
-        /** @var SystemAttachmentServices $systemAttachmentModel */
-        $systemAttachmentModel = app()->make(SystemAttachmentServices::class);
-        $imageInfo = $systemAttachmentModel->getInfo(['name' => $name]);
-        if (!$imageInfo) {
-            /** @var QrcodeServices $qrcode */
-            $qrcode = app()->make(QrcodeServices::class);
-            $resForever = $qrcode->qrCodeForever(0, 'code');
-            if ($resForever) {
-                $resCode = MiniProgramService::qrcodeService()->appCodeUnlimit($resForever->id, '', 280);
-                $res = ['res' => $resCode, 'id' => $resForever->id];
-            } else {
-                $res = false;
-            }
-            if (!$res) throw new ValidateException('二维码生成失败');
-            $upload = UploadService::init(1);
-            if ($upload->to('routine/code')->stream((string)$res['res'], $name) === false) {
-                return $upload->getError();
-            }
-            $imageInfo = $upload->getUploadInfo();
-            $imageInfo['image_type'] = 1;
-            $systemAttachmentModel->attachmentAdd($imageInfo['name'], $imageInfo['size'], $imageInfo['type'], $imageInfo['dir'], $imageInfo['thumb_path'], 1, $imageInfo['image_type'], $imageInfo['time'], 2);
-            $qrcode->update($res['id'], ['status' => 1, 'time' => time(), 'qrcode_url' => $imageInfo['dir']]);
-            $data['code'] = sys_config('site_url') . $imageInfo['dir'];
-        } else $data['code'] = sys_config('site_url') . $imageInfo['att_dir'];
+        if (sys_config('routine_appId') == '') {
+            $data['code'] = '';
+        } else {
+            $name = $data['routine_name'] . '.jpg';
+            /** @var SystemAttachmentServices $systemAttachmentModel */
+            $systemAttachmentModel = app()->make(SystemAttachmentServices::class);
+            $imageInfo = $systemAttachmentModel->getInfo(['name' => $name]);
+            if (!$imageInfo) {
+                /** @var QrcodeServices $qrcode */
+                $qrcode = app()->make(QrcodeServices::class);
+                $resForever = $qrcode->qrCodeForever(0, 'code');
+                if ($resForever) {
+                    $resCode = MiniProgramService::qrcodeService()->appCodeUnlimit($resForever->id, '', 280);
+                    $res = ['res' => $resCode, 'id' => $resForever->id];
+                } else {
+                    $res = false;
+                }
+                if (!$res) throw new ValidateException('二维码生成失败');
+                $upload = UploadService::init(1);
+                if ($upload->to('routine/code')->stream((string)$res['res'], $name) === false) {
+                    return $upload->getError();
+                }
+                $imageInfo = $upload->getUploadInfo();
+                $imageInfo['image_type'] = 1;
+                $systemAttachmentModel->attachmentAdd($imageInfo['name'], $imageInfo['size'], $imageInfo['type'], $imageInfo['dir'], $imageInfo['thumb_path'], 1, $imageInfo['image_type'], $imageInfo['time'], 2);
+                $qrcode->update($res['id'], ['status' => 1, 'time' => time(), 'qrcode_url' => $imageInfo['dir']]);
+                $data['code'] = sys_config('site_url') . $imageInfo['dir'];
+            } else $data['code'] = sys_config('site_url') . $imageInfo['att_dir'];
+        }
         $data['help'] = 'https://help.crmeb.net/crmeb-v4/1863455';
         return app('json')->success($data);
     }

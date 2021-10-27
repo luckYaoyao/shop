@@ -33,15 +33,15 @@ export default {
       },
       component: () => import('@/pages/app/wechat/menus/index')
     },
-    {
-      path: 'wechat/setting/template/index',
-      name: `${pre}wechatTemplate`,
-      meta: {
-        auth: ['application-wechat-template'],
-        title: '微信模板消息'
-      },
-      component: () => import('@/pages/app/routine/routineTemplate/index')
-    },
+    // {
+    //   path: 'wechat/setting/template/index',
+    //   name: `${pre}wechatTemplate`,
+    //   meta: {
+    //     auth: ['application-wechat-template'],
+    //     title: '微信模板消息'
+    //   },
+    //   component: () => import('@/pages/app/routine/routineTemplate/index')
+    // },
     {
       path: 'wechat/wechat_user/user/index',
       name: `${pre}wechatUser`,
@@ -133,13 +133,13 @@ export default {
       component: () => import('@/pages/app/wechat/reply/follow')
     },
     {
-      path: 'routine/routine_template/index',
+      path: 'routine/download',
       name: `${pre}routineTemplate`,
       meta: {
-        auth: ['routine-routine_template'],
-        title: '小程序订阅消息'
+        auth: ['routine-download'],
+        title: '小程序下载'
       },
-      component: () => import('@/pages/app/routine/routineTemplate/index')
+      component: () => import('@/pages/app/routine/download/index')
     },
     {
       path: 'version_list',
@@ -149,6 +149,6 @@ export default {
         title: 'APP版本管理'
       },
       component: () => import('@/pages/app/version/index')
-    }
+    },
   ]
 }

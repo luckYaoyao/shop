@@ -153,6 +153,26 @@ export function replyApi (data) {
         data: data.key
     })
 }
+/**
+ * @description  小程序包下载
+ * @param {Object} param data {Object} 传值参数
+ */
+export function routineDownload (data) {
+    return request({
+        url: 'app/routine/download',
+        method: 'post',
+        data
+    })
+}
+/**
+ * @description  小程序下载页面数据
+ */
+export function routineInfo () {
+    return request({
+        url: 'app/routine/info',
+        method: 'get'
+    })
+}
 
 /**
  * @description  自动回复 -- 关键字 列表
