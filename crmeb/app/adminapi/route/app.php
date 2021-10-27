@@ -21,7 +21,7 @@ Route::group('app', function () {
     //一键同步订阅消息
     Route::get('routine/syncSubscribe', 'v1.application.routine.RoutineTemplate/syncSubscribe')->name('syncSubscribe')->option(['real_name' => '一键同步订阅消息']);
     //一键同步微信模版消息消息
-    Route::get('wechat/syncSubscribe', 'v1.application.wechat.WechatTemplate/syncSubscribe')->name('syncSubscribe')->option(['real_name' => '一键同步订阅消息']);
+    Route::get('wechat/syncSubscribe', 'v1.application.wechat.WechatTemplate/syncSubscribe')->name('syncSubscribe')->option(['real_name' => '一键同步模版消息']);
     //修改状态
     Route::put('routine/set_status/:id/:status', 'v1.application.routine.RoutineTemplate/set_status')->name('RoutineSetStatus')->option(['real_name' => '修改订阅消息状态']);
     //菜单值
@@ -87,6 +87,11 @@ Route::group('app', function () {
     Route::get('wechat/kefu/record/:id', 'v1.application.wechat.StoreService/chat_user')->option(['real_name' => '聊天记录']);
     //查看对话
     Route::get('wechat/kefu/chat_list', 'v1.application.wechat.StoreService/chat_list')->option(['real_name' => '查看对话']);
+
+    //下载小程序模版页面数据
+    Route::get('routine/info', 'v1.application.routine.RoutineTemplate/getDownloadInfo')->option(['real_name' => '下载小程序页面数据']);
+    //下载小程序模版
+    Route::post('routine/download', 'v1.application.routine.RoutineTemplate/downloadTemp')->option(['real_name' => '下载小程序模版']);
 
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,

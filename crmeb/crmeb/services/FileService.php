@@ -156,7 +156,7 @@ class FileService
             $file2 = $toDir . '/' . $fileName;
             if ($fileName != '.' && $fileName != '..') {
                 if (is_dir($file1)) {
-                    self::copy_dir($file1, $file2);
+                    $this->copyDir($file1, $file2);
                 } else {
                     copy($file1, $file2);
                 }
@@ -984,4 +984,41 @@ class FileService
     {
         return is_object($value) ? $value->__toString() : $value;
     }
+
+    /**
+     * 压缩文件夹及文件
+     * @param string $source 需要压缩的文件夹/文件路径
+     * @param string $destination 压缩后的保存地址
+     * @param string $folder 文件夹前缀，保存时需要去掉的父级文件夹
+     * @return boolean
+     */
+    function addZip($source, $destination, $folder = '')
+    {
+        if (!extension_loaded('zip') || !file_exists($source)) {
+            return false;
+        }
+
+        $zip = new \ZipArchive;
+        if (!$zip->open($destination, $zip::CREATE)) {
+            return false;
+        }
+        $source = str_replace('\\', '/', $source);
+        $folder = str_replace('\\', '/', $folder);
+        if (is_dir($source) === true) {
+            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($source), \RecursiveIteratorIterator::SELF_FIRST);
+            foreach ($files as $file) {
+                $file = str_replace('\\', '/', $file);
+                if (in_array(substr($file, strrpos($file, '/') + 1), array('.', '..'))) continue;
+                if (is_dir($file) === true) {
+                    $zip->addEmptyDir(str_replace($folder . '/', '', $file . '/'));
+                } else if (is_file($file) === true) {
+                    $zip->addFromString(str_replace($folder . '/', '', $file), file_get_contents($file));
+                }
+            }
+        } else if (is_file($source) === true) {
+            $zip->addFromString(basename($source), file_get_contents($source));
+        }
+        return $zip->close();
+    }
+
 }

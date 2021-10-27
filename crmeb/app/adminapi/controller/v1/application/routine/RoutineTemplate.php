@@ -10,13 +10,16 @@
 // +----------------------------------------------------------------------
 namespace app\adminapi\controller\v1\application\routine;
 
+use app\services\other\QrcodeServices;
 use app\services\other\TemplateMessageServices;
+use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\exceptions\AdminException;
+use think\exception\ValidateException;
 use think\facade\App;
 use think\Request;
 use think\facade\Route as Url;
 use app\adminapi\controller\AuthController;
-use crmeb\services\{FormBuilder as Form, MiniProgramService, template\Template};
+use crmeb\services\{FileService, FormBuilder as Form, MiniProgramService, template\Template, UploadService};
 use think\facade\Cache;
 
 /**
@@ -275,5 +278,123 @@ class RoutineTemplate extends AuthController
         }
         $msg = $errData ? implode('\n', $errData) : '同步成功';
         return app('json')->success($msg);
+    }
+
+    /**
+     * 下载小程序
+     * @return mixed
+     */
+    public function downloadTemp()
+    {
+        [$name, $is_live] = $this->request->postMore([
+            ['name', ''],
+            ['is_live', 0]
+        ], true);
+        try {
+            @unlink(public_path() . 'view/download/routine.zip');
+            //拷贝源文件
+            /** @var FileService $fileService */
+            $fileService = app(FileService::class);
+            $fileService->copyDir(public_path() . 'view/mp_view', public_path() . 'view/download');
+            //替换appid和名称
+            $this->updateConfigJson(sys_config('routine_appId'), $name != '' ? $name : sys_config('routine_name'));
+            //是否开启直播
+            if ($is_live == 0) $this->updateAppJson();
+            //替换url
+            $this->updateUrl(sys_config('site_url'));
+            //压缩文件
+            $fileService->addZip(public_path() . 'view/download', public_path() . 'view/download/routine.zip', public_path() . 'view/download');
+            $data['url'] = sys_config('site_url') . '/view/download/routine.zip';
+            return app('json')->success($data);
+        } catch (\Throwable $throwable) {
+
+        }
+    }
+
+    /**
+     * 替换url
+     * @param $url
+     */
+    public function updateUrl($url)
+    {
+        $fileUrl = app()->getRootPath() . "public/view/download/common/vendor.js";
+        $string = file_get_contents($fileUrl); //加载配置文件
+        $string = str_replace('https://demo.crmeb.com', $url, $string); // 正则查找然后替换
+        $newFileUrl = app()->getRootPath() . "public/view/download/common/vendor.js";
+        @file_put_contents($newFileUrl, $string); // 写入配置文件
+
+    }
+
+    /**
+     * 判断是否开启直播
+     * @param int $iszhibo
+     */
+    public function updateAppJson()
+    {
+        $fileUrl = app()->getRootPath() . "public/view/download/app.json";
+        $string = file_get_contents($fileUrl); //加载配置文件
+        $pats = '/,
+      "plugins": \{
+        "live-player-plugin": \{
+          "version": "(.*?)",
+          "provider": "(.*?)"
+        }
+      }/';
+        $string = preg_replace($pats, '', $string); // 正则查找然后替换
+        $newFileUrl = app()->getRootPath() . "public/view/download/app.json";
+        @file_put_contents($newFileUrl, $string); // 写入配置文件
+    }
+
+    /**
+     * 替换appid
+     * @param string $appid
+     * @param string $projectanme
+     */
+    public function updateConfigJson($appId = '', $projectName = '')
+    {
+        $fileUrl = app()->getRootPath() . "public/view/download/project.config.json";
+        $string = file_get_contents($fileUrl); //加载配置文件
+        // 替换appid
+        $appIdOld = '/"appid"(.*?),/';
+        $appIdNew = '"appid"' . ': ' . '"' . $appId . '",';
+        $string = preg_replace($appIdOld, $appIdNew, $string); // 正则查找然后替换
+        // 替换小程序名称
+        $projectNameOld = '/"projectname"(.*?),/';
+        $projectNameNew = '"projectname"' . ': ' . '"' . $projectName . '",';
+        $string = preg_replace($projectNameOld, $projectNameNew, $string); // 正则查找然后替换
+        $newFileUrl = app()->getRootPath() . "public/view/download/project.config.json";
+        @file_put_contents($newFileUrl, $string); // 写入配置文件
+    }
+
+    public function getDownloadInfo()
+    {
+        $data['routine_name'] = sys_config('routine_name', '');
+        $name = $data['routine_name'] . '.jpg';
+        /** @var SystemAttachmentServices $systemAttachmentModel */
+        $systemAttachmentModel = app()->make(SystemAttachmentServices::class);
+        $imageInfo = $systemAttachmentModel->getInfo(['name' => $name]);
+        if (!$imageInfo) {
+            /** @var QrcodeServices $qrcode */
+            $qrcode = app()->make(QrcodeServices::class);
+            $resForever = $qrcode->qrCodeForever(0, 'code');
+            if ($resForever) {
+                $resCode = MiniProgramService::qrcodeService()->appCodeUnlimit($resForever->id, '', 280);
+                $res = ['res' => $resCode, 'id' => $resForever->id];
+            } else {
+                $res = false;
+            }
+            if (!$res) throw new ValidateException('二维码生成失败');
+            $upload = UploadService::init(1);
+            if ($upload->to('routine/code')->stream((string)$res['res'], $name) === false) {
+                return $upload->getError();
+            }
+            $imageInfo = $upload->getUploadInfo();
+            $imageInfo['image_type'] = 1;
+            $systemAttachmentModel->attachmentAdd($imageInfo['name'], $imageInfo['size'], $imageInfo['type'], $imageInfo['dir'], $imageInfo['thumb_path'], 1, $imageInfo['image_type'], $imageInfo['time'], 2);
+            $qrcode->update($res['id'], ['status' => 1, 'time' => time(), 'qrcode_url' => $imageInfo['dir']]);
+            $data['code'] = sys_config('site_url') . $imageInfo['dir'];
+        } else $data['code'] = sys_config('site_url') . $imageInfo['att_dir'];
+        $data['help'] = 'https://help.crmeb.net/crmeb-v4/1863455';
+        return app('json')->success($data);
     }
 }
