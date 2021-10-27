@@ -118,7 +118,7 @@ class SystemAttachmentServices extends BaseServices
         if ($upload_type == 0) {
             $upload_type = sys_config('upload_type', 1);
         }
-        if ($menuName == 'weixin_ckeck_file') {
+        if ($menuName == 'weixin_ckeck_file' || $menuName == 'ico_path') {
             $upload_type = 1;
             $realName = true;
         }

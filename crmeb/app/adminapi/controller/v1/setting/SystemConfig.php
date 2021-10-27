@@ -292,6 +292,15 @@ class SystemConfig extends AuthController
             $to = public_path() . array_reverse(explode('/', $post['weixin_ckeck_file']))[0];
             @copy($from, $to);
         }
+        if (isset($post['ico_path'])) {
+            $from = public_path() . $post['ico_path'];
+            $toAdmin = public_path('admin') . 'favicon.ico';
+            $toHome = public_path('home') . 'favicon.ico';
+            $toPublic = public_path() . 'favicon.ico';
+            @copy($from, $toAdmin);
+            @copy($from, $toHome);
+            @copy($from, $toPublic);
+        }
         if (isset($post['admin_port'])) {
             $res = include(config_path() . 'workerman.php');
             $old_admin_port = $res['admin']['port'];

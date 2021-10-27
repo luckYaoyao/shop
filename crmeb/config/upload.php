@@ -15,7 +15,7 @@ return [
     //上传文件大小
     'filesize' => 2097152,
     //上传文件后缀类型
-    'fileExt' => ['jpg', 'jpeg', 'png', 'gif', 'pem', 'mp3', 'wma', 'wav', 'amr', 'mp4', 'key', 'xlsx', 'xls', 'txt'],
+    'fileExt' => ['jpg', 'jpeg', 'png', 'gif', 'pem', 'mp3', 'wma', 'wav', 'amr', 'mp4', 'key', 'xlsx', 'xls', 'txt', 'ico'],
     //上传文件类型
     'fileMime' => [
         'image/jpeg',
@@ -32,6 +32,7 @@ return [
         'application/vnd.ms-excel',
         'application/vnd.ms-excel',
         'text/xml',
+        'image/x-icon',
     ],
     //驱动模式
     'stores' => [
