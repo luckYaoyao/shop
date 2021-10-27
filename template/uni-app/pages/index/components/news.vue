@@ -1,7 +1,7 @@
 <template>
 	<view class="new" :style="colorStyle">
 		<view class="news default" v-if="isIframe && !itemNew.length">暂无新闻，请上传新闻</view>
-		<view class='news acea-row row-between-wrapper' v-if="isShow && itemNew.length">
+		<view class='news acea-row row-between-wrapper skeleton-rect' v-if="isShow && itemNew.length">
 			<view class='pictrue'>
 				<image :src='img'></image>
 			</view>

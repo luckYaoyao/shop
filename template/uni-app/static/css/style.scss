@@ -132,7 +132,7 @@
 	font-size: 26rpx;
 	color: #82848f;
 	margin-top: 20rpx;
-	height: 80rpx
+	min-height: 80rpx
 }
 
 .product-con .attribute .atterTxt {
@@ -142,7 +142,8 @@
 
 .product-con .attribute .iconfont {
 	font-size: 28rpx;
-	color: #7a7a7a
+	color: #7a7a7a;
+	line-height: 40rpx;
 }
 
 .product-con .userEvaluation {

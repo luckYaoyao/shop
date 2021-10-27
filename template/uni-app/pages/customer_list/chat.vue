@@ -309,6 +309,11 @@
 					title: '连接失败'
 				});
 			});
+			uni.$on('err_tip', (e) => {
+				this.$util.Tips({
+					title: e.msg
+				});
+			});
 			uni.$on('online', data => {
 				if (data.online == 0) {
 					uni.showModal({

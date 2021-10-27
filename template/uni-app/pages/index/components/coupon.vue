@@ -4,7 +4,7 @@
 			<text>优惠券，暂无数据</text>
 		</view>
 		<view class="index-wrapper coupon" v-if="couponList.length&&isShow&&!isIframe">
-			<view class='title acea-row row-between-wrapper'>
+			<view class='title acea-row row-between-wrapper skeleton-rect'>
 				<view class='text'>
 					<view class='name line1'>优惠券</view>
 					<view class='line1 txt-btn'>领取今日好券</view>
@@ -20,7 +20,7 @@
 				<navigator url="/pages/users/user_get_coupon/index" hover-class="none"
 					class="more acea-row row-center-wrapper">更多<text class="iconfont icon-xiangyou"></text></navigator>
 			</view> -->
-			<view class="conter">
+			<view class="conter skeleton-rect">
 				<scroll-view scroll-x="true" style="white-space: nowrap; vertical-align: middle;"
 					show-scrollbar="false">
 

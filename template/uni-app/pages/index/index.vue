@@ -1,5 +1,7 @@
 <template>
 	<view id="pageIndex" :style="colorStyle">
+		<skeleton v-if="!isIframe" :show="showSkeleton" :isNodes="isNodes" ref="skeleton" loading="chiaroscuro"
+			selector="skeleton" bgcolor="#FFF"></skeleton>
 		<!-- #ifdef H5 -->
 		<view class="followMe" v-if="$wechat.isWeixin()">
 			<view class="follow acea-row row-between-wrapper" v-if="followHid && followUrl && !subscribe">
@@ -29,58 +31,70 @@
 		</view>
 		<!-- #endif -->
 		<!-- 顶部搜索 -->
-		<headerSerch class="mp-header" :dataConfig="headerSerch.default"
-			@click.native="bindEdit('headerSerch','default')"></headerSerch>
-		<!-- 轮播 -->
-		<swiperBg :dataConfig="swiperBg.default" @click.native="bindEdit('swiperBg','default')"></swiperBg>
-		<!-- 金刚区 -->
-		<menus :dataConfig="menus.default" @click.native="bindEdit('menus','default')"></menus>
-		<!-- 新闻简报 -->
-		<news :dataConfig="news.default" @click.native="bindEdit('news','default')"></news>
-		<!-- 活动魔方 -->
-		<activity :dataConfig="activity.default" @click.native="bindEdit('activity','default')"></activity>
-		<!-- 		<seckill :dataConfig="seckill.default" @click.native="bindEdit('seckill','default')"></seckill>
-		<adsRecommend :dataConfig="adsRecommend.default" @click.native="bindEdit('adsRecommend','default')"></adsRecommend>
-		<combination :dataConfig="combination.default" @click.native="bindEdit('combination','default')"></combination>
-		<bargain :dataConfig="bargain.default" @click.native="bindEdit('bargain','default')"></bargain>
-		<goodList :dataConfig="goodList.default" @click.native="bindEdit('goodList','default')"></goodList>
-		<picTxt :dataConfig="picTxt.default" @click.native="bindEdit('picTxt','default')"></picTxt>	 -->
-		<alive :dataConfig="alive.default" @click.native="bindEdit('alive','default')"></alive>
-		<!-- 优惠券 -->
-		<coupon :dataConfig="coupon.default" @click.native="bindEdit('coupon','default')"></coupon>
-		<!-- 快速选择 -->
-		<scrollBox :dataConfig="scrollBox.default" @click.native="bindEdit('scrollBox','default')"></scrollBox>
-		<!-- 促销精品 -->
-		<recommend :dataConfig="goodList.aa" @click.native="bindEdit('goodList','aa')"></recommend>
-		<!-- 排行榜 -->
-		<popular :dataConfig="goodList.bb" @click.native="bindEdit('goodList','bb')"></popular>
-		<!-- 商品轮播 -->
-		<mBanner :dataConfig="swiperBg.aa" @click.native="bindEdit('swiperBg','aa')"></mBanner>
-		<!-- 首发新品 -->
-		<newGoods :dataConfig="goodList.cc" @click.native="bindEdit('goodList','cc')"></newGoods>
-		<!-- 精品推荐 -->
-		<!-- <mBanner :dataConfig="swiperBg.cc" @click.native="bindEdit('swiperBg','cc')"></mBanner> -->
+		<view class="skeleton" id="pageIndexs" :style="{visibility: showSkeleton ? 'hidden' : 'visible'}">
+			<headerSerch class="mp-header" :dataConfig="headerSerch.default"
+				@click.native="bindEdit('headerSerch','default')"></headerSerch>
+			<!-- 轮播 -->
+			<swiperBg :dataConfig="swiperBg.default" @click.native="bindEdit('swiperBg','default')"></swiperBg>
+			<!-- 金刚区 -->
+			<menus :dataConfig="menus.default" @click.native="bindEdit('menus','default')">
+			</menus>
+			<!-- 新闻简报 -->
+			<news :dataConfig="news.default" @click.native="bindEdit('news','default')"></news>
+			<!-- 活动魔方 -->
+			<activity :dataConfig="activity.default" @click.native="bindEdit('activity','default')"></activity>
+			<!-- 		<seckill :dataConfig="seckill.default" @click.native="bindEdit('seckill','default')"></seckill>
+			<adsRecommend :dataConfig="adsRecommend.default" @click.native="bindEdit('adsRecommend','default')"></adsRecommend>
+			<combination :dataConfig="combination.default" @click.native="bindEdit('combination','default')"></combination>
+			<bargain :dataConfig="bargain.default" @click.native="bindEdit('bargain','default')"></bargain>
+			<goodList :dataConfig="goodList.default" @click.native="bindEdit('goodList','default')"></goodList>
+			<picTxt :dataConfig="picTxt.default" @click.native="bindEdit('picTxt','default')"></picTxt>	 -->
+			<alive :dataConfig="alive.default" @click.native="bindEdit('alive','default')">
+			</alive>
+			<!-- 优惠券 -->
+			<coupon :dataConfig="coupon.default" @click.native="bindEdit('coupon','default')">
+			</coupon>
+			<!-- 快速选择 -->
+			<scrollBox :dataConfig="scrollBox.default" @click.native="bindEdit('scrollBox','default')"></scrollBox>
+			<!-- 促销精品 -->
+			<recommend :dataConfig="goodList.aa" @click.native="bindEdit('goodList','aa')">
+			</recommend>
+			<!-- 排行榜 -->
+			<popular :dataConfig="goodList.bb" @click.native="bindEdit('goodList','bb')">
+			</popular>
+			<!-- 商品轮播 -->
+			<mBanner :dataConfig="swiperBg.aa" @click.native="bindEdit('swiperBg','aa')">
+			</mBanner>
+			<!-- 首发新品 -->
+			<newGoods :dataConfig="goodList.cc" @click.native="bindEdit('goodList','cc')">
+			</newGoods>
+			<!-- 精品推荐 -->
+			<!-- <mBanner :dataConfig="swiperBg.cc" @click.native="bindEdit('swiperBg','cc')"></mBanner> -->
 
-		<!-- <titles :dataConfig="titles.default" :sty="'off'" @click.native="bindEdit('titles','default')"></titles> -->
-		<!-- 商品轮播 -->
+			<!-- <titles :dataConfig="titles.default" :sty="'off'" @click.native="bindEdit('titles','default')"></titles> -->
+			<!-- 商品轮播 -->
 
 
-		<!-- 		<customerService :dataConfig="customerService.default" @click.native="bindEdit('customerService','default')"></customerService> -->
-		<!-- 促销单品 -->
-		<promotion :dataConfig="goodList.dd" @click.native="bindEdit('goodList','dd')"></promotion>
-		<!-- 商品分类 -->
-		<tabNav class="sticky-box" :style="'top:'+ isTop+'px;'" :dataConfig="tabNav.default"
-			@click.native="bindEdit('tabNav','default')" @bindSortId="bindSortId" @bindHeight="bindHeighta"></tabNav>
-		<!-- 商品列表 -->
-		<goodsWaterfall :class="{'nothing':loading}" v-if="!isIframe && tabNav.default && tabNav.default.isShow.val"
-			:dataLists="goodLists" @click.native="bindEdit('List')"></goodsWaterfall>
-		<Loading class="loading-sty" :loaded="loaded" :loading="loading"></Loading>
-		<view class=""
-			v-if="!isIframe && tabNav.default && tabNav.default.isShow.val && goodLists.length == 0 && !loading">
-			<view class="empty-box">
-				<image src="/static/images/noShopper.png"></image>
+			<!-- 		<customerService :dataConfig="customerService.default" @click.native="bindEdit('customerService','default')"></customerService> -->
+			<!-- 促销单品 -->
+			<promotion :dataConfig="goodList.dd" @click.native="bindEdit('goodList','dd')">
+			</promotion>
+			<!-- 商品分类 -->
+			<tabNav class="sticky-box" :style="'top:'+ isTop+'px;'" :dataConfig="tabNav.default"
+				@click.native="bindEdit('tabNav','default')" @bindSortId="bindSortId" @bindHeight="bindHeighta">
+			</tabNav>
+			<!-- 商品列表 -->
+			<goodsWaterfall :class="{'nothing':loading}" v-if="!isIframe && tabNav.default && tabNav.default.isShow.val"
+				:dataLists="goodLists" @click.native="bindEdit('List')"></goodsWaterfall>
+			<Loading class="loading-sty" :loaded="loaded" :loading="loading"></Loading>
+			<view class=""
+				v-if="!isIframe && tabNav.default && tabNav.default.isShow.val && goodLists.length == 0 && !loading">
+				<view class="empty-box">
+					<image src="/static/images/noShopper.png"></image>
+				</view>
 			</view>
 		</view>
+
 
 		<!-- 分类商品模块 -->
 		<!-- #ifdef  APP-PLUS -->
@@ -289,11 +303,13 @@
 			tabNav,
 			Loading,
 			goodsWaterfall,
-			appUpdate //APP更新
+			appUpdate, //APP更新
 		},
 		mixins: [colors],
 		data() {
 			return {
+				showSkeleton: true, //骨架屏显示隐藏
+				isNodes: 0, //控制什么时候开始抓取元素节点,只要数值改变就重新抓取
 				isSortType: 0,
 				sortList: {},
 				sortAll: [],
@@ -358,6 +374,7 @@
 		onLoad(options) {
 			uni.hideTabBar();
 			// #ifdef APP-PLUS
+			this.showSkeleton = false
 			this.$nextTick(() => {
 				// this.$refs.appUpdate.update(); //调用子组件 检查更新
 			})
@@ -375,9 +392,10 @@
 			// // #endif
 			// #ifdef H5
 			if (app.globalData.isIframe) {
+				this.showSkeleton = false
 				setTimeout(() => {
 					let active;
-					document.getElementById('pageIndex').children.forEach(dom => {
+					document.getElementById('pageIndexs').children.forEach(dom => {
 						dom.addEventListener('click', (e) => {
 							e.stopPropagation();
 							e.preventDefault();
@@ -439,6 +457,7 @@
 			// #ifdef H5
 			this.isTop = 0
 			// #endif
+
 		},
 
 		// #ifdef MP
@@ -615,6 +634,11 @@
 			diyData() {
 				let that = this;
 				getDiy().then(res => {
+					// #ifndef APP-PLUS
+					setTimeout(() => {
+						this.isNodes++;
+					}, 0);
+					// #endif
 					let data = res.data;
 					that.headerSerch = data.headerSerch;
 					that.swiperBg = data.swiperBg;
@@ -635,6 +659,13 @@
 					that.seckill = data.seckill;
 					that.coupon = data.coupon;
 					this.$Cache.set('TAB_BAR', data.tabBar.default.tabBarList)
+					// #ifndef APP-PLUS
+					setTimeout(() => {
+						this.showSkeleton = false
+					}, 2000)
+					// #endif
+
+
 				});
 			},
 			getIndexData() {

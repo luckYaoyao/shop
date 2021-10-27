@@ -4,11 +4,11 @@
 		</view>
 		<block v-if="isShow && imgUrls.length">
 			<view class="swiper square" v-if="imgUrls.length">
-				<swiper :style="'height:'+ (imageH) +'rpx;'" indicator-dots="true" :autoplay="true" :circular="circular"
+				<swiper class="skeleton-rect" :style="'height:'+ (imageH) +'rpx;'" indicator-dots="true" :autoplay="true" :circular="circular"
 					:interval="interval" :duration="duration" indicator-color="rgba(255,255,255,0.6)"
 					indicator-active-color="#fff" :current="swiperCur" @change="swiperChange">
 					<block v-for="(item,index) in imgUrls" :key="index">
-						<swiper-item :class="{active:index == swiperCur}">
+						<swiper-item class="" :class="{active:index == swiperCur}">
 							<view @click="goDetail(item)" class='slide-navigator acea-row row-between-wrapper'>
 								<image :src="item.img" class="slide-image" :style="'height:'+ (imageH) +'rpx;'">
 								</image>
@@ -97,7 +97,7 @@
 				isIframe: false,
 				mt: -55,
 				isShow: true,
-				imageH: 0,
+				imageH: 250,
 				swiperCur: 0,
 			};
 		},

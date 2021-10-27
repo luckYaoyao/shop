@@ -420,3 +420,13 @@ export function getCustomerType(data) {
 		noAuth: true
 	});
 }
+
+/**
+ * 获取开屏广告
+ * @returns {*}
+ */
+export function getOpenAdv(data) {
+	return request.get("get_open_adv", {}, {
+		noAuth: true
+	});
+}

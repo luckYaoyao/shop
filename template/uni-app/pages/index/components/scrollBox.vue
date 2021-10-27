@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class='index-wrapper' v-if="isShow && fastList.length">
+		<view class='index-wrapper skeleton-rect' v-if="isShow && fastList.length">
 			<view class='title acea-row row-between-wrapper'>
 				<view class='text'>
 					<view class='name line1'>{{titleInfo[0].val}}</view>

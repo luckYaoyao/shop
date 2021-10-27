@@ -3,10 +3,10 @@
 	<view v-if="isShow" class="header">
 		<view class="serch-wrapper row-middle">
 			<view class="logo">
-				<image :src="logoConfig" mode="heightFix"></image>
+				<image class="skeleton-rect" :src="logoConfig" mode="heightFix"></image>
 				<text class="swiger">好物尽享 任你选择</text>
 			</view>
-			<view class="input acea-row row-middle fillet" hover-class="none" @click="goPage"><text
+			<view class="input acea-row row-middle fillet skeleton-rect" hover-class="none" @click="goPage"><text
 					class="iconfont icon-sousuo"></text>
 				搜索商品</view>
 		</view>

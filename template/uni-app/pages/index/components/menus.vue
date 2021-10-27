@@ -4,7 +4,7 @@
 			<block v-for="(item,index) in menus" :key="index">
 				<view class='item' @click="menusTap(item.info[1].value)">
 					<view class='pictrue'>
-						<image :src='item.img'></image>
+						<image class="skeleton-radius" :src='item.img'></image>
 					</view>
 					<view class="menu-txt">{{item.info[0].value}}</view>
 				</view>

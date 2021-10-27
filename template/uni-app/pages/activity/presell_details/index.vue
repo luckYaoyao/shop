@@ -93,11 +93,35 @@
 					</view>
 					<view class="attribute acea-row row-between-wrapper" @click="selecAttr"
 						v-if="attr.productAttr.length">
-						<view style="display: flex; align-items: center; width: 90%;">
+						<!-- <view style="display: flex; align-items: center; width: 90%;">
 							{{ attrTxt }}：
 							<view class="atterTxt line1" style="width: 82%;">{{ attrValue }}</view>
 						</view>
-						<view class="iconfont icon-jiantou"></view>
+						<view class="iconfont icon-jiantou"></view> -->
+						<view class="flex">
+						  <view style="display: flex; align-items: center; width: 90%">
+						    <view class="attr-txt"> {{ attrTxt }}： </view>
+						    <view class="atterTxt line1" style="width: 82%">{{
+						      attrValue
+						    }}</view>
+						  </view>
+						  <view class="iconfont icon-jiantou"></view>
+						</view>
+						<view
+						  class="acea-row row-between-wrapper"
+						  style="margin-top: 7px; padding-left: 70px"
+						  v-if="skuArr.length > 1"
+						>
+						  <view class="flexs">
+						    <image
+						      :src="item.image"
+						      v-for="(item, index) in skuArr.slice(0, 4)"
+						      :key="index"
+						      class="attrImg"
+						    ></image>
+						  </view>
+						  <view class="switchTxt">共{{ skuArr.length }}种规格可选</view>
+						</view>
 					</view>
 				</view>
 				<view class="userEvaluation" id="past1">
@@ -157,7 +181,13 @@
 		<!-- 组件 -->
 		<productWindow :attr="attr" :isShow="0" :limitNum="1" :iSplus="1" @myevent="onMyEvent" @ChangeAttr="ChangeAttr"
 			@ChangeCartNum="ChangeCartNum" @attrVal="attrVal" @iptCartNum="iptCartNum" id="product-window"
-			:is_vip="is_vip"></productWindow>
+			:is_vip="is_vip" @getImg="showImg"></productWindow>
+		<cus-previewImg
+			ref="cusPreviewImg"
+			:list="skuArr"
+			@changeSwitch="changeSwitch"
+			@shareFriend="listenerActionSheet"
+		/>
 		<couponListWindow :coupon="coupon" v-if="coupon" @ChangCouponsClone="ChangCouponsClone"
 			@ChangCoupons="ChangCoupons" @ChangCouponsUseState="ChangCouponsUseState" @tabCouponType="tabCouponType">
 		</couponListWindow>
@@ -253,6 +283,7 @@
 	import authorize from '@/components/Authorize';
 	// #endif
 	import colors from "@/mixins/color";
+	import cusPreviewImg from "@/components/cus-previewImg/cus-previewImg.vue";
 	let app = getApp();
 	export default {
 		components: {
@@ -263,6 +294,7 @@
 			shareRedPackets,
 			kefuIcon,
 			'jyf-parser': parser,
+			cusPreviewImg,
 			// #ifdef MP
 			authorize
 			// #endif
@@ -353,7 +385,9 @@
 				navbarRight: 0,
 				homeTop: 20,
 				routineContact: '0',
-				pay_status: 1
+				pay_status: 1,
+				skuArr: [],
+				selectSku: {},
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -611,6 +645,7 @@
 			 */
 			ChangeAttr: function(res) {
 				let productSelect = this.productValue[res];
+				this.$set(this, "selectSku", productSelect);
 				if (productSelect && productSelect.stock > 0) {
 					this.$set(this.attr.productSelect, 'image', productSelect.image);
 					this.$set(this.attr.productSelect, 'price', productSelect.price);
@@ -681,6 +716,12 @@
 						uni.setNavigationBarTitle({
 							title: storeInfo.title.substring(0, 7) + '...'
 						});
+						for (let key in res.data.productValue) {
+						  let obj = res.data.productValue[key];
+						  that.skuArr.push(obj);
+						}
+						console.log(that.skuArr)
+						that.$set(that, "selectSku", that.skuArr[0]);
 						var navList = ['商品', '评价', '详情'];
 						if (goodArray.length) {
 							navList.splice(2, 0, '推荐');
@@ -1269,7 +1310,42 @@
 			tabCouponType: function(type) {
 				this.$set(this.coupon, 'type', type);
 				this.getCouponList(type);
-			}
+			},
+			//点击sku图片打开轮播图
+			showImg(index) {
+			  this.$refs.cusPreviewImg.open(this.selectSku.suk);
+			},
+			//滑动轮播图选择商品
+			changeSwitch(e) {
+				console.log(this.skuArr,e)
+			  let productSelect = this.skuArr[e];
+			  this.$set(this, "selectSku", productSelect);
+			  var skuList = productSelect.suk.split(",");
+			  this.$set(this.attr.productAttr[0], "index", skuList[0]);
+				console.log(this.skuList)
+			  if (skuList.length == 2) {
+			    this.$set(this.attr.productAttr[0], "index", skuList[0]);
+			    this.$set(this.attr.productAttr[1], "index", skuList[1]);
+			  } else if (skuList.length == 3) {
+			    this.$set(this.attr.productAttr[0], "index", skuList[0]);
+			    this.$set(this.attr.productAttr[1], "index", skuList[1]);
+			    this.$set(this.attr.productAttr[2], "index", skuList[2]);
+			  } else if (skuList.length == 4) {
+			    this.$set(this.attr.productAttr[0], "index", skuList[0]);
+			    this.$set(this.attr.productAttr[1], "index", skuList[1]);
+			    this.$set(this.attr.productAttr[2], "index", skuList[2]);
+			    this.$set(this.attr.productAttr[3], "index", skuList[3]);
+			  }
+			  if (productSelect) {
+			    this.$set(this.attr.productSelect, "image", productSelect.image);
+			    this.$set(this.attr.productSelect, "price", productSelect.price);
+			    this.$set(this.attr.productSelect, "stock", productSelect.stock);
+			    this.$set(this.attr.productSelect, "unique", productSelect.unique);
+			    this.$set(this.attr.productSelect, "vipPrice", productSelect.vipPrice);
+			    this.$set(this, "attrTxt", "已选择");
+			    this.$set(this, "attrValue", productSelect.suk);
+			  }
+			},
 		}
 	};
 </script>
@@ -1837,5 +1913,44 @@
 		padding: 4rpx 6rpx;
 		border-radius: 4rpx;
 		background-color: var(--view-op-ten);
+	}
+	.attrImg {
+	  width: 66rpx;
+	  height: 66rpx;
+	  border-radius: 6rpx;
+	  display: block;
+	  margin-right: 14rpx;
+	}
+	
+	.switchTxt {
+	  height: 60rpx;
+	  flex: 1;
+	  line-height: 60rpx;
+	  box-sizing: border-box;
+	  background: #eeeeee;
+	  padding-right: 0 24rpx 0;
+	  border-radius: 8rpx;
+	  text-align: center;
+	}
+	
+	.attribute {
+	  padding: 10rpx 30rpx;
+	  .line1 {
+	    width: 600rpx;
+	  }
+	}
+	.flex {
+	  display: flex;
+	  justify-content: space-between;
+	  width: 100%;
+	}
+	.flexs {
+	  display: flex;
+	}
+	
+	.attr-txt {
+	  display: flex;
+	  flex-wrap: nowrap;
+	  width: 130rpx;
 	}
 </style>

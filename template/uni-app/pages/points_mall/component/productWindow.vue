@@ -3,8 +3,8 @@
 		<view class="product-window"
 			:class="(attr.cartAttr === true ? 'on' : '') + ' ' + (iSbnt?'join':'') + ' ' + (iScart?'joinCart':'')">
 			<view class="textpic acea-row row-between-wrapper">
-				<view class="pictrue">
-					<image :src="attr.productSelect.image" @click='getpreviewImage'></image>
+				<view class="pictrue" @click="showImg()">
+					<image :src="attr.productSelect.image"></image>
 				</view>
 				<view class="text">
 					<view class="line1">
@@ -132,6 +132,9 @@
 					.join(",");
 				that.$emit("ChangeAttr", value);
 
+			},
+			showImg() {
+				this.$emit('getImg');
 			},
 			//获取被选中属性；
 			getCheckedValue: function() {

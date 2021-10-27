@@ -58,8 +58,32 @@
 					</view>
 					<view class='attribute acea-row row-between-wrapper' @tap='selecAttr'
 						v-if='attribute.productAttr.length'>
-						<view>{{attr}}：<text class='atterTxt'>{{attrValue}}</text></view>
-						<view class='iconfont icon-jiantou'></view>
+					<!-- 	<view>{{attr}}：<text class='atterTxt'>{{attrValue}}</text></view>
+						<view class='iconfont icon-jiantou'></view> -->
+						<view class="flex">
+						  <view style="display: flex; align-items: center; width: 90%">
+						    <view class="attr-txt"> {{ attr }}： </view>
+						    <view class="atterTxt line1" style="width: 82%">{{
+						      attrValue
+						    }}</view>
+						  </view>
+						  <view class="iconfont icon-jiantou"></view>
+						</view>
+						<view
+						  class="acea-row row-between-wrapper"
+						  style="margin-top: 7px; padding-left: 70px"
+						  v-if="skuArr.length > 1"
+						>
+						  <view class="flexs">
+						    <image
+						      :src="item.image"
+						      v-for="(item, index) in skuArr.slice(0, 4)"
+						      :key="index"
+						      class="attrImg"
+						    ></image>
+						  </view>
+						  <view class="switchTxt">共{{ skuArr.length }}种规格可选</view>
+						</view>
 					</view>
 				</view>
 				<view class='userEvaluation' id="past1" v-if="replyCount">
@@ -76,8 +100,13 @@
 				<view class='product-intro' id="past2">
 					<view class='title'>产品介绍</view>
 					<view class='conter'>
-						<view class="" v-html="storeInfo.description">
-						</view>
+						<!-- <view class="" v-html="storeInfo.description">
+						</view> -->
+						<parser
+						  :html="storeInfo.description"
+						  ref="article"
+						  :tag-style="tagStyle"
+						></parser>
 					</view>
 				</view>
 			</scroll-view>
@@ -127,8 +156,15 @@
 				</view>
 			</view>
 		</view>
+		<cus-previewImg
+		  ref="cusPreviewImg"
+		  :list="skuArr"
+		  @changeSwitch="changeSwitch"
+		  @shareFriend="listenerActionSheet"
+		/>
 		<product-window :attr='attribute' :limitNum='1' @myevent="onMyEvent" @ChangeAttr="ChangeAttr" :type="'seckill'"
-			@ChangeCartNum="ChangeCartNum" @attrVal="attrVal" @iptCartNum="iptCartNum"></product-window>
+			@ChangeCartNum="ChangeCartNum" @attrVal="attrVal" @iptCartNum="iptCartNum" @getImg="showImg"></product-window>
+	
 		<!-- #ifdef MP -->
 		<!-- <authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth"></authorize> -->
 		<!-- #endif -->
@@ -206,7 +242,7 @@
 	// #ifdef MP
 	import authorize from '@/components/Authorize';
 	// #endif
-	import parser from "@/components/mp-html/mp-html";
+	// import parser from "@/components/mp-html/mp-html";
 	import countDown from '@/components/countDown';
 	import {
 		imageBase64
@@ -228,9 +264,24 @@
 	// #endif
 	import colors from '@/mixins/color.js';
 	import menuIcon from '@/components/menuIcon.vue'
+	import parser from "@/components/jyf-parser/jyf-parser";
+	import cusPreviewImg from "@/components/cus-previewImg/cus-previewImg.vue";
 	export default {
 		computed: mapGetters(['isLogin']),
 		mixins:[colors],
+		components: {
+			productConSwiper,
+			'productWindow': productWindow,
+			userEvaluation,
+			kefuIcon,
+			menuIcon,
+			countDown,
+			cusPreviewImg,
+			parser,
+			// #ifdef MP
+			authorize
+			// #endif
+		},
 		data() {
 			return {
 				showMenuIcon: false,
@@ -298,21 +349,12 @@
 				homeTop: 20,
 				returnShow: true,
 				H5ShareBox: false, //公众号分享图片
-				routineContact: 0
+				routineContact: 0,
+				skuArr: [],
+				selectSku: {},
 			}
 		},
-		components: {
-			productConSwiper,
-			'productWindow': productWindow,
-			userEvaluation,
-			kefuIcon,
-			"jyf-parser": parser,
-			menuIcon,
-			countDown,
-			// #ifdef MP
-			authorize
-			// #endif
-		},
+
 		computed: mapGetters(['isLogin']),
 		watch: {
 			isLogin: {
@@ -459,7 +501,8 @@
 					this.imgUrls = res.data.storeInfo.images;
 					this.storeInfo.description = this.storeInfo.description.replace(/<img/gi,
 						'<img style="max-width:100%;height:auto;float:left;display:block" ');
-					this.attribute.productAttr = res.data.productAttr;
+					// this.attribute.productAttr = res.data.productAttr;
+					that.$set(that.attribute, "productAttr", res.data.productAttr);
 					this.productValue = res.data.productValue;
 					this.attribute.productSelect.num = res.data.storeInfo.num;
 					this.attribute.productSelect.once_num = res.data.storeInfo.once_num;
@@ -470,6 +513,11 @@
 					uni.setNavigationBarTitle({
 						title: title.substring(0, 7) + '...'
 					});
+					for (let key in res.data.productValue) {
+					  let obj = res.data.productValue[key];
+					  that.skuArr.push(obj);
+					}
+					this.$set(this, "selectSku", that.skuArr[0]);
 					var navList = ['商品', '详情'];
 					if(res.data.replyCount){
 						navList.splice(1, 0, '评价');
@@ -688,6 +736,7 @@
 			ChangeAttr: function(res) {
 				this.$set(this, 'cart_num', 1);
 				let productSelect = this.productValue[res];
+				this.$set(this, "selectSku", productSelect);
 				if (productSelect) {
 					this.$set(this.attribute.productSelect, "image", productSelect.image);
 					this.$set(this.attribute.productSelect, "price", productSelect.price);
@@ -1062,7 +1111,42 @@
 							configAppMessage)
 					});
 				}
-			}
+			},
+			//点击sku图片打开轮播图
+			showImg(index) {
+			  this.$refs.cusPreviewImg.open(this.selectSku.suk);
+			},
+			//滑动轮播图选择商品
+			changeSwitch(e) {
+				console.log(this.skuArr[e])
+			  let productSelect = this.skuArr[e];
+			  this.$set(this, "selectSku", productSelect);
+			  var skuList = productSelect.suk.split(",");
+				console.log(this.attribute.productAttr)
+			  this.$set(this.attribute.productAttr[0], "index", skuList[0]);
+			  if (skuList.length == 2) {
+			    this.$set(this.attribute.productAttr[0], "index", skuList[0]);
+			    this.$set(this.attribute.productAttr[1], "index", skuList[1]);
+			  } else if (skuList.length == 3) {
+			    this.$set(this.attribute.productAttr[0], "index", skuList[0]);
+			    this.$set(this.attribute.productAttr[1], "index", skuList[1]);
+			    this.$set(this.attribute.productAttr[2], "index", skuList[2]);
+			  } else if (skuList.length == 4) {
+			    this.$set(this.attribute.productAttr[0], "index", skuList[0]);
+			    this.$set(this.attribute.productAttr[1], "index", skuList[1]);
+			    this.$set(this.attribute.productAttr[2], "index", skuList[2]);
+			    this.$set(this.attribute.productAttr[3], "index", skuList[3]);
+			  }
+			  if (productSelect) {
+			    this.$set(this.attribute.productSelect, "image", productSelect.image);
+			    this.$set(this.attribute.productSelect, "price", productSelect.price);
+			    this.$set(this.attribute.productSelect, "stock", productSelect.stock);
+			    this.$set(this.attribute.productSelect, "unique", productSelect.id);
+			    this.$set(this.attribute.productSelect, "vipPrice", productSelect.vipPrice);
+			    this.$set(this, "attrTxt", "已选择");
+			    this.$set(this, "attrValue", productSelect.suk);
+			  }
+			},
 		},
 		//#ifdef MP
 		onShareAppMessage() {
@@ -1463,5 +1547,44 @@
 	.share-box image {
 		width: 100%;
 		height: 100%;
+	}
+	.attrImg {
+	  width: 66rpx;
+	  height: 66rpx;
+	  border-radius: 6rpx;
+	  display: block;
+	  margin-right: 14rpx;
+	}
+	
+	.switchTxt {
+	  height: 60rpx;
+	  flex: 1;
+	  line-height: 60rpx;
+	  box-sizing: border-box;
+	  background: #eeeeee;
+	  padding-right: 0 24rpx 0;
+	  border-radius: 8rpx;
+	  text-align: center;
+	}
+	
+	.attribute {
+	  padding: 10rpx 30rpx;
+	  .line1 {
+	    width: 600rpx;
+	  }
+	}
+	.flex {
+	  display: flex;
+	  justify-content: space-between;
+	  width: 100%;
+	}
+	.flexs {
+	  display: flex;
+	}
+	
+	.attr-txt {
+	  display: flex;
+	  flex-wrap: nowrap;
+	  width: 130rpx;
 	}
 </style>

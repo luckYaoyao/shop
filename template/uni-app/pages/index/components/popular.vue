@@ -1,6 +1,6 @@
 <template>
 	<view :style="colorStyle">
-		<view class='hotList' v-if="isShow && hotList.length">
+		<view class='hotList skeleton-rect' v-if="isShow && hotList.length">
 			<!-- <view class='hot-bg'>
 			</view> -->
 			<view class='title acea-row row-between-wrapper'>

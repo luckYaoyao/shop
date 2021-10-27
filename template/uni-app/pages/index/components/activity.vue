@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view v-if="isShow" class="specialArea acea-row row-between-wrapper">
-			<view class="assemble" hover-class="none" @click="gopage(activityOne.info[2].value)">
+			<view class="assemble skeleton-rect" hover-class="none" @click="gopage(activityOne.info[2].value)">
 				<image :src="activityOne.img" alt="img" />
 				<!-- <view class="text" v-if="activityOne.info">
 					<view class="name">{{ activityOne.info[0].value }}</view>
@@ -9,7 +9,7 @@
 				</view> -->
 			</view>
 			<view class="list acea-row row-column-between">
-				<view class="item" v-for="(item, index) in activity" :key="index" @click="gopage(item.info[2].value)">
+				<view class="item skeleton-rect" v-for="(item, index) in activity" :key="index" @click="gopage(item.info[2].value)">
 					<image :src="item.img" alt="img" />
 					<!-- 	<view class="text">
 						<view class="name">{{ item.info[0].value }}</view>

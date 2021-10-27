@@ -2,7 +2,7 @@
 	<view class="">
 
 		<view class="index-wrapper" :style="colorStyle">
-			<view class='wrapper' v-if="isShow && firstList.length">
+			<view class='wrapper skeleton-rect' v-if="isShow && firstList.length">
 				<view class='title acea-row row-between-wrapper'>
 					<view class='text'>
 						<view class='name line1'>
