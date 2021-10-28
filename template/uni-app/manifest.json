@@ -1,5 +1,5 @@
 {
-    "name" : "crmeb",
+    "name" : "routineTitle",
     "appid" : "__UNI__A3F1ED4",
     "description" : "crmeb商城",
     "versionName" : "1.0.0",
@@ -162,7 +162,7 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wx3b82801238ca1b57",
+        "appid" : "wx1234567890",
         "setting" : {
             "urlCheck" : false,
             "minified" : true,

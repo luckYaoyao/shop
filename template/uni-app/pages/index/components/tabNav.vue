@@ -8,7 +8,7 @@
 				<view class="longTab">
 					<scroll-view scroll-x="true" style="white-space: nowrap; display: flex;" scroll-with-animation
 						:scroll-left="tabLeft" show-scrollbar="true">
-						<view :url="'/pages/goods_list/index?cid='+item.id+'&title='+item.cate_name" class="longItem skeleton-rect"
+						<view :url="'/pages/goods_list/index?cid='+item.id+'&title='+item.cate_name" class="longItem"
 							:style='"width:"+"max-content"' :data-index="index" :class="index===tabClick?'click':''"
 							v-for="(item,index) in tabTitle" :key="index" :id="'id'+index"
 							@click="longClick(item,index)">

@@ -19,6 +19,7 @@
                 <Tree
                   :data="treeData"
                   :render="renderContent"
+                  :load-data="loadData"
                   class="treeBox"
                   ref="tree"
                 ></Tree>
@@ -64,7 +65,7 @@
               <i-select
                 :value="pids"
                 placeholder="图片移动至"
-                style="width: 160px"
+                style="width: 250px"
                 class="treeSel"
               >
                 <i-option
@@ -79,6 +80,7 @@
                   :data="treeData2"
                   :render="renderContentSel"
                   ref="reference"
+                  :load-data="loadData"
                   class="treeBox"
                 ></Tree>
               </i-select>
@@ -610,10 +612,10 @@ export default {
     },
     // 搜索分类
     changePage() {
-      this.getList();
+      this.getList("search");
     },
     // 分类列表树
-    getList() {
+    getList(type) {
       let data = {
         title: "全部图片",
         id: "",
@@ -623,12 +625,24 @@ export default {
         .then(async (res) => {
           this.treeData = res.data.list;
           this.treeData.unshift(data);
-          this.treeData2 = [...this.treeData];
+          if (type !== "search") {
+            this.treeData2 = [...this.treeData];
+          }
           this.addFlag(this.treeData);
         })
         .catch((res) => {
           this.$Message.error(res.msg);
         });
+    },
+    loadData(item, callback) {
+      getCategoryListApi({
+        pid: item.id,
+      })
+        .then(async (res) => {
+          const data = res.data.list;
+          callback(data);
+        })
+        .catch((res) => {});
     },
     addFlag(treedata) {
       treedata.map((item) => {
@@ -937,6 +951,7 @@ export default {
 .treeSel >>>.ivu-select-dropdown-list {
   padding: 0 5px !important;
   box-sizing: border-box;
+  width: 200px;
 }
 
 .imagesNo {
@@ -1008,6 +1023,10 @@ export default {
   background: transparent;
   border-radius: 6px;
   display: inline-block;
+}
+
+.bnt /deep/ .ivu-tree-children {
+  padding: 5px 0;
 }
 
 .trees-coadd /deep/ .ivu-tree-children .ivu-tree-arrow {

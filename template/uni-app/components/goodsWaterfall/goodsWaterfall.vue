@@ -3,7 +3,7 @@
 		<view class="feng_flow">
 			<view class="flow_block">
 				<view class="product-list pr10" v-for="(item, i1) in lists1" :key="i1" @click="goGoodsDetail(item)">
-					<view class="product-item skeleton-rect">
+					<view class="product-item">
 						<image :src="item.image" mode="widthFix" style="width: 100%;"></image>
 						<view class="info">
 							<view class="title line2">{{ item.store_name }}</view>
@@ -24,7 +24,7 @@
 				</view>
 			</view>
 			<view class="flow_block">
-				<view class="product-list pl10 skeleton-rect" v-for="(item2, i2) in lists2" :key="i2" @click="goGoodsDetail(item2)">
+				<view class="product-list pl10" v-for="(item2, i2) in lists2" :key="i2" @click="goGoodsDetail(item2)">
 					<view class="product-item">
 						<image :src="item2.image" mode="widthFix" style="width: 100%;"></image>
 						<view class="info">

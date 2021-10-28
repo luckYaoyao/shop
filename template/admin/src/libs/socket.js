@@ -15,12 +15,7 @@ import Vue from 'vue';
 const vm = new Vue;
 let wsAdminSocketUrl = getCookies('WS_ADMIN_URL') || ''
 // let wsKefuSocketUrl = getCookies('WS_CHAT_URL') || ''
-getWorkermanUrl().then(res=>{
-    wsAdminSocketUrl = res.data.admin
-    // wsKefuSocketUrl = res.data.chat
-    setCookies('WS_ADMIN_URL',res.data.admin)
-    // setCookies('WS_CHAT_URL',res.data.chat)
-})
+
 class wsSocket {
     constructor (opt) {
         this.ws = null;
@@ -99,6 +94,13 @@ class wsSocket {
 
 
 function createSocket(key) {
+    getWorkermanUrl().then(res=>{
+        console.log('11111  ')
+        wsAdminSocketUrl = res.data.admin
+        // wsKefuSocketUrl = res.data.chat
+        setCookies('WS_ADMIN_URL',res.data.admin)
+        // setCookies('WS_CHAT_URL',res.data.chat)
+    })
     return new Promise((resolve, reject) => {
         const ws = new wsSocket({
             key,
@@ -113,7 +115,6 @@ function createSocket(key) {
                 vm.$emit(type, data);
             },
             close(e){
-
                 vm.$emit('close', e);
             }
         })

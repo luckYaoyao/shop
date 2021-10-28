@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view class="productList" :style="colorStyle">
-			<view class='index-wrapper acea-row row-between-wrapper skeleton-rect' v-if="isShow && bastList.length">
+			<view class='index-wrapper acea-row row-between-wrapper' v-if="isShow && bastList.length">
 				<view class='title acea-row row-between-wrapper'>
 					<view class='text'>
 						<view class='name line1'>

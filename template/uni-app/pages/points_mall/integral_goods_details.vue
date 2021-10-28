@@ -200,7 +200,7 @@
 			kefuIcon,
 			"jyf-parser": parser,
 			countDown,
-			cusPreviewImg
+			cusPreviewImg,
 			// #ifdef MP
 			authorize
 			// #endif

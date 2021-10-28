@@ -1,7 +1,9 @@
 <template>
 	<view id="pageIndex" :style="colorStyle">
+		<!-- #ifndef MP -->
 		<skeleton v-if="!isIframe" :show="showSkeleton" :isNodes="isNodes" ref="skeleton" loading="chiaroscuro"
 			selector="skeleton" bgcolor="#FFF"></skeleton>
+		<!-- #endif -->
 		<!-- #ifdef H5 -->
 		<view class="followMe" v-if="$wechat.isWeixin()">
 			<view class="follow acea-row row-between-wrapper" v-if="followHid && followUrl && !subscribe">
@@ -95,90 +97,6 @@
 			</view>
 		</view>
 
-
-		<!-- 分类商品模块 -->
-		<!-- #ifdef  APP-PLUS -->
-		<!-- 		<view class="sort-product" v-if="isSortType == 1" style="margin-top: 70rpx;">
-			<view class="product-list" v-if="goodList.length">
-				<view class="product-item" v-for="(item, index) in goodList" @click="goGoodsDetail(item)">
-					<image :src="item.image"></image>
-					<view class="info">
-						<view class="title line1">{{ item.store_name }}</view>
-						<view class="tag" v-if="item.activity && item.activity.type === '1'">秒杀</view>
-						<view class="tag" v-if="item.activity && item.activity.type === '2'">砍价</view>
-						<view class="tag" v-if="item.activity && item.activity.type === '3'">拼团</view>
-						<view class="price-box">
-							<text>￥</text>
-							{{ item.price }}
-						</view>
-					</view>
-				</view>
-			</view>
-			<Loading :loaded="loaded" :loading="loading"></Loading>
-			<view class="" v-if="goodList.length == 0 && loaded">
-				<view class="empty-box">
-					<image src="/static/images/noShopper.png"></image>
-				</view>
-				<recommend :hostProduct="hostProduct"></recommend>
-			</view>
-		</view> -->
-		<!-- #endif -->
-		<!-- #ifndef  APP-PLUS -->
-		<!-- 		<view class="sort-product" :style="{ marginTop: sortMpTop + 'px' }">
-			<view class="product-list" v-if="goodLists.length">
-				<view class="product-item" v-for="(item, index) in goodLists" @click="goGoodsDetail(item)">
-					<image :src="item.image"></image>
-					<view class="info">
-						<view class="title line2">{{ item.store_name }}</view>
-						<view class="tag" v-if="item.activity && item.activity.type === '1'">秒杀</view>
-						<view class="tag" v-if="item.activity && item.activity.type === '2'">砍价</view>
-						<view class="tag" v-if="item.activity && item.activity.type === '3'">拼团</view>
-						<view class="price-box">
-							<text>￥</text>
-							{{ item.price }}
-						</view>
-					</view>
-				</view>
-			</view>
-			<Loading :loaded="loaded" :loading="loading"></Loading>
-			<view class="" v-if="goodList.length == 0 && loaded">
-				<view class="empty-box">
-					<image src="/static/images/noShopper.png"></image>
-				</view>
-			</view>
-		</view> -->
-		<!-- #endif -->
-		<!-- #ifdef MP -->
-		<!-- <eimlFlow :list="goodLists" :columnNum="2"></eimlFlow> -->
-		<!-- #endif -->
-		<!-- #ifdef  H5-->
-		<!-- <view class="sort-product">
-			<flowLayout :columnNum="2">
-				<view class="product-list" v-for="(item,index) in goodLists" v-bind:key="index" :slot="index"
-					@click="goGoodsDetail(item)">
-					<view class="product-item">
-						<image :src="item.image"></image>
-						<view class="info">
-							<view class="title line2">{{ item.store_name }}</view>
-							<view class="tag" v-if="item.activity && item.activity.type === '1'">秒杀</view>
-							<view class="tag" v-if="item.activity && item.activity.type === '2'">砍价</view>
-							<view class="tag" v-if="item.activity && item.activity.type === '3'">拼团</view>
-							<view class="price-box">
-								<view>
-									<text>￥</text>
-									{{ item.price }}
-								</view>
-								<view class="sales">
-									已售 {{item.sales}}
-								</view>
-							</view>
-						</view>
-					</view>
-				</view>
-			</flowLayout>
-		</view> -->
-
-		<!-- #endif -->
 		<tabBar :dataConfig="tabBar.default" :pagePath="'/pages/index/index'"
 			@click.native="bindEdit('tabBar','default')"></tabBar>
 		<view v-if="site_config && !isIframe" class="site-config" @click="goICP">{{ site_config }}</view>
@@ -632,9 +550,10 @@
 			},
 			onLoadFun() {},
 			diyData() {
+		
 				let that = this;
 				getDiy().then(res => {
-					// #ifndef APP-PLUS
+					// #ifndef APP-PLUS || MP
 					setTimeout(() => {
 						this.isNodes++;
 					}, 0);
