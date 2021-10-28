@@ -28,6 +28,18 @@ export default {
                         title: '最多可添加1张图片，图片建议宽度128 * 45px',
                         url: 'http://kaifa.crmeb.net/uploads/attach/2019/10/20191023/db7b7bef9dffdedd27e9a3aa34218cea.png'
                     },
+                    titleInfo:{
+                        title:'',
+                        type: 8,
+                        list:[
+                            {
+                                title:'商城简介',
+                                val:'好物尽享 任你选择',
+                                max: 20,
+                                pla: '选填，不超过10个字'
+                            }
+                        ]
+                    },
                     hotList: {
                         title:'热词最多20个字，鼠标拖拽左侧圆点可调整热词顺序',
                         max:99,
@@ -46,6 +58,18 @@ export default {
                     imgUrl:{
                         title: '最多可添加1张图片，图片建议宽度128 * 45px',
                         url: 'http://kaifa.crmeb.net/uploads/attach/2019/10/20191023/db7b7bef9dffdedd27e9a3aa34218cea.png'
+                    },
+                    titleInfo:{
+                        title:'',
+                        type: 8,
+                        list:[
+                            {
+                                title:'商城简介',
+                                val:'好物尽享 任你选择',
+                                max: 20,
+                                pla: '选填，不超过10个字'
+                            }
+                        ]
                     },
                     hotList: {
                         title:'热词最多20个字，鼠标拖拽左侧圆点可调整热词顺序',
@@ -1771,6 +1795,10 @@ export default {
                     {
                         components: toolCom.c_is_show,
                         configNme: 'isShow'
+                    },
+                    {
+                        components: toolCom.c_input_list,
+                        configNme: 'titleInfo'
                     },
                     {
                         components: toolCom.c_upload_img,

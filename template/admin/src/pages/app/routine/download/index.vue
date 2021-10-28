@@ -26,7 +26,7 @@
             </div>
             <div class="content-box">
               <div class="left">小程序名称：</div>
-              <div class="right">{{ pageData.routine_name }}</div>
+              <div class="right">{{ pageData.routine_name || "未命名" }}</div>
             </div>
             <div class="content-box">
               <div class="left">小程序码：</div>
@@ -122,15 +122,20 @@ export default {
     downLoad() {
       routineDownload({
         is_live: this.is_live,
-      }).then((res) => {
-        console.log(res);
-        window.open(res.data.url, "_blank");
-      });
+      })
+        .then((res) => {
+          console.log(res);
+          window.open(res.data.url, "_blank");
+        })
+        .catch((err) => {
+          this.$Message.warning(err.msg);
+        });
     },
     downLoadCode(url) {
+      if (!url) return this.$Message.warning("暂无下载链接");
+      console.log("11111");
       var image = new Image();
       image.src = url;
-
       // 解决跨域 Canvas 污染问题
       image.setAttribute("crossOrigin", "anonymous");
       image.onload = function () {
@@ -231,9 +236,9 @@ export default {
 .mask {
   position: absolute;
   left: 0;
-  width: 100%;
   top: 0;
-  height: 100%;
+  width: 312px;
+  height: 550px;
   background-color: rgba(0, 0, 0, 0);
 }
 </style>

@@ -154,6 +154,7 @@ export default {
   width: 60px;
   height: 60px;
   margin-bottom: 10px;
+  background-color: #f2f2f2;
 
   img {
     width: 100%;
