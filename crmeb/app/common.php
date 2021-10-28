@@ -24,7 +24,7 @@ if (!function_exists('getWorkerManUrl')) {
      */
     function getWorkerManUrl()
     {
-        $ws = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS']) == 'on' ? 'wss://' : 'ws://';
+        $ws = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'wss://' : 'ws://';
         $host = $_SERVER['HTTP_HOST'];
         $data['admin'] = $ws . $host . '/notice';
         $data['channel'] = $ws . $host . '/msg';
