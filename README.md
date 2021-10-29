@@ -173,12 +173,14 @@ v3.2.9 发行版下载地址：https://gitee.com/ZhongBangKeJi/CRMEB/releases/v3
 
 ![输入图片说明](readme/images/1主图.jpg)
 ![输入图片说明](readme/images/2首页.jpg)
-![输入图片说明](readme/images/3可视化.jpg)
+![输入图片说明](readme/images/3可视化1.jpg)
+![输入图片说明](readme/images/3可视化2.jpg)
+![输入图片说明](readme/images/3可视化3.jpg)
 ![输入图片说明](readme/images/4商品.jpg)
 ![输入图片说明](readme/images/5订单.jpg)
 ![输入图片说明](readme/images/6用户.jpg)
 ![输入图片说明](readme/images/7分销.jpg)
-![输入图片说明](readme/images/8客服.jpg)
+![输入图片说明](readme/images/8消息管理.jpg)
 ![输入图片说明](readme/images/9砍价.jpg)
 ![输入图片说明](readme/images/10拼团.jpg)
 ![输入图片说明](readme/images/11秒杀.jpg)
@@ -188,7 +190,6 @@ v3.2.9 发行版下载地址：https://gitee.com/ZhongBangKeJi/CRMEB/releases/v3
 ![输入图片说明](readme/images/15优惠券.jpg)
 ![输入图片说明](readme/images/16后台管理.jpg)
 ![输入图片说明](readme/images/17后台管理.jpg)
-![输入图片说明](readme/images/18模版.jpg)
 ![输入图片说明](readme/images/19奖项.jpg)
 
 
