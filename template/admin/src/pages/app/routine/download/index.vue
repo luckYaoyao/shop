@@ -24,6 +24,14 @@
               <div class="line"></div>
               <div class="right title">小程序设置</div>
             </div>
+            <Alert v-if="!pageData.appId">
+              <template slot="desc">
+                您尚未配置小程序信息，请<router-link
+                  :to="{ path: '/admin/setting/system_config?from=download' }"
+                  >立即设置</router-link
+                ></template
+              >
+            </Alert>
             <div class="content-box">
               <div class="left">小程序名称：</div>
               <div class="right">{{ pageData.routine_name || "未命名" }}</div>
@@ -91,12 +99,13 @@ export default {
         sm: 24,
         xs: 24,
       },
-      iframeUrl: `${location.origin}?type=iframeWindow`,
+      iframeUrl: `${location.origin}/pages/index/index?type=iframeWindow`,
       is_live: 1,
       pageData: {
         code: "",
         routine_name: "",
         help: "",
+        appId: "1",
       },
     };
   },
@@ -132,8 +141,7 @@ export default {
         });
     },
     downLoadCode(url) {
-      if (!url) return this.$Message.warning("暂无下载链接");
-      console.log("11111");
+      if (!url) return this.$Message.warning("暂无小程序码");
       var image = new Image();
       image.src = url;
       // 解决跨域 Canvas 污染问题
