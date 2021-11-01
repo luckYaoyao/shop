@@ -9,5 +9,7 @@ runtime/session
 runtime/temp
 install.lock
 public/uploads
-public/download
 remarks.txt
+crmeb/runtime/temp
+crmeb/runtime/cache
+crmeb/public/statics/download
