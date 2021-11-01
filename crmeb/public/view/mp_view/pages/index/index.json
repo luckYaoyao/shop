@@ -29,6 +29,7 @@
     "tab-bar": "/pages/index/components/tabBar",
     "tab-nav": "/pages/index/components/tabNav",
     "loading": "/components/Loading/index",
+    "skeletons": "/pages/index/components/skeleton",
     "app-update": "/pages/index/update/app-update"
   }
 }

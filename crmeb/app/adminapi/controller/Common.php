@@ -383,12 +383,5 @@ class Common extends AuthController
         return app('json')->success(sort_list_tier($data));
     }
 
-    /**
-     * 获取workerman请求域名
-     * @return mixed
-     */
-    public function getWorkerManUrl()
-    {
-        return app('json')->success(getWorkerManUrl());
-    }
+
 }

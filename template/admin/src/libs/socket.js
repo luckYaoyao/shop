@@ -14,7 +14,7 @@ import {getWorkermanUrl} from '@/api/kefu'
 import Vue from 'vue';
 const vm = new Vue;
 let wsAdminSocketUrl = getCookies('WS_ADMIN_URL') || ''
-// let wsKefuSocketUrl = getCookies('WS_CHAT_URL') || ''
+let wsKefuSocketUrl = getCookies('WS_CHAT_URL') || ''
 
 class wsSocket {
     constructor (opt) {
@@ -95,11 +95,10 @@ class wsSocket {
 
 function createSocket(key) {
     getWorkermanUrl().then(res=>{
-        console.log('11111  ')
         wsAdminSocketUrl = res.data.admin
-        // wsKefuSocketUrl = res.data.chat
+        wsKefuSocketUrl = res.data.chat
         setCookies('WS_ADMIN_URL',res.data.admin)
-        // setCookies('WS_CHAT_URL',res.data.chat)
+        setCookies('WS_CHAT_URL',res.data.chat)
     })
     return new Promise((resolve, reject) => {
         const ws = new wsSocket({
@@ -125,7 +124,7 @@ function createSocket(key) {
 
 
 export const adminSocket = createSocket(1);
-// export const Socket = createSocket(2);
+export const Socket = createSocket(2);
 //
 // class Socket {
 //     constructor () {

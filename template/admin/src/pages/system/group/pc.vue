@@ -35,6 +35,7 @@
 					<div class="left_box">
 						<div class="left_cont" :class="pageId == 1 ? 'on':''" @click="menu(1)">网站LOGO</div>
 						<div class="left_cont" :class="pageId == 'pc_home_banner' ? 'on':''" @click="menu('pc_home_banner')">首页轮播图</div>
+						<div class="left_cont" :class="pageId == 3 ? 'on':''" @click="menu(3)">客服页面广告</div>
 					</div>
                 </Col>
 				<div style="display: flex; width: 83%;">

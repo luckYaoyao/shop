@@ -313,7 +313,9 @@ Route::group(function () {
     //长链接设置
     Route::get('get_workerman_url', 'v1.PublicController/getWorkerManUrl')->name('getWorkerManUrl');
     //首页开屏广告
-    Route::get('get_open_adv', 'v1.PublicController/getOpenAdv')->name('getOpenAdv');
+    Route::get('get_open_adv','v1.PublicController/getOpenAdv')->name('getOpenAdv');
+    //获取用户协议
+    Route::get('user_agreement', 'v1.PublicController/getUserAgreement')->name('getUserAgreement');
 })->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class)->middleware(\app\api\middleware\AuthTokenMiddleware::class, false);
 
 Route::miss(function () {

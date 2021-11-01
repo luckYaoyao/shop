@@ -516,4 +516,24 @@ class StoreOrderDeliveryServices extends BaseServices
         });
         return true;
     }
+
+    /**
+     * 返回订单商品总重量
+     * @param int $id
+     * @return int|string
+     */
+    public function getOrderSumWeight(int $id, $default = false)
+    {
+        /** @var StoreOrderCartInfoServices $services */
+        $services = app()->make(StoreOrderCartInfoServices::class);
+        $orderGoodInfo = $services->getOrderCartInfo((int)$id);
+        $weight = 0;
+        foreach ($orderGoodInfo as $cartInfo) {
+            $cart = $cartInfo['cart_info'] ?? [];
+            if ($cart) {
+                $weight = bcadd((string)$weight, (string)bcmul((string)$cart['cart_num'] ?? '0', (string)$cart['productInfo']['attrInfo']['weight'] ?? '0', 4), 2);
+            }
+        }
+        return $weight ? $weight : ($default === false ? 0 : $default);
+    }
 }

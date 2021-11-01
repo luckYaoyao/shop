@@ -295,6 +295,7 @@ class RoutineTemplate extends AuthController
             //拷贝源文件
             /** @var FileService $fileService */
             $fileService = app(FileService::class);
+//            $path = $is_live == 0 ? 'view/mp_view' : 'view/mp_view_live';
             $fileService->copyDir(public_path() . 'view/mp_view', public_path() . 'view/download');
             //替换appid和名称
             $this->updateConfigJson(sys_config('routine_appId'), $name != '' ? $name : sys_config('routine_name'));
@@ -326,7 +327,7 @@ class RoutineTemplate extends AuthController
     }
 
     /**
-     * 判断是否开启直播
+     * 判断是否开启直播(弃用)
      * @param int $iszhibo
      */
     public function updateAppJson()

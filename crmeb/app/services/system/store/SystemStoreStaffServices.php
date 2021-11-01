@@ -21,10 +21,7 @@ use crmeb\services\FormBuilder;
  * 门店店员
  * Class SystemStoreStaffServices
  * @package app\services\system\store
- * @method count(array $where = []) 获取指定条件下的count
- * @method update($id, array $data, ?string $key = null) 修改数据
- * @method save(array $data) 保存数据
- * @method delete(int $id, ?string $key = null) 删除数据
+ * @mixin SystemStoreStaffDao
  */
 class SystemStoreStaffServices extends BaseServices
 {
@@ -47,7 +44,10 @@ class SystemStoreStaffServices extends BaseServices
     /**
      * 判断是否是有权限核销的店员
      * @param $uid
-     * @return int
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function verifyStatus($uid)
     {

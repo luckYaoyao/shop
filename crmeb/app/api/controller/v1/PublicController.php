@@ -15,6 +15,7 @@ use app\services\activity\StorePinkServices;
 use app\services\diy\DiyServices;
 use app\services\message\service\StoreServiceServices;
 use app\services\order\DeliveryServiceServices;
+use app\services\other\CacheServices;
 use app\services\product\product\StoreCategoryServices;
 use app\services\product\product\StoreProductServices;
 use app\services\shipping\ExpressServices;
@@ -508,5 +509,17 @@ class PublicController
     public function getOpenAdv()
     {
         return app('json')->success(sys_config('open_adv',''));
+    }
+
+    /**
+     * 获取用户协议内容
+     * @return mixed
+     */
+    public function getUserAgreement()
+    {
+        /** @var CacheServices $cache */
+        $cache = app()->make(CacheServices::class);
+        $content = $cache->getDbCache('user_agreement', '');
+        return app('json')->success(compact('content'));
     }
 }

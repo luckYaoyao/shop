@@ -1,9 +1,8 @@
 <template>
 	<view id="pageIndex" :style="colorStyle">
-		<!-- #ifndef MP -->
-		<skeleton v-if="!isIframe" :show="showSkeleton" :isNodes="isNodes" ref="skeleton" loading="chiaroscuro"
-			selector="skeleton" bgcolor="#FFF"></skeleton>
-		<!-- #endif -->
+		<!-- <skeleton v-if="!isIframe" :show="showSkeleton" :isNodes="isNodes" ref="skeleton" loading="chiaroscuro"
+			selector="skeleton" bgcolor="#FFF"></skeleton> -->
+		<skeletons :show="showSkeleton" loading="chiaroscuro" bgcolor="#FFF"></skeletons>
 		<!-- #ifdef H5 -->
 		<view class="followMe" v-if="$wechat.isWeixin()">
 			<view class="follow acea-row row-between-wrapper" v-if="followHid && followUrl && !subscribe">
@@ -19,11 +18,6 @@
 			</view>
 		</view>
 		<!-- #endif -->
-		<!-- #ifdef H5 -->
-		<!-- 	<view class="bac-col">
-			
-		</view> -->
-		<!-- #endif -->
 		<!-- #ifdef MP -->
 		<view class="indexTip" :style="'top:' + (navH+50) + 'px'" :hidden="iShidden">
 			<view class="tip acea-row row-between-wrapper">
@@ -34,7 +28,7 @@
 		<!-- #endif -->
 		<!-- 顶部搜索 -->
 		<view class="skeleton" id="pageIndexs" :style="{visibility: showSkeleton ? 'hidden' : 'visible'}">
-			<headerSerch class="mp-header" :dataConfig="headerSerch.default"
+			<headerSerch class="mp-header skeleton" :dataConfig="headerSerch.default"
 				@click.native="bindEdit('headerSerch','default')"></headerSerch>
 			<!-- 轮播 -->
 			<swiperBg :dataConfig="swiperBg.default" @click.native="bindEdit('swiperBg','default')"></swiperBg>
@@ -190,6 +184,7 @@
 	} from '@/libs/login.js';
 	import colors from "@/mixins/color";
 	import goodsWaterfall from "@/components/goodsWaterfall/goodsWaterfall.vue"
+	import skeletons from './components/skeleton.vue'
 	let app = getApp();
 	let statusBarHeight = uni.getSystemInfoSync().statusBarHeight;
 	export default {
@@ -221,6 +216,7 @@
 			tabNav,
 			Loading,
 			goodsWaterfall,
+			skeletons,
 			appUpdate, //APP更新
 		},
 		mixins: [colors],
@@ -233,7 +229,6 @@
 				sortAll: [],
 				goodPage: 1,
 				goodLists: [],
-				sid: 0,
 				curSort: 0,
 				sortMpTop: 0,
 				loaded: false,
@@ -281,18 +276,12 @@
 				domOffsetTop: 50,
 				isTop: 0,
 				privacyStatus: false, // 隐私政策是否同意过
-				// #ifdef APP-PLUS || MP
 				isFixed: false,
-				// #endif
-				// #ifdef H5
-				isFixed: false,
-				// #endif
 			};
 		},
 		onLoad(options) {
 			uni.hideTabBar();
 			// #ifdef APP-PLUS
-			this.showSkeleton = false
 			this.$nextTick(() => {
 				// this.$refs.appUpdate.update(); //调用子组件 检查更新
 			})
@@ -550,14 +539,8 @@
 			},
 			onLoadFun() {},
 			diyData() {
-		
 				let that = this;
 				getDiy().then(res => {
-					// #ifndef APP-PLUS || MP
-					setTimeout(() => {
-						this.isNodes++;
-					}, 0);
-					// #endif
 					let data = res.data;
 					that.headerSerch = data.headerSerch;
 					that.swiperBg = data.swiperBg;
@@ -578,11 +561,12 @@
 					that.seckill = data.seckill;
 					that.coupon = data.coupon;
 					this.$Cache.set('TAB_BAR', data.tabBar.default.tabBarList)
-					// #ifndef APP-PLUS
+					setTimeout(() => {
+						// this.isNodes++;
+					}, 0);
 					setTimeout(() => {
 						this.showSkeleton = false
 					}, 2000)
-					// #endif
 
 
 				});
@@ -623,35 +607,6 @@
 				this.loaded = false;
 				this.goodPage = 1
 				this.getGoodsList(data)
-				// if (this.sortAll.length > 0) {
-				// 	this.sortAll.forEach((el, index) => {
-				// 		if (el.id == data) {
-				// 			this.$set(this, 'sortList', el);
-				// 			this.sid = el.children.length ? el.children[0].id : '';
-				// 		}
-				// 	});
-				// 	this.goodLists = [];
-				// 	this.goodPage = 1;
-				// 	this.$nextTick(() => {
-				// 		if (this.sortList != '') this.getGoodsList();
-				// 	});
-				// } else {
-				// 	getCategoryList().then(res => {
-				// 		this.sortAll = res.data;
-				// 		res.data.forEach((el, index) => {
-				// 			if (el.id == data) {
-				// 				this.sortList = el;
-				// 				this.sid = el.children.length ? el.children[0].id : '';
-				// 			}
-				// 		});
-				// 		this.goodLists = [];
-				// 		this.goodPage = 1;
-
-				// 		this.$nextTick(() => {
-				// 			if (this.sortList != '') this.getGoodsList();
-				// 		});
-				// 	});
-				// }
 			},
 			getGoodsList(data) {
 				if (this.loading || this.loaded) return;

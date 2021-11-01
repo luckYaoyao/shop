@@ -25,7 +25,8 @@ Route::group(function () {
     Route::get('download', 'PublicController/download')->option(['real_name' => '下载文件']);
     //验证码
     Route::get('captcha_pro', 'Login/captcha')->name('')->option(['real_name' => '获取验证码']);
-
+    //获取客服数据
+    Route::get('get_workerman_url', 'PublicController/getWorkerManUrl')->option(['real_name' => '获取客服数据']);
 
     Route::get('index', 'Test/index')->option(['real_name' => '测试地址']);
 

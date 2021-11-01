@@ -69,10 +69,10 @@
 			readyAction: function() {
 				const that = this;
 				//绘制背景
-				uni.createSelectorQuery().selectAll(`.${this.selector}`).boundingClientRect().exec(function(res) {
-					if(res[0].length>0)
-					that.systemInfo.height = res[0][0].height + res[0][0].top;
-				});
+				uni.createSelectorQuery().selectAll(`.${this.selector}`).boundingClientRect(function(res) {
+					if (res[0].length > 0)
+						that.systemInfo.height = res[0][0].height + res[0][0].top;
+				}).exec()
 
 				//绘制矩形
 				this.rectHandle();
@@ -93,6 +93,7 @@
 				const that = this;
 
 				uni.createSelectorQuery().selectAll(`.${this.selector}-radius`).boundingClientRect().exec(function(res) {
+					console.log(res)
 					that.skeletonCircleLists = res[0];
 				});
 			}

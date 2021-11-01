@@ -39,8 +39,6 @@ Route::group(function () {
     Route::get('menusList', 'Common/menusList')->option(['real_name' => '搜索菜单列表']);
     //获取logo
     Route::get('logo', 'Common/getLogo')->option(['real_name' => '获取logo']);
-    //获取客服数据
-    Route::get('get_workerman_url', 'Common/getWorkerManUrl')->option(['real_name' => '获取客服数据']);
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,

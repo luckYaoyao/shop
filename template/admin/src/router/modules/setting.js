@@ -323,6 +323,15 @@ export default {
       component: () => import('@/pages/setting/freight/index')
     },
     {
+      path: 'store_service/index',
+      name: `${pre}service`,
+      meta: {
+        auth: ['setting-store-service'],
+        title: '客服管理'
+      },
+      component: () => import('@/pages/setting/storeService/index')
+    },
+    {
       path: 'freight/city/list',
       name: `${pre}dada`,
       meta: {
@@ -411,6 +420,24 @@ export default {
         title: '数据配置'
       },
       component: () => import('@/pages/system/group/list')
+    },
+    {
+      path: 'system_group_data/kf_adv',
+      name: `${pre}kfAdv`,
+      meta: {
+        auth: ['setting-system-group_data-kf_adv'],
+        title: '客服页面广告'
+      },
+      component: () => import('@/pages/system/group/kfAdv')
+    },
+    {
+      path: 'store_service/speechcraft',
+      name: `${pre}speechcraft`,
+      meta: {
+        auth: ['admin-setting-store_service-speechcraft'],
+        title: '客服话术'
+      },
+      component: () => import('@/pages/setting/storeService/speechcraft')
     },
     {
       path: 'store_service/feedback',

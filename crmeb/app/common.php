@@ -27,7 +27,7 @@ if (!function_exists('getWorkerManUrl')) {
         $ws = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') ? 'wss://' : 'ws://';
         $host = $_SERVER['HTTP_HOST'];
         $data['admin'] = $ws . $host . '/notice';
-        $data['channel'] = $ws . $host . '/msg';
+        $data['chat'] = $ws . $host . '/msg';
         return $data;
     }
 }
@@ -808,7 +808,7 @@ if (!function_exists('get_image_thumb')) {
      */
     function get_image_thumb($filePath, string $type = 'all', bool $is_remote_down = false)
     {
-        if (!$filePath || !is_string($filePath)) return $filePath;
+        if (!$filePath || !is_string($filePath) || strpos($filePath, '?') !== false) return $filePath;
         try {
             $upload = UploadService::getOssInit($filePath, $is_remote_down);
             $data = $upload->thumb('', $type);

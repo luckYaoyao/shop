@@ -131,6 +131,10 @@ Route::group('setting', function () {
     Route::get('seckill_data/header', 'v1.setting.SystemGroupData/header')->option(['real_name' => '秒杀数据字段']);
     //秒杀数据状态
     Route::put('seckill_data/set_status/:id/:status', 'v1.setting.SystemGroupData/set_status')->option(['real_name' => '秒杀数据状态']);
+    //获取隐私协议
+    Route::get('get_user_agreement', 'v1.setting.SystemGroupData/getUserAgreement')->option(['real_name' => '获取隐私协议']);
+    //设置隐私协议
+    Route::post('set_user_agreement', 'v1.setting.SystemGroupData/setUserAgreement')->option(['real_name' => '设置隐私协议']);
 
     //系统通知
     //系统通知列表

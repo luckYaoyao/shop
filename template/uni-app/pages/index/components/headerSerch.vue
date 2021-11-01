@@ -25,12 +25,12 @@
 	<!-- #endif -->
 	<!-- #ifdef MP  || APP-PLUS -->
 	<view v-if="isShow">
-		<view class="mp-header" :style="{height:headH}">
+		<view class="mp-header skeleton-rect" :style="{height:headH}">
 			<view class="sys-head" :style="{height:sysHeight}"></view>
 			<view class="serch-box" style="height: 48px;">
 				<view class="serch-wrapper row-middle">
 					<view class="logo">
-						<image :src="logoConfig" mode="heightFix"></image>
+						<image class="skeleton-rect" :src="logoConfig" mode="heightFix"></image>
 						<text class="swiger">好物尽享 任你选择</text>
 					</view>
 					<navigator url="/pages/goods_search/index" class="input acea-row row-middle fillet"
@@ -180,6 +180,7 @@
 		width: 100%;
 		background: linear-gradient(90deg, var(--view-main-start) 0%, var(--view-main-over) 100%);
 		z-index: 999;
+
 		// height: 250rpx;
 		.serch-box {
 			padding-bottom: 10rpx;

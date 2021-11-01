@@ -139,7 +139,7 @@ class Local extends BaseUpload
         $this->fileInfo->realName = $fileHandle->getOriginalName();
         $this->fileInfo->fileName = $this->fileInfo->uploadInfo->getFilename();
         $this->fileInfo->filePath = $this->defaultPath . '/' . str_replace('\\', '/', $fileName);
-        if ($this->checkImage('.' . $this->fileInfo->filePath)) {
+        if ($this->checkImage(public_path() . $this->fileInfo->filePath) && $this->authThumb) {
             try {
                 $this->thumb($this->fileInfo->filePath);
             } catch (\Throwable $e) {
@@ -170,7 +170,7 @@ class Local extends BaseUpload
         $this->fileInfo->realName = $key;
         $this->fileInfo->fileName = $key;
         $this->fileInfo->filePath = $this->defaultPath . '/' . $this->path . '/' . $key;
-        if ($this->checkImage('.' . $this->fileInfo->filePath) && $this->authThumb) {
+        if ($this->checkImage(public_path() . $this->fileInfo->filePath) && $this->authThumb) {
             try {
                 $this->thumb($this->fileInfo->filePath);
             } catch (\Throwable $e) {
@@ -316,11 +316,11 @@ class Local extends BaseUpload
             [$path, $ext] = $this->getFileName($filePath);
             $waterPath = $path . '_water_image.' . $ext;
         }
-        $savePath = '.' . $waterPath;
+        $savePath = public_path() . $waterPath;
         try {
             if (!file_exists($savePath)) {
                 $Image = Image::open(app()->getRootPath() . 'public' . $filePath);
-                $Image->water($watermark_image, $waterConfig['watermark_position'] ?: 1, $waterConfig['watermark_opacity'])->save(root_path() . 'public' . $savePath);
+                $Image->water($watermark_image, $waterConfig['watermark_position'] ?: 1, $waterConfig['watermark_opacity'])->save($savePath);
             }
         } catch (\Throwable $e) {
             throw new ValidateException($e->getMessage());
@@ -347,7 +347,7 @@ class Local extends BaseUpload
             [$path, $ext] = $this->getFileName($filePath);
             $waterPath = $path . '_water_text.' . $ext;
         }
-        $savePath = '.' . $waterPath;
+        $savePath = public_path() . $waterPath;
         try {
             if (!file_exists($savePath)) {
                 $Image = Image::open(app()->getRootPath() . 'public' . $filePath);
@@ -358,7 +358,7 @@ class Local extends BaseUpload
                 if (strlen($waterConfig['watermark_text_color']) > 7) {
                     $waterConfig['watermark_text_color'] = substr($waterConfig['watermark_text_color'], 0, 7);
                 }
-                $Image->text($waterConfig['watermark_text'], $waterConfig['watermark_text_font'], $waterConfig['watermark_text_size'], $waterConfig['watermark_text_color'], $waterConfig['watermark_position'], [$waterConfig['watermark_x'], $waterConfig['watermark_y'], $waterConfig['watermark_text_angle']])->save(root_path() . 'public' . $savePath);
+                $Image->text($waterConfig['watermark_text'], $waterConfig['watermark_text_font'], $waterConfig['watermark_text_size'], $waterConfig['watermark_text_color'], $waterConfig['watermark_position'], [$waterConfig['watermark_x'], $waterConfig['watermark_y'], $waterConfig['watermark_text_angle']])->save($savePath);
             }
         } catch (\Throwable $e) {
             throw new ValidateException($e->getMessage() . $e->getLine());

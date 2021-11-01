@@ -107,7 +107,7 @@
 	.specialArea {
 		background: linear-gradient(180deg, #fff 0%, #f5f5f5 100%);
 		// background-color: $uni-bg-color;
-		padding: 0 $uni-index-margin-col $uni-index-margin-row $uni-index-margin-col;
+		padding: 0 $uni-index-margin-col 0 $uni-index-margin-col;
 		border-radius: $uni-border-radius-index;
 		// box-shadow: $uni-index-box-shadow;
 	}

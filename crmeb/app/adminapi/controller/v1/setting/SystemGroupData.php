@@ -327,4 +327,30 @@ class SystemGroupData extends AuthController
         $this->services->saveAllData($params['data'], $params['config_name']);
         return app('json')->success('添加数据成功!');
     }
+
+
+    /**
+     * 获取用户协议内容
+     * @return mixed
+     */
+    public function getUserAgreement()
+    {
+        /** @var CacheServices $cache */
+        $cache = app()->make(CacheServices::class);
+        $content = $cache->getDbCache('user_agreement', '');
+        return $this->success(compact('content'));
+    }
+
+    /**
+     * 设置用户协议内容
+     * @return mixed
+     */
+    public function setUserAgreement()
+    {
+        $content = $this->request->post('content');
+        /** @var CacheServices $cache */
+        $cache = app()->make(CacheServices::class);
+        $cache->setDbCache('user_agreement', $content);
+        return $this->success('设置成功');
+    }
 }

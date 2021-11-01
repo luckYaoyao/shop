@@ -1542,6 +1542,7 @@ HTML;
         $data['store_self_mention'] = (int)sys_config('store_self_mention') ?? 0;//门店自提是否开启
         if (isset($validCartInfo[0]['productInfo']['is_virtual']) && $validCartInfo[0]['productInfo']['is_virtual']) {
             $data['virtual_type'] = 1;
+            $data['deduction'] = true;
         } else {
             $data['virtual_type'] = 0;
         }

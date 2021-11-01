@@ -1,6 +1,6 @@
 <template>
 	<view class="swiperBg">
-		<view class='boutique skeleton-rect' :class="{'off': sty ==='off'}" v-if="isShow && bastBanner.length && !isIframe">
+		<view class='boutique' :class="{'off': sty ==='off'}" v-if="isShow && bastBanner.length && !isIframe">
 			<swiper autoplay="true" indicator-dots="true" :circular="circular" :interval="interval" :duration="duration"
 				indicator-color="rgba(255,255,255,0.6)" indicator-active-color="#fff" :style="'height:'+ (imageH) +'rpx;'">
 				<block v-for="(item,index) in bastBanner">

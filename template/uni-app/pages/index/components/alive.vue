@@ -73,8 +73,8 @@
 		</view>
 		<!-- #endif -->
 		<!-- #ifdef MP -->
-		<view class="live">
-			<view class="skeleton-rect" v-if="isShow && liveList.length>0">
+		<view class="live"  v-if="isShow && liveList.length>0">
+			<view class="skeleton-rect">
 				<view class="title-box" v-if="titleInfo.length">
 					<view class='text'>
 						<view class='title line1'>
