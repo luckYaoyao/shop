@@ -2047,7 +2047,7 @@ export default {
     upVirtual() {
       for (let i = 0; i < this.virtualList.length; i++) {
         const element = this.virtualList[i];
-        if(!element.value){
+        if (!element.value) {
           this.$Message.error("请输入所有卡密");
           return;
         }

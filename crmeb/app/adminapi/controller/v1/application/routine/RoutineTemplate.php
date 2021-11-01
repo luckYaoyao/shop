@@ -290,22 +290,22 @@ class RoutineTemplate extends AuthController
             ['name', ''],
             ['is_live', 0]
         ], true);
+        if (sys_config('routine_appId', '') == '') throw new AdminException('请先配置小程序appId');
         try {
-            @unlink(public_path() . 'view/download/routine.zip');
+            @unlink(public_path() . 'statics/download/routine.zip');
             //拷贝源文件
             /** @var FileService $fileService */
             $fileService = app(FileService::class);
-//            $path = $is_live == 0 ? 'view/mp_view' : 'view/mp_view_live';
-            $fileService->copyDir(public_path() . 'view/mp_view', public_path() . 'view/download');
+            $fileService->copyDir(public_path() . 'statics/mp_view', public_path() . 'statics/download');
             //替换appid和名称
             $this->updateConfigJson(sys_config('routine_appId'), $name != '' ? $name : sys_config('routine_name'));
             //是否开启直播
             if ($is_live == 0) $this->updateAppJson();
             //替换url
-            $this->updateUrl(sys_config('site_url'));
+            $this->updateUrl('https://' . $_SERVER['HTTP_HOST']);
             //压缩文件
-            $fileService->addZip(public_path() . 'view/download', public_path() . 'view/download/routine.zip', public_path() . 'view/download');
-            $data['url'] = sys_config('site_url') . '/view/download/routine.zip';
+            $fileService->addZip(public_path() . 'statics/download', public_path() . 'statics/download/routine.zip', public_path() . 'statics/download');
+            $data['url'] = sys_config('site_url') . '/statics/download/routine.zip';
             return app('json')->success($data);
         } catch (\Throwable $throwable) {
 
@@ -318,10 +318,10 @@ class RoutineTemplate extends AuthController
      */
     public function updateUrl($url)
     {
-        $fileUrl = app()->getRootPath() . "public/view/download/common/vendor.js";
+        $fileUrl = app()->getRootPath() . "public/statics/download/common/vendor.js";
         $string = file_get_contents($fileUrl); //加载配置文件
         $string = str_replace('https://demo.crmeb.com', $url, $string); // 正则查找然后替换
-        $newFileUrl = app()->getRootPath() . "public/view/download/common/vendor.js";
+        $newFileUrl = app()->getRootPath() . "public/statics/download/common/vendor.js";
         @file_put_contents($newFileUrl, $string); // 写入配置文件
 
     }
@@ -332,7 +332,7 @@ class RoutineTemplate extends AuthController
      */
     public function updateAppJson()
     {
-        $fileUrl = app()->getRootPath() . "public/view/download/app.json";
+        $fileUrl = app()->getRootPath() . "public/statics/download/app.json";
         $string = file_get_contents($fileUrl); //加载配置文件
         $pats = '/,
       "plugins": \{
@@ -342,7 +342,7 @@ class RoutineTemplate extends AuthController
         }
       }/';
         $string = preg_replace($pats, '', $string); // 正则查找然后替换
-        $newFileUrl = app()->getRootPath() . "public/view/download/app.json";
+        $newFileUrl = app()->getRootPath() . "public/statics/download/app.json";
         @file_put_contents($newFileUrl, $string); // 写入配置文件
     }
 
@@ -353,7 +353,7 @@ class RoutineTemplate extends AuthController
      */
     public function updateConfigJson($appId = '', $projectName = '')
     {
-        $fileUrl = app()->getRootPath() . "public/view/download/project.config.json";
+        $fileUrl = app()->getRootPath() . "public/statics/download/project.config.json";
         $string = file_get_contents($fileUrl); //加载配置文件
         // 替换appid
         $appIdOld = '/"appid"(.*?),/';
@@ -363,7 +363,7 @@ class RoutineTemplate extends AuthController
         $projectNameOld = '/"projectname"(.*?),/';
         $projectNameNew = '"projectname"' . ': ' . '"' . $projectName . '",';
         $string = preg_replace($projectNameOld, $projectNameNew, $string); // 正则查找然后替换
-        $newFileUrl = app()->getRootPath() . "public/view/download/project.config.json";
+        $newFileUrl = app()->getRootPath() . "public/statics/download/project.config.json";
         @file_put_contents($newFileUrl, $string); // 写入配置文件
     }
 
@@ -399,6 +399,7 @@ class RoutineTemplate extends AuthController
                 $data['code'] = sys_config('site_url') . $imageInfo['dir'];
             } else $data['code'] = sys_config('site_url') . $imageInfo['att_dir'];
         }
+        $data['appId'] = sys_config('routine_appId');
         $data['help'] = 'https://help.crmeb.net/crmeb-v4/1863455';
         return app('json')->success($data);
     }

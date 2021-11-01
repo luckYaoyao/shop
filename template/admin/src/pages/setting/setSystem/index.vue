@@ -103,7 +103,7 @@ export default {
     },
   },
   methods: {
-    childrenList() {
+    childrenList(index) {
       let that = this;
       that.headerList.forEach(function (item) {
         if (item.value.toString() === that.currentTab) {
@@ -113,14 +113,14 @@ export default {
           } else {
             that.headerChildrenList = item.children;
             that.childrenId = item.children.length
-              ? item.children[0].id.toString()
+              ? item.children[index ? index : 0].id.toString()
               : "";
           }
         }
       });
     },
     // 头部tab
-    getHeader() {
+    getHeader(index) {
       this.spinShow = true;
       return new Promise((resolve, reject) => {
         let tab_id = this.$route.params.tab_id;
@@ -132,8 +132,8 @@ export default {
           .then(async (res) => {
             let config = res.data.config_tab;
             this.headerList = config;
-            this.currentTab = config[0].value.toString();
-            this.childrenList();
+            this.currentTab = config[index ? index : 0].value.toString();
+            this.childrenList(1);
             resolve(this.currentTab);
             this.spinShow = false;
           })
@@ -192,7 +192,9 @@ export default {
       });
     },
     async getAllData() {
-      if (this.$route.params.type !== "3") {
+      if (this.$route.query.from === "download") {
+        await this.getHeader(2);
+      } else if (this.$route.params.type !== "3") {
         await this.getHeader();
       } else {
         this.headerList = [];
