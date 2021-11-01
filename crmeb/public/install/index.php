@@ -364,17 +364,19 @@ switch ($step) {
                 $tables = mysqli_fetch_all($result);//参数MYSQL_ASSOC、MYSQLI_NUM、MYSQLI_BOTH规定产生数组类型
                 $bl_table = array('eb_system_admin'
                 , 'eb_system_role'
+                , 'eb_agent_level'
+                , 'eb_page_link'
+                , 'eb_page_categroy'
                 , 'eb_system_config'
                 , 'eb_system_config_tab'
                 , 'eb_system_menus'
-                , 'eb_system_file'
+                , 'eb_system_notification'
                 , 'eb_express'
                 , 'eb_system_group'
                 , 'eb_system_group_data'
                 , 'eb_template_message'
                 , 'eb_shipping_templates'
                 , "eb_shipping_templates_region"
-                , "eb_shipping_templates_free"
                 , 'eb_system_city'
                 , 'eb_diy'
                 , 'eb_member_ship'
