@@ -1,7 +1,6 @@
 <template>
 	<!-- #ifdef MP -->
 	<view v-if="liveList.length > 0">
-		<!-- 直播 -->
 			<view class="live-wrapper-b">
 				<navigator class="live-item-b" v-for="(item,index) in liveList" :key="index" :url="'plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=' + item.room_id" hover-class="none" :style="[{'background':bg},{'box-shadow':`0px 1px 20px ${boxShadow}`}]">
 					<view class="img-box">
@@ -15,7 +14,7 @@
 						</view>
 						<view class="label bgred" v-if="item.live_status==101">
 							<image src="/static/images/live-01.png" mode="" style="width: 21rpx; height: 22rpx;"></image>
-							<text>直播中</text>
+							<text>进行中</text>
 						</view>
 						<image :src="item.share_img"></image>
 					</view>
@@ -59,7 +58,6 @@
 			this.getLiveList();
 		},
 		methods: {
-			// 直播
 			getLiveList: function() {
 				let limit = this.$config.LIMIT;
 				if(!this.isScroll) return

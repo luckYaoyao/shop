@@ -2,6 +2,7 @@
   "navigationBarTitleText": "",
   "navigationStyle": "custom",
   "navigationBarTextStyle": "white",
+  "enablePullDownRefresh": true,
   "usingComponents": {
     "goods-waterfall": "/components/goodsWaterfall/goodsWaterfall",
     "coupon-window": "/components/couponWindow/index",

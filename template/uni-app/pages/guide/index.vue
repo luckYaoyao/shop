@@ -21,13 +21,11 @@
 		},
 		onLoad() {
 			this.loadExecution()
-
 		},
 		methods: {
-			loadExecution: function() {
+			loadExecution() {
 				const tagDate = uni.getStorageSync('guideDate') || '',
 					nowDate = new Date().toLocaleDateString();
-				console.log(nowDate)
 				if (tagDate === nowDate) {
 					uni.switchTab({
 						url: '/pages/index/index'
@@ -35,7 +33,7 @@
 					return
 				}
 				getOpenAdv().then(res => {
-					console.log(nowDate)
+					console.log(res)
 					if (!res.data.length) {
 						uni.switchTab({
 							url: '/pages/index/index'

@@ -8,7 +8,6 @@
 					<text class="title">{{titleInfo[0].val}}</text>
 					<navigator class="more">查看更多<text class="iconfont icon-jiantou"></text></navigator>
 				</view>
-				<!-- 直播 -->
 				<view class="live-wrapper-a">
 					<navigator class="live-item-a" v-for="(item,index) in liveList" :key="index"
 						:url="'plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=' + item.room_id"
@@ -24,7 +23,7 @@
 							</view>
 							<view class="label bgred" v-if="item.live_status==101">
 								<text class="iconfont icon-zhibozhong"></text>
-								<text>直播中</text>
+								<text>进行中</text>
 							</view>
 							<image :src="item.share_img"></image>
 						</view>
@@ -65,9 +64,8 @@
 					<text class="title">{{titleInfo[0].val}}</text>
 					<navigator class="more">查看更多<text class="iconfont icon-jiantou"></text></navigator>
 				</view>
-				<!-- 直播 -->
 				<view class="live-wrapper-a">
-					<view class="empty-img">直播间，暂无数据</view>
+					<view class="empty-img">暂无数据</view>
 				</view>
 			</view>
 		</view>
@@ -80,12 +78,11 @@
 						<view class='title line1'>
 							{{titleInfo[0].val}}
 						</view>
-						<view class='line1 txt-btn'>精彩直播</view>
+						<view class='line1 txt-btn'>精彩内容</view>
 					</view>
 					<navigator hover-class="none" url="/pages/live_list/index" class="more">更多<text
 							class="iconfont icon-jiantou"></text></navigator>
 				</view>
-				<!-- 直播 -->
 				<view class="live-wrapper-a">
 					<navigator class="live-item-a" v-for="(item,index) in liveList" :key="index"
 						:url="'plugin-private://wx2b03c6e691cd7370/pages/live-player-plugin?room_id=' + item.room_id"
@@ -101,7 +98,7 @@
 							</view>
 							<view class="label bgred" v-if="item.live_status==101">
 								<text class="iconfont icon-zhibozhong"></text>
-								<text>直播中</text>
+								<text>进行中</text>
 							</view>
 							<image :src="item.share_img"></image>
 						</view>
@@ -185,7 +182,6 @@
 		},
 		mounted() {},
 		methods: {
-			// 直播
 			getLiveList: function() {
 				getLiveList(1, this.numConfig <= this.limit ? this.numConfig : this.limit)
 					.then(res => {

@@ -16,7 +16,6 @@
 		<!-- #ifndef APP-PLUS -->
 		<menuIcon :showMenuIcon="showMenuIcon" @open="open"></menuIcon>
 		<!-- #endif -->
-
 		<view class='product-con'>
 			<scroll-view :scroll-top="scrollTop" scroll-y='true' scroll-with-animation="true"
 				:style="'height:'+height+'px;'" @scroll="scroll">
@@ -413,7 +412,6 @@
 
 			if (options.id) {
 				this.id = options.id
-				this.status = options.status
 				//记录推广人uid
 				if (options.pid) app.globalData.spid = options.pid;
 				// if (options.time) this.datatime = Number(options.time);
@@ -490,11 +488,9 @@
 			},
 			getSeckillDetail: function() {
 				let that = this;
-				getSeckillDetail(that.id, {
-					// time: that.datatime,
-					status: that.status
-				}).then(res => {
+				getSeckillDetail(that.id, {}).then(res => {
 					this.dataShow = 1;
+					this.status = res.data.storeInfo.status
 					let title = res.data.storeInfo.title;
 					this.storeInfo = res.data.storeInfo;
 					this.datatime = Number(res.data.storeInfo.last_time);

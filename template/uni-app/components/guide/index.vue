@@ -6,12 +6,10 @@
 					<view class="swiper-item-img">
 						<image :src="item" mode="aspectFit"></image>
 					</view>
-					<!-- <view class="swiper-item-img"><image src="../../static/guide/icon_01.png" mode="aspectFit"></image></view> -->
 				</view>
 			</swiper-item>
 		</swiper>
 		<view class="jump-over" @tap="launchFlag()">跳过 {{time}}</view>
-		<!-- <view class="uniapp-img"><image src="../../static/guide/uniapp4@2x.png" mode="aspectFit"></image></view> -->
 	</view>
 </template>
 
@@ -74,6 +72,7 @@
 		height: 100%;
 		background-size: 100% auto;
 		padding: 0;
+		z-index: 999;
 	}
 
 	.swiper {

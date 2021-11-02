@@ -259,7 +259,7 @@
 				menus: {}, //导航
 				news: {}, //消息公告
 				activity: {}, //活动魔方
-				alive: {}, //直播
+				alive: {}, 
 				scrollBox: {}, //快速选择分类
 				titles: {}, //标题
 				goodList: {}, //商品列表(商品列表、首发新品、热门榜单、促销单品、精品推荐)
@@ -364,9 +364,11 @@
 			// #ifdef H5
 			this.isTop = 0
 			// #endif
-
 		},
-
+		onPullDownRefresh() {
+			this.diyData();
+			this.getIndexData();
+		},
 		// #ifdef MP
 		//发送给朋友
 		onShareAppMessage: function() {
@@ -562,13 +564,11 @@
 					that.coupon = data.coupon;
 					this.$Cache.set('TAB_BAR', data.tabBar.default.tabBarList)
 					setTimeout(() => {
-						// this.isNodes++;
-					}, 0);
-					setTimeout(() => {
 						this.showSkeleton = false
-					}, 2000)
-
-
+					}, 1500)
+					uni.stopPullDownRefresh({
+						success: (e) => {}
+					});
 				});
 			},
 			getIndexData() {

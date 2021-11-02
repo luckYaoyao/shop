@@ -66,6 +66,7 @@
 			},
 			shareFriend(){
 				this.$emit('shareFriend')
+				this.showBox = false;
 			}
 		}
 	}

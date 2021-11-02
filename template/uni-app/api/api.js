@@ -298,7 +298,7 @@ export function getCity() {
 }
 
 /**
- * 获取小程序直播列表
+ * 获取小程序列表
  */
 export function getLiveList(page, limit) {
 	return request.get('wechat/live', {

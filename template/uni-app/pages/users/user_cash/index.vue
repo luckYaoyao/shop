@@ -265,10 +265,10 @@
 				// if (this.prevent) return
 				// this.prevent = true
 				if (that.currentTab == 0) { //银行卡
-					if (value.name.length == 0) return this.$util.Tips({
+					if (!value.name.trim()) return this.$util.Tips({
 						title: '请填写持卡人姓名'
 					});
-					if (value.cardnum.length == 0) return this.$util.Tips({
+					if (!value.cardnum.trim()) return this.$util.Tips({
 						title: '请填写卡号'
 					});
 					if (that.index == 0) return this.$util.Tips({
@@ -278,7 +278,7 @@
 					value.bankname = that.array[that.index];
 				} else if (that.currentTab == 1) { //微信
 					value.extract_type = 'weixin';
-					if (value.name.length == 0) return this.$util.Tips({
+					if (!value.name.trim()) return this.$util.Tips({
 						title: '请填写微信号'
 					});
 					value.weixin = value.name;
@@ -291,7 +291,7 @@
 					value.alipay_code = value.name;
 					value.qrcode_url = that.qrcodeUrlZ;
 				}
-				if (value.money.length == 0) return this.$util.Tips({
+				if (!value.money.trim()) return this.$util.Tips({
 					title: '请填写提现金额'
 				});
 				if (Number(value.money) < Number(that.minPrice)) return this.$util.Tips({
