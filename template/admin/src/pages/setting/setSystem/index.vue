@@ -133,7 +133,7 @@ export default {
             let config = res.data.config_tab;
             this.headerList = config;
             this.currentTab = config[index ? index : 0].value.toString();
-            this.childrenList(1);
+            this.childrenList(index ? 1 : 0);
             resolve(this.currentTab);
             this.spinShow = false;
           })
@@ -193,8 +193,11 @@ export default {
     },
     async getAllData() {
       if (this.$route.query.from === "download") {
+        console.log("111");
         await this.getHeader(2);
       } else if (this.$route.params.type !== "3") {
+        console.log("222");
+
         await this.getHeader();
       } else {
         this.headerList = [];

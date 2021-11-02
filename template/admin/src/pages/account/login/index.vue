@@ -68,6 +68,7 @@
             <Button
               type="primary"
               long
+              :loading="loading"
               size="large"
               @click="handleSubmit('formInline')"
               class="btn"
@@ -110,6 +111,7 @@ export default {
         pagination: ".swiper-pagination",
         autoplay: true,
       },
+      loading: false,
       modals: false,
       autoLogin: true,
       imgcode: "",
@@ -211,6 +213,7 @@ export default {
         content: "登录中...",
         duration: 0,
       });
+      this.loading = true;
       AccountLogin({
         account: this.formInline.username,
         pwd: this.formInline.password,
@@ -244,6 +247,7 @@ export default {
           );
 
           if (this.jigsaw) this.jigsaw.reset();
+
           return this.$router.replace({ path: "/admin/home/" || "/admin/" });
         })
         .catch((res) => {
@@ -255,6 +259,9 @@ export default {
           this.$Message.error(data.msg || "登录失败");
           if (this.jigsaw) this.jigsaw.reset();
         });
+      setTimeout((e) => {
+        this.loading = false;
+      }, 1000);
     },
     getExpiresTime(expiresTime) {
       let nowTimeNum = Math.round(new Date() / 1000);

@@ -140,9 +140,7 @@
           <i-switch
             size="large"
             v-model="splitSwitch"
-            :disabled="
-              orderStatus === 8 || orderStatus === 11 || pay_type === 'offline'
-            "
+            :disabled="orderStatus === 8 || orderStatus === 11"
             @on-change="changeSplitStatus"
           >
             <span slot="open">开启</span>
