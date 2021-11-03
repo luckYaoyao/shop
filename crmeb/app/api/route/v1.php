@@ -59,7 +59,8 @@ Route::group(function () {
     Route::post('switch_h5', 'v1.LoginController/switch_h5')->name('switch_h5');// 切换账号
     //商品类
     Route::get('product/code/:id', 'v1.store.StoreProductController/code')->name('productCode');//商品分享二维码 推广员
-
+    //核销
+    Route::post('order/order_verific', 'v1.order.StoreOrderController/order_verific')->name('order');//订单核销
     //公共类
     Route::post('upload/image', 'v1.PublicController/upload_image')->name('uploadImage');//图片上传
     //用户类 客服聊天记录

@@ -32,8 +32,8 @@ use app\services\order\{OtherOrderServices,
     StoreOrderRefundServices,
     StoreOrderServices,
     StoreOrderSuccessServices,
-    StoreOrderTakeServices
-};
+    StoreOrderTakeServices,
+    StoreOrderWriteOffServices};
 use app\services\pay\OrderPayServices;
 use app\services\pay\YuePayServices;
 use app\services\product\product\StoreProductReplyServices;
@@ -956,5 +956,22 @@ class StoreOrderController
         return app('json')->successful($cartProduct);
     }
 
-
+    /**
+     * 门店核销
+     * @param Request $request
+     */
+    public function order_verific(Request $request, StoreOrderWriteOffServices $services)
+    {
+        list($verifyCode, $isConfirm) = $request->postMore([
+            ['verify_code', ''],
+            ['is_confirm', 0]
+        ], true);
+        if (!$verifyCode) return app('json')->fail('Lack of write-off code');
+        $uid = $request->uid();
+        $orderInfo = $services->writeOffOrder($verifyCode, (int)$isConfirm, $uid);
+        if ($isConfirm == 0) {
+            return app('json')->success($orderInfo);
+        }
+        return app('json')->success('Write off successfully');
+    }
 }
