@@ -287,6 +287,19 @@ class SystemConfig extends AuthController
         if (isset($post['wss_open'])) {
             $this->services->saveSslFilePath((int)$post['wss_open'], $post['wss_local_pk'] ?? '', $post['wss_local_cert'] ?? '');
         }
+        if (isset($post['store_brokerage_price']) && $post['store_brokerage_statu'] == 3) {
+            if ($post['store_brokerage_price'] === '') {
+                return app('json')->fail('满额分销最低金额不能为空！');
+            }
+            if ($post['store_brokerage_price'] < 0) {
+                return app('json')->fail('满额分销最低金额不能小于0！');
+            }
+        }
+        if (isset($post['store_brokerage_binding_time']) && $post['store_brokerage_binding_status'] == 2) {
+            if (!preg_match("/^[0-9][0-9]*$/", $post['store_brokerage_binding_time'])) {
+                return app('json')->fail('绑定有效期请填写正整数！');
+            }
+        }
         if (isset($post['weixin_ckeck_file'])) {
             $from = public_path() . $post['weixin_ckeck_file'];
             $to = public_path() . array_reverse(explode('/', $post['weixin_ckeck_file']))[0];

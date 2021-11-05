@@ -36,7 +36,7 @@ class SystemConfigValidata extends Validate
         'extract_time' => 'number|between:0,180',
         'replenishment_num' => 'number',
         'store_stock' => 'number',
-        'store_brokerage_price' => 'float|egt:0',
+        'store_brokerage_price' => 'float',
         'integral_ratio' => 'float|egt:0|elt:1000|regex:float_two',
         'integral_max_num' => 'number|egt:0',
         'order_give_integral' => 'float|egt:0|elt:1000',
