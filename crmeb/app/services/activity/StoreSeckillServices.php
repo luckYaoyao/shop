@@ -451,9 +451,7 @@ class StoreSeckillServices extends BaseServices
 
         /** @var QrcodeServices $qrcodeService */
         $qrcodeService = app()->make(QrcodeServices::class);
-        $time = $request->param()['time'] ?? '';
-        $status = $request->param()['status'] ?? '';
-        $storeInfo['code_base'] = $qrcodeService->getWechatQrcodePath($id . '_product_seckill_detail_wap.jpg', '/pages/activity/goods_seckill_details/index?id=' . $id . '&time=' . $time . '&status=' . $status);
+        $storeInfo['code_base'] = $qrcodeService->getWechatQrcodePath($id . '_' . $uid . '_product_seckill_detail_wap.jpg', '/pages/activity/goods_seckill_details/index?id=' . $id . '&spread=' . $uid);
 
         /** @var StoreOrderServices $storeOrderServices */
         $storeOrderServices = app()->make(StoreOrderServices::class);
