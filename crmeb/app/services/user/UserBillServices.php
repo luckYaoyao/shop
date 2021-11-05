@@ -1019,7 +1019,7 @@ class UserBillServices extends BaseServices
     {
         $where = [];
         $where['category'] = 'now_money';
-        $where['type'] = 'brokerage';
+        $where['type'] = ['brokerage', 'brokerage_user'];
         if ($time) {
             $where['time'] = $time;
         }
