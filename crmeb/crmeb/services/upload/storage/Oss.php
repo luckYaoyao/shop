@@ -203,6 +203,9 @@ class Oss extends BaseUpload
                         $this->fileInfo->$key = $filePath . '?x-oss-process=image/resize,h_' . $config[$height] . ',w_' . $config[$width];
                         $this->fileInfo->$key = $this->water($this->fileInfo->$key);
                         $data[$v] = $this->fileInfo->$key;
+                    } else {
+                        $this->fileInfo->$key = $this->water($this->fileInfo->$key);
+                        $data[$v] = $this->fileInfo->$key;
                     }
                 }
             }

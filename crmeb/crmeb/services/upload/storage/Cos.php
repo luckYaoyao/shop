@@ -203,6 +203,9 @@ class Cos extends BaseUpload
                         $this->fileInfo->$key = $filePath . '?imageMogr2/thumbnail/' . $config[$width] . 'x' . $config[$height];
                         $this->fileInfo->$key = $this->water($this->fileInfo->$key);
                         $data[$v] = $this->fileInfo->$key;
+                    } else {
+                        $this->fileInfo->$key = $this->water($this->fileInfo->$key);
+                        $data[$v] = $this->fileInfo->$key;
                     }
                 }
             }

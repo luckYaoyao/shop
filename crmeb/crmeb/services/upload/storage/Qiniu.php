@@ -204,6 +204,9 @@ class Qiniu extends BaseUpload
                         $this->fileInfo->$key = $filePath . '?imageView2/2/w/' . $config[$width] . '/h/' . $config[$height];
                         $this->fileInfo->$key = $this->water($this->fileInfo->$key);
                         $data[$v] = $this->fileInfo->$key;
+                    } else {
+                        $this->fileInfo->$key = $this->water($this->fileInfo->$key);
+                        $data[$v] = $this->fileInfo->$key;
                     }
                 }
             }

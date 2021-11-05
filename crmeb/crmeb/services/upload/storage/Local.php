@@ -222,6 +222,7 @@ class Local extends BaseUpload
                 throw new ValidateException('缩略图生成目录生成失败，目录：' . $dir);
             }
             $filePath = $this->water($filePath);
+            $data = ['big' => $filePath, 'mid' => $filePath, 'small' => $filePath];
             $this->fileInfo->filePathWater = $filePath;
             $config = $this->thumbConfig;
             try {
