@@ -104,7 +104,9 @@ class Notice implements ListenerInterface
                             $RoutineTemplateList->sendOrderSuccess($data['uid'], $data['pay_price'], $data['order_id']);
                         }
                         //小票打印
-                        $NoticeService->orderPrint($data);
+                        if (isset($data['cart_id']) && $data['cart_id']) {
+                            $NoticeService->orderPrint($data);
+                        }
                         break;
                     //发货给用户
                     case 'order_deliver_success':
