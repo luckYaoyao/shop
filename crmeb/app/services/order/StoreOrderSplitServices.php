@@ -72,7 +72,7 @@ class StoreOrderSplitServices extends BaseServices
         $order_data['cart_id'] = [];
         $order_data['unique'] = $storeOrderCreateServices->getNewOrderId('');
         $order_data['add_time'] = time();
-        $order_data['mark'] = '发货拆分订单';
+        $order_data['mark'] = '拆分订单';
         $new_order = $this->dao->save($order_data);
         if (!$new_order) {
             throw new ValidateException('生成新订单失败');

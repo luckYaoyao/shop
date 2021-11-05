@@ -566,10 +566,19 @@ class StoreOrder extends AuthController
         $orderInfo->refund_status = 0;
         $orderInfo->refund_type = 3;
         $orderInfo->save();
+        if ($orderInfo->pid > 0) {
+            $res1 = $this->services->getCount([
+                ['pid', '=', $orderInfo->pid],
+                ['refund_type', '>', 0],
+                ['refund_type', '<>', 3],
+            ]);
+            if ($res1 == 0) {
+                $this->services->update($orderInfo->pid, ['refund_status' => 0]);
+            }
+        }
         $services->storeProductOrderRefundNo((int)$id, $refund_reason);
         //提醒推送
         event('notice.notice', [['orderInfo' => $orderInfo], 'send_order_refund_no_status']);
-//
         return app('json')->success('Modified success');
     }
 

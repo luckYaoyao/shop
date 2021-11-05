@@ -428,6 +428,16 @@ class StoreOrderDeliveryServices extends BaseServices
                 throw new ValidateException('暂时不支持其他发货类型');
         }
 
+        if ($orderInfo['pid'] > 0) {
+            /** @var StoreOrderCartInfoServices $cartInfoService */
+            $cartInfoService = app()->make(StoreOrderCartInfoServices::class);
+            $res = $cartInfoService->getSplitCartList($orderInfo['pid']);
+            if ($res) {
+                $this->dao->update($orderInfo['pid'], ['status' => 3]);
+            } else {
+                $this->dao->update($orderInfo['pid'], ['status' => 4]);
+            }
+        }
         event('order.delivery', [$orderInfo, $storeName, $data, $type]);
         return true;
     }
