@@ -959,19 +959,19 @@ class StoreProductServices extends BaseServices
         if ($id) {
             /** @var StoreSeckillServices $storeSeckillService */
             $storeSeckillService = app()->make(StoreSeckillServices::class);
-            $res1 = $storeSeckillService->count(['product_id' => $id, 'is_del' => 0, 'status' => 1, 'seckill_time' => 1]);
+            $res1 = $storeSeckillService->count(['product_id' => $id, 'is_del' => 0]);
             if ($res1) {
                 throw new AdminException('商品参与秒杀活动开启，无法进行此操作');
             }
             /** @var StoreBargainServices $storeBargainService */
             $storeBargainService = app()->make(StoreBargainServices::class);
-            $res2 = $storeBargainService->count(['product_id' => $id, 'is_del' => 0, 'status' => 1, 'bargain_time' => 1]);
+            $res2 = $storeBargainService->count(['product_id' => $id, 'is_del' => 0]);
             if ($res2) {
                 throw new AdminException('商品参与砍价活动开启，无法进行此操作');
             }
             /** @var StoreCombinationServices $storeCombinationService */
             $storeCombinationService = app()->make(StoreCombinationServices::class);
-            $res3 = $storeCombinationService->count(['product_id' => $id, 'is_del' => 0, 'is_show' => 1, 'pinkIngTime' => 1]);
+            $res3 = $storeCombinationService->count(['product_id' => $id, 'is_del' => 0]);
             if ($res3) {
                 throw new AdminException('商品参与拼团活动开启，无法进行此操作');
             }
