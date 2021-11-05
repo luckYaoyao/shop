@@ -338,7 +338,7 @@ class SystemGroupData extends AuthController
         /** @var CacheServices $cache */
         $cache = app()->make(CacheServices::class);
         $content = $cache->getDbCache('user_agreement', '');
-        return $this->success(compact('content'));
+        return app('json')->success(compact('content'));
     }
 
     /**
