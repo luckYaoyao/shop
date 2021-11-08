@@ -12,26 +12,41 @@
         <img src="https://img.shields.io/badge/Licence-GPL3.0-green.svg?style=flat" />
     </a>
     <a href="http://www.crmeb.com">
-        <img src="https://img.shields.io/badge/Edition-4.1-blue.svg" />
+        <img src="https://img.shields.io/badge/Edition-4.3-blue.svg" />
     </a>
      <a href="https://gitee.com/ZhongBangKeJi/CRMEB/repository/archive/master.zip">
         <img src="https://img.shields.io/badge/download-80m-red.svg" />
     </a>
     </p>
 <p align="center">    
-    <b>喜欢的话就点右上角 "Star" 支持一下吧，下次就不会迷路了，谢谢！</b>  
-</p>
-
-
-## 项目介绍  
- 
-  码云开源项目php语言排名第一的开源GVP项目，感谢码云提供的平台！
- 
-  CRMEB就是客户关系管理+营销电商系统，CRMEB打通版系统实现公众号端、微信小程序端、H5端、APP、PC端用户账号同步，能够快速积累客户、会员数据分析、智能转化客户、有效提高销售、会员维护、网络营销的一款企业应用，包含商城、拼团、砍价、秒杀、优惠券、积分、分销、客服等功能。我们历经4年时间精心研发，让更多企业快速实现公域流量转私有流量，让企业经营更简单，CRMEB系统赋能更多技术帮助中小企业实现互联网转型发展，减少重复造轮子。我们系统目前服务了几十万家企业，覆盖全球各地，被多所知名大学作为教学课件，荣获“2020年度开源中国最具价值开源项目”，“2021年度TOP20优秀Gitee组织”奖，当然最宝贵的是收获大量用户/企业的认可和支持，感谢大家！！！
- 
-  系统采用TP6+uni-app+iview核心技术，十几个开发交流群，论坛交流，全面系统文档，专业技术服务团队，让您二开/运营无忧。
+    <b>码云开源项目php语言排名第一的开源GVP项目，感谢码云提供的平台！喜欢的话就点右上角 "Star" 支持一下</b> 
+    </p>
   
-  官网地址：（[https://www.crmeb.com](http://https://www.crmeb.com)
+ 
+ ## 产品介绍
+ 
+ CRMEB打通版是一款全开源支持免费商用的PHP单商户商城系统；
+ 
+ CRMEB技术团队（官网：www.crmeb.com)历经4年时间匠心之作！系统采用前后端分离技术，基于TP6+Uui-app框架开发；客户移动端采用uni-app开发，管理后台前端使用iviewUI开发。系统支持微信公众号端、微信小程序端、H5端、PC端多端账号同步，可快速打包生成APP；
+ 
+ 赋能开发者，减少重复造轮子；系统支持自动检查安装环境一键安装部署，使用简单方便；围绕方便二次开发，系统内置强大灵活的权限管理，可以控制到每一个菜单；通过内置组合数据,管理碎片化数据,系统配置快速添加系统配置参数，方便二开；后台应用form-builder PHP快速生成现代化表单；并提供详细的使用文档、开发文档、接口文档、数据字典等相关文档；及十几个技术交流群、技术论坛答疑；帮助更多开发者快速上手，节省开发时间，提升开发效率；助力企业实现数字化经营！
+ 
+ ## 系统功能
+ #### 商城功能
+ 首页可视化编辑、主题风格切换、商品管理、商品评价、规格模板、运费模板、主图视频、虚拟商品、商品口令、扫码核销、发票管理、多提货点、配送员等
+ #### 营销活动
+ 直播带货、拼团活动、砍价活动、秒杀活动、产品预售、九宫格抽奖、优惠券、积分商城、签到
+ #### 分销功能
+ 指定分销、任务分销、人人分销、分销等级、分销有效期
+ #### 用户管理
+ 用户等级（经验等级）、用户分组、用户标签、会员等级、付费会员、会员充值
+ #### 客服系统
+ 客服状态、快捷回复、客服转接、客户信息（客户订单、购买记录、客户手机号、等级、推荐人、分类、标签）
+ #### 第三方设置
+ 云储存(七牛云、阿里云OSS、腾讯云COS)、电子面单、电子小票、一号通（短信通知、商品采集、物流查询）、第三方客服、腾讯地图
+ #### 系统设置
+ 系统配置、组合数据、数据备份、系统日志、文件校验、刷新缓存、清除数据、权限控制、消息管理、城市数据、物流公司
+
 
 努力成为你的最爱，还有什么不满意的请留下您宝贵的建议[点击留言](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF) 
 
@@ -48,18 +63,6 @@
  | [推荐服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
  | [评论](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF)
 - - -
-
-## 经典老版
-
-CRMEB v3.2.9 版本的请访问：https://gitee.com/ZhongBangKeJi/CRMEB/tree/v3.2.9/ 
-
-v3.2.9 发行版下载地址：https://gitee.com/ZhongBangKeJi/CRMEB/releases/v3.2.9
-    
-~~~
-    //喜欢v3.2.9的朋友下载方式
-
-    git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git   
-~~~
 
 ## 技术亮点
 ~~~
