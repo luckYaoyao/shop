@@ -3,7 +3,7 @@
     <img src="https://images.gitee.com/uploads/images/2018/1214/151026_2299df23_892944.gif" />
 </p>
 
-<h1 align="center"> CRMEB客户管理+电商营销系统</h1> 
+<h3 align="center"> 码云开源项目php语言排名第一的开源GVP项目，感谢码云提供的平台！</h3> 
 <p align="center">
     <a href="http://www.crmeb.com">
         <img src="https://img.shields.io/badge/OfficialWebsite-CRMEB-yellow.svg" />
@@ -19,8 +19,8 @@
     </a>
     </p>
 <p align="center">    
-    <b>码云开源项目php语言排名第一的开源GVP项目，感谢码云提供的平台！喜欢的话就点右上角 "Star" 支持一下</b> 
-    </p>
+    <b>喜欢的话就点右上角 "Star" 支持一下</b> 
+</p>
   
  
  ## 产品介绍
