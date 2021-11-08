@@ -1,6 +1,5 @@
 {
   "pages": [
-    "pages/guide/index",
     "pages/index/index",
     "pages/order_addcart/order_addcart",
     "pages/user/index",

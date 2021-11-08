@@ -115,17 +115,15 @@ export function parseQuery() {
 	return res;
 }
 
-// #ifdef H5
 let VUE_APP_WS_URL = Cache.get('WORKERMAN_URL') || ''
+
 getWorkermanUrl().then(res => {
 	Cache.set('WORKERMAN_URL', res.data.chat)
 	VUE_APP_WS_URL = res.data.chat;
 })
+
 export {
 	VUE_APP_WS_URL
 }
-// #endif
-
-
 
 export default parseQuery;
