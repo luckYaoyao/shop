@@ -54,7 +54,8 @@
 
 标准版权益：
 
-功能比开源版多手机订单管理、付费会员功能、后台数据统计分析功能，购买标准版会加入我们VIP会员群，技术一对一服务，提供详细升级包及升级教程，[点击咨询](https://kefu.crmeb.net/chat/index?noCanClose=1&token=4109fbb2d7bc3d5559348278816a20bc)
+功能比开源版多手机订单管理、付费会员功能、后台数据统计分析功能，购买标准版会加入我们VIP会员群，技术一对一服务，提供详细升级包及升级教程，
+<a href="https://kefu.crmeb.net/chat/index?noCanClose=1&token=4109fbb2d7bc3d5559348278816a20bc" target="_blank">[点击咨询]</a>
 
 努力成为你的最爱，还有什么不满意的请留下您宝贵的建议[点击留言](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF) 
 
