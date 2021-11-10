@@ -306,6 +306,10 @@ class StoreCouponIssueServices extends BaseServices
                 $v['start_use_time'] = date('Y/m/d', $v['start_use_time']);
                 $v['end_use_time'] = $v['end_use_time'] ? date('Y/m/d', $v['end_use_time']) : date('Y/m/d', time() + 86400);
             }
+            if ($v['start_time']) {
+                $v['start_time'] = date('Y/m/d', $v['start_time']);
+                $v['end_time'] = date('Y/m/d', $v['end_time']);
+            }
         }
         $data['list'] = $list;
         $data['count'] = $this->dao->getIssueCouponCount($where['product_id'], $cateId);
