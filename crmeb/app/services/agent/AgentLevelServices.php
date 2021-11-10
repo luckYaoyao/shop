@@ -213,13 +213,13 @@ class AgentLevelServices extends BaseServices
      */
     public function getAgentLevelBrokerage(int $uid, $userInfo = [])
     {
-        $one_brokerage_up = $two_brokerage_up = 0;
+        $one_brokerage_up = $two_brokerage_up = $spread_one_uid = $spread_two_uid = 0;
         if (!$uid) {
-            return [$one_brokerage_up, $two_brokerage_up];
+            return [$one_brokerage_up, $two_brokerage_up, $spread_one_uid, $spread_two_uid];
         }
         //商城分销是否开启
         if (!sys_config('brokerage_func_status')) {
-            return [$one_brokerage_up, $two_brokerage_up];
+            return [$one_brokerage_up, $two_brokerage_up, $spread_one_uid, $spread_two_uid];
         }
         /** @var UserServices $userServices */
         $userServices = app()->make(UserServices::class);
@@ -227,7 +227,7 @@ class AgentLevelServices extends BaseServices
             $userInfo = $userServices->getUserInfo($uid);
         }
         if (!$userInfo) {
-            return [$one_brokerage_up, $two_brokerage_up];
+            return [$one_brokerage_up, $two_brokerage_up, $spread_one_uid, $spread_two_uid];
         }
         //获取上级uid ｜｜ 开启自购返回自己uid
         $spread_one_uid = $userServices->getSpreadUid($uid, $userInfo);
