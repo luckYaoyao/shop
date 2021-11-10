@@ -492,8 +492,8 @@ class StoreOrderRefundServices extends BaseServices
                 /** @var StoreOrderSplitServices $storeOrderSplitServices */
                 $storeOrderSplitServices = app()->make(StoreOrderSplitServices::class);
                 //拆单
+                $status = $order['status'];
                 $order = $storeOrderSplitServices->split($order_id, $cart_ids, $order);
-                $status = 1;
             } elseif (in_array($order['pid'], [0, -1]) && $this->dao->count(['pid' => $order_id])) {
                 /** @var StoreOrderCartInfoServices $storeOrderCartInfoServices */
                 $storeOrderCartInfoServices = app()->make(StoreOrderCartInfoServices::class);
@@ -508,8 +508,8 @@ class StoreOrderRefundServices extends BaseServices
                 /** @var StoreOrderSplitServices $storeOrderSplitServices */
                 $storeOrderSplitServices = app()->make(StoreOrderSplitServices::class);
                 //拆单
+                $status = $order['status'];
                 $order = $storeOrderSplitServices->split($order_id, $cart_ids, $order);
-                $status = 1;
             }
 
             $data = [
