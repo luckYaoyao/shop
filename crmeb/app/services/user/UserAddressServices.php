@@ -174,7 +174,8 @@ class UserAddressServices extends BaseServices
                     ['uid', '=', $uid],
                     ['real_name', '=', $addressInfo['real_name']],
                     ['phone', '=', $addressInfo['phone']],
-                    ['detail', '=', $addressInfo['detail']]
+                    ['detail', '=', $addressInfo['detail']],
+                    ['is_del', '=', 0]
                 ] + $where);
             if ($res) throw new ValidateException('地址已存在，请勿重复添加');
         }
