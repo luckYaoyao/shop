@@ -542,7 +542,7 @@ class StoreOrderDao extends BaseDao
             if ($time[0] == $time[1]) {
                 $query->whereDay('pay_time', $time[0]);
             } else {
-                $time[1] = date('Y/m/d', strtotime($time[1]) + 86400);
+//                $time[1] = date('Y/m/d', strtotime($time[1]) + 86400);
                 $query->whereTime('pay_time', 'between', $time);
             }
         })->field("FROM_UNIXTIME(pay_time,'$timeType') as days,$str as num")
@@ -563,7 +563,7 @@ class StoreOrderDao extends BaseDao
             if ($time[0] == $time[1]) {
                 $query->whereDay('pay_time', $time[0]);
             } else {
-                $time[1] = date('Y/m/d', strtotime($time[1]) + 86400);
+//                $time[1] = date('Y/m/d', strtotime($time[1]) + 86400);
                 $query->whereTime('pay_time', 'between', $time);
             }
         })->field('sum(pay_price) as payPrice,province')
@@ -590,7 +590,6 @@ class StoreOrderDao extends BaseDao
             if ($time[0] == $time[1]) {
                 $query->whereDay($field, $time[0]);
             } else {
-                $time[1] = date('Y/m/d', strtotime($time[1]) + 86400);
                 $query->whereTime($field, 'between', $time);
             }
         })->whereIn('pid', [-1, 0])->field("FROM_UNIXTIME($field,'$timeType') as days,$str as num")->group('days')->select()->toArray();
