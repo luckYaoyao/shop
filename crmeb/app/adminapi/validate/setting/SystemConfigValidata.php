@@ -96,7 +96,6 @@ class SystemConfigValidata extends Validate
         'extract_time.number' => '佣金冻结时间范围在0-180之间',
         'extract_time.between' => '佣金冻结时间范围在0-180之间',
         'store_brokerage_price.float' => '满额分销金额金额必须为数字',
-        'store_brokerage_price.gt' => '满额分销金额金额必须大于0',
         'integral_ratio.float' => '积分抵用比例必须为数字',
         'integral_ratio.regex' => '积分抵用比例最多两位小数',
         'integral_ratio.egt' => '积分抵用比例必须在0-1000之间',
