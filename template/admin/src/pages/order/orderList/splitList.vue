@@ -1,10 +1,10 @@
 <template>
   <div>
-  <div class="i-layout-page-header">
-          <div class="i-layout-page-header">
-            <span class="ivu-page-header-title">子订单列表</span>
-          </div>
-        </div>
+    <div class="i-layout-page-header">
+      <div class="i-layout-page-header">
+        <span class="ivu-page-header-title">子订单列表</span>
+      </div>
+    </div>
     <Table
       :columns="columns"
       :data="orderList"
@@ -52,22 +52,22 @@
           }}</span>
         </div>
       </template>
-	  <template slot-scope="{ row, index }" slot="statusName">
-	    <div v-html="row.status_name.status_name" class="pt5"></div>
-	    <div class="pictrue-box">
-	      <div
-	        v-viewer
-	        v-if="row.status_name.pics"
-	        v-for="(item, index) in row.status_name.pics || []"
-	        :key="index"
-	      >
-	        <img class="pictrue mr10" v-lazy="item" :src="item" />
-	      </div>
-	    </div>
-	  </template>
+      <template slot-scope="{ row, index }" slot="statusName">
+        <div v-html="row.status_name.status_name" class="pt5"></div>
+        <div class="pictrue-box">
+          <div
+            v-viewer
+            v-if="row.status_name.pics"
+            v-for="(item, index) in row.status_name.pics || []"
+            :key="index"
+          >
+            <img class="pictrue mr10" v-lazy="item" :src="item" />
+          </div>
+        </div>
+      </template>
       <template slot-scope="{ row, index }" slot="action">
         <a @click="edit(row)" v-if="row._status === 1">编辑</a>
-        <!-- <a
+        <a
           @click="sendOrder(row)"
           v-if="
             (row._status === 2 || row._status === 8) &&
@@ -75,7 +75,7 @@
             (row.pinkStatus === null || row.pinkStatus === 2)
           "
           >发送货</a
-        > -->
+        >
         <a @click="delivery(row)" v-if="row._status === 4">配送信息</a>
         <a
           @click="bindWrite(row)"
@@ -171,8 +171,9 @@
               <DropdownItem name="8" v-show="row._status === 4"
                 >已收货</DropdownItem
               >
-			  <DropdownItem name="9" v-if="row.is_del == 1"
-			    >删除订单</DropdownItem>
+              <DropdownItem name="9" v-if="row.is_del == 1"
+                >删除订单</DropdownItem
+              >
             </DropdownMenu>
           </Dropdown>
         </template>
@@ -673,8 +674,7 @@ export default {
       this.getList();
     },
     getOrderList(id) {
-      splitOrderList(id).then((res) => {
-      });
+      splitOrderList(id).then((res) => {});
     },
     // 订单列表
     getList(res) {
