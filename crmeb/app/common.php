@@ -483,6 +483,7 @@ if (!function_exists('image_to_base64')) {
             curl_setopt($curl, CURLOPT_ENCODING, 'gzip');
             curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
             curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
             $data = curl_exec($curl);
             $code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             curl_close($curl);
