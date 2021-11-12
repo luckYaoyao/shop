@@ -166,7 +166,7 @@ class UserAddressServices extends BaseServices
     {
         if ($addressInfo['id'] == 0) {
             if (isset($addressInfo['address']['city_id'])) {
-                $where['city_id'] = $addressInfo['address']['city_id'];
+                $where[] = ['city_id', '=', $addressInfo['address']['city_id']];
             } else {
                 $where = [];
             }
