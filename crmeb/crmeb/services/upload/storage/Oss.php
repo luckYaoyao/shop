@@ -199,7 +199,7 @@ class Oss extends BaseUpload
                     $height = 'thumb_' . $v . '_height';
                     $width = 'thumb_' . $v . '_width';
                     $key = 'filePath' . ucfirst($v);
-                    if (isset($config[$height]) && isset($config[$width]) && $config[$height] && $config[$width]) {
+                    if (sys_config('image_thumbnail_status', 1) && isset($config[$height]) && isset($config[$width]) && $config[$height] && $config[$width]) {
                         $this->fileInfo->$key = $filePath . '?x-oss-process=image/resize,h_' . $config[$height] . ',w_' . $config[$width];
                         $this->fileInfo->$key = $this->water($this->fileInfo->$key);
                         $data[$v] = $this->fileInfo->$key;
