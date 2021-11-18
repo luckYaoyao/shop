@@ -816,7 +816,6 @@ if (!function_exists('get_image_thumb')) {
             $image = $type == 'all' ? $data : $data[$type] ?? $filePath;
         } catch (\Throwable $e) {
             $image = $filePath;
-//            throw new ValidateException($e->getMessage());
             \think\facade\Log::error('获取缩略图失败，原因：' . $e->getMessage() . '----' . $e->getFile() . '----' . $e->getLine() . '----' . $filePath);
         }
         $data = parse_url($image);
