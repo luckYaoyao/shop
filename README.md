@@ -181,7 +181,7 @@
 
 #### 技术交流社区：https://q.crmeb.net
 
-#### CRMEB微信开发12群：1025263163（2000人群可加）
+#### 添加客服，进入技术交流群：![输入图片说明](https://images.gitee.com/uploads/images/2021/1122/085727_875d0142_5516386.png "单商户v4客服渠道码 .png")
 
 ## 页面展示
 
@@ -258,7 +258,7 @@ CRMEB Min版商城：https://gitee.com/ZhongBangKeJi/CRMEB-Min
 CRMEB Min是一款轻量级、高性能开源电商商城系统，采用TP6+Mysql+Uniapp+iView+Redis等最流行热门技术语言，支持队列、表单生成、长链接、定时任务等，完善的权限管理、会员管理、产品订单管理、CMS管理、支持多端、一键开通短信、产品采集、物流查询等接口。快速简单高效！
 
 ## 联系我们（在线专业解答、获取功能清单）
-![有问题？联系CRMEB官方客服](https://images.gitee.com/uploads/images/2020/1128/154416_441805ca_1491977.png "屏幕截图.png")
+![有问题？联系CRMEB官方客服](https://images.gitee.com/uploads/images/2021/1122/085627_94ad3196_5516386.jpeg "单商户v4客服渠道码-关注客服.jpg")
  
 
 官方网站：http://www.crmeb.com
