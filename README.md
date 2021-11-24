@@ -181,7 +181,7 @@
 
 #### 技术交流社区：https://q.crmeb.net
 
-#### 添加客服，进入技术交流群：![输入图片说明](https://images.gitee.com/uploads/images/2021/1122/085727_875d0142_5516386.png "单商户v4客服渠道码 .png")
+#### 添加客服，进入技术交流群：![输入图片说明](readme/images/wecom-temp-942275590577d7aab148451d5f85458e.jpg)
 
 ## 页面展示
 
