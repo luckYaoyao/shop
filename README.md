@@ -55,17 +55,6 @@
 [点击获取系统前后端全部接口文档【离线版】](http://s.crmeb.com/goods_detail/729)
 
 
-
-#### 付费版介绍（为了开源项目更好的发展，特推出付费版，感谢大家的支持！）
-一、PC端模版需付费购买 仅需698元，不到技术一天的工资
-
-二、标准版仅需1280元
-
-标准版权益：
-
-功能比开源版多手机订单管理、付费会员功能、后台数据统计分析功能，购买标准版会加入我们VIP会员群，技术一对一服务，提供详细升级包及升级教程，
-<a href="https://kefu.crmeb.net/chat/index?noCanClose=1&token=4109fbb2d7bc3d5559348278816a20bc" target="_blank">[点击咨询]</a>
-
 努力成为你的最爱，还有什么不满意的请留下您宝贵的建议[点击留言](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF) 
 
 - - -
@@ -106,52 +95,7 @@
 
 ## 推荐服务器（虚拟空间不支持）
 
-阿里云领取2000元代金劵：[<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z">https://www.aliyun.com</a>]
- 
- <table><tr><td> 
- 
- 入门级配置
- ```
- CPU：1核
- 内存：2G
- 实例规格：ECS共享型 n4
- 带宽：1M
- 系统：CentOS 7.4 64位(推荐)
- 价格：79.6元/年 226.5元/三年
- ```
- <a href="https://www.aliyun.com/activity/new?spm=5176.23165873.J_5244793720.1.6d3a5420ptDH93&userCode=dligum2z">学生6.6/月</a>
-   </td>
- <td>
- 
- 标准级配置
- ```
- CPU：2核
- 内存：4G
- 实例规格：突发性能t5实例
- 带宽：5M
- 系统：CentOS 7.4 64位(推荐)
- 价格：936元/年 2386.8元/三年
- ```
- <a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z">新用户半价</a>
- 
-   </td>
-   <td>
- 
- 企业级配置
- ```
- CPU：4核
- 内存：8G
- 实例规格：突发性能t6实例
- 带宽：5M
- 系统：CentOS 7.4 64位(推荐)
- 价格：2786.64元/年 5389.20元/三年
- ```
- <a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z">领取￥2000红包</a>
- 
-   </td>
-   </tr></table>
- 
-服务器环境推荐要求
+服务器环境推荐要求：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z">https://www.aliyun.com
 * Nignx
 
 * PHP 7.1 ~ 7.3 
@@ -175,10 +119,6 @@
 
 数据字典：https://help.crmeb.net/crmeb-v4/1863569
 
-后端接口：http://bbs.crmeb.net/doc/datongadminapi.html
-
-前端接口：http://bbs.crmeb.net/doc/datongapi.html
-
 安装教程：https://help.crmeb.net/crmeb-v4/1876709
 
 二开教程：https://www.bilibili.com/video/BV1GX4y1T7Wd
@@ -190,7 +130,8 @@
 
 #### 技术交流社区：https://q.crmeb.net
 
-#### 添加客服，进入技术交流群：![输入图片说明](readme/images/image.jpg)
+### 官方开发、技术大佬常驻群，欢迎加入！
+![输入图片说明](readme/images/image.jpg)
 
 ## 页面展示
 
@@ -201,6 +142,7 @@
 ![输入图片说明](readme/images/v4UI详情_02.jpg)
 ![输入图片说明](readme/images/v4UI详情_03.jpg)
 ![输入图片说明](readme/images/v4UI详情_04.jpg)
+
 (页面仅展示部分UI)
 ##[点击获取高清版全套UI设计图源文件](http://s.crmeb.com/goods_detail/728)
 
