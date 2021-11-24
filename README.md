@@ -201,9 +201,9 @@
 ![输入图片说明](readme/images/v4UI详情_02.jpg)
 ![输入图片说明](readme/images/v4UI详情_03.jpg)
 ![输入图片说明](readme/images/v4UI详情_04.jpg)
-
-## [点击获取高清版全套UI设计图源文件](http://s.crmeb.com/goods_detail/728)
 (页面仅展示部分UI)
+##[点击获取高清版全套UI设计图源文件](http://s.crmeb.com/goods_detail/728)
+
 
 ### 后端UI展示
 
@@ -225,6 +225,9 @@
 账号：demo  
 
 密码：crmeb.com
+
+##  CRMEB SAAS版7天免费体验 [点击体验](https://saas.crmeb.com/)
+
 
 ## 程序下载 
 
