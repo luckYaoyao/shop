@@ -47,6 +47,15 @@
  #### 系统设置
  系统配置、组合数据、数据备份、系统日志、文件校验、刷新缓存、清除数据、权限控制、消息管理、城市数据、物流公司
 
+#### 思维脑图
+[点击获取高清思维脑图](https://wiki.crmeb.net/web/single/crmeb_v4/1756)
+#### 功能清单
+[点击获取功能清单（Excel版）](https://wiki.crmeb.net/web/single/crmeb_v4/1758)
+#### 接口文档
+[点击获取系统前后端全部接口文档【离线版】](http://s.crmeb.com/goods_detail/729)
+
+
+
 #### 付费版介绍（为了开源项目更好的发展，特推出付费版，感谢大家的支持！）
 一、PC端模版需付费购买 仅需698元，不到技术一天的工资
 
@@ -181,30 +190,30 @@
 
 #### 技术交流社区：https://q.crmeb.net
 
-#### 添加客服，进入技术交流群：![输入图片说明](readme/images/wecom-temp-942275590577d7aab148451d5f85458e.jpg)
+#### 添加客服，进入技术交流群：![输入图片说明](readme/images/image.jpg)
 
 ## 页面展示
 
+### 前端UI展示
+
 ![输入图片说明](readme/images/1主图.jpg)
-![输入图片说明](readme/images/2首页.jpg)
-![输入图片说明](readme/images/3可视化1.jpg)
-![输入图片说明](readme/images/3可视化2.jpg)
-![输入图片说明](readme/images/3可视化3.jpg)
-![输入图片说明](readme/images/4商品.jpg)
-![输入图片说明](readme/images/5订单.jpg)
-![输入图片说明](readme/images/6用户.jpg)
-![输入图片说明](readme/images/7分销.jpg)
-![输入图片说明](readme/images/8消息管理.jpg)
-![输入图片说明](readme/images/9砍价.jpg)
-![输入图片说明](readme/images/10拼团.jpg)
-![输入图片说明](readme/images/11秒杀.jpg)
-![输入图片说明](readme/images/12签到.jpg)
-![输入图片说明](readme/images/13余额.jpg)
-![输入图片说明](readme/images/14积分.jpg)
-![输入图片说明](readme/images/15优惠券.jpg)
-![输入图片说明](readme/images/16后台管理.jpg)
-![输入图片说明](readme/images/17后台管理.jpg)
-![输入图片说明](readme/images/19奖项.jpg)
+![输入图片说明](readme/images/v4UI详情_01.jpg)
+![输入图片说明](readme/images/v4UI详情_02.jpg)
+![输入图片说明](readme/images/v4UI详情_03.jpg)
+![输入图片说明](readme/images/v4UI详情_04.jpg)
+
+## [点击获取高清版全套UI设计图源文件](http://s.crmeb.com/goods_detail/728)
+(页面仅展示部分UI)
+
+### 后端UI展示
+
+![输入图片说明](readme/images/单商户-开源版_02.jpg)
+![输入图片说明](readme/images/单商户-开源版_03.jpg)
+![输入图片说明](readme/images/单商户-开源版_04.jpg)
+![输入图片说明](readme/images/单商户-开源版_05.jpg)
+![输入图片说明](readme/images/单商户-开源版_06.jpg)
+![输入图片说明](readme/images/单商户-开源版_07.jpg)
+![输入图片说明](readme/images/单商户-开源版_08.jpg)
 
 
 ##  系统演示
