@@ -144,6 +144,11 @@
 ![输入图片说明](readme/images/1400宽-单商户UI详情_02.jpg)
 ![输入图片说明](readme/images/1400宽-单商户UI详情_03.jpg)
 ![输入图片说明](readme/images/1400宽-单商户UI详情_04.jpg)
+![输入图片说明](readme/images/1400宽-单商户UI详情_05.jpg)
+![输入图片说明](readme/images/1400宽-单商户UI详情_06.jpg)
+![输入图片说明](readme/images/1400宽-单商户UI详情_07.jpg)
+![输入图片说明](readme/images/1400宽-单商户UI详情_08.jpg)
+![输入图片说明](readme/images/1400宽-单商户UI详情_09.jpg)
 
 (页面仅展示部分UI)
 ## <a href='http://s.crmeb.com/goods_detail/728' target='_blank'>点击获取高清版全套UI设计图</a>
