@@ -49,13 +49,13 @@
 
 #### 思维脑图
 
-<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1756"  target="_blank">点击获取思维脑图源文件</a>
+<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1756"  target="_blank">点击查看思维脑图</a>
 #### 功能清单
 
-<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1758"  target="_blank">点击获取功能清单（Excel版）</a>
+<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1758"  target="_blank">点击查看功能清单</a>
 #### 接口文档
 
-<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1760"  target="_blank">点击获取系统前后端全部接口文档【离线版】</a>
+<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1760"  target="_blank">点击查看系统前后端全部接口</a>
 
 
 努力成为你的最爱，还有什么不满意的请留下您宝贵的建议[点击留言](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF) 
@@ -65,8 +65,7 @@
    :fa-th-list:  [导航](https://gitee.com/ZhongBangKeJi/CRMEB)
  | [系统功能](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD)
  | [系统演示](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E6%BC%94%E7%A4%BA)
- | [程序下载](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%A8%8B%E5%BA%8F%E4%B8%8B%E8%BD%BD)
- | [使用手册](https://help.crmeb.net/crmeb-v4/1863402)
+ | [使用手册](https://wiki.crmeb.net/web/single/crmeb_v4/998)
  | [二开手册](https://gitee.com/ZhongBangKeJi/CRMEB/wikis/%E5%BA%8F%E8%A8%80?sort_id=4100490)
  | [论坛地址](http://q.crmeb.net)
  | [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
