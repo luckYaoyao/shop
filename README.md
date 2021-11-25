@@ -48,7 +48,7 @@
  系统配置、组合数据、数据备份、系统日志、文件校验、刷新缓存、清除数据、权限控制、消息管理、城市数据、物流公司
 
 #### 思维脑图
-[点击获取高清思维脑图](https://wiki.crmeb.net/web/single/crmeb_v4/1756)
+[点击获取思维脑图源文件](https://wiki.crmeb.net/web/single/crmeb_v4/1756)
 #### 功能清单
 [点击获取功能清单（Excel版）](https://wiki.crmeb.net/web/single/crmeb_v4/1758)
 #### 接口文档
