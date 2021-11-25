@@ -144,7 +144,7 @@
 ![输入图片说明](readme/images/1400宽-单商户UI详情_04.jpg)
 
 (页面仅展示部分UI)
-## [点击获取高清版全套UI设计图源文件](http://s.crmeb.com/goods_detail/728)
+## [点击获取高清版全套UI设计图](http://s.crmeb.com/goods_detail/728)
 
 
 ### 后端UI展示
