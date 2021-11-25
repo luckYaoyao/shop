@@ -146,7 +146,7 @@
 ![输入图片说明](readme/images/1400宽-单商户UI详情_04.jpg)
 
 (页面仅展示部分UI)
-## [点击获取高清版全套UI设计图](http://s.crmeb.com/goods_detail/728)
+## <a href='http://s.crmeb.com/goods_detail/728' target='_blank'>点击获取高清版全套UI设计图</a>
 
 
 ### 后端UI展示
@@ -166,7 +166,7 @@
 
 密码：crmeb.com
 
-##  CRMEB SAAS版7天免费体验 [点击体验](https://saas.crmeb.com/)
+##  CRMEB SAAS版7天免费体验 <a href='https://saas.crmeb.com/' target='_blank'>【点击体验】</a>
 
 
 ## 程序下载 
