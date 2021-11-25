@@ -48,11 +48,14 @@
  系统配置、组合数据、数据备份、系统日志、文件校验、刷新缓存、清除数据、权限控制、消息管理、城市数据、物流公司
 
 #### 思维脑图
-[点击获取思维脑图源文件](https://wiki.crmeb.net/web/single/crmeb_v4/1756)
+
+<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1756"  target="_blank">点击获取思维脑图源文件</a>
 #### 功能清单
-[点击获取功能清单（Excel版）](https://wiki.crmeb.net/web/single/crmeb_v4/1758)
+
+<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1758"  target="_blank">点击获取功能清单（Excel版）</a>
 #### 接口文档
-[点击获取系统前后端全部接口文档【离线版】](https://wiki.crmeb.net/web/single/crmeb_v4/1760)
+
+<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1760"  target="_blank">点击获取系统前后端全部接口文档【离线版】</a>
 
 
 努力成为你的最爱，还有什么不满意的请留下您宝贵的建议[点击留言](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF) 
@@ -95,7 +98,7 @@
 
 ## 推荐服务器（虚拟空间不支持）
 
-服务器环境推荐要求：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z">https://www.aliyun.com
+服务器环境推荐要求：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z" target="_blank">  查看 </a>
 * Nignx
 
 * PHP 7.1 ~ 7.3 
