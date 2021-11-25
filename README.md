@@ -52,7 +52,7 @@
 #### 功能清单
 [点击获取功能清单（Excel版）](https://wiki.crmeb.net/web/single/crmeb_v4/1758)
 #### 接口文档
-[点击获取系统前后端全部接口文档【离线版】](http://s.crmeb.com/goods_detail/729)
+[点击获取系统前后端全部接口文档【离线版】](https://wiki.crmeb.net/web/single/crmeb_v4/1760)
 
 
 努力成为你的最爱，还有什么不满意的请留下您宝贵的建议[点击留言](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF) 
@@ -138,10 +138,10 @@
 ### 前端UI展示
 
 ![输入图片说明](readme/images/1主图.jpg)
-![输入图片说明](readme/images/v4UI详情_01.jpg)
-![输入图片说明](readme/images/v4UI详情_02.jpg)
-![输入图片说明](readme/images/v4UI详情_03.jpg)
-![输入图片说明](readme/images/v4UI详情_04.jpg)
+![输入图片说明](readme/images/1400宽-单商户UI详情_01.jpg)
+![输入图片说明](readme/images/1400宽-单商户UI详情_02.jpg)
+![输入图片说明](readme/images/1400宽-单商户UI详情_03.jpg)
+![输入图片说明](readme/images/1400宽-单商户UI详情_04.jpg)
 
 (页面仅展示部分UI)
 ##[点击获取高清版全套UI设计图源文件](http://s.crmeb.com/goods_detail/728)
