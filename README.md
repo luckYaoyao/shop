@@ -128,7 +128,7 @@
 
 密码：crmeb.com
 
-##  CRMEB SAAS版7天免费体验 <a href='https://saas.crmeb.com/' target='_blank'>【点击体验】</a>
+##  CRMEB云部署快速体验完整功能 <a href='https://saas.crmeb.com/' target='_blank'>【点击体验】</a>
 
 
 ## 程序下载 
