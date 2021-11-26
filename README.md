@@ -40,15 +40,15 @@
 
 接口文档：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1760"  target="_blank">在线接口</a>
 
-目录结构：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1129"  target="_blank">https://wiki.crmeb.net/web/single/crmeb_v4/1129</a>
+目录结构：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1129"  target="_blank">目录结构</a>
 
-数据字典：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1130"  target="_blank">https://wiki.crmeb.net/web/single/crmeb_v4/1130</a>
+数据字典：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1130"  target="_blank">数据字典</a>
 
-安装教程：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/892"  target="_blank">https://wiki.crmeb.net/web/single/crmeb_v4/892</a>
+安装教程：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/892"  target="_blank">安装教程</a>
 
-二开教程：<a href="https://www.bilibili.com/video/BV1GX4y1T7Wd"  target="_blank">https://www.bilibili.com/video/BV1GX4y1T7Wd</a>
+二开教程：<a href="https://www.bilibili.com/video/BV1GX4y1T7Wd"  target="_blank">二开教程</a>
 
-二开文档：<a href="https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670"  target="_blank">https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670</a>
+二开文档：<a href="https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670"  target="_blank">二开文档</a>
 
 
 ## 技术交流
