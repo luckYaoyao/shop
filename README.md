@@ -46,7 +46,7 @@
 
 安装教程：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/892"  target="_blank">安装教程</a>
 
-二开教程：<a href="https://www.bilibili.com/video/BV1GX4y1T7Wd"  target="_blank">二开教程</a>
+二开教程：<a href="https://ke.qq.com/course/4125326?tuin=5e252c1"  target="_blank">CRMEB Uniapp前端二开视频教程 点击学习</a>
 
 二开文档：<a href="https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670"  target="_blank">二开文档</a>
 
