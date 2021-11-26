@@ -3,6 +3,7 @@
     <div class="i-layout-page-header">
       <div class="i-layout-page-header">
         <span class="ivu-page-header-title">子订单列表</span>
+        <span class="return" @click="$router.go(-1)">返回</span>
       </div>
     </div>
     <Table
@@ -945,5 +946,12 @@ img {
 .pictrue {
   width: 25px;
   height: 25px;
+}
+
+.return {
+  border: 1px solid #ccc;
+  padding: 3px 5px;
+  margin-left: 15px;
+  border-radius: 3px;
 }
 </style>
