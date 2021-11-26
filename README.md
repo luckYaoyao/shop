@@ -6,18 +6,22 @@
 <h3 align="center"> 码云开源项目php语言排名前三的开源GVP项目！</h3> 
 
  
+
  CRMEB打通版是一款全开源支持免费商用的PHP单商户商城系统；
  
  CRMEB技术团队（官网：www.crmeb.com)历经4年时间匠心之作！系统采用前后端分离技术，基于TP6+Uni-app框架开发；客户移动端采用uni-app开发，管理后台前端使用iviewUI开发。系统支持微信公众号端、微信小程序端、H5端、PC端多端账号同步，可快速打包生成APP；
  
  赋能开发者，减少重复造轮子；系统支持自动检查安装环境一键安装部署，使用简单方便；围绕方便二次开发，系统内置强大灵活的权限管理，可以控制到每一个菜单；通过内置组合数据,管理碎片化数据,系统配置快速添加系统配置参数，内置钩子，方便二开；后台应用form-builder PHP快速生成现代化表单；并提供详细的使用文档、开发文档、接口文档、数据字典等相关文档；及十几个技术交流群、技术论坛答疑；帮助更多开发者快速上手，节省开发时间，提升开发效率；助力企业实现数字化经营！
  
+<p align="center" >
+<a href="https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md"> 宽屏预览 </a>
+</p>
 
-努力成为你的最爱，还有什么不满意的请留下您宝贵的建议[点击留言](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF) 
 
 - - -
 
-   :fa-th-list:  [导航](https://gitee.com/ZhongBangKeJi/CRMEB)
+   :fa-th-list:  [官网地址](https://www.crmeb.com)
+ | [服务市场](https://s.crmeb.com)
  | [系统功能](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD)
  | [系统演示](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E6%BC%94%E7%A4%BA)
  | [使用手册](https://wiki.crmeb.net/web/single/crmeb_v4/998)
@@ -25,16 +29,21 @@
  | [论坛地址](http://q.crmeb.net)
  | [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
  | [推荐服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
- | [评论](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF)
+ | [留言评论](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF)
 - - -
 
 ## 相关文档
 
-系统功能：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1758"  target="_blank">点击查看功能清单</a>
+| 系统功能：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1758"  target="_blank">功能清单</a>  | 系统脑图：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1756"  target="_blank">思维脑图</a>  | 接口文档：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1760"  target="_blank">全部接口</a>  | 目录结构：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1129"  target="_blank">目录结构</a>  |
+|---|---|---|---|
+| 数据字典：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1130"  target="_blank">数据字典</a>  | 安装教程：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/892"  target="_blank">安装教程</a>  | 二开教程：<a href="https://www.bilibili.com/video/BV1GX4y1T7Wd"  target="_blank">二开教程</a>  | 二开文档：<a href="https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670"  target="_blank">二开文档</a>  |
 
-系统脑图：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1756"  target="_blank">点击查看思维脑图</a>
 
-接口文档：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1760"  target="_blank">点击查看系统前后端全部接口</a>
+系统功能：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1758"  target="_blank">功能清单</a>
+
+系统脑图：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1756"  target="_blank">思维脑图</a>
+
+接口文档：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1760"  target="_blank">在线接口</a>
 
 目录结构：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1129"  target="_blank">https://wiki.crmeb.net/web/single/crmeb_v4/1129</a>
 
@@ -42,9 +51,9 @@
 
 安装教程：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/892"  target="_blank">https://wiki.crmeb.net/web/single/crmeb_v4/892</a>
 
-二开教程：https://www.bilibili.com/video/BV1GX4y1T7Wd
+二开教程：<a href="https://www.bilibili.com/video/BV1GX4y1T7Wd"  target="_blank">https://www.bilibili.com/video/BV1GX4y1T7Wd</a>
 
-二开文档：https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670
+二开文档：<a href="https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670"  target="_blank">https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670</a>
 
 
 ## 技术交流
