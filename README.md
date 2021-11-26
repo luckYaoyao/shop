@@ -55,7 +55,7 @@
 
 #### 技术交流社区：https://q.crmeb.net
 
-### CRMEB 官方指定指数大佬交流群，欢迎加入！
+### CRMEB 官方指定技术大佬交流群，欢迎加入！
 ![输入图片说明](readme/images/image.jpg)
 
 
