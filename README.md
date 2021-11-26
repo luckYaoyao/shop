@@ -4,26 +4,7 @@
 </p>
 
 <h3 align="center"> 码云开源项目php语言排名前三的开源GVP项目！</h3> 
-<p align="center">
-    <a href="http://www.crmeb.com">
-        <img src="https://img.shields.io/badge/OfficialWebsite-CRMEB-yellow.svg" />
-    </a>
-<a href="http://www.crmeb.com">
-        <img src="https://img.shields.io/badge/Licence-GPL3.0-green.svg?style=flat" />
-    </a>
-    <a href="http://www.crmeb.com">
-        <img src="https://img.shields.io/badge/Edition-4.3-blue.svg" />
-    </a>
-     <a href="https://gitee.com/ZhongBangKeJi/CRMEB/repository/archive/master.zip">
-        <img src="https://img.shields.io/badge/download-80m-red.svg" />
-    </a>
-    </p>
-<p align="center">    
-    <b>感谢码云提供的平台，喜欢的话就点右上角 "Star" 支持一下</b> 
-</p>
-  
- 
- ## 产品介绍
+
  
  CRMEB打通版是一款全开源支持免费商用的PHP单商户商城系统；
  
@@ -31,32 +12,6 @@
  
  赋能开发者，减少重复造轮子；系统支持自动检查安装环境一键安装部署，使用简单方便；围绕方便二次开发，系统内置强大灵活的权限管理，可以控制到每一个菜单；通过内置组合数据,管理碎片化数据,系统配置快速添加系统配置参数，内置钩子，方便二开；后台应用form-builder PHP快速生成现代化表单；并提供详细的使用文档、开发文档、接口文档、数据字典等相关文档；及十几个技术交流群、技术论坛答疑；帮助更多开发者快速上手，节省开发时间，提升开发效率；助力企业实现数字化经营！
  
- ## 系统功能
- #### 商城功能
- 首页可视化编辑、主题风格切换、商品管理、商品评价、规格模板、运费模板、主图视频、虚拟商品、商品口令、扫码核销、发票管理、多提货点、配送员等
- #### 营销活动
- 直播带货、拼团活动、砍价活动、秒杀活动、产品预售、九宫格抽奖、优惠券、积分商城、签到
- #### 分销功能
- 指定分销、任务分销、人人分销、分销等级、分销有效期
- #### 用户管理
- 用户等级（经验等级）、用户分组、用户标签、会员等级、会员充值
- #### 客服系统
- 客服状态、快捷回复、客服转接、客户信息（客户订单、购买记录、客户手机号、等级、推荐人、分类、标签）
- #### 第三方设置
- 云储存(七牛云、阿里云OSS、腾讯云COS)、电子面单、电子小票、一号通（短信通知、商品采集、物流查询）、第三方客服、腾讯地图
- #### 系统设置
- 系统配置、组合数据、数据备份、系统日志、文件校验、刷新缓存、清除数据、权限控制、消息管理、城市数据、物流公司
-
-#### 思维脑图
-
-<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1756"  target="_blank">点击查看思维脑图</a>
-#### 功能清单
-
-<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1758"  target="_blank">点击查看功能清单</a>
-#### 接口文档
-
-<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1760"  target="_blank">点击查看系统前后端全部接口</a>
-
 
 努力成为你的最爱，还有什么不满意的请留下您宝贵的建议[点击留言](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF) 
 
@@ -72,6 +27,33 @@
  | [推荐服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
  | [评论](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF)
 - - -
+
+## 相关文档
+
+系统功能：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1758"  target="_blank">点击查看功能清单</a>
+
+系统脑图：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1756"  target="_blank">点击查看思维脑图</a>
+
+接口文档：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1760"  target="_blank">点击查看系统前后端全部接口</a>
+
+目录结构：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1129"  target="_blank">https://wiki.crmeb.net/web/single/crmeb_v4/1129</a>
+
+数据字典：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1130"  target="_blank">https://wiki.crmeb.net/web/single/crmeb_v4/1130</a>
+
+安装教程：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/892"  target="_blank">https://wiki.crmeb.net/web/single/crmeb_v4/892</a>
+
+二开教程：https://www.bilibili.com/video/BV1GX4y1T7Wd
+
+二开文档：https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670
+
+
+## 技术交流
+
+#### 技术交流社区：https://q.crmeb.net
+
+### 官方开发、技术大佬常驻群，欢迎加入！
+![输入图片说明](readme/images/image.jpg)
+
 
 ## 技术亮点
 ~~~
@@ -109,31 +91,6 @@
 推荐使用bt宝塔面板，简单易用。
 服务器推荐阿里云ecs或腾讯云cvm 云服务器。
 
-
-
-## 相关文档
-
-系统功能：https://help.crmeb.net/crmeb-v4/1863404
-
-系统脑图：https://help.crmeb.net/crmeb-v4/1863405
-
-目录结构：https://help.crmeb.net/crmeb-v4/2034387
-
-数据字典：https://help.crmeb.net/crmeb-v4/1863569
-
-安装教程：https://help.crmeb.net/crmeb-v4/1876709
-
-二开教程：https://www.bilibili.com/video/BV1GX4y1T7Wd
-
-二开文档：https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670
-
-
-## 技术交流
-
-#### 技术交流社区：https://q.crmeb.net
-
-### 官方开发、技术大佬常驻群，欢迎加入！
-![输入图片说明](readme/images/image.jpg)
 
 ## 页面展示
 
