@@ -34,11 +34,6 @@
 
 ## 相关文档
 
-| 系统功能：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1758"  target="_blank">功能清单</a>  | 系统脑图：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1756"  target="_blank">思维脑图</a>  | 接口文档：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1760"  target="_blank">全部接口</a>  | 目录结构：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1129"  target="_blank">目录结构</a>  |
-|---|---|---|---|
-| 数据字典：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1130"  target="_blank">数据字典</a>  | 安装教程：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/892"  target="_blank">安装教程</a>  | 二开教程：<a href="https://www.bilibili.com/video/BV1GX4y1T7Wd"  target="_blank">二开教程</a>  | 二开文档：<a href="https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670"  target="_blank">二开文档</a>  |
-
-
 系统功能：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1758"  target="_blank">功能清单</a>
 
 系统脑图：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1756"  target="_blank">思维脑图</a>
@@ -89,11 +84,11 @@
 ## 推荐服务器（虚拟空间不支持）
 
 服务器环境推荐要求：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z" target="_blank">  查看 </a>
-* Nignx
+* Nignx/Apache/IIS
 
 * PHP 7.1 ~ 7.3 
 
-* MySQL  5.7
+* MySQL 5.5-7.0
 
 * Redis
 
@@ -148,7 +143,7 @@
 
 git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git
 
-新版v4.3.0 下载（当前开源版功能全，前后台分离版，适合二开）
+最新版 下载（当前开源版功能全，前后台分离版，适合二开）
 
 git clone https://gitee.com/ZhongBangKeJi/CRMEB.git
 
@@ -184,7 +179,7 @@ CRMEB Min是一款轻量级、高性能开源电商商城系统，采用TP6+Mysq
 ![有问题？联系CRMEB官方客服](https://images.gitee.com/uploads/images/2021/1122/085627_94ad3196_5516386.jpeg "单商户v4客服渠道码-关注客服.jpg")
  
 
-官方网站：http://www.crmeb.com
+官方网站：https://www.crmeb.com
 
 交流社区：https://q.crmeb.net
 
