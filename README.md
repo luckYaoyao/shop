@@ -24,9 +24,9 @@
  | [服务市场](https://s.crmeb.com)
  | [系统功能](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD)
  | [系统演示](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E6%BC%94%E7%A4%BA)
- | [使用手册](https://wiki.crmeb.net/web/single/crmeb_v4/998)
+ | [使用手册](https://doc.crmeb.com/web/single/crmeb_v4/998)
  | [二开手册](https://gitee.com/ZhongBangKeJi/CRMEB/wikis/%E5%BA%8F%E8%A8%80?sort_id=4100490)
- | [论坛地址](http://q.crmeb.net)
+ | [论坛地址](https://q.crmeb.com)
  | [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
  | [推荐服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
  | [留言评论](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF)
@@ -34,44 +34,43 @@
 
 ## 相关文档
 
-系统功能：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1758"  target="_blank">功能清单</a>
+系统功能：<a href="https://doc.crmeb.com/web/single/crmeb_v4/1758"  target="_blank">功能清单</a>
 
-系统脑图：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1756"  target="_blank">思维脑图</a>
+系统脑图：<a href="https://doc.crmeb.com/web/single/crmeb_v4/1756"  target="_blank">思维脑图</a>
 
-接口文档：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1760"  target="_blank">在线接口</a>
+接口文档：<a href="https://doc.crmeb.com/web/single/crmeb_v4/1760"  target="_blank">在线接口</a>
 
-目录结构：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1129"  target="_blank">目录结构</a>
+目录结构：<a href="https://doc.crmeb.com/web/single/crmeb_v4/1129"  target="_blank">目录结构</a>
 
-数据字典：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/1130"  target="_blank">数据字典</a>
+数据字典：<a href="https://doc.crmeb.com/web/single/crmeb_v4/1130"  target="_blank">数据字典</a>
 
-安装教程：<a href="https://wiki.crmeb.net/web/single/crmeb_v4/892"  target="_blank">安装教程</a>
+安装教程：<a href="https://doc.crmeb.com/web/single/crmeb_v4/892"  target="_blank">安装教程</a>
 
 二开教程：<a href="https://ke.qq.com/course/4125326?tuin=5e252c1"  target="_blank">CRMEB Uniapp前端二开视频教程 点击学习</a>
 
 二开文档：<a href="https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670"  target="_blank">二开文档</a>
 
+技术交流社区：<a href="https://q.crmeb.com"  target="_blank">https://q.crmeb.com</a>
 
-## 技术交流
+### 不懂服务器？不懂技术？无法解决高并发？想数据私有化？还想后期定制开发？
 
-#### 技术交流社区：https://q.crmeb.net
+推荐云部署版一键解决以上所有问题，超低价格低至 :collision:  9.9元/年，点击了解 https://saas.crmeb.com/saas-home-software-list-w-s-y.html
 
-## 推荐服务器（虚拟空间不支持）
+### 推荐服务器（虚拟空间不支持）
 
 服务器环境推荐要求：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z" target="_blank">  查看 </a>
-* Nignx/Apache/IIS
 
-* PHP 7.1 ~ 7.3 
+```
+Nignx/Apache/IIS
+PHP 7.1 ~ 7.3 
+MySQL 5.5-7.0
+Redis
+```
 
-* MySQL 5.5-7.0
 
-* Redis
+推荐使用bt宝塔面板，简单易用，服务器推荐阿里云ecs或腾讯云cvm 云服务器。
 
-推荐使用bt宝塔面板，简单易用。
-服务器推荐阿里云ecs或腾讯云cvm 云服务器。
 
-#### 不懂服务器？不懂技术？无法解决高并发？想数据私有化？还想后期定制开发？
-
-推荐云部署版一键解决以上所有问题，超低价格低至9.9元/年，点击了解 https://saas.crmeb.com/saas-home-software-list-w-s-y.html
 
 
 ### CRMEB 官方指定技术大佬交流群，欢迎加入！
@@ -184,7 +183,7 @@ CRMEB Min是一款轻量级、高性能开源电商商城系统，采用TP6+Mysq
 
 官方网站：https://www.crmeb.com
 
-交流社区：https://q.crmeb.net
+交流社区：https://q.crmeb.com
 
 ## 特别鸣谢
 
@@ -213,7 +212,7 @@ CRMEB Min是一款轻量级、高性能开源电商商城系统，采用TP6+Mysq
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
-版权所有Copyright © 2017-2021 by CRMEB (http://www.crmeb.com)
+版权所有Copyright © 2017-2022 by CRMEB (https://www.crmeb.com)
 
 All rights reserved。
 
