@@ -55,6 +55,25 @@
 
 #### 技术交流社区：https://q.crmeb.net
 
+## 推荐服务器（虚拟空间不支持）
+
+服务器环境推荐要求：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z" target="_blank">  查看 </a>
+* Nignx/Apache/IIS
+
+* PHP 7.1 ~ 7.3 
+
+* MySQL 5.5-7.0
+
+* Redis
+
+推荐使用bt宝塔面板，简单易用。
+服务器推荐阿里云ecs或腾讯云cvm 云服务器。
+
+#### 不懂服务器？不懂技术？无法解决高并发？想数据私有化？还想后期定制开发？
+
+推荐云部署版一键解决以上所有问题，超低价格低至9.9元/年，点击了解 https://saas.crmeb.com/saas-home-software-list-w-s-y.html
+
+
 ### CRMEB 官方指定技术大佬交流群，欢迎加入！
 ![输入图片说明](readme/images/image.jpg)
 
@@ -79,22 +98,6 @@
     16.一键安装自动检查系统环境一键安装；
     17.移动端使用uni-app进行开发，方便编译成各种格式的代码；
 ~~~
-
-
-## 推荐服务器（虚拟空间不支持）
-
-服务器环境推荐要求：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z" target="_blank">  查看 </a>
-* Nignx/Apache/IIS
-
-* PHP 7.1 ~ 7.3 
-
-* MySQL 5.5-7.0
-
-* Redis
-
-推荐使用bt宝塔面板，简单易用。
-服务器推荐阿里云ecs或腾讯云cvm 云服务器。
-
 
 ## 页面展示
 
