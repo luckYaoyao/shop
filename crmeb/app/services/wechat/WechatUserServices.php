@@ -123,8 +123,17 @@ class WechatUserServices extends BaseServices
     public function updateUser($openid)
     {
         $userInfo = WechatService::getUserInfo($openid);
-        $userInfo['tagid_list'] = implode(',', $userInfo['tagid_list']);
-        if (!$this->dao->update($openid, $userInfo->toArray(), 'openid'))
+        $userInfo = is_object($userInfo) ? $userInfo->toArray() : $userInfo;
+        if (isset($userInfo['nickname']) && $userInfo['nickname']) {
+            $userInfo['nickname'] = filter_emoji($userInfo['nickname']);
+        } else {
+            mt_srand();
+            $userInfo['nickname'] = 'wx' . rand(100000, 999999);
+        }
+        if (isset($userInfo['tagid_list'])) {
+            $userInfo['tagid_list'] = implode(',', $userInfo['tagid_list']);
+        }
+        if (!$this->dao->update($openid, $userInfo, 'openid'))
             throw new AdminException('更新失败');
         return true;
     }
@@ -137,6 +146,12 @@ class WechatUserServices extends BaseServices
     public function setNewUser($openid)
     {
         $userInfo = WechatService::getUserInfo($openid);
+        if (isset($userInfo['nickname']) && $userInfo['nickname']) {
+            $userInfo['nickname'] = filter_emoji($userInfo['nickname']);
+        } else {
+            mt_srand();
+            $userInfo['nickname'] = 'wx' . rand(100000, 999999);
+        }
         if (!isset($userInfo['subscribe']) || !$userInfo['subscribe'] || !isset($userInfo['openid']))
             throw new ValidateException('请关注公众号!');
         $userInfo = $userInfo->toArray();

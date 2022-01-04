@@ -168,9 +168,9 @@
 						<!-- #endif -->
 						<!-- #ifdef MP -->
 						<block v-for="(item,index) in MyMenus" :key="index">
-							<view class="item" v-if="item.url!='#' 
-								&& item.url!='/pages/service/index' 
-								&& item.url!='/pages/customer_list/chat' 
+							<view class="item" v-if="item.url!='#'
+								&& item.url!='/pages/service/index'
+								&& item.url!='/pages/customer_list/chat'
 								|| (item.url=='/pages/customer_list/chat' && routineContact == 0)" @click="goMenuPage(item.url, item.name)">
 								<image :src="item.pic"></image>
 								<text>{{item.name}}</text>
@@ -324,7 +324,7 @@
 				my_banner_status: 1
 			}
 		},
-		created() {
+		onLoad(option) {
 			uni.hideTabBar()
 			let that = this;
 			// if (uni.getStorageSync('FOOTER_BAR')) {
@@ -350,6 +350,16 @@
 			// #ifdef H5 || APP-PLUS
 			if (that.isLogin == false) {
 				toLogin()
+			}
+			//获取用户信息回来后授权
+			let cacheCode = this.$Cache.get('snsapi_userinfo_code');
+			let res1 = cacheCode ? option.code != cacheCode : true;
+			if (this.isWeixin && option.code && res1 && option.scope === 'snsapi_userinfo') {
+				this.$Cache.set('snsapi_userinfo_code', option.code);
+				Auth.auth(option.code).then(res => {
+					this.getUserInfo();
+				}).catch(err => {
+				})
 			}
 			// #endif
 			// #ifdef APP-PLUS
@@ -385,10 +395,13 @@
 				this.setVisit();
 			};
 		},
+		onPullDownRefresh() {
+			this.onLoadFun();
+		},
 		methods: {
 			getWechatuserinfo() {
 				//#ifdef H5
-				Auth.isWeixin() && Auth.oAuth('snsapi_userinfo', '/pages/user/index');
+				Auth.isWeixin() && Auth.toAuth('snsapi_userinfo', '/pages/user/index');
 				//#endif
 			},
 			getRoutineUserInfo(e) {
@@ -509,7 +522,7 @@
 					});
 			},
 			/**
-			 * 
+			 *
 			 * 获取个人中心图标
 			 */
 			switchTab(order) {
@@ -636,7 +649,7 @@
 							});
 						} else if (name && name === '联系客服') {
 							return getCustomer(url)
-							
+
 						} else if (name === '订单核销') {
 							return window.location.href = `${location.origin}${url}`
 						}

@@ -1779,34 +1779,33 @@ class UserServices extends BaseServices
         foreach ($noBeOpenids as $openid) {
             try {
                 $info = WechatService::getUserInfo($openid);
+                $info = is_object($info) ? $info->toArray() : $info;
             } catch (\Throwable $e) {
                 $info = [];
             }
             if (!$info) continue;
-            if ($info['subscribe'] == 1) {
-                $data['nickname'] = $info['nickname'] ?? '';
-                $data['headimgurl'] = $info['headimgurl'] ?? '';
-                $userInfoData = $this->setUserInfo($data);
-                if (!$userInfoData) {
-                    throw new AdminException('用户信息储存失败!');
-                }
-                $data['uid'] = $userInfoData['uid'];
-                $data['subscribe'] = $info['subscribe'];
-                $data['unionid'] = $info['unionid'] ?? '';
-                $data['openid'] = $info['openid'] ?? '';
-                $data['sex'] = $info['sex'] ?? 0;
-                $data['language'] = $info['language'] ?? '';
-                $data['city'] = $info['city'] ?? '';
-                $data['province'] = $info['province'] ?? '';
-                $data['country'] = $info['country'] ?? '';
-                $data['subscribe_time'] = $info['subscribe_time'] ?? '';
-                $data['groupid'] = $info['groupid'] ?? 0;
-                $data['remark'] = $info['remark'] ?? '';
-                $data['tagid_list'] = isset($info['tagid_list']) && $info['tagid_list'] ? implode(',', $info['tagid_list']) : '';
-                $data['add_time'] = $time;
-                $data['is_complete'] = 1;
-                $dataAll[] = $data;
+            $data['nickname'] = $info['nickname'] ?? '';
+            $data['headimgurl'] = $info['headimgurl'] ?? '';
+            $userInfoData = $this->setUserInfo($data);
+            if (!$userInfoData) {
+                throw new AdminException('用户信息储存失败!');
             }
+            $data['uid'] = $userInfoData['uid'];
+            $data['subscribe'] = $info['subscribe'] ?? 1;
+            $data['unionid'] = $info['unionid'] ?? '';
+            $data['openid'] = $info['openid'] ?? '';
+            $data['sex'] = $info['sex'] ?? 0;
+            $data['language'] = $info['language'] ?? '';
+            $data['city'] = $info['city'] ?? '';
+            $data['province'] = $info['province'] ?? '';
+            $data['country'] = $info['country'] ?? '';
+            $data['subscribe_time'] = $info['subscribe_time'] ?? '';
+            $data['groupid'] = $info['groupid'] ?? 0;
+            $data['remark'] = $info['remark'] ?? '';
+            $data['tagid_list'] = isset($info['tagid_list']) && $info['tagid_list'] ? implode(',', $info['tagid_list']) : '';
+            $data['add_time'] = $time;
+            $data['is_complete'] = 1;
+            $dataAll[] = $data;
         }
         if ($dataAll) {
             /** @var WechatUserServices $wechatUser */

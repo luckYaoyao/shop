@@ -17,7 +17,7 @@ use app\services\wechat\WechatReplyServices;
 use crmeb\exceptions\AdminException;
 use app\services\pay\PayNotifyServices;
 use crmeb\utils\ApiErrorCode;
-use EasyWeChat\Foundation\Application;
+use crmeb\services\easywechat\Application;
 use EasyWeChat\Message\Article;
 use EasyWeChat\Message\Image;
 use EasyWeChat\Message\Material;
@@ -27,6 +27,7 @@ use EasyWeChat\Message\Video;
 use EasyWeChat\Message\Voice;
 use EasyWeChat\Payment\Order;
 use EasyWeChat\Server\Guard;
+use Symfony\Component\HttpFoundation\Request;
 use think\exception\ValidateException;
 use think\Response;
 use crmeb\utils\Hook;
@@ -240,6 +241,17 @@ class WechatService
     public static function oauthService()
     {
         return self::application()->oauth;
+    }
+
+    /**
+     * 网页授权
+     * @return easywechat\oauth2\wechat\WechatOauth2Provider
+     */
+    public static function oauth2Service()
+    {
+        $request = app()->request;
+        self::application()->oauth2->setRequest(new Request($request->get(), $request->post(), [], [], [], $request->server(), $request->getContent()));
+        return self::application()->oauth2;
     }
 
     /**

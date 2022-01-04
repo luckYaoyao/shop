@@ -13,7 +13,7 @@ namespace crmeb\services;
 
 use app\services\pay\PayNotifyServices;
 use crmeb\exceptions\ApiException;
-use EasyWeChat\Foundation\Application;
+use crmeb\services\easywechat\Application;
 use think\exception\ValidateException;
 use crmeb\utils\Hook;
 use think\Response;
