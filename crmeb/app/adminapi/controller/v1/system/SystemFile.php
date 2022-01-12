@@ -60,6 +60,8 @@ class SystemFile extends AuthController
     //保存文件
     public function savefile()
     {
+        return app('json')->fail('请勿在生产环境使用，该接口存在危险性！！！');//如果开发环境，可以注释本行
+        
         $comment = $this->request->param('comment');
         $filepath = $this->request->param('filepath');
         if(empty($comment) || empty($filepath)){
