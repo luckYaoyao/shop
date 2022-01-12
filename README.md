@@ -52,11 +52,11 @@
 
 技术交流社区：<a href="https://q.crmeb.com"  target="_blank">https://q.crmeb.com</a>
 
-### 不懂服务器？不懂技术？无法解决高并发？想数据私有化？还想后期定制开发？
+#### 不懂服务器？不懂技术？无法解决高并发？想数据私有化？还想后期定制开发？
 
 推荐云部署版一键解决以上所有问题，超低价格低至 :collision:  9.9元/年，点击了解 https://saas.crmeb.com/saas-home-software-detail-50042-s-y.html
 
-### 推荐服务器（虚拟空间不支持）
+#### 推荐服务器（虚拟空间不支持）
 
 服务器环境推荐要求：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z" target="_blank">  查看 </a>
 
@@ -104,21 +104,8 @@ Redis
 
 ## 页面展示
 
-### 前端UI展示
-
-![输入图片说明](readme/images/1主图.jpg)
-![输入图片说明](readme/images/1400宽-单商户UI详情_01.jpg)
-![输入图片说明](readme/images/1400宽-单商户UI详情_02.jpg)
-![输入图片说明](readme/images/1400宽-单商户UI详情_03.jpg)
-![输入图片说明](readme/images/1400宽-单商户UI详情_04.jpg)
-![输入图片说明](readme/images/1400宽-单商户UI详情_05.jpg)
-![输入图片说明](readme/images/1400宽-单商户UI详情_06.jpg)
-![输入图片说明](readme/images/1400宽-单商户UI详情_07.jpg)
-![输入图片说明](readme/images/1400宽-单商户UI详情_08.jpg)
-![输入图片说明](readme/images/1400宽-单商户UI详情_09.jpg)
-
 (页面仅展示部分UI)
-## <a href='http://s.crmeb.com/goods_detail/728' target='_blank'>点击获取高清版全套UI设计图</a>
+## <a href='http://s.crmeb.com/goods_detail/728' target='_blank'>点击查看高清版全套UI设计图</a>
 
 
 ### 后端UI展示
@@ -138,7 +125,7 @@ Redis
 
 密码：crmeb.com
 
-##  CRMEB云部署快速体验完整功能 <a href='https://saas.crmeb.com/' target='_blank'>【点击体验】</a>
+####  CRMEB云部署快速体验完整功能 <a href='https://saas.crmeb.com/' target='_blank'>【点击体验】</a>
 
 
 ## 程序下载 
@@ -180,14 +167,6 @@ tp PHP表单生成器，快速生成现代化的form表单。包含复选框、�
 CRMEB Min版商城：https://gitee.com/ZhongBangKeJi/CRMEB-Min
 
 CRMEB Min是一款轻量级、高性能开源电商商城系统，采用TP6+Mysql+Uniapp+iView+Redis等最流行热门技术语言，支持队列、表单生成、长链接、定时任务等，完善的权限管理、会员管理、产品订单管理、CMS管理、支持多端、一键开通短信、产品采集、物流查询等接口。快速简单高效！
-
-## 联系我们（在线专业解答、获取功能清单）
-![有问题？联系CRMEB官方客服](https://images.gitee.com/uploads/images/2021/1122/085627_94ad3196_5516386.jpeg "单商户v4客服渠道码-关注客服.jpg")
- 
-
-官方网站：https://www.crmeb.com
-
-交流社区：https://q.crmeb.com
 
 ## 特别鸣谢
 
