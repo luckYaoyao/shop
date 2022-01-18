@@ -50,7 +50,13 @@
 
 二开文档：<a href="https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670"  target="_blank">二开文档</a>
 
-技术交流社区：<a href="https://q.crmeb.com"  target="_blank">https://q.crmeb.com</a>
+技术交流社区：<a href="https://q.crmeb.com"  target="_blank">https://q.crmeb.com
+
+
+[![](readme/images/1思维脑图+功能清单.jpg)](http://s.crmeb.com/goods_detail/730)
+[![](readme/images/2高清UI设计图.jpg)](http://s.crmeb.com/goods_detail/728)
+[![](readme/images/3前后端接口文档.jpg)](http://s.crmeb.com/goods_detail/729)
+[![](readme/images/4PC端前端模板.jpg)](http://s.crmeb.com/goods_detail/711)
 
 #### 不懂服务器？不懂技术？无法解决高并发？想数据私有化？还想后期定制开发？
 
