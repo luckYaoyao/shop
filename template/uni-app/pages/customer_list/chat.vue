@@ -236,7 +236,6 @@
 			// #endif
 			// 初始化
 			if (app.globalData.isWsOpen) {
-				console.log('2222')
 				this.$socket.send({
 					data: {
 						token: this.$store.state.app.token,
@@ -275,13 +274,13 @@
 				});
 				this.$nextTick(e => {
 					this.getChatList();
-				})	
+				})
 			});
 			// 监听客服转接
 			uni.$on('to_transfer', data => {
 				this.toUid = data.toUid;
 				this.$socket.send({
-					
+
 					data: {
 						id: this.toUid
 					},

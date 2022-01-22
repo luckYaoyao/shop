@@ -93,7 +93,6 @@
 				const that = this;
 
 				uni.createSelectorQuery().selectAll(`.${this.selector}-radius`).boundingClientRect().exec(function(res) {
-					console.log(res)
 					that.skeletonCircleLists = res[0];
 				});
 			}

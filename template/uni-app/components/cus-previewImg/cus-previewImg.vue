@@ -46,13 +46,12 @@
 		},
 		watch: {
 			list(val) {
-				// console.log('图片预览', val)
+
 			}
 		},
 		methods: {
 			// 左右切换
 			changeSwiper(e) {
-				console.log(e.target.current)
 				this.currentIndex = e.target.current;
 				this.$emit('changeSwitch',e.target.current)
 			},

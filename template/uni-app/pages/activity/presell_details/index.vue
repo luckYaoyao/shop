@@ -720,7 +720,6 @@
 						  let obj = res.data.productValue[key];
 						  that.skuArr.push(obj);
 						}
-						console.log(that.skuArr)
 						that.$set(that, "selectSku", that.skuArr[0]);
 						var navList = ['商品', '评价', '详情'];
 						if (goodArray.length) {
@@ -1317,12 +1316,10 @@
 			},
 			//滑动轮播图选择商品
 			changeSwitch(e) {
-				console.log(this.skuArr,e)
 			  let productSelect = this.skuArr[e];
 			  this.$set(this, "selectSku", productSelect);
 			  var skuList = productSelect.suk.split(",");
 			  this.$set(this.attr.productAttr[0], "index", skuList[0]);
-				console.log(this.skuList)
 			  if (skuList.length == 2) {
 			    this.$set(this.attr.productAttr[0], "index", skuList[0]);
 			    this.$set(this.attr.productAttr[1], "index", skuList[1]);
@@ -1921,7 +1918,7 @@
 	  display: block;
 	  margin-right: 14rpx;
 	}
-	
+
 	.switchTxt {
 	  height: 60rpx;
 	  flex: 1;
@@ -1932,7 +1929,7 @@
 	  border-radius: 8rpx;
 	  text-align: center;
 	}
-	
+
 	.attribute {
 	  padding: 10rpx 30rpx;
 	  .line1 {
@@ -1947,7 +1944,7 @@
 	.flexs {
 	  display: flex;
 	}
-	
+
 	.attr-txt {
 	  display: flex;
 	  flex-wrap: nowrap;

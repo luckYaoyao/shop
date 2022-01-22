@@ -105,7 +105,7 @@
 					that.lists2 = []
 				}
 				this.tmp_data.map((da, di) => {
-					console.log(that.list1Height,that.list2Height)
+
 					if (that.list1Height > that.list2Height) {
 						that.list2Height += da.img_height
 						that.lists2.push(da)
@@ -118,7 +118,7 @@
 			},
 			//图片加载完成补齐数据
 			imgLoad(e) {
-				console.log(e.target.id,e.detail.width,e.detail.height)
+
 				this.loaded.push(e.target.id)
 				//存储数据
 				// this.tmp_data[e.target.id]['img_width'] = e.detail.width

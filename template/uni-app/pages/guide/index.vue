@@ -33,7 +33,6 @@
 					return
 				}
 				getOpenAdv().then(res => {
-					console.log(res)
 					if (!res.data.length) {
 						uni.switchTab({
 							url: '/pages/index/index'

@@ -319,7 +319,7 @@
 			// #endif
 			/**
 			 * 购物车手动填写
-			 * 
+			 *
 			 */
 			iptCartNum: function(e) {
 				this.$set(this.attribute.productSelect, 'cart_num', e);
@@ -394,7 +394,7 @@
 			},
 			/**
 			 * 默认选中属性
-			 * 
+			 *
 			 */
 			DefaultSelect: function() {
 				let self = this
@@ -475,7 +475,7 @@
 			},
 			/**
 			 * 购物车数量加和数量减
-			 * 
+			 *
 			 */
 			ChangeCartNum: function(changeValue) {
 				//changeValue:是否 加|减
@@ -519,7 +519,7 @@
 			},
 			/**
 			 * 属性变动赋值
-			 * 
+			 *
 			 */
 			ChangeAttr: function(res) {
 				this.$set(this, 'cart_num', 1);
@@ -585,11 +585,9 @@
 			},
 			//滑动轮播图选择商品
 			changeSwitch(e) {
-				console.log(this.skuArr[e])
 				let productSelect = this.skuArr[e];
 				this.$set(this, "selectSku", productSelect);
 				var skuList = productSelect.suk.split(",");
-				console.log(this.attribute.productAttr)
 				this.$set(this.attribute.productAttr[0], "index", skuList[0]);
 				if (skuList.length == 2) {
 					this.$set(this.attribute.productAttr[0], "index", skuList[0]);
