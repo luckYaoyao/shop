@@ -1483,7 +1483,7 @@ class StoreProductServices extends BaseServices
      */
     public function setLevelPrice($price, int $uid, $userInfo, $vipStatus, $discount = 0, $vipPrice = 0.00, $is_vip = 0, $is_show = false)
     {
-        if (!(float)$price) return $price;
+        if (!(float)$price) return [(float)$price, (float)$price, 'level'];
         if (!$vipStatus) $is_vip = 0;
         //已登录
         if ($uid) {
