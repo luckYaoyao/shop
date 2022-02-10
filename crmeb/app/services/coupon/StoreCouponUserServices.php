@@ -301,7 +301,7 @@ class StoreCouponUserServices extends BaseServices
                 break;
         }
         [$page, $limit] = $this->getPageValue();
-        $list = $this->dao->getCouponListByOrder($where, 'status ASC,add_time DESC', $page, $limit);
+        $list = $this->dao->getCouponListByOrder($where, 'id ASC,add_time DESC', $page, $limit);
         /** @var StoreCategoryServices $categoryServices */
         $categoryServices = app()->make(StoreCategoryServices::class);
         $category = $categoryServices->getColumn([], 'pid,cate_name', 'id');
