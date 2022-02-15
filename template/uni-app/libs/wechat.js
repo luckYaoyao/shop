@@ -312,7 +312,7 @@ class AuthWechat {
 					})
 				},
 				success(res) {
-					return resolve(res,2222);
+					return resolve(res, 2222);
 				}
 			};
 			Object.assign(configDefault, config);

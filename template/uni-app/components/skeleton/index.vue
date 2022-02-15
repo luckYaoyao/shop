@@ -70,7 +70,7 @@
 				const that = this;
 				//绘制背景
 				uni.createSelectorQuery().selectAll(`.${this.selector}`).boundingClientRect(function(res) {
-					if (res[0].length > 0)
+					if (res[0] && res[0].length > 0)
 						that.systemInfo.height = res[0][0].height + res[0][0].top;
 				}).exec()
 

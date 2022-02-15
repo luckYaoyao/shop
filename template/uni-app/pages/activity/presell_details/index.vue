@@ -37,6 +37,14 @@
 							<view v-text="'已预订：' + (storeInfo.sales || 0) + (storeInfo.unit_name || '')"></view>
 						</view>
 						<view class="introduce" v-text="storeInfo.title"></view>
+						<view v-if="!is_money_level && storeInfo.vip_price && storeInfo.is_vip"
+							class="svip acea-row row-between-wrapper">
+							<view class="">开通“超级会员”立省{{ diff }}元</view>
+							<navigator url="/pages/annex/vip_paid/index">
+								立即开通
+								<text class="iconfont icon-jiantou"></text>
+							</navigator>
+						</view>
 						<view class="presell_count">
 							<view>
 								<view>预售活动时间：</view>
@@ -283,7 +291,7 @@
 	import authorize from '@/components/Authorize';
 	// #endif
 	import colors from "@/mixins/color";
-	import cusPreviewImg from "@/components/cus-previewImg/cus-previewImg.vue";
+	import cusPreviewImg from "@/components/cusPreviewImg/index.vue";
 	let app = getApp();
 	export default {
 		components: {
@@ -644,6 +652,7 @@
 			 *
 			 */
 			ChangeAttr: function(res) {
+				console.log(this.productValue[res])
 				let productSelect = this.productValue[res];
 				this.$set(this, "selectSku", productSelect);
 				if (productSelect && productSelect.stock > 0) {
@@ -720,6 +729,7 @@
 						  let obj = res.data.productValue[key];
 						  that.skuArr.push(obj);
 						}
+						console.log(that.skuArr)
 						that.$set(that, "selectSku", that.skuArr[0]);
 						var navList = ['商品', '评价', '详情'];
 						if (goodArray.length) {
@@ -945,7 +955,7 @@
 				} else {
 					let that = this;
 					if (this.storeInfo.userCollect) {
-						collectDel(this.storeInfo.product_id).then(res => {
+						collectDel([this.storeInfo.product_id]).then(res => {
 							that.$set(that.storeInfo, 'userCollect', !that.storeInfo.userCollect);
 							return that.$util.Tips({
 								title: res.msg
@@ -1071,6 +1081,7 @@
 			},
 			// 授权关闭
 			authColse: function(e) {
+				console.log(e, 'eeeee');
 				this.isShowAuth = e;
 			},
 			/**
@@ -1316,10 +1327,12 @@
 			},
 			//滑动轮播图选择商品
 			changeSwitch(e) {
+				console.log(this.skuArr,e)
 			  let productSelect = this.skuArr[e];
 			  this.$set(this, "selectSku", productSelect);
 			  var skuList = productSelect.suk.split(",");
 			  this.$set(this.attr.productAttr[0], "index", skuList[0]);
+				console.log(this.skuList)
 			  if (skuList.length == 2) {
 			    this.$set(this.attr.productAttr[0], "index", skuList[0]);
 			    this.$set(this.attr.productAttr[1], "index", skuList[1]);
@@ -1918,18 +1931,18 @@
 	  display: block;
 	  margin-right: 14rpx;
 	}
-
+	
 	.switchTxt {
 	  height: 60rpx;
 	  flex: 1;
 	  line-height: 60rpx;
 	  box-sizing: border-box;
 	  background: #eeeeee;
-	  padding: 0 14rpx 0 14rpx;
+	  padding: 0 10rpx;
 	  border-radius: 8rpx;
 	  text-align: center;
 	}
-
+	
 	.attribute {
 	  padding: 10rpx 30rpx;
 	  .line1 {
@@ -1944,7 +1957,7 @@
 	.flexs {
 	  display: flex;
 	}
-
+	
 	.attr-txt {
 	  display: flex;
 	  flex-wrap: nowrap;

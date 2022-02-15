@@ -83,6 +83,7 @@ function _toLogin(push, pathLogin) {
 			});
 		}
 
+
 	} else {
 		uni.navigateTo({
 			url: '/pages/users/login/index'
@@ -90,12 +91,13 @@ function _toLogin(push, pathLogin) {
 	}
 	// #endif
 
-	// #ifdef MP
+	// #ifdef MP 
 	// uni.navigateTo({
 	// 	url: '/pages/users/wechat_login/index'
 	// })
 	Routine.getCode()
 		.then(code => {
+			console.log(code)
 			Routine.silenceAuth(code).then(res => {
 				console.log(res)
 			})

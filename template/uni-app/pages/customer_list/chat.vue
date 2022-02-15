@@ -108,8 +108,8 @@
 			<swiper class="swiper-wrapper" :autoplay="autoplay" :circular="circular" :interval="interval"
 				:duration="duration" v-if="emojiGroup.length > 0">
 				<block v-for="(emojiList, index) in emojiGroup" :key="index">
-					<swiper-item><i class="em" :class="emoji" v-for="emoji in emojiList" :key="emoji"
-							@click="addEmoji(emoji)"></i></swiper-item>
+					<swiper-item><i class="em" :class="emoji" :style="'background-image:url('+ httpUrl +')'"
+							v-for="emoji in emojiList" :key="emoji" @click="addEmoji(emoji)"></i></swiper-item>
 				</block>
 			</swiper>
 		</view>
@@ -145,6 +145,9 @@
 	import emojiList from '@/utils/emoji';
 	import Loading from '@/components/Loading';
 	import colors from "@/mixins/color";
+	import {
+		HTTP_REQUEST_URL
+	} from "@/config/app.js";
 	export default {
 		name: 'adminChat_index',
 		data() {
@@ -183,7 +186,8 @@
 				userType: 0,
 				canvasWidth: "",
 				canvasHeight: "",
-				canvasStatus: false
+				canvasStatus: false,
+				httpUrl: '',
 			};
 		},
 		mixins: [colors],
@@ -230,12 +234,14 @@
 			uni.$off()
 		},
 		onReady() {
+			this.httpUrl = `${HTTP_REQUEST_URL}/statics/images/look.png`;
 			// #ifdef H5
 			let dom = document.querySelector(".chat-box");
 			dom.style.height = window.innerHeight + 'px'
 			// #endif
 			// 初始化
 			if (app.globalData.isWsOpen) {
+				console.log('2222')
 				this.$socket.send({
 					data: {
 						token: this.$store.state.app.token,
@@ -396,7 +402,8 @@
 			},
 			// 聊天表情转换
 			replace_em(str) {
-				str = str.replace(/\[em-([a-z_]*)\]/g, "<span class='em em-$1'/></span>");
+				str = str.replace(/\[em-([a-z_]*)\]/g, "<span class='em em-$1' style='background-image:url(" + this
+					.httpUrl + ")'></span>");
 				return str;
 			},
 			// 获取聊天列表
@@ -744,6 +751,7 @@
 		.chat-item {
 			display: flex;
 			margin-bottom: 36rpx;
+			-webkit-user-select: auto;
 
 			.avatar {
 				width: 80rpx;
@@ -760,6 +768,7 @@
 				background: #fff;
 				border-radius: 14rpx;
 				word-break: break-all;
+				-webkit-user-select: auto;
 			}
 
 			.img-box {

@@ -283,6 +283,7 @@
 			luck_draw_finish(param) {
 				this.aleartType = 2
 				this.aleartStatus = true
+				// console.log(`抽到第${param+1}个方格的奖品`)
 			},
 			qrR(res) {
 				this.codeSrc = res

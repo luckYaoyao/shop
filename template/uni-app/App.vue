@@ -77,6 +77,8 @@
 		async onLaunch(option) {
 			let that = this;
 			colorChange('color_change').then(res => {
+				uni.setStorageSync('is_diy', res.data.is_diy)
+				uni.$emit('is_diy', res.data.is_diy)
 				switch (res.data.status) {
 					case 1:
 						uni.setStorageSync('viewColor', blue)
@@ -125,7 +127,7 @@
 
 				}
 			});
-			// #endif
+			// #endif	
 			// #ifdef MP
 			if (HTTP_REQUEST_URL == '') {
 				console.error(
@@ -246,6 +248,7 @@
 								if (res.data.key !== undefined && res.data.key) {
 									this.$Cache.set('snsapiKey', res.data.key);
 								} else {
+
 									let time = res.data.expires_time - this.$Cache.time();
 									this.$store.commit('LOGIN', {
 										token: res.data.token,
@@ -254,6 +257,7 @@
 									this.$Cache.set('WX_AUTH', code);
 									this.$store.commit('SETUID', res.data.userInfo.uid);
 									this.$store.commit('UPDATE_USERINFO', res.data.userInfo);
+
 									if (option.query.back_url) {
 										location.replace(decodeURIComponent(decodeURIComponent(option.query
 											.back_url)));
@@ -307,7 +311,6 @@
 			document.head.appendChild(__s);
 			// #endif
 		},
-		mounted() {},
 		methods: {
 			// 小程序静默授权
 			silenceAuth(code) {
@@ -382,5 +385,10 @@
 		height: 100vh;
 		top: 0;
 		bottom: 0;
+	}
+
+	.open-location {
+		width: 100%;
+		height: 100vh;
 	}
 </style>
