@@ -68,8 +68,8 @@
 
 ```
 Nignx/Apache/IIS
-PHP 7.1 ~ 7.3 
-MySQL 5.5-7.0
+PHP 7.1 ~ 7.4 
+MySQL 5.7
 Redis
 ```
 
