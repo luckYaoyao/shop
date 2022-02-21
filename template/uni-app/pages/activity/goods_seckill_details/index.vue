@@ -125,7 +125,13 @@
 							<view class='conter'>
 								<!-- <view class="" v-html="storeInfo.description">
 						</view> -->
+
+								<!-- #ifndef APP-PLUS -->
 								<parser :html="storeInfo.description" ref="article" :tag-style="tagStyle"></parser>
+								<!-- #endif -->
+								<!-- #ifdef APP-PLUS -->
+								<view class="description" v-html="storeInfo.description"></view>
+								<!-- #endif -->
 							</view>
 						</view>
 					</scroll-view>
@@ -549,6 +555,10 @@
 					this.imgUrls = res.data.storeInfo.images;
 					this.storeInfo.description = this.storeInfo.description.replace(/<img/gi,
 						'<img style="max-width:100%;height:auto;float:left;display:block" ');
+					this.storeInfo.description = this.storeInfo.description.replace(
+						/<video/gi,
+						'<video style="width:100%;height:300px;display:block" '
+					);
 					// this.attribute.productAttr = res.data.productAttr;
 					that.$set(that.attribute, "productAttr", res.data.productAttr);
 					this.productValue = res.data.productValue;

@@ -805,7 +805,7 @@
 				}
 				getCartCounts().then(async c => {
 					that.cartCount = c.data.count;
-					for (let i = 0; i < Math.ceil(that.cartCount / that.limit); i++) {
+					for (let i = 0; i < Math.ceil(c.data.ids.length / that.limit); i++) {
 						let cartList = await this.getCartData(data)
 						let valid = cartList.valid
 						let validList = that.$util.SplitArray(valid, that.cartList.valid);
@@ -1197,6 +1197,11 @@
 		border-left: 0;
 		border-radius: 0 3rpx 3rpx 0;
 	}
+	
+	.shoppingCart .list .item .picTxt .carnum .plus.on {
+		border-color: #e3e3e3;
+		color: #dedede;
+	}
 
 	.shoppingCart .list .item .picTxt .carnum .num {
 		color: var(--view-theme);
@@ -1299,9 +1304,9 @@
 		bottom: 0rpx;
 		// #endif
 		// #ifdef MP || APP-PLUS
-		bottom: 100rpx;
-		bottom: calc(100rpx + constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
-		bottom: calc(100rpx + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
+		bottom: 98rpx;
+		bottom: calc(98rpx + constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
+		bottom: calc(98rpx + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
 		// #endif
 	}
 

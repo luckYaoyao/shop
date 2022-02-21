@@ -11,8 +11,8 @@
   },
   "compileType": "miniprogram",
   "libVersion": "",
-  "appid": "wx1234567890",
-  "projectname": "routineTitle",
+  "appid": "1234567890",
+  "projectname": "routine",
   "condition": {
     "search": {
       "current": -1,

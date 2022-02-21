@@ -268,8 +268,12 @@
 								<view class="product-intro" id="past3">
 									<view class="title">产品介绍</view>
 									<view class="conter">
+										<!-- #ifndef APP-PLUS -->
 										<parser :html="description" ref="article" :tag-style="tagStyle"></parser>
-										<!-- <view class="description" v-html="description"></view> -->
+										<!-- #endif -->
+										<!-- #ifdef APP-PLUS -->
+										<view class="description" v-html="description"></view>
+										<!-- #endif -->
 									</view>
 								</view>
 							</scroll-view>
@@ -611,7 +615,7 @@
 				tagStyle: {
 					img: "width:100%;display:block;",
 					table: "width:100%",
-					video: "width:100%",
+					video: "width:100%;height:100%;",
 				},
 				returnShow: true, //判断顶部返回是否出现
 				diff: "",
@@ -1067,6 +1071,11 @@
 								/<img/gi,
 								'<img style="max-width:100%;height:auto;float:left;display:block" '
 							);
+							this.description = this.description.replace(
+								/<video/gi,
+								'<video style="width:100%;height:300px;display:block" '
+							);
+
 						}
 						that.$set(that, 'presale_pay_status', res.data.storeInfo
 							.presale_pay_status); // 1未开始; 2进行中; 3已结束

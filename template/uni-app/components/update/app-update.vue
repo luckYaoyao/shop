@@ -44,6 +44,10 @@
 				type: Boolean,
 				default: false, //是否有原生tabbar组件
 			},
+			getVer: {
+				type: Boolean,
+				default: false, //是否有原生tabbar组件
+			},
 		},
 		data() {
 			return {
@@ -122,7 +126,7 @@
 						console.log(tagDate === nowDate)
 						if (tagDate !== nowDate) {
 							uni.setStorageSync('app_update_time', new Date().toLocaleDateString());
-						} else {
+						} else if ((tagDate !== nowDate) && this.getVer) {
 							if (!res.data.is_force) return
 						}
 						// 这里的返回的数据跟后台约定
@@ -157,6 +161,8 @@
 						});
 						vm.viewObj.show(); //显示原生遮罩
 					}
+				} else {
+					this.$emit('isNew')
 				}
 			},
 

@@ -74,7 +74,7 @@
 						<span class="iconfont icon-s-yanzhengmadenglu1"></span>
 					</view>
 					<view class="apple-btn" @click="appleLogin" v-if="appleShow">
-						<view class="iconfont icon-s-pingguo"></view>通过Apple登录
+						<view class="iconfont icon-s-pingguo"></view>
 					</view>
 				</view>
 			</view>
@@ -595,17 +595,14 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				width: 246rpx;
-				height: 66rpx;
-				margin-left: 30rpx;
+				width: 68rpx;
+				height: 68rpx;
+				border-radius: 50%;
 				background: #EAEAEA;
-				border-radius: 34rpx;
-				font-size: 24rpx;
 
 				.icon-s-pingguo {
 					color: #333;
-					margin-right: 10rpx;
-					font-size: 34rpx;
+					font-size: 44rpx;
 				}
 			}
 
@@ -620,6 +617,7 @@
 			}
 
 			.mima {
+				margin-right: 30rpx;
 				background-color: #28B3E9;
 			}
 
