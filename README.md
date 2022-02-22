@@ -78,7 +78,7 @@ Redis
 
 
 
-### 官方客服
+### 官方技术交流群
 ![输入图片说明](readme/images/image.jpg)
 ### CRMEB官方论坛：https://q.crmeb.com
 
