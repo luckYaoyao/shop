@@ -13,7 +13,10 @@
 			"style": {
 				"navigationBarTitleText": "",
 				"navigationStyle": "custom",
-				"navigationBarTextStyle": "white"
+				"navigationBarTextStyle": "white",
+				"app-plus": {
+					"scrollIndicator": "none"
+				}
 			}
 		},
 		{
@@ -945,7 +948,13 @@
 						// #endif
 					}
 				}
-			]
+			],
+			"plugins": {
+				"live-player-plugin": {
+					"version": "1.3.2",
+					"provider": "wx2b03c6e691cd7370"
+				}
+			}
 		},
 		{
 			"root": "pages/goods_details",
@@ -954,10 +963,18 @@
 				"path": "index",
 				"style": {
 					"navigationStyle": "custom",
+					"transparentTitle": "auto",
 					"app-plus": {
 						// #ifdef APP-PLUS
 						"titleNView": {
-							"type": "default"
+							"padding-left": "10px",
+							"padding-right": "10px",
+							"type": "transparent",
+							"buttons": [ //原生标题栏按钮配置,
+								{
+									"type": "menu" //原生标题栏增加分享按钮，点击事件可通过页面的 onNavigationBarButtonTap 函数进行监听
+								}
+							]
 						}
 						// #endif
 					}
@@ -1026,7 +1043,14 @@
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {
-								"type": "default"
+								"padding-left": "10px",
+								"padding-right": "10px",
+								"type": "transparent",
+								"buttons": [ //原生标题栏按钮配置,
+									{
+										"type": "menu" //原生标题栏增加分享按钮，点击事件可通过页面的 onNavigationBarButtonTap 函数进行监听
+									}
+								]
 							}
 							// #endif
 						}
@@ -1075,7 +1099,14 @@
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {
-								"type": "default"
+								"padding-left": "10px",
+								"padding-right": "10px",
+								"type": "transparent",
+								"buttons": [ //原生标题栏按钮配置,
+									{
+										"type": "menu" //原生标题栏增加分享按钮，点击事件可通过页面的 onNavigationBarButtonTap 函数进行监听
+									}
+								]
 							}
 							// #endif
 						}
@@ -1116,24 +1147,6 @@
 					"path": "presell/index",
 					"style": {
 						"navigationBarTitleText": "预售列表",
-						"app-plus": {
-							// #ifdef APP-PLUS
-							"titleNView": {
-								"type": "default"
-							}
-							// #endif
-						}
-					}
-				},
-				{
-					"path": "presell_details/index",
-					"style": {
-						"navigationStyle": "custom"
-							// #ifdef MP
-							,
-						"navigationBarTextStyle": "#fff"
-							// #endif
-							,
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {
@@ -1449,11 +1462,18 @@
 				{
 					"path": "integral_goods_details",
 					"style": {
-						"navigationBarTitleText": "商品详情",
+						"navigationStyle": "custom",
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {
-								"type": "default"
+								"padding-left": "10px",
+								"padding-right": "10px",
+								"type": "transparent",
+								"buttons": [ //原生标题栏按钮配置,
+									{
+										"type": "menu" //原生标题栏增加分享按钮，点击事件可通过页面的 onNavigationBarButtonTap 函数进行监听
+									}
+								]
 							}
 							// #endif
 						}

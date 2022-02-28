@@ -598,10 +598,11 @@
 				width: 68rpx;
 				height: 68rpx;
 				border-radius: 50%;
-				background: #EAEAEA;
+				background: #000;
+
 
 				.icon-s-pingguo {
-					color: #333;
+					color: #fff;
 					font-size: 44rpx;
 				}
 			}
@@ -622,6 +623,7 @@
 			}
 
 			.yanzheng {
+				margin-right: 30rpx;
 				background-color: #F89C23;
 			}
 

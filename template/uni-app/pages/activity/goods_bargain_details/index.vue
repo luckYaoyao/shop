@@ -481,7 +481,6 @@
 		},
 		methods: {
 			colorShow(colorStatus) {
-				console.log(colorStatus)
 				switch (colorStatus) {
 					case 1:
 						this.picUrl = this.picList[0]

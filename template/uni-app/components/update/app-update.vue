@@ -69,6 +69,7 @@
 		},
 		created() {
 			vm = this;
+			this.update()
 		},
 		computed: {
 			// 下载进度计算

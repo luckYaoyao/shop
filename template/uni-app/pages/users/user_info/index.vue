@@ -108,12 +108,10 @@
 				</view>
 
 				<button class='modifyBnt bg-color' formType="submit">保存修改</button>
-				<!-- #ifdef H5 -->
-				<view class="logOut cartcolor acea-row row-center-wrapper" @click="outLogin"
-					v-if="!this.$wechat.isWeixin()">退出登录</view>
+				<!-- #ifdef H5 || APP-PLUS -->
+				<view class="logOut cartcolor acea-row row-center-wrapper" @click="outLogin">退出登录</view>
 				<!-- #endif -->
 				<!-- #ifdef APP-PLUS -->
-				<view class="logOut cartcolor acea-row row-center-wrapper" @click="outLogin">退出登录</view>
 				<app-update ref="appUpdate" :force="true" :tabbar="false" :getVer='true' @isNew="isNew"></app-update>
 				<!-- #endif -->
 			</view>
@@ -190,7 +188,7 @@
 				// #ifdef APP-PLUS
 				this.formatSize()
 				// 获取版本号
-				plus.runtime.getProperty(plus.runtime.appid, (inf)=> {
+				plus.runtime.getProperty(plus.runtime.appid, (inf) => {
 					console.log(inf.version)
 					this.version = inf.version;
 				});
@@ -200,12 +198,12 @@
 			}
 		},
 		methods: {
-			isNew(){
+			isNew() {
 				that.$util.Tips({
 					title: '当前为最新版本'
 				});
 			},
-			
+
 			updateApp() {
 				this.$refs.appUpdate.update(); //调用子组件 检查更新
 			},
@@ -347,6 +345,7 @@
 							if (res.confirm) {
 								getLogout()
 									.then(res => {
+										// uni.clearStorage()
 										that.$store.commit("LOGOUT");
 										uni.reLaunch({
 											url: '/pages/index/index'

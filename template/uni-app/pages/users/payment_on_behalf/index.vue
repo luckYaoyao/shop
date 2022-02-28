@@ -65,6 +65,9 @@
 				发送给微信好友
 			</button>
 			<!-- #endif -->
+			<button v-if="!resData.paid && !resData.type" class="order-btn detail" @click="goOrderDetail()">
+				查看订单详情
+			</button>
 			<button class="order-btn" v-if="!resData.paid && resData.type" @tap='payOpen()'>立即付款</button>
 			<button class="order-btn on-pay" v-if="resData.paid && resData.type">订单已支付</button>
 			<button class="order-btn" v-if="resData.paid && !resData.type" @tap='goOrderDetail()'>查看订单详情</button>
@@ -81,6 +84,9 @@
 		</view>
 		<payment :payMode='payMode' :pay_close="pay_close" :friendPay="true" @onChangeFun='onChangeFun'
 			:order_id="order_id" :totalPrice='resData.pay_price'></payment>
+		<!-- #ifndef MP -->
+		<home></home>
+		<!-- #endif -->
 	</view>
 </template>
 
@@ -88,6 +94,7 @@
 	import orderGoods from '@/components/orderGoods';
 	import colors from "@/mixins/color";
 	import payment from '@/components/payment';
+	import home from '@/components/home/index.vue'
 	import {
 		friendDetail
 	} from '@/api/user.js'
@@ -105,7 +112,8 @@
 		mixins: [colors],
 		components: {
 			orderGoods,
-			payment
+			payment,
+			home
 		},
 		computed: mapGetters(["isLogin"]),
 		data() {
@@ -410,6 +418,13 @@
 				font-size: 30rpx;
 				text-align: center;
 				margin-top: 60rpx;
+			}
+
+			.order-btn.detail {
+				margin-top: 20rpx;
+				color: var(--view-theme);
+				background-color: #fff;
+				border: 1px solid var(--view-theme);
 			}
 
 			.order-btn.on-pay {
