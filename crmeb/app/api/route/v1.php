@@ -243,6 +243,7 @@ Route::group(function () {
     Route::get('order/refund/detail/:uni', 'v1.order.StoreOrderRefundController/refundDetail')->name('refundDetail');//退款单详情
     Route::post('order/refund/cancel/:uni', 'v1.order.StoreOrderRefundController/cancelApply')->name('cancelApply');//用户取消退款申请
     Route::post('order/refund/express', 'v1.order.StoreOrderRefundController/applyExpress')->name('refundDetail');//退款单详情
+    Route::get('order/refund/del/:uni', 'v1.order.StoreOrderRefundController/delRefund')->name('delRefund');//用户取消退款申请
 
     /** 代理商相关 */
     Route::get('agent/apply/info', 'v1.user.DivisionController/applyInfo')->name('申请详情');//申请详情

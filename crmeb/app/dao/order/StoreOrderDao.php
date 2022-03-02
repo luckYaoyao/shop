@@ -359,7 +359,7 @@ class StoreOrderDao extends BaseDao
      */
     public function storeOrderCount()
     {
-        return $this->search(['paid' => 1, 'is_del' => 0, 'refund_status' => 0, 'status' => 1, 'shipping_type' => 1])->count();
+        return $this->search(['paid' => 1, 'is_del' => 0, 'refund_status' => 0, 'status' => 1, 'shipping_type' => 1, 'pid' => 0])->count();
     }
 
     /**
