@@ -1004,12 +1004,9 @@
 				{
 					"path": "goods_bargain_details/index",
 					"style": {
-						"navigationStyle": "custom"
-							// #ifdef MP
-							,
-						"navigationBarTextStyle": "white"
+						// #ifdef MP
+						"navigationBarTitleText": "砍价活动",
 							// #endif
-							,
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {

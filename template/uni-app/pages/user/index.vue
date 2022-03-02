@@ -740,7 +740,11 @@
 							return getCustomer(url)
 
 						} else if (name === '订单核销') {
-							return window.location.href = `${location.origin}${url}`
+							console.log(`${url}`)
+							return uni.navigateTo({
+								url:url
+							});
+							// return window.location.href = `${location.origin}${url}`
 						}
 						// #endif
 

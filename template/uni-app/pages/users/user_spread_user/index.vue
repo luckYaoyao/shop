@@ -5,20 +5,14 @@
 				<view class='name acea-row row-center-wrapper'>
 					<!-- 当前佣金 -->
 					<view>
-						<view class="user-msg" @click="jumbPath">
+						<view class="user-msg">
 							<image class="avatar" :src="userInfo.avatar" mode=""></image>
 							<view class="nickname">{{userInfo.nickname}}</view>
-							<view class="level">
-								{{userInfo.agent_level_name?userInfo.agent_level_name:'分销等级'}}
-								<text class='iconfont icon-xiangyou'></text>
+							<view v-if="userInfo.is_agent_level" class="level" @click="jumbPath">
+								<text>{{userInfo.agent_level_name?userInfo.agent_level_name:'分销等级'}}</text>
+								<text v-if="userInfo.is_agent_level" class='iconfont icon-xiangyou'></text>
 							</view>
 						</view>
-					</view>
-					<view class="distribution acea-row row-center-wrapper" :class="userInfo.agent_level_name?'on':''"
-						@click="jumbPath" v-if="userInfo.is_agent_level">
-						<text class="iconfont icon-dengjitubiao"></text>
-						<text>{{userInfo.agent_level_name?userInfo.agent_level_name:'分销等级'}}</text>
-						<text class="iconfont icon-you"></text>
 					</view>
 				</view>
 				<view class='num'>{{userInfo.brokerage_price}}</view>
@@ -226,7 +220,8 @@
 		background-repeat: no-repeat;
 		background-size: 100% 100%;
 		width: 100%;
-		height: 480rpx;
+		// height: 480rpx;
+		padding-bottom: 20rpx;
 		background-color: var(--view-theme);
 	}
 

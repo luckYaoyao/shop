@@ -1161,12 +1161,12 @@
 			 * 
 			 * 删除订单
 			 */
-			delOrder: function() {
+			delOrder() {
 				let that = this;
 				uni.showModal({
 					title: '删除订单',
 					content: '确定删除该订单',
-					success: function(res) {
+					success: (res) => {
 						if (res.confirm) {
 							(that.isReturen ? refundOrderDel : orderDel)(that.order_id).then(res => {
 								if (that.status.type == -2) {
