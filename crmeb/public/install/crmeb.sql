@@ -7579,7 +7579,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (326, 'wap_login_logo', 'upload', 'input', 26, '', 1, '', 0, 0, '\"https:\\/\\/data44.wuht.net\\/\\/uploads\\/attach\\/2022\\/01\\/20220115\\/96e39565d72357df71860d326e9e6f02.jpeg\"', '移动端登录logo', '移动端登录logo，建议尺寸86x86，建议png格式', 3, 1),
 (327, 'pc_logo', 'upload', '', 75, '', 1, '', 0, 0, '\"https:\\/\\/data44.wuht.net\\/\\/uploads\\/attach\\/2022\\/01\\/20220115\\/a66e6cd123dc10834355747dec7863e5.png\"', 'PC端LOGO', 'PC端LOGO', 0, 1),
 (328, 'record_No', 'text', 'input', 26, '', 0, '', 100, 0, '\"\"', '备案号', '备案号', 0, 1),
-(329, 'routine_contact_type', 'radio', '', 7, '1=>小程序客服\n0=>智慧客服系统', 0, '', 0, 0, '0', '小程序客服类型', '小程序客服类型', 0, 1),
+(329, 'routine_contact_type', 'radio', '', 7, '1=>小程序客服\n0=>跟随系统', 0, '', 0, 0, '0', '小程序客服类型', '小程序客服类型', 0, 1),
 (330, 'station_open', 'radio', '', 26, '1=>开启\n0=>关闭', 0, '', 0, 0, '1', '站点开启', '站点开始|关闭（用于升级等临时关闭）', 11, 1),
 (331, 'uni_brokerage_price', 'text', 'input', 73, '', 0, '', 100, 0, '\"2\"', '推广佣金单价（每推广一个用户）', '分销推广佣金单价（每推广一个用户）', 93, 1),
 (332, 'day_brokerage_price_upper', 'text', 'input', 73, '', 0, '', 100, 0, '\"-1\"', '每日推广佣金上限', '每日推广佣金上限（0:不发佣金-1:不限制；注最好是推广佣金单价的整数倍）', 92, 1),
