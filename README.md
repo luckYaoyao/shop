@@ -52,7 +52,7 @@
 
 技术交流社区：<a href="https://q.crmeb.com"  target="_blank">https://q.crmeb.com
 
-
+ ![](readme/images/gitee打通版-横.jpg)
 [![](readme/images/1思维脑图功能清单.jpg)](http://s.crmeb.com/goods_detail/730)
 [![](readme/images/2高清UI设计图.jpg)](http://s.crmeb.com/goods_detail/728)
 [![](readme/images/3前后端接口文档.jpg)](http://s.crmeb.com/goods_detail/729)
