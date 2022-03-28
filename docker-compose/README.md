@@ -9,7 +9,7 @@ curl -sSL https://get.daocloud.io/docker | sh
 ```
 ## 2、安装docker-compose
 https://www.runoob.com/docker/docker-compose.html
-## 3、下载CRMEB程序放
+## 3、下载CRMEB程序
 建议去下载最新开源代码 https://gitee.com/ZhongBangKeJi/CRMEB
 ## 4、启动项目
 进入docker-compose目录 cd /docker-compose
