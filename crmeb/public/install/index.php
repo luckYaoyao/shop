@@ -1,41 +1,30 @@
 <?php
 
-include 'auto.php';
-if (IS_SAE)
-    header("Location: index_sae.php");
+//最低php版本要求
+define('PHP_EDITION','7.1.0');
+//服务环境检测
+if (function_exists('saeAutoLoader') || isset($_SERVER['HTTP_BAE_ENV_APPID']))
+    showHtml('对不起，当前环境不支持本系统，请使用独立服务或云主机！');
 
 define('APP_DIR', _dir_path(substr(dirname(__FILE__), 0, -15)));//项目目录
 define('SITE_DIR', _dir_path(substr(dirname(__FILE__), 0, -8)));//入口文件目录
 
 if (file_exists('./install.lock')) {
-    echo '
-		<html>
-        <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        </head>
-        <body>
-        	你已经安装过该系统，如果想重新安装，请先删除install目录下的 install.lock 文件，然后再安装。
-        </body>
-        </html>';
-    exit;
+    showHtml('你已经安装过该系统，如果想重新安装，请先删除install目录下的 install.lock 文件，然后再安装。');
 }
 @set_time_limit(1000);
 
 if (PHP_EDITION > phpversion()) {
-    header("Content-type:text/html;charset=utf-8");
-    exit('您的php版本过低，不能安装本软件，请升级到' . PHP_EDITION . '或更高版本再安装，谢谢！');
+    showHtml('您的php版本过低，不能安装本软件，请升级到' . PHP_EDITION . '或更高版本再安装，谢谢！');
 }
 if (phpversion() > '8.0') {
-    header("Content-type:text/html;charset=utf-8");
-    exit('您的php版本太高，不能安装本软件，兼容php版本7.1~7.4，谢谢！');
+    showHtml('您的php版本太高，不能安装本软件，兼容php版本7.1~7.4，谢谢！');
 }
 define("CRMEB_VERSION", '20180601');
 date_default_timezone_set('PRC');
 error_reporting(E_ALL & ~E_NOTICE);
 header('Content-Type: text/html; charset=UTF-8');
-//define('SITEDIR2', substr(SITEDIR,0,-7));
-//echo SITEDIR;
-//exit;SITE_DIR
+
 //数据库
 $sqlFile = 'crmeb.sql';
 $configFile = '.env';
@@ -99,7 +88,7 @@ switch ($step) {
         if (extension_loaded('redis')) {
             $redis = '<span class="correct_span">&radic;</span> 已安装';
         } else {
-            $redis = '<a href="http://help.crmeb.net/crmebpro/1707557" target="_blank"><span class="correct_span error_span">&radic;</span> 点击查看帮助</a>';
+            $redis = '<a href="https://doc.crmeb.com/web/single/crmeb_v4/913" target="_blank"><span class="correct_span error_span">&radic;</span> 点击查看帮助</a>';
             $err++;
         }
 
@@ -143,7 +132,7 @@ switch ($step) {
         if (function_exists('finfo_open')) {
             $finfo_open = '<span class="correct_span">&radic;</span> 启用';
         } else {
-            $finfo_open = '<a href="http://help.crmeb.net/crmebpro/1707557" target="_blank"><span class="correct_span error_span">&radic;</span>点击查看帮助</a>';
+            $finfo_open = '<a href="https://doc.crmeb.com/web/single/crmeb_v4/913" target="_blank"><span class="correct_span error_span">&radic;</span>点击查看帮助</a>';
             $err++;
         }
 
@@ -661,5 +650,17 @@ function delFile($dir, $file_type = '')
         if (file_exists($dir)) unlink($dir);
     }
 }
-
+//错误提示方法
+function showHtml($str) {
+    echo '
+		<html>
+        <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        </head>
+        <body>
+        '.$str.'
+        </body>
+        </html>';
+    exit;
+}
 ?>
