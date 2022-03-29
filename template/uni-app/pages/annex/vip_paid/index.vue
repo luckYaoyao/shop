@@ -416,7 +416,7 @@
 					from: 'routine',
 					// #endif
 					// #ifdef APP-PLUS
-					from: 'app',
+					from: 'weixin',
 					// #endif
 					member_type: this.svip.type,
 					mc_id: this.mc_id,
