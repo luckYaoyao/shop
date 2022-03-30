@@ -67,10 +67,10 @@ services:
     volumes:
       - ../crmeb:/var/www #程序运行目录
       - ./php/php-ini-overrides.ini:/etc/php/7.4/fpm/conf.d/99-overrides.ini
-    # command: php think workerman start --d
     networks:
       app_net:
         ipv4_address: 192.168.10.90
+#    command: /bin/bash -c "php -v"
   # nginx 容器
   nginx:
     container_name: crmeb_nginx
