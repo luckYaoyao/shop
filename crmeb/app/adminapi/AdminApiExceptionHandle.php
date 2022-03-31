@@ -19,6 +19,7 @@ use think\exception\DbException;
 use think\exception\Handle;
 use think\exception\ValidateException;
 use think\facade\Env;
+use think\facade\Log;
 use think\Response;
 use Throwable;
 
@@ -27,26 +28,42 @@ class AdminApiExceptionHandle extends Handle
 
     /**
      * 记录异常信息（包括日志或者其它方式记录）
-     *
      * @access public
      * @param Throwable $exception
      * @return void
      */
-    public function report(Throwable $exception): void
+    public function report(Throwable $exception):void
     {
-        // 使用内置的方式记录异常日志
-        parent::report($exception);
+        $data = [
+            'file' => $exception->getFile(),
+            'line' => $exception->getLine(),
+            'message' => $this->getMessage($exception),
+            'code' => $this->getCode($exception),
+        ];
+
+        //日志内容
+        $log = [
+            request()->adminId(),                                                                 //管理员ID
+            request()->ip(),                                                                      //客户ip
+            ceil(msectime() - (request()->time(true) * 1000)),                                    //耗时（毫秒）
+            request()->rule()->getMethod(),                                                       //请求类型
+            str_replace("/", "", request()->rootUrl()),                                           //应用
+            request()->baseUrl(),                                                                 //路由
+            json_encode(request()->param(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),     //请求参数
+            json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),                  //报错数据
+
+        ];
+        Log::write(implode("|", $log), "error");
     }
 
     /**
      * Render an exception into an HTTP response.
-     *
      * @access public
      * @param \think\Request $request
-     * @param Throwable $e
+     * @param Throwable      $e
      * @return Response
      */
-    public function render($request, Throwable $e): Response
+    public function render($request, Throwable $e):Response
     {
         $massageData = Env::get('app_debug', false) ? [
             'file' => $e->getFile(),
@@ -58,7 +75,7 @@ class AdminApiExceptionHandle extends Handle
         if ($e instanceof DbException) {
             return app('json')->fail('数据获取失败', $massageData);
         } elseif ($e instanceof AuthException || $e instanceof ValidateException || $e instanceof ApiException) {
-            return app('json')->make($e->getCode() ?: 400, $e->getMessage());
+            return app('json')->make($e->getCode() ? : 400, $e->getMessage());
         } elseif ($e instanceof AdminException) {
             return app('json')->fail($e->getMessage(), $massageData);
         } else {
