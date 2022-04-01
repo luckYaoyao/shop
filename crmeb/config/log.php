@@ -20,12 +20,10 @@ return [
     'level' => ['error', 'warning', 'fail', 'success'],
     // 日志类型记录的通道 ['error'=>'email',...]
     'type_channel' => [],
-    // 是否关闭日志写入
-    'close' => false,
-    //是否关闭业务成功日志
-    'success_close' => false,
-    //是否关闭业务失败日志
-    'fail_close' => false,
+    //是否开启业务成功日志
+    'success_log' => false,
+    //是否开启业务失败日志
+    'fail_log' => false,
     // 日志通道列表
     'channels' => [
         'file' => [

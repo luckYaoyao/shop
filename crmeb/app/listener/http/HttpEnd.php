@@ -27,11 +27,11 @@ class HttpEnd
         $status = isset($response->getData()["status"]) ? $response->getData()["status"] : 0;
         if ($status == 200) {
             //业务成功日志开关
-            if (config("log.success_close")) return;
+            if (!config("log.success_log")) return;
             $type = "success";
         } else {
             //业务失败日志开关
-            if (config("log.fail_close")) return;
+            if (!config("log.fail_log")) return;
             $type = "fail";
         }
 
