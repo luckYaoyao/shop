@@ -36,7 +36,7 @@ return [
             // 独立日志级别
             'apart_level' => ['error', 'fail', 'success'],
             // 最大日志文件数量
-            'max_files' => 0,
+            'max_files' => 60,
             'time_format' => 'Y-m-d H:i:s',
             'format' => '%s|%s|%s'
         ],
