@@ -15,6 +15,7 @@ namespace app\adminapi;
 use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\exceptions\AuthException;
+use think\db\exception\DbException;
 use think\exception\Handle;
 use think\exception\ValidateException;
 use think\facade\Env;
