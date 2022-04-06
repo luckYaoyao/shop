@@ -203,24 +203,53 @@ switch ($step) {
     case '3':
         $dbName = strtolower(trim($_POST['dbName']));
         $_POST['dbport'] = $_POST['dbport'] ?: '3306';
-        if ($_GET['testdbpwd']) {
+        if ($_GET['mysqldbpwd']) {
             $dbHost = $_POST['dbHost'];
             $conn = @mysqli_connect($dbHost, $_POST['dbUser'], $_POST['dbPwd'], NULL, $_POST['dbport']);
-            if (mysqli_connect_errno($conn)) {
-                die(json_encode(0));
+//            var_dump(mysqli_connect_errno($conn));
+            if ($error = mysqli_connect_errno($conn)) {
+                if($error == 2002) {
+                    die(json_encode(2002));//地址或端口错误
+                } else if($error == 1045) {
+                    die(json_encode(1045));//用户名或密码错误
+                } else {
+                    die(json_encode(-1));//链接失败
+                }
             } else {
+
                 $result = mysqli_query($conn, "SELECT @@global.sql_mode");
                 $result = $result->fetch_array();
                 $version = mysqli_get_server_info($conn);
                 if ($version >= 5.7) {
                     if (strstr($result[0], 'STRICT_TRANS_TABLES') || strstr($result[0], 'STRICT_ALL_TABLES') || strstr($result[0], 'TRADITIONAL') || strstr($result[0], 'ANSI'))
-                        exit(json_encode(-4));
+                        exit(json_encode(-2));//数据库配置需要修改
                 }
                 $result = mysqli_query($conn, "select count(table_name) as c from information_schema.`TABLES` where table_schema='$dbName'");
                 $result = $result->fetch_array();
-                if ($result['c'] > 0)
-                    exit(json_encode(-2));
+                if ($result['c'] > 0) {
+                    mysqli_close($conn);
+                    exit(json_encode(-3));//数据库存在
+                } else {
+                    if (!mysqli_select_db($conn, $dbName)) {
+                        //创建数据时同时设置编码
+                        if (!mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `" . $dbName . "` DEFAULT CHARACTER SET utf8;")) {
+                            exit(json_encode(-4));//无权限创建数据库
+                        } else {
+                            mysqli_query($conn, "DROP DATABASE `" . $dbName . "` ;");
+                            mysqli_close($conn);
+                            exit(json_encode(1));//数据库配置成功
+                        }
+                    } else {
+                        mysqli_close($conn);
+                        exit(json_encode(1));//数据库配置成功
+                    }
+
+                }
+
+
             }
+        }
+        if ($_GET['redisdbpwd']) {
 
             //redis数据库信息
             $rbhost = $_POST['rbhost'] ?? '127.0.0.1';
@@ -250,8 +279,6 @@ switch ($step) {
                 exit(json_encode(-3));
             }
         }
-
-
         include_once("./templates/step3.php");
         exit();
 
@@ -271,40 +298,35 @@ switch ($step) {
             $dbPrefix = empty($_POST['dbprefix']) ? 'eb_' : trim($_POST['dbprefix']);
 
             $username = trim($_POST['manager']);
-            $password = trim($_POST['manager_pwd']);
+            $password = trim($_POST['manager_pwd']) ?:'crmeb.com';
             $email = trim($_POST['manager_email']);
 
             if (!function_exists('mysqli_connect')) {
                 $arr['msg'] = "请安装 mysqli 扩展!";
-                echo json_encode($arr);
-                exit;
+                exit(json_encode($arr));
             }
             $conn = @mysqli_connect($dbHost, $dbUser, $dbPwd, NULL, $_POST['dbport']);
             if (mysqli_connect_errno($conn)) {
                 $arr['msg'] = "连接数据库失败!" . mysqli_connect_error($conn);
-                echo json_encode($arr);
-                exit;
+                exit(json_encode($arr));
             }
             mysqli_set_charset($conn, "utf8"); //,character_set_client=binary,sql_mode='';
             $version = mysqli_get_server_info($conn);
             if ($version < 5.1) {
                 $arr['msg'] = '数据库版本太低! 必须5.1以上';
-                echo json_encode($arr);
-                exit;
+                exit(json_encode($arr));
             }
 
             if (!mysqli_select_db($conn, $dbName)) {
                 //创建数据时同时设置编码
                 if (!mysqli_query($conn, "CREATE DATABASE IF NOT EXISTS `" . $dbName . "` DEFAULT CHARACTER SET utf8;")) {
                     $arr['msg'] = '数据库 ' . $dbName . ' 不存在，也没权限创建新的数据库！';
-                    echo json_encode($arr);
-                    exit;
+                    exit(json_encode($arr));
                 }
                 if ($n == -1) {
                     $arr['n'] = 0;
                     $arr['msg'] = "成功创建数据库:{$dbName}<br>";
-                    echo json_encode($arr);
-                    exit;
+                    exit(json_encode($arr));
                 }
                 mysqli_select_db($conn, $dbName);
             }
@@ -333,8 +355,7 @@ switch ($step) {
                     }
                     $i++;
                     $arr = array('n' => $i, 'msg' => $message);
-                    echo json_encode($arr);
-                    exit;
+                    exit(json_encode($arr));
                 } else {
                     if (trim($sql) == '')
                         continue;
@@ -437,13 +458,11 @@ switch ($step) {
             if ($res) {
                 $message = '成功添加管理员<br />成功写入配置文件<br>安装完成．';
                 $arr = array('n' => 999999, 'msg' => $message);
-                echo json_encode($arr);
-                exit;
+                exit(json_encode($arr));
             } else {
                 $message = '添加管理员失败<br />成功写入配置文件<br>安装完成．';
                 $arr = array('n' => 999999, 'msg' => $message);
-                echo json_encode($arr);
-                exit;
+                exit(json_encode($arr));
             }
 
         }
