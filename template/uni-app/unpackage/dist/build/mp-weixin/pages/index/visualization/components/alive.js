@@ -1,0 +1,10 @@
+(global["webpackJsonp"]=global["webpackJsonp"]||[]).push([["pages/index/visualization/components/alive"],{"002d":function(t,i,n){"use strict";var a;n.d(i,"b",(function(){return e})),n.d(i,"c",(function(){return o})),n.d(i,"a",(function(){return a}));var e=function(){var t=this,i=t.$createElement;t._self._c},o=[]},"016a":function(t,i,n){"use strict";n.r(i);var a=n("9ff3"),e=n.n(a);for(var o in a)"default"!==o&&function(t){n.d(i,t,(function(){return a[t]}))}(o);i["default"]=e.a},"0dad":function(t,i,n){"use strict";n.r(i);var a=n("002d"),e=n("016a");for(var o in e)"default"!==o&&function(t){n.d(i,t,(function(){return e[t]}))}(o);n("65b4");var s,f=n("f0c5"),u=Object(f["a"])(e["default"],a["b"],a["c"],!1,null,"12dcdaaf",null,!1,a["a"],s);i["default"]=u.exports},"65b4":function(t,i,n){"use strict";var a=n("da02"),e=n.n(a);e.a},"9ff3":function(t,i,n){"use strict";Object.defineProperty(i,"__esModule",{value:!0}),i.default=void 0;var a=n("f44a"),e=getApp().globalData,o={name:"alive",props:{dataConfig:{type:Object,default:function(){}}},watch:{dataConfig:{immediate:!0,handler:function(t,i){t&&(this.numConfig=t.numConfig.val,this.titleInfo=t.titleInfo.list,this.isShow=t.isShow.val,this.getLiveList())}}},data:function(){return{isIframe:!1,liveList:[],numConfig:0,limit:this.$config.LIMIT,name:this.$options.name,titleInfo:[],isShow:!0,custom_params:""}},created:function(){this.isIframe=e.isIframe},mounted:function(){this.custom_params=encodeURIComponent(JSON.stringify({spid:this.$store.state.app.uid}))},methods:{getLiveList:function(){var t=this;(0,a.getLiveList)(1,this.numConfig<=this.limit?this.numConfig:this.limit).then((function(i){t.liveList=i.data})).catch((function(t){}))}}};i.default=o},da02:function(t,i,n){}}]);
+;(global["webpackJsonp"] = global["webpackJsonp"] || []).push([
+    'pages/index/visualization/components/alive-create-component',
+    {
+        'pages/index/visualization/components/alive-create-component':(function(module, exports, __webpack_require__){
+            __webpack_require__('543d')['createComponent'](__webpack_require__("0dad"))
+        })
+    },
+    [['pages/index/visualization/components/alive-create-component']]
+]);
