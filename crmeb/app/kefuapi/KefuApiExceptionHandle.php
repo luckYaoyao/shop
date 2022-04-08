@@ -42,7 +42,7 @@ class KefuApiExceptionHandle extends Handle
      * @param Throwable $exception
      * @return void
      */
-    public function report(Throwable $exception):void
+    public function report(Throwable $exception): void
     {
         if (!$this->isIgnoreReport($exception)) {
             $data = [
@@ -72,10 +72,10 @@ class KefuApiExceptionHandle extends Handle
      * Render an exception into an HTTP response.
      * @access public
      * @param \think\Request $request
-     * @param Throwable      $e
+     * @param Throwable $e
      * @return Response
      */
-    public function render($request, Throwable $e):Response
+    public function render($request, Throwable $e): Response
     {
         $massageData = Config::get('app_debug', false) ? [
             'file' => $e->getFile(),

@@ -42,7 +42,7 @@ class ApiExceptionHandle extends Handle
      * @param Throwable $exception
      * @return void
      */
-    public function report(Throwable $exception):void
+    public function report(Throwable $exception): void
     {
         if (!$this->isIgnoreReport($exception)) {
             $data = [
@@ -72,10 +72,10 @@ class ApiExceptionHandle extends Handle
      * Render an exception into an HTTP response.
      * @access public
      * @param \think\Request $request
-     * @param Throwable      $e
+     * @param Throwable $e
      * @return Response
      */
-    public function render($request, Throwable $e):Response
+    public function render($request, Throwable $e): Response
     {
         // 添加自定义异常处理机制
         if ($e instanceof DbException) {
