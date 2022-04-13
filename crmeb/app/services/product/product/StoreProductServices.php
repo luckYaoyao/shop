@@ -13,6 +13,7 @@ namespace app\services\product\product;
 
 
 use app\dao\product\product\StoreProductDao;
+use app\exceptions\CommonException;
 use app\Request;
 use app\services\activity\advance\StoreAdvanceServices;
 use app\services\activity\bargain\StoreBargainServices;
@@ -39,6 +40,7 @@ use crmeb\exceptions\AdminException;
 use app\jobs\ProductLogJob;
 use app\jobs\ProductCopyJob;
 use crmeb\services\GroupDataService;
+use crmeb\utils\AdminApiErrorCode;
 use Lizhichao\Word\VicWord;
 use think\exception\ValidateException;
 use think\facade\Config;
@@ -494,9 +496,11 @@ class StoreProductServices extends BaseServices
      */
     public function save(int $id, array $data)
     {
-        if (count($data['cate_id']) < 1) throw new AdminException('请选择商品分类');
-        if (!$data['store_name']) throw new AdminException('请输入商品名称');
-        if (count($data['slider_image']) < 1) throw new AdminException('请上传商品轮播图');
+        if (count($data['cate_id']) < 1) throw new CommonException(AdminApiErrorCode::ERR_PLEASE_SELECT_PRODUCT_CATEGORY);
+        if (!$data['store_name']) throw new CommonException(AdminApiErrorCode::ERR_PLEASE_ENTER_THE_PRODUCT_NAME);
+
+        $data['slider_image'] = [];
+        if (count($data['slider_image']) < 1) throw new CommonException(AdminApiErrorCode::ERR_PLEASE_UPLOAD_SLIDER_IMAGE);
 
         $detail = $data['attrs'];
         $attr = $data['items'];

@@ -173,6 +173,8 @@ class StoreOrderDao extends BaseDao
             } else {
                 $query->where('refund_status', 0);
             }
+        })->when(isset($where['is_spread']), function ($query) {
+            $query->where('refund_status', 2);
         });
     }
 

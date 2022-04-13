@@ -375,7 +375,7 @@ class DiyServices extends BaseServices
         }
         /** @var QrcodeServices $QrcodeService */
         $QrcodeService = app()->make(QrcodeServices::class);
-        $image = $QrcodeService->getRoutineQrcodePath($id, 0, 6, [], true);
+        $image = $QrcodeService->getRoutineQrcodePath($id, 0, 6, [], false);
         return $image;
     }
 }

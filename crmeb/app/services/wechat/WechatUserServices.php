@@ -410,4 +410,16 @@ class WechatUserServices extends BaseServices
         }
         return $noBeOpenids;
     }
+
+    /**
+     * 用户关注
+     * @param $openid
+     * @return bool
+     */
+    public function subscribe($openid): bool
+    {
+        if (!$this->dao->update($openid, ['subscribe' => 1, 'subscribe_time' => time()], 'openid'))
+            throw new AdminException('用户关注失败');
+        return true;
+    }
 }

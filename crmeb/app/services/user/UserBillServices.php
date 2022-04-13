@@ -1189,7 +1189,7 @@ class UserBillServices extends BaseServices
         $storeOrderServices = app()->make(StoreOrderServices::class);
         [$page, $limit] = $this->getPageValue();
         $time = [];
-        $where = ['paid' => 1, 'type' => 1, 'spread_or_uid' => $uid, 'pid' => 0];
+        $where = ['paid' => 1, 'type' => 1, 'spread_or_uid' => $uid, 'pid' => 0, 'is_spread' => 1];
         $list = $storeOrderServices->getlist($where, ['id,order_id,uid,add_time,spread_uid,status,spread_two_uid,one_brokerage,two_brokerage,pay_price,pid'], $page, $limit, ['split']);
         $result['count'] = $storeOrderServices->count($where + ['pid' => 0]);
         $time_data = [];

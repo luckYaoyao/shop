@@ -122,25 +122,25 @@ if (!function_exists('attr_format')) {
             for ($i = 0; $i < $count - 1; $i++) {
                 if ($i == 0) $data = $arr[$i]['detail'];
                 //替代变量1
-                $rep1 = $rep4 = [];
+                $rep4 = [];
+                $tmp = [];
                 foreach ($data as $v) {
                     foreach ($arr[$i + 1]['detail'] as $g) {
                         //替代变量2
                         $rep2 = ($i != 0 ? '' : $arr[$i]['value'] . '_$_') . $v . '-$-' . $arr[$i + 1]['value'] . '_$_' . $g;
                         $tmp[] = $rep2;
-//                        if ($i == $count - 2) {
                         foreach (explode('-$-', $rep2) as $k => $h) {
                             //替代变量3
                             $rep3 = explode('_$_', $h);
                             //替代变量4
                             $rep4['detail'][$rep3[0]] = $rep3[1] ?? '';
                         }
-                        if ($count == count($rep4['detail']))
+                        if ($count == count($rep4['detail'])) {
                             $res[] = $rep4;
-//                        }
+                        }
                     }
                 }
-                $data = $tmp ?? [];
+                $data = $tmp;
             }
         } else {
             $dataArr = [];
