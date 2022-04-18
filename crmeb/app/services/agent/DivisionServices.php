@@ -244,25 +244,14 @@ class DivisionServices extends BaseServices
         $userServices = app()->make(UserServices::class);
         $uid = $data['uid'];
         $userInfo = $userServices->getUserInfo($uid, 'is_division,division_id,agent_id');
-        if (!$data['edit'] && $data['division_id'] != 0) {
-            if ($userInfo['is_division']) throw new AdminException('对方是事业部，您不能添加为代理商');
-            if ($userInfo['division_id'] == $data['division_id']) throw new AdminException('对方是您的代理商，请勿重复添加');
-            if ($userInfo['division_id']) throw new AdminException('对方已经是代理商，无法添加到您的下级');
-        }
         $agentData = [
-            'division_id' => $data['division_id'],
-            'agent_id' => $uid,
-            'division_type' => 2,
             'division_status' => $data['division_status'],
-            'is_agent' => 1,
             'division_percent' => $data['division_percent'],
             'division_change_time' => time(),
             'division_end_time' => strtotime($data['division_end_time']),
-            'spread_uid' => $data['division_id'],
-            'spread_time' => time()
         ];
-        $division_info = $userServices->getUserInfo($agentData['division_id'], 'division_end_time,division_percent');
-        if ($data['division_id'] != 0) {
+        $division_info = $userServices->getUserInfo($userInfo['division_id'], 'division_end_time,division_percent');
+        if ($division_info) {
             if ($agentData['division_percent'] > $division_info['division_percent']) throw new AdminException('代理商佣金比例不能大于事业部佣金比例');
             if ($agentData['division_end_time'] > $division_info['division_end_time']) throw new AdminException('代理商到期时间不能大于事业部到期时间');
         }
