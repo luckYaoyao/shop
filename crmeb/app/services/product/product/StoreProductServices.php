@@ -498,8 +498,6 @@ class StoreProductServices extends BaseServices
     {
         if (count($data['cate_id']) < 1) throw new CommonException(AdminApiErrorCode::ERR_PLEASE_SELECT_PRODUCT_CATEGORY);
         if (!$data['store_name']) throw new CommonException(AdminApiErrorCode::ERR_PLEASE_ENTER_THE_PRODUCT_NAME);
-
-        $data['slider_image'] = [];
         if (count($data['slider_image']) < 1) throw new CommonException(AdminApiErrorCode::ERR_PLEASE_UPLOAD_SLIDER_IMAGE);
 
         $detail = $data['attrs'];
