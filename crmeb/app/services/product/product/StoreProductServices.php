@@ -373,15 +373,13 @@ class StoreProductServices extends BaseServices
         $attr = $data['attrs'];
         $is_virtual = $data['is_virtual']; //是否虚拟商品
         $virtual_type = $data['virtual_type']; //虚拟商品类型
-        $value = attr_format($attr)[1];
+        list($value, $head) = attr_format($attr);
         $valueNew = [];
         $count = 0;
-        foreach ($value as $key => $item) {
-            $detail = $item['detail'];
-            foreach ($detail as $v => $d) {
-                $detail[$v] = trim($d);
-            }
-            $suk = implode(',', $detail);
+
+            foreach ($value as $suk) {
+                $detail = explode(',', $suk);
+
             $types = 1;
             if ($id) {
                 $sukValue = $storeProductAttrValueServices->getColumn(['product_id' => $id, 'type' => 0, 'suk' => $suk], 'bar_code,cost,price,ot_price,stock,image as pic,weight,volume,brokerage,brokerage_two,vip_price,is_virtual,coupon_id,unique,disk_info', 'suk');
@@ -425,16 +423,16 @@ class StoreProductServices extends BaseServices
                 $sukValue[$suk]['brokerage_two'] = 0;
             }
             if ($types) { //编辑商品时，将没有规格的数据不生成默认值
-                foreach (array_keys($detail) as $k => $title) {
+                    foreach ($head as $k => $title) {
                     $header[$k]['title'] = $title;
                     $header[$k]['align'] = 'center';
                     $header[$k]['minWidth'] = 130;
                 }
-                foreach (array_values($detail) as $k => $v) {
+                foreach ($detail as $k => $v) {
                     $valueNew[$count]['value' . ($k + 1)] = $v;
                     $header[$k]['key'] = 'value' . ($k + 1);
                 }
-                $valueNew[$count]['detail'] = $detail;
+                $valueNew[$count]['detail'] = array_combine($head,$detail);
                 $valueNew[$count]['pic'] = $sukValue[$suk]['pic'] ?? '';
                 $valueNew[$count]['price'] = $sukValue[$suk]['price'] ? floatval($sukValue[$suk]['price']) : 0;
                 $valueNew[$count]['cost'] = $sukValue[$suk]['cost'] ? floatval($sukValue[$suk]['cost']) : 0;
@@ -498,6 +496,8 @@ class StoreProductServices extends BaseServices
     {
         if (count($data['cate_id']) < 1) throw new CommonException(AdminApiErrorCode::ERR_PLEASE_SELECT_PRODUCT_CATEGORY);
         if (!$data['store_name']) throw new CommonException(AdminApiErrorCode::ERR_PLEASE_ENTER_THE_PRODUCT_NAME);
+
+        // $data['slider_image'] = [];
         if (count($data['slider_image']) < 1) throw new CommonException(AdminApiErrorCode::ERR_PLEASE_UPLOAD_SLIDER_IMAGE);
 
         $detail = $data['attrs'];
@@ -874,24 +874,23 @@ class StoreProductServices extends BaseServices
             $attr[$key]['attrHidden'] = true;
             $attr[$key]['detail'] = $value['attr_values'];
         }
-        $value = attr_format($attr)[1];
+        list($value, $head) = attr_format($attr);
         $valueNew = [];
         $count = 0;
         $sukValue = $sukDefaultValue = $storeProductAttrValueServices->getSkuArray(['product_id' => $id, 'type' => 0]);
-        foreach ($value as $key => $item) {
-            $detail = $item['detail'];
-            $suk = implode(',', $item['detail']);
+        foreach ($value as $suk) {
+            $detail = explode(',', $suk);
             if (!isset($sukDefaultValue[$suk])) continue;
-            foreach (array_keys($detail) as $k => $title) {
+            foreach ($head as $k => $title) {
                 $header[$k]['title'] = $title;
                 $header[$k]['align'] = 'center';
                 $header[$k]['minWidth'] = 80;
             }
-            foreach (array_values($detail) as $k => $v) {
+            foreach ($detail as $k => $v) {
                 $valueNew[$count]['value' . ($k + 1)] = $v;
                 $header[$k]['key'] = 'value' . ($k + 1);
             }
-            $valueNew[$count]['detail'] = $detail;
+            $valueNew[$count]['detail'] = array_combine($head, $detail);
             $valueNew[$count]['pic'] = $sukValue[$suk]['pic'];
             $valueNew[$count]['price'] = floatval($sukValue[$suk]['price']);
             if ($type == 2) $valueNew[$count]['min_price'] = 0;
