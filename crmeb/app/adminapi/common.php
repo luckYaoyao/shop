@@ -49,20 +49,20 @@ if (!function_exists('setconfig')) {
                 $pats[$i] = '/\'' . $pat[$i] . '\'(.*?),/';
                 $reps[$i] = "'" . $pat[$i] . "'" . "=>" . "'" . $rep[$i] . "',";
             }
-            $fileurl = app()->getConfigPath() . $name.".php";
+            $fileurl = app()->getConfigPath() . $name . ".php";
             $string = file_get_contents($fileurl); //加载配置文件
             $string = preg_replace($pats, $reps, $string); // 正则查找然后替换
             @file_put_contents($fileurl, $string); // 写入配置文件
             return true;
-        } else if(is_string($pat) && is_string($rep)){
+        } else if (is_string($pat) && is_string($rep)) {
             $pats = '/\'' . $pat . '\'(.*?),/';
-            if(substr_count($rep,'[')){
-                $reps = "'" . $pat . "'" . "=>" .  $rep . ",";
-            } else{
-                $rep = str_replace('\'',"",$rep);
+            if (substr_count($rep, '[')) {
+                $reps = "'" . $pat . "'" . "=>" . $rep . ",";
+            } else {
+                $rep = str_replace('\'', "", $rep);
                 $reps = "'" . $pat . "'" . "=>" . "'" . $rep . "',";
             }
-            $fileurl = app()->getConfigPath() . $name.".php";
+            $fileurl = app()->getConfigPath() . $name . ".php";
             $string = file_get_contents($fileurl); //加载配置文件
             $string = preg_replace($pats, $reps, $string); // 正则查找然后替换
             @file_put_contents($fileurl, $string); // 写入配置文件
@@ -81,26 +81,26 @@ if (!function_exists('arrayToText')) {
      */
     function arrayToText($array)
     {
-        $config = print_r($array,true);
-        $config = str_replace('[',"\"",$config);
-        $config = str_replace(']',"\"",$config);
+        $config = print_r($array, true);
+        $config = str_replace('[', "\"", $config);
+        $config = str_replace(']', "\"", $config);
         $input = explode("\n", $config);
-        foreach ($input as $k=>$v){
-            if(empty($v) || strpos($v, 'Array')!==false || strpos($v, '(')!==false || strpos($v, ')')!==false){
+        foreach ($input as $k => $v) {
+            if (empty($v) || strpos($v, 'Array') !== false || strpos($v, '(') !== false || strpos($v, ')') !== false) {
                 continue;
             }
             $tmpValArr = explode('=>', $v);
-            if(count($tmpValArr) == 2){
-                $input[$k] = $tmpValArr[0] . '=> \'' .trim($tmpValArr[1]) . '\',';
+            if (count($tmpValArr) == 2) {
+                $input[$k] = $tmpValArr[0] . '=> \'' . trim($tmpValArr[1]) . '\',';
             }
         }
         $config = implode("\n", $input);
-        $config = str_replace('Array',"",$config);
-        $config = str_replace('(',"[",$config);
-        $config = str_replace(')',"],",$config);
-        $config = rtrim($config,"\n");
-        $config = rtrim($config,",");
-        $config = "<?php \n return ".$config.';';
+        $config = str_replace('Array', "", $config);
+        $config = str_replace('(', "[", $config);
+        $config = str_replace(')', "],", $config);
+        $config = rtrim($config, "\n");
+        $config = rtrim($config, ",");
+        $config = "<?php \n return " . $config . ';';
 //        $fileurl = app()->getConfigPath() ."templates.php";
 //        @file_put_contents($fileurl, $config); // 写入配置文件
         return $config;
@@ -118,20 +118,22 @@ if (!function_exists('attr_format')) {
         $title = array_column($arr, 'value');
         $result = [];
 
-        if ($len > 1) {
-            $result = $arr[0]['detail'];
-            for ($i = 0; $i < $len - 1; $i++) {
-                $temp = $result;
-                $result = [];
-                foreach ($temp as $item) {
-                    foreach ($arr[$i + 1]['detail'] as $datum) {
-                        $result[] = trim($item) . ',' . trim($datum);
+        if ($len > 0) {
+            if ($len > 1) {
+                $result = $arr[0]['detail'];
+                for ($i = 0; $i < $len - 1; $i++) {
+                    $temp = $result;
+                    $result = [];
+                    foreach ($temp as $item) {
+                        foreach ($arr[$i + 1]['detail'] as $datum) {
+                            $result[] = trim($item) . ',' . trim($datum);
+                        }
                     }
                 }
-            }
-        } else {
-            foreach ($arr[0]['detail'] as $item) {
-                $result[] = trim($item);
+            } else {
+                foreach ($arr[0]['detail'] as $item) {
+                    $result[] = trim($item);
+                }
             }
         }
         return [$result, $title];
