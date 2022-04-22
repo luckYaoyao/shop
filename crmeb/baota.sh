@@ -66,29 +66,13 @@ fi
 if [ ! -e "${extFile}/swoole.so" ]; then
 . ${setup_path}/panel/install/install_soft.sh 1 $action_type swoole4 $php_version
 fi
-
-#安装swoole_loader授权
-swoole_loader_name="swoole_loader${php_version}.so"
-if [ ! -e "${extFile}${swoole_loader_name}" ];then
-    cp help/swoole_loader/$swoole_loader_name $extFile
-fi
-isInstall=`cat ${setup_path}/php/$php_version/etc/php.ini|grep $swoole_loader_name`
-if [ "${isInstall}" = "" ];then
-    echo -e "extension = $extFile$swoole_loader_name" >> ${setup_path}/php/$php_version/etc/php.ini
-    if [ -f ${setup_path}/php/$php_version/etc/php-cli.ini ];then
-        echo -e "extension = $extFile$swoole_loader_name" >> ${setup_path}/php/$php_version/etc/php-cli.ini
-    fi
-fi
+#pcntl_signal pcntl_signal_dispatch pcntl_fork pcntl_wait pcntl_alarm 禁用函数删除
 sed -i 's/,proc_open//' ${setup_path}/php/$php_version/etc/php.ini
 
 #安装php-fileinfo 插件
 if [ ! -e "${extFile}/swoole.so" ]; then
 . ${setup_path}/panel/install/install_soft.sh 1 $action_type fileinfo $php_version
 fi
-
-#覆盖crmeb加密文件
-vphp=${php_version:0:1}.${php_version:1:1}
-cp -rf help/$vphp/ ./
 
 #修改nginx配置
 project_path=$(cd `dirname $0`; pwd)
@@ -118,7 +102,23 @@ server
         proxy_cache_purge cache_one \$host\$1\$is_args\$args;
     }
     #引用反向代理规则，注释后配置的反向代理将无效
-    include ${setup_path}/panel/vhost/nginx/proxy/${project_name}/*.conf;
+    location /notice {
+        proxy_pass http://127.0.0.1:20002/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header X-real-ip $remote_addr;
+        proxy_set_header X-Forwarded-For $remote_addr;
+    }
+    #提示：v4.3.0 以前版本，可不用配置一下代码
+    location /msg {
+        proxy_pass http://127.0.0.1:20003/;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header X-real-ip $remote_addr;
+        proxy_set_header X-Forwarded-For $remote_addr;
+    }
 
 	  include enable-php-00.conf;
     #PHP-INFO-END
@@ -144,45 +144,4 @@ server
 " > ${setup_path}/panel/vhost/nginx/${project_name}.conf
 fi
 
-#==============以下为反向代理配置=====================
-
-# if [ ! -d "${setup_path}/panel/vhost/nginx/proxy" ]; then
-#     mkdir "${setup_path}/panel/vhost/nginx/proxy"
-# fi
-
-# if [ ! -d "${setup_path}/panel/vhost/nginx/proxy/${project_name}" ]; then
-#     mkdir "${setup_path}/panel/vhost/nginx/proxy/${project_name}"
-# fi
-# echo -e "
-#   #PROXY-START/
-# location  ~* \.(php|jsp|cgi|asp|aspx)$
-# {
-#     proxy_pass http://127.0.0.1:20199;
-#     proxy_set_header Host \$host;
-#     proxy_set_header X-Real-IP \$remote_addr;
-#     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-#     proxy_set_header REMOTE-HOST \$remote_addr;
-# }
-# location /
-# {
-#     if (!-e \$request_filename) {
-#          proxy_pass http://127.0.0.1:20199;
-#     }
-#     proxy_http_version 1.1;
-#     proxy_read_timeout 360s;
-#     proxy_redirect off;
-#     proxy_set_header Upgrade \$http_upgrade;
-#     proxy_set_header Connection \"upgrade\";
-#     proxy_set_header Host \$host;
-#     proxy_set_header X-Real-IP \$remote_addr;
-#     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
-#     proxy_set_header REMOTE-HOST \$remote_addr;
-#     add_header X-Cache \$upstream_cache_status;
-#     #Set Nginx Cache
-#        add_header Cache-Control no-cache;
-#     expires 12h;
-# }
-# #PROXY-END/
-# " > ${setup_path}/panel/vhost/nginx/proxy/${project_name}/proxy.conf
-
-# 操作说明，进入程序根目录运行 ./baota.sh
+# 操作说明，进入程序根目录运行 /bin/bash baota.sh
