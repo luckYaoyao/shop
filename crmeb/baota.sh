@@ -70,7 +70,7 @@ fi
 sed -i 's/,proc_open//' ${setup_path}/php/$php_version/etc/php.ini
 
 #安装php-fileinfo 插件
-if [ ! -e "${extFile}/swoole.so" ]; then
+if [ ! -e "${extFile}/fileinfo.so" ]; then
 . ${setup_path}/panel/install/install_soft.sh 1 $action_type fileinfo $php_version
 fi
 
@@ -105,19 +105,19 @@ server
     location /notice {
         proxy_pass http://127.0.0.1:20002/;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection "upgrade";
-        proxy_set_header X-real-ip $remote_addr;
-        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-real-ip \$remote_addr;
+        proxy_set_header X-Forwarded-For \$remote_addr;
     }
     #提示：v4.3.0 以前版本，可不用配置一下代码
     location /msg {
         proxy_pass http://127.0.0.1:20003/;
         proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Upgrade \$http_upgrade;
         proxy_set_header Connection "upgrade";
-        proxy_set_header X-real-ip $remote_addr;
-        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-real-ip \$remote_addr;
+        proxy_set_header X-Forwarded-For \$remote_addr;
     }
 
 	  include enable-php-00.conf;
@@ -143,5 +143,5 @@ server
 }
 " > ${setup_path}/panel/vhost/nginx/${project_name}.conf
 fi
-
+echo ''
 # 操作说明，进入程序根目录运行 /bin/bash baota.sh
