@@ -1,6 +1,6 @@
-![输入图片说明](https://images.gitee.com/uploads/images/2021/1015/163550_f4d3b3cc_5516386.jpeg "v4-gitee(3).jpg")
+![输入图片说明](https://images.gitee.com/uploads/pic/2021/1015/163550_f4d3b3cc_5516386.jpeg "v4-gitee(3).jpg")
 <p align="center" >
-    <img src="https://images.gitee.com/uploads/images/2021/1109/164354_0aafe3d2_892944.gif" />
+    <img src="https://images.gitee.com/uploads/pic/2021/1109/164354_0aafe3d2_892944.gif" />
 </p>
 
 <h3 align="center"> 码云开源项目php语言排名前三的开源GVP项目！</h3> 
@@ -52,11 +52,11 @@
 
 技术交流社区：<a href="https://q.crmeb.com"  target="_blank">https://q.crmeb.com
 
- ![](readme/images/gitee打通版-横.jpg)
-[![](readme/images/1思维脑图功能清单.jpg)](http://s.crmeb.com/goods_detail/730)
-[![](readme/images/2高清UI设计图.jpg)](http://s.crmeb.com/goods_detail/728)
-[![](readme/images/3前后端接口文档.jpg)](http://s.crmeb.com/goods_detail/729)
-[![](readme/images/4PC端前端模板.jpg)](http://s.crmeb.com/goods_detail/711)
+ ![](readme/pic/gitee打通版-横.jpg)
+[![](readme/pic/1思维脑图功能清单.jpg)](http://s.crmeb.com/goods_detail/730)
+[![](readme/pic/2高清UI设计图.jpg)](http://s.crmeb.com/goods_detail/728)
+[![](readme/pic/3前后端接口文档.jpg)](http://s.crmeb.com/goods_detail/729)
+[![](readme/pic/4PC端前端模板.jpg)](http://s.crmeb.com/goods_detail/711)
 
 #### 不懂服务器？不懂技术？无法解决高并发？想数据私有化？还想后期定制开发？
 
@@ -79,7 +79,7 @@ Redis
 
 
 ### 官方技术交流群
-![输入图片说明](readme/images/image.jpg)
+![输入图片说明](readme/pic/image.jpg)
 ### CRMEB官方论坛：https://q.crmeb.com
 
 技术交流、安装搭建问题、系统建议反馈 欢迎光临CRMEB官方论坛！
@@ -111,17 +111,17 @@ Redis
 
 ## 页面展示
 (页面仅展示部分UI)
-![输入图片说明](readme/images/gitee开源版详情_01.jpg)
-![输入图片说明](readme/images/gitee开源版详情_02.jpg)
-![输入图片说明](readme/images/gitee开源版详情_03.jpg)
-![输入图片说明](readme/images/gitee开源版详情_04.jpg)
-![输入图片说明](readme/images/gitee开源版详情_05.jpg)
+![输入图片说明](readme/pic/gitee开源版详情_01.jpg)
+![输入图片说明](readme/pic/gitee开源版详情_02.jpg)
+![输入图片说明](readme/pic/gitee开源版详情_03.jpg)
+![输入图片说明](readme/pic/gitee开源版详情_04.jpg)
+![输入图片说明](readme/pic/gitee开源版详情_05.jpg)
 ## <a href='http://s.crmeb.com/goods_detail/728' target='_blank'>点击查看高清版全套UI设计图</a>
 
 
 ##  系统演示
 
-![输入图片说明](readme/images/20公众号.jpg)
+![输入图片说明](readme/pic/20公众号.jpg)
 
 演示站： http://v4.crmeb.net/admin  
 
