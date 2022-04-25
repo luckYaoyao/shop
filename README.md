@@ -135,9 +135,7 @@ git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git
 
 ## 推荐项目
 
- :star: CRMChat客服系统 https://gitee.com/ZhongBangKeJi/CRMChat
-
-TP6+swoole4开源客服系统，支持微信网页、H5端、PC端客服接入，商家端有PC端管理、H5端、App端接待，支持用户添加标签、分组等功能
+ :star: CRMChat客服系统： https://gitee.com/ZhongBangKeJi/CRMChat
 
 JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
 
