@@ -128,23 +128,12 @@ Redis
 
 ## 程序下载 
 
-
+老版本v3.2.9 下载（功能全，后台非前后端分离，适合新手二开）
 ```
-老版本v3.2.9 下载（功能全，后台非前后端分离，适合二开）
-
 git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git
-
-最新版 下载（当前开源版功能全，前后台分离版，适合二开）
-
-git clone https://gitee.com/ZhongBangKeJi/CRMEB.git
-
-精简版Min下载(基础商城框架，适合精简需求的客户，适合二开)
-
-git clone https://gitee.com/ZhongBangKeJi/CRMEB-Min.git 
-
 ```
 
-## 相关项目
+## 推荐项目
 
  :star: CRMChat客服系统 https://gitee.com/ZhongBangKeJi/CRMChat
 
@@ -152,19 +141,8 @@ TP6+swoole4开源客服系统，支持微信网页、H5端、PC端客服接入�
 
 JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
 
-CRMEB商城JAVA版，SpringBoot + Maven + Swagger + Mybatis Plus + Redis + Uniapp +Vue+elementUI 包含移动端、小程序、PC后台、Api接口；有产品、用户、购物车、订单、积分、优惠券、营销、余额、权限、角色、系统设置、组合数据、可拖拉拽的form表单等模块，大量的减少了二开的成本。
-
 知识付费：https://gitee.com/ZhongBangKeJi/crmeb_zzff_class
 
-CRMEB知识付费系统是基于ThinkPhp5.0+Vue开发的全开源知识付费系统。功能包含直播课堂、付费视频、付费音频、付费阅读、会员系统、课程分销、课程拼团、直播带货、直播打赏、商城系统等。能够快速积学员、学员数据分析、智能转化客户、有效提高销售、吸引流量、网络营销、品牌推广的一款应用，且更适合企业二次开发
-
-form-builder : https://github.com/xaboy/form-builder
-
-tp PHP表单生成器，快速生成现代化的form表单。包含复选框、单选框、输入框、下拉选择框等元素以及,省市区三级联动,时间选择,日期选择,颜色选择,文件/图片上传等功能。
-
-CRMEB Min版商城：https://gitee.com/ZhongBangKeJi/CRMEB-Min
-
-CRMEB Min是一款轻量级、高性能开源电商商城系统，采用TP6+Mysql+Uniapp+iView+Redis等最流行热门技术语言，支持队列、表单生成、长链接、定时任务等，完善的权限管理、会员管理、产品订单管理、CMS管理、支持多端、一键开通短信、产品采集、物流查询等接口。快速简单高效！
 
 ## 特别鸣谢
 
@@ -182,7 +160,7 @@ CRMEB Min是一款轻量级、高性能开源电商商城系统，采用TP6+Mysq
 
 ## 开源版使用须知
 
-1.允许用于个人学习、毕业设计、教学案例、公益事业;
+1.允许用于个人学习、毕业设计、教学案例、公益事业、商业使用;
 
 2.如果商用必须保留版权信息，请自觉遵守;
 
@@ -199,9 +177,11 @@ All rights reserved。
 
 CRMEB® 商标和著作权所有者为西安众邦网络科技有限公司。
 
-[返回顶部 :fa-arrow-circle-up: ](https://gitee.com/ZhongBangKeJi/CRMEB#%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D)
 ![](readme/pic/gitee打通版-横.jpg)
 [![](readme/pic/1思维脑图功能清单.jpg)](http://s.crmeb.com/goods_detail/730)
 [![](readme/pic/2高清UI设计图.jpg)](http://s.crmeb.com/goods_detail/728)
 [![](readme/pic/3前后端接口文档.jpg)](http://s.crmeb.com/goods_detail/729)
 [![](readme/pic/4PC端前端模板.jpg)](http://s.crmeb.com/goods_detail/711)
+
+[返回顶部 :fa-arrow-circle-up: ](https://gitee.com/ZhongBangKeJi/CRMEB#%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D)
+
