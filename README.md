@@ -78,7 +78,7 @@ Redis
 
 技术交流、安装搭建问题、系统建议反馈 欢迎光临CRMEB官方论坛！
 
-提交BUG、产品建议反馈 有奖悬赏  欢迎参与：https://q.crmeb.com/thread/7380
+提交BUG、产品建议反馈 有奖悬赏  欢迎参与：https://q.crmeb.com/thread/7544
 
 
 ## 技术亮点
