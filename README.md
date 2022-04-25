@@ -52,12 +52,6 @@
 
 技术交流社区：<a href="https://q.crmeb.com"  target="_blank">https://q.crmeb.com
 
- ![](readme/pic/gitee打通版-横.jpg)
-[![](readme/pic/1思维脑图功能清单.jpg)](http://s.crmeb.com/goods_detail/730)
-[![](readme/pic/2高清UI设计图.jpg)](http://s.crmeb.com/goods_detail/728)
-[![](readme/pic/3前后端接口文档.jpg)](http://s.crmeb.com/goods_detail/729)
-[![](readme/pic/4PC端前端模板.jpg)](http://s.crmeb.com/goods_detail/711)
-
 #### 不懂服务器？不懂技术？无法解决高并发？想数据私有化？还想后期定制开发？
 
 推荐云部署版一键解决以上所有问题，超低价格低至 :collision:  9.9元/年，点击了解 https://saas.crmeb.com/saas-home-software-detail-50042-s-y.html
@@ -206,3 +200,8 @@ All rights reserved。
 CRMEB® 商标和著作权所有者为西安众邦网络科技有限公司。
 
 [返回顶部 :fa-arrow-circle-up: ](https://gitee.com/ZhongBangKeJi/CRMEB#%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D)
+![](readme/pic/gitee打通版-横.jpg)
+[![](readme/pic/1思维脑图功能清单.jpg)](http://s.crmeb.com/goods_detail/730)
+[![](readme/pic/2高清UI设计图.jpg)](http://s.crmeb.com/goods_detail/728)
+[![](readme/pic/3前后端接口文档.jpg)](http://s.crmeb.com/goods_detail/729)
+[![](readme/pic/4PC端前端模板.jpg)](http://s.crmeb.com/goods_detail/711)
