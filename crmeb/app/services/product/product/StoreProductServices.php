@@ -377,8 +377,8 @@ class StoreProductServices extends BaseServices
         $valueNew = [];
         $count = 0;
 
-            foreach ($value as $suk) {
-                $detail = explode(',', $suk);
+        foreach ($value as $suk) {
+            $detail = explode(',', $suk);
 
             $types = 1;
             if ($id) {
@@ -423,7 +423,7 @@ class StoreProductServices extends BaseServices
                 $sukValue[$suk]['brokerage_two'] = 0;
             }
             if ($types) { //编辑商品时，将没有规格的数据不生成默认值
-                    foreach ($head as $k => $title) {
+                foreach ($head as $k => $title) {
                     $header[$k]['title'] = $title;
                     $header[$k]['align'] = 'center';
                     $header[$k]['minWidth'] = 130;
@@ -432,7 +432,7 @@ class StoreProductServices extends BaseServices
                     $valueNew[$count]['value' . ($k + 1)] = $v;
                     $header[$k]['key'] = 'value' . ($k + 1);
                 }
-                $valueNew[$count]['detail'] = array_combine($head,$detail);
+                $valueNew[$count]['detail'] = array_combine($head, $detail);
                 $valueNew[$count]['pic'] = $sukValue[$suk]['pic'] ?? '';
                 $valueNew[$count]['price'] = $sukValue[$suk]['price'] ? floatval($sukValue[$suk]['price']) : 0;
                 $valueNew[$count]['cost'] = $sukValue[$suk]['cost'] ? floatval($sukValue[$suk]['cost']) : 0;
@@ -555,6 +555,7 @@ class StoreProductServices extends BaseServices
         }
         $data['cate_id'] = implode(',', $data['cate_id']);
         $data['label_id'] = implode(',', $data['label_id']);
+        $slider_image = $data['slider_image'];
         $data['image'] = $data['slider_image'][0];
         $data['slider_image'] = json_encode($data['slider_image']);
         $data['stock'] = array_sum(array_column($detail, 'stock'));
@@ -575,7 +576,7 @@ class StoreProductServices extends BaseServices
         if (isset($data['description_images'])) {
             $descriptionImages = $data['description_images'];
         }
-        $this->transaction(function () use ($id, $is_copy, $data, $descriptionImages, $description, $cate_id, $storeDescriptionServices, $storeProductCateServices, $storeProductAttrServices, $storeProductCouponServices, $storeCategoryServices, $detail, $attr, $coupon_ids, $type) {
+        $this->transaction(function () use ($id, $is_copy, $data, $descriptionImages, $description, $cate_id, $storeDescriptionServices, $storeProductCateServices, $storeProductAttrServices, $storeProductCouponServices, $storeCategoryServices, $detail, $attr, $coupon_ids, $type, $slider_image) {
             if ($data['spec_type'] == 0) {
                 $attr = [
                     [
@@ -639,11 +640,18 @@ class StoreProductServices extends BaseServices
                 $attrRes = $storeProductAttrServices->saveProductAttr($skuList, $res->id, 0, $data['is_vip'], $data['virtual_type']);
                 if (!empty($coupon_ids)) $storeProductCouponServices->setCoupon($res->id, $coupon_ids);
                 if (!$attrRes) throw new AdminException('添加失败！');
+
+                //采集商品下载图片
                 if ($type == -1) {
-                    //下载商品详情图片
-                    ProductCopyJob::dispatchDo('copyDescriptionImage', [$res->id]);
-                    //下载商品轮播图片
-                    ProductCopyJob::dispatchDo('copySliderImage', [$res->id]);
+                    //下载商品轮播图
+                    foreach ($slider_image as $s_image) {
+                        ProductCopyJob::dispatchDo('copySliderImage', [$res->id, $s_image, count($slider_image)]);
+                    }
+                    preg_match_all('#<img.*?src="([^"]*)"[^>]*>#i', $description, $match);
+                    foreach ($match[1] as $d_image) {
+                        ProductCopyJob::dispatchDo('copyDescriptionImage', [$res->id, $description, $d_image, count($match[1])]);
+                    }
+
                 }
             }
         });
@@ -921,7 +929,7 @@ class StoreProductServices extends BaseServices
             $header[] = ['title' => '成本价', 'key' => 'cost', 'align' => 'center', 'minWidth' => 80];
             $header[] = ['title' => '日常售价', 'key' => 'r_price', 'align' => 'center', 'minWidth' => 80];
         } elseif ($type == 4) {
-            $header[] = ['title' => '兑换积分', 'slot' => 'price', 'align' => 'center', 'minWidth' => 80];
+            $header[] = ['title' => '兑换积分', 'key' => 'price', 'type' => 1, 'align' => 'center', 'minWidth' => 80];
         } elseif ($type == 6) {
             $header[] = ['title' => '预售价', 'key' => 'price', 'type' => 1, 'align' => 'center', 'minWidth' => 80];
             $header[] = ['title' => '成本价', 'key' => 'cost', 'align' => 'center', 'minWidth' => 80];
@@ -1258,7 +1266,7 @@ class StoreProductServices extends BaseServices
         $storeInfo['userCollect'] = $storeProductRelationServices->isProductRelation(['uid' => $uid, 'product_id' => $id, 'type' => 'collect', 'category' => 'product']);
         $storeInfo['userLike'] = false;
         $storeInfo['small_image'] = $storeInfo['image'];
-        $storeInfo = get_thumb_water($storeInfo, 'big', ['image', 'slider_image', 'small_image']);
+        $storeInfo = get_thumb_water($storeInfo, 'small', ['small_image']);
 
         //预售相关
         if ($storeInfo['presale']) {
@@ -1322,6 +1330,7 @@ class StoreProductServices extends BaseServices
         /** @var MemberCardServices $memberCardService */
         $memberCardService = app()->make(MemberCardServices::class);
         $data['svip_open'] = $vipStatus = $memberCardService->isOpenMemberCard('vip_price');
+        $data['svip_price_open'] = (int)sys_config('member_price_status');
         $data['storeInfo']['svip_economize_price'] = bcsub((string)$data['storeInfo']['price'], (string)$data['storeInfo']['vip_price'], 2);
         if (!$this->vipIsOpen(!!$storeInfo['is_vip'], $vipStatus)) {
             $data['storeInfo']['vip_price'] = 0;

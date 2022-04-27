@@ -214,7 +214,7 @@ class StoreIntegralServices extends BaseServices
             $header[] = ['title' => $item['value'], 'key' => 'value' . ($key + 1), 'align' => 'center', 'minWidth' => 80];
         }
         $header[] = ['title' => '图片', 'slot' => 'pic', 'align' => 'center', 'minWidth' => 120];
-        $header[] = ['title' => '兑换积分', 'slot' => 'price', 'align' => 'center', 'minWidth' => 80];
+        $header[] = ['title' => '兑换积分', 'key' => 'price', 'type' => 1, 'align' => 'center', 'minWidth' => 80];
         $header[] = ['title' => '库存', 'key' => 'stock', 'align' => 'center', 'minWidth' => 80];
         $header[] = ['title' => '兑换次数', 'key' => 'quota', 'type' => 1, 'align' => 'center', 'minWidth' => 80];
         $header[] = ['title' => '重量(KG)', 'key' => 'weight', 'align' => 'center', 'minWidth' => 80];
@@ -245,7 +245,7 @@ class StoreIntegralServices extends BaseServices
                 foreach ($detail as $k => $v) {
                     $valueNew[$count]['value' . ($k + 1)] = $v;
                 }
-                $valueNew[$count]['detail'] = json_encode(array_combine($head,$detail));
+                $valueNew[$count]['detail'] = json_encode(array_combine($head, $detail));
                 $valueNew[$count]['pic'] = $sukValue[$suk]['pic'] ?? '';
                 $valueNew[$count]['price'] = $sukValue[$suk]['price'] ? floatval($sukValue[$suk]['price']) : 0;
                 $valueNew[$count]['cost'] = $sukValue[$suk]['cost'] ? floatval($sukValue[$suk]['cost']) : 0;
