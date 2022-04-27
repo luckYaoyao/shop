@@ -67,10 +67,10 @@ class StoreProductController
         if (!$where['ids']) {
             unset($where['ids']);
         }
-        $type = 'mid';
+        $type = 'big';
         $field = ['image', 'recommend_image'];
         if ($where['store_name']) {
-            $type = 'small';
+            $type = 'big';
             $field = ['image'];
         }
         $list = $this->services->getGoodsList($where, (int)$request->uid());
