@@ -27,19 +27,12 @@ class UserCancelServices extends BaseServices
      */
     public function SetUserCancel($uid)
     {
-//        $data = [];
-//        $data['uid'] = $userInfo['uid'];
-//        $data['name'] = $userInfo['nickname'];
-//        $data['phone'] = $userInfo['phone'];
-//        $data['add_time'] = time();
-//        return $this->dao->save($data);
         /** @var UserServices $userServices */
         $userServices = app()->make(UserServices::class);
         /** @var WechatUserServices $wechatUserServices */
         $wechatUserServices = app()->make(WechatUserServices::class);
         $userServices->update($uid, ['is_del' => 1]);
         $wechatUserServices->update(['uid' => $uid], ['is_del' => 1]);
-        CacheService::clearTokenAll('api' . $uid);
     }
 
     /**
