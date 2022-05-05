@@ -392,14 +392,14 @@ class DivisionServices extends BaseServices
                     /** 员工直接下级 */
                     if ($isSelfBrokerage) {
                         $storeBrokerageOne = $storeBrokerageRatio;
-                        $storeBrokerageTwo = 0;
-                        $staffPercent = $staffInfo['division_percent'] - $storeBrokerageOne;
+                        $storeBrokerageTwo = $staffInfo['division_percent'] - $storeBrokerageOne;
+                        $staffPercent = 0;
                         $agentPercent = $agentInfo['division_percent'] - $staffInfo['division_percent'];
                         $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
                     } else {
-                        $storeBrokerageOne = 0;
+                        $storeBrokerageOne = $staffInfo['division_percent'];
                         $storeBrokerageTwo = 0;
-                        $staffPercent = $staffInfo['division_percent'];
+                        $staffPercent = 0;
                         $agentPercent = $agentInfo['division_percent'] - $staffInfo['division_percent'];
                         $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
                     }
