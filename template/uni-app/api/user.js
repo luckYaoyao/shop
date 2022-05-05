@@ -209,6 +209,15 @@ export function spreadOrder(data) {
 	return request.post('spread/order', data);
 }
 
+/**
+ * 
+ * 事业部/推广订单
+ * @param object data
+ */
+export function divisionOrder(data) {
+	return request.post('division/order', data);
+}
+
 /*
  * 获取推广人排行
  * */
