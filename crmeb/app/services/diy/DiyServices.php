@@ -55,7 +55,7 @@ class DiyServices extends BaseServices
     {
         [$page, $limit] = $this->getPageValue();
         $where['is_del'] = 0;
-        $list = $this->dao->getDiyList($where, $page, $limit);
+        $list = $this->dao->getDiyList($where, $page, $limit, ['id', 'name', 'type', 'add_time', 'update_time', 'is_diy', 'status']);
         foreach ($list as &$item) {
             $item['type_name'] = $item['type'] == 0 ? '可视化' : 'DIY';
         }
