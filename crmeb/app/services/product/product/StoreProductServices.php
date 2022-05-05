@@ -1668,7 +1668,7 @@ class StoreProductServices extends BaseServices
      * @param string $type
      * @return array[]
      */
-    public function getRecommendProductArr(int $uid, array $fields, bool $is_num = true, string $type = 'small')
+    public function getRecommendProductArr(int $uid, array $fields, bool $is_num = true, string $type = 'mid')
     {
         $baseList = $firstList = $benefitList = $hotList = $vipList = [];
         $data = [$baseList, $firstList, $benefitList, $hotList, $vipList];
@@ -1756,7 +1756,7 @@ class StoreProductServices extends BaseServices
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function getRecommendProduct(int $uid, $field, int $num = 0, string $type = 'small')
+    public function getRecommendProduct(int $uid, $field, int $num = 0, string $type = 'mid')
     {
         [$page, $limit] = $this->getPageValue();
         $where['vip_user'] = $uid ? app()->make(UserServices::class)->value(['uid' => $uid], 'is_money_level') : 0;

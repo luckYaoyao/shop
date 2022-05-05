@@ -95,11 +95,6 @@ class JwtAuth
     {
         $tokenInfo = $this->getToken($id, $type, $params);
         $exp = $tokenInfo['params']['exp'] - $tokenInfo['params']['iat'] + 60;
-        if (in_array($type, ['api', 'wechat', 'routine'])) {
-            $type = 'api' . $id;
-        } else {
-            $type = 'admin';
-        }
         $res = CacheService::setTokenBucket(md5($tokenInfo['token']), ['uid' => $id, 'type' => $type, 'token' => $tokenInfo['token'], 'exp' => $exp], (int)$exp, $type);
         if (!$res) {
             throw new AdminException(ApiErrorCode::ERR_SAVE_TOKEN);
