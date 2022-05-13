@@ -2,7 +2,56 @@
   <div class="message">
     <div class="i-layout-page-header">
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-        <div>
+        <div class="ivu-mt">
+          <Alert v-if="industry" type="info" banner closable>
+            <template slot="desc" >
+              <div>
+                <p>
+                  1、请在微信后台设置模版消息主营行业：{{
+                    industry.primary_industry.first_class
+                        ? industry.primary_industry.first_class + "||"
+                        : industry.primary_industry
+                  }}
+                  {{
+                    industry.primary_industry.second_class
+                        ? industry.primary_industry.second_class
+                        : ""
+                  }}
+                  ||  副营行业：{{
+                    industry.secondary_industry.first_class
+                        ? industry.secondary_industry.first_class + "||"
+                        : industry.secondary_industry
+                  }}
+                  {{
+                    industry.secondary_industry.second_class
+                        ? industry.secondary_industry.second_class
+                        : ""
+                  }}
+                </p>
+                <p>2、点击同步按钮会自动在微信后台添加模版消息</p>
+              </div>
+            </template>
+          </Alert>
+          <Row type="flex" class="mb20">
+            <Col v-bind="grid">
+              <Button
+                  v-auth="['app-wechat-template-sync']"
+                  icon="md-list"
+                  type="success"
+                  @click="routineTemplate"
+                  style="margin-left: 20px"
+              >同步小程序订阅消息</Button
+              >
+              <Button
+                  v-auth="['app-wechat-template-sync']"
+                  icon="md-list"
+                  type="success"
+                  @click="wechatTemplate"
+                  style="margin-left: 20px"
+              >同步微信模版消息</Button
+              >
+            </Col>
+          </Row>
           <Tabs v-model="currentTab" @on-click="changeTab">
             <TabPane
               :label="item.label"
@@ -16,55 +65,7 @@
       <div class="ivu-row">
 
         <Card :bordered="false" dis-hover class="ivu-mt">
-          <Alert v-if="industry && currentTab == 1" type="info" banner closable>
-            <template slot="desc" >
-              <div>
-                <p>
-               1、请在微信后台设置模版消息主营行业：{{
-                  industry.primary_industry.first_class
-                      ? industry.primary_industry.first_class + "||"
-                      : industry.primary_industry
-                }}
-                {{
-                  industry.primary_industry.second_class
-                      ? industry.primary_industry.second_class
-                      : ""
-                }}
-                  ||  副营行业：{{
-                  industry.secondary_industry.first_class
-                      ? industry.secondary_industry.first_class + "||"
-                      : industry.secondary_industry
-                }}
-                {{
-                  industry.secondary_industry.second_class
-                      ? industry.secondary_industry.second_class
-                      : ""
-                }}
-                </p>
-                <p>2、点击同步按钮会自动在微信后台添加模版消息</p>
-              </div>
-            </template>
-          </Alert>
-          <Row type="flex" class="mb20" v-if="currentTab == 1">
-            <Col v-bind="grid">
-              <Button
-                v-auth="['app-wechat-template-sync']"
-                icon="md-list"
-                type="success"
-                @click="routineTemplate"
-                style="margin-left: 20px"
-                >同步小程序订阅消息</Button
-              >
-              <Button
-                v-auth="['app-wechat-template-sync']"
-                icon="md-list"
-                type="success"
-                @click="wechatTemplate"
-                style="margin-left: 20px"
-                >同步微信模版消息</Button
-              >
-            </Col>
-          </Row>
+
 
           <Table
             :columns="currentTab == 1 ?columns : columns2"
