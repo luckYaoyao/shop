@@ -1,9 +1,13 @@
 <template>
   <div>
     <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
+        <router-link :to="{ path: '/admin/system/config/system_config_tab/index' }"
+        ><Button icon="ios-arrow-back" size="small" type="text"
+        >返回</Button
+        ></router-link
+        >
+        <Divider type="vertical" />
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-      </div>
     </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
       <Row type="flex">

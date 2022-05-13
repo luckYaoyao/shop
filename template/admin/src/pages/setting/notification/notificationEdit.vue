@@ -2,10 +2,11 @@
   <div class="edit">
     <div class="i-layout-page-header">
       <router-link :to="{ path: '/admin/setting/notification/index' }"
-        ><Button icon="ios-arrow-back" size="small" class="mr20"
-          >返回</Button
-        ></router-link
+      ><Button icon="ios-arrow-back" size="small" type="text"
+      >返回</Button
+      ></router-link
       >
+      <Divider type="vertical" />
       <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
     </div>
     <div class="tabs">
@@ -172,7 +173,7 @@
                     </RadioGroup>
                   </FormItem>
                 </div>
-                
+
                 <div v-else-if="item.slot === 'is_ent_wechat' && !loading">
                   <FormItem label="通知内容">
                     <div class="content">
@@ -355,6 +356,7 @@ export default {
 .tabs {
   padding: 0 30px;
   background-color: #fff;
+  margin-top: 20px;
 }
 .trip {
   color: rgb(146, 139, 139);
@@ -369,4 +371,4 @@ export default {
 .form-sty {
   margin-top: 20px;
 }
-</style>  
+</style>
