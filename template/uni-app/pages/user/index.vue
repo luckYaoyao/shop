@@ -424,19 +424,18 @@
 					}
 				})
 			}
-
 			// #ifdef MP
 			// 小程序静默授权
 			if (!this.$store.getters.isLogin) {
-				Routine.getCode()
-					.then(code => {
-						Routine.silenceAuth(code).then(res => {
-							this.onLoadFun();
-						})
-					})
-					.catch(res => {
-						uni.hideLoading();
-					});
+				// Routine.getCode()
+				// 	.then(code => {
+				// 		Routine.silenceAuth(code).then(res => {
+				// 			this.onLoadFun();
+				// 		})
+				// 	})
+				// 	.catch(res => {
+				// 		uni.hideLoading();
+				// 	});
 			}
 			// #endif
 
@@ -569,50 +568,52 @@
 			},
 			//小程序授权api替换 getUserInfo
 			getUserProfile() {
-				uni.showLoading({
-					title: '获取中'
-				});
-				let self = this;
-				Routine.getUserProfile()
-					.then(res => {
-						Routine.getCode()
-							.then(code => {
-								let userInfo = res.userInfo;
-								userInfo.code = code;
-								userInfo.spread_spid = app.globalData.spid; //获取推广人ID
-								userInfo.spread_code = app.globalData.code; //获取推广人分享二维码ID
-								Routine.authUserInfo(userInfo)
-									.then(res => {
-										if (res.data.key !== undefined && res.data.key) {
-											uni.hideLoading();
-											self.authKey = res.data.key;
-											self.isPhoneBox = true;
-										} else {
-											uni.hideLoading();
-											let time = res.data.expires_time - self.$Cache.time();
-											self.$store.commit('LOGIN', {
-												token: res.data.token,
-												time: time
-											});
-											this.getUserInfo()
-										}
-									})
-									.catch(res => {
-										uni.hideLoading();
-										uni.showToast({
-											title: res.msg,
-											icon: 'none',
-											duration: 2000
-										});
-									});
-							})
-							.catch(res => {
-								uni.hideLoading();
-							});
-					})
-					.catch(res => {
-						uni.hideLoading();
-					});
+				console.log('去登录')
+				toLogin();
+				// uni.showLoading({
+				// 	title: '获取中'
+				// });
+				// let self = this;
+				// Routine.getUserProfile()
+				// 	.then(res => {
+				// 		Routine.getCode()
+				// 			.then(code => {
+				// 				let userInfo = res.userInfo;
+				// 				userInfo.code = code;
+				// 				userInfo.spread_spid = app.globalData.spid; //获取推广人ID
+				// 				userInfo.spread_code = app.globalData.code; //获取推广人分享二维码ID
+				// 				Routine.authUserInfo(userInfo)
+				// 					.then(res => {
+				// 						if (res.data.key !== undefined && res.data.key) {
+				// 							uni.hideLoading();
+				// 							self.authKey = res.data.key;
+				// 							self.isPhoneBox = true;
+				// 						} else {
+				// 							uni.hideLoading();
+				// 							let time = res.data.expires_time - self.$Cache.time();
+				// 							self.$store.commit('LOGIN', {
+				// 								token: res.data.token,
+				// 								time: time
+				// 							});
+				// 							this.getUserInfo()
+				// 						}
+				// 					})
+				// 					.catch(res => {
+				// 						uni.hideLoading();
+				// 						uni.showToast({
+				// 							title: res.msg,
+				// 							icon: 'none',
+				// 							duration: 2000
+				// 						});
+				// 					});
+				// 			})
+				// 			.catch(res => {
+				// 				uni.hideLoading();
+				// 			});
+				// 	})
+				// 	.catch(res => {
+				// 		uni.hideLoading();
+				// 	});
 			},
 			/**
 			 * 

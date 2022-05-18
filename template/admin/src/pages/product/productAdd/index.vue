@@ -1439,7 +1439,7 @@
           <Col span="24">
             <div class="line"></div>
           </Col>
-          <Col span="24" v-if="formValidate.virtual_type == 0">
+          <Col span="24" v-if="formValidate.virtual_type == 0 || formValidate.virtual_type == 3">
             <FormItem label="预售商品：">
               <i-switch v-model="formValidate.presale" size="large">
                 <span slot="open">开启</span>

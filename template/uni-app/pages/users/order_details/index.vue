@@ -221,7 +221,7 @@
 				</view>
 			</view>
 			<!-- 退款订单详情 -->
-			<view class='wrapper' v-if="isGoodsReturn">
+			<view class='wrapper' v-if="isGoodsReturn && orderInfo.cartInfo[0].productInfo.virtual_type != 3">
 				<view class='item acea-row row-between'>
 					<view>收货人：</view>
 					<view class='conter'>{{orderInfo.real_name}}</view>
@@ -955,6 +955,9 @@
 						}
 						if (item.value == 'yue') {
 							item.payStatus = res.data.yue_pay_status == 1 ? true : false;
+						}
+						if (item.value == 'friend') {
+							item.payStatus = res.data.friend_pay_status == 1 ? true : false;
 						}
 					});
 					that.getOrderStatus();

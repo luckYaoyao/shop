@@ -3,7 +3,6 @@
 		<goodsCate1 v-show="category==1" ref="classOne"></goodsCate1>
 		<goodsCate2 v-show="category==2" ref="classTwo" @jumpIndex="jumpIndex"></goodsCate2>
 		<goodsCate3 v-show="category==3" ref="classThree" @jumpIndex="jumpIndex"></goodsCate3>
-		<!-- <tabBar v-show="category == 1" :pagePath="'/pages/goods_cate/goods_cate'"></tabBar> -->
 	</view>
 </template>
 
@@ -43,10 +42,10 @@
 		},
 		onShow() {
 			if (this.status == 2 || this.status == 3) {
-				uni.hideTabBar()
+				uni.hideTabBar();
 			} else if (this.status == 1) {
 				if (!this.is_diy) {
-					uni.hideTabBar()
+					uni.hideTabBar();
 				} else {
 					this.$refs.classOne.getNav();
 				}

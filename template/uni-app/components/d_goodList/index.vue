@@ -58,7 +58,9 @@
 			}
 		},
 		data() {
-			return {};
+			return {
+				addIng: false
+			};
 		},
 		created() {},
 		mounted() {},
@@ -73,9 +75,13 @@
 				this.$emit('gocartdan', item, index);
 			},
 			CartNumDes(index, item) {
+				if (this.addIng) return
+				this.addIng = true
 				this.$emit('ChangeCartNumDan', false, index, item);
 			},
 			CartNumAdd(index, item) {
+				if (this.addIng) return
+				this.addIng = true
 				this.$emit('ChangeCartNumDan', true, index, item);
 			}
 		}

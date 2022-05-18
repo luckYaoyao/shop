@@ -75,14 +75,16 @@ function _toLogin(push, pathLogin) {
 		} else {
 			urlData += '?go_longin=1';
 		}
-		if (!Cache.has('snsapiKey')) {
-			auth.oAuth('snsapi_base', urlData);
-		} else {
-			uni.navigateTo({
-				url: '/pages/users/wechat_login/index',
-			});
-		}
-
+		// if (!Cache.has('snsapiKey')) {
+		// 	auth.oAuth('snsapi_base', urlData);
+		// } else {
+		// 	uni.navigateTo({
+		// 		url: '/pages/users/wechat_login/index',
+		// 	});
+		// }
+		uni.navigateTo({
+			url: '/pages/users/wechat_login/index',
+		});
 
 	} else {
 		uni.navigateTo({
@@ -92,19 +94,19 @@ function _toLogin(push, pathLogin) {
 	// #endif
 
 	// #ifdef MP 
-	// uni.navigateTo({
-	// 	url: '/pages/users/wechat_login/index'
-	// })
-	Routine.getCode()
-		.then(code => {
-			console.log(code)
-			Routine.silenceAuth(code).then(res => {
-				console.log(res)
-			})
-		})
-		.catch(err => {
-			uni.hideLoading();
-		});
+	uni.navigateTo({
+		url: '/pages/users/wechat_login/index'
+	})
+	// Routine.getCode()
+	// 	.then(code => {
+	// 		console.log(code)
+	// 		Routine.silenceAuth(code).then(res => {
+	// 			console.log(res)
+	// 		})
+	// 	})
+	// 	.catch(err => {
+	// 		uni.hideLoading();
+	// 	});
 	// #endif
 
 	// #ifdef APP-PLUS

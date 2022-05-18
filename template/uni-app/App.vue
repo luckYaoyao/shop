@@ -218,85 +218,85 @@
 			}
 
 			//公众号静默授权
-			if (window.location.pathname !== '/' && option.query.scope === 'snsapi_base') {
-				let snsapiBase = 'snsapi_base';
-				let urlData = location.pathname + location.search;
-				// if (!that.$store.getters.isLogin && uni.getStorageSync('authIng')) {
-				// 	uni.setStorageSync('authIng', false)
-				// }
-				if (!that.$store.getters.isLogin && Auth.isWeixin()) {
-					let code,
-						state,
-						scope = ''
+			// if (window.location.pathname !== '/' && option.query.scope === 'snsapi_base') {
+			// 	let snsapiBase = 'snsapi_base';
+			// 	let urlData = location.pathname + location.search;
+			// 	// if (!that.$store.getters.isLogin && uni.getStorageSync('authIng')) {
+			// 	// 	uni.setStorageSync('authIng', false)
+			// 	// }
+			// 	if (!that.$store.getters.isLogin && Auth.isWeixin()) {
+			// 		let code,
+			// 			state,
+			// 			scope = ''
 
-					if (option.query.code instanceof Array) {
-						code = option.query.code[option.query.code.length - 1]
-					} else {
-						code = option.query.code
-					}
+			// 		if (option.query.code instanceof Array) {
+			// 			code = option.query.code[option.query.code.length - 1]
+			// 		} else {
+			// 			code = option.query.code
+			// 		}
 
 
-					if (code && code != uni.getStorageSync('snsapiCode') && location.pathname.indexOf(
-							'/pages/users/wechat_login/index') === -1) {
-						// 存储静默授权code
-						uni.setStorageSync('snsapiCode', code);
-						let spread = that.globalData.spid ? that.globalData.spid : '';
-						uni.setStorageSync('authIng', true)
-						silenceAuth({
-								code: code,
-								spread: that.$Cache.get('spread'),
-								spid: that.globalData.code
-							})
-							.then(res => {
-								uni.setStorageSync('authIng', false)
-								uni.setStorageSync('snRouter', decodeURIComponent(decodeURIComponent(option.query
-									.back_url)));
-								if (res.data.key !== undefined && res.data.key) {
-									this.$Cache.set('snsapiKey', res.data.key);
-								} else {
+			// 		if (code && code != uni.getStorageSync('snsapiCode') && location.pathname.indexOf(
+			// 				'/pages/users/wechat_login/index') === -1) {
+			// 			// 存储静默授权code
+			// 			uni.setStorageSync('snsapiCode', code);
+			// 			let spread = that.globalData.spid ? that.globalData.spid : '';
+			// 			uni.setStorageSync('authIng', true)
+			// 			silenceAuth({
+			// 					code: code,
+			// 					spread: that.$Cache.get('spread'),
+			// 					spid: that.globalData.code
+			// 				})
+			// 				.then(res => {
+			// 					uni.setStorageSync('authIng', false)
+			// 					uni.setStorageSync('snRouter', decodeURIComponent(decodeURIComponent(option.query
+			// 						.back_url)));
+			// 					if (res.data.key !== undefined && res.data.key) {
+			// 						this.$Cache.set('snsapiKey', res.data.key);
+			// 					} else {
 
-									let time = res.data.expires_time - this.$Cache.time();
-									this.$store.commit('LOGIN', {
-										token: res.data.token,
-										time: time
-									});
-									this.$Cache.set('WX_AUTH', code);
-									this.$store.commit('SETUID', res.data.userInfo.uid);
-									this.$store.commit('UPDATE_USERINFO', res.data.userInfo);
+			// 						let time = res.data.expires_time - this.$Cache.time();
+			// 						this.$store.commit('LOGIN', {
+			// 							token: res.data.token,
+			// 							time: time
+			// 						});
+			// 						this.$Cache.set('WX_AUTH', code);
+			// 						this.$store.commit('SETUID', res.data.userInfo.uid);
+			// 						this.$store.commit('UPDATE_USERINFO', res.data.userInfo);
 
-									if (option.query.back_url) {
-										location.replace(decodeURIComponent(decodeURIComponent(option.query
-											.back_url)));
-									}
-								}
-							})
-							.catch(error => {
-								uni.setStorageSync('authIng', false)
-								let url = ''
-								if (option.query.back_url instanceof Array) {
-									url = option.query.back_url[option.query.back_url.length - 1]
-								} else {
-									url = option.query.back_url
-								}
-								if (!that.$Cache.has('snsapiKey')) {
-									if (location.pathname.indexOf('/pages/users/wechat_login/index') === -1) {
-										Auth.oAuth(snsapiBase, url);
-									}
-								}
-							});
-					} else {
-						if (!this.$Cache.has('snsapiKey')) {
-							if (location.pathname.indexOf('/pages/users/wechat_login/index') === -1) {
-								Auth.oAuth(snsapiBase, urlData);
-							}
-						}
-					}
-				} else {
-					if (option.query.back_url) {
-						location.replace(uni.getStorageSync('snRouter'));
-					}
-				}
-			}
+			// 						if (option.query.back_url) {
+			// 							location.replace(decodeURIComponent(decodeURIComponent(option.query
+			// 								.back_url)));
+			// 						}
+			// 					}
+			// 				})
+			// 				.catch(error => {
+			// 					uni.setStorageSync('authIng', false)
+			// 					let url = ''
+			// 					if (option.query.back_url instanceof Array) {
+			// 						url = option.query.back_url[option.query.back_url.length - 1]
+			// 					} else {
+			// 						url = option.query.back_url
+			// 					}
+			// 					if (!that.$Cache.has('snsapiKey')) {
+			// 						if (location.pathname.indexOf('/pages/users/wechat_login/index') === -1) {
+			// 							Auth.oAuth(snsapiBase, url);
+			// 						}
+			// 					}
+			// 				});
+			// 		} else {
+			// 			if (!this.$Cache.has('snsapiKey')) {
+			// 				if (location.pathname.indexOf('/pages/users/wechat_login/index') === -1) {
+			// 					Auth.oAuth(snsapiBase, urlData);
+			// 				}
+			// 			}
+			// 		}
+			// 	} else {
+			// 		if (option.query.back_url) {
+			// 			location.replace(uni.getStorageSync('snRouter'));
+			// 		}
+			// 	}
+			// }
 			// #endif
 			// #ifdef MP
 			// 小程序静默授权

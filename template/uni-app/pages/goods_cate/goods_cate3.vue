@@ -50,9 +50,9 @@
 					</view>
 					<view class="mask" @click="closeTap"></view>
 				</view>
-				<goodClass :tempArr="tempArr" :isLogin="isLogin" @gocartduo="goCartDuo" @gocartdan="goCartDan"
-					@ChangeCartNumDan="ChangeCartNumDan" @detail="goDetail" :endLocation="endLocation"
-					@addCart="addCart"></goodClass>
+				<goodClass ref="goodClass" :tempArr="tempArr" :isLogin="isLogin" @gocartduo="goCartDuo"
+					@gocartdan="goCartDan" @ChangeCartNumDan="ChangeCartNumDan" @detail="goDetail"
+					:endLocation="endLocation" @addCart="addCart"></goodClass>
 				<view class='loadingicon acea-row row-center-wrapper'>
 					<text class='loading iconfont icon-jiazai' :hidden='loading==false'></text>{{loadTitle}}
 				</view>
@@ -297,6 +297,8 @@
 				let that = this;
 				getCartCounts().then(res => {
 					that.cartCount = res.data.count;
+					console.log(that.$refs.goodClass)
+					that.$refs.goodClass.addIng = false
 				});
 			},
 
@@ -1030,6 +1032,7 @@
 			padding-left: 30rpx;
 			box-sizing: border-box;
 			height: 100rpx;
+			bottom: 98rpx;
 
 			.cartIcon {
 				width: 124rpx;

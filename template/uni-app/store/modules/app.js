@@ -46,8 +46,8 @@ const mutations = {
 		state.token = token;
 	},
 	LOGOUT(state) {
-		state.token = undefined;
-		state.uid = undefined
+		state.token = false;
+		state.uid = 0
 		Cache.clear(LOGIN_STATUS);
 		Cache.clear(UID);
 	},

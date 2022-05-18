@@ -125,7 +125,7 @@
 				</view>
 
 				<button class='modifyBnt bg-color' formType="submit">保存修改</button>
-				<!-- #ifdef H5 || APP-PLUS -->
+				<!-- #ifdef H5 || APP-PLUS || MP -->
 				<view class="logOut cartcolor acea-row row-center-wrapper" @click="outLogin">退出登录</view>
 				<!-- #endif -->
 				<!-- #ifdef APP-PLUS -->

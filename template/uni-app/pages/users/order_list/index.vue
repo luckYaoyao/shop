@@ -286,6 +286,9 @@
 						if (item.value == 'yue') {
 							item.payStatus = res.data.yue_pay_status == 1 ? true : false;
 						}
+						if (item.value == 'friend') {
+							item.payStatus = res.data.friend_pay_status == 1 ? true : false;
+						}
 					});
 					//#ifdef MP
 					this.payMode[1].payStatus = false;

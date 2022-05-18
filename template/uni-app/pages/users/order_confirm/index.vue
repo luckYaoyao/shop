@@ -820,7 +820,8 @@
 					} else {
 						that.cartArr[3].payStatus = 1
 					}
-
+					//好友代付是否开启
+					that.cartArr[4].payStatus = res.data.friend_pay_status || 0;
 					// that.$set(that, 'cartArr', that.cartArr);
 					that.$set(that, 'ChangePrice', that.totalPrice);
 					that.getBargainId();

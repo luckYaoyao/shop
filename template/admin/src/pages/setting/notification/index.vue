@@ -2,56 +2,7 @@
   <div class="message">
     <div class="i-layout-page-header">
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-        <div class="ivu-mt">
-          <Alert v-if="industry" type="info" banner closable>
-            <template slot="desc" >
-              <div>
-                <p>
-                  1、请在微信后台设置模版消息主营行业：{{
-                    industry.primary_industry.first_class
-                        ? industry.primary_industry.first_class + "||"
-                        : industry.primary_industry
-                  }}
-                  {{
-                    industry.primary_industry.second_class
-                        ? industry.primary_industry.second_class
-                        : ""
-                  }}
-                  ||  副营行业：{{
-                    industry.secondary_industry.first_class
-                        ? industry.secondary_industry.first_class + "||"
-                        : industry.secondary_industry
-                  }}
-                  {{
-                    industry.secondary_industry.second_class
-                        ? industry.secondary_industry.second_class
-                        : ""
-                  }}
-                </p>
-                <p>2、点击同步按钮会自动在微信后台添加模版消息</p>
-              </div>
-            </template>
-          </Alert>
-          <Row type="flex" class="mb20">
-            <Col v-bind="grid">
-              <Button
-                  v-auth="['app-wechat-template-sync']"
-                  icon="md-list"
-                  type="success"
-                  @click="routineTemplate"
-                  style="margin-left: 20px"
-              >同步小程序订阅消息</Button
-              >
-              <Button
-                  v-auth="['app-wechat-template-sync']"
-                  icon="md-list"
-                  type="success"
-                  @click="wechatTemplate"
-                  style="margin-left: 20px"
-              >同步微信模版消息</Button
-              >
-            </Col>
-          </Row>
+        <div>
           <Tabs v-model="currentTab" @on-click="changeTab">
             <TabPane
               :label="item.label"
@@ -62,11 +13,56 @@
           </Tabs>
         </div>
       </div>
-      <div class="ivu-row">
-
+      <div class="table-box">
         <Card :bordered="false" dis-hover class="ivu-mt">
-
-
+          <Row type="flex" class="mb20" v-if="currentTab == 1">
+            <Col v-bind="grid">
+              <Button
+                v-auth="['app-wechat-template-sync']"
+                icon="md-list"
+                type="success"
+                @click="routineTemplate"
+                style="margin-left: 20px"
+                >同步小程序订阅消息</Button
+              >
+              <Button
+                v-auth="['app-wechat-template-sync']"
+                icon="md-list"
+                type="success"
+                @click="wechatTemplate"
+                style="margin-left: 20px"
+                >同步微信模版消息</Button
+              >
+            </Col>
+          </Row>
+          <Alert v-if="industry && currentTab == 1">
+            <template slot="desc">
+              <div>
+                主营行业：{{
+                  industry.primary_industry.first_class
+                    ? industry.primary_industry.first_class + "||"
+                    : industry.primary_industry
+                }}
+                {{
+                  industry.primary_industry.second_class
+                    ? industry.primary_industry.second_class
+                    : ""
+                }}
+              </div>
+              <div>
+                副营行业：{{
+                  industry.secondary_industry.first_class
+                    ? industry.secondary_industry.first_class + "||"
+                    : industry.secondary_industry
+                }}
+                {{
+                  industry.secondary_industry.second_class
+                    ? industry.secondary_industry.second_class
+                    : ""
+                }}
+              </div>
+            </template>
+          </Alert>
           <Table
             :columns="currentTab == 1 ?columns : columns2"
             :data="levelLists"
@@ -96,7 +92,7 @@
               ]"
               :slot="item"
             >
-              <div v-if="item === 'is_ent_wechat' && currentTab == 1">--</div>
+              <div v-if="item === 'is_ent_wechat' && currentTab == 1">--</div>  
               <i-switch
                 v-model="row[item]"
                 :value="row[item]"
@@ -347,8 +343,5 @@ export default {
 }
 .table {
   padding: 0 18px;
-}
-.ivu-alert-with-desc {
-  padding: 5px 16px;
 }
 </style>
