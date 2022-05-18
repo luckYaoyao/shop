@@ -245,7 +245,7 @@ class AliPayService
             ['auth_app_id', ''],
             ['buyer_logon_id', ''],
             ['point_amount', ''],
-        ]);
+        ], false, false);
 
         //商户订单号
         $postOrder['out_trade_no'] = $paramInfo['out_trade_no'] ?? '';

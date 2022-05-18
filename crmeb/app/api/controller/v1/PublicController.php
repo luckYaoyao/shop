@@ -429,9 +429,9 @@ class PublicController
             ['priceOrder', ''],
             ['newsOrder', ''],
             ['salesOrder', ''],
-            [['type', 0], 0],
+            [['type', 'd'], 0],
             ['ids', ''],
-            ['selectId', ''],
+            [['selectId', 'd'], ''],
             ['selectType', 0],
             ['isType', 0],
         ]);

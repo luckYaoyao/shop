@@ -122,14 +122,14 @@ class SystemNotificationServices extends BaseServices
                 $info['content'] = $smsTem[$info['sms_id']] ?? '';
                 break;
             case 'is_wechat':
-                $wechat = $TemplateMessageServices->getOne(['notification_id' => $info['id'], 'type' => 1]);
+                $wechat = $TemplateMessageServices->getOne(['id' => $info['wechat_id'], 'type' => 1]);
                 $info['templage_message_id'] = $wechat['id'] ?? '';
                 $info['tempkey'] = $wechat['tempkey'] ?? '';
                 $info['tempid'] = $wechat['tempid'] ?? '';
                 $info['content'] = $wechat['content'] ?? '';
                 break;
             case 'is_routine':
-                $wechat = $TemplateMessageServices->getOne(['notification_id' => $info['id'], 'type' => 0]);
+                $wechat = $TemplateMessageServices->getOne(['id' => $info['routine_id'], 'type' => 0]);
                 $info['templage_message_id'] = $wechat['id'] ?? '';
                 $info['tempkey'] = $wechat['tempkey'] ?? '';
                 $info['tempid'] = $wechat['tempid'] ?? '';

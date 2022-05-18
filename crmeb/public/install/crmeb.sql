@@ -7634,7 +7634,9 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (386, 'print_type', 'radio', 'input', 86, '1=>易联云', 1, '', 0, 0, '\"1\"', '平台选择', '平台选择', 0, 1),
 (387, 'config_export_type', 'radio', 'input', 93, '1=>一号通', 1, '', 0, 0, '\"1\"', '电子面单类型', '电子面单类型', 0, 1),
 (388, 'customer_corpId', 'text', 'input', 69, '', 1, '', 100, 0, '\"\"', '企业ID', '小程序需要跳转企业微信客服的话需要配置此项', 0, 1),
-(389, 'create_wechat_user', 'radio', 'input', '2', '1=>开启\r\n0=>关闭', '1', '', '0', '0', '0', '关注公众号是否生成用户', '关注公众号是否生成用户', '0', '1');
+(389, 'create_wechat_user', 'radio', 'input', '2', '1=>开启\r\n0=>关闭', '1', '', '0', '0', '0', '关注公众号是否生成用户', '关注公众号是否生成用户', '0', '1'),
+(390, 'friend_pay_status', 'radio', 'input', '95', '1=>开启\r\n0=>关闭', '1', '', '0', '0', '0', '好友代付开关', '好友代付开关', '0', '1');
+
 -- --------------------------------------------------------
 
 --
@@ -7703,7 +7705,8 @@ INSERT INTO `eb_system_config_tab` (`id`, `pid`, `title`, `eng_title`, `status`,
 (91, 64, '基础配置', 'logistics_basic', 1, 0, '', 3, 0),
 (92, 64, '阿里云配置', 'logistics_aliyun', 1, 0, '', 3, 0),
 (93, 66, '基础配置', 'electronic_basic', 1, 0, '', 3, 0),
-(94, 66, '一号通配置', 'system_electronic_config', 1, 0, '', 3, 0);
+(94, 66, '一号通配置', 'system_electronic_config', 1, 0, '', 3, 0),
+(95, 23, '好友代付', 'friend_pay', 1, 0, '', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -8804,6 +8807,8 @@ CREATE TABLE IF NOT EXISTS `eb_system_notification` (
   `system_text` varchar(512) NOT NULL DEFAULT '' COMMENT '系统消息id',
   `app_id` int(11) NOT NULL DEFAULT '0' COMMENT 'app推送id',
   `sms_id` int(11) NOT NULL DEFAULT '0' COMMENT '短信id',
+  `wechat_id` int(10) NOT NULL DEFAULT '0' COMMENT '模版消息id',
+  `routine_id` int(10) NOT NULL DEFAULT '0' COMMENT '订阅消息id',
   `ent_wechat_text` varchar(512) NOT NULL DEFAULT '' COMMENT '企业微信消息',
   `variable` varchar(256) NOT NULL DEFAULT '' COMMENT '变量',
   `url` varchar(512) NOT NULL DEFAULT '' COMMENT '群机器人链接',
@@ -8816,32 +8821,32 @@ CREATE TABLE IF NOT EXISTS `eb_system_notification` (
 -- 转存表中的数据 `eb_system_notification`
 --
 
-INSERT INTO `eb_system_notification` (`id`, `mark`, `name`, `title`, `is_system`, `is_app`, `is_wechat`, `is_routine`, `is_sms`, `is_ent_wechat`, `system_title`, `system_text`, `app_id`, `sms_id`, `ent_wechat_text`, `variable`, `url`, `type`, `add_time`) VALUES
-(1, 'bind_spread_uid', '绑定推广关系', '注册完成给上级发送', 1, 1, 1, 1, 0, 0, '绑定下级通知', '恭喜，又一员猛将将永久绑定到您的团队，用户{nickname}加入您的队伍！', 0, 0, '0', '{nikename}用户名', '', 1, 0),
-(2, 'order_pay_success', '支付成功给用户发送', '支付成功给用户发送', 1, 1, 1, 1, 2, 0, '购买成功通知', '您购买的商品已支付成功，支付金额{pay_price}元，订单号{order_id},感谢您的光临！', 0, 440396, '0', '{order_id}订单号,{total_num}商品总数,{pay_price}支付金额', '', 1, 0),
-(3, 'order_take', '确认收货提醒发送', '确认收货用户提醒发送', 1, 1, 1, 1, 2, 0, '确认收货通知', '亲，您的订单{order_id},商品{store_name}已确认收货,感谢您的光临！', 0, 440402, '0', '{order_id}订单号,{store_name}商品名称', '', 1, 0),
-(4, 'price_revision', '改价提醒发送', '改价给用户提醒发送', 1, 1, 1, 0, 2, 0, '改价通知', '您的订单{order_id}，实际支付金额已被修改为{pay_price}', 0, 440410, '0', '{order_id}订单号,{pay_price}订单金额', '', 1, 0),
-(5, 'order_refund', '退款成功提醒发送', '退款给用户提醒发送', 1, 1, 1, 1, 0, 0, '退款成功通知', '您的订单{order_id}已同意退款,退款金额{refund_price}元。', 0, 0, '0', '{order_id}订单号,{refund_price}退款金额,{pay_price}订单金额', '', 1, 0),
-(7, 'recharge_success', '充值成功提醒发送', '充值成功给用户提醒发送', 1, 1, 1, 1, 0, 0, '充值成功通知', '您成功充值￥{price}，现剩余余额￥{now_money}元', 0, 0, '0', '{order_id}充值订单,{price}充值金额,{now_money}现有余额', '', 1, 0),
-(8, 'integral_accout', '积分到账提醒发送', '积分到账给用户提醒发送', 1, 1, 1, 1, 0, 0, '积分到账通知', '亲，您成功获得积分{gain_integral}，现有积分{integral}', 0, 0, '0', '{order_id}订单号,{store_name}商品名称,{pay_price}支付金额,{gain_integral}获取积分,{integral}现有积分', '', 1, 0),
-(9, 'order_brokerage', '佣金到账提醒发送', '佣金到账给用户提醒发送', 1, 1, 1, 1, 0, 0, '佣金到账通知', '亲，恭喜您成功获得佣金{brokerage_price}元', 0, 0, '0', '{goods_name}商品名称,{goods_price}商品金额,{brokerage_price}分佣金额', '', 1, 0),
-(10, 'bargain_success', '砍价成功提醒发送', '砍价成功给用户提醒发送', 1, 1, 1, 1, 0, 0, '砍价成功通知', '亲，好腻害！你的朋友们已经帮你砍到底价了，商品名称{title}，底价{min_price}', 0, 0, '0', '{title}活动名称{min_price}最低价', '', 1, 0),
-(11, 'order_user_groups_success', '拼团成功提醒发送', '拼团成功给用户提醒发送', 1, 1, 1, 1, 0, 0, '拼团成功通知', '亲，您的拼团已经完成了，拼团名称{title}，团长{nickname}', 0, 0, '0', '{title}活动名称,{nickname}团长,{count}拼团人数,{pink_time}开团时间', '', 1, 0),
-(12, 'send_order_pink_fial', '拼团失败提醒发送', '拼团失败给用户提醒发送', 1, 1, 1, 1, 0, 0, '拼团失败通知', '亲，您的拼团失败，活动名称{title}', 0, 0, '0', '{title}活动名称{count}拼团人数', '', 1, 0),
-(13, 'open_pink_success', '开团成功提醒发送', '开团成功给用户提醒发送', 1, 1, 1, 1, 0, 0, '开团成功通知', '亲，您已成功参与拼团，活动名称{title}', 0, 0, '0', '{title}活动名称,{nickname}团长,{count}拼团人数,{pink_time}开团时间', '', 1, 0),
-(14, 'user_extract', '提现成功提醒发送', '提现成功给用户提醒发送', 1, 1, 1, 1, 0, 0, '提现成功通知', '亲，您成功提现佣金{extract_number}元', 0, 0, '0', '{extract_number}提现金额,{nickname}用户昵称,{date}提现时间', '', 1, 0),
-(15, 'user_balance_change', '提现失败提醒发送', '提现失败给用户提醒发送', 1, 1, 1, 1, 0, 0, '提现失败通知', '亲，您发起的提现被驳回，返回佣金{extract_number}元', 0, 0, '0', '{extract_number}提现金额,{nickname}用户昵称,{date}提现时间,{message}失败原因', '', 1, 0),
-(16, 'recharge_order_refund_status', '充值退款提醒发送', '充值退款给用户提醒发送', 1, 1, 1, 1, 0, 0, '充值退款通知', '亲，您充值的金额已退款,本次退款{refund_price}元', 0, 0, '0', '{refund_price}退款金额,{order_id}充值订单,{price}充值金额', '', 1, 0),
-(17, 'send_order_refund_no_status', '退款申请未通过提醒发送', '退款申请未通过给用户提醒发送', 1, 1, 1, 1, 0, 0, '退款申请拒绝通知', '您好！您的订单{order_id}已拒绝退款。', 0, 0, '0', '{order_id}订单号,{store_name}商品名称,{pay_price}订单金额', '', 1, 0),
-(18, 'send_order_apply_refund', '申请退款给客服发消息', '申请退款给客服发消息', 1, 1, 1, 0, 2, 1, '您有新的退款待处理', '您有一笔退款订单待处理，订单号{order_id}!', 0, 440407, '您有个订单退款请注意查收\\n订单号：{order_id}', '{admin_name}管理员,{order_id}订单号', '', 2, 0),
-(19, 'admin_pay_success_code', '下单给客服发消息', '下单支付给客服发消息', 1, 1, 1, 0, 2, 1, '您有新的订单待处理', '您有一笔支付成功的订单待处理，订单号{order_id}!', 0, 440405, '您有个新订单请注意查收\\n订单号：{order_id}', '{admin_name}管理员,{order_id}订单号', '', 2, 0),
-(20, 'order_deliver_success', '发货提醒发送', '发货用户提醒发送', 1, 1, 1, 1, 2, 0, '发货通知', '亲爱的用户{nickname}您的商品{store_name}，订单号{order_id}已发货，请注意查收', 0, 441596, '0', '{nickname}用户昵称,{store_name}商品名称,{order_id}订单号,{delivery_name}配送员姓名,{delivery_id}配送员电话,{user_address}收货地址', '', 1, 0),
-(21, 'order_postage_success', '发货快递提醒发送', '发货快递用户提醒发送', 1, 1, 1, 1, 2, 0, '发货通知', '亲爱的用户{nickname}您的商品{store_name}，订单号{order_id}已发货，请注意查收', 0, 441596, '0', '{nickname}用户昵称,{store_name}商品名称,{order_id}订单号,{delivery_name}快递名称,{delivery_id}快递单号,{user_address}收货地址', '', 1, 0),
-(22, 'send_order_pink_clone', '取消拼团提醒发送', '取消拼团给用户提醒发送', 1, 1, 1, 1, 0, 0, '取消拼团通知', '亲，您的拼团取消，活动名称{title}', 0, 0, '0', '{title}活动名称{count}拼团人数', '', 1, 0),
-(23, 'can_pink_success', '参团成功提醒发送', '参团成功给用户提醒发送', 1, 1, 1, 1, 0, 0, '参团成功通知', '亲，您已成功参与拼团，活动名称{title}', 0, 0, '0', '{title}活动名称,{nickname}团长,{count}拼团人数,{pink_time}开团时间', '', 1, 0),
-(24, 'kefu_send_extract_application', '提现申请给客服发消息', '提现申请给客服发消息', 1, 0, 1, 0, 0, 1, '你有个新的提现申请待处理', '您有一笔提现申请待处理，提现金额{money}!', 0, 0, '您有个提现申请请注意查收\\n>提现金额{money}', '{nickname}用户昵称,{money}提现金额', 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=ae3s-safwea-aa', 2, 0),
-(25, 'send_admin_confirm_take_over', '收货给客服发消息', '收货给客服发消息', 1, 0, 0, 0, 2, 1, '你有个新的用户收货待处理', '您有一笔订单已经确认收货，订单号{order_id}!', 0, 440408, '您有个订单确认收货\\n>订单号{order_id}', '{storeTitle}商品名称,{order_id}订单号', '', 2, 0),
-(26, 'order_pay_false', '提醒付款通知', '提醒付款通知用户提醒发送', 1, 1, 1, 0, 2, 0, '提醒付款通知', '您有未付款订单,订单号为:{order_id}，商品数量有限，请及时付款。', 0, 440409, '0', '', '', 1, 0);
+INSERT INTO `eb_system_notification` (`id`, `mark`, `name`, `title`, `is_system`, `is_app`, `is_wechat`, `is_routine`, `is_sms`, `is_ent_wechat`, `system_title`, `system_text`, `app_id`, `sms_id`, `wechat_id`, `routine_id`, `ent_wechat_text`, `variable`, `url`, `type`, `add_time`) VALUES
+(1, 'bind_spread_uid', '绑定推广关系', '注册完成给上级发送', 1, 0, 1, 1, 0, 0, '绑定下级通知', '恭喜，又一员猛将将永久绑定到您的团队，用户{nickname}加入您的队伍！', 0, 0, 31, 4, '0', '{nikename}用户名', '', 1, 0),
+(2, 'order_pay_success', '支付成功给用户发送', '支付成功给用户发送', 1, 0, 1, 1, 2, 0, '购买成功通知', '您购买的商品已支付成功，支付金额{pay_price}元，订单号{order_id},感谢您的光临！', 0, 440396, 26, 12, '0', '{order_id}订单号,{total_num}商品总数,{pay_price}支付金额', '', 1, 0),
+(3, 'order_take', '确认收货提醒发送', '确认收货用户提醒发送', 1, 0, 1, 1, 2, 0, '确认收货通知', '亲，您的订单{order_id},商品{store_name}已确认收货,感谢您的光临！', 0, 440402, 17, 3, '0', '{order_id}订单号,{store_name}商品名称', '', 1, 0),
+(4, 'price_revision', '改价提醒发送', '改价给用户提醒发送', 1, 0, 1, 0, 2, 0, '改价通知', '您的订单{order_id}，实际支付金额已被修改为{pay_price}', 0, 440410, 36, 0, '0', '{order_id}订单号,{pay_price}订单金额', '', 1, 0),
+(5, 'order_refund', '退款成功提醒发送', '退款给用户提醒发送', 1, 0, 1, 1, 0, 0, '退款成功通知', '您的订单{order_id}已同意退款,退款金额{refund_price}元。', 0, 0, 18, 10, '0', '{order_id}订单号,{refund_price}退款金额,{pay_price}订单金额', '', 1, 0),
+(7, 'recharge_success', '充值成功提醒发送', '充值成功给用户提醒发送', 1, 0, 1, 1, 0, 0, '充值成功通知', '您成功充值￥{price}，现剩余余额￥{now_money}元', 0, 0, 37, 11, '0', '{order_id}充值订单,{price}充值金额,{now_money}现有余额', '', 1, 0),
+(8, 'integral_accout', '积分到账提醒发送', '积分到账给用户提醒发送', 1, 0, 1, 1, 0, 0, '积分到账通知', '亲，您成功获得积分{gain_integral}，现有积分{integral}', 0, 0, 41, 14, '0', '{order_id}订单号,{store_name}商品名称,{pay_price}支付金额,{gain_integral}获取积分,{integral}现有积分', '', 1, 0),
+(9, 'order_brokerage', '佣金到账提醒发送', '佣金到账给用户提醒发送', 1, 0, 1, 1, 0, 0, '佣金到账通知', '亲，恭喜您成功获得佣金{brokerage_price}元', 0, 0, 30, 1, '0', '{goods_name}商品名称,{goods_price}商品金额,{brokerage_price}分佣金额', '', 1, 0),
+(10, 'bargain_success', '砍价成功提醒发送', '砍价成功给用户提醒发送', 1, 0, 1, 1, 0, 0, '砍价成功通知', '亲，好腻害！你的朋友们已经帮你砍到底价了，商品名称{title}，底价{min_price}', 0, 0, 27, 7, '0', '{title}活动名称{min_price}最低价', '', 1, 0),
+(11, 'order_user_groups_success', '拼团成功提醒发送', '拼团成功给用户提醒发送', 1, 0, 1, 1, 0, 0, '拼团成功通知', '亲，您的拼团已经完成了，拼团名称{title}，团长{nickname}', 0, 0, 23, 6, '0', '{title}活动名称,{nickname}团长,{count}拼团人数,{pink_time}开团时间', '', 1, 0),
+(12, 'send_order_pink_fial', '拼团失败提醒发送', '拼团失败给用户提醒发送', 1, 0, 1, 1, 0, 0, '拼团失败通知', '亲，您的拼团失败，活动名称{title}', 0, 0, 24, 15, '0', '{title}活动名称{count}拼团人数', '', 1, 0),
+(13, 'open_pink_success', '开团成功提醒发送', '开团成功给用户提醒发送', 1, 0, 1, 1, 0, 0, '开团成功通知', '亲，您已成功参与拼团，活动名称{title}', 0, 0, 28, 6, '0', '{title}活动名称,{nickname}团长,{count}拼团人数,{pink_time}开团时间', '', 1, 0),
+(14, 'user_extract', '提现成功提醒发送', '提现成功给用户提醒发送', 1, 0, 1, 1, 0, 0, '提现成功通知', '亲，您成功提现佣金{extract_number}元', 0, 0, 38, 2, '0', '{extract_number}提现金额,{nickname}用户昵称,{date}提现时间', '', 1, 0),
+(15, 'user_balance_change', '提现失败提醒发送', '提现失败给用户提醒发送', 1, 0, 1, 1, 0, 0, '提现失败通知', '亲，您发起的提现被驳回，返回佣金{extract_number}元', 0, 0, 39, 2, '0', '{extract_number}提现金额,{nickname}用户昵称,{date}提现时间,{message}失败原因', '', 1, 0),
+(16, 'recharge_order_refund_status', '充值退款提醒发送', '充值退款给用户提醒发送', 1, 0, 1, 1, 0, 0, '充值退款通知', '亲，您充值的金额已退款,本次退款{refund_price}元', 0, 0, 18, 11, '0', '{refund_price}退款金额,{order_id}充值订单,{price}充值金额', '', 1, 0),
+(17, 'send_order_refund_no_status', '退款申请未通过提醒发送', '退款申请未通过给用户提醒发送', 1, 0, 1, 1, 0, 0, '退款申请拒绝通知', '您好！您的订单{order_id}已拒绝退款。', 0, 0, 18, 10, '0', '{order_id}订单号,{store_name}商品名称,{pay_price}订单金额', '', 1, 0),
+(18, 'send_order_apply_refund', '申请退款给客服发消息', '申请退款给客服发消息', 1, 0, 0, 0, 2, 1, '您有新的退款待处理', '您有一笔退款订单待处理，订单号{order_id}!', 0, 440407, 0, 0, '您有个订单退款请注意查收\\n订单号：{order_id}', '{admin_name}管理员,{order_id}订单号', '', 2, 0),
+(19, 'admin_pay_success_code', '下单给客服发消息', '下单支付给客服发消息', 1, 0, 0, 0, 2, 1, '您有新的订单待处理', '您有一笔支付成功的订单待处理，订单号{order_id}!', 0, 440405, 0, 0, '您有个新订单请注意查收\\n订单号：{order_id}', '{admin_name}管理员,{order_id}订单号', '', 2, 0),
+(20, 'order_deliver_success', '发货提醒发送', '发货用户提醒发送', 1, 0, 1, 1, 2, 0, '发货通知', '亲爱的用户{nickname}您的商品{store_name}，订单号{order_id}已发货，请注意查收', 0, 441596, 20, 5, '0', '{nickname}用户昵称,{store_name}商品名称,{order_id}订单号,{delivery_name}配送员姓名,{delivery_id}配送员电话,{user_address}收货地址', '', 1, 0),
+(21, 'order_postage_success', '发货快递提醒发送', '发货快递用户提醒发送', 1, 0, 1, 1, 2, 0, '发货通知', '亲爱的用户{nickname}您的商品{store_name}，订单号{order_id}已发货，请注意查收', 0, 441596, 16, 9, '0', '{nickname}用户昵称,{store_name}商品名称,{order_id}订单号,{delivery_name}快递名称,{delivery_id}快递单号,{user_address}收货地址', '', 1, 0),
+(22, 'send_order_pink_clone', '取消拼团提醒发送', '取消拼团给用户提醒发送', 1, 0, 1, 1, 0, 0, '取消拼团通知', '亲，您的拼团取消，活动名称{title}', 0, 0, 24, 15, '0', '{title}活动名称{count}拼团人数', '', 1, 0),
+(23, 'can_pink_success', '参团成功提醒发送', '参团成功给用户提醒发送', 1, 0, 1, 1, 0, 0, '参团成功通知', '亲，您已成功参与拼团，活动名称{title}', 0, 0, 23, 6, '0', '{title}活动名称,{nickname}团长,{count}拼团人数,{pink_time}开团时间', '', 1, 0),
+(24, 'kefu_send_extract_application', '提现申请给客服发消息', '提现申请给客服发消息', 1, 0, 0, 0, 0, 1, '你有个新的提现申请待处理', '您有一笔提现申请待处理，提现金额{money}!', 0, 0, 0, 0, '您有个提现申请请注意查收\\n>提现金额{money}', '{nickname}用户昵称,{money}提现金额', 'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=ae3s-safwea-aa', 2, 0),
+(25, 'send_admin_confirm_take_over', '收货给客服发消息', '收货给客服发消息', 1, 0, 0, 0, 2, 1, '你有个新的用户收货待处理', '您有一笔订单已经确认收货，订单号{order_id}!', 0, 440408, 0, 0, '您有个订单确认收货\\n>订单号{order_id}', '{storeTitle}商品名称,{order_id}订单号', '', 2, 0),
+(26, 'order_pay_false', '提醒付款通知', '提醒付款通知用户提醒发送', 1, 0, 1, 0, 2, 0, '提醒付款通知', '您有未付款订单,订单号为:{order_id}，商品数量有限，请及时付款。', 0, 440409, 40, 0, '0', '', '', 1, 0);
 
 -- --------------------------------------------------------
 

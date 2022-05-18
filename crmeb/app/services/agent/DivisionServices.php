@@ -130,6 +130,8 @@ class DivisionServices extends BaseServices
             'is_agent' => 0,
             'is_staff' => 0,
             'division_id' => $uid,
+            'agent_id' => 0,
+            'staff_id' => 0,
             'division_type' => 1,
             'division_status' => $data['division_status'],
             'spread_uid' => 0,
@@ -330,189 +332,199 @@ class DivisionServices extends BaseServices
      */
     public function getDivisionPercent($uid, $storeBrokerageRatio, $storeBrokerageRatioTwo, $isSelfBrokerage)
     {
-        /** @var UserServices $userServices */
-        $userServices = app()->make(UserServices::class);
-        $userInfo = $userServices->get($uid);
-        if ($userInfo['is_division'] == 1 && $userInfo['division_end_time'] > time()) {
-            /** 自己是事业部 */
-            if ($isSelfBrokerage) {
-                $storeBrokerageOne = $storeBrokerageRatio;
-                $storeBrokerageTwo = 0;
-                $staffPercent = 0;
-                $agentPercent = 0;
-                $divisionPercent = 0;
-            } else {
-                $storeBrokerageOne = 0;
-                $storeBrokerageTwo = 0;
-                $staffPercent = 0;
-                $agentPercent = 0;
-                $divisionPercent = 0;
-            }
-        } elseif ($userInfo['is_agent'] == 1 && $userInfo['division_end_time'] > time()) {
-            /** 自己是代理商 */
-            $divisionInfo = $userServices->get($userInfo['division_id']);
-            if ($isSelfBrokerage) {
-                $storeBrokerageOne = $storeBrokerageRatio;
-                $storeBrokerageTwo = 0;
-                $staffPercent = 0;
-                $agentPercent = 0;
-                $divisionPercent = $divisionInfo['division_percent'] - $storeBrokerageOne;
-            } else {
-                $storeBrokerageOne = 0;
-                $storeBrokerageTwo = 0;
-                $staffPercent = 0;
-                $agentPercent = 0;
-                $divisionPercent = $divisionInfo['division_percent'];
-            }
-        } elseif ($userInfo['is_staff'] == 1 && $userInfo['division_end_time'] > time()) { // 自己是员工
-            /** 自己是员工 */
-            $agentInfo = $userServices->get($userInfo['agent_id']);
-            $divisionInfo = $userServices->get($userInfo['division_id']);
-            if ($isSelfBrokerage) {
-                $storeBrokerageOne = $storeBrokerageRatio;
-                $storeBrokerageTwo = 0;
-                $staffPercent = 0;
-                $agentPercent = $agentInfo['division_percent'] - $storeBrokerageOne;
-                $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
-            } else {
-                $storeBrokerageOne = 0;
-                $storeBrokerageTwo = 0;
-                $staffPercent = 0;
-                $agentPercent = $agentInfo['division_percent'];
-                $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
-            }
+        $division_open = (int)sys_config('division_status', 0);
+        if (!$division_open) {
+            /** 代理商关闭 */
+            $storeBrokerageOne = $storeBrokerageRatio;
+            $storeBrokerageTwo = $storeBrokerageRatioTwo;
+            $staffPercent = 0;
+            $agentPercent = 0;
+            $divisionPercent = 0;
         } else {
-            /** 自己是普通用户 */
-            $staffInfo = $userServices->get($userInfo['staff_id']);
-            $agentInfo = $userServices->get($userInfo['agent_id']);
-            $divisionInfo = $userServices->get($userInfo['division_id']);
-            if ($userInfo['staff_id']) {
-                /** 该用户为员工推广 */
-                if ($userInfo['staff_id'] == $userInfo['spread_uid']) {
-                    /** 员工直接下级 */
-                    if ($isSelfBrokerage) {
-                        $storeBrokerageOne = $storeBrokerageRatio;
-                        $storeBrokerageTwo = $staffInfo['division_percent'] - $storeBrokerageOne;
-                        $staffPercent = 0;
-                        $agentPercent = $agentInfo['division_percent'] - $staffInfo['division_percent'];
-                        $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
+            /** @var UserServices $userServices */
+            $userServices = app()->make(UserServices::class);
+            $userInfo = $userServices->get($uid);
+            if ($userInfo['is_division'] == 1 && $userInfo['division_end_time'] > time()) {
+                /** 自己是事业部 */
+                if ($isSelfBrokerage) {
+                    $storeBrokerageOne = $storeBrokerageRatio;
+                    $storeBrokerageTwo = 0;
+                    $staffPercent = 0;
+                    $agentPercent = 0;
+                    $divisionPercent = 0;
+                } else {
+                    $storeBrokerageOne = 0;
+                    $storeBrokerageTwo = 0;
+                    $staffPercent = 0;
+                    $agentPercent = 0;
+                    $divisionPercent = 0;
+                }
+            } elseif ($userInfo['is_agent'] == 1 && $userInfo['division_end_time'] > time()) {
+                /** 自己是代理商 */
+                $divisionInfo = $userServices->get($userInfo['division_id']);
+                if ($isSelfBrokerage) {
+                    $storeBrokerageOne = $storeBrokerageRatio;
+                    $storeBrokerageTwo = 0;
+                    $staffPercent = 0;
+                    $agentPercent = 0;
+                    $divisionPercent = $divisionInfo['division_percent'] - $storeBrokerageOne;
+                } else {
+                    $storeBrokerageOne = 0;
+                    $storeBrokerageTwo = 0;
+                    $staffPercent = 0;
+                    $agentPercent = 0;
+                    $divisionPercent = $divisionInfo['division_percent'];
+                }
+            } elseif ($userInfo['is_staff'] == 1 && $userInfo['division_end_time'] > time()) { // 自己是员工
+                /** 自己是员工 */
+                $agentInfo = $userServices->get($userInfo['agent_id']);
+                $divisionInfo = $userServices->get($userInfo['division_id']);
+                if ($isSelfBrokerage) {
+                    $storeBrokerageOne = $storeBrokerageRatio;
+                    $storeBrokerageTwo = 0;
+                    $staffPercent = 0;
+                    $agentPercent = $agentInfo['division_percent'] - $storeBrokerageOne;
+                    $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
+                } else {
+                    $storeBrokerageOne = 0;
+                    $storeBrokerageTwo = 0;
+                    $staffPercent = 0;
+                    $agentPercent = $agentInfo['division_percent'];
+                    $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
+                }
+            } else {
+                /** 自己是普通用户 */
+                $staffInfo = $userServices->get($userInfo['staff_id']);
+                $agentInfo = $userServices->get($userInfo['agent_id']);
+                $divisionInfo = $userServices->get($userInfo['division_id']);
+                if ($userInfo['staff_id']) {
+                    /** 该用户为员工推广 */
+                    if ($userInfo['staff_id'] == $userInfo['spread_uid']) {
+                        /** 员工直接下级 */
+                        if ($isSelfBrokerage) {
+                            $storeBrokerageOne = $storeBrokerageRatio;
+                            $storeBrokerageTwo = $staffInfo['division_percent'] - $storeBrokerageOne;
+                            $staffPercent = 0;
+                            $agentPercent = $agentInfo['division_percent'] - $staffInfo['division_percent'];
+                            $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
+                        } else {
+                            $storeBrokerageOne = $staffInfo['division_percent'];
+                            $storeBrokerageTwo = 0;
+                            $staffPercent = 0;
+                            $agentPercent = $agentInfo['division_percent'] - $staffInfo['division_percent'];
+                            $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
+                        }
+                    } elseif ($userServices->value(['uid' => $userInfo['spread_uid']], 'spread_uid') == $userInfo['staff_id']) {
+                        /** 员工间接下级 */
+                        if ($isSelfBrokerage) {
+                            $storeBrokerageOne = $storeBrokerageRatio;
+                            $storeBrokerageTwo = $storeBrokerageRatioTwo;
+                            $staffPercent = 0;
+                            $agentPercent = $agentInfo['division_percent'] - $storeBrokerageOne - $storeBrokerageTwo;
+                            $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
+                        } else {
+                            $storeBrokerageOne = $storeBrokerageRatio;
+                            $storeBrokerageTwo = 0;
+                            $staffPercent = $staffInfo['division_percent'] - $storeBrokerageOne;
+                            $agentPercent = $agentInfo['division_percent'] - $staffInfo['division_percent'];
+                            $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
+                        }
                     } else {
-                        $storeBrokerageOne = $staffInfo['division_percent'];
-                        $storeBrokerageTwo = 0;
-                        $staffPercent = 0;
-                        $agentPercent = $agentInfo['division_percent'] - $staffInfo['division_percent'];
-                        $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
-                    }
-                } elseif ($userServices->value(['uid' => $userInfo['spread_uid']], 'spread_uid') == $userInfo['staff_id']) {
-                    /** 员工间接下级 */
-                    if ($isSelfBrokerage) {
+                        /** 和员工的关系超过两级 */
                         $storeBrokerageOne = $storeBrokerageRatio;
                         $storeBrokerageTwo = $storeBrokerageRatioTwo;
                         $staffPercent = 0;
                         $agentPercent = $agentInfo['division_percent'] - $storeBrokerageOne - $storeBrokerageTwo;
                         $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
-                    } else {
-                        $storeBrokerageOne = $storeBrokerageRatio;
-                        $storeBrokerageTwo = 0;
-                        $staffPercent = $staffInfo['division_percent'] - $storeBrokerageOne;
-                        $agentPercent = $agentInfo['division_percent'] - $staffInfo['division_percent'];
-                        $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
                     }
-                } else {
-                    /** 和员工的关系超过两级 */
-                    $storeBrokerageOne = $storeBrokerageRatio;
-                    $storeBrokerageTwo = $storeBrokerageRatioTwo;
-                    $staffPercent = 0;
-                    $agentPercent = $agentInfo['division_percent'] - $storeBrokerageOne - $storeBrokerageTwo;
-                    $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
-                }
-            } elseif ($userInfo['agent_id']) {
-                /** 该用户为代理商推广 */
-                if ($userInfo['agent_id'] == $userInfo['spread_uid']) {
-                    /** 代理商直接下级 */
-                    if ($isSelfBrokerage) {
-                        $storeBrokerageOne = $storeBrokerageRatio;
-                        $storeBrokerageTwo = 0;
-                        $staffPercent = 0;
-                        $agentPercent = $agentInfo['division_percent'] - $storeBrokerageOne;
-                        $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
+                } elseif ($userInfo['agent_id']) {
+                    /** 该用户为代理商推广 */
+                    if ($userInfo['agent_id'] == $userInfo['spread_uid']) {
+                        /** 代理商直接下级 */
+                        if ($isSelfBrokerage) {
+                            $storeBrokerageOne = $storeBrokerageRatio;
+                            $storeBrokerageTwo = 0;
+                            $staffPercent = 0;
+                            $agentPercent = $agentInfo['division_percent'] - $storeBrokerageOne;
+                            $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
+                        } else {
+                            $storeBrokerageOne = 0;
+                            $storeBrokerageTwo = 0;
+                            $staffPercent = 0;
+                            $agentPercent = $agentInfo['division_percent'];
+                            $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
+                        }
+                    } elseif ($userServices->value(['uid' => $userInfo['spread_uid']], 'spread_uid') == $userInfo['agent_id']) {
+                        /** 代理商间接下级 */
+                        if ($isSelfBrokerage) {
+                            $storeBrokerageOne = $storeBrokerageRatio;
+                            $storeBrokerageTwo = $storeBrokerageRatioTwo;
+                            $staffPercent = 0;
+                            $agentPercent = $agentInfo['division_percent'] - $storeBrokerageOne - $storeBrokerageTwo;
+                            $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
+                        } else {
+                            $storeBrokerageOne = $storeBrokerageRatio;
+                            $storeBrokerageTwo = 0;
+                            $staffPercent = 0;
+                            $agentPercent = $agentInfo['division_percent'] - $storeBrokerageOne;
+                            $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
+                        }
                     } else {
-                        $storeBrokerageOne = 0;
-                        $storeBrokerageTwo = 0;
-                        $staffPercent = 0;
-                        $agentPercent = $agentInfo['division_percent'];
-                        $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
-                    }
-                } elseif ($userServices->value(['uid' => $userInfo['spread_uid']], 'spread_uid') == $userInfo['agent_id']) {
-                    /** 代理商间接下级 */
-                    if ($isSelfBrokerage) {
+                        /** 和代理商的关系超过两级 */
                         $storeBrokerageOne = $storeBrokerageRatio;
                         $storeBrokerageTwo = $storeBrokerageRatioTwo;
                         $staffPercent = 0;
-                        $agentPercent = $agentInfo['division_percent'] - $storeBrokerageOne - $storeBrokerageTwo;
-                        $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
-                    } else {
-                        $storeBrokerageOne = $storeBrokerageRatio;
-                        $storeBrokerageTwo = 0;
-                        $staffPercent = 0;
-                        $agentPercent = $agentInfo['division_percent'] - $storeBrokerageOne;
+                        $agentPercent = $agentInfo['division_percent'] - $storeBrokerageRatio - $storeBrokerageTwo;
                         $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
                     }
-                } else {
-                    /** 和代理商的关系超过两级 */
-                    $storeBrokerageOne = $storeBrokerageRatio;
-                    $storeBrokerageTwo = $storeBrokerageRatioTwo;
-                    $staffPercent = 0;
-                    $agentPercent = $agentInfo['division_percent'] - $storeBrokerageRatio - $storeBrokerageTwo;
-                    $divisionPercent = $divisionInfo['division_percent'] - $agentInfo['division_percent'];
-                }
-            } elseif ($userInfo['division_id']) {
-                /** 该用户为事业部推广 */
-                if ($userInfo['division_id'] == $userInfo['spread_uid']) {
-                    /** 事业部直接下级 */
-                    if ($isSelfBrokerage) {
-                        $storeBrokerageOne = $storeBrokerageRatio;
-                        $storeBrokerageTwo = 0;
-                        $staffPercent = 0;
-                        $agentPercent = 0;
-                        $divisionPercent = $divisionInfo['division_percent'] - $storeBrokerageOne;
+                } elseif ($userInfo['division_id']) {
+                    /** 该用户为事业部推广 */
+                    if ($userInfo['division_id'] == $userInfo['spread_uid']) {
+                        /** 事业部直接下级 */
+                        if ($isSelfBrokerage) {
+                            $storeBrokerageOne = $storeBrokerageRatio;
+                            $storeBrokerageTwo = 0;
+                            $staffPercent = 0;
+                            $agentPercent = 0;
+                            $divisionPercent = $divisionInfo['division_percent'] - $storeBrokerageOne;
+                        } else {
+                            $storeBrokerageOne = 0;
+                            $storeBrokerageTwo = 0;
+                            $staffPercent = 0;
+                            $agentPercent = 0;
+                            $divisionPercent = $divisionInfo['division_percent'];
+                        }
+                    } elseif ($userServices->value(['uid' => $userInfo['spread_uid']], 'spread_uid') == $userInfo['division_id']) {
+                        /** 事业部间接下级 */
+                        if ($isSelfBrokerage) {
+                            $storeBrokerageOne = $storeBrokerageRatio;
+                            $storeBrokerageTwo = $storeBrokerageRatioTwo;
+                            $staffPercent = 0;
+                            $agentPercent = 0;
+                            $divisionPercent = $divisionInfo['division_percent'] - $storeBrokerageOne - $storeBrokerageTwo;
+                        } else {
+                            $storeBrokerageOne = $storeBrokerageRatio;
+                            $storeBrokerageTwo = 0;
+                            $staffPercent = 0;
+                            $agentPercent = 0;
+                            $divisionPercent = $divisionInfo['division_percent'] - $storeBrokerageOne;
+                        }
                     } else {
-                        $storeBrokerageOne = 0;
-                        $storeBrokerageTwo = 0;
-                        $staffPercent = 0;
-                        $agentPercent = 0;
-                        $divisionPercent = $divisionInfo['division_percent'];
-                    }
-                } elseif ($userServices->value(['uid' => $userInfo['spread_uid']], 'spread_uid') == $userInfo['division_id']) {
-                    /** 事业部间接下级 */
-                    if ($isSelfBrokerage) {
+                        /** 和事业部的关系超过两级 */
                         $storeBrokerageOne = $storeBrokerageRatio;
                         $storeBrokerageTwo = $storeBrokerageRatioTwo;
                         $staffPercent = 0;
                         $agentPercent = 0;
                         $divisionPercent = $divisionInfo['division_percent'] - $storeBrokerageOne - $storeBrokerageTwo;
-                    } else {
-                        $storeBrokerageOne = $storeBrokerageRatio;
-                        $storeBrokerageTwo = 0;
-                        $staffPercent = 0;
-                        $agentPercent = 0;
-                        $divisionPercent = $divisionInfo['division_percent'] - $storeBrokerageOne;
                     }
                 } else {
-                    /** 和事业部的关系超过两级 */
+                    /** 没有任何代理商关系 */
                     $storeBrokerageOne = $storeBrokerageRatio;
                     $storeBrokerageTwo = $storeBrokerageRatioTwo;
                     $staffPercent = 0;
                     $agentPercent = 0;
-                    $divisionPercent = $divisionInfo['division_percent'] - $storeBrokerageOne - $storeBrokerageTwo;
+                    $divisionPercent = 0;
                 }
-            } else {
-                /** 没有任何代理商关系 */
-                $storeBrokerageOne = $storeBrokerageRatio;
-                $storeBrokerageTwo = $storeBrokerageRatioTwo;
-                $staffPercent = 0;
-                $agentPercent = 0;
-                $divisionPercent = 0;
             }
         }
         return [$storeBrokerageOne, $storeBrokerageTwo, $staffPercent, $agentPercent, $divisionPercent];

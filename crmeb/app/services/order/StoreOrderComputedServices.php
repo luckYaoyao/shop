@@ -440,8 +440,9 @@ class StoreOrderComputedServices extends BaseServices
                     }
                 }
                 if (count($storePostage_arr)) {
+					$maxStorePostage = max($storePostage_arr);
                     //获取运费计算中的最大值
-                    $storePostage = bcadd((string)$storePostage, (string)(max($storePostage_arr)), 2);
+                    $storePostage = bcadd((string)$storePostage, (string)$maxStorePostage, 2);
                 }
             }
         }
@@ -462,7 +463,7 @@ class StoreOrderComputedServices extends BaseServices
             }
             $truePostageArr = [];
             foreach ($postageArr as $postitem) {
-                if ($postitem['sum'] == $storePostage) {
+                if ($postitem['sum'] == ($maxStorePostage ?? 0)) {
                     $truePostageArr = $postitem['data'];
                     break;
                 }
@@ -474,9 +475,9 @@ class StoreOrderComputedServices extends BaseServices
                 }
                 $tempId = $item['productInfo']['temp_id'] ?? 0;
                 $tempPostage = $truePostageArr[$tempId] ?? 0;
-                $type = $temp_num[$tempId]['type'];
                 $tempNumber = $temp_num[$tempId]['number'] ?? 0;
                 if (!$tempId || !$tempPostage || !$tempNumber) continue;
+                $type = $temp_num[$tempId]['type'];
                 $cartNumber = $item['cart_num'];
                 if ((($cartAlready[$tempId]['number'] ?? 0) + $cartNumber) >= $tempNumber) {
                     $price = isset($cartAlready[$tempId]['price']) ? bcsub((string)$tempPostage, (string)$cartAlready[$tempId]['price'], 6) : $tempPostage;

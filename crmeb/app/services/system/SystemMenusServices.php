@@ -240,13 +240,15 @@ class SystemMenusServices extends BaseServices
     public function getMenus($roles): array
     {
         $field = ['menu_name', 'pid', 'id'];
+        $where = ['is_del' => 0];
         if (!$roles) {
-            $menus = $this->dao->getMenusRoule(['is_del' => 0], $field);
+            $menus = $this->dao->getMenusRoule($where, $field);
         } else {
             /** @var SystemRoleServices $service */
             $service = app()->make(SystemRoleServices::class);
-            $ids = $service->value([['id', 'in', $roles]], 'GROUP_CONCAT(rules) as ids');
-            $menus = $this->dao->getMenusRoule(['rule' => $ids], $field);
+            $roles = is_string($roles) ? explode(',', $roles) : $roles;
+            $ids = $service->getRoleIds($roles);
+            $menus = $this->dao->getMenusRoule(['rule' => $ids] + $where, $field);
         }
         return $this->tidyMenuTier(false, $menus);
     }

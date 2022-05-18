@@ -266,6 +266,18 @@ class StoreProduct extends BaseModel
     }
 
     /**
+     * 是否预售商品
+     * @param $query
+     * @param $value
+     */
+    public function searchIsPresaleAttr($query, $value)
+    {
+        if ($value >= 0) {
+            $query->where('presale', $value);
+        }
+    }
+
+    /**
      * 分类搜索器
      * @param Model $query
      * @param int $value

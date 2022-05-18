@@ -255,7 +255,7 @@ abstract class BaseDao
      */
     public function saveAll(array $data)
     {
-        return $this->getModel()::insertAll($data);
+        return $this->getModel()->saveAll($data);
     }
 
     /**

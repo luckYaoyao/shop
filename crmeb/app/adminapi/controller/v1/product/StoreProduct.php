@@ -291,7 +291,8 @@ class StoreProduct extends AuthController
             ['type', 1],
             ['is_live', 0],
             ['is_new', ''],
-            ['is_virtual', -1]
+            ['is_virtual', -1],
+            ['is_presale', -1]
         ]);
         $where['is_show'] = 1;
         $where['is_del'] = 0;

@@ -264,7 +264,7 @@ class RoutineServices extends BaseServices
             throw new ValidateException('静默授权失败');
         }
         $routineInfo = [
-            'unionid' => $userInfoConfig['unionid'] ?? null
+            'unionid' => $userInfoConfig['unionid'] ?? ''
         ];
         /** @var QrcodeServices $qrcode */
         $qrcode = app()->make(QrcodeServices::class);
@@ -321,7 +321,7 @@ class RoutineServices extends BaseServices
             throw new ValidateException('静默授权失败');
         }
         $routineInfo = [
-            'unionid' => $userInfoConfig['unionid'] ?? null
+            'unionid' => $userInfoConfig['unionid'] ?? ''
         ];
         /** @var QrcodeServices $qrcode */
         $qrcode = app()->make(QrcodeServices::class);
@@ -370,7 +370,7 @@ class RoutineServices extends BaseServices
             throw new ValidateException('静默授权失败');
         }
         $routineInfo = [
-            'unionid' => $userInfoConfig['unionid'] ?? null
+            'unionid' => $userInfoConfig['unionid'] ?? ''
         ];
         /** @var QrcodeServices $qrcode */
         $qrcode = app()->make(QrcodeServices::class);

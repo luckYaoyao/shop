@@ -494,12 +494,6 @@ class StoreProductServices extends BaseServices
      */
     public function save(int $id, array $data)
     {
-        if (count($data['cate_id']) < 1) throw new CommonException(AdminApiErrorCode::ERR_PLEASE_SELECT_PRODUCT_CATEGORY);
-        if (!$data['store_name']) throw new CommonException(AdminApiErrorCode::ERR_PLEASE_ENTER_THE_PRODUCT_NAME);
-
-        // $data['slider_image'] = [];
-        if (count($data['slider_image']) < 1) throw new CommonException(AdminApiErrorCode::ERR_PLEASE_UPLOAD_SLIDER_IMAGE);
-
         $detail = $data['attrs'];
         $attr = $data['items'];
         $cate_id = $data['cate_id'];
@@ -1244,6 +1238,7 @@ class StoreProductServices extends BaseServices
     {
         $uid = (int)$request->uid();
         $data['uid'] = $uid;
+
         $storeInfo = $this->dao->getOne(['id' => $id, 'is_show' => 1, 'is_del' => 0], '*', ['description']);
         if (!$storeInfo) {
             throw new ValidateException('商品不存在');
@@ -1365,7 +1360,7 @@ class StoreProductServices extends BaseServices
         $vip_user = $uid ? app()->make(UserServices::class)->value(['uid' => $uid], 'is_money_level') : 0;
         if ($storeInfo['recommend_list'] != '') {
             $recommend_list = explode(',', $storeInfo['recommend_list']);
-            $data['good_list'] = get_thumb_water($this->getProducts(['ids' => $recommend_list], 12));
+            $data['good_list'] = get_thumb_water($this->getProducts(['ids' => $recommend_list, 'is_del' => 0, 'is_show' => 1], 12));
             $recommend_count = 12 - count($data['good_list']);
             if ($recommend_count) $data['good_list'] = array_merge($data['good_list'], get_thumb_water($this->getProducts(['is_good' => 1, 'is_del' => 0, 'is_show' => 1, 'vip_user' => $vip_user, 'not_ids' => $recommend_list], $recommend_count)));
         } else {

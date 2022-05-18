@@ -462,7 +462,7 @@ class Notice implements ListenerInterface
                         //短信
                         $NoticeSms->sendAdminRefund($order);
                         //公众号
-                        $WechatTemplateList->sendAdminNewRefund($order);
+//                        $WechatTemplateList->sendAdminNewRefund($order);
                         //企业微信通知
                         $EnterpriseWechat->sendMsg(['order_id' => $order['order_id']]);
                         break;
@@ -474,7 +474,7 @@ class Notice implements ListenerInterface
                         //短信
                         $NoticeSms->sendAdminPaySuccess($order);
                         //公众号小程序
-                        $WechatTemplateList->sendAdminNewOrder($order);
+//                        $WechatTemplateList->sendAdminNewOrder($order);
                         //企业微信通知
                         $EnterpriseWechat->sendMsg(['order_id' => $order['order_id']]);
                         break;

@@ -129,7 +129,7 @@ class StoreOrderCreateServices extends BaseServices
         $wechatServices = app()->make(WechatUserServices::class);
         /** @var UserAddressServices $addressServices */
         $addressServices = app()->make(UserAddressServices::class);
-        if ($shippingType === 1 && $virtual_type == 0) {
+        if ($shippingType == 1 && $virtual_type == 0) {
             if (!$addressId) {
                 throw new ValidateException('请选择收货地址!');
             }

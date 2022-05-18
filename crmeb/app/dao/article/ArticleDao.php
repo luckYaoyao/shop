@@ -12,6 +12,7 @@ namespace app\dao\article;
 
 use app\dao\BaseDao;
 use app\model\article\Article;
+use think\exception\ValidateException;
 
 /**
  * 文章dao
@@ -56,6 +57,7 @@ class ArticleDao extends BaseDao
     public function read($id)
     {
         $data = $this->search()->with(['content', 'storeInfo', 'cateName'])->find($id);
+        if (!$data) throw new ValidateException('文章不存在');
         $data['store_info'] = $data['storeInfo'];
         return $data;
     }
