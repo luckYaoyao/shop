@@ -360,9 +360,9 @@ class UserBillController
             $systemAttachment->delete(['name' => $name]);
         }
         $siteUrl = sys_config('site_url');
-        if (!$imageInfo) {
-            /** @var QrcodeServices $qrCode */
-            $qrCode = app()->make(QrcodeServices::class);
+        /** @var QrcodeServices $qrCode */
+        $qrCode = app()->make(QrcodeServices::class);
+        if (!$imageInfo && !$qrCode->qrCOdeExist($user['uid'], 'spread')) {
             $resForever = $qrCode->qrCodeForever($user['uid'], 'spread', '', '');
             $resCode = MiniProgramService::qrcodeService()->appCodeUnlimit($resForever->id, '', 280);
             if ($resCode) {

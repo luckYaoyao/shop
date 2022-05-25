@@ -340,4 +340,16 @@ class QrcodeServices extends BaseServices
         }
         return $re;
     }
+
+    /**
+     * 检测是否存在
+     * @param int $thirdId
+     * @param string $thirdType
+     * @return bool
+     */
+    public function qrCodeExist($thirdId = 0, $thirdType = 'spread')
+    {
+        return !!$this->dao->getCount(['third_id' => $thirdId, 'third_type' => $thirdType]);
+    }
+
 }
