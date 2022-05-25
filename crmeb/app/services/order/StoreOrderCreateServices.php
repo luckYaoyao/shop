@@ -223,7 +223,7 @@ class StoreOrderCreateServices extends BaseServices
             'staff_id' => $userInfo['staff_id'],
         ];
 
-        if ($shippingType === 2) {
+        if ($shippingType == 2) {
             $orderInfo['verify_code'] = $this->getStoreCode();
             /** @var SystemStoreServices $storeServices */
             $storeServices = app()->make(SystemStoreServices::class);
