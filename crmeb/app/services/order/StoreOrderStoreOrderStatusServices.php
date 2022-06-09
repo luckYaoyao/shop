@@ -18,7 +18,7 @@ use app\services\BaseServices;
 /**
  * Class StoreOrderStoreOrderStatusServices
  * @package app\services\order
- * @method getTakeOrderIds(array $where)
+ * @method getTakeOrderIds(array $where, ?int $limit = 0)
  */
 class StoreOrderStoreOrderStatusServices extends BaseServices
 {

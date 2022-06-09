@@ -81,8 +81,11 @@ class StoreOrderStoreOrderStatusDao extends BaseDao
      * @param array $where
      * @return array
      */
-    public function getTakeOrderIds(array $where)
+    public function getTakeOrderIds(array $where, int $limit = 0)
     {
-        return $this->search($where)->whereIn('refund_status', [0, 1])->field([$this->alias . '.*'])->select()->toArray();
+        return $this->search($where)->whereIn('refund_type', [0, 3])->field([$this->alias . '.*'])
+            ->when($limit != 0, function ($query) use ($limit) {
+                $query->limit($limit);
+            })->select()->toArray();
     }
 }
