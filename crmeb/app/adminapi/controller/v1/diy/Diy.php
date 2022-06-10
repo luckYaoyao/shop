@@ -625,6 +625,7 @@ class Diy extends AuthController
             ['value', []],
             ['video_link', '']
         ]);
+        if ($data['type'] == '') $data['type'] = 'pic';
         /** @var CacheServices $cacheServices */
         $cacheServices = app()->make(CacheServices::class);
         $cacheServices->setDbCache('open_adv', $data);
