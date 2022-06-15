@@ -1,7 +1,7 @@
-CRMEB v4.x
+CRMEB v4.x 后端程序目录
 ===============
 
-> 运行环境要求PHP7.1+。
+> 运行环境要求PHP7.1-7.4。
 
 ## 主要特性
 
@@ -48,7 +48,7 @@ PHPExcel数据导出,导出表格更加美观可视；
 
 ## 重新安装
 1. 清除数据库
-2. 删除/public/install/install.lock 文件
+2. 删除/public/install.lock 文件
 
 ## 手动安装
 1.创建数据库，倒入数据库文件
@@ -126,7 +126,7 @@ php think workerman start admin
 
 ## 文档
 
-[使用手册](https://help.crmeb.net)
+[使用手册](https://doc.crmeb.com)
 [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
 
 
@@ -139,7 +139,7 @@ php think workerman start admin
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
-版权所有Copyright © 2017-2019 by CRMEB (http://www.crmeb.com)
+版权所有Copyright © 2017-2022 by CRMEB (http://www.crmeb.com)
 
 All rights reserved。
 
