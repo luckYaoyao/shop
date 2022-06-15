@@ -367,7 +367,8 @@ class StoreOrderComputedServices extends BaseServices
                     } else {
                         $num = $cart['cart_num'] * $cart['productInfo']['attrInfo']['volume'];
                     }
-                    $region = $regions[$tempId] ?? $regions[1];
+                    $region = $regions[$tempId] ?? ($regions[1] ?? []);
+                    if (!$region) continue;
                     if (!isset($temp_num[$tempId])) {
                         $temp_num[$tempId] = [
                             'number' => $num,
