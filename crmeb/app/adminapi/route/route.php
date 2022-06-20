@@ -30,6 +30,8 @@ Route::group(function () {
     Route::get('captcha_pro', 'Login/captcha')->name('')->option(['real_name' => '获取验证码']);
     //获取客服数据
     Route::get('get_workerman_url', 'PublicController/getWorkerManUrl')->option(['real_name' => '获取客服数据']);
+    //获取系统当前版本号
+    Route::get('get_version', 'PublicController/getVersion')->option(['real_name' => '获取系统当前版本号']);
     //测试
     Route::get('index', 'Test/index')->option(['real_name' => '测试地址']);
 })->middleware(AllowOriginMiddleware::class);
