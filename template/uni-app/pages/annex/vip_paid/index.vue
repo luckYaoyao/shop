@@ -471,7 +471,8 @@
 			},
 			// 调用支付
 			callPay(data) {
-				let {
+        let that = this;
+        let {
 					status,
 					result
 				} = data.data, {
@@ -509,7 +510,7 @@
 							signType: jsConfig.signType,
 							paySign: jsConfig.paySign,
 							success: function(res) {
-								this.$util.Tips({
+                that.$util.Tips({
 									title: '支付成功',
 									icon: 'success'
 								}, {
