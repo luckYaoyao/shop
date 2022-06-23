@@ -87,6 +87,11 @@ SELECT = 0 #数据库
 http://域名/admin
 默认账号：admin 密码：crmeb.com
 
+## 消息队列
+```sh
+php think queue:listen --queue
+```
+
 ## 定时任务
 在自动收货,库存预警等功能使用到
 ```sh
