@@ -110,7 +110,7 @@ Redis
 ![输入图片说明](readme/pic/gitee开源版详情_03.jpg)
 ![输入图片说明](readme/pic/gitee开源版详情_04.jpg)
 ![输入图片说明](readme/pic/gitee开源版详情_05.jpg)
-### <a href='http://s.crmeb.com/goods_detail/728' target='_blank'>点击查看高清版全套UI设计图</a>
+
 
 
 ##  系统演示
