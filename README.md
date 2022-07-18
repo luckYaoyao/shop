@@ -54,7 +54,7 @@
 
 #### 不懂服务器？不懂技术？无法解决高并发？想数据私有化？还想后期定制开发？
 
-推荐云部署版一键解决以上所有问题，超低价格低至 :collision:  9.9元/年，点击了解 https://saas.crmeb.com/saas-home-software-detail-50042-s-y.html
+推荐云部署版一键解决以上所有问题，超低价格低至 :collision:  9.9元/年，点击了解 https://saas.crmeb.com/saas-home-software-detail-50043-s-y.html
 
 #### 推荐服务器（虚拟空间不支持）
 
