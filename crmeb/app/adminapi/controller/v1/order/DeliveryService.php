@@ -89,17 +89,14 @@ class DeliveryService extends AuthController
         /** @var UserServices $userService */
         $userService = app()->make(UserServices::class);
         $userInfo = $userService->get($data['uid']);
-        if ($data['phone'] == '') {
-            if (!$userInfo['phone']) {
-                throw new AdminException('该用户没有绑定手机号，请手动填写');
-            } else {
-                $data['phone'] = $userInfo['phone'];
-            }
-        } else {
-            if (!check_phone($data['phone'])) {
-                return app('json')->fail('请输入正确的手机号!');
-            }
+        if ($data['phone'] == '' && !$userInfo['phone']) {
+            throw new AdminException('该用户没有绑定手机号，请手动填写');
+        } 
+        $data['phone'] = $userInfo['phone'];
+        if (!check_phone($data['phone'])) {
+            return app('json')->fail('请输入正确的手机号!');
         }
+        
         if ($data['nickname'] == '') $data['nickname'] = $userInfo['nickname'];
         $data['avatar'] = $data['image']['image'];
         if ($this->services->count(['uid' => $data['uid']])) {
