@@ -28,14 +28,13 @@ use app\services\user\UserBillServices;
 use app\services\user\UserBrokerageServices;
 use app\services\user\UserMoneyServices;
 use app\services\user\UserServices;
+use crmeb\exceptions\AdminException;
+use crmeb\exceptions\ApiException;
 use crmeb\services\AliPayService;
 use crmeb\services\CacheService;
 use crmeb\services\FormBuilder as Form;
-use crmeb\services\MiniProgramService;
-use crmeb\services\WechatService;
+use crmeb\services\pay\Pay;
 use crmeb\services\workerman\ChannelService;
-use think\exception\ValidateException;
-use think\facade\Log;
 
 
 /**
@@ -74,18 +73,18 @@ class StoreOrderRefundServices extends BaseServices
         if ($type == 'refund') {//售后订单
             $orderRefund = $this->dao->get($id);
             if (!$orderRefund) {
-                throw new ValidateException('未查到订单');
+                throw new AdminException(100026);
             }
             $order = $this->storeOrderServices->get((int)$orderRefund['store_order_id']);
             if (!$order) {
-                throw new ValidateException('未查到订单');
+                throw new AdminException(100026);
             }
             if (!$order['paid']) {
-                throw new ValidateException('未支付无法退款');
+                throw new AdminException(400488);
             }
             if ($orderRefund['refund_price'] > 0 && in_array($orderRefund['refund_type'], [1, 5])) {
                 if ($orderRefund['refund_price'] <= $orderRefund['refunded_price']) {
-                    throw new ValidateException('订单已退款');
+                    throw new AdminException(400485);
                 }
             }
             $f[] = Form::input('order_id', '退款单号', $orderRefund->getData('order_id'))->disabled(true);
@@ -94,14 +93,14 @@ class StoreOrderRefundServices extends BaseServices
         } else {//订单主动退款
             $order = $this->storeOrderServices->get((int)$id);
             if (!$order) {
-                throw new ValidateException('未查到订单');
+                throw new AdminException(100026);
             }
             if (!$order['paid']) {
-                throw new ValidateException('未支付无法退款');
+                throw new AdminException(400488);
             }
             if ($order['pay_price'] > 0 && in_array($order['refund_status'], [0, 1])) {
                 if ($order['pay_price'] <= $order['refund_price']) {
-                    throw new ValidateException('订单已退款');
+                    throw new AdminException(400485);
                 }
             }
             $f[] = Form::input('order_id', '退款单号', $order->getData('order_id'))->disabled(true);
@@ -124,7 +123,7 @@ class StoreOrderRefundServices extends BaseServices
         $order = $this->transaction(function () use ($id, $refundData) {
             //退款拆分
             $orderRefundInfo = $this->dao->get($id);
-            if (!$orderRefundInfo) throw new ValidateException('数据不存在');
+            if (!$orderRefundInfo) throw new AdminException(100026);
             $cart_ids = [];
             if ($orderRefundInfo['cart_info']) {
                 foreach ($orderRefundInfo['cart_info'] as $cart) {
@@ -143,14 +142,14 @@ class StoreOrderRefundServices extends BaseServices
 
             //回退积分和优惠卷
             if (!$this->integralAndCouponBack($splitOrderInfo)) {
-                throw new ValidateException('回退积分和优惠卷失败');
+                throw new AdminException(400489);
             }
             //退拼团
             if ($splitOrderInfo['pid'] == 0 && !$splitOrderInfo['pink_id']) {
                 /** @var StorePinkServices $pinkServices */
                 $pinkServices = app()->make(StorePinkServices::class);
                 if (!$pinkServices->setRefundPink($splitOrderInfo)) {
-                    throw new ValidateException('拼团修改失败!');
+                    throw new AdminException(400490);
                 }
             }
 
@@ -158,7 +157,7 @@ class StoreOrderRefundServices extends BaseServices
             /** @var UserBrokerageServices $userBrokerageServices */
             $userBrokerageServices = app()->make(UserBrokerageServices::class);
             if (!$userBrokerageServices->orderRefundBrokerageBack($splitOrderInfo)) {
-                throw new ValidateException('回退佣金失败');
+                throw new AdminException(400491);
             }
 
             //回退库存
@@ -189,18 +188,26 @@ class StoreOrderRefundServices extends BaseServices
                             $no = $refundOrder['trade_no'];
                             $refundData['type'] = 'trade_no';
                         }
+                        /** @var Pay $pay */
+                        $pay = app()->make(Pay::class);
                         if ($refundOrder['is_channel'] == 1) {
+                            $refundData['trade_no'] = $refundOrder['trade_no'];
+                            $refundData['pay_new_weixin_open'] = sys_config('pay_new_weixin_open');
+                            /** @var StoreOrderCreateServices $storeOrderCreateServices */
+                            $storeOrderCreateServices = app()->make(StoreOrderCreateServices::class);
+                            $refundData['refund_no'] = $refundData['refund_no'];
                             //小程序退款
-                            MiniProgramService::payOrderRefund($no, $refundData);//小程序
+                            $pay->refund($no, $refundData);//小程序
                         } else {
                             //微信公众号退款
-                            WechatService::payOrderRefund($no, $refundData);//公众号
+                            $refundData['wechat'] = true;
+                            $pay->refund($no, $refundData);//公众号
                         }
                         break;
                     case PayServices::YUE_PAY:
                         //余额退款
                         if (!$this->yueRefund($refundOrder, $refundData)) {
-                            throw new ValidateException('余额退款失败');
+                            throw new AdminException(400492);
                         }
                         break;
                     case PayServices::ALIAPY_PAY:
@@ -266,6 +273,11 @@ class StoreOrderRefundServices extends BaseServices
      */
     public function agreeExpress($id)
     {
+        $order = $this->dao->get($id, ['refund_type']);
+        if (!$order) throw new AdminException(100026);
+        if ($order['refund_type'] == 4) {
+            return true;
+        }
         $this->dao->update($id, ['refund_type' => 4], 'id');
         return true;
     }
@@ -283,14 +295,14 @@ class StoreOrderRefundServices extends BaseServices
 
             //回退积分和优惠卷
             if (!$this->integralAndCouponBack($order)) {
-                throw new ValidateException('回退积分和优惠卷失败');
+                throw new AdminException(400489);
             }
             //虚拟商品优惠券退款处理
             if ($order['virtual_type'] == 2) {
                 /** @var StoreCouponUserServices $couponUser */
                 $couponUser = app()->make(StoreCouponUserServices::class);
                 $res = $couponUser->delUserCoupon(['cid' => $order['virtual_info'], 'uid' => $order['uid'], 'status' => 0]);
-                if (!$res) throw new ValidateException('购买的优惠券已使用或者已过期');
+                if (!$res) throw new AdminException(400493);
                 /** @var StoreCouponIssueUserServices $couponIssueUser */
                 $couponIssueUser = app()->make(StoreCouponIssueUserServices::class);
                 $couponIssueUser->delIssueUserCoupon(['issue_coupon_id' => $order['virtual_info'], 'uid' => $order['uid']]);
@@ -301,7 +313,7 @@ class StoreOrderRefundServices extends BaseServices
                 /** @var StorePinkServices $pinkServices */
                 $pinkServices = app()->make(StorePinkServices::class);
                 if (!$pinkServices->setRefundPink($order)) {
-                    throw new ValidateException('拼团修改失败!');
+                    throw new AdminException(400490);
                 }
             }
 
@@ -309,7 +321,7 @@ class StoreOrderRefundServices extends BaseServices
             /** @var UserBrokerageServices $userBrokerageServices */
             $userBrokerageServices = app()->make(UserBrokerageServices::class);
             if (!$userBrokerageServices->orderRefundBrokerageBack($order)) {
-                throw new ValidateException('回退佣金失败');
+                throw new AdminException(400491);
             }
 
 
@@ -341,18 +353,21 @@ class StoreOrderRefundServices extends BaseServices
                             $no = $refundOrder['trade_no'];
                             $refundData['type'] = 'trade_no';
                         }
+                        /** @var Pay $pay */
+                        $pay = app()->make(Pay::class);
                         if ($refundOrder['is_channel'] == 1) {
                             //小程序退款
-                            MiniProgramService::payOrderRefund($no, $refundData);//小程序
+                            $pay->refund($no, $refundData);//小程序
                         } else {
                             //微信公众号退款
-                            WechatService::payOrderRefund($no, $refundData);//公众号
+                            $refundData['wechat'] = true;
+                            $pay->refund($no, $refundData);//公众号
                         }
                         break;
                     case PayServices::YUE_PAY:
                         //余额退款
                         if (!$this->yueRefund($refundOrder, $refundData)) {
-                            throw new ValidateException('余额退款失败');
+                            throw new AdminException(400492);
                         }
                         break;
                     case PayServices::ALIAPY_PAY:
@@ -469,7 +484,7 @@ class StoreOrderRefundServices extends BaseServices
             $res4 = $userBillServices->income('pay_product_integral_back', $order['uid'], (int)$use_integral, $integral + $use_integral, $order['id']);
         }
         if (!($res1 && $res2 && $res3 && $res4)) {
-            throw new ValidateException('回退积分增加失败');
+            throw new ApiException(400494);
         }
         if ($use_integral > $give_integral) {
             $order->back_integral = bcsub($use_integral, $give_integral, 2);
@@ -604,7 +619,7 @@ class StoreOrderRefundServices extends BaseServices
     {
         $order = $this->dao->get($id);
         if (!$order) {
-            throw new ValidateException('Data does not exist!');
+            throw new AdminException(100026);
         }
         $f[] = Form::input('order_id', '不退款单号', $order->getData('order_id'))->disabled(true);
         $f[] = Form::input('refund_reason', '不退款原因')->type('textarea')->required('请填写不退款原因');
@@ -627,7 +642,7 @@ class StoreOrderRefundServices extends BaseServices
             $orderRefundInfo = $this->dao->get(['id' => $id, 'is_cancel' => 0]);
         }
         if (!$orderRefundInfo) {
-            throw new ValidateException('售后订单不存在');
+            throw new ApiException(400495);
         }
         /** @var StoreOrderServices $storeOrderServices */
         $storeOrderServices = app()->make(StoreOrderServices::class);
@@ -664,11 +679,11 @@ class StoreOrderRefundServices extends BaseServices
     public function refundIntegralForm(int $id)
     {
         if (!$orderInfo = $this->dao->get($id))
-            throw new ValidateException('订单不存在');
+            throw new AdminException(400118);
         if ($orderInfo->use_integral < 0 || $orderInfo->use_integral == $orderInfo->back_integral)
-            throw new ValidateException('积分已退或者积分为零无法再退');
+            throw new AdminException(400496);
         if (!$orderInfo->paid)
-            throw new ValidateException('未支付无法退积分');
+            throw new AdminException(400497);
         $f[] = Form::input('order_id', '退款单号', $orderInfo->getData('order_id'))->disabled(1);
         $f[] = Form::number('use_integral', '使用的积分', (float)$orderInfo->getData('use_integral'))->min(0)->disabled(1);
         $f[] = Form::number('use_integrals', '已退积分', (float)$orderInfo->getData('back_integral'))->min(0)->disabled(1);
@@ -702,7 +717,7 @@ class StoreOrderRefundServices extends BaseServices
             $res4 = $orderInfo->save();
             $res = $res1 && $res2 && $res3 && $res4;
             if (!$res) {
-                throw new ValidateException('订单退积分失败');
+                throw new AdminException(400498);
             }
             return true;
         });
@@ -720,16 +735,16 @@ class StoreOrderRefundServices extends BaseServices
     public function orderApplyRefund($order, string $refundReasonWap = '', string $refundReasonWapExplain = '', array $refundReasonWapImg = [], int $refundType = 0, $cart_id = 0, $refund_num = 0)
     {
         if (!$order) {
-            throw new ValidateException('支付订单不存在!');
+            throw new ApiException(410173);
         }
         if ($order['refund_status'] == 2) {
-            throw new ValidateException('订单已退款!');
+            throw new ApiException(410226);
         }
         if ($order['refund_status'] == 1) {
-            throw new ValidateException('正在申请退款中!');
+            throw new ApiException(410250);
         }
         if ($order['total_num'] < $refund_num) {
-            throw new ValidateException('退款件数大于订单件数!');
+            throw new ApiException(410252);
         }
         $this->transaction(function () use ($order, $refundReasonWap, $refundReasonWapExplain, $refundReasonWapImg, $refundType, $refund_num, $cart_id) {
             $status = 0;
@@ -749,7 +764,7 @@ class StoreOrderRefundServices extends BaseServices
                 $storeOrderCartInfoServices = app()->make(StoreOrderCartInfoServices::class);
                 $cart_info = $storeOrderCartInfoServices->getSplitCartList($order_id, 'cart_info');
                 if (!$cart_info) {
-                    throw new ValidateException('该订单已全部拆分发货，请去自订单申请');
+                    throw new ApiException(410253);
                 }
                 $cart_ids = [];
                 foreach ($cart_info as $key => $cart) {
@@ -783,7 +798,7 @@ class StoreOrderRefundServices extends BaseServices
             $res2 = false !== $this->storeOrderServices->update(['id' => $order['id']], $data);
             $res = $res1 && $res2;
             if (!$res)
-                throw new ValidateException('申请退款失败!');
+                throw new ApiException(410254);
             //子订单申请退款
             if ($order['pid'] > 0) {
                 $p_order = $this->storeOrderServices->get((int)$order['pid']);
@@ -838,7 +853,7 @@ class StoreOrderRefundServices extends BaseServices
             $res2 = false !== $this->dao->update(['id' => $id], $data);
             $res = $res1 && $res2;
             if (!$res)
-                throw new ValidateException('提交失败!');
+                throw new ApiException(100018);
         });
         return true;
     }
@@ -868,7 +883,7 @@ class StoreOrderRefundServices extends BaseServices
             $order = $orderServices->get($id);
         }
         if (!$order) {
-            throw new ValidateException('支付订单不存在!');
+            throw new ApiException(410173);
         }
 
         $is_now = $this->dao->getCount([
@@ -878,7 +893,7 @@ class StoreOrderRefundServices extends BaseServices
             ['is_del', '=', 0],
             ['is_pink_cancel', '=', 0]
         ]);
-        if ($is_now) throw new ValidateException('存在待处理退款单，请稍后再试');
+        if ($is_now) throw new ApiException(410255);
 
         $refund_num = $order['total_num'];
         $refund_price = $order['pay_price'];
@@ -892,7 +907,7 @@ class StoreOrderRefundServices extends BaseServices
             $refund_num = 0;
             foreach ($cart_ids as $cart) {
                 if ($cart['cart_num'] + $cartInfo[$cart['cart_id']]['refund_num'] > $cartInfo[$cart['cart_id']]['cart_num']) {
-                    throw new ValidateException('超出订单中商品数量，请重新选择!');
+                    throw new ApiException(410252);
                 }
                 $refund_num = bcadd((string)$refund_num, (string)$cart['cart_num'], 0);
             }
@@ -920,7 +935,7 @@ class StoreOrderRefundServices extends BaseServices
         } else {
             foreach ($cartInfos as $cart) {
                 if ($cart['refund_num'] > 0) {
-                    throw new ValidateException('超出订单中商品数量，请重新选择!');
+                    throw new ApiException(410252);
                 }
             }
         }
@@ -952,7 +967,7 @@ class StoreOrderRefundServices extends BaseServices
             $storeOrderRefundServices = app()->make(StoreOrderRefundServices::class);
             $res3 = $storeOrderRefundServices->save($refundData);
             if (!$res3) {
-                throw new ValidateException('添加退款申请失败');
+                throw new ApiException(410251);
             }
             $res4 = true;
             if ($cart_ids) {
@@ -970,12 +985,8 @@ class StoreOrderRefundServices extends BaseServices
             return $res1 && $res2 && $res3 && $res4;
         });
         $storeOrderCartInfoServices->clearOrderCartInfo($order['id']);
-         try {
-            ChannelService::instance()->send('NEW_REFUND_ORDER', ['order_id' => $order['order_id']]);
-        } catch (\Exception $e) {
-        }
         //申请退款事件
-        event('order.orderRefund', [$order]);
+        event('order.orderRefundCreateAfter', [$order]);
         return $res;
     }
 
@@ -1067,9 +1078,9 @@ class StoreOrderRefundServices extends BaseServices
      */
     public function refundDetail($uni)
     {
-        if (!strlen(trim($uni))) throw new ValidateException('参数错误');
+        if (!strlen(trim($uni))) throw new ApiException(100100);
         $order = $this->dao->get(['order_id' => $uni], ['*']);
-        if (!$order) throw new ValidateException('订单不存在');
+        if (!$order) throw new ApiException(410173);
         $order = $order->toArray();
 
         /** @var StoreOrderServices $orderServices */
@@ -1087,9 +1098,11 @@ class StoreOrderRefundServices extends BaseServices
         $orderData = $order;
         $orderData['store_order_sn'] = $orderInfo['order_id'];
         $orderData['cartInfo'] = $orderData['cart_info'];
+        $orderData['_pay_time'] = date('Y-m-d H:i:s', $orderInfo['pay_time']);
         //核算优惠金额
         $vipTruePrice = 0;
         $total_price = 0;
+        $pay_postage = '0';
         foreach ($orderData['cartInfo'] ?? [] as $key => &$cart) {
             if (!isset($cart['sum_true_price'])) $cart['sum_true_price'] = bcmul((string)$cart['truePrice'], (string)$cart['cart_num'], 2);
             $cart['vip_sum_truePrice'] = bcmul($cart['vip_truePrice'], $cart['cart_num'] ? $cart['cart_num'] : 1, 2);
@@ -1099,8 +1112,8 @@ class StoreOrderRefundServices extends BaseServices
                 if (!$cart['surplus_num']) unset($orderData['cartInfo'][$key]);
             }
             $total_price = bcadd($total_price, $cart['sum_true_price'], 2);
+            $pay_postage = bcadd($cart['postage_price'], $pay_postage, 2);
         }
-
         $orderData['use_integral'] = $this->getOrderSumPrice($orderData['cartInfo'], 'use_integral', false);
         $orderData['integral_price'] = $this->getOrderSumPrice($orderData['cartInfo'], 'integral_price', false);
         $orderData['coupon_price'] = $this->getOrderSumPrice($orderData['cartInfo'], 'coupon_price', false);
@@ -1109,7 +1122,7 @@ class StoreOrderRefundServices extends BaseServices
         $total_price = bcadd((string)$total_price, (string)bcadd((string)$orderData['deduction_price'], (string)$orderData['coupon_price'], 2), 2);
         $orderData['vip_true_price'] = $vipTruePrice;
         $orderData['postage_price'] = 0;
-        $orderData['pay_postage'] = $this->getOrderSumPrice($orderData['cart_info'], 'postage_price', false);
+        $orderData['pay_postage'] = $this->getOrderSumPrice($orderData['cart_info'], 'origin_postage_price', false);
         $orderData['member_price'] = 0;
         $orderData['routine_contact_type'] = sys_config('routine_contact_type', 0);
 
@@ -1187,6 +1200,7 @@ class StoreOrderRefundServices extends BaseServices
                 'help_status' => 1
             ];
         }
+        $orderData['pay_postage'] = $pay_postage;
         return $orderData;
     }
 
@@ -1206,7 +1220,7 @@ class StoreOrderRefundServices extends BaseServices
             $orderRefundInfo = $this->dao->get(['id' => $id, 'is_cancel' => 0]);
         }
         if (!$orderRefundInfo) {
-            throw new ValidateException('售后订单不存在');
+            throw new ApiException(410173);
         }
         $cart_ids = array_column($orderRefundInfo['cart_info'], 'id');
         /** @var StoreOrderCartInfoServices $storeOrderCartInfoServices */
@@ -1222,6 +1236,65 @@ class StoreOrderRefundServices extends BaseServices
             $storeOrderCartInfoServices->update(['oid' => $oid, 'cart_id' => $cart['id']], ['refund_num' => $refund_num]);
         }
         $storeOrderCartInfoServices->clearOrderCartInfo($oid);
+        //售后订单取消后置事件
+        event('order.orderRefundCancelAfter', [$orderRefundInfo]);
+
         return true;
+    }
+
+    /**
+     * 修改备注
+     * @param int $id
+     * @param string $remark
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function updateRemark(int $id, string $remark)
+    {
+        if (!$id) {
+            throw new AdminException(100100);
+        }
+        if (!$remark) {
+            throw new AdminException(410177);
+        }
+
+        if (!$order = $this->dao->get($id)) {
+            throw new AdminException(410173);
+        }
+        $order->remark = $remark;
+        if (!$order->save()) {
+            throw new AdminException(100025);
+        }
+        return true;
+    }
+
+    /**
+     * 拒绝退款
+     * @param int $id
+     * @param string $refund_reason
+     * @return void
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function refuse(int $id, string $refund_reason)
+    {
+        if (!$refund_reason) {
+            throw new AdminException(400499);
+        }
+
+        if (!$id || !($orderRefundInfo = $this->dao->get($id))) {
+            throw new AdminException(400118);
+        }
+
+        $refundData = [
+            'refuse_reason' => $refund_reason,
+            'refund_type' => 3,
+            'refunded_time' => time()
+        ];
+        //拒绝退款处理
+        $this->refuseRefund($id, $refundData, $orderRefundInfo);
     }
 }

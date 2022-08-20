@@ -8,9 +8,9 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +---------------------------------------------------------------------
 
-import BasicLayout from '@/components/main'
+import BasicLayout from '@/components/main';
 
-const pre = 'product_'
+const pre = 'product_';
 
 export default {
   path: '/admin/product',
@@ -19,10 +19,10 @@ export default {
   meta: {
     title: '商品',
     // 授权标识
-    auth: ['admin-store-index']
+    auth: ['admin-store-index'],
   },
   redirect: {
-    name: `${pre}productList`
+    name: `${pre}productList`,
   },
   component: BasicLayout,
   children: [
@@ -32,45 +32,45 @@ export default {
       meta: {
         title: '商品管理',
         auth: ['admin-store-storeProuduct-index'],
-        keepAlive: true
+        keepAlive: true,
       },
-      component: () => import('@/pages/product/productList')
+      component: () => import('@/pages/product/productList'),
     },
     {
       path: 'product_classify',
       name: `${pre}productClassify`,
       meta: {
         title: '商品分类',
-        auth: ['admin-store-storeCategory-index']
+        auth: ['admin-store-storeCategory-index'],
       },
-      component: () => import('@/pages/product/productClassify')
+      component: () => import('@/pages/product/productClassify'),
     },
     {
       path: 'add_product/:id?',
       name: `${pre}productAdd`,
       meta: {
         auth: ['admin-store-storeProuduct-index'],
-        title: '商品添加'
+        title: '商品添加',
       },
-      component: () => import('@/pages/product/productAdd')
+      component: () => import('@/pages/product/productAdd'),
     },
     {
       path: 'product_reply/:id?',
       name: `${pre}productEvaluate`,
       meta: {
         auth: ['admin-store-storeProuduct-index'],
-        title: '商品评论'
+        title: '商品评论',
       },
-      component: () => import('@/pages/product/productReply')
+      component: () => import('@/pages/product/productReply'),
     },
     {
       path: 'product_attr',
       name: `${pre}productAttr`,
       meta: {
         auth: ['admin-store-storeProuduct-index'],
-        title: '商品规格'
+        title: '商品规格',
       },
-      component: () => import('@/pages/product/productAttr')
-    }
-  ]
-}
+      component: () => import('@/pages/product/productAttr'),
+    },
+  ],
+};

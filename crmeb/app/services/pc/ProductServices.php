@@ -13,12 +13,12 @@ declare (strict_types=1);
 namespace app\services\pc;
 
 use app\services\BaseServices;
+use app\services\other\PosterServices;
 use app\services\product\product\StoreProductServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use app\services\user\UserServices;
-use crmeb\services\MiniProgramService;
-use crmeb\services\UploadService;
-use crmeb\services\UtilService;
+use crmeb\services\app\MiniProgramService;
+use app\services\other\UploadService;
 use Guzzle\Http\EntityBody;
 
 class ProductServices extends BaseServices
@@ -79,8 +79,8 @@ class ProductServices extends BaseServices
                 }
                 $imageInfo = $upload->getUploadInfo();
                 $imageInfo['image_type'] = $uploadType;
-                if ($imageInfo['image_type'] == 1) $remoteImage = UtilService::remoteImage($siteUrl . $imageInfo['dir']);
-                else $remoteImage = UtilService::remoteImage($imageInfo['dir']);
+                if ($imageInfo['image_type'] == 1) $remoteImage = PosterServices::remoteImage($siteUrl . $imageInfo['dir']);
+                else $remoteImage = PosterServices::remoteImage($imageInfo['dir']);
                 if (!$remoteImage['status']) return false;
                 $systemAttachmentService->save([
                     'name' => $imageInfo['name'],

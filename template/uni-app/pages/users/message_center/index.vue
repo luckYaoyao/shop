@@ -3,7 +3,7 @@
 		<view class="top-tabs" :style="colorStyle">
 			<view class="tabs" :class="{btborder:type === index}" v-for="(item,index) in tabsList" :key="index"
 				@tap="changeTabs(index)">
-				{{item.name}}
+				{{$t(item.name)}}
 			</view>
 		</view>
 		<view v-if="list.length && type ===1" class="list">
@@ -13,16 +13,16 @@
 				</view>
 				<view class="text-wrap">
 					<view class="name-wrap">
-						<view class="name">{{ item.nickname }}</view>
+						<view class="name">{{ $t(item.nickname) }}</view>
 						<view>{{ item._update_time }}</view>
 					</view>
 					<view class="info-wrap">
 						<view v-if="item.message_type === 1" class="info" v-html="item.message"></view>
 						<view v-if="item.message_type === 2" class="info" v-html="item.message"></view>
-						<view v-if="item.message_type === 3" class="info">[图片]</view>
-						<view v-if="item.message_type === 4" class="info">[语音]</view>
-						<view v-if="item.message_type === 5" class="info">[商品]</view>
-						<view v-if="item.message_type === 6" class="info">[订单]</view>
+						<view v-if="item.message_type === 3" class="info">{{$t(`[图片]`)}}</view>
+						<view v-if="item.message_type === 4" class="info">{{$t(`[语音]`)}}</view>
+						<view v-if="item.message_type === 5" class="info">{{$t(`[商品]`)}}</view>
+						<view v-if="item.message_type === 6" class="info">{{$t(`[订单]`)}}</view>
 						<view class="num" v-if="item.mssage_num">{{ item.mssage_num }}</view>
 					</view>
 				</view>
@@ -31,13 +31,13 @@
 		<view class="list" v-if="list.length && type === 0">
 			<view v-for="(item, index) in list" :key="index" class="item" @click="goDetail(item.id)">
 				<view class="image-wrap">
-					<image v-if="item.type === 1" class="image" src="../../../static/images/admin-msg.png"></image>
-					<image v-else class="image" src="../../../static/images/user-msg.png"></image>
+					<image v-if="item.type === 1" class="image" src="../static/admin-msg.png"></image>
+					<image v-else class="image" src="../static/user-msg.png"></image>
 					<view class="no-look" v-if="!item.look"></view>
 				</view>
 				<view class="text-wrap">
 					<view class="name-wrap">
-						<view class="name">{{ item.title || '--' }}</view>
+						<view class="name">{{ $t(item.title) || '--' }}</view>
 						<view>{{ item.add_time }}</view>
 					</view>
 					<view class="info-wrap">
@@ -48,9 +48,9 @@
 		</view>
 		<view v-else-if="finished && !list.length" class="empty-wrap">
 			<view class="image-wrap">
-				<image class="image" src="../../../static/images/noMessage.png"></image>
+				<image class="image" :src="imgHost + '/statics/images/noMessage.png'"></image>
 			</view>
-			<view>亲、暂无消息记录哟！</view>
+			<view>{{$t(`亲、暂无消息记录哟！`)}}</view>
 		</view>
 		<!-- #ifndef MP -->
 		<home></home>
@@ -65,6 +65,7 @@
 	} from '@/api/user.js';
 	import colors from '@/mixins/color.js';
 	import home from '@/components/home';
+	import {HTTP_REQUEST_URL} from '@/config/app';
 	export default {
 		mixins: [colors],
 		components: {
@@ -72,6 +73,7 @@
 		},
 		data() {
 			return {
+				imgHost:HTTP_REQUEST_URL,
 				list: [],
 				page: 1,
 				type: 0,
@@ -163,7 +165,7 @@
 				}
 				this.loading = true;
 				uni.showLoading({
-					title: '加载中'
+					title: this.$t(`加载中`)
 				});
 				messageSystem({
 						page: this.page,
@@ -229,9 +231,8 @@
 				return str;
 			},
 			goChat(id) {
-				// this.$router.push({ path: '/pages/customer_list/chat'})
 				uni.navigateTo({
-					url: '/pages/customer_list/chat?to_uid=' + id + '&type=1'
+					url: '/pages/extension/customer_list/chat?to_uid=' + id + '&type=1'
 				})
 			},
 			goDetail(id) {

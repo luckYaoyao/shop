@@ -107,25 +107,25 @@ class UserGroupServices extends BaseServices
         $groupName = $this->dao->getOne(['group_name' => $data['group_name']]);
         if ($id) {
             if (!$this->getGroup($id)) {
-                throw new AdminException('数据不存在');
+                throw new AdminException(100026);
             }
             if ($groupName && $id != $groupName['id']) {
-                throw new AdminException('该分组已经存在');
+                throw new AdminException(400666);
             }
             if ($this->dao->update($id, $data)) {
                 return true;
             } else {
-                throw new AdminException('修改失败或者您没有修改什么！');
+                throw new AdminException(100007);
             }
         } else {
             unset($data['id']);
             if ($groupName) {
-                throw new AdminException('该分组已经存在');
+                throw new AdminException(400666);
             }
             if ($this->dao->save($data)) {
                 return true;
             } else {
-                throw new AdminException('添加失败！');
+                throw new AdminException(100022);
             }
         }
     }
@@ -138,7 +138,7 @@ class UserGroupServices extends BaseServices
     {
         if ($this->getGroup($id)) {
             if (!$this->dao->delete($id)) {
-                throw new AdminException('删除失败,请稍候再试!');
+                throw new AdminException(100008);
             }
         }
         return '删除成功!';

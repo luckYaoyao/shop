@@ -33,12 +33,12 @@ class SystemAuthServices extends BaseServices
     {
         $res = HttpService::postRequest('http://authorize.crmeb.net/api/auth_apply', $data);
         if ($res === false) {
-            throw new AdminException('申请失败,服务器没有响应!');
+            throw new AdminException(100028);
         }
         $res = json_decode($res, true);
         if (isset($res['status'])) {
             if ($res['status'] == 400) {
-                throw new AdminException($res['msg'] ?? "申请失败");
+                throw new AdminException(100028);
             } else {
                 return true;
             }

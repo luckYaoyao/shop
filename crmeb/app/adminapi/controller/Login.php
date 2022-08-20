@@ -61,7 +61,7 @@ class Login extends AuthController
         ], true);
 
         if (!app()->make(Captcha::class)->check($imgcode)) {
-            return app('json')->fail('验证码错误，请重新输入');
+            return app('json')->fail(400336);
         }
 
         $this->validate(['account' => $account, 'pwd' => $password], \app\adminapi\validate\setting\SystemAdminValidata::class, 'get');

@@ -55,7 +55,7 @@ class StoreProductReply extends AuthController
     public function delete($id)
     {
         $this->services->del($id);
-        return app('json')->success('删除成功!');
+        return app('json')->success(100002);
     }
 
     /**
@@ -69,7 +69,7 @@ class StoreProductReply extends AuthController
             ['content', '']
         ], true);
         $this->services->setReply($id, $content);
-        return app('json')->success('回复成功!');
+        return app('json')->success(400169);
     }
 
     /**
@@ -107,6 +107,6 @@ class StoreProductReply extends AuthController
         }
         $this->validate(['product_id' => $data['product_id'], 'nickname' => $data['nickname'], 'avatar' => $data['avatar'], 'comment' => $data['comment'], 'product_score' => $data['product_score'], 'service_score' => $data['service_score']], \app\adminapi\validate\product\StoreProductReplyValidate::class, 'save');
         $this->services->saveReply($data);
-        return app('json')->success('添加成功!');
+        return app('json')->success(100000);
     }
 }

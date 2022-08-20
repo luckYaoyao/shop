@@ -38,12 +38,12 @@ class StoreCouponValidate extends Validate
      * @var array
      */
     protected $message = [
-        'title.require' => '请填写优惠卷名称',
-        'image.require' => '请选择商品',
-        'category_id.require' => '请选择商品类型',
-        'coupon_price.require' => '请填写优惠卷金额',
-        'use_min_price.require' => '请填写优惠卷最小使用金额',
-        'coupon_time.require' => '请填写优惠卷有效期',
+        'title.require' => '400372',
+        'image.require' => '400337',
+        'category_id.require' => '400373',
+        'coupon_price.require' => '400374',
+        'use_min_price.require' => '400375',
+        'coupon_time.require' => '400376',
     ];
 
     protected $scene = [

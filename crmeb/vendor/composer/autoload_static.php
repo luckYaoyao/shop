@@ -7,19 +7,18 @@ namespace Composer\Autoload;
 class ComposerStaticInitf16474ac994ccc25392f403933800b79
 {
     public static $files = array (
-        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
-        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         '023d27dca8066ef29e6739335ea73bad' => __DIR__ . '/..' . '/symfony/polyfill-php70/bootstrap.php',
+        '25072dd6e2470089de65ae7bf11d3109' => __DIR__ . '/..' . '/symfony/polyfill-php72/bootstrap.php',
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
+        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
-        '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
-        'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'f598d06aa772fa33d905e87be6398fb1' => __DIR__ . '/..' . '/symfony/polyfill-intl-idn/bootstrap.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
-        '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
-        '538ca81a9a966a6716601ecf48f4eaef' => __DIR__ . '/..' . '/opis/closure/functions.php',
         'd767e4fc2dc52fe66584ab8c6684783e' => __DIR__ . '/..' . '/adbario/php-dot-notation/src/helpers.php',
+        '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '9b552a3cc426e3287cc811caefa3cf53' => __DIR__ . '/..' . '/topthink/think-helper/src/helper.php',
+        '538ca81a9a966a6716601ecf48f4eaef' => __DIR__ . '/..' . '/opis/closure/functions.php',
         '65fec9ebcfbb3cbb4fd0d519687aea01' => __DIR__ . '/..' . '/danielstjules/stringy/src/Create.php',
         'abede361264e2ae69ec1eee813a101af' => __DIR__ . '/..' . '/markbaker/complex/classes/src/functions/abs.php',
         '21a5860fbef5be28db5ddfbc3cca67c4' => __DIR__ . '/..' . '/markbaker/complex/classes/src/functions/acos.php',
@@ -83,8 +82,8 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         '0d0b82117c23db94c492fee02b2ed01f' => __DIR__ . '/..' . '/songshenzong/support/src/StringsHelpers.php',
         'd96a90b43bcdea846705672ffd4e9294' => __DIR__ . '/..' . '/songshenzong/support/src/BashEchoHelpers.php',
         '9e090711773bfc38738f5dbaee5a7f14' => __DIR__ . '/..' . '/overtrue/wechat/src/Payment/helpers.php',
-        'f67964341ef83e59f1cc6a3916599312' => __DIR__ . '/..' . '/qcloud/cos-sdk-v5/src/Qcloud/Cos/Common.php',
         '841780ea2e1d6545ea3a253239d59c05' => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu/functions.php',
+        '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
         '1cfd2761b63b0a29ed23657ea394cb2d' => __DIR__ . '/..' . '/topthink/think-captcha/src/helper.php',
         'cc56288302d9df745d97c934d6a6e5f0' => __DIR__ . '/..' . '/topthink/think-queue/src/common.php',
     );
@@ -143,7 +142,6 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         'Q' => 
         array (
             'Qiniu\\' => 6,
-            'Qcloud\\Cos\\' => 11,
             'QCloud\\COSSTS\\' => 14,
         ),
         'P' => 
@@ -159,6 +157,7 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         array (
             'Overtrue\\Socialite\\' => 19,
             'Opis\\Closure\\' => 13,
+            'OneSm\\' => 6,
             'OSS\\' => 4,
         ),
         'M' => 
@@ -181,8 +180,6 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         array (
             'GuzzleHttp\\Psr7\\' => 16,
             'GuzzleHttp\\Promise\\' => 19,
-            'GuzzleHttp\\Command\\Guzzle\\' => 26,
-            'GuzzleHttp\\Command\\' => 19,
             'GuzzleHttp\\' => 11,
             'Godruoyi\\Snowflake\\' => 19,
         ),
@@ -198,6 +195,8 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         'D' => 
         array (
             'Doctrine\\Common\\Lexer\\' => 22,
+            'Darabonba\\OpenApi\\' => 18,
+            'Darabonba\\GatewaySpi\\' => 21,
         ),
         'C' => 
         array (
@@ -208,8 +207,14 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         'A' => 
         array (
             'Alipay\\EasySDK\\' => 15,
+            'AlibabaCloud\\Tea\\XML\\' => 21,
+            'AlibabaCloud\\Tea\\Utils\\' => 23,
             'AlibabaCloud\\Tea\\FileForm\\' => 26,
             'AlibabaCloud\\Tea\\' => 17,
+            'AlibabaCloud\\SDK\\Dysmsapi\\V20170525\\' => 36,
+            'AlibabaCloud\\OpenApiUtil\\' => 25,
+            'AlibabaCloud\\Endpoint\\' => 22,
+            'AlibabaCloud\\Credentials\\' => 25,
             'Adbar\\' => 6,
         ),
     );
@@ -238,15 +243,12 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         'think\\' => 
         array (
             0 => __DIR__ . '/..' . '/topthink/framework/src/think',
-            1 => __DIR__ . '/..' . '/topthink/think-cache/src',
-            2 => __DIR__ . '/..' . '/topthink/think-container/src',
-            3 => __DIR__ . '/..' . '/topthink/think-factory/src',
-            4 => __DIR__ . '/..' . '/topthink/think-helper/src',
-            5 => __DIR__ . '/..' . '/topthink/think-image/src',
-            6 => __DIR__ . '/..' . '/topthink/think-log/src',
-            7 => __DIR__ . '/..' . '/topthink/think-orm/src',
-            8 => __DIR__ . '/..' . '/topthink/think-queue/src',
-            9 => __DIR__ . '/..' . '/topthink/think-template/src',
+            1 => __DIR__ . '/..' . '/topthink/think-factory/src',
+            2 => __DIR__ . '/..' . '/topthink/think-helper/src',
+            3 => __DIR__ . '/..' . '/topthink/think-image/src',
+            4 => __DIR__ . '/..' . '/topthink/think-orm/src',
+            5 => __DIR__ . '/..' . '/topthink/think-queue/src',
+            6 => __DIR__ . '/..' . '/topthink/think-template/src',
         ),
         'dh2y\\qrcode\\' => 
         array (
@@ -332,10 +334,6 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         array (
             0 => __DIR__ . '/..' . '/qiniu/php-sdk/src/Qiniu',
         ),
-        'Qcloud\\Cos\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/qcloud/cos-sdk-v5/src/Qcloud/Cos',
-        ),
         'QCloud\\COSSTS\\' => 
         array (
             0 => __DIR__ . '/..' . '/qcloud_sts/qcloud-sts-sdk/src',
@@ -371,6 +369,10 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         'Opis\\Closure\\' => 
         array (
             0 => __DIR__ . '/..' . '/opis/closure/src',
+        ),
+        'OneSm\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/lizhichao/one-sm/src',
         ),
         'OSS\\' => 
         array (
@@ -412,14 +414,6 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
         ),
-        'GuzzleHttp\\Command\\Guzzle\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/guzzlehttp/guzzle-services/src',
-        ),
-        'GuzzleHttp\\Command\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/guzzlehttp/command/src',
-        ),
         'GuzzleHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
@@ -444,6 +438,14 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         array (
             0 => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer',
         ),
+        'Darabonba\\OpenApi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/alibabacloud/darabonba-openapi/src',
+        ),
+        'Darabonba\\GatewaySpi\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/alibabacloud/gateway-spi/src',
+        ),
         'Complex\\' => 
         array (
             0 => __DIR__ . '/..' . '/markbaker/complex/classes/src',
@@ -460,6 +462,14 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         array (
             0 => __DIR__ . '/..' . '/alipaysdk/easysdk/php/src',
         ),
+        'AlibabaCloud\\Tea\\XML\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/alibabacloud/tea-xml/src',
+        ),
+        'AlibabaCloud\\Tea\\Utils\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/alibabacloud/tea-utils/src',
+        ),
         'AlibabaCloud\\Tea\\FileForm\\' => 
         array (
             0 => __DIR__ . '/..' . '/alibabacloud/tea-fileform/src',
@@ -468,6 +478,22 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         array (
             0 => __DIR__ . '/..' . '/alibabacloud/tea/src',
         ),
+        'AlibabaCloud\\SDK\\Dysmsapi\\V20170525\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/alibabacloud/dysmsapi-20170525/src',
+        ),
+        'AlibabaCloud\\OpenApiUtil\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/alibabacloud/openapi-util/src',
+        ),
+        'AlibabaCloud\\Endpoint\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/alibabacloud/endpoint-util/src',
+        ),
+        'AlibabaCloud\\Credentials\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/alibabacloud/credentials/src',
+        ),
         'Adbar\\' => 
         array (
             0 => __DIR__ . '/..' . '/adbario/php-dot-notation/src',
@@ -475,6 +501,13 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
     );
 
     public static $prefixesPsr0 = array (
+        'Q' => 
+        array (
+            'Qcloud\\Cos\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/qcloud/cos-sdk-v5/src',
+            ),
+        ),
         'P' => 
         array (
             'Pimple' => 
@@ -513,6 +546,7 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
     public static $classMap = array (
         'ArithmeticError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/ArithmeticError.php',
         'AssertionError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/AssertionError.php',
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'DivisionByZeroError' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/DivisionByZeroError.php',
         'Error' => __DIR__ . '/..' . '/symfony/polyfill-php70/Resources/stubs/Error.php',
         'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',

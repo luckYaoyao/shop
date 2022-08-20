@@ -51,7 +51,13 @@ class StoreProductLog extends BaseModel
      */
     public function storeName()
     {
-        return $this->hasOne(StoreProduct::class, 'id', 'product_id')->bind(['store_name','image']);
+        return $this->hasOne(StoreProduct::class, 'id', 'product_id')->bind([
+            'store_name',
+            'image',
+            'product_price'=>'price',
+            'stock',
+            'is_show'
+        ]);
     }
 
     /**

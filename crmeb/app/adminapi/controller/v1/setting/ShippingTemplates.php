@@ -80,7 +80,7 @@ class ShippingTemplates extends AuthController
         $temp['sort'] = $data['sort'];
         $temp['add_time'] = time();
         $this->services->save((int)$id, $temp, $data);
-        return app('json')->success('添加成功!');
+        return app('json')->success(100000);
     }
 
     /**
@@ -92,10 +92,10 @@ class ShippingTemplates extends AuthController
             [['id', 'd'], 0],
         ], true);
         if ($id == 1) {
-            return app('json')->fail('默认模板不能删除');
+            return app('json')->fail(400181);
         } else {
             $this->services->detete($id);
-            return app('json')->success('删除成功');
+            return app('json')->success(100002);
         }
     }
 

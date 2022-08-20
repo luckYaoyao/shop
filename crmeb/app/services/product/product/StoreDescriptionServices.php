@@ -60,7 +60,7 @@ class StoreDescriptionServices extends BaseServices
         } else {
             $res = $this->dao->save(['product_id' => $id, 'description' => $description, 'type' => $type]);
         }
-        if (!$res) throw new AdminException('商品详情保存失败！');
+        if (!$res) throw new AdminException(400560);
     }
 
 }

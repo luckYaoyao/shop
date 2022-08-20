@@ -12,10 +12,8 @@ declare (strict_types=1);
 
 namespace app\services\pay;
 
-use crmeb\services\AliPayService;
-use crmeb\services\MiniProgramService;
-use crmeb\services\WechatService;
-use think\exception\ValidateException;
+use crmeb\exceptions\ApiException;
+use crmeb\services\pay\Pay;
 
 /**
  * 支付统一入口
@@ -74,31 +72,23 @@ class PayServices
     public function pay(string $payType, string $openid, string $orderId, string $price, string $successAction, string $body, bool $isCode = false)
     {
         try {
-            switch ($payType) {
-                case 'routine':
-                    if (request()->isApp()) {
-                        return MiniProgramService::appPay($openid, $orderId, $price, $successAction, $body);
-                    } else {
-                        return MiniProgramService::jsPay($openid, $orderId, $price, $successAction, $body);
-                    }
-                case 'weixinh5':
-                    return WechatService::paymentPrepare(null, $orderId, $price, $successAction, $body, '', 'MWEB');
-                case 'weixin':
-                    if (request()->isApp()) {
-                        return WechatService::appPay($openid, $orderId, $price, $successAction, $body);
-                    } else {
-                        return WechatService::jsPay($openid, $orderId, $price, $successAction, $body);
-                    }
-                case 'alipay':
-                    return AliPayService::instance()->create($body, $orderId, $price, $successAction, $openid, $openid, $isCode);
-                case 'pc':
-                case 'store':
-                    return WechatService::nativePay($openid, $orderId, $price, $successAction, $body);
-                default:
-                    throw new ValidateException('支付方式不存在');
+
+            //这些全都是微信支付
+            if (in_array($payType, ['routine', 'weixinh5', 'weixin', 'pc', 'store'])) {
+                $payType = 'wechat_pay';
             }
+
+            if ($payType == 'alipay') {
+                $payType = 'ali_pay';
+            }
+
+            /** @var Pay $pay */
+            $pay = app()->make(Pay::class, [$payType]);
+
+            return $pay->create($orderId, $price, $successAction, $body, '', ['openid' => $openid, 'isCode' => $isCode,'pay_new_weixin_open' => (bool)sys_config('pay_new_weixin_open')]);
+
         } catch (\Exception $e) {
-            throw new ValidateException($e->getMessage());
+            throw new ApiException($e->getMessage());
         }
     }
 }

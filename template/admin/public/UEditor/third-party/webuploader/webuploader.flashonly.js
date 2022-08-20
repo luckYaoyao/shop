@@ -3853,15 +3853,11 @@
                 uid = parts[ 0 ];
                 type = parts[ 1 ];
     
-                // console.log.apply( console, arguments );
-    
                 if ( type === 'Ready' && uid === me.uid ) {
                     me.trigger('ready');
                 } else if ( clients[ uid ] ) {
                     clients[ uid ].trigger( type.toLowerCase(), evt, obj );
                 }
-    
-                // Base.log( evt, obj );
             }
     
             // flash的接受器。

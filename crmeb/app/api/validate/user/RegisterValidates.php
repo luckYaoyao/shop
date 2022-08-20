@@ -30,13 +30,13 @@ class RegisterValidates extends Validate
     ];
 
     protected $message = [
-        'phone.require' => '手机号必须填写',
-        'phone.regex' => '手机号格式错误',
-        'account.require' => '手机号必须填写',
-        'account.regex' => '手机号格式错误',
-        'captcha.require' => '验证码必须填写',
-        'captcha.length' => '验证码长度不正确',
-        'password.require' => '密码必须填写',
+        'phone.require' => '410015',
+        'phone.regex' => '410018',
+        'account.require' => '410015',
+        'account.regex' => '410018',
+        'captcha.require' => '410004',
+        'captcha.length' => '410010',
+        'password.require' => '410011',
     ];
 
 

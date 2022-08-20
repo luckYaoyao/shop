@@ -18,7 +18,7 @@ use app\services\product\product\StoreCategoryServices;
 use app\services\user\member\MemberCardServices;
 use app\services\user\UserBillServices;
 use app\services\user\UserServices;
-use think\exception\ValidateException;
+use crmeb\exceptions\ApiException;
 use app\services\user\UserAddressServices;
 use app\services\activity\coupon\StoreCouponUserServices;
 use app\services\shipping\ShippingTemplatesFreeServices;
@@ -84,7 +84,7 @@ class StoreOrderComputedServices extends BaseServices
         if ($offlinePayStatus == 2) unset($systemPayType['offline']);
         if (strtolower($payType) != 'pc' && strtolower($payType) != 'friend') {
             if (!array_key_exists($payType, $systemPayType)) {
-                throw new ValidateException('选择支付方式有误');
+                throw new ApiException(410241);
             }
         }
         if (!$userInfo) {
@@ -92,7 +92,7 @@ class StoreOrderComputedServices extends BaseServices
             $userServices = app()->make(UserServices::class);
             $userInfo = $userServices->getUserInfo($uid);
             if (!$userInfo) {
-                throw new ValidateException('用户不存在!');
+                throw new ApiException(410032);
             }
         }
         $cartInfo = $cartGroup['cartInfo'];
@@ -158,7 +158,7 @@ class StoreOrderComputedServices extends BaseServices
             $couponServices = app()->make(StoreCouponUserServices::class);
             $couponInfo = $couponServices->getOne([['id', '=', $couponId], ['uid', '=', $uid], ['is_fail', '=', 0], ['status', '=', 0], ['start_time', '<', time()], ['end_time', '>', time()]], '*', ['issue']);
             if (!$couponInfo) {
-                throw new ValidateException('选择的优惠劵无效!');
+                throw new ApiException(410242);
             }
             $type = $couponInfo['applicable_type'] ?? 0;
             $flag = false;
@@ -199,7 +199,7 @@ class StoreOrderComputedServices extends BaseServices
                 $flag = true;
             }
             if (!$flag) {
-                throw new ValidateException('不满足优惠劵的使用条件!');
+                throw new ApiException(410243);
             }
             $payPrice = (float)bcsub((string)$payPrice, (string)$couponInfo['coupon_price'], 2);
             if ($isCreate) {
@@ -210,7 +210,7 @@ class StoreOrderComputedServices extends BaseServices
             $couponPrice = 0;
         }
         if (!$res1) {
-            throw new ValidateException('使用优惠劵失败!');
+            throw new ApiException(410244);
         }
         return [$payPrice, $couponPrice];
     }
@@ -327,6 +327,7 @@ class StoreOrderComputedServices extends BaseServices
                 $item['postage_price'] = 0;
             } elseif ($item['productInfo']['freight'] == 2) {
                 $item['postage_price'] = bcmul((string)$item['productInfo']['postage'], (string)$item['cart_num'], 2);
+                $item['origin_postage_price'] = bcmul((string)$item['productInfo']['postage'], (string)$item['cart_num'], 2);
                 $storePostage = bcadd((string)$storePostage, (string)$item['postage_price'], 2);
             }
         }
@@ -462,6 +463,7 @@ class StoreOrderComputedServices extends BaseServices
                 $express_rule_number = $memberCardService->isOpenMemberCard('express');
                 $express_rule_number = $express_rule_number <= 0 ? 0 : $express_rule_number;
             }
+            $discountRate = bcdiv($express_rule_number, 100, 4);
             $truePostageArr = [];
             foreach ($postageArr as $postitem) {
                 if ($postitem['sum'] == ($maxStorePostage ?? 0)) {
@@ -472,6 +474,9 @@ class StoreOrderComputedServices extends BaseServices
             $cartAlready = [];
             foreach ($cartInfo as &$item) {
                 if (isset($item['productInfo']['freight']) && in_array($item['productInfo']['freight'], [1, 2])) {
+                    if ($item['productInfo']['freight'] == 2) {
+                        $item['postage_price'] = sprintf("%.2f", bcmul($item['postage_price'], $discountRate, 6));
+                    }
                     continue;
                 }
                 $tempId = $item['productInfo']['temp_id'] ?? 0;
@@ -489,7 +494,7 @@ class StoreOrderComputedServices extends BaseServices
                 $cartAlready[$tempId]['price'] = bcadd((string)($cartNumber[$tempId]['price'] ?? 0.00), (string)$price, 4);
 
                 if ($express_rule_number && $express_rule_number < 100) {
-                    $price = bcmul($price, bcdiv($express_rule_number, 100, 4), 4);
+                    $price = bcmul($price, $discountRate, 4);
                 }
                 if ($type == 2) {
                     $price = bcmul($price, $item['productInfo']['attrInfo']['weight'], 6);

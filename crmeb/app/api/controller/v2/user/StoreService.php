@@ -13,8 +13,8 @@ namespace app\api\controller\v2\user;
 
 
 use app\Request;
-use app\services\message\service\StoreServiceLogServices;
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceLogServices;
+use app\services\kefu\service\StoreServiceServices;
 
 /**
  * Class StoreService
@@ -51,6 +51,6 @@ class StoreService
             [['toUid', 'd'], 0],
         ], true);
         $uid = $request->uid();
-        return app('json')->successful($services->getRecord($uid, $uidTo, $limit, $toUid));
+        return app('json')->success($services->getRecord($uid, $uidTo, $limit, $toUid));
     }
 }

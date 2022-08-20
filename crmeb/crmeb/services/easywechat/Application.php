@@ -12,6 +12,7 @@
 namespace crmeb\services\easywechat;
 
 
+use crmeb\services\easywechat\miniPayment\ServiceProvider;
 use crmeb\services\easywechat\oauth2\wechat\WechatOauth2Provider;
 use crmeb\services\easywechat\wechatlive\ProgramProvider as LiveProgramProvider;
 
@@ -30,7 +31,8 @@ class Application extends \EasyWeChat\Foundation\Application
      */
     protected $providersNew = [
         LiveProgramProvider::class,
-        WechatOauth2Provider::class
+        WechatOauth2Provider::class,
+        ServiceProvider::class
     ];
 
     /**

@@ -94,4 +94,14 @@ class SystemAdminDao extends BaseDao
     {
         return $this->getModel()->where($where)->find();
     }
+
+    /**
+     * 检测是否有管理员使用该角色
+     * @param int $id
+     * @return bool
+     */
+    public function checkRoleUse(int $id): bool
+    {
+        return (bool)$this->getModel()->whereFindInSet('roles', $id)->count();
+    }
 }

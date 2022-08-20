@@ -102,7 +102,7 @@ class SystemClearServices extends BaseServices
                     Db::execute($item);
                 }
             } catch (\Throwable $e) {
-                throw new AdminException('替换失败,失败原因:' . $e->getMessage());
+                throw new AdminException(400612, ['msg' => $e->getMessage()]);
             }
         });
     }

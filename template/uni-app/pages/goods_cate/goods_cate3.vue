@@ -5,9 +5,9 @@
 				class="pageIndex acea-row row-center-wrapper" hover-class="none">
 				<text class="iconfont icon-fanhuishouye"></text>
 			</navigator>
-			<navigator url="/pages/goods_search/index" class="search acea-row row-middle" hover-class="none">
+			<navigator url="/pages/goods/goods_search/index" class="search acea-row row-middle" hover-class="none">
 				<text class="iconfont icon-sousuo5"></text>
-				搜索商品
+				{{$t(`搜索商品名称`)}}
 			</navigator>
 		</view>
 		<view class="conter">
@@ -15,7 +15,7 @@
 				<scroll-view scroll-y="true" scroll-with-animation='true' style="height: calc(100% - 100rpx)">
 					<view class='item acea-row row-center-wrapper' :class='index==navActive?"on":""'
 						v-for="(item,index) in categoryList" :key="index" @click="tapNav(index,item)">
-						<text>{{item.cate_name}}</text>
+						<text>{{$t(item.cate_name)}}</text>
 					</view>
 				</scroll-view>
 			</view>
@@ -26,7 +26,7 @@
 							scroll-with-animation :scroll-left="tabLeft" show-scrollbar="true">
 							<view class="longItem" :style='"width:"+isWidth+"px"' :class="index===tabClick?'click':''"
 								v-for="(item,index) in categoryErList" :key="index" @click="longClick(index)">
-								{{item.cate_name}}
+								{{$t(item.cate_name)}}
 							</view>
 						</scroll-view>
 					</view>
@@ -43,7 +43,7 @@
 							<view class="acea-row row-middle">
 								<view class="item line1" :class="index===tabClick?'click':''"
 									v-for="(item,index) in categoryErList" :key="index" @click="longClick(index)">
-									{{item.cate_name}}
+									{{$t(item.cate_name)}}
 								</view>
 							</view>
 						</view>
@@ -67,8 +67,8 @@
 				<view class="iconfont icon-gouwuche-yangshi1"></view>
 			</view>
 			<view class="acea-row row-middle">
-				<view class="money">￥<text class="num">{{totalPrice}}</text></view>
-				<view class="bnt" :class="cartCount?'':'on'" @click="subOrder">去结算</view>
+				<view class="money">{{$t(`￥`)}}<text class="num">{{totalPrice}}</text></view>
+				<view class="bnt" :class="cartCount?'':'on'" @click="subOrder">{{$t(`去付款`)}}</view>
 			</view>
 		</view>
 		<cartList :cartData="cartData" @closeList="closeList" @ChangeCartNumDan="ChangeCartList"
@@ -127,7 +127,7 @@
 				tempArr: [],
 				loading: false,
 				loadend: false,
-				loadTitle: '加载更多',
+				loadTitle: this.$t(`加载更多`),
 				page: 1,
 				limit: 10,
 				cid: 0, //一级分类
@@ -219,12 +219,12 @@
 						ids.push(item.id)
 					});
 					uni.navigateTo({
-						url: '/pages/users/order_confirm/index?cartId=' + ids.join(',')
+						url: '/pages/goods/order_confirm/index?cartId=' + ids.join(',')
 					});
 					that.cartData.iScart = false;
 				} else {
 					return that.$util.Tips({
-						title: '请选择产品'
+						title: this.$t(`请选择产品`)
 					});
 				}
 			},
@@ -433,11 +433,11 @@
 					that.$set(that, 'tempArr', that.tempArr);
 					that.loading = false;
 					that.loadend = loadend;
-					that.loadTitle = loadend ? "人家是有底线的~" : "加载更多";
+					that.loadTitle = loadend ? that.$t(`没有更多内容啦~`) : that.$t(`加载更多`);
 					that.page = that.page + 1;
 				}).catch(err => {
 					that.loading = false,
-						that.loadTitle = '加载更多'
+						that.loadTitle = that.$t(`加载更多`);
 				});
 			},
 
@@ -488,7 +488,7 @@
 							this.$set(this.cartData, 'cartList', this.cartData.cartList);
 						}
 						return this.$util.Tips({
-							title: "该产品没有更多库存了"
+							title: this.$t(`该产品没有更多库存了`)
 						});
 					} else {
 						if (!isDuo) {
@@ -548,7 +548,7 @@
 						productSelect === undefined
 					)
 						return that.$util.Tips({
-							title: "产品库存不足，请选择其它属性"
+							title: that.$t(`该产品没有更多库存了`)
 						});
 				}
 				let q = {
@@ -562,7 +562,7 @@
 						if (duo) {
 							that.attr.cartAttr = false;
 							that.$util.Tips({
-								title: "添加购物车成功"
+								title: that.$t(`添加成功`)
 							});
 							// that.page = 1;
 							// that.loadend = false;
@@ -618,7 +618,7 @@
 						return
 					}
 					uni.showLoading({
-						title: '加载中'
+						title: this.$t(`正在加载中`)
 					});
 
 					this.storeName = item.store_name;
@@ -669,7 +669,7 @@
 					data.forEach(item => {
 						item.children.unshift({
 							'id': 0,
-							'cate_name': '全部'
+							'cate_name': that.$t(`全部`)
 						})
 					})
 					that.categoryTitle = data[0].cate_name;
@@ -1032,7 +1032,6 @@
 			padding-left: 30rpx;
 			box-sizing: border-box;
 			height: 100rpx;
-			bottom: 98rpx;
 
 			.cartIcon {
 				width: 124rpx;

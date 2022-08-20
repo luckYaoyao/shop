@@ -89,24 +89,19 @@
       @on-cancel="cancel"
       width="1000"
     >
-      <commission-details
-        v-if="modals"
-        ref="commission"
-        :ids="ids"
-        :time="formValidate.time"
-      ></commission-details>
+      <commission-details v-if="modals" ref="commission" :ids="ids" :time="formValidate.time"></commission-details>
     </Modal>
   </div>
 </template>
-		
-		<script>
-import exportExcel from "@/utils/newToExcel.js";
-import commissionDetails from "../components/commissionDetails";
-import { getRecord } from "@/api/statistic.js";
-import { getFlowList } from "@/api/finance";
+
+<script>
+import exportExcel from '@/utils/newToExcel.js';
+import commissionDetails from '../components/commissionDetails';
+import { getRecord } from '@/api/statistic.js';
+import { getFlowList } from '@/api/finance';
 
 export default {
-  name: "bill",
+  name: 'bill',
   components: {
     commissionDetails,
   },
@@ -114,7 +109,7 @@ export default {
     return {
       modals: false,
       options: this.$timeOptions,
-      ids: "",
+      ids: '',
       grid: {
         xl: 7,
         lg: 7,
@@ -124,75 +119,75 @@ export default {
       },
       total: 0,
       loading: false,
-      tab: "day",
+      tab: 'day',
       staff: [],
       columns: [
         {
-          title: "ID",
-          key: "id",
+          title: 'ID',
+          key: 'id',
           width: 60,
         },
         {
-          title: "标题",
-          key: "title",
+          title: '标题',
+          key: 'title',
           minWidth: 80,
         },
         {
-          title: "日期",
-          key: "add_time",
+          title: '日期',
+          key: 'add_time',
           minWidth: 80,
         },
         {
-          title: "收入金额",
-          slot: "income_price",
+          title: '收入金额',
+          slot: 'income_price',
           minWidth: 80,
         },
         {
-          title: "支出金额",
-          slot: "exp_price",
+          title: '支出金额',
+          slot: 'exp_price',
           minWidth: 80,
         },
         {
-          title: "入账金额",
-          slot: "entry_price",
+          title: '入账金额',
+          slot: 'entry_price',
           minWidth: 80,
         },
         {
-          title: "操作",
-          slot: "action",
-          fixed: "right",
+          title: '操作',
+          slot: 'action',
+          fixed: 'right',
           minWidth: 120,
-          align: "center",
+          align: 'center',
         },
       ],
       orderList: [
         {
-          id: "1",
-          order_id: "200",
-          pay_price: "200",
+          id: '1',
+          order_id: '200',
+          pay_price: '200',
           status: 1,
-          phone: "13000000000",
-          address: "100",
+          phone: '13000000000',
+          address: '100',
         },
       ],
       formValidate: {
-        store_id: "",
-        time: "",
+        store_id: '',
+        time: '',
         page: 1,
         limit: 15,
       },
       timeVal: [],
       fromList: {
-        title: "选择时间",
+        title: '选择时间',
         custom: true,
         fromTxt: [
-          { text: "全部", val: "" },
-          { text: "昨天", val: "yesterday" },
-          { text: "今天", val: "today" },
-          { text: "本周", val: "week" },
-          { text: "本月", val: "month" },
-          { text: "本季度", val: "quarter" },
-          { text: "本年", val: "year" },
+          { text: '全部', val: '' },
+          { text: '昨天', val: 'yesterday' },
+          { text: '今天', val: 'today' },
+          { text: '本周', val: 'week' },
+          { text: '本月', val: 'month' },
+          { text: '本季度', val: 'quarter' },
+          { text: '本年', val: 'year' },
         ],
       },
     };
@@ -202,7 +197,7 @@ export default {
       return this.isMobile ? undefined : 80;
     },
     labelPosition() {
-      return this.isMobile ? "top" : "left";
+      return this.isMobile ? 'top' : 'left';
     },
   },
   mounted() {
@@ -247,7 +242,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.time = this.timeVal[0] ? this.timeVal.join("-") : "";
+      this.formValidate.time = this.timeVal[0] ? this.timeVal.join('-') : '';
       this.formValidate.page = 1;
       this.getList();
     },
@@ -258,7 +253,7 @@ export default {
     },
     // 账单详情
     Info(row) {
-      this.ids = row.ids || "";
+      this.ids = row.ids || '';
       this.modals = true;
     },
     cancel() {
@@ -266,7 +261,7 @@ export default {
     },
     //下载
     async download(row) {
-      let [th, fileKey, data, fileName] = [[], [], [], ""];
+      let [th, fileKey, data, fileName] = [[], [], [], ''];
       let excelData = {
         ids: row.ids,
         page: 1,
@@ -293,8 +288,8 @@ export default {
   },
 };
 </script>
-		
-		<style scoped lang="less">
+
+<style scoped lang="less">
 /deep/.ivu-page-header,
 /deep/.ivu-tabs-bar {
   border-bottom: 1px solid #ffffff;
@@ -333,4 +328,3 @@ export default {
   padding: 0px 30px 15px 30px;
 }
 </style>
-		

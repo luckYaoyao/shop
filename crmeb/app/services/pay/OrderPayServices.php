@@ -15,8 +15,8 @@ namespace app\services\pay;
 use app\services\order\StoreOrderCartInfoServices;
 use app\services\order\StoreOrderServices;
 use app\services\wechat\WechatUserServices;
+use crmeb\exceptions\ApiException;
 use crmeb\utils\Str;
-use think\exception\ValidateException;
 
 /**
  * 订单发起支付
@@ -44,10 +44,10 @@ class OrderPayServices
     public function orderPay(array $orderInfo, string $payType)
     {
         if ($orderInfo['paid']) {
-            throw new ValidateException('订单已支付!');
+            throw new ApiException(410174);
         }
         if ($orderInfo['pay_price'] <= 0) {
-            throw new ValidateException('该支付无需支付!');
+            throw new ApiException(410274);
         }
         $openid = '';
         if (!in_array($payType, ['weixinh5', 'pc']) && !request()->isApp()) {
@@ -60,23 +60,23 @@ class OrderPayServices
             $services = app()->make(WechatUserServices::class);
             $openid = $services->uidToOpenid($orderInfo['pay_uid'] ?? $orderInfo['uid'], $userType);
             if (!$openid) {
-                throw new ValidateException('获取用户openid失败,无法支付');
+                throw new ApiException(410275);
             }
         }
         $site_name = sys_config('site_name');
         if (isset($orderInfo['member_type'])) {
-            $body = Str::substrUTf8($site_name . '--' . $orderInfo['member_type'], 30);
+            $body = Str::substrUTf8($site_name . '--' . $orderInfo['member_type'], 20);
             $successAction = "member";
         } else {
             /** @var StoreOrderCartInfoServices $orderInfoServices */
             $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);
             $body = $orderInfoServices->getCarIdByProductTitle((int)$orderInfo['id'], $orderInfo['cart_id']);
-            $body = Str::substrUTf8($site_name . '--' . $body, 30);
+            $body = Str::substrUTf8($site_name . '--' . $body, 20);
             $successAction = "product";
         }
 
         if (!$body) {
-            throw new ValidateException('支付参数缺少：请前往后台设置->系统设置-> 填写 网站名称');
+            throw new ApiException(410276);
         }
 
         /** @var StoreOrderServices $orderServices */
@@ -95,10 +95,10 @@ class OrderPayServices
     public function alipayOrder(array $orderInfo, string $quitUrl, bool $isCode = false)
     {
         if ($orderInfo['paid']) {
-            throw new ValidateException('订单已支付!');
+            throw new ApiException(410174);
         }
         if ($orderInfo['pay_price'] <= 0) {
-            throw new ValidateException('该支付无需支付!');
+            throw new ApiException(410274);
         }
         $site_name = sys_config('site_name');
         if (isset($orderInfo['member_type'])) {
@@ -113,7 +113,7 @@ class OrderPayServices
         }
 
         if (!$body) {
-            throw new ValidateException('支付参数缺少：请前往后台设置->系统设置-> 填写 网站名称');
+            throw new ApiException(410276);
         }
 
         /** @var StoreOrderServices $orderServices */

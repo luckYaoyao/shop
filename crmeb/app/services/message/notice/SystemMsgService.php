@@ -12,7 +12,7 @@
 namespace app\services\message\notice;
 
 use app\services\message\NoticeService;
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceServices;
 use app\services\message\MessageSystemServices;
 use think\facade\Log;
 

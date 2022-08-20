@@ -127,7 +127,7 @@ class SystemCityServices extends BaseServices
     {
         $info = $this->dao->get($id);
         if (!$info) {
-            throw new AdminException('需改的数据不存在');
+            throw new AdminException(100026);
         }
         $info = $info->toArray();
         $info['parent_name'] = $this->dao->value(['city_id' => $info['parent_id']], 'name') ?: '中国';

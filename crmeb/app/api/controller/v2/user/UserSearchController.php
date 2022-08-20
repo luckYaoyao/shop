@@ -22,7 +22,7 @@ use think\Request;
 class UserSearchController
 {
     /**
-     * @var UserInvoiceServices
+     * @var UserSearchServices
      */
     protected $services;
 
@@ -37,13 +37,13 @@ class UserSearchController
 
     public function getUserSeachList(Request $request)
     {
-        return app('json')->successful($this->services->getUserList((int)$request->uid()));
+        return app('json')->success($this->services->getUserList((int)$request->uid()));
     }
 
     public function cleanUserSearch(Request $request)
     {
         $uid = (int)$request->uid();
         $this->services->update(['uid' => $uid], ['is_del' => 1]);
-        return app('json')->successful('删除成功');
+        return app('json')->success(100002);
     }
 }

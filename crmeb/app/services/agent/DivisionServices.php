@@ -8,7 +8,6 @@ use app\services\system\admin\SystemRoleServices;
 use app\services\user\UserServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\FormBuilder as Form;
-use think\exception\ValidateException;
 use think\facade\Route;
 
 class DivisionServices extends BaseServices
@@ -81,7 +80,7 @@ class DivisionServices extends BaseServices
         /** @var SystemAdminServices $adminService */
         $adminService = app()->make(SystemAdminServices::class);
         $userInfo = $userServices->getUserInfo($uid);
-        if ($uid && !$userInfo) throw new AdminException('参数错误，找不到用户');
+        if ($uid && !$userInfo) throw new AdminException(100100);
         if ($uid) {
             $adminInfo = $adminService->getInfo(['division_id' => $uid])->toArray();
             if (isset($adminInfo['roles'])) {
@@ -119,7 +118,7 @@ class DivisionServices extends BaseServices
      */
     public function divisionSave($data)
     {
-        if ((int)$data['uid'] == 0) throw new AdminException('请填写用户UID');
+        if ((int)$data['uid'] == 0) throw new AdminException(400450);
         $uid = $data['uid'];
         $aid = $data['aid'];
         $agentData = [
@@ -157,24 +156,24 @@ class DivisionServices extends BaseServices
             $adminService = app()->make(SystemAdminServices::class);
             if (!$aid) {
                 if ($adminData['pwd']) {
-                    if (!$adminData['conf_pwd']) throw new AdminException('请输入确认密码');
-                    if ($adminData['pwd'] != $adminData['conf_pwd']) throw new AdminException('两次输入的密码不一致');
+                    if (!$adminData['conf_pwd']) throw new AdminException(400263);
+                    if ($adminData['pwd'] != $adminData['conf_pwd']) throw new AdminException(400264);
                     $adminService->create($adminData);
                 } else {
-                    throw new AdminException('请输入密码');
+                    throw new AdminException(400263);
                 }
             } else {
                 $adminInfo = $adminService->get($aid);
                 if (!$adminInfo)
-                    throw new AdminException('管理员信息未查到');
+                    throw new AdminException(400451);
                 if ($adminInfo->is_del) {
-                    throw new AdminException('管理员已经删除');
+                    throw new AdminException(400452);
                 }
                 if (!$adminData['real_name'])
-                    throw new AdminException('管理员姓名不能为空');
+                    throw new AdminException(400453);
                 if ($adminData['pwd']) {
-                    if (!$adminData['conf_pwd']) throw new AdminException('请输入确认密码');
-                    if ($adminData['pwd'] != $adminData['conf_pwd']) throw new AdminException('两次输入的密码不一致');
+                    if (!$adminData['conf_pwd']) throw new AdminException(400263);
+                    if ($adminData['pwd'] != $adminData['conf_pwd']) throw new AdminException(400264);
                     $adminInfo->pwd = $this->passwordHash($adminData['pwd']);
                 }
                 $adminInfo->real_name = $adminData['real_name'];
@@ -220,7 +219,7 @@ class DivisionServices extends BaseServices
         /** @var UserServices $userService */
         $userService = app()->make(UserServices::class);
         $userInfo = $userService->get($uid);
-        if ($uid && !$userInfo) throw new AdminException('参数错误，找不到用户');
+        if ($uid && !$userInfo) throw new AdminException(400214);
         $field = [];
         if ($uid) {
             $field[] = Form::number('uid', '用户UID', $userInfo['uid'] ?? '')->disabled(true)->style(['width' => '173px']);
@@ -254,8 +253,8 @@ class DivisionServices extends BaseServices
         ];
         $division_info = $userServices->getUserInfo($userInfo['division_id'], 'division_end_time,division_percent');
         if ($division_info) {
-            if ($agentData['division_percent'] > $division_info['division_percent']) throw new AdminException('代理商佣金比例不能大于事业部佣金比例');
-            if ($agentData['division_end_time'] > $division_info['division_end_time']) throw new AdminException('代理商到期时间不能大于事业部到期时间');
+            if ($agentData['division_percent'] > $division_info['division_percent']) throw new AdminException(400448);
+            if ($agentData['division_end_time'] > $division_info['division_end_time']) throw new AdminException(400449);
         }
         $res = $userServices->update($uid, $agentData);
         if ($res) return true;
@@ -279,7 +278,7 @@ class DivisionServices extends BaseServices
         if ($res) {
             return true;
         } else {
-            throw new AdminException('操作失败');
+            throw new AdminException(100005);
         }
     }
 
@@ -332,7 +331,7 @@ class DivisionServices extends BaseServices
      */
     public function getDivisionPercent($uid, $storeBrokerageRatio, $storeBrokerageRatioTwo, $isSelfBrokerage)
     {
-        $division_open = (int)sys_config('division_status', 0);
+        $division_open = (int)sys_config('division_status', 1);
         if (!$division_open) {
             /** 代理商关闭 */
             $storeBrokerageOne = $storeBrokerageRatio;
@@ -527,6 +526,6 @@ class DivisionServices extends BaseServices
                 }
             }
         }
-        return [$storeBrokerageOne, $storeBrokerageTwo, $staffPercent, $agentPercent, $divisionPercent];
+        return [max($storeBrokerageOne, 0), max($storeBrokerageTwo, 0),  max($staffPercent, 0), max($agentPercent, 0), max($divisionPercent, 0)];
     }
 }

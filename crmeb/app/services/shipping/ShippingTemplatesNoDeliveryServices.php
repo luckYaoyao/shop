@@ -57,7 +57,7 @@ class ShippingTemplatesNoDeliveryServices extends BaseServices
                     if (isset($value['children']) && is_array($value['children'])) {
                         foreach ($value['children'] as $vv) {
                             if (!isset($vv['city_id'])) {
-                                throw new AdminException('缺少城市id无法保存');
+                                throw new AdminException(400591);
                             }
                             $placeList [] = [
                                 'temp_id' => $tempId,

@@ -35,14 +35,15 @@ class MessageSystemController
     /**
      * 站内信消息列表
      * @param Request $request
-     * @param $page
-     * @param $limit
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function message_list(Request $request)
     {
         $uid = (int)$request->uid();
-        return app('json')->successful($this->services->getMessageSystemList($uid));
+        return app('json')->success($this->services->getMessageSystemList($uid));
     }
 
     /**
@@ -50,16 +51,19 @@ class MessageSystemController
      * @param Request $request
      * @param $id
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function detail(Request $request, $id)
     {
         if (!$id) {
-            app('json')->fail('缺少参数');
+            app('json')->fail(100100);
         }
         $uid = (int)$request->uid();
         $where['uid'] = $uid;
         $where['id'] = $id;
-        return app('json')->successful($this->services->getInfo($where));
+        return app('json')->success($this->services->getInfo($where));
     }
 
     /**
@@ -75,6 +79,6 @@ class MessageSystemController
             ['value', '']
         ]);
         $this->services->update($data['id'], [$data['key'] => $data['value']]);
-        return app('json')->successful('成功');
+        return app('json')->success(100014);
     }
 }

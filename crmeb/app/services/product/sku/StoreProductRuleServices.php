@@ -45,8 +45,8 @@ class StoreProductRuleServices extends BaseServices
                 $specs = json_decode($item['rule_value'], true);
                 if ($specs) {
                     foreach ($specs as $key => $value) {
-                        $attr_name[] = $value['value'];
-                        $attr_value[] = implode(',', $value['detail']);
+                        $attr_name[] = $value['value']  ?? '';
+                        $attr_value[] = implode(',', $value['detail'] ?? '');
                     }
                 } else {
                     $attr_name[] = '';
@@ -74,7 +74,7 @@ class StoreProductRuleServices extends BaseServices
         } else {
             $res = $this->dao->save($data);
         }
-        if (!$res) throw new AdminException('保存失败');
+        if (!$res) throw new AdminException(100006);
     }
 
     /**
@@ -95,7 +95,7 @@ class StoreProductRuleServices extends BaseServices
      */
     public function del(string $ids)
     {
-        if ($ids == '') throw new AdminException('请至少选择一条数据');
+        if ($ids == '') throw new AdminException(100100);
         $this->dao->del($ids);
     }
 }

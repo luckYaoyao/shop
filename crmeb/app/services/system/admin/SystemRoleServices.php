@@ -17,7 +17,6 @@ use app\Request;
 use app\services\BaseServices;
 use app\services\system\SystemMenusServices;
 use crmeb\exceptions\AuthException;
-use crmeb\utils\ApiErrorCode;
 use think\facade\Cache;
 
 
@@ -119,7 +118,6 @@ class SystemRoleServices extends BaseServices
         if (!in_array($rule, array_map(function ($item) {
             return trim(strtolower(str_replace(' ', '', $item)));
         }, array_column($auth, 'api_url')))) {
-//            throw new AuthException(ApiErrorCode::ERR_RULE);
             return true;
         }
         //验证访问接口是否有权限
@@ -127,7 +125,7 @@ class SystemRoleServices extends BaseServices
             if (trim(strtolower($item['api_url'])) === $rule && $method === trim(strtolower($item['methods'])))
                 return true;
         }))) {
-            throw new AuthException(ApiErrorCode::ERR_AUTH);
+            throw new AuthException(110000);
         }
     }
 

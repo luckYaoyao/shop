@@ -36,13 +36,13 @@ class ServeValidata extends Validate
      * @var array
      */
     protected $message = [
-        'phone.require' => '请填写手机号码',
-        'phone.number' => '您输入的手机号码必须为数字',
-        'phone.mobile' => '您输入的手机号码有误',
-        'password.require' => '密码必须填写',
-        'verify_code.require' => '请填写短信验证码',
-        'verify_code.number' => '短信验证码必须为数字',
-        'account.require' => '请填写账号',
+        'phone.require' => '400333',
+        'phone.number' => '400019',
+        'phone.mobile' => '400252',
+        'password.require' => '400020',
+        'verify_code.require' => '400137',
+        'verify_code.number' => '400021',
+        'account.require' => '400133',
     ];
 
     protected $scene = [

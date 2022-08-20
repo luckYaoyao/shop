@@ -6,7 +6,7 @@
 		<view class='header acea-row row-center-wrapper'>
 			<view class='acea-row row-between-wrapper input'>
 				<text class='iconfont icon-sousuo'></text>
-				<input type='text' placeholder='点击搜索商品信息' @confirm="searchSubmitValue" confirm-type='search'
+				<input type='text' :placeholder="$t('搜索商品名称')" @confirm="searchSubmitValue" confirm-type='search'
 					name="search" placeholder-class='placeholder'></input>
 			</view>
 		</view>
@@ -15,7 +15,7 @@
 				<scroll-view scroll-y="true" scroll-with-animation='true' style="height: calc(100% - 100rpx)">
 					<view class='item acea-row row-center-wrapper' :class='index==navActive?"on":""'
 						v-for="(item,index) in productList" :key="index" @click='tap(index,"b"+index)'>
-						<text>{{item.cate_name}}</text>
+						<text>{{$t(item.cate_name)}}</text>
 					</view>
 					<!-- #ifdef APP-PLUS -->
 					<view class="item" v-if="newData.status && newData.status.status"></view>
@@ -31,19 +31,19 @@
 						<view class='listw' :id="'b'+index">
 							<view class='title acea-row row-center-wrapper'>
 								<view class='line'></view>
-								<view class='name'>{{item.cate_name}}</view>
+								<view class='name'>{{$t(item.cate_name)}}</view>
 								<view class='line'></view>
 							</view>
 							<view class='list acea-row'>
 								<block v-for="(itemn,indexn) in item.children" :key="indexn">
 									<navigator hover-class='none'
-										:url='"/pages/goods_list/index?sid="+itemn.id+"&title="+itemn.cate_name'
+										:url='"/pages/goods/goods_list/index?sid="+itemn.id+"&title="+itemn.cate_name'
 										class='item acea-row row-column row-middle'>
 										<view class='picture'>
 											<image :src='itemn.pic' v-if="itemn.pic"></image>
 											<image src="/static/images/sort-img.png" v-else></image>
 										</view>
-										<view class='name line1'>{{itemn.cate_name}}</view>
+										<view class='name line1'>{{$t(itemn.cate_name)}}</view>
 									</navigator>
 								</block>
 							</view>
@@ -59,11 +59,11 @@
 				<view class="foot-item" v-for="(item,index) in newData.menuList" :key="index" @click="goRouter(item)">
 					<block v-if="item.link == activeRouter">
 						<image :src="item.imgList[0]"></image>
-						<view class="txt" :style="{color:newData.activeTxtColor.color[0].item}">{{item.name}}</view>
+						<view class="txt" :style="{color:newData.activeTxtColor.color[0].item}">{{$t(item.name)}}</view>
 					</block>
 					<block v-else>
 						<image :src="item.imgList[1]"></image>
-						<view class="txt" :style="{color:newData.txtColor.color[0].item}">{{item.name}}</view>
+						<view class="txt" :style="{color:newData.txtColor.color[0].item}">{{$t(item.name)}}</view>
 					</block>
 					<div class="count-num" v-if="item.link === '/pages/order_addcart/order_addcart' && cartNum > 0">
 						{{cartNum}}
@@ -232,11 +232,11 @@
 			searchSubmitValue: function(e) {
 				if (this.$util.trim(e.detail.value).length > 0)
 					uni.navigateTo({
-						url: '/pages/goods_list/index?searchValue=' + e.detail.value
+						url: '/pages/goods/goods_list/index?searchValue=' + e.detail.value
 					})
 				else
 					return this.$util.Tips({
-						title: '请填写要搜索的产品信息'
+						title: this.$t(`搜索商品名称`)
 					});
 			},
 		}

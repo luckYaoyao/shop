@@ -53,6 +53,6 @@ class PageLinkServices extends BaseServices
      */
     public function del(int $id){
         $res = $this->dao->delete($id);
-        if (!$res) throw new AdminException('删除失败');
+        if (!$res) throw new AdminException(100008);
     }
 }

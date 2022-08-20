@@ -305,9 +305,9 @@ class User extends BaseModel
     {
         if ($value) {
             if (is_array($value)) {
-                if (count($value) == 2) $query->whereTime('spread_time', $value[0], $value[1]);
+                if (count($value) == 2) $query->where('spread_time', $value[0], $value[1]);
             } else {
-                $query->whereTime('spread_time', $value);
+                $query->where('spread_time', $value);
             }
         }
     }

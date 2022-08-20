@@ -2,14 +2,14 @@
 	<view style="touch-action: none;" v-show="!isSortType">
 		<!-- #ifdef H5 || APP-PLUS -->
 		<view class="customerService" :style="'top:'+topConfig" @touchmove.stop.prevent="setTouchMove">
-			<navigator class="pictrue" url="/pages/customer_list/chat" hover-class="none">
+			<navigator class="pictrue" url="/pages/extension/customer_list/chat" hover-class="none">
 				<image :src="logoConfig"></image>
 			</navigator>
 		</view>
 		<!-- #endif -->
 		<!-- #ifdef MP -->
 		<view class="customerService" :style="'top:'+topConfig" @touchmove.stop.prevent="setTouchMove" v-if="routineContact === '0'">
-			<navigator class="pictrue" url="/pages/customer_list/chat" hover-class="none">
+			<navigator class="pictrue" url="/pages/extension/customer_list/chat" hover-class="none">
 				<image :src="logoConfig"></image>
 			</navigator>
 		</view>

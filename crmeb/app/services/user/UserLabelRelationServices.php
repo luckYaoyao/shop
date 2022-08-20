@@ -56,7 +56,7 @@ class UserLabelRelationServices extends BaseServices
         $re = $this->dao->delete([['uid', 'in', $uids]]);
         if (!count($labels)) return true;
         if ($re === false) {
-            throw new AdminException('清空用户标签失败');
+            throw new AdminException(400667);
         }
         /** @var UserServices $userServices */
         $userServices = app()->make(UserServices::class);
@@ -69,7 +69,7 @@ class UserLabelRelationServices extends BaseServices
         }
         if ($data) {
             if (!$this->dao->saveAll($data))
-                throw new AdminException('设置标签失败');
+                throw new AdminException(400668);
         }
         return true;
     }

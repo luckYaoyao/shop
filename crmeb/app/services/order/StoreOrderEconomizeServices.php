@@ -14,7 +14,7 @@ namespace app\services\order;
 
 use app\dao\order\StoreOrderEconomizeDao;
 use app\services\BaseServices;
-use think\exception\ValidateException;
+use crmeb\exceptions\ApiException;
 
 /**
  * Class StoreOrderInvoiceServices
@@ -37,7 +37,7 @@ class StoreOrderEconomizeServices extends BaseServices
      */
     public function addEconomize(array $add)
     {
-        if (!$add) throw new ValidateException('数据不存在');
+        if (!$add) throw new ApiException(100026);
         return $this->dao->save($add);
     }
 
@@ -50,7 +50,7 @@ class StoreOrderEconomizeServices extends BaseServices
      */
     public function getOne(array $where)
     {
-        if (!$where) throw new ValidateException('条件缺失');
+        if (!$where) throw new ApiException(100100);
         return $this->dao->getOne($where);
     }
 

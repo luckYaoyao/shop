@@ -120,10 +120,10 @@ class ArticleCategoryServices extends BaseServices
         /** @var ArticleServices $articleService */
         $articleService = app()->make(ArticleServices::class);
         $pidCount = $this->dao->count(['pid' => $id]);
-        if($pidCount > 0) throw new AdminException('该分类有下级分类，无法删除！');
+        if($pidCount > 0) throw new AdminException(400454);
         $count = $articleService->count(['cid' => $id]);
         if ($count > 0) {
-            throw new AdminException('该分类下有文章，无法删除！');
+            throw new AdminException(400455);
         } else {
             return $this->dao->delete($id);
         }

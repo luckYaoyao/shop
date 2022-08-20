@@ -13,8 +13,8 @@ namespace crmeb\services\serve\storage;
 
 
 use crmeb\basic\BaseStorage;
+use crmeb\exceptions\AdminException;
 use crmeb\services\AccessTokenServeService;
-use think\exception\ValidateException;
 
 /**
  * Class Crmeb
@@ -155,7 +155,7 @@ class Crmeb extends BaseStorage
     {
         $typeContent = [1 => 'sms', 2 => 'expr_dump', 3 => 'expr_query', 4 => 'copy'];
         if (!isset($typeContent[$type])) {
-            throw new ValidateException('参数类型不正确');
+            throw new AdminException(100100);
         }
         $data = ['page' => $page, 'limit' => $limit, 'type' => $typeContent[$type]];
         if ($type == 1 && $status != '') {

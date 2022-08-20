@@ -80,7 +80,7 @@ class SystemClearData extends AuthController
                 return $this->wechatuserData();
                 break;
             default:
-                return app('json')->fail('参数有误');
+                return app('json')->fail(100100);
         }
     }
 
@@ -94,7 +94,7 @@ class SystemClearData extends AuthController
         /** @var SystemAttachmentServices $services */
         $services = app()->make(SystemAttachmentServices::class);
         $services->delete(2, 'module_type');
-        return app('json')->success('清除数据成功!');
+        return app('json')->success(100046);
     }
 
     //清除回收站商品
@@ -103,7 +103,7 @@ class SystemClearData extends AuthController
         /** @var StoreProductServices $services */
         $services = app()->make(StoreProductServices::class);
         $services->delete(1, 'is_del');
-        return app('json')->success('清除数据成功!');
+        return app('json')->success(100046);
     }
 
     /**
@@ -123,7 +123,7 @@ class SystemClearData extends AuthController
 
         ], true);
         $this->services->delDirAndFile('./public/uploads/store/comment');
-        return app('json')->success('清除数据成功!');
+        return app('json')->success(100046);
     }
 
     /**
@@ -138,7 +138,7 @@ class SystemClearData extends AuthController
             'store_product_rule', 'store_seckill', 'store_product', 'store_visit', 'store_product_log', 'category', 'delivery_service',
             'live_anchor', 'live_goods', 'live_room', 'live_room_goods', 'store_product_coupon'
         ], true);
-        return app('json')->success('清除数据成功!');
+        return app('json')->success(100046);
     }
 
     /**
@@ -148,7 +148,7 @@ class SystemClearData extends AuthController
     public function categoryData()
     {
         $this->services->clearData(['store_category'], true);
-        return app('json')->success('清除数据成功!');
+        return app('json')->success(100046);
     }
 
     /**
@@ -160,7 +160,7 @@ class SystemClearData extends AuthController
         $this->services->clearData(['store_order', 'store_order_cart_info', 'store_order_status', 'store_pink',
             'store_cart', 'store_order_status', 'other_order', 'other_order_status', 'store_order_invoice'
         ], true);
-        return app('json')->success('清除数据成功!');
+        return app('json')->success(100046);
     }
 
     /**
@@ -173,7 +173,7 @@ class SystemClearData extends AuthController
             'store_service', 'store_service_log', 'store_service_record', 'store_service_feedback', 'store_service_speechcraft'
         ], true);
         $this->services->delDirAndFile('./public/uploads/store/service');
-        return app('json')->success('清除数据成功!');
+        return app('json')->success(100046);
     }
 
     /**
@@ -187,7 +187,7 @@ class SystemClearData extends AuthController
             'wechat_news_category'
         ], true);
         $this->services->delDirAndFile('./public/uploads/wechat');
-        return app('json')->success('清除数据成功!');
+        return app('json')->success(100046);
     }
 
     /**
@@ -200,7 +200,7 @@ class SystemClearData extends AuthController
             'system_attachment', 'system_attachment_category'
         ], true);
         $this->services->delDirAndFile('./public/uploads/');
-        return app('json')->success('清除上传文件成功!');
+        return app('json')->success(100046);
     }
 
     /**
@@ -212,7 +212,7 @@ class SystemClearData extends AuthController
         $this->services->clearData([
             'user', 'wechat_user'
         ], true);
-        return app('json')->success('清除数据成功!');
+        return app('json')->success(100046);
     }
 
     //清除内容分类
@@ -221,7 +221,7 @@ class SystemClearData extends AuthController
         $this->services->clearData([
             'article_category', 'article', 'article_content'
         ], true);
-        return app('json')->success('清除数据成功!');
+        return app('json')->success(100046);
     }
 
     //清除系统记录
@@ -230,7 +230,7 @@ class SystemClearData extends AuthController
         $this->services->clearData([
             'system_notice_admin', 'system_log'
         ], true);
-        return app('json')->success('清除数据成功!');
+        return app('json')->success(100046);
     }
 
     /**
@@ -243,10 +243,10 @@ class SystemClearData extends AuthController
             ['url', '']
         ], true);
         if (!$url)
-            return app('json')->fail('请输入需要更换的域名');
+            return app('json')->fail(400304);
         if (!verify_domain($url))
-            return app('json')->fail('域名不合法');
+            return app('json')->fail(400305);
         $this->services->replaceSiteUrl($url);
-        return app('json')->success('替换成功！');
+        return app('json')->success(400306);
     }
 }

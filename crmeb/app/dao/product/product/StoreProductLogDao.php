@@ -68,4 +68,26 @@ class StoreProductLogDao extends BaseDao
             }
         })->field("FROM_UNIXTIME(add_time,'$timeType') as days,$str as num")->group('days')->select()->toArray();
     }
+
+    /**
+     * 列表
+     * @param array $where
+     * @param string $field
+     * @param int $page
+     * @param int $limit
+     * @param string $group
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getList(array $where, string $field = '*', int $page = 0, int $limit = 0, string $group = '')
+    {
+        return $this->search($where)->with(['storeName'])->field($field)
+            ->when($page != 0 && $limit != 0, function ($query) use ($page, $limit) {
+                $query->page($page, $limit);
+            })->when($group, function ($query) use ($group) {
+                $query->group($group);
+            })->order('add_time desc')->select()->toArray();
+    }
 }

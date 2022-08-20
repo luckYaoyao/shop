@@ -12,25 +12,12 @@
       @on-cancel="handleReset"
       @on-visible-change="visible"
     >
-      <Form
-        ref="formValidate"
-        :model="formValidate"
-        :label-width="110"
-        :rules="ruleValidate"
-        @submit.native.prevent
-      >
+      <Form ref="formValidate" :model="formValidate" :label-width="110" :rules="ruleValidate" @submit.native.prevent>
         <Row type="flex" :gutter="24">
           <Col span="24">
             <FormItem label="类型：">
-              <RadioGroup
-                v-model="formValidate.auth_type"
-                @on-change="changeRadio"
-              >
-                <Radio
-                  :label="item.value"
-                  v-for="(item, i) in optionsRadio"
-                  :key="i"
-                >
+              <RadioGroup v-model="formValidate.auth_type" @on-change="changeRadio">
+                <Radio :label="item.value" v-for="(item, i) in optionsRadio" :key="i">
                   <Icon type="social-apple"></Icon>
                   <span>{{ item.label }}</span>
                 </Radio>
@@ -40,34 +27,17 @@
         </Row>
         <Row type="flex" :gutter="24">
           <Col v-bind="grid">
-            <FormItem
-              :label="!authType ? '接口名称：' : '按钮名称：'"
-              prop="menu_name"
-            >
+            <FormItem :label="!authType ? '接口名称：' : '按钮名称：'" prop="menu_name">
               <div class="add">
-                <Input
-                  v-model="formValidate.menu_name"
-                  :placeholder="!authType ? '请输入接口名称' : '请输入按钮名称'"
-                >
+                <Input v-model="formValidate.menu_name" :placeholder="!authType ? '请输入接口名称' : '请输入按钮名称'">
                 </Input>
-                <Button
-                  class="ml10 df"
-                  v-show="!authType"
-                  @click="getRuleList()"
-                  icon="ios-apps"
-                >
-                </Button>
+                <Button class="ml10 df" v-show="!authType" @click="getRuleList()" icon="ios-apps"> </Button>
               </div>
             </FormItem>
           </Col>
           <Col v-bind="grid">
             <FormItem label="父级分类：">
-              <Cascader
-                :data="menuList"
-                change-on-select
-                v-model="formValidate.path"
-                filterable
-              ></Cascader>
+              <Cascader :data="menuList" change-on-select v-model="formValidate.path" filterable></Cascader>
             </FormItem>
           </Col>
           <Col v-bind="grid" v-if="!authType">
@@ -83,11 +53,7 @@
           </Col>
           <Col v-bind="grid" v-if="!authType">
             <FormItem label="接口地址：">
-              <Input
-                v-model="formValidate.api_url"
-                placeholder="请输入接口地址"
-                prop="api_url"
-              ></Input>
+              <Input v-model="formValidate.api_url" placeholder="请输入接口地址" prop="api_url"></Input>
             </FormItem>
           </Col>
           <!-- <Col v-bind="grid" v-if="authType">
@@ -100,18 +66,12 @@
           </Col> -->
           <Col v-bind="grid" v-if="authType">
             <FormItem label="路由地址：" prop="menu_path">
-              <Input
-                v-model="formValidate.menu_path"
-                placeholder="请输入路由地址"
-              ></Input>
+              <Input v-model="formValidate.menu_path" placeholder="请输入路由地址"></Input>
             </FormItem>
           </Col>
           <Col v-bind="grid">
             <FormItem label="权限标识：" prop="unique_auth">
-              <Input
-                v-model="formValidate.unique_auth"
-                placeholder="请输入权限标识"
-              ></Input>
+              <Input v-model="formValidate.unique_auth" placeholder="请输入权限标识"></Input>
             </FormItem>
           </Col>
           <Col v-bind="grid" v-if="authType">
@@ -136,22 +96,13 @@
 
           <Col v-bind="grid">
             <FormItem label="排序：">
-              <Input
-                type="number"
-                v-model="formValidate.sort"
-                placeholder="请输入排序"
-                number
-              ></Input>
+              <Input type="number" v-model="formValidate.sort" placeholder="请输入排序" number></Input>
             </FormItem>
           </Col>
           <Col v-bind="grid" v-if="authType">
             <FormItem label="隐藏菜单：">
               <RadioGroup v-model="formValidate.is_show_path">
-                <Radio
-                  :label="item.value"
-                  v-for="(item, i) in isShowPathRadio"
-                  :key="i"
-                >
+                <Radio :label="item.value" v-for="(item, i) in isShowPathRadio" :key="i">
                   <Icon type="social-apple"></Icon>
                   <span>{{ item.label }}</span>
                 </Radio>
@@ -161,11 +112,7 @@
           <Col :xs="24">
             <FormItem label="状态：">
               <RadioGroup v-model="formValidate.is_show">
-                <Radio
-                  :label="item.value"
-                  v-for="(item, i) in isShowRadio"
-                  :key="i"
-                >
+                <Radio :label="item.value" v-for="(item, i) in isShowRadio" :key="i">
                   <Icon type="social-apple"></Icon>
                   <span>{{ item.label }}</span>
                 </Radio>
@@ -174,24 +121,12 @@
           </Col>
 
           <Col span="24">
-            <Button
-              type="primary"
-              long
-              @click="handleSubmit('formValidate')"
-              :disabled="valids"
-              >提交</Button
-            >
+            <Button type="primary" long @click="handleSubmit('formValidate')" :disabled="valids">提交</Button>
           </Col>
         </Row>
       </Form>
     </Modal>
-    <Modal
-      v-model="modal12"
-      scrollable
-      width="600"
-      title="图标选择"
-      footer-hide
-    >
+    <Modal v-model="modal12" scrollable width="600" title="图标选择" footer-hide>
       <Input
         v-model="iconVal"
         placeholder="输入关键词搜索,注意全是英文"
@@ -204,31 +139,15 @@
         <div class="scollhide">
           <div class="iconlist">
             <ul class="list-inline">
-              <li
-                class="icons-item"
-                v-for="(item, i) in list"
-                :key="i"
-                :title="item.type"
-              >
-                <Icon
-                  :type="item.type"
-                  @click="iconChange(item.type)"
-                  class="ivu-icon"
-                />
+              <li class="icons-item" v-for="(item, i) in list" :key="i" :title="item.type">
+                <Icon :type="item.type" @click="iconChange(item.type)" class="ivu-icon" />
               </li>
             </ul>
           </div>
         </div>
       </div>
     </Modal>
-    <Modal
-      v-model="ruleModal"
-      scrollable
-      width="1100"
-      title="权限列表"
-      footer-hide
-      @on-visible-change="modalchange"
-    >
+    <Modal v-model="ruleModal" scrollable width="1100" title="权限列表" footer-hide @on-visible-change="modalchange">
       <div class="search-rule">
         <Input
           class="mr10"
@@ -260,10 +179,10 @@
 </template>
 
 <script>
-import { addMenusApi, addMenus, getRuleList } from "@/api/systemMenus";
-import icon from "@/utils/icon";
+import { addMenusApi, addMenus, getRuleList } from '@/api/systemMenus';
+import icon from '@/utils/icon';
 export default {
-  name: "menusFrom",
+  name: 'menusFrom',
   props: {
     formValidate: {
       type: Object,
@@ -271,14 +190,14 @@ export default {
     },
     titleFrom: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   data() {
     return {
       arrs: [],
-      searchRule: "",
-      iconVal: "",
+      searchRule: '',
+      iconVal: '',
       grid: {
         xl: 12,
         lg: 12,
@@ -289,18 +208,10 @@ export default {
       modals: false,
       modal12: false,
       ruleValidate: {
-        menu_name: [
-          { required: true, message: "请输入按钮名称", trigger: "blur" },
-        ],
-        menu_path: [
-          { required: true, message: "请输入路由地址", trigger: "blur" },
-        ],
-        methods: [
-          { required: true, message: "请选择接口请求方式", trigger: "blur" },
-        ],
-        api_url: [
-          { required: true, message: "请填写接口请求地址", trigger: "blur" },
-        ],
+        menu_name: [{ required: true, message: '请输入按钮名称', trigger: 'blur' }],
+        menu_path: [{ required: true, message: '请输入路由地址', trigger: 'blur' }],
+        methods: [{ required: true, message: '请选择接口请求方式', trigger: 'blur' }],
+        api_url: [{ required: true, message: '请填写接口请求地址', trigger: 'blur' }],
       },
       FromData: [],
       valids: false,
@@ -313,23 +224,23 @@ export default {
     };
   },
   watch: {
-    "formValidate.header": function (n) {
+    'formValidate.header': function (n) {
       this.formValidate.is_header = n ? 1 : 0;
     },
-    "formValidate.auth_type": function (n) {
+    'formValidate.auth_type': function (n) {
       if (n === undefined) {
         n = 1;
       }
       this.authType = n === 1;
     },
-    "formValidate.data": function (n) {},
+    'formValidate.data': function (n) {},
   },
   computed: {
     /* eslint-disable */
     optionsList() {
       let a = [];
       this.FromData.map((item) => {
-        if ("pid" === item.field) {
+        if ('pid' === item.field) {
           a = item.options;
         }
       });
@@ -338,7 +249,7 @@ export default {
     headerOptionsList() {
       let a = [];
       this.FromData.map((item) => {
-        if ("header" === item.field) {
+        if ('header' === item.field) {
           a = item.options;
         }
       });
@@ -347,7 +258,7 @@ export default {
     optionsListmodule() {
       let a = [];
       this.FromData.map((item) => {
-        if ("module" === item.field) {
+        if ('module' === item.field) {
           a = item.options;
         }
       });
@@ -356,7 +267,7 @@ export default {
     optionsRadio() {
       let a = [];
       this.FromData.map((item) => {
-        if ("auth_type" === item.field) {
+        if ('auth_type' === item.field) {
           a = item.options;
         }
       });
@@ -365,7 +276,7 @@ export default {
     isheaderRadio() {
       let a = [];
       this.FromData.map((item) => {
-        if ("is_header" === item.field) {
+        if ('is_header' === item.field) {
           a = item.options;
         }
       });
@@ -374,7 +285,7 @@ export default {
     isShowRadio() {
       let a = [];
       this.FromData.map((item) => {
-        if ("is_show" === item.field) {
+        if ('is_show' === item.field) {
           a = item.options;
         }
       });
@@ -383,7 +294,7 @@ export default {
     isShowPathRadio() {
       let a = [];
       this.FromData.map((item) => {
-        if ("is_show_path" === item.field) {
+        if ('is_show_path' === item.field) {
           a = item.options;
         }
       });
@@ -392,7 +303,7 @@ export default {
     menuList() {
       let a = [];
       this.FromData.map((item) => {
-        if ("menu_list" === item.field) {
+        if ('menu_list' === item.field) {
           a = item.props.data;
         }
       });
@@ -410,7 +321,7 @@ export default {
     modalchange(type) {
       if (!type) {
         this.arrs = [];
-        this.ruleModal = "";
+        this.ruleModal = '';
         this.ruleModal = false;
       }
     },
@@ -420,7 +331,7 @@ export default {
       }
     },
     selectRule(data) {
-      this.$emit("selectRule", data);
+      this.$emit('selectRule', data);
       this.$nextTick((e) => {
         this.ruleModal = false;
       });
@@ -452,7 +363,7 @@ export default {
       }
     },
     init() {
-      this.searchRule = "";
+      this.searchRule = '';
       this.arrs = [];
     },
     handleCreate1(val) {
@@ -486,10 +397,8 @@ export default {
         this.formValidate.pid = this.formValidate.path[length - 1] || 0;
       }
       let data = {
-        url: this.formValidate.id
-          ? `/setting/menus/${this.formValidate.id}`
-          : "/setting/menus",
-        method: this.formValidate.id ? "put" : "post",
+        url: this.formValidate.id ? `/setting/menus/${this.formValidate.id}` : '/setting/menus',
+        method: this.formValidate.id ? 'put' : 'post',
         datas: this.formValidate,
       };
       this.$refs[name].validate((valid) => {
@@ -499,24 +408,23 @@ export default {
             .then(async (res) => {
               this.$Message.success(res.msg);
               this.modals = false;
-              this.$emit("getList");
+              this.$emit('getList');
               this.getAddFrom();
-              this.$store.dispatch("admin/menus/getMenusNavList");
+              this.$store.dispatch('admin/menus/getMenusNavList');
             })
             .catch((res) => {
               this.$Message.error(res.msg);
             });
         } else {
-          if (!this.formValidate.menu_name)
-            return this.$Message.error("请添加按钮名称！");
+          if (!this.formValidate.menu_name) return this.$Message.error('请添加按钮名称！');
         }
       });
     },
     handleReset() {
       this.modals = false;
       this.authType = true;
-      this.$refs["formValidate"].resetFields();
-      this.$emit("clearFrom");
+      this.$refs['formValidate'].resetFields();
+      this.$emit('clearFrom');
     },
   },
   created() {

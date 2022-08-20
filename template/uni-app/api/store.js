@@ -259,3 +259,19 @@ export function getHomeProducts(data) {
 export function getPresellProductDetail(id) {
 	return request.get("advance/detail/" + id);
 }
+
+/**
+ * 获取浏览记录列表
+ * @param object data
+ */
+export function getVisitList(data) {
+	return request.get('user/visit_list', data)
+}
+
+/**
+ * 获取浏览记录列表-删除 
+ * @param object data
+ */
+export function deleteVisitList(data) {
+	return request.delete('user/visit', data)
+}

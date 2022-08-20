@@ -130,4 +130,14 @@ class StoreService extends BaseModel
     {
         if ($value) $query->whereNotIn('uid', $value);
     }
+
+    /**
+     * 客服在线搜索器
+     * @param $query
+     * @param $value
+     */
+    public function searchOnlineAttr($query, $value)
+    {
+        if ($value) $query->where('online', $value);
+    }
 }

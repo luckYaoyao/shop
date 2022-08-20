@@ -13,6 +13,7 @@ namespace app\services\statistic;
 
 use app\dao\system\statistics\CapitalFlowDao;
 use app\services\BaseServices;
+use app\services\pay\PayServices;
 use crmeb\exceptions\AdminException;
 
 class CapitalFlowServices extends BaseServices
@@ -114,10 +115,11 @@ class CapitalFlowServices extends BaseServices
         foreach ($list as &$item) {
             $item['add_time'] = date('Y-m-d H:i:s', $item['add_time']);
             $item['trading_type'] = $status[$item['trading_type']];
+            $item['pay_type_name'] = PayServices::PAY_TYPE[$item['pay_type'] != 'routine' ? $item['pay_type'] : 'weixin'];
         }
         $count = $this->dao->count($where);
         if ($export) {
-            $fileKey = ['flow_id', 'order_id', 'nickname', 'phone', 'price', 'trading_type', 'pay_type', 'add_time', 'mark'];
+            $fileKey = ['flow_id', 'order_id', 'nickname', 'phone', 'price', 'trading_type', 'pay_type_name', 'add_time', 'mark'];
             $header = ['交易单号', '关联订单', '用户', '电话', '金额', '订单类型', '支付类型', '交易时间', '备注'];
             $fileName = '账单导出' . date('YmdHis') . rand(1000, 9999);
             return compact('list', 'fileKey', 'header', 'fileName');
@@ -138,7 +140,7 @@ class CapitalFlowServices extends BaseServices
         if ($res) {
             return true;
         } else {
-            throw new AdminException('备注失败');
+            throw new AdminException(100025);
         }
     }
 

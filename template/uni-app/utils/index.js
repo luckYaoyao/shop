@@ -66,7 +66,7 @@ export function getCustomer(url) {
 		let type = res.data.customer_type
 		if (type == '0') {
 			uni.navigateTo({
-				url: url || '/pages/customer_list/chat'
+				url: url || '/pages/extension/customer_list/chat'
 			})
 		} else if (type == '1') {
 			uni.makePhoneCall({
@@ -90,7 +90,7 @@ export function getCustomer(url) {
 					success(res) {},
 					fail(err) {
 						uni.showToast({
-							title: '请先配置企业ID',
+							title: err.errMsg,
 							icon: 'none',
 							duration: 2000
 						});

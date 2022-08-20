@@ -13,7 +13,7 @@ namespace app\api\controller\v1;
 
 use app\services\activity\combination\StorePinkServices;
 use app\services\diy\DiyServices;
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceServices;
 use app\services\order\DeliveryServiceServices;
 use app\services\other\AgreementServices;
 use app\services\other\CacheServices;
@@ -32,7 +32,7 @@ use app\services\user\UserServices;
 use app\services\wechat\WechatUserServices;
 use app\Request;
 use crmeb\services\CacheService;
-use crmeb\services\UploadService;
+use app\services\other\UploadService;
 use crmeb\services\workerman\ChannelService;
 use think\facade\Cache;
 
@@ -88,7 +88,7 @@ class PublicController
         }
         $newGoodsBananr = sys_config('new_goods_bananr');
         $tengxun_map_key = sys_config('tengxun_map_key');
-        return app('json')->successful(compact('banner', 'menus', 'roll', 'info', 'activity', 'lovely', 'benefit', 'likeInfo', 'logoUrl', 'site_name', 'subscribe', 'newGoodsBananr', 'tengxun_map_key', 'explosive_money'));
+        return app('json')->success(compact('banner', 'menus', 'roll', 'info', 'activity', 'lovely', 'benefit', 'likeInfo', 'logoUrl', 'site_name', 'subscribe', 'newGoodsBananr', 'tengxun_map_key', 'explosive_money'));
     }
 
     /**
@@ -104,7 +104,7 @@ class PublicController
         $data['img'] = str_replace('\\', '/', $data['img']);
         $data['title'] = sys_config('wechat_share_title');
         $data['synopsis'] = sys_config('wechat_share_synopsis');
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 
     /**
@@ -168,7 +168,6 @@ class PublicController
         $auth['/pages/annex/vip_paid/index'] = !$vipCard || !$svipOpen;
         $auth['/kefu/mobile_list'] = !$userService || $uid == 0;
         foreach ($menusInfo as $key => &$value) {
-//            $value['pic'] = set_file_url($value['pic']);
             if (isset($auth[$value['url']]) && $auth[$value['url']]) {
                 unset($menusInfo[$key]);
                 continue;
@@ -189,7 +188,7 @@ class PublicController
         $diyServices = app()->make(DiyServices::class);
         $diy_data = $diyServices->get(['template_name' => 'member', 'type' => 1], ['value', 'order_status', 'my_banner_status']);
         $diy_data = $diy_data ? $diy_data->toArray() : [];
-        return app('json')->successful(['routine_my_menus' => array_merge($menusInfo), 'routine_my_banner' => $my_banner, 'routine_spread_banner' => $bannerInfo, 'routine_contact_type' => $routine_contact_type, 'diy_data' => $diy_data]);
+        return app('json')->success(['routine_my_menus' => array_merge($menusInfo), 'routine_my_banner' => $my_banner, 'routine_spread_banner' => $bannerInfo, 'routine_contact_type' => $routine_contact_type, 'diy_data' => $diy_data]);
     }
 
     /**
@@ -208,7 +207,7 @@ class PublicController
                 array_push($searchKeyword, $item['title']);
             }
         }
-        return app('json')->successful($searchKeyword);
+        return app('json')->success($searchKeyword);
     }
 
 
@@ -223,8 +222,8 @@ class PublicController
         $data = $request->postMore([
             ['filename', 'file'],
         ]);
-        if (!$data['filename']) return app('json')->fail('参数有误');
-        if (Cache::has('start_uploads_' . $request->uid()) && Cache::get('start_uploads_' . $request->uid()) >= 100) return app('json')->fail('非法操作');
+        if (!$data['filename']) return app('json')->fail(100100);
+        if (Cache::has('start_uploads_' . $request->uid()) && Cache::get('start_uploads_' . $request->uid()) >= 100) return app('json')->fail(100101);
         $upload = UploadService::init();
         $info = $upload->to('store/comment')->validate()->move($data['filename']);
         if ($info === false) {
@@ -240,7 +239,7 @@ class PublicController
         Cache::set('start_uploads_' . $request->uid(), $start_uploads, 86400);
         $res['dir'] = path_to_url($res['dir']);
         if (strpos($res['dir'], 'http') === false) $res['dir'] = $request->domain() . $res['dir'];
-        return app('json')->successful('图片上传成功!', ['name' => $res['name'], 'url' => $res['dir']]);
+        return app('json')->success(100009, ['name' => $res['name'], 'url' => $res['dir']]);
     }
 
     /**
@@ -250,7 +249,7 @@ class PublicController
     public function logistics(ExpressServices $services)
     {
         $expressList = $services->expressList();
-        return app('json')->successful($expressList ?? []);
+        return app('json')->success($expressList ?? []);
     }
 
     /**
@@ -274,9 +273,9 @@ class PublicController
                 ChannelService::instance()->send('PAY_SMS_SUCCESS', ['price' => $price, 'number' => $num], [$attach]);
             } catch (\Throwable $e) {
             }
-            return app('json')->successful();
+            return app('json')->success(100010);
         }
-        return app('json')->fail();
+        return app('json')->fail(100005);
     }
 
     /**
@@ -287,7 +286,7 @@ class PublicController
     public function user_share(Request $request, UserBillServices $services)
     {
         $uid = (int)$request->uid();
-        return app('json')->successful($services->setUserShare($uid));
+        return app('json')->success($services->setUserShare($uid));
     }
 
     /**
@@ -320,9 +319,9 @@ class PublicController
                 }
                 return $image;
             });
-            return app('json')->successful(compact('code', 'image'));
+            return app('json')->success(compact('code', 'image'));
         } catch (\Exception $e) {
-            return app('json')->fail($e->getMessage());
+            return app('json')->fail(100005);
         }
     }
 
@@ -338,7 +337,7 @@ class PublicController
         ], true);
         $data['list'] = $services->getStoreList(['type' => 0], ['id', 'name', 'phone', 'address', 'detailed_address', 'image', 'latitude', 'longitude'], $latitude, $longitude);
         $data['tengxun_map_key'] = sys_config('tengxun_map_key');
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 
     /**
@@ -350,7 +349,7 @@ class PublicController
     {
         /** @var SystemCityServices $systemCity */
         $systemCity = app()->make(SystemCityServices::class);
-        return app('json')->successful($systemCity->cityList());
+        return app('json')->success($systemCity->cityList());
     }
 
     /**
@@ -365,7 +364,7 @@ class PublicController
             $uids = array_rand($uids, count($uids) < 3 ? count($uids) : 3);
         }
         $data['avatars'] = $uids ? $user->getColumn(is_array($uids) ? [['uid', 'in', $uids]] : ['uid' => $uids], 'avatar') : [];
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 
     /**
@@ -375,7 +374,7 @@ class PublicController
     public function copy_words()
     {
         $data['words'] = sys_config('copy_words');
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 
     /**生成口令关键字
@@ -393,7 +392,7 @@ class PublicController
         /** @var StoreProductServices $productService */
         $productService = app()->make(StoreProductServices::class);
         $keyWords['key_words'] = $productService->getProductWords($productId);
-        return app('json')->successful($keyWords);
+        return app('json')->success($keyWords);
     }
 
     /**
@@ -405,7 +404,7 @@ class PublicController
      */
     public function getDiy(DiyServices $services, $id = 0)
     {
-        return app('json')->successful($services->getDiyInfo((int)$id));
+        return app('json')->success($services->getDiyInfo((int)$id));
     }
 
     /**
@@ -441,7 +440,7 @@ class PublicController
         $where['productId'] = '';
         if ($data['selectType'] == 1) {
             if (!$data['ids']) {
-                return app('json')->success([]);
+                return app('json')->success(100011);
             }
             $where['ids'] = $data['ids'] ? explode(',', $data['ids']) : [];
             if ($data['type'] != 2 && $data['type'] != 3 && $data['type'] != 8) {
@@ -540,5 +539,39 @@ class PublicController
     {
         $data = $agreementServices->getAgreementBytype($type);
         return app('json')->success($data);
+    }
+
+    /**
+     * 查询版权信息
+     * @return mixed
+     */
+    public function copyright()
+    {
+        try {
+            if (Cache::has('nncnL_crmeb_copyright')) {
+                $copyrightContext = Cache::get('nncnL_crmeb_copyright');
+            } else {
+                /** @var SystemConfigServices $services */
+                $services = app()->make(SystemConfigServices::class);
+                $copyrightContext = $services->value(['menu_name' => 'nncnL_crmeb_copyright'], 'value');
+                $copyrightContext = $copyrightContext ? json_decode($copyrightContext, true) : null;
+                Cache::set('nncnL_crmeb_copyright', $copyrightContext, 3600);
+            }
+
+            // dump(Cache::has('nncnL_crmeb_copyright_image'));
+            if (Cache::has('nncnL_crmeb_copyright_image')) {
+                $copyrightImage = Cache::get('nncnL_crmeb_copyright_image');
+            } else {
+                /** @var SystemConfigServices $services */
+                $services = app()->make(SystemConfigServices::class);
+                $copyrightImage = $services->value(['menu_name' => 'nncnL_crmeb_copyright_image'], 'value');
+                $copyrightImage = $copyrightImage ? json_decode($copyrightImage, true) : null;
+                Cache::set('nncnL_crmeb_copyright_image', $copyrightImage, 3600);
+            }
+        } catch (\Throwable $e) {
+            $copyrightContext = '';
+            $copyrightImage = '';
+        }
+        return app('json')->success(compact('copyrightContext', 'copyrightImage'));
     }
 }

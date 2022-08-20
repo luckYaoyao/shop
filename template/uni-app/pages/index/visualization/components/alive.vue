@@ -6,7 +6,7 @@
 			<view v-if="isIframe && liveList.length>0">
 				<view class="title-box" v-if="titleInfo.length">
 					<text class="title">{{titleInfo[0].val}}</text>
-					<navigator class="more">查看更多<text class="iconfont icon-jiantou"></text></navigator>
+					<navigator class="more">{{$t(`查看更多`)}}<text class="iconfont icon-jiantou"></text></navigator>
 				</view>
 				<view class="live-wrapper-a">
 					<navigator class="live-item-a" v-for="(item,index) in liveList" :key="index"
@@ -14,16 +14,16 @@
 						hover-class="none">
 						<view class="img-box">
 							<view class="bgblue" v-if="item.live_status == 102">
-								<view class="txt">预告</view>
+								<view class="txt">{{$t(`预告`)}}</view>
 								<view class="msg">{{item.show_time}}</view>
 							</view>
 							<view class="label bggary" v-if="item.live_status==103">
 								<text class="iconfont icon-huifang"></text>
-								<text>回放</text>
+								<text>{{$t(`回放`)}}</text>
 							</view>
 							<view class="label bgred" v-if="item.live_status==101">
 								<text class="iconfont icon-zhibozhong"></text>
-								<text>进行中</text>
+								<text>{{$t(`进行中`)}}</text>
 							</view>
 							<image :src="item.share_img"></image>
 						</view>
@@ -62,10 +62,10 @@
 			<view v-if="isIframe && !liveList.length">
 				<view class="title-box" v-if="titleInfo.length">
 					<text class="title">{{titleInfo[0].val}}</text>
-					<navigator class="more">查看更多<text class="iconfont icon-jiantou"></text></navigator>
+					<navigator class="more">{{$t(`查看更多`)}}<text class="iconfont icon-jiantou"></text></navigator>
 				</view>
 				<view class="live-wrapper-a">
-					<view class="empty-img">暂无数据</view>
+					<view class="empty-img">{{$t(`暂无数据`)}}</view>
 				</view>
 			</view>
 		</view>
@@ -78,9 +78,9 @@
 						<view class='title line1'>
 							{{titleInfo[0].val}}
 						</view>
-						<view class='line1 txt-btn'>精彩内容</view>
+						<view class='line1 txt-btn'>{{$t(`精彩内容`)}}</view>
 					</view>
-					<navigator hover-class="none" url="/pages/live_list/index" class="more">更多<text
+					<navigator hover-class="none" url="/pages/columnGoods/live_list/index" class="more">{{$t(`更多`)}}<text
 							class="iconfont icon-jiantou"></text></navigator>
 				</view>
 				<view class="live-wrapper-a">
@@ -89,16 +89,16 @@
 						hover-class="none">
 						<view class="img-box">
 							<view class="bgblue" v-if="item.live_status == 102">
-								<view class="txt">预告</view>
+								<view class="txt">{{$t(`预告`)}}</view>
 								<view class="msg">{{item.show_time}}</view>
 							</view>
 							<view class="label bggary" v-if="item.live_status==103">
 								<text class="iconfont icon-huifang"></text>
-								<text>回放</text>
+								<text>{{$t(`回放`)}}</text>
 							</view>
 							<view class="label bgred" v-if="item.live_status==101">
 								<text class="iconfont icon-zhibozhong"></text>
-								<text>进行中</text>
+								<text>{{$t(`进行中`)}}</text>
 							</view>
 							<image :src="item.share_img"></image>
 						</view>

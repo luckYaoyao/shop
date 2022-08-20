@@ -65,10 +65,10 @@ class UserGroup extends AuthController
             ['group_name', ''],
         ]);
         if (!$data['group_name']) {
-            return app('json')->fail('请输入分组名称');
+            return app('json')->fail(400321);
         }
         $this->services->save((int)$data['id'], $data);
-        return app('json')->success('提交成功！');
+        return app('json')->success(100017);
     }
 
     /**
@@ -81,7 +81,7 @@ class UserGroup extends AuthController
         $data = $this->request->getMore([
             ['id', 0],
         ]);
-        if (!$data['id']) return app('json')->fail('数据不存在');
+        if (!$data['id']) return app('json')->fail(100100);
         return app('json')->success($this->services->delGroup((int)$data['id']));
     }
 }

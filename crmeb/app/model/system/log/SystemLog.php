@@ -50,7 +50,9 @@ class SystemLog extends BaseModel
      */
     public function searchPagesAttr($query, $value)
     {
-        $query->whereLike('page', '%' . $value . '%');
+        if ($value !== '') {
+            $query->whereLike('page', '%' . $value . '%');
+        }
     }
 
     /**
@@ -60,7 +62,9 @@ class SystemLog extends BaseModel
      */
     public function searchPathAttr($query, $value)
     {
-        $query->whereLike('path', '%' . $value . '%');
+        if ($value !== '') {
+            $query->whereLike('path', '%' . $value . '%');
+        }
     }
 
     /**
@@ -70,7 +74,9 @@ class SystemLog extends BaseModel
      */
     public function searchIpAttr($query, $value)
     {
-        $query->where('ip', 'LIKE', "%$value%");
+        if ($value !== '') {
+            $query->where('ip', 'LIKE', "%$value%");
+        }
     }
 
     /**
@@ -80,6 +86,8 @@ class SystemLog extends BaseModel
      */
     public function searchAdminIdAttr($query, $value)
     {
-        $query->whereIn('admin_id', $value);
+        if (!empty($value)) {
+            $query->whereIn('admin_id', $value);
+        }
     }
 }

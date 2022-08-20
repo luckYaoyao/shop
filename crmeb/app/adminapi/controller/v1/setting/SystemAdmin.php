@@ -78,7 +78,7 @@ class SystemAdmin extends AuthController
 
         $data['level'] = $this->adminInfo['level'] + 1;
         $this->services->create($data);
-        return app('json')->success('添加成功');
+        return app('json')->success(100000);
     }
 
     /**
@@ -90,7 +90,7 @@ class SystemAdmin extends AuthController
     public function edit($id)
     {
         if (!$id) {
-            return app('json')->fail('管理员信息读取失败');
+            return app('json')->fail(400182);
         }
 
         return app('json')->success($this->services->updateForm($this->adminInfo['level'] + 1, (int)$id));
@@ -115,9 +115,9 @@ class SystemAdmin extends AuthController
         $this->validate($data, \app\adminapi\validate\setting\SystemAdminValidata::class, 'update');
 
         if ($this->services->save((int)$id, $data)) {
-            return app('json')->success('修改成功');
+            return app('json')->success(100001);
         } else {
-            return app('json')->fail('修改失败');
+            return app('json')->fail(100007);
         }
     }
 
@@ -128,11 +128,11 @@ class SystemAdmin extends AuthController
      */
     public function delete($id)
     {
-        if (!$id) return app('json')->fail('删除失败，缺少参数');
+        if (!$id) return app('json')->fail(100100);
         if ($this->services->update((int)$id, ['is_del' => 1, 'status' => 0]))
-            return app('json')->success('删除成功！');
+            return app('json')->success(100002);
         else
-            return app('json')->fail('删除失败');
+            return app('json')->fail(100008);
     }
 
     /**
@@ -144,7 +144,7 @@ class SystemAdmin extends AuthController
     public function set_status($id, $status)
     {
         $this->services->update((int)$id, ['status' => $status]);
-        return app('json')->success($status == 0 ? '关闭成功' : '开启成功');
+        return app('json')->success(100014);
     }
 
     /**
@@ -170,12 +170,12 @@ class SystemAdmin extends AuthController
             ['conf_pwd', ''],
         ]);
         if(!preg_match('/^(?![^a-zA-Z]+$)(?!\D+$).{6,}$/',$data['new_pwd'])){
-            return app('json')->fail('设置的密码过于简单(不小于六位包含数字字母)');
+            return app('json')->fail(400183);
         }
         if ($this->services->updateAdmin($this->adminId, $data))
-            return app('json')->success('修改成功');
+            return app('json')->success(100001);
         else
-            return app('json')->fail('修改失败');
+            return app('json')->fail(100007);
     }
 
     /**

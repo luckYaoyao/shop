@@ -44,7 +44,7 @@ class StoreProductReplyStoreProductServices extends BaseServices
     {
         [$page, $limit] = $this->getPageValue();
         $list = $this->dao->getProductReplyList($where, $page, $limit);
-        $count = $this->dao->replyCount($where);
+        $count = $this->dao->replyCount($where + ['is_del' => 0]);
         return compact('list', 'count');
     }
 }

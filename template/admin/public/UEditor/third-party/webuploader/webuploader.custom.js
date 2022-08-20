@@ -5374,11 +5374,6 @@
     
                     byteout = [];
     
-                    // benchmarking
-                    // var duration = new Date().getTime() - time_start;
-                    // console.log('Encoding time: '+ currentQuality + 'ms');
-                    //
-    
                     return jpegDataUri
             }
     
@@ -5401,11 +5396,9 @@
     
                 initQuantTables(sf);
                 currentQuality = quality;
-                // console.log('Quality set to: '+quality +'%');
             }
     
             function init(){
-                // var time_start = new Date().getTime();
                 if(!quality) quality = 50;
                 // Create tables
                 initCharLookupTable()
@@ -5414,8 +5407,6 @@
                 initRGBYUVTable();
     
                 setQuality(quality);
-                // var duration = new Date().getTime() - time_start;
-                // console.log('Initialization '+ duration + 'ms');
             }
     
             init();

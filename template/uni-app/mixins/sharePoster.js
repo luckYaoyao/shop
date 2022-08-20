@@ -13,6 +13,7 @@ import {
 import {
 	getProductCode
 } from "@/api/store.js";
+import i18n from '../utils/lang.js';
 let sysHeight = uni.getSystemInfoSync().statusBarHeight + 'px';
 export const sharePoster = {
 	data() {
@@ -74,14 +75,14 @@ export const sharePoster = {
 			arr2 = [that.posterbackgd, that.storeImage, that.PromotionCode];
 			if (that.isDown)
 				return that.$util.Tips({
-					title: "正在下载海报,请稍后再试",
+					title: i18n.t(`正在下载海报,请稍后再试`),
 				});
 			// #endif
 			// #ifdef H5 || APP-PLUS
 			arr2 = [that.posterbackgd, that.storeImageBase64, that.PromotionCode];
 			if (!that.storeImageBase64)
 				return that.$util.Tips({
-					title: "正在下载海报,请稍后再试",
+					title: i18n.t(`正在下载海报,请稍后再试`),
 				});
 			// #endif
 			uni.getImageInfo({
@@ -94,7 +95,7 @@ export const sharePoster = {
 					// #endif
 					// #ifdef MP
 					return that.$util.Tips({
-						title: "正在下载海报,请稍后再试",
+						title: i18n.t(`正在下载海报,请稍后再试`),
 					});
 					// #endif
 				},
@@ -105,7 +106,7 @@ export const sharePoster = {
 							arr2[2] = msgPromotionCode;
 							if (arr2[2] == "")
 								return that.$util.Tips({
-									title: "海报二维码生成失败！",
+									title: i18n.t(`海报二维码生成失败`),
 								});
 							that.$util.PosterCanvas(
 								arr2,
@@ -144,14 +145,14 @@ export const sharePoster = {
 			});
 		},
 		//替换安全域名
-		setDomain: function(url) {
+		setDomain(url) {
 			url = url ? url.toString() : "";
 			//本地调试打开,生产请注销
 			if (url.indexOf("https://") > -1) return url;
 			else return url.replace("http://", "https://");
 		},
 		//获取海报产品图
-		downloadFilestoreImage: function() {
+		downloadFilestoreImage() {
 			let that = this;
 			uni.downloadFile({
 				url: that.setDomain(that.storeInfo.image),
@@ -172,7 +173,7 @@ export const sharePoster = {
 		 * @param function successFn 下载完成回调
 		 *
 		 */
-		downloadFilePromotionCode: function(successFn) {
+		downloadFilePromotionCode(successFn) {
 			let that = this;
 			// #ifdef MP
 			getProductCode(that.id)
@@ -194,6 +195,9 @@ export const sharePoster = {
 				.catch((err) => {
 					that.$set(that, "isDown", false);
 					that.$set(that, "PromotionCode", "");
+					return that.$util.Tips({
+						title: err,
+					});
 				});
 			// #endif
 			// #ifdef APP-PLUS

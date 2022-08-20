@@ -33,6 +33,6 @@ class CartController
     {
         $uid = $request->uid();
         $data = $this->services->getCartList((int)$uid);
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 }

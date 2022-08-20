@@ -273,8 +273,8 @@ export function logout() {
 /**
  * 获取订阅消息id
  */
-export function getTemlIds() {
-	return request.get('wechat/teml_ids', {}, {
+export function getTempIds() {
+	return request.get('wechat/temp_ids', {}, {
 		noAuth: true
 	});
 }
@@ -429,4 +429,13 @@ export function getOpenAdv(data) {
 	return request.get("get_open_adv", {}, {
 		noAuth: true
 	});
+}
+
+/**
+ * 获取版权信息
+ */
+export function getCrmebCopyRight() {
+	return request.get('copyright', {}, {
+		noAuth: true
+	})
 }

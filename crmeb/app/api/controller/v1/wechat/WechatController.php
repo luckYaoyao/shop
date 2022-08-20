@@ -67,7 +67,6 @@ class WechatController
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
      */
     public function auth(Request $request)
     {
@@ -77,17 +76,20 @@ class WechatController
         ], true);
         $token = $this->services->auth($spreadId, $login_type);
         if ($token && isset($token['key'])) {
-            return app('json')->success('授权成功，请绑定手机号', $token);
+            return app('json')->success(410022, $token);
         } else if ($token) {
-            return app('json')->success('登录成功', ['userInfo' => $token['userInfo']]);
+            return app('json')->success(410001, ['userInfo' => $token['userInfo']]);
         } else
-            return app('json')->fail('登录失败');
+            return app('json')->fail(410019);
     }
 
     /**
      * App微信登陆
      * @param Request $request
      * @return mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function appAuth(Request $request)
     {
@@ -98,35 +100,40 @@ class WechatController
         ], true);
         if ($phone) {
             if (!$captcha) {
-                return app('json')->fail('请输入验证码');
+                return app('json')->fail(410004);
             }
             //验证验证码
             $verifyCode = CacheService::get('code_' . $phone);
             if (!$verifyCode)
-                return app('json')->fail('请先获取验证码');
+                return app('json')->fail(410009);
             $verifyCode = substr($verifyCode, 0, 6);
             if ($verifyCode != $captcha) {
                 CacheService::delete('code_' . $phone);
-                return app('json')->fail('验证码错误');
+                return app('json')->fail(410010);
             }
         }
         $token = $this->services->appAuth($userInfo, $phone);
         if ($token) {
-            return app('json')->success('登录成功', $token);
+            return app('json')->success(410001, $token);
         } else if ($token === false) {
-            return app('json')->success('登录成功', ['isbind' => true]);
+            return app('json')->success(410001, ['isbind' => true]);
         } else {
-            return app('json')->fail('登陆失败');
+            return app('json')->fail(410019);
         }
     }
 
+    /**
+     * 关注二维码
+     * @return mixed
+     * @throws \Exception
+     */
     public function follow()
     {
         $data = $this->services->follow();
         if ($data) {
-            return app('json')->success('ok', $data);
+            return app('json')->success($data);
         } else {
-            return app('json')->fail('获取失败');
+            return app('json')->fail(100016);
         }
 
     }

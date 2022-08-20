@@ -31,10 +31,10 @@ class LuckLotteryController
      */
     public function LotteryInfo(Request $request, $factor)
     {
-        if (!$factor) return app('json')->fail('参数错误!');
+        if (!$factor) return app('json')->fail(100100);
         $lottery = $this->services->getFactorLottery((int)$factor);
         if (!$lottery) {
-            return app('json')->fail('抽奖活动不存在');
+            return app('json')->fail(410318);
         }
         $uid = (int)$request->uid();
         $lottery = $lottery->toArray();
@@ -54,7 +54,7 @@ class LuckLotteryController
         }
         $lotteryData['all_record'] = $all_record;
         $lotteryData['user_record'] = $user_record;
-        return app('json')->successful('ok', $lotteryData);
+        return app('json')->success($lotteryData);
     }
 
     /**
@@ -77,14 +77,14 @@ class LuckLotteryController
                 /** @var QrcodeServices $qrcodeService */
                 $qrcodeService = app()->make(QrcodeServices::class);
                 $url = $qrcodeService->getTemporaryQrcode('luckLottery-5', $request->uid())->url;
-                return app('json')->successful('请先关注公众号', ['code' => 'subscribe', 'url' => $url]);
+                return app('json')->success(410024, ['code' => 'subscribe', 'url' => $url]);
             }
         }
         if (!$id) {
-            return app('json')->fail('参数错误');
+            return app('json')->fail(100100);
         }
         $uid = (int)$request->uid();
-        return app('json')->successful($this->services->luckLottery($uid, $id));
+        return app('json')->success($this->services->luckLottery($uid, $id));
     }
 
     /**
@@ -102,10 +102,10 @@ class LuckLotteryController
             ['mark', '']
         ], true);
         if (!$id) {
-            return app('json')->fail('参数错误');
+            return app('json')->fail(100100);
         }
         $uid = (int)$request->uid();
-        return app('json')->successful($lotteryRecordServices->receivePrize($uid, $id, compact('name', 'phone', 'address', 'mark')) ? '领取成功' : '领取失败');
+        return app('json')->success($lotteryRecordServices->receivePrize($uid, $id, compact('name', 'phone', 'address', 'mark')) ? 410319 : 410320);
     }
 
     /**
@@ -117,6 +117,6 @@ class LuckLotteryController
     public function lotteryRecord(Request $request, LuckLotteryRecordServices $lotteryRecordServices)
     {
         $uid = (int)$request->uid();
-        return app('json')->successful($lotteryRecordServices->getRecord($uid));
+        return app('json')->success($lotteryRecordServices->getRecord($uid));
     }
 }

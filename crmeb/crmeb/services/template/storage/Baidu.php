@@ -12,7 +12,7 @@
 namespace crmeb\services\template\storage;
 
 
-use crmeb\basic\BaseMessage;
+use crmeb\services\template\BaseMessage;
 
 class Baidu extends BaseMessage
 {

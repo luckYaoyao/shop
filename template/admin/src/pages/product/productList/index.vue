@@ -16,28 +16,14 @@
       </div>
     </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
-        ref="artFrom"
-        :model="artFrom"
-        :label-width="75"
-        label-position="right"
-        @submit.native.prevent
-      >
+      <Form ref="artFrom" :model="artFrom" :label-width="75" label-position="right" @submit.native.prevent>
         <Row type="flex" :gutter="24">
           <Col v-bind="grid">
             <FormItem label="商品分类：" label-for="pid">
-              <Select
-                v-model="artFrom.cate_id"
-                placeholder="请选择商品分类"
-                clearable
-                @on-change="userSearchs"
-              >
-                <Option
-                  v-for="item in treeSelect"
-                  :value="item.id"
-                  :key="item.id"
-                  >{{ item.html + item.cate_name }}</Option
-                >
+              <Select v-model="artFrom.cate_id" placeholder="请选择商品分类" clearable @on-change="userSearchs">
+                <Option v-for="item in treeSelect" :value="item.id" :key="item.id">{{
+                  item.html + item.cate_name
+                }}</Option>
               </Select>
             </FormItem>
           </Col>
@@ -55,20 +41,10 @@
         </Row>
       </Form>
       <div class="Button">
-        <router-link
-          v-auth="['product-product-save']"
-          :to="'/admin/product/add_product'"
-          ><Button type="primary" class="bnt mr15" icon="md-add"
-            >添加商品</Button
-          ></router-link
+        <router-link v-auth="['product-product-save']" :to="'/admin/product/add_product'"
+          ><Button type="primary" class="bnt mr15" icon="md-add">添加商品</Button></router-link
         >
-        <Button
-          v-auth="['product-crawl-save']"
-          type="success"
-          class="bnt mr15"
-          @click="onCopy"
-          >商品采集</Button
-        >
+        <Button v-auth="['product-crawl-save']" type="success" class="bnt mr15" @click="onCopy">商品采集</Button>
         <Button
           v-auth="['product-product-product_show']"
           class="bnt mr15"
@@ -83,19 +59,11 @@
           v-show="artFrom.type === '2'"
           >批量上架</Button
         >
-        <Button
-          v-auth="['export-storeProduct']"
-          class="export"
-          icon="ios-share-outline"
-          @click="exports"
-          >导出</Button
-        >
+        <Button v-auth="['export-storeProduct']" class="export" icon="ios-share-outline" @click="exports">导出</Button>
       </div>
       <Table
         ref="table"
-        :columns="
-          artFrom.type !== '1' && artFrom.type !== '2' ? columns2 : columns
-        "
+        :columns="artFrom.type !== '1' && artFrom.type !== '2' ? columns2 : columns"
         :data="tableList"
         class="ivu-mt"
         :loading="loading"
@@ -133,13 +101,9 @@
           <Divider type="vertical" />
           <a @click="edit(row)">编辑</a>
           <Divider type="vertical" />
-          <router-link :to="{ path: '/admin/product/product_reply/' + row.id }"
-            ><a>查看评论</a></router-link
-          >
+          <router-link :to="{ path: '/admin/product/product_reply/' + row.id }"><a>查看评论</a></router-link>
           <Divider type="vertical" />
-          <a @click="del(row, '恢复商品', index)" v-if="artFrom.type === '6'"
-            >恢复商品</a
-          >
+          <a @click="del(row, '恢复商品', index)" v-if="artFrom.type === '6'">恢复商品</a>
           <a @click="del(row, '移入回收站', index)" v-else>移到回收站</a>
         </template>
       </Table>
@@ -153,10 +117,7 @@
           :page-size="artFrom.limit"
         />
       </div>
-      <attribute
-        :attrTemplate="attrTemplate"
-        v-on:changeTemplate="changeTemplate"
-      ></attribute>
+      <attribute :attrTemplate="attrTemplate" v-on:changeTemplate="changeTemplate"></attribute>
     </Card>
     <!-- 生成淘宝京东表单-->
     <Modal
@@ -181,12 +142,12 @@
 </template>
 
 <script>
-import expandRow from "./tableExpand.vue";
-import attribute from "./attribute";
-import toExcel from "../../../utils/Excel.js";
-import { mapState } from "vuex";
-import taoBao from "./taoBao";
-import goodsDetail from "./components/goodsDetail.vue";
+import expandRow from './tableExpand.vue';
+import attribute from './attribute';
+import toExcel from '../../../utils/Excel.js';
+import { mapState } from 'vuex';
+import taoBao from './taoBao';
+import goodsDetail from './components/goodsDetail.vue';
 
 import {
   getGoodHeade,
@@ -196,12 +157,12 @@ import {
   productShowApi,
   productUnshowApi,
   storeProductApi,
-} from "@/api/product";
+} from '@/api/product';
 export default {
-  name: "product_productList",
+  name: 'product_productList',
   components: { expandRow, attribute, taoBao, goodsDetail },
   computed: {
-    ...mapState("userLevel", ["categoryId"]),
+    ...mapState('userLevel', ['categoryId']),
   },
   data() {
     return {
@@ -217,9 +178,9 @@ export default {
       artFrom: {
         page: 1,
         limit: 15,
-        cate_id: "",
-        type: "1",
-        store_name: "",
+        cate_id: '',
+        type: '1',
+        store_name: '',
         excel: 0,
       },
       list: [],
@@ -229,7 +190,7 @@ export default {
       loading: false,
       columns: [
         {
-          type: "expand",
+          type: 'expand',
           width: 50,
           render: (h, params) => {
             return h(expandRow, {
@@ -240,61 +201,61 @@ export default {
           },
         },
         {
-          type: "selection",
+          type: 'selection',
           width: 60,
-          align: "center",
+          align: 'center',
         },
         {
-          title: "商品ID",
-          key: "id",
+          title: '商品ID',
+          key: 'id',
           width: 80,
         },
         {
-          title: "商品图",
-          slot: "image",
+          title: '商品图',
+          slot: 'image',
           minWidth: 80,
         },
         {
-          title: "商品名称",
-          key: "store_name",
+          title: '商品名称',
+          key: 'store_name',
           minWidth: 250,
         },
         {
-          title: "商品类型",
-          key: "product_type",
+          title: '商品类型',
+          key: 'product_type',
           minWidth: 100,
         },
         {
-          title: "商品售价",
-          key: "price",
+          title: '商品售价',
+          key: 'price',
           minWidth: 90,
         },
         {
-          title: "销量",
-          key: "sales",
+          title: '销量',
+          key: 'sales',
           minWidth: 90,
         },
         {
-          title: "库存",
-          key: "stock",
+          title: '库存',
+          key: 'stock',
           minWidth: 80,
         },
         {
-          title: "排序",
-          key: "sort",
+          title: '排序',
+          key: 'sort',
           minWidth: 70,
         },
         {
-          title: "状态",
-          slot: "state",
+          title: '状态',
+          slot: 'state',
           width: 100,
           filters: [
             {
-              label: "上架",
+              label: '上架',
               value: 1,
             },
             {
-              label: "下架",
+              label: '下架',
               value: 0,
             },
           ],
@@ -304,9 +265,9 @@ export default {
           filterMultiple: false,
         },
         {
-          title: "操作",
-          slot: "action",
-          fixed: "right",
+          title: '操作',
+          slot: 'action',
+          fixed: 'right',
           minWidth: 220,
         },
       ],
@@ -315,13 +276,13 @@ export default {
       attrTemplate: false,
       selectedIds: new Set(), //选中合并项的id
       ids: [],
-      goodsId: "",
+      goodsId: '',
       isProductBox: false,
     };
   },
   watch: {
     $route() {
-      if (this.$route.fullPath === "/admin/product/product_list?type=5") {
+      if (this.$route.fullPath === '/admin/product/product_list?type=5') {
         this.getPath();
       }
     },
@@ -330,7 +291,7 @@ export default {
   activated() {
     this.goodHeade();
     this.goodsCategory();
-    if (this.$route.fullPath === "/admin/product/product_list?type=5") {
+    if (this.$route.fullPath === '/admin/product/product_list?type=5') {
       this.getPath();
     } else {
       this.getDataList();
@@ -343,11 +304,11 @@ export default {
     },
     getPath() {
       this.columns2 = [...this.columns];
-      if (name !== "1" && name !== "2") {
+      if (name !== '1' && name !== '2') {
         this.columns2.shift({
-          type: "selection",
+          type: 'selection',
           width: 60,
-          align: "center",
+          align: 'center',
         });
       }
       this.artFrom.page = 1;
@@ -379,7 +340,7 @@ export default {
     // 批量上架
     onShelves() {
       if (this.ids.length === 0) {
-        this.$Message.warning("请选择要上架的商品");
+        this.$Message.warning('请选择要上架的商品');
       } else {
         let data = {
           ids: this.ids,
@@ -398,7 +359,7 @@ export default {
     // 批量下架
     onDismount() {
       if (this.ids.length === 0) {
-        this.$Message.warning("请选择要下架的商品");
+        this.$Message.warning('请选择要下架的商品');
       } else {
         let data = {
           ids: this.ids,
@@ -477,7 +438,7 @@ export default {
     // 复制淘宝
     onCopy() {
       this.$router.push({
-        path: "/admin/product/add_product",
+        path: '/admin/product/add_product',
         query: { type: -1 },
       });
       // this.modals = true
@@ -486,11 +447,11 @@ export default {
     onClickTab(name) {
       this.artFrom.type = name;
       this.columns2 = [...this.columns];
-      if (name !== "1" && name !== "2") {
+      if (name !== '1' && name !== '2') {
         this.columns2.shift({
-          type: "selection",
+          type: 'selection',
           width: 60,
-          align: "center",
+          align: 'center',
         });
       }
       this.artFrom.page = 1;
@@ -499,8 +460,8 @@ export default {
     },
     // 下拉树
     handleCheckChange(data) {
-      let value = "";
-      let title = "";
+      let value = '';
+      let title = '';
       this.list = [];
       this.artFrom.cate_id = 0;
       data.forEach((item, index) => {
@@ -539,7 +500,7 @@ export default {
     // 商品列表；
     getDataList() {
       this.loading = true;
-      this.artFrom.cate_id = this.artFrom.cate_id || "";
+      this.artFrom.cate_id = this.artFrom.cate_id || '';
       getGoods(this.artFrom)
         .then((res) => {
           let data = res.data;
@@ -580,33 +541,13 @@ export default {
     },
     // 数据导出；
     exportData: function () {
-      let th = [
-        "商品名称",
-        "商品简介",
-        "商品分类",
-        "价格",
-        "库存",
-        "销量",
-        "收藏人数",
-      ];
-      let filterVal = [
-        "store_name",
-        "store_info",
-        "cate_name",
-        "price",
-        "stock",
-        "sales",
-        "collect",
-      ];
-      this.where.page = "nopage";
+      let th = ['商品名称', '商品简介', '商品分类', '价格', '库存', '销量', '收藏人数'];
+      let filterVal = ['store_name', 'store_info', 'cate_name', 'price', 'stock', 'sales', 'collect'];
+      this.where.page = 'nopage';
       getGoods(this.where).then((res) => {
         let data = res.data.map((v) => filterVal.map((k) => v[k]));
         let fileTime = Date.parse(new Date());
-        let [fileName, fileType, sheetName] = [
-          "商户数据_" + fileTime,
-          "xlsx",
-          "商户数据",
-        ];
+        let [fileName, fileType, sheetName] = ['商户数据_' + fileTime, 'xlsx', '商户数据'];
         toExcel({ th, data, fileName, fileType, sheetName });
       });
     },
@@ -619,7 +560,7 @@ export default {
     },
     // 编辑
     edit(row) {
-      this.$router.push({ path: "/admin/product/add_product/" + row.id });
+      this.$router.push({ path: '/admin/product/add_product/' + row.id });
     },
     // 确认
     del(row, tit, num) {
@@ -627,8 +568,8 @@ export default {
         title: tit,
         num: num,
         url: `product/product/${row.id}`,
-        method: "DELETE",
-        ids: "",
+        method: 'DELETE',
+        ids: '',
         un: 1,
       };
       this.$modalSure(delfromData)

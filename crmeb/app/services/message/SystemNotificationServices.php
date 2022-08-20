@@ -21,9 +21,10 @@ use think\facade\Cache;
 use crmeb\exceptions\AdminException;
 
 /**
- *
+ * 消息管理类
  * Class SystemNotificationServices
  * @package app\services\system
+ * @method value($where, $value) 条件获取某个字段的值
  */
 class SystemNotificationServices extends BaseServices
 {
@@ -49,7 +50,7 @@ class SystemNotificationServices extends BaseServices
     {
         return $this->dao->getOne($where);
     }
-    
+
 
     /**
      * 后台获取列表
@@ -98,7 +99,6 @@ class SystemNotificationServices extends BaseServices
         $type = $where['type'];
         unset($where['type']);
         $info = $this->dao->getOne($where);
-//        var_dump($info);
         if (!$info) return [];
         $info = $info->toArray();
         switch ($type) {
@@ -149,7 +149,7 @@ class SystemNotificationServices extends BaseServices
         $id = $data['id'];
         $info = $this->dao->get($id);
         if (!$info) {
-            throw new AdminException('数据不存在');
+            throw new AdminException(100026);
         }
         /** @var TemplateMessageServices $TemplateMessageServices */
         $TemplateMessageServices = app()->make(TemplateMessageServices::class);

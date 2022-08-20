@@ -80,7 +80,7 @@ class StoreProductAttrValueServices extends BaseServices
     public function saveAll(array $data)
     {
         $res = $this->dao->saveAll($data);
-        if (!$res) throw new AdminException('规格保存失败');
+        if (!$res) throw new AdminException(100006);
         return $res;
     }
 

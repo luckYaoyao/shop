@@ -34,7 +34,7 @@ class PublicController
         list($pid) = $request->getMore([
             [['pid', 'd'], 0],
         ], true);
-        return app('json')->successful($this->services->getCity($pid));
+        return app('json')->success($this->services->getCity($pid));
     }
 
     /**
@@ -56,7 +56,7 @@ class PublicController
         }
         $logoUrl = str_replace('\\', '/', $logoUrl);
         $data['logoUrl'] = $logoUrl;
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 
     /**
@@ -66,6 +66,6 @@ class PublicController
     public function getWechatQrcode()
     {
         $data['wechat_qrcode'] = sys_config('wechat_qrcode');
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 }

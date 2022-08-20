@@ -132,7 +132,7 @@ class SystemConfigTabServices extends BaseServices
     {
         $configTabInfo = $this->dao->get($id);
         if (!$configTabInfo) {
-            throw new AdminException('没有查到数据,无法修改!');
+            throw new AdminException(100026);
         }
         return create_form('编辑配置分类', $this->createConfigTabForm($configTabInfo->toArray()), $this->url('/setting/config_class/' . $id), 'PUT');
     }

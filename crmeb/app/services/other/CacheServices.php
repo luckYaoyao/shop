@@ -16,6 +16,7 @@ use app\dao\other\CacheDao;
 use app\services\BaseServices;
 
 /**
+ * 数据库表缓存
  * Class CacheServices
  * @package app\services\other
  * @method delectDeOverdueDbCache() 删除过期缓存

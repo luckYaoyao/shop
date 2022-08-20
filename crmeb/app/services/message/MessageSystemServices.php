@@ -14,10 +14,9 @@ namespace app\services\message;
 
 use app\dao\system\MessageSystemDao;
 use app\services\BaseServices;
-use think\exception\ValidateException;
-
+use crmeb\exceptions\ApiException;
 /**
- *
+ * 站内信services类
  * Class MessageSystemServices
  * @package app\services\system
  * @method save(array $data) 保存数据
@@ -71,7 +70,7 @@ class MessageSystemServices extends BaseServices
     {
         $info = $this->dao->getOne($where);
         if (!$info || $info['is_del'] == 1) {
-            throw new ValidateException('数据不存在');
+            throw new ApiException(100026);
         }
         $info = $info->toArray();
         if ($info['look'] == 0) {

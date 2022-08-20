@@ -56,7 +56,7 @@ class SystemNotification extends AuthController
             ['type', ''],
             ['id', 0]
         ]);
-        if (!$where['id']) return app('json')->fail('参数错误');
+        if (!$where['id']) return app('json')->fail(100100);
         return app('json')->success($this->services->getNotInfo($where));
     }
 
@@ -87,12 +87,12 @@ class SystemNotification extends AuthController
             ['routine_id', ''],
             ['mark', ''],
         ]);
-        if (!$data['id']) return app('json')->fail('参数错误');
+        if (!$data['id']) return app('json')->fail(100100);
         if ($this->services->saveData($data)) {
             CacheService::delete('NOTCE_'. $data['mark']);
-            return app('json')->success('修改成功!');
+            return app('json')->success(100001);
         } else {
-            return app('json')->fail('修改失败,请稍候再试!');
+            return app('json')->fail(100007);
         }
     }
 
@@ -103,10 +103,10 @@ class SystemNotification extends AuthController
      */
     public function set_status($type, $status, $id)
     {
-        if ($type == '' || $status == '' || $id == 0) return app('json')->fail('参数错误');
+        if ($type == '' || $status == '' || $id == 0) return app('json')->fail(100100);
         $this->services->update($id, [$type => $status]);
         $res = $this->services->getOneNotce(['id'=>$id]);
         CacheService::delete('NOTCE_'.$res->mark);
-        return app('json')->success($status == 1 ? '开启成功' : '关闭成功');
+        return app('json')->success(100014);
     }
 }

@@ -5,11 +5,11 @@
 			<view class="ChangePassword">
 				<view class="list">
 					<view class="item">
-						<input type='number' placeholder='填写手机号码' placeholder-class='placeholder'
+						<input type='number' :placeholder='$t(`请输入手机号`)' placeholder-class='placeholder'
 							v-model="phone"></input>
 					</view>
 					<view class="item acea-row row-between-wrapper">
-						<input type='number' placeholder='填写验证码' placeholder-class='placeholder' class="codeIput"
+						<input type='number' :placeholder='$t(`填写验证码`)' placeholder-class='placeholder' class="codeIput"
 							v-model="captcha"></input>
 						<button class="code font-color" :class="disabled === true ? 'on' : ''" :disabled='disabled'
 							@click="code">
@@ -17,7 +17,7 @@
 						</button>
 					</view>
 				</view>
-				<button form-type="submit" class="confirmBnt bg-color">确认绑定</button>
+				<button form-type="submit" class="confirmBnt bg-color">{{$t(`确认绑定`)}}</button>
 			</view>
 		</form>
 	</view>
@@ -75,26 +75,26 @@
 				this.url = options.url || options.back_url || '';
 				let spread = this.$Cache.get("spread");
 				let loginType = this.$Cache.get(LOGINTYPE);
-				silenceAuth({
-					code: options.code || '',
-					spread: spread
-				}).then(res => {
-					if (res.data.key !== undefined) {
-						this.bindPhone = true;
-						this.authKey = res.data.key;
-					} else {
-						this.$store.commit("LOGIN", {
-							token: res.data.token,
-							time: parseInt(res.data.expires_time) - this.$Cache.time()
-						});
-						this.$Cache.set(WX_AUTH, options.code);
-						this.$Cache.clear(STATE_KEY);
-						loginType && this.$Cache.clear(LOGINTYPE);
-						location.href = decodeURIComponent(
-							decodeURIComponent(options.back_url)
-						);
-					}
-				})
+				// silenceAuth({
+				// 	code: options.code || '',
+				// 	spread: spread
+				// }).then(res => {
+				// 	if (res.data.key !== undefined) {
+				// 		this.bindPhone = true;
+				// 		this.authKey = res.data.key;
+				// 	} else {
+				// 		this.$store.commit("LOGIN", {
+				// 			token: res.data.token,
+				// 			time: parseInt(res.data.expires_time) - this.$Cache.time()
+				// 		});
+				// 		this.$Cache.set(WX_AUTH, options.code);
+				// 		this.$Cache.clear(STATE_KEY);
+				// 		loginType && this.$Cache.clear(LOGINTYPE);
+				// 		location.href = decodeURIComponent(
+				// 			decodeURIComponent(options.back_url)
+				// 		);
+				// 	}
+				// })
 			} else {
 				wechat.auth(code, state).then(() => {
 					location.href = decodeURIComponent(
@@ -113,23 +113,23 @@
 				let that = this;
 				if (!that.phone) {
 					return that.$util.Tips({
-						title: '请填写手机号码！'
+						title: that.$t(`请输入手机号`)
 					});
 				}
 				if (!(/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.phone))) {
 					return that.$util.Tips({
-						title: '请输入正确的手机号码！'
+						title: that.$t(`请输入正确的手机号码`)
 					});
 				}
 				if (!that.captcha) {
 					return that.$util.Tips({
-						title: '请填写验证码'
+						title: that.$t(`填写验证码`)
 					});
 				}
 				bindingPhone({
 					phone: that.phone,
 					captcha: that.captcha,
-					key: this.authKey
+					key: that.authKey
 				}).then(res => {
 					let time = res.data.expires_time - this.$Cache.time();
 					this.$store.commit('LOGIN', {
@@ -140,7 +140,7 @@
 						location.href = this.url;
 					} else {
 						return that.$util.Tips({
-							title: '绑定成功！',
+							title: this.$t(`绑定成功`),
 							icon: 'success'
 						}, {
 							tab: 4,
@@ -160,10 +160,10 @@
 			code() {
 				let that = this;
 				if (!that.phone) return that.$util.Tips({
-					title: '请填写手机号码！'
+					title: that.$t(`请输入手机号`)
 				});
 				if (!(/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.phone))) return that.$util.Tips({
-					title: '请输入正确的手机号码！'
+					title: that.$t(`请输入正确的手机号码`)
 				});
 				verifyCode().then(res => {
 					registerVerify(that.phone, 'reset', res.data.key, that.captcha).then(res => {

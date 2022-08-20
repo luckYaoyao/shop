@@ -19,7 +19,7 @@ use app\services\order\StoreOrderStatusServices;
 use app\jobs\ProductLogJob;
 use app\services\user\UserServices;
 use app\services\statistic\CapitalFlowServices;
-use think\exception\ValidateException;
+use crmeb\exceptions\ApiException;
 
 /**
  * 线下支付
@@ -40,11 +40,11 @@ class OrderOfflineServices extends BaseServices
         $orderSerives = app()->make(StoreOrderServices::class);
         $orderInfo = $orderSerives->get($id);
         if (!$orderInfo) {
-            throw new ValidateException('订单不存在');
+            throw new ApiException(410173);
         }
 
         if ($orderInfo->paid) {
-            throw new ValidateException('订单已支付');
+            throw new ApiException(410174);
         }
         $orderInfo->paid = 1;
         $orderInfo->pay_time = time();

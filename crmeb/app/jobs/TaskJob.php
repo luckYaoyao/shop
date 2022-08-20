@@ -11,11 +11,16 @@
 
 namespace app\jobs;
 
-use app\services\message\sms\SmsRecordServices;
+use app\services\yihaotong\SmsRecordServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\basic\BaseJobs;
 use crmeb\traits\QueueTrait;
 
+/**
+ * 定时任务
+ * Class TaskJob
+ * @package crmeb\jobs
+ */
 class TaskJob extends BaseJobs
 {
     use QueueTrait;

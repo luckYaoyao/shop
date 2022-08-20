@@ -15,8 +15,9 @@ use app\services\activity\bargain\StoreBargainServices;
 use app\services\activity\combination\StoreCombinationServices;
 use app\services\activity\seckill\StoreSeckillServices;
 use app\services\activity\coupon\StoreCouponUserServices;
-use app\services\message\service\StoreServiceServices;
-use app\services\message\sms\SmsSendServices;
+use app\services\kefu\service\StoreServiceServices;
+use app\services\message\notice\SmsService;
+use app\services\order\OutStoreOrderServices;
 use app\services\order\StoreOrderCartInfoServices;
 use app\services\order\StoreOrderEconomizeServices;
 use app\services\order\StoreOrderServices;
@@ -27,7 +28,7 @@ use app\services\user\UserLevelServices;
 use app\services\user\UserServices;
 use app\services\wechat\WechatUserServices;
 use crmeb\basic\BaseJobs;
-use crmeb\services\WechatService;
+use crmeb\services\app\WechatService;
 use crmeb\services\workerman\ChannelService;
 use crmeb\traits\QueueTrait;
 use think\exception\ValidateException;
@@ -165,7 +166,6 @@ class OrderJob extends BaseJobs
     }
 
 
-
     /**
      * 订单支付成功后给客服发送客服消息
      * @param $order
@@ -190,12 +190,7 @@ class OrderJob extends BaseJobs
             $bargainServices = app()->make(StoreBargainServices::class);
             /** @var StoreOrderCartInfoServices $cartInfoServices */
             $cartInfoServices = app()->make(StoreOrderCartInfoServices::class);
-            /** @var SmsSendServices $smsServices */
-            $smsServices = app()->make(SmsSendServices::class);
-            $switch = (bool)sys_config('admin_pay_success_switch');
-            foreach ($serviceOrderNotice as $key => $item) {
-                $admin_name = $item['nickname'];
-                $order_id = $order['order_id'];
+            foreach ($serviceOrderNotice as $item) {
                 $userInfo = $wechatUserServices->getOne(['uid' => $item['uid'], 'user_type' => 'wechat']);
                 if ($userInfo) {
                     $userInfo = $userInfo->toArray();
@@ -259,9 +254,9 @@ class OrderJob extends BaseJobs
         //模板变量
         $pay_price = $order['pay_price'];
         $order_id = $order['order_id'];
-        /** @var SmsSendServices $smsServices */
-        $smsServices = app()->make(SmsSendServices::class);
-        $smsServices->send($switch, $order['user_phone'], compact('order_id', 'pay_price'), 'PAY_SUCCESS_CODE');
+        /** @var SmsService $smsServices */
+        $smsServices = app()->make(SmsService::class);
+        $smsServices->send($switch, $order['user_phone'], compact('order_id', 'pay_price'), 'order_pay_success');
     }
 
     /**计算节约金额
@@ -322,5 +317,57 @@ class OrderJob extends BaseJobs
         }
         return false;
 
+    }
+
+    /**
+     * 订单推送
+     * @param int $oid
+     * @param int $step
+     * @return bool
+     */
+    public function orderCreate(int $oid, int $step = 0): bool
+    {
+        if ($step > 2) {
+            Log::error('订单' . $oid . '推送失败');
+            return true;
+        }
+
+        try {
+            /** @var OutStoreOrderServices $services */
+            $services = app()->make(OutStoreOrderServices::class);
+            if (!$services->orderCreatePush($oid)) {
+                OrderJob::dispatchSece(($step + 1) * 5, 'push', [$oid, $step + 1]);
+            }
+        } catch (\Exception $e) {
+            Log::error('订单' . $oid . '推送失败,失败原因:' . $e->getMessage());
+            OrderJob::dispatchSece(($step + 1) * 5, 'push', [$oid, $step + 1]);
+        }
+        return true;
+    }
+
+    /**
+     * 订单支付推送
+     * @param int $oid
+     * @param int $step
+     * @return bool
+     */
+    public function paySuccess(int $oid, int $step = 0): bool
+    {
+        if ($step > 2) {
+            Log::error('订单支付' . $oid . '推送失败');
+            return true;
+        }
+
+        try {
+            /** @var OutStoreOrderServices $services */
+            $services = app()->make(OutStoreOrderServices::class);
+            if (!$services->paySuccessPush($oid)) {
+                OrderJob::dispatchSece(($step + 1) * 5, 'paySuccess', [$oid, $step + 1]);
+            }
+        } catch (\Exception $e) {
+            Log::error('订单支付' . $oid . '推送失败,失败原因:' . $e->getMessage());
+            OrderJob::dispatchSece(($step + 1) * 5, 'paySuccess', [$oid, $step + 1]);
+        }
+        return true;
     }
 }

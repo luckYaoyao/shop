@@ -1,4 +1,6 @@
 <?php
+//文件签名
+$fileValue = '';
 //最低php版本要求
 define('PHP_EDITION','7.1.0');
 //服务环境检测
@@ -207,9 +209,9 @@ switch ($step) {
             $conn = @mysqli_connect($dbHost, $_POST['dbUser'], $_POST['dbPwd'], NULL, $_POST['dbport']);
 //            var_dump(mysqli_connect_errno($conn));
             if ($error = mysqli_connect_errno($conn)) {
-                if($error == 2002) {
+                if ($error == 2002) {
                     die(json_encode(2002));//地址或端口错误
-                } else if($error == 1045) {
+                } else if ($error == 1045) {
                     die(json_encode(1045));//用户名或密码错误
                 } else {
                     die(json_encode(-1));//链接失败
@@ -297,7 +299,7 @@ switch ($step) {
             $dbPrefix = empty($_POST['dbprefix']) ? 'eb_' : trim($_POST['dbprefix']);
 
             $username = trim($_POST['manager']);
-            $password = trim($_POST['manager_pwd']) ?:'crmeb.com';
+            $password = trim($_POST['manager_pwd']) ?: 'crmeb.com';
             $email = trim($_POST['manager_email']);
 
             if (!function_exists('mysqli_connect')) {
@@ -451,7 +453,7 @@ switch ($step) {
             $res = mysqli_query($conn, $addadminsql);
             $res2 = true;
             if (isset($_SERVER['SERVER_NAME'])) {
-                $site_url = '\'"http://' . $_SERVER['SERVER_NAME'] . '"\'';
+                $site_url = '\'"https://' . $_SERVER['SERVER_NAME'] . '"\'';
                 $res2 = mysqli_query($conn, 'UPDATE `' . $dbPrefix . 'system_config` SET `value`=' . $site_url . ' WHERE `menu_name`="site_url"');
             }
             if ($res) {
@@ -476,6 +478,7 @@ switch ($step) {
         installlog();
         include_once("./templates/step5.php");
         @touch('../install.lock');
+        generateSignature();
         exit();
 }
 //读取版本号
@@ -668,17 +671,80 @@ function delFile($dir, $file_type = '')
         if (file_exists($dir)) unlink($dir);
     }
 }
+
 //错误提示方法
-function showHtml($str) {
+function showHtml($str)
+{
     echo '
 		<html>
         <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         </head>
         <body>
-        '.$str.'
+        ' . $str . '
         </body>
         </html>';
     exit;
 }
+
+/**
+ * 计算签名
+ * @param string $path
+ * @throws Exception
+ */
+function getFileSignature(string $path)
+{
+    global $fileValue;
+    if (!is_dir($path)) {
+        $fileValue .= @md5_file($path);
+    } else {
+        if (!$dh = opendir($path)) throw new Exception($path . " File open failed!");
+        while (($file = readdir($dh)) != false) {
+            if ($file == "." || $file == "..") {
+                continue;
+            } else {
+                getFileSignature($path . DIRECTORY_SEPARATOR . $file);
+            }
+        }
+        closedir($dh);
+    }
+}
+
+/**
+ * 写入签名
+ * @return void
+ * @throws Exception
+ */
+function generateSignature()
+{
+    $file = APP_DIR . '.version';
+    if (!$data = @file($file)) {
+        throw new Exception('.version读取失败');
+    }
+    $list = [];
+    if (!empty($data)) {
+        foreach ($data as $datum) {
+            list($name, $value) = explode('=', $datum);
+            $list[$name] = rtrim($value);
+        }
+    }
+
+    if (!isset($list['project_signature'])) {
+        $list['project_signature'] = '';
+    }
+
+    global $fileValue;
+    getFileSignature(APP_DIR . DIRECTORY_SEPARATOR . 'app');
+    getFileSignature(APP_DIR . DIRECTORY_SEPARATOR . 'crmeb');
+
+    $list['project_signature'] = md5($fileValue);
+
+    $str = "";
+    foreach ($list as $key => $item) {
+        $str .= "{$key}={$item}\n";
+    }
+
+    file_put_contents($file, $str);
+}
+
 ?>

@@ -51,7 +51,7 @@ class PublicController
         }
         $tengxun_map_key = sys_config('tengxun_map_key');
         $site_name = sys_config('site_name');
-        return app('json')->successful(compact('info', 'benefit', 'likeInfo', 'subscribe', 'tengxun_map_key', 'site_name'));
+        return app('json')->success(compact('info', 'benefit', 'likeInfo', 'subscribe', 'tengxun_map_key', 'site_name'));
     }
 
     /**
@@ -71,7 +71,7 @@ class PublicController
         /** @var DiyServices $diyService */
         $diyService = app()->make(DiyServices::class);
         $data = $diyService->getDiy($id);
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 
     /**
@@ -102,7 +102,7 @@ class PublicController
     public function getStoreStatus()
     {
         $data['store_status'] = sys_config('store_self_mention', 0);
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 
     /**

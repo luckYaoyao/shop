@@ -1,4 +1,4 @@
-CRMEB v4.x 后端程序目录
+CRMEB v4.5 后端程序目录
 ===============
 
 > 运行环境要求PHP7.1-7.4。
@@ -76,9 +76,9 @@ php think timer [ status ] [ --d ]
 ```
 参数
 - status: 状态
-    - start: 启动
-    - stop: 关闭
-    - restart: 重启
+  - start: 启动
+  - stop: 关闭
+  - restart: 重启
 - --d : 后台执行
 
 ## 长连接服务
@@ -93,9 +93,9 @@ php think workerman start --d
 ```
 参数
 - status: 状态
-    - start: 启动
-    - stop: 关闭
-    - restart: 重启
+  - start: 启动
+  - stop: 关闭
+  - restart: 重启
 - --d : 后台执行
 
 ## 文档

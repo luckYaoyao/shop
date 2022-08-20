@@ -52,15 +52,15 @@
 						<view class="wrapper">
 							<view class="share acea-row row-between row-bottom">
 								<view class="money font-color skeleton-rect">
-									￥
+									{{$t(`￥`)}}
 									<text class="num" v-text="storeInfo.price || 0"></text>
-									<text v-if="storeInfo.spec_type">起</text>
+									<text v-if="storeInfo.spec_type">{{$t(`起`)}}</text>
 									<text class="vip-money" v-if="
                       storeInfo.vip_price &&
                       storeInfo.vip_price > 0 &&
                       storeInfo.is_vip == 1 &&
 					  svip_price_open == 1
-                    ">￥{{ storeInfo.vip_price }}</text>
+                    ">{{$t(`￥`)}}{{ storeInfo.vip_price }}</text>
 									<image v-if="
                       storeInfo.vip_price &&
                       storeInfo.vip_price > 0 &&
@@ -71,32 +71,26 @@
 								<view class="iconfont icon-fenxiang skeleton-rect" @click="listenerActionSheet"></view>
 							</view>
 							<view class="introduce skeleton-rect" v-text="storeInfo.store_name"></view>
+							<view class="limit_good" v-if="storeInfo.limit_type > 0">{{storeInfo.limit_type == 1 ? $t(`限购`) : $t(`限购`)}}{{storeInfo.limit_num}}{{storeInfo.unit_name}}</view>
 							<view class="label acea-row row-between-wrapper" style="padding-bottom: 20rpx">
-								<view class="skeleton-rect" v-text="'划线价:￥' + (storeInfo.ot_price || 0)">
+								<view class="skeleton-rect">
+									{{$t(`划线价`)}} : {{$t(`￥`)}}{{storeInfo.ot_price || 0}}
 								</view>
-								<view class="skeleton-rect" v-text="
-                    '库存:' +
-                    (storeInfo.stock || 0) +
-                    (storeInfo.unit_name || '')
-                  "></view>
-								<view class="skeleton-rect" v-text="
-                    '销量:' +
-                    (storeInfo.fsales || 0) +
-                    (storeInfo.unit_name || '')
-                  "></view>
+								<view class="skeleton-rect" >{{$t(`库存`)}} : {{storeInfo.stock || 0}} {{$t(storeInfo.unit_name) || ''}}</view>
+								<view class="skeleton-rect" >{{$t(`销量`)}} : {{storeInfo.fsales || 0}} {{$t(storeInfo.unit_name) || ''}}</view>
 							</view>
 							<view v-if="
                   !is_money_level && storeInfo.vip_price && storeInfo.is_vip
                 " class="svip acea-row row-between-wrapper">
-								<view class="">开通“超级会员”立省{{ diff }}元</view>
+								<view class="">{{$t(`开通“超级会员”立省`)}}{{ diff }}{{$t(`元`)}}</view>
 								<navigator url="/pages/annex/vip_paid/index">
-									立即开通
+									{{$t(`立即开通`)}}
 									<text class="iconfont icon-jiantou"></text>
 								</navigator>
 							</view>
 							<view class="presell_count" v-if="storeInfo.presale">
 								<view>
-									<view>预售活动时间：</view>
+									<view>{{$t(`预售活动时间`)}}：</view>
 									<view v-if="storeInfo.presale_start_time && storeInfo.presale_end_time"
 										class="presell_time">
 										<view class='iconfont icon-shijian1'></view>
@@ -105,7 +99,7 @@
 										{{storeInfo.presale_end_time}}
 									</view>
 								</view>
-								<view>预售结束后{{ storeInfo.presale_day }}天内发货</view>
+								<view>{{$t(`预售结束后`)}} {{ storeInfo.presale_day }} {{$t(`天内发货`)}}</view>
 							</view>
 							<!-- <view class='coupon acea-row row-between-wrapper' v-if="storeInfo.give_integral > 0">
 									<view class='hide line1 acea-row'>
@@ -116,17 +110,17 @@
 							<view v-if="couponList.length" class="coupon acea-row row-between-wrapper skeleton-rect"
 								@click="couponTap" style="margin-top: 0rpx">
 								<view class="hide line1 acea-row">
-									优惠券：
+									{{$t(`优惠券`)}}：
 									<template v-for="(item, index) in couponList">
 										<view v-if="index < 2" class="activity" :key="index">
-											满{{ item.use_min_price }}减{{ item.coupon_price }}</view>
+										{{$t(`满`)}} {{ item.use_min_price }} {{$t(`减`)}} {{ item.coupon_price }}</view>
 									</template>
 								</view>
 								<view class="iconfont icon-jiantou"></view>
 							</view>
 							<view class="coupon acea-row row-between-wrapper skeleton-rect" v-if="activity.length">
 								<view class="line1 acea-row">
-									<text>活&nbsp;&nbsp;&nbsp;动：</text>
+									<text>{{$t(`活动`)}}：</text>
 									<view v-for="(item, index) in activity" :key="index" @click="goActivity(item)">
 										<view v-if="item.type === '1'" :class="
                         index == 0
@@ -138,7 +132,7 @@
                           : ''
                       ">
 											<text class="iconfonts iconfont icon-pintuan"></text>
-											<text class="activity_title">参与秒杀</text>
+											<text class="activity_title">{{$t(`参与秒杀`)}}</text>
 										</view>
 										<view :class="
                         index == 0
@@ -150,7 +144,7 @@
                           : ''
                       " v-if="item.type === '2'">
 											<text class="iconfonts iconfont icon-shenhezhong"></text>
-											<text class="activity_title">参与砍价</text>
+											<text class="activity_title">{{$t(`参与砍价`)}}</text>
 										</view>
 										<view :class="
                         index == 0
@@ -162,7 +156,7 @@
                           : ''
                       " v-if="item.type === '3'">
 											<text class="iconfonts iconfont icon-kanjia"></text>
-											<text class="activity_title">参与拼团</text>
+											<text class="activity_title">{{$t(`参与拼团`)}}</text>
 										</view>
 									</view>
 								</view>
@@ -172,7 +166,7 @@
 							v-if="attr.productAttr.length">
 							<view class="flex">
 								<view style="display: flex; align-items: center; width: 90%">
-									<view class="attr-txt"> {{ attrTxt }}： </view>
+									<view class="attr-txt"> {{attrTxt}}： </view>
 									<view class="atterTxt line1" style="width: 82%">{{
                     attrValue
                   }}</view>
@@ -185,17 +179,17 @@
 									<image :src="item.image" v-for="(item, index) in skuArr.slice(0, 4)" :key="index"
 										class="attrImg"></image>
 								</view>
-								<view class="switchTxt">共{{ skuArr.length }}种规格可选</view>
+								<view class="switchTxt">{{$t(`共`)}}{{ skuArr.length }} {{$t(`种规格可选`)}}</view>
 							</view>
 						</view>
 					</view>
 					<view class="userEvaluation skeleton-rect" id="past1" v-if="replyCount">
 						<view class="title acea-row row-between-wrapper">
-							<view>用户评价({{ replyCount }})</view>
+							<view>{{$t(`用户评价`)}}({{ replyCount }})</view>
 							<navigator class="praise" hover-class="none"
-								:url="'/pages/users/goods_comment_list/index?product_id=' + id">
+								:url="'/pages/goods/goods_comment_list/index?product_id=' + id">
 								<text class="font-num">{{ replyChance }}%</text>
-								好评率
+								 {{$t(`好评率`)}}
 								<text class="iconfont icon-jiantou"></text>
 							</navigator>
 						</view>
@@ -206,15 +200,13 @@
 					<!-- 优品推荐 -->
 					<view class="superior" v-if="good_list.length" id="past2">
 						<view class="title acea-row row-center-wrapper">
-							<!-- <image src="../../static/images/ling.png"></image> -->
 							<view class="lingw acea-row row-center-wrapper">
 								<view class="lingn"></view>
 							</view>
-							<view class="titleTxt">优品推荐</view>
+							<view class="titleTxt">{{$t(`优品推荐`)}}</view>
 							<view class="lingw acea-row row-center-wrapper">
 								<view class="lingn"></view>
 							</view>
-							<!--<image src="../../static/images/ling.png"></image> -->
 						</view>
 						<view class="slider-banner banner">
 							<swiper indicator-dots="true" :autoplay="autoplay" :circular="circular" :interval="interval"
@@ -227,14 +219,14 @@
 											<view class="pictrue">
 												<image :src="val.image"></image>
 												<span class="pictrue_log pictrue_log_class"
-													v-if="val.activity && val.activity.type === '1'">秒杀</span>
+													v-if="val.activity && val.activity.type === '1'">{{$t(`秒杀`)}}</span>
 												<span class="pictrue_log pictrue_log_class"
-													v-if="val.activity && val.activity.type === '2'">砍价</span>
+													v-if="val.activity && val.activity.type === '2'">{{$t(`砍价`)}}</span>
 												<span class="pictrue_log pictrue_log_class"
-													v-if="val.activity && val.activity.type === '3'">拼团</span>
+													v-if="val.activity && val.activity.type === '3'">{{$t(`拼团`)}}</span>
 											</view>
 											<view class="name line1">{{ val.store_name }}</view>
-											<view class="money font-color">¥{{ val.price }}</view>
+											<view class="money font-color">{{$t(`￥`)}}{{ val.price }}</view>
 										</view>
 									</view>
 								</swiper-item>
@@ -243,7 +235,7 @@
 						</view>
 					</view>
 					<view class="product-intro" id="past3">
-						<view class="title">产品介绍</view>
+						<view class="title">{{$t(`产品介绍`)}}</view>
 						<view class="conter">
 							<!-- #ifndef APP-PLUS -->
 							<parser :html="description" ref="article" :tag-style="tagStyle"></parser>
@@ -264,12 +256,12 @@
 
 				<navigator hover-class="none" class="item skeleton-rect" open-type="switchTab" url="/pages/index/index">
 					<view class="iconfont icon-shouye6"></view>
-					<view class="p_center">首页</view>
+					<view class="p_center">{{$t(`首页`)}}</view>
 				</navigator>
 				<view @click="setCollect" class="item skeleton-rect">
 					<view class="iconfont icon-shoucang1" v-if="storeInfo.userCollect"></view>
 					<view class="iconfont icon-shoucang" v-else></view>
-					<view class="p_center">收藏</view>
+					<view class="p_center">{{$t(`收藏`)}}</view>
 				</view>
 				<view class="animated item skeleton-rect" :class="animated == true ? 'bounceIn' : ''" @click="goCart">
 					<view class="iconfont icon-gouwuche1">
@@ -277,12 +269,12 @@
               CartCount || 0
             }}</text>
 					</view>
-					<view class="p_center skeleton-rect">购物车</view>
+					<view class="p_center skeleton-rect">{{$t(`购物车`)}}</view>
 				</view>
 				<view v-if="a" class="presale">
 					<view class="acea-row">
 						<form class=" bnts bg-color-hui"><button class=" bnts bg-color-hui"
-								form-type="submit">暂无产品</button></form>
+								form-type="submit">{{$t(`暂无产品`)}}</button></form>
 					</view>
 				</view>
 				<view v-else>
@@ -292,26 +284,26 @@
 							<form v-if="storeInfo.cart_button" @submit="joinCart" class="joinCart bnts"
 								:class="!storeInfo.cart_button ? 'virbnt' : ''">
 								<button class="joinCart bnts" form-type="submit">
-									加入购物车
+									{{$t(`加入购物车`)}}
 								</button>
 							</form>
 							<form class="buy bnts bg-color-hui">
 								<button class="buy bnts bg-color-hui" form-type="submit"
 									:class="!storeInfo.cart_button ? 'virbnt' : ''">
-									已售罄
+									{{$t(`已售罄`)}}
 								</button>
 							</form>
 						</view>
 						<view class="bnt acea-row skeleton-rect" v-else>
 							<form v-if="storeInfo.cart_button" @submit="joinCart" class="joinCart bnts">
 								<button class="joinCart bnts" form-type="submit">
-									加入购物车
+									{{$t(`加入购物车`)}}
 								</button>
 							</form>
 							<form @submit="goBuy" class="buy bnts" :class="!storeInfo.cart_button ? 'virbnt' : ''">
 								<button class="buy bnts" :class="!storeInfo.cart_button ? 'virbnt' : ''"
 									form-type="submit">
-									立即购买
+									{{$t(`立即购买`)}}
 								</button>
 							</form>
 						</view>
@@ -319,16 +311,16 @@
 					<view class="presale" v-else>
 						<view class="acea-row" v-if="presale_pay_status === 1 || presale_pay_status === 3">
 							<form class="bnts bg-color-hui"><button class="bnts bg-color-hui"
-									form-type="submit">{{presale_pay_status === 1?'未开始':'已结束'}}</button>
+									form-type="submit">{{presale_pay_status === 1?$t(`未开始`):$t(`已结束`)}}</button>
 							</form>
 						</view>
 						<view class="acea-row"
 							v-else-if="attr.productSelect.quota <= 0 || attr.productSelect.quota < attr.productSelect.cart_num">
 							<form class=" bnts bg-color-hui"><button class=" bnts bg-color-hui"
-									form-type="submit">已售罄</button></form>
+									form-type="submit">{{$t(`已售罄`)}}</button></form>
 						</view>
 						<view class="bnts acea-row" v-else-if="presale_pay_status === 2">
-							<form @submit="goBuy" class="bnts"><button class="bnts" form-type="submit">立即购买</button>
+							<form @submit="goBuy" class="bnts"><button class="bnts" form-type="submit">{{$t(`立即购买`)}}</button>
 							</form>
 						</view>
 					</view>
@@ -363,35 +355,35 @@
 				<!-- #ifndef MP -->
 				<button class="item" hover-class="none" v-if="weixinStatus === true" @click="H5ShareBox = true">
 					<view class="iconfont icon-weixin3"></view>
-					<view class="">发送给朋友</view>
+					<view class="">{{$t(`发送给朋友`)}}</view>
 				</button>
 				<!-- #endif -->
 				<!-- #ifdef MP -->
 				<button class="item" open-type="share" hover-class="none" @click="goFriend">
 					<view class="iconfont icon-weixin3"></view>
-					<view class="">发送给朋友</view>
+					<view class="">{{$t(`发送给朋友`)}}</view>
 				</button>
 				<!-- #endif -->
 				<!-- #ifdef H5  -->
 				<div class="item copy-data" v-if="storeInfo.command_word != ''"
 					:data-clipboard-text="storeInfo.command_word">
 					<view class="iconfont icon-fuzhikouling"></view>
-					<text>复制口令</text>
+					<text>{{$t(`复制口令`)}}</text>
 				</div>
 				<!-- #endif -->
 				<!-- #ifdef APP-PLUS -->
 				<view class="item" @click="appShare('WXSceneSession')">
 					<view class="iconfont icon-weixin3"></view>
-					<view class="">微信好友</view>
+					<view class="">{{$t(`微信好友`)}}</view>
 				</view>
 				<view class="item" @click="appShare('WXSenceTimeline')">
 					<view class="iconfont icon-pengyouquan"></view>
-					<view class="">微信朋友圈</view>
+					<view class="">{{$t(`微信朋友圈`)}}</view>
 				</view>
 				<!-- #endif -->
 				<button class="item" hover-class="none" @click="goPoster">
 					<view class="iconfont icon-haibao"></view>
-					<view class="">生成海报</view>
+					<view class="">{{$t(`生成海报`)}}</view>
 				</button>
 			</view>
 			<view class="mask" v-if="posters" @click="listenerActionClose"></view>
@@ -404,17 +396,17 @@
 				</image>
 				<image :src="posterImage"></image>
 				<!-- #ifndef H5  -->
-				<view class="save-poster" @click="savePosterPath">保存到手机</view>
+				<view class="save-poster" @click="savePosterPath">{{$t(`保存到手机`)}}</view>
 				<!-- #endif -->
 				<!-- #ifdef H5 -->
-				<view class="keep">长按图片可以保存到手机</view>
+				<view class="keep">{{$t(`长按图片可以保存到手机`)}}</view>
 				<!-- #endif -->
 			</view>
 			<view class="mask" v-if="posterImageStatus"></view>
 			<canvas class="canvas" canvas-id="myCanvas" v-if="canvasStatus"></canvas>
 			<!-- 发送给朋友图片 -->
 			<view class="share-box" v-if="H5ShareBox">
-				<image src="/static/images/share-info.png" @click="H5ShareBox = false"></image>
+				<image :src="imgHost + '/statics/images/share-info.png'" @click="H5ShareBox = false"></image>
 			</view>
 			<kefuIcon :ids="parseInt(id)" :routineContact="routineContact" :storeInfo="storeInfo" :goodsCon="1">
 			</kefuIcon>
@@ -465,17 +457,16 @@
 		silenceBindingSpread,
 		updateURLParameter
 	} from "@/utils";
-	import mpHtml from "@/components/mp-html/mp-html";
 	import ClipboardJS from "@/plugin/clipboard/clipboard.js";
 	// #ifdef MP
 	import authorize from "@/components/Authorize";
 	// #endif
 	// #ifdef APP-PLUS
 	import {
-		TOKENNAME,
-		HTTP_REQUEST_URL
+		TOKENNAME
 	} from "@/config/app.js";
 	// #endif
+	import {HTTP_REQUEST_URL} from '@/config/app';
 	let app = getApp();
 	import colors from "@/mixins/color";
 	import {
@@ -491,7 +482,6 @@
 			userEvaluation,
 			shareRedPackets,
 			kefuIcon,
-			mpHtml,
 			menuIcon,
 			cusPreviewImg,
 			// #ifdef MP
@@ -511,6 +501,7 @@
 		data() {
 			let that = this;
 			return {
+				imgHost:HTTP_REQUEST_URL,
 				sysHeight: sysHeight,
 				a: false,
 				showSkeleton: true, //骨架屏显示隐藏
@@ -526,7 +517,7 @@
 				},
 				showAnimate: true,
 				showMenuIcon: false,
-				attrTxt: "请选择", //属性页面提示
+				attrTxt: this.$t(`请选择`), //属性页面提示
 				attrValue: "", //已选属性
 				animated: false, //购物车动画
 				id: 0, //商品id
@@ -654,7 +645,7 @@
 			if (!options.id) {
 				this.showSkeleton = false;
 				return that.$util.Tips({
-					title: "缺少参数无法查看商品",
+					title: that.$t(`缺少参数无法查看商品`),
 				}, {
 					tab: 3,
 					url: 1,
@@ -696,7 +687,7 @@
 				const clipboard = new ClipboardJS(".copy-data");
 				clipboard.on("success", () => {
 					this.$util.Tips({
-						title: "复制成功",
+						title: this.$t(`复制成功`),
 					});
 				});
 				// #endif
@@ -763,14 +754,14 @@
 					imageUrl: that.storeInfo.small_image,
 					success: function(res) {
 						uni.showToast({
-							title: "分享成功",
+							title: that.$t(`分享成功`),
 							icon: "success",
 						});
 						that.posters = false;
 					},
 					fail: function(err) {
 						uni.showToast({
-							title: "分享失败",
+							title: that.$t(`分享失败`),
 							icon: "none",
 							duration: 2000,
 						});
@@ -956,7 +947,7 @@
 				// console.log(productSelect)
 				if (!productSelect) {
 					this.$util.Tips({
-						title: "暂无该产品,重新选择",
+						title: this.$t(`重新选择`),
 						success: () => {
 							this.a = true
 							this.attr.productSelect.stock = 0
@@ -980,7 +971,7 @@
 						productSelect.vip_price
 					);
 					this.$set(this, "attrValue", res);
-					this.$set(this, "attrTxt", "已选择");
+					this.$set(this, "attrTxt", this.$t(`已选择`));
 				} else {
 					this.$set(this.attr.productSelect, "image", productSelect.image);
 					this.$set(this.attr.productSelect, "price", productSelect.price);
@@ -993,7 +984,7 @@
 						this.storeInfo.vip_price
 					);
 					this.$set(this, "attrValue", "");
-					this.$set(this, "attrTxt", "请选择");
+					this.$set(this, "attrTxt", this.$t(`请选择`));
 				}
 			},
 			/**
@@ -1094,9 +1085,9 @@
 							"diff",
 							that.$util.$h.Sub(storeInfo.price, storeInfo.vip_price)
 						);
-						var navList = ["商品", "详情"];
+						var navList = [that.$t(`商品`), that.$t(`详情`)];
 						if (res.data.replyCount) {
-							navList.splice(1, 0, "评价");
+							navList.splice(1, 0, that.$t(`评价`));
 						}
 						// if (goodArray.length) {
 						// 	navList.splice(-1, 0, '推荐');
@@ -1195,7 +1186,7 @@
 			showMaoLocation: function() {
 				if (!this.systemStore.latitude || !this.systemStore.longitude)
 					return this.$util.Tips({
-						title: "缺少经纬度信息无法查看地图！",
+						title: this.$t(`缺少经纬度信息无法查看地图`),
 					});
 				uni.openLocation({
 					latitude: parseFloat(this.systemStore.latitude),
@@ -1241,7 +1232,7 @@
 						"vip_price",
 						productSelect.vip_price
 					);
-					this.$set(this, "attrTxt", "已选择");
+					this.$set(this, "attrTxt", this.$t(`已选择`));
 				} else if (!productSelect && productAttr.length) {
 					this.$set(
 						this.attr.productSelect,
@@ -1259,7 +1250,7 @@
 						this.storeInfo.vip_price
 					);
 					this.$set(this, "attrValue", "");
-					this.$set(this, "attrTxt", "请选择");
+					this.$set(this, "attrTxt", this.$t(`请选择`));
 				} else if (!productSelect && !productAttr.length) {
 					this.$set(
 						this.attr.productSelect,
@@ -1281,7 +1272,7 @@
 						this.storeInfo.vip_price
 					);
 					this.$set(this, "attrValue", "");
-					this.$set(this, "attrTxt", "请选择");
+					this.$set(this, "attrTxt", this.$t(`请选择`));
 				}
 			},
 			/**
@@ -1438,13 +1429,13 @@
 					that.isOpen === true
 				)
 					return that.$util.Tips({
-						title: "产品库存不足，请选择其它属性",
+						title: that.$t(`产品库存不足，请选择其它属性`),
 					});
 				if (that.attr.productSelect.cart_num <= 0) {
 					that.attr.productSelect.cart_num = 1;
 					that.isOpen = false;
 					return that.$util.Tips({
-						title: "请先选择数量",
+						title: that.$t(`请选择数量`),
 					});
 				}
 				let q = {
@@ -1462,12 +1453,12 @@
 						that.attr.cartAttr = false;
 						if (news) {
 							uni.navigateTo({
-								url: "/pages/users/order_confirm/index?new=1&cartId=" +
+								url: "/pages/goods/order_confirm/index?new=1&cartId=" +
 									res.data.cartId,
 							});
 						} else {
 							that.$util.Tips({
-								title: "添加购物车成功",
+								title: that.$t(`添加成功`),
 								success: () => {
 									that.getCartCount(true);
 								},
@@ -1560,6 +1551,7 @@
 			// 分享关闭
 			listenerActionClose: function() {
 				this.posters = false;
+				this.posterImageStatus = false;
 			},
 			//隐藏海报
 			posterImageClose: function() {
@@ -1589,13 +1581,13 @@
 										success: function(res) {
 											that.posterImageClose();
 											that.$util.Tips({
-												title: "保存成功",
+												title: that.$t(`保存成功`),
 												icon: "success",
 											});
 										},
 										fail: function(res) {
 											that.$util.Tips({
-												title: "保存失败",
+												title: that.$t(`保存失败`),
 											});
 										},
 									});
@@ -1607,13 +1599,13 @@
 								success: function(res) {
 									that.posterImageClose();
 									that.$util.Tips({
-										title: "保存成功",
+										title: that.$t(`保存成功`),
 										icon: "success",
 									});
 								},
 								fail: function(res) {
 									that.$util.Tips({
-										title: "保存失败",
+										title: that.$t(`保存失败`),
 									});
 								},
 							});
@@ -1630,13 +1622,13 @@
 					success: function(res) {
 						that.posterImageClose();
 						that.$util.Tips({
-							title: "保存成功",
+							title: that.$t(`保存成功`),
 							icon: "success",
 						});
 					},
 					fail: function(res) {
 						that.$util.Tips({
-							title: "保存失败",
+							title: that.$t(`保存失败`),
 						});
 					},
 				});
@@ -1708,7 +1700,7 @@
 					this.$set(this.attr.productSelect, "stock", productSelect.stock);
 					this.$set(this.attr.productSelect, "unique", productSelect.unique);
 					this.$set(this.attr.productSelect, "vipPrice", productSelect.vipPrice);
-					this.$set(this, "attrTxt", "已选择");
+					this.$set(this, "attrTxt", this.$t(`已选择`));
 					this.$set(this, "attrValue", productSelect.suk);
 				}
 			},
@@ -2316,6 +2308,12 @@
 	.introduce {
 		min-height: 44rpx;
 	}
+	
+	.limit_good {
+		font-size: 16rpx;
+		margin: 10rpx 30rpx;
+		color: red;
+	}
 
 	.attrImg {
 		width: 66rpx;
@@ -2327,7 +2325,7 @@
 
 	.switchTxt {
 		height: 60rpx;
-		flex: 1;
+		// flex: 1;
 		line-height: 60rpx;
 		box-sizing: border-box;
 		background: #eeeeee;

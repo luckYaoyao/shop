@@ -47,11 +47,11 @@ class WechatController
         ], true);
         $token = $this->services->newAuth($spreadId, $login_type);
         if ($token && isset($token['key'])) {
-            return app('json')->success('授权成功，请绑定手机号', $token);
+            return app('json')->success(410022, $token);
         } else if ($token) {
-            return app('json')->success('登录成功', ['token' => $token['token'], 'userInfo' => $token['userInfo'], 'expires_time' => $token['params']['exp']]);
+            return app('json')->success(410001, ['token' => $token['token'], 'userInfo' => $token['userInfo'], 'expires_time' => $token['params']['exp']]);
         } else
-            return app('json')->fail('登录失败');
+            return app('json')->fail(410019);
     }
 
     /**
@@ -64,11 +64,11 @@ class WechatController
     {
         $token = $this->services->silenceAuth($spread);
         if ($token && isset($token['key'])) {
-            return app('json')->success('授权成功，请绑定手机号', $token);
+            return app('json')->success(410022, $token);
         } else if ($token) {
-            return app('json')->success('登录成功', ['token' => $token['token'], 'expires_time' => $token['params']['exp']]);
+            return app('json')->success(410001, ['token' => $token['token'], 'expires_time' => $token['params']['exp']]);
         } else
-            return app('json')->fail('登录失败');
+            return app('json')->fail(410019);
     }
 
     /**
@@ -81,11 +81,11 @@ class WechatController
     {
         $token = $this->services->silenceAuthNoLogin($spread);
         if ($token && isset($token['auth_login'])) {
-            return app('json')->success('授权成功', $token);
+            return app('json')->success(410023, $token);
         } else if ($token) {
-            return app('json')->success('登录成功', ['token' => $token['token'], 'userInfo' => $token['userInfo'], 'expires_time' => $token['params']['exp']]);
+            return app('json')->success(410001, ['token' => $token['token'], 'userInfo' => $token['userInfo'], 'expires_time' => $token['params']['exp']]);
         } else
-            return app('json')->fail('登录失败');
+            return app('json')->fail(410019);
     }
 
     /**
@@ -99,17 +99,17 @@ class WechatController
         //验证验证码
         $verifyCode = CacheService::get('code_' . $phone);
         if (!$verifyCode)
-            return app('json')->fail('请先获取验证码');
+            return app('json')->fail(410009);
         $verifyCode = substr($verifyCode, 0, 6);
         if ($verifyCode != $captcha) {
             CacheService::delete('code_' . $phone);
-            return app('json')->fail('验证码错误');
+            return app('json')->fail(410010);
         }
         CacheService::delete('code_' . $phone);
         $token = $this->services->silenceAuthBindingPhone($key, $phone);
         if ($token) {
-            return app('json')->success('登录成功', $token);
+            return app('json')->success(410001, $token);
         } else
-            return app('json')->fail('登录失败');
+            return app('json')->fail(410019);
     }
 }

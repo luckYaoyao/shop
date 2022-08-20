@@ -1,16 +1,4 @@
 <template>
-	<!-- <view class='product-bg'>
-	        <swiper  :indicator-dots="indicatorDots"
-	            :autoplay="autoplay" :circular="circular" :interval="interval" :duration="duration" @change="change">
-	            <block v-for="(item,index) in imgUrls" :key="index"> 
-	                <swiper-item>
-	                   <image :src="item" class="slide-image"/>
-					   
-	                </swiper-item>
-	            </block>
-	        </swiper>
-	        <view class='pages'>{{currents}}/{{imgUrls.length || 1}}</view>
-	    </view> -->
 	<view class='product-bg'>
 		<swiper :indicator-dots="indicatorDots" indicator-active-color="var(--view-theme)" :autoplay="autoplay" :circular="circular"
 		 :interval="interval" :duration="duration" @change="change" v-if="isPlay">

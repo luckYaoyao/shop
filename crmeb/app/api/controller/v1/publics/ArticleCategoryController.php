@@ -26,12 +26,10 @@ class ArticleCategoryController
     {
         $this->services = $services;
     }
+
     /**
      * 文章分类列表
      * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
      */
     public function lst()
     {
@@ -40,6 +38,6 @@ class ArticleCategoryController
             array_unshift($cateInfo, ['id' => 0, 'title' => '热门']);
             return $cateInfo;
         });
-        return app('json')->successful($cateInfo);
+        return app('json')->success($cateInfo);
     }
 }

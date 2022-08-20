@@ -40,6 +40,8 @@ Route::group(function () {
     Route::post('binding', 'v1.LoginController/binding_phone')->name('bindingPhone');
     // 支付宝复制链接支付
     Route::get('ali_pay', 'v1.order.StoreOrderController/aliPay')->name('aliPay');
+    //查询版权
+    Route::get('copyright', 'v1.PublicController/copyright')->option(['real_name' => '申请版权']);
 
 })->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class);
 
@@ -69,7 +71,8 @@ Route::group(function () {
 
 //会员授权接口
 Route::group(function () {
-
+    //获取支付方式
+    Route::get('pay/config', 'v1.PayController/config')->name('payConfig');
     //用户修改手机号
     Route::post('user/updatePhone', 'v1.LoginController/update_binding_phone')->name('updateBindingPhone');
     //设置登录code
@@ -138,6 +141,7 @@ Route::group(function () {
     Route::post('cart/num', 'v1.store.StoreCartController/num')->name('cartNum'); //购物车 修改商品数量
     Route::get('cart/count', 'v1.store.StoreCartController/count')->name('cartCount'); //购物车 获取数量
     //订单类
+    Route::post('order/check_shipping', 'v1.order.StoreOrderController/checkShipping')->name('checkShipping'); //检测是否显示快递和自提标签
     Route::post('order/confirm', 'v1.order.StoreOrderController/confirm')->name('orderConfirm'); //订单确认
     Route::post('order/computed/:key', 'v1.order.StoreOrderController/computedOrder')->name('computedOrder'); //计算订单金额
     Route::post('order/create/:key', 'v1.order.StoreOrderController/create')->name('orderCreate'); //订单创建
@@ -257,6 +261,10 @@ Route::group(function () {
 
     Route::get('user_cancel', 'v1.user.UserController/SetUserCancel')->name('SetUserCancel');//用户注销
 
+    /** 用户浏览记录 */
+    Route::get('user/visit_list', 'v1.user.UserController/visitList')->name('visitList');//商品浏览列表
+    Route::delete('user/visit', 'v1.user.UserController/visitDelete')->name('visitDelete');//商品浏览记录删除
+
 
 })->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class)->middleware(\app\api\middleware\AuthTokenMiddleware::class, true);
 //未授权接口
@@ -315,7 +323,7 @@ Route::group(function () {
     //小程序登陆
     Route::post('wechat/mp_auth', 'v1.wechat.AuthController/mp_auth')->name('mpAuth');//小程序登陆
     Route::get('wechat/get_logo', 'v1.wechat.AuthController/get_logo')->name('getLogo');//小程序登陆授权展示logo
-    Route::get('wechat/teml_ids', 'v1.wechat.AuthController/teml_ids')->name('wechatTemlIds');//小程序订阅消息
+    Route::get('wechat/temp_ids', 'v1.wechat.AuthController/temp_ids')->name('wechatTempIds');//小程序订阅消息
     Route::get('wechat/live', 'v1.wechat.AuthController/live')->name('wechatLive');//小程序直播列表
     Route::get('wechat/livePlaybacks/:id', 'v1.wechat.AuthController/livePlaybacks')->name('livePlaybacks');//小程序直播回放
 

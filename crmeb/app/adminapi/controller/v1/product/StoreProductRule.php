@@ -56,7 +56,7 @@ class StoreProductRule extends AuthController
             ['spec', []]
         ]);
         $this->services->save($id, $data);
-        return app('json')->success('保存成功!');
+        return app('json')->success(100000);
     }
 
     /**
@@ -82,6 +82,6 @@ class StoreProductRule extends AuthController
             ['ids', '']
         ], true);
         $this->services->del((string)$ids);
-        return app('json')->success('删除成功!');
+        return app('json')->success(100002);
     }
 }

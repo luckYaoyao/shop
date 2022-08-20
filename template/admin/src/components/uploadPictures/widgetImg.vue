@@ -5,31 +5,22 @@
       @getPicD="getPicD"
       :gridPic="gridPic"
       :gridBtn="gridBtn"
-      v-if="
-        this.$route.query.fodder === 'dialog' ||
-        this.$route.query.type === 'many'
-      "
+      v-if="this.$route.query.fodder === 'dialog' || this.$route.query.type === 'many'"
     ></upload-from>
-    <upload-from
-      :isChoice="isChoice"
-      @getPic="getPic"
-      :gridPic="gridPic"
-      :gridBtn="gridBtn"
-      v-else
-    ></upload-from>
+    <upload-from :isChoice="isChoice" @getPic="getPic" :gridPic="gridPic" :gridBtn="gridBtn" v-else></upload-from>
   </div>
 </template>
 
 <script>
-import uploadFrom from "./index";
-import "../../../public/UEditor/dialogs/internal";
+import uploadFrom from './index';
+import '../../../public/UEditor/dialogs/internal';
 export default {
-  name: "widgetImg",
+  name: 'widgetImg',
   components: { uploadFrom },
   data() {
     return {
-      isChoice: "单选",
-      isChoiceD: "多选",
+      isChoice: '单选',
+      isChoiceD: '多选',
       gridPic: {
         xl: 4,
         lg: 4,
@@ -49,10 +40,10 @@ export default {
   mounted() {},
   methods: {
     getPicD(pc) {
-      if (this.$route.query.fodder === "dialog") {
-        let str = "";
+      if (this.$route.query.fodder === 'dialog') {
+        let str = '';
         for (let i = 0; i < pc.length; i++) {
-          nowEditor.editor.execCommand("insertimage", { src: pc[i].att_dir });
+          nowEditor.editor.execCommand('insertimage', { src: pc[i].att_dir });
         }
         nowEditor.dialog.close(true);
       } else {

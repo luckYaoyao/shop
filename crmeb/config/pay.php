@@ -11,7 +11,7 @@
 
 return [
     //默认支付模式
-    'default' => 'wechat',
+    'default' => 'wechat_pay',
     //支付方式
     'payType' => ['weixin' => '微信支付', 'yue' => '余额支付', 'offline' => '线下支付'],
     //提现方式
@@ -21,13 +21,9 @@ return [
     //驱动模式
     'stores' => [
         //微信支付
-        'wechat' => [],
-        //小程序支付
-        'routine' => [],
-        //微信h5支付
-        'wechath5' => [],
+        'wechat_pay' => [],
         //支付宝支付
-        'alipay' => [],
+        'ali_pay' => [],
         //余额支付
         'yue' => [],
     ]

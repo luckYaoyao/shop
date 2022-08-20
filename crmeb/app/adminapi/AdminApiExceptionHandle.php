@@ -12,7 +12,6 @@
 namespace app\adminapi;
 
 
-use app\exceptions\CommonException;
 use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\exceptions\AuthException;
@@ -35,7 +34,6 @@ class AdminApiExceptionHandle extends Handle
         AuthException::class,
         AdminException::class,
         ApiException::class,
-        CommonException::class,
     ];
 
     /**
@@ -58,12 +56,12 @@ class AdminApiExceptionHandle extends Handle
             $log = [
                 request()->adminId(),                                                                 //管理员ID
                 request()->ip(),                                                                      //客户ip
-                ceil(msectime() - (request()->time(true) * 1000)),                                    //耗时（毫秒）
+                ceil(msectime() - (request()->time(true) * 1000)),                               //耗时（毫秒）
                 request()->rule()->getMethod(),                                                       //请求类型
-                str_replace("/", "", request()->rootUrl()),                                           //应用
+                str_replace("/", "", request()->rootUrl()),                             //应用
                 request()->baseUrl(),                                                                 //路由
-                json_encode(request()->param(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),     //请求参数
-                json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),                  //报错数据
+                json_encode(request()->param(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),//请求参数
+                json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),             //报错数据
 
             ];
             Log::write(implode("|", $log), "error");
@@ -87,13 +85,20 @@ class AdminApiExceptionHandle extends Handle
         ] : [];
         // 添加自定义异常处理机制
         if ($e instanceof DbException) {
-            return app('json')->fail('数据获取失败', $massageData);
-        } elseif ($e instanceof AuthException || $e instanceof ValidateException || $e instanceof ApiException || $e instanceof CommonException) {
-            return app('json')->make($e->getCode() ? : 400, $e->getMessage());
-        } elseif ($e instanceof AdminException) {
+            return app('json')->fail(100102, $massageData);
+        } elseif ($e instanceof ValidateException) {
             return app('json')->fail($e->getMessage(), $massageData);
+        } elseif ($e instanceof AuthException || $e instanceof AdminException || $e instanceof ApiException) {
+            return app('json')->make($e->getCode() ?: 400, $e->getMessage(), $massageData);
         } else {
-            return app('json')->code(200)->make(400, $e->getMessage(), $massageData);
+            return app('json')->fail('很抱歉!系统开小差了', Env::get('app_debug', false) ? [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'code' => $e->getCode(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTrace(),
+                'previous' => $e->getPrevious(),
+            ] : []);
         }
     }
 

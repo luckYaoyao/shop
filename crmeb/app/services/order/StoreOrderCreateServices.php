@@ -23,10 +23,10 @@ use app\services\shipping\ShippingTemplatesRegionServices;
 use app\services\shipping\ShippingTemplatesServices;
 use app\services\wechat\WechatUserServices;
 use app\services\BaseServices;
+use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use app\dao\order\StoreOrderDao;
 use app\services\user\UserServices;
-use think\exception\ValidateException;
 use app\services\user\UserBillServices;
 use app\services\user\UserAddressServices;
 use app\services\activity\bargain\StoreBargainServices;
@@ -131,14 +131,14 @@ class StoreOrderCreateServices extends BaseServices
         $addressServices = app()->make(UserAddressServices::class);
         if ($shippingType == 1 && $virtual_type == 0) {
             if (!$addressId) {
-                throw new ValidateException('请选择收货地址!');
+                throw new ApiException(410045);
             }
             if (!$addressInfo = $addressServices->getOne(['uid' => $uid, 'id' => $addressId, 'is_del' => 0]))
-                throw new ValidateException('地址选择有误!');
+                throw new ApiException(410046);
             $addressInfo = $addressInfo->toArray();
         } else {
             if ((!$real_name || !$phone) && $virtual_type == 0) {
-                throw new ValidateException('请填写姓名和电话');
+                throw new ApiException(410245);
             }
             $addressInfo['real_name'] = $real_name;
             $addressInfo['phone'] = $phone;
@@ -174,7 +174,7 @@ class StoreOrderCreateServices extends BaseServices
             $systemPayType = PayServices::PAY_TYPE;
             unset($systemPayType['offline']);
             if ($payType != 'pc' && !array_key_exists($payType, $systemPayType)) {
-                throw new ValidateException('营销商品不能使用线下支付!');
+                throw new ApiException(410246);
             }
         }
         //$shipping_type = 1 快递发货 $shipping_type = 2 门店自提
@@ -183,7 +183,7 @@ class StoreOrderCreateServices extends BaseServices
 
         $orderInfo = [
             'uid' => $uid,
-            'order_id' => $this->getNewOrderId(),
+            'order_id' => $this->getNewOrderId('cp'),
             'real_name' => $addressInfo['real_name'],
             'user_phone' => $addressInfo['phone'],
             'user_address' => $addressInfo['province'] . ' ' . $addressInfo['city'] . ' ' . $addressInfo['district'] . ' ' . $addressInfo['detail'],
@@ -229,7 +229,7 @@ class StoreOrderCreateServices extends BaseServices
             $storeServices = app()->make(SystemStoreServices::class);
             $orderInfo['store_id'] = $storeServices->getStoreDispose($storeId, 'id');
             if (!$orderInfo['store_id']) {
-                throw new ValidateException('暂无门店无法选择门店自提');
+                throw new ApiException(410247);
             }
         }
         /** @var StoreOrderCartInfoServices $cartServices */
@@ -241,7 +241,7 @@ class StoreOrderCreateServices extends BaseServices
             //创建订单
             $order = $this->dao->save($orderInfo);
             if (!$order) {
-                throw new ValidateException('订单生成失败!');
+                throw new ApiException(410200);
             }
             //记录自提人电话和姓名
             /** @var UserServices $userService */
@@ -256,7 +256,7 @@ class StoreOrderCreateServices extends BaseServices
             //扣库存
             $this->decGoodsStock($cartInfo, $combinationId, $seckillId, $bargainId, $advanceId);
             //保存购物车商品信息
-            $cartServices->setCartInfo($order['id'], $cartInfo);
+            $cartServices->setCartInfo($order['id'], $uid, $cartInfo);
             return $order;
         });
 
@@ -295,7 +295,7 @@ class StoreOrderCreateServices extends BaseServices
             $res2 = $res2 && false != $res3;
         }
         if (!$res2) {
-            throw new ValidateException('使用积分抵扣失败!');
+            throw new ApiException(410227);
         }
     }
 
@@ -329,10 +329,10 @@ class StoreOrderCreateServices extends BaseServices
                 else $res5 = $res5 && $services->decProductStock((int)$cart['cart_num'], (int)$cart['productInfo']['id'], isset($cart['productInfo']['attrInfo']) ? $cart['productInfo']['attrInfo']['unique'] : '');
             }
             if (!$res5) {
-                throw new ValidateException('库存不足!');
+                throw new ApiException(410238);
             }
         } catch (\Throwable $e) {
-            throw new ValidateException('库存不足!');
+            throw new ApiException(410238);
         }
     }
 
@@ -385,7 +385,7 @@ class StoreOrderCreateServices extends BaseServices
 //            $cartInfo = $this->computeOrderProductPostage($cartInfo, $priceData, $addressId);
         } catch (\Throwable $e) {
             Log::error('订单商品结算失败,File：' . $e->getFile() . ',Line：' . $e->getLine() . ',Message：' . $e->getMessage());
-            throw new ValidateException('订单商品结算失败');
+            throw new ApiException(410248);
         }
         //truePice实际支付单价（存在）
         //几件商品总体优惠 以及积分抵扣金额
@@ -665,6 +665,9 @@ class StoreOrderCreateServices extends BaseServices
         $BrokerageTwo = sys_config('store_brokerage_two') != '' ? sys_config('store_brokerage_two') : 0;
         $storeBrokerageRatio = $BrokerageOne + (($BrokerageOne * $one_brokerage_up) / 100);
         $storeBrokerageTwo = $BrokerageTwo + (($BrokerageTwo * $two_brokerage_up) / 100);
+        if (sys_config('brokerage_level') == 1) {
+            $storeBrokerageTwo = $spread_two_uid = 0;
+        }
 
         /** @var DivisionServices $divisionService */
         $divisionService = app()->make(DivisionServices::class);

@@ -10,7 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\api\middleware;
 
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceServices;
 use app\services\order\DeliveryServiceServices;
 use app\services\system\store\SystemStoreStaffServices;
 use crmeb\interfaces\MiddlewareInterface;

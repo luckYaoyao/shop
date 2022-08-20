@@ -33,7 +33,7 @@ class SmsConfigValidate extends Validate
      * @var array
      */
     protected $message = [
-        'sms_account.require' => '短信账号必须填写',
-        'sms_token.require' => '短信密码必须填写',
+        'sms_account.require' => '400387',
+        'sms_token.require' => '400388',
     ];
 }

@@ -76,9 +76,6 @@
 	} from '@/api/public.js';
 	// #ifdef H5
 	import mConfig from '@/pages/index/diy/components/index.js';
-	import {
-		silenceAuth
-	} from '@/api/public.js';
 	// #endif
 	// #ifdef MP || APP-PLUS
 	import authorize from '@/components/Authorize';
@@ -105,7 +102,7 @@
 	import pictureCube from '@/pages/index/diy/components/pictureCube';
 
 	import {
-		getTemlIds
+		getTempIds
 	} from '@/api/api.js';
 	import {
 		SUBSCRIBE_MESSAGE,
@@ -171,7 +168,7 @@
 				goodType: 3,
 				loading: false,
 				loadend: false,
-				loadTitle: '加载更多', //提示语
+				loadTitle: this.$t(`加载更多`), //提示语
 				page: 1,
 				limit: this.$config.LIMIT,
 				iSshowH: false,
@@ -216,7 +213,7 @@
 			}
 			// #endif
 			uni.setNavigationBarTitle({
-				title: '专题栏'
+				title: this.$t(`专题栏`)
 			});
 
 			// #ifdef APP-PLUS
@@ -237,7 +234,7 @@
 			this.setOpenShare();
 			// #endif
 			// #ifdef MP || APP-PLUS
-			this.getTemlIds();
+			this.getTempIds();
 			// #endif
 			getShare().then(res => {
 				this.shareInfo = res.data;
@@ -344,10 +341,10 @@
 			// #endif
 
 			// #ifdef MP || APP-PLUS
-			getTemlIds() {
+			getTempIds() {
 				let messageTmplIds = wx.getStorageSync(SUBSCRIBE_MESSAGE);
 				if (!messageTmplIds) {
-					getTemlIds().then(res => {
+					getTempIds().then(res => {
 						if (res.data) wx.setStorageSync(SUBSCRIBE_MESSAGE, JSON.stringify(res.data));
 					});
 				}
@@ -368,7 +365,7 @@
 					let data = res.data;
 					if (res.data.length == 0) {
 						return this.$util.Tips({
-							title: '暂无数据'
+							title: this.$t(`暂无数据`)
 						}, {
 							tab: 3
 						})
@@ -447,13 +444,13 @@
 						let tempArr = that.$util.SplitArray(list, that.tempArr);
 						that.$set(that, 'tempArr', tempArr.slice(0, this.numConfig));
 						that.loadend = loadend;
-						that.loadTitle = loadend ? '没有更多内容啦~' : '加载更多';
+						that.loadTitle = loadend ? that.$t(`没有更多内容啦~`) : that.$t(`加载更多`);
 						that.page = that.page + 1;
 						that.loading = false;
 					})
 					.catch(res => {
 						that.loading = false;
-						that.loadTitle = '加载更多';
+						that.loadTitle = that.$t(`加载更多`);
 					});
 			},
 			goDetail(item) {

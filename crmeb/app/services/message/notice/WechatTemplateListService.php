@@ -13,7 +13,7 @@ namespace app\services\message\notice;
 
 use app\jobs\TemplateJob;
 use app\services\message\NoticeService;
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceServices;
 use app\services\wechat\WechatUserServices;
 use think\facade\Log;
 
@@ -59,21 +59,20 @@ class WechatTemplateListService extends NoticeService
 
     /**
      * 发送模板消息
-     * @param string $tempCode 模板消息常量名称
-     * @param $uid uid
-     * @param array $data 模板内容
-     * @param string $link 跳转链接
-     * @param string|null $color 文字颜色
-     * @return bool|mixed
+     * @param int $uid
+     * @param array $data
+     * @param string|null $link
+     * @param string|null $color
+     * @return bool|void
      */
-    public function sendTemplate(string $tempCode, int $uid, array $data, string $link = null, string $color = null)
+    public function sendTemplate(int $uid, array $data, string $link = null, string $color = null)
     {
         try {
             $this->isopend = $this->notceinfo['is_wechat'] === 1;
             if ($this->isopend) {
                 $openid = $this->getOpenidByUid($uid);
                 //放入队列执行
-                TemplateJob::dispatchDo('doJob', ['wechat', $openid, $tempCode, $data, $link, $color]);
+                TemplateJob::dispatchDo('doJob', ['wechat', $openid, $this->notceinfo['mark'], $data, $link, $color]);
             }
         } catch (\Exception $e) {
             Log::error($e->getMessage());
@@ -83,12 +82,13 @@ class WechatTemplateListService extends NoticeService
 
     /**
      * 支付成功发送模板消息
+     * @param $uid
      * @param $order
-     * @return bool
+     * @return bool|void
      */
     public function sendOrderPaySuccess($uid, $order)
     {
-        return $this->sendTemplate('ORDER_PAY_SUCCESS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您购买的商品已支付成功',
             'keyword1' => $order['order_id'],
             'keyword2' => $order['pay_price'],
@@ -100,11 +100,11 @@ class WechatTemplateListService extends NoticeService
      * 购买会员成功
      * @param $uid
      * @param $order
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendMemberOrderPaySuccess($uid, $order)
     {
-        return $this->sendTemplate('ORDER_PAY_SUCCESS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，购买会员成功，恭喜您成为本平台尊贵会员！',
             'keyword1' => $order['order_id'],
             'keyword2' => $order['pay_price'],
@@ -114,13 +114,15 @@ class WechatTemplateListService extends NoticeService
 
     /**
      * 订单发货
+     * @param $uid
+     * @param string $goodsName
      * @param $order
      * @param array $data
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendOrderDeliver($uid, string $goodsName, $order, array $data)
     {
-        return $this->sendTemplate('ORDER_DELIVER_SUCCESS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲,您的订单已发货,请注意查收',
             'keyword1' => $goodsName,
             'keyword2' => $order['pay_type'] == 'offline' ? '线下支付' : date('Y/m/d H:i', $order['pay_time']),
@@ -133,13 +135,14 @@ class WechatTemplateListService extends NoticeService
 
     /**
      * 订单发货
+     * @param $uid
      * @param $order
      * @param array $data
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendOrderPostage($uid, $order, array $data)
     {
-        return $this->sendTemplate('ORDER_POSTAGE_SUCCESS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'keyword1' => $order['order_id'],
             'keyword2' => $order['delivery_name'],
             'keyword3' => $order['delivery_id'],
@@ -150,41 +153,43 @@ class WechatTemplateListService extends NoticeService
 
     /**
      * 发送客服消息
-     * @param $order
-     * @param string|null $link
-     * @return bool
+     * @param $uid
+     * @param $data
+     * @return bool|void
      */
     public function sendServiceNotice($uid, $data)
     {
-        return $this->sendTemplate('ADMIN_NOTICE', $uid,
-            [
-                'keyword1' => '新订单',
-                'keyword2' => $data['delivery_name'],
-                'keyword3' => $data['delivery_id'],
-                'first' => '亲,您有新的订单待处理',
-                'remark' => '点击查看订单详情'
-            ], '/pages/users/order_details/index?order_id=' . $data['order_id']);
+        return $this->sendTemplate((int)$uid, [
+            'keyword1' => '新订单',
+            'keyword2' => $data['delivery_name'],
+            'keyword3' => $data['delivery_id'],
+            'first' => '亲,您有新的订单待处理',
+            'remark' => '点击查看订单详情'
+        ], '/pages/users/order_details/index?order_id=' . $data['order_id']);
     }
 
     /**
      * 退款发送客服消息
-     * @param $order
+     * @param $uid
+     * @param $data
      * @param string|null $link
-     * @return bool
+     * @return bool|void
      */
     public function sendRefundServiceNotice($uid, $data, ?string $link = null)
     {
-        return $this->sendTemplate('ADMIN_NOTICE', $uid, $data, $link);
+        return $this->sendTemplate((int)$uid, $data, $link);
     }
 
     /**
      * 确认收货发送模板消息
+     * @param $uid
      * @param $order
-     * @return bool|mixed
+     * @param $title
+     * @return bool|void
      */
     public function sendOrderTakeSuccess($uid, $order, $title)
     {
-        return $this->sendTemplate('ORDER_TAKE_SUCCESS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您的订单已收货',
             'keyword1' => $order['order_id'],
             'keyword2' => '已收货',
@@ -196,13 +201,13 @@ class WechatTemplateListService extends NoticeService
 
     /**
      * 发送退款申请模板消息
-     * @param array $data
+     * @param $uid
      * @param $order
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendOrderApplyRefund($uid, $order)
     {
-        return $this->sendTemplate('ORDER_REFUND_STATUS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '你有一笔退款订单需要处理',
             'keyword1' => $order['order_id'],
             'keyword2' => $order['status'],
@@ -213,13 +218,14 @@ class WechatTemplateListService extends NoticeService
 
     /**
      * 发送退款模板消息
+     * @param $uid
      * @param $data
      * @param $order
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendOrderRefundSuccess($uid, $data, $order)
     {
-        return $this->sendTemplate('ORDER_REFUND_STATUS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您购买的商品已退款,本次退款' . $data['refund_price'] . '金额',
             'keyword1' => $data['order_id'],
             'keyword2' => $order['pay_price'],
@@ -230,13 +236,13 @@ class WechatTemplateListService extends NoticeService
 
     /**
      * 发送退款模板消息
-     * @param array $data
+     * @param $uid
      * @param $order
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendOrderRefundNoStatus($uid, $order)
     {
-        return $this->sendTemplate('ORDER_REFUND_STATUS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您的退款申请未申请通过',
             'keyword1' => $order['order_id'],
             'keyword2' => $order['pay_price'],
@@ -247,13 +253,14 @@ class WechatTemplateListService extends NoticeService
 
     /**
      * 发送用户充值退款模板消息
+     * @param $uid
      * @param $data
      * @param $userRecharge
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendRechargeRefundStatus($uid, $data, $userRecharge)
     {
-        return $this->sendTemplate('ORDER_REFUND_STATUS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您充值的金额已退款,本次退款' .
                 $data['refund_price'] . '金额',
             'keyword1' => $userRecharge['order_id'],
@@ -267,12 +274,13 @@ class WechatTemplateListService extends NoticeService
      * 拼团成功发送模板消息
      * @param $uid
      * @param $order_id
+     * @param $pinkId
      * @param $title
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendOrderPinkSuccess($uid, $order_id, $pinkId, $title)
     {
-        return $this->sendTemplate('ORDER_USER_GROUPS_SUCCESS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您的拼团已经完成了',
             'keyword1' => $order_id,
             'keyword2' => $title,
@@ -283,13 +291,14 @@ class WechatTemplateListService extends NoticeService
     /**
      * 参团成功发送模板消息
      * @param $uid
-     * @param $order_id
-     * @param $title
-     * @return bool|mixed
+     * @param string $order_id
+     * @param string $title
+     * @param int $pink_id
+     * @return bool|void
      */
     public function sendOrderPinkUseSuccess($uid, string $order_id, string $title, int $pink_id)
     {
-        return $this->sendTemplate('ORDER_USER_GROUPS_SUCCESS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您已成功参与拼团',
             'keyword1' => $order_id,
             'keyword2' => $title,
@@ -300,14 +309,13 @@ class WechatTemplateListService extends NoticeService
     /**
      * 取消拼团发送模板消息
      * @param $uid
-     * @param StorePink $order_id
-     * @param $price
-     * @param string $title
-     * @return bool|mixed
+     * @param $pink
+     * @param $title
+     * @return bool|void
      */
     public function sendOrderPinkClone($uid, $pink, $title)
     {
-        return $this->sendTemplate('ORDER_USER_GROUPS_LOSE', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您的拼团取消',
             'keyword1' => $title,
             'keyword2' => $pink->price,
@@ -319,13 +327,13 @@ class WechatTemplateListService extends NoticeService
     /**
      * 拼团失败发送模板消息
      * @param $uid
-     * @param StorePink $pink
+     * @param $pink
      * @param $title
-     * @return bool|mixed
+     * @return bool|void
      */
-    public function sendOrderPinkFial($uid, $pink, $title)
+    public function sendOrderPinkFail($uid, $pink, $title)
     {
-        return $this->sendTemplate('ORDER_USER_GROUPS_LOSE', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您的拼团失败',
             'keyword1' => $title,
             'keyword2' => $pink->price,
@@ -337,13 +345,13 @@ class WechatTemplateListService extends NoticeService
     /**
      * 开团成功发送模板消息
      * @param $uid
-     * @param StorePink $pink
+     * @param $pink
      * @param $title
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendOrderPinkOpenSuccess($uid, $pink, $title)
     {
-        return $this->sendTemplate('OPEN_PINK_SUCCESS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '您好，您已成功开团！赶紧与小伙伴们分享吧！！！',
             'keyword1' => $title,
             'keyword2' => $pink['total_price'],
@@ -355,12 +363,14 @@ class WechatTemplateListService extends NoticeService
     /**
      * 砍价成功发送模板消息
      * @param $uid
-     * @param StoreBargain $bargain
-     * @return bool|mixed
+     * @param $bargain
+     * @param array $bargainUser
+     * @param int $bargainUserId
+     * @return bool|void
      */
     public function sendBargainSuccess($uid, $bargain, $bargainUser = [], $bargainUserId = 0)
     {
-        return $this->sendTemplate('BARGAIN_SUCCESS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '好腻害！你的朋友们已经帮你砍到底价了！',
             'keyword1' => $bargain['title'],
             'keyword2' => $bargain['min_price'],
@@ -368,15 +378,18 @@ class WechatTemplateListService extends NoticeService
         ], '/pages/activity/goods_bargain_details/index?id=' . $bargain['id'] . '&bargain=' . $bargainUserId);
     }
 
-
     /**
      * 佣金到账发送模板消息
-     * @param $order
-     * @return bool
+     * @param string $uid
+     * @param string $brokeragePrice
+     * @param string $goodsName
+     * @param string $goodsPrice
+     * @param $orderTime
+     * @return bool|void
      */
     public function sendOrderBrokerageSuccess(string $uid, string $brokeragePrice, string $goodsName, string $goodsPrice, $orderTime)
     {
-        return $this->sendTemplate('ORDER_BROKERAGE', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您有一笔佣金入账!',
             'keyword1' => $brokeragePrice,//分销佣金
             'keyword2' => $goodsPrice . "元",//交易金额
@@ -385,14 +398,15 @@ class WechatTemplateListService extends NoticeService
         ], '/pages/users/user_spread_user/index');
     }
 
-    /** 绑定推广关系发送消息提醒
+    /**
+     * 绑定推广关系发送消息提醒
      * @param string $uid
      * @param string $userName
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendBindSpreadUidSuccess(string $uid, string $userName)
     {
-        return $this->sendTemplate('BIND_SPREAD_UID', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '恭喜，加入您的团队',
             'keyword1' => $userName,
             'keyword2' => date('Y-m-d H:i:s', time()),
@@ -402,8 +416,6 @@ class WechatTemplateListService extends NoticeService
 
     /**
      * 新订单给客服提醒
-     * @param $switch
-     * @param $adminList
      * @param $order
      * @return bool
      */
@@ -413,7 +425,7 @@ class WechatTemplateListService extends NoticeService
         $StoreServiceServices = app()->make(StoreServiceServices::class);
         $adminList = $StoreServiceServices->getStoreServiceOrderNotice();
         foreach ($adminList as $item) {
-            $this->sendTemplate('ADMIN_NOTICE', $item['uid'],
+            $this->sendTemplate((int)$item['uid'],
                 [
                     'keyword1' => '新订单',
                     'keyword2' => $order['delivery_name'],
@@ -427,8 +439,6 @@ class WechatTemplateListService extends NoticeService
 
     /**
      * 退款给客服提醒
-     * @param $switch
-     * @param $adminList
      * @param $order
      * @return bool
      */
@@ -439,7 +449,7 @@ class WechatTemplateListService extends NoticeService
         $StoreServiceServices = app()->make(StoreServiceServices::class);
         $adminList = $StoreServiceServices->getStoreServiceOrderNotice();
         foreach ($adminList as $item) {
-            $this->sendTemplate('ADMIN_NOTICE', $item['uid'],
+            $this->sendTemplate((int)$item['uid'],
                 [
                     'keyword1' => '退款申请',
                     'keyword2' => $order['delivery_name'],
@@ -455,11 +465,11 @@ class WechatTemplateListService extends NoticeService
      * 订单改价
      * @param $uid
      * @param $order
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendPriceRevision($uid, $order)
     {
-        return $this->sendTemplate('PRICE_REVISION', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您的订单已改价',
             'keyword1' => $order['order_id'],
             'keyword2' => $order['pay_price'],
@@ -471,11 +481,11 @@ class WechatTemplateListService extends NoticeService
      * 充值成功
      * @param $uid
      * @param $order
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendRechargeSuccess($uid, $order)
     {
-        return $this->sendTemplate('RECHARGE_SUCCESS', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您的充值已成功',
             'keyword1' => $uid,
             'keyword2' => $order['price'],
@@ -489,11 +499,11 @@ class WechatTemplateListService extends NoticeService
      * 获得积分
      * @param $uid
      * @param $order
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendUserIntegral($uid, $order)
     {
-        return $this->sendTemplate('INTEGRAL_ACCOUT', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您的积分已到账',
             'keyword1' => $uid,
             'keyword2' => $order['pay_price'],
@@ -508,11 +518,11 @@ class WechatTemplateListService extends NoticeService
      * 提醒付款通知
      * @param $uid
      * @param $order
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendOrderPayFalse($uid, $order)
     {
-        return $this->sendTemplate('ORDER_PAY_FALSE', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您有订单还未付款',
             'keyword1' => $order['order_id'],
             'keyword2' => $order['pay_price'],
@@ -525,11 +535,11 @@ class WechatTemplateListService extends NoticeService
      * 提现成功
      * @param $uid
      * @param $extractNumber
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendUserExtract($uid, $extractNumber)
     {
-        return $this->sendTemplate('USER_EXTRACT', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您的提现申请已通过',
             'keyword1' => $extractNumber,
             'keyword2' => date('Y-m-d H:i:s', time()),
@@ -543,11 +553,11 @@ class WechatTemplateListService extends NoticeService
      * @param $uid
      * @param $extractNumber
      * @param $message
-     * @return bool|mixed
+     * @return bool|void
      */
     public function sendExtractFail($uid, $extractNumber, $message)
     {
-        return $this->sendTemplate('USER_EXTRACT_FAIL', $uid, [
+        return $this->sendTemplate((int)$uid, [
             'first' => '亲，您的提现申请未通过',
             'keyword1' => $extractNumber,
             'keyword2' => date('Y-m-d H:i:s', time()),

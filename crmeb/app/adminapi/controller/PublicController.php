@@ -44,21 +44,4 @@ class PublicController
     {
         return app('json')->success(getWorkerManUrl());
     }
-
-
-    /**
-     * 获取当前系统版本
-     * @return array
-     */
-    public function getVersion()
-    {
-        $version_arr = [];
-        $curent_version = @file(app()->getRootPath() . '.version');
-
-        foreach ($curent_version as $val) {
-            list($k, $v) = explode('=', $val);
-            $version_arr[$k] = $v;
-        }
-        return app('json')->success($version_arr);
-    }
 }

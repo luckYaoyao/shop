@@ -13,6 +13,7 @@ namespace app\api\middleware;
 
 
 use app\Request;
+use crmeb\exceptions\ApiException;
 use crmeb\interfaces\MiddlewareInterface;
 
 /**
@@ -24,7 +25,7 @@ class StationOpenMiddleware implements MiddlewareInterface
     public function handle(Request $request, \Closure $next)
     {
         if (!sys_config('station_open', 1)) {
-            return app('json')->make('410010', '站点升级中，请稍候访问');
+            throw new ApiException(100103);
         }
         return $next($request);
     }

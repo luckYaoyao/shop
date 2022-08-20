@@ -61,13 +61,13 @@ class SystemAdminServices extends BaseServices
     {
         $adminInfo = $this->dao->accountByAdmin($account);
         if (!$adminInfo) {
-            throw new AdminException('管理员不存在!');
+            throw new AdminException(400594);
         }
         if (!$adminInfo->status) {
-            throw new AdminException('您已被禁止登录!');
+            throw new AdminException(400595);
         }
         if (!password_verify($password, $adminInfo->pwd)) {
-            throw new AdminException('账号或密码错误，请重新输入');
+            throw new AdminException(400140);
         }
         $adminInfo->last_time = time();
         $adminInfo->last_ip = app('request')->ip();
@@ -204,12 +204,12 @@ class SystemAdminServices extends BaseServices
     public function create(array $data)
     {
         if ($data['conf_pwd'] != $data['pwd']) {
-            throw new AdminException('两次输入的密码不相同');
+            throw new AdminException(400264);
         }
         unset($data['conf_pwd']);
 
         if ($this->dao->count(['account' => $data['account'], 'is_del' => 0])) {
-            throw new AdminException('管理员账号已存在');
+            throw new AdminException(400596);
         }
 
         $data['pwd'] = $this->passwordHash($data['pwd']);
@@ -221,7 +221,7 @@ class SystemAdminServices extends BaseServices
                 \think\facade\Cache::clear();
                 return true;
             } else {
-                throw new AdminException('添加失败');
+                throw new AdminException(100022);
             }
         });
     }
@@ -237,10 +237,10 @@ class SystemAdminServices extends BaseServices
     {
         $adminInfo = $this->dao->get($id);
         if (!$adminInfo) {
-            throw new AdminException('管理员不存在!');
+            throw new AdminException(400594);
         }
         if ($adminInfo->is_del) {
-            throw new AdminException('管理员已经删除');
+            throw new AdminException(400452);
         }
         return create_form('管理员修改', $this->createAdminForm($level, $adminInfo->toArray()), $this->url('/setting/admin/' . $id), 'PUT');
     }
@@ -254,26 +254,26 @@ class SystemAdminServices extends BaseServices
     public function save(int $id, array $data)
     {
         if (!$adminInfo = $this->dao->get($id)) {
-            throw new AdminException('管理员不存在,无法修改');
+            throw new AdminException(400594);
         }
         if ($adminInfo->is_del) {
-            throw new AdminException('管理员已经删除');
+            throw new AdminException(400452);
         }
         //修改密码
         if ($data['pwd']) {
 
             if (!$data['conf_pwd']) {
-                throw new AdminException('请输入确认密码');
+                throw new AdminException(400263);
             }
 
             if ($data['conf_pwd'] != $data['pwd']) {
-                throw new AdminException('上次输入的密码不相同');
+                throw new AdminException(400264);
             }
             $adminInfo->pwd = $this->passwordHash($data['pwd']);
         }
         //修改账号
         if (isset($data['account']) && $data['account'] != $adminInfo->account && $this->dao->isAccountUsable($data['account'], $id)) {
-            throw new AdminException('管理员账号已存在');
+            throw new AdminException(400596);
         }
         if (isset($data['roles'])) {
             $adminInfo->roles = implode(',', $data['roles']);
@@ -299,21 +299,21 @@ class SystemAdminServices extends BaseServices
     {
         $adminInfo = $this->dao->get($id);
         if (!$adminInfo)
-            throw new AdminException('管理员信息未查到');
+            throw new AdminException(400451);
         if ($adminInfo->is_del) {
-            throw new AdminException('管理员已经删除');
+            throw new AdminException(400452);
         }
         if (!$data['real_name'])
-            throw new AdminException('管理员姓名不能为空');
+            throw new AdminException(400453);
         if ($data['pwd']) {
             if (!password_verify($data['pwd'], $adminInfo['pwd']))
-                throw new AdminException('原始密码错误');
+                throw new AdminException(400597);
             if (!$data['new_pwd'])
-                throw new AdminException('请输入新密码');
+                throw new AdminException(400598);
             if (!$data['conf_pwd'])
-                throw new AdminException('请输入确认密码');
+                throw new AdminException(400263);
             if ($data['new_pwd'] != $data['conf_pwd'])
-                throw new AdminException('两次输入的密码不一致');
+                throw new AdminException(400264);
             $adminInfo->pwd = $this->passwordHash($data['new_pwd']);
         }
 

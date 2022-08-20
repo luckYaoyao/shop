@@ -8,20 +8,20 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-import { Modal } from 'iview'
+import { Modal } from 'iview';
 
 const beforeClose = {
   before_close_normal: (resolve) => {
     this.$Modal.confirm({
       title: '确定要关闭这一页吗',
       onOk: () => {
-        resolve(true)
+        resolve(true);
       },
       onCancel: () => {
-        resolve(false)
-      }
-    })
-  }
+        resolve(false);
+      },
+    });
+  },
 };
 
-export default beforeClose
+export default beforeClose;

@@ -10,9 +10,9 @@
 // +----------------------------------------------------------------------
 namespace crmeb\services\upload\storage;
 
-use crmeb\basic\BaseUpload;
-use crmeb\exceptions\UploadException;
-use crmeb\services\DownloadImageService;
+use crmeb\services\upload\BaseUpload;
+use crmeb\exceptions\AdminException;
+use crmeb\utils\DownloadImage;
 use think\exception\ValidateException;
 use think\facade\Config;
 use think\facade\Filesystem;
@@ -244,7 +244,7 @@ class Local extends BaseUpload
                     }
                 }
             } catch (\Throwable $e) {
-                throw new ValidateException($e->getMessage());
+                throw new AdminException($e->getMessage());
             }
         }
         return $data;
@@ -296,12 +296,12 @@ class Local extends BaseUpload
                 $watermark_image = '.' . $this->defaultPath . '/' . $this->thumbWaterPath . '/' . $name;
                 if (!file_exists($watermark_image)) {
                     try {
-                        /** @var DownloadImageService $down */
-                        $down = app()->make(DownloadImageService::class);
+                        /** @var DownloadImage $down */
+                        $down = app()->make(DownloadImage::class);
                         $data = $down->path($this->thumbWaterPath)->downloadImage($waterConfig['watermark_image'], $name);
                         $watermark_image = $data['path'] ?? '';
                     } catch (\Throwable $e) {
-                        throw new ValidateException('远程水印图片下载失败，原因：' . $e->getMessage());
+                        throw new AdminException(400724);
                     }
                 }
             } else {
@@ -309,14 +309,14 @@ class Local extends BaseUpload
             }
         }
         if (!$watermark_image) {
-            throw new ValidateException('请先配置水印图片');
+            throw new AdminException(400722);
         }
         $savePath = public_path() . $filePath;
         try {
             $Image = Image::open(app()->getRootPath() . 'public' . $filePath);
             $Image->water($watermark_image, $waterConfig['watermark_position'] ?: 1, $waterConfig['watermark_opacity'])->save($savePath);
         } catch (\Throwable $e) {
-            throw new ValidateException($e->getMessage());
+            throw new AdminException($e->getMessage());
         }
         return $savePath;
     }
@@ -333,7 +333,7 @@ class Local extends BaseUpload
             $waterConfig = $this->waterConfig;
         }
         if (!$waterConfig['watermark_text']) {
-            throw new ValidateException('请先配置水印文字');
+            throw new AdminException(400723);
         }
         $savePath = public_path() . $filePath;
         try {
@@ -347,7 +347,7 @@ class Local extends BaseUpload
             }
             $Image->text($waterConfig['watermark_text'], $waterConfig['watermark_text_font'], $waterConfig['watermark_text_size'], $waterConfig['watermark_text_color'], $waterConfig['watermark_position'], [$waterConfig['watermark_x'], $waterConfig['watermark_y'], $waterConfig['watermark_text_angle']])->save($savePath);
         } catch (\Throwable $e) {
-            throw new ValidateException($e->getMessage() . $e->getLine());
+            throw new AdminException($e->getMessage() . $e->getLine());
         }
         return $savePath;
     }
@@ -368,7 +368,7 @@ class Local extends BaseUpload
                 unlink(str_replace($fileName, 'mid_' . $fileName, $filePath));
                 unlink(str_replace($fileName, 'small_' . $fileName, $filePath));
                 return true;
-            } catch (UploadException $e) {
+            } catch (\Exception $e) {
                 return $this->setError($e->getMessage());
             }
         }

@@ -7,20 +7,16 @@
     </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
       <div class="box" ref="picBox">
-        <upload-file
-          v-if="uploadShow"
-          :isShow="0"
-          :pageLimit="pageLimit"
-        ></upload-file>
+        <upload-file v-if="uploadShow" :isShow="0" :pageLimit="pageLimit"></upload-file>
       </div>
     </Card>
   </div>
 </template>
 <script>
-import uploadFile from "@/components/uploadPictures/index";
+import uploadFile from '@/components/uploadPictures/index';
 export default {
   components: { uploadFile },
-  name: "system_file",
+  name: 'system_file',
   data() {
     return {
       pageLimit: 30,
@@ -29,7 +25,6 @@ export default {
   },
   mounted() {
     let winwidth = this.$refs.picBox.clientWidth;
-    console.log(this.$refs.picBox.clientWidth);
     if (winwidth < 1018) {
       this.pageLimit = 12;
     } else if (winwidth < 1185) {

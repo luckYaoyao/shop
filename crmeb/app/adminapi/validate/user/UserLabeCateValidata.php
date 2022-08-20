@@ -39,8 +39,8 @@ class UserLabeCateValidata extends Validate
      * @var array
      */
     protected $message = [
-        'name.require' => '请填写标签分类名称',
-        'sort.require' => '请填写标签分类排序',
-        'sort.number' => '标签分类必须为数字'
+        'name.require' => '400086',
+        'sort.require' => '400087',
+        'sort.number' => '400088'
     ];
 }

@@ -205,6 +205,17 @@ export function orderConfirm(cartId, news, addressId, shipping_type) {
 }
 
 /**
+ * 获取确认订单页面是否展示快递配送和到店自提
+ * @param string cartId
+ */
+export function checkShipping(cartId, news) {
+	return request.post('order/check_shipping', {
+		cartId,
+		'new': news
+	});
+}
+
+/**
  * 获取当前金额能使用的优惠卷
  * @param string price
  * 

@@ -87,8 +87,6 @@ Route::group('order', function () {
     Route::get('invoice_order_info/:id', 'v1.order.StoreOrderInvoice/orderInfo')->name('StoreOrderorInvoiceOrderInfo')->option(['real_name' => '开票订单详情']);
     //配送员列表
     Route::get('delivery/index', 'v1.order.DeliveryService/index')->option(['real_name' => '配送员列表']);
-    //新增配送员选择用户列表
-    Route::get('delivery/create', 'v1.order.DeliveryService/create')->option(['real_name' => '新增配送员选择用户列表']);
     //新增配送表单
     Route::get('delivery/add', 'v1.order.DeliveryService/add')->option(['real_name' => '新增配送表单']);
     //保存新建的数据

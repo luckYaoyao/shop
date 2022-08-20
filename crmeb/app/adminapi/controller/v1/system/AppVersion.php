@@ -73,6 +73,6 @@ class AppVersion extends AuthController
         $id = $data['id'];
         unset($data['id']);
         $this->services->versionSave($id, $data);
-        return app('json')->success('添加成功');
+        return app('json')->success(100021);
     }
 }

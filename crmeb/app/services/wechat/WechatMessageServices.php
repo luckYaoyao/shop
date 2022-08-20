@@ -14,9 +14,8 @@ namespace app\services\wechat;
 
 use app\dao\wechat\WechatMessageDao;
 use app\services\BaseServices;
-use think\exception\ValidateException;
+use crmeb\exceptions\ApiException;
 use think\facade\Cache;
-use think\facade\Log;
 
 class WechatMessageServices extends BaseServices
 {
@@ -74,7 +73,7 @@ class WechatMessageServices extends BaseServices
         $type = strtolower($event);
         $add_time = time();
         if (!$this->dao->save(compact('result', 'openid', 'type', 'add_time'))) {
-            throw new ValidateException('更新信息失败');
+            throw new ApiException(410080);
         }
         return true;
     }

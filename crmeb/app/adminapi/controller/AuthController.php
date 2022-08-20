@@ -12,6 +12,7 @@ namespace app\adminapi\controller;
 
 
 use crmeb\basic\BaseController;
+use think\facade\Validate;
 
 /**
  * 基类 所有控制器继承的类
@@ -48,15 +49,14 @@ class AuthController extends BaseController
         $this->adminInfo = $this->request->adminInfo();
         $this->auth = $this->request->adminInfo['rule'] ?? [];
     }
+
     /**
      * 验证数据
-     * @access protected
-     * @param array $data 数据
-     * @param string|array $validate 验证器名或者验证规则数组
-     * @param string|array $message 验证场景或者提示信息
-     * @param bool $batch 是否批量验证
-     * @return array|string|true
-     * @throws ValidateException
+     * @param array $data
+     * @param $validate
+     * @param null $message
+     * @param bool $batch
+     * @return bool
      */
     final protected function validate(array $data, $validate, $message = null, bool $batch = false)
     {

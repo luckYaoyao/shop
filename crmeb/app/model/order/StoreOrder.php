@@ -320,7 +320,9 @@ class StoreOrder extends BaseModel
      */
     public function searchPaidAttr($query, $value)
     {
-        $query->where('paid', $value);
+        if (in_array($value, [0, 1])) {
+            $query->where('paid', $value);
+        }
     }
 
     /**

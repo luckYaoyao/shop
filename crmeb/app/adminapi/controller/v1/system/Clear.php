@@ -34,7 +34,7 @@ class Clear extends AuthController
     public function refresh_cache()
     {
         $this->services->refresCache();
-        return app('json')->success('数据缓存刷新成功!');
+        return app('json')->success(400302);
     }
 
 
@@ -44,7 +44,7 @@ class Clear extends AuthController
     public function delete_log()
     {
         $this->services->deleteLog();
-        return app('json')->success('数据缓存刷新成功!');
+        return app('json')->success(100002);
     }
 }
 

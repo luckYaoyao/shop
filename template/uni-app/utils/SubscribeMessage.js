@@ -62,8 +62,8 @@ export function openExtrctSubscribe() {
 export function openPinkSubscribe() {
 	let tmplIds = auth();
 	return subscribe([
-		tmplIds.pink_true,
-		tmplIds.pink_status
+		tmplIds.open_pink_success,
+		tmplIds.can_pink_success
 	]);
 }
 

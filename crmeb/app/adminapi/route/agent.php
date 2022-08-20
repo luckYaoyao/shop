@@ -70,8 +70,6 @@ Route::group('agent', function () {
     Route::get('division/examine_apply/:id/:type','v1.agent.Division/examineApply')->name('examineApply')->option(['real_name'=>'审核表单']);//审核表单
     Route::post('division/apply_agent/save','v1.agent.Division/applyAgentSave')->name('applyAgentSave')->option(['real_name'=>'提交审核']);//提交审核
     Route::delete('division/del_apply/:id','v1.agent.Division/delApply')->name('delApply')->option(['real_name'=>'删除审核']);//删除审核
-    Route::get('division/agent_agreement/info','v1.agent.Division/agentAgreementInfo')->name('agentAgreementInfo')->option(['real_name'=>'协议详情']);//提交审核
-    Route::post('division/agent_agreement/save','v1.agent.Division/agentAgreementSave')->name('agentAgreementSave')->option(['real_name'=>'保存协议']);//提交审核
 
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,

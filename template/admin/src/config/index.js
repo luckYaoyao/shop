@@ -9,6 +9,7 @@
 // +---------------------------------------------------------------------
 
 export default {
+  s: `1`,
   /**
    * @description 配置显示在浏览器标签的title
    */
@@ -28,7 +29,7 @@ export default {
    */
   baseUrl: {
     dev: '',
-    pro: ''
+    pro: '',
   },
   /**
    * @description 默认打开的首页的路由name值，默认为home
@@ -40,7 +41,7 @@ export default {
   plugin: {
     'error-store': {
       showInHeader: true, // 设为false后不会在顶部显示错误日志徽标
-      developmentOff: false // 设为true后在开发环境不会收集错误信息，方便开发中排查错误
-    }
-  }
-}
+      developmentOff: false, // 设为true后在开发环境不会收集错误信息，方便开发中排查错误
+    },
+  },
+};

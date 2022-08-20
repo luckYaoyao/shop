@@ -43,10 +43,10 @@ class Sms extends AuthController
     public function openServe(string $sign)
     {
         if (!$sign) {
-            return app('json')->fail('请设置短信签名');
+            return app('json')->fail(400179);
         }
         $this->services->sms()->setSign($sign)->open();
-        return app('json')->success('开通成功');
+        return app('json')->success(100044);
     }
 
     /**
@@ -65,10 +65,10 @@ class Sms extends AuthController
         $this->validate(['phone' => $phone], ServeValidata::class, 'phone');
 
         if (!$sign) {
-            return app('json')->fail('请设置短信签名');
+            return app('json')->fail(400179);
         }
         $this->services->sms()->modify($sign, $phone, $code);
-        return app('json')->success('修改短信签名成功');
+        return app('json')->success(400180);
     }
 
     /**
@@ -99,7 +99,7 @@ class Sms extends AuthController
         ], true);
 
         if (!$title || !$content || !$type) {
-            return app('json')->success('请填写申请模板内容');
+            return app('json')->success(400143);
         }
         return app('json')->success($this->services->sms()->apply($title, $content, (int)$type));
     }

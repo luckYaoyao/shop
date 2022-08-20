@@ -21,8 +21,8 @@ use app\services\user\UserBrokerageServices;
 use app\services\user\UserExtractServices;
 use app\services\user\UserServices;
 use crmeb\exceptions\AdminException;
-use crmeb\services\{MiniProgramService, QrcodeService, UploadService};
-use think\exception\ValidateException;
+use crmeb\services\app\MiniProgramService;
+use app\services\other\UploadService;
 
 /**
  *
@@ -260,7 +260,6 @@ class AgentManageServices extends BaseServices
     }
 
 
-
     /**
      * 获取永久二维码
      * @param $type
@@ -272,7 +271,7 @@ class AgentManageServices extends BaseServices
         /** @var QrcodeServices $qrcode */
         $qrcode = app()->make(QrcodeServices::class);
         $code = $qrcode->getForeverQrcode('spread', $uid);
-        if (!$code['ticket']) exception('永久二维码获取错误');
+        if (!$code['ticket']) throw new AdminException(410072);
         return $code;
     }
 
@@ -283,11 +282,11 @@ class AgentManageServices extends BaseServices
     public function lookXcxCode(int $uid)
     {
         if (!sys_config('routine_appId') || !sys_config('routine_appsecret')) {
-            throw new ValidateException('请先在设置->应用设置->小程序设置中配置小程序');
+            throw new AdminException(400236);
         }
         $userInfo = app()->make(UserServices::class)->getUserInfo($uid);
         if (!$userInfo) {
-            throw new AdminException('数据不存在');
+            throw new AdminException(100026);
         }
         $name = $userInfo['uid'] . '_' . $userInfo['is_promoter'] . '_user.jpg';
         /** @var SystemAttachmentServices $systemAttachmentModel */
@@ -303,7 +302,7 @@ class AgentManageServices extends BaseServices
             } else {
                 $res = false;
             }
-            if (!$res) throw new ValidateException('二维码生成失败');
+            if (!$res) throw new AdminException(400237);
             $upload = UploadService::init();
             if ($upload->to('routine/spread/code')->setAuthThumb(false)->stream((string)$res['res'], $name) === false) {
                 return $upload->getError();
@@ -326,14 +325,16 @@ class AgentManageServices extends BaseServices
     {
         $userInfo = app()->make(UserServices::class)->getUserInfo($uid);
         if (!$userInfo) {
-            throw new AdminException('数据不存在');
+            throw new AdminException(100026);
         }
         $name = $userInfo['uid'] . '_h5_' . $userInfo['is_promoter'] . '_user.jpg';
         /** @var SystemAttachmentServices $systemAttachmentModel */
         $systemAttachmentModel = app()->make(SystemAttachmentServices::class);
         $imageInfo = $systemAttachmentModel->getInfo(['name' => $name]);
         if (!$imageInfo) {
-            $urlCode = QrcodeService::getWechatQrcodePath($uid . '_h5_' . $userInfo['is_promoter'] . '_user.jpg', '?spread=' . $uid);
+            /** @var QrcodeServices $qrcodeService */
+            $qrcodeService = app()->make(QrcodeServices::class);
+            $urlCode = $qrcodeService->getWechatQrcodePathAgent($uid . '_h5_' . $userInfo['is_promoter'] . '_user.jpg', '?spread=' . $uid);
         } else $urlCode = $imageInfo['att_dir'];
         return ['code_src' => $urlCode];
     }
@@ -348,7 +349,7 @@ class AgentManageServices extends BaseServices
         $userServices = app()->make(UserServices::class);
         $userInfo = $userServices->getUserInfo($uid);
         if (!$userInfo) {
-            throw new AdminException('数据不存在');
+            throw new AdminException(100026);
         }
         $spreadInfo = $userServices->get($userInfo['spread_uid']);
         $spreadInfo->spread_count = $spreadInfo->spread_count - 1;
@@ -356,7 +357,7 @@ class AgentManageServices extends BaseServices
         if ($userServices->update($uid, ['spread_uid' => 0, 'spread_time' => 0]) !== false) {
             return true;
         } else {
-            throw new AdminException('解除失败');
+            throw new AdminException(400447);
         }
     }
 
@@ -370,12 +371,12 @@ class AgentManageServices extends BaseServices
         /** @var UserServices $userServices */
         $userServices = app()->make(UserServices::class);
         if (!$userServices->getUserInfo($uid)) {
-            throw new AdminException('数据不存在');
+            throw new AdminException(100026);
         }
         if ($userServices->update($uid, ['spread_open' => 0]) !== false)
             return true;
         else
-            throw new AdminException('取消失败');
+            throw new AdminException(100020);
     }
 
     /**

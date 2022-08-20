@@ -31,6 +31,9 @@ class StoreCouponsController
      * 可领取优惠券列表
      * @param Request $request
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function lst(Request $request)
     {
@@ -40,12 +43,11 @@ class StoreCouponsController
             ['num',0]
         ]);
         if ($request->getFromType() == 'pc') $where['type'] = -1;
-        return app('json')->successful($this->services->getIssueCouponList($request->uid(), $where)['list']);
+        return app('json')->success($this->services->getIssueCouponList($request->uid(), $where)['list']);
     }
 
     /**
      * 领取优惠券
-     *
      * @param Request $request
      * @return mixed
      */
@@ -54,12 +56,12 @@ class StoreCouponsController
         list($couponId) = $request->getMore([
             ['couponId', 0]
         ], true);
-        if (!$couponId || !is_numeric($couponId)) return app('json')->fail('参数错误!');
+        if (!$couponId || !is_numeric($couponId)) return app('json')->fail(100100);
 
         /** @var StoreCouponIssueServices $couponIssueService */
         $couponIssueService = app()->make(StoreCouponIssueServices::class);
         $couponIssueService->issueUserCoupon($couponId, $request->user());
-        return app('json')->success('领取成功');
+        return app('json')->success(410319);
     }
 
     /**
@@ -67,24 +69,27 @@ class StoreCouponsController
      * @param Request $request
      * @param $types
      * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
      */
     public function user(Request $request, $types)
     {
         $uid = (int)$request->uid();
-        return app('json')->successful($this->services->getUserCouponList($uid, $types));
+        return app('json')->success($this->services->getUserCouponList($uid, $types));
     }
 
     /**
      * 优惠券 订单获取
      * @param Request $request
-     * @param $price
+     * @param StoreCouponIssueServices $service
+     * @param $cartId
+     * @param $new
      * @return mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function order(Request $request, StoreCouponIssueServices $service, $cartId, $new)
     {
-        return app('json')->successful($service->beUsableCouponList((int)$request->uid(), $cartId, !!$new));
+        return app('json')->success($service->beUsableCouponList((int)$request->uid(), $cartId, !!$new));
     }
 }

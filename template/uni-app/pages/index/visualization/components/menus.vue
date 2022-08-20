@@ -25,7 +25,7 @@
 				<view class='pictrue default'>
 					<text class="iconfont icon-icon25201"></text>
 				</view>
-				<view class="menu-txt">默认</view>
+				<view class="menu-txt">{{$t(`默认`)}}</view>
 			</view>
 		</view>
 	</view>

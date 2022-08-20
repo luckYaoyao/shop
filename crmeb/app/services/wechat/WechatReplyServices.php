@@ -16,8 +16,7 @@ use app\services\BaseServices;
 use app\dao\wechat\WechatReplyDao;
 use app\services\kefu\KefuServices;
 use crmeb\exceptions\AdminException;
-use crmeb\services\WechatService;
-use think\exception\ValidateException;
+use crmeb\services\app\WechatService;
 
 /**
  *
@@ -123,7 +122,7 @@ class WechatReplyServices extends BaseServices
             $res = $this->dao->update($id, ['type' => $type, 'data' => json_encode($res), 'status' => $status], 'id');
             $res1 = $keyServices->saveAll($arr);
             if (!$res || !$res1) {
-                throw new AdminException('保存失败!');
+                throw new AdminException(100006);
             }
         } else {
             $reply = $this->dao->save([
@@ -137,7 +136,7 @@ class WechatReplyServices extends BaseServices
                 $arr[$k]['reply_id'] = $reply->id;
             }
             $res = $keyServices->saveAll($arr);
-            if (!$res) throw new AdminException('保存失败!');
+            if (!$res) throw new AdminException(100006);
         }
         return true;
     }
@@ -205,7 +204,7 @@ class WechatReplyServices extends BaseServices
     {
         $res = [];
         if (!isset($data['content']) || $data['content'] == '') {
-            throw new AdminException('请输入回复信息内容');
+            throw new AdminException(400706);
         }
         $res['content'] = $data['content'];
         return $res;
@@ -220,7 +219,7 @@ class WechatReplyServices extends BaseServices
     public function tidyImage($data, $id)
     {
         if (!isset($data['src']) || $data['src'] == '') {
-            throw new AdminException('请上传回复的图片');
+            throw new AdminException(400707);
         }
         $reply = $this->dao->get((int)$id);
         if ($reply) $reply['data'] = json_decode($reply['data'], true);
@@ -233,7 +232,7 @@ class WechatReplyServices extends BaseServices
             try {
                 $material = WechatService::materialService()->uploadImage(url_to_path($data['src']));
             } catch (\Throwable $e) {
-                throw new ValidateException(WechatService::getMessage($e->getMessage()));
+                throw new AdminException(WechatService::getMessage($e->getMessage()));
             }
             $res['media_id'] = $material->media_id;
             $dataEvent = ['type' => 'image', 'media_id' => $material->media_id, 'path' => $res['src'], 'url' => $material->url];
@@ -253,7 +252,7 @@ class WechatReplyServices extends BaseServices
     public function tidyVoice($data, $id)
     {
         if (!isset($data['src']) || $data['src'] == '') {
-            throw new AdminException('请上传回复的声音');
+            throw new AdminException(400708);
         }
         $reply = $this->dao->get((int)$id);
         if ($reply) $reply['data'] = json_decode($reply['data'], true);
@@ -266,7 +265,7 @@ class WechatReplyServices extends BaseServices
             try {
                 $material = WechatService::materialService()->uploadVoice(url_to_path($data['src']));
             } catch (\Throwable $e) {
-                throw new ValidateException(WechatService::getMessage($e->getMessage()));
+                throw new AdminException(WechatService::getMessage($e->getMessage()));
             }
             $res['media_id'] = $material->media_id;
             $dataEvent = ['media_id' => $material->media_id, 'path' => $res['src'], 'type' => 'voice'];
@@ -287,7 +286,7 @@ class WechatReplyServices extends BaseServices
     {
 //        $data = $data['list'][0];
         if (!count($data)) {
-            throw new AdminException('请选择图文消息');
+            throw new AdminException(400709);
         }
         $siteUrl = sys_config('site_url');
         if (empty($data['url'])) $data['url'] = $siteUrl . '/pages/news_details/index?id=' . $data['id'];

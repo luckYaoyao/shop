@@ -12,8 +12,8 @@
 namespace crmeb\services\workerman\chat;
 
 
-use app\services\message\service\StoreServiceRecordServices;
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceRecordServices;
+use app\services\kefu\service\StoreServiceServices;
 use Channel\Client;
 use crmeb\services\workerman\ChannelService;
 use crmeb\services\workerman\Response;

@@ -14,7 +14,7 @@ namespace app\services\kefu;
 
 use app\services\BaseServices;
 use app\services\product\product\StoreProductCateServices;
-use think\exception\ValidateException;
+use crmeb\exceptions\ApiException;
 use app\dao\product\product\StoreProductDao;
 use app\services\order\StoreOrderStoreOrderCartInfoServices;
 use app\services\product\product\StoreProductVisitServices;
@@ -100,7 +100,7 @@ class ProductServices extends BaseServices
         $productInfo = $this->dao->get($id, ['store_name', 'IFNULL(sales,0) + IFNULL(ficti,0) as sales', 'image',
             'slider_image', 'price', 'vip_price', 'ot_price', 'stock', 'id'], ['description']);
         if (!$productInfo) {
-            throw new ValidateException('商品未查到');
+            throw new ApiException(410143);
         }
         return $productInfo->toArray();
     }

@@ -5655,11 +5655,6 @@
     
                     byteout = [];
     
-                    // benchmarking
-                    // var duration = new Date().getTime() - time_start;
-                    // console.log('Encoding time: '+ currentQuality + 'ms');
-                    //
-    
                     return jpegDataUri
             }
     
@@ -5682,7 +5677,6 @@
     
                 initQuantTables(sf);
                 currentQuality = quality;
-                // console.log('Quality set to: '+quality +'%');
             }
     
             function init(){
@@ -5695,8 +5689,6 @@
                 initRGBYUVTable();
     
                 setQuality(quality);
-                // var duration = new Date().getTime() - time_start;
-                // console.log('Initialization '+ duration + 'ms');
             }
     
             init();
@@ -6399,15 +6391,11 @@
                 uid = parts[ 0 ];
                 type = parts[ 1 ];
     
-                // console.log.apply( console, arguments );
-    
                 if ( type === 'Ready' && uid === me.uid ) {
                     me.trigger('ready');
                 } else if ( clients[ uid ] ) {
                     clients[ uid ].trigger( type.toLowerCase(), evt, obj );
                 }
-    
-                // Base.log( evt, obj );
             }
     
             // flash的接受器。

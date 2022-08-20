@@ -18,7 +18,7 @@ import {
 	checkLogin
 } from '../libs/login';
 import store from '../store';
-
+import i18n from './lang.js';
 
 /**
  * 发送请求
@@ -35,13 +35,14 @@ function baseRequest(url, method, data, {
 		if (!store.state.app.token && !checkLogin()) {
 			toLogin();
 			return Promise.reject({
-				msg: '未登录'
+				msg: i18n.t(`未登录`)
 			});
 		}
 	}
 	if (store.state.app.token) header[TOKENNAME] = 'Bearer ' + store.state.app.token;
 
 	return new Promise((reslove, reject) => {
+		header['Cb-lang'] = uni.getStorageSync('locale') ? uni.getStorageSync('locale') :'zh_cn'
 		uni.request({
 			url: Url + '/api/' + url,
 			method: method || 'GET',
@@ -52,29 +53,29 @@ function baseRequest(url, method, data, {
 					reslove(res.data, res);
 				else if (res.data.status == 200)
 					reslove(res.data, res);
-				else if ([410000, 410001, 410002].indexOf(res.data.status) !== -1) {
+				else if ([110002, 110003, 110004].indexOf(res.data.status) !== -1) {
 					toLogin();
 					reject(res.data);
-				} else if (res.data.status == 410010) {
+				} else if (res.data.status == 100103) {
 					uni.showModal({
-						title: '提示',
+						title: i18n.t(`提示`),
 						content: res.data.msg,
 						showCancel: false,
-						confirmText: '我知道了'
+						confirmText: i18n.t(`我知道了`)
 					});
 				} else
-					reject(res.data.msg || '系统错误');
+					reject(res.data.msg || i18n.t(`系统错误`));
 			},
 			fail: (msg) => {
 				let data = {
-					mag: '请求失败',
+					mag: i18n.t(`请求失败`),
 					status: 1 //1没网
 				}
 				// #ifdef APP-PLUS
 				reject(data);
 				// #endif
 				// #ifndef APP-PLUS
-				reject('请求失败');
+				reject(i18n.t(`请求失败`));
 				// #endif
 			}
 		})

@@ -8,7 +8,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +---------------------------------------------------------------------
 
-import BasicLayout from '@/components/main'
+import BasicLayout from '@/components/main';
 
 // export default {
 //   path: '/',
@@ -34,17 +34,17 @@ import BasicLayout from '@/components/main'
 // }
 
 const meta = {
-  auth: true
-}
+  auth: true,
+};
 
-const pre = 'home_'
+const pre = 'home_';
 
 export default {
   path: '/',
   name: 'home',
   header: 'home',
   redirect: {
-    name: `${pre}index`
+    name: `${pre}index`,
   },
   meta,
   component: BasicLayout,
@@ -56,9 +56,9 @@ export default {
       meta: {
         auth: ['admin-index-index'],
         title: '主页',
-        affix: true
+        affix: true,
       },
-      component: () => import('@/pages/index/index')
-    }
-  ]
-}
+      component: () => import('@/pages/index/index'),
+    },
+  ],
+};

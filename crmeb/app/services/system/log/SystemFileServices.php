@@ -221,7 +221,7 @@ class SystemFileServices extends BaseServices
         if (strstr($uname, 'Windows') !== false)
             $filepath = ltrim(str_replace('/', DS, $filepath), '.');
         if (!FileClass::isWritable($filepath)) {
-            throw new AdminException('没有权限');
+            throw new AdminException(400611);
         }
         return FileClass::writeFile($filepath, $comment);
     }

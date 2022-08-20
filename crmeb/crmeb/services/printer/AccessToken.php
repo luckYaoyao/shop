@@ -12,6 +12,7 @@ namespace crmeb\services\printer;
 
 
 use app\services\other\CacheServices;
+use crmeb\exceptions\AdminException;
 use crmeb\services\HttpService;
 use think\facade\Config;
 use think\helper\Str;
@@ -128,7 +129,7 @@ class AccessToken extends HttpService
             return '';
         },86400);
         if (!$this->accessToken[$this->name])
-            throw new \Exception('获取access_token获取失败');
+            throw new AdminException(400718);
 
         return $this->accessToken[$this->name];
     }

@@ -90,12 +90,12 @@ class SystemCity extends AuthController
             $data['level'] = $data['level'] + 1;
             $data['city_id'] = intval($this->services->getCityIdMax() + 1);
             $this->services->save($data);
-            return app('json')->success('添加城市成功!');
+            return app('json')->success(100000);
         } else {
             unset($data['level']);
             unset($data['parent_id']);
             $this->services->update($data['id'], $data);
-            return app('json')->success('修改城市成功!');
+            return app('json')->success(100001);
         }
     }
 
@@ -124,7 +124,7 @@ class SystemCity extends AuthController
             [['city_id', 'd'], 0]
         ], true);
         $this->services->deleteCity($id);
-        return app('json')->success('删除成功!');
+        return app('json')->success(100002);
     }
 
     /**
@@ -136,9 +136,9 @@ class SystemCity extends AuthController
         $res = CacheService::delete('tree_city_list');
         $res = $res && CacheService::delete('CITY_LIST');
         if ($res) {
-            return app('json')->success('清除成功!');
+            return app('json')->success(400185);
         } else {
-            return app('json')->fail('清除失败或缓存未生成!');
+            return app('json')->fail(400186);
         }
     }
 }

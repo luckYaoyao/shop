@@ -15,7 +15,6 @@ use app\Request;
 use app\services\system\admin\SystemRoleServices;
 use crmeb\exceptions\AuthException;
 use crmeb\interfaces\MiddlewareInterface;
-use crmeb\utils\ApiErrorCode;
 
 /**
  * 权限规则验证
@@ -28,7 +27,7 @@ class AdminCkeckRoleMiddleware implements MiddlewareInterface
     public function handle(Request $request, \Closure $next)
     {
         if (!$request->adminId() || !$request->adminInfo())
-            throw new AuthException(ApiErrorCode::ERR_ADMINID_VOID);
+            throw new AuthException(100100);
 
         if ($request->adminInfo()['level']) {
             /** @var SystemRoleServices $systemRoleService */

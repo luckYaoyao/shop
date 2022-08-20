@@ -35,10 +35,10 @@ class UserValidata extends Validate
      * @var array
      */
     protected $message = [
-        'account.require' => '请输入用户账号',
-        'account.alphaNum' => '账号只能为数字和字母',
-        'pwd.require' => '请填写密码',
-        'true_pwd.require' => '请填写确认密码',
-        'nickname.number' => '请输入用户昵称'
+        'account.require' => '400254',
+        'account.alphaNum' => '400089',
+        'pwd.require' => '400134',
+        'true_pwd.require' => '400263',
+        'nickname.number' => '400187'
     ];
 }

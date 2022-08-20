@@ -15,10 +15,10 @@ namespace app\services\system\attachment;
 use app\services\BaseServices;
 use app\dao\system\attachment\SystemAttachmentDao;
 use crmeb\exceptions\AdminException;
+use crmeb\exceptions\ApiException;
 use crmeb\exceptions\UploadException;
-use crmeb\services\UploadService;
+use app\services\other\UploadService;
 use crmeb\traits\ServicesTrait;
-use think\exception\ValidateException;
 
 /**
  *
@@ -83,7 +83,7 @@ class SystemAttachmentServices extends BaseServices
     public function del(string $ids)
     {
         $ids = explode(',', $ids);
-        if (empty($ids)) throw new AdminException('请选择要删除的图片');
+        if (empty($ids)) throw new AdminException(400599);
         foreach ($ids as $v) {
             $attinfo = $this->dao->get((int)$v);
             if ($attinfo) {
@@ -158,7 +158,7 @@ class SystemAttachmentServices extends BaseServices
     public function move(array $data)
     {
         $res = $this->dao->move($data);
-        if (!$res) throw new AdminException('移动失败或不能重复移动到同一分类下');
+        if (!$res) throw new AdminException(400600);
     }
 
     /**
@@ -194,7 +194,7 @@ class SystemAttachmentServices extends BaseServices
         $data['time'] = $time ?: time();
         $data['pid'] = $pid;
         if (!$this->dao->save($data)) {
-            throw new ValidateException('添加附件失败');
+            throw new ApiException(100022);
         }
         return true;
     }

@@ -55,7 +55,7 @@ class FlowStatistic extends AuthController
             ['mark', '']
         ]);
         $this->services->setMark($id, $data);
-        return app('json')->success('备注成功！');
+        return app('json')->success(100024);
     }
 
     /**

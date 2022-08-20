@@ -55,7 +55,7 @@ class StoreProductReply extends BaseModel
      */
     public function cartInfo()
     {
-        return $this->hasOne(StoreOrderCartInfo::class, 'oid', 'oid')->bind(['cart_info']);
+        return $this->hasOne(StoreOrderCartInfo::class, 'unique', 'unique')->bind(['cart_info']);
     }
 
     /**

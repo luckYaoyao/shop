@@ -14,16 +14,17 @@ namespace app\services\wechat;
 
 use app\services\BaseServices;
 use app\dao\wechat\WechatUserDao;
+use app\services\message\SystemNotificationServices;
+use app\services\message\TemplateMessageServices;
 use app\services\other\QrcodeServices;
 use app\services\user\LoginServices;
 use app\services\user\UserServices;
 use app\services\user\UserVisitServices;
+use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
 use crmeb\services\CacheService as Cache;
-use crmeb\services\MiniProgramService;
-use crmeb\services\template\Template;
-use think\exception\ValidateException;
-use think\facade\Config;
+use crmeb\services\app\MiniProgramService;
+use crmeb\services\oauth\OAuth;
 
 /**
  *
@@ -55,31 +56,13 @@ class RoutineServices extends BaseServices
      */
     public function mp_auth($code, $post_cache_key, $login_type, $spread_spid, $spread_code, $iv, $encryptedData)
     {
-        $session_key = Cache::get('eb_api_code_' . $post_cache_key);
-        $userInfoCong = [];
-        if (!$code && !$session_key)
-            throw new ValidateException('授权失败,参数有误');
-        if ($code && !$session_key) {
-            try {
-                $userInfoCong = MiniProgramService::getUserInfo($code);
-                $session_key = $userInfoCong['session_key'];
-                $cache_key = md5(time() . $code);
-                Cache::set('eb_api_code_' . $cache_key, $session_key, 86400);
-                if (!isset($userInfoCong['openid'])) {
-                    throw new ValidateException('openid获取失败');
-                }
-            } catch (\Exception $e) {
-                throw new ValidateException('获取session_key失败，请检查您的配置！:' . $e->getMessage() . 'line' . $e->getLine());
-            }
-        }
-        try {
-            //解密获取用户信息
-            $userInfo = MiniProgramService::encryptor($session_key, $iv, $encryptedData);
-        } catch (\Exception $e) {
-            if ($e->getCode() == '-41003') {
-                throw new ValidateException('获取会话密匙失败');
-            }
-        }
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class, ['mini_program']);
+        [$userInfoCong, $userInfo] = $oauth->oauth($code, [
+            'iv' => $iv,
+            'encryptedData' => $encryptedData
+        ]);
+        $session_key = $userInfoCong['session_key'];
         $userInfo['unionId'] = isset($userInfoCong['unionid']) ? $userInfoCong['unionid'] : '';
         $userInfo['openId'] = $openid = $userInfoCong['openid'];
         $userInfo['spid'] = $spread_spid;
@@ -106,7 +89,7 @@ class RoutineServices extends BaseServices
                 'userInfo' => $user
             ];
         } else
-            throw new ValidateException('获取用户访问token失败!');
+            throw new ApiException(410038);
     }
 
     /**
@@ -122,29 +105,17 @@ class RoutineServices extends BaseServices
      */
     public function newAuth($code, $spid, $spread, $iv, $encryptedData)
     {
-        if (!$code)
-            throw new ValidateException('授权失败,参数有误');
-        $session_key = '';
-        try {
-            $userInfoCong = MiniProgramService::getUserInfo($code);
-            $session_key = $userInfoCong['session_key'];
-        } catch (\Exception $e) {
-            throw new ValidateException('获取session_key失败，请检查您的配置！:' . $e->getMessage() . 'line' . $e->getLine());
+        if (!$code) {
+            throw new ApiException(100100);
         }
-        if (!isset($userInfoCong['openid'])) {
-            throw new ValidateException('openid获取失败');
-        }
-        try {
-            //解密获取用户信息
-            $userInfo = MiniProgramService::encryptor($session_key, $iv, $encryptedData);
-        } catch (\Exception $e) {
-            if ($e->getCode() == '-41003') {
-                throw new ValidateException('获取会话密匙失败');
-            }
-        }
-        if (!isset($userInfoCong['openid'])) {
-            throw new ValidateException('openid获取失败');
-        }
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class, ['mini_program']);
+        [$userInfoCong, $userInfo] = $oauth->oauth($code, [
+            'iv' => $iv,
+            'encryptedData' => $encryptedData
+        ]);
+        $session_key = $userInfoCong['session_key'];
+
         $userInfo['unionId'] = isset($userInfoCong['unionid']) ? $userInfoCong['unionid'] : '';
         $userInfo['openId'] = $openid = $userInfoCong['openid'];
         $userInfo['spid'] = $spid;
@@ -175,7 +146,7 @@ class RoutineServices extends BaseServices
             $token['userInfo'] = $user;
             return $token;
         } else
-            throw new ValidateException('登录失败');
+            throw new ApiException(410019);
     }
 
     /**
@@ -219,18 +190,23 @@ class RoutineServices extends BaseServices
      * 获取小程序订阅消息id
      * @return mixed
      */
-    public function temlIds()
+    public function tempIds()
     {
-        $temlIdsName = Config::get('template.stores.subscribe.template_id', []);
-        $temlIdsList = Cache::get('TEML_IDS_LIST', function () use ($temlIdsName) {
-            $temlId = [];
-            $templdata = new Template('subscribe');
-            foreach ($temlIdsName as $key => $item) {
-                $temlId[strtolower($key)] = $templdata->getTempId($item);
+        return Cache::get('TEMP_IDS_LIST', function () {
+            /** @var SystemNotificationServices $sysNotify */
+            $sysNotify = app()->make(SystemNotificationServices::class);
+            $marks = $sysNotify->getColumn([['routine_id', '>', 0]], 'routine_id', 'mark');
+            $ids = array_values($marks);
+            /** @var TemplateMessageServices $tempMsgServices */
+            $tempMsgServices = app()->make(TemplateMessageServices::class);
+            $list = $tempMsgServices->getColumn([['id', 'in', $ids]], 'tempid', 'id');
+
+            $tempIdsList = [];
+            foreach ($marks as $key => $item) {
+                $tempIdsList[$key] = $list[$item];
             }
-            return $temlId;
+            return $tempIdsList;
         });
-        return $temlIdsList;
     }
 
     /**
@@ -259,9 +235,12 @@ class RoutineServices extends BaseServices
      */
     public function silenceAuth($code, $spread, $spid)
     {
-        $userInfoConfig = MiniProgramService::getUserInfo($code);
+
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class, ['mini_program']);
+        $userInfoConfig = $oauth->oauth($code, ['silence' => true]);
         if (!isset($userInfoConfig['openid'])) {
-            throw new ValidateException('静默授权失败');
+            throw new ApiException(410078);
         }
         $routineInfo = [
             'unionid' => $userInfoConfig['unionid'] ?? ''
@@ -292,7 +271,7 @@ class RoutineServices extends BaseServices
             if ($token) {
                 return $token;
             } else
-                throw new ValidateException('登录失败');
+                throw new ApiException(410019);
         } else {
             //更新用户信息
             $wechatUserServices->wechatUpdata([$user['uid'], ['code' => $spid]]);
@@ -303,7 +282,7 @@ class RoutineServices extends BaseServices
             if ($token) {
                 return $token;
             } else
-                throw new ValidateException('登录失败');
+                throw new ApiException(410019);
         }
 
     }
@@ -316,9 +295,11 @@ class RoutineServices extends BaseServices
      */
     public function silenceAuthNoLogin($code, $spread, $spid)
     {
-        $userInfoConfig = MiniProgramService::getUserInfo($code);
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class, ['mini_program']);
+        $userInfoConfig = $oauth->oauth($code, ['silence' => true]);
         if (!isset($userInfoConfig['openid'])) {
-            throw new ValidateException('静默授权失败');
+            throw new ApiException(410078);
         }
         $routineInfo = [
             'unionid' => $userInfoConfig['unionid'] ?? ''
@@ -352,7 +333,7 @@ class RoutineServices extends BaseServices
                 $token['userInfo'] = $user;
                 return $token;
             } else
-                throw new ValidateException('登录失败');
+                throw new ApiException(410019);
         }
 
     }
@@ -365,9 +346,11 @@ class RoutineServices extends BaseServices
      */
     public function silenceAuthBindingPhone($code, $spread, $spid, $phone)
     {
-        $userInfoConfig = MiniProgramService::getUserInfo($code);
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class, ['mini_program']);
+        $userInfoConfig = $oauth->oauth($code, ['silence' => true]);
         if (!isset($userInfoConfig['openid'])) {
-            throw new ValidateException('静默授权失败');
+            throw new ApiException(410078);
         }
         $routineInfo = [
             'unionid' => $userInfoConfig['unionid'] ?? ''
@@ -394,7 +377,7 @@ class RoutineServices extends BaseServices
         if ($token) {
             return $token;
         } else
-            throw new ValidateException('登录失败');
+            throw new ApiException(410019);
     }
 
     /**
@@ -411,22 +394,17 @@ class RoutineServices extends BaseServices
         if ($key) {
             [$openid, $wechatInfo, $spreadId, $login_type, $userType] = $createData = CacheService::getTokenBucket($key);
         }
-        try {
-            $userInfoCong = MiniProgramService::getUserInfo($code);
-            $session_key = $userInfoCong['session_key'];
-        } catch (\Exception $e) {
-            throw new ValidateException('获取session_key失败，请检查您的配置！:' . $e->getMessage() . 'line' . $e->getLine());
-        }
-        try {
-            //解密获取用户信息
-            $userInfo = MiniProgramService::encryptor($session_key, $iv, $encryptedData);
-            if (!$userInfo || !isset($userInfo['purePhoneNumber'])) {
-                throw new ValidateException('获取用户信息失败');
-            }
-        } catch (\Exception $e) {
-            if ($e->getCode() == '-41003') {
-                throw new ValidateException('获取会话密匙失败');
-            }
+
+
+        /** @var OAuth $oauth */
+        $oauth = app()->make(OAuth::class, ['mini_program']);
+        [$userInfoCong, $userInfo] = $oauth->oauth($code, [
+            'iv' => $iv,
+            'encryptedData' => $encryptedData
+        ]);
+        $session_key = $userInfoCong['session_key'];
+        if (!$userInfo || !isset($userInfo['purePhoneNumber'])) {
+            throw new ApiException(410079);
         }
 
         $spreadId = $spid ?? 0;
@@ -457,7 +435,7 @@ class RoutineServices extends BaseServices
                 'expires_time' => $token['params']['exp'],
             ];
         } else
-            throw new ValidateException('登录失败');
+            throw new ApiException(410019);
     }
 
 
@@ -467,7 +445,7 @@ class RoutineServices extends BaseServices
         $userServices = app()->make(UserServices::class);
         $user = $userServices->getUserInfo($uid);
         if (!$user) {
-            throw new ValidateException('数据不存在');
+            throw new ApiException(100026);
         }
         $userInfo = [];
         $userInfo['nickname'] = filter_emoji($data['nickName'] ?? '');//姓名
@@ -483,7 +461,7 @@ class RoutineServices extends BaseServices
         $loginService->updateUserInfo($userInfo, $user);
         //更新用户信息
         if (!$this->dao->update(['uid' => $user['uid'], 'user_type' => 'routine'], $userInfo)) {
-            throw new ValidateException('更新失败');
+            throw new ApiException(100013);
         }
         return true;
     }

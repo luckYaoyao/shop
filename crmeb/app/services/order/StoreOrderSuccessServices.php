@@ -17,7 +17,7 @@ use app\services\activity\lottery\LuckLotteryServices;
 use app\services\activity\combination\StorePinkServices;
 use app\services\BaseServices;
 use app\services\pay\PayServices;
-use think\exception\ValidateException;
+use crmeb\exceptions\ApiException;
 
 /**
  * Class StoreOrderSuccessServices
@@ -49,7 +49,7 @@ class StoreOrderSuccessServices extends BaseServices
     public function zeroYuanPayment(array $orderInfo, int $uid, string $payType = PayServices::YUE_PAY)
     {
         if ($orderInfo['paid']) {
-            throw new ValidateException('该订单已支付!');
+            throw new ApiException(410265);
         }
         return $this->paySuccess($orderInfo, $payType);//余额支付成功
     }
@@ -63,6 +63,7 @@ class StoreOrderSuccessServices extends BaseServices
     public function paySuccess(array $orderInfo, string $paytype = PayServices::WEIXIN_PAY, array $other = [])
     {
         $updata = ['paid' => 1, 'pay_type' => $paytype, 'pay_time' => time()];
+        $orderInfo['pay_time'] = $updata['pay_time'];
         if ($other && isset($other['trade_no'])) {
             $updata['trade_no'] = $other['trade_no'];
         }

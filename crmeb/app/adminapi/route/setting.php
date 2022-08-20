@@ -152,6 +152,20 @@ Route::group('setting', function () {
     Route::get('get_agreement/:type', 'v1.setting.SystemAgreement/getAgreement')->option(['real_name' => '获取协议内容']);
     Route::post('save_agreement', 'v1.setting.SystemAgreement/saveAgreement')->option(['real_name' => '设置协议内容']);
 
+    //获取版权信息
+    Route::get('get_version', 'v1.setting.SystemConfig/getVersion')->option(['real_name' => '获取版权信息']);
+
+    //对外接口账号信息
+    Route::get('system_out_account/index', 'v1.setting.SystemOutAccount/index')->option(['real_name' => '对外接口账号信息']);
+    //对外接口账号添加
+    Route::post('system_out_account/save', 'v1.setting.SystemOutAccount/save')->option(['real_name' => '对外接口账号添加']);
+    //对外接口账号修改
+    Route::post('system_out_account/update/:id', 'v1.setting.SystemOutAccount/update')->option(['real_name' => '对外接口账号修改']);
+    //设置账号是否禁用
+    Route::put('system_out_account/set_status/:id/:status', 'v1.setting.SystemOutAccount/set_status')->option(['real_name' => '设置账号是否禁用']);
+    //删除账号
+    Route::delete('system_out_account/:id', 'v1.setting.SystemOutAccount/delete')->option(['real_name' => '删除账号']);
+
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,

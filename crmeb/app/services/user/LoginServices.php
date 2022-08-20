@@ -14,11 +14,11 @@ namespace app\services\user;
 
 use app\dao\user\UserDao;
 use app\services\BaseServices;
-use app\services\message\sms\SmsRecordServices;
-use app\services\message\sms\SmsSendServices;
+use app\services\yihaotong\SmsRecordServices;
+use app\services\message\notice\SmsService;
 use app\services\wechat\WechatUserServices;
+use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
-use think\exception\ValidateException;
 use think\facade\Config;
 
 /**
@@ -31,7 +31,7 @@ class LoginServices extends BaseServices
 
     /**
      * LoginServices constructor.
-     * @param LoginDao $dao
+     * @param UserDao $dao
      */
     public function __construct(UserDao $dao)
     {
@@ -40,25 +40,27 @@ class LoginServices extends BaseServices
 
     /**
      * H5账号登陆
-     * @param Request $request
-     * @return mixed
+     * @param $account
+     * @param $password
+     * @param $spread
+     * @return array
      * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
-     * @throws \think\exception\DbException
      */
     public function login($account, $password, $spread)
     {
         $user = $this->dao->getOne(['account|phone' => $account, 'is_del' => 0]);
         if ($user) {
             if ($user->pwd !== md5((string)$password))
-                throw new ValidateException('账号或密码错误');
+                throw new ApiException(410025);
             if ($user->pwd === md5('123456'))
-                throw new ValidateException('请修改您的初始密码，再尝试登录！');
+                throw new ApiException(410026);
         } else {
-            throw new ValidateException('账号或密码错误');
+            throw new ApiException(410025);
         }
         if (!$user['status'])
-            throw new ValidateException('已被禁止，请联系管理员');
+            throw new ApiException(410027);
 
         //更新用户信息
         $this->updateUserInfo(['code' => $spread], $user);
@@ -66,13 +68,14 @@ class LoginServices extends BaseServices
         if ($token) {
             return ['token' => $token['token'], 'expires_time' => $token['params']['exp']];
         } else
-            throw new ValidateException('登录失败');
+            throw new ApiException(410019);
     }
 
     /**
      * 更新用户信息
      * @param $user
-     * @param $uid
+     * @param $userInfo
+     * @param false $is_new
      * @return bool
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -86,7 +89,7 @@ class LoginServices extends BaseServices
         $data['phone'] = !isset($user['phone']) || !$user['phone'] ? $userInfo->phone : $user['phone'];
         $data['last_time'] = time();
         $data['last_ip'] = app()->request->ip();
-        $spreadUid = isset($user['code']) ? $user['code'] : 0;
+        $spreadUid = $user['code'] ?? 0;
         //如果扫了员工邀请码，上级，代理商，区域代理都会改动。
         if (isset($user['is_staff']) && !$userInfo['is_agent'] && !$userInfo['is_division']) {
             $spreadInfo = $this->dao->get($spreadUid);
@@ -149,17 +152,17 @@ class LoginServices extends BaseServices
             }
         }
         if (!$this->dao->update($userInfo['uid'], $data, 'uid')) {
-            throw new ValidateException('修改信息失败');
+            throw new ApiException(100007);
         }
         return true;
     }
 
-    public function verify(SmsSendServices $services, $phone, $type, $time, $ip)
+    public function verify(SmsService $services, $phone, $type, $time, $ip)
     {
         if ($this->dao->getOne(['account' => $phone, 'is_del' => 0]) && $type == 'register') {
-            throw new ValidateException('手机号已注册');
+            throw new ApiException(410028);
         }
-        $default = Config::get('sms.default', 'yunxin');
+        $default = Config::get('sms.default', 'yihaotong');
         $defaultMaxPhoneCount = Config::get('sms.maxPhoneCount', 10);
         $defaultMaxIpCount = Config::get('sms.maxIpCount', 50);
         $maxPhoneCount = Config::get('sms.stores.' . $default . '.maxPhoneCount', $defaultMaxPhoneCount);
@@ -167,17 +170,17 @@ class LoginServices extends BaseServices
         /** @var SmsRecordServices $smsRecord */
         $smsRecord = app()->make(SmsRecordServices::class);
         if ($smsRecord->count(['phone' => $phone, 'add_ip' => $ip, 'time' => 'today']) >= $maxPhoneCount) {
-            throw new ValidateException('您今日发送得短信次数已经达到上限');
+            throw new ApiException(410029);
         }
         if ($smsRecord->count(['add_ip' => $ip, 'time' => 'today']) >= $maxIpCount) {
-            throw new ValidateException('此IP今日发送次数已经达到上限');
+            throw new ApiException(410030);
         }
         $code = rand(100000, 999999);
         $data['code'] = $code;
         $data['time'] = $time;
-        $res = $services->send(true, $phone, $data, 'VERIFICATION_CODE_TIME');
+        $res = $services->send(true, $phone, $data, 'verify_code');
         if ($res !== true)
-            throw new ValidateException('短信平台验证码发送失败' . $res);
+            throw new ApiException(410031);
         return $code;
     }
 
@@ -186,12 +189,16 @@ class LoginServices extends BaseServices
      * @param $account
      * @param $password
      * @param $spread
-     * @return User|\think\Model
+     * @param string $user_type
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function register($account, $password, $spread, $user_type = 'h5')
     {
         if ($this->dao->getOne(['account|phone' => $account, 'is_del' => 0])) {
-            throw new ValidateException('用户已存在,请去修改密码');
+            throw new ApiException(410028);
         }
         $phone = $account;
         $data['account'] = $account;
@@ -212,14 +219,14 @@ class LoginServices extends BaseServices
         $data['last_time'] = time();
         $data['last_ip'] = app('request')->ip();
         $data['nickname'] = substr(md5($account . time()), 0, 12);
-        $data['avatar'] = $data['headimgurl'] = sys_config('h5_avatar');
+        $data['avatar'] = sys_config('h5_avatar');
         $data['city'] = '';
         $data['language'] = '';
         $data['province'] = '';
         $data['country'] = '';
         $data['status'] = 1;
         if (!$re = $this->dao->save($data)) {
-            throw new ValidateException('注册失败');
+            throw new ApiException(410014);
         } else {
             //用户生成后置事件
             event('user.register', [$spread, $user_type, $data['nickname'], $re->uid, 1]);
@@ -238,10 +245,10 @@ class LoginServices extends BaseServices
     {
         $user = $this->dao->getOne(['account|phone' => $account, 'is_del' => 0]);
         if (!$user) {
-            throw new ValidateException('用户不存在');
+            throw new ApiException(410032);
         }
         if (!$this->dao->update($user['uid'], ['pwd' => md5((string)$password)], 'uid')) {
-            throw new ValidateException('修改密码失败');
+            throw new ApiException(410033);
         }
         return true;
     }
@@ -262,12 +269,12 @@ class LoginServices extends BaseServices
         if (!$user) {
             $user = $this->register($phone, '123456', $spread, $user_type);
             if (!$user) {
-                throw new ValidateException('用户登录失败,无法生成新用户,请稍后再试!');
+                throw new ApiException(410034);
             }
         }
 
         if (!$user->status)
-            throw new ValidateException('已被禁止，请联系管理员');
+            throw new ApiException(410027);
 
         // 设置推广关系
         $this->updateUserInfo(['code' => $spread], $user);
@@ -276,7 +283,7 @@ class LoginServices extends BaseServices
         if ($token) {
             return ['token' => $token['token'], 'expires_time' => $token['params']['exp']];
         } else {
-            throw new ValidateException('登录失败');
+            throw new ApiException(410019);
         }
     }
 
@@ -297,20 +304,20 @@ class LoginServices extends BaseServices
         }
         $switch_user = $this->dao->getOne($where);
         if (!$switch_user) {
-            return app('json')->fail('用户不存在,无法切换');
+            return app('json')->fail(410035);
         }
         if (!$switch_user->status) {
-            return app('json')->fail('已被禁止，请联系管理员');
+            return app('json')->fail(410027);
         }
         $edit_data = ['login_type' => $login_type];
         if (!$this->dao->update($switch_user['uid'], $edit_data, 'uid')) {
-            throw new ValidateException('修改新用户登录类型出错');
+            throw new ApiException(410036);
         }
         $token = $this->createToken((int)$switch_user['uid'], 'api');
         if ($token) {
             return ['token' => $token['token'], 'expires_time' => $token['params']['exp']];
         } else {
-            throw new ValidateException('切换失败');
+            throw new ApiException(410019);
         }
     }
 
@@ -324,11 +331,11 @@ class LoginServices extends BaseServices
     public function bindind_phone($phone, $key = '')
     {
         if (!$key) {
-            throw new ValidateException('请刷新页面或者重新授权');
+            throw new ApiException(410037);
         }
         [$openid, $wechatInfo, $spreadId, $login_type, $userType] = $createData = CacheService::getTokenBucket($key);
         if (!$createData) {
-            throw new ValidateException('请刷新页面或者重新授权');
+            throw new ApiException(410037);
         }
         $wechatInfo['phone'] = $phone;
         /** @var WechatUserServices $wechatUser */
@@ -343,7 +350,7 @@ class LoginServices extends BaseServices
                 'expires_time' => $token['params']['exp'],
             ];
         } else
-            return app('json')->fail('获取用户访问token失败!');
+            return app('json')->fail(410019);
     }
 
     /**
@@ -357,25 +364,25 @@ class LoginServices extends BaseServices
     {
         $userInfo = $this->dao->get($uid);
         if (!$userInfo) {
-            throw new ValidateException('用户不存在');
+            throw new ApiException(410113);
         }
         if ($this->dao->getOne([['phone', '=', $phone], ['user_type', '<>', 'h5'], ['is_del', '=', 0]])) {
-            throw new ValidateException('此手机已经绑定，无法多次绑定！');
+            throw new ApiException(410039);
         }
         if ($userInfo->phone) {
-            throw new ValidateException('您的账号已经绑定过手机号码！');
+            throw new ApiException(410040);
         }
         $data = [];
         if ($this->dao->getOne(['account' => $phone, 'phone' => $phone, 'user_type' => 'h5', 'is_del' => 0])) {
-            if (!$step) return ['msg' => 'H5已有账号是否绑定此账号上', 'data' => ['is_bind' => 1]];
+            if (!$step) return ['msg' => 410041, 'data' => ['is_bind' => 1]];
         } else {
             $data['account'] = $phone;
         }
         $data['phone'] = $phone;
         if ($this->dao->update($userInfo['uid'], $data, 'uid') || $userInfo->phone == $phone)
-            return ['msg' => '绑定成功', 'data' => []];
+            return ['msg' => 410016, 'data' => []];
         else
-            throw new ValidateException('绑定失败');
+            throw new ApiException(410017);
     }
 
     /**
@@ -389,20 +396,20 @@ class LoginServices extends BaseServices
     {
         $userInfo = $this->dao->get(['uid' => $uid, 'is_del' => 0]);
         if (!$userInfo) {
-            throw new ValidateException('用户不存在');
+            throw new ApiException(410113);
         }
         if ($userInfo->phone == $phone) {
-            throw new ValidateException('新手机号和原手机号相同，无需修改');
+            throw new ApiException(410042);
         }
         if ($this->dao->getOne([['phone', '=', $phone], ['is_del', '=', 0]])) {
-            throw new ValidateException('此手机已经注册');
+            throw new ApiException(410043);
         }
         $data = [];
         $data['phone'] = $phone;
         $data['account'] = $phone;
         if ($this->dao->update($userInfo['uid'], $data, 'uid'))
-            return ['msg' => '修改成功', 'data' => []];
+            return ['msg' => 100001, 'data' => []];
         else
-            throw new ValidateException('修改失败');
+            throw new ApiException(100007);
     }
 }

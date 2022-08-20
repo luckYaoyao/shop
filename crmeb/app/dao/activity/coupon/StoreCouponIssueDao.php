@@ -58,14 +58,15 @@ class StoreCouponIssueDao extends BaseDao
      * @param array $where
      * @param int $page
      * @param int $limit
+     * @param string $field
      * @return array
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function getList(array $where, int $page, int $limit)
+    public function getList(array $where, int $page, int $limit, string $field = '*')
     {
-        return $this->search($where)
+        return $this->search($where)->field($field)
             ->page($page, $limit)->order('id desc')->select()->toArray();
     }
 

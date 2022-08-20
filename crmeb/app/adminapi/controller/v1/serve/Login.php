@@ -15,7 +15,7 @@ namespace app\adminapi\controller\v1\serve;
 use app\adminapi\controller\AuthController;
 use app\adminapi\validate\serve\ServeValidata;
 use app\Request;
-use app\services\message\sms\SmsAdminServices;
+use app\services\yihaotong\SmsAdminServices;
 use crmeb\services\CacheService;
 use app\services\serve\ServeServices;
 use think\facade\App;
@@ -82,9 +82,9 @@ class Login extends AuthController
         $res = $this->services->user()->register($data);
         if ($res) {
             $services->updateSmsConfig($data['account'], md5($data['account'] . md5($data['password'])));
-            return app('json')->success('注册成功');
+            return app('json')->success(400170);
         } else {
-            return app('json')->fail('注册失败');
+            return app('json')->fail(400171);
         }
     }
 
@@ -109,9 +109,9 @@ class Login extends AuthController
             CacheService::clear();
             CacheService::redisHandler()->set('sms_account', $account);
             $services->updateSmsConfig($account, $password);
-            return app('json')->success('登录成功', $res);
+            return app('json')->success(400139, $res);
         } else {
-            return app('json')->fail('登录失败');
+            return app('json')->fail(400172);
         }
     }
 }

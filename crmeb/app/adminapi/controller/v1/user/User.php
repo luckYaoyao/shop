@@ -124,10 +124,10 @@ class User extends AuthController
         ]);
         if ($data['phone']) {
             if (!check_phone($data['phone'])) {
-                return app('json')->fail('手机号码格式不正确');
+                return app('json')->fail(400252);
             }
             if ($this->services->count(['phone' => $data['phone'], 'is_del' => 0])) {
-                return app('json')->fail('手机号已经存在不能添加相同的手机号用户');
+                return app('json')->fail(400314);
             }
             if (trim($data['real_name']) != '') {
                 $data['nickname'] = $data['real_name'];
@@ -136,14 +136,14 @@ class User extends AuthController
             }
         }
         if ($data['card_id']) {
-            if (!check_card($data['card_id'])) return app('json')->fail('请输入正确的身份证');
+            if (!check_card($data['card_id'])) return app('json')->fail(400315);
         }
         if ($data['pwd']) {
             if (!$data['true_pwd']) {
-                return app('json')->fail('请输入确认密码');
+                return app('json')->fail(400263);
             }
             if ($data['pwd'] != $data['true_pwd']) {
-                return app('json')->fail('两次输入的密码不一致');
+                return app('json')->fail(400264);
             }
             $data['pwd'] = md5($data['pwd']);
         } else {
@@ -172,10 +172,10 @@ class User extends AuthController
                 $res = $this->services->saveGiveLevel((int)$userInfo->uid, (int)$data['level']);
             }
             if (!$res) {
-                throw new ValidateException('保存添加用户失败');
+                return app('json')->fail(100006);
             }
         });
-        return app('json')->success('添加成功');
+        return app('json')->success(100021);
     }
 
     /**
@@ -199,7 +199,7 @@ class User extends AuthController
      * */
     public function give_level($id)
     {
-        if (!$id) return app('json')->fail('缺少参数');
+        if (!$id) return app('json')->fail(100100);
         return app('json')->success($this->services->giveLevel((int)$id));
     }
 
@@ -210,11 +210,11 @@ class User extends AuthController
      * */
     public function save_give_level($id)
     {
-        if (!$id) return app('json')->fail('缺少参数');
+        if (!$id) return app('json')->fail(100100);
         list($level_id) = $this->request->postMore([
             ['level_id', 0],
         ], true);
-        return app('json')->success($this->services->saveGiveLevel((int)$id, (int)$level_id) ? '赠送成功' : '赠送失败');
+        return app('json')->success($this->services->saveGiveLevel((int)$id, (int)$level_id) ? 400218 : 400219);
     }
 
     /**
@@ -224,7 +224,7 @@ class User extends AuthController
      * */
     public function give_level_time($id)
     {
-        if (!$id) return app('json')->fail('缺少参数');
+        if (!$id) return app('json')->fail(100100);
         return app('json')->success($this->services->giveLevelTime((int)$id));
     }
 
@@ -235,11 +235,11 @@ class User extends AuthController
      * */
     public function save_give_level_time($id)
     {
-        if (!$id) return app('json')->fail('缺少参数');
+        if (!$id) return app('json')->fail(100100);
         list($days) = $this->request->postMore([
             ['days', 0],
         ], true);
-        return app('json')->success($this->services->saveGiveLevelTime((int)$id, (int)$days) ? '赠送成功' : '赠送失败');
+        return app('json')->success($this->services->saveGiveLevelTime((int)$id, (int)$days) ? 400218 : 400219);
     }
 
     /**
@@ -249,8 +249,8 @@ class User extends AuthController
      */
     public function del_level($id)
     {
-        if (!$id) return app('json')->fail('缺少参数');
-        return app('json')->success($this->services->cleanUpLevel((int)$id) ? '清除成功' : '清除失败');
+        if (!$id) return app('json')->fail(100100);
+        return app('json')->success($this->services->cleanUpLevel((int)$id) ? 400185 : 400186);
     }
 
     /**
@@ -267,7 +267,7 @@ class User extends AuthController
         list($uids) = $this->request->postMore([
             ['uids', []],
         ], true);
-        if (!$uids) return app('json')->fail('缺少参数');
+        if (!$uids) return app('json')->fail(100100);
         return app('json')->success($this->services->setGroup($uids));
     }
 
@@ -282,10 +282,10 @@ class User extends AuthController
             ['group_id', 0],
             ['uids', ''],
         ], true);
-        if (!$uids) return app('json')->fail('缺少参数');
-        if (!$group_id) return app('json')->fail('请选择分组');
+        if (!$uids) return app('json')->fail(100100);
+        if (!$group_id) return app('json')->fail(400316);
         $uids = explode(',', $uids);
-        return app('json')->success($this->services->saveSetGroup($uids, (int)$group_id) ? '设置分组成功' : '设置分组失败或无改动');
+        return app('json')->success($this->services->saveSetGroup($uids, (int)$group_id) ? 100014 : 100015);
     }
 
     /**
@@ -302,7 +302,7 @@ class User extends AuthController
             ['uids', []],
         ], true);
         $uid = implode(',', $uids);
-        if (!$uid) return app('json')->fail('缺少参数');
+        if (!$uid) return app('json')->fail(100100);
         return app('json')->success($this->services->setLabel($uids));
     }
 
@@ -316,10 +316,10 @@ class User extends AuthController
             ['label_id', []],
             ['uids', ''],
         ], true);
-        if (!$uids) return app('json')->fail('缺少参数');
-        if (!$lables) return app('json')->fail('请选择标签');
+        if (!$uids) return app('json')->fail(100100);
+        if (!$lables) return app('json')->fail(400317);
         $uids = explode(',', $uids);
-        return app('json')->success($this->services->saveSetLabel($uids, $lables) ? '设置标签成功' : '设置标签失败');
+        return app('json')->success($this->services->saveSetLabel($uids, $lables) ? 100014 : 100015);
     }
 
     /**
@@ -330,7 +330,7 @@ class User extends AuthController
      */
     public function edit_other($id)
     {
-        if (!$id) return app('json')->fail('数据不存在');
+        if (!$id) return app('json')->fail(100026);
         return app('json')->success($this->services->editOther((int)$id));
     }
 
@@ -347,12 +347,12 @@ class User extends AuthController
             ['integration_status', 0],
             ['integration', 0],
         ]);
-        if (!$id) return app('json')->fail('数据不存在');
+        if (!$id) return app('json')->fail(100100);
         $data['adminId'] = $this->adminId;
         $data['money'] = (string)$data['money'];
         $data['integration'] = (string)$data['integration'];
         $data['is_other'] = true;
-        return app('json')->success($this->services->updateInfo($id, $data) ? '修改成功' : '修改失败');
+        return app('json')->success($this->services->updateInfo($id, $data) ? 100001 : 100007);
     }
 
     /**
@@ -365,7 +365,7 @@ class User extends AuthController
 //        if ($status == '' || $id == 0) return app('json')->fail('参数错误');
 //        UserModel::where(['uid' => $id])->update(['status' => $status]);
 
-        return app('json')->success($status == 0 ? '禁用成功' : '解禁成功');
+        return app('json')->success(100014);
     }
 
     /**
@@ -375,7 +375,7 @@ class User extends AuthController
      */
     public function edit($id)
     {
-        if (!$id) return app('json')->fail('数据不存在');
+        if (!$id) return app('json')->fail(100100);
         return app('json')->success($this->services->edit($id));
     }
 
@@ -401,29 +401,29 @@ class User extends AuthController
             ['true_pwd'],
             ['spread_open', 1]
         ]);
+        if (!$id) return app('json')->fail(100100);
         if ($data['phone']) {
-            if (!preg_match("/^1[3456789]\d{9}$/", $data['phone'])) return app('json')->fail('手机号码格式不正确');
+            if (!preg_match("/^1[3456789]\d{9}$/", $data['phone'])) return app('json')->fail(400252);
         }
         if ($data['card_id']) {
-            if (!check_card($data['card_id'])) return app('json')->fail('请输入正确的身份证');
+            if (!check_card($data['card_id'])) return app('json')->fail(400315);
         }
         if ($data['pwd']) {
             if (!$data['true_pwd']) {
-                return app('json')->fail('请输入确认密码');
+                return app('json')->fail(400263);
             }
             if ($data['pwd'] != $data['true_pwd']) {
-                return app('json')->fail('两次输入的密码不一致');
+                return app('json')->fail(400264);
             }
             $data['pwd'] = md5($data['pwd']);
         } else {
             unset($data['pwd']);
         }
         unset($data['true_pwd']);
-        if (!$id) return app('json')->fail('数据不存在');
         $data['adminId'] = $this->adminId;
         $data['money'] = (string)$data['money'];
         $data['integration'] = (string)$data['integration'];
-        return app('json')->success($this->services->updateInfo($id, $data) ? '修改成功' : '修改失败');
+        return app('json')->success($this->services->updateInfo($id, $data) ? 100001 : 100007);
     }
 
     /**
@@ -437,7 +437,7 @@ class User extends AuthController
             ['type', ''],
         ]);
         $id = (int)$id;
-        if ($data['type'] == '') return app('json')->fail('缺少参数');
+        if ($data['type'] == '') return app('json')->fail(100100);
         return app('json')->success($this->services->oneUserInfo($id, $data['type']));
     }
 
@@ -448,7 +448,7 @@ class User extends AuthController
     public function syncWechatUsers()
     {
         $this->services->syncWechatUsers();
-        return app('json')->success('加入消息队列成功，正在异步执行中');
+        return app('json')->success(400318);
     }
 
 }

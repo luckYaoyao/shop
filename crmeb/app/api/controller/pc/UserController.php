@@ -51,7 +51,7 @@ class UserController
                 $data = $brokerageService->getBrokerageList($uid, $type);
                 break;
         }
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 
     /**
@@ -62,6 +62,6 @@ class UserController
     public function getCollectList(Request $request)
     {
         $uid = (int)$request->uid();
-        return app('json')->successful($this->services->getCollectList($uid));
+        return app('json')->success($this->services->getCollectList($uid));
     }
 }

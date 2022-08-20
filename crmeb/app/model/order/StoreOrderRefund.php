@@ -142,4 +142,23 @@ class StoreOrderRefund extends BaseModel
             $query->where('refund_type', 6);
         }
     }
+
+    /**
+     * 一对一关联订单表
+     * @return StoreOrderRefund|\think\model\relation\HasOne
+     */
+    public function orderData()
+    {
+        return $this->hasOne(StoreOrder::class, 'id', 'store_order_id')->field('id, order_id, pay_type, paid, real_name,user_phone, user_address,pay_uid, pay_time')
+            ->bind([
+                'store_order_sn' => 'order_id',
+                'pay_type',
+                'paid',
+                'real_name',
+                'user_phone',
+                'user_address',
+                'pay_uid',
+                'pay_time'
+            ]);
+    }
 }

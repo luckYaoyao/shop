@@ -141,7 +141,7 @@ class SystemStoreStaffServices extends BaseServices
     {
         $storeStaff = $this->dao->get($id);
         if (!$storeStaff) {
-            throw new AdminException('没有查到信息,无法修改');
+            throw new AdminException(100026);
         }
         return create_form('修改核销员', $this->createStoreStaffForm($storeStaff->toArray()), $this->url('/merchant/store_staff/save/' . $id));
     }

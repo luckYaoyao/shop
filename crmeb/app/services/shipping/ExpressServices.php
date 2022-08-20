@@ -17,7 +17,7 @@ use app\services\BaseServices;
 use app\services\serve\ServeServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\CacheService;
-use crmeb\services\ExpressService;
+use crmeb\services\express\storage\AliyunExpress;
 use crmeb\services\FormBuilder as Form;
 
 /**
@@ -114,7 +114,7 @@ class ExpressServices extends BaseServices
     {
         $express = $this->dao->get($id);
         if (!$express) {
-            throw new AdminException('查询数据失败,无法修改');
+            throw new AdminException(100026);
         }
         return create_form('编辑物流公司', $this->createExpressForm($express->toArray()), $this->url('/freight/express/' . $id), 'PUT');
     }
@@ -172,7 +172,7 @@ class ExpressServices extends BaseServices
         //$list = $this->dao->getExpress($where, 'name', 'id');
         $data = [];
         foreach ($list as $key => $value) {
-            $data[] = ['label' => $value['name'], 'value' => $value['id']];
+            $data[] = ['label' => $value['name'], 'value' => $value['code']];
         }
         return $data;
     }
@@ -195,7 +195,6 @@ class ExpressServices extends BaseServices
         $resultData = CacheService::get($cacheName, null);
         if ($resultData === null || !is_array($resultData)) {
             $data = [];
-            $com = $this->express_code[$com] ?? '';
             $cacheTime = 0;
             switch ((int)sys_config('logistics_type')) {
                 case 1:
@@ -212,7 +211,9 @@ class ExpressServices extends BaseServices
                     }
                     break;
                 case 2:
-                    $result = ExpressService::query($expressNum, $com);
+                    /** @var AliyunExpress $services */
+                    $services = app()->make(AliyunExpress::class);
+                    $result = $services->query($expressNum, $com);
                     if (is_array($result) &&
                         isset($result['result']) &&
                         isset($result['result']['deliverystatus']) &&

@@ -64,7 +64,7 @@ class MemberCardBatch extends AuthController
             ['remark', '']
         ]);
         $this->services->save((int)$id, $data);
-        return app('json')->success("卡片生成成功");
+        return app('json')->success(400313);
     }
 
     /**
@@ -80,7 +80,7 @@ class MemberCardBatch extends AuthController
             ['field', ''],
         ]);
         $this->services->setValue($id, $data);
-        return app('json')->success("修改成功");
+        return app('json')->success(100001);
     }
 
     /**会员二维码，兑换卡

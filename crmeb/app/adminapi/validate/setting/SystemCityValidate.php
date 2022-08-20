@@ -33,9 +33,9 @@ class SystemCityValidate extends Validate
      * @var array
      */
     protected $message = [
-        'name.require' => '请填写城市名称',
-        'level.number' => 'level数据格式错误，应为整数',
-        'parent_id.number' => 'parent_id数据格式错误，应为整数',
+        'name.require' => '400038',
+        'level.number' => '400039',
+        'parent_id.number' => '400040',
     ];
 
     protected $scene = [

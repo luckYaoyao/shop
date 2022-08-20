@@ -2,36 +2,36 @@
 	<view class="pos-order-list" ref="container">
 		<view class="nav acea-row row-around row-middle">
 			<view class="item" :class="where.status == 0 ? 'on' : ''" @click="changeStatus(0)">
-				待付款
+				{{$t(`待付款`)}}
 			</view>
 			<view class="item" :class="where.status == 1 ? 'on' : ''" @click="changeStatus(1)">
-				待发货
+				{{$t(`待发货`)}}
 			</view>
 			<view class="item" :class="where.status == 2 ? 'on' : ''" @click="changeStatus(2)">
-				待收货
+				{{$t(`待收货`)}}
 			</view>
 			<view class="item" :class="where.status == 3 ? 'on' : ''" @click="changeStatus(3)">
-				待评价
+				{{$t(`待评价`)}}
 			</view>
 			<view class="item" :class="where.status == 4 ? 'on' : ''" @click="changeStatus(4)">
-				已完成
+				{{$t(`已完成`)}}
 			</view>
 			<view class="item" :class="where.status == -3 ? 'on' : ''" @click="changeStatus(-3)">
-				退款
+				{{$t(`退款`)}}
 			</view>
 		</view>
 		<view class="list" v-if="list.length">
 			<view class="item" v-for="(item, index) in list" :key="index">
 				<view class="order-num acea-row row-between-wrapper" @click="toDetail(item)">
 					<view>
-						<view>订单号：{{ item.order_id }}</view>
-						<view class="time">下单时间：{{ item.add_time }}</view>
+						<view>{{$t(`订单号`)}}：{{ item.order_id }}</view>
+						<view class="time">{{$t(`下单时间`)}}：{{ item.add_time }}</view>
 					</view>
 					<view class="state"
 						:class="(item.refund_status==0 && where.status != 0 && item.refund.length)?'on':''">
-						{{item.refund_status==1?'退款中':item.refund_status==2?'已退款':item.refund_status==3?'拒绝退款':item.status_name.status_name}}
+						{{item.refund_status==1?$t(`退款中`):item.refund_status==2?$t(`已退款`):item.refund_status==3?$t(`拒绝退款`):item.status_name.status_name}}
 						<text
-							v-if="item.refund_status==0 && where.status != 0 && item.refund.length">{{item.is_all_refund?'，退款中':'，部分退款中'}}</text>
+							v-if="item.refund_status==0 && where.status != 0 && item.refund.length">{{item.is_all_refund?$t(`退款中`):$t(`部分退款中`)}}</text>
 					</view>
 				</view>
 				<view class="pos-order-goods" v-for="(val, key) in item._info" :key="key">
@@ -52,66 +52,51 @@
 						</view>
 						<view class="money">
 							<view class="x-money">
-								￥{{ val.cart_info.productInfo.attrInfo?val.cart_info.productInfo.attrInfo.price:val.cart_info.productInfo.price }}
+								{{$t(`￥`)}}{{ val.cart_info.productInfo.attrInfo?val.cart_info.productInfo.attrInfo.price:val.cart_info.productInfo.price }}
 							</view>
 							<view class="num">x{{ val.cart_info.cart_num }}</view>
-							<!-- 	<view class="y-money">
-								￥{{ val.cart_info.productInfo.ot_price }}
-							</view> -->
 							<view class="info" v-if="val.cart_info.refund_num && item._status._type !=-2">
-								{{val.cart_info.refund_num}}件退款中
+								{{val.cart_info.refund_num}}{{$t(`件退款中`)}}
 							</view>
 						</view>
 					</view>
 				</view>
 				<view class="public-total">
-					共{{ item.total_num }}件商品，实付款
-					<span class="money">￥{{ item.pay_price }}</span> ( 邮费 ¥{{
+					{{$t(`共`)}}{{ item.total_num }}{{$t(`件商品，实付款`)}}
+					<span class="money">{{$t(`￥`)}}{{ item.pay_price }}</span> ( {{$t(`邮费`)}} {{$t(`￥`)}}{{
 	            item.pay_postage
 	          }}
 					)
 				</view>
 				<view class="operation acea-row row-between-wrapper">
-					<view class="more">
-						<!--            <view class="iconfont icon-gengduo" @click="more(index)"></view>-->
-						<!--            <view class="order" v-show="current === index">-->
-						<!--              <view class="items">-->
-						<!--                {{ where.status > 0 ? "删除" : "取消" }}订单-->
-						<!--              </view>-->
-						<!--              <view class="arrow"></view>-->
-						<!--            </view>-->
-					</view>
 					<view class="acea-row row-middle">
 						<view class="bnt" @click="modify(item, 0)" v-if="where.status == 0">
-							一键改价
+							{{$t(`一键改价`)}}
 						</view>
-						<view class="bnt" @click="modify(item, 1)">订单备注</view>
-						<!-- 						<view class="bnt" @click="modify(item, 0)" v-if="where.status == -3 && item.refund_status === 1">
-							立即退款
-						</view> -->
-						<view class="bnt" @click="modify(item, 2, 1)"
+						<view class="bnt" @click="modify(item, 1)">{{$t(`订单备注`)}}</view>
+						<view class="bnt" @click="modify(item, 0, 1)"
 							v-if="(item.refund_type == 0 || item.refund_type == 1 || item.refund_type == 5 ) && where.status == -3 && parseFloat(item.pay_price) > 0">
-							立即退款
+							{{$t(`立即退款`)}}
 						</view>
 						<view class="bnt" @click="modify(item, 2, 0)"
-							v-if="where.status == -3 && item.refund_type == 2">同意退货</view>
-						<view class="wait" v-if="where.status == -3 && item.refund_type == 4">待用户发货</view>
+							v-if="where.status == -3 && item.refund_type == 2">{{$t(`同意退货`)}}</view>
+						<view class="wait" v-if="where.status == -3 && item.refund_type == 4">{{$t(`待用户发货`)}}</view>
 						<view class="bnt cancel" v-if="item.pay_type === 'offline' && item.paid === 0"
 							@click="offlinePay(item)">
-							确认付款
+							{{$t(`确认付款`)}}
 						</view>
 						<navigator class="bnt"
 							v-if="where.status == 1 && item.shipping_type === 1 && (item.pinkStatus === null || item.pinkStatus === 2)"
 							:url="'/pages/admin/delivery/index?id='+item.order_id+'&listId='+item.id+'&totalNum='+item.total_num+'&orderStatus='+item._status+'&comeType=1'">
-							去发货
+							{{$t(`去发货`)}}
 						</navigator>
 					</view>
 				</view>
 			</view>
 		</view>
 		<view v-else class="nothing">
-			<image v-if="!loading" src="../../../static/images/no-thing.png" alt="">
-				<view v-if="!loading">暂无记录</view>
+			<image v-if="!loading" :src="imgHost + '/statics/images/no-thing.png'" alt="">
+			<view v-if="!loading">{{$t(`暂无记录`)}}</view>
 		</view>
 		<Loading :loaded="loaded" :loading="loading"></Loading>
 		<PriceChange :change="change" :orderInfo="orderInfo" :isRefund="isRefund" v-on:closechange="changeclose($event)"
@@ -131,7 +116,7 @@
 		orderRefund_order
 	} from "@/api/admin";
 	import Loading from '@/components/Loading/index'
-	import PriceChange from '@/components/PriceChange/index'
+	import PriceChange from '../components/PriceChange/index.vue'
 	import {
 		isMoney
 	} from '@/utils/validate.js'
@@ -207,7 +192,7 @@
 				this.change = true;
 				this.status = status.toString();
 				this.orderInfo = item;
-				if (status == 2) {
+				if (status == 0 && type == 1) {
 					this.isRefund = type
 				}
 			},
@@ -225,7 +210,7 @@
 				if (that.status == 0) {
 					if (!isMoney(price)) {
 						return that.$util.Tips({
-							title: '请输入正确的金额'
+							title: that.$t(`请输入正确的金额`)
 						});
 					}
 					data.price = price;
@@ -233,7 +218,7 @@
 						res => {
 							that.change = false;
 							that.$util.Tips({
-								title: '改价成功',
+								title: that.$t(`改价成功`),
 								icon: 'success'
 							})
 							that.init();
@@ -241,7 +226,7 @@
 						err => {
 							that.change = false;
 							that.$util.Tips({
-								title: '改价失败',
+								title: that.$t(`改价失败`),
 								icon: 'none'
 							})
 						}
@@ -250,7 +235,7 @@
 					if (this.isRefund) {
 						if (!isMoney(refund_price)) {
 							return that.$util.Tips({
-								title: '请输入正确的金额'
+								title: that.$t(`请输入正确的金额`)
 							});
 						}
 						data.price = refund_price;
@@ -287,7 +272,7 @@
 				} else {
 					if (!remark) {
 						return this.$util.Tips({
-							title: '请输入备注'
+							title: that.$t(`请输入备注`)
 						})
 					}
 					data.remark = remark;

@@ -53,7 +53,7 @@ class PayNotifyServices
             /** @var UserRechargeServices $userRecharge */
             $userRecharge = app()->make(UserRechargeServices::class);
             if ($userRecharge->be(['order_id' => $order_id, 'paid' => 1])) return true;
-            return $userRecharge->rechargeSuccess($order_id);
+            return $userRecharge->rechargeSuccess($order_id,['trade_no' => $trade_no]);
         } catch (\Exception $e) {
             return false;
         }

@@ -92,7 +92,7 @@ class SystemStoreServices extends BaseServices
                 if ($this->dao->update($id, $data)) {
                     return true;
                 } else {
-                    throw new AdminException('修改失败或者您没有修改什么！');
+                    throw new AdminException(100007);
                 }
             } else {
                 $data['add_time'] = time();
@@ -100,7 +100,7 @@ class SystemStoreServices extends BaseServices
                 if ($this->dao->save($data)) {
                     return true;
                 } else {
-                    throw new AdminException('保存失败！');
+                    throw new AdminException(100006);
                 }
             }
         });

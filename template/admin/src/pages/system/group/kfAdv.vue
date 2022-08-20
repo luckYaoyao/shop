@@ -22,29 +22,24 @@
           ></vue-ueditor-wrap>
         </FormItem>
 
-        <Button
-          type="primary"
-          class="submission"
-          @click="onsubmit('formValidate')"
-          >提交</Button
-        >
+        <Button type="primary" class="submission" @click="onsubmit('formValidate')">提交</Button>
       </Form>
     </Card>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
-import VueUeditorWrap from "vue-ueditor-wrap";
-import { getKfAdv, setKfAdv } from "@/api/system";
+import { mapState } from 'vuex';
+import VueUeditorWrap from 'vue-ueditor-wrap';
+import { getKfAdv, setKfAdv } from '@/api/system';
 
 export default {
-  name: "kfAdv",
+  name: 'kfAdv',
   components: { VueUeditorWrap },
   data() {
     return {
       dialog: {},
-      isChoice: "单选",
+      isChoice: '单选',
       grid: {
         xl: 8,
         lg: 8,
@@ -68,33 +63,33 @@ export default {
       },
       loading: false,
       formValidate: {
-        content: "",
+        content: '',
       },
       ruleValidate: {
         // content: [
         //     {required: true, message: '请输入内容', trigger: 'change'}
         // ]
       },
-      value: "",
+      value: '',
       modalPic: false,
       template: false,
       treeData: [],
       myConfig: {
         autoHeightEnabled: false, // 编辑器不自动被内容撑高
         initialFrameHeight: 500, // 初始容器高度
-        initialFrameWidth: "100%", // 初始容器宽度
-        UEDITOR_HOME_URL: "/admin/UEditor/",
-        serverUrl: "",
+        initialFrameWidth: '100%', // 初始容器宽度
+        UEDITOR_HOME_URL: '/admin/UEditor/',
+        serverUrl: '',
       },
     };
   },
   computed: {
-    ...mapState("media", ["isMobile"]),
+    ...mapState('media', ['isMobile']),
     labelWidth() {
       return this.isMobile ? undefined : 120;
     },
     labelPosition() {
-      return this.isMobile ? "top" : "right";
+      return this.isMobile ? 'top' : 'right';
     },
   },
   watch: {
@@ -141,25 +136,25 @@ export default {
     },
     addCustomDialog(editorId) {
       window.UE.registerUI(
-        "test-dialog",
+        'test-dialog',
         function (editor, uiName) {
           // 创建 dialog
           let dialog = new window.UE.ui.Dialog({
             // 指定弹出层中页面的路径，这里只能支持页面，路径参考常见问题 2
-            iframeUrl: "/admin/widget.images/index.html?fodder=dialog",
+            iframeUrl: '/admin/widget.images/index.html?fodder=dialog',
             // 需要指定当前的编辑器实例
             editor: editor,
             // 指定 dialog 的名字
             name: uiName,
             // dialog 的标题
-            title: "上传图片",
+            title: '上传图片',
             // 指定 dialog 的外围样式
-            cssRules: "width:960px;height:550px;padding:20px;",
+            cssRules: 'width:960px;height:550px;padding:20px;',
           });
           this.dialog = dialog;
           var btn = new window.UE.ui.Button({
-            name: "dialog-button",
-            title: "上传图片",
+            name: 'dialog-button',
+            title: '上传图片',
             cssRules: `background-image: url(../../../assets/images/icons.png);background-position: -726px -77px;`,
             onclick: function () {
               // 渲染dialog
@@ -169,7 +164,7 @@ export default {
           });
           return btn;
         },
-        37
+        37,
       );
     },
   },

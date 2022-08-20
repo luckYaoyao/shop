@@ -79,6 +79,7 @@ class StoreOrderStoreOrderStatusDao extends BaseDao
     /**
      * 获取确认收货订单id
      * @param array $where
+     * @param int $limit
      * @return array
      */
     public function getTakeOrderIds(array $where, int $limit = 0)

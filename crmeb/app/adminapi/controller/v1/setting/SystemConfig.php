@@ -47,7 +47,7 @@ class SystemConfig extends AuthController
             ['status', -1]
         ]);
         if (!$where['tab_id']) {
-            return app('json')->fail('参数错误');
+            return app('json')->fail(100100);
         }
         if ($where['status'] == -1) {
             unset($where['status']);
@@ -92,24 +92,24 @@ class SystemConfig extends AuthController
             ['sort', 0],
             ['status', 0]
         ]);
-        if (!$data['info']) return app('json')->fail('请输入配置名称');
-        if (!$data['menu_name']) return app('json')->fail('请输入字段名称');
-        if (!$data['desc']) return app('json')->fail('请输入配置简介');
+        if (!$data['info']) return app('json')->fail(400274);
+        if (!$data['menu_name']) return app('json')->fail(400275);
+        if (!$data['desc']) return app('json')->fail(400276);
         if ($data['sort'] < 0) {
             $data['sort'] = 0;
         }
         if ($data['type'] == 'text') {
-            if (!$data['width']) return app('json')->fail('请输入文本框的宽度');
-            if ($data['width'] <= 0) return app('json')->fail('请输入正确的文本框的宽度');
+            if (!$data['width']) return app('json')->fail(400277);
+            if ($data['width'] <= 0) return app('json')->fail(400278);
         }
         if ($data['type'] == 'textarea') {
-            if (!$data['width']) return app('json')->fail('请输入多行文本框的宽度');
-            if (!$data['high']) return app('json')->fail('请输入多行文本框的高度');
-            if ($data['width'] < 0) return app('json')->fail('请输入正确的多行文本框的宽度');
-            if ($data['high'] < 0) return app('json')->fail('请输入正确的多行文本框的宽度');
+            if (!$data['width']) return app('json')->fail(400279);
+            if (!$data['high']) return app('json')->fail(400280);
+            if ($data['width'] < 0) return app('json')->fail(400281);
+            if ($data['high'] < 0) return app('json')->fail(400282);
         }
         if ($data['type'] == 'radio' || $data['type'] == 'checkbox') {
-            if (!$data['parameter']) return app('json')->fail('请输入配置参数');
+            if (!$data['parameter']) return app('json')->fail(400283);
             $this->services->valiDateRadioAndCheckbox($data);
         }
         $data['value'] = json_encode($data['value']);
@@ -120,7 +120,7 @@ class SystemConfig extends AuthController
             $this->services->save($data);
         }
         \crmeb\services\CacheService::clear();
-        return app('json')->success('添加配置成功!');
+        return app('json')->success(400284);
     }
 
     /**
@@ -132,7 +132,7 @@ class SystemConfig extends AuthController
     public function read($id)
     {
         if (!$id) {
-            return app('json')->fail('参数错误，请重新打开');
+            return app('json')->fail(100100);
         }
         $info = $this->services->getReadList((int)$id);
         return app('json')->success(compact('info'));
@@ -181,12 +181,12 @@ class SystemConfig extends AuthController
             ['status', 0]
         ]);
         if (!$this->services->get($id)) {
-            return app('json')->fail('编辑的记录不存在!');
+            return app('json')->fail(100026);
         }
         $data['value'] = json_encode($data['value']);
         $this->services->update($id, $data);
         \crmeb\services\CacheService::clear();
-        return app('json')->success('修改成功!');
+        return app('json')->success(100001);
     }
 
     /**
@@ -198,10 +198,10 @@ class SystemConfig extends AuthController
     public function delete($id)
     {
         if (!$this->services->delete($id))
-            return app('json')->fail('删除失败,请稍候再试!');
+            return app('json')->fail(100008);
         else {
             \crmeb\services\CacheService::clear();
-            return app('json')->success('删除成功!');
+            return app('json')->success(100002);
         }
     }
 
@@ -214,11 +214,11 @@ class SystemConfig extends AuthController
     public function set_status($id, $status)
     {
         if ($status == '' || $id == 0) {
-            return app('json')->fail('参数错误');
+            return app('json')->fail(100100);
         }
         $this->services->update($id, ['status' => $status]);
         \crmeb\services\CacheService::clear();
-        return app('json')->success($status == 0 ? '隐藏成功' : '显示成功');
+        return app('json')->success(100014);
     }
 
     /**
@@ -228,7 +228,7 @@ class SystemConfig extends AuthController
     {
         $tabId = $this->request->param('tab_id', 1);
         if (!$tabId) {
-            return app('json')->fail('参数错误');
+            return app('json')->fail(100100);
         }
         $url = $request->baseUrl();
         return app('json')->success($this->services->getConfigForm($url, $tabId));
@@ -256,24 +256,27 @@ class SystemConfig extends AuthController
         if (isset($post['upload_type'])) {
             $this->services->checkThumbParam($post);
         }
+        if (isset($post['extract_type']) && !count($post['extract_type'])) {
+            return app('json')->fail(400753);
+        }
         if (isset($post['store_brokerage_binding_status'])) {
             $this->services->checkBrokerageBinding($post);
         }
         if (isset($post['store_brokerage_ratio']) && isset($post['store_brokerage_two'])) {
             $num = $post['store_brokerage_ratio'] + $post['store_brokerage_two'];
             if ($num > 100) {
-                return app('json')->fail('一二级返佣比例不能大于100%');
+                return app('json')->fail(400285);
             }
         }
         if (isset($post['spread_banner'])) {
             $num = count($post['spread_banner']);
             if ($num > 5) {
-                return app('json')->fail('分销海报不能多于5张');
+                return app('json')->fail(400286);
             }
         }
         if (isset($post['user_extract_min_price'])) {
             if (!preg_match('/[0-9]$/', $post['user_extract_min_price'])) {
-                return app('json')->fail('提现最低金额只能为数字!');
+                return app('json')->fail(400287);
             }
         }
         if (isset($post['wss_open'])) {
@@ -281,15 +284,28 @@ class SystemConfig extends AuthController
         }
         if (isset($post['store_brokerage_price']) && $post['store_brokerage_statu'] == 3) {
             if ($post['store_brokerage_price'] === '') {
-                return app('json')->fail('满额分销最低金额不能为空！');
+                return app('json')->fail(400288);
             }
             if ($post['store_brokerage_price'] < 0) {
-                return app('json')->fail('满额分销最低金额不能小于0！');
+                return app('json')->fail(400289);
             }
         }
         if (isset($post['store_brokerage_binding_time']) && $post['store_brokerage_binding_status'] == 2) {
             if (!preg_match("/^[0-9][0-9]*$/", $post['store_brokerage_binding_time'])) {
-                return app('json')->fail('绑定有效期请填写正整数！');
+                return app('json')->fail(400290);
+            }
+        }
+        if (isset($post['uni_brokerage_price']) && $post['uni_brokerage_price'] < 0) {
+            return app('json')->fail(400756);
+        }
+        if (isset($post['day_brokerage_price_upper']) && $post['day_brokerage_price_upper'] < -1) {
+            return app('json')->fail(400757);
+        }
+        if( isset($post['pay_new_weixin_open']) && (bool)$post['pay_new_weixin_open'])
+        {
+            if(empty($post['pay_new_weixin_mchid']))
+            {
+                return  app('json')->fail(400763);
             }
         }
         if (isset($post['weixin_ckeck_file'])) {
@@ -315,7 +331,7 @@ class SystemConfig extends AuthController
             }
         }
         \crmeb\services\CacheService::clear();
-        return app('json')->success('修改成功');
+        return app('json')->success(100001);
 
     }
 
@@ -365,5 +381,18 @@ class SystemConfig extends AuthController
             $data[$item['menu_name']] = json_decode($item['value']);
         }
         return app('json')->success($data);
+    }
+
+    /**
+     * 获取版本号信息
+     * @return mixed
+     */
+    public function getVersion()
+    {
+        $version = get_crmeb_version();
+        return app('json')->success([
+            'version' => $version,
+            'label' => 19
+        ]);
     }
 }

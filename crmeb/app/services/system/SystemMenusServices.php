@@ -180,7 +180,7 @@ class SystemMenusServices extends BaseServices
     {
         $menusInfo = $this->dao->get($id);
         if (!$menusInfo) {
-            throw new AdminException('数据不存在');
+            throw new AdminException(100026);
         }
         return create_form('修改权限', $this->createMenusForm($menusInfo->getData()), $this->url('/setting/update/' . $id), 'PUT');
     }
@@ -194,7 +194,7 @@ class SystemMenusServices extends BaseServices
     {
         $menusInfo = $this->dao->get($id);
         if (!$menusInfo) {
-            throw new AdminException('数据不存在');
+            throw new AdminException(100026);
         }
         $menu = $menusInfo->getData();
         $menu['pid'] = (int)$menu['pid'];
@@ -224,7 +224,7 @@ class SystemMenusServices extends BaseServices
     public function delete(int $id)
     {
         if ($this->dao->count(['pid' => $id])) {
-            throw new AdminException('请先删除改菜单下的子菜单');
+            throw new AdminException(400613);
         }
         return $this->dao->delete($id);
     }

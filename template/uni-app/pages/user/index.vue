@@ -5,7 +5,7 @@
 			<view class="sys-head">
 				<view class="sys-bar" :style="{height:sysHeight}"></view>
 				<!-- #ifdef MP -->
-				<view class="sys-title" :style="member_style==3?'color:#333':''">个人中心</view>
+				<view class="sys-title" :style="member_style==3?'color:#333':''">{{$t('个人中心')}}</view>
 				<!-- #endif -->
 				<view class="bg" :style="member_style==3?'background:#f5f5f5':''"></view>
 			</view>
@@ -23,13 +23,13 @@
 								<button class="bntImg" v-if="userInfo.is_complete == 0 && isWeixin"
 									@click="getWechatuserinfo">
 									<image class="avatar" src='/static/images/f.png'></image>
-									<view class="avatarName">获取头像</view>
+									<view class="avatarName">{{$t('获取头像')}}</view>
 								</button>
 								<!-- #endif -->
 								<!-- #ifdef MP -->
 								<button class="bntImg" v-if="userInfo.is_complete == 0" @tap="getUserProfile">
 									<image class="avatar" src='/static/images/f.png'></image>
-									<view class="avatarName">获取头像</view>
+									<view class="avatarName">{{$t('获取头像')}}</view>
 								</button>
 								<!-- #endif -->
 								<!-- #ifndef APP-PLUS -->
@@ -61,13 +61,13 @@
 								<!-- #ifdef MP -->
 								<view class="name" v-if="!userInfo.uid" @click="openAuto"
 									style="height: 100%; display: flex; align-items: center;">
-									请点击授权
+									{{$t('请点击授权')}}
 								</view>
 								<!-- #endif -->
 								<!-- #ifdef H5 -->
 								<view class="name" v-if="!userInfo.uid && isWeixin" @click="openAuto"
 									style="height: 100%; display: flex; align-items: center;">
-									请点击授权
+									{{$t('请点击授权')}}
 								</view>
 								<!-- #endif -->
 								<view class="name" v-if="userInfo.uid">
@@ -83,7 +83,8 @@
 										<image src="/static/images/edit.png" mode=""></image>
 									</view> -->
 								</view>
-								<view class="phone" v-if="!userInfo.phone && isLogin" @tap="bindPhone">绑定手机号</view>
+								<view class="phone" v-if="!userInfo.phone && isLogin" @tap="bindPhone">
+									{{$t('绑定手机号')}}</view>
 							</view>
 							<view class="message">
 								<navigator url="/pages/users/user_info/index" hover-class="none">
@@ -107,38 +108,39 @@
 							<view class="num-item" v-if="userInfo.balance_func_status"
 								@click="goMenuPage('/pages/users/user_money/index')">
 								<text class="num">{{userInfo.now_money || 0}}</text>
-								<view class="txt">余额</view>
+								<view class="txt">{{$t('余额')}}</view>
 							</view>
 							<view class="num-item" v-else
 								@click="goMenuPage('/pages/users/user_goods_collection/index')">
 								<text class="num">{{userInfo.collectCount || 0}}</text>
-								<view class="txt">收藏</view>
+								<view class="txt">{{$t('收藏')}}</view>
 							</view>
 							<view class="num-item" @click="goMenuPage('/pages/users/user_coupon/index')">
 								<text class="num">{{userInfo.couponCount || 0}}</text>
-								<view class="txt">优惠券</view>
+								<view class="txt">{{$t('优惠券')}}</view>
 							</view>
 							<view class="num-item" @click="goMenuPage('/pages/users/user_integral/index')">
 								<text class="num">{{userInfo.integral || 0}}</text>
-								<view class="txt">积分</view>
+								<view class="txt">{{$t('积分')}}</view>
 							</view>
 						</view>
 						<!-- <view class="sign" @click="goSignIn">签到</view> -->
 						<view class="cardVipA acea-row row-between-wrapper"
 							v-if="userInfo.svip_open && member_style==1">
 							<view class="left-box">
-								<view v-if="userInfo.vip_status == 1" class="small">永久</view>
-								<view v-else-if="userInfo.vip_status == 3" class="small">会员到期
+								<view v-if="userInfo.vip_status == 1" class="small">{{$t('永久')}}</view>
+								<view v-else-if="userInfo.vip_status == 3" class="small">{{$t('会员到期')}}
 									{{ userInfo.overdue_time | dateFormat }}
 								</view>
-								<view v-else-if="userInfo.vip_status == -1" class="small">已过期</view>
-								<view v-else-if="userInfo.vip_status == 2" class="small">未开通会员</view>
+								<view v-else-if="userInfo.vip_status == -1" class="small">{{$t('已过期')}}</view>
+								<view v-else-if="userInfo.vip_status == 2" class="small">{{$t('未开通会员')}}
+								</view>
 							</view>
 							<view class="acea-row row-middle">
 								<navigator v-if="userInfo.vip_status == 1" url="/pages/annex/vip_paid/index"
-									hover-class="none" class="btn">查看会员权益</navigator>
+									hover-class="none" class="btn">{{$t('查看会员权益')}}</navigator>
 								<navigator v-else url="/pages/annex/vip_paid/index" hover-class="none" class="btn">
-									{{ userInfo.overdue_time ? '立即续费' : '立即激活' }}
+									{{ userInfo.overdue_time ? $t('立即续费') : $t('立即激活') }}
 								</navigator>
 								<text class="iconfont icon-xiangyou"></text>
 							</view>
@@ -148,18 +150,19 @@
 								<view class="pictrue">
 									<image src="../../static/images/member01.png"></image>
 								</view>
-								<view v-if="userInfo.vip_status == 1" class="small">永久</view>
-								<view v-else-if="userInfo.vip_status == 3" class="small">会员到期
+								<view v-if="userInfo.vip_status == 1" class="small">{{$t('永久')}}</view>
+								<view v-else-if="userInfo.vip_status == 3" class="small">{{$t('会员到期')}}
 									{{ userInfo.overdue_time | dateFormat }}
 								</view>
-								<view v-else-if="userInfo.vip_status == -1" class="small">已过期</view>
-								<view v-else-if="userInfo.vip_status == 2" class="small">未开通会员</view>
+								<view v-else-if="userInfo.vip_status == -1" class="small">{{$t('已过期')}}</view>
+								<view v-else-if="userInfo.vip_status == 2" class="small">{{$t('未开通会员')}}
+								</view>
 							</view>
 							<view class="acea-row">
 								<navigator v-if="userInfo.vip_status == 1" url="/pages/annex/vip_paid/index"
-									hover-class="none" class="btn">会员可享多项权益</navigator>
+									hover-class="none" class="btn">{{$t('会员可享多项权益')}}</navigator>
 								<navigator v-else url="/pages/annex/vip_paid/index" hover-class="none" class="btn">
-									{{ userInfo.overdue_time ? '立即续费' : '立即激活' }}
+									{{ userInfo.overdue_time ? $t('立即续费') : $t('立即激活') }}
 								</navigator>
 								<text class="iconfont icon-xiangyou btn"></text>
 							</view>
@@ -167,26 +170,27 @@
 					</view>
 					<view class="card-vip" v-if="userInfo.svip_open && member_style==2">
 						<view class="left-box">
-							<view class="big">会员可享多项权益</view>
-							<view v-if="userInfo.vip_status == 1" class="small">永久</view>
-							<view v-else-if="userInfo.vip_status == 3" class="small">会员到期
+							<view class="big">{{$t('会员可享多项权益')}}</view>
+							<view v-if="userInfo.vip_status == 1" class="small">{{$t('永久')}}</view>
+							<view v-else-if="userInfo.vip_status == 3" class="small">{{$t('会员到期')}}
 								{{ userInfo.overdue_time | dateFormat }}
 							</view>
-							<view v-else-if="userInfo.vip_status == -1" class="small">已过期</view>
-							<view v-else-if="userInfo.vip_status == 2" class="small">未开通会员</view>
+							<view v-else-if="userInfo.vip_status == -1" class="small">{{$t('已过期')}}</view>
+							<view v-else-if="userInfo.vip_status == 2" class="small">{{$t('未开通会员')}}
+							</view>
 						</view>
 						<navigator v-if="userInfo.vip_status == 1" url="/pages/annex/vip_paid/index" hover-class="none"
-							class="btn">查看会员权益</navigator>
+							class="btn">{{$t('查看会员权益')}}</navigator>
 						<navigator v-else url="/pages/annex/vip_paid/index" hover-class="none" class="btn">
-							{{ userInfo.overdue_time ? '立即续费' : '立即激活' }}
+							{{ userInfo.overdue_time ? $t('立即续费') : $t('立即激活') }}
 						</navigator>
 					</view>
 					<view class="order-wrapper" :class="userInfo.svip_open?'':'height'">
 						<view class="order-hd flex">
-							<view class="left">订单中心</view>
-							<navigator class="right flex" hover-class="none" url="/pages/users/order_list/index"
+							<view class="left">{{$t('订单中心')}}</view>
+							<navigator class="right flex" hover-class="none" url="/pages/goods/order_list/index"
 								open-type="navigate">
-								查看全部
+								{{$t('查看全部')}}
 								<text class="iconfont icon-xiangyou"></text>
 							</navigator>
 						</view>
@@ -198,7 +202,7 @@
 										<text class="iconfont" :class="item.img"></text>
 										<text class="order-status-num" v-if="item.num > 0">{{ item.num }}</text>
 									</view>
-									<view class="txt">{{item.title}}</view>
+									<view class="txt">{{$t(item.title)}}</view>
 								</navigator>
 							</block>
 						</view>
@@ -210,24 +214,24 @@
 						:duration="duration" indicator-color="rgba(255,255,255,0.6)" indicator-active-color="#fff">
 						<block v-for="(item,index) in imgUrls" :key="index">
 							<swiper-item>
-								<navigator @click="goMenuPage(item.url)"
+								<view @click="goMenuPage(item.url)"
 									class='slide-navigator acea-row row-between-wrapper' hover-class='none'>
 									<image :src="item.pic" class="slide-image"></image>
-								</navigator>
+								</view>
 							</swiper-item>
 						</block>
 					</swiper>
 				</view>
 				<!-- 会员菜单 -->
 				<view class="user-menus" style="margin-top: 20rpx;">
-					<view class="menu-title">我的服务</view>
+					<view class="menu-title">{{$t('我的服务')}}</view>
 					<view class="list-box">
 						<!-- #ifdef APP-PLUS || H5 -->
 						<block v-for="(item,index) in MyMenus" :key="index">
 							<view class="item" v-if="item.url!='#' && item.url!='/pages/service/index'"
 								@click="goMenuPage(item.url, item.name)">
 								<image :src="item.pic"></image>
-								<text>{{item.name}}</text>
+								<text>{{$t(item.name)}}</text>
 							</view>
 						</block>
 						<!-- #endif -->
@@ -235,40 +239,41 @@
 						<block v-for="(item,index) in MyMenus" :key="index">
 							<view class="item" v-if="item.url!='#' 
 								&& item.url!='/pages/service/index' 
-								&& item.url!='/pages/customer_list/chat' 
-								|| (item.url=='/pages/customer_list/chat' && routineContact == 0)" @click="goMenuPage(item.url, item.name)">
+								&& item.url!='/pages/extension/customer_list/chat' 
+								|| (item.url=='/pages/extension/customer_list/chat' && routineContact == 0)"
+								@click="goMenuPage(item.url, item.name)">
 								<image :src="item.pic"></image>
-								<text>{{item.name}}</text>
+								<text>{{$t(item.name)}}</text>
 							</view>
 						</block>
 
 						<button class="item" open-type='contact' v-if="routineContact == 1">
 							<image src="/static/images/contact.png"></image>
-							<text>联系客服</text>
+							<text>{{$t('联系客服')}}</text>
 						</button>
 						<!-- #endif -->
 						<!-- #ifdef APP-PLUS -->
 						<view class="item" hover-class="none" @click="goMenuPage('/pages/users/privacy/index?type=3')">
 							<image src="/static/images/menu.png"></image>
-							<text>隐私协议</text>
+							<text>{{$t('隐私协议')}}</text>
 						</view>
 						<!-- #endif -->
 					</view>
 				</view>
 				<view class="user-menus" style="margin-top: 20rpx;" v-if="storeMenu.length">
-					<view class="menu-title">商家管理</view>
+					<view class="menu-title">{{$t('商家管理')}}</view>
 					<view class="list-box">
 						<block v-for="(item,index) in storeMenu" :key="index">
 							<view class="item" :url="item.url" hover-class="none"
 								v-if="item.url!='#' && item.url!='/pages/service/index'"
 								@click="goMenuPage(item.url, item.name)">
 								<image :src="item.pic"></image>
-								<text>{{item.name}}</text>
+								<text>{{$t(item.name)}}</text>
 							</view>
 						</block>
 					</view>
 				</view>
-				<image src="/static/images/support.png" alt="" class='support'></image>
+				<image :src="copyRightPic" alt="" class='support'></image>
 				<view class="uni-p-b-98"></view>
 			</scroll-view>
 		</view>
@@ -341,7 +346,7 @@
 				var rest = setTime - nowTime.getTime()
 				var day = parseInt(rest / (60 * 60 * 24 * 1000))
 				// var hour = parseInt(rest/(60*60*1000)%24) //小时
-				return day + '天'
+				return day + this.$t('day')
 			},
 			dateFormat: function(value) {
 				return dayjs(value * 1000).format('YYYY-MM-DD');
@@ -354,22 +359,22 @@
 				orderMenu: [{
 						img: 'icon-daifukuan',
 						title: '待付款',
-						url: '/pages/users/order_list/index?status=0'
+						url: '/pages/goods/order_list/index?status=0'
 					},
 					{
 						img: 'icon-daifahuo',
 						title: '待发货',
-						url: '/pages/users/order_list/index?status=1'
+						url: '/pages/goods/order_list/index?status=1'
 					},
 					{
 						img: 'icon-daishouhuo',
 						title: '待收货',
-						url: '/pages/users/order_list/index?status=2'
+						url: '/pages/goods/order_list/index?status=2'
 					},
 					{
 						img: 'icon-daipingjia',
 						title: '待评价',
-						url: '/pages/users/order_list/index?status=3'
+						url: '/pages/goods/order_list/index?status=3'
 					},
 					{
 						img: 'icon-a-shouhoutuikuan',
@@ -406,6 +411,7 @@
 				member_style: 1,
 				my_banner_status: 1,
 				is_diy: uni.getStorageSync('is_diy'),
+				copyRightPic: '/static/images/support.png', //版权图片
 			}
 		},
 		onLoad(option) {
@@ -460,7 +466,7 @@
 			let routes = getCurrentPages(); // 获取当前打开过的页面路由数组
 			let curRoute = routes[routes.length - 1].route //获取当前页面路由
 			this.activeRouter = '/' + curRoute
-
+			this.getCopyRight();
 		},
 		onReady() {
 			let self = this
@@ -485,6 +491,7 @@
 				this.getMyMenus();
 				this.setVisit();
 			};
+			this.getCopyRight();
 		},
 		onPullDownRefresh() {
 			this.onLoadFun();
@@ -500,7 +507,7 @@
 					userInfo: e.detail.userInfo
 				}).then(res => {
 					this.getUserInfo();
-					return this.$util.Tips('更新用户信息成功');
+					return this.$util.Tips(this.$t('更新用户信息成功'));
 				}).catch(res => {
 
 				})
@@ -568,52 +575,7 @@
 			},
 			//小程序授权api替换 getUserInfo
 			getUserProfile() {
-				console.log('去登录')
 				toLogin();
-				// uni.showLoading({
-				// 	title: '获取中'
-				// });
-				// let self = this;
-				// Routine.getUserProfile()
-				// 	.then(res => {
-				// 		Routine.getCode()
-				// 			.then(code => {
-				// 				let userInfo = res.userInfo;
-				// 				userInfo.code = code;
-				// 				userInfo.spread_spid = app.globalData.spid; //获取推广人ID
-				// 				userInfo.spread_code = app.globalData.code; //获取推广人分享二维码ID
-				// 				Routine.authUserInfo(userInfo)
-				// 					.then(res => {
-				// 						if (res.data.key !== undefined && res.data.key) {
-				// 							uni.hideLoading();
-				// 							self.authKey = res.data.key;
-				// 							self.isPhoneBox = true;
-				// 						} else {
-				// 							uni.hideLoading();
-				// 							let time = res.data.expires_time - self.$Cache.time();
-				// 							self.$store.commit('LOGIN', {
-				// 								token: res.data.token,
-				// 								time: time
-				// 							});
-				// 							this.getUserInfo()
-				// 						}
-				// 					})
-				// 					.catch(res => {
-				// 						uni.hideLoading();
-				// 						uni.showToast({
-				// 							title: res.msg,
-				// 							icon: 'none',
-				// 							duration: 2000
-				// 						});
-				// 					});
-				// 			})
-				// 			.catch(res => {
-				// 				uni.hideLoading();
-				// 			});
-				// 	})
-				// 	.catch(res => {
-				// 		uni.hideLoading();
-				// 	});
 			},
 			/**
 			 * 
@@ -649,7 +611,7 @@
 					res.data.routine_my_menus.forEach((el, index, arr) => {
 						if (el.url == '/pages/admin/order/index' || el.url ==
 							'/pages/admin/order_cancellation/index' || el.name ==
-							'客服接待') {
+							this.$t(`客服接待`)) {
 							storeMenu.push(el)
 						} else {
 							myMenu.push(el)
@@ -737,25 +699,25 @@
 				if (this.isLogin) {
 					if (url.indexOf('http') === -1) {
 						// #ifdef H5 || APP-PLUS
-						if (name && name === '客服接待') {
+						if (name && name === this.$t(`service_reception`)) {
 							// return window.location.href = `${location.origin}${url}`
 							return uni.navigateTo({
 								url: `/pages/annex/web_view/index?url=${location.origin}${url}`
 							});
-						} else if (name && name === '联系客服') {
+						} else if (name && name === this.$t(`contact_customer`)) {
 							return getCustomer(url)
 
-						} else if (name === '订单核销') {
+						} else if (name === this.$t(`order_write_off`)) {
 							console.log(`${url}`)
 							return uni.navigateTo({
-								url:url
+								url: url
 							});
 							// return window.location.href = `${location.origin}${url}`
 						}
 						// #endif
 
 						// #ifdef MP
-						if (name && name === '联系客服') {
+						if (name && name === this.$t(`contact_customer`)) {
 							return getCustomer(url)
 						}
 						if (url != '#' && url == '/pages/users/user_info/index') {
@@ -765,7 +727,12 @@
 						}
 						// #endif
 						uni.navigateTo({
-							url: url
+							url: url,
+							fail(err) {
+								uni.switchTab({
+									url: url
+								})
+							}
 						})
 					} else {
 						uni.navigateTo({
@@ -790,6 +757,12 @@
 						})
 					}
 				})
+			},
+			getCopyRight() {
+				const copyRight = uni.getStorageSync('copyRight')
+				if (copyRight.copyrightImage) {
+					this.copyRightPic = copyRight.copyrightImage
+				}
 			}
 		}
 	}
@@ -937,7 +910,6 @@
 				top: 0;
 				width: 100%;
 				height: 100%;
-				// background: url("~@/static/images/user-sys.png") no-repeat;
 				background: var(--view-theme);
 				background-size: 100% auto;
 				background-position: left bottom;
@@ -1356,7 +1328,7 @@
 		.btn {
 			height: 52rpx;
 			line-height: 52rpx;
-			padding: 0 20rpx;
+			padding: 0 10rpx;
 			text-align: center;
 			background: #fff;
 			border-radius: 28rpx;

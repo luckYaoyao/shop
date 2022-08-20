@@ -109,6 +109,6 @@ class CopyTaobao extends AuthController
             ['attrs', []]
         ]);
         $this->services->save($data);
-        return app('json')->success('生成商品成功');
+        return app('json')->success(100000);
     }
 }

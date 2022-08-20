@@ -57,7 +57,7 @@ class StoreProductAttrServices extends BaseServices
         if (isset($data['valueGroup']) && $data['valueGroup']) {
             $detailTemp = array_column($data['valueGroup'], 'vip_price');
             if ($detailTemp) {
-                if ($is_vip && in_array(0, $detailTemp)) throw new AdminException('会员价格不能为0');
+                if ($is_vip && in_array(0, $detailTemp)) throw new AdminException(400588);
                 $detailTemp = array_diff($detailTemp, [0]);
                 if ($detailTemp) {
                     $productVipPrice = min($detailTemp);
@@ -67,7 +67,7 @@ class StoreProductAttrServices extends BaseServices
         }
         if ($is_virtual == 0 || $is_virtual == 2) {
             if ($is_virtual == 2 && in_array(0, array_column($data['valueGroup'], 'coupon_id'))) {
-                throw new AdminException('虚拟优惠券商品请选择优惠券');
+                throw new AdminException(400589);
             }
             return $storeProductAttrValueServices->saveAll($data['valueGroup']);
         } else {
@@ -89,7 +89,7 @@ class StoreProductAttrServices extends BaseServices
                         if (!$productVirtual->count(['card_no' => $items['key'], 'card_pwd' => $items['value']])) {
                             $productVirtual->save($data);
                         } else {
-                            throw new AdminException('卡号：' . $items['key'] . '密码：' . $items['value'] . '，已经添加过，请重新添加卡密');
+                            throw new AdminException(400590, ['key' => $items['key'], 'value' => $items['value']]);
                         }
                     }
                 }

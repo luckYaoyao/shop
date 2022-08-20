@@ -14,14 +14,14 @@ namespace app\services\kefu;
 
 use app\services\BaseServices;
 use app\dao\service\StoreServiceDao;
-use app\services\message\service\StoreServiceAuxiliaryServices;
-use app\services\message\service\StoreServiceServices;
+use app\services\kefu\service\StoreServiceAuxiliaryServices;
+use app\services\kefu\service\StoreServiceServices;
 use app\services\user\UserServices;
 use app\services\wechat\WechatUserServices;
+use crmeb\exceptions\ApiException;
 use crmeb\services\workerman\ChannelService;
-use think\exception\ValidateException;
-use app\services\message\service\StoreServiceLogServices;
-use app\services\message\service\StoreServiceRecordServices;
+use app\services\kefu\service\StoreServiceLogServices;
+use app\services\kefu\service\StoreServiceRecordServices;
 use think\facade\Log;
 
 /**
@@ -87,7 +87,7 @@ class KefuServices extends BaseServices
     public function setTransfer(int $kfuUid, int $uid, int $kfuToUid)
     {
         if ($uid === $kfuToUid) {
-            throw new ValidateException('自己不能转接给自己');
+            throw new ApiException(410139);
         }
         /** @var StoreServiceAuxiliaryServices $auxiliaryServices */
         $auxiliaryServices = app()->make(StoreServiceAuxiliaryServices::class);
@@ -123,7 +123,7 @@ class KefuServices extends BaseServices
             $record = $serviceRecord->saveRecord($uid, $kfuToUid, $messageData['msn'] ?? '', $info['type'] ?? 1, $messageData['message_type'] ?? 1, $num, $info['is_tourist'] ?? 0, $info['nickname'] ?? "", $info['avatar'] ?? '');
             $res = $res && $auxiliaryServices->saveAuxliary(['binding_id' => $kfuUid, 'relation_id' => $uid]);
             if (!$res && !$record) {
-                throw new ValidateException('转接客服失败');
+                throw new ApiException(410140);
             }
             return $record;
         });

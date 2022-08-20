@@ -97,7 +97,7 @@ class JwtAuth
         $exp = $tokenInfo['params']['exp'] - $tokenInfo['params']['iat'] + 60;
         $res = CacheService::setTokenBucket(md5($tokenInfo['token']), ['uid' => $id, 'type' => $type, 'token' => $tokenInfo['token'], 'exp' => $exp], (int)$exp, $type);
         if (!$res) {
-            throw new AdminException(ApiErrorCode::ERR_SAVE_TOKEN);
+            throw new AdminException(100023);
         }
         return $tokenInfo;
     }

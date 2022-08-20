@@ -18,7 +18,7 @@ use crmeb\exceptions\AuthException;
 use think\db\exception\DbException;
 use think\exception\Handle;
 use think\exception\ValidateException;
-use think\facade\Config;
+use think\facade\Env;
 use think\facade\Log;
 use think\Response;
 use Throwable;
@@ -77,7 +77,7 @@ class KefuApiExceptionHandle extends Handle
      */
     public function render($request, Throwable $e): Response
     {
-        $massageData = Config::get('app_debug', false) ? [
+        $massageData = Env::get('app_debug', false) ? [
             'file' => $e->getFile(),
             'line' => $e->getLine(),
             'trace' => $e->getTrace(),
@@ -85,11 +85,20 @@ class KefuApiExceptionHandle extends Handle
         ] : [];
         // 添加自定义异常处理机制
         if ($e instanceof DbException) {
-            return app('json')->fail('数据获取失败', $massageData);
-        } elseif ($e instanceof ValidateException || $e instanceof AuthException) {
-            return app('json')->make($e->getCode() ? : 400, $e->getMessage());
+            return app('json')->fail(100102, $massageData);
+        } elseif ($e instanceof ValidateException) {
+            return app('json')->fail($e->getMessage(), $massageData);
+        } elseif ($e instanceof AuthException || $e instanceof AdminException || $e instanceof ApiException) {
+            return app('json')->make($e->getCode() ?: 400, $e->getMessage(), $massageData);
         } else {
-            return app('json')->code(200)->make(400, $e->getMessage(), $massageData);
+            return app('json')->fail('很抱歉!系统开小差了', Env::get('app_debug', false) ? [
+                'message' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'code' => $e->getCode(),
+                'line' => $e->getLine(),
+                'trace' => $e->getTrace(),
+                'previous' => $e->getPrevious(),
+            ] : []);
         }
     }
 }

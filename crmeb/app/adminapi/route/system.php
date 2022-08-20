@@ -83,6 +83,23 @@ Route::group('system', function () {
     Route::get('version_crate/:id', 'v1.system.AppVersion/crate')->option(['real_name' => '添加版本']);
     //添加版本信息
     Route::post('version_save', 'v1.system.AppVersion/save')->option(['real_name' => '添加版本']);
+
+    //升级状态
+    Route::get('upgrade_status', 'UpgradeController/upgradeStatus')->option(['real_name' => '升级状态']);
+    //升级包列表
+    Route::get('upgrade/list', 'UpgradeController/upgradeList')->option(['real_name' => '升级包列表']);
+    //可升级包列表
+    Route::get('upgradeable/list', 'UpgradeController/upgradeableList')->option(['real_name' => '可升级包列表']);
+    //升级协议
+    Route::get('upgrade/agreement', 'UpgradeController/agreement')->option(['real_name' => '升级协议']);
+    //升级包下载
+    Route::post('upgrade_download/:package_key', 'UpgradeController/download')->option(['real_name' => '升级包下载']);
+    //升级进度
+    Route::get('upgrade_progress', 'UpgradeController/progress')->option(['real_name' => '升级进度']);
+    //升级记录
+    Route::get('upgrade_log/list', 'UpgradeController/upgradeLogList')->option(['real_name' => '升级记录']);
+    //导出备份项目
+    Route::get('upgrade_export/:id/:type', 'UpgradeController/export')->option(['real_name' => '导出备份']);
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,

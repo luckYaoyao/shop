@@ -59,7 +59,7 @@ class SystemConfigTabDao extends BaseDao
      */
     public function getConfgTabList(array $where, int $page, int $limit)
     {
-        return $this->search($where)->order('sort desc,id asc')->page($page, $limit)->select();
+        return $this->search($where)->order('sort desc,id asc')->select();
     }
 
 }

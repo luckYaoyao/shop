@@ -35,12 +35,12 @@ class StoreProductController
             ['id', 0],
             ['type', 0]
         ], true);
-        if (!$id) return app('json')->fail('参数错误');
+        if (!$id) return app('json')->fail(100100);
         /** @var StoreProductAttrServices $storeProductAttrServices */
         $storeProductAttrServices = app()->make(StoreProductAttrServices::class);
         list($data['productAttr'], $data['productValue']) = $storeProductAttrServices->getProductAttrDetail($id, $request->uid(), $type);
         $storeInfo = $this->services->getOne(['id' => $id]);
         $data['storeInfo'] = $storeInfo ? $storeInfo->toArray() : [];
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 }

@@ -28,7 +28,7 @@ class PrintJob extends BaseJobs
     use QueueTrait;
 
     /**
-     * 发送短信
+     * 小票打印
      * @param $switch
      * @param $adminList
      * @param $order

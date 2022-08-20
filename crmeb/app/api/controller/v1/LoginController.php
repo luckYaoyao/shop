@@ -13,6 +13,7 @@ namespace app\api\controller\v1;
 
 
 use app\Request;
+use app\services\message\notice\SmsService;
 use app\services\wechat\WechatServices;
 use think\facade\Cache;
 use app\jobs\TaskJob;
@@ -21,7 +22,6 @@ use crmeb\services\CacheService;
 use app\services\user\LoginServices;
 use think\exception\ValidateException;
 use app\api\validate\user\RegisterValidates;
-use app\services\message\sms\SmsSendServices;
 
 /**微信小程序授权类
  * Class AuthController
@@ -29,7 +29,7 @@ use app\services\message\sms\SmsSendServices;
  */
 class LoginController
 {
-    protected $services = NUll;
+    protected $services;
 
     /**
      * LoginController constructor.
@@ -55,9 +55,9 @@ class LoginController
         ], true);
         TaskJob::dispatchDo('emptyYesterdayAttachment');
         if (!$account || !$password) {
-            return app('json')->fail('请输入账号和密码');
+            return app('json')->fail(410000);
         }
-        return app('json')->success('登录成功', $this->services->login($account, $password, $spread));
+        return app('json')->success(410001, $this->services->login($account, $password, $spread));
     }
 
     /**
@@ -68,7 +68,7 @@ class LoginController
     {
         $key = trim(ltrim($request->header(Config::get('cookie.token_name')), 'Bearer'));
         CacheService::redisHandler()->delete($key);
-        return app('json')->success('成功');
+        return app('json')->success(410002);
     }
 
     public function verifyCode()
@@ -85,9 +85,9 @@ class LoginController
         $rep = captcha();
         $key = app('session')->get('captcha.key');
         $uni = $request->get('key');
-        if ($uni)
+        if ($uni) {
             Cache::set('sms.key.cap.' . $uni, $key, 300);
-
+        }
         return $rep;
     }
 
@@ -105,17 +105,12 @@ class LoginController
         if (!Cache::has($cacheName)) {
             return false;
         }
-
         $key = Cache::get($cacheName);
-
         $code = mb_strtolower($code, 'UTF-8');
-
         $res = password_verify($code, $key);
-
         if ($res) {
             Cache::delete($cacheName);
         }
-
         return $res;
     }
 
@@ -124,7 +119,7 @@ class LoginController
      * @param Request $request
      * @return mixed
      */
-    public function verify(Request $request, SmsSendServices $services)
+    public function verify(Request $request, SmsService $services)
     {
         [$phone, $type, $key, $code] = $request->postMore([['phone', 0], ['type', ''], ['key', ''], ['code', '']], true);
 
@@ -132,21 +127,21 @@ class LoginController
         $nowKey = 'sms.' . date('YmdHi');
 
         if (!Cache::has($keyName))
-            return app('json')->make(401, '发送验证码失败,请刷新页面重新获取');
+            return app('json')->fail(410003);
 
         if (($num = Cache::get($keyName)) > 2) {
             if (!$code)
-                return app('json')->make(402, '请输入验证码');
+                return app('json')->fail(410004);
 
             if (!$this->checkCaptcha($key, $code))
-                return app('json')->fail('验证码输入有误');
+                return app('json')->fail(410005);
         }
 
         $total = 1;
         if ($has = Cache::has($nowKey)) {
             $total = Cache::get($nowKey);
             if ($total > Config::get('sms.maxMinuteCount', 20))
-                return app('json')->success('已发送');
+                return app('json')->success(410006);
         }
 
         try {
@@ -160,9 +155,9 @@ class LoginController
             CacheService::set('code_' . $phone, $smsCode, $time * 60);
             Cache::set($keyName, $num + 1, 300);
             Cache::set($nowKey, $total, 61);
-            return app('json')->success('发送成功');
+            return app('json')->success(410007);
         } else {
-            return app('json')->fail('发送失败');
+            return app('json')->fail(410008);
         }
 
     }
@@ -182,19 +177,19 @@ class LoginController
         }
         $verifyCode = CacheService::get('code_' . $account);
         if (!$verifyCode)
-            return app('json')->fail('请先获取验证码');
+            return app('json')->fail(410009);
         $verifyCode = substr($verifyCode, 0, 6);
         if ($verifyCode != $captcha)
-            return app('json')->fail('验证码错误');
+            return app('json')->fail(410010);
         if (strlen(trim($password)) < 6 || strlen(trim($password)) > 16)
-            return app('json')->fail('密码必须是在6到16位之间');
-        if (md5($password) == md5('123456')) return app('json')->fail('密码太过简单，请输入较为复杂的密码');
+            return app('json')->fail(410011);
+        if (md5($password) == md5('123456')) return app('json')->fail(410012);
 
         $registerStatus = $this->services->register($account, $password, $spread, 'h5');
         if ($registerStatus) {
-            return app('json')->success('注册成功');
+            return app('json')->success(410013);
         }
-        return app('json')->fail('注册失败');
+        return app('json')->fail(410014);
     }
 
     /**
@@ -212,17 +207,17 @@ class LoginController
         }
         $verifyCode = CacheService::get('code_' . $account);
         if (!$verifyCode)
-            return app('json')->fail('请先获取验证码');
+            return app('json')->fail(410009);
         $verifyCode = substr($verifyCode, 0, 6);
         if ($verifyCode != $captcha) {
-            return app('json')->fail('验证码错误');
+            return app('json')->fail(410010);
         }
         if (strlen(trim($password)) < 6 || strlen(trim($password)) > 16)
-            return app('json')->fail('密码必须是在6到16位之间');
-        if ($password == '123456') return app('json')->fail('密码太过简单，请输入较为复杂的密码');
+            return app('json')->fail(410011);
+        if ($password == '123456') return app('json')->fail(410012);
         $resetStatus = $this->services->reset($account, $password);
-        if ($resetStatus) return app('json')->success('修改成功');
-        return app('json')->fail('修改失败');
+        if ($resetStatus) return app('json')->success(100001);
+        return app('json')->fail(100007);
     }
 
     /**
@@ -247,18 +242,18 @@ class LoginController
         //验证验证码
         $verifyCode = CacheService::get('code_' . $phone);
         if (!$verifyCode)
-            return app('json')->fail('请先获取验证码');
+            return app('json')->fail(410009);
         $verifyCode = substr($verifyCode, 0, 6);
         if ($verifyCode != $captcha) {
-            return app('json')->fail('验证码错误');
+            return app('json')->fail(410010);
         }
         $user_type = $request->getFromType() ? $request->getFromType() : 'h5';
         $token = $this->services->mobile($phone, $spread, $user_type);
         if ($token) {
             CacheService::delete('code_' . $phone);
-            return app('json')->success('登录成功', $token);
+            return app('json')->success(410001, $token);
         } else {
-            return app('json')->fail('登录失败');
+            return app('json')->fail(410002);
         }
     }
 
@@ -277,9 +272,9 @@ class LoginController
         $token = $this->services->switchAccount($user, $from);
         if ($token) {
             $token['userInfo'] = $user;
-            return app('json')->success('登录成功', $token);
+            return app('json')->success(410001, $token);
         } else
-            return app('json')->fail('登录失败');
+            return app('json')->fail(410002);
     }
 
     /**
@@ -304,25 +299,25 @@ class LoginController
             return app('json')->fail($e->getError());
         }
         if (!$key) {
-            return app('json')->fail('参数错误');
+            return app('json')->fail(100100);
         }
         if (!$phone) {
-            return app('json')->fail('请输入手机号');
+            return app('json')->fail(410015);
         }
         //验证验证码
         $verifyCode = CacheService::get('code_' . $phone);
         if (!$verifyCode)
-            return app('json')->fail('请先获取验证码');
+            return app('json')->fail(410009);
         $verifyCode = substr($verifyCode, 0, 6);
         if ($verifyCode != $captcha) {
-            return app('json')->fail('验证码错误');
+            return app('json')->fail(410010);
         }
         $re = $this->services->bindind_phone($phone, $key);
         if ($re) {
             CacheService::delete('code_' . $phone);
-            return app('json')->success('绑定成功', $re);
+            return app('json')->success(410016, $re);
         } else
-            return app('json')->fail('绑定失败');
+            return app('json')->fail(410017);
     }
 
     /**
@@ -351,18 +346,18 @@ class LoginController
             //验证验证码
             $verifyCode = CacheService::get('code_' . $phone);
             if (!$verifyCode)
-                return app('json')->fail('请先获取验证码');
+                return app('json')->fail(410009);
             $verifyCode = substr($verifyCode, 0, 6);
             if ($verifyCode != $captcha)
-                return app('json')->fail('验证码错误');
+                return app('json')->fail(410010);
         }
         $uid = (int)$request->uid();
         $re = $this->services->userBindindPhone($uid, $phone, $step);
         if ($re) {
             CacheService::delete('code_' . $phone);
-            return app('json')->success($re['msg'] ?? '绑定成功', $re['data'] ?? []);
+            return app('json')->success($re['msg'] ?? 410016, $re['data'] ?? []);
         } else
-            return app('json')->fail('绑定失败');
+            return app('json')->fail(410017);
     }
 
     public function update_binding_phone(Request $request)
@@ -381,17 +376,17 @@ class LoginController
         //验证验证码
         $verifyCode = CacheService::get('code_' . $phone);
         if (!$verifyCode)
-            return app('json')->fail('请先获取验证码');
+            return app('json')->fail(410009);
         $verifyCode = substr($verifyCode, 0, 6);
         if ($verifyCode != $captcha)
-            return app('json')->fail('验证码错误');
+            return app('json')->fail(410010);
         $uid = (int)$request->uid();
         $re = $this->services->updateBindindPhone($uid, $phone);
         if ($re) {
             CacheService::delete('code_' . $phone);
-            return app('json')->success($re['msg'] ?? '修改成功', $re['data'] ?? []);
+            return app('json')->success($re['msg'] ?? 100001, $re['data'] ?? []);
         } else
-            return app('json')->fail('修改失败');
+            return app('json')->fail(100007);
     }
 
     /**
@@ -402,11 +397,11 @@ class LoginController
     public function setLoginKey(string $code)
     {
         if (!$code) {
-            return app('json')->fail('登录CODE不存在');
+            return app('json')->fail(410020);
         }
         $cacheCode = CacheService::get($code);
         if ($cacheCode === false || $cacheCode === null) {
-            return app('json')->fail('二维码已过期请重新扫描');
+            return app('json')->fail(410021);
         }
         CacheService::set($code, '0', 600);
         return app('json')->success();
@@ -431,16 +426,16 @@ class LoginController
         ], true);
         if ($phone) {
             if (!$captcha) {
-                return app('json')->fail('请输入验证码');
+                return app('json')->fail(410004);
             }
             //验证验证码
             $verifyCode = CacheService::get('code_' . $phone);
             if (!$verifyCode)
-                return app('json')->fail('请先获取验证码');
+                return app('json')->fail(410009);
             $verifyCode = substr($verifyCode, 0, 6);
             if ($verifyCode != $captcha) {
                 CacheService::delete('code_' . $phone);
-                return app('json')->fail('验证码错误');
+                return app('json')->fail(410010);
             }
         }
         if ($email == '') $email = substr(md5($openId), 0, 12);
@@ -452,11 +447,11 @@ class LoginController
         ];
         $token = $services->appAuth($userInfo, $phone, 'apple');
         if ($token) {
-            return app('json')->success('登录成功', $token);
+            return app('json')->success(410001, $token);
         } else if ($token === false) {
-            return app('json')->success('登录成功', ['isbind' => true]);
+            return app('json')->success(410001, ['isbind' => true]);
         } else {
-            return app('json')->fail('登陆失败');
+            return app('json')->fail(410019);
         }
 
     }

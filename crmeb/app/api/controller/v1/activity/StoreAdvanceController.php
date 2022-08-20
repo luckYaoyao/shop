@@ -45,7 +45,7 @@ class StoreAdvanceController
         ]);
         $where['status'] = 1;
         $data = $this->services->getList($where);
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 
     /**
@@ -60,6 +60,6 @@ class StoreAdvanceController
     public function detail(Request $request, $id)
     {
         $data = $this->services->getAdvanceinfo($request, $id);
-        return app('json')->successful($data);
+        return app('json')->success($data);
     }
 }

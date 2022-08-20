@@ -48,7 +48,9 @@ class CategoryServices extends BaseServices
     {
         [$page, $limit] = $this->getPageValue();
         $data = $this->dao->getCateList($where, $page, $limit, $field);
-        array_unshift($data, ['id' => 0, 'name' => '系统话术', 'sort' => 0]);
+        if ($where['owner_id'] == 0) {
+            array_unshift($data, ['id' => 0, 'name' => '系统话术', 'sort' => 0]);
+        }
         $count = $this->dao->count($where);
         return compact('data', 'count');
     }

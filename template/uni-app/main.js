@@ -15,6 +15,7 @@ import Cache from './utils/cache'
 import util from 'utils/util'
 import configs from './config/app.js'
 import socket from './libs/new_chat.js'
+import i18n from './utils/lang.js';
 Vue.prototype.$util = util;
 Vue.prototype.$config = configs;
 Vue.prototype.$Cache = Cache;
@@ -25,7 +26,9 @@ import pageLoading from './components/pageLoading.vue'
 import skeleton from './components/skeleton/index.vue'
 
 Vue.component('skeleton', skeleton)
-Vue.component('pageLoading',pageLoading)
+Vue.component('pageLoading',pageLoading) 
+
+
 // #ifdef H5
 
 
@@ -58,7 +61,7 @@ if (vconsole !== undefined) {
 	  Cache.clear(cookieName);
 } else vconsole = Cache.get(cookieName);
 
-import VConsole from './components/vconsole.min.js'
+import VConsole from './pages/extension/components/vconsole.min.js'
 
 if (vconsole !== undefined && vconsole === md5Crmeb) {
 	Cache.set(cookieName, md5Crmeb, 3600);
@@ -79,5 +82,6 @@ const app = new Vue({
     ...App,
 	store,
 	Cache,
+	i18n,
 })
 app.$mount();

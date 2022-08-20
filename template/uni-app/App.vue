@@ -18,7 +18,8 @@
 		getCartCounts,
 	} from '@/api/order.js';
 	import {
-		colorChange
+		colorChange,
+		getCrmebCopyRight
 	} from '@/api/api.js';
 	import {
 		mapGetters
@@ -45,7 +46,8 @@
 			globalData: false,
 			isIframe: false,
 			tabbarShow: true,
-			windowHeight: 0
+			windowHeight: 0,
+			locale: ''
 		},
 		mixins: [colors],
 		computed: mapGetters(['isLogin', 'cartNum']),
@@ -300,15 +302,15 @@
 			// #endif
 			// #ifdef MP
 			// 小程序静默授权
-			if (!this.$store.getters.isLogin) {
-				Routine.getCode()
-					.then(code => {
-						this.silenceAuth(code);
-					})
-					.catch(res => {
-						uni.hideLoading();
-					});
-			}
+			// if (!this.$store.getters.isLogin) {
+			// 	Routine.getCode()
+			// 		.then(code => {
+			// 			this.silenceAuth(code);
+			// 		})
+			// 		.catch(res => {
+			// 			uni.hideLoading();
+			// 		});
+			// }
 			// #endif
 			// #ifdef H5
 			// 添加crmeb chat 统计
@@ -316,31 +318,34 @@
 			__s.src = `${HTTP_REQUEST_URL}/api/get_script`;
 			document.head.appendChild(__s);
 			// #endif
+			getCrmebCopyRight().then(res => {
+				uni.setStorageSync('copyRight', res.data)
+			})
 		},
 		methods: {
 			// 小程序静默授权
-			silenceAuth(code) {
-				let that = this;
-				let spread = that.globalData.spid ? that.globalData.spid : '';
-				silenceAuth({
-						code: code,
-						spread_spid: spread,
-						spread_code: that.globalData.code
-					})
-					.then(res => {
-						if (res.data.token !== undefined && res.data.token) {
-							uni.hideLoading();
-							let time = res.data.expires_time - this.$Cache.time();
-							that.$store.commit('LOGIN', {
-								token: res.data.token,
-								time: time
-							});
-							that.$store.commit('SETUID', res.data.userInfo.uid);
-							that.$store.commit('UPDATE_USERINFO', res.data.userInfo);
-						}
-					})
-					.catch(res => {});
-			},
+			// silenceAuth(code) {
+			// 	let that = this;
+			// 	let spread = that.globalData.spid ? that.globalData.spid : '';
+			// 	silenceAuth({
+			// 			code: code,
+			// 			spread_spid: spread,
+			// 			spread_code: that.globalData.code
+			// 		})
+			// 		.then(res => {
+			// 			if (res.data.token !== undefined && res.data.token) {
+			// 				uni.hideLoading();
+			// 				let time = res.data.expires_time - this.$Cache.time();
+			// 				that.$store.commit('LOGIN', {
+			// 					token: res.data.token,
+			// 					time: time
+			// 				});
+			// 				that.$store.commit('SETUID', res.data.userInfo.uid);
+			// 				that.$store.commit('UPDATE_USERINFO', res.data.userInfo);
+			// 			}
+			// 		})
+			// 		.catch(res => {});
+			// },
 		},
 		onHide: function() {
 
@@ -349,7 +354,7 @@
 </script>
 
 <style>
-	@import url('@/plugin/emoji-awesome/css/google.min.css');
+	@import url('@/plugin/emoji-awesome/css/tuoluojiang.css');
 	@import url('@/plugin/animate/animate.min.css');
 	@import 'static/css/base.css';
 	@import 'static/iconfont/iconfont.css';

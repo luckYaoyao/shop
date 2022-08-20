@@ -1,4 +1,4 @@
-![输入图片说明](https://images.gitee.com/uploads/images/2021/1015/163550_f4d3b3cc_5516386.jpeg "v4-gitee(3).jpg")
+![输入图片说明](readme/pic/gitee.jpg)
 <p align="center" >
     <img src="https://images.gitee.com/uploads/images/2021/1109/164354_0aafe3d2_892944.gif" />
 </p>
@@ -7,12 +7,13 @@
 
  
 
- CRMEB打通版是一款全开源支持免费商用的PHP单商户商城系统；
+ CRMEB打通版是一款全开源支持免费商用的PHP **多语言** 商城系统；
  
- CRMEB技术团队（官网：www.crmeb.com)历经5年时间匠心之作！系统采用前后端分离技术，基于TP6+Uni-app框架开发；客户移动端采用uni-app开发，管理后台前端使用iviewUI开发。系统支持微信公众号端、微信小程序端、H5端、PC端多端账号同步，可快速打包生成APP；
+ CRMEB技术团队（官网：www.crmeb.com)历经6年时间匠心之作！系统采用前后端分离技术，基于TP6+Uni-app框架开发；客户移动端采用uni-app开发，管理后台前端使用iviewUI开发。系统支持微信公众号端、微信小程序端、H5端、PC端多端账号同步，可快速打包生成APP；
  
  赋能开发者，减少重复造轮子；系统支持自动检查安装环境一键安装部署，使用简单方便；围绕方便二次开发，系统内置强大灵活的权限管理，可以控制到每一个菜单；通过内置组合数据,管理碎片化数据,系统配置快速添加系统配置参数，所有用户操作地方都内置钩子，代码严格分控制层（中间件、路由）、Services层、Dao层、Model层；后台应用form-builder PHP快速生成现代化表单；并提供详细的使用文档、开发文档、接口文档、数据字典等相关文档；及十几个技术交流群、技术论坛答疑；让您二开无忧，帮助更多开发者快速上手，节省开发时间，提升开发效率；助力企业实现数字化经营！
- 
+
+![输入图片说明](readme/pic/gitee1.jpg)
 <p align="center" >
 <a href="https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md"> 宽屏预览 </a>
 </p>
@@ -100,7 +101,9 @@ Redis
     15.支持队列降低流量高峰，解除耦合，高可用;
     16.一键安装自动检查系统环境一键安装；
     17.移动端使用uni-app进行开发，方便编译成各种格式的代码；
-    18.严格代码规范，层次分明
+    18.严格代码规范，层次分明；
+    19.移动端支持多语言切换；
+    20.后台返回错误码统一
 ~~~
 
 ## 页面展示
@@ -110,7 +113,7 @@ Redis
 ![输入图片说明](readme/pic/gitee开源版详情_03.jpg)
 ![输入图片说明](readme/pic/gitee开源版详情_04.jpg)
 ![输入图片说明](readme/pic/gitee开源版详情_05.jpg)
-
+### <a href='http://s.crmeb.com/goods_detail/728' target='_blank'>点击查看高清版全套UI设计图</a>
 
 
 ##  系统演示

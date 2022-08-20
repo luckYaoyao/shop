@@ -15,7 +15,7 @@ use app\dao\other\TemplateMessageDao;
 use app\services\BaseServices;
 
 /**
- * 模板消息
+ * 模板消息管理类
  * Class TemplateMessageServices
  * @package app\services\other
  * @method getOne(array $where, ?string $field = '*')  获取一条信息
