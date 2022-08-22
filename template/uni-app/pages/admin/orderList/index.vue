@@ -29,7 +29,7 @@
 					</view>
 					<view class="state"
 						:class="(item.refund_status==0 && where.status != 0 && item.refund.length)?'on':''">
-						{{item.refund_status==1?$t(`退款中`):item.refund_status==2?$t(`已退款`):item.refund_status==3?$t(`拒绝退款`):item.status_name.status_name}}
+						{{item.refund_status==1?$t(`退款中`):item.refund_status==2?$t(`已退款`):item.refund_status==3?$t(`拒绝退款`):$t(item.status_name.status_name)}}
 						<text
 							v-if="item.refund_status==0 && where.status != 0 && item.refund.length">{{item.is_all_refund?$t(`退款中`):$t(`部分退款中`)}}</text>
 					</view>
@@ -117,6 +117,7 @@
 	} from "@/api/admin";
 	import Loading from '@/components/Loading/index'
 	import PriceChange from '../components/PriceChange/index.vue'
+	import {HTTP_REQUEST_URL} from '@/config/app'
 	import {
 		isMoney
 	} from '@/utils/validate.js'
@@ -128,6 +129,7 @@
 		},
 		data() {
 			return {
+				imgHost:HTTP_REQUEST_URL,
 				current: "",
 				change: false,
 				types: 0,

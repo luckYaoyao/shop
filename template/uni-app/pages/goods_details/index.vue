@@ -71,7 +71,7 @@
 								<view class="iconfont icon-fenxiang skeleton-rect" @click="listenerActionSheet"></view>
 							</view>
 							<view class="introduce skeleton-rect" v-text="storeInfo.store_name"></view>
-							<view class="limit_good" v-if="storeInfo.limit_type > 0">{{storeInfo.limit_type == 1 ? $t(`限购`) : $t(`限购`)}}{{storeInfo.limit_num}}{{storeInfo.unit_name}}</view>
+							<view class="limit_good" v-if="storeInfo.limit_type > 0">{{storeInfo.limit_type == 1 ? $t(`单次限购`) : $t(`永久限购`)}}{{storeInfo.limit_num}}{{$t(storeInfo.unit_name)}}</view>
 							<view class="label acea-row row-between-wrapper" style="padding-bottom: 20rpx">
 								<view class="skeleton-rect">
 									{{$t(`划线价`)}} : {{$t(`￥`)}}{{storeInfo.ot_price || 0}}

@@ -35,7 +35,7 @@
 								<text class="y_money">{{$t(`￥`)}}{{item.ot_price}}</text>
 							</view>
 							<view class="limit">{{$t(`限量`)}} <text
-									class="limitPrice">{{item.quota_show}}{{item.unit_name || ''}}</text></view>
+									class="limitPrice">{{item.quota_show}}{{$t(item.unit_name) || ''}}</text></view>
 							<view class="progress">
 								<view class='bg-reds' :style="'width:'+item.percent+'%;'"></view>
 								<view class='piece'>{{$t(`已抢`)}}{{item.percent}}%</view>

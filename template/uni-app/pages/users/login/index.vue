@@ -82,9 +82,9 @@
 			<view class="protocol">
 				<checkbox-group @change='ChangeIsDefault'>
 					<checkbox :class="inAnimation?'trembling':''" @animationend='inAnimation=false'
-						:checked="protocol ? true : false" />已阅读并同意 <text class="main-color"
-						@click="privacy(4)">《用户协议》</text>
-					与<text class="main-color" @click="privacy(3)">《隐私协议》</text>
+						:checked="protocol ? true : false" />{{$t(`已阅读并同意`)}} <text class="main-color"
+						@click="privacy(4)">{{$t(`《用户协议》`)}}</text>
+					{{$t(`与`)}}<text class="main-color" @click="privacy(3)">{{$t(`《隐私协议》`)}}</text>
 				</checkbox-group>
 			</view>
 		</view>

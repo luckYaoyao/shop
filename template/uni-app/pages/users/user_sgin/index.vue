@@ -23,7 +23,7 @@
 				<view class='list acea-row row-between-wrapper'>
 					<view class='item' v-for="(item,index) in signSystemList" :key="index">
 						<view :class='(index+1) == signSystemList.length ? "rewardTxt" : ""'>
-							{{(item.day==$t(`第七天`) || item.day==$t(`第7天`))?$t(`奖励`):item.day}}
+							{{(item.day==$t(`第七天`) || item.day==$t(`第7天`))?$t(`奖励`):$t(item.day)}}
 						</view>
 						<view class='venus'
 							:class="(index + 1 === signSystemList.length ? 'reward' : '') + ' ' +(sign_index >= index + 1 ? 'venusSelect' : '')">

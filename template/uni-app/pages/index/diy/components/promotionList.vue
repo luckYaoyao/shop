@@ -22,7 +22,7 @@
 						<view v-if="priceShow">
 							<text>{{$t(`￥`)}}</text>{{item.price}}
 						</view>
-						<view class="txt" :style="'border:1px solid '+labelColor+';color:'+labelColor" :class="priceShow?'':'on'" v-if="item.checkCoupon && couponShow">券</view>
+						<view class="txt" :style="'border:1px solid '+labelColor+';color:'+labelColor" :class="priceShow?'':'on'" v-if="item.checkCoupon && couponShow">{{$t(`券`)}}</view>
 					</view>
 				</view>
 			</view>

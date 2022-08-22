@@ -72,9 +72,9 @@
 						<view class='label acea-row row-middle'>
 							<!-- <view class='stock'>库存：{{storeInfo.stock}}{{storeInfo.unit_name}}</view> -->
 							<view class='stock'>
-								{{$t(`累计销售`)}}：{{storeInfo.total?storeInfo.total:0}}{{storeInfo.unit_name || ''}}
+								{{$t(`累计销售`)}}：{{storeInfo.total?storeInfo.total:0}}{{$t(storeInfo.unit_name) || ''}}
 							</view>
-							<view>{{$t(`限量`)}}: {{ storeInfo.quota ? storeInfo.quota : 0 }}{{storeInfo.unit_name || ''}}
+							<view>{{$t(`限量`)}}: {{ storeInfo.quota ? storeInfo.quota : 0 }}{{$t(storeInfo.unit_name) || ''}}
 							</view>
 						</view>
 					</view>

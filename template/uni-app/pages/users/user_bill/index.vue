@@ -13,7 +13,7 @@
 						<view class='listn'>
 							<view class='itemn acea-row row-between-wrapper' v-for="(vo,indexn) in item.child" :key="indexn">
 								<view>
-									<view class='name line1'>{{vo.title}}</view>
+									<view class='name line1'>{{$t(vo.title)}}</view>
 									<view>{{vo.add_time}}</view>
 								</view>
 								<view class='num' v-if="vo.pm">+{{vo.number}}</view>

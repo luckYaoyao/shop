@@ -8,7 +8,7 @@
 							{{$t(`兑换时间`)}}：{{item.add_time}}
 						</view>
 						<view class="status">
-							{{item.status_name}}
+							{{$t(item.status_name)}}
 						</view>
 					</view>
 					<view class="picTxt acea-row row-between-wrapper">

@@ -26,7 +26,7 @@ let langJson = {
 		'zh_ft': zh_ft,
 	}
 let lang = '';
-// #ifdef MP
+// #ifdef MP || APP-PLUS
 lang = uni.getStorageSync('locale') != '' ? uni.getStorageSync('locale') : 'zh_cn';
 // #endif
 // #ifdef H5

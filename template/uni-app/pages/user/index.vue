@@ -283,11 +283,11 @@
 				<view class="foot-item" v-for="(item,index) in newData.menuList" :key="index" @click="goRouter(item)">
 					<block v-if="item.link == activeRouter">
 						<image :src="item.imgList[0]"></image>
-						<view class="txt" :style="{color:newData.activeTxtColor.color[0].item}">{{item.name}}</view>
+						<view class="txt" :style="{color:newData.activeTxtColor.color[0].item}">{{$t(item.name)}}</view>
 					</block>
 					<block v-else>
 						<image :src="item.imgList[1]"></image>
-						<view class="txt" :style="{color:newData.txtColor.color[0].item}">{{item.name}}</view>
+						<view class="txt" :style="{color:newData.txtColor.color[0].item}">{{$t(item.name)}}</view>
 					</block>
 					<div class="count-num" v-if="item.link === '/pages/order_addcart/order_addcart' && cartNum > 0">
 						{{cartNum}}

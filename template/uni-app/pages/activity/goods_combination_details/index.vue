@@ -55,10 +55,10 @@
 						<view class='introduce'>{{storeInfo.title}}</view>
 						<view class='label acea-row row-between-wrapper'>
 							<view class='stock'>{{$t(`类型`)}}：{{storeInfo.people || 0}}{{$t(`人团`)}}</view>
-							<view>{{$t(`累计销量`)}}：{{storeInfo.total?storeInfo.total:0}} {{storeInfo.unit_name || ''}}
+							<view>{{$t(`累计销量`)}}：{{storeInfo.total?storeInfo.total:0}} {{$t(storeInfo.unit_name) || ''}}
 							</view>
 							<view>{{$t(`限购`)}}: {{ storeInfo.quota ? storeInfo.quota : 0 }}
-								{{storeInfo.unit_name || ''}}
+								{{$t(storeInfo.unit_name) || ''}}
 							</view>
 						</view>
 					</view>

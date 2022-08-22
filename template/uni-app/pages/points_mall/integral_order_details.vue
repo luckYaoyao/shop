@@ -45,7 +45,7 @@
 				</view>
 				<view class='item acea-row row-between'>
 					<view>{{$t(`订单状态`)}}：</view>
-					<view class='conter'>{{cartInfo.status_name}}</view>
+					<view class='conter'>{{$t(cartInfo.status_name)}}</view>
 				</view>
 				<view class='item acea-row row-between'>
 					<view>{{$t(`下单时间`)}}：</view>

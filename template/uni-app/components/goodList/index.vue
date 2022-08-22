@@ -20,10 +20,10 @@
 							<view class='vip-money acea-row row-middle'
 								v-if="item.is_vip && item.vip_price && item.vip_price > 0">{{$t(`￥`)}}{{item.vip_price || 0}}
 								<image src='../../static/images/vip.png'></image><text
-									class='num'>{{$t(`已售`)}} {{item.sales}}{{item.unit_name}}</text>
+									class='num'>{{$t(`已售`)}} {{item.sales}}{{$t(item.unit_name)}}</text>
 							</view>
 							<view class='vip-money acea-row row-middle' v-else><text
-									class='num'>{{$t(`已售`)}} {{item.sales}}{{item.unit_name}}</text></view>
+									class='num'>{{$t(`已售`)}} {{item.sales}}{{$t(item.unit_name)}}</text></view>
 						</view>
 					</view>
 					<!-- <view class='iconfont icon-gouwuche cart-color acea-row row-center-wrapper'></view> -->
