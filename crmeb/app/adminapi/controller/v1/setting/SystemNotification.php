@@ -86,6 +86,7 @@ class SystemNotification extends AuthController
             ['wechat_id', ''],
             ['routine_id', ''],
             ['mark', ''],
+            ['sms_id', ''],
         ]);
         if (!$data['id']) return app('json')->fail(100100);
         if ($this->services->saveData($data)) {

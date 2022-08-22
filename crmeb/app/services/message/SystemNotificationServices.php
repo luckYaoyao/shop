@@ -170,6 +170,7 @@ class SystemNotificationServices extends BaseServices
                 $update['name'] = $data['name'];
                 $update['title'] = $data['title'];
                 $update['is_sms'] = $data['is_sms'];
+                $update['sms_id'] = $data['sms_id'];
                 $res = $this->dao->update((int)$id, $update);
                 break;
             case 'is_wechat':
