@@ -145,7 +145,8 @@ switch ($step) {
         );
         $file = array(
             '.env',
-            '.version'
+            '.version',
+            '.constant',
         );
         //必须开启函数
         $disabled = explode(',', ini_get('disable_functions'));
