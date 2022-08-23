@@ -14,8 +14,6 @@
 /crmeb/app/adminapi/controller/v1/statistic/TradeStatistic.php
 /crmeb/app/adminapi/controller/v1/statistic/UserStatistic.php
 /crmeb/public/install.lock
-/crmeb/timer.pid
-/crmeb/workerman.pid
 /crmeb/.env
 /crmeb/.constant
 /crmeb/runtime/timer.pid
