@@ -207,6 +207,12 @@ class LoginServices extends BaseServices
         if ($spread) {
             $data['spread_uid'] = $spread;
             $data['spread_time'] = time();
+            /** @var UserServices $userServices */
+            $userServices = app()->make(UserServices::class);
+            $spreadInfo = $userServices->get($spread);
+            $data['division_id'] = $spreadInfo['division_id'];
+            $data['agent_id'] = $spreadInfo['agent_id'];
+            $data['staff_id'] = $spreadInfo['staff_id'];
         }
         $data['real_name'] = '';
         $data['birthday'] = 0;

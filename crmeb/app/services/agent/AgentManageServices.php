@@ -68,6 +68,9 @@ class AgentManageServices extends BaseServices
                 $item['new_money'] = 0;
             $item['brokerage_money'] = $item['brokerage_price'];
             unset($item['extract'], $item['order'], $item['bill'], $item['spreadUser'], $item['spreadCount']);
+            if (strpos($item['headimgurl'], '/statics/system_images/') !== false) {
+                $item['headimgurl'] = set_file_url($item['headimgurl']);
+            }
         }
         return $data;
     }

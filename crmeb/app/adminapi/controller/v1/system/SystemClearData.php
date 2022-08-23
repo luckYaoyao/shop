@@ -2,13 +2,14 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 namespace app\adminapi\controller\v1\system;
+
 
 use think\facade\App;
 use app\adminapi\controller\AuthController;
@@ -39,6 +40,7 @@ class SystemClearData extends AuthController
     /**
      * 统一方法
      * @param $type
+     * @return mixed
      */
     public function index($type)
     {
@@ -86,18 +88,25 @@ class SystemClearData extends AuthController
 
     /**
      * 清除用户生成的临时附件
-     * @param int $type
-     * @throws \Exception
+     * @return mixed
      */
     public function userTemp()
     {
         /** @var SystemAttachmentServices $services */
         $services = app()->make(SystemAttachmentServices::class);
+        $imageUrl = $services->getColumn(['module_type' => 2], 'att_dir');
+        foreach ($imageUrl as $item) {
+            @unlink(app()->getRootPath() . 'public' . $item);
+        }
         $services->delete(2, 'module_type');
+        $this->services->clearData(['qrcode'], true);
         return app('json')->success(100046);
     }
 
-    //清除回收站商品
+    /**
+     * 清除回收站商品
+     * @return mixed
+     */
     public function recycleProduct()
     {
         /** @var StoreProductServices $services */

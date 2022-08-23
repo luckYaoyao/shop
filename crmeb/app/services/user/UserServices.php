@@ -1609,7 +1609,14 @@ class UserServices extends BaseServices
         //记录上下级关系
         if (!$userInfo['spread_uid'] && $spreadUid != $uid && $userSpreadUid != $userInfo['uid']) {
             if ((sys_config('brokerage_bindind') == 2 && $userInfo['add_time'] == $userInfo['last_time']) || sys_config('brokerage_bindind') == 1) {
-                if (!$this->dao->update($uid, ['spread_uid' => $spreadUid, 'spread_time' => time()], 'uid')) {
+                $spreadInfo = $this->dao->get($spreadUid);
+                $data = [];
+                $data['spread_uid'] = $spreadUid;
+                $data['spread_time'] = time();
+                $data['division_id'] = $spreadInfo['division_id'];
+                $data['agent_id'] = $spreadInfo['agent_id'];
+                $data['staff_id'] = $spreadInfo['staff_id'];
+                if (!$this->dao->update($uid, $data, 'uid')) {
                     throw new ApiException(410288);
                 }
                 /** @var UserBillServices $userBill */

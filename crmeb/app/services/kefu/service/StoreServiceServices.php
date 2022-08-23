@@ -58,6 +58,11 @@ class StoreServiceServices extends BaseServices
     {
         [$page, $limit] = $this->getPageValue();
         $list = $this->dao->getServiceList($where, $page, $limit);
+        foreach ($list as &$item) {
+            if (strpos($item['avatar'], '/statics/system_images/') !== false) {
+                $item['avatar'] = set_file_url($item['avatar']);
+            }
+        }
         $this->updateNonExistentService(array_column($list, 'uid'));
         $count = $this->dao->count($where);
         return compact('list', 'count');

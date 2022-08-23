@@ -152,7 +152,9 @@ class DivisionAgentApplyServices extends BaseServices
                     'is_staff' => 0,
                     'division_percent' => $data['division_percent'],
                     'division_change_time' => time(),
-                    'division_end_time' => strtotime($data['division_end_time'])
+                    'division_end_time' => strtotime($data['division_end_time']),
+                    'spread_uid' => $applyInfo['division_id'],
+                    'spread_time' => time()
                 ];
                 /** @var UserServices $userServices */
                 $userServices = app()->make(UserServices::class);
