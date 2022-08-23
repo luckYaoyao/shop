@@ -144,7 +144,8 @@ switch ($step) {
             'runtime',
         );
         $file = array(
-            '.env'
+            '.env',
+            '.version'
         );
         //必须开启函数
         $disabled = explode(',', ini_get('disable_functions'));
