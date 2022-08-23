@@ -453,7 +453,7 @@ switch ($step) {
             $res = mysqli_query($conn, $addadminsql);
             $res2 = true;
             if (isset($_SERVER['SERVER_NAME'])) {
-                $site_url = '\'"https://' . $_SERVER['SERVER_NAME'] . '"\'';
+                $site_url = '\'"http://' . $_SERVER['SERVER_NAME'] . '"\'';
                 $res2 = mysqli_query($conn, 'UPDATE `' . $dbPrefix . 'system_config` SET `value`=' . $site_url . ' WHERE `menu_name`="site_url"');
             }
             if ($res) {
