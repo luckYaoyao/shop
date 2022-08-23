@@ -146,7 +146,7 @@
                 <?php
                 foreach ($file as $filename) {
                     $filedir = APP_DIR . $filename;
-                    if (testwrite($filedir)) {
+                    if (is_writeable($filedir)) {
                         $w = '<span class="correct_span">&radic;</span>可写 ';
                     } else {
                         $w = '<span class="correct_span error_span">&radic;</span>不可写 ';
