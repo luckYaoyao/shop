@@ -1512,7 +1512,7 @@ class UserServices extends BaseServices
         $user['extract_type'] = sys_config('extract_type');
         $user['integral'] = intval($user['integral']);
         $user['is_agent_level'] = $agentLevelServices->count(['status' => 1, 'is_del' => 0]) > 0 ? 1 : 0;
-        $user['division_open'] = (int)sys_config('division_status', 1);
+        $user['division_open'] = (int)sys_config('division_status', 0);
         $user['avatar'] = strpos($user['avatar'], '/statics/system_images/') !== false ? set_file_url($user['avatar']) : $user['avatar'];
         return $user;
     }
