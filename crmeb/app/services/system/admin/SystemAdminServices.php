@@ -21,6 +21,7 @@ use app\dao\system\admin\SystemAdminDao;
 use app\services\system\SystemMenusServices;
 use crmeb\services\FormBuilder;
 use crmeb\services\workerman\ChannelService;
+use think\facade\Event;
 
 /**
  * 管理员service
@@ -87,13 +88,14 @@ class SystemAdminServices extends BaseServices
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function login(string $account, string $password, string $type)
+    public function login(string $account, string $password, string $type, string $key = '')
     {
         $adminInfo = $this->verifyLogin($account, $password);
         $tokenInfo = $this->createToken($adminInfo->id, $type);
         /** @var SystemMenusServices $services */
         $services = app()->make(SystemMenusServices::class);
         [$menus, $uniqueAuth] = $services->getMenusList($adminInfo->roles, (int)$adminInfo['level']);
+        $queue = Event::until('admin.login', [$key]);
         return [
             'token' => $tokenInfo['token'],
             'expires_time' => $tokenInfo['params']['exp'],
@@ -107,7 +109,8 @@ class SystemAdminServices extends BaseServices
             'logo' => sys_config('site_logo'),
             'logo_square' => sys_config('site_logo_square'),
             'version' => get_crmeb_version(),
-            'newOrderAudioLink' => get_file_link(sys_config('new_order_audio_link', ''))
+            'newOrderAudioLink' => get_file_link(sys_config('new_order_audio_link', '')),
+            'queue' => $queue
         ];
     }
 
@@ -117,12 +120,15 @@ class SystemAdminServices extends BaseServices
      */
     public function getLoginInfo()
     {
+        $key = uniqid();
+        event('admin.info', [$key]);
         return [
             'slide' => sys_data('admin_login_slide') ?? [],
             'logo_square' => sys_config('site_logo_square'),//透明
             'logo_rectangle' => sys_config('site_logo'),//方形
             'login_logo' => sys_config('login_logo'),//登陆
-            'site_name' => sys_config('site_name')
+            'site_name' => sys_config('site_name'),
+            'key' => $key
         ];
     }
 

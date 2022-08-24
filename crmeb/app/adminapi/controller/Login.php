@@ -56,8 +56,8 @@ class Login extends AuthController
      */
     public function login()
     {
-        [$account, $password, $imgcode] = $this->request->postMore([
-            'account', 'pwd', ['imgcode', '']
+        [$account, $password, $imgcode, $key] = $this->request->postMore([
+            'account', 'pwd', ['imgcode', ''], ['key', '']
         ], true);
 
         if (!app()->make(Captcha::class)->check($imgcode)) {
@@ -66,7 +66,7 @@ class Login extends AuthController
 
         $this->validate(['account' => $account, 'pwd' => $password], \app\adminapi\validate\setting\SystemAdminValidata::class, 'get');
 
-        return app('json')->success($this->services->login($account, $password, 'admin'));
+        return app('json')->success($this->services->login($account, $password, 'admin', $key));
     }
 
     /**

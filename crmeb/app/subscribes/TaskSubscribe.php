@@ -44,6 +44,7 @@ class TaskSubscribe
      */
     public function onTask_6()
     {
+        file_put_contents(runtime_path() . '.timer', time());
     }
 
     /**
