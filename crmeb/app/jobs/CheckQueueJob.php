@@ -29,7 +29,7 @@ class CheckQueueJob extends BaseJobs
 
     public function handle($key)
     {
-        $path = runtime_path() . '.queue';
+        $path = root_path('runtime') . '.queue';
         file_put_contents($path, $key);
     }
 }

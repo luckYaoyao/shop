@@ -71,6 +71,7 @@
 </template>
 <script>
 import { AccountLogin, loginInfoApi } from '@/api/account';
+import { getWorkermanUrl } from '@/api/kefu';
 // import mixins from '../mixins'
 import Setting from '@/setting';
 import { setCookies } from '@/libs/util';
@@ -104,6 +105,7 @@ export default {
       login_logo: '',
       swiperList: [],
       defaultSwiperList: require('@/assets/images/sw.jpg'),
+      key:'',
     };
   },
   created() {
@@ -167,6 +169,7 @@ export default {
           let data = res.data || {};
           this.login_logo = data.login_logo ? data.login_logo : require('@/assets/images/logo.png');
           this.swiperList = data.slide.length ? data.slide : [{ slide: this.defaultSwiperList }];
+          this.key = data.key;
         })
         .catch((err) => {
           this.$Message.error(err);
@@ -185,6 +188,7 @@ export default {
         account: this.formInline.username,
         pwd: this.formInline.password,
         imgcode: this.formInline.code,
+        key: this.key
       })
         .then(async (res) => {
           msg();
@@ -212,6 +216,27 @@ export default {
 
           if (this.jigsaw) this.jigsaw.reset();
 
+          try {
+            if (data.queue === false) {
+              this.$Notice.warning({
+                title: '温馨提示',
+                desc:'您的【消息队列】未开启，没有开启会导致异步任务无法执行。请尽快执行命令开启！！',
+                duration: 30
+              });
+            }
+            if (data.timer === false) {
+              this.$Notice.warning({
+                title: '温馨提示',
+                desc:'您的【定时任务】未开启，没有开启会导致定时执行的任务无法执行。请尽快执行命令开启！！',
+                duration: 30
+              });
+            }
+
+            this.checkSocket()
+          }catch (e) {
+
+          }
+
           return this.$router.replace({ path: '/admin/home/' || '/admin/' });
         })
         .catch((res) => {
@@ -226,6 +251,36 @@ export default {
       setTimeout((e) => {
         this.loading = false;
       }, 1000);
+    },
+    checkSocket(){
+      getWorkermanUrl().then(res=>{
+        let url = res.data.admin
+        let isNotice = false;
+        let socket = new WebSocket(url);
+        socket.onopen = () =>{
+          socket.close();
+        };
+        socket.onerror = (err) =>{
+          if(!isNotice){
+            isNotice = true;
+            this.$Notice.warning({
+              title: '温馨提示',
+              desc:'您的【长连接】未开启，没有开启会导致客服消息无法发送,后台订单通知无法收到。请尽快执行命令开启！！',
+              duration: 30
+            });
+          }
+        };
+        socket.onclose = (err) =>{
+          if(!isNotice){
+            isNotice = true;
+            this.$Notice.warning({
+              title: '温馨提示',
+              desc:'您的【长连接】未开启，没有开启会导致客服消息无法发送,后台订单通知无法收到。请尽快执行命令开启！！',
+              duration: 30
+            });
+          }
+        };
+      })
     },
     getExpiresTime(expiresTime) {
       let nowTimeNum = Math.round(new Date() / 1000);

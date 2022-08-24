@@ -22,6 +22,8 @@ class AdminLogin
 
     public function handle($event)
     {
+        $res = false;
+        $res1 = false;
         try {
             [$key] = $event;
             //检测消息队列是否执行
@@ -29,9 +31,20 @@ class AdminLogin
             $content = file_get_contents($path);
             $res = $key === $content;
             unlink($path);
-            return $res;
         } catch (\Throwable $e) {
-            return false;
         }
+
+        try {
+
+            $timerPath = root_path('runtime') . '.timer';
+            $timer = file_get_contents($timerPath);
+            if ($timer && $timer <= time() && $timer > (time() - 10)) {
+                $res1 = true;
+            }
+
+        } catch (\Throwable $e) {
+        }
+
+        return [$res, $res1];
     }
 }
