@@ -146,6 +146,7 @@
                   <div class="acea-row">
                     <InputNumber
                       min="0.01"
+                      max="10000"
                       v-model="formValidate.postage"
                       placeholder="请输入金额"
                       class="perW20 maxW"
@@ -172,6 +173,7 @@
                       placeholder="请输入砍价人数"
                       element-id="people_num"
                       :min="2"
+                      :max="10000"
                       :precision="0"
                       v-model="formValidate.people_num"
                       class="perW20"
@@ -187,6 +189,7 @@
                       placeholder="请输入帮砍次数"
                       element-id="bargain_num"
                       :min="1"
+                      :max="10000"
                       :precision="0"
                       v-model="formValidate.bargain_num"
                       class="perW20"
@@ -202,8 +205,9 @@
                   <div class="acea-row row-middle">
                     <InputNumber
                       placeholder="购买数量限制"
-                      :precision="0"
                       :min="1"
+                      :max="10000"
+                      :precision="0"
                       v-model="formValidate.num"
                       class="perW20"
                     />
@@ -226,6 +230,8 @@
                   <InputNumber
                     placeholder="请输入排序"
                     element-id="sort"
+                    :min="0"
+                    :max="10000"
                     :precision="0"
                     v-model="formValidate.sort"
                     class="perW10"

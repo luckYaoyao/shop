@@ -149,6 +149,7 @@
                   <div class="acea-row">
                     <InputNumber
                       :min="0.01"
+                      :max="10000"
                       v-model="formValidate.postage"
                       placeholder="请输入金额"
                       class="perW20 maxW"
@@ -191,6 +192,7 @@
                       placeholder="请输入数量限制"
                       element-id="num"
                       :precision="0"
+                      :max="10000"
                       v-model="formValidate.num"
                       class="perW20"
                     />
@@ -208,6 +210,7 @@
                       placeholder="请输入单次购买数量限制"
                       element-id="once_num"
                       :precision="0"
+                      :max="10000"
                       v-model="formValidate.once_num"
                       class="perW20"
                     />
@@ -233,6 +236,8 @@
                     placeholder="请输入排序"
                     element-id="sort"
                     :precision="0"
+                    :max="10000"
+                    :min="0"
                     v-model="formValidate.sort"
                     class="perW10"
                   />

@@ -145,6 +145,7 @@
                   <div class="acea-row">
                     <InputNumber
                       min="0.01"
+                      max="10000"
                       v-model="formValidate.postage"
                       placeholder="请输入金额"
                       class="perW20 maxW"
@@ -184,6 +185,7 @@
                   <div class="acea-row row-middle">
                     <InputNumber
                       :min="2"
+                      :max="10000"
                       placeholder="请输入拼团人数"
                       :precision="0"
                       element-id="people"
@@ -200,6 +202,8 @@
                     <InputNumber
                       placeholder="设置虚拟成团的补齐人数"
                       :precision="0"
+                      :max="10000"
+                      :min="0"
                       v-model="formValidate.virtualPeople"
                       element-id="virtualPeople"
                       class="perW20"
@@ -217,6 +221,7 @@
                       :min="1"
                       placeholder="请输入总数量限制"
                       :precision="0"
+                      :max="10000"
                       element-id="num"
                       v-model="formValidate.num"
                       class="perW20"
@@ -234,6 +239,7 @@
                       :min="1"
                       placeholder="请输入单次购买数量限制"
                       :precision="0"
+                      :max="10000"
                       element-id="once_num"
                       v-model="formValidate.once_num"
                       class="perW20"
@@ -291,6 +297,8 @@
                     placeholder="请输入排序"
                     element-id="sort"
                     :precision="0"
+                    :max="10000"
+                    :min="0"
                     v-model="formValidate.sort"
                     class="perW10"
                   />
