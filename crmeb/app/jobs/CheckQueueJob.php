@@ -31,5 +31,6 @@ class CheckQueueJob extends BaseJobs
     {
         $path = root_path('runtime') . '.queue';
         file_put_contents($path, $key);
+        return true;
     }
 }
