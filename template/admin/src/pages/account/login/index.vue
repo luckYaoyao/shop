@@ -258,6 +258,7 @@ export default {
         let isNotice = false;
         let socket = new WebSocket(url);
         socket.onopen = () =>{
+          isNotice = true;
           socket.close();
         };
         socket.onerror = (err) =>{
