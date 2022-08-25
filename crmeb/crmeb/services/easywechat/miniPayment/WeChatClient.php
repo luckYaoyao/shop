@@ -70,7 +70,7 @@ class WeChatClient extends AbstractAPI
             'sub_orders'=>[
                 [
                     'mchid'=>$this->merchant->merchant_id,
-                    'amount'=>$order['total_fee'],
+                    'amount'=>(int)$order['total_fee'],
                     'trade_no'=>$order['out_trade_no'],
                     'description'=>$order['body']
                 ]
