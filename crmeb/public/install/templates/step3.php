@@ -290,9 +290,11 @@
         function submitForm() {
             if(!mysqlstatu) {
                 mysqlDbPwd(1);
+                return false;
             }
             if(!redisstatu) {
                 redisDbPwd(1);
+                return false;
             }
             if(checkForm()) {
                 $("#J_install_form").submit(); // ajax 验证通过后再提交表单
