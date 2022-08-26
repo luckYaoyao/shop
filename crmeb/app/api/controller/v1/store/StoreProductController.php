@@ -66,6 +66,10 @@ class StoreProductController
         }
         if ($where['ids'] && is_string($where['ids'])) {
             $where['ids'] = explode(',', $where['ids']);
+            foreach ($where['ids'] as $key => &$item) {
+                $where['ids'][$key] = (int)$item;
+                if ($where['ids'][$key] == 0) unset($where['ids'][$key]);
+            }
         }
         if (!$where['ids']) {
             unset($where['ids']);
