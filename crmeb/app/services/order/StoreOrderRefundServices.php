@@ -987,6 +987,12 @@ class StoreOrderRefundServices extends BaseServices
         $storeOrderCartInfoServices->clearOrderCartInfo($order['id']);
         //申请退款事件
         event('order.orderRefundCreateAfter', [$order]);
+        //提醒推送
+        event('notice.notice', [['order' => $order], 'send_order_apply_refund']);
+        try {
+            ChannelService::instance()->send('NEW_REFUND_ORDER', ['order_id' => $order['order_id']]);
+        } catch (\Exception $e) {
+        }
         return $res;
     }
 
