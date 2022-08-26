@@ -87,7 +87,7 @@ class RefundOrder extends AuthController
      */
     public function remark($id)
     {
-        [$remark] = $this->request->postMore([['remark', '']],true);
+        [$remark] = $this->request->postMore([['remark', '']], true);
 
         $this->services->updateRemark((int)$id, $remark);
         return app('json')->success(100024);
@@ -177,10 +177,10 @@ class RefundOrder extends AuthController
                 mt_srand();
                 $refund_data['refund_id'] = $order['order_id'] . rand(100, 999);
             }
-            ($order['pid'] > 0) ? $refund_data['order_id'] = $services->value(['id'=>(int)$order['pid']],'order_id') : $refund_data['order_id'] = $order['order_id'];
+            ($order['pid'] > 0) ? $refund_data['order_id'] = $services->value(['id' => (int)$order['pid']], 'order_id') : $refund_data['order_id'] = $order['order_id'];
             /** @var WechatUserServices $wechatUserServices */
             $wechatUserServices = app()->make(WechatUserServices::class);
-            $refund_data['open_id'] = $wechatUserServices->uidToOpenid((int)$order['uid'],'routine') ?? '';
+            $refund_data['open_id'] = $wechatUserServices->uidToOpenid((int)$order['uid'], 'routine') ?? '';
             $refund_data['refund_no'] = $orderRefund['order_id'];
             //修改订单退款状态
             unset($data['refund_price']);

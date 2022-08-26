@@ -63,7 +63,9 @@ class StoreProductAttrServices extends BaseServices
                     $productVipPrice = min($detailTemp);
                 }
             }
-            $storeProductService->update($id, ['vip_price' => $productVipPrice]);
+            if ($type == 0) {
+                $storeProductService->update($id, ['vip_price' => $productVipPrice]);
+            }
         }
         if ($is_virtual == 0 || $is_virtual == 2) {
             if ($is_virtual == 2 && in_array(0, array_column($data['valueGroup'], 'coupon_id'))) {
