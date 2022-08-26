@@ -114,8 +114,8 @@ class SystemAdminServices extends BaseServices
             'logo_square' => sys_config('site_logo_square'),
             'version' => get_crmeb_version(),
             'newOrderAudioLink' => get_file_link(sys_config('new_order_audio_link', '')),
-            'queue' => $queue ?? false,
-            'timer' => $timer ?? false
+            'queue' => $queue ?? true,
+            'timer' => $timer ?? true
         ];
     }
 
