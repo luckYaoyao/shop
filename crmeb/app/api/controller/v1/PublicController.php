@@ -300,6 +300,9 @@ class PublicController
             ['image', ''],
             ['code', ''],
         ], true);
+        if (!preg_match('/.*(\.png|\.jpg|\.jpeg|\.gif)$/', $imageUrl) || !preg_match('/.*(\.png|\.jpg|\.jpeg|\.gif)$/', $codeUrl)) {
+            return app('json')->fail(100100);
+        }
         try {
             $code = CacheService::get($codeUrl, function () use ($codeUrl) {
                 $codeTmp = $code = $codeUrl ? image_to_base64($codeUrl) : false;
