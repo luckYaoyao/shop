@@ -21,6 +21,7 @@ use app\dao\system\admin\SystemAdminDao;
 use app\services\system\SystemMenusServices;
 use crmeb\services\FormBuilder;
 use crmeb\services\workerman\ChannelService;
+use think\facade\Config;
 use think\facade\Event;
 
 /**
@@ -95,7 +96,10 @@ class SystemAdminServices extends BaseServices
         /** @var SystemMenusServices $services */
         $services = app()->make(SystemMenusServices::class);
         [$menus, $uniqueAuth] = $services->getMenusList($adminInfo->roles, (int)$adminInfo['level']);
-        [$queue, $timer] = Event::until('admin.login', [$key]);
+        $remind = Config::get('app.console_remind', false);
+        if ($remind) {
+            [$queue, $timer] = Event::until('admin.login', [$key]);
+        }
         return [
             'token' => $tokenInfo['token'],
             'expires_time' => $tokenInfo['params']['exp'],
@@ -110,8 +114,8 @@ class SystemAdminServices extends BaseServices
             'logo_square' => sys_config('site_logo_square'),
             'version' => get_crmeb_version(),
             'newOrderAudioLink' => get_file_link(sys_config('new_order_audio_link', '')),
-            'queue' => $queue,
-            'timer' => $timer
+            'queue' => $queue ?? false,
+            'timer' => $timer ?? false
         ];
     }
 
