@@ -130,6 +130,7 @@ class AliPayService
      */
     public function create(string $title, string $orderId, string $totalAmount, string $passbackParams, string $quitUrl = '', string $siteUrl = '', bool $isCode = false)
     {
+        $title = trim($title);
         try {
             if ($isCode) {
                 //二维码支付
