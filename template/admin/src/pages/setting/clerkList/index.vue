@@ -134,7 +134,7 @@ export default {
           minWidth: 100,
         },
         {
-          title: '客服名称',
+          title: '核销员名称',
           key: 'staff_name',
           minWidth: 100,
         },

@@ -427,7 +427,7 @@
 				url: 1
 			});
 			this.couponId = options.couponId || 0;
-			this.noCoupon = options.noCoupon || 0;
+			this.noCoupon = Number(options.noCoupon) || 0;
 			this.pinkId = options.pinkId ? parseInt(options.pinkId) : 0;
 			this.addressId = options.addressId || 0;
 			this.cartId = options.cartId;
@@ -497,6 +497,7 @@
 							that.is_shipping = false;
 							that.shippingType = 1;
 							this.getConfirm();
+							this.getList();
 						}
 					}
 				}).catch(err => {
@@ -672,6 +673,7 @@
 							success: (res) => {
 								uni.setStorageSync('user_latitude', res.latitude);
 								uni.setStorageSync('user_longitude', res.longitude);
+								this.getList()
 							},
 							complete: () => {
 								this.getList()
@@ -972,7 +974,13 @@
 							that.toPay = true;
 							// #ifdef MP
 							/* that.toPay = true; */
-							uni.requestPayment({
+							let mp_pay_name=''
+							if(uni.requestOrderPayment){
+								mp_pay_name='requestOrderPayment'
+							}else{
+								mp_pay_name='requestPayment'
+							}
+							uni[mp_pay_name]({
 								timeStamp: jsConfig.timestamp,
 								nonceStr: jsConfig.nonceStr,
 								package: jsConfig.package,
@@ -1009,7 +1017,7 @@
 								complete: function(e) {
 									uni.hideLoading();
 									//关闭当前页面跳转至订单状态
-									if (res.errMsg == 'requestPayment:cancel') return that.$util
+									if (res.errMsg == 'requestPayment:cancel' || e.errMsg == 'requestOrderPayment:cancel') return that.$util
 										.Tips({
 											title: that.$t(`取消支付`)
 										}, {

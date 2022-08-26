@@ -85,7 +85,7 @@
 					<view class="" v-if="goodList.length == 0 && loaded">
 						<view class="emptyBox">
 							<image :src="imgHost + '/statics/images/no-thing.png'"></image>
-							<view class="tips">{{$t(`no_product_see`)}}</view>
+							<view class="tips">{{$t(`暂无商品，去看点别的吧`)}}</view>
 						</view>
 						<recommend :hostProduct="hostProduct"></recommend>
 					</view>

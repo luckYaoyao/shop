@@ -54,6 +54,9 @@
 							<view v-else-if="item._status._type == 1 && item.shipping_type == 1" class="font-color">{{$t(`待发货`)}}
 								<text v-if="item.refund.length">，{{item.is_all_refund?$t(`退款中`):$t(`部分退款中`)}}</text>
 							</view>
+							<view v-else-if="item._status._type == 1 && item.shipping_type == 2" class="font-color">{{$t(`待核销`)}}
+								<text v-if="item.refund.length">，{{item.is_all_refund?$t(`退款中`):$t(`部分退款中`)}}</text>
+							</view>
 							<view v-else-if="item._status._type == 2" class="font-color">{{$t(`待收货`)}}
 								<text v-if="item.refund.length">，{{item.is_all_refund?$t(`退款中`):$t(`部分退款中`)}}</text>
 							</view>

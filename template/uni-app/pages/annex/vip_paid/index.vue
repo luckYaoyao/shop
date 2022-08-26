@@ -503,7 +503,13 @@
 						break;
 					case 'WECHAT_PAY':
 						// #ifdef MP
-						uni.requestPayment({
+						let mp_pay_name=''
+						if(uni.requestOrderPayment){
+							mp_pay_name='requestOrderPayment'
+						}else{
+							mp_pay_name='requestPayment'
+						}
+						uni[mp_pay_name]({
 							timeStamp: jsConfig.timestamp,
 							nonceStr: jsConfig.nonceStr,
 							package: jsConfig.package,

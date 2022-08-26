@@ -1,9 +1,14 @@
 <template>
-	<view class="main" @touchstart="start" @touchend="end">
+	<view class="main">
 		<view class="top-tabs" :style="colorStyle">
-			<view class="tabs" :class="{btborder:type === index}" v-for="(item,index) in tabsList" :key="index"
-				@tap="changeTabs(index)">
-				{{$t(item.name)}}
+			<view class="tabs">
+				<view class="item" :class="{btborder:type === index}" v-for="(item,index) in tabsList" :key="index"
+					@tap="changeTabs(index)">
+					{{$t(item.name)}}
+				</view>
+			</view>
+			<view class="read-all">
+				全部已读
 			</view>
 		</view>
 		<view v-if="list.length && type ===1" class="list">
@@ -29,21 +34,30 @@
 			</view>
 		</view>
 		<view class="list" v-if="list.length && type === 0">
-			<view v-for="(item, index) in list" :key="index" class="item" @click="goDetail(item.id)">
-				<view class="image-wrap">
-					<image v-if="item.type === 1" class="image" src="../static/admin-msg.png"></image>
-					<image v-else class="image" src="../static/user-msg.png"></image>
-					<view class="no-look" v-if="!item.look"></view>
-				</view>
-				<view class="text-wrap">
-					<view class="name-wrap">
-						<view class="name">{{ $t(item.title) || '--' }}</view>
-						<view>{{ item.add_time }}</view>
-					</view>
-					<view class="info-wrap">
-						<view class="info" v-html="item.content"></view>
-					</view>
-				</view>
+			<view v-for="(item, index) in list" :key="index">
+				<tuiDrawer @click="(e)=>bindClick(e,item)" :key="item.id" :actions="!item.look ? actions :actionsIsLook"
+					:params="{id:item.id}">
+					<template v-slot:content>
+						<view class="item" @click="goDetail(item.id)">
+							<view class="image-wrap">
+								<image v-if="item.type === 1" class="image" src="../static/admin-msg.png"></image>
+								<image v-else class="image" src="../static/user-msg.png"></image>
+								<view class="no-look" v-if="!item.look"></view>
+							</view>
+							<view class="text-wrap">
+								<view class="name-wrap">
+									<view class="name">{{ $t(item.title) || '--' }}</view>
+									<view>{{ item.add_time }}</view>
+								</view>
+								<view class="info-wrap">
+									<view class="info" v-html="item.content"></view>
+								</view>
+							</view>
+						</view>
+
+					</template>
+
+				</tuiDrawer>
 			</view>
 		</view>
 		<view v-else-if="finished && !list.length" class="empty-wrap">
@@ -65,15 +79,19 @@
 	} from '@/api/user.js';
 	import colors from '@/mixins/color.js';
 	import home from '@/components/home';
-	import {HTTP_REQUEST_URL} from '@/config/app';
+	import tuiDrawer from '@/components/tuiDrawer/index.vue'
+	import {
+		HTTP_REQUEST_URL
+	} from '@/config/app';
 	export default {
 		mixins: [colors],
 		components: {
-			home
+			home,
+			tuiDrawer
 		},
 		data() {
 			return {
-				imgHost:HTTP_REQUEST_URL,
+				imgHost: HTTP_REQUEST_URL,
 				list: [],
 				page: 1,
 				type: 0,
@@ -90,7 +108,29 @@
 				startData: {
 					clientX: 0,
 					clientY: 0
-				}
+				},
+				actions: [{
+						name: '删除',
+						color: '#fff',
+						fontsize: 28, //单位rpx
+						width: 70, //单位px
+						background: '#E6A23C'
+					},
+					{
+						name: '已读',
+						color: '#fff',
+						fontsize: 28, //单位rpx
+						width: 70, //单位px
+						background: '#409EFF'
+					},
+				],
+				actionsIsLook: [{
+					name: '删除',
+					color: '#fff',
+					fontsize: 28, //单位rpx
+					width: 70, //单位px
+					background: '#E6A23C'
+				}, ]
 			};
 		},
 		onShow() {
@@ -144,6 +184,15 @@
 					} else {
 						console.log('无效')
 					}
+				}
+			},
+			// 滑动点击操作
+			bindClick(e, item) {
+				console.log(e, item)
+				if (e.index == 0) {
+					// 删除逻辑
+				} else {
+					// 已读
 				}
 			},
 			changeTabs(index) {
@@ -385,9 +434,19 @@
 		margin-bottom: 10rpx;
 		z-index: 1000;
 		transition: all 0.3s;
+		justify-content: space-between;
+
+		.read-all {
+			margin-right: 24rpx;
+			font-size: 24rpx;
+		}
 	}
 
 	.tabs {
+		display: flex;
+	}
+
+	.item {
 		display: flex;
 		align-items: center;
 		padding: 4rpx 15rpx;

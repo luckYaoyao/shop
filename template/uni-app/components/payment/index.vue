@@ -154,8 +154,13 @@
 							});
 
 							// #ifdef MP
-
-							uni.requestPayment({
+							let mp_pay_name=''
+							if(uni.requestOrderPayment){
+								mp_pay_name='requestOrderPayment'
+							}else{
+								mp_pay_name='requestPayment'
+							}
+							uni[mp_pay_name]({
 								timeStamp: jsConfig.timestamp,
 								nonceStr: jsConfig.nonceStr,
 								package: jsConfig.package,
@@ -184,7 +189,7 @@
 								},
 								complete: function(e) {
 									uni.hideLoading();
-									if (e.errMsg == 'requestPayment:cancel') return that.$util
+									if (e.errMsg == 'requestPayment:cancel' || e.errMsg == 'requestOrderPayment:cancel') return that.$util
 										.Tips({
 											title: that.$t(`取消支付`)
 										}, () => {

@@ -39,6 +39,7 @@
 		getUserAgreement,
 		cancelUser
 	} from '@/api/user.js'
+	const app = getApp();
 	export default {
 		mixins: [colors],
 		data() {
@@ -58,6 +59,8 @@
 			},
 			cancelUser() {
 				cancelUser().then(res => {
+					app.globalData.spid = '';
+					app.globalData.pid = '';
 					this.$store.commit("LOGOUT");
 					uni.reLaunch({
 						url: '/pages/index/index'

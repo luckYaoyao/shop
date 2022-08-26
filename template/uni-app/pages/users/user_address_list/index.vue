@@ -361,11 +361,10 @@
 					this.cartId = '';
 					this.pinkId = '';
 					this.couponId = '';
-					let noCouponUrl = this.noCoupon == 1 ? '&noCoupon=' + this.noCoupon : '';
 					uni.redirectTo({
 						url: '/pages/goods/order_confirm/index?is_address=1&new=' + this.news + '&cartId=' +
 							cartId + '&addressId=' + id + '&pinkId=' +
-							pinkId + '&couponId=' + couponId + noCouponUrl
+							pinkId + '&couponId=' + couponId + '&noCoupon=' + this.noCoupon
 							
 					})
 				}

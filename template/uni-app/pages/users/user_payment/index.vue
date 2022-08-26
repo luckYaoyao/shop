@@ -259,7 +259,18 @@
 					}).then(res => {
 						uni.hideLoading();
 						let jsConfig = res.data;
+						// #ifdef MP
+						let mp_pay_name=''
+						if(uni.requestOrderPayment){
+							mp_pay_name='requestOrderPayment'
+						}else{
+							mp_pay_name='requestPayment'
+						}
+						uni[mp_pay_name]({
+						// #endif
+						// #ifdef APP-PLUS
 						uni.requestPayment({
+						// #endif
 							// #ifdef MP
 							timeStamp: jsConfig.timestamp,
 							nonceStr: jsConfig.nonceStr,
