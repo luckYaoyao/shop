@@ -7,7 +7,7 @@
 					{{$t(item.name)}}
 				</view>
 			</view>
-			<view class="read-all">
+			<view class="read-all" @click="allLook()">
 				全部已读
 			</view>
 		</view>
@@ -75,7 +75,8 @@
 <script>
 	import {
 		serviceRecord,
-		messageSystem
+		messageSystem,
+		msgLookDel
 	} from '@/api/user.js';
 	import colors from '@/mixins/color.js';
 	import home from '@/components/home';
@@ -136,7 +137,6 @@
 		onShow() {
 			this.page = 1
 			this.list = []
-			console.log(this.type)
 			this.changeTabs(this.type)
 		},
 		onReachBottom() {
@@ -147,7 +147,6 @@
 			}
 		},
 		onPullDownRefresh() {
-			console.log('refresh');
 			this.page = 1
 			this.finished = false
 			this.list = []
@@ -163,7 +162,6 @@
 				this.startData.clientY = e.changedTouches[0].clientY;
 			},
 			end(e) {
-				// console.log(e)
 				const subX = e.changedTouches[0].clientX - this.startData.clientX;
 				const subY = e.changedTouches[0].clientY - this.startData.clientY;
 				if (subY > 50 || subY < -50) {
@@ -188,12 +186,60 @@
 			},
 			// 滑动点击操作
 			bindClick(e, item) {
-				console.log(e, item)
 				if (e.index == 0) {
-					// 删除逻辑
+					msgLookDel({
+						id: item.id,
+						key: 'is_del',
+						value: 1
+					}).then(res => {
+						let i = this.list.findIndex(e=>{
+							return e.id === item.id
+						})
+						this.list.splice(i,1)
+					}).catch(err => {
+						uni.showToast({
+							title: err.msg,
+							icon: 'none'
+						})
+					})
 				} else {
 					// 已读
+					msgLookDel({
+						id: item.id,
+						key: 'look',
+						value: 1
+					}).then(res => {
+						item.look = 1
+					}).catch(err => {
+						uni.showToast({
+							title: err.msg,
+							icon: 'none'
+						})
+					})
 				}
+			},
+			allLook() {
+				msgLookDel({
+					id: 0,
+					key: 'look',
+					value: 1,
+					all: 1
+				}).then(res => {
+					this.page = 1
+					this.limit = 20
+					this.list = []
+					this.finished = false
+					if (this.type === 1) {
+						this.getList()
+					} else {
+						this.messageSystem()
+					}
+				}).catch(err => {
+					uni.showToast({
+						title: err.msg,
+						icon: 'none'
+					})
+				})
 			},
 			changeTabs(index) {
 				this.type = index
@@ -221,7 +267,6 @@
 						limit: this.limit
 					})
 					.then(res => {
-						console.log(res)
 						let data = res.data;
 						uni.hideLoading();
 						this.loading = false;
@@ -231,7 +276,6 @@
 						uni.stopPullDownRefresh();
 					})
 					.catch(err => {
-						console.log(err)
 						uni.showToast({
 							title: err.msg,
 							icon: 'none'

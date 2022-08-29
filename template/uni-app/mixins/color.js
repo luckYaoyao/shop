@@ -18,7 +18,6 @@ export default {
 	created() {
 		this.colorStyle = uni.getStorageSync('viewColor')
 		uni.$on('ok', (data, status) => {
-			console.log(status)
 			this.colorStyle = data
 			this.colorStatus = status
 		})

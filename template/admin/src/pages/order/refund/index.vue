@@ -217,6 +217,9 @@
                 <DropdownItem name="7" v-show="[1, 2].includes(row.refund_type) && row.is_pink_cancel === 0"
                   >不退款</DropdownItem
                 >
+                <DropdownItem name="8" v-show="row.is_del == 1"
+                  >删除订单</DropdownItem
+                >
               </DropdownMenu>
             </Dropdown>
           </template>
@@ -481,20 +484,12 @@ export default {
           break;
         case '8':
           this.delfromData = {
-            title: '修改确认收货',
-            url: `/order/take/${row.id}`,
-            method: 'put',
+            title: '删除订单',
+            url: `/order/del/${row.store_order_id}`,
+            method: 'DELETE',
             ids: '',
           };
-          this.$modalSure(this.delfromData)
-            .then((res) => {
-              this.$Message.success(res.msg);
-              this.getOrderList();
-            })
-            .catch((res) => {
-              this.$Message.error(res.msg);
-            });
-          // this.modalTitleSs = '修改确认收货';
+          this.delOrder(row, this.delfromData);
           break;
         case '10':
           this.delfromData = {

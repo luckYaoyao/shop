@@ -586,6 +586,13 @@ export function getMsgDetails(id) {
 }
 
 /**
+ * 消息中心-消息已读/删除
+ */
+export function msgLookDel(data) {
+	return request.get('user/message_system/edit_message', data);
+}
+
+/**
  * 苹果账号登录
  * @param {Object} data
  */

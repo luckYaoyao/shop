@@ -1,7 +1,8 @@
 <template>
 	<view :style="colorStyle">
 		<view class='order-submission'>
-			<view class="allAddress" :style="store_self_mention && is_shipping ? '':'padding-top:10rpx'" v-if="!virtual_type">
+			<view class="allAddress" :style="store_self_mention && is_shipping ? '':'padding-top:10rpx'"
+				v-if="!virtual_type">
 
 				<view class="nav acea-row">
 					<view class="item font-num" :class="shippingType == 0 ? 'on' : 'on2'" @tap="addressType(0)"
@@ -49,7 +50,7 @@
 					v-if="!pinkId && !BargainId && !combinationId && !seckillId&& !noCoupon && !discountId && !advanceId">
 					<view>{{$t(`优惠券`)}}</view>
 					<view class='discount'>
-					{{couponTitle}}
+						{{couponTitle}}
 						<text class='iconfont icon-jiantou'></text>
 					</view>
 				</view>
@@ -57,7 +58,7 @@
 					v-if="!pinkId && !BargainId && !combinationId && !seckillId && !advanceId">
 					<view>{{$t(`积分抵扣`)}}</view>
 					<view class='discount acea-row row-middle'>
-						<view> {{useIntegral ? $t(`剩余积分`):$t(`当前积分`)}} 
+						<view> {{useIntegral ? $t(`剩余积分`):$t(`当前积分`)}}
 							<text class='num font-color'>{{integral || 0}}</text>
 						</view>
 						<checkbox-group @change="ChangeIntegral">
@@ -83,15 +84,19 @@
 					<view class="item acea-row row-between-wrapper">
 						<view>{{$t(`联系电话`)}}</view>
 						<view class="discount">
-							<input style="text-align: right;" v-model="contactsTel" type="text" :placeholder="$t(`请输入手机号`)"
-								placeholder-class="placeholder"></input>
+							<input style="text-align: right;" v-model="contactsTel" type="text"
+								:placeholder="$t(`请输入手机号`)" placeholder-class="placeholder"></input>
 						</view>
 					</view>
 				</view>
 				<view class='item' v-if="textareaStatus">
 					<view>{{$t(`备注说明`)}}</view>
-					<textarea placeholder-class='placeholder' :placeholder="$t(`填写备注信息，100字以内`)" v-if="!coupon.coupon"
-						@input='bindHideKeyboard' :value="mark" :maxlength="150" name="mark">
+					<view class="mark" v-if="!coupon.coupon && !inputTrip" @click="inputTripClick">
+						<view :class="{'mark-msg': mark}" v-text="mark || $t(`填写备注信息，100字以内`)"></view>
+					</view>
+					<textarea placeholder-class='placeholder' :placeholder="$t(`填写备注信息，100字以内`)"
+						v-if="!coupon.coupon && inputTrip" @input='bindHideKeyboard' :focus="focus"
+						@blur="inputTrip = false" :value="mark" :maxlength="150" name="mark">
 						</textarea>
 				</view>
 			</view>
@@ -167,7 +172,8 @@
 				<view class='item acea-row row-between-wrapper'>
 					<view>{{$t(`商品总价`)}}：</view>
 					<view class='money'>
-						{{$t(`￥`)}}{{(parseFloat(priceGroup.totalPrice)+parseFloat(priceGroup.vipPrice)).toFixed(2)}}</view>
+						{{$t(`￥`)}}{{(parseFloat(priceGroup.totalPrice)+parseFloat(priceGroup.vipPrice)).toFixed(2)}}
+					</view>
 				</view>
 				<view class='item acea-row row-between-wrapper' v-if="priceGroup.storePostage > 0">
 					<view>{{$t(`配送运费`)}}：</view>
@@ -199,7 +205,8 @@
 					<text class='font-color'>{{$t(`￥`)}}{{totalPrice || 0}}</text>
 				</view>
 				<view class='settlement' style='z-index:100' @tap.stop="goPay"
-					v-if="(valid_count>0&&!discount_id) || (valid_count==cartInfo.length&&discount_id)">{{$t(`立即支付`)}}</view>
+					v-if="(valid_count>0&&!discount_id) || (valid_count==cartInfo.length&&discount_id)">{{$t(`立即支付`)}}
+				</view>
 				<view class='settlement bg-color-hui' style='z-index:100' v-else>{{$t(`立即支付`)}}</view>
 			</view>
 		</view>
@@ -398,7 +405,9 @@
 				noCoupon: 0,
 				valid_count: 0,
 				discount_id: 0,
-				is_shipping: true
+				is_shipping: true,
+				inputTrip: false,
+				focus: true,
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -974,11 +983,11 @@
 							that.toPay = true;
 							// #ifdef MP
 							/* that.toPay = true; */
-							let mp_pay_name=''
-							if(uni.requestOrderPayment){
-								mp_pay_name='requestOrderPayment'
-							}else{
-								mp_pay_name='requestPayment'
+							let mp_pay_name = ''
+							if (uni.requestOrderPayment) {
+								mp_pay_name = 'requestOrderPayment'
+							} else {
+								mp_pay_name = 'requestPayment'
 							}
 							uni[mp_pay_name]({
 								timeStamp: jsConfig.timestamp,
@@ -1017,7 +1026,8 @@
 								complete: function(e) {
 									uni.hideLoading();
 									//关闭当前页面跳转至订单状态
-									if (res.errMsg == 'requestPayment:cancel' || e.errMsg == 'requestOrderPayment:cancel') return that.$util
+									if (res.errMsg == 'requestPayment:cancel' || e.errMsg ==
+										'requestOrderPayment:cancel') return that.$util
 										.Tips({
 											title: that.$t(`取消支付`)
 										}, {
@@ -1039,8 +1049,8 @@
 							}).catch(res => {
 								if (!this.$wechat.isWeixin()) {
 									uni.redirectTo({
-										url: goPages + '&msg='+ that.$t(`支付失败`) + '&status=2'
-											// '&msg=支付失败&status=2'
+										url: goPages + '&msg=' + that.$t(`支付失败`) + '&status=2'
+										// '&msg=支付失败&status=2'
 									})
 								}
 								if (res.errMsg == 'chooseWXPay:cancel') return that.$util.Tips({
@@ -1067,7 +1077,8 @@
 									}, 2000)
 								},
 								fail: (e) => {
-									let url = '/pages/goods/order_pay_status/index?order_id=' + orderId +
+									let url = '/pages/goods/order_pay_status/index?order_id=' +
+										orderId +
 										'&msg=' + that.$t(`支付失败`);
 									uni.showModal({
 										content: that.$t(`支付失败`),
@@ -1077,8 +1088,7 @@
 												uni.redirectTo({
 													url: url
 												})
-											} else if (res.cancel) {
-											}
+											} else if (res.cancel) {}
 										}
 									})
 								},
@@ -1138,7 +1148,8 @@
 									uni.showToast({
 										title: that.$t(`支付成功`)
 									})
-									let url = '/pages/goods/order_pay_status/index?order_id=' + orderId +
+									let url = '/pages/goods/order_pay_status/index?order_id=' +
+										orderId +
 										'&msg=' + that.$t(`支付成功`);
 									setTimeout(res => {
 										uni.redirectTo({
@@ -1148,8 +1159,9 @@
 
 								},
 								fail: (e) => {
-									let url = '/pages/goods/order_pay_status/index?order_id=' + orderId +
-										'&msg='+ that.$t(`支付失败`);
+									let url = '/pages/goods/order_pay_status/index?order_id=' +
+										orderId +
+										'&msg=' + that.$t(`支付失败`);
 									uni.showModal({
 										content: that.$t(`支付失败`),
 										showCancel: false,
@@ -1158,8 +1170,7 @@
 												uni.redirectTo({
 													url: url
 												})
-											} else if (res.cancel) {
-											}
+											} else if (res.cancel) {}
 										}
 									})
 								},
@@ -1341,6 +1352,10 @@
 				that.confirm[index].value.splice(indexs, 1);
 				// that.$set(that, 'pics', that.pics);
 			},
+			inputTripClick() {
+				this.inputTrip = true
+				// this.$refs.trip.foucs()
+			},
 		}
 	}
 </script>
@@ -1508,6 +1523,23 @@
 		font-size: 30rpx;
 		color: #282828;
 		border-bottom: 1px solid #f0f0f0;
+
+		.mark {
+			background-color: #f9f9f9;
+			width: 345px;
+			height: 70px;
+			border-radius: 1px;
+			margin-top: 15px;
+			padding: 12px 14px;
+			color: #ccc;
+			font-size: 28rpx;
+			box-sizing: border-box;
+		}
+
+		.mark-msg {
+			color: #333;
+			font-size: 32rpx;
+		}
 	}
 
 	.order-submission .wrapper .item .discount {
@@ -1559,6 +1591,7 @@
 
 	.order-submission .wrapper .item .placeholder {
 		color: #ccc;
+		font-size: 28rpx;
 	}
 
 	.order-submission .wrapper .item .list {
