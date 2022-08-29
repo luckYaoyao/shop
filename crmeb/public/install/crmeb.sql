@@ -2741,6 +2741,7 @@ CREATE TABLE IF NOT EXISTS `eb_store_order_refund` (
   `is_pink_cancel` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否拼团自动取消',
   `is_del` tinyint(1) DEFAULT '0' COMMENT '取消申请',
   `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '申请退款时间',
+  `is_system_del` tinyint(1) DEFAULT '0' COMMENT '系统删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -8770,7 +8771,7 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (1009, 135, '', 'APP', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/app/app', '135', 1, '', 0, 'admin-app', 0),
 (1010, 1008, '', 'PC端配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/pc_config/3/75', '135/1008', 1, '', 0, 'setting-system-config', 0),
 (1011, 1009, '', 'APP配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/app_config/3/77', '135/1009', 1, '', 0, 'setting-system-config', 0),
-(1012, 12, '', '存储配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/storage', '12', 1, '', 0, 'setting-storage', 0),
+(1012, 1056, '', '系统存储配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/storage', '12', 1, '', 0, 'setting-storage', 0),
 (1018, 909, '', '抽奖配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/marketing/lottery/create', '27/909', 1, '', 0, 'admin-marketing-lottery-create', 0),
 (1019, 909, '', '中奖记录', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/marketing/lottery/recording_list', '27/909', 1, '', 0, 'admin-marketing-lottery-recording_list-id', 0),
 (1023, 27, '', '公众号渠道码', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/marketing/channel_code/channelCodeIndex', '27', 1, '', 0, 'marketing-channel_code-index', 0),
