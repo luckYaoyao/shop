@@ -76,9 +76,15 @@ class MessageSystemController
         $data = $request->getMore([
             ['id', 0],
             ['key', ''],
-            ['value', '']
+            ['value', ''],
+            ['all', 0]
         ]);
-        $this->services->update($data['id'], [$data['key'] => $data['value']]);
+        $all = (int)$data['all'];
+        if ($all === 1) {
+            $this->services->update(['uid' => $request->uid()], [$data['key'] => $data['value']]);
+        } else {
+            $this->services->update($data['id'], [$data['key'] => $data['value']]);
+        }
         return app('json')->success(100014);
     }
 }

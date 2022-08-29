@@ -117,6 +117,16 @@ class StoreOrderRefund extends BaseModel
     }
 
     /**
+     * is_system_del搜索器
+     * @param Model $query
+     * @param $value
+     */
+    public function searchIsSystemDelAttr($query, $value)
+    {
+        if ($value !== '' && !is_null($value)) $query->where('is_system_del', $value);
+    }
+
+    /**
      * refund_type
      * @param $query
      * @param $value

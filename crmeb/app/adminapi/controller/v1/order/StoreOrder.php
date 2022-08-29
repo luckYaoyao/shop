@@ -218,9 +218,12 @@ class StoreOrder extends AuthController
         if (!$orderInfo->is_del)
             return app('json')->fail(400157);
         $orderInfo->is_system_del = 1;
-        if ($orderInfo->save())
+        if ($orderInfo->save()) {
+            /** @var StoreOrderRefundServices $refundServices */
+            $refundServices = app()->make(StoreOrderRefundServices::class);
+            $refundServices->update(['store_order_id' => $id], ['is_system_del' => 1]);
             return app('json')->success(100002);
-        else
+        } else
             return app('json')->fail(100008);
     }
 
@@ -486,7 +489,7 @@ class StoreOrder extends AuthController
             $orderInfo['_store_name'] = $storeServices->value(['id' => $orderInfo['store_id']], 'name');
         } else
             $orderInfo['_store_name'] = '';
-        $orderInfo['spread_name'] = $services->value(['uid'=>$orderInfo['spread_uid']],'nickname') ?? '无';
+        $orderInfo['spread_name'] = $services->value(['uid' => $orderInfo['spread_uid']], 'nickname') ?? '无';
         $userInfo = $userInfo->toArray();
         return app('json')->success(compact('orderInfo', 'userInfo'));
     }

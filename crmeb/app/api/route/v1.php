@@ -221,7 +221,7 @@ Route::group(function () {
     //消息站内信
     Route::get('user/message_system/list', 'v1.user.MessageSystemController/message_list')->name('MessageSystemList'); //站内信列表
     Route::get('user/message_system/detail/:id', 'v1.user.MessageSystemController/detail')->name('MessageSystemDetail'); //详情
-    Route::get('user/message_system/edit_message', 'v1.user.MessageSystemController/edit_message')->name('EditMessage');//站内信设为未读/删除ß
+    Route::get('user/message_system/edit_message', 'v1.user.MessageSystemController/edit_message')->name('EditMessage');//站内信设为未读/删除
 
     //积分商城订单
     Route::post('store_integral/order/confirm', 'v1.order.StoreIntegralOrderController/confirm')->name('storeIntegralOrderConfirm'); //订单确认

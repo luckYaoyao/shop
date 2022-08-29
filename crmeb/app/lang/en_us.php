@@ -66,6 +66,7 @@ return [
     100101 => 'Illegal operation',
     100102 => 'Data acquisition failed',
     100103 => 'Site upgrade in progress, please visit later',
+    100104 => 'Missing Code',
 
     // 处理特殊状态码
     110000 => 'You do not have access right for the time being',
@@ -1256,4 +1257,7 @@ return [
     40003 => 'Illegal openid. Please confirm whether openid (the user) has paid attention to wechat or whether it is the openid of other wechat',
     40002 => 'Illegal voucher type',
     40001 => 'Get access_ Appsecret error in token, or access_ The token is invalid. Please carefully compare the correctness of appsecret or check whether the interface is being called for the appropriate wechat',
+    200011 => "This account has been banned and cannot be operated",
+    200012 => "The number of personal templates has reached the upper limit, the upper limit is 25",
+    200014 => "Please check the category of the applet",
 ];

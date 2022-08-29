@@ -55,6 +55,7 @@ class UpgradeServices extends BaseServices
     public function __construct(UpgradeLogDao $dao)
     {
         $versionData = $this->getVersion();
+        if ($versionData['version_code'] < 450) return true;
         if (empty($versionData)) {
             throw new AdminException('授权信息丢失');
         }
