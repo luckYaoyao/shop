@@ -930,7 +930,6 @@ if (!function_exists('getLang')) {
             $range = 'zh_cn';
         }
 
-        CacheService::redisHandler()->delete('lang_' . $range);
         //读取当前语言的语言包
         $lang = CacheService::redisHandler()->remember('lang_' . $range, function () use ($config, $range) {
             return include $config['extend_list'][$range];
