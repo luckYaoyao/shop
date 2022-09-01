@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
@@ -12,6 +12,7 @@
 namespace app\services\pay;
 
 
+use app\services\order\OtherOrderServices;
 use app\services\order\StoreOrderCartInfoServices;
 use app\services\order\StoreOrderServices;
 use app\services\wechat\WechatUserServices;
@@ -67,21 +68,23 @@ class OrderPayServices
         if (isset($orderInfo['member_type'])) {
             $body = Str::substrUTf8($site_name . '--' . $orderInfo['member_type'], 20);
             $successAction = "member";
+            /** @var OtherOrderServices $otherOrderServices */
+            $otherOrderServices = app()->make(OtherOrderServices::class);
+            $otherOrderServices->update($orderInfo['id'], ['pay_type' => 'alipay']);
         } else {
             /** @var StoreOrderCartInfoServices $orderInfoServices */
             $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);
             $body = $orderInfoServices->getCarIdByProductTitle((int)$orderInfo['id'], $orderInfo['cart_id']);
             $body = Str::substrUTf8($site_name . '--' . $body, 20);
             $successAction = "product";
+            /** @var StoreOrderServices $orderServices */
+            $orderServices = app()->make(StoreOrderServices::class);
+            $orderServices->update($orderInfo['id'], ['pay_type' => 'weixin']);
         }
 
         if (!$body) {
             throw new ApiException(410276);
         }
-
-        /** @var StoreOrderServices $orderServices */
-        $orderServices = app()->make(StoreOrderServices::class);
-        $orderServices->update($orderInfo['id'], ['pay_type' => 'weixin']);
 
         return $this->payServices->pay($payType, $openid, $orderInfo['order_id'], $orderInfo['pay_price'], $successAction, $body);
     }
@@ -104,21 +107,25 @@ class OrderPayServices
         if (isset($orderInfo['member_type'])) {
             $body = Str::substrUTf8($site_name . '--' . $orderInfo['member_type'], 30);
             $successAction = "member";
+            /** @var OtherOrderServices $otherOrderServices */
+            $otherOrderServices = app()->make(OtherOrderServices::class);
+            $otherOrderServices->update($orderInfo['id'], ['pay_type' => 'alipay']);
         } else {
             /** @var StoreOrderCartInfoServices $orderInfoServices */
             $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);
             $body = $orderInfoServices->getCarIdByProductTitle($orderInfo['id'], $orderInfo['cart_id']);
             $body = Str::substrUTf8($site_name . '--' . $body, 30);
             $successAction = "product";
+            /** @var StoreOrderServices $orderServices */
+            $orderServices = app()->make(StoreOrderServices::class);
+            $orderServices->update($orderInfo['id'], ['pay_type' => 'alipay']);
         }
 
         if (!$body) {
             throw new ApiException(410276);
         }
 
-        /** @var StoreOrderServices $orderServices */
-        $orderServices = app()->make(StoreOrderServices::class);
-        $orderServices->update($orderInfo['id'], ['pay_type' => 'alipay']);
+
 
         return $this->payServices->pay('alipay', $quitUrl, $orderInfo['order_id'], $orderInfo['pay_price'], $successAction, $body, $isCode);
     }

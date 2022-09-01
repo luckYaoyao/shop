@@ -2,7 +2,7 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2020 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
@@ -13,6 +13,7 @@ namespace app\services\pay;
 
 
 use app\services\BaseServices;
+use app\services\order\StoreOrderDeliveryServices;
 use app\services\order\StoreOrderInvoiceServices;
 use app\services\order\StoreOrderServices;
 use app\services\order\StoreOrderStatusServices;
@@ -68,6 +69,13 @@ class OrderOfflineServices extends BaseServices
         $orderInfo['nickname'] = $userInfo['nickname'];
         $orderInfo['phone'] = $userInfo['phone'];
         $capitalFlowServices->setFlow($orderInfo, 'order');
+
+        //虚拟商品自动发货
+        if($orderInfo['virtual_type'] > 0){
+            /** @var StoreOrderDeliveryServices $orderDeliveryServices */
+            $orderDeliveryServices = app()->make(StoreOrderDeliveryServices::class);
+            $orderDeliveryServices->virtualSend($orderInfo);
+        }
 
         //支付记录
         ProductLogJob::dispatch(['pay', ['uid' => $orderInfo['uid'], 'order_id' => $orderInfo['id']]]);
