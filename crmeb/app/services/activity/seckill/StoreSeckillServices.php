@@ -923,7 +923,7 @@ class StoreSeckillServices extends BaseServices
                 $item['status'] = '未知';
             }
             $item['add_time'] = date('Y-m-d H:i:s', $item['add_time']);
-            $item['pay_time'] = date('Y-m-d H:i:s', $item['pay_time']);
+            $item['pay_time'] = $item['pay_time'] ? date('Y-m-d H:i:s', $item['pay_time']) : '';
         }
         return compact('list', 'count');
     }

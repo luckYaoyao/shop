@@ -301,7 +301,7 @@ class PublicController
             ['code', ''],
         ], true);
         if (!preg_match('/.*(\.png|\.jpg|\.jpeg|\.gif)$/', $imageUrl) || !preg_match('/.*(\.png|\.jpg|\.jpeg|\.gif)$/', $codeUrl)) {
-            return app('json')->fail(100100);
+            return app('json')->success(['code' => false, 'image' => false]);
         }
         try {
             $code = CacheService::get($codeUrl, function () use ($codeUrl) {
