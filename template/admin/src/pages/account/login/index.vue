@@ -52,7 +52,7 @@
         </Form>
       </div>
     </div>
-    <Modal
+    <!-- <Modal
       v-model="modals"
       scrollable
       footer-hide
@@ -66,7 +66,8 @@
         <div id="captcha" style="position: relative" ref="captcha"></div>
         <div id="msg"></div>
       </div>
-    </Modal>
+    </Modal> -->
+    <vcode :show="isShow" @success="closeModel()" @close="closeModel()" successText="验证通过" />
   </div>
 </template>
 <script>
@@ -76,9 +77,13 @@ import { getWorkermanUrl } from '@/api/kefu';
 import Setting from '@/setting';
 import { setCookies } from '@/libs/util';
 import '../../../assets/js/canvas-nest.min';
-import '../../../assets/js/jigsaw.js';
+// import '../../../assets/js/jigsaw.js';
+import Vcode from 'vue-puzzle-vcode';
 export default {
   // mixins: [mixins],
+  components: {
+    Vcode,
+  },
   data() {
     return {
       fullWidth: document.documentElement.clientWidth,
@@ -87,7 +92,7 @@ export default {
         autoplay: true,
       },
       loading: false,
-      modals: false,
+      isShow: false,
       autoLogin: true,
       imgcode: '',
       formInline: {
@@ -101,11 +106,11 @@ export default {
         code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
       },
       errorNum: 0,
-      jigsaw: null,
+      // jigsaw: null,
       login_logo: '',
       swiperList: [],
       defaultSwiperList: require('@/assets/images/sw.jpg'),
-      key:'',
+      key: '',
     };
   },
   created() {
@@ -143,15 +148,15 @@ export default {
     this.$nextTick(() => {
       // /* eslint-disable */
       let that = this;
-      this.jigsaw = jigsaw.init({
-        el: this.$refs.captcha,
-        onSuccess() {
-          that.modals = false;
-          that.closeModel();
-        },
-        onFail: this.closefail,
-        onRefresh() {},
-      });
+      // this.jigsaw = jigsaw.init({
+      //   el: this.$refs.captcha,
+      //   onSuccess() {
+      //     that.modals = false;
+      //     that.closeModel();
+      //   },
+      //   onFail: this.closefail,
+      //   onRefresh() {},
+      // });
       if (this.screenWidth < 768) {
         document.getElementsByTagName('canvas')[0].removeAttribute('class', 'index_bg');
       } else {
@@ -179,6 +184,7 @@ export default {
     },
     // 关闭模态框
     closeModel() {
+      this.isShow = false;
       let msg = this.$Message.loading({
         content: '登录中...',
         duration: 0,
@@ -188,7 +194,7 @@ export default {
         account: this.formInline.username,
         pwd: this.formInline.password,
         imgcode: this.formInline.code,
-        key: this.key
+        key: this.key,
       })
         .then(async (res) => {
           msg();
@@ -214,28 +220,26 @@ export default {
           this.$store.commit('userInfo/version', data.version);
           this.$store.commit('userInfo/newOrderAudioLink', data.newOrderAudioLink);
 
-          if (this.jigsaw) this.jigsaw.reset();
+          // if (this.jigsaw) this.jigsaw.reset();
 
           try {
             if (data.queue === false) {
               this.$Notice.warning({
                 title: '温馨提示',
-                desc:'您的【消息队列】未开启，没有开启会导致异步任务无法执行。请尽快执行命令开启！！',
-                duration: 30
+                desc: '您的【消息队列】未开启，没有开启会导致异步任务无法执行。请尽快执行命令开启！！',
+                duration: 30,
               });
             }
             if (data.timer === false) {
               this.$Notice.warning({
                 title: '温馨提示',
-                desc:'您的【定时任务】未开启，没有开启会导致定时执行的任务无法执行。请尽快执行命令开启！！',
-                duration: 30
+                desc: '您的【定时任务】未开启，没有开启会导致定时执行的任务无法执行。请尽快执行命令开启！！',
+                duration: 30,
               });
             }
 
-            this.checkSocket()
-          }catch (e) {
-
-          }
+            this.checkSocket();
+          } catch (e) {}
 
           return this.$router.replace({ path: '/admin/home/' || '/admin/' });
         })
@@ -246,42 +250,42 @@ export default {
           this.errorNum++;
           this.captchas();
           this.$Message.error(data.msg || '登录失败');
-          if (this.jigsaw) this.jigsaw.reset();
+          // if (this.jigsaw) this.jigsaw.reset();
         });
       setTimeout((e) => {
         this.loading = false;
       }, 1000);
     },
-    checkSocket(){
-      getWorkermanUrl().then(res=>{
-        let url = res.data.admin
+    checkSocket() {
+      getWorkermanUrl().then((res) => {
+        let url = res.data.admin;
         let isNotice = false;
         let socket = new WebSocket(url);
-        socket.onopen = () =>{
+        socket.onopen = () => {
           isNotice = true;
           socket.close();
         };
-        socket.onerror = (err) =>{
-          if(!isNotice){
+        socket.onerror = (err) => {
+          if (!isNotice) {
             isNotice = true;
             this.$Notice.warning({
               title: '温馨提示',
-              desc:'您的【长连接】未开启，没有开启会导致客服消息无法发送,后台订单通知无法收到。请尽快执行命令开启！！',
-              duration: 30
+              desc: '您的【长连接】未开启，没有开启会导致客服消息无法发送,后台订单通知无法收到。请尽快执行命令开启！！',
+              duration: 30,
             });
           }
         };
-        socket.onclose = (err) =>{
-          if(!isNotice){
+        socket.onclose = (err) => {
+          if (!isNotice) {
             isNotice = true;
             this.$Notice.warning({
               title: '温馨提示',
-              desc:'您的【长连接】未开启，没有开启会导致客服消息无法发送,后台订单通知无法收到。请尽快执行命令开启！！',
-              duration: 30
+              desc: '您的【长连接】未开启，没有开启会导致客服消息无法发送,后台订单通知无法收到。请尽快执行命令开启！！',
+              duration: 30,
             });
           }
         };
-      })
+      });
     },
     getExpiresTime(expiresTime) {
       let nowTimeNum = Math.round(new Date() / 1000);
@@ -289,7 +293,7 @@ export default {
       return parseFloat(parseFloat(parseFloat(expiresTimeNum / 60) / 60) / 24);
     },
     closefail() {
-      if (this.jigsaw) this.jigsaw.reset();
+      // if (this.jigsaw) this.jigsaw.reset();
       this.$Message.error('校验错误');
     },
     handleResize(event) {
@@ -307,7 +311,7 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.errorNum >= 2) {
-            this.modals = true;
+            this.isShow = true;
           } else {
             this.closeModel();
           }
