@@ -106,20 +106,7 @@ class SystemNotificationServices extends BaseServices
                 $info['content'] = $info['system_text'] ?? '';
                 break;
             case 'is_sms':
-                $snsCacheName = 'sms_template_list';
-                $smsTem = [];
-                if (Cache::has($snsCacheName)) {
-                    $smsTem = Cache::get($snsCacheName);
-                } else {
-                    $list = $ServeServices->sms()->temps(1, 30, 0);
-                    if (isset($list['data']) && $list['data']) {
-                        foreach ($list['data'] as $item) {
-                            $smsTem[$item['temp_id']] = $item['content'];
-                        }
-                    }
-                    if ($smsTem) Cache::set($snsCacheName, $smsTem, 172800);
-                }
-                $info['content'] = $smsTem[$info['sms_id']] ?? '';
+                $info['content'] = $info['sms_text'];
                 break;
             case 'is_wechat':
                 $wechat = $TemplateMessageServices->getOne(['id' => $info['wechat_id'], 'type' => 1]);

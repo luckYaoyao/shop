@@ -88,9 +88,10 @@ class SystemNotification extends AuthController
             ['mark', ''],
             ['sms_id', ''],
         ]);
+        if ($data['mark'] == 'verify_code') $data['type'] = 'is_sms';
         if (!$data['id']) return app('json')->fail(100100);
         if ($this->services->saveData($data)) {
-            CacheService::delete('NOTCE_'. $data['mark']);
+            CacheService::delete('NOTCE_' . $data['mark']);
             return app('json')->success(100001);
         } else {
             return app('json')->fail(100007);
@@ -106,8 +107,8 @@ class SystemNotification extends AuthController
     {
         if ($type == '' || $status == '' || $id == 0) return app('json')->fail(100100);
         $this->services->update($id, [$type => $status]);
-        $res = $this->services->getOneNotce(['id'=>$id]);
-        CacheService::delete('NOTCE_'.$res->mark);
+        $res = $this->services->getOneNotce(['id' => $id]);
+        CacheService::delete('NOTCE_' . $res->mark);
         return app('json')->success(100014);
     }
 }

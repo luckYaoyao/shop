@@ -300,7 +300,10 @@ class PublicController
             ['image', ''],
             ['code', ''],
         ], true);
-        if (!preg_match('/.*(\.png|\.jpg|\.jpeg|\.gif)$/', $imageUrl) || !preg_match('/.*(\.png|\.jpg|\.jpeg|\.gif)$/', $codeUrl)) {
+        if ($imageUrl !== '' && !preg_match('/.*(\.png|\.jpg|\.jpeg|\.gif)$/', $imageUrl)) {
+            return app('json')->success(['code' => false, 'image' => false]);
+        }
+        if ($codeUrl !== '' && !preg_match('/.*(\.png|\.jpg|\.jpeg|\.gif)$/', $codeUrl)) {
             return app('json')->success(['code' => false, 'image' => false]);
         }
         try {
