@@ -179,10 +179,10 @@ All rights reserved。
 CRMEB® 商标和著作权所有者为西安众邦网络科技有限公司。
 
 ![](readme/pic/gitee打通版-横.jpg)
-[![](readme/pic/1思维脑图功能清单.jpg)](http://s.crmeb.com/goods_detail/730)
-[![](readme/pic/2高清UI设计图.jpg)](http://s.crmeb.com/goods_detail/728)
-[![](readme/pic/3前后端接口文档.jpg)](http://s.crmeb.com/goods_detail/729)
-[![](readme/pic/4PC端前端模板.jpg)](http://s.crmeb.com/goods_detail/711)
+[![](readme/pic/1思维脑图功能清单.jpg)](https://s.crmeb.com/goods_detail/739)
+[![](readme/pic/2高清UI设计图.jpg)](https://s.crmeb.com/goods_detail/739)
+[![](readme/pic/3前后端接口文档.jpg)](https://s.crmeb.com/goods_detail/739)
+[![](readme/pic/4PC端前端模板.jpg)](https://s.crmeb.com/goods_detail/739)
 
 [返回顶部 :fa-arrow-circle-up: ](https://gitee.com/ZhongBangKeJi/CRMEB#%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D)
 
