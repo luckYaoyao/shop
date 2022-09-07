@@ -56,7 +56,7 @@
 					<view class="conter">{{orderInfo.invoice.remark}}</view>
 				</view>
 			</view>
-			<orderGoods :evaluate='evaluate' :orderId="order_id" :cartInfo="cartInfo" :jump="true" :paid="orderInfo.paid" :oid="orderInfo.id" :isShow="false"></orderGoods>
+			<orderGoods :evaluate='evaluate' :orderId="order_id" :cartInfo="cartInfo" :jump="true" :paid="orderInfo.paid" :oid="orderInfo.id" :isShow="false" :statusType="status.type"></orderGoods>
 			<view class='wrapper'>
 				<view class='item acea-row row-between'>
 					<view>{{$t(`订单编号`)}}：</view>

@@ -56,7 +56,7 @@
 						@click.stop="evaluateTap(item.unique,orderId)">
 						{{$t(`评价`)}}</view>
 					<view class='logistics'
-						v-if="paid === 1 && refund_status === 0 && item.refund_num !=item.cart_num && !is_confirm && isShow"
+						v-if="paid === 1 && refund_status === 0 && item.refund_num !=item.cart_num && !is_confirm && isShow && virtualType == 0"
 						@click.stop="openSubcribe(item)">
 						{{$t(`申请退款`)}}</view>
 					<view class="rig-btn" v-if="status_type === 2 && index === cartInfo.length - 1 || !split">
@@ -77,6 +77,10 @@
 		props: {
 			// 订单状态
 			statusType: {
+				type: Number,
+				default: 0,
+			},
+			virtualType: {
 				type: Number,
 				default: 0,
 			},

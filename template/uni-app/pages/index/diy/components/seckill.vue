@@ -20,7 +20,7 @@
 					 hover-class='none'>
 						<view class="img-box">
 							<image :src="item.image" mode="aspectFill"></image>
-							<view v-if="discountShow" class="msg flex-aj-center" :style="'color:'+ themeColor +';border-color:'+ themeColor +';'">{{item.discountNum}}{{$t(`off`)}}</view>
+							<view v-if="discountShow" class="msg flex-aj-center" :style="'color:'+ themeColor +';border-color:'+ themeColor +';'">{{item.discountNum}}{{$t(`折`)}}</view>
 						</view>
 						<view class="info">
 							<view v-if="titleShow" class="name line1">{{item.title}}</view>

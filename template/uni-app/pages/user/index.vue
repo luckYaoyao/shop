@@ -611,7 +611,7 @@
 					res.data.routine_my_menus.forEach((el, index, arr) => {
 						if (el.url == '/pages/admin/order/index' || el.url ==
 							'/pages/admin/order_cancellation/index' || el.name ==
-							this.$t(`客服接待`)) {
+							'客服接待') {
 							storeMenu.push(el)
 						} else {
 							myMenu.push(el)

@@ -64,7 +64,7 @@
 				<view class="right-section">
 					<view class="section-hd acea-row row-between-wrapper">
 						<view>{{$t(`我的成长特权`)}}</view>
-						<navigator v-if="is_open_member" class="svip" url="/pages/annex/vip_paid/index">{{$t(`upgrading_svip`)}}</navigator>
+						<navigator v-if="is_open_member" class="svip" url="/pages/annex/vip_paid/index">{{$t(`立即升级`)}}</navigator>
 					</view>
 					<view class="section-bd acea-row">
 						<view class="item">

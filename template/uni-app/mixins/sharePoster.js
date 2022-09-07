@@ -1,7 +1,7 @@
 // +----------------------------------------------------------------------
 // | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
 // +----------------------------------------------------------------------
-// | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
+// | Copyright (c) 2016~2021 https://www.crmeb.com All rights reserved.
 // +----------------------------------------------------------------------
 // | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
 // +----------------------------------------------------------------------
@@ -9,7 +9,7 @@
 // +----------------------------------------------------------------------
 import {
 	imageBase64
-} from "@/api/public";
+} from "@/api/public";ß
 import {
 	getProductCode
 } from "@/api/store.js";
@@ -63,50 +63,21 @@ export const sharePoster = {
 				})
 				.catch(() => {});
 		},
-		/**
-		 * 生成海报
-		 */
-		goPoster() {
+		initPoster(arr2) {
 			let that = this;
-			that.posters = false;
-			that.$set(that, "canvasStatus", true);
-			let arr2
-			// #ifdef MP
-			arr2 = [that.posterbackgd, that.storeImage, that.PromotionCode];
-			if (that.isDown)
-				return that.$util.Tips({
-					title: i18n.t(`正在下载海报,请稍后再试`),
-				});
-			// #endif
-			// #ifdef H5 || APP-PLUS
-			arr2 = [that.posterbackgd, that.storeImageBase64, that.PromotionCode];
-			if (!that.storeImageBase64)
-				return that.$util.Tips({
-					title: i18n.t(`正在下载海报,请稍后再试`),
-				});
-			// #endif
 			uni.getImageInfo({
 				src: that.PromotionCode,
-				fail: function(res) {
-					// #ifdef H5
-					return that.$util.Tips({
-						title: res,
-					});
-					// #endif
-					// #ifdef MP
-					return that.$util.Tips({
-						title: i18n.t(`正在下载海报,请稍后再试`),
-					});
-					// #endif
-				},
 				success() {
 					if (arr2[2] == "") {
 						//海报二维码不存在则从新下载
-						that.downloadFilePromotionCode(function(msgPromotionCode) {
+						that.downloadFilePromotionCode(function(
+							msgPromotionCode) {
 							arr2[2] = msgPromotionCode;
 							if (arr2[2] == "")
 								return that.$util.Tips({
-									title: i18n.t(`海报二维码生成失败`),
+									title: i18n.t(
+										`海报二维码生成失败`
+									),
 								});
 							that.$util.PosterCanvas(
 								arr2,
@@ -114,11 +85,20 @@ export const sharePoster = {
 								that.storeInfo.price,
 								that.storeInfo.ot_price,
 								function(tempFilePath) {
-									that.$set(that, "posterImage", tempFilePath);
-									that.$set(that, "posterImageStatus", true);
-									that.$set(that, "canvasStatus", false);
-									that.$set(that, "actionSheetHidden", !that
-										.actionSheetHidden);
+									that.$set(that,
+										"posterImage",
+										tempFilePath);
+									that.$set(that,
+										"posterImageStatus",
+										true);
+									that.$set(that,
+										"canvasStatus",
+										false);
+									that.$set(that,
+										"actionSheetHidden",
+										!that
+										.actionSheetHidden
+									);
 								}
 							);
 						});
@@ -131,18 +111,87 @@ export const sharePoster = {
 								that.storeInfo.price,
 								that.storeInfo.ot_price,
 								function(tempFilePath) {
-									that.$set(that, "posterImage", tempFilePath);
-									that.$set(that, "posterImageStatus", true);
-									that.$set(that, "canvasStatus", false);
-									that.$set(that, "actionSheetHidden", !that
-										.actionSheetHidden);
+									that.$set(that,
+										"posterImage",
+										tempFilePath);
+									that.$set(that,
+										"posterImageStatus",
+										true);
+									that.$set(that,
+										"canvasStatus",
+										false);
+									that.$set(that,
+										"actionSheetHidden",
+										!that
+										.actionSheetHidden
+									);
 								}
 							);
 						})
 
 					}
 				},
+				fail: function(res) {
+					// #ifdef H5
+					return that.$util.Tips({
+						title: res,
+					});
+					// #endif
+					// #ifdef MP
+					return that.$util.Tips({
+						title: i18n.t(`正在下载海报,请稍后再试`),
+					});
+					// #endif
+				},
 			});
+		},
+		/**
+		 * 生成海报
+		 */
+		async goPoster() {
+			let that = this;
+			that.posters = false;
+			that.$set(that, "canvasStatus", true);
+			let arr2
+			// #ifdef MP
+			getProductCode(that.id)
+				.then((res) => {
+					uni.downloadFile({
+						url: that.setDomain(res.data.code),
+						success: function(res) {
+							that.$set(that, "isDown", false);
+							that.$set(that, "PromotionCode", res.tempFilePath)
+							if (typeof successFn == "function")
+								successFn && successFn(res.tempFilePath);
+							arr2 = [that.posterbackgd, that.storeImage, that.PromotionCode];
+							that.initPoster(arr2)
+						},
+						fail: function() {
+							that.$set(that, "isDown", false);
+							that.$set(that, "PromotionCode", "");
+						},
+					});
+				})
+				.catch((err) => {
+					that.$set(that, "isDown", false);
+					that.$set(that, "PromotionCode", "");
+					return that.$util.Tips({
+						title: err,
+					});
+				});
+			// #endif
+			// #ifdef H5 || APP-PLUS
+			arr2 = [that.posterbackgd, that.storeImageBase64, that.PromotionCode];
+			console.log(arr2)
+			if (!that.storeImageBase64)
+				return that.$util.Tips({
+					title: i18n.t(`正在下载海报,请稍后再试`),
+				});
+			that.initPoster(arr2)
+			// #endif
+			console.log(arr2, 'arr2s')
+
+
 		},
 		//替换安全域名
 		setDomain(url) {

@@ -71,13 +71,19 @@
 								<view class="iconfont icon-fenxiang skeleton-rect" @click="listenerActionSheet"></view>
 							</view>
 							<view class="introduce skeleton-rect" v-text="storeInfo.store_name"></view>
-							<view class="limit_good" v-if="storeInfo.limit_type > 0">{{storeInfo.limit_type == 1 ? $t(`单次限购`) : $t(`永久限购`)}}{{storeInfo.limit_num}}{{$t(storeInfo.unit_name)}}</view>
+							<view class="limit_good" v-if="storeInfo.limit_type > 0">
+								{{storeInfo.limit_type == 1 ? $t(`单次限购`) : $t(`永久限购`)}}{{storeInfo.limit_num}}{{$t(storeInfo.unit_name)}}
+							</view>
 							<view class="label acea-row row-between-wrapper" style="padding-bottom: 20rpx">
 								<view class="skeleton-rect">
 									{{$t(`划线价`)}} : {{$t(`￥`)}}{{storeInfo.ot_price || 0}}
 								</view>
-								<view class="skeleton-rect" >{{$t(`库存`)}} : {{storeInfo.stock || 0}} {{$t(storeInfo.unit_name) || ''}}</view>
-								<view class="skeleton-rect" >{{$t(`销量`)}} : {{storeInfo.fsales || 0}} {{$t(storeInfo.unit_name) || ''}}</view>
+								<view class="skeleton-rect">{{$t(`库存`)}} : {{storeInfo.stock || 0}}
+									{{$t(storeInfo.unit_name) || ''}}
+								</view>
+								<view class="skeleton-rect">{{$t(`销量`)}} : {{storeInfo.fsales || 0}}
+									{{$t(storeInfo.unit_name) || ''}}
+								</view>
 							</view>
 							<view v-if="
                   !is_money_level && storeInfo.vip_price && storeInfo.is_vip
@@ -113,7 +119,8 @@
 									{{$t(`优惠券`)}}：
 									<template v-for="(item, index) in couponList">
 										<view v-if="index < 2" class="activity" :key="index">
-										{{$t(`满`)}} {{ item.use_min_price }} {{$t(`减`)}} {{ item.coupon_price }}</view>
+											{{$t(`满`)}} {{ item.use_min_price }} {{$t(`减`)}} {{ item.coupon_price }}
+										</view>
 									</template>
 								</view>
 								<view class="iconfont icon-jiantou"></view>
@@ -189,7 +196,7 @@
 							<navigator class="praise" hover-class="none"
 								:url="'/pages/goods/goods_comment_list/index?product_id=' + id">
 								<text class="font-num">{{ replyChance }}%</text>
-								 {{$t(`好评率`)}}
+								{{$t(`好评率`)}}
 								<text class="iconfont icon-jiantou"></text>
 							</navigator>
 						</view>
@@ -320,7 +327,8 @@
 									form-type="submit">{{$t(`已售罄`)}}</button></form>
 						</view>
 						<view class="bnts acea-row" v-else-if="presale_pay_status === 2">
-							<form @submit="goBuy" class="bnts"><button class="bnts" form-type="submit">{{$t(`立即购买`)}}</button>
+							<form @submit="goBuy" class="bnts"><button class="bnts"
+									form-type="submit">{{$t(`立即购买`)}}</button>
 							</form>
 						</view>
 					</view>
@@ -466,7 +474,9 @@
 		TOKENNAME
 	} from "@/config/app.js";
 	// #endif
-	import {HTTP_REQUEST_URL} from '@/config/app';
+	import {
+		HTTP_REQUEST_URL
+	} from '@/config/app';
 	let app = getApp();
 	import colors from "@/mixins/color";
 	import {
@@ -501,7 +511,7 @@
 		data() {
 			let that = this;
 			return {
-				imgHost:HTTP_REQUEST_URL,
+				imgHost: HTTP_REQUEST_URL,
 				sysHeight: sysHeight,
 				a: false,
 				showSkeleton: true, //骨架屏显示隐藏
@@ -1534,9 +1544,10 @@
 					if (this.$wechat.isWeixin() === true) {
 						this.weixinStatus = true;
 					}
-					// #endif
-					// #ifndef APP-PLUS
 					this.downloadFilePromotionCode();
+					// #endif
+					// #ifdef MP
+					// this.downloadFilePromotionCode();
 					// #endif
 					// #ifdef APP-PLUS
 					if (this.PromotionCode.indexOf("http") == 0) {
@@ -2308,7 +2319,7 @@
 	.introduce {
 		min-height: 44rpx;
 	}
-	
+
 	.limit_good {
 		font-size: 16rpx;
 		margin: 10rpx 30rpx;

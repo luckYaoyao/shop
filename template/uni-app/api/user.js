@@ -540,8 +540,8 @@ export function memberOverdueTime(data) {
 }
 
 /**
- * 新版分享海报信息获取
- * 
+ * 新版分享海报信息获取
+ * 
  */
 export function spreadMsg() {
 	return request.get('user/spread_info');
@@ -549,23 +549,23 @@ export function spreadMsg() {
 
 
 /**
- * 图片链接转base64
- * 
+ * 图片链接转base64
+ * 
  */
 export function imgToBase(data) {
 	return request.post('image_base64', data);
 }
 
 /**
- * 获取小程序二维码
- * 
+ * 获取小程序二维码
+ * 
  */
 export function routineCode(data) {
 	return request.get('user/routine_code', data);
 }
 
 /**
- * 消息中心
+ * 消息中心
  */
 export function serviceRecord(data) {
 	return request.get('user/record', data);

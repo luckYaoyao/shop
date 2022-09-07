@@ -152,7 +152,7 @@
 			</orderGoods>
 			<orderGoods :evaluate='evaluate' :deliveryType="orderInfo.shipping_type" :statusType="status.type"
 				:sendType="orderInfo.delivery_type" :orderId="order_id" :oid="orderInfo.id" :cartInfo="cartInfo"
-				:pid="pid" :jump="true" :refund_status="orderInfo.refund_status" :paid="orderInfo.paid"
+				:pid="pid" :jump="true" :refund_status="orderInfo.refund_status" :paid="orderInfo.paid" :virtualType="orderInfo.virtual_type"
 				@openSubcribe="openSubcribe">
 			</orderGoods>
 			<!-- #ifdef H5 || APP-PLUS -->
