@@ -1012,3 +1012,25 @@ export function saveType(type) {
     method: 'get',
   });
 }
+
+/**
+ * @description 多语言-语言类型列表
+ */
+ export function langTypeList(data) {
+  return request({
+    url: `setting/lang_type/list`,
+    method: 'get',
+    params: data,
+  });
+}
+
+/**
+ * @description 多语言-语言类型新增编辑
+ * @param {Number} param id {Number} 
+ */
+ export function langTypeForm(id) {
+  return request({
+    url: `setting/lang_type/form/${id}`,
+    method: 'get',
+  });
+}

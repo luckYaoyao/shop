@@ -629,5 +629,14 @@ export default {
       },
       component: () => import('@/pages/setting/systemOutAccount/index'),
     },
+    {
+      path: 'lang/list',
+      name: `${pre}langList`,
+      meta: {
+        auth: ['admin-lang-list'],
+        title: '语言列表',
+      },
+      component: () => import('@/pages/setting/multiLanguage/list'),
+    },
   ],
 };

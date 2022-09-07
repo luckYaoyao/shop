@@ -551,7 +551,7 @@ export default {
 };
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .active {
   padding: 6px 0;
   background-color: #eee !important;
