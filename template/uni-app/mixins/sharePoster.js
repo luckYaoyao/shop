@@ -9,7 +9,7 @@
 // +----------------------------------------------------------------------
 import {
 	imageBase64
-} from "@/api/public";ß
+} from "@/api/public";
 import {
 	getProductCode
 } from "@/api/store.js";

@@ -324,7 +324,7 @@
 				<view class="qs-btn" v-if="status.type == 0 || status.type == -9" @click.stop="cancelOrder">{{$t(`取消订单`)}}</view>
 				<view class='bnt bg-color' v-if="status.type==0" @tap='pay_open(orderInfo.order_id)'>{{$t(`立即付款`)}}</view>
 				<view
-					@click="openSubcribe(`/pages/users/${cartInfo.length > 1 ? 'goods_return_list' : 'goods_return'}/index?orderId=`+orderInfo.order_id+ '&id=' + orderInfo.id)"
+					@click="openSubcribe(`/pages/goods/${cartInfo.length > 1 ? 'goods_return_list' : 'goods_return'}/index?orderId=`+orderInfo.order_id+ '&id=' + orderInfo.id)"
 					class='bnt cancel'
 					v-else-if="orderInfo.is_apply_refund && orderInfo.refund_status == 0 && cartInfo.length>1 && !orderInfo.virtual_type">
 					{{cartInfo.length>1?$t(`批量退款`):$t(`申请退款`)}}
