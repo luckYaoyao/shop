@@ -787,7 +787,7 @@ HTML;
                 $order = $this->dao->getOne(['id' => $id, 'is_del' => 0]);
                 //改价短信提醒
                 event('notice.notice', [['order' => $order, 'pay_price' => $data['pay_price']], 'price_revision']);
-                return true;
+                return $data['order_id'];
             } else {
                 throw new AdminException(100007);
             }

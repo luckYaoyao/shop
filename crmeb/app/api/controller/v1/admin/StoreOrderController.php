@@ -191,9 +191,9 @@ class StoreOrderController
         }
         if ($price === '') return app('json')->fail(410175);
         if ($price < 0) return app('json')->fail(410176);
-        if ($order['pay_price'] == $price) return app('json')->success(100001);
-        $services->updateOrder($order['id'], ['total_price' => $order['total_price'], 'pay_price' => $price]);
-        return app('json')->success(100001);
+        if ($order['pay_price'] == $price) return app('json')->success(100001, ['order_id' => $order_id]);
+        $order_id = $services->updateOrder($order['id'], ['total_price' => $order['total_price'], 'pay_price' => $price]);
+        return app('json')->success(100001, ['order_id' => $order_id]);
     }
 
     /**
@@ -577,5 +577,20 @@ class StoreOrderController
             return app('json')->success(100024);
         } else
             return app('json')->fail(100025);
+    }
+
+    /**
+     * 同意退货
+     * @param StoreOrderRefundServices $services
+     * @param Request $request
+     * @return mixed
+     */
+    public function agreeExpress(StoreOrderRefundServices $services, Request $request)
+    {
+        [$id] = $request->postMore([
+            ['id', ''],
+        ], true);
+        $services->agreeExpress($id);
+        return app('json')->success(100010);
     }
 }

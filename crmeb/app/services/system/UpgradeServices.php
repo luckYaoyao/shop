@@ -184,7 +184,7 @@ class UpgradeServices extends BaseServices
     {
         [$page, $limit] = $this->getPageValue();
         $this->requestData['page'] = (string)($page ?: 1);
-        $this->requestData['limit'] = (string)($limit ?: 1);
+        $this->requestData['limit'] = (string)($limit ?: 10);
         $this->getSign($this->timeStamp);
         $result = HttpService::getRequest(self::UPGRADE_URL, $this->requestData);
         if (!$result) {
@@ -563,7 +563,7 @@ class UpgradeServices extends BaseServices
             if (CacheService::get($token . 'is_execute') == 2) {
                 return true;
             }
-            CacheService::set($token . 'is_execute', 2);
+            CacheService::set($token . 'is_execute', 2, 86400);
 
             $dataBackupName = CacheService::get($token . '_database_backup_name');
             if (!$dataBackupName || !is_file(app()->getRootPath() . 'backup' . DS . $dataBackupName)) {
@@ -606,7 +606,7 @@ class UpgradeServices extends BaseServices
         if (CacheService::get($token . 'is_save') == 2) {
             return true;
         }
-        CacheService::set($token . 'is_save', 2);
+        CacheService::set($token . 'is_save', 2, 86400);
 
         $upgradeData = CacheService::get($token . '_upgrade_data');
 
@@ -742,6 +742,7 @@ class UpgradeServices extends BaseServices
         }
 
         if (empty($upgradeSql)) {
+            CacheService::set($token . '_database_upgrade', 2, 86400);
             return true;
         }
 
