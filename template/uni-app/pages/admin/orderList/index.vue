@@ -74,11 +74,11 @@
 							{{$t(`一键改价`)}}
 						</view>
 						<view class="bnt" @click="modify(item, 1)">{{$t(`订单备注`)}}</view>
-						<view class="bnt" @click="modify(item, 0, 1)"
+						<view class="bnt" @click="modify(item, 2)"
 							v-if="(item.refund_type == 0 || item.refund_type == 1 || item.refund_type == 5 ) && where.status == -3 && parseFloat(item.pay_price) > 0">
 							{{$t(`立即退款`)}}
 						</view>
-						<view class="bnt" @click="modify(item, 2, 0)"
+						<view class="bnt" @click="agreeExpress(item)"
 							v-if="where.status == -3 && item.refund_type == 2">{{$t(`同意退货`)}}</view>
 						<view class="wait" v-if="where.status == -3 && item.refund_type == 4">{{$t(`待用户发货`)}}</view>
 						<view class="bnt cancel" v-if="item.pay_type === 'offline' && item.paid === 0"
@@ -96,7 +96,7 @@
 		</view>
 		<view v-else class="nothing">
 			<image v-if="!loading" :src="imgHost + '/statics/images/no-thing.png'" alt="">
-			<view v-if="!loading">{{$t(`暂无记录`)}}</view>
+				<view v-if="!loading">{{$t(`暂无记录`)}}</view>
 		</view>
 		<Loading :loaded="loaded" :loading="loading"></Loading>
 		<PriceChange :change="change" :orderInfo="orderInfo" :isRefund="isRefund" v-on:closechange="changeclose($event)"
@@ -112,12 +112,14 @@
 		setAdminRefundRemark,
 		setOfflinePay,
 		setOrderRefund,
-		orderRefundAgree,
+		agreeExpress,
 		orderRefund_order
 	} from "@/api/admin";
 	import Loading from '@/components/Loading/index'
 	import PriceChange from '../components/PriceChange/index.vue'
-	import {HTTP_REQUEST_URL} from '@/config/app'
+	import {
+		HTTP_REQUEST_URL
+	} from '@/config/app'
 	import {
 		isMoney
 	} from '@/utils/validate.js'
@@ -129,7 +131,7 @@
 		},
 		data() {
 			return {
-				imgHost:HTTP_REQUEST_URL,
+				imgHost: HTTP_REQUEST_URL,
 				current: "",
 				change: false,
 				types: 0,
@@ -190,12 +192,12 @@
 				}
 			},
 			// 商品操作
-			modify: function(item, status, type) {
+			modify: function(item, status) {
 				this.change = true;
 				this.status = status.toString();
 				this.orderInfo = item;
-				if (status == 0 && type == 1) {
-					this.isRefund = type
+				if (status == 2) {
+					this.isRefund = 1
 				}
 			},
 			changeclose: function(msg) {
@@ -234,43 +236,28 @@
 						}
 					);
 				} else if (that.status == 2) {
-					if (this.isRefund) {
-						if (!isMoney(refund_price)) {
-							return that.$util.Tips({
-								title: that.$t(`请输入正确的金额`)
-							});
-						}
-						data.price = refund_price;
-						data.type = opt.type;
-						setOrderRefund(data).then(
-							res => {
-								that.change = false;
-								that.$util.Tips({
-									title: res.msg
-								});
-								that.init();
-							},
-							err => {
-								that.change = false;
-								that.$util.Tips({
-									title: err
-								});
-							}
-						);
-					} else {
-						orderRefundAgree(this.orderInfo.id).then(res => {
+					if (!isMoney(refund_price)) {
+						return that.$util.Tips({
+							title: that.$t(`请输入正确的金额`)
+						});
+					}
+					data.price = refund_price;
+					data.type = opt.type;
+					setOrderRefund(data).then(
+						res => {
 							that.change = false;
 							that.$util.Tips({
 								title: res.msg
 							});
 							that.init();
-						}).catch(err => {
+						},
+						err => {
 							that.change = false;
 							that.$util.Tips({
 								title: err
 							});
-						})
-					}
+						}
+					);
 				} else {
 					if (!remark) {
 						return this.$util.Tips({
@@ -301,6 +288,22 @@
 						}
 					);
 				}
+			},
+			agreeExpress(item) {
+				console.log(3333)
+				let that = this;
+				agreeExpress({
+					id: item.id
+				}).then(res => {
+					that.$util.Tips({
+						title: res.msg
+					});
+					that.init();
+				}).catch(err => {
+					that.$util.Tips({
+						title: err
+					});
+				})
 			},
 			toDetail(item) {
 				uni.navigateTo({
@@ -466,6 +469,7 @@
 
 	.pos-order-list .list .item .operation .wait {
 		margin-left: 30rpx;
+		color: orangered;
 	}
 
 	.pos-order-goods {

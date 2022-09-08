@@ -2,16 +2,10 @@
   <view>
     <view class="priceChange" :class="change === true ? 'on' : ''">
       <view class="priceTitle">
-        {{
-          status == 0
-            ? orderInfo.refund_status === 1
-              ? $t(`立即退款`)
-              : $t(`一键改价`)
-            : $t(`订单备注`)
-        }}
+        {{ status == 0 ? $t(`一键改价`) : status == 1 ? $t(`订单备注`) : $t(`立即退款`) }}
         <span class="iconfont icon-guanbi" @click="close"></span>
       </view>
-      <view class="listChange" v-if="status == 0">
+      <view class="listChange" v-if="status == 0 || status == 2">
         <view
           class="item acea-row row-between-wrapper"
           v-if="orderInfo.refund_status === 0"

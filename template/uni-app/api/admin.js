@@ -176,3 +176,12 @@ export function setAdminRefundRemark(data) {
 		login: true
 	});
 }
+
+/**
+ * 订单同意退货
+ */
+export function agreeExpress(data) {
+	return request.post("admin/order/agreeExpress", data, {
+		login: true
+	});
+}

@@ -133,7 +133,7 @@
 			<view class="item acea-row row-between">
 				<view>{{$t(`配送方式`)}}：</view>
 				<view class="conter" v-if="orderInfo.delivery_type === 'express'">
-{{$t(`快递`)}}
+					{{$t(`快递`)}}
 				</view>
 				<view class="conter" v-if="orderInfo.delivery_type === 'send'">{{$t(`送货`)}}</view>
 			</view>
@@ -162,9 +162,14 @@
 			<view class="bnt cancel" @click="modify('0')" v-if="types == 0">
 				{{$t(`一键改价`)}}
 			</view>
-			<view class="bnt cancel" @click="modify('0')" v-if="types == -1">
+			<view class="bnt cancel" @click="modify('2')" v-if="types == -1 && orderInfo.refund_type == 1">
 				{{$t(`立即退款`)}}
 			</view>
+			<view class="bnt cancel" @click="agreeExpress(orderInfo.id)"
+				v-if="types == -1 && orderInfo.refund_type == 2">
+				{{$t(`同意退货`)}}
+			</view>
+			<view class="wait" v-if="types == -1 && orderInfo.refund_type == 4">{{$t(`待用户发货`)}}</view>
 			<view class="bnt cancel" @click="modify('1')">{{$t(`订单备注`)}}</view>
 			<view class="bnt cancel" v-if="orderInfo.pay_type === 'offline' && orderInfo.paid === 0"
 				@click="offlinePay">
@@ -191,6 +196,7 @@
 		setAdminRefundRemark,
 		setOfflinePay,
 		setOrderRefund,
+		agreeExpress
 	} from "@/api/admin";
 	// import { required, num } from "@utils/validate";
 	// import { validatorDefaultCatch } from "@utils/dialog";
@@ -301,6 +307,22 @@
 					}
 				);
 			},
+			agreeExpress(id) {
+				console.log(3333)
+				let that = this;
+				agreeExpress({
+					id
+				}).then(res => {
+					that.$util.Tips({
+						title: res.msg
+					});
+					that.init();
+				}).catch(err => {
+					that.$util.Tips({
+						title: err
+					});
+				})
+			},
 			async savePrice(opt) {
 				let that = this,
 					data = {},
@@ -309,7 +331,7 @@
 					refund_status = that.orderInfo.refund_status,
 					remark = opt.remark;
 				data.order_id = that.orderInfo.order_id;
-				if (that.status == 0 && refund_status === 0) {
+				if (that.status == 0) {
 					if (!isMoney(price)) {
 						return that.$util.Tips({
 							title: that.$t(`请输入正确的金额`)
@@ -317,15 +339,14 @@
 					}
 					data.price = price;
 					setAdminOrderPrice(data).then(
-						function() {
+						res => {
 							that.change = false;
 							that.$util.Tips({
 								title: that.$t(`改价成功`),
 								icon: 'success'
-							})
-							that.getIndex();
+							}, '/pages/admin/orderDetail/index?id=' + res.data.order_id + '&types=0')
 						},
-						function() {
+						err => {
 							that.change = false;
 							that.$util.Tips({
 								title: that.$t(`改价失败`),
@@ -333,7 +354,7 @@
 							})
 						}
 					);
-				} else if (that.status == 0 && refund_status === 1) {
+				} else if (that.status == 2) {
 					if (!isMoney(refund_price)) {
 						return that.$util.Tips({
 							title: that.$t(`请输入正确的金额`)
@@ -741,6 +762,11 @@
 	.order-details .footer .bnt.default {
 		color: #444;
 		border: 1px solid #444;
+	}
+
+	.wait {
+		margin-right: 30rpx;
+		color: orangered;
 	}
 
 	.order-details .footer .bnt~.bnt {
