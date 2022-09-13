@@ -13,7 +13,7 @@
  
  赋能开发者，减少重复造轮子；系统支持自动检查安装环境一键安装部署，使用简单方便；围绕方便二次开发，系统内置强大灵活的权限管理，可以控制到每一个菜单；通过内置组合数据,管理碎片化数据,系统配置快速添加系统配置参数，所有用户操作地方都内置钩子，代码严格分控制层（中间件、路由）、Services层、Dao层、Model层；后台应用form-builder PHP快速生成现代化表单；并提供详细的使用文档、开发文档、接口文档、数据字典等相关文档；及十几个技术交流群、技术论坛答疑；让您二开无忧，帮助更多开发者快速上手，节省开发时间，提升开发效率；助力企业实现数字化经营！
 
-[![](readme/pic/zhongqiu.jpg)](https://q.crmeb.com/thread/11954)
+[![](readme/pic/zhongqiu.jpg)](http://www.crmeb.com/news/detail/796)
 <p align="center" >
 <a href="https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md"> 宽屏预览 </a>
 </p>
