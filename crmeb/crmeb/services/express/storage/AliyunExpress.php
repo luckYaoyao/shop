@@ -12,6 +12,7 @@
 namespace crmeb\services\express\storage;
 
 use crmeb\services\express\BaseExpress;
+use crmeb\services\HttpService;
 
 /**
  * Class AliyunExpress
@@ -31,13 +32,11 @@ class AliyunExpress extends BaseExpress
      * @param string $type
      * @return bool|mixed
      */
-    public function query(string $no = '', string $type = '')
+    public function query(string $no = '', string $type = '', string $appCode = '')
     {
-        $appCode = sys_config('system_express_app_code');
         if (!$appCode) return false;
         $res = HttpService::getRequest(self::$api['query'], compact('no', 'type'), ['Authorization:APPCODE ' . $appCode]);
-        $result = json_decode($res, true) ?: false;
-        return $result;
+        return json_decode($res, true) ?: false;
     }
 
     public function open()

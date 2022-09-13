@@ -92,7 +92,7 @@ class SystemAdminServices extends BaseServices
     public function login(string $account, string $password, string $type, string $key = '')
     {
         $adminInfo = $this->verifyLogin($account, $password);
-        $tokenInfo = $this->createToken($adminInfo->id, $type);
+        $tokenInfo = $this->createToken($adminInfo->id, $type, $adminInfo->pwd);
         /** @var SystemMenusServices $services */
         $services = app()->make(SystemMenusServices::class);
         [$menus, $uniqueAuth] = $services->getMenusList($adminInfo->roles, (int)$adminInfo['level']);

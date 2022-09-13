@@ -66,11 +66,11 @@ abstract class BaseServices
      * @param $type
      * @return array
      */
-    public function createToken(int $id, $type)
+    public function createToken(int $id, $type, $pwd = '')
     {
         /** @var JwtAuth $jwtAuth */
         $jwtAuth = app()->make(JwtAuth::class);
-        return $jwtAuth->createToken($id, $type);
+        return $jwtAuth->createToken($id, $type, ['pwd' => md5($pwd)]);
     }
 
     /**

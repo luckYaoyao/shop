@@ -202,7 +202,7 @@ class RoutineTemplateListService extends NoticeService
         $data['thing1'] = $bargain['title'];
         $data['amount2'] = $bargain['min_price'];
         $data['thing3'] = '恭喜您，已经砍到最低价了';
-        return $this->sendTemplate((int)$uid, $data, '/pages/activity/user_goods_bargain_list/index?id=' . $bargain['id'] . '&bargain=' . $bargainUserId);
+        return $this->sendTemplate((int)$uid, $data, '/pages/activity/goods_bargain_details/index?id=' . $bargain['id'] . '&bargain=' . $bargainUserId);
     }
 
     /**

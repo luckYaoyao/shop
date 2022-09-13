@@ -54,7 +54,7 @@ class AdminAuthServices extends BaseServices
         /** @var JwtAuth $jwtAuth */
         $jwtAuth = app()->make(JwtAuth::class);
         //设置解析token
-        [$id, $type] = $jwtAuth->parseToken($token);
+        [$id, $type, $pwd] = $jwtAuth->parseToken($token);
 
         //检测token是否过期
         $md5Token = md5($token);
@@ -94,6 +94,9 @@ class AdminAuthServices extends BaseServices
                 $cacheService->clearToken($md5Token);
             }
             $this->authFailAfter($id, $type);
+            throw new AuthException(110003);
+        }
+        if ($pwd !== md5($adminInfo->pwd)) {
             throw new AuthException(110003);
         }
 

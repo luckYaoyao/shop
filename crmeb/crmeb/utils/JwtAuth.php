@@ -43,9 +43,6 @@ class JwtAuth
         $host = app()->request->host();
         $time = time();
         $exp_time = strtotime('+ 30day');
-//        if (app()->request->isApp()) {
-//            $exp_time = strtotime('+ 30day');
-//        }
         $params += [
             'iss' => $host,
             'aud' => $host,
@@ -69,7 +66,7 @@ class JwtAuth
         $this->token = $jwt;
         list($headb64, $bodyb64, $cryptob64) = explode('.', $this->token);
         $payload = JWT::jsonDecode(JWT::urlsafeB64Decode($bodyb64));
-        return [$payload->jti->id, $payload->jti->type];
+        return [$payload->jti->id, $payload->jti->type, $payload->pwd ?? ''];
     }
 
     /**
