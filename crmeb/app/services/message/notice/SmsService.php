@@ -101,6 +101,9 @@ class SmsService extends NoticeService
 
             //获取发送短信驱动类型
             $type = $this->smsType[sys_config('sms_type', 0)];
+            if ($type == 'tencent') {
+                $data = $this->handleTencent($mark, $data);
+            }
             $smsMake = $services->sms($type);
             //发送短信
             $res = $smsMake->send($phone, $templateId, $data);
@@ -182,5 +185,41 @@ class SmsService extends NoticeService
         return true;
     }
 
-
+    /**
+     * 处理腾讯云参数
+     * @param $mark
+     * @param $data
+     * @return array
+     */
+    public function handleTencent($mark, $data)
+    {
+        $result = [];
+        switch ($mark) {
+            case 'verify_code':
+                $result = [(string)$data['code'], (string)$data['time']];
+                break;
+            case 'order_pay_false':
+                $result = [$data['order_id']];
+                break;
+            case 'price_revision':
+                $result = [$data['order_id'], (string)$data['pay_price']];
+                break;
+            case 'order_pay_success':
+                $result = [(string)$data['pay_price'], $data['order_id']];
+                break;
+            case 'order_take':
+                $result = [$data['order_id'], $data['store_name']];
+                break;
+            case 'send_order_apply_refund':
+            case 'admin_pay_success_code':
+            case 'send_admin_confirm_take_over':
+                $result = [$data['admin_name'], $data['order_id']];
+                break;
+            case 'order_deliver_success':
+            case 'order_postage_success':
+                $result = [$data['nickname'], $data['store_name'], $data['order_id']];
+                break;
+        }
+        return $result;
+    }
 }

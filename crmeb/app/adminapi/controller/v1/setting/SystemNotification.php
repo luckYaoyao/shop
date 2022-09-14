@@ -91,7 +91,7 @@ class SystemNotification extends AuthController
         if ($data['mark'] == 'verify_code') $data['type'] = 'is_sms';
         if (!$data['id']) return app('json')->fail(100100);
         if ($this->services->saveData($data)) {
-            CacheService::delete('NOTCE_' . $data['mark']);
+            CacheService::delete('NOTICE_SMS_' . $data['mark']);
             return app('json')->success(100001);
         } else {
             return app('json')->fail(100007);

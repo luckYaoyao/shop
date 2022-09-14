@@ -104,14 +104,14 @@ class Tencent extends BaseSms
      */
     public function send(string $phone, string $templateId, array $data)
     {
-        $boby = json_encode([
+        $body = json_encode([
             'PhoneNumberSet' => [$phone],
             'SmsSdkAppId' => $this->smsSdkAppId,
             'SignName' => $this->signName,
             'TemplateId' => $templateId,
             'TemplateParamSet' => $data,
         ]);
-        $res = HttpService::request(self::API_URL, 'post', $boby, $this->getHeader($boby));
+        $res = HttpService::request(self::API_URL, 'post', $body, $this->getHeader($body));
         $res = json_decode($res, true);
 
         if (!empty($res['Response']['Error'])) {

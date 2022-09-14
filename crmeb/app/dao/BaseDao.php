@@ -65,7 +65,7 @@ abstract class BaseDao
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function selectList(array $where, string $field = '*', int $page = 0, int $limit = 0, bool $search = false)
+    public function selectList(array $where, string $field = '*', int $page = 0, int $limit = 0, string $order = '', bool $search = false)
     {
         if ($search) {
             $model = $this->search($where);
@@ -74,6 +74,8 @@ abstract class BaseDao
         }
         return $model->field($field)->when($page && $limit, function ($query) use ($page, $limit) {
             $query->page($page, $limit);
+        })->when($order !== '', function ($query) use ($order) {
+            $query->order($order);
         })->select();
     }
 

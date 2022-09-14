@@ -14,8 +14,9 @@ use crmeb\services\CacheService;
 use think\exception\ValidateException;
 use crmeb\services\FormBuilder as Form;
 use app\services\other\UploadService;
-use think\facade\Config;
-use think\facade\Lang;
+use app\services\system\lang\LangTypeServices;
+use app\services\system\lang\LangCodeServices;
+use app\services\system\lang\LangCountryServices;
 
 if (!function_exists('getWorkerManUrl')) {
 
@@ -916,25 +917,33 @@ if (!function_exists('getLang')) {
      */
     function getLang($code, array $replace = [])
     {
-        $config = Config::get('lang');
         $request = app()->request;
-
         //获取接口传入的语言类型
         if (!$range = $request->header('cb-lang')) {
-            $range = $request->cookie($config['cookie_var']);
+            if ($request->header('accept-language') !== null) {
+                $range = explode(',', $request->header('accept-language'))[0];
+            } else {
+                $range = 'zh-CN';
+            }
         }
 
-        //如果找到当前语言类型，默认中文
-        $langData = array_values($config['accept_language']);
-        if (!in_array($range, $langData)) {
-            $range = 'zh_cn';
-        }
+        // 获取type_id
+        /** @var LangCountryServices $langCountryServices */
+        $langCountryServices = app()->make(LangCountryServices::class);
+        $typeId = $langCountryServices->value(['code' => $range], 'type_id') ?: 1;
+
+        // 获取缓存key
+        /** @var LangTypeServices $langTypeServices */
+        $langTypeServices = app()->make(LangTypeServices::class);
+        $langData = $langTypeServices->getColumn(['status' => 1, 'is_del' => 0], 'file_name', 'id');
+        $langStr = 'lang_' . str_replace('-', '_', $langData[$typeId]);
 
         //读取当前语言的语言包
-        $lang = CacheService::redisHandler()->remember('lang_' . $range, function () use ($config, $range) {
-            return include $config['extend_list'][$range];
+        $lang = CacheService::redisHandler()->remember($langStr, function () use ($typeId, $range) {
+            /** @var LangCodeServices $langCodeServices */
+            $langCodeServices = app()->make(LangCodeServices::class);
+            return $langCodeServices->getColumn(['type_id' => $typeId, 'is_admin' => 1], 'lang_explain', 'code');
         }, 3600);
-
         //获取返回文字
         $message = (string)($lang[$code] ?? 'Code Error');
 
