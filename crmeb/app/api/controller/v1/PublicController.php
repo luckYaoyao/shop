@@ -583,4 +583,59 @@ class PublicController
         }
         return app('json')->success(compact('copyrightContext', 'copyrightImage'));
     }
+
+    /**
+     * 获取多语言类型列表
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function getLangTypeList()
+    {
+        /** @var LangTypeServices $langTypeServices */
+        $langTypeServices = app()->make(LangTypeServices::class);
+        $list = $langTypeServices->langTypeList(['status' => 1, 'is_del' => 0])['list'];
+        $data = [];
+        foreach ($list as $item) {
+            $data[] = ['name' => $item['language_name'], 'value' => $item['file_name']];
+        }
+        return app('json')->success($data);
+    }
+
+    /**
+     * 获取当前语言json
+     * @return mixed
+     * @throws \Throwable
+     */
+    public function getLangJson()
+    {
+        $request = app()->request;
+        //获取接口传入的语言类型
+        if (!$range = $request->header('cb-lang')) {
+            if ($request->header('accept-language') !== null) {
+                $range = explode(',', $request->header('accept-language'))[0];
+            } else {
+                $range = 'zh-CN';
+            }
+        }
+        // 获取type_id
+        /** @var LangCountryServices $langCountryServices */
+        $langCountryServices = app()->make(LangCountryServices::class);
+        $typeId = $langCountryServices->value(['code' => $range], 'type_id') ?: 1;
+
+        // 获取缓存key
+        /** @var LangTypeServices $langTypeServices */
+        $langTypeServices = app()->make(LangTypeServices::class);
+        $langData = $langTypeServices->getColumn(['status' => 1, 'is_del' => 0], 'file_name', 'id');
+        $langStr = 'api_lang_' . str_replace('-', '_', $langData[$typeId]);
+
+        //读取当前语言的语言包
+        $lang = CacheService::redisHandler()->remember($langStr, function () use ($typeId, $range) {
+            /** @var LangCodeServices $langCodeServices */
+            $langCodeServices = app()->make(LangCodeServices::class);
+            return $langCodeServices->getColumn(['type_id' => $typeId, 'is_admin' => 0], 'lang_explain', 'code');
+        }, 3600);
+        return app('json')->success([$range => $lang]);
+    }
 }
