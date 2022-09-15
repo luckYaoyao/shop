@@ -45,7 +45,8 @@
         "guzzlehttp/guzzle": "6.5.5",
         "alipaysdk/easysdk": "2.0",
         "lizhichao/word": "^2.1",
-        "alibabacloud/dysmsapi-20170525": "2.0.16"
+        "alibabacloud/dysmsapi-20170525": "2.0.16",
+        "fastknife/ajcaptcha": "^1.1"
     },
     "autoload": {
         "psr-4": {

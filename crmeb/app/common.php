@@ -14,9 +14,11 @@ use crmeb\services\CacheService;
 use think\exception\ValidateException;
 use crmeb\services\FormBuilder as Form;
 use app\services\other\UploadService;
+use Fastknife\Service\BlockPuzzleCaptchaService;
 use app\services\system\lang\LangTypeServices;
 use app\services\system\lang\LangCodeServices;
 use app\services\system\lang\LangCountryServices;
+use think\facade\Config;
 
 if (!function_exists('getWorkerManUrl')) {
 
@@ -958,5 +960,35 @@ if (!function_exists('getLang')) {
         }
 
         return $message;
+    }
+}
+
+if (!function_exists('aj_captcha_check')) {
+    /**
+     * 验证滑块
+     * @param string $token
+     * @param string $pointJson
+     * @return bool
+     */
+    function aj_captcha_check(string $token, string $pointJson)
+    {
+        $config = Config::get('ajcaptcha');
+        $service = new BlockPuzzleCaptchaService($config);
+        $service->check($token, $pointJson);
+        return true;
+    }
+}
+
+
+if (!function_exists('aj_captcha_create')) {
+    /**
+     * 创建验证码
+     * @return array
+     */
+    function aj_captcha_create()
+    {
+        $config = Config::get('ajcaptcha');
+        $service = new BlockPuzzleCaptchaService($config);
+        return $service->get();
     }
 }
