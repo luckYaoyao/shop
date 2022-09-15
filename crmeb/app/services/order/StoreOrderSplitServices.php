@@ -127,6 +127,7 @@ class StoreOrderSplitServices extends BaseServices
                     if ($orderInfo['pid'] == 0 || $orderInfo['pid'] > 0 && $key == 'new') {
                         $_info = is_string($cartInfo[$cart['cart_id']]['cart_info']) ? json_decode($cartInfo[$cart['cart_id']]['cart_info'], true) : $cartInfo[$cart['cart_id']]['cart_info'];
                         $new_cart_data['oid'] = $new_id;
+                        $new_cart_data['uid'] = $orderInfo['uid'];
                         $new_cart_data['cart_id'] = $storeOrderCreateServices->getNewOrderId('');
                         $new_cart_data['product_id'] = $_info['product_id'];
                         $new_cart_data['old_cart_id'] = $cart['cart_id'];
@@ -149,6 +150,7 @@ class StoreOrderSplitServices extends BaseServices
                         $cart_info->save();
                         $cart_data_all[] = [
                             'oid' => $new_id,
+                            'uid' => $orderInfo['uid'],
                             'cart_id' => $cart_info->cart_id,
                             'product_id' => $cart_info->product_id,
                             'old_cart_id' => $cart_info->old_cart_id,
