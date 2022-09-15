@@ -18,12 +18,18 @@ use crmeb\interfaces\MiddlewareInterface;
 
 /**
  * 权限规则验证
- * Class AdminCkeckRoleMiddleware
+ * Class AdminCheckRoleMiddleware
  * @package app\http\middleware
  */
-class AdminCkeckRoleMiddleware implements MiddlewareInterface
+class AdminCheckRoleMiddleware implements MiddlewareInterface
 {
-
+    /**
+     * 权限规则验证
+     * @param Request $request
+     * @param \Closure $next
+     * @return mixed
+     * @throws \throwable
+     */
     public function handle(Request $request, \Closure $next)
     {
         if (!$request->adminId() || !$request->adminInfo())
@@ -32,7 +38,7 @@ class AdminCkeckRoleMiddleware implements MiddlewareInterface
         if ($request->adminInfo()['level']) {
             /** @var SystemRoleServices $systemRoleService */
             $systemRoleService = app()->make(SystemRoleServices::class);
-            $systemRoleService->verifiAuth($request);
+            $systemRoleService->verifyAuth($request);
         }
 
         return $next($request);

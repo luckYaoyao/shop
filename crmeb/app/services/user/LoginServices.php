@@ -246,6 +246,10 @@ class LoginServices extends BaseServices
      * 重置密码
      * @param $account
      * @param $password
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function reset($account, $password)
     {
@@ -263,15 +267,16 @@ class LoginServices extends BaseServices
      * 手机号登录
      * @param $phone
      * @param $spread
+     * @param string $user_type
      * @return array
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function mobile($phone, $spread, $user_type = 'h5')
+    public function mobile($phone, $spread, string $user_type = 'h5')
     {
         //数据库查询
-        $user = $this->dao->getOne(['phone' => $phone, 'is_del' => 0]);
+        $user = $this->dao->getOne(['account|phone' => $phone, 'is_del' => 0]);
         if (!$user) {
             $user = $this->register($phone, '123456', $spread, $user_type);
             if (!$user) {
@@ -297,6 +302,10 @@ class LoginServices extends BaseServices
      * 切换登录
      * @param $user
      * @param $from
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function switchAccount($user, $from)
     {
@@ -329,12 +338,14 @@ class LoginServices extends BaseServices
 
     /**
      * 绑定手机号(静默还没写入用户信息)
-     * @param $user
      * @param $phone
-     * @param $step
-     * @return mixed
+     * @param string $key
+     * @return array
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
      */
-    public function bindind_phone($phone, $key = '')
+    public function bindind_phone($phone, string $key = '')
     {
         if (!$key) {
             throw new ApiException(410037);
@@ -361,10 +372,13 @@ class LoginServices extends BaseServices
 
     /**
      * 用户绑定手机号
-     * @param $user
+     * @param int $uid
      * @param $phone
      * @param $step
-     * @return mixed
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function userBindindPhone(int $uid, $phone, $step)
     {
@@ -393,10 +407,12 @@ class LoginServices extends BaseServices
 
     /**
      * 用户绑定手机号
-     * @param $user
+     * @param int $uid
      * @param $phone
-     * @param $step
-     * @return mixed
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function updateBindindPhone(int $uid, $phone)
     {

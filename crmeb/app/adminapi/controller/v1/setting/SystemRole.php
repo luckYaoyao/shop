@@ -35,8 +35,7 @@ class SystemRole extends AuthController
 
     /**
      * 显示资源列表
-     *
-     * @return \think\Response
+     * @return mixed
      */
     public function index()
     {
@@ -49,9 +48,12 @@ class SystemRole extends AuthController
     }
 
     /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
+     * 显示创建资源表单页
+     * @param SystemMenusServices $services
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function create(SystemMenusServices $services)
     {
@@ -88,10 +90,13 @@ class SystemRole extends AuthController
     }
 
     /**
-     * 显示编辑资源表单页.
-     *
-     * @param int $id
-     * @return \think\Response
+     * 显示编辑资源表单页
+     * @param SystemMenusServices $services
+     * @param $id
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function edit(SystemMenusServices $services, $id)
     {
