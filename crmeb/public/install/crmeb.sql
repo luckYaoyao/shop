@@ -26139,8 +26139,8 @@ CREATE TABLE IF NOT EXISTS `eb_lang_type` (
   `file_name` varchar(20) DEFAULT '' COMMENT '配置文件名称',
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '1启用0禁用',
   `is_default` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否默认语言',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `id` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='语言类型';
 
 --
