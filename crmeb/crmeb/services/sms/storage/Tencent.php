@@ -113,9 +113,11 @@ class Tencent extends BaseSms
         ]);
         $res = HttpService::request(self::API_URL, 'post', $body, $this->getHeader($body));
         $res = json_decode($res, true);
-
         if (!empty($res['Response']['Error'])) {
             return $this->setError($res['Response']['Message']);
+        }
+        if ($res['Response']['SendStatusSet'][0]['Code'] != 'Ok') {
+            return $this->setError($res['Response']['SendStatusSet'][0]['Message']);
         }
 
         return $res;
