@@ -122,7 +122,7 @@ class ShippingTemplatesFreeServices extends BaseServices
             $childrenData[] = [
                 'city_id' => $item['province_id'],
                 'name' => $item['name'] ?? '全国',
-                'children' => $this->getCityTemp($uniqid, $provinceId)
+                'children' => $this->getCityTemp($uniqid, $item['province_id'])
             ];
         }
         return $childrenData;

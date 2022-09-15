@@ -166,6 +166,29 @@ Route::group('setting', function () {
     //删除账号
     Route::delete('system_out_account/:id', 'v1.setting.SystemOutAccount/delete')->option(['real_name' => '删除账号']);
 
+    /** 多语言 */
+    //语言国家列表
+    Route::get('lang_country/list', 'v1.setting.LangCountry/langCountryList')->option(['real_name' => '语言国家列表']);
+    //设置国家语言类型表单
+    Route::get('lang_country/type_form/:id', 'v1.setting.LangCountry/langCountryTypeForm')->option(['real_name' => '设置国家语言类型表单']);
+    //语言类型列表
+    Route::post('lang_country/save/:id', 'v1.setting.LangCountry/langCountrySave')->option(['real_name' => '语言国家修改']);
+    //语言类型列表
+    Route::get('lang_type/list', 'v1.setting.LangType/langTypeList')->option(['real_name' => '语言类型列表']);
+    //新增修改语言类型表单
+    Route::get('lang_type/form/:id', 'v1.setting.LangType/langTypeForm')->option(['real_name' => '新增修改语言类型表单']);
+    //保存新增修改语言
+    Route::post('lang_type/save/:id', 'v1.setting.LangType/langTypeSave')->option(['real_name' => '保存新增修改语言']);
+    //删除语言
+    Route::delete('lang_type/del/:id', 'v1.setting.LangType/langTypeDel')->option(['real_name' => '删除语言']);
+    //获取语言列表
+    Route::get('lang_code/list', 'v1.setting.LangCode/langCodeList')->option(['real_name' => '语言列表']);
+    //获取语言信息
+    Route::get('lang_code/info', 'v1.setting.LangCode/langCodeInfo')->option(['real_name' => '语言详情']);
+    //保存修改语言
+    Route::post('lang_code/save', 'v1.setting.LangCode/langCodeSave')->option(['real_name' => '保存修改语言']);
+    //删除语言
+    Route::delete('lang_code/del/:id', 'v1.setting.LangCode/langCodeDel')->option(['real_name' => '删除语言']);
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,

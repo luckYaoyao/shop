@@ -375,6 +375,11 @@ Route::group(function () {
     //获取用户协议
     Route::get('user_agreement', 'v1.PublicController/getUserAgreement')->name('getUserAgreement');
     Route::get('get_agreement/:type', 'v1.PublicController/getAgreement')->name('getAgreement');
+
+    //获取多语言类型列表
+    Route::get('get_lang_type_list', 'v1.PublicController/getLangTypeList')->name('getLangTypeList');
+    //获取当前语言json
+    Route::get('get_lang_json', 'v1.PublicController/getLangJson')->name('getLangJson');
 })->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class)->middleware(\app\api\middleware\AuthTokenMiddleware::class, false);
 
 Route::miss(function () {
