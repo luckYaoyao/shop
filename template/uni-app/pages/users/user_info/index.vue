@@ -103,7 +103,7 @@
 						</view>
 					</view>
 					<!-- #endif -->
-					<view class="item acea-row row-between-wrapper">
+					<view class="item acea-row row-between-wrapper" v-if="array.length">
 						<view>{{$t(`语言切换`)}}</view>
 						<view class="uni-list-cell-db">
 							<picker @change="bindPickerChange" range-key="name" :value="setIndex" :range="array">
@@ -155,10 +155,12 @@
 	import {
 		getUserInfo,
 		userEdit,
-		getLogout
+		getLogout,
+		getLangList,
+		getLangJson
 	} from '@/api/user.js';
 	import {
-		switchH5Login
+		switchH5Login,
 	} from '@/api/api.js';
 	import {
 		toLogin
@@ -195,47 +197,7 @@
 				canvasStatus: false,
 				fileSizeString: '',
 				version: '',
-				array: [{
-						name: '中文',
-						value: 'zh_cn'
-					},
-					{
-						name: 'English',
-						value: 'en_us'
-					},
-					{
-						name: '日本語',
-						value: 'ja_jp'
-					},
-					{
-						name: 'Français',
-						value: 'fr_fr'
-					},
-					{
-						name: 'ไทย',
-						value: 'th_th'
-					},
-					{
-						name: 'Italiano',
-						value: 'it_it'
-					},
-					{
-						name: 'Монгол',
-						value: 'mn_mn'
-					},
-					{
-						name: '한국인',
-						value: 'ko_kr'
-					},
-					{
-						name: 'Tiếng Việt',
-						value: 'vi_vn'
-					},
-					{
-						name: '中文(繁体)',
-						value: 'zh_ft'
-					},
-				],
+				array: [],
 				setIndex: 0,
 			};
 		},
@@ -253,6 +215,7 @@
 		onLoad() {
 			if (this.isLogin) {
 				this.getUserInfo();
+				this.getLangList()
 				// #ifdef APP-PLUS
 				this.formatSize()
 				// 获取版本号
@@ -261,12 +224,17 @@
 					this.version = inf.version;
 				});
 				// #endif 
-				this.setLang();
 			} else {
 				toLogin();
 			}
 		},
 		methods: {
+			getLangList() {
+				getLangList().then(res => {
+					this.array = res.data
+					this.setLang();
+				})
+			},
 			isNew() {
 				this.$util.Tips({
 					title: this.$t(`当前为最新版本`)
@@ -281,8 +249,13 @@
 			},
 			bindPickerChange(e, item) {
 				this.setIndex = e.detail.value
-				this.$i18n.locale = this.array[this.setIndex].value;
 				uni.setStorageSync('locale', this.array[this.setIndex].value);
+				getLangJson().then(res => {
+					uni.setStorageSync('localeJson', res.data)
+					this.$i18n.locale = this.array[this.setIndex].value;
+					this.$i18n.setLocaleMessage(this.array[this.setIndex].value, res.data[this
+						.array[this.setIndex].value]);
+				})
 			},
 
 			updateApp() {

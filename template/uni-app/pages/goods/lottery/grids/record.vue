@@ -86,16 +86,17 @@
 		},
 		filters: {
 			typeName(type) {
+				console.log(type)
 				if (type == 2) {
-					return this.$t(`积分`)
+					return '积分'
 				} else if (type == 3) {
-					return this.$t(`余额`)
+					return '余额'
 				} else if (type == 4) {
-					return this.$t(`红包`)
+					return '红包'
 				} else if (type == 5) {
-					return this.$t(`优惠券`)
+					return '优惠券'
 				} else if (type == 6) {
-					return this.$t(`商品`)
+					return '商品'
 				}
 			}
 		},

@@ -42,7 +42,9 @@ function baseRequest(url, method, data, {
 	if (store.state.app.token) header[TOKENNAME] = 'Bearer ' + store.state.app.token;
 
 	return new Promise((reslove, reject) => {
-		header['Cb-lang'] = uni.getStorageSync('locale') ? uni.getStorageSync('locale') :'zh_cn'
+		if (uni.getStorageSync('locale')) {
+			header['Cb-lang'] = uni.getStorageSync('locale')
+		}
 		uni.request({
 			url: Url + '/api/' + url,
 			method: method || 'GET',

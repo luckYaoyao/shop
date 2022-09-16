@@ -19,8 +19,12 @@
 	} from '@/api/order.js';
 	import {
 		colorChange,
-		getCrmebCopyRight
+		getCrmebCopyRight,
+
 	} from '@/api/api.js';
+	import {
+		getLangJson
+	} from '@/api/user.js'
 	import {
 		mapGetters
 	} from "vuex"
@@ -108,6 +112,9 @@
 						break
 				}
 			});
+			getLangJson().then(res => {
+				uni.setStorageSync('localeJson', res.data)
+			})
 			if (option.query.spread) {
 				that.$Cache.set('spread', option.query.spread);
 				that.globalData.spid = option.query.spread;

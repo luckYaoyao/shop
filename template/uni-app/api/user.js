@@ -670,3 +670,22 @@ export function delClerkPercent(id) {
 export function cancelUser() {
 	return request.get('user_cancel');
 }
+/**
+ * 获取多语言类型
+ */
+
+export function getLangList() {
+	return request.get('get_lang_type_list', {}, {
+		noAuth: true
+	})
+}
+
+/**
+ * 获取多语言JSON
+ */
+
+export function getLangJson() {
+	return request.get('get_lang_json', {}, {
+		noAuth: true
+	})
+}
