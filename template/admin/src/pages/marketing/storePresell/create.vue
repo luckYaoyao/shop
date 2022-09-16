@@ -353,7 +353,6 @@
 <script>
 import { mapState } from 'vuex';
 import goodsList from '@/components/goodsList/index';
-import UeditorWrap from '@/components/ueditorFrom/index';
 import WangEditor from '@/components/wangEditor/index.vue';
 import uploadPictures from '@/components/uploadPictures';
 import freightTemplate from '@/components/freightTemplate/index';
@@ -363,7 +362,6 @@ import { productGetTemplateApi } from '@/api/product';
 export default {
   name: 'storePersellCreate',
   components: {
-    UeditorWrap,
     goodsList,
     uploadPictures,
     WangEditor,

@@ -49,7 +49,7 @@ import { productGetTempKeysApi, uploadType } from '@/api/product';
 import Setting from '@/setting';
 import { getCookies } from '@/libs/util';
 
-import '../../../public/UEditor/dialogs/internal';
+// import '../../../public/UEditor/dialogs/internal';
 export default {
   name: 'vide11o',
   data() {
@@ -156,11 +156,7 @@ export default {
       });
     },
     uploads() {
-      nowEditor.editor.execCommand(
-        'inserthtml',
-        `<p><img/><video src='${this.formValidate.video_link}' controls></video><br/></p>`,
-      );
-      nowEditor.dialog.close(true);
+      this.$emit('getvideo', this.formValidate.video_link);
     },
   },
 };

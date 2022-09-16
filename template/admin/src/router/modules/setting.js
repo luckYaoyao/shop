@@ -432,15 +432,6 @@ export default {
       component: () => import('@/pages/system/group/list'),
     },
     {
-      path: 'system_group_data/kf_adv',
-      name: `${pre}kfAdv`,
-      meta: {
-        auth: ['setting-system-group_data-kf_adv'],
-        title: '客服页面广告',
-      },
-      component: () => import('@/pages/system/group/kfAdv'),
-    },
-    {
       path: 'store_service/speechcraft',
       name: `${pre}speechcraft`,
       meta: {
@@ -637,6 +628,24 @@ export default {
         title: '语言列表',
       },
       component: () => import('@/pages/setting/multiLanguage/list'),
+    },
+    {
+      path: 'lang/info',
+      name: `${pre}langInfo`,
+      meta: {
+        auth: ['admin-lang-info'],
+        title: '语言详情',
+      },
+      component: () => import('@/pages/setting/multiLanguage/langList'),
+    },
+    {
+      path: 'lang/country',
+      name: `${pre}langCountry`,
+      meta: {
+        auth: ['admin-lang-country'],
+        title: '国家列表',
+      },
+      component: () => import('@/pages/setting/multiLanguage/country'),
     },
   ],
 };

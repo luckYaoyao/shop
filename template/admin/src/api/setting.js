@@ -1034,3 +1034,47 @@ export function saveType(type) {
     method: 'get',
   });
 }
+
+/**
+ * @description 多语言-语言详情列表
+ */
+ export function langCodeList(data) {
+  return request({
+    url: `setting/lang_code/list`,
+    method: 'get',
+    params: data,
+  });
+}
+
+/**
+ * @description 获取语言信息
+ */
+ export function langCodeInfo(data) {
+  return request({
+    url: `setting/lang_code/info`,
+    method: 'get',
+    params: data,
+  });
+}
+
+/**
+ * @description 修改语言详情
+ */
+ export function langCodeSettingSave(data) {
+  return request({
+    url: `setting/lang_code/save`,
+    method: 'post',
+    data,
+  });
+}
+
+/**
+ * @description 国家列表
+ */
+ export function langCountryList(data) {
+  return request({
+    url: `setting/lang_country/list`,
+    method: 'get',
+    params: data,
+  });
+}

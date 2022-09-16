@@ -68,6 +68,9 @@
       </div>
     </Modal> -->
     <vcode :show="isShow" @success="closeModel()" @close="closeModel()" successText="验证通过" />
+    <div class="footer">
+      <div class="pull-right">Copyright © 2022 <span id="copyright">CRMEB</span> 版本号：<span>我是版本号</span></div>
+    </div>
   </div>
 </template>
 <script>
@@ -443,5 +446,20 @@ a:link, a:visited, a:hover, a:active {
 
 .from-wh {
   width: 400px;
+}
+.pull-right {
+    float: right!important;
+}
+.footer{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  margin: 0;
+  background: rgba(255,255,255,.8);
+  border-top: 1px solid #e7eaec;
+  overflow: hidden;
+  padding: 10px 20px;
+  height: 36px;
 }
 </style>

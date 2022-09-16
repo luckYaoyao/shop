@@ -26,7 +26,22 @@
             <img v-lazy="row.icon" />
           </div>
         </template>
+        <template slot-scope="{ row, index }" slot="status">
+          <i-switch
+            v-model="row.status"
+            :value="row.status"
+            :true-value="1"
+            :false-value="0"
+            @on-change="changeSwitch(row)"
+            size="large"
+          >
+            <span slot="open">开启</span>
+            <span slot="close">关闭</span>
+          </i-switch>
+        </template>
         <template slot-scope="{ row, index }" slot="action">
+          <a @click="edit(row, '编辑语言', index)">编辑</a>
+          <Divider type="vertical" />
           <a @click="del(row, '删除语言', index)">删除</a>
         </template>
       </Table>
@@ -67,6 +82,25 @@ export default {
           title: '语言编码',
           key: 'file_name',
           minWidth: 200,
+        },
+        {
+          title: '状态',
+          slot: 'status',
+          width: 100,
+          filters: [
+            {
+              label: '开启',
+              value: 1,
+            },
+            {
+              label: '关闭',
+              value: 0,
+            },
+          ],
+          filterMethod(value, row) {
+            return row.status === value;
+          },
+          filterMultiple: false,
         },
         {
           title: '操作',
@@ -119,6 +153,10 @@ export default {
       this.langFrom.page = index;
       this.getList();
     },
+    // 编辑
+    edit(row) {
+      this.$modalForm(langTypeForm(row.id)).then(() => this.getList());
+    },
     // 删除
     del(row, tit, num) {
       let delfromData = {
@@ -137,6 +175,20 @@ export default {
         .catch((res) => {
           this.$Message.error(res.msg);
         });
+    },
+    // 修改状态
+    changeSwitch(row) {
+      console.log(row)
+      // PostgoodsIsShow(row.id, row.is_show)
+      //   .then((res) => {
+      //     this.$Message.success(res.msg);
+      //     this.goodHeade();
+      //     this.getDataList();
+      //   })
+      //   .catch((res) => {
+      //     row.is_show = !row.is_show ? 1 : 0;
+      //     this.$Message.error(res.msg);
+      //   });
     },
   },
 };

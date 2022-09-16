@@ -130,14 +130,12 @@
 <script>
 import { mapState } from 'vuex';
 import goodsList from '@/components/goodsList/index';
-import UeditorWrap from '@/components/ueditorFrom/index';
-import VueUeditorWrap from 'vue-ueditor-wrap';
 import uploadPictures from '@/components/uploadPictures';
 import { integralAddBatch, productAttrsApi, integralInfoApi } from '@/api/marketing';
 
 export default {
   name: 'storeIntegralCreate',
-  components: { UeditorWrap, goodsList, uploadPictures, VueUeditorWrap },
+  components: { goodsList, uploadPictures },
   data() {
     return {
       loading: false,

@@ -426,7 +426,6 @@
 <script>
 import { mapState } from 'vuex';
 import goodsList from '@/components/goodsList/index';
-import UeditorWrap from '@/components/ueditorFrom/index';
 import WangEditor from '@/components/wangEditor/index.vue';
 import uploadPictures from '@/components/uploadPictures';
 import { combinationInfoApi, combinationCreatApi, productAttrsApi } from '@/api/marketing';
@@ -435,7 +434,6 @@ import freightTemplate from '@/components/freightTemplate/index';
 export default {
   name: 'storeCombinationCreate',
   components: {
-    UeditorWrap,
     goodsList,
     uploadPictures,
     WangEditor,

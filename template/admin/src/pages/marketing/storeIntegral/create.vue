@@ -263,14 +263,13 @@
 <script>
 import { mapState } from 'vuex';
 import goodsList from '@/components/goodsList/index';
-import UeditorWrap from '@/components/ueditorFrom/index';
 import WangEditor from '@/components/wangEditor/index.vue';
 import uploadPictures from '@/components/uploadPictures';
 import { integralAddApi, productAttrsApi, integralInfoApi } from '@/api/marketing';
 
 export default {
   name: 'storeIntegralCreate',
-  components: { UeditorWrap, goodsList, uploadPictures, WangEditor },
+  components: { goodsList, uploadPictures, WangEditor },
   data() {
     return {
       submitOpen: false,

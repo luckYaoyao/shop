@@ -13,7 +13,7 @@
 
 <script>
 import uploadFrom from './index';
-import '../../../public/UEditor/dialogs/internal';
+// import '../../../public/UEditor/dialogs/internal';
 export default {
   name: 'widgetImg',
   components: { uploadFrom },
@@ -40,22 +40,14 @@ export default {
   mounted() {},
   methods: {
     getPicD(pc) {
-      if (this.$route.query.fodder === 'dialog') {
-        let str = '';
-        for (let i = 0; i < pc.length; i++) {
-          nowEditor.editor.execCommand('insertimage', { src: pc[i].att_dir });
-        }
-        nowEditor.dialog.close(true);
-      } else {
-        let pcs = window.form_create_helper.get(this.$route.query.fodder) || [];
-        pc = pc.map((item) => {
-          return item.att_dir;
-        });
-        let concatPc = pcs.concat(pc);
-        let pcList = Array.from(new Set(concatPc));
-        form_create_helper.set(this.$route.query.fodder, pcList);
-        form_create_helper.close(this.$route.query.fodder);
-      }
+      let pcs = window.form_create_helper.get(this.$route.query.fodder) || [];
+      pc = pc.map((item) => {
+        return item.att_dir;
+      });
+      let concatPc = pcs.concat(pc);
+      let pcList = Array.from(new Set(concatPc));
+      form_create_helper.set(this.$route.query.fodder, pcList);
+      form_create_helper.close(this.$route.query.fodder);
     },
     getPic(pc) {
       form_create_helper.set(this.$route.query.fodder, pc.satt_dir);

@@ -1524,7 +1524,6 @@ import uploadPictures from '@/components/uploadPictures';
 import freightTemplate from '@/components/freightTemplate';
 import couponList from '@/components/couponList';
 import addAttr from '../productAttr/addAttr';
-import VueUeditorWrap from 'vue-ueditor-wrap';
 import goodsList from '@/components/goodsList/index';
 import taoBao from './taoBao';
 import WangEditor from '@/components/wangEditor/index.vue';
@@ -1554,7 +1553,7 @@ import { uploadByPieces } from '@/utils/upload'; //引入uploadByPieces方法
 export default {
   name: 'product_productAdd',
   components: {
-    VueUeditorWrap,
+    // VueUeditorWrap,
     uploadPictures,
     freightTemplate,
     addAttr,

@@ -51,7 +51,6 @@
 <script>
 import vuedraggable from 'vuedraggable';
 import { mapState, mapActions } from 'vuex';
-import UeditorWrap from 'vue-ueditor-wrap';
 import uploadPictures from '@/components/uploadPictures';
 import { wechatNewsAddApi, wechatNewsInfotApi } from '@/api/app';
 export default {
@@ -63,7 +62,6 @@ export default {
   },
   components: {
     draggable: vuedraggable,
-    UeditorWrap,
     uploadPictures,
   },
   data() {

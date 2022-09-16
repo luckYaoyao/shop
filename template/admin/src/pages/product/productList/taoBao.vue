@@ -223,13 +223,11 @@
             </Col>
             <Col span="24">
               <FormItem label="商品详情：">
-                <vue-ueditor-wrap
-                  v-model="formValidate.description"
-                  @beforeInit="addCustomDialog"
-                  :config="myConfig"
+                <WangEditor
                   style="width: 100%"
-                  class="ueditor"
-                ></vue-ueditor-wrap>
+                  :content="formValidate.description"
+                  @editorContent="getEditorContent"
+                ></WangEditor>
               </FormItem>
             </Col>
             <Col span="24">
@@ -267,8 +265,9 @@
 
 <script>
 import { crawlFromApi, treeListApi, crawlSaveApi, productGetTemplateApi, copyConfigApi } from '@/api/product';
-import VueUeditorWrap from 'vue-ueditor-wrap';
 import uploadPictures from '@/components/uploadPictures';
+import WangEditor from '@/components/wangEditor/index.vue';
+
 export default {
   name: 'taoBao',
   data() {
@@ -397,13 +396,6 @@ export default {
         sm: 24,
         xs: 24,
       },
-      myConfig: {
-        autoHeightEnabled: false, // 编辑器不自动被内容撑高
-        initialFrameHeight: 500, // 初始容器高度
-        initialFrameWidth: '100%', // 初始容器宽度
-        UEDITOR_HOME_URL: '/admin/UEditor/',
-        serverUrl: '',
-      },
       formValidate: {
         store_name: '',
         cate_id: [],
@@ -450,9 +442,10 @@ export default {
         url: '',
       },
       tableIndex: 0,
+      content: '',
     };
   },
-  components: { VueUeditorWrap, uploadPictures },
+  components: { WangEditor, uploadPictures },
   computed: {},
 
   created() {
@@ -516,6 +509,9 @@ export default {
           return item;
         }),
       );
+    },
+    getEditorContent(data) {
+      this.content = data;
     },
     // 删除表格中的属性
     delAttrTable(index) {
@@ -584,6 +580,7 @@ export default {
     },
     // 提交
     handleSubmit(name) {
+      this.formValidate.description = this.content;
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.modal_loading = true;

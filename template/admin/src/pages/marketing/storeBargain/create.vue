@@ -294,13 +294,6 @@
             </Row>
             <div v-show="current === 2">
               <FormItem label="内容：">
-                <!-- <vue-ueditor-wrap
-                  v-model="formValidate.description"
-                  :key="1"
-                  @beforeInit="addCustomDialog"
-                  :config="myConfig"
-                  style="width: 90%"
-                ></vue-ueditor-wrap> -->
                 <WangEditor
                   style="width: 90%"
                   :content="formValidate.description"
@@ -310,13 +303,6 @@
             </div>
             <div v-show="current === 3">
               <FormItem label="规则：">
-                <!-- <vue-ueditor-wrap
-                  v-model="formValidate.rule"
-                  :key="2"
-                  @beforeInit="addCustomDialog"
-                  :config="myConfig"
-                  style="width: 90%"
-                ></vue-ueditor-wrap> -->
                 <WangEditor
                   style="width: 90%"
                   :content="formValidate.rule"
@@ -390,7 +376,6 @@ import uploadPictures from '@/components/uploadPictures';
 import { bargainInfoApi, bargainCreatApi, productAttrsApi } from '@/api/marketing';
 import { productGetTemplateApi } from '@/api/product';
 import freightTemplate from '@/components/freightTemplate/index';
-// import VueUeditorWrap from "vue-ueditor-wrap";
 import WangEditor from '@/components/wangEditor/index.vue';
 
 export default {
