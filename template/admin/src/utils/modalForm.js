@@ -22,6 +22,7 @@ function getModalInstance(render = undefined) {
       maskClosable: false,
       footerHide: true,
       render: render,
+      // zIndex: 2000,
     });
 
   return modalInstance;

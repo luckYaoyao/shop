@@ -25,6 +25,7 @@
     "cos-js-sdk-v5": "^0.5.26",
     "countup": "^1.8.2",
     "cropperjs": "^1.2.2",
+    "crypto-js": "^4.1.1",
     "dayjs": "^1.7.7",
     "echarts": "^4.8.0",
     "editor": "^1.0.0",

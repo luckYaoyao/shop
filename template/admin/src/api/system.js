@@ -314,6 +314,17 @@ export function filesImportApi(data) {
 }
 
 /**
+ * @description 文件管理 -- 登录
+ */
+export function opendirLoginApi(data) {
+  return request({
+    url: `system/file/login`,
+    method: 'POST',
+    data,
+  });
+}
+
+/**
  * @description 文件管理 -- 列表
  */
 export function opendirListApi(params) {
@@ -321,6 +332,7 @@ export function opendirListApi(params) {
     url: `system/file/opendir`,
     method: 'GET',
     params,
+	file_edit:true
   });
 }
 
@@ -331,6 +343,7 @@ export function openfileApi(filepath) {
   return request({
     url: `system/file/openfile?filepath=${filepath}`,
     method: 'GET',
+	file_edit:true
   });
 }
 
@@ -342,6 +355,7 @@ export function savefileApi(data) {
     url: `system/file/savefile`,
     method: 'post',
     data,
+	file_edit:true
   });
 }
 

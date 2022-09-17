@@ -10,6 +10,23 @@
 
 import request from '@/libs/request';
 
+
+export function ajCaptcha(params){
+  return request({
+    url:'ajcaptcha',
+    method:'get',
+    params:params
+  });
+}
+
+export function ajCaptchaCheck(data){
+  return request({
+    url:'ajcheck',
+    method:'post',
+    data:data
+  });
+}
+
 /**
  * @description 表格--删除
  * @param {Number} param id {Number} 配置id

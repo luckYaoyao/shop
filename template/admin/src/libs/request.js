@@ -34,9 +34,14 @@ service.interceptors.request.use(
     }
     const token = getCookies('token');
     const kefuToken = getCookies('kefu_token');
-    if (token || kefuToken) {
-      config.headers['Authori-zation'] = config.kefu ? 'Bearer ' + kefuToken : 'Bearer ' + token;
+	const fileToken = getCookies('file_token');
+    if (token || kefuToken || fileToken) {
+      config.headers['Authori-zation'] = config.file_edit ? (config.kefu ? 'Bearer ' + kefuToken : 'Bearer ' + fileToken) : (config.kefu ? 'Bearer ' + kefuToken : 'Bearer ' + token);
     }
+	if(fileToken)
+	{
+		config.headers['Invalid-zation'] = 'Bearer ' + fileToken;
+	}
     return config;
   },
   (error) => {

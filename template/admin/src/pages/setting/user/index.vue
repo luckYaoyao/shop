@@ -6,7 +6,7 @@
       </div>
     </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="120" label-position="right">
+      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="160" label-position="right">
         <FormItem label="账号" prop="">
           <Input type="text" v-model="account" :disabled="true" class="input"></Input>
         </FormItem>
@@ -22,6 +22,12 @@
         <FormItem label="确认新密码" prop="conf_pwd">
           <Input type="password" v-model="formValidate.conf_pwd" class="input"></Input>
         </FormItem>
+		<FormItem label="文件管理新密码" prop="file_pwd">
+		  <Input type="password" v-model="formValidate.file_pwd" class="input"></Input>
+		</FormItem>
+		<FormItem label="文件管理确认新密码" prop="conf_file_pwd">
+		  <Input type="password" v-model="formValidate.conf_file_pwd" class="input"></Input>
+		</FormItem>
         <FormItem>
           <Button type="primary" @click="handleSubmit('formValidate')">提交</Button>
         </FormItem>
@@ -53,12 +59,16 @@ export default {
         pwd: '',
         new_pwd: '',
         conf_pwd: '',
+		file_pwd: '',
+		conf_file_pwd: '',
       },
       ruleValidate: {
         real_name: [{ required: true, message: '您的姓名不能为空', trigger: 'blur' }],
         pwd: [{ required: true, message: '请输入您的原始密码', trigger: 'blur' }],
         new_pwd: [{ required: true, message: '请输入您的新密码', trigger: 'blur' }],
         conf_pwd: [{ required: true, message: '请确认您的新密码', trigger: 'blur' }],
+		file_pwd: [{ required: true, message: '请输入您的文件管理新密码', trigger: 'blur' }],
+		conf_file_pwd: [{ required: true, message: '请确认您的文件管理新密码', trigger: 'blur' }],
       },
     };
   },

@@ -52,25 +52,14 @@
         </Form>
       </div>
     </div>
-    <!-- <Modal
-      v-model="modals"
-      scrollable
-      footer-hide
-      closable
-      title="请完成安全校验"
-      :mask-closable="false"
-      :z-index="2"
-      width="342"
-    >
-      <div class="captchaBox">
-        <div id="captcha" style="position: relative" ref="captcha"></div>
-        <div id="msg"></div>
-      </div>
-    </Modal> -->
-    <vcode :show="isShow" @success="closeModel()" @close="closeModel()" successText="验证通过" />
-    <div class="footer">
-      <div class="pull-right">Copyright © 2022 <span id="copyright">CRMEB</span> 版本号：<span>我是版本号</span></div>
-    </div>
+
+    <Verify
+        @success="success"
+        captchaType="blockPuzzle"
+        :imgSize="{ width: '330px', height: '155px' }"
+      ref="verify"
+    ></Verify>
+
   </div>
 </template>
 <script>
@@ -80,12 +69,11 @@ import { getWorkermanUrl } from '@/api/kefu';
 import Setting from '@/setting';
 import { setCookies } from '@/libs/util';
 import '../../../assets/js/canvas-nest.min';
-// import '../../../assets/js/jigsaw.js';
-import Vcode from 'vue-puzzle-vcode';
+import Verify from "@/components/verifition/Verify";
+
 export default {
-  // mixins: [mixins],
   components: {
-    Vcode,
+    Verify,
   },
   data() {
     return {
@@ -185,8 +173,11 @@ export default {
           this.swiperList = [{ slide: this.defaultSwiperList }];
         });
     },
+    success(params){
+      this.closeModel(params);
+    },
     // 关闭模态框
-    closeModel() {
+    closeModel(params) {
       this.isShow = false;
       let msg = this.$Message.loading({
         content: '登录中...',
@@ -198,6 +189,8 @@ export default {
         pwd: this.formInline.password,
         imgcode: this.formInline.code,
         key: this.key,
+        captchaType: 'blockPuzzle',
+        captchaVerification: params.captchaVerification,
       })
         .then(async (res) => {
           msg();
@@ -313,11 +306,7 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          if (this.errorNum >= 2) {
-            this.isShow = true;
-          } else {
-            this.closeModel();
-          }
+          this.$refs.verify.show()
         }
       });
     },
