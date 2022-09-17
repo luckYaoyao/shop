@@ -11,6 +11,10 @@
 			</view>
 			<view class="sub_btn" @click="loginBtn">{{$t(`立即登录`)}}</view>
 		</view>
+
+		<Verify @success="success" :captchaType="'blockPuzzle'" :imgSize="{ width: '330px', height: '155px' }"
+			ref="verify"></Verify>
+
 	</view>
 </template>
 
@@ -18,6 +22,7 @@
 	const app = getApp();
 	import sendVerifyCode from "@/mixins/SendVerifyCode";
 	import Routine from '@/libs/routine';
+	import Verify from './../verify/verify.vue';
 	import {
 		loginMobile,
 		registerVerify,
@@ -31,6 +36,9 @@
 	} from '@/api/api.js'
 	export default {
 		name: 'login_mobile',
+		components: {
+			Verify
+		},
 		props: {
 			isUp: {
 				type: Boolean,
@@ -53,8 +61,29 @@
 			this.getCode();
 		},
 		methods: {
+			success(data) {
+				let that = this;
+				this.$refs.verify.hide()
+				getCodeApi().then(res => {
+					registerVerify({
+						phone: that.account,
+						key: res.data.key,
+						captchaType: 'blockPuzzle',
+						captchaVerification: data.captchaVerification
+					}).then(res => {
+						that.$util.Tips({
+							title: res.msg
+						});
+						that.sendCode();
+					}).catch(err => {
+						return that.$util.Tips({
+							title: err
+						})
+					})
+				})
+			},
 			// 获取验证码
-			async code() {
+			code() {
 				let that = this;
 				if (!that.account) return that.$util.Tips({
 					title: that.$t(`请填写手机号码`)
@@ -62,19 +91,7 @@
 				if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.account)) return that.$util.Tips({
 					title: that.$t(`请输入正确的手机号码`)
 				});
-				await registerVerify({
-					phone: that.account,
-					key: that.keyCode,
-				}).then(res => {
-					that.$util.Tips({
-						title: res.msg
-					});
-					that.sendCode();
-				}).catch(err => {
-					return that.$util.Tips({
-						title: err
-					})
-				})
+				this.$refs.verify.show();
 			},
 			// 获取验证码api
 			getCode() {

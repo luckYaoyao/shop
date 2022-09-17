@@ -680,12 +680,9 @@
 
 			// #ifdef MP
 			getTempIds() {
-				let messageTmplIds = wx.getStorageSync(SUBSCRIBE_MESSAGE);
-				if (!messageTmplIds) {
-					getTempIds().then(res => {
-						if (res.data) wx.setStorageSync(SUBSCRIBE_MESSAGE, JSON.stringify(res.data));
-					});
-				}
+				getTempIds().then(res => {
+					if (res.data) wx.setStorageSync(SUBSCRIBE_MESSAGE, JSON.stringify(res.data));
+				});
 			},
 			// #endif
 			// 对象转数组

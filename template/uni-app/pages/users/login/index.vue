@@ -34,19 +34,20 @@
 				<view class="item">
 					<view class="acea-row row-middle">
 						<image src="../static/code_2.png" style="width: 28rpx; height: 32rpx;"></image>
-						<input type="text" :placeholder="$t(`填写验证码`)" maxlength="6" class="codeIput" v-model="captcha" />
+						<input type="text" :placeholder="$t(`填写验证码`)" maxlength="6" class="codeIput"
+							v-model="captcha" />
 						<button class="code" :disabled="disabled" :class="disabled === true ? 'on' : ''" @click="code">
 							{{ text }}
 						</button>
 					</view>
 				</view>
-				<view class="item" v-if="isShowCode">
+			<!-- 	<view class="item" v-if="isShowCode">
 					<view class="acea-row row-middle">
 						<image src="../static/code_2.png" style="width: 28rpx; height: 32rpx;"></image>
 						<input type="text" :placeholder="$t(`填写验证码`)" class="codeIput" v-model="codeVal" />
 						<view class="code" @click="again"><img :src="codeUrl" /></view>
 					</view>
-				</view>
+				</view> -->
 			</view>
 			<view class="logon" @click="loginMobile" v-if="current !== 0">{{$t(`登录`)}}</view>
 			<view class="logon" @click="submit" v-if="current === 0">{{$t(`登录`)}}</view>
@@ -89,6 +90,10 @@
 			</view>
 		</view>
 		<view class="bottom"></view>
+
+		<Verify @success="success" :captchaType="'blockPuzzle'" :imgSize="{ width: '330px', height: '155px' }"
+			ref="verify"></Verify>
+
 	</view>
 </template>
 <script>
@@ -122,14 +127,18 @@
 	// #endif
 	const BACK_URL = "login_back_url";
 	import colors from '@/mixins/color.js';
+	import Verify from '@/pages/users/components/verify/verify.vue';
 	export default {
 		name: "Login",
+		components: {
+			Verify
+		},
 		mixins: [sendVerifyCode, colors],
 		data: function() {
 			return {
 				inAnimation: false,
 				protocol: false,
-				navList: [this.$t(`快速登录`),this.$t(`账号登录`)],
+				navList: [this.$t(`快速登录`), this.$t(`账号登录`)],
 				current: 1,
 				account: "",
 				password: "",
@@ -380,6 +389,19 @@
 					this.keyCode +
 					Date.parse(new Date());
 			},
+			success(data) {
+				this.$refs.verify.hide()
+				getCodeApi()
+					.then(res => {
+						this.keyCode = res.data.key;
+						this.getCode(data);
+					})
+					.catch(res => {
+						this.$util.Tips({
+							title: res
+						});
+					});
+			},
 			code() {
 				let that = this
 				if (!that.protocol) {
@@ -388,16 +410,7 @@
 						title: '请先阅读并同意协议'
 					});
 				}
-				getCodeApi()
-					.then(res => {
-						that.keyCode = res.data.key;
-						that.getCode();
-					})
-					.catch(res => {
-						that.$util.Tips({
-							title: res
-						});
-					});
+				this.$refs.verify.show()
 			},
 			async getLogoImage() {
 				let that = this;
@@ -514,7 +527,7 @@
 						});
 					});
 			},
-			async getCode() {
+			async getCode(data) {
 				let that = this;
 				if (!that.protocol) {
 					this.inAnimation = true
@@ -534,7 +547,8 @@
 						phone: that.account,
 						type: that.type,
 						key: that.keyCode,
-						code: that.codeVal
+						captchaType: 'blockPuzzle',
+						captchaVerification: data.captchaVerification
 					})
 					.then(res => {
 						that.$util.Tips({
@@ -779,6 +793,7 @@
 			}
 		}
 	}
+
 	.protocol {
 		margin-top: 40rpx;
 		color: #999999;
@@ -786,9 +801,11 @@
 		text-align: center;
 		bottom: 20rpx;
 	}
+
 	.trembling {
 		animation: shake 0.6s;
 	}
+
 	.main-color {
 		color: var(--view-theme);
 	}

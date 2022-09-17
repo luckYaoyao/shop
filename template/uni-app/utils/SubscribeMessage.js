@@ -40,8 +40,7 @@ export function openOrderSubscribe() {
 	let tmplIds = auth();
 	return subscribe([
 		tmplIds.order_take,
-		tmplIds.integral_accout,
-		tmplIds.order_brokerage
+		tmplIds.integral_accout
 	]);
 }
 
@@ -62,8 +61,7 @@ export function openExtrctSubscribe() {
 export function openPinkSubscribe() {
 	let tmplIds = auth();
 	return subscribe([
-		tmplIds.open_pink_success,
-		tmplIds.can_pink_success
+		tmplIds.order_user_groups_success
 	]);
 }
 

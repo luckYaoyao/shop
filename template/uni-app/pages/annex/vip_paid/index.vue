@@ -429,23 +429,21 @@
 					// #endif
 				};
 				// #ifdef MP
-				openPaySubscribe().then(() => {
-					memberCardCreate(query).then(res => {
-						if (parseFloat(this.svip.pre_price) > 0) {
-							this.callPay(res);
-						} else {
-							this.memberCard();
-							this.groomList();
-							uni.hideLoading();
-							uni.showToast({
-								title: this.$t(`成功开启0元试用`),
-							});
-						}
-					}).catch(err => {
+				memberCardCreate(query).then(res => {
+					if (parseFloat(this.svip.pre_price) > 0) {
+						this.callPay(res);
+					} else {
+						this.memberCard();
+						this.groomList();
+						uni.hideLoading();
 						uni.showToast({
-							title: err,
-							icon: 'none'
+							title: this.$t(`成功开启0元试用`),
 						});
+					}
+				}).catch(err => {
+					uni.showToast({
+						title: err,
+						icon: 'none'
 					});
 				});
 				// #endif
