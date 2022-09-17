@@ -28096,6 +28096,7 @@ CREATE TABLE IF NOT EXISTS `eb_system_admin` (
   `account` varchar(32) NOT NULL DEFAULT '' COMMENT '后台管理员账号',
   `head_pic` varchar(255) NOT NULL DEFAULT '',
   `pwd` varchar(100) NOT NULL DEFAULT '' COMMENT '后台管理员密码',
+  `file_pwd` varchar(100) NOT NULL DEFAULT '' COMMENT '后台管理员文件密码',
   `real_name` varchar(16) NOT NULL DEFAULT '' COMMENT '后台管理员姓名',
   `roles` varchar(128) NOT NULL DEFAULT '' COMMENT '后台管理员权限(menus_id)',
   `last_ip` varchar(16) NOT NULL DEFAULT '' COMMENT '后台管理员最后一次登录ip',
