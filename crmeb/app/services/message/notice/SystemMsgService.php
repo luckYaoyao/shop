@@ -16,7 +16,6 @@ use app\services\kefu\service\StoreServiceServices;
 use app\services\message\MessageSystemServices;
 use think\facade\Log;
 
-
 /**
  * 短信发送消息列表
  * Created by PhpStorm.
@@ -44,11 +43,11 @@ class SystemMsgService extends NoticeService
 
     }
 
-
     /**
      * 发送消息
-     * @param $uid uid
-     * @param array $data 模板内容
+     * @param int $uid
+     * @param $data
+     * @return bool|void
      */
     public function sendMsg(int $uid, $data)
     {
@@ -80,8 +79,8 @@ class SystemMsgService extends NoticeService
 
     /**
      * 给客服发站内信
-     * @param array $notceinfo
-     * @param array $data
+     * @param $data
+     * @return bool|void
      */
     public function kefuSystemSend($data)
     {
@@ -114,6 +113,4 @@ class SystemMsgService extends NoticeService
             return true;
         }
     }
-
-
 }

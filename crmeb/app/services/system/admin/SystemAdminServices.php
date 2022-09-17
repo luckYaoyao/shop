@@ -80,6 +80,35 @@ class SystemAdminServices extends BaseServices
     }
 
     /**
+     * 文件管理员登陆
+     * @param string $account
+     * @param string $password
+     * @return array|\think\Model
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function verifyFileLogin(string $account, string $password)
+    {
+        $adminInfo = $this->dao->accountByAdmin($account);
+        if (!$adminInfo) {
+            throw new AdminException(400594);
+        }
+        if (!$adminInfo->status) {
+            throw new AdminException(400595);
+        }
+        if (!password_verify($password, $adminInfo->file_pwd)) {
+            throw new AdminException(400140);
+        }
+        $adminInfo->last_time = time();
+        $adminInfo->last_ip = app('request')->ip();
+        $adminInfo->login_count++;
+        $adminInfo->save();
+
+        return $adminInfo;
+    }
+
+    /**
      * 后台登陆获取菜单获取token
      * @param string $account
      * @param string $password
@@ -326,6 +355,15 @@ class SystemAdminServices extends BaseServices
             if ($data['new_pwd'] != $data['conf_pwd'])
                 throw new AdminException(400264);
             $adminInfo->pwd = $this->passwordHash($data['new_pwd']);
+        }
+        if($data['file_pwd'])
+        {
+            if($adminInfo->level != 0) throw new AdminException(400611);
+            if (!$data['conf_file_pwd'])
+                throw new AdminException(400263);
+            if($data['file_pwd'] != $data['conf_file_pwd'])
+                throw new AdminException(400264);
+            $adminInfo->file_pwd = $this->passwordHash($data['file_pwd']);
         }
 
         $adminInfo->real_name = $data['real_name'];

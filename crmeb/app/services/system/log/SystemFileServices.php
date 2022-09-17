@@ -14,6 +14,7 @@ namespace app\services\system\log;
 
 use app\dao\system\log\SystemFileDao;
 use app\services\BaseServices;
+use app\services\system\admin\SystemAdminServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\CacheService;
 use crmeb\services\FileService as FileClass;
@@ -34,6 +35,32 @@ class SystemFileServices extends BaseServices
     {
         $this->dao = $dao;
     }
+
+    /**
+     * @param array $admin
+     * @param string $password
+     * @param string $type
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     *
+     * @date 2022/09/07
+     * @author yyw
+     */
+    public function Login($account, string $password, string $type)
+    {
+        /** @var SystemAdminServices $adminServer */
+        $adminServer = app()->make(SystemAdminServices::class);
+        $adminInfo = $adminServer->verifyFileLogin($account, $password);
+        $tokenInfo = $this->createToken($adminInfo->id, $type,$adminInfo->pwd);
+        return [
+            'token' => $tokenInfo['token'],
+            'expires_time' => $tokenInfo['params']['exp'],
+        ];
+
+    }
+
 
     /**
      * 获取文件校验列表
@@ -191,11 +218,19 @@ class SystemFileServices extends BaseServices
             $rootdir = str_replace('\\', '\\\\', $rootdir);
         }
         $list = array_merge($fileAll['dir'], $fileAll['file']);
+        $navList = [];
         foreach ($list as $key => $value) {
             $list[$key]['real_path'] = str_replace($rootdir, '', $value['pathname']);
             $list[$key]['mtime'] = date('Y-m-d H:i:s', $value['mtime']);
+
+            $navList[$key]['title'] = $value['filename'];
+            if($value['isDir']) $navList[$key]['loading'] = false;
+            $navList[$key]['children'] = [];
+            $navList[$key]['path'] = $value['path'];
+            $navList[$key]['isDir'] = $value['isDir'];
+            $navList[$key]['pathname'] = $value['pathname'];
         }
-        return compact('dir', 'list');
+        return compact('dir', 'list','navList');
     }
 
     //读取文件
@@ -205,11 +240,16 @@ class SystemFileServices extends BaseServices
         $ext = FileClass::getExt($filepath);
         $extarray = [
             'js' => 'text/javascript'
+            , 'htm' => 'text/html'
+            , 'shtml' => 'text/html'
+            , 'xml' => 'text/xml'
             , 'php' => 'text/x-php'
             , 'html' => 'text/html'
             , 'sql' => 'text/x-mysql'
-            , 'css' => 'text/x-scss'];
-        $mode = empty($extarray[$ext]) ? '' : $extarray[$ext];
+            , 'css' => 'text/x-scss'
+            , 'txt'=>'text/plain'
+        ];
+        $mode = empty($extarray[$ext]) ? 'text/plain' : $extarray[$ext];
         return compact('content', 'mode', 'filepath');
     }
 
@@ -224,5 +264,48 @@ class SystemFileServices extends BaseServices
             throw new AdminException(400611);
         }
         return FileClass::writeFile($filepath, $comment);
+    }
+
+
+    public function delFolder(string $path)
+    {
+        if (!file_exists($path)) {
+            return false;
+        }
+        if(is_file($path))
+        {
+            return unlink($path);
+        }
+        $dir = opendir($path);
+        while ($fileName = readdir($dir)) {
+            $file = $path . '/' . $fileName;
+            if ($fileName != '.' && $fileName != '..') {
+                if (is_dir($file)) {
+                    self::delDir($file);
+                } else {
+                    unlink($file);
+                }
+            }
+        }
+        closedir($dir);
+        return rmdir($path);
+    }
+
+    public function createFolder(string $path, int $permissions = 0755)
+    {
+        /** @var FileClass $fileClass */
+        $fileClass = app()->make(FileClass::class);
+        return $fileClass->createDir($path,$permissions);
+    }
+
+    public function createFile(string $path)
+    {
+        /** @var FileClass $fileClass */
+        $fileClass = app()->make(FileClass::class);
+        return $fileClass->createFile($path);
+    }
+    public function copyFolder($surDir,$toDir)
+    {
+        return FileClass::copyDir($surDir,$toDir);
     }
 }

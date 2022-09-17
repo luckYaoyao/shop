@@ -948,7 +948,7 @@ class StoreOrderRefundServices extends BaseServices
         $refundData['refund_num'] = $refund_num;
         $refundData['refund_type'] = $refundType;
         $refundData['refund_price'] = $refund_price;
-        $refundData['order_id'] = app()->make(StoreOrderCreateServices::class)->getNewOrderId('');
+        $refundData['order_id'] = $order['refund_no'] = app()->make(StoreOrderCreateServices::class)->getNewOrderId('');
         $refundData['add_time'] = time();
         $refundData['cart_info'] = json_encode(array_column($cartInfos, 'cart_info'));
         $refundData['is_pink_cancel'] = $isPink;

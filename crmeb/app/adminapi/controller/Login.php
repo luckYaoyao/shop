@@ -48,6 +48,34 @@ class Login extends AuthController
     }
 
     /**
+     * @return mixed
+     */
+    public function ajcaptcha()
+    {
+        $captchaType = $this->request->get('captchaType');
+        return app('json')->success(aj_captcha_create($captchaType));
+    }
+
+    /**
+     * 一次验证
+     * @return mixed
+     */
+    public function ajcheck()
+    {
+        [$token, $pointJson, $captchaType] = $this->request->postMore([
+            ['token', ''],
+            ['pointJson', ''],
+            ['captchaType', ''],
+        ], true);
+        try {
+            aj_captcha_check_one($captchaType, $token, $pointJson);
+            return app('json')->success();
+        } catch (\Throwable $e) {
+            return app('json')->fail(400336);
+        }
+    }
+
+    /**
      * 登陆
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException
@@ -56,11 +84,22 @@ class Login extends AuthController
      */
     public function login()
     {
-        [$account, $password, $imgcode, $key] = $this->request->postMore([
-            'account', 'pwd', ['imgcode', ''], ['key', '']
+        [$account, $password, $imgcode, $key, $captchaVerification, $captchaType] = $this->request->postMore([
+            'account',
+            'pwd',
+            ['imgcode', ''],
+            ['key', ''],
+            ['captchaVerification', ''],
+            ['captchaType', '']
         ], true);
 
         if (!app()->make(Captcha::class)->check($imgcode)) {
+            return app('json')->fail(400336);
+        }
+
+        try {
+            aj_captcha_check_two($captchaType, $captchaVerification);
+        } catch (\Throwable $e) {
             return app('json')->fail(400336);
         }
 

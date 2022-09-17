@@ -245,22 +245,12 @@ class OrderJob extends BaseJobs
     }
 
     /**
-     *  支付成功短信提醒
-     * @param string $order_id
-     */
-    public function mssageSendPaySuccess($order)
-    {
-        $switch = (bool)sys_config('lower_order_switch');
-        //模板变量
-        $pay_price = $order['pay_price'];
-        $order_id = $order['order_id'];
-        /** @var SmsService $smsServices */
-        $smsServices = app()->make(SmsService::class);
-        $smsServices->send($switch, $order['user_phone'], compact('order_id', 'pay_price'), 'order_pay_success');
-    }
-
-    /**计算节约金额
+     * 计算节约金额
      * @param $order
+     * @return false|mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function setEconomizeMoney($order)
     {
@@ -293,7 +283,7 @@ class OrderJob extends BaseJobs
                 if ($cartInfo) {
                     foreach ($cartInfo as $k => $item) {
                         foreach ($item as $value) {
-                            if ($value['price_type'] == 'member') $memberPrice += bcmul($value['vip_truePrice'], $value['cart_num'] ?: 1, 2);
+                            if (isset($value['price_type']) && $value['price_type'] == 'member') $memberPrice += bcmul($value['vip_truePrice'], $value['cart_num'] ?: 1, 2);
                         }
                     }
                 }

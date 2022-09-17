@@ -33476,7 +33476,9 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (1067, 25, '', '语言设置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/lang', '25', 1, '', 0, 'admin-lang', 0),
 (1068, 1067, '', '语言列表', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/lang/list', '12/1067', 1, '', 0, 'admin-lang-list', 0),
 (1069, 1067, '', '语言详情', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/lang/info', '12/1067', 1, '', 0, 'admin-lang-info', 0),
-(1070, 1067, '', '国家列表', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/lang/country', '25/1067', 1, '', 0, 'admin-lang-country', 0);
+(1070, 1067, '', '地区列表', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/lang/country', '25/1067', 1, '', 0, 'admin-lang-country', 0),
+(1071, 25, '', '文件管理', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/system/maintain/system_file/opendir', '25', 1, '', 0, 'system-maintain-system-file', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -33748,23 +33750,24 @@ INSERT INTO `eb_template_message` (`id`, `notification_id`, `type`, `tempkey`, `
 (12, 2, 0, '1927', '付款成功通知', '', '付款单号{{character_string1.DATA}}\n付款金额{{amount2.DATA}}\n付款时间{{date3.DATA}}', '', '', '1637554360', 1),
 (14, 8, 0, '335', '积分到账提醒', '', '订单编号{{character_string2.DATA}}\n商品名称{{thing3.DATA}}\n支付金额{{amount4.DATA}}\n获得积分{{number5.DATA}}\n累计积分{{number6.DATA}}', '', '', '1637554360', 1),
 (15, 12, 0, '3353', '拼团状态通知', '', '商品名称{{thing2.DATA}}\n拼团人数{{thing1.DATA}}\n备注{{thing3.DATA}}', '', '', '1637554360', 1),
-(16, 21, 1, 'OPENTM200565259', '订单发货提醒', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n物流公司：{{keyword2.DATA}}\n物流单号：{{keyword3.DATA}}\n{{remark.DATA}}', '', '', '1515052638', 1),
-(17, 3, 1, 'OPENTM413386489', '订单收货通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n订单状态：{{keyword2.DATA}}\n收货时间：{{keyword3.DATA}}\n商品详情：{{keyword4.DATA}}\n{{remark.DATA}}', '', '', '1515052765', 1),
-(18, 5, 1, 'OPENTM410119152', '退款进度通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n订单金额：{{keyword2.DATA}}\n下单时间：{{keyword3.DATA}}\n{{remark.DATA}}', '', '', '1515053049', 1),
-(20, 20, 1, 'OPENTM207707249', '订单发货提醒', '', '{{first.DATA}}\r\n商品明细：{{keyword1.DATA}}\r\n下单时间：{{keyword2.DATA}}\r\n配送地址：{{keyword3.DATA}}\r\n配送人：{{keyword4.DATA}}\r\n联系电话：{{keyword5.DATA}}\r\n{{remark.DATA}}', '', '', '1515053313', 1),
-(23, 11, 1, 'OPENTM407456411', '拼团成功通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n团购商品：{{keyword2.DATA}}\n{{remark.DATA}}', '', '', '1520063823', 1),
-(24, 12, 1, 'OPENTM401113750', '拼团失败通知', '', '{{first.DATA}}\n拼团商品：{{keyword1.DATA}}\n商品金额：{{keyword2.DATA}}\n退款金额：{{keyword3.DATA}}\n{{remark.DATA}}', '', '', '1520064059', 1),
-(26, 2, 1, 'OPENTM207791277', '订单支付成功通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n支付金额：{{keyword2.DATA}}\n{{remark.DATA}}', '', '', '1528966759', 1),
-(27, 10, 1, 'OPENTM410292733', '砍价成功提醒', '', '{{first.DATA}}\n商品名称：{{keyword1.DATA}}\n底价：{{keyword2.DATA}}\n{{remark.DATA}}', '', '', '1564566678', 1),
-(28, 23, 1, 'OPENTM414349441', '开团成功通知', '', '{{first.DATA}}\n拼团名称：{{keyword1.DATA}}\n团购价格：{{keyword2.DATA}}\n拼团人数：{{keyword3.DATA}}\n{{remark.DATA}}', '', '', '1564567037', 1),
-(30, 9, 1, 'OPENTM409909643', '佣金到账提醒', '', '{{first.DATA}}\r\n分销佣金：{{keyword1.DATA}}\r\n交易金额：{{keyword2.DATA}}\r\n结算时间：{{keyword3.DATA}}\r\n{{remark.DATA}}', '', '', '1602500478', 1),
-(31, 1, 1, 'OPENTM410239001', '下级推广者绑定成功提醒', '', '{{first.DATA}}\r\n关联用户：{{keyword1.DATA}}\r\n关联说明：{{keyword2.DATA}}\r\n{{remark.DATA}}', '', '', '1602558146', 1),
-(36, 4, 1, 'OPENTM410137124', '改价提醒发送', '', '{{first.DATA}}\r\n订单编号：{{keyword1.DATA}}\r\n订单金额：{{keyword2.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1),
-(37, 7, 1, 'OPENTM411706852', '充值成功提醒发送', '', '{{first.DATA}}\r\n会员账号：{{keyword1.DATA}}\r\n充值金额：{{keyword2.DATA}}\r\n充值订单：{{keyword3.DATA}}\r\n充值时间：{{keyword4.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1),
-(38, 14, 1, 'OPENTM418265600', '提现成功提醒发送', '', '{{first.DATA}}\r\n提现金额：{{keyword1.DATA}}\r\n申请时间：{{keyword2.DATA}}\r\n提现状态：{{keyword3.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1),
-(39, 15, 1, 'OPENTM408529050', '提现失败提醒发送', '', '{{first.DATA}}\r\n提现金额：{{keyword1.DATA}}\r\n提现时间：{{keyword2.DATA}}\r\n失败原因：{{keyword3.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1),
-(40, 26, 1, 'OPENTM413741318', '提醒付款通知', '', '{{first.DATA}}\r\n订单编号：{{keyword1.DATA}}\r\n订单金额：{{keyword2.DATA}}\r\n下单时间：{{keyword3.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1),
-(41, 8, 1, 'OPENTM418252271', '积分到账提醒发送', '', '{{first.DATA}}\r\n会员ID：{{keyword1.DATA}}\r\n消费金额：{{keyword2.DATA}}\r\n使用积分：{{keyword3.DATA}}\r\n获得积分：{{keyword4.DATA}}\r\n时间：{{keyword5.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1);
+(16, 21, 1, 'OPENTM415939287', '订单发货通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n发货日期：{{keyword2.DATA}}\n商品详细：{{keyword3.DATA}}\n物流公司：{{keyword4.DATA}}\n物流单号：{{keyword5.DATA}}\n{{remark.DATA}}', '', '', '1515052638', 1),
+(17, 3, 1, 'OPENTM418528119', '订单收货通知', '', '{{first.DATA}}\n订单编号：{{keyword1.DATA}}\n商品名称：{{keyword2.DATA}}\n金额：{{keyword3.DATA}}\n时间：{{keyword4.DATA}}\n{{remark.DATA}}', '', '', '1515052765', 1),
+(18, 5, 1, 'OPENTM207284059', '退款通知', '', '{{first.DATA}}\r\n退款金额：{{keyword1.DATA}}\r\n退款时间：{{keyword2.DATA}}\r\n订单编号：{{keyword3.DATA}}\r\n{{remark.DATA}}', '', '', '1515053049', 1),
+(20, 20, 1, 'OPENTM416122303', '订单配送通知', '', '{{first.DATA}}\r\n订单编号：{{keyword1.DATA}}\r\n订单金额：{{keyword2.DATA}}\r\n配送员：{{keyword3.DATA}}\r\n联系电话：{{keyword4.DATA}}\r\n{{remark.DATA}}', '', '', '1515053313', 1),
+(23, 11, 1, 'OPENTM409367318', '拼团成功通知', '', '{{first.DATA}}\r\n订单号：{{keyword1.DATA}}\r\n商品信息：{{keyword2.DATA}}\r\n拼团价格：{{keyword3.DATA}}\r\n组团信息：{{keyword4.DATA}}\r\n{{remark.DATA}}', '', '', '1520063823', 1),
+(24, 12, 1, 'OPENTM418350969', '拼团失败通知', '', '{{first.DATA}}\r\n订单号：{{keyword1.DATA}}\r\n商品信息：{{keyword2.DATA}}\r\n失败类型：{{keyword3.DATA}}\r\n失败原因：{{keyword4.DATA}}\r\n{{remark.DATA}}', '', '', '1520064059', 1),
+(26, 2, 1, 'OPENTM418062102', '订单支付成功通知', '', '{{first.DATA}}\n订单号：{{keyword1.DATA}}\n商品名称：{{keyword2.DATA}}\n支付金额：{{keyword3.DATA}}\n下单人：{{keyword4.DATA}}\n订单支付时间：{{keyword5.DATA}}\n{{remark.DATA}}', '', '', '1528966759', 1),
+(27, 10, 1, 'OPENTM418554923', '砍价成功通知', '', '{{first.DATA}}\n商品名称：{{keyword1.DATA}}\n底价：{{keyword2.DATA}}\n{{remark.DATA}}', '', '', '1564566678', 1),
+(28, 23, 1, 'OPENTM410867947', '开团成功提醒', '', '{{first.DATA}}\r\n商品信息：{{keyword1.DATA}}\r\n团长：{{keyword2.DATA}}\r\n拼团人数：{{keyword3.DATA}}\r\n截止时间：{{keyword4.DATA}}\r\n{{remark.DATA}}', '', '', '1564567037', 1),
+(30, 9, 1, 'OPENTM400590844', '佣金提醒', '', '{{first.DATA}}\r\n佣金金额：{{keyword1.DATA}}\r\n时间：{{keyword2.DATA}}\r\n{{remark.DATA}}', '', '', '1602500478', 1),
+(31, 1, 1, 'OPENTM409880752', '绑定成功通知', '', '{{first.DATA}}\r\n姓名：{{keyword1.DATA}}\r\n绑定时间：{{keyword2.DATA}}\r\n{{remark.DATA}}', '', '', '1602558146', 1),
+(36, 4, 1, 'OPENTM401202515', '订单修改价格通知', '', '{{first.DATA}}\n订单号：{{keyword1.DATA}}\n商品名称：{{keyword2.DATA}}\n下单时间：{{keyword3.DATA}}\n订单总价：{{keyword4.DATA}}\n订单状态：{{keyword5.DATA}}\n{{remark.DATA}}', '', '', '1632305076', 1),
+(37, 7, 1, 'OPENTM414089457', '充值成功通知', '', '{{first.DATA}}\r\n充值时间：{{keyword1.DATA}}\r\n充值金额：{{keyword2.DATA}}\r\n充值状态：{{keyword3.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1),
+(38, 14, 1, 'OPENTM405876306', '提现审核通知', '', '{{first.DATA}}\n提现金额：{{keyword1.DATA}}\n申请时间：{{keyword2.DATA}}\n审核状态：{{keyword3.DATA}}\n原因说明：{{keyword4.DATA}}\n{{remark.DATA}}', '', '', '1632305076', 1),
+(39, 15, 1, 'OPENTM403167119', '提现失败通知', '', '{{first.DATA}}\r\n提现金额：{{keyword1.DATA}}\r\n提现时间：{{keyword2.DATA}}\r\n原因说明：{{keyword3.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1),
+(40, 26, 1, 'OPENTM408199008', '订单待支付提醒', '', '{{first.DATA}}\r\n订单金额：{{keyword1.DATA}}\r\n订单详情：{{keyword2.DATA}}\r\n订单编号：{{keyword3.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1),
+(41, 8, 1, 'OPENTM201661503', '消费成功通知', '', '{{first.DATA}}\r\n商品名称：{{keyword1.DATA}}\r\n消费金额：{{keyword2.DATA}}\r\n抵扣积分：{{keyword3.DATA}}\r\n获得积分：{{keyword4.DATA}}\r\n消费时间：{{keyword5.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1),
+(42, 8, 1, 'OPENTM415269411', '订单进度提醒', '', '{{first.DATA}}\r\n订单编号：{{keyword1.DATA}}\r\n订单内容：{{keyword2.DATA}}\r\n订单状态：{{keyword3.DATA}}\r\n时间：{{keyword4.DATA}}\r\n{{remark.DATA}}', '', '', '1632305076', 1);
 
 -- --------------------------------------------------------
 

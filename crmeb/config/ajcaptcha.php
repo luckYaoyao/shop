@@ -25,11 +25,11 @@ return [
     'watermark' => [
         'fontsize' => 12,
         'color' => '#000000',
-        'text' => '我的水印'
+        'text' => 'CRMEB标准版'
     ],
     'cache' => [
         //若您使用了框架，并且想使用类似于redis这样的缓存驱动，则应换成框架的中的缓存驱动
-        'constructor' => [think\Facade\Cache::class, 'instance'],
+        'constructor' => app()->make(\think\Cache::class),
         'method' => [
             //遵守PSR-16规范不需要设置此项（tp6, laravel,hyperf）。如tp5就不支持（tp5缓存方法是rm,所以要配置为"delete" => "rm"）
             /**

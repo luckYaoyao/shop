@@ -14,32 +14,29 @@ namespace app\adminapi\middleware;
 
 use app\Request;
 use app\services\system\admin\AdminAuthServices;
+use crmeb\exceptions\AuthException;
 use crmeb\interfaces\MiddlewareInterface;
 use think\facade\Config;
-use crmeb\services\CacheService;
 
 /**
  * 后台登陆验证中间件
  * Class AdminAuthTokenMiddleware
  * @package app\adminapi\middleware
  */
-class AdminAuthTokenMiddleware implements MiddlewareInterface
+class AdminEditorTokenMiddleware implements MiddlewareInterface
 {
     public function handle(Request $request, \Closure $next)
     {
         $authInfo = null;
         $token = trim(ltrim($request->header(Config::get('cookie.token_name', 'Authori-zation')), 'Bearer'));
-        // 获取文件token,让其失效
-        $invalid_token = trim(ltrim($request->header(Config::get('cookie.invalid_token_name', 'Invalid-zation')), 'Bearer'));
-        if($invalid_token)
-        {
-            $md5Token = md5($invalid_token);
-            $res = CacheService::clearToken($md5Token);
-        }
 
         /** @var AdminAuthServices $service */
         $service = app()->make(AdminAuthServices::class);
-        $adminInfo = $service->parseToken($token);
+        $adminInfo = $service->parseToken($token,110008);
+        if($adminInfo['type'] !== 'admin_edit')
+        {
+            throw new AuthException('登陆异常，请重新登录',[],110008);
+        }
         Request::macro('isAdminLogin', function () use (&$adminInfo) {
             return !is_null($adminInfo);
         });

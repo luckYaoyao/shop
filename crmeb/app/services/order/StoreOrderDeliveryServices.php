@@ -22,6 +22,7 @@ use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\services\FormBuilder as Form;
 use app\services\shipping\ExpressServices;
+use think\facade\Log;
 
 /**
  * 订单发货
@@ -439,9 +440,11 @@ class StoreOrderDeliveryServices extends BaseServices
         switch ($type) {
             case 1://快递发货
                 $this->orderDeliverGoods($id, $data, $orderInfo, $storeName);
+                event('notice.notice', [['orderInfo' => $orderInfo, 'storeName' => $storeName, 'data' => $data], 'order_postage_success']);
                 break;
             case 2://配送
                 $this->orderDelivery($id, $data, $orderInfo, $storeName);
+                event('notice.notice', [['orderInfo' => $orderInfo, 'storeName' => $storeName, 'data' => $data], 'order_deliver_success']);
                 break;
             case 3://虚拟发货
                 $this->orderVirtualDelivery($id, $data, $orderInfo, $storeName);
@@ -449,9 +452,8 @@ class StoreOrderDeliveryServices extends BaseServices
             default:
                 throw new AdminException(400522);
         }
-        //用户推送消息事件
-        event('notice.notice', [['orderInfo' => $orderInfo, 'storeName' => $storeName, 'data' => $data], 'order_deliver_success']);
-        event('order.delivery', [$orderInfo, $storeName, $data, $type]);
+        //到期自动收货
+        event('order.orderDelivery', [$orderInfo, $storeName, $data, $type]);
         return true;
     }
 

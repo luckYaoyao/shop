@@ -30,6 +30,10 @@ Route::group(function () {
     Route::post('login/mobile', 'v1.LoginController/mobile')->name('loginMobile');
     //图片验证码
     Route::get('sms_captcha', 'v1.LoginController/captcha')->name('captcha');
+    //图形验证码
+    Route::get('ajcaptcha', 'v1.LoginController/ajcaptcha')->name('ajcaptcha');
+    //图形验证码
+    Route::post('ajcheck', 'v1.LoginController/ajcheck')->name('ajcheck');
     //验证码发送
     Route::post('register/verify', 'v1.LoginController/verify')->name('registerVerify');
     //手机号注册

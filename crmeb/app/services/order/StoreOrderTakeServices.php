@@ -134,6 +134,9 @@ class StoreOrderTakeServices extends BaseServices
      * @param $userInfo
      * @param $storeTitle
      * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function gainUserIntegral($order, $userInfo, $storeTitle)
     {
@@ -159,6 +162,8 @@ class StoreOrderTakeServices extends BaseServices
             $integral = $userInfo['integral'] + $order['gain_integral'];
             $userInfo->integral = $integral;
             $res1 = false != $userInfo->save();
+        } else {
+            $res2 = true;
         }
         $order_integral = 0;
 
@@ -175,7 +180,6 @@ class StoreOrderTakeServices extends BaseServices
                 }
             }
             $order_integral = bcmul((string)$order_give_integral, (string)($order_integral ?: $order['pay_price']), 0);
-
             $res3 = false != $userBillServices->income('order_give_integral', $order['uid'], $order_integral, $userInfo['integral'] + $order_integral, $order['id']);
             $integral = $userInfo['integral'] + $order_integral;
             $userInfo->integral = $integral;
@@ -316,7 +320,7 @@ class StoreOrderTakeServices extends BaseServices
                     $userBrokerageServices->income('get_pink_master_brokerage', $pinkMasterUid, [
                         'number' => floatval($pinkMasterPrice),
                         'frozen_time' => $frozen_time
-                    ], bcadd((string)$userInfo['brokerage_price'],$pinkMasterPrice,2), $orderInfo['id']);
+                    ], bcadd((string)$userInfo['brokerage_price'], $pinkMasterPrice, 2), $orderInfo['id']);
                 }
             }
             if (!$combinationInfo['is_commission']) {

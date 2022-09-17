@@ -121,27 +121,33 @@ class LoginController
      */
     public function verify(Request $request, SmsService $services)
     {
-        [$phone, $type, $key, $code] = $request->postMore([['phone', 0], ['type', ''], ['key', ''], ['code', '']], true);
+        [$phone, $type, $key, $captchaType, $captchaVerification] = $request->postMore([
+            ['phone', 0],
+            ['type', ''],
+            ['key', ''],
+            ['captchaType', ''],
+            ['captchaVerification', ''],
+        ], true);
 
         $keyName = 'sms.key.' . $key;
         $nowKey = 'sms.' . date('YmdHi');
 
-        if (!Cache::has($keyName))
+        if (!Cache::has($keyName)) {
             return app('json')->fail(410003);
-
-        if (($num = Cache::get($keyName)) > 2) {
-            if (!$code)
-                return app('json')->fail(410004);
-
-            if (!$this->checkCaptcha($key, $code))
-                return app('json')->fail(410005);
         }
 
         $total = 1;
-        if ($has = Cache::has($nowKey)) {
+        if (Cache::has($nowKey)) {
             $total = Cache::get($nowKey);
             if ($total > Config::get('sms.maxMinuteCount', 20))
                 return app('json')->success(410006);
+        }
+
+        //二次验证
+        try {
+            aj_captcha_check_two($captchaType, $captchaVerification);
+        } catch (\Throwable $e) {
+            return app('json')->fail($e->getError());
         }
 
         try {
@@ -153,7 +159,6 @@ class LoginController
         $smsCode = $this->services->verify($services, $phone, $type, $time, app()->request->ip());
         if ($smsCode) {
             CacheService::set('code_' . $phone, $smsCode, $time * 60);
-            Cache::set($keyName, $num + 1, 300);
             Cache::set($nowKey, $total, 61);
             return app('json')->success(410007);
         } else {
@@ -454,5 +459,33 @@ class LoginController
             return app('json')->fail(410019);
         }
 
+    }
+
+    /**
+     * @return mixed
+     */
+    public function ajcaptcha(Request $request)
+    {
+        $captchaType = $request->get('captchaType');
+        return app('json')->success(aj_captcha_create($captchaType));
+    }
+
+    /**
+     * 一次验证
+     * @return mixed
+     */
+    public function ajcheck(Request $request)
+    {
+        [$token, $pointJson, $captchaType] = $request->postMore([
+            ['token', ''],
+            ['pointJson', ''],
+            ['captchaType', ''],
+        ], true);
+        try {
+            aj_captcha_check_one($captchaType, $token, $pointJson);
+            return app('json')->success();
+        } catch (\Throwable $e) {
+            return app('json')->fail(400336);
+        }
     }
 }

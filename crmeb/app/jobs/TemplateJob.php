@@ -64,7 +64,6 @@ class TemplateJob extends BaseJobs
                 $notifyServices = app()->make(SystemNotificationServices::class);
                 return $notifyServices->getNotInfo(['type' => $is_type, 'mark' => $tempCode])['tempid'];
             });
-
             return $template->send($tempid, $data);
         } catch (\Exception $e) {
             Log::error($e->getMessage());

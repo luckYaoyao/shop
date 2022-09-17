@@ -334,33 +334,32 @@ class OtherOrderServices extends BaseServices
             $orderInfo['phone'] = $userInfo['phone'];
             $capitalFlowServices->setFlow($orderInfo, $type);
         }
-
-
-        //用户推送消息事件
-        event('notice.notice', [$orderInfo, 'order_pay_success']);
-        //支付成功给客服发送消息
-        event('notice.notice', [$orderInfo, 'admin_pay_success_code']);
         $res = $res1 && $res2 && $res3 && $res4;
         return false !== $res;
     }
 
     /**
      * 修改
-     * @param array $where
+     * @param $where
      * @param array $data
-     * @return mixed
+     * @return \crmeb\basic\BaseModel
      */
-    public function update(array $where, array $data)
+    public function update($where, array $data)
     {
         return $this->dao->update($where, $data);
     }
 
     /**
      * 购买会员卡数据校验
-     * @param $memberType
-     * @param $pay_price
-     * @param $type
+     * @param string $memberType
+     * @param string $payPrice
+     * @param string $type
+     * @param $uid
+     * @param $mcId
      * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function checkPayMemberType(string $memberType, string $payPrice, string $type, $uid, $mcId)
     {

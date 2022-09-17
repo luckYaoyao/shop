@@ -58,7 +58,12 @@ class StoreOrderSuccessServices extends BaseServices
      * 支付成功
      * @param array $orderInfo
      * @param string $paytype
+     * @param array $other
      * @return bool
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function paySuccess(array $orderInfo, string $paytype = PayServices::WEIXIN_PAY, array $other = [])
     {
@@ -67,6 +72,9 @@ class StoreOrderSuccessServices extends BaseServices
         if ($other && isset($other['trade_no'])) {
             $updata['trade_no'] = $other['trade_no'];
         }
+        /** @var StoreOrderCartInfoServices $orderInfoServices */
+        $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);
+        $orderInfo['storeName'] = $orderInfoServices->getCarIdByProductTitle((int)$orderInfo['id'], $orderInfo['cart_id']);
         $res1 = $this->dao->update($orderInfo['id'], $updata);
         $resPink = true;
         if ($orderInfo['combination_id'] && $res1 && !$orderInfo['refund_status']) {
@@ -82,6 +90,7 @@ class StoreOrderSuccessServices extends BaseServices
             $luckLotteryServices = app()->make(LuckLotteryServices::class);
             $luckLotteryServices->setCacheLotteryNum((int)$orderInfo['uid'], 'order');
         }
+        $orderInfo['send_name'] = $orderInfo['real_name'];
         //订单支付成功后置事件
         event('order.orderPaySuccess', [$orderInfo]);
         //用户推送消息事件

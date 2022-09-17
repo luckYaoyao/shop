@@ -43,13 +43,13 @@ class AdminAuthServices extends BaseServices
      * @return array
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function parseToken(string $token): array
+    public function parseToken(string $token,int $code = 110003): array
     {
         /** @var CacheService $cacheService */
         $cacheService = app()->make(CacheService::class);
 
         if (!$token || $token === 'undefined') {
-            throw new AuthException(110003);
+            throw new AuthException($code);
         }
         /** @var JwtAuth $jwtAuth */
         $jwtAuth = app()->make(JwtAuth::class);
@@ -60,7 +60,7 @@ class AdminAuthServices extends BaseServices
         $md5Token = md5($token);
         if (!$cacheService->hasToken($md5Token) || !($cacheToken = $cacheService->getTokenBucket($md5Token))) {
             $this->authFailAfter($id, $type);
-            throw new AuthException(110003);
+            throw new AuthException($code);
         }
         //是否超出有效次数
         if (isset($cacheToken['invalidNum']) && $cacheToken['invalidNum'] >= 3) {
@@ -68,7 +68,7 @@ class AdminAuthServices extends BaseServices
                 $cacheService->clearToken($md5Token);
             }
             $this->authFailAfter($id, $type);
-            throw new AuthException(110003);
+            throw new AuthException($code);
         }
 
 
@@ -84,7 +84,7 @@ class AdminAuthServices extends BaseServices
                 $cacheService->clearToken($md5Token);
             }
             $this->authFailAfter($id, $type);
-            throw new AuthException(110003);
+            throw new AuthException($code);
         }
 
         //获取管理员信息
@@ -94,10 +94,10 @@ class AdminAuthServices extends BaseServices
                 $cacheService->clearToken($md5Token);
             }
             $this->authFailAfter($id, $type);
-            throw new AuthException(110003);
+            throw new AuthException($code);
         }
         if ($pwd !== md5($adminInfo->pwd)) {
-            throw new AuthException(110003);
+            throw new AuthException($code);
         }
 
         $adminInfo->type = $type;

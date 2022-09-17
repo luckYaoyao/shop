@@ -168,6 +168,8 @@ class SystemAdmin extends AuthController
             ['pwd', ''],
             ['new_pwd', ''],
             ['conf_pwd', ''],
+            ['file_pwd', ''],
+            ['conf_file_pwd', ''],
         ]);
         if(!preg_match('/^(?![^a-zA-Z]+$)(?!\D+$).{6,}$/',$data['new_pwd'])){
             return app('json')->fail(400183);

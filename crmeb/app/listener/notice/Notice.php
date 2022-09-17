@@ -136,7 +136,7 @@ class Notice implements ListenerInterface
                         $smsdata = ['nickname' => $nickname, 'store_name' => $storeTitle, 'order_id' => $orderInfo['order_id'], 'delivery_name' => $orderInfo['delivery_name'], 'delivery_id' => $orderInfo['delivery_id'], 'user_address' => $orderInfo['user_address']];
                         $SystemMsg->sendMsg($orderInfo['uid'], $smsdata);
                         //模板消息公众号模版消息
-                        $WechatTemplateList->sendOrderPostage($orderInfo['uid'], $orderInfo->toArray(), $datas);
+                        $WechatTemplateList->sendOrderPostage($orderInfo['uid'], $orderInfo->toArray(), $store_name);
                         //模板消息小程序订阅消息
                         $RoutineTemplateList->sendOrderPostage($orderInfo['uid'], $orderInfo->toArray(), $storeTitle, $isGive);
                         break;
@@ -169,12 +169,15 @@ class Notice implements ListenerInterface
                     case 'order_refund':
                         $datas = $data['data'];
                         $order = $data['order'];
+                        $order['refund_price'] = $datas['refund_price'];
+                        $order['refund_no'] = $datas['refund_no'];
                         $storeName = $orderInfoServices->getCarIdByProductTitle($order['id'], $order['cart_id']);
                         $storeTitle = Str::substrUTf8($storeName, 20, 'UTF-8', '');
                         //站内信
                         $SystemMsg->sendMsg($order['uid'], ['order_id' => $order['order_id'], 'pay_price' => $order['pay_price'], 'refund_price' => $datas['refund_price']]);
                         //模板消息公众号模版消息
-                        $WechatTemplateList->sendOrderRefundSuccess($order['uid'], $datas, $order);
+                        $title = '亲，您购买的商品已退款';
+                        $WechatTemplateList->sendOrderRefund($order['uid'], $order, $title);
                         //模板消息小程序订阅消息
                         $RoutineTemplateList->sendOrderRefundSuccess($order['uid'], $order, $storeTitle, $datas);
                         break;
@@ -182,11 +185,13 @@ class Notice implements ListenerInterface
                     case 'send_order_refund_no_status':
                         $order = $data['orderInfo'];
                         $order['pay_price'] = $order['refund_price'];
+                        $order['refund_no'] = $order['order_id'];
                         $storeTitle = Str::substrUTf8($order['cart_info'][0]['productInfo']['store_name'], 20, 'UTF-8', '');
                         //站内信
                         $SystemMsg->sendMsg($order['uid'], ['order_id' => $order['order_id'], 'pay_price' => $order['refund_price'], 'store_name' => $storeTitle]);
                         //模板消息公众号模版消息
-                        $WechatTemplateList->sendOrderRefundNoStatus($order['uid'], $order);
+                        $title = '亲，您的订单拒绝退款，点击查看原因';
+                        $WechatTemplateList->sendOrderRefund($order['uid'], $order, $title);
                         //模板消息小程序订阅消息
                         $RoutineTemplateList->sendOrderRefundFail($order['uid'], $order, $storeTitle);
                         break;
@@ -219,7 +224,7 @@ class Notice implements ListenerInterface
                         //站内信
                         $SystemMsg->sendMsg($order['uid'], ['order_id' => $order['order_id'], 'store_name' => $data['storeTitle'], 'pay_price' => $order['pay_price'], 'gain_integral' => $data['give_integral'], 'integral' => $data['integral']]);
                         //模板消息公众号模版消息
-                        $WechatTemplateList->sendUserIntegral($order['uid'], $order);
+                        $WechatTemplateList->sendUserIntegral($order['uid'], $order, $data);
                         //模板消息小程序订阅消息
                         $RoutineTemplateList->sendUserIntegral($order['uid'], $data['order'], $data['storeTitle'], $data['give_integral'], $data['integral']);
                         break;
@@ -233,7 +238,7 @@ class Notice implements ListenerInterface
                         //站内信
                         $SystemMsg->sendMsg($spread_uid, ['goods_name' => $goodsName, 'goods_price' => $goodsPrice, 'brokerage_price' => $brokeragePrice]);
                         //模板消息公众号模版消息
-                        $WechatTemplateList->sendOrderBrokerageSuccess($spread_uid, $brokeragePrice, $goodsName, $goodsPrice, $add_time);
+                        $WechatTemplateList->sendOrderBrokerageSuccess($spread_uid, $brokeragePrice, $add_time);
                         //模板消息小程序订阅消息
                         $RoutineTemplateList->sendOrderBrokerageSuccess($spread_uid, $brokeragePrice, $goodsName);
                         break;
@@ -249,6 +254,32 @@ class Notice implements ListenerInterface
                         //模板消息小程序订阅消息
                         $RoutineTemplateList->sendBargainSuccess($uid, $bargainInfo, $bargainUserInfo, $uid);
                         break;
+                    //开团成功
+                    case 'open_pink_success':
+                        $orderInfo = $data['orderInfo'];
+                        $title = $data['title'];
+                        $pink = $data['pink'];
+                        $nickname = $UserServices->value(['uid' => $orderInfo['uid']], 'nickname');
+                        //站内信
+                        $SystemMsg->sendMsg($orderInfo['uid'], ['title' => $title, 'nickname' => $nickname, 'count' => $pink['people'], 'pink_time' => date('Y-m-d H:i:s', $pink['add_time'])]);
+                        //模板消息公众号模版消息
+                        $WechatTemplateList->sendOrderPinkOpenSuccess($orderInfo['uid'], $pink, $title);
+                        //模板消息小程序订阅消息
+                        $RoutineTemplateList->sendPinkSuccess($orderInfo['uid'], $title, $nickname, $pink['add_time'], $pink['people'], '/pages/users/order_details/index?order_id=' . $pink['order_id']);
+                        break;
+                    //参团成功
+                    case 'can_pink_success':
+                        $orderInfo = $data['orderInfo'];
+                        $title = $data['title'];
+                        $pink = $data['pink'];
+                        $nickname = $UserServices->value(['uid' => $orderInfo['uid']], 'nickname');
+                        //站内信
+                        $SystemMsg->sendMsg($orderInfo['uid'], ['title' => $title, 'nickname' => $nickname, 'count' => $pink['people'], 'pink_time' => date('Y-m-d H:i:s', $pink['add_time'])]);
+                        //模板消息公众号模版消息
+                        $WechatTemplateList->sendOrderPinkUseSuccess($orderInfo['uid'], $orderInfo, $title);
+                        //模板消息小程序订阅消息
+                        $RoutineTemplateList->sendPinkSuccess($orderInfo['uid'], $title, $nickname, $pink['add_time'], $pink['people'], '/pages/users/order_details/index?order_id=' . $pink['order_id']);
+                        break;
                     //拼团成功
                     case 'order_user_groups_success':
                         $list = $data['list'];
@@ -257,7 +288,7 @@ class Notice implements ListenerInterface
                         //站内信
                         $SystemMsg->sendMsg($list['uid'], ['title' => $title, 'nickname' => $list['nickname'], 'count' => $list['people'], 'pink_time' => date('Y-m-d H:i:s', $list['add_time'])]);
                         //模板消息公众号模版消息
-                        $WechatTemplateList->sendOrderPinkSuccess($list['uid'], $list['order_id'], $list['id'], $title);
+                        $WechatTemplateList->sendOrderPinkSuccess($list['uid'], $list, $title);
                         //模板消息小程序订阅消息
                         $RoutineTemplateList->sendPinkSuccess($list['uid'], $title, $list['nickname'], $list['add_time'], $list['people'], $url);
                         break;
@@ -282,32 +313,6 @@ class Notice implements ListenerInterface
                         $WechatTemplateList->sendOrderPinkFail($uid, $pink, $pink->title);
                         //模板消息小程序订阅消息
                         $RoutineTemplateList->sendPinkFail($uid, $pink->title, $pink->people, '亲，您拼团失败，自动为您申请退款，退款金额为：' . $pink->price, '/pages/order_details/index?order_id=' . $pink->order_id);
-                        break;
-                    //参团成功
-                    case 'can_pink_success':
-                        $orderInfo = $data['orderInfo'];
-                        $title = $data['title'];
-                        $pink = $data['pink'];
-                        $nickname = $UserServices->value(['uid' => $orderInfo['uid']], 'nickname');
-                        //站内信
-                        $SystemMsg->sendMsg($orderInfo['uid'], ['title' => $title, 'nickname' => $nickname, 'count' => $pink['people'], 'pink_time' => date('Y-m-d H:i:s', $pink['add_time'])]);
-                        //模板消息公众号模版消息
-                        $WechatTemplateList->sendOrderPinkUseSuccess($orderInfo['uid'], $orderInfo['order_id'], $title, $orderInfo['pink_id']);
-                        //模板消息小程序订阅消息
-                        $RoutineTemplateList->sendPinkSuccess($orderInfo['uid'], $title, $nickname, $pink['add_time'], $pink['people'], '/pages/users/order_details/index?order_id=' . $pink['order_id']);
-                        break;
-                    //开团成功
-                    case 'open_pink_success':
-                        $orderInfo = $data['orderInfo'];
-                        $title = $data['title'];
-                        $pink = $data['pink'];
-                        $nickname = $UserServices->value(['uid' => $orderInfo['uid']], 'nickname');
-                        //站内信
-                        $SystemMsg->sendMsg($orderInfo['uid'], ['title' => $title, 'nickname' => $nickname, 'count' => $pink['people'], 'pink_time' => date('Y-m-d H:i:s', $pink['add_time'])]);
-                        //模板消息公众号模版消息
-                        $WechatTemplateList->sendOrderPinkOpenSuccess($orderInfo['uid'], $pink, $title);
-                        //模板消息小程序订阅消息
-                        $RoutineTemplateList->sendPinkSuccess($orderInfo['uid'], $title, $nickname, $pink['add_time'], $pink['people'], '/pages/users/order_details/index?order_id=' . $pink['order_id']);
                         break;
                     //提现成功
                     case 'user_extract':
@@ -338,23 +343,12 @@ class Notice implements ListenerInterface
                     case 'order_pay_false':
                         $order = $data['order'];
                         $order_id = $order['order_id'];
+                        $order['storeName'] = $orderInfoServices->getCarIdByProductTitle($order['id'], $order['cart_id']);
                         //短信
                         $NoticeSms->sendSms($order['user_phone'], compact('order_id'));
                         //站内信
                         $SystemMsg->sendMsg($order['uid'], ['order_id' => $order_id]);
                         $WechatTemplateList->sendOrderPayFalse($order['uid'], $order);
-                        break;
-                    //申请退款给客服发消息
-                    case 'send_order_apply_refund':
-                        $order = $data['order'];
-                        //站内信
-                        $SystemMsg->kefuSystemSend(['order_id' => $order['order_id']]);
-                        //短信
-                        $NoticeSms->sendAdminRefund($order);
-                        //公众号
-//                        $WechatTemplateList->sendAdminNewRefund($order);
-                        //企业微信通知
-                        $EnterpriseWechat->sendMsg(['order_id' => $order['order_id']]);
                         break;
                     //新订单给客服
                     case 'admin_pay_success_code':
@@ -364,16 +358,13 @@ class Notice implements ListenerInterface
                         //短信
                         $NoticeSms->sendAdminPaySuccess($order);
                         //公众号小程序
-//                        $WechatTemplateList->sendAdminNewOrder($order);
+                        $storeName = $orderInfoServices->getCarIdByProductTitle($order['id'], $order['cart_id']);
+                        $title = '亲，来新订单啦！';
+                        $status = '新订单';
+                        $link = '/pages/admin/orderDetail/index?id=' . $order['order_id'];
+                        $WechatTemplateList->sendAdminOrder($order['order_id'], $storeName, $title, $status, $link);
                         //企业微信通知
                         $EnterpriseWechat->sendMsg(['order_id' => $order['order_id']]);
-                        break;
-                    //提现申请给客服
-                    case 'kefu_send_extract_application':
-                        //站内信
-                        $SystemMsg->kefuSystemSend($data);
-                        //企业微信通知
-                        $EnterpriseWechat->sendMsg($data);
                         break;
                     //确认收货给客服
                     case 'send_admin_confirm_take_over':
@@ -383,8 +374,37 @@ class Notice implements ListenerInterface
                         $SystemMsg->kefuSystemSend(['storeTitle' => $storeTitle, 'order_id' => $order['order_id']]);
                         //短信
                         $NoticeSms->sendAdminConfirmTakeOver($order);
+                        //公众号
+                        $storeName = $orderInfoServices->getCarIdByProductTitle($order['id'], $order['cart_id']);
+                        $title = '亲，用户已经收到货物啦！';
+                        $status = '订单收货';
+                        $link = '/pages/admin/orderDetail/index?id=' . $order['order_id'];
+                        $WechatTemplateList->sendAdminOrder($order['order_id'], $storeName, $title, $status, $link);
                         //企业微信通知
                         $EnterpriseWechat->sendMsg(['storeTitle' => $storeTitle, 'order_id' => $order['order_id']]);
+                        break;
+                    //申请退款给客服发消息
+                    case 'send_order_apply_refund':
+                        $order = $data['order'];
+                        //站内信
+                        $SystemMsg->kefuSystemSend(['order_id' => $order['order_id']]);
+                        //短信
+                        $NoticeSms->sendAdminRefund($order);
+                        //企业微信通知
+                        $EnterpriseWechat->sendMsg(['order_id' => $order['order_id']]);
+                        //公众号
+                        $storeName = $orderInfoServices->getCarIdByProductTitle($order['id'], $order['cart_id']);
+                        $title = '亲，您有个退款订单待处理！';
+                        $status = '订单退款';
+                        $link = '/pages/admin/orderDetail/index?id=' . $order['refund_no'] . '&types=-3';
+                        $WechatTemplateList->sendAdminOrder($order['refund_no'], $storeName, $title, $status, $link);
+                        break;
+                    //提现申请给客服
+                    case 'kefu_send_extract_application':
+                        //站内信
+                        $SystemMsg->kefuSystemSend($data);
+                        //企业微信通知
+                        $EnterpriseWechat->sendMsg($data);
                         break;
                 }
 
