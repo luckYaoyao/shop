@@ -91,7 +91,7 @@ class RoutineTemplateListService extends NoticeService
             'thing1' => $order['order_id'],
             'thing2' => $title,
             'date5' => date('Y-m-d H:i:s', time()),
-        ], '/pages/users/order_details/index?order_id=' . $order['order_id']);
+        ], '/pages/goods/order_details/index?order_id=' . $order['order_id']);
     }
 
     /**
@@ -110,14 +110,14 @@ class RoutineTemplateListService extends NoticeService
                 'thing1' => $order['delivery_name'],
                 'time3' => date('Y-m-d H:i:s', time()),
                 'thing5' => $storeTitle,
-            ], '/pages/users/order_details/index?order_id=' . $order['order_id']);
+            ], '/pages/goods/order_details/index?order_id=' . $order['order_id']);
         } else {//同城配送
             return $this->sendTemplate((int)$uid, [
                 'thing8' => $storeTitle,
                 'character_string1' => $order['order_id'],
                 'name4' => $order['delivery_name'],
                 'phone_number10' => $order['delivery_id']
-            ], '/pages/users/order_details/index?order_id=' . $order['order_id']);
+            ], '/pages/goods/order_details/index?order_id=' . $order['order_id']);
         }
     }
 
@@ -135,7 +135,7 @@ class RoutineTemplateListService extends NoticeService
             'amount3' => $UserRecharge['price'],
             'amount4' => $now_money,
             'date5' => date('Y-m-d H:i:s', time()),
-        ], '/pages/user_bill/index?type=2');
+        ], '/pages/users/user_bill/index?type=2');
     }
 
     /**
@@ -153,7 +153,7 @@ class RoutineTemplateListService extends NoticeService
             'thing2' => $storeTitle,
             'amount3' => $order['pay_price'],
             'character_string6' => $data['order_id']
-        ], '/pages/users/order_details/index?order_id=' . $data['order_id'] . '&isReturen=1');
+        ], '/pages/goods/order_details/index?order_id=' . $data['order_id'] . '&isReturen=1');
     }
 
     /**
@@ -170,7 +170,7 @@ class RoutineTemplateListService extends NoticeService
             'thing2' => $storeTitle,
             'amount3' => $order['pay_price'],
             'character_string6' => $order['order_id']
-        ], '/pages/users/order_details/index?order_id=' . $order['order_id'] . '&isReturen=1');
+        ], '/pages/goods/order_details/index?order_id=' . $order['order_id'] . '&isReturen=1');
     }
 
     /**
@@ -218,7 +218,7 @@ class RoutineTemplateListService extends NoticeService
         $data['character_string1'] = $orderId;
         $data['amount2'] = $pay_price . '元';
         $data['date3'] = date('Y-m-d H:i:s', time());
-        return $this->sendTemplate((int)$uid, $data, '/pages/users/order_details/index?order_id=' . $orderId);
+        return $this->sendTemplate((int)$uid, $data, '/pages/goods/order_details/index?order_id=' . $orderId);
     }
 
     /**
@@ -252,7 +252,7 @@ class RoutineTemplateListService extends NoticeService
             'amount2' => $extract_number . '元',
             'thing3' => $nickname,
             'date4' => date('Y-m-d H:i:s', time())
-        ], '/pages/users/user_spread_money/index?type=2');
+        ], '/pages/users/user_spread_money/index?type=1');
     }
 
     /**
@@ -269,7 +269,7 @@ class RoutineTemplateListService extends NoticeService
             'amount2' => $extract_number . '元',
             'thing3' => $nickname,
             'date4' => date('Y-m-d H:i:s', time())
-        ], '/pages/users/user_spread_money/index?type=2');
+        ], '/pages/users/user_spread_money/index?type=1');
     }
 
     /**

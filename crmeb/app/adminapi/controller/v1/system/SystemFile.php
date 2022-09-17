@@ -43,6 +43,28 @@ class SystemFile extends AuthController
         return app('json')->success(['list' => $this->services->getFileList()]);
     }
 
+    /**
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     *
+     * @date 2022/09/07
+     * @author yyw
+     */
+    public function login()
+    {
+        [$password] = $this->request->postMore([
+            'password',
+        ], true);
+
+        $adminInfo = $this->request->adminInfo();
+        if (!$adminInfo) return app('json')->fail(100101);
+        if ($adminInfo['level'] != 0) return app('json')->fail(100101);
+
+        return app('json')->success($this->services->login($adminInfo['account'], $password, 'admin_edit'));
+    }
+
     //打开目录
     public function opendir()
     {

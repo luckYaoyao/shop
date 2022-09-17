@@ -22,7 +22,6 @@ use app\services\user\UserServices;
 use app\services\user\UserVisitServices;
 use crmeb\exceptions\ApiException;
 use crmeb\services\CacheService;
-use crmeb\services\CacheService as Cache;
 use crmeb\services\app\MiniProgramService;
 use crmeb\services\oauth\OAuth;
 
@@ -130,7 +129,7 @@ class RoutineServices extends BaseServices
         $storeUserMobile = sys_config('store_user_mobile');
         if ($storeUserMobile && !$user) {
             $userInfoKey = md5($openid . '_' . time() . '_rouine');
-            Cache::setTokenBucket($userInfoKey, $createData, 7200);
+            CacheService::setTokenBucket($userInfoKey, $createData, 7200);
             return ['key' => $userInfoKey];
         } else if (!$user) {
             $user = $wechatUserServices->wechatOauthAfter($createData);
@@ -192,7 +191,7 @@ class RoutineServices extends BaseServices
      */
     public function tempIds()
     {
-        return Cache::get('TEMP_IDS_LIST', function () {
+        return CacheService::get('TEMP_IDS_LIST', function () {
             /** @var SystemNotificationServices $sysNotify */
             $sysNotify = app()->make(SystemNotificationServices::class);
             $marks = $sysNotify->getColumn([['routine_id', '>', 0]], 'routine_id', 'mark');
@@ -217,7 +216,7 @@ class RoutineServices extends BaseServices
      */
     public function live($page, $limit)
     {
-        $list = Cache::get('WECHAT_LIVE_LIST_' . $page . '_' . $limit, function () use ($page, $limit) {
+        $list = CacheService::get('WECHAT_LIVE_LIST_' . $page . '_' . $limit, function () use ($page, $limit) {
             $list = MiniProgramService::getLiveInfo((int)$page, (int)$limit);
             foreach ($list as &$item) {
                 $item['_start_time'] = date('m-d H:i', $item['start_time']);
@@ -262,7 +261,7 @@ class RoutineServices extends BaseServices
         $storeUserMobile = sys_config('store_user_mobile');
         if ($storeUserMobile && !$user) {
             $userInfoKey = md5($openid . '_' . time() . '_routine');
-            Cache::setTokenBucket($userInfoKey, $createData, 7200);
+            CacheService::setTokenBucket($userInfoKey, $createData, 7200);
             return ['key' => $userInfoKey];
         } else if (!$user) {
             //写入用户信息
@@ -320,7 +319,7 @@ class RoutineServices extends BaseServices
 
         if (!$user) {
             $userInfoKey = md5($openid . '_' . time() . '_routine');
-            Cache::setTokenBucket($userInfoKey, $createData, 7200);
+            CacheService::setTokenBucket($userInfoKey, $createData, 7200);
             return ['auth_login' => 1, 'key' => $userInfoKey];
         } else {
             //更新用户信息

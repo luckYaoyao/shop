@@ -94,6 +94,8 @@ Route::group('system', function () {
     Route::get('upgrade_log/list', 'UpgradeController/upgradeLogList')->option(['real_name' => '升级记录']);
     //导出备份项目
     Route::get('upgrade_export/:id/:type', 'UpgradeController/export')->option(['real_name' => '导出备份']);
+
+    Route::post('file/login', 'v1.system.SystemFile/login')->option(['real_name' => '文件管理登录']);
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,

@@ -75,8 +75,6 @@ class Notice implements ListenerInterface
                             $SystemMsg->sendMsg($data['spreadUid'], ['nickname' => $name]);
                             //模板消息公众号模版消息
                             $WechatTemplateList->sendBindSpreadUidSuccess($data['spreadUid'], $name);
-                            //模板消息小程序订阅消息
-                            $RoutineTemplateList->sendBindSpreadUidSuccess($data['spreadUid'], $name);
                         }
                         break;
                     //支付成功给用户
@@ -159,6 +157,7 @@ class Notice implements ListenerInterface
                     case 'price_revision':
                         $order = $data['order'];
                         $pay_price = $data['pay_price'];
+                        $order['storeName'] = $orderInfoServices->getCarIdByProductTitle($order['id'], $order['cart_id']);
                         //短信
                         $NoticeSms->sendSms($order['user_phone'], ['order_id' => $order['order_id'], 'pay_price' => $pay_price]);
                         //站内信
@@ -239,8 +238,6 @@ class Notice implements ListenerInterface
                         $SystemMsg->sendMsg($spread_uid, ['goods_name' => $goodsName, 'goods_price' => $goodsPrice, 'brokerage_price' => $brokeragePrice]);
                         //模板消息公众号模版消息
                         $WechatTemplateList->sendOrderBrokerageSuccess($spread_uid, $brokeragePrice, $add_time);
-                        //模板消息小程序订阅消息
-                        $RoutineTemplateList->sendOrderBrokerageSuccess($spread_uid, $brokeragePrice, $goodsName);
                         break;
                     //砍价成功
                     case 'bargain_success':
@@ -264,8 +261,6 @@ class Notice implements ListenerInterface
                         $SystemMsg->sendMsg($orderInfo['uid'], ['title' => $title, 'nickname' => $nickname, 'count' => $pink['people'], 'pink_time' => date('Y-m-d H:i:s', $pink['add_time'])]);
                         //模板消息公众号模版消息
                         $WechatTemplateList->sendOrderPinkOpenSuccess($orderInfo['uid'], $pink, $title);
-                        //模板消息小程序订阅消息
-                        $RoutineTemplateList->sendPinkSuccess($orderInfo['uid'], $title, $nickname, $pink['add_time'], $pink['people'], '/pages/users/order_details/index?order_id=' . $pink['order_id']);
                         break;
                     //参团成功
                     case 'can_pink_success':
@@ -277,8 +272,6 @@ class Notice implements ListenerInterface
                         $SystemMsg->sendMsg($orderInfo['uid'], ['title' => $title, 'nickname' => $nickname, 'count' => $pink['people'], 'pink_time' => date('Y-m-d H:i:s', $pink['add_time'])]);
                         //模板消息公众号模版消息
                         $WechatTemplateList->sendOrderPinkUseSuccess($orderInfo['uid'], $orderInfo, $title);
-                        //模板消息小程序订阅消息
-                        $RoutineTemplateList->sendPinkSuccess($orderInfo['uid'], $title, $nickname, $pink['add_time'], $pink['people'], '/pages/users/order_details/index?order_id=' . $pink['order_id']);
                         break;
                     //拼团成功
                     case 'order_user_groups_success':
@@ -300,8 +293,6 @@ class Notice implements ListenerInterface
                         $SystemMsg->sendMsg($uid, ['title' => $pink->title, 'count' => $pink->people]);
                         //模板消息公众号模版消息
                         $WechatTemplateList->sendOrderPinkClone($uid, $pink, $pink->title);
-                        //模板消息小程序订阅消息
-                        $RoutineTemplateList->sendPinkFail($uid, $pink->title, $pink->people, '亲，您的拼团取消，点击查看订单详情', '/pages/order_details/index?order_id=' . $pink->order_id);
                         break;
                     //拼团失败
                     case 'send_order_pink_fial':
@@ -311,8 +302,6 @@ class Notice implements ListenerInterface
                         $SystemMsg->sendMsg($uid, ['title' => $pink->title, 'count' => $pink->people]);
                         //模板消息公众号模版消息
                         $WechatTemplateList->sendOrderPinkFail($uid, $pink, $pink->title);
-                        //模板消息小程序订阅消息
-                        $RoutineTemplateList->sendPinkFail($uid, $pink->title, $pink->people, '亲，您拼团失败，自动为您申请退款，退款金额为：' . $pink->price, '/pages/order_details/index?order_id=' . $pink->order_id);
                         break;
                     //提现成功
                     case 'user_extract':
