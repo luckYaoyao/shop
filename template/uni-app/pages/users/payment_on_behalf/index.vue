@@ -187,8 +187,8 @@
 				this.pay_close = true;
 			},
 			getDetail() {
+				let that = this;
 				friendDetail(this.order_id).then(res => {
-					console.log(res)
 					this.resData = res.data.info
 					if (this.resData.paid && !this.resData.type) {
 						this.goOrderDetail()
@@ -196,7 +196,15 @@
 					//#ifdef H5
 					this.ShareInfo(this.resData)
 					//#endif
-				})
+				}).catch((err) => {
+					console.log('1',err)
+					that.$util.Tips({
+						title: err
+					}, {
+						tab: 4,
+						url: '/pages/index/index'
+					});
+				});
 			},
 			//#ifdef H5
 			ShareInfo(data) {

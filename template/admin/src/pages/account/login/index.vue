@@ -59,7 +59,9 @@
         :imgSize="{ width: '330px', height: '155px' }"
       ref="verify"
     ></Verify>
-
+    <div class="footer">
+      <div class="pull-right">{{copyright}}</div>
+    </div>
   </div>
 </template>
 <script>
@@ -102,6 +104,7 @@ export default {
       swiperList: [],
       defaultSwiperList: require('@/assets/images/sw.jpg'),
       key: '',
+      copyright: 'Copyright © 2022 | 西安众邦网络科技有限公司',
     };
   },
   created() {
@@ -166,6 +169,7 @@ export default {
           this.login_logo = data.login_logo ? data.login_logo : require('@/assets/images/logo.png');
           this.swiperList = data.slide.length ? data.slide : [{ slide: this.defaultSwiperList }];
           this.key = data.key;
+          if(data.copyright != '') this.copyright = data.copyright;
         })
         .catch((err) => {
           this.$Message.error(err);
@@ -435,6 +439,21 @@ a:link, a:visited, a:hover, a:active {
 
 .from-wh {
   width: 400px;
+}
+.pull-right {
+    float: right!important;
+}
+.footer{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  margin: 0;
+  background: rgba(255,255,255,.8);
+  border-top: 1px solid #e7eaec;
+  overflow: hidden;
+  padding: 10px 20px;
+  height: 36px;
 }
 .pull-right {
     float: right!important;
