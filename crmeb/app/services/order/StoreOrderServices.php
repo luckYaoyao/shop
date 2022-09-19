@@ -2144,7 +2144,7 @@ HTML;
      */
     public function getFriendDetail($orderId, $uid)
     {
-        $orderInfo = $this->dao->getOne(['order_id' => $orderId]);
+        $orderInfo = $this->dao->getOne(['order_id' => $orderId, 'is_del' => 0]);
         if ($orderInfo) {
             $orderInfo = $orderInfo->toArray();
         } else {
