@@ -162,6 +162,7 @@ class SystemAdminServices extends BaseServices
             'logo_rectangle' => sys_config('site_logo'),//方形
             'login_logo' => sys_config('login_logo'),//登陆
             'site_name' => sys_config('site_name'),
+            'copyright' => sys_config('nncnL_crmeb_copyright'),
             'key' => $key
         ];
     }
@@ -356,12 +357,11 @@ class SystemAdminServices extends BaseServices
                 throw new AdminException(400264);
             $adminInfo->pwd = $this->passwordHash($data['new_pwd']);
         }
-        if($data['file_pwd'])
-        {
-            if($adminInfo->level != 0) throw new AdminException(400611);
+        if ($data['file_pwd']) {
+            if ($adminInfo->level != 0) throw new AdminException(400611);
             if (!$data['conf_file_pwd'])
                 throw new AdminException(400263);
-            if($data['file_pwd'] != $data['conf_file_pwd'])
+            if ($data['file_pwd'] != $data['conf_file_pwd'])
                 throw new AdminException(400264);
             $adminInfo->file_pwd = $this->passwordHash($data['file_pwd']);
         }
