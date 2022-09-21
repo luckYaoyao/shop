@@ -5,6 +5,7 @@ namespace app\services\system\lang;
 use app\dao\system\lang\LangCodeDao;
 use app\services\BaseServices;
 use crmeb\exceptions\AdminException;
+use crmeb\services\CacheService;
 
 class LangCodeServices extends BaseServices
 {
@@ -57,11 +58,11 @@ class LangCodeServices extends BaseServices
      */
     public function langCodeInfo($code)
     {
-        $list = $this->dao->selectList(['code' => $code], '*', 0, 0, '', true)->toArray();
-        if (!$list) throw new AdminException(100026);
+        if (!$code) throw new AdminException(100026);
         /** @var LangTypeServices $langTypeServices */
         $langTypeServices = app()->make(LangTypeServices::class);
         $typeList = $langTypeServices->getColumn([['status', '=', 1], ['is_del', '=', 0]], 'language_name,file_name,id', 'id');
+        $list = $this->dao->selectList([['code', '=', $code], ['type_id', 'in', array_column($typeList, 'id')]])->toArray();
         foreach ($list as &$item) {
             $item['language_name'] = $typeList[$item['type_id']]['language_name'] . '(' . $typeList[$item['type_id']]['file_name'] . ')';
         }
@@ -91,6 +92,7 @@ class LangCodeServices extends BaseServices
             }
         }
         $this->dao->saveAll($saveData);
+        $this->clearLangCache();
         return true;
     }
 
@@ -103,7 +105,24 @@ class LangCodeServices extends BaseServices
     {
         $code = $this->dao->value(['id' => $id], 'code');
         $res = $this->dao->delete(['code' => $code]);
-        if($res) return true;
+        $this->clearLangCache();
+        if ($res) return true;
         throw new AdminException(100008);
+    }
+
+    /**
+     * 清除语言缓存
+     * @return bool
+     */
+    public function clearLangCache()
+    {
+        /** @var LangTypeServices $langTypeServices */
+        $langTypeServices = app()->make(LangTypeServices::class);
+        $typeList = $langTypeServices->getColumn(['status' => 1, 'is_del' => 0], 'file_name');
+        foreach ($typeList as $value) {
+            $langStr = 'api_lang_' . str_replace('-', '_', $value);
+            CacheService::redisHandler()->delete($langStr);
+        }
+        return true;
     }
 }

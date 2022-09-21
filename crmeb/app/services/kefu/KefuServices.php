@@ -220,7 +220,7 @@ class KefuServices extends BaseServices
                 ->setTrigger('crmeb_chat')->send('mssage_num', [
                     'uid' => $userInfo['uid'],
                     'num' => $num,
-                    'recored' => $data['recored']
+                    'recored' => $data['record']
                 ], [$toUid]);
             ChannelService::instance()
                 ->setTrigger('crmeb_chat')->send('reply', $data, [$toUid]);
