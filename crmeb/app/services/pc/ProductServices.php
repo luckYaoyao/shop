@@ -68,7 +68,7 @@ class ProductServices extends BaseServices
             $imageInfo = $systemAttachmentService->getOne(['name' => $namePath]);
             $siteUrl = sys_config('site_url');
             if (!$imageInfo) {
-                $res = MiniProgramService::qrcodeService()->appCodeUnlimit($data, 'pages/goods_details/index', 280);
+                $res = MiniProgramService::appCodeUnlimitService($data, 'pages/goods_details/index', 280);
                 if (!$res) return false;
                 $uploadType = (int)sys_config('upload_type', 1);
                 $upload = UploadService::init();

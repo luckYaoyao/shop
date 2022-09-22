@@ -166,11 +166,11 @@ class Cos extends BaseUpload
 
     /**
      * 文件流上传
-     * @param string $fileContent
+     * @param  $fileContent
      * @param string|null $key
      * @return array|bool|mixed|\StdClass
      */
-    public function stream(string $fileContent, string $key = null)
+    public function stream($fileContent, string $key = null)
     {
         if (!$key) {
             $key = $this->saveFileName();

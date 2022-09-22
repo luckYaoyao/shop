@@ -64,7 +64,7 @@ class PosterJob extends BaseJobs
             }
             if (!$imageInfo_routine) {
                 $resForever = $qrcodeService->getForeverQrcode('spread', $user['uid']);
-                $resCode    = MiniProgramService::qrcodeService()->appCodeUnlimit($resForever->id, '', 280);
+                $resCode    = MiniProgramService::appCodeUnlimitService($resForever->id, '', 280);
                 if ($resCode) {
                     $res = ['res' => $resCode, 'id' => $resForever->id];
                 } else {

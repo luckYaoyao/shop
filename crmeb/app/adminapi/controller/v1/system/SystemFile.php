@@ -84,7 +84,7 @@ class SystemFile extends AuthController
     {
         $comment = $this->request->param('comment');
         $filepath = $this->request->param('filepath');
-        if (empty($comment) || empty($filepath)) {
+        if (empty($filepath)) {
             return app('json')->fail(410087);
         }
         $res = $this->services->savefile($filepath, $comment);
@@ -104,15 +104,34 @@ class SystemFile extends AuthController
      */
     public function createFolder()
     {
-        [$path] = $this->request->postMore([
-            ['path', '']
+        [$path,$name] = $this->request->postMore([
+            ['path', ''],
+            ['name', '']
         ], true);
+        if (empty($path) || empty($name)) {
+            return app('json')->fail(410087);
+        }
+        $data = [];
         try {
-            $this->services->createFolder($path);
+            $res = $this->services->createFolder($path,$name);
+            if($res)
+            {
+                $data = [
+                    'children' => [],
+                    'contextmenu'=> true,
+                    'isDir'=> true,
+                    'loading'=> false,
+                    'path'=> $path,
+                    'pathname'=> $path . DS . $name,
+                    'title'=> $name,
+                ];
+            }else{
+                return app('json')->fail(100005);
+            }
         } catch (\Exception $e) {
             return app('json')->fail($e->getMessage());
         }
-        return app('json')->success(100010);
+        return app('json')->success($data);
     }
 
     /**
@@ -124,15 +143,34 @@ class SystemFile extends AuthController
      */
     public function createFile()
     {
-        [$path] = $this->request->postMore([
-            ['path', '']
+        [$path,$name] = $this->request->postMore([
+            ['path', ''],
+            ['name', '']
         ], true);
+        if (empty($path) || empty($name)) {
+            return app('json')->fail(410087);
+        }
+        $data = [];
         try {
-            $this->services->createFile($path);
+            $res = $this->services->createFile($path,$name);
+            if($res)
+            {
+                $data = [
+                    'children' => [],
+                    'contextmenu'=> true,
+                    'isDir'=> false,
+                    'loading'=> false,
+                    'path'=> $path,
+                    'pathname'=> $path . DS . $name,
+                    'title'=> $name,
+                ];
+            }else{
+                return app('json')->fail(100005);
+            }
         } catch (\Exception $e) {
             return app('json')->fail($e->getMessage());
         }
-        return app('json')->success(100010);
+        return app('json')->success($data);
     }
 
     /**
@@ -147,12 +185,33 @@ class SystemFile extends AuthController
         [$path] = $this->request->postMore([
             ['path', '']
         ], true);
+        if (empty($path)) {
+            return app('json')->fail(410087);
+        }
         try {
             $this->services->delFolder($path);
         } catch (\Exception $e) {
             return app('json')->fail($e->getMessage());
         }
         return app('json')->success(100010);
+    }
+
+    public function rename()
+    {
+        [$newname,$oldname] = $this->request->postMore([
+            ['newname', ''],
+            ['oldname', '']
+        ], true);
+        if (empty($newname) || empty($oldname)) {
+            return app('json')->fail(410087);
+        }
+        try {
+            $this->services->rename($newname,$oldname);
+        } catch (\Exception $e) {
+            return app('json')->fail($e->getMessage());
+        }
+        return app('json')->success(100010);
+
     }
 
 
@@ -162,6 +221,9 @@ class SystemFile extends AuthController
             ['surDir', ''],
             ['toDir', '']
         ], true);
+        if (empty($surDir) || empty($toDir)) {
+            return app('json')->fail(410087);
+        }
         try {
             return app('json')->success($this->services->copyFolder($surDir, $toDir));
         } catch (\Exception $e) {

@@ -221,7 +221,7 @@ class RoutineTemplate extends AuthController
                 $qrcode = app()->make(QrcodeServices::class);
                 $resForever = $qrcode->qrCodeForever(0, 'code');
                 if ($resForever) {
-                    $resCode = MiniProgramService::qrcodeService()->appCodeUnlimit($resForever->id, '', 280);
+                    $resCode = MiniProgramService::appCodeUnlimitService($resForever->id, '', 280);
                     $res = ['res' => $resCode, 'id' => $resForever->id];
                 } else {
                     $res = false;

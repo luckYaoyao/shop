@@ -180,7 +180,7 @@ class UserBillController
                 }
                 if (!$imageInfo) {
                     $resForever = $qrCode->qrCodeForever($user['uid'], 'spread', '', '');
-                    $resCode = MiniProgramService::qrcodeService()->appCodeUnlimit($resForever->id, '', 280);
+                    $resCode = MiniProgramService::appCodeUnlimitService($resForever->id, '', 280);
                     if ($resCode) {
                         $res = ['res' => $resCode, 'id' => $resForever->id];
                     } else {
@@ -363,7 +363,7 @@ class UserBillController
         $qrCode = app()->make(QrcodeServices::class);
         if (!$imageInfo) {
             $resForever = $qrCode->qrCodeForever($user['uid'], 'spread', '', '');
-            $resCode = MiniProgramService::qrcodeService()->appCodeUnlimit($resForever->id, '', 280);
+            $resCode = MiniProgramService::appCodeUnlimitService($resForever->id, '', 280);
             if ($resCode) {
                 $res = ['res' => $resCode, 'id' => $resForever->id];
             } else {

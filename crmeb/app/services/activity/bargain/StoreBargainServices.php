@@ -805,7 +805,7 @@ class StoreBargainServices extends BaseServices
                     if ($userServices->checkUserPromoter((int)$user['uid'], $user)) {
                         $valueData .= '&spread=' . $user['uid'];
                     }
-                    $res = MiniProgramService::qrcodeService()->appCodeUnlimit($valueData, 'pages/activity/goods_bargain_details/index', 280);
+                    $res = MiniProgramService::appCodeUnlimitService($valueData, 'pages/activity/goods_bargain_details/index', 280);
                     if (!$res) throw new ApiException(400237);
                     $uploadType = (int)sys_config('upload_type', 1);
                     $upload = UploadService::init();
@@ -902,7 +902,7 @@ class StoreBargainServices extends BaseServices
                     if ($userServices->checkUserPromoter((int)$user['uid'], $user)) {
                         $valueData .= '&spread=' . $user['uid'];
                     }
-                    $res = MiniProgramService::qrcodeService()->appCodeUnlimit($valueData, 'pages/activity/goods_bargain_details/index', 280);
+                    $res = MiniProgramService::appCodeUnlimitService($valueData, 'pages/activity/goods_bargain_details/index', 280);
                     if (!$res) throw new ApiException(410167);
                     $uploadType = (int)sys_config('upload_type', 1);
                     $upload = UploadService::init();

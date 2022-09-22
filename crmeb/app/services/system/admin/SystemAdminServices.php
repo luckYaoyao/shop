@@ -163,6 +163,7 @@ class SystemAdminServices extends BaseServices
             'login_logo' => sys_config('login_logo'),//登陆
             'site_name' => sys_config('site_name'),
             'copyright' => sys_config('nncnL_crmeb_copyright'),
+            'version' => get_crmeb_version(),
             'key' => $key
         ];
     }

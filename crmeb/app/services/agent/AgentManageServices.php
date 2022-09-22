@@ -300,7 +300,7 @@ class AgentManageServices extends BaseServices
             $qrcode = app()->make(QrcodeServices::class);
             $resForever = $qrcode->qrCodeForever($uid, 'spread_routine');
             if ($resForever) {
-                $resCode = MiniProgramService::qrcodeService()->appCodeUnlimit($resForever->id, '', 280);
+                $resCode = MiniProgramService::appCodeUnlimitService($resForever->id, '', 280);
                 $res = ['res' => $resCode, 'id' => $resForever->id];
             } else {
                 $res = false;

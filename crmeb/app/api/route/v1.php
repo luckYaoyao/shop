@@ -18,6 +18,7 @@ Route::any('wechat/notify', 'v1.wechat.WechatController/notify');//公众号支�
 Route::any('routine/notify', 'v1.wechat.AuthController/notify');//小程序支付回调
 Route::any('pay/notify/:type', 'v1.PayController/notify');//支付回调
 Route::get('get_script', 'v1.PublicController/getScript');//获取统计代码
+Route::get('version', 'v1.PublicController/getVersion');//获取统计代码
 
 Route::group(function () {
     //apple快捷登陆

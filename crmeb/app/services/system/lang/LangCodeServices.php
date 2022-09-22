@@ -78,10 +78,24 @@ class LangCodeServices extends BaseServices
      */
     public function langCodeSave($data)
     {
+        if ($data['edit'] == 0) {
+            if ($data['is_admin'] == 1) {
+                $code = $this->dao->getMax(['is_admin' => 1], 'code');
+                if ($code < 500000) {
+                    $code = 500000;
+                } else {
+                    $code = $code + 1;
+                }
+            } else {
+                $code = $data['remarks'];
+            }
+        } else {
+            $code = $data['code'];
+        }
         $saveData = [];
         foreach ($data['list'] as $key => $item) {
             $saveData[$key] = [
-                'code' => $data['code'],
+                'code' => $code,
                 'remarks' => $data['remarks'],
                 'lang_explain' => $item['lang_explain'],
                 'type_id' => $item['type_id'],

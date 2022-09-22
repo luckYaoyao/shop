@@ -638,4 +638,13 @@ class PublicController
         }, 3600);
         return app('json')->success([$range => $lang]);
     }
+
+    /**
+     * 获取版本号
+     * @return mixed
+     */
+    public function getVersion()
+    {
+        return app('json')->success(['version' => get_crmeb_version()]);
+    }
 }

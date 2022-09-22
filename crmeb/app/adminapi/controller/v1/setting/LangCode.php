@@ -71,6 +71,7 @@ class LangCode extends AuthController
             ['is_admin', 0],
             ['code', ''],
             ['remarks', ''],
+            ['edit', 0],
             ['list', []]
         ]);
         $this->services->langCodeSave($data);

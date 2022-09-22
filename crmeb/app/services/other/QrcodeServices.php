@@ -278,7 +278,7 @@ class QrcodeServices extends BaseServices
             }
             $siteUrl = sys_config('site_url');
             if (!$imageInfo) {
-                $res = MiniProgramService::qrcodeService()->appCodeUnlimit($data, $page, 280);
+                $res = MiniProgramService::appCodeUnlimitService($data, $page, 280);
                 if (!$res) return false;
                 if ($res->getSize() < 100) return 'unpublished';
                 $uploadType = (int)sys_config('upload_type', 1);

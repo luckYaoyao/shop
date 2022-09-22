@@ -156,11 +156,12 @@ class Oss extends BaseUpload
 
     /**
      * 文件流上传
-     * @param string $fileContent
+     * @param $fileContent
      * @param string|null $key
-     * @return bool|mixed
+     * @return array|bool|mixed
+     * @throws OssException
      */
-    public function stream(string $fileContent, string $key = null)
+    public function stream($fileContent, string $key = null)
     {
         try {
             if (!$key) {

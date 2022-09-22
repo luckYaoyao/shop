@@ -114,6 +114,7 @@ Route::group('system', function () {
     Route::get('file/createFolder', 'v1.system.SystemFile/createFolder')->option(['real_name' => '创建文件夹']);
     Route::get('file/createFile', 'v1.system.SystemFile/createFile')->option(['real_name' => '创建文件']);
     Route::get('file/delFolder', 'v1.system.SystemFile/delFolder')->option(['real_name' => '删除文件夹']);
+    Route::get('file/rename', 'v1.system.SystemFile/rename')->option(['real_name' => '重命名文件夹']);
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
     \app\adminapi\middleware\AdminEditorTokenMiddleware::class,

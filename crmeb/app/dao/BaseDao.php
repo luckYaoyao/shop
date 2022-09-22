@@ -493,4 +493,26 @@ abstract class BaseDao
 //            return false;
 //        }
     }
+
+    /**
+     * 获取条件数据中的某个值的最大值
+     * @param array $where
+     * @param string $field
+     * @return mixed
+     */
+    public function getMax(array $where = [], string $field = '')
+    {
+        return $this->getModel()->where($where)->max($field);
+    }
+
+    /**
+     * 获取条件数据中的某个值的最小值
+     * @param array $where
+     * @param string $field
+     * @return mixed
+     */
+    public function getMin(array $where = [], string $field = '')
+    {
+        return $this->getModel()->where($where)->min($field);
+    }
 }
