@@ -60,7 +60,8 @@
       ref="verify"
     ></Verify>
     <div class="footer">
-      <div class="pull-right">{{copyright}}</div>
+      <div class="pull-right" v-if="copyright">{{copyright}}</div>
+      <div class="pull-right" v-else><a href="https://www.crmeb.com" target="_blank">Copyright © 2022 | 西安众邦网络科技有限公司 | {{version}}</a></div>
     </div>
   </div>
 </template>
@@ -104,7 +105,8 @@ export default {
       swiperList: [],
       defaultSwiperList: require('@/assets/images/sw.jpg'),
       key: '',
-      copyright: 'Copyright © 2022 | 西安众邦网络科技有限公司',
+      copyright: '',
+      version: ''
     };
   },
   created() {
@@ -169,7 +171,8 @@ export default {
           this.login_logo = data.login_logo ? data.login_logo : require('@/assets/images/logo.png');
           this.swiperList = data.slide.length ? data.slide : [{ slide: this.defaultSwiperList }];
           this.key = data.key;
-          if(data.copyright != '') this.copyright = data.copyright;
+          this.copyright = data.copyright;
+          this.version = data.version;
         })
         .catch((err) => {
           this.$Message.error(err);
@@ -454,9 +457,14 @@ a:link, a:visited, a:hover, a:active {
   overflow: hidden;
   padding: 10px 20px;
   height: 36px;
+  z-index: 999;
 }
 .pull-right {
     float: right!important;
+    color: #666;
+}
+.pull-right a {
+    color: #666;
 }
 .footer{
   position: fixed;

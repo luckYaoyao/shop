@@ -7,6 +7,8 @@ const CompressionPlugin = require('compression-webpack-plugin');
 // 引入js打包工具
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+
 const resolve = (dir) => {
   return path.join(__dirname, dir);
 };
@@ -115,6 +117,7 @@ module.exports = {
     if (Setting.isMock) {
       entry.add('@/mock').end();
     }
+    config.plugin('monaco').use(new MonacoWebpackPlugin());
   },
 
   // 设为false打包时不生成.map文件

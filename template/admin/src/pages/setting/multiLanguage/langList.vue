@@ -102,11 +102,9 @@
             <Radio :label="item.value" v-for="(item, index) in langType.isAdmin" :key="index">{{ item.title }}</Radio>
           </RadioGroup>
         </FormItem>
-        <FormItem label="状态码/文字：" prop="code" class="mb20">
-          <Input v-model="langFormData.code" placeholder="请输入状态码/文字" style="width: 330px"></Input>
-        </FormItem>
-        <FormItem label="文字：" prop="remarks" class="mb20">
-          <Input v-model="langFormData.remarks" placeholder="请输入状态码/文字" style="width: 330px"></Input>
+        <Input v-model="langFormData.edit" type="hidden"></Input>
+        <FormItem label="语言说明：" prop="remarks" class="mb20">
+          <Input v-model="langFormData.remarks" placeholder="请输入语言说明" style="width: 330px"></Input>
         </FormItem>
         <FormItem label="对应语言：" prop="remark" class="mb20">
           <Table
@@ -195,6 +193,8 @@ export default {
       langFormData: {
         is_admin: 0,
         code: '',
+        remarks: '',
+        edit: 0,
         list: [],
       },
       tabList: [],
@@ -242,6 +242,7 @@ export default {
           this.langFormData.list = res.data.list;
           this.langFormData.code = res.data.code;
           this.langFormData.remarks = res.data.remarks;
+          this.langFormData.edit = 1;
           this.addlangModal = true;
         })
         .catch((err) => {

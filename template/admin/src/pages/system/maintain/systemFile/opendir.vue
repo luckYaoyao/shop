@@ -7,7 +7,7 @@
 		</div>
 		<Card :bordered="false" dis-hover class="ivu-mt">
 			<login-from v-if="isShowLogn" @on-Login="onLogin"></login-from>
-			<div v-if="isShowList" class="backs" @click="goBack">
+			<div v-if="isShowList" class="backs" @click="goBack(false)">
 				<Icon type="ios-folder-outline" class="mr5" /><span>返回上级</span>
 			</div>
 			<Table v-if="isShowList" ref="selection" :columns="columns4" :data="tabList" :loading="loading"
@@ -27,23 +27,62 @@
 				</template>
 			</Table>
 		</Card>
-		<!-- <codemirror :rows='rows' :code='code' :modals='modals' :title='title'></codemirror> -->
-		<Modal v-model="modals" scrollable footer-hide closable :title="title" :mask-closable="false" width="900">
-			<Button type="primary" id="savefile" class="mr5 mb15" @click="savefile">保存</Button>
-			<Button id="undo" class="mr5 mb15" @click="undofile">撤销</Button>
-			<Button id="redo" class="mr5 mb15" @click="redofile">回退</Button>
-			<Button id="refresh" class="mb15" @click="refreshfile">刷新</Button>
-			<div class="file-box">
-				<div class="file-left cm-s-ambiance CodeMirror">
-					<Tree :data="navList" :render="renderContent" :load-data="loadData" expand-node></Tree>
+		<Modal :class-name="className" v-model="modals" scrollable footer-hide closable :mask-closable="false" width="80%">
+			<p slot="header" class="diy-header" ref="diyHeader">
+				<span>{{title}}</span>
+				<Icon @click="winChanges" class="diy-header-icon" :type="className ? 'ios-contract' : 'ios-qr-scanner'"  size = "20"/>
+			</p>
+			<div style="height: 100%;">
+				<Button type="primary" id="savefile" class="diy-button" @click="savefile">保存</Button>
+				<Button id="refresh" class="diy-button" @click="refreshfile">刷新</Button>
+				
+				<div class="file-box">
+					<div class="show-info">
+						<div class="show-text" :title="navItem.pathname">
+							目录: {{navItem.pathname}}
+						</div>
+						<div class="diy-button-list">
+							<Button class="diy-button" @click="goBack(true)">返回上一级</Button>
+							<Button class="diy-button" @click="getList(true,true)">刷新</Button>
+						</div>
+					</div>
+					<div class="file-left">
+						<Tree class="diy-tree-render" :data="navList" :render="renderContent" :load-data="loadData" @on-contextmenu="handleContextMenu" expand-node>
+							<template class="diy-menu" slot="contextMenu">
+								<DropdownItem v-if="contextData && contextData.isDir" @click.native="handleContextCreateFolder()">新建文件夹</DropdownItem>
+								<DropdownItem v-if="contextData && contextData.isDir" @click.native="handleContextCreateFile()">新建文件</DropdownItem>
+								<DropdownItem @click.native="handleContextRename()">重命名</DropdownItem>
+								<DropdownItem @click.native="handleContextDelFolder()" style="color: #ed4014">删除</DropdownItem>
+							</template>
+						</Tree>
+					</div>
+					<div class="file-fix"></div>
+					<div class="file-content">
+						<div id="container" style="height:100%;min-height: 600px;"></div>
+					</div>
+					<Spin size="large" fix v-if="spinShow"></Spin>
 				</div>
-				<div class="file-content">
-					<textarea ref="mycode" class="codesql public_text" v-model="code"></textarea>
-				</div>
-				<Spin size="large" fix v-if="spinShow"></Spin>
 			</div>
-
+			
 		</Modal>
+		
+		<div v-show="formShow" class="diy-from">
+			<div class="diy-from-header">{{formTitle}}<span :title="contextData ? contextData.pathname : ''">{{contextData ? contextData.pathname : ''}}</span></div>
+			<Form ref="formInline" :model="formFile" :rules="ruleInline" inline>
+				<FormItem prop="filename" class="diy-file">
+					<Input type="text" class="diy-file" v-model="formFile.filename" placeholder="请输入名字">
+						<Icon type="ios-folder-open-outline" slot="prepend"></Icon>
+					</Input>
+				</FormItem>
+				<FormItem>
+					<Button class="diy-button" @click="handleSubmit('formInline')">确定</Button>
+				</FormItem>
+				<FormItem>
+					<Button class="diy-button" @click="formExit()">取消</Button>
+				</FormItem>
+				<div class="form-mask" v-show="formShow"></div>
+			</Form>
+		</div>		
 	</div>
 </template>
 
@@ -53,43 +92,21 @@
 		opendirListApi,
 		openfileApi,
 		savefileApi,
-		opendirLoginApi
+		opendirLoginApi,
+		createFolder,
+		createFile,
+		delFolder,
+		rename
 	} from '@/api/system';
 	import CodeMirror from 'codemirror/lib/codemirror';
 	import loginFrom from './components/loginFrom';
-	import codemirror from './components/codemirror';
-	import 'codemirror/theme/ambiance.css';
 	import {
 		setCookies,
 		getCookies,
 		removeCookies
 	} from '@/libs/util';
-
-
-	// 核心样式
-	// import 'codemirror/lib/codemirror.css'
-	// 引入主题后还需要在 options 中指定主题才会生效
-	import 'codemirror/theme/cobalt.css'
-
-	// 需要引入具体的语法高亮库才会有对应的语法高亮效果
-	// codemirror 官方其实支持通过 /addon/mode/loadmode.js 和 /mode/meta.js 来实现动态加载对应语法高亮库
-	// 但 vue 貌似没有无法在实例初始化后再动态加载对应 JS ，所以此处才把对应的 JS 提前引入
-	// import 'codemirror/mode/javascript/javascript.js'
-	// import 'codemirror/mode/css/css.js'
-	// import 'codemirror/mode/xml/xml.js'
-	// import 'codemirror/mode/clike/clike.js'
-	// import 'codemirror/mode/markdown/markdown.js'
-	// import 'codemirror/mode/python/python.js'
-	// import 'codemirror/mode/r/r.js'
-	// import 'codemirror/mode/shell/shell.js'
-	// import 'codemirror/mode/sql/sql.js'
-	// import 'codemirror/mode/swift/swift.js'
-	// import 'codemirror/mode/vue/vue.js'
-	import 'codemirror/addon/edit/closebrackets.js'
-
-
-	require('codemirror/mode/javascript/javascript');
-	// import { resolveComponent } from 'vue'
+	import Fullscreen from '@/components/main/components/fullscreen';
+	import * as monaco from 'monaco-editor'
 	export default {
 		name: 'opendir',
 		data() {
@@ -142,49 +159,40 @@
 				rows: {},
 				pathname: '',
 				title: '',
-				navList: []
+				navList: [],   //左侧导航数据
+				navItem:{},   //左侧导航点击是选中的数据
+				contextData:null,   //左侧导航右键点击是产生的数据对象
+				formFile: {      //重命名表单
+					filename: '',
+				},
+				ruleInline: {
+					filename: [
+						{ required: true, message: '请输入文件或文件夹的名字', trigger: 'blur' }
+					]
+				},
+				formShow:false,
+				// 文件操作类型 createFolder|创建文件夹 createFile|创建文件 delFolder|删除文件夹或者文件
+				fileType:'',
+				formTitle:'测试',
+				className:"",
+				fullscreen:false,  // 是否全屏
 			};
 		},
 		components: {
 			loginFrom,
-			codemirror
+			Fullscreen
 		},
 		mounted() {
-			this.editor = CodeMirror.fromTextArea(this.$refs.mycode, {
-				value: 'http://www.crmeb.com', // 文本域默认显示的文本
-				mode: 'text/javascript',
-				theme: 'ambiance', // CSS样式选择
-				indentUnit: 8, // 缩进单位，默认2
-				smartIndent: true, // 是否智能缩进
-				tabSize: 4, // Tab缩进，默认4
-				readOnly: false, // 是否只读，默认false
-				showCursorWhenSelecting: true,
-				lineNumbers: true, // 是否显示行号
-				lineWrapping: true,   //内容超过编辑器的宽时，应该滚动显示还是换行显示
-				autoCloseBrackets:true,   //代码自动补全
-				indentWithTabs: true,
-				matchBrackets: true,
-				extraKeys: {
-					'Ctrl': 'autocomplete'
-				}, //自定义快捷键
-				gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter', 'CodeMirror-lint-markers'],
-			});
-			// 初始化
-			// this._initialize()
-
-			//代码自动提示功能，记住使用cursorActivity事件不要使用change事件，这是一个坑，那样页面直接会卡死
-			editor.on('cursorActivity', function() {
-				editor.showHint()
-			})
+			this.initEditor();
+			
 		},
 		created() {
 			this.getList();
-			// this.onIsLogin();
+		},
+		computed:{
+			
 		},
 		methods: {
-			
-			
-			
 			// 点击行
 			currentChange(currentRow) {
 				if (currentRow.isDir) {
@@ -193,40 +201,63 @@
 					this.edit(currentRow);
 				}
 			},
-			// 列表
-			getList() {
-				this.loading = true;
-				opendirListApi(this.formItem)
+			/**
+			 * 文件列表
+			 * @param {Object} refresh   // 是否重新加载 bool
+			 * @param {Object} is_edit   // 是否是编辑器中的刷新 bool
+			 */
+			getList(refresh,is_edit) { 
+				let data;
+				if(refresh){
+					data = {
+						dir: '',
+						superior: 0,
+						filedir: '',
+					};
+				}else{
+					data = this.formItem;
+				}
+				if(!is_edit) this.loading = true;
+				opendirListApi(data)
 					.then(async (res) => {
 						let data = res.data;
-						this.tabList = data.list;
-						this.navList = data.navList
+						if(is_edit)
+						{
+							this.navList = data.navList;
+						}else{
+							this.navListForTab = data.navList;
+							this.tabList = data.list;
+							// this.navList = data.navList;
+							this.isShowList = true;
+						}
 						this.dir = data.dir;
 						this.isShowLogn = false;
-						this.isShowList = true;
 						this.loading = false;
+						
 					})
 					.catch((res) => {
-						if (res.status == 110008) {
-							this.$Message.error(res.msg);
-							this.isShowLogn = true;
-							this.isShowList = false;
-							this.loading = false;
-						} else {
-							this.loading = false;
-							this.$Message.error(res.msg);
-						}
-
+						this.catchFun(res);
 					});
 			},
+			//新建文件后重新加载左侧导航
+			getListItem(data) {
+				opendirListApi(data)
+					.then(async (res) => {
+						this.$set(this.contextData, 'children', res.data.navList);
+					})
+					.catch((res) => {
+						this.catchFun(res);
+					});
+			},
+			
 			// 返回上级
-			goBack() {
+			goBack(is_edit) {
 				this.formItem = {
 					dir: this.dir,
 					superior: 1,
 					filedir: '',
 				};
-				this.getList();
+				this.getList(false,is_edit);
 			},
 			// 打开
 			open(row) {
@@ -236,28 +267,16 @@
 					superior: 0,
 					filedir: row.filename,
 				};
-				this.getList();
+				this.getList(false,false);
 			},
 			// 编辑
 			edit(row) {
-
+				this.navItem = row;
 				this.spinShow = true;
 				this.pathname = row.pathname;
 				this.title = row.filename;
-				openfileApi(row.pathname)
-					.then(async (res) => {
-						let data = res.data;
-						this.code = res.data.content;
-						if(data.mode) this.editor.setOption(data.mode);
-						this.editor.setValue(this.code);
-						this.editor.refresh();
-						this.modals = true;
-						this.spinShow = false;
-					})
-					.catch((res) => {
-						this.spinShow = false;
-						this.$Message.error(res.msg);
-					});
+				this.navList = this.navListForTab;
+				this.openfile(row.pathname,true);
 			},
 			// 保存
 			savefile() {
@@ -268,45 +287,25 @@
 				savefileApi(data)
 					.then(async (res) => {
 						this.$Message.success(res.msg);
-						this.modals = false;
+						// this.modals = false;
 					})
 					.catch((res) => {
-						this.$Message.error(res.msg);
+						this.catchFun(res);
 					});
-			},
-			// 撤销
-			undofile() {
-				this.editor.undo();
-			},
-			redofile() {
-				this.editor.redo();
 			},
 			// 刷新
 			refreshfile() {
-				this.editor.refresh();
-			},
-
-			// 查看是否登录
-			onIsLogin() {
-				this.spinShow = true;
-				let file_login_status = window.localStorage.getItem("file_login_status"); //保存数据
-				if (file_login_status) {
-					this.getList();
-				} else {
-					this.isShowLogn = true;
-					this.spinShow = false;
-					this.isShowList = false;
-				}
-
-
+				// 刷新编辑器
+				if(!this.navItem.isDir) this.openfile(this.navItem.pathname,false);
 			},
 			// 登录跳转
 			onLogin(data) {
 				let expires = this.getExpiresTime(data.expires_time);
 				// 记录用户登陆信息
 				setCookies('file_token', data.token, expires);
-				this.getList();
+				this.getList(false,false);
 			},
+			//计算token过期时间
 			getExpiresTime(expiresTime) {
 				let nowTimeNum = Math.round(new Date() / 1000);
 				let expiresTimeNum = expiresTime - nowTimeNum;
@@ -332,75 +331,493 @@
 								this.isShowList = false;
 								this.loading = false;
 							} else {
-								this.loading = false;
-								this.$Message.error(res.msg);
+								this.catchFun(res);
 							}
 						});
 				}
 			},
 			// 自定义显示
 			renderContent (h, { root, node, data }) {
+				let that = this;
 				return h('span', {
 					style: {
 						display: "inline-block",
 						cursor: "pointer",
-						userSelect: 'none'
+						userSelect: 'null',
+						color:"#cccccc",
+						display: 'inline-block',
+						width: '100%',
+						borderRadis:'5px'
 					},
 					on: {
 						click: () => {
-						  this.clickDir(data);
+						  that.clickDir(data,root,node);
+						},
+						'contextmenu': ()=>{
+							// that.handleContextDelFolder(data,root,node);
 						}
 					}
-				},data.title);
+					
+				},[
+					h('span', [
+						h('Icon', {
+							props: {
+								type:  data.isDir ? "ios-folder-outline" : 'ios-document-outline'
+							},
+							style: {
+								marginRight: '8px'
+							}
+						}),
+						h('span',{
+							attrs:{
+								title:data.title,
+							},
+						}, data.title)
+					])
+				]);
 			},
-			clickDir(data){
+			/**
+			 * 侧边栏点击事件
+			 * @param {Object} data
+			 */
+			clickDir(data,root,node){
+				this.navItem = data;
+				this.pathname = data.pathname;
 				if(!data.isDir)
 				{
-					openfileApi(data.pathname)
-						.then(async (res) => {
-							let data = res.data;
-							this.code = res.data.content;
-							if(data.mode) this.editor.setOption(data.mode);
-							this.editor.setValue(this.code);
-							this.editor.refresh();
-						})
-						.catch((res) => {
+					this.openfile(data.pathname,false);
+				}
+			},
+			//侧边栏右键点击事件
+			handleContextMenu (data, event, position) {
+				position.left =  (Number(position.left.slice(0,-2)) + 75)+'px';
+				this.contextData = data;
+				
+			},
+			// 文件操作类型 createFolder|创建文件夹 createFile|创建文件 delFolder|删除文件夹或者文件
+			//创建文件夹
+			handleContextCreateFolder () {
+				this.formFile.filename = '';
+				this.formTitle = '创建文件夹';
+				this.formShow = true;
+				this.fileType = 'createFolder';
+				
+			},
+			//创建文件
+			handleContextCreateFile () {
+				this.formFile.filename = '';
+				this.formTitle = '创建文件';
+				this.formShow = true;
+				this.fileType = 'createFile';
+			},
+			//删除文件
+			handleContextDelFolder () {
+				let that = this;
+				that.$Modal.confirm({
+				  title: '删除文件夹和文件',
+				  content: '您确定要删除改文件？',
+				  loading: true,
+				  onOk: () => {
+					let data = {
+						path:that.contextData.pathname,
+					};
+					delFolder(data).then(async(res)=>{
+						that.loopDel(that.navList,that.contextData.nodeKey)
+						that.$Modal.remove();
+						that.$Message.success('删除成功');
+					}).catch((res)=>{
+						that.catchFun(res);
+					});
+				  },
+				  onCancel: () => {
+				    that.$Message.info('取消删除');
+				  },
+				});
+			},
+			//重命名
+			handleContextRename(){
+				this.formFile.filename = this.contextData.title;
+				this.formTitle = '重命名文件';
+				this.formShow = true;
+				this.fileType = 'renameFile';
+			},
+			//打开文件
+			openfile(path,is_edit){
+				openfileApi(path)
+					.then(async (res) => {
+						let data = res.data;
+						this.code = data.content;
+						// this.editor.setValue(this.code);
+						//改变属性
+						this.changeModel(data.mode,this.code);
+						if(is_edit)
+						{
+							this.modals = true;
 							this.spinShow = false;
-							this.$Message.error(res.msg);
-						});
+						}
+					})
+					.catch((res) => {
+						this.catchFun(res);
+					});
+			},
+			/**
+			 * 初始化编辑器
+			 */
+			initEditor(){
+				let that = this;
+				// 初始化编辑器，确保dom已经渲染
+				that.editor = monaco.editor.create(document.getElementById('container'), {
+					value:that.code,//编辑器初始显示文字
+					language:'sql',//语言支持自行查阅demo
+					automaticLayout: true,//自动布局
+					theme:'vs-dark' ,//官方自带三种主题vs, hc-black, or vs-dark
+					foldingStrategy: 'indentation', // 代码可分小段折叠
+					overviewRulerBorder: false, // 不要滚动条的边框
+					scrollbar: { // 滚动条设置
+						verticalScrollbarSize: 4, // 竖滚动条
+						horizontalScrollbarSize: 10, // 横滚动条
+					},
+					autoIndent: true, // 自动布局
+					tabSize: 4, // tab缩进长度
+					autoClosingOvertype:'always',
+				});
+
+				//添加按键监听
+				that.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, function () {
+				　　that.savefile();
+				});
+
+			},
+			getValue(){
+				this.editor.getValue(); //获取编辑器中的文本
+			},
+			/**
+			 * 切换语言
+			 * @param {Object} mode
+			 */
+			changeModel(mode,value){
+				var oldModel = this.editor.getModel();//获取旧模型
+				// var value = this.editor.getValue();//获取旧的文本
+				//创建新模型，value为旧文本，id为modeId，即语言（language.id）
+				//modesIds即为支持语言
+				// var modesIds = monaco.languages.getLanguages().map(function(lang) { return lang.id; });
+				if(!mode) mode = oldModel.getLanguageId();
+				// if(!value) value = this.editor.getValue();
+				
+				var newModel = monaco.editor.createModel(value,mode);
+				//将旧模型销毁
+				if(oldModel){
+					oldModel.dispose();
+				}
+				//设置新模型
+				this.editor.setModel(newModel);
+			},
+			// 文件操作类型 createFolder|创建文件夹 createFile|创建文件 delFolder|删除文件夹或者文件
+			handleSubmit(name) {
+				let that =this;
+				let data = '';
+				let dataItem = '';
+				this.$refs[name].validate((valid) => {
+					if (valid) {
+						switch (that.fileType)
+						{
+							case 'createFolder':
+								data = {
+									path:that.contextData.pathname,
+									name:that.formFile.filename
+								};
+								createFolder(data).then(async(res)=>{
+									dataItem = {
+										dir: that.contextData.path,
+										superior: 0,
+										filedir: that.contextData.title,
+									};
+									that.getListItem(dataItem)
+									if(that.formShow) that.formShow = false;
+									that.$Message.success('创建成功');
+								}).catch((res)=>{
+									that.catchFun(res);
+								});
+							break;
+							case 'createFile':
+								data = {
+									path:that.contextData.pathname,
+									name:that.formFile.filename
+								};
+								createFile(data).then(async(res)=>{
+									dataItem = {
+										dir: that.contextData.path,
+										superior: 0,
+										filedir: that.contextData.title,
+									};
+									that.getListItem(dataItem)
+									if(that.formShow) that.formShow = false;
+									that.$Message.success('创建成功');
+								}).catch((res)=>{
+									that.catchFun(res);
+								});
+							break;
+							case 'renameFile':
+								data = {
+									newname:that.contextData.path + '\\' + that.formFile.filename,
+									oldname:that.contextData.pathname
+								};
+								rename(data).then(async(res)=>{
+									that.$set(that.contextData, 'title', that.formFile.filename);
+									that.$Message.success('修改成功');
+									if(that.formShow) that.formShow = false;
+								}).catch((res)=>{
+									that.catchFun(res);
+								});
+							break;
+						}
+					} else {
+						this.$Message.error('Fail!');
+					}
+				})
+			},
+			/**
+			 * 退出表单
+			 */
+			formExit(){
+				this.formShow = false;
+			},
+			
+			/**
+			 * 处理接口回调
+			 * @param {Object} res
+			 */
+			catchFun(res){
+				if(res.status)
+				{
+					if(res.status == 400)
+					 this.$Message.error(res.msg);
+					if (res.status == 110008) {
+						this.$Message.error(res.msg);
+						this.isShowLogn = true;
+						this.isShowList = false;
+						this.loading = false;
+					}
+				}else{
+					this.$Message.error('文件编码不被兼容，无法正确读取文件!');
+				}
+				//关闭蒙版层
+				if(this.spinShow) this.spinShow = false;
+				// 关闭文件列表展示
+				if(this.loading) this.loading = false;
+			},
+			loopDel(data,nodeKey){
+				data.forEach((item, index) => {
+					if (item.nodeKey === nodeKey) {
+						return data.splice(index, 1)
+					}
+					if (item.children.length > 0) {
+						return this.loopDel(item.children, nodeKey)
+					}
+				})
+			},
+			winChanges(){
+				if(this.className)
+				{
+					this.className = '';
+				}else{
+					this.className = "diy-fullscreen";
 				}
 			}
-			
 		},
 	};
 </script>
 <style scoped lang="stylus">
 .mt20
     >>>.ivu-icon-ios-folder-outline
-       font-size 14px !important
+       font-size 14px !important;
     >>> .ivu-icon-ios-document-outline
-       font-size 18px !important
+       font-size 18px !important;
     >>> .ivu-table-row
-       cursor pointer
+       cursor pointer;
 .mr5
    margin-right 5px
 .backs
-   cursor pointer
-   display inline-block
+   cursor pointer;
+   display inline-block;
 >>>.CodeMirror
- height: 70vh !important
+ height: 70vh !important;
  
 .file-box
-	display: flex
-	align-items: center
-	justify-content: space-between
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	position: relative;
+	height: 95%;
+	min-height: 600px;
+	overflow: hidden;
 .file-box
 	.file-left
-		width:25%
-		max-width: 400px
-		overflow: auto
-.file-box
+		position: absolute;
+		top: 53px;
+		left: 0;
+		height: 90%;
+		// height: 100%;
+		// min-height: 600px;
+		width:25%;
+		max-width: 250px;
+		overflow: auto;
+		background-color: #222222;
+		box-shadow: #000000 -6px 0 6px -6px inset;
+	.file-fix
+		flex: 1;
+		max-width: 250px;
+		height: 100%;
+		min-height: 600px;
+		// bottom: 0px;
+		// overflow: auto;
+		// min-height: 600px;
+		background-color: #222222;
+.file-box 
 	.file-content
-		flex: 75%
-		overflow: hidden
+		// position: absolute;
+		// top: 53px;
+		// left: 25%;
+		flex: 3;
+		overflow: hidden;
+		min-height: 600px;
+		height: 100%;
+>>>.ivu-modal-body
+		padding: 0;
+>>>.ivu-modal-content
+	background-color: #292929
+.diy-button
+	// float: left;
+	height: 35px;
+	line-height: 35px;
+	padding: 0 15px;
+	font-size: 13px;
+	text-align: center;
+	color: #fff;
+	border: 0;
+	border-right: 1px solid #4c4c4c;
+	cursor: pointer;
+	border-radius: 0
+	background-color: #565656
+
+.form-mask
+	z-index: -1;
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	background: rgba(0,0,0,0.3);
+.diy-from-header
+	height: 30px
+	line-height: 30px;
+	background-color: #fff;
+	text-align: left;
+	padding-left: 20px
+	font-size: 16px;
+	margin-bottom: 15px;
+	span
+		display: inline-block;
+		float: right;
+		color: #999;
+		text-align: right;
+		font-size: 12px;
+		width: 280px;
+		word-break:keep-all;/* 不换行 */
+		white-space:nowrap;/* 不换行 */
+		overflow:hidden;
+		text-overflow:ellipsis;
+.diy-from
+	z-index: 9999;
+	width: 400px;
+	height: 100px;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	margin: auto;
+	text-align: center;
+	background-color: #2f2f2f;
+.show-info
+	background-color: #383838;
+	color: #FFF;
+	width: 25%;
+	max-width: 250px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 1122;
+	.diy-button
+		width: 50%;
+		height: 25px;
+		line-height: 25px;
+	.diy-button-list
+		display: flex;
+		align-items: center;
+	.show-text
+		padding-left: 10px;
+		word-break:keep-all;/* 不换行 */
+		white-space:nowrap;/* 不换行 */
+		overflow:hidden;
+		text-overflow:ellipsis;
+		padding: 5px 5px;
+body >>>.ivu-select-dropdown{
+	background: #fff;
+}
+.diy-tree-render
+	>>>li
+		overflow: hidden;
+	>>>.ivu-tree-title
+		width: 90%;
+		max-width:250px;
+		padding: 0;
+		padding-left: 5px
+>>>.ivu-tree-children
+		.ivu-tree-title:hover
+			background-color:#2f2f2f !important;
+.file-box
+	.file-left::-webkit-scrollbar
+		width: 4px;
+.file-box
+	.file-left::-webkit-scrollbar-thumb
+		border-radius: 10px;
+		-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+		background: rgba(255, 255, 255, 0.2);
+.file-box
+	.file-left::-webkit-scrollbar-track 
+		-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+		border-radius: 0;
+		background: rgba(0,0,0,0.1);
+.diy-header
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	.diy-header-icon
+		margin-right: 30px;
+		cursor: pointer;
+	.diy-header-icon:hover
+		opacity: 0.8;
+// 自定义方法缩小
+>>>.diy-fullscreen 
+		overflow: hidden;
+		.ivu-modal
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			bottom: 0px;
+			height: 100%;
+			width: 100% !important;
+			.ivu-modal-content
+				height: 100%;
+				.ivu-modal-body
+					height: 100%;
+>>>.ivu-modal
+	.ivu-modal-content
+		.ivu-modal-body
+			height: 632px;
+			overflow: hidden;
 </style>

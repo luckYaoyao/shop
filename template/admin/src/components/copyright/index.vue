@@ -3,7 +3,7 @@
     <div class="ivu-global-footer-links">
       <a :href="item.href" target="_blank" v-for="(item, index) in links" :key="index">{{ item.title }}</a>
     </div>
-    <div class="ivu-global-footer-copyright">{{ copyright }}</div>
+    <div class="ivu-global-footer-copyright"><a href="https://www.crmeb.com" target="_blank">{{ copyright }}</a></div>
   </div>
 </template>
 <script>
@@ -71,5 +71,8 @@ export default {
 .ivu-global-footer-copyright {
   color: #808695;
   font-size: 14px;
+}
+.ivu-global-footer-copyright a {
+  color: #808695;
 }
 </style>
