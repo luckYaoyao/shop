@@ -24,7 +24,7 @@ return [
     //水印
     'watermark' => [
         'fontsize' => 12,
-        'color' => '#000000',
+        'color' => '#FFFFFF',
         'text' => 'CRMEB'
     ],
     'cache' => [
