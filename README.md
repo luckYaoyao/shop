@@ -178,6 +178,15 @@ All rights reserved。
 
 CRMEB® 商标和著作权所有者为西安众邦网络科技有限公司。
 
+## 参与开发人员
+
+##### 技术：等风来、最后一片叶、吴汐、旺仔、小小、娜娜、归来仍是少年
+##### 产品：木子刀客
+##### 设计：xy-yyds、LXT
+##### 测试：夏天、绵绵羊、。ws
+
+注：排名不分前后
+
 ![](readme/pic/gitee打通版-横.jpg)
 [![](readme/pic/1思维脑图功能清单.jpg)](https://s.crmeb.com/goods_detail/739)
 [![](readme/pic/2高清UI设计图.jpg)](https://s.crmeb.com/goods_detail/739)
