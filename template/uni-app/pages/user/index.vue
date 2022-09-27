@@ -699,15 +699,15 @@
 				if (this.isLogin) {
 					if (url.indexOf('http') === -1) {
 						// #ifdef H5 || APP-PLUS
-						if (name && name === this.$t(`service_reception`)) {
+						if (name && name === '客服接待') {
 							// return window.location.href = `${location.origin}${url}`
 							return uni.navigateTo({
 								url: `/pages/annex/web_view/index?url=${location.origin}${url}`
 							});
-						} else if (name && name === this.$t(`contact_customer`)) {
+						} else if (name && name === '联系客服') {
 							return getCustomer(url)
 
-						} else if (name === this.$t(`order_write_off`)) {
+						} else if (name === '订单核销') {
 							console.log(`${url}`)
 							return uni.navigateTo({
 								url: url
@@ -717,7 +717,7 @@
 						// #endif
 
 						// #ifdef MP
-						if (name && name === this.$t(`contact_customer`)) {
+						if (name && name === '联系客服') {
 							return getCustomer(url)
 						}
 						if (url != '#' && url == '/pages/users/user_info/index') {

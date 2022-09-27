@@ -2,7 +2,7 @@
 	<view>
 		<view class="CommissionRank" :style="colorStyle">
 			<view class="header">
-				<view class="rank" v-if="position">{{$t(`您目前的排名`)}}<text class="num">{{position}}</text>{{$t(`number`)}}</view>
+				<view class="rank" v-if="position">{{$t(`您目前的排名`)}}<text class="num">{{position}}</text></view>
 				<view class="rank" v-else>{{$t(`您目前暂无排名`)}}</view>
 			</view>
 			<view class="wrapper">

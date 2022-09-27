@@ -55,7 +55,7 @@
 					</view>
 				</view>
 				<view class='item acea-row row-between-wrapper'
-					v-if="!pinkId && !BargainId && !combinationId && !seckillId && !advanceId">
+					v-if="!pinkId && !BargainId && !combinationId && !seckillId && !advanceId && integral_open">
 					<view>{{$t(`积分抵扣`)}}</view>
 					<view class='discount acea-row row-middle'>
 						<view> {{useIntegral ? $t(`剩余积分`):$t(`当前积分`)}}
@@ -408,6 +408,7 @@
 				is_shipping: true,
 				inputTrip: false,
 				focus: true,
+				integral_open: false,
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -807,6 +808,7 @@
 					that.$set(that, 'special_invoice', res.data.special_invoice);
 					that.$set(that, 'store_self_mention', res.data.store_self_mention);
 					that.$set(that, 'virtual_type', res.data.virtual_type || 0);
+					that.$set(that, 'integral_open', res.data.integral_open);
 					//微信支付是否开启
 					that.cartArr[0].payStatus = res.data.pay_weixin_open || 0
 					//支付宝是否开启

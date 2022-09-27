@@ -29,6 +29,7 @@
 		mapGetters
 	} from "vuex"
 	import colors from '@/mixins/color.js';
+	import Cache from '@/utils/cache';
 	let green =
 		'--view-theme: rgba(66,202,77,1);--view-theme-16: #42CA4D;--view-priceColor:#FF7600;--view-minorColor:rgba(108, 198, 94, 0.5);--view-minorColorT:rgba(66, 202, 77, 0.1);--view-bntColor:#FE960F;--view-op-ten: rgba(66,202,77, 0.1);--view-main-start:#70E038; --view-main-over:#42CA4D;--view-op-point-four: rgba(66,202,77, 0.04);'
 	let red =
@@ -112,9 +113,13 @@
 						break
 				}
 			});
-			getLangJson().then(res => {
-				uni.setStorageSync('localeJson', res.data)
-			})
+			console.log(Cache.has('localeJson', true))
+			if (!Cache.has('localeJson', true)) {
+				getLangJson().then(res => {
+					Cache.set('localeJson', res.data, 600);
+					// uni.setStorageSync('localeJson', res.data)
+				})
+			}
 			if (option.query.spread) {
 				that.$Cache.set('spread', option.query.spread);
 				that.globalData.spid = option.query.spread;

@@ -7,7 +7,7 @@
 				<view class="grids-top">
 					<image src="../../static/font-left.png" mode=""></image>
 					<view class="grids-title">
-						<view>{{$t(`恭喜您`)}}，{{$t(`获得`)}} {{lottery_num}} {{$t(`time`)}}</view>
+						<view>{{$t(`恭喜您`)}}，{{$t(`获得`)}} {{lottery_num}} {{$t(`次`)}}</view>
 					</view>
 					<image src="../../static/font-right.png" mode=""></image>
 				</view>

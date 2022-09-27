@@ -172,6 +172,7 @@
 	// #ifdef MP
 	import authorize from '@/components/Authorize';
 	// #endif
+	import Cache from '@/utils/cache';
 	import colors from '@/mixins/color.js';
 	import appUpdate from "@/components/update/app-update.vue";
 	export default {
@@ -251,7 +252,7 @@
 				this.setIndex = e.detail.value
 				uni.setStorageSync('locale', this.array[this.setIndex].value);
 				getLangJson().then(res => {
-					uni.setStorageSync('localeJson', res.data)
+					Cache.set('localeJson', res.data, 600)
 					this.$i18n.locale = this.array[this.setIndex].value;
 					this.$i18n.setLocaleMessage(this.array[this.setIndex].value, res.data[this
 						.array[this.setIndex].value]);
