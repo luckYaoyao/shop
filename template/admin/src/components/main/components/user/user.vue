@@ -11,6 +11,7 @@
         <!--消息中心<Badge style="margin-left: 10px" :count="messageUnreadCount"></Badge>-->
         <!--</DropdownItem>-->
         <DropdownItem name="userCenter"><Icon type="ios-contact-outline" class="iconImg" />个人中心</DropdownItem>
+		    <DropdownItem v-show = "info.level === 0" name="fileEdit"><Icon type="ios-document-outline" class="iconImg" />文件管理</DropdownItem>
         <DropdownItem name="logout"><Icon type="ios-log-out" class="iconImg" />退出登录</DropdownItem>
       </DropdownMenu>
     </Dropdown>
@@ -75,6 +76,9 @@ export default {
     userCenter() {
       this.$router.push('/admin/system/user');
     },
+    fileEdit(){
+      this.$router.push('/admin/system/files');
+    },
     message() {
       this.$router.push({
         name: 'message_page',
@@ -91,6 +95,9 @@ export default {
         case 'message':
           this.message();
           break;
+        case 'fileEdit':
+          this.fileEdit();
+        break;
       }
     },
   },

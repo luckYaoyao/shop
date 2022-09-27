@@ -34,6 +34,11 @@
       </Form>
     </Card>
     <Card :bordered="false" dis-hover>
+      <Row type="flex">
+        <Col v-bind="grid">
+          <Button type="primary" icon="md-add" @click="add">添加语言地区</Button>
+        </Col>
+      </Row>
       <Table
         ref="table"
         :columns="columns"
@@ -46,7 +51,7 @@
         <template slot-scope="{ row, index }" slot="action">
           <a @click="edit(row)">编辑</a>
           <Divider type="vertical" />
-          <a @click="del(row, '删除语言', index)">删除</a>
+          <a @click="del(row, '删除地区语言', index)">删除</a>
         </template>
       </Table>
       <div class="acea-row row-right page">
@@ -64,10 +69,17 @@
 </template>
 <script>
 import { mapState } from 'vuex';
-import { langCountryList } from '@/api/setting';
+import { langCountryList, langCountryForm } from '@/api/setting';
 export default {
   data() {
     return {
+      grid: {
+        xl: 7,
+        lg: 7,
+        md: 12,
+        sm: 24,
+        xs: 24,
+      },
       formValidate: {
         keyword: '',
         page: 1,
@@ -115,6 +127,32 @@ export default {
     this.getList();
   },
   methods: {
+    // 添加
+    add() {
+      this.$modalForm(langCountryForm(0)).then(() => this.getList());
+    },
+    edit(row) {
+      this.$modalForm(langCountryForm(row.id)).then(() => this.getList());
+    },
+    // 删除
+    del(row, tit, num) {
+      let delfromData = {
+        title: tit,
+        num: num,
+        url: `setting/lang_country/del/${row.id}`,
+        method: 'DELETE',
+        ids: '',
+      };
+      this.$modalSure(delfromData)
+        .then((res) => {
+          this.$Message.success(res.msg);
+          this.tabList.splice(num, 1);
+          // this.getList();
+        })
+        .catch((res) => {
+          this.$Message.error(res.msg);
+        });
+    },
     selChange() {
       this.formValidate.page = 1;
       this.getList();

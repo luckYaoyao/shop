@@ -27,13 +27,13 @@
 				</template>
 			</Table>
 		</Card>
-		<Modal :class-name="className" v-model="modals" scrollable footer-hide closable :mask-closable="false" width="80%">
+		<Modal :class-name="className" v-model="modals" scrollable footer-hide closable :mask-closable="false" width="80%" :before-close = 'editModalChange'>
 			<p slot="header" class="diy-header" ref="diyHeader">
 				<span>{{title}}</span>
 				<Icon @click="winChanges" class="diy-header-icon" :type="className ? 'ios-contract' : 'ios-qr-scanner'"  size = "20"/>
 			</p>
 			<div style="height: 100%;">
-				<Button type="primary" id="savefile" class="diy-button" @click="savefile">保存</Button>
+				<Button type="primary" id="savefile" class="diy-button" @click="savefile(indexEditor)">保存</Button>
 				<Button id="refresh" class="diy-button" @click="refreshfile">刷新</Button>
 				
 				<div class="file-box">
@@ -48,7 +48,7 @@
 					</div>
 					<div class="file-left">
 						<Tree class="diy-tree-render" :data="navList" :render="renderContent" :load-data="loadData" @on-contextmenu="handleContextMenu" expand-node>
-							<template class="diy-menu" slot="contextMenu">
+							<template transfer slot="contextMenu">
 								<DropdownItem v-if="contextData && contextData.isDir" @click.native="handleContextCreateFolder()">新建文件夹</DropdownItem>
 								<DropdownItem v-if="contextData && contextData.isDir" @click.native="handleContextCreateFile()">新建文件</DropdownItem>
 								<DropdownItem @click.native="handleContextRename()">重命名</DropdownItem>
@@ -58,7 +58,11 @@
 					</div>
 					<div class="file-fix"></div>
 					<div class="file-content">
-						<div id="container" style="height:100%;min-height: 600px;"></div>
+						<Tabs type="card" v-model="indexEditor" style="height: 100%;" @on-click="toggleEditor" :animated="false" closable @on-tab-remove="handleTabRemove">
+							<TabPane v-for="(value) in editorIndex" :key="value.index" :name="value.index.toString()" :label="value.title" :icon="value.icon" v-if="value.tab">
+								<div ref="container" :id="'container_'+value.index" style="height:100%;min-height: 560px;"></div>
+							</TabPane>
+						</Tabs>
 					</div>
 					<Spin size="large" fix v-if="spinShow"></Spin>
 				</div>
@@ -105,17 +109,38 @@
 		getCookies,
 		removeCookies
 	} from '@/libs/util';
-	import Fullscreen from '@/components/main/components/fullscreen';
+	// import Fullscreen from '@/components/main/components/fullscreen';
 	import * as monaco from 'monaco-editor'
 	export default {
 		name: 'opendir',
 		data() {
 			return {
-				editor: '',
+				modals: false,  //编辑器开关
+				editor: '',   //当前编辑器对象
+				editorIndex:[  //选项卡数组
+					{
+						tab:true,
+						index:'0',
+						title:'',
+						icon:'',
+					}
+				],
+				editorList:[],  //编辑器数组
+				indexEditor:0,  //当前编辑器索引
+				code: '',       //当前文件打开时的内容
+				navList: [],   //左侧导航数据
+				navItem:{},   //左侧导航点击是选中的数据
+				contextData:null,   //左侧导航右键点击是产生的数据对象
+				
+				
+				fileType:'',    // 文件操作类型 createFolder|创建文件夹 createFile|创建文件 delFolder|删除文件夹或者文件
+				className:"",  //全屏 class名
+				// fullscreen:false,  // 是否全屏
+				isSave:true,   //当前文件是否保存
+				
 				isShowLogn: false, // 登录
 				isShowList: false, // 登录之后列表
-				code: '',
-				modals: false,
+				
 				spinShow: false,
 				loading: false,
 				tabList: [],
@@ -151,17 +176,17 @@
 						minWidth: 150,
 					},
 				],
-				formItem: {
+				formItem: {    //记录当前路径信息，获取文件列表时使用
 					dir: '',
 					superior: 0,
 					filedir: '',
 				},
-				rows: {},
-				pathname: '',
-				title: '',
-				navList: [],   //左侧导航数据
-				navItem:{},   //左侧导航点击是选中的数据
-				contextData:null,   //左侧导航右键点击是产生的数据对象
+				dir:'',   //当前完整文件路径
+				// rows: {},  // 
+				pathname: '',   // 当前文件路径
+				title: '',   //当前文件标题
+				
+				
 				formFile: {      //重命名表单
 					filename: '',
 				},
@@ -170,17 +195,13 @@
 						{ required: true, message: '请输入文件或文件夹的名字', trigger: 'blur' }
 					]
 				},
-				formShow:false,
-				// 文件操作类型 createFolder|创建文件夹 createFile|创建文件 delFolder|删除文件夹或者文件
-				fileType:'',
-				formTitle:'测试',
-				className:"",
-				fullscreen:false,  // 是否全屏
+				formShow:false,  //表单开关
+				formTitle:'',	//表单标题
+				
 			};
 		},
 		components: {
 			loginFrom,
-			Fullscreen
 		},
 		mounted() {
 			this.initEditor();
@@ -261,7 +282,7 @@
 			},
 			// 打开
 			open(row) {
-				this.rows = row;
+				// this.rows = row;
 				this.formItem = {
 					dir: row.path,
 					superior: 0,
@@ -275,28 +296,48 @@
 				this.spinShow = true;
 				this.pathname = row.pathname;
 				this.title = row.filename;
+				this.editorIndex[0].title = row.filename;
 				this.navList = this.navListForTab;
-				this.openfile(row.pathname,true);
+				this.dir = row.path;
+				// 创建代码容器
+				if(this.editorList.length <= 0)
+				{
+					this.initEditor();
+				}
+				this.openfile(row.pathname,false);
 			},
-			// 保存
-			savefile() {
+			/**
+			 * 保存
+			 * @param {Object} index   // 当前索引
+			 * @param {Object} type    // true 不更新当前本地数据，false或者为空 更新当前数据
+			 */
+			savefile(index,type) {
+				let code = this.editorList[index].editor.getValue();
 				let data = {
-					comment: this.editor.getValue(),
-					filepath: this.pathname,
+					comment: code,
+					filepath: this.editorList[index].path,
 				};
+				let that = this;
 				savefileApi(data)
 					.then(async (res) => {
-						this.$Message.success(res.msg);
-						// this.modals = false;
+						if(!type)
+						{
+							that.code = code;
+							that.isSave = true;
+							that.editorIndex[index].icon = '';
+							that.editorList[index].isSave = true;
+						}
+						that.$Message.success(res.msg);
+						that.$Modal.remove();
 					})
 					.catch((res) => {
-						this.catchFun(res);
+						that.catchFun(res);
 					});
 			},
 			// 刷新
 			refreshfile() {
 				// 刷新编辑器
-				if(!this.navItem.isDir) this.openfile(this.navItem.pathname,false);
+				if(this.editorList[this.indexEditor]) this.openfile(this.editorList[this.indexEditor].path,true);
 			},
 			// 登录跳转
 			onLogin(data) {
@@ -381,11 +422,20 @@
 			 * @param {Object} data
 			 */
 			clickDir(data,root,node){
-				this.navItem = data;
-				this.pathname = data.pathname;
+				let that = this;
+				that.navItem = data;
+				that.pathname = data.pathname;
 				if(!data.isDir)
 				{
-					this.openfile(data.pathname,false);
+					
+					let index = that.editorIndex.length
+					// 创建tabs
+					that.editorIndex.push({tab:true,index:index.toString(),title:data.title,icon:''});
+					that.indexEditor = index.toString();
+					// 创建代码容器
+					that.initEditor();
+					that.openfile(data.pathname,true);
+					
 				}
 			},
 			//侧边栏右键点击事件
@@ -394,7 +444,7 @@
 				this.contextData = data;
 				
 			},
-			// 文件操作类型 createFolder|创建文件夹 createFile|创建文件 delFolder|删除文件夹或者文件
+			// 文件操作类型 createFolder|创建文件夹 createFile|创建文件 delFolder|删除文件夹或者文件 renameFile|文件重命名
 			//创建文件夹
 			handleContextCreateFolder () {
 				this.formFile.filename = '';
@@ -443,21 +493,24 @@
 			},
 			//打开文件
 			openfile(path,is_edit){
+				let that = this;
 				openfileApi(path)
 					.then(async (res) => {
 						let data = res.data;
-						this.code = data.content;
-						// this.editor.setValue(this.code);
+						that.code = data.content;
+						// 保存相对信息
+						that.editorList[that.indexEditor].path = path;
+						that.editorList[that.indexEditor].oldCode = that.code;
 						//改变属性
-						this.changeModel(data.mode,this.code);
-						if(is_edit)
+						that.changeModel(data.mode,that.code);
+						if(!is_edit)
 						{
-							this.modals = true;
-							this.spinShow = false;
+							that.modals = true;
+							that.spinShow = false;
 						}
 					})
 					.catch((res) => {
-						this.catchFun(res);
+						that.catchFun(res);
 					});
 			},
 			/**
@@ -465,38 +518,45 @@
 			 */
 			initEditor(){
 				let that = this;
-				// 初始化编辑器，确保dom已经渲染
-				that.editor = monaco.editor.create(document.getElementById('container'), {
-					value:that.code,//编辑器初始显示文字
-					language:'sql',//语言支持自行查阅demo
-					automaticLayout: true,//自动布局
-					theme:'vs-dark' ,//官方自带三种主题vs, hc-black, or vs-dark
-					foldingStrategy: 'indentation', // 代码可分小段折叠
-					overviewRulerBorder: false, // 不要滚动条的边框
-					scrollbar: { // 滚动条设置
-						verticalScrollbarSize: 4, // 竖滚动条
-						horizontalScrollbarSize: 10, // 横滚动条
-					},
-					autoIndent: true, // 自动布局
-					tabSize: 4, // tab缩进长度
-					autoClosingOvertype:'always',
+				
+				that.$nextTick(() => {
+				  // 初始化编辑器，确保dom已经渲染
+				  that.editor = monaco.editor.create(document.getElementById('container_'+that.indexEditor), {
+				  	value:that.code,//编辑器初始显示文字
+				  	language:'sql',//语言支持自行查阅demo
+				  	automaticLayout: true,//自动布局
+				  	theme:'vs-dark' ,//官方自带三种主题vs, hc-black, or vs-dark
+				  	foldingStrategy: 'indentation', // 代码可分小段折叠
+				  	overviewRulerBorder: false, // 不要滚动条的边框
+				  	scrollbar: { // 滚动条设置
+				  		verticalScrollbarSize: 4, // 竖滚动条
+				  		horizontalScrollbarSize: 10, // 横滚动条
+				  	},
+				  	autoIndent: true, // 自动布局
+				  	tabSize: 4, // tab缩进长度
+				  	autoClosingOvertype:'always',
+				  });
+				  //添加按键监听
+				  that.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, function () {
+				  　　that.savefile(that.indexEditor);
+				  });
+				  that.editor.onKeyUp(() => {
+				  	// 当键盘按下，判断当前编辑器文本与已保存的编辑器文本是否一致
+				  	if(that.editor.getValue() != that.code){
+				  		that.isSave = false;
+				  		that.editorIndex[that.indexEditor].icon = 'md-warning';
+						that.editorList[that.indexEditor].isSave = false;
+				  	}
+				  });
+				  that.editorList.push({'editor':that.editor,'oldCode':that.code,'path':'','isSave':true,'index':that.indexEditor});
 				});
-
-				//添加按键监听
-				that.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KEY_S, function () {
-				　　that.savefile();
-				});
-
-			},
-			getValue(){
-				this.editor.getValue(); //获取编辑器中的文本
 			},
 			/**
 			 * 切换语言
 			 * @param {Object} mode
 			 */
 			changeModel(mode,value){
-				var oldModel = this.editor.getModel();//获取旧模型
+				var oldModel = this.editorList[this.indexEditor].editor.getModel();//获取旧模型
 				// var value = this.editor.getValue();//获取旧的文本
 				//创建新模型，value为旧文本，id为modeId，即语言（language.id）
 				//modesIds即为支持语言
@@ -510,7 +570,7 @@
 					oldModel.dispose();
 				}
 				//设置新模型
-				this.editor.setModel(newModel);
+				this.editorList[this.indexEditor].editor.setModel(newModel);
 			},
 			// 文件操作类型 createFolder|创建文件夹 createFile|创建文件 delFolder|删除文件夹或者文件
 			handleSubmit(name) {
@@ -616,6 +676,9 @@
 					}
 				})
 			},
+			/**
+			 * 窗口最大化
+			 */
 			winChanges(){
 				if(this.className)
 				{
@@ -623,6 +686,76 @@
 				}else{
 					this.className = "diy-fullscreen";
 				}
+			},
+			/**
+			 * 切换选项卡
+			 * @param {Object} index
+			 */
+			toggleEditor(index){
+				index = Number(index);
+				this.code = this.editorList[index].oldCode; //设置文件打开时的代码
+				this.editor = this.editorList[index].editor;  //设置编辑器实例
+			},
+			handleTabRemove (index) {
+				let that = this;
+				
+				// 关闭选项卡
+				that.editorIndex[index].tab = false;  // 关闭选项卡
+				// 判断当前文件有没有保存
+				if(!that.editorList[index].isSave)
+				{
+					that.$Modal.confirm({
+					  title: '文件未保存',
+					  content: '您是否需要保存当前文件',
+					  loading: true,
+					  onOk: () => {
+						// 保存文件
+						that.savefile(index);
+					  },
+					  onCancel: () => {
+					    that.$Message.info('取消保存');
+					  },
+					});
+				}
+				
+				
+			},
+			//编辑器状态变化
+			editModalChange()
+			{
+				let that = this;
+				that.editorList.forEach(function(value,index){
+					if(value.isSave === false)
+					{
+						if(confirm(`${that.editorIndex[index].title}文件未保存,是否要保存该文件`))
+						{
+							// 保存当前文件
+							that.savefile(index,true);   
+						}else{
+							that.$Message.info(`已取消${that.editorIndex[index].title}文件保存`);
+						}
+					}
+					// 销毁当前编辑器
+					 that.editorList[index].editor.dispose();
+					 that.editorList[index].editor = null;
+				});
+				// 初始话数据
+				that.modals = false;  //编辑器开关
+				that.editor = '';   //当前编辑器对象
+				that.editorIndex = [  //选项卡数组
+					{
+						tab:true,
+						index:'0',
+						title:'',
+						icon:'',
+					}
+				];
+				that.editorList = [];  //编辑器数组
+				that.indexEditor = '0';  //当前编辑器索引
+				that.code = '';       //当前文件打开时的内容
+				that.navList = [];   //左侧导航数据
+				that.navItem = {};   //左侧导航点击是选中的数据
+				that.contextData = null;   //左侧导航右键点击是产生的数据对象
 			}
 		},
 	};
@@ -764,7 +897,7 @@
 		white-space:nowrap;/* 不换行 */
 		overflow:hidden;
 		text-overflow:ellipsis;
-		padding: 5px 5px;
+		padding: 7px 5px;
 body >>>.ivu-select-dropdown{
 	background: #fff;
 }
@@ -815,9 +948,39 @@ body >>>.ivu-select-dropdown{
 				height: 100%;
 				.ivu-modal-body
 					height: 100%;
+			.ivu-tabs 
+				.ivu-tabs-content-animated
+					height: 92%;
+					background-color:#2f2f2f !important;
+			.ivu-tabs-content
+				height: 100%
+			.ivu-tabs
+				.ivu-tabs-tabpane
+					height: 92%
 >>>.ivu-modal
 	.ivu-modal-content
 		.ivu-modal-body
 			height: 632px;
 			overflow: hidden;
+	.ivu-tabs 
+		.ivu-tabs-content-animated
+			height: 560px;
+			margin-top: -1px;
+		.ivu-tabs-tabpane
+			height: 560px;
+			margin-top: -1px;
+	.ivu-tabs-nav .ivu-tabs-tab .ivu-icon
+		color: #f00;
+>>>body .ivu-select-dropdown .ivu-dropdown-transfer
+		background:red !important;
+// 导航栏右键样式 无效
+.ivu-select-dropdown.ivu-dropdown-transfer{
+  background:#fff !important;
+}
+.ivu-select-dropdown.ivu-dropdown-transfer .ivu-dropdown-menu .ivu-dropdown-item:hover{
+	background-color: #e5e5e5 !important;
+}
+// 选项卡头部
+>>>.ivu-tabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-nav-container
+	background-color: #333;
 </style>

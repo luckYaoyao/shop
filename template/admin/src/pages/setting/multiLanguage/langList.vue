@@ -102,7 +102,7 @@
             <Radio :label="item.value" v-for="(item, index) in langType.isAdmin" :key="index">{{ item.title }}</Radio>
           </RadioGroup>
         </FormItem>
-        <Input v-model="langFormData.edit" type="hidden"></Input>
+        <Input v-model="langFormData.edit" v-show="false"></Input>
         <FormItem label="语言说明：" prop="remarks" class="mb20">
           <Input v-model="langFormData.remarks" placeholder="请输入语言说明" style="width: 330px"></Input>
         </FormItem>

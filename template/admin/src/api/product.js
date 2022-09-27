@@ -388,3 +388,16 @@ export function importCard(data) {
     params: data,
   });
 }
+
+/**
+ * @description 商品批量设置
+ * @param {Number} param id {Number} 属性id
+ * @param {Object} param data {Object} 传值参数
+ */
+ export function batchSetting(data) {
+  return request({
+    url: `product/batch/setting`,
+    method: 'POST',
+    data,
+  });
+}

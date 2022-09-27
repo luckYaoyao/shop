@@ -310,6 +310,17 @@ export function updtaeAdmin(data) {
     data,
   });
 }
+/**
+ * @description 文件管理 --- 设置密码
+ * data 请求参数
+ */
+export function setFilePassword(data) {
+  return request({
+    url: `setting/set_file_password`,
+    method: 'PUT',
+    data,
+  });
+}
 
 /**
  * @description 个人中心 --- 设置会员等级

@@ -1078,3 +1078,14 @@ export function saveType(type) {
     params: data,
   });
 }
+/**
+ * 添加语言地区表单
+ * @param {*} id 
+ * @returns 
+ */
+ export function langCountryForm(id) {
+  return request({
+    url: `setting/lang_country/form/${id}`,
+    method: 'get',
+  });
+}
