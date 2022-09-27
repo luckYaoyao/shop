@@ -111,7 +111,7 @@ class Common extends AuthController
                 } catch (\Throwable $e) {
                     return app('json')->fail(400330);
                 }
-                return app('json')->success(['status' => 1, 'copyright' => $this->copyright(), 'authCode' => $authCode, 'day' => 0, 'force_reminder' => $upgradeStatus['force_reminder'] ?? 0]);
+                return app('json')->success(['status' => 1, 'copyright' => $res['data']['copyright'], 'authCode' => $authCode, 'day' => 0, 'force_reminder' => $upgradeStatus['force_reminder'] ?? 0]);
             default:
                 return app('json')->success(['status' => -9, 'force_reminder' => $upgradeStatus['force_reminder'] ?? 0]);
         }

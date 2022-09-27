@@ -1581,6 +1581,7 @@ HTML;
         /** @var UserBillServices $userBillServices */
         $userBillServices = app()->make(UserBillServices::class);
         $data['usable_integral'] = bcsub((string)$user['integral'], (string)$userBillServices->getBillSum(['uid' => $user['uid'], 'is_frozen' => 1]), 0);
+        $data['integral_open'] = sys_config('integral_ratio', 0) > 0;
         return $data;
     }
 

@@ -359,6 +359,11 @@ class StoreProduct extends AuthController
         return app('json')->success(100002);
     }
 
+    /**
+     * 导入卡密
+     * @return mixed
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
     public function import_card()
     {
         $data = $this->request->getMore([
@@ -370,5 +375,28 @@ class StoreProduct extends AuthController
         $readExcelService = app()->make(FileService::class);
         $cardData = $readExcelService->readExcel($file);
         return app('json')->success($cardData);
+    }
+
+    /**
+     * 商品批量设置
+     * @return mixed
+     */
+    public function batchSetting()
+    {
+        $data = $this->request->postMore([
+            ['ids', []],
+            ['cate_id', []],
+            ['logistics', []],
+            ['freight', 2],
+            ['postage', 0],
+            ['temp_id', 1],
+            ['give_integral', 0],
+            ['coupon_ids', []],
+            ['label_id', []],
+            ['recommend', []],
+            ['type', 0]
+        ]);
+        $this->service->batchSetting($data);
+        return app('json')->success(100014);
     }
 }

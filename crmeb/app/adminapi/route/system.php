@@ -94,7 +94,7 @@ Route::group('system', function () {
     Route::get('upgrade_log/list', 'UpgradeController/upgradeLogList')->option(['real_name' => '升级记录']);
     //导出备份项目
     Route::get('upgrade_export/:id/:type', 'UpgradeController/export')->option(['real_name' => '导出备份']);
-
+    //文件管理登录
     Route::post('file/login', 'v1.system.SystemFile/login')->option(['real_name' => '文件管理登录']);
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
@@ -111,9 +111,13 @@ Route::group('system', function () {
     Route::get('file/openfile', 'v1.system.SystemFile/openfile')->option(['real_name' => '读取文件']);
     //保存文件
     Route::post('file/savefile', 'v1.system.SystemFile/savefile')->option(['real_name' => '保存文件']);
+    //创建文件夹
     Route::get('file/createFolder', 'v1.system.SystemFile/createFolder')->option(['real_name' => '创建文件夹']);
+    //创建文件
     Route::get('file/createFile', 'v1.system.SystemFile/createFile')->option(['real_name' => '创建文件']);
+    //删除文件夹或者文件
     Route::get('file/delFolder', 'v1.system.SystemFile/delFolder')->option(['real_name' => '删除文件夹']);
+    //重命名文件
     Route::get('file/rename', 'v1.system.SystemFile/rename')->option(['real_name' => '重命名文件夹']);
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,

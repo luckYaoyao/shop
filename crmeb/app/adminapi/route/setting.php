@@ -25,6 +25,8 @@ Route::group('setting', function () {
     Route::get('info', 'v1.setting.SystemAdmin/info')->name('SystemAdminInfo')->option(['real_name' => '获取当前管理员信息']);
     //修改当前管理员信息
     Route::put('update_admin', 'v1.setting.SystemAdmin/update_admin')->name('SystemAdminUpdateAdmin')->option(['real_name' => '修改当前管理员信息']);
+    //设置文件管理密码
+    Route::put('set_file_password', 'v1.setting.SystemAdmin/set_file_password')->name('SystemAdminSetFilePassword')->option(['real_name' => '设置当前文件管理密码']);
     //权限菜单资源路由
     Route::resource('menus', 'v1.setting.SystemMenus')->option(['real_name' => '权限菜单']);
     //未添加的权限规则列表
@@ -169,10 +171,12 @@ Route::group('setting', function () {
     /** 多语言 */
     //语言国家列表
     Route::get('lang_country/list', 'v1.setting.LangCountry/langCountryList')->option(['real_name' => '语言国家列表']);
-    //设置国家语言类型表单
-    Route::get('lang_country/type_form/:id', 'v1.setting.LangCountry/langCountryTypeForm')->option(['real_name' => '设置国家语言类型表单']);
-    //语言类型列表
-    Route::post('lang_country/save/:id', 'v1.setting.LangCountry/langCountrySave')->option(['real_name' => '语言国家修改']);
+    //添加语言地区表单
+    Route::get('lang_country/form/:id', 'v1.setting.LangCountry/langCountryForm')->option(['real_name' => '添加语言地区表单']);
+    //保存语言地区
+    Route::post('lang_country/save/:id', 'v1.setting.LangCountry/langCountrySave')->option(['real_name' => '保存语言地区']);
+    //删除语言地区
+    Route::delete('lang_country/del/:id', 'v1.setting.LangCountry/langCountryDel')->option(['real_name' => '删除语言地区']);
     //语言类型列表
     Route::get('lang_type/list', 'v1.setting.LangType/langTypeList')->option(['real_name' => '语言类型列表']);
     //新增修改语言类型表单

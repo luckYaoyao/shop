@@ -1954,4 +1954,99 @@ class StoreProductServices extends BaseServices
 
         }
     }
+
+    /**
+     * 商品批量设置
+     * @param $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function batchSetting($data)
+    {
+        $ids = $data['ids'];
+        $batchData = [];
+        if (!count($ids)) throw new AdminException(400337);
+        switch ($data['type']) {
+            case 1: // 修改分类
+                $cate_id = $data['cate_id'];
+                if (!count($cate_id)) throw new AdminException(410107);
+                /** @var StoreCategoryServices $storeCategoryServices */
+                $storeCategoryServices = app()->make(StoreCategoryServices::class);
+                $cateGory = $storeCategoryServices->getColumn([['id', 'IN', $cate_id]], 'id,pid', 'id');
+                if (!$cateGory) throw new AdminException(410096);
+                $time = time();
+                $cateData = [];
+                foreach ($cate_id as $cid) {
+                    if ($cid && isset($cateGory[$cid]['pid'])) {
+                        foreach ($ids as $product_id) {
+                            $cateData[$product_id][] = ['product_id' => $product_id, 'cate_id' => $cid, 'cate_pid' => $cateGory[$cid]['pid'], 'status' => 1, 'add_time' => $time];
+                        }
+                    }
+                }
+                /** @var StoreProductCateServices $storeProductCateServices */
+                $storeProductCateServices = app()->make(StoreProductCateServices::class);
+                foreach ($ids as $product_id) {
+                    $storeProductCateServices->change($product_id, $cateData[$product_id]);
+                    $this->dao->update($product_id, ['cate_id' => implode(',', $cate_id)]);
+                }
+                break;
+            case 2:
+                foreach ($ids as $product_id) {
+                    $batchData[] = [
+                        'id' => $product_id,
+                        'logistics' => implode(',', $data['logistics']),
+                        'freight' => $data['freight'],
+                        'postage' => $data['freight'] == 2 ? $data['postage'] : 0,
+                        'temp_id' => $data['freight'] == 3 ? $data['temp_id'] : 0
+                    ];
+                }
+                if (count($batchData)) $this->dao->saveAll($batchData);
+                break;
+            case 3:
+                foreach ($ids as $product_id) {
+                    $batchData[] = [
+                        'id' => $product_id,
+                        'give_integral' => $data['give_integral']
+                    ];
+                }
+                if (count($batchData)) $this->dao->saveAll($batchData);
+                break;
+            case 4:
+                /** @var StoreProductCouponServices $storeProductCouponServices */
+                $storeProductCouponServices = app()->make(StoreProductCouponServices::class);
+                foreach ($ids as $product_id) {
+                    if (!empty($data['coupon_ids'])) {
+                        $storeProductCouponServices->setCoupon($product_id, $data['coupon_ids']);
+                    } else {
+                        $storeProductCouponServices->delete(['product_id' => $product_id]);
+                    }
+                }
+                break;
+            case 5:
+                foreach ($ids as $product_id) {
+                    $batchData[] = [
+                        'id' => $product_id,
+                        'label_id' => implode(',', $data['label_id'])
+                    ];
+                }
+                if (count($batchData)) $this->dao->saveAll($batchData);
+                break;
+            case 6:
+                foreach ($ids as $product_id) {
+                    $batchData[] = [
+                        'id' => $product_id,
+                        'is_hot' => in_array('is_hot',$data['recommend']) ? 1 : 0,
+                        'is_benefit' => in_array('is_benefit',$data['recommend']) ? 1 : 0,
+                        'is_new' => in_array('is_new',$data['recommend']) ? 1 : 0,
+                        'is_good' => in_array('is_good',$data['recommend']) ? 1 : 0,
+                        'is_best' => in_array('is_best',$data['recommend']) ? 1 : 0
+                    ];
+                }
+                if (count($batchData)) $this->dao->saveAll($batchData);
+                break;
+            default:
+                return true;
+        }
+        return true;
+    }
 }

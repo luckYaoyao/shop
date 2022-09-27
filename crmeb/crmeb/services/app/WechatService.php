@@ -146,9 +146,9 @@ class WechatService
                             $response = $messageService->wechatEventView($message);
                             break;
                         case 'funds_order_pay':
-                            $prefix = substr($message['order_info']['trade_no'],0,2);
+                            $prefix = substr($message['order_info']['trade_no'], 0, 2);
                             //处理一下参数
-                            switch ($prefix){
+                            switch ($prefix) {
                                 case 'cp':
                                     $data['attach'] = 'Product';
                                     break;
@@ -162,14 +162,12 @@ class WechatService
                             $data['out_trade_no'] = $message['order_info']['trade_no'];
                             $data['transaction_id'] = $message['order_info']['transaction_id'];
                             $data['opneid'] = $message['FromUserName'];
-                            if(Event::until('pay.notify', [$data]))
-                            {
+                            if (Event::until('pay.notify', [$data])) {
                                 $response = 'success';
-                            }else
-                            {
+                            } else {
                                 $response = 'faild';
                             }
-                            Log::error(['data'=>$data,'res'=>$response,'message'=>$message]);
+                            Log::error(['data' => $data, 'res' => $response, 'message' => $message]);
                             break;
                     }
                     break;
@@ -446,6 +444,7 @@ class WechatService
             }
         }
     }
+
     /**
      * 获得下单ID 新小程序支付
      * @param $openid
@@ -500,6 +499,7 @@ class WechatService
         $paymentPrepare = self::paymentPrepare($openid, $out_trade_no, $total_fee, $attach, $body, $detail, $trade_type, $options);
         return self::paymentService()->configForJSSDKPayment($paymentPrepare->prepay_id);
     }
+
     /**
      * 获得jsSdk支付参数  新小程序支付
      * @param $openid

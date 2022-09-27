@@ -51,6 +51,11 @@ class WechatController
         return $this->services->notify();
     }
 
+    public function v3notify()
+    {
+        return $this->services->v3notify();
+    }
+
     /**
      * 公众号权限配置信息获取
      * @param Request $request

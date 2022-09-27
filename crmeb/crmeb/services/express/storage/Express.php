@@ -110,11 +110,12 @@ class Express extends BaseExpress
      * @return 物流状态：status 0在途，1揽收，2疑难，3签收，4退签，5派件，6退回，7转单，10待清关，11清关中，12已清关，13清关异常，14收件人拒签
      * @return 物流详情 content
      */
-    public function query(string $num, string $com = '')
+    public function query(string $num, string $com = '', $phone = '')
     {
         $param = [
             'com' => $com,
-            'num' => $num
+            'num' => $num,
+            'phone' => $phone
         ];
         if ($com === null) {
             unset($param['com']);
@@ -156,7 +157,7 @@ class Express extends BaseExpress
         }
         /** @var ExpressServices $expressServices */
         $expressServices = app()->make(ExpressServices::class);
-        $expressData = $expressServices->getOneByWhere(['code'=>$param['com']])->toArray();
+        $expressData = $expressServices->getOneByWhere(['code' => $param['com']])->toArray();
         if (isset($data['cargo'])) $param['cargo'] = $data['cargo'];
         if ($expressData['partner_id'] == 1) $param['partner_id'] = $expressData['account'];
         if ($expressData['partner_key'] == 1) $param['partner_key'] = $expressData['key'];

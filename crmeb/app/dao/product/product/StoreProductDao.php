@@ -160,7 +160,7 @@ class StoreProductDao extends BaseDao
             }
         })->when(!$page && $limit, function ($query) use ($limit) {
             $query->limit($limit);
-        })->field($field)->select()->toArray();
+        })->order('sort desc')->field($field)->select()->toArray();
     }
 
     /**商品列表
@@ -225,7 +225,7 @@ class StoreProductDao extends BaseDao
             ->when($limit, function ($query) use ($limit) {
                 $query->limit($limit);
             })
-            ->order((in_array($field, ['is_hot','is_best']) ? 'sales DESC' : 'sort DESC') . ', id DESC')->select()->toArray();
+            ->order(in_array($field, ['is_hot', 'is_best']) ? 'sales DESC,sort DESC, id desc' : 'sort DESC, id desc')->select()->toArray();
 
     }
 

@@ -12,6 +12,7 @@ namespace app\adminapi\controller\v1\setting;
 
 use app\adminapi\controller\AuthController;
 use app\Request;
+use app\services\order\StoreOrderServices;
 use app\services\system\config\SystemConfigServices;
 use app\services\system\config\SystemConfigTabServices;
 use think\facade\App;
@@ -301,13 +302,21 @@ class SystemConfig extends AuthController
         if (isset($post['day_brokerage_price_upper']) && $post['day_brokerage_price_upper'] < -1) {
             return app('json')->fail(400757);
         }
-        if( isset($post['pay_new_weixin_open']) && (bool)$post['pay_new_weixin_open'])
-        {
-            if(empty($post['pay_new_weixin_mchid']))
-            {
-                return  app('json')->fail(400763);
+        if (isset($post['pay_new_weixin_open']) && (bool)$post['pay_new_weixin_open']) {
+            if (empty($post['pay_new_weixin_mchid'])) {
+                return app('json')->fail(400763);
             }
         }
+
+        //支付接口类型选择，如果有订单就不能再进行切换
+        if (isset($post['pay_wechat_type'])) {
+            /** @var StoreOrderServices $orderServices */
+            $orderServices = app()->make(StoreOrderServices::class);
+            if ($post['pay_wechat_type'] != -1 && $orderServices->count()) {
+                return app('json')->fail('支付接口类型已经选择，不能再次进行切换，切换后会导致无法退款等问题。');
+            }
+        }
+
         if (isset($post['weixin_ckeck_file'])) {
             $from = public_path() . $post['weixin_ckeck_file'];
             $to = public_path() . array_reverse(explode('/', $post['weixin_ckeck_file']))[0];

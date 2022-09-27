@@ -76,6 +76,10 @@ class PayServices
             //这些全都是微信支付
             if (in_array($payType, ['routine', 'weixinh5', 'weixin', 'pc', 'store'])) {
                 $payType = 'wechat_pay';
+                //判断是否使用v3
+                if (sys_config('pay_wechat_type') == 1) {
+                    $payType = 'v3_wechat_pay';
+                }
             }
 
             if ($payType == 'alipay') {
@@ -85,7 +89,7 @@ class PayServices
             /** @var Pay $pay */
             $pay = app()->make(Pay::class, [$payType]);
 
-            return $pay->create($orderId, $price, $successAction, $body, '', ['openid' => $openid, 'isCode' => $isCode,'pay_new_weixin_open' => (bool)sys_config('pay_new_weixin_open')]);
+            return $pay->create($orderId, $price, $successAction, $body, '', ['openid' => $openid, 'isCode' => $isCode, 'pay_new_weixin_open' => (bool)sys_config('pay_new_weixin_open')]);
 
         } catch (\Exception $e) {
             throw new ApiException($e->getMessage());

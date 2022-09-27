@@ -38,8 +38,13 @@ class PayController
                 return $pay->handleNotify();
             case 'wechat':
             case 'routine':
-                /** @var Pay $pay */
-                $pay = app()->make(Pay::class);
+                if (sys_config('pay_wechat_type')) {
+                    /** @var Pay $pay */
+                    $pay = app()->make(Pay::class, ['v3_wechat_pay']);
+                } else {
+                    /** @var Pay $pay */
+                    $pay = app()->make(Pay::class);
+                }
                 return $pay->handleNotify()->getContent();
         }
     }

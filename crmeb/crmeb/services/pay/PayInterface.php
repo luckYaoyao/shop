@@ -72,6 +72,6 @@ interface PayInterface
      * 支付回调
      * @return mixed
      */
-    public static function handleNotify();
+    public function handleNotify();
 
 }

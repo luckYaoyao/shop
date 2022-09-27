@@ -64,9 +64,8 @@ class WechatPay extends BasePay implements PayInterface
                 }
                 if (request()->isRoutine()) {
                     // 获取配置  判断是否为新支付
-                    if($options['pay_new_weixin_open'])
-                    {
-                        return MiniProgramService::newJsPay($options['openid'], $orderId, $totalFee, $attach, $body, $detail,$options);
+                    if ($options['pay_new_weixin_open']) {
+                        return MiniProgramService::newJsPay($options['openid'], $orderId, $totalFee, $attach, $body, $detail, $options);
                     }
                     return MiniProgramService::jsPay($options['openid'], $orderId, $totalFee, $attach, $body, $detail);
                 }
@@ -114,10 +113,9 @@ class WechatPay extends BasePay implements PayInterface
         if (isset($opt['wechat'])) {
             return WechatService::refund($outTradeNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundReason, $type, $refundAccount);
         } else {
-            if($opt['pay_new_weixin_open'])
-            {
+            if ($opt['pay_new_weixin_open']) {
                 return MiniProgramService::miniRefund($outTradeNo, $totalFee, $refundFee, $opt);
-            }else{
+            } else {
                 return MiniProgramService::refund($outTradeNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundReason, $type, $refundAccount);
             }
         }
@@ -140,7 +138,7 @@ class WechatPay extends BasePay implements PayInterface
      * @return mixed|\Symfony\Component\HttpFoundation\Response
      * @throws \EasyWeChat\Core\Exceptions\FaultException
      */
-    public static function handleNotify()
+    public function handleNotify()
     {
         return WechatService::handleNotify();
     }

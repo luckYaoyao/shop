@@ -188,8 +188,13 @@ class StoreOrderRefundServices extends BaseServices
                             $no = $refundOrder['trade_no'];
                             $refundData['type'] = 'trade_no';
                         }
+                        if (sys_config('pay_wechat_type')) {
+                            $drivers = 'v3_wechat_pay';
+                        } else {
+                            $drivers = 'wechat_pay';
+                        }
                         /** @var Pay $pay */
-                        $pay = app()->make(Pay::class);
+                        $pay = app()->make(Pay::class, [$drivers]);
                         if ($refundOrder['is_channel'] == 1) {
                             $refundData['trade_no'] = $refundOrder['trade_no'];
                             $refundData['pay_new_weixin_open'] = sys_config('pay_new_weixin_open');

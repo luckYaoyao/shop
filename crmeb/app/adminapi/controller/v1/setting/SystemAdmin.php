@@ -168,13 +168,29 @@ class SystemAdmin extends AuthController
             ['pwd', ''],
             ['new_pwd', ''],
             ['conf_pwd', ''],
-            ['file_pwd', ''],
-            ['conf_file_pwd', ''],
         ]);
         if(!preg_match('/^(?![^a-zA-Z]+$)(?!\D+$).{6,}$/',$data['new_pwd'])){
             return app('json')->fail(400183);
         }
         if ($this->services->updateAdmin($this->adminId, $data))
+            return app('json')->success(100001);
+        else
+            return app('json')->fail(100007);
+    }
+    /**
+     * 修改当前登陆admin的文件管理密码
+     * @return mixed
+     */
+    public function set_file_password()
+    {
+        $data = $this->request->postMore([
+            ['file_pwd', ''],
+            ['conf_file_pwd', ''],
+        ]);
+        if(!preg_match('/^(?![^a-zA-Z]+$)(?!\D+$).{6,}$/',$data['file_pwd'])){
+            return app('json')->fail(400183);
+        }
+        if ($this->services->setFilePassword($this->adminId, $data))
             return app('json')->success(100001);
         else
             return app('json')->fail(100007);

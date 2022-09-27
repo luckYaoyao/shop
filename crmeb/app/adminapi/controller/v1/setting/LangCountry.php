@@ -50,22 +50,29 @@ class LangCountry extends AuthController
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function langCountryTypeForm($id)
+    public function langCountryForm($id)
     {
-        return app('json')->success($this->services->LangCountryTypeForm($id));
+        return app('json')->success($this->services->langCountryForm($id));
     }
 
     /**
-     * 国家语言修改
+     * 地区语言修改
      * @param $id
      * @return mixed
      */
     public function langCountrySave($id)
     {
-        [$typeId] = $this->request->postMore([
-            ['type', 0],
-        ], true);
-        $this->services->langCountrySave($id, $typeId);
+        $data = $this->request->postMore([
+            ['name', ''],
+            ['code', ''],
+        ]);
+        $this->services->langCountrySave($id, $data);
         return app('json')->success(100000);
+    }
+
+    public function langCountryDel($id)
+    {
+        $this->services->langCountryDel($id);
+        return app('json')->success(100002);
     }
 }

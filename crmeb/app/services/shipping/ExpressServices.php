@@ -190,7 +190,7 @@ class ExpressServices extends BaseServices
      * @param string|null $com
      * @return array
      */
-    public function query(string $cacheName, string $expressNum, string $com = null)
+    public function query(string $cacheName, string $expressNum, string $com = null, $phone = '')
     {
         $resultData = CacheService::get($cacheName, null);
         if ($resultData === null || !is_array($resultData)) {
@@ -200,7 +200,7 @@ class ExpressServices extends BaseServices
                 case 1:
                     /** @var ServeServices $services */
                     $services = app()->make(ServeServices::class);
-                    $result = $services->express()->query($expressNum, $com);
+                    $result = $services->express()->query($expressNum, $com, $phone);
                     if (isset($result['ischeck']) && $result['ischeck'] == 1) {
                         $cacheTime = 0;
                     } else {

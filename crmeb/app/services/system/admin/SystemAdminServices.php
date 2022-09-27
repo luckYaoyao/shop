@@ -138,6 +138,7 @@ class SystemAdminServices extends BaseServices
                 'id' => $adminInfo->getData('id'),
                 'account' => $adminInfo->getData('account'),
                 'head_pic' => $adminInfo->getData('head_pic'),
+                'level' => $adminInfo->getData('level'),
             ],
             'logo' => sys_config('site_logo'),
             'logo_square' => sys_config('site_logo_square'),
@@ -358,6 +359,28 @@ class SystemAdminServices extends BaseServices
                 throw new AdminException(400264);
             $adminInfo->pwd = $this->passwordHash($data['new_pwd']);
         }
+
+        $adminInfo->real_name = $data['real_name'];
+        $adminInfo->head_pic = $data['head_pic'];
+        if ($adminInfo->save())
+            return true;
+        else
+            return false;
+    }
+    /**
+     * 设置当前管理员文件管理密码
+     * @param int $id
+     * @param array $data
+     * @return bool
+     */
+    public function setFilePassword(int $id, array $data)
+    {
+        $adminInfo = $this->dao->get($id);
+        if (!$adminInfo)
+            throw new AdminException(400451);
+        if ($adminInfo->is_del) {
+            throw new AdminException(400452);
+        }
         if ($data['file_pwd']) {
             if ($adminInfo->level != 0) throw new AdminException(400611);
             if (!$data['conf_file_pwd'])
@@ -366,9 +389,6 @@ class SystemAdminServices extends BaseServices
                 throw new AdminException(400264);
             $adminInfo->file_pwd = $this->passwordHash($data['file_pwd']);
         }
-
-        $adminInfo->real_name = $data['real_name'];
-        $adminInfo->head_pic = $data['head_pic'];
         if ($adminInfo->save())
             return true;
         else

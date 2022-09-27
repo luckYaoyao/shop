@@ -409,7 +409,7 @@ class StoreOrderController
                 case 'routine':
                     if ($type == 1 || in_array($order['is_channel'], [0, 2, 3, 4])) {
                         $order['order_id'] = app()->make(StoreOrderCreateServices::class)->getNewOrderId('cp');
-                        $this->services->update($order['id'],['order_id'=>$order['order_id']],'id');
+                        $this->services->update($order['id'], ['order_id' => $order['order_id']], 'id');
                     }
                     break;
                 case 'app':
@@ -690,7 +690,7 @@ class StoreOrderController
         return app('json')->success([
             'order' => $orderInfo,
             'express' => [
-                'result' => ['list' => $expressServices->query($cacheName, $orderInfo['delivery_id'], $orderInfo['delivery_code'])
+                'result' => ['list' => $expressServices->query($cacheName, $orderInfo['delivery_id'], $orderInfo['delivery_code'], $order['user_phone'])
                 ]
             ]
         ]);

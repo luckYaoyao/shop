@@ -49,7 +49,7 @@ class WeChatClient extends AbstractAPI
 
     /**
      * 支付
-     * @param array $params[
+     * @param array $params [
      *                      'openid'=>'支付者的openid',
      *                      'out_trade_no'=>'商家合单支付总交易单号',
      *                      'total_fee'=>'支付金额',
@@ -64,15 +64,15 @@ class WeChatClient extends AbstractAPI
     public function createorder($order)
     {
         $params = [
-            'openid'=>$order['openid'],    // 支付者的openid
-            'combine_trade_no'=>$order['out_trade_no'],  // 商家合单支付总交易单号
-            'expire_time'=>time()+$this->expire_time,
-            'sub_orders'=>[
+            'openid' => $order['openid'],    // 支付者的openid
+            'combine_trade_no' => $order['out_trade_no'],  // 商家合单支付总交易单号
+            'expire_time' => time() + $this->expire_time,
+            'sub_orders' => [
                 [
-                    'mchid'=>$this->merchant->merchant_id,
-                    'amount'=>(int)$order['total_fee'],
-                    'trade_no'=>$order['out_trade_no'],
-                    'description'=>$order['body']
+                    'mchid' => $this->merchant->merchant_id,
+                    'amount' => (int)$order['total_fee'],
+                    'trade_no' => $order['out_trade_no'],
+                    'description' => $order['body']
                 ]
             ]
         ];
@@ -81,7 +81,7 @@ class WeChatClient extends AbstractAPI
 
     /**
      * 退款
-     * @param array $params[
+     * @param array $params [
      *                      'openid'=>'退款者的openid',
      *                      'trade_no'=>'商家交易单号',
      *                      'transaction_id'=>'支付单号',
@@ -95,13 +95,13 @@ class WeChatClient extends AbstractAPI
     public function refundorder(array $order)
     {
         $params = [
-            'openid'=>$order['openid'],
-            'mchid'=>$this->merchant->merchant_id,
-            'trade_no'=>$order['trade_no'],
-            'transaction_id'=>$order['transaction_id'],
-            'refund_no'=>$order['refund_no'],
-            'total_amount'=>$order['total_amount'],
-            'refund_amount'=>$order['refund_amount'],
+            'openid' => $order['openid'],
+            'mchid' => $this->merchant->merchant_id,
+            'trade_no' => $order['trade_no'],
+            'transaction_id' => $order['transaction_id'],
+            'refund_no' => $order['refund_no'],
+            'total_amount' => $order['total_amount'],
+            'refund_amount' => $order['refund_amount'],
         ];
         return $this->parseJSON('post', [self::API_SET_REFUND_ORDER, json_encode($params)]);
     }

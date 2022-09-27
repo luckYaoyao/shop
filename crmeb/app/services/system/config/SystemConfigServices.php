@@ -139,7 +139,19 @@ class SystemConfigServices extends BaseServices
         'pay_weixin_open' => [
             'son_type' => [
                 'pay_weixin_mchid' => '',
-                'pay_weixin_key' => '',
+                'pay_wechat_type' => [
+                    'son_type' => [
+                        'pay_weixin_key' => '',
+                    ],
+                    'show_value' => 0
+                ],
+                'pay_wechat_type@' => [
+                    'son_type' => [
+                        'pay_weixin_serial_no' => '',
+                        'pay_weixin_key_v3' => ''
+                    ],
+                    'show_value' => 1
+                ],
                 'pay_weixin_client_cert' => '',
                 'pay_weixin_client_key' => '',
                 'paydir' => '',

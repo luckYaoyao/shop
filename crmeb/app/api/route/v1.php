@@ -15,6 +15,7 @@ use think\Response;
 
 Route::any('wechat/serve', 'v1.wechat.WechatController/serve');//公众号服务
 Route::any('wechat/notify', 'v1.wechat.WechatController/notify');//公众号支付回调
+Route::any('wechat/v3notify', 'v1.wechat.WechatController/v3notify');//公众号支付回调
 Route::any('routine/notify', 'v1.wechat.AuthController/notify');//小程序支付回调
 Route::any('pay/notify/:type', 'v1.PayController/notify');//支付回调
 Route::get('get_script', 'v1.PublicController/getScript');//获取统计代码

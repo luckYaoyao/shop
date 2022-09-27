@@ -510,7 +510,7 @@ class StoreOrder extends AuthController
 
         $data['delivery_name'] = $orderInfo['delivery_name'];
         $data['delivery_id'] = $orderInfo['delivery_id'];
-        $data['result'] = $services->query($cacheName, $orderInfo['delivery_id'], $orderInfo['delivery_code'] ?? null);
+        $data['result'] = $services->query($cacheName, $orderInfo['delivery_id'], $orderInfo['delivery_code'] ?? null, $orderInfo['user_phone']);
         return app('json')->success($data);
     }
 

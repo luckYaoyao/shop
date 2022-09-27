@@ -142,7 +142,7 @@ class StoreIntegralOrderController
         return app('json')->success([
             'order' => $order,
             'express' => [
-                'result' => ['list' => $expressServices->query($cacheName, $order['delivery_id'], $order['delivery_code'])
+                'result' => ['list' => $expressServices->query($cacheName, $order['delivery_id'], $order['delivery_code'], $order['user_phone'])
                 ]
             ]
         ]);

@@ -21,6 +21,7 @@ use crmeb\services\CacheService;
 use crmeb\services\CacheService as Cache;
 use crmeb\services\app\WechatService as WechatAuthService;
 use crmeb\services\oauth\OAuth;
+use crmeb\services\pay\Pay;
 use crmeb\utils\Canvas;
 
 /**
@@ -58,6 +59,21 @@ class WechatServices extends BaseServices
     {
         ob_clean();
         return WechatAuthService::handleNotify()->getContent();
+    }
+
+    /**
+     * v3支付回调
+     * @return string
+     * @throws \EasyWeChat\Core\Exceptions\FaultException
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2022/9/22
+     */
+    public function v3notify()
+    {
+        /** @var Pay $pay */
+        $pay = app()->make(Pay::class, ['v3_wechat_pay']);
+        return $pay->handleNotify()->getContent();
     }
 
     /**

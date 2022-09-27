@@ -19,7 +19,7 @@ class LangCountryServices extends BaseServices
     }
 
     /**
-     * 国家语言列表
+     * 地区语言列表
      * @param array $where
      * @return array
      * @throws \think\db\exception\DataNotFoundException
@@ -35,7 +35,7 @@ class LangCountryServices extends BaseServices
     }
 
     /**
-     * 设置国家语言类型表单
+     * 添加语言地区表单
      * @param $id
      * @return array
      * @throws \FormBuilder\Exception\FormBuilderException
@@ -43,32 +43,41 @@ class LangCountryServices extends BaseServices
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function LangCountryTypeForm($id)
+    public function langCountryForm($id)
     {
-        if (!$id) throw new AdminException(100100);
-        $info = $this->dao->get($id);
-        if (!$info) throw new AdminException(100026);
-        /** @var LangTypeServices $typeServices */
-        $typeServices = app()->make(LangTypeServices::class);
-        $typeList = $typeServices->getColumn(['status' => 1, 'is_del' => 0], 'language_name,file_name', 'id');
-        $options[] = ['value' => 0, 'label' => '未定义'];
-        foreach ($typeList as $item) {
-            $options[] = ['value' => $item['id'], 'label' => $item['language_name'] . '(' . $item['file_name'] . ')'];
-        }
-        $field[] = Form::select('type', '选择语言类型', $info->type_id)->setOptions($options)->filterable(1);
-        return create_form('设置语言类型', $field, Url::buildUrl('/setting/lang_country/save/' . $id), 'POST');
+        if ($id) $info = $this->dao->get($id);
+        $field = [];
+        $field[] = Form::input('name', '所属地区', $info['name'] ?? '')->required('请填写所属地区');
+        $field[] = Form::input('code', '语言码', $info['code'] ?? '')->required('请填写语言码');
+        return create_form($id ? '修改语言地区' : '新增语言地区', $field, Url::buildUrl('/setting/lang_country/save/' . $id), 'POST');
     }
 
     /**
-     * 国家语言修改
+     * 保存语言地区
      * @param $id
      * @param $typeId
      * @return bool
      */
-    public function LangCountrySave($id, $typeId)
+    public function LangCountrySave($id, $data)
     {
-        $res = $this->dao->update(['id' => $id], ['type_id' => $typeId]);
+        if ($id) {
+            $res = $this->dao->update(['id' => $id], $data);
+        } else {
+            $res = $this->dao->save($data);
+        }
         if (!$res) throw new AdminException(100007);
+        return true;
+    }
+
+    /**
+     * 删除语言地区
+     * @param $id
+     * @return bool
+     */
+    public function langCountryDel($id)
+    {
+        $res = $this->dao->delete($id);
+        if (!$res) throw new AdminException(100008);
         return true;
     }
 }
