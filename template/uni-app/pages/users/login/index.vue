@@ -41,7 +41,7 @@
 						</button>
 					</view>
 				</view>
-			<!-- 	<view class="item" v-if="isShowCode">
+				<!-- 	<view class="item" v-if="isShowCode">
 					<view class="acea-row row-middle">
 						<image src="../static/code_2.png" style="width: 28rpx; height: 32rpx;"></image>
 						<input type="text" :placeholder="$t(`填写验证码`)" class="codeIput" v-model="codeVal" />
@@ -89,7 +89,12 @@
 				</checkbox-group>
 			</view>
 		</view>
-		<view class="bottom"></view>
+		<view class="bottom">
+			<view class="ver" v-if="copyRight">{{copyRight}}</view>
+			<view v-else class="ver">© 2014-2022
+				<a href="https://www.crmeb.com">www.crmeb.com</a>
+			</view>
+		</view>
 
 		<Verify @success="success" :captchaType="'blockPuzzle'" :imgSize="{ width: '330px', height: '155px' }"
 			ref="verify"></Verify>
@@ -136,6 +141,7 @@
 		mixins: [sendVerifyCode, colors],
 		data: function() {
 			return {
+				copyRight: '',
 				inAnimation: false,
 				protocol: false,
 				navList: [this.$t(`快速登录`), this.$t(`账号登录`)],
@@ -176,6 +182,9 @@
 					}
 				}
 			});
+			if (uni.getStorageSync('copyRight').copyrightContext) {
+				this.copyRight = uni.getStorageSync('copyRight').copyrightContext
+			}
 		},
 		mounted: function() {
 			// this.getCode();
@@ -800,6 +809,30 @@
 		font-size: 24rpx;
 		text-align: center;
 		bottom: 20rpx;
+	}
+
+	.bottom {
+		position: fixed;
+		bottom: 30rpx;
+		left: 0;
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		color: #999999;
+
+		.ver {
+			font-size: 20rpx;
+		}
+
+		.ver-msg {
+			margin-left: 10rpx;
+		}
+
+		a {
+			color: #999999;
+			margin-left: 10rpx;
+			text-decoration: none;
+		}
 	}
 
 	.trembling {

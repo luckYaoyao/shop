@@ -1,5 +1,13 @@
 <template>
 	<view class="pos-order-list" ref="container">
+		<view class='search acea-row row-between-wrapper'>
+			<view class='input acea-row row-between-wrapper'>
+				<text class='iconfont icon-sousuo'></text>
+				<input type='text' v-model='where.keywords' @confirm="inputConfirm" :focus='focus'
+					:placeholder='$t(`搜索用户名/订单号/电话`)' placeholder-class='placeholder' @input="setValue"></input>
+			</view>
+			<view class='bnt' @tap='searchBut'>{{$t(`搜索`)}}</view>
+		</view>
 		<view class="nav acea-row row-around row-middle">
 			<view class="item" :class="where.status == 0 ? 'on' : ''" @click="changeStatus(0)">
 				{{$t(`待付款`)}}
@@ -136,6 +144,7 @@
 				change: false,
 				types: 0,
 				where: {
+					keywords: '',
 					page: 1,
 					limit: 10,
 					status: 0
@@ -143,6 +152,7 @@
 				list: [],
 				loaded: false,
 				loading: false,
+				focus: false,
 				orderInfo: {},
 				status: "",
 				isRefund: 0 //1是仅退款;0是退货退款
@@ -154,8 +164,32 @@
 			this.init();
 		},
 		methods: {
+			setValue(event) {
+				this.$set(this.where, 'keywords', event.detail.value);
+			},
+			inputConfirm(event) {
+				if (event.detail.value) {
+					uni.hideKeyboard();
+					this.getIndex();
+				}
+			},
+			searchBut() {
+				let that = this;
+				if (!that.where.keywords.trim()) return this.$util.Tips({
+					title: that.$t(`请输入要搜索的商品`)
+				});
+				that.focus = false;
+				that.where.page = 1;
+				that.loading = false;
+				that.loaded = false;
+				that.$set(that, 'list', []);
+				uni.showLoading({
+					title: that.$t(`正在搜索中`)
+				});
+				that.getIndex();
+			},
 			// 获取数据
-			getIndex: function() {
+			getIndex() {
 				let that = this;
 				if (that.loading || that.loaded) return;
 				that.loading = true;
@@ -167,8 +201,10 @@
 						that.loaded = res.data.length < that.where.limit;
 						that.list.push.apply(that.list, res.data);
 						that.where.page = that.where.page + 1;
+						uni.hideLoading();
 					},
 					err => {
+						uni.hideLoading();
 						that.$util.Tips({
 							title: err
 						})
@@ -176,7 +212,7 @@
 				);
 			},
 			// 初始化
-			init: function() {
+			init() {
 				this.list = [];
 				this.where.page = 1;
 				this.loaded = false;
@@ -192,7 +228,7 @@
 				}
 			},
 			// 商品操作
-			modify: function(item, status) {
+			modify(item, status) {
 				this.change = true;
 				this.status = status.toString();
 				this.orderInfo = item;
@@ -200,7 +236,7 @@
 					this.isRefund = 1
 				}
 			},
-			changeclose: function(msg) {
+			changeclose(msg) {
 				this.change = msg;
 			},
 			async savePrice(opt) {
@@ -310,7 +346,7 @@
 					url: `/pages/admin/orderDetail/index?id=${item.order_id}&types=${this.where.status}`
 				})
 			},
-			offlinePay: function(item) {
+			offlinePay(item) {
 				setOfflinePay({
 					order_id: item.order_id
 				}).then(
@@ -333,15 +369,55 @@
 	}
 </script>
 
-<style>
+<style lang="scss" scoped>
+	.pos-order-list {
+		.search {
+			padding-left: 30rpx;
+			padding-top: 30rpx;
+			background-color: #fff;
+
+			.input {
+				width: 598rpx;
+				background-color: #f7f7f7;
+				border-radius: 33rpx;
+				padding: 0 35rpx;
+				box-sizing: border-box;
+				height: 66rpx;
+			}
+
+			.input input {
+				width: 472rpx;
+				font-size: 28rpx;
+			}
+
+			.input .placeholder {
+				color: #999;
+			}
+
+			.input .iconfont {
+				color: #555;
+				font-size: 35rpx;
+			}
+
+			.bnt {
+				width: 120rpx;
+				text-align: center;
+				height: 66rpx;
+				line-height: 66rpx;
+				font-size: 30rpx;
+				color: #282828;
+			}
+		}
+	}
+
 	.pos-order-list .nav {
 		width: 100%;
 		height: 96upx;
 		background-color: #fff;
-		font-size: 30upx;
+		font-size: 28rpx;
 		color: #282828;
 		position: fixed;
-		top: 0;
+		top: 96rpx;
 		left: 0;
 		z-index: 9999;
 	}
@@ -355,7 +431,7 @@
 	}
 
 	.pos-order-list .nothing {
-		margin-top: 120upx;
+		margin-top: 220upx;
 		text-align: center;
 		color: #cfcfcf;
 	}
