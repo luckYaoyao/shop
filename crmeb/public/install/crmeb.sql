@@ -251,15 +251,19 @@ CREATE TABLE IF NOT EXISTS `eb_category` (
   KEY `pid` (`pid`),
   KEY `name` (`name`),
   KEY `is_be` (`owner_id`,`type`,`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='标签分类';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='标签分类';
 
 --
 -- 转存表中的数据 `eb_category`
 --
 
 INSERT INTO `eb_category` (`id`, `pid`, `owner_id`, `name`, `sort`, `type`, `other`, `add_time`) VALUES
-(1, 0, 0, '性别', 0, 0, '', 0),
-(2, 0, 0, '客户类型', 0, 0, '', 0);
+(1, 0, 0, '客户性别', 6, 0, NULL, 0),
+(2, 0, 0, '客户来源', 10, 0, NULL, 0),
+(3, 0, 0, '用过哪类产品', 8, 0, NULL, 0),
+(4, 0, 0, '客户年龄段', 4, 0, NULL, 0),
+(5, 0, 0, '累计消费次数', 2, 0, NULL, 0),
+(6, 0, 0, '累计消费金额', 0, 0, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -32423,7 +32427,9 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (412, 'comment_content', 'text', 'input', 27, '', 1, '', 100, 0, '\"\\u6b64\\u7528\\u6237\\u672a\\u505a\\u8bc4\\u4ef7\"', '自动评价文字', '自动评价显示的评价文字', 0, 1),
 (413, 'pay_wechat_type', 'radio', 'input', 4, '0=>v2\n1=>v3', 1, '', 0, 0, '0', '支付接口类型', '支付接口类型v2对应微信支付旧版v2支付。v3对应微信支付v3支付接口。支付证书可以通用一个。支付秘钥和v2旧版支付有区别', 10, 1),
 (414, 'pay_weixin_serial_no', 'text', 'input', 4, '', 1, '', 100, 0, '\"\"', '证书序列号', '「商户API证书」的「证书序列号」，可以在证书管理里面查看', 0, 1),
-(415, 'pay_weixin_key_v3', 'text', 'input', 4, '', 1, '', 100, 0, '\"\"', 'V3支付Key', 'V3支付秘钥', 0, 1);
+(415, 'pay_weixin_key_v3', 'text', 'input', 4, '', 1, '', 100, 0, '\"\"', 'V3支付Key', 'V3支付秘钥', 0, 1),
+(416, 'reward_money', 'text', 'number', 105, '', 1, '', 0, 0, '\"0\"', '金额', '新用户奖励金额，必须大于等于0', 0, 1),
+(417, 'reward_integral', 'text', 'number', 105, '', 1, '', 0, 0, '\"0\"', '积分', '新用户奖励积分，必须大于等于0', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -32503,7 +32509,8 @@ INSERT INTO `eb_system_config_tab` (`id`, `pid`, `title`, `eng_title`, `status`,
 (101, 100, '用户基础配置', 'user_config_basic', 1, 0, '', 0, 100),
 (102, 65, '对外接口配置', 'out_config', 1, 0, '', 3, 0),
 (103, 102, '基础配置', 'out_basic', 1, 0, '', 3, 0),
-(104, 102, '推送配置', 'out_push', 1, 0, '', 3, 0);
+(104, 102, '推送配置', 'out_push', 1, 0, '', 3, 0),
+(105, 100, '新用户设置', 'new_user_setting', 1, 0, '', 0, 0);
 
 -- --------------------------------------------------------
 
