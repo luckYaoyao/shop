@@ -3,11 +3,15 @@
     <div class="ivu-global-footer-links">
       <a :href="item.href" target="_blank" v-for="(item, index) in links" :key="index">{{ item.title }}</a>
     </div>
-    <div class="ivu-global-footer-copyright"><a href="https://www.crmeb.com" target="_blank">{{ copyright }}</a></div>
+    <div class="ivu-global-footer-copyright" v-if="copyright">{{ copyright }}</div>
+    <div class="ivu-global-footer-copyright">
+      Copyright © 2014-2022 
+      <a href="https://www.crmeb.com" target="_blank">{{ version }}</a>
+    </div>
   </div>
 </template>
 <script>
-import { getCrmebCopyRight } from '@/api/system'
+import { getCrmebCopyRight } from '@/api/system';
 export default {
   name: 'i-copyright',
   data() {
@@ -29,19 +33,19 @@ export default {
           href: 'http://doc.crmeb.com',
         },
       ],
-      copyright: 'Copyright © 2022 | 西安众邦网络科技有限公司',
+      copyright: 'Copyright © 2014-2022',
+      version: '',
     };
   },
-  created(){
+  created() {
     this.getVersion();
-    
   },
   methods: {
     getVersion() {
-      let version = this.$store.state.userInfo.version;
+      this.version = this.$store.state.userInfo.version;
       getCrmebCopyRight().then((res) => {
-         this.copyright = res.data.copyrightContext || (this.copyright += version ? '  |  ' + version : '')
-      })
+        this.copyright = res.data.copyrightContext;
+      });
     },
   },
 };

@@ -91,17 +91,22 @@ export default {
         {
           title: '编号',
           key: 'id',
-          width: 80,
+          width: 120,
         },
         {
-          title: '所属语言',
+          title: '浏览器语言识别码',
+          key: 'code',
+          minWidth: 150,
+        },
+        {
+          title: '语言说明',
           key: 'name',
           minWidth: 180,
         },
         {
-          title: '状态码/文字',
-          key: 'code',
-          minWidth: 300,
+          title: '关联语言',
+          key: 'link_lang',
+          minWidth: 180,
         },
         {
           title: '操作',

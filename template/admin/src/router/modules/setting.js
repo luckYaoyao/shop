@@ -643,7 +643,7 @@ export default {
       name: `${pre}langCountry`,
       meta: {
         auth: ['admin-lang-country'],
-        title: '国家列表',
+        title: '地区关联语言',
       },
       component: () => import('@/pages/setting/multiLanguage/country'),
     },

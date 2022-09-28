@@ -212,7 +212,7 @@ export default {
 
 <style lang="less">
 .close .ivu-dropdown-item {
-  color: rgba(255, 255, 255, 0.7) !important;
+  // color: rgba(255, 255, 255, 0.7) !important;
 }
 @import './tags-nav.less';
 </style>

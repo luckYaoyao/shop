@@ -53,8 +53,11 @@
       </Form>
     </Card>
     <Alert class="mt10">
-      通知
-      <template slot="desc">我是一个通知. </template>
+      使用说明
+      <template slot="desc"
+        >添加用户端页面语言，添加完成之后状态码为中文文字，前端页面使用 $t(`xxxx`)，js文件中使用 this.t(`xxxx`)
+        或者使用 that.t(`xxxx`)<br />添加后端接口语言，添加完成之后状态码为6位数字，后台抛错或者控制器返回文字的时候直接填写状态码数字</template
+      >
     </Alert>
     <Card :bordered="false" dis-hover>
       <Row type="flex">

@@ -54,25 +54,24 @@
     </div>
 
     <Verify
-        @success="success"
-        captchaType="blockPuzzle"
-        :imgSize="{ width: '330px', height: '155px' }"
+      @success="success"
+      captchaType="blockPuzzle"
+      :imgSize="{ width: '330px', height: '155px' }"
       ref="verify"
     ></Verify>
     <div class="footer">
-      <div class="pull-right" v-if="copyright">{{copyright}}</div>
-      <div class="pull-right" v-else><a href="https://www.crmeb.com" target="_blank">Copyright © 2022 | 西安众邦网络科技有限公司 | {{version}}</a></div>
+      <div class="pull-right" v-if="copyright">{{ copyright }}</div>
+      <div class="pull-right" v-else>Copyright © 2014-2022 <a href="https://www.crmeb.com" target="_blank">{{version}}</a></div>
     </div>
   </div>
 </template>
 <script>
 import { AccountLogin, loginInfoApi } from '@/api/account';
 import { getWorkermanUrl } from '@/api/kefu';
-// import mixins from '../mixins'
 import Setting from '@/setting';
 import { setCookies } from '@/libs/util';
-import '../../../assets/js/canvas-nest.min';
-import Verify from "@/components/verifition/Verify";
+import '@/assets/js/canvas-nest.min';
+import Verify from '@/components/verifition/Verify';
 
 export default {
   components: {
@@ -106,7 +105,7 @@ export default {
       defaultSwiperList: require('@/assets/images/sw.jpg'),
       key: '',
       copyright: '',
-      version: ''
+      version: '',
     };
   },
   created() {
@@ -180,7 +179,7 @@ export default {
           this.swiperList = [{ slide: this.defaultSwiperList }];
         });
     },
-    success(params){
+    success(params) {
       this.closeModel(params);
     },
     // 关闭模态框
@@ -197,7 +196,7 @@ export default {
         imgcode: this.formInline.code,
         key: this.key,
         captchaType: 'blockPuzzle',
-        captchaVerification: params.captchaVerification,
+        captchaVerification: params ? params.captchaVerification : '',
       })
         .then(async (res) => {
           msg();
@@ -313,7 +312,11 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$refs.verify.show()
+          if (this.errorNum > 2) {
+            this.$refs.verify.show();
+          } else {
+            this.closeModel();
+          }
         }
       });
     },
@@ -464,6 +467,7 @@ a:link, a:visited, a:hover, a:active {
     color: #666;
 }
 .pull-right a {
+    margin-left: 0;
     color: #666;
 }
 .footer{

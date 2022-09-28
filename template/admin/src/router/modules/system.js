@@ -88,6 +88,15 @@ export default {
       component: () => import('@/pages/system/maintain/systemFile/opendir'),
     },
     {
+      path: 'maintain/system_file/login',
+      name: `${pre}opendir_login`,
+      meta: {
+        auth: ['system-maintain-system-file'],
+        title: '文件管理入口',
+      },
+      component: () => import('@/pages/system/maintain/systemFile/login'),
+    },
+    {
       path: 'config/system_config_tab/index',
       name: `${pre}configTab`,
       meta: {
@@ -137,9 +146,9 @@ export default {
       name: `${pre}upgradeclient`,
       meta: {
         auth: ['system-onlineUpgrade-index'],
-        title: '在线升级'
+        title: '在线升级',
       },
-      component: () => import('@/pages/system/onlineUpgrade/index')
+      component: () => import('@/pages/system/onlineUpgrade/index'),
     },
   ],
 };

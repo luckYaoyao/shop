@@ -54,7 +54,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { langTypeList, langTypeForm } from '@/api/setting';
+import { langTypeList, langTypeForm, langTypeStatus } from '@/api/setting';
 export default {
   name: 'user_group',
   data() {
@@ -79,7 +79,7 @@ export default {
           minWidth: 200,
         },
         {
-          title: '语言编码',
+          title: '浏览器语言识别码',
           key: 'file_name',
           minWidth: 200,
         },
@@ -178,17 +178,14 @@ export default {
     },
     // 修改状态
     changeSwitch(row) {
-      console.log(row)
-      // PostgoodsIsShow(row.id, row.is_show)
-      //   .then((res) => {
-      //     this.$Message.success(res.msg);
-      //     this.goodHeade();
-      //     this.getDataList();
-      //   })
-      //   .catch((res) => {
-      //     row.is_show = !row.is_show ? 1 : 0;
-      //     this.$Message.error(res.msg);
-      //   });
+      langTypeStatus(row.id, row.status)
+        .then((res) => {
+          this.$Message.success(res.msg);
+        })
+        .catch((res) => {
+          row.status = !row.status ? 1 : 0;
+          this.$Message.error(res.msg);
+        });
     },
   },
 };

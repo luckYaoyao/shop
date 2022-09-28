@@ -147,55 +147,57 @@ export default {
 </script>
 <style lang="less">
 @import './side-menu.less';
-.side-menu-wrapper a.drop-menu-a {
-  padding: 15px !important;
-}
-.ivu-select-dropdown.ivu-dropdown-transfer {
-  background: rgb(0, 21, 41) !important;
-  width: 170px !important;
-}
-.ivu-select-dropdown.ivu-dropdown-transfer .ivu-select-dropdown {
-  background: rgb(0, 21, 41) !important;
-  width: 170px !important;
-}
-.ivu-select-dropdown.ivu-dropdown-transfer .ivu-dropdown-menu {
-  min-width: unset !important;
-}
-.ivu-select-dropdown.ivu-dropdown-transfer .ivu-dropdown-menu .ivu-dropdown-item {
-  padding: 9px 0 9px 30px !important;
-  font-size: 13px !important;
-  text-align: left;
-}
-.ivu-select-dropdown.ivu-dropdown-transfer .ivu-dropdown-menu .ivu-dropdown-item:hover {
-  background-color: #2d8cf0 !important;
-}
-.ivu-select-dropdown.ivu-dropdown-transfer .menu-title {
-  padding-left: 0 !important;
-  color: rgba(225, 225, 225, 0.7) !important;
-  font-size: 13px !important;
-}
-.ivu-select-dropdown.ivu-dropdown-transfer .ivu-dropdown-menu .ivu-dropdown-item:hover .menu-title {
-  color: #fff !important;
-}
-.ivu-select-dropdown.ivu-dropdown-transfer .collased-menu-dropdown {
-  padding: 9px 0 9px 30px !important;
-}
-.ivu-select-dropdown.ivu-dropdown-transfer .collased-menu-dropdown:hover {
-  background-color: #2d8cf0 !important;
-  color: #fff !important;
-}
-.ivu-select-dropdown.ivu-dropdown-transfer
-  .collased-menu-dropdown:hover
-  > .ivu-dropdown-rel
-  > .drop-menu-a
-  > .menu-title {
-  color: #fff !important;
-}
-.ivu-select-dropdown.ivu-dropdown-transfer
-  .collased-menu-dropdown:hover
-  > .ivu-dropdown-rel
-  > .drop-menu-a
-  > .ivu-icon {
-  color: #fff !important;
+.ivu-menu {
+  .side-menu-wrapper a.drop-menu-a {
+    padding: 15px !important;
+  }
+  .ivu-select-dropdown.ivu-dropdown-transfer {
+    background: rgb(0, 21, 41) !important;
+    width: 170px !important;
+  }
+  .ivu-select-dropdown.ivu-dropdown-transfer .ivu-select-dropdown {
+    background: rgb(0, 21, 41) !important;
+    width: 170px !important;
+  }
+  .ivu-select-dropdown.ivu-dropdown-transfer .ivu-dropdown-menu {
+    min-width: unset !important;
+  }
+  .ivu-select-dropdown.ivu-dropdown-transfer .ivu-dropdown-menu .ivu-dropdown-item {
+    padding: 9px 0 9px 30px !important;
+    font-size: 13px !important;
+    text-align: left;
+  }
+  .ivu-select-dropdown.ivu-dropdown-transfer .ivu-dropdown-menu .ivu-dropdown-item:hover {
+    background-color: #2d8cf0 !important;
+  }
+  .ivu-select-dropdown.ivu-dropdown-transfer .menu-title {
+    padding-left: 0 !important;
+    color: rgba(225, 225, 225, 0.7) !important;
+    font-size: 13px !important;
+  }
+  .ivu-select-dropdown.ivu-dropdown-transfer .ivu-dropdown-menu .ivu-dropdown-item:hover .menu-title {
+    color: #fff !important;
+  }
+  .ivu-select-dropdown.ivu-dropdown-transfer .collased-menu-dropdown {
+    padding: 9px 0 9px 30px !important;
+  }
+  .ivu-select-dropdown.ivu-dropdown-transfer .collased-menu-dropdown:hover {
+    background-color: #2d8cf0 !important;
+    color: #fff !important;
+  }
+  .ivu-select-dropdown.ivu-dropdown-transfer
+    .collased-menu-dropdown:hover
+    > .ivu-dropdown-rel
+    > .drop-menu-a
+    > .menu-title {
+    color: #fff !important;
+  }
+  .ivu-select-dropdown.ivu-dropdown-transfer
+    .collased-menu-dropdown:hover
+    > .ivu-dropdown-rel
+    > .drop-menu-a
+    > .ivu-icon {
+    color: #fff !important;
+  }
 }
 </style>

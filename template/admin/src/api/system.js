@@ -332,18 +332,19 @@ export function opendirListApi(params) {
     url: `system/file/opendir`,
     method: 'GET',
     params,
-	file_edit:true
+    file_edit: true,
   });
 }
 
 /**
  * @description 文件管理 -- 读取文件
  */
-export function openfileApi(filepath) {
+export function openfileApi(params) {
   return request({
-    url: `system/file/openfile?filepath=${filepath}`,
+    url: `system/file/openfile`,
     method: 'GET',
-	file_edit:true
+    params,
+    file_edit: true,
   });
 }
 
@@ -352,10 +353,10 @@ export function openfileApi(filepath) {
  */
 export function savefileApi(data) {
   return request({
-    url: `system/file/savefile`,
+    url: `system/file/savefile?fileToken=${data.fileToken}`,
     method: 'post',
     data,
-	file_edit:true
+    file_edit: true,
   });
 }
 /**
@@ -366,7 +367,7 @@ export function createFolder(params) {
     url: `system/file/createFolder`,
     method: 'GET',
     params,
-	file_edit:true
+    file_edit: true,
   });
 }
 /**
@@ -377,7 +378,7 @@ export function createFile(params) {
     url: `system/file/createFile`,
     method: 'GET',
     params,
-	file_edit:true
+    file_edit: true,
   });
 }
 /**
@@ -388,7 +389,7 @@ export function rename(params) {
     url: `system/file/rename`,
     method: 'GET',
     params,
-	file_edit:true
+    file_edit: true,
   });
 }
 /**
@@ -399,7 +400,7 @@ export function delFolder(params) {
     url: `system/file/delFolder`,
     method: 'GET',
     params,
-	file_edit:true
+    file_edit: true,
   });
 }
 
@@ -587,44 +588,44 @@ export function setAgreements(data, type) {
 }
 
 /**
-* @description 获取授权产品
-*/
+ * @description 获取授权产品
+ */
 export function crmebProduct(params) {
   return request({
-      url: 'crmeb_product',
-      method: 'get',
-      params
+    url: 'crmeb_product',
+    method: 'get',
+    params,
   });
 }
 
 /**
  * @description 获取授权订单
  */
- export function getVersion() {
+export function getVersion() {
   return request({
-      url: `setting/get_version`,
-      method: 'get',
+    url: `setting/get_version`,
+    method: 'get',
   });
 }
 
 /**
-* @description 获取版权
-*/
+ * @description 获取版权
+ */
 export function getCrmebCopyRight() {
   return request({
-      url: `copyright`,
-      method: 'get'
+    url: `copyright`,
+    method: 'get',
   });
 }
 
 /**
-* @description 保存版权
-*/
+ * @description 保存版权
+ */
 export function saveCrmebCopyRight(data) {
   return request({
-      url: `copyright`,
-      method: 'post',
-      data
+    url: `copyright`,
+    method: 'post',
+    data,
   });
 }
 
@@ -632,41 +633,41 @@ export function saveCrmebCopyRight(data) {
  * @description 升级包 -- 列表
  * @param data
  */
- export function upgradeListApi (params) {
+export function upgradeListApi(params) {
   return request({
-      url: '/system/upgrade/list',
-      method: 'get',
-      params
-  })
+    url: '/system/upgrade/list',
+    method: 'get',
+    params,
+  });
 }
 
 /**
-* @description 升级进度
-*/
+ * @description 升级进度
+ */
 export function upgradeProgressApi() {
   return request({
-      url: `/system/upgrade_progress`,
-      method: 'get'
+    url: `/system/upgrade_progress`,
+    method: 'get',
   });
 }
 
 /**
-* @description 升级协议
-*/
+ * @description 升级协议
+ */
 export function upgradeAgreementApi() {
   return request({
-      url: `/system/upgrade/agreement`,
-      method: 'get'
+    url: `/system/upgrade/agreement`,
+    method: 'get',
   });
 }
 
 /**
-* @description 升级状态
-*/
+ * @description 升级状态
+ */
 export function upgradeStatusApi() {
   return request({
-      url: `/system/upgrade_status`,
-      method: 'get'
+    url: `/system/upgrade_status`,
+    method: 'get',
   });
 }
 
@@ -674,31 +675,31 @@ export function upgradeStatusApi() {
  * @description 升级包 -- 升级记录
  * @param data
  */
- export function upgradeLogListApi (params) {
+export function upgradeLogListApi(params) {
   return request({
-      url: '/system/upgrade_log/list',
-      method: 'get',
-      params
-  })
+    url: '/system/upgrade_log/list',
+    method: 'get',
+    params,
+  });
 }
 
 /**
  * 导出备份文件
  */
- export function upgradeExportApi(id) {
+export function upgradeExportApi(id) {
   return request({
     url: `system/upgrade_export/${id}`,
     method: 'get',
-    responseType: 'blob'
+    responseType: 'blob',
   });
 }
 
 /**
  * @description 下载升级包
  */
- export function downloadApi(params) {
+export function downloadApi(params) {
   return request({
-    url: '/system/upgrade_download/'+params,
+    url: '/system/upgrade_download/' + params,
     method: 'POST',
   });
 }
@@ -707,10 +708,10 @@ export function upgradeStatusApi() {
  * @description 升级包 -- 可升级列表
  * @param data
  */
- export function upgradeableListApi (params) {
+export function upgradeableListApi(params) {
   return request({
-      url: '/system/upgradeable/list',
-      method: 'get',
-      params
-  })
+    url: '/system/upgradeable/list',
+    method: 'get',
+    params,
+  });
 }

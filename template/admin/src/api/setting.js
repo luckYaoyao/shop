@@ -1089,3 +1089,14 @@ export function saveType(type) {
     method: 'get',
   });
 }
+/**
+ * 添加语言地区表单
+ * @param {*} id 
+ * @returns 
+ */
+ export function langTypeStatus(id,status) {
+  return request({
+    url: `setting/lang_type/status/${id}/${status}`,
+    method: 'put',
+  });
+}

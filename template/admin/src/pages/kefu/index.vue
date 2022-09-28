@@ -52,7 +52,7 @@
     </div>
     <div class="foot-box" v-if="copyright">{{ copyright }}</div>
     <div class="foot-box" v-else>
-      <a href="https://www.crmeb.com" target="_blank">Copyright © 2022 | 西安众邦网络科技有限公司 | {{ version }}</a>
+      Copyright © 2014-2022 <a href="https://www.crmeb.com" target="_blank">{{ version }}</a>
     </div>
   </div>
 </template>
@@ -401,13 +401,14 @@ export default {
   height: 100vh;
 
   .foot-box {
-    padding: 20px 0;
+    padding: 20px 20px;
     font-size: 14px;
     color: #666666;
-    text-align: center;
+    text-align: right;
     box-sizing: border-box;
 
     a {
+      margin-left: 0;
       color: #666666;
     }
   }

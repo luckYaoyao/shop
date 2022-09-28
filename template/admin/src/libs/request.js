@@ -34,14 +34,9 @@ service.interceptors.request.use(
     }
     const token = getCookies('token');
     const kefuToken = getCookies('kefu_token');
-	const fileToken = getCookies('file_token');
-    if (token || kefuToken || fileToken) {
-      config.headers['Authori-zation'] = config.file_edit ? (config.kefu ? 'Bearer ' + kefuToken : 'Bearer ' + fileToken) : (config.kefu ? 'Bearer ' + kefuToken : 'Bearer ' + token);
+    if (token || kefuToken) {
+      config.headers['Authori-zation'] = config.kefu ? 'Bearer ' + kefuToken : 'Bearer ' + token;
     }
-	if(fileToken)
-	{
-		config.headers['Invalid-zation'] = 'Bearer ' + fileToken;
-	}
     return config;
   },
   (error) => {
@@ -85,11 +80,15 @@ service.interceptors.response.use(
         removeCookies('kefu_uuid');
         router.replace({ path: '/kefu' });
         break;
+      case 110008:
+        router.replace({ path: '/admin/system/maintain/system_file/login' });
+        break;
       default:
         return Promise.reject(obj || { msg: '未知错误' });
     }
   },
   (error) => {
+    console.log(error);
     Message.error(error.msg);
     return Promise.reject(error);
   },
