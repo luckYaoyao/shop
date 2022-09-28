@@ -116,7 +116,7 @@ class UserLabelServices extends BaseServices
         if (!$data['label_cate']) {
             throw new AdminException(400669);
         }
-        $levelName = $this->dao->getOne(['label_name' => $data['label_name']]);
+        $levelName = $this->dao->getOne(['label_name' => $data['label_name'], 'label_cate' => $data['label_cate']]);
         if ($id) {
             if (!$this->getLable($id)) {
                 throw new AdminException(100026);

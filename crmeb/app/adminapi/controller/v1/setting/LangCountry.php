@@ -65,6 +65,7 @@ class LangCountry extends AuthController
         $data = $this->request->postMore([
             ['name', ''],
             ['code', ''],
+            ['type_id', 0],
         ]);
         $this->services->langCountrySave($id, $data);
         return app('json')->success(100000);

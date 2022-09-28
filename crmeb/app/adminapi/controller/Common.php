@@ -54,7 +54,7 @@ class Common extends AuthController
         // 正常域名
         $res = HttpService::request('http://authorize.crmeb.net/api/auth_cert_query', 'post', [
             'domain_name' => $host,
-            'label' => 19,
+            'label' => 34,
             'version' => $version
         ]);
         $res = $res ? json_decode($res, true) : [];
@@ -64,7 +64,7 @@ class Common extends AuthController
             $host = str_replace('test.', '', $host);
             $res = HttpService::request('http://authorize.crmeb.net/api/auth_cert_query', 'post', [
                 'domain_name' => $host,
-                'label' => 19,
+                'label' => 34,
                 'version' => $version
             ]);
             $res = $res ? json_decode($res, true) : [];
@@ -75,7 +75,7 @@ class Common extends AuthController
             $host = str_replace('www.', '', $host);
             $res = HttpService::request('http://authorize.crmeb.net/api/auth_cert_query', 'post', [
                 'domain_name' => $host,
-                'label' => 19,
+                'label' => 34,
                 'version' => $version
             ]);
             $res = $res ? json_decode($res, true) : [];

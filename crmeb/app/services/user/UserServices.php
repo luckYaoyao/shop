@@ -138,6 +138,9 @@ class UserServices extends BaseServices
         $res = $this->dao->save($data);
         if (!$res)
             throw new AdminException(400684);
+
+        //新用户注册奖励
+        $this->rewardNewUser((int)$res->uid);
         //用户生成后置事件
         event('user.register', [$spreadUid, $userType, $user['nickname'], $res->uid, 1]);
         //推送消息
@@ -2099,5 +2102,54 @@ class UserServices extends BaseServices
         $groupInfo = $userGroupServices->getGroupList();
         $labelInfo = $userLabelCateServices->getUserLabel($uid);
         return compact('userInfo', 'levelInfo', 'groupInfo', 'labelInfo');
+    }
+
+
+    /**
+     * 新用户注册奖励
+     * @param int $id
+     * @return bool
+     * @throws Exception
+     *
+     * @date 2022/09/28
+     * @author yyw
+     */
+    public function rewardNewUser(int $id)
+    {
+        $user = $this->getUserInfo($id);
+        if (!$user) {
+            throw new AdminException(100026);
+        }
+        $res1 = false;
+        $res2 = false;
+        $reward_money = sys_config('reward_money');
+        $reward_integral = sys_config('reward_integral');
+        $edit = array();
+        if ($reward_money > 0) {//余额增加
+            /** @var UserMoneyServices $userMoneyServices */
+            $userMoneyServices = app()->make(UserMoneyServices::class);
+            $edit['now_money'] = bcadd($user['now_money'], $reward_money, 2);
+            $res1 = $userMoneyServices->income('register_system_add', $user['uid'], $reward_money, $edit['now_money'],  1);
+        } else {
+            $res1 = true;
+        }
+        if ($reward_integral > 0) {//积分增加
+            /** @var UserBillServices $userBill */
+            $userBill = app()->make(UserBillServices::class);
+            $integral_data = ['link_id' => 1, 'number' => $reward_integral];
+            $edit['integral'] = bcadd($user['integral'], $reward_integral, 2);
+            $integral_data['balance'] = $edit['integral'];
+            $integral_data['title'] = '新用户注册增加积分';
+            $integral_data['mark'] = '新用户注册增加了' . floatval($reward_integral) . '积分';
+            $res2 = $userBill->incomeIntegral($user['uid'], 'system_add', $integral_data);
+        } else {
+            $res2 = true;
+        }
+        if ($edit) $res3 = $this->dao->update($id, $edit);
+
+        else $res3 = true;
+        if ($res1 && $res2 && $res3)
+            return true;
+        else throw new AdminException(100007);
     }
 }

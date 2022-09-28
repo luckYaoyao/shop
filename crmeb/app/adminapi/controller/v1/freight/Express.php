@@ -96,6 +96,9 @@ class Express extends AuthController
             ['account', ''],
             ['key', ''],
             ['net_name', ''],
+            ['courier_name', ''],
+            ['customer_name', ''],
+            ['code_name', ''],
             ['sort', 0],
             ['is_show', 0]]);
         if (!$expressInfo = $this->services->get($id)) return app('json')->fail(100026);
@@ -108,9 +111,21 @@ class Express extends AuthController
         if ($expressInfo['net'] == 1 && !$data['net_name']) {
             return app('json')->fail(400404);
         }
+        if ($expressInfo['check_man'] == 1 && !$data['courier_name']) {
+            return app('json')->fail(500001);
+        }
+        if ($expressInfo['partner_name'] == 1 && !$data['customer_name']) {
+            return app('json')->fail(500002);
+        }
+        if ($expressInfo['is_code'] == 1 && !$data['code_name']) {
+            return app('json')->fail(500003);
+        }
         $expressInfo->account = $data['account'];
         $expressInfo->key = $data['key'];
         $expressInfo->net_name = $data['net_name'];
+        $expressInfo->courier_name = $data['courier_name'];
+        $expressInfo->customer_name = $data['customer_name'];
+        $expressInfo->code_name = $data['code_name'];
         $expressInfo->sort = $data['sort'];
         $expressInfo->is_show = $data['is_show'];
         $expressInfo->status = 1;

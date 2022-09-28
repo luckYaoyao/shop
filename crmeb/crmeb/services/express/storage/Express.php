@@ -162,6 +162,9 @@ class Express extends BaseExpress
         if ($expressData['partner_id'] == 1) $param['partner_id'] = $expressData['account'];
         if ($expressData['partner_key'] == 1) $param['partner_key'] = $expressData['key'];
         if ($expressData['net'] == 1) $param['net'] = $expressData['net_name'];
+        if ($expressData['check_man'] == 1) $param['checkMan'] = $expressData['courier_name'];
+        if ($expressData['partner_name'] == 1) $param['partnerName'] = $expressData['customer_name'];
+        if ($expressData['is_code'] == 1) $param['code'] = $expressData['code_name'];
         return $this->accessToken->httpRequest(self::EXPRESS_DUMP, $param, 'POST');
     }
 

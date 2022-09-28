@@ -185,6 +185,8 @@ Route::group('setting', function () {
     Route::post('lang_type/save/:id', 'v1.setting.LangType/langTypeSave')->option(['real_name' => '保存新增修改语言']);
     //删除语言
     Route::delete('lang_type/del/:id', 'v1.setting.LangType/langTypeDel')->option(['real_name' => '删除语言']);
+    //修改语言类型状态
+    Route::put('lang_type/status/:id/:status', 'v1.setting.LangType/langTypeStatus')->option(['real_name' => '修改语言类型状态']);
     //获取语言列表
     Route::get('lang_code/list', 'v1.setting.LangCode/langCodeList')->option(['real_name' => '语言列表']);
     //获取语言信息

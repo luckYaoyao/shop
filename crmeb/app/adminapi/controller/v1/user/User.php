@@ -165,6 +165,7 @@ class User extends AuthController
         $this->services->transaction(function () use ($data, $label) {
             $res = true;
             $userInfo = $this->services->save($data);
+            $this->services->rewardNewUser((int)$userInfo->uid);
             if ($label) {
                 $res = $this->services->saveSetLabel([$userInfo->uid], $label);
             }

@@ -86,6 +86,13 @@ class UserMoneyServices extends BaseServices
             'status' => 1,
             'pm' => 1
         ],
+        'register_system_add' => [
+            'title' => '新用户注册赠送余额',
+            'type' => 'system_add',
+            'mark' => '新用户注册赠送{%num%}余额',
+            'status' => 1,
+            'pm' => 1
+        ],
     ];
 
     /**

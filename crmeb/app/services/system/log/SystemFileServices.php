@@ -16,8 +16,11 @@ use app\dao\system\log\SystemFileDao;
 use app\services\BaseServices;
 use app\services\system\admin\SystemAdminServices;
 use crmeb\exceptions\AdminException;
+use crmeb\exceptions\AuthException;
 use crmeb\services\CacheService;
 use crmeb\services\FileService as FileClass;
+use crmeb\utils\JwtAuth;
+use Firebase\JWT\ExpiredException;
 use think\facade\Log;
 
 /**
@@ -49,17 +52,81 @@ class SystemFileServices extends BaseServices
      * @date 2022/09/07
      * @author yyw
      */
-    public function Login($account, string $password, string $type)
+    public function Login(string $password, string $type)
     {
-        /** @var SystemAdminServices $adminServer */
-        $adminServer = app()->make(SystemAdminServices::class);
-        $adminInfo = $adminServer->verifyFileLogin($account, $password);
-        $tokenInfo = $this->createToken($adminInfo->id, $type,$adminInfo->pwd);
+        if (config('filesystem.password') !== $password) {
+            throw new AdminException(400140);
+        }
+        $md5Password = md5($password);
+        /** @var JwtAuth $jwtAuth */
+        $jwtAuth = app()->make(JwtAuth::class);
+        $tokenInfo = $jwtAuth->createToken($md5Password, $type, ['pwd' => $md5Password]);
+        CacheService::set(md5($tokenInfo['token']), $tokenInfo['token'], 3600);
         return [
-            'token' => $tokenInfo['token'],
+            'token' => md5($tokenInfo['token']),
             'expires_time' => $tokenInfo['params']['exp'],
         ];
 
+    }
+
+    /**
+     * 获取Admin授权信息
+     * @param string $token
+     * @return bool
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     */
+    public function parseToken(string $token): bool
+    {
+        /** @var CacheService $cacheService */
+        $cacheService = app()->make(CacheService::class);
+
+        if (!$token || $token === 'undefined') {
+            throw new AuthException(110008);
+        }
+
+        /** @var JwtAuth $jwtAuth */
+        $jwtAuth = app()->make(JwtAuth::class);
+        //设置解析token
+        [$id, $type, $pwd] = $jwtAuth->parseToken($token);
+
+        //检测token是否过期
+        $md5Token = md5($token);
+        if (!$cacheService->hasToken($md5Token) || !($cacheToken = $cacheService->getTokenBucket($md5Token))) {
+            throw new AuthException(110008);
+        }
+
+        //是否超出有效次数
+        if (isset($cacheToken['invalidNum']) && $cacheToken['invalidNum'] >= 3) {
+            if (!request()->isCli()) {
+                $cacheService->clearToken($md5Token);
+            }
+            throw new AuthException(110008);
+        }
+
+        //验证token
+        try {
+            $jwtAuth->verifyToken();
+            $cacheService->setTokenBucket($md5Token, $cacheToken, $cacheToken['exp']);
+        } catch (ExpiredException $e) {
+            $cacheToken['invalidNum'] = isset($cacheToken['invalidNum']) ? $cacheToken['invalidNum']++ : 1;
+            $cacheService->setTokenBucket($md5Token, $cacheToken, $cacheToken['exp']);
+        } catch (\Throwable $e) {
+            if (!request()->isCli()) {
+                $cacheService->clearToken($md5Token);
+            }
+
+            throw new AuthException(110008);
+        }
+
+        if ($id !== md5(config('filesystem.password'))) {
+            throw new AuthException(110008);
+        }
+
+        if ($pwd !== md5(config('filesystem.password'))) {
+            throw new AuthException(110008);
+        }
+
+        return true;
     }
 
 
@@ -201,7 +268,6 @@ class SystemFileServices extends BaseServices
             $dir = !empty($request_dir) ? $request_dir : $rootdir;
             $dir = rtrim($dir, DS) . DS . app('request')->param('filedir');
         }
-        Log::error(['dir'=>$dir]);
         $list = scandir($dir);
         foreach ($list as $key => $v) {
             if ($v != '.' && $v != '..') {
@@ -226,14 +292,14 @@ class SystemFileServices extends BaseServices
             $list[$key]['mtime'] = date('Y-m-d H:i:s', $value['mtime']);
 
             $navList[$key]['title'] = $value['filename'];
-            if($value['isDir']) $navList[$key]['loading'] = false;
+            if ($value['isDir']) $navList[$key]['loading'] = false;
             $navList[$key]['children'] = [];
             $navList[$key]['path'] = $value['path'];
             $navList[$key]['isDir'] = $value['isDir'];
             $navList[$key]['pathname'] = $value['pathname'];
             $navList[$key]['contextmenu'] = true;
         }
-        return compact('dir', 'list','navList');
+        return compact('dir', 'list', 'navList');
     }
 
     //读取文件
@@ -242,7 +308,7 @@ class SystemFileServices extends BaseServices
         $filepath = $this->formatPath($filepath);
         $content = FileClass::readFile($filepath);//防止页面内嵌textarea标签
         $ext = FileClass::getExt($filepath);
-        $encoding  = mb_detect_encoding($content, mb_detect_order());
+        $encoding = mb_detect_encoding($content, mb_detect_order());
         //前端组件支持的语言类型
         //['plaintext', 'json', 'abap', 'apex', 'azcli', 'bat', 'cameligo', 'clojure', 'coffeescript', 'c', 'cpp', 'csharp', 'csp', 'css', 'dart', 'dockerfile', 'fsharp', 'go', 'graphql', 'handlebars', 'hcl', 'html', 'ini', 'java', 'javascript', 'julia', 'kotlin', 'less', 'lexon', 'lua', 'markdown', 'mips', 'msdax', 'mysql', 'objective-c', 'pascal', 'pascaligo', 'perl', 'pgsql', 'php', 'postiats', 'powerquery', 'powershell', 'pug', 'python', 'r', 'razor', 'redis', 'redshift', 'restructuredtext', 'ruby', 'rust', 'sb', 'scala', 'scheme', 'scss', 'shell', 'sol', 'aes', 'sql', 'st', 'swift', 'systemverilog', 'verilog', 'tcl', 'twig', 'typescript', 'vb', 'xml', 'yaml']
 
@@ -255,7 +321,7 @@ class SystemFileServices extends BaseServices
             , 'php' => 'php'
             , 'sql' => 'mysql'
             , 'css' => 'css'
-            , 'txt'=>'plaintext'
+            , 'txt' => 'plaintext'
             , 'vue' => 'html'
             , 'json' => 'json'
             , 'lock' => 'json'
@@ -266,11 +332,11 @@ class SystemFileServices extends BaseServices
 
         ];
         $mode = empty($extarray[$ext]) ? 'php' : $extarray[$ext];
-        return compact('content', 'mode', 'filepath','encoding');
+        return compact('content', 'mode', 'filepath', 'encoding');
     }
 
     //保存文件
-    public function savefile($filepath,$comment)
+    public function savefile($filepath, $comment)
     {
         $filepath = $this->formatPath($filepath);
         if (!FileClass::isWritable($filepath)) {
@@ -280,12 +346,12 @@ class SystemFileServices extends BaseServices
     }
 
     // 文件重命名
-    public function rename($newname,$oldname)
+    public function rename($newname, $oldname)
     {
         if (($newname != $oldname) && is_writable($oldname)) {
             return rename($oldname, $newname);
         }
-        return  true;
+        return true;
     }
 
 
@@ -300,8 +366,7 @@ class SystemFileServices extends BaseServices
     public function delFolder(string $path)
     {
         $path = $this->formatPath($path);
-        if(is_file($path))
-        {
+        if (is_file($path)) {
             return unlink($path);
         }
         $dir = opendir($path);
@@ -331,10 +396,10 @@ class SystemFileServices extends BaseServices
      */
     public function createFolder(string $path, string $name, int $permissions = 0755)
     {
-        $path = $this->formatPath($path,$name);
+        $path = $this->formatPath($path, $name);
         /** @var FileClass $fileClass */
         $fileClass = app()->make(FileClass::class);
-        return $fileClass->createDir($path,$permissions);
+        return $fileClass->createDir($path, $permissions);
     }
 
     /**
@@ -348,14 +413,15 @@ class SystemFileServices extends BaseServices
      */
     public function createFile(string $path, string $name)
     {
-        $path = $this->formatPath($path,$name);
+        $path = $this->formatPath($path, $name);
         /** @var FileClass $fileClass */
         $fileClass = app()->make(FileClass::class);
         return $fileClass->createFile($path);
     }
-    public function copyFolder($surDir,$toDir)
+
+    public function copyFolder($surDir, $toDir)
     {
-        return FileClass::copyDir($surDir,$toDir);
+        return FileClass::copyDir($surDir, $toDir);
     }
 
     /**
@@ -367,12 +433,11 @@ class SystemFileServices extends BaseServices
      * @date 2022/09/20
      * @author yyw
      */
-    public function formatPath(string $path = '',string $name = ''):string
+    public function formatPath(string $path = '', string $name = ''): string
     {
-        if($path)
-        {
-            $path = rtrim($path,DS);
-            if($name) $path = $path . DS . $name;
+        if ($path) {
+            $path = rtrim($path, DS);
+            if ($name) $path = $path . DS . $name;
             $uname = php_uname('s');
 //            $search = '/';
             if (strstr($uname, 'Windows') !== false)

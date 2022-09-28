@@ -121,8 +121,9 @@ Route::group('system', function () {
     Route::get('file/rename', 'v1.system.SystemFile/rename')->option(['real_name' => '重命名文件夹']);
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
-    \app\adminapi\middleware\AdminEditorTokenMiddleware::class,
+    \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
+    \app\adminapi\middleware\AdminEditorTokenMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
 ]);
 

@@ -70,6 +70,18 @@ class LangType extends AuthController
     }
 
     /**
+     * 修改语言类型状态
+     * @param $id
+     * @param $status
+     * @return mixed
+     */
+    public function langTypeStatus($id, $status)
+    {
+        $this->services->langTypeStatus($id, $status);
+        return app('json')->success(100014);
+    }
+
+    /**
      * 删除语言类型
      * @param int $id
      * @return mixed

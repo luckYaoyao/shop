@@ -163,7 +163,7 @@ class SystemAdminServices extends BaseServices
             'logo_rectangle' => sys_config('site_logo'),//方形
             'login_logo' => sys_config('login_logo'),//登陆
             'site_name' => sys_config('site_name'),
-            'copyright' => sys_config('nncnL_crmeb_copyright'),
+            'copyright' => sys_config('nncnL_crmeb_copyright', ''),
             'version' => get_crmeb_version(),
             'key' => $key
         ];
@@ -367,6 +367,7 @@ class SystemAdminServices extends BaseServices
         else
             return false;
     }
+
     /**
      * 设置当前管理员文件管理密码
      * @param int $id

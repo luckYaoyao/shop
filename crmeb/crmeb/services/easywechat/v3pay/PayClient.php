@@ -291,7 +291,7 @@ class PayClient extends BaseClient
         $res = $this->request($this->getApiUrl(self::API_REFUND_QUERY_URL, ['out_refund_no'], [$outRefundNo]), 'GET');
 
         if (!$res) {
-            throw new PayException(50001);
+            throw new PayException(500000);
         }
 
         if (isset($res['code']) && isset($res['message'])) {

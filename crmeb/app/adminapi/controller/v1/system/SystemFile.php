@@ -61,8 +61,9 @@ class SystemFile extends AuthController
         $adminInfo = $this->request->adminInfo();
         if (!$adminInfo) return app('json')->fail(100101);
         if ($adminInfo['level'] != 0) return app('json')->fail(100101);
+        if ($password === '') return app('json')->fail(400256);
 
-        return app('json')->success($this->services->login($adminInfo['account'], $password, 'admin_edit'));
+        return app('json')->success($this->services->login($password, 'file_edit'));
     }
 
     //打开目录
@@ -104,7 +105,7 @@ class SystemFile extends AuthController
      */
     public function createFolder()
     {
-        [$path,$name] = $this->request->postMore([
+        [$path, $name] = $this->request->postMore([
             ['path', ''],
             ['name', '']
         ], true);
@@ -113,19 +114,18 @@ class SystemFile extends AuthController
         }
         $data = [];
         try {
-            $res = $this->services->createFolder($path,$name);
-            if($res)
-            {
+            $res = $this->services->createFolder($path, $name);
+            if ($res) {
                 $data = [
                     'children' => [],
-                    'contextmenu'=> true,
-                    'isDir'=> true,
-                    'loading'=> false,
-                    'path'=> $path,
-                    'pathname'=> $path . DS . $name,
-                    'title'=> $name,
+                    'contextmenu' => true,
+                    'isDir' => true,
+                    'loading' => false,
+                    'path' => $path,
+                    'pathname' => $path . DS . $name,
+                    'title' => $name,
                 ];
-            }else{
+            } else {
                 return app('json')->fail(100005);
             }
         } catch (\Exception $e) {
@@ -143,7 +143,7 @@ class SystemFile extends AuthController
      */
     public function createFile()
     {
-        [$path,$name] = $this->request->postMore([
+        [$path, $name] = $this->request->postMore([
             ['path', ''],
             ['name', '']
         ], true);
@@ -152,19 +152,18 @@ class SystemFile extends AuthController
         }
         $data = [];
         try {
-            $res = $this->services->createFile($path,$name);
-            if($res)
-            {
+            $res = $this->services->createFile($path, $name);
+            if ($res) {
                 $data = [
                     'children' => [],
-                    'contextmenu'=> true,
-                    'isDir'=> false,
-                    'loading'=> false,
-                    'path'=> $path,
-                    'pathname'=> $path . DS . $name,
-                    'title'=> $name,
+                    'contextmenu' => true,
+                    'isDir' => false,
+                    'loading' => false,
+                    'path' => $path,
+                    'pathname' => $path . DS . $name,
+                    'title' => $name,
                 ];
-            }else{
+            } else {
                 return app('json')->fail(100005);
             }
         } catch (\Exception $e) {
@@ -196,9 +195,16 @@ class SystemFile extends AuthController
         return app('json')->success(100010);
     }
 
+    /**
+     * 文件重命名
+     * @return mixed
+     *
+     * @date 2022/09/28
+     * @author yyw
+     */
     public function rename()
     {
-        [$newname,$oldname] = $this->request->postMore([
+        [$newname, $oldname] = $this->request->postMore([
             ['newname', ''],
             ['oldname', '']
         ], true);
@@ -206,7 +212,7 @@ class SystemFile extends AuthController
             return app('json')->fail(410087);
         }
         try {
-            $this->services->rename($newname,$oldname);
+            $this->services->rename($newname, $oldname);
         } catch (\Exception $e) {
             return app('json')->fail($e->getMessage());
         }

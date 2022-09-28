@@ -29,14 +29,6 @@ class AdminAuthTokenMiddleware implements MiddlewareInterface
     {
         $authInfo = null;
         $token = trim(ltrim($request->header(Config::get('cookie.token_name', 'Authori-zation')), 'Bearer'));
-        // 获取文件token,让其失效
-        $invalid_token = trim(ltrim($request->header(Config::get('cookie.invalid_token_name', 'Invalid-zation')), 'Bearer'));
-        if($invalid_token)
-        {
-            $md5Token = md5($invalid_token);
-            $res = CacheService::clearToken($md5Token);
-        }
-
         /** @var AdminAuthServices $service */
         $service = app()->make(AdminAuthServices::class);
         $adminInfo = $service->parseToken($token);

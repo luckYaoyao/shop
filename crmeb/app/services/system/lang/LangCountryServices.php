@@ -30,6 +30,16 @@ class LangCountryServices extends BaseServices
     {
         [$page, $limit] = $this->getPageValue();
         $list = $this->dao->selectList($where, '*', $page, $limit, 'id desc', true)->toArray();
+        /** @var LangTypeServices $langTypeServices */
+        $langTypeServices = app()->make(LangTypeServices::class);
+        $langTypeList = $langTypeServices->getColumn([], 'language_name,file_name,id', 'id');
+        foreach ($list as &$item) {
+            if (isset($langTypeList[$item['type_id']])) {
+                $item['link_lang'] = $langTypeList[$item['type_id']]['language_name'] . '(' . $langTypeList[$item['type_id']]['file_name'] . ')';
+            } else {
+                $item['link_lang'] = '';
+            }
+        }
         $count = $this->dao->count($where);
         return compact('list', 'count');
     }
@@ -49,6 +59,17 @@ class LangCountryServices extends BaseServices
         $field = [];
         $field[] = Form::input('name', '所属地区', $info['name'] ?? '')->required('请填写所属地区');
         $field[] = Form::input('code', '语言码', $info['code'] ?? '')->required('请填写语言码');
+        /** @var LangTypeServices $langTypeServices */
+        $langTypeServices = app()->make(LangTypeServices::class);
+        $list = $langTypeServices->getColumn(['is_del' => 0, 'status' => 1], 'language_name,file_name,id', 'id');
+        $setOption = function () use ($list) {
+            $menus = [];
+            foreach ($list as $item) {
+                $menus[] = ['value' => $item['id'], 'label' => $item['language_name'] . '(' . $item['file_name'] . ')'];
+            }
+            return $menus;
+        };
+        $field[] = Form::select('type_id', '语言类型', $info['type_id'] ?? 0)->setOptions(Form::setOptions($setOption))->filterable(true);
         return create_form($id ? '修改语言地区' : '新增语言地区', $field, Url::buildUrl('/setting/lang_country/save/' . $id), 'POST');
     }
 

@@ -331,6 +331,9 @@ class SystemConfig extends AuthController
             @copy($from, $toHome);
             @copy($from, $toPublic);
         }
+        if(isset($post['reward_integral']) || isset($post['reward_money'])) {
+            if($post['reward_integral'] < 0 || $post['reward_money'] < 0) return app('json')->fail(400558);
+        }
         foreach ($post as $k => $v) {
             $config_one = $this->services->getOne(['menu_name' => $k]);
             if ($config_one) {

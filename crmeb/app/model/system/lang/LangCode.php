@@ -48,7 +48,7 @@ class LangCode extends BaseModel
      */
     public function searchRemarksAttr($query, $value)
     {
-        if ($value !== '') $query->where('remarks', 'like', '%' . $value . '%');
+        if ($value !== '') $query->where('remarks|code|lang_explain', 'like', '%' . $value . '%');
     }
 
     /**

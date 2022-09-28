@@ -84,6 +84,19 @@ class LangTypeServices extends BaseServices
     }
 
     /**
+     * 修改语言类型状态
+     * @param $id
+     * @param $status
+     * @return bool
+     */
+    public function langTypeStatus($id, $status)
+    {
+        $res = $this->dao->update(['id' => $id], ['status' => $status]);
+        if(!$res) throw new AdminException(100015);
+        return true;
+    }
+
+    /**
      * 删除语言类型
      * @param int $id
      * @return bool

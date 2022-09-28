@@ -14,8 +14,10 @@ namespace app\adminapi\middleware;
 
 use app\Request;
 use app\services\system\admin\AdminAuthServices;
+use app\services\system\log\SystemFileServices;
 use crmeb\exceptions\AuthException;
 use crmeb\interfaces\MiddlewareInterface;
+use crmeb\services\CacheService;
 use think\facade\Config;
 
 /**
@@ -27,26 +29,11 @@ class AdminEditorTokenMiddleware implements MiddlewareInterface
 {
     public function handle(Request $request, \Closure $next)
     {
-        $authInfo = null;
-        $token = trim(ltrim($request->header(Config::get('cookie.token_name', 'Authori-zation')), 'Bearer'));
+        $token = CacheService::get(trim($request->get('fileToken')));
 
-        /** @var AdminAuthServices $service */
-        $service = app()->make(AdminAuthServices::class);
-        $adminInfo = $service->parseToken($token,110008);
-        if($adminInfo['type'] !== 'admin_edit')
-        {
-            throw new AuthException('登陆异常，请重新登录',[],110008);
-        }
-        Request::macro('isAdminLogin', function () use (&$adminInfo) {
-            return !is_null($adminInfo);
-        });
-        Request::macro('adminId', function () use (&$adminInfo) {
-            return $adminInfo['id'];
-        });
-
-        Request::macro('adminInfo', function () use (&$adminInfo) {
-            return $adminInfo;
-        });
+        /** @var SystemFileServices $service */
+        $service = app()->make(SystemFileServices::class);
+        $service->parseToken($token);
 
         return $next($request);
     }

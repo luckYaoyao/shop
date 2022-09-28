@@ -45,7 +45,7 @@ class PublicController
     {
         $data['contact_number'] = sys_config('contact_number');
         $data['company_address'] = sys_config('company_address');
-        $data['copyright'] = sys_config('copyright');
+        $data['copyright'] = sys_config('nncnL_crmeb_copyright', '');
         $data['record_No'] = sys_config('record_No');
         $data['site_name'] = sys_config('site_name');
         $data['site_keywords'] = sys_config('site_keywords');

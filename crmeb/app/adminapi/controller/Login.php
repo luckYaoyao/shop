@@ -97,10 +97,12 @@ class Login extends AuthController
             return app('json')->fail(400336);
         }
 
-        try {
-            aj_captcha_check_two($captchaType, $captchaVerification);
-        } catch (\Throwable $e) {
-            return app('json')->fail(400336);
+        if ($captchaVerification != '') {
+            try {
+                aj_captcha_check_two($captchaType, $captchaVerification);
+            } catch (\Throwable $e) {
+                return app('json')->fail(400336);
+            }
         }
 
         $this->validate(['account' => $account, 'pwd' => $password], \app\adminapi\validate\setting\SystemAdminValidata::class, 'get');

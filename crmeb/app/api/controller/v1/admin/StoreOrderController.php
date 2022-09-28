@@ -89,6 +89,7 @@ class StoreOrderController
             ['type', ''],
             ['field_key', ''],
             ['field_value', ''],
+            ['keywords', '', '', 'real_name']
         ]);
         $where['is_system_del'] = 0;
         if (!in_array($where['status'], [-1, -2, -3])) {

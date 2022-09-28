@@ -200,6 +200,8 @@ class LoginServices extends BaseServices
         if ($this->dao->getOne(['account|phone' => $account, 'is_del' => 0])) {
             throw new ApiException(410028);
         }
+        /** @var UserServices $userServices */
+        $userServices = app()->make(UserServices::class);
         $phone = $account;
         $data['account'] = $account;
         $data['pwd'] = md5((string)$password);
@@ -207,8 +209,6 @@ class LoginServices extends BaseServices
         if ($spread) {
             $data['spread_uid'] = $spread;
             $data['spread_time'] = time();
-            /** @var UserServices $userServices */
-            $userServices = app()->make(UserServices::class);
             $spreadInfo = $userServices->get($spread);
             $data['division_id'] = $spreadInfo['division_id'];
             $data['agent_id'] = $spreadInfo['agent_id'];
@@ -234,6 +234,7 @@ class LoginServices extends BaseServices
         if (!$re = $this->dao->save($data)) {
             throw new ApiException(410014);
         } else {
+            $userServices->rewardNewUser((int)$re->uid);
             //用户生成后置事件
             event('user.register', [$spread, $user_type, $data['nickname'], $re->uid, 1]);
             //推送消息

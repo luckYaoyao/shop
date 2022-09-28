@@ -82,8 +82,8 @@ class Login extends BaseController
             'appid' => sys_config('wechat_open_app_id', 'wxc736972a4ca1e2a1'),
             'version' => get_crmeb_version(),
             'site_name' => sys_config('site_name'),
-            'copyright' => sys_config('nncnL_crmeb_copyright'),
-            'copyrightImg' => sys_config('nncnL_crmeb_copyright_image'),
+            'copyright' => sys_config('nncnL_crmeb_copyright', ''),
+            'copyrightImg' => sys_config('nncnL_crmeb_copyright_image', ''),
         ]);
     }
 

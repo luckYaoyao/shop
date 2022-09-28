@@ -33,12 +33,12 @@ class JwtAuth
 
     /**
      * 获取token
-     * @param int $id
+     * @param int|string $id
      * @param string $type
      * @param array $params
      * @return array
      */
-    public function getToken(int $id, string $type, array $params = []): array
+    public function getToken($id, string $type, array $params = []): array
     {
         $host = app()->request->host();
         $time = time();
@@ -83,12 +83,13 @@ class JwtAuth
 
     /**
      * 获取token并放入令牌桶
-     * @param int $id
+     * @param $id
      * @param string $type
      * @param array $params
      * @return array
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function createToken(int $id, string $type, array $params = [])
+    public function createToken($id, string $type, array $params = [])
     {
         $tokenInfo = $this->getToken($id, $type, $params);
         $exp = $tokenInfo['params']['exp'] - $tokenInfo['params']['iat'] + 60;
