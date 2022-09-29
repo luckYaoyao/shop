@@ -34,7 +34,7 @@
           </div>
           <Divider type="vertical" v-if="row.status || row.type" />
           <template>
-            <Dropdown @on-click="changeMenu(row, index, $event)">
+            <Dropdown @on-click="changeMenu(row, index, $event)" transfer="true">
               <a href="javascript:void(0)"
                 >更多
                 <Icon type="ios-arrow-down"></Icon>

@@ -1,6 +1,6 @@
 <template>
   <div class="user-avatar-dropdown">
-    <Dropdown @on-click="handleClick">
+    <Dropdown @on-click="handleClick" transfer="true">
       <!--<Badge :dot="!!messageUnreadCount">-->
       <!--<Avatar :src="avatars"/>-->
       <!--</Badge>-->

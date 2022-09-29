@@ -109,7 +109,7 @@
           <a @click="edit(row)">编辑</a>
           <Divider type="vertical" />
           <template>
-            <Dropdown @on-click="changeMenu(row, $event, index)">
+            <Dropdown @on-click="changeMenu(row, $event, index)" transfer="true">
               <a href="javascript:void(0)">
                 更多
                 <Icon type="ios-arrow-down"></Icon>

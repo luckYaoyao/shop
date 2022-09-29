@@ -1,6 +1,6 @@
 <template>
   <div class="header-notice">
-    <Dropdown @on-click="jumpUrl">
+    <Dropdown @on-click="jumpUrl" transfer="true">
       <div>
         <Badge dot :count="needList.length ? needList.length : 0">
           <Icon type="ios-notifications-outline" size="26"></Icon>
