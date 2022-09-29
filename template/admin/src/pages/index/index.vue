@@ -20,7 +20,6 @@ import visitChart from './components/visitChart';
 import userChart from './components/userChart';
 import hotSearch from './hot-search';
 import userPreference from './user-preference';
-import { checkAuth } from '@/api/index';
 import { auth } from '@/api/system';
 import { Notice } from 'iview';
 import { getCookies, setCookies } from '@/libs/util';
@@ -45,30 +44,6 @@ export default {
     };
   },
   mounted() {
-    if (!getCookies('auth')) {
-      checkAuth()
-        .then((res) => {
-          // return Notice.warning({
-          //     title: '授权提醒',
-          //     duration: 0,
-          //     desc: res.msg,
-          //     render: h => {
-          //         return h('div', [
-          //             h('a', {
-          //                 attrs: {
-          //                     href: 'http://www.crmeb.com/home/grant/applyauthorize.html',
-          //                     target: '_blank'
-          //                 }
-          //             }, res.msg)
-          //         ])
-          //     },
-          //     onClose () {
-          //         setCookies('auth', true, 86400)
-          //     }
-          // })
-        })
-        .catch((res) => {});
-    }
     this.getAuth();
   },
   methods: {

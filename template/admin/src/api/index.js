@@ -50,9 +50,3 @@ export function rankApi() {
   });
 }
 
-export function checkAuth() {
-  return request({
-    url: 'check_auth',
-    method: 'get',
-  });
-}
