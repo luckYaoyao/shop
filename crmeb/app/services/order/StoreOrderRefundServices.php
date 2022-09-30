@@ -242,8 +242,9 @@ class StoreOrderRefundServices extends BaseServices
                 'refund_reason_wap_explain' => $orderRefundInfo['refund_explain'],
                 'refund_reason_time' => $orderRefundInfo['refunded_time'],
                 'refund_reason_wap' => $orderRefundInfo['refund_reason'],
-                'refund_price' => $orderRefundInfo['refund_price'],
+                'refund_price' => $refundData['refund_price'],
             ], 'id');
+            $splitOrderInfo = $this->storeOrderServices->get($splitOrderInfo['id']);
             $this->dao->update($id, ['store_order_id' => $splitOrderInfo['id']]);
             if ($otherOrder['id'] != 0 && $orderInfo['id'] != $otherOrder['id']) {//拆分生成新订单了
                 //修改原订单还在申请的退款单

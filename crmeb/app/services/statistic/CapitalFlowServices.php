@@ -45,7 +45,7 @@ class CapitalFlowServices extends BaseServices
             case 'refund':
                 $data['order_id'] = $orderInfo['order_id'];
                 $data['uid'] = $orderInfo['uid'];
-                $data['price'] = bcmul('-1', $orderInfo['refund_price'] ?? $orderInfo['pay_price'], 2);
+                $data['price'] = bcmul('-1', $orderInfo['refund_price'], 2);
                 $data['trading_type'] = 2;
                 $data['pay_type'] = $orderInfo['pay_type'];
                 break;

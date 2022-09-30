@@ -190,7 +190,7 @@ class PayClient extends BaseClient
     public function batches(string $outBatchNo, string $amount, string $batchName, string $remark, array $transferDetailList)
     {
         $totalFee = '0';
-
+        $amount = bcadd($amount, '0', 2);
         foreach ($transferDetailList as &$item) {
             if ($item['transfer_amount'] >= 2000 && !empty($item['user_name'])) {
                 throw new PayException('明细金额大于等于2000时,收款人姓名必须填写');

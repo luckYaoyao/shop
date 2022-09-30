@@ -22,6 +22,7 @@ use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\services\FormBuilder as Form;
 use crmeb\services\app\WechatService;
+use crmeb\services\pay\Pay;
 use crmeb\services\workerman\ChannelService;
 use think\facade\Route as Url;
 
@@ -191,8 +192,18 @@ class UserExtractServices extends BaseServices
             $services = app()->make(StoreOrderCreateServices::class);
             $insertData['order_id'] = $services->getNewOrderId();
 
-            // 微信提现
-            $res = WechatService::merchantPay($openid, $insertData['order_id'], $userExtract['extract_price'], '提现佣金到零钱');
+            //v3商家转账到零钱
+            if (sys_config('pay_wechat_type')) {
+                $pay = new Pay('v3_wechat_pay');
+                $res = $pay->merchantPay($openid, $insertData['order_id'], $userExtract['extract_price'], [
+                    'batch_name' => '提现佣金到零钱',
+                    'batch_remark' => '您于' . date('Y-m-d H:i:s') . '提现.' . $userExtract['extract_price'] . '元'
+                ]);
+            } else {
+                // 微信提现
+                $res = WechatService::merchantPay($openid, $insertData['order_id'], $userExtract['extract_price'], '提现佣金到零钱');
+            }
+
             if (!$res) {
                 throw new ApiException(400658);
             }
