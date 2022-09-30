@@ -34122,7 +34122,7 @@ CREATE TABLE IF NOT EXISTS `eb_user_extract` (
   `fail_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '无效时间',
   `add_time` int(10) UNSIGNED NOT NULL DEFAULT '0' COMMENT '添加时间',
   `status` tinyint(2) NOT NULL DEFAULT '0' COMMENT '-1 未通过 0 审核中 1 已提现',
-  `wechat` varchar(15) NOT NULL DEFAULT '' COMMENT '微信号',
+  `wechat` varchar(50) NOT NULL DEFAULT '' COMMENT '微信号',
   `qrcode_url` varchar(255) NOT NULL DEFAULT '' COMMENT '二维码地址',
   PRIMARY KEY (`id`) USING BTREE,
   KEY `extract_type` (`extract_type`) USING BTREE,
