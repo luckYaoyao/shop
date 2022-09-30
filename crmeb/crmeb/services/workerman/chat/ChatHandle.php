@@ -296,7 +296,7 @@ class ChatHandle
                     $url = sys_config('site_url') . '/kefu/mobile_chat?toUid=' . $uid . '&nickname=' . $_userInfo['nickname'];
                 } else {
                     $head = '客服回复消息提醒';
-                    $url = sys_config('site_url') . '/pages/customer_list/chat?uid=' . $uid;
+                    $url = sys_config('site_url') . '/pages/extension/customer_list/chat?uid=' . $uid;
                 }
                 $message = WechatService::newsMessage($head, $description, $url, $_userInfo['avatar']);
                 $userInfo = $userInfo->toArray();
