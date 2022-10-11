@@ -11,7 +11,6 @@
 
 namespace app\api\controller\v1;
 
-
 use app\Request;
 use app\services\message\notice\SmsService;
 use app\services\wechat\WechatServices;
@@ -23,7 +22,8 @@ use app\services\user\LoginServices;
 use think\exception\ValidateException;
 use app\api\validate\user\RegisterValidates;
 
-/**微信小程序授权类
+/**
+ * 微信小程序授权类
  * Class AuthController
  * @package app\api\controller
  */
@@ -63,6 +63,7 @@ class LoginController
     /**
      * 退出登录
      * @param Request $request
+     * @return mixed
      */
     public function logout(Request $request)
     {
@@ -71,6 +72,10 @@ class LoginController
         return app('json')->success(410002);
     }
 
+    /**
+     * 获取发送验证码key
+     * @return mixed
+     */
     public function verifyCode()
     {
         $unique = password_hash(uniqid(true), PASSWORD_BCRYPT);
@@ -79,6 +84,11 @@ class LoginController
         return app('json')->success(['key' => $unique, 'expire_time' => $time]);
     }
 
+    /**
+     * 获取图片验证码
+     * @param Request $request
+     * @return \think\Response
+     */
     public function captcha(Request $request)
     {
         ob_clean();
@@ -93,7 +103,6 @@ class LoginController
 
     /**
      * 验证验证码是否正确
-     *
      * @param $uni
      * @param string $code
      * @return bool
@@ -117,6 +126,7 @@ class LoginController
     /**
      * 验证码发送
      * @param Request $request
+     * @param SmsService $services
      * @return mixed
      */
     public function verify(Request $request, SmsService $services)
@@ -171,6 +181,9 @@ class LoginController
      * H5注册新用户
      * @param Request $request
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function register(Request $request)
     {
@@ -201,6 +214,9 @@ class LoginController
      * 密码修改
      * @param Request $request
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function reset(Request $request)
     {
@@ -462,6 +478,7 @@ class LoginController
     }
 
     /**
+     * 滑块验证
      * @return mixed
      */
     public function ajcaptcha(Request $request)

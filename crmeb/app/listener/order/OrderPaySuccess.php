@@ -89,10 +89,5 @@ class OrderPaySuccess implements ListenerInterface
 
         //商品日志记录支付记录
         ProductLogJob::dispatch(['pay', ['uid' => $orderInfo['uid'], 'order_id' => $orderInfo['id']]]);
-
-        // 推送订单支付
-        if (sys_config('out_push_switch') && sys_config('out_push_order_pay_url')) {
-            OrderJob::dispatchDo('paySuccess', [(int)$orderInfo['id']]);
-        }
     }
 }

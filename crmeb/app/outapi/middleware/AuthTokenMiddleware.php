@@ -13,7 +13,8 @@ namespace app\outapi\middleware;
 
 
 use app\Request;
-use app\services\out\LoginServices;
+use app\services\out\OutAccountServices;
+use app\services\out\OutInterfaceServices;
 use crmeb\interfaces\MiddlewareInterface;
 use think\facade\Config;
 
@@ -35,8 +36,8 @@ class AuthTokenMiddleware implements MiddlewareInterface
     public function handle(Request $request, \Closure $next)
     {
         $token = trim(ltrim($request->header(Config::get('cookie.token_name', 'Authori-zation')), 'Bearer'));
-        /** @var LoginServices $services */
-        $services = app()->make(LoginServices::class);
+        /** @var OutAccountServices $services */
+        $services = app()->make(OutAccountServices::class);
         $outInfo = $services->parseToken($token);
         Request::macro('outId', function () use (&$outInfo) {
             return (int)$outInfo['id'];
@@ -45,6 +46,9 @@ class AuthTokenMiddleware implements MiddlewareInterface
         Request::macro('outInfo', function () use (&$outInfo) {
             return $outInfo;
         });
+        /** @var OutInterfaceServices $outInterfaceServices */
+        $outInterfaceServices = app()->make(OutInterfaceServices::class);
+        $outInterfaceServices->verifyAuth($request);
 
         return $next($request);
     }

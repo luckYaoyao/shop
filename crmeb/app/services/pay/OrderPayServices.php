@@ -40,7 +40,11 @@ class OrderPayServices
     /**
      * 订单发起支付
      * @param array $orderInfo
+     * @param string $payType
      * @return array|string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function orderPay(array $orderInfo, string $payType)
     {

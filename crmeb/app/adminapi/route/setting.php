@@ -165,8 +165,14 @@ Route::group('setting', function () {
     Route::post('system_out_account/update/:id', 'v1.setting.SystemOutAccount/update')->option(['real_name' => '对外接口账号修改']);
     //设置账号是否禁用
     Route::put('system_out_account/set_status/:id/:status', 'v1.setting.SystemOutAccount/set_status')->option(['real_name' => '设置账号是否禁用']);
+    //设置账号推送接口表单
+    Route::get('system_out_account/set_up/:id', 'v1.setting.SystemOutAccount/outSetUpForm')->option(['real_name' => '设置账号推送接口表单']);
+    //设置账号推送接口
+    Route::put('system_out_account/set_up/:id', 'v1.setting.SystemOutAccount/outSetUpSave')->option(['real_name' => '设置账号推送接口']);
     //删除账号
     Route::delete('system_out_account/:id', 'v1.setting.SystemOutAccount/delete')->option(['real_name' => '删除账号']);
+    //对外接口列表
+    Route::get('system_out_interface/list', 'v1.setting.SystemOutAccount/outInterfaceList')->option(['real_name' => '对外接口列表']);
 
     /** 多语言 */
     //语言国家列表

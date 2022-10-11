@@ -995,6 +995,8 @@ class StoreOrderRefundServices extends BaseServices
         event('order.orderRefundCreateAfter', [$order]);
         //提醒推送
         event('notice.notice', [['order' => $order], 'send_order_apply_refund']);
+        //推送订单
+        event('out.outPush', ['refund_create_push', (int)$order['id']]);
         try {
             ChannelService::instance()->send('NEW_REFUND_ORDER', ['order_id' => $order['order_id']]);
         } catch (\Exception $e) {
@@ -1250,7 +1252,8 @@ class StoreOrderRefundServices extends BaseServices
         $storeOrderCartInfoServices->clearOrderCartInfo($oid);
         //售后订单取消后置事件
         event('order.orderRefundCancelAfter', [$orderRefundInfo]);
-
+        // 推送订单
+        event('out.outPush', ['order_pay_push', (int)$orderRefundInfo['id']]);
         return true;
     }
 

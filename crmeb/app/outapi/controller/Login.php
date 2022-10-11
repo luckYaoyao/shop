@@ -13,7 +13,7 @@ namespace app\outapi\controller;
 use app\outapi\validate\LoginValidate;
 use app\Request;
 use think\facade\App;
-use app\services\out\LoginServices;
+use app\services\out\OutAccountServices;
 
 /**
  * Class Login
@@ -24,9 +24,9 @@ class Login extends AuthController
     /**
      * OutAccount constructor.
      * @param App $app
-     * @param LoginServices $services
+     * @param OutAccountServices $services
      */
-    public function __construct(App $app, LoginServices $services)
+    public function __construct(App $app, OutAccountServices $services)
     {
         parent::__construct($app);
         $this->services = $services;

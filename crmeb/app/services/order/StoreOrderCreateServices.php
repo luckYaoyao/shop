@@ -212,7 +212,7 @@ class StoreOrderCreateServices extends BaseServices
             'unique' => $key,
             'shipping_type' => $shippingType,
             'channel_type' => $userInfo['user_type'],
-            'province' => $userInfo['user_type'] == 'wechat' || $userInfo['user_type'] == 'routine' ? $wechatServices->value(['uid' => $uid, 'user_type' => $userInfo['user_type']], 'province') : '',
+            'province' => strval($userInfo['user_type'] == 'wechat' || $userInfo['user_type'] == 'routine' ? $wechatServices->value(['uid' => $uid, 'user_type' => $userInfo['user_type']], 'province') : ''),
             'spread_uid' => 0,
             'spread_two_uid' => 0,
             'virtual_type' => $virtual_type,
@@ -260,8 +260,10 @@ class StoreOrderCreateServices extends BaseServices
             return $order;
         });
 
-        //订单创建成功后置事件
+        // 订单创建成功后置事件
         event('order.orderCreateAfter', [$order, compact('cartInfo', 'priceData', 'addressId', 'cartIds', 'news'), $uid, $key, $combinationId, $seckillId, $bargainId]);
+        // 推送订单
+        event('out.outPush', ['order_create_push', (int)$order['id']]);
         return $order;
     }
 

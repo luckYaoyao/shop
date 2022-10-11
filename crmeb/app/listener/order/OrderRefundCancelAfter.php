@@ -15,10 +15,5 @@ class OrderRefundCancelAfter implements ListenerInterface
     public function handle($event): void
     {
         [$orderRefundInfo] = $event;
-
-        // 售后单取消
-        if (sys_config('out_push_switch') && sys_config('out_push_refund_cancel_url')) {
-            RefundOrderJob::dispatchDo('cancelApply', [(int)$orderRefundInfo['id']]);
-        }
     }
 }

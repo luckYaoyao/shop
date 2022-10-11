@@ -56,9 +56,10 @@ class WechatController
 
     /**
      * 微信公众号静默授权
-     * @param $code
-     * @param $spread
+     * @param string $spread
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function silenceAuth($spread = '')
     {
@@ -73,9 +74,10 @@ class WechatController
 
     /**
      * 微信公众号静默授权
-     * @param $code
-     * @param $spread
+     * @param string $spread
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function silenceAuthNoLogin($spread = '')
     {
@@ -90,9 +92,13 @@ class WechatController
 
     /**
      * 静默授权 手机号直接注册登录
-     * @param $code
-     * @param $spread
+     * @param string $key
+     * @param string $phone
+     * @param string $captcha
      * @return mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function silenceAuthBindingPhone($key = '', $phone = '', $captcha = '')
     {

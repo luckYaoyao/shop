@@ -26586,8 +26586,87 @@ CREATE TABLE IF NOT EXISTS `eb_out_account` (
   `last_time` int(11) NOT NULL DEFAULT '0' COMMENT '最后一次登录时间',
   `ip` varchar(30) NOT NULL DEFAULT '' COMMENT 'IP',
   `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+  `push_open` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否推送',
+  `order_create_push` varchar(255) NOT NULL DEFAULT '' COMMENT '订单创建推送接口',
+  `order_pay_push` varchar(255) NOT NULL DEFAULT '' COMMENT '订单支付推送接口',
+  `refund_create_push` varchar(255) NOT NULL DEFAULT '' COMMENT '售后订单创建推送接口',
+  `refund_cancel_push` varchar(255) NOT NULL DEFAULT '' COMMENT '售后订单取消推送接口',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='对外接口账号' ROW_FORMAT=DYNAMIC;
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `eb_out_interface`
+--
+
+CREATE TABLE IF NOT EXISTS `eb_out_interface` (
+  `id` int(11) NOT NULL COMMENT '自增id',
+  `pid` int(11) NOT NULL DEFAULT '0' COMMENT '父级pid',
+  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0菜单，1接口',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '接口名称',
+  `describe` text DEFAULT NULL COMMENT '功能描述',
+  `method` varchar(255) NOT NULL DEFAULT '' COMMENT '接口类型',
+  `url` varchar(255) NOT NULL DEFAULT '' COMMENT '接口地址',
+  `request_params` text DEFAULT NULL COMMENT '请求参数',
+  `return_params` text DEFAULT NULL COMMENT '返回参数',
+  `request_example` text DEFAULT NULL COMMENT '请求示例',
+  `return_example` text DEFAULT NULL COMMENT '返回示例',
+  `error_code` text DEFAULT NULL COMMENT '错误返回',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='对外接口';
+
+--
+-- 转存表中的数据 `eb_out_interface`
+--
+
+INSERT INTO `eb_out_interface` (`id`, `pid`, `type`, `name`, `describe`, `method`, `url`, `request_params`, `return_params`, `request_example`, `return_example`, `error_code`) VALUES
+(1, 0, 0, '第三方授权', NULL, '', '', NULL, NULL, NULL, NULL, NULL),
+(2, 1, 1, '获取access_token', NULL, 'post', '/access_token', NULL, NULL, NULL, NULL, NULL),
+(3, 1, 1, '刷新access_token', NULL, 'post', '/refresh_token', NULL, NULL, NULL, NULL, NULL),
+(4, 0, 0, '用户相关', NULL, '', '', NULL, NULL, NULL, NULL, NULL),
+(5, 4, 1, '新增用户', NULL, 'post', '/user', NULL, NULL, NULL, NULL, NULL),
+(6, 4, 1, '用户列表', NULL, 'get', '/user/list', NULL, NULL, NULL, NULL, NULL),
+(7, 4, 1, '等级列表', NULL, 'get', '/user_level/list', NULL, NULL, NULL, NULL, NULL),
+(8, 4, 1, '更新用户', NULL, 'put', '/user/{uid}', NULL, NULL, NULL, NULL, NULL),
+(9, 4, 1, '赠送积分余额优惠券会员', NULL, 'put', '/user/give/{uid}', NULL, NULL, NULL, NULL, NULL),
+(10, 0, 0, '优惠券相关', NULL, '', '', NULL, NULL, NULL, NULL, NULL),
+(11, 10, 1, '新增优惠券', NULL, 'post', '/coupon', NULL, NULL, NULL, NULL, NULL),
+(12, 10, 1, '修改优惠券状态', NULL, 'put', '/coupon/status/{id}/{status}', NULL, NULL, NULL, NULL, NULL),
+(13, 10, 1, '删除优惠券', NULL, 'delete', '/coupon/{id}', NULL, NULL, NULL, NULL, NULL),
+(14, 10, 1, '优惠券列表', NULL, 'get', '/coupon/list', NULL, NULL, NULL, NULL, NULL),
+(15, 0, 0, '商品相关', NULL, '', '', NULL, NULL, NULL, NULL, NULL),
+(16, 15, 1, '新增分类', NULL, 'post', '/category', NULL, NULL, NULL, NULL, NULL),
+(17, 15, 1, '更新分类', NULL, 'put', '/category/{id}', NULL, NULL, NULL, NULL, NULL),
+(18, 15, 1, '更新分类状态', NULL, 'put', '/category/set_show/{id}/{is_show}', NULL, NULL, NULL, NULL, NULL),
+(19, 15, 1, '删除分类', NULL, 'delete', '/category/{id}', NULL, NULL, NULL, NULL, NULL),
+(20, 15, 1, '分类列表', NULL, 'get', '/category/list', NULL, NULL, NULL, NULL, NULL),
+(21, 15, 1, '分类详情', NULL, 'get', '/category/{id}', NULL, NULL, NULL, NULL, NULL),
+(22, 15, 1, '新增商品', NULL, 'post', '/product', NULL, NULL, NULL, NULL, NULL),
+(23, 15, 1, '更新商品', NULL, 'put', '/product/{id}', NULL, NULL, NULL, NULL, NULL),
+(24, 15, 1, '更新商品状态', NULL, 'put', '/product/set_show/{id}/{is_show}', NULL, NULL, NULL, NULL, NULL),
+(25, 15, 1, '商品列表', NULL, 'get', '/product/list', NULL, NULL, NULL, NULL, NULL),
+(26, 15, 1, '商品详情', NULL, 'get', '/product/{id}', NULL, NULL, NULL, NULL, NULL),
+(27, 15, 1, '同步商品库存', NULL, 'put', '/product/stock/upload', NULL, NULL, NULL, NULL, NULL),
+(28, 0, 0, '订单相关', NULL, '', '', NULL, NULL, NULL, NULL, NULL),
+(29, 28, 1, '订单列表', NULL, 'get', '/order/list', NULL, NULL, NULL, NULL, NULL),
+(30, 28, 1, '订单详情', NULL, 'get', '/order/{order_id}', NULL, NULL, NULL, NULL, NULL),
+(31, 28, 1, '订单未发货商品列表', NULL, 'get', '/order/split_cart_info/{order_id}', NULL, NULL, NULL, NULL, NULL),
+(32, 28, 1, '快递公司', NULL, 'get', '/order/express_list', NULL, NULL, NULL, NULL, NULL),
+(33, 28, 1, '订单收货', NULL, 'put', '/order/receive/{order_id}', NULL, NULL, NULL, NULL, NULL),
+(34, 28, 1, '订单发货', NULL, 'put', '/order/delivery/{order_id}', NULL, NULL, NULL, NULL, NULL),
+(35, 28, 1, '订单拆单发货', NULL, 'put', '/order/split_delivery/{order_id}', NULL, NULL, NULL, NULL, NULL),
+(36, 28, 1, '修改订单备注', NULL, 'put', '/order/remark/{order_id}', NULL, NULL, NULL, NULL, NULL),
+(37, 28, 1, '修改订单配送信息', NULL, 'put', '/order/distribution/{order_id}', NULL, NULL, NULL, NULL, NULL),
+(38, 28, 1, '修改订单发票', NULL, 'put', '/order/invoice/{order_id}', NULL, NULL, NULL, NULL, NULL),
+(39, 28, 1, '修改订单发票状态', NULL, 'put', '/order/invoice_status/{order_id}', NULL, NULL, NULL, NULL, NULL),
+(40, 28, 1, '推送订单', NULL, 'post', '/order/upload', NULL, NULL, NULL, NULL, NULL),
+(41, 0, 0, '售后服务', NULL, '', '', NULL, NULL, NULL, NULL, NULL),
+(42, 41, 1, '售后订单列表', NULL, 'get', '/refund/list', NULL, NULL, NULL, NULL, NULL),
+(43, 41, 1, '售后订单详情', NULL, 'get', '/refund/{order_id}', NULL, NULL, NULL, NULL, NULL),
+(44, 41, 1, '修改售后订单备注', NULL, 'put', '/refund/remark/{order_id}', NULL, NULL, NULL, NULL, NULL),
+(45, 41, 1, '同意退款', NULL, 'put', '/refund/{order_id}', NULL, NULL, NULL, NULL, NULL),
+(46, 41, 1, '拒绝退款', NULL, 'put', '/refund/refuse/{order_id}', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 

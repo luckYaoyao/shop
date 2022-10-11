@@ -15,6 +15,7 @@ use app\dao\out\OutAccountDao;
 use app\services\BaseServices;
 use crmeb\exceptions\AuthException;
 use crmeb\services\CacheService;
+use crmeb\services\FormBuilder as Form;
 use crmeb\utils\JwtAuth;
 use Firebase\JWT\ExpiredException;
 
@@ -26,7 +27,7 @@ use Firebase\JWT\ExpiredException;
  * @method update($id, array $data, ?string $key = null)
  * @method save(array $data)保存
  */
-class LoginServices extends BaseServices
+class OutAccountServices extends BaseServices
 {
     /**
      * LoginServices constructor.
@@ -123,6 +124,7 @@ class LoginServices extends BaseServices
             foreach ($list as &$item) {
                 $item['add_time'] = $item['add_time'] ? date('Y-m-d H:i:s', $item['add_time']) : '暂无';
                 $item['last_time'] = $item['last_time'] ? date('Y-m-d H:i:s', $item['last_time']) : '暂无';
+                $item['rules'] = is_null($item['rules']) ? [] : explode(',', $item['rules']);
             }
         }
         return compact('count', 'list');
@@ -233,5 +235,36 @@ class LoginServices extends BaseServices
         }
 
         return [$md5Token, $id, $type];
+    }
+
+    /**
+     * 设置账号推送接口表单
+     * @param $id
+     * @return array
+     * @throws \FormBuilder\Exception\FormBuilderException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function outSetUpForm($id)
+    {
+        $info = $this->dao->get($id);
+        $f[] = Form::radio('push_open', '推送开关', $info['push_open'] ?? 0)->options([['label' => '开启', 'value' => 1], ['label' => '关闭', 'value' => 0]]);
+        $f[] = Form::input('order_create_push', '订单创建推送', $info['order_create_push'] ?? '');
+        $f[] = Form::input('order_pay_push', '订单支付推送', $info['order_pay_push'] ?? '');
+        $f[] = Form::input('refund_create_push', '退款单创建推送', $info['refund_create_push'] ?? '');
+        $f[] = Form::input('refund_cancel_push', '退款单取消推送', $info['refund_cancel_push'] ?? '');
+        return create_form('设置推送', $f, $this->url('/setting/system_out_account/set_up/' . $id), 'PUT');
+    }
+
+    /**
+     * 设置账号推送接口
+     * @param $id
+     * @param $data
+     * @return \crmeb\basic\BaseModel
+     */
+    public function outSetUpSave($id, $data)
+    {
+        return $this->dao->update($id, $data);
     }
 }

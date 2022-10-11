@@ -154,7 +154,6 @@ class SystemConfigServices extends BaseServices
                 ],
                 'pay_weixin_client_cert' => '',
                 'pay_weixin_client_key' => '',
-                'paydir' => '',
             ],
             'show_value' => 1
         ],

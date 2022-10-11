@@ -275,16 +275,11 @@ class OutStoreOrderRefundServices extends BaseServices
     /**
      * 售后单生成
      * @param int $id
+     * @param string $pushUrl
      * @return bool
      */
-    public function refundCreatePush(int $id): bool
+    public function refundCreatePush(int $id, string $pushUrl): bool
     {
-        $pushUrl = sys_config('out_push_refund_url');
-        if (!$pushUrl) {
-            Log::error('请检查售后单推送接口配置');
-            return true;
-        }
-
         $refundInfo = $this->getInfo('', $id);
         /** @var OutStoreOrderServices $orderServices */
         $orderServices = app()->make(OutStoreOrderServices::class);
@@ -299,21 +294,19 @@ class OutStoreOrderRefundServices extends BaseServices
     /**
      * 售后单取消
      * @param int $id
+     * @param string $pushUrl
      * @return bool
      */
-    public function cancelApplyPush(int $id): bool
+    public function cancelApplyPush(int $id, string $pushUrl): bool
     {
-        $pushUrl = sys_config('out_push_refund_cancel_url');
-        if (!$pushUrl) {
-            Log::error('请检查售后单取消推送接口配置');
-            return true;
+        $refundInfo = $this->getInfo('', $id);
+        /** @var OutStoreOrderServices $orderServices */
+        $orderServices = app()->make(OutStoreOrderServices::class);
+        $orderInfo = $orderServices->get($refundInfo['store_order_id'], ['id', 'order_id']);
+        if (!$orderInfo) {
+            throw new AdminException(400118);
         }
-
-        $refundInfo = $this->dao->get($id, ['order_id']);
-        if (!$refundInfo) {
-            throw new AdminException(410173);
-        }
-        $refundInfo = $refundInfo->toArray();
+        $refundInfo['order'] = $orderInfo->toArray();
         return $this->push($pushUrl, $refundInfo, $id, '取消售后单');
     }
 

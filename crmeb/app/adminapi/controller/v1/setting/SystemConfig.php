@@ -309,13 +309,13 @@ class SystemConfig extends AuthController
         }
 
         //支付接口类型选择，如果有订单就不能再进行切换
-        if (isset($post['pay_wechat_type'])) {
-            /** @var StoreOrderServices $orderServices */
-            $orderServices = app()->make(StoreOrderServices::class);
-            if ($post['pay_wechat_type'] != -1 && $orderServices->count()) {
-                return app('json')->fail('支付接口类型已经选择，不能再次进行切换，切换后会导致无法退款等问题。');
-            }
-        }
+//        if (isset($post['pay_wechat_type'])) {
+//            /** @var StoreOrderServices $orderServices */
+//            $orderServices = app()->make(StoreOrderServices::class);
+//            if ($post['pay_wechat_type'] != -1 && $orderServices->count()) {
+//                return app('json')->fail('支付接口类型已经选择，不能再次进行切换，切换后会导致无法退款等问题。');
+//            }
+//        }
 
         if (isset($post['weixin_ckeck_file'])) {
             $from = public_path() . $post['weixin_ckeck_file'];

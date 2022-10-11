@@ -45,6 +45,7 @@ class WechatServices extends BaseServices
     /**
      * 微信公众号服务
      * @return \think\Response
+     * @throws \EasyWeChat\Server\BadRequestException
      */
     public function serve()
     {
@@ -54,6 +55,8 @@ class WechatServices extends BaseServices
 
     /**
      * 支付异步回调
+     * @return string
+     * @throws \EasyWeChat\Core\Exceptions\FaultException
      */
     public function notify()
     {
@@ -285,31 +288,36 @@ class WechatServices extends BaseServices
         /** @var WechatUserServices $wechatUserServices */
         $wechatUserServices = app()->make(WechatUserServices::class);
         $user = $wechatUserServices->getAuthUserInfo($openid, 'wechat');
-        if (!$user) {//没有注册用户也没有强制手机号绑定 返回让微信授权登录
-            $createData = [$openid, $wechatInfo, $spread, '', 'wechat'];
-            $userInfoKey = md5($openid . '_' . time() . '_wechat');
-            Cache::setTokenBucket($userInfoKey, $createData, 7200);
-            return ['auth_login' => 1, 'key' => $userInfoKey];
-        } else {
-            //更新用户信息
-            $wechatUserServices->wechatUpdata([$user['uid'], ['code' => $spread]]);
-            $token = $this->createToken((int)$user['uid'], 'wechat');
-            if ($token) {
-                /** @var UserVisitServices $visitServices */
-                $visitServices = app()->make(UserVisitServices::class);
-                $visitServices->loginSaveVisit($user);
-                $token['userInfo'] = $user;
-                return $token;
-            } else
-                throw new ApiException(410019);
-        }
+        $createData = [$openid, $wechatInfo, $spread, '', 'wechat'];
+        $userInfoKey = md5($openid . '_' . time() . '_wechat');
+        Cache::setTokenBucket($userInfoKey, $createData, 7200);
+        return ['auth_login' => 1, 'key' => $userInfoKey];
+//        if (!$user) {//没有注册用户也没有强制手机号绑定 返回让微信授权登录
+//            $createData = [$openid, $wechatInfo, $spread, '', 'wechat'];
+//            $userInfoKey = md5($openid . '_' . time() . '_wechat');
+//            Cache::setTokenBucket($userInfoKey, $createData, 7200);
+//            return ['auth_login' => 1, 'key' => $userInfoKey];
+//        } else {
+//            //更新用户信息
+//            $wechatUserServices->wechatUpdata([$user['uid'], ['code' => $spread]]);
+//            $token = $this->createToken((int)$user['uid'], 'wechat');
+//            if ($token) {
+//                /** @var UserVisitServices $visitServices */
+//                $visitServices = app()->make(UserVisitServices::class);
+//                $visitServices->loginSaveVisit($user);
+//                $token['userInfo'] = $user;
+//                return $token;
+//            } else
+//                throw new ApiException(410019);
+//        }
     }
 
     /**
      * 微信公众号静默授权
-     * @param $spread
+     * @param $key
      * @param $phone
      * @return array
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      */
@@ -357,9 +365,11 @@ class WechatServices extends BaseServices
     }
 
     /**
-     * @param array $userInfo
+     * app登录
+     * @param array $userData
      * @param string $phone
-     * @return array
+     * @param string $userType
+     * @return array|false
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\ModelNotFoundException
      */

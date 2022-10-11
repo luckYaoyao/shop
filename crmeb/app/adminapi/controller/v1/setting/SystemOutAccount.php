@@ -12,7 +12,8 @@ namespace app\adminapi\controller\v1\setting;
 
 use app\adminapi\controller\AuthController;
 use app\outapi\validate\StoreOutAccountValidate;
-use app\services\out\LoginServices;
+use app\services\out\OutAccountServices;
+use app\services\out\OutInterfaceServices;
 use think\facade\App;
 
 /**
@@ -26,9 +27,9 @@ class SystemOutAccount extends AuthController
      * 构造方法
      * SystemOut constructor.
      * @param App $app
-     * @param LoginServices $services
+     * @param OutAccountServices $services
      */
-    public function __construct(App $app, LoginServices $services)
+    public function __construct(App $app, OutAccountServices $services)
     {
         parent::__construct($app);
         $this->services = $services;
@@ -76,6 +77,9 @@ class SystemOutAccount extends AuthController
     /**
      * 保存
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function save()
     {
@@ -83,6 +87,7 @@ class SystemOutAccount extends AuthController
             [['appid', 's'], ''],
             [['appsecret', 's'], ''],
             [['title', 's'], ''],
+            ['rules', []],
         ]);
         $this->validate($data, StoreOutAccountValidate::class, 'save');
         if ($this->services->getOne(['appid' => $data['appid']])) return app('json')->fail('账号重复');
@@ -92,6 +97,7 @@ class SystemOutAccount extends AuthController
             $data['appsecret'] = password_hash($data['appsecret'], PASSWORD_DEFAULT);
         }
         $data['add_time'] = time();
+        $data['rules'] = implode(',', $data['rules']);
         if (!$this->services->save($data)) {
             return app('json')->fail('添加失败');
         } else {
@@ -103,12 +109,16 @@ class SystemOutAccount extends AuthController
      * 修改
      * @param string $id
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function update($id = '')
     {
         $data = $this->request->postMore([
             [['appsecret', 's'], ''],
             [['title', 's'], ''],
+            ['rules', []],
         ]);
 
         $this->validate($data, StoreOutAccountValidate::class, 'update');
@@ -118,12 +128,57 @@ class SystemOutAccount extends AuthController
             $data['appsecret'] = password_hash($data['appsecret'], PASSWORD_DEFAULT);
         }
         if (!$this->services->getOne(['id' => $id])) return app('json')->fail('没有此账号');
-
+        $data['rules'] = implode(',', $data['rules']);
         $res = $this->services->update($id, $data);
         if (!$res) {
             return app('json')->fail('修改失败');
         } else {
             return app('json')->success('修改成功!');
         }
+    }
+
+    /**
+     * 设置账号推送接口表单
+     * @param $id
+     * @return mixed
+     * @throws \FormBuilder\Exception\FormBuilderException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function outSetUpForm($id)
+    {
+        return app('json')->success($this->services->outSetUpForm($id));
+    }
+
+    /**
+     * 设置账号推送接口
+     * @param $id
+     * @return mixed
+     */
+    public function outSetUpSave($id)
+    {
+        $data = $this->request->postMore([
+            ['push_open', 0],
+            ['order_create_push', ''],
+            ['order_pay_push', ''],
+            ['refund_create_push', ''],
+            ['refund_cancel_push', ''],
+        ]);
+        $this->services->outSetUpSave($id, $data);
+        return app('json')->success('修改成功');
+    }
+
+    /**
+     * 对外接口列表
+     * @param OutInterfaceServices $service
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function outInterfaceList(OutInterfaceServices $service)
+    {
+        return app('json')->success($service->outInterfaceList());
     }
 }

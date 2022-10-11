@@ -19,7 +19,6 @@ use crmeb\exceptions\AdminException;
 use crmeb\services\app\WechatService;
 
 /**
- *
  * Class UserWechatuserServices
  * @package app\services\user
  * @method delete($id, ?string $key = null)  删除
@@ -39,7 +38,7 @@ class WechatReplyServices extends BaseServices
 
     /**
      * 消息类型
-     * @var string[]
+     * @return string[]
      */
     public function replyType()
     {
@@ -71,7 +70,8 @@ class WechatReplyServices extends BaseServices
     }
 
     /**
-     * @param $key
+     * 关注回复
+     * @param string $key
      * @return array|\think\Model|null
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -89,7 +89,9 @@ class WechatReplyServices extends BaseServices
     }
 
     /**
+     * 保存关键字
      * @param $data
+     * @param $id
      * @param $key
      * @param $type
      * @param int $status
@@ -213,8 +215,11 @@ class WechatReplyServices extends BaseServices
     /**
      * 整理图片资源
      * @param $data
-     * @param $key
-     * @return array|bool|mixed
+     * @param $id
+     * @return array|mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function tidyImage($data, $id)
     {
@@ -246,8 +251,11 @@ class WechatReplyServices extends BaseServices
     /**
      * 整理声音资源
      * @param $data
-     * @param $key
-     * @return array|bool|mixed
+     * @param $id
+     * @return array|mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function tidyVoice($data, $id)
     {
@@ -279,17 +287,16 @@ class WechatReplyServices extends BaseServices
     /**
      * 整理图文资源
      * @param $data
-     * @param $key
+     * @param $id
      * @return bool
      */
     public function tidyNews($data, $id = 0)
     {
-//        $data = $data['list'][0];
         if (!count($data)) {
             throw new AdminException(400709);
         }
         $siteUrl = sys_config('site_url');
-        if (empty($data['url'])) $data['url'] = $siteUrl . '/pages/news_details/index?id=' . $data['id'];
+        if (empty($data['url'])) $data['url'] = $siteUrl . '/pages/extension/news_details/index?id=' . $data['id'];
         if (count($data['image_input'])) $data['image'] = $data['image_input'][0];
         return $data;
     }
@@ -297,7 +304,11 @@ class WechatReplyServices extends BaseServices
     /**
      * 获取关键字
      * @param $key
+     * @param string $openId
      * @return array|\EasyWeChat\Message\Image|\EasyWeChat\Message\News|\EasyWeChat\Message\Text|\EasyWeChat\Message\Transfer|\EasyWeChat\Message\Voice
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function reply($key, string $openId = '')
     {

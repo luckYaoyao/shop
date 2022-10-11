@@ -393,15 +393,11 @@ class OutStoreOrderServices extends BaseServices
     /**
      * 订单推送
      * @param int $id
+     * @param string $pushUrl
      * @return bool
      */
-    public function orderCreatePush(int $id): bool
+    public function orderCreatePush(int $id, string $pushUrl): bool
     {
-        $pushUrl = sys_config('out_push_order_url');
-        if (!$pushUrl) {
-            Log::error('请检查订单推送接口配置');
-            return true;
-        }
         $orderInfo = $this->getInfo('', $id);
         return $this->push($pushUrl, $orderInfo, $id, '订单');
     }
@@ -409,20 +405,12 @@ class OutStoreOrderServices extends BaseServices
     /**
      * 支付推送
      * @param int $id
+     * @param string $pushUrl
      * @return bool
      */
-    public function paySuccessPush(int $id): bool
+    public function paySuccessPush(int $id, string $pushUrl): bool
     {
-        $pushUrl = sys_config('out_push_order_pay_url');
-        if (!$pushUrl) {
-            Log::error('请检查订单支付推送接口配置');
-            return true;
-        }
-        $orderInfo = $this->dao->get($id, ['order_id']);
-        if (!$orderInfo) {
-            throw new AdminException(410173);
-        }
-        $orderInfo = $orderInfo->toArray();
+        $orderInfo = $this->getInfo('', $id);
         return $this->push($pushUrl, $orderInfo, $id, '订单支付');
     }
 

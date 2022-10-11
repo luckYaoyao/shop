@@ -51,7 +51,9 @@ class RoutineServices extends BaseServices
      * @param $spread_code
      * @param $iv
      * @param $encryptedData
-     * @return mixed
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function mp_auth($code, $post_cache_key, $login_type, $spread_spid, $spread_code, $iv, $encryptedData)
     {
@@ -150,8 +152,8 @@ class RoutineServices extends BaseServices
 
     /**
      * 小程序创建用户后返回uid
-     * @param $routineInfo
-     * @return mixed
+     * @param $routine
+     * @return array
      */
     public function routineOauth($routine)
     {
@@ -179,6 +181,8 @@ class RoutineServices extends BaseServices
 
     /**
      * 小程序支付回调
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \EasyWeChat\Core\Exceptions\FaultException
      */
     public function notify()
     {
@@ -187,7 +191,7 @@ class RoutineServices extends BaseServices
 
     /**
      * 获取小程序订阅消息id
-     * @return mixed
+     * @return bool|mixed|null
      */
     public function tempIds()
     {
@@ -210,9 +214,9 @@ class RoutineServices extends BaseServices
 
     /**
      * 获取小程序直播列表
-     * @param $pgae
+     * @param $page
      * @param $limit
-     * @return mixed
+     * @return array|bool|mixed
      */
     public function live($page, $limit)
     {
@@ -230,7 +234,11 @@ class RoutineServices extends BaseServices
      * 静默授权
      * @param $code
      * @param $spread
-     * @return mixed
+     * @param $spid
+     * @return array
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function silenceAuth($code, $spread, $spid)
     {
@@ -290,7 +298,9 @@ class RoutineServices extends BaseServices
      * 静默授权
      * @param $code
      * @param $spread
-     * @return mixed
+     * @param $spid
+     * @return array
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function silenceAuthNoLogin($code, $spread, $spid)
     {
@@ -341,7 +351,11 @@ class RoutineServices extends BaseServices
      * 手机号登录 静默授权绑定关系
      * @param $code
      * @param $spread
-     * @return mixed
+     * @param $spid
+     * @param $phone
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function silenceAuthBindingPhone($code, $spread, $spid, $phone)
     {
@@ -382,8 +396,15 @@ class RoutineServices extends BaseServices
     /**
      * 自动获取手机号绑定
      * @param $code
+     * @param $iv
+     * @param $encryptedData
      * @param $spread
-     * @return mixed
+     * @param $spid
+     * @param string $key
+     * @return array
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function authBindingPhone($code, $iv, $encryptedData, $spread, $spid, $key = '')
     {
@@ -393,7 +414,6 @@ class RoutineServices extends BaseServices
         if ($key) {
             [$openid, $wechatInfo, $spreadId, $login_type, $userType] = $createData = CacheService::getTokenBucket($key);
         }
-
 
         /** @var OAuth $oauth */
         $oauth = app()->make(OAuth::class, ['mini_program']);
@@ -438,6 +458,15 @@ class RoutineServices extends BaseServices
     }
 
 
+    /**
+     * 更新用户信息
+     * @param $uid
+     * @param array $data
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public function updateUserInfo($uid, array $data)
     {
         /** @var UserServices $userServices */
