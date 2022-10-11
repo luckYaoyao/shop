@@ -23,6 +23,7 @@
 	import sendVerifyCode from "@/mixins/SendVerifyCode";
 	import Routine from '@/libs/routine';
 	import Verify from './../verify/verify.vue';
+	import Cache from '@/utils/cache';
 	import {
 		loginMobile,
 		registerVerify,
@@ -34,6 +35,9 @@
 	import {
 		bindingPhone
 	} from '@/api/api.js'
+	import {
+		silenceAuth
+	} from '@/api/public.js'
 	export default {
 		name: 'login_mobile',
 		components: {
@@ -150,48 +154,34 @@
 				uni.showLoading({
 					title: that.$t(`正在登录中`)
 				});
-				if (this.authKey) {
-					phoneWxSilenceAuth({
-						spid: app.globalData.spid,
-						spread: app.globalData.code,
-						phone: this.account,
-						captcha: this.codeNum,
-						key: this.authKey
-					}).then(res => {
-						let time = res.data.expires_time - this.$Cache.time();
-						this.$store.commit('LOGIN', {
-							token: res.data.token,
-							time: time
-						});
-						this.getUserInfo();
-					}).catch(error => {
-						uni.hideLoading()
-						this.$util.Tips({
-							title: error
-						})
-					})
+				if (!this.authKey) {
+					let key = this.$Cache.get('snsapiKey');
+					this.phoneAuth(key)
 				} else {
-					loginMobile({
-						phone: this.account,
-						captcha: this.codeNum,
-						spread: app.globalData.spid,
-					}).then(res => {
-						let time = res.data.expires_time - this.$Cache.time();
-						this.$store.commit('LOGIN', {
-							token: res.data.token,
-							time: time
-						});
-						this.$Cache.clear('snsapiKey');
-						this.getUserInfo();
-					}).catch(error => {
-						uni.hideLoading()
-						this.$util.Tips({
-							title: error
-						})
-					})
+					this.phoneAuth(this.authKey)
 				}
-
 				// #endif
+			},
+			phoneAuth(key) {
+				phoneWxSilenceAuth({
+					spid: app.globalData.spid,
+					spread: app.globalData.code,
+					phone: this.account,
+					captcha: this.codeNum,
+					key
+				}).then(res => {
+					let time = res.data.expires_time - this.$Cache.time();
+					this.$store.commit('LOGIN', {
+						token: res.data.token,
+						time: time
+					});
+					this.getUserInfo();
+				}).catch(error => {
+					uni.hideLoading()
+					this.$util.Tips({
+						title: error
+					})
+				})
 			},
 			// #ifdef MP
 			phoneSilenceAuth(code) {

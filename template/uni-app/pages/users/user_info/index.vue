@@ -34,13 +34,16 @@
 				<view class='list'>
 					<view class='item acea-row row-between-wrapper'>
 						<view>{{$t(`头像`)}}</view>
-						<view class="avatar-box" @click.stop='uploadpic'>
+						<view class="avatar-box" v-if="!mp_is_new" @click.stop='uploadpic'>
 							<image :src="userInfo.avatar"></image>
 						</view>
+						<button v-else class="avatar-box" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
+							<image :src="userInfo.avatar"></image>
+						</button>
 					</view>
 					<view class='item acea-row row-between-wrapper'>
 						<view>{{$t(`昵称`)}}</view>
-						<view class='input'><input type='text' name='nickname' :value='userInfo.nickname'></input>
+						<view class='input'><input type='nickname' name='nickname' :value='userInfo.nickname'></input>
 						</view>
 					</view>
 					<view class='item acea-row row-between-wrapper'>
@@ -200,6 +203,7 @@
 				version: '',
 				array: [],
 				setIndex: 0,
+				mp_is_new: this.$Cache.get('MP_VERSION_ISNEW') || false
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -369,7 +373,6 @@
 							'time': this.$Cache.strTotime(res.data.expires_time) - this.$Cache.time()
 						});
 						that.getUserInfo();
-
 					}).catch(err => {
 						uni.hideLoading();
 						return that.$util.Tips({
@@ -455,7 +458,18 @@
 					this.canvasHeight = res.h
 				});
 			},
-
+			// 微信头像获取
+			onChooseAvatar(e) {
+				const {
+					avatarUrl
+				} = e.detail
+				console.log(avatarUrl)
+				this.$util.uploadImgs('upload/image', avatarUrl, (res) => {
+					this.userInfo.avatar = res.data.url
+				}, (err) => {
+					console.log(err)
+				})
+			},
 			/**
 			 * 提交修改
 			 */

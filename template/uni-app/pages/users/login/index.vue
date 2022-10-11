@@ -1,8 +1,7 @@
 <template>
 	<view class="login-wrapper" :style="colorStyle">
 		<view class="shading">
-			<image :src="logoUrl" v-if="logoUrl" />
-			<image src="../static/logo2.png" v-else />
+			<image :src="logoUrl" />
 		</view>
 		<view class="whiteBg" v-if="formItem === 1">
 			<view class="list" v-if="current !== 1">
@@ -95,10 +94,8 @@
 				<a href="https://www.crmeb.com">www.crmeb.com</a>
 			</view>
 		</view>
-
 		<Verify @success="success" :captchaType="'blockPuzzle'" :imgSize="{ width: '330px', height: '155px' }"
 			ref="verify"></Verify>
-
 	</view>
 </template>
 <script>
@@ -419,6 +416,12 @@
 						title: '请先阅读并同意协议'
 					});
 				}
+				if (!that.account) return that.$util.Tips({
+					title: that.$t(`请填写手机号码`)
+				});
+				if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.account)) return that.$util.Tips({
+					title: that.$t(`请输入正确的手机号码`)
+				});
 				this.$refs.verify.show()
 			},
 			async getLogoImage() {
@@ -563,7 +566,6 @@
 						that.$util.Tips({
 							title: res.msg
 						});
-						that.sendCode();
 					})
 					.catch(res => {
 						that.$util.Tips({

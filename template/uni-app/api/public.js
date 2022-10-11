@@ -99,6 +99,17 @@ export function follow() {
 }
 
 /**
+ * code生成用户
+ * @returns {*}
+ */
+export function authLogin(data) {
+	return request.get("v2/wechat/silence_auth_login", data, {
+		noAuth: true
+	});
+}
+
+
+/**
  * 获取图片base64
  * @retins {*}
  * */

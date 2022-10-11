@@ -20,6 +20,8 @@
 				<button form-type="submit" class="confirmBnt bg-color">{{$t(`确认绑定`)}}</button>
 			</view>
 		</form>
+		<Verify @success="success" :captchaType="'blockPuzzle'" :imgSize="{ width: '330px', height: '155px' }"
+			ref="verify"></Verify>
 	</view>
 	<view class="lottie-bg" v-else>
 		<view id="lottie">
@@ -43,12 +45,18 @@
 		silenceAuth
 	} from '@/api/public';
 	import {
-		registerVerify,
 		bindingPhone,
 		verifyCode
 	} from '@/api/api.js';
+	import {
+		registerVerify
+	} from '@/api/user.js'
+	import Verify from '@/pages/users/components/verify/verify.vue';
 	export default {
 		name: "Auth",
+		components: {
+			Verify
+		},
 		mixins: [sendVerifyCode],
 		data() {
 			return {
@@ -165,20 +173,28 @@
 				if (!(/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.phone))) return that.$util.Tips({
 					title: that.$t(`请输入正确的手机号码`)
 				});
+				this.$refs.verify.show()
+			},
+			success(data) {
+				this.$refs.verify.hide()
 				verifyCode().then(res => {
-					registerVerify(that.phone, 'reset', res.data.key, that.captcha).then(res => {
+					registerVerify({
+						phone: that.phone,
+						type: 'reset',
+						key: res.data.key,
+						captchaType: 'blockPuzzle',
+						captchaVerification: data.captchaVerification
+					}).then(res => {
 						that.$util.Tips({
 							title: res.msg
 						});
-						that.sendCode();
 					}).catch(err => {
 						return that.$util.Tips({
 							title: err
 						});
 					});
 				});
-
-			}
+			},
 		}
 	};
 </script>

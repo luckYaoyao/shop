@@ -27,13 +27,13 @@
 								</button>
 								<!-- #endif -->
 								<!-- #ifdef MP -->
-								<button class="bntImg" v-if="userInfo.is_complete == 0" @tap="getUserProfile">
+								<!-- <button class="bntImg" v-if="userInfo.is_complete == 0" @tap="getUserProfile">
 									<image class="avatar" src='/static/images/f.png'></image>
 									<view class="avatarName">{{$t('获取头像')}}</view>
-								</button>
+								</button> -->
 								<!-- #endif -->
 								<!-- #ifndef APP-PLUS -->
-								<view v-else class="avatar-box" :class="{on:userInfo.is_money_level}">
+								<view class="avatar-box" :class="{on:userInfo.is_money_level}">
 									<image class="avatar" :src='userInfo.avatar' v-if="userInfo.avatar"
 										@click="goEdit()">
 									</image>
@@ -84,7 +84,8 @@
 									</view> -->
 								</view>
 								<view class="phone" v-if="!userInfo.phone && isLogin" @tap="bindPhone">
-									{{$t('绑定手机号')}}</view>
+									{{$t('绑定手机号')}}
+								</view>
 							</view>
 							<view class="message">
 								<navigator url="/pages/users/user_info/index" hover-class="none">
@@ -214,8 +215,8 @@
 						:duration="duration" indicator-color="rgba(255,255,255,0.6)" indicator-active-color="#fff">
 						<block v-for="(item,index) in imgUrls" :key="index">
 							<swiper-item>
-								<view @click="goMenuPage(item.url)"
-									class='slide-navigator acea-row row-between-wrapper' hover-class='none'>
+								<view @click="goMenuPage(item.url)" class='slide-navigator acea-row row-between-wrapper'
+									hover-class='none'>
 									<image :src="item.pic" class="slide-image"></image>
 								</view>
 							</swiper-item>

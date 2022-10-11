@@ -5,7 +5,9 @@
 				<view class="picTxt acea-row row-between-wrapper">
 					<view class="text">
 						<view class="name">{{$t(`订单信息`)}}</view>
-						<view>{{$t(`消费订单`)}}：{{ orderData.order_count || 0 }} {{$t(`总消费`)}}：{{$t(`￥`)}}{{ orderData.sum_price || 0 }}</view>
+						<view>{{$t(`消费订单`)}}：{{ orderData.order_count || 0 }}
+							{{$t(`总消费`)}}：{{$t(`￥`)}}{{ orderData.sum_price || 0 }}
+						</view>
 					</view>
 					<view class="pictrue">
 						<image src="../static/orderTime.png"></image>
@@ -51,10 +53,12 @@
 							</view>
 							<view v-if="item._status._type == 9" class="font-color">{{$t(`线下付款,未支付`)}}</view>
 							<view v-else-if="item._status._type == 0" class="font-color">{{$t(`待付款`)}}</view>
-							<view v-else-if="item._status._type == 1 && item.shipping_type == 1" class="font-color">{{$t(`待发货`)}}
+							<view v-else-if="item._status._type == 1 && item.shipping_type == 1" class="font-color">
+								{{$t(`待发货`)}}
 								<text v-if="item.refund.length">，{{item.is_all_refund?$t(`退款中`):$t(`部分退款中`)}}</text>
 							</view>
-							<view v-else-if="item._status._type == 1 && item.shipping_type == 2" class="font-color">{{$t(`待核销`)}}
+							<view v-else-if="item._status._type == 1 && item.shipping_type == 2" class="font-color">
+								{{$t(`待核销`)}}
 								<text v-if="item.refund.length">，{{item.is_all_refund?$t(`退款中`):$t(`部分退款中`)}}</text>
 							</view>
 							<view v-else-if="item._status._type == 2" class="font-color">{{$t(`待收货`)}}
@@ -66,7 +70,8 @@
 							<view v-else-if="item._status._type == 4" class="font-color">{{$t(`已完成`)}}
 								<text v-if="item.refund.length">，{{item.is_all_refund?$t(`退款中`):$t(`部分退款中`)}}</text>
 							</view>
-							<view v-else-if="item._status._type == 5 && item.status == 0" class="font-color">{{$t(`未核销`)}}
+							<view v-else-if="item._status._type == 5 && item.status == 0" class="font-color">
+								{{$t(`未核销`)}}
 								<text v-if="item.refund.length">，{{item.is_all_refund?$t(`退款中`):$t(`部分退款中`)}}</text>
 							</view>
 							<view v-else-if="item._status._type == -2" class="font-color">{{$t(`已退款`)}}
@@ -81,7 +86,8 @@
 							<view class="text  row-between">
 								<text class="name line2">{{ items.productInfo.store_name }}</text>
 								<view class="money">
-									<view v-if="items.productInfo.attrInfo">{{$t(`￥`)}}{{ items.productInfo.attrInfo.price }}
+									<view v-if="items.productInfo.attrInfo">
+										{{$t(`￥`)}}{{ items.productInfo.attrInfo.price }}
 									</view>
 									<view v-else>{{$t(`￥`)}}{{ items.productInfo.price }}</view>
 									<view>x{{ items.cart_num }}</view>
@@ -348,7 +354,7 @@
 				this.pay_close = false;
 				uni.navigateTo({
 					url: '/pages/goods/order_pay_status/index?order_id=' + this.pay_order_id +
-						'&msg='+this.$t(`支付成功`)+'&type=3&totalPrice=' + this.totalPrice
+						'&msg=' + this.$t(`支付成功`) + '&type=3&totalPrice=' + this.totalPrice
 				})
 				this.pay_order_id = '';
 				this.getOrderData();
@@ -587,6 +593,7 @@
 		color: #999;
 		margin-top: 6rpx;
 		display: flex;
+		line-height: 39rpx;
 	}
 
 	.my-order .list .item .item-info .text .name {

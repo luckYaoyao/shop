@@ -7,7 +7,8 @@
 				<view class="title">{{$t(`获取授权`)}}</view>
 				<view class="txt">{{$t(`获取微信的手机号授权`)}}</view>
 			</view>
-			<button class="sub_btn" open-type="getPhoneNumber" @getphonenumber="getphonenumber">{{$t(`获取微信手机号`)}}</button>
+			<button class="sub_btn" open-type="getPhoneNumber"
+				@getphonenumber="getphonenumber">{{$t(`获取微信手机号`)}}</button>
 		</view>
 	</view>
 </template>
@@ -16,42 +17,46 @@
 	import Routine from '@/libs/routine';
 	import {
 		loginMobile,
-		registerVerify,
 		getCodeApi,
 		getUserInfo
 	} from "@/api/user";
-	import { getLogo, silenceAuth, getUserPhone } from '@/api/public';
-	export default{
-		name:'routine_phone',
-		props:{
-			isPhoneBox:{
-				type:Boolean,
-				default:false,
+	import {
+		getLogo,
+		silenceAuth,
+		getUserPhone
+	} from '@/api/public';
+	export default {
+		name: 'routine_phone',
+		props: {
+			isPhoneBox: {
+				type: Boolean,
+				default: false,
 			},
-			logoUrl:{
-				type:String,
-				default:'',
+			logoUrl: {
+				type: String,
+				default: '',
 			},
-			authKey:{
-				type:String,
-				default:'',
+			authKey: {
+				type: String,
+				default: '',
 			}
 		},
-		data(){
+		data() {
 			return {
-				keyCode:'',
-				account:'',
-				codeNum:'',
-				isStatus:false
+				keyCode: '',
+				account: '',
+				codeNum: '',
+				isStatus: false
 			}
 		},
-		mounted() {
-		},
-		methods:{
+		mounted() {},
+		methods: {
 			// #ifdef MP
 			// 小程序获取手机号码
-			getphonenumber(e){
-				uni.showLoading({ title: this.$t(`加载中`) });
+			getphonenumber(e) {
+				uni.showLoading({
+					title: this.$t(`加载中`)
+				});
 				Routine.getCode()
 					.then(code => {
 						this.getUserPhoneNumber(e.detail.encryptedData, e.detail.iv, code);
@@ -63,13 +68,13 @@
 			// 小程序获取手机号码回调
 			getUserPhoneNumber(encryptedData, iv, code) {
 				getUserPhone({
-					encryptedData: encryptedData,
-					iv: iv,
-					code: code,
-					spread_spid: app.globalData.spid,
-					spread_code: app.globalData.code,
-					key:this.authKey
-				})
+						encryptedData: encryptedData,
+						iv: iv,
+						code: code,
+						spread_spid: app.globalData.spid,
+						spread_code: app.globalData.code,
+						key: this.authKey
+					})
 					.then(res => {
 						let time = res.data.expires_time - this.$Cache.time();
 						this.$store.commit('LOGIN', {
@@ -97,23 +102,25 @@
 				});
 			},
 			// #endif
-			close(){
-				this.$emit('close',{isStatus:this.isStatus})
+			close() {
+				this.$emit('close', {
+					isStatus: this.isStatus
+				})
 			}
 		}
 	}
-	
 </script>
 
 <style lang="scss">
-	.mobile-bg{
+	.mobile-bg {
 		position: fixed;
 		left: 0;
 		top: 0;
 		width: 100%;
 		height: 100%;
-		background: rgba(0,0,0,0.5);
+		background: rgba(0, 0, 0, 0.5);
 	}
+
 	.mobile-mask {
 		z-index: 20;
 		position: fixed;
@@ -122,27 +129,32 @@
 		width: 100%;
 		padding: 67rpx 30rpx;
 		background: #fff;
-		.info-box{
-			display:flex;
+
+		.info-box {
+			display: flex;
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
-			image{
+
+			image {
 				width: 150rpx;
 				height: 150rpx;
 				border-radius: 10rpx;
 			}
-			.title{
+
+			.title {
 				margin-top: 30rpx;
 				margin-bottom: 20rpx;
 				font-size: 36rpx;
 			}
-			.txt{
+
+			.txt {
 				font-size: 30rpx;
 				color: #868686;
 			}
 		}
-		.sub_btn{
+
+		.sub_btn {
 			width: 690rpx;
 			height: 86rpx;
 			line-height: 86rpx;
@@ -154,7 +166,8 @@
 			text-align: center;
 		}
 	}
-	.animated{
-		animation-duration:.4s
+
+	.animated {
+		animation-duration: .4s
 	}
 </style>

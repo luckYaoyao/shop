@@ -77,7 +77,7 @@
 			home,
 			zbCode
 		},
-		mixins:[colors],
+		mixins: [colors],
 		data() {
 			return {
 				imgUrls: [],
@@ -146,14 +146,14 @@
 		},
 		async onReady() {
 			if (this.isLogin) {
-				this.val = `${HTTP_REQUEST_URL}?spread=${this.uid}`
+				this.val = `${HTTP_REQUEST_URL}?spid=${this.uid}`
 				await this.spreadMsgs()
-				getUserInfo().then(res=>{
+				getUserInfo().then(res => {
 					this.userInfo = res.data
 				})
 			} else {
 				toLogin();
-		
+
 			}
 
 		},
@@ -229,7 +229,7 @@
 						tempFilePath) => {
 						that.$set(that.posterImage, i, tempFilePath);
 						// #ifdef MP
-						if(!that.posterImage.length){
+						if (!that.posterImage.length) {
 							return that.$util.Tips({
 								title: that.$t(`小程序二维码需要发布正式版后才能获取到`)
 							});
@@ -242,8 +242,7 @@
 			downloadImg() {
 				uni.saveImageToPhotosAlbum({
 					filePath: this.posterImage[this.swiperIndex],
-					success: function() {
-					}
+					success: function() {}
 				});
 			},
 			async routineCode() {

@@ -240,8 +240,8 @@ export default {
 				ctx.setTextAlign('left')
 				ctx.setFontSize(36);
 				ctx.setFillStyle('#999');
-					
-				if(ot_price){
+
+				if (ot_price) {
 					ctx.fillText(i18n.t(`￥`) + ot_price, 50, 876 + contentHh);
 					var underline = function(ctx, text, x, y, size, color, thickness, offset) {
 						var width = ctx.measureText(text).width;
@@ -253,9 +253,9 @@ export default {
 								x -= width;
 								break;
 						}
-					
+
 						y += size + offset;
-					
+
 						ctx.beginPath();
 						ctx.strokeStyle = color;
 						ctx.lineWidth = thickness;
@@ -264,7 +264,7 @@ export default {
 						ctx.stroke();
 					}
 					underline(ctx, i18n.t(`￥`) + ot_price, 55, 865, 36, '#999', 2, 0)
-				} 
+				}
 				ctx.setTextAlign('left')
 				ctx.setFontSize(28);
 				ctx.setFillStyle('#999');
@@ -460,7 +460,7 @@ export default {
 			fail: function(err) {
 				uni.hideLoading();
 				that.Tips({
-					title:  i18n.t(`无法获取图片信息`)
+					title: i18n.t(`无法获取图片信息`)
 				});
 			}
 		})
@@ -615,7 +615,7 @@ export default {
 				})
 			}
 		})
-	
+
 		function uploadImg(filePath) {
 			uni.uploadFile({
 				url: HTTP_REQUEST_URL + '/api/' + uploadUrl,
@@ -658,7 +658,97 @@ export default {
 			})
 		}
 	},
+	/**
+	 * 小程序头像获取上传
+	 * @param uploadUrl 上传接口地址
+	 * @param filePath 上传文件路径 
+	 * @param successCallback success回调 
+	 * @param errorCallback err回调
+	 */
+	uploadImgs(uploadUrl, filePath, successCallback, errorCallback) {
+		let that = this;
+		uni.uploadFile({
+			url: HTTP_REQUEST_URL + '/api/' +
+				uploadUrl,
+			filePath: filePath,
+			fileType: 'image',
+			name: 'pics',
+			formData: {
+				'filename': 'pics'
+			},
+			header: {
+				// #ifdef MP
+				"Content-Type": "multipart/form-data",
+				// #endif
+				[TOKENNAME]: 'Bearer ' + store.state
+					.app.token
+			},
+			success: (res) => {
+				console.log(res)
+				uni.hideLoading();
+				if (res.statusCode == 403) {
+					that.Tips({
+						title: res.data
+					});
+				} else {
+					let data = res.data ? JSON
+						.parse(res.data) : {};
+					if (data.status == 200) {
+						successCallback &&
+							successCallback(
+								data)
+					} else {
+						errorCallback &&
+							errorCallback(data);
+						that.Tips({
+							title: data
+								.msg
+						});
+					}
+				}
+			},
+			fail: (err) => {
+				console.log(err)
+				uni.hideLoading();
+				that.Tips({
+					title: i18n.t(
+						`上传图片失败`)
+				});
+			}
+		})
+	},
+	/**
+	 * 小程序比较版本信息
+	 * @param v1 当前版本
+	 * @param v2 进行比较的版本 
+	 * @return boolen
+	 * 
+	 */
+	compareVersion(v1, v2) {
+		v1 = v1.split('.')
+		v2 = v2.split('.')
+		const len = Math.max(v1.length, v2.length)
 
+		while (v1.length < len) {
+			v1.push('0')
+		}
+		while (v2.length < len) {
+			v2.push('0')
+		}
+
+		for (let i = 0; i < len; i++) {
+			const num1 = parseInt(v1[i])
+			const num2 = parseInt(v2[i])
+
+			if (num1 > num2) {
+				return 1
+			} else if (num1 < num2) {
+				return -1
+			}
+		}
+
+		return 0
+	},
 	/**
 	 * 处理服务器扫码带进来的参数
 	 * @param string param 扫码携带参数

@@ -5,14 +5,18 @@
 				<view class="phone">{{$t(`当前手机号`)}}：{{phone}}</view>
 				<view class="list">
 					<view class="item">
-						<input type='password' :placeholder='$t(`设置新密码`)' placeholder-class='placeholder' name="password" :value="password"></input>
+						<input type='password' :placeholder='$t(`设置新密码`)' placeholder-class='placeholder'
+							name="password" :value="password"></input>
 					</view>
 					<view class="item">
-						<input type='password' :placeholder='$t(`确认新密码`)' placeholder-class='placeholder' name="qr_password" :value="qr_password"></input>
+						<input type='password' :placeholder='$t(`确认新密码`)' placeholder-class='placeholder'
+							name="qr_password" :value="qr_password"></input>
 					</view>
 					<view class="item acea-row row-between-wrapper">
-						<input type='number' :placeholder='$t(`填写验证码`)' placeholder-class='placeholder' class="codeIput" name="captcha" :value="captcha"></input>
-						<button class="code font-num" :class="disabled === true ? 'on' : ''" :disabled='disabled' @click="code">
+						<input type='number' :placeholder='$t(`填写验证码`)' placeholder-class='placeholder' class="codeIput"
+							name="captcha" :value="captcha"></input>
+						<button class="code font-num" :class="disabled === true ? 'on' : ''" :disabled='disabled'
+							@click="code">
 							{{ text }}
 						</button>
 					</view>
@@ -23,6 +27,8 @@
 		<!-- #ifdef MP -->
 		<!-- <authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse"></authorize> -->
 		<!-- #endif -->
+		<Verify @success="success" :captchaType="'blockPuzzle'" :imgSize="{ width: '330px', height: '155px' }"
+			ref="verify"></Verify>
 	</view>
 </template>
 
@@ -30,11 +36,11 @@
 	import sendVerifyCode from "@/mixins/SendVerifyCode";
 	import {
 		phoneRegisterReset,
-		registerVerify,
 		verifyCode
 	} from '@/api/api.js';
 	import {
-		getUserInfo
+		getUserInfo,
+		registerVerify
 	} from '@/api/user.js';
 	import {
 		toLogin
@@ -46,12 +52,14 @@
 	import authorize from '@/components/Authorize';
 	// #endif
 	import colors from '@/mixins/color.js';
+	import Verify from '@/pages/users/components/verify/verify.vue';
 	export default {
-		mixins: [sendVerifyCode,colors],
+		mixins: [sendVerifyCode, colors],
 		components: {
 			// #ifdef MP
-			authorize
+			authorize,
 			// #endif
+			Verify
 		},
 		data() {
 			return {
@@ -61,25 +69,25 @@
 				captcha: '',
 				qr_password: '',
 				isAuto: false, //没有授权的不会自动授权
-				isShowAuth: false ,//是否隐藏授权
+				isShowAuth: false, //是否隐藏授权
 				key: '',
 			};
 		},
 		computed: mapGetters(['isLogin']),
-		watch:{
-			isLogin:{
-				handler:function(newV,oldV){
-					if(newV){
+		watch: {
+			isLogin: {
+				handler: function(newV, oldV) {
+					if (newV) {
 						this.getUserInfo();
 					}
 				},
-				deep:true
+				deep: true
 			}
 		},
 		onLoad() {
 			if (this.isLogin) {
 				this.getUserInfo();
-				verifyCode().then(res=>{
+				verifyCode().then(res => {
 					this.$set(this, 'key', res.data.key)
 				});
 			} else {
@@ -118,18 +126,29 @@
 				if (!that.userInfo.phone) return that.$util.Tips({
 					title: that.$t(`手机号码不存在,无法发送验证码！`)
 				});
-				await registerVerify(that.userInfo.phone,'reset', that.key).then(res => {
+				this.$refs.verify.show()
+
+			},
+			async success(data) {
+				let that = this;
+				this.$refs.verify.hide()
+				console.log(that.userInfo.phone)
+				await registerVerify({
+					phone: that.userInfo.phone,
+					type: 'reset',
+					key: that.key,
+					captchaType: 'blockPuzzle',
+					captchaVerification: data.captchaVerification
+				}).then(res => {
 					that.$util.Tips({
 						title: res.msg
 					});
-					that.sendCode();
 				}).catch(err => {
 					return that.$util.Tips({
 						title: err
 					});
 				});
 			},
-
 			/**
 			 * H5登录 修改密码
 			 * 
