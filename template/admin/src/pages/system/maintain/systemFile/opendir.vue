@@ -284,6 +284,7 @@ export default {
         };
       } else {
         params = this.formItem;
+        params.fileToken = this.fileToken;
       }
       if (!is_edit) this.loading = true;
       opendirListApi(params)

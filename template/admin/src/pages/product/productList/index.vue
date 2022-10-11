@@ -45,7 +45,7 @@
           ><Button type="primary" class="bnt mr15" icon="md-add">添加商品</Button></router-link
         >
         <Button v-auth="['product-crawl-save']" type="success" class="bnt mr15" @click="onCopy">商品采集</Button>
-        <Dropdown class="bnt mr15" @on-click="batchSelect" transfer="true">
+        <Dropdown class="bnt mr15" @on-click="batchSelect" :transfer="true">
           <Button type="info">
             批量操作
             <Icon type="ios-arrow-down"></Icon>

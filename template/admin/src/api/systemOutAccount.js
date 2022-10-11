@@ -41,7 +41,7 @@ export function outSaveApi(data) {
   return request({
     url: `setting/system_out_account/save`,
     method: 'post',
-    params: data
+    data
   });
 }
 
@@ -50,10 +50,32 @@ export function outSaveApi(data) {
  * @param {Object} param id {Number} 账号ID
  * @param {Object} param data {Object} 传值
  */
-export function outSavesApi(id, data) {
+export function outSavesApi(data) {
   return request({
-    url: `setting/system_out_account/update/${id}`,
+    url: `setting/system_out_account/update/${data.id}`,
     method: 'post',
-    params: data
+    data
+  });
+}
+
+/**
+ * 对外账号设置推送
+ * @param {*} id 
+ * @returns 
+ */
+export function outSetUp(id) {
+  return request({
+    url: `setting/system_out_account/set_up/${id}`,
+    method: 'get'
+  });
+}
+
+/**
+ * 对外接口列表
+ */
+export function interfaceList() {
+  return request({
+    url: `setting/system_out_interface/list`,
+    method: 'get'
   });
 }

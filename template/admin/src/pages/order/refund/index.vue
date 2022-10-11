@@ -111,8 +111,8 @@
         </template>
         <template slot-scope="{ row, index }" slot="statusName">
           <div v-html="row.refund_reason" class="pt5"></div>
-          <div class="pictrue-box">
-            <div v-viewer v-if="row.refund_img" v-for="(item, index) in row.refund_img || []" :key="index">
+          <div class="pictrue-box" v-if="row.refund_img.length">
+            <div v-viewer v-for="(item, index) in row.refund_img || []" :key="index">
               <img class="pictrue mr10" v-lazy="item" :src="item" />
             </div>
           </div>
@@ -167,7 +167,7 @@
           <!--            "-->
           <!--          />-->
           <template>
-            <Dropdown @on-click="changeMenu(row, $event)">
+            <Dropdown @on-click="changeMenu(row, $event)" transfer="true">
               <a href="javascript:void(0)"
                 >更多
                 <Icon type="ios-arrow-down"></Icon>
@@ -217,9 +217,7 @@
                 <DropdownItem name="7" v-show="[1, 2].includes(row.refund_type) && row.is_pink_cancel === 0"
                   >不退款</DropdownItem
                 >
-                <DropdownItem name="8" v-show="row.is_del == 1"
-                  >删除订单</DropdownItem
-                >
+                <DropdownItem name="8" v-show="row.is_del == 1">删除订单</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           </template>

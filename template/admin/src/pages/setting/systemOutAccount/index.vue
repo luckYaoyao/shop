@@ -35,7 +35,7 @@
             </FormItem>
           </Col>
         </Row> -->
-        <Row type="flex" v-if="total == 0">
+        <Row type="flex">
           <Col v-bind="grid">
             <Button v-auth="['setting-system_admin-add']" type="primary" @click="add" icon="md-add">添加账号</Button>
           </Col>
@@ -50,12 +50,12 @@
         :loading="loading"
         highlight-row
       >
-        <template slot-scope="{ row, index }" slot="roles">
+        <template slot-scope="{ row }" slot="roles">
           <div v-if="row.roles.length !== 0">
             <Tag color="blue" v-for="(item, index) in row.roles.split(',')" :key="index" v-text="item"></Tag>
           </div>
         </template>
-        <template slot-scope="{ row, index }" slot="status">
+        <template slot-scope="{ row }" slot="status">
           <i-switch
             v-model="row.status"
             :value="row.status"
@@ -69,6 +69,8 @@
           </i-switch>
         </template>
         <template slot-scope="{ row, index }" slot="action">
+          <a @click="setUp(row)">设置</a>
+          <Divider type="vertical" />
           <a @click="edit(row)">编辑</a>
           <Divider type="vertical" />
           <a @click="del(row, '删除账号', index)">删除</a>
@@ -85,37 +87,62 @@
         />
       </div>
     </Card>
-    		<Modal v-model="modals" scrollable :title="type == 0?'添加账号':'编辑账号'" :mask-closable="false" :closable="false">
-			<Form ref="modalsdate" :model="modalsdate" :rules="type == 0 ? ruleValidate : editValidate" :label-width="50" label-position="right">
-				<FormItem label="账号" prop="appid" >
-					<div style="display: flex;">
-						<Input type="text" v-model="modalsdate.appid" :disabled='type != 0'></Input>
-					</div>
-				</FormItem>
-				<FormItem label="密码" prop="appsecret">
-					<div style="display: flex;">
-						<Input type="text" v-model="modalsdate.appsecret" class="input"></Input>
-						<Button type="primary" @click="reset" class="reset">重置</Button>
-					</div>
-				</FormItem>
-				<FormItem label="描述" prop="title">
-					<div style="display: flex;">
-						<Input type="textarea" v-model="modalsdate.title"></Input>
-					</div>
-				</FormItem>
-			</Form>
-			<div slot="footer">
-				<Button v-if="modalsid == ''" type="primary" @click="ok('modalsdate')">确定</Button>
-				<Button v-else type="primary" @click="oks('modalsdate')">确定</Button>
-				<Button @click="cancel">取消</Button>
-			</div>
-		</Modal>
+    <Modal
+      v-model="modals"
+      scrollable
+      :title="type == 0 ? '添加账号' : '编辑账号'"
+      :mask-closable="false"
+      width="700"
+      :closable="false"
+    >
+      <Form
+        ref="modalsdate"
+        :model="modalsdate"
+        :rules="type == 0 ? ruleValidate : editValidate"
+        :label-width="70"
+        label-position="right"
+      >
+        <FormItem label="账号" prop="appid">
+          <div style="display: flex">
+            <Input type="text" v-model="modalsdate.appid" :disabled="type != 0"></Input>
+          </div>
+        </FormItem>
+        <FormItem label="密码" prop="appsecret">
+          <div style="display: flex">
+            <Input type="text" v-model="modalsdate.appsecret" class="input"></Input>
+            <Button type="primary" @click="reset" class="reset">重置</Button>
+          </div>
+        </FormItem>
+        <FormItem label="描述" prop="title">
+          <div style="display: flex">
+            <Input type="textarea" v-model="modalsdate.title"></Input>
+          </div>
+        </FormItem>
+        <FormItem label="接口权限" prop="title">
+          <!-- <CheckboxGroup v-model="modalsdate.rules">
+            <Checkbox
+              :disabled="[2, 3].includes(item.id)"
+              style="width: 30%"
+              v-for="item in intList"
+              :key="item.id"
+              :label="item.id"
+              >{{ item.name }}</Checkbox
+            >
+          </CheckboxGroup> -->
+          <Tree :data="intList" multiple show-checkbox ref="tree" @on-check-change="selectTree"></Tree>
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button type="primary" @click="ok('modalsdate')">确定</Button>
+        <Button @click="cancel">取消</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import { accountListApi, outSaveApi, outSavesApi, setShowApi } from '@/api/systemOutAccount';
+import { accountListApi, outSaveApi, outSavesApi, setShowApi, outSetUp, interfaceList } from '@/api/systemOutAccount';
 export default {
   name: 'systemOut',
   data() {
@@ -141,7 +168,24 @@ export default {
       },
       status: '',
       list: [],
+      intList: [],
+      columns: [
+        {
+          type: 'selection',
+          width: 60,
+          align: 'center',
+        },
+        {
+          title: '接口名称',
+          key: 'name',
+        },
+      ],
       columns1: [
+        {
+          title: '编号',
+          key: 'id',
+          minWidth: 80,
+        },
         {
           title: '账号',
           key: 'appid',
@@ -186,26 +230,19 @@ export default {
       modals: false,
       modalsid: '',
       type: 0,
-      modalsdate:{
-        appid: "",
+      modalsdate: {
+        appid: '',
         appsecret: '',
-        title: ''
+        title: '',
+        rules: [],
       },
       ruleValidate: {
-        appid: [
-         { required: true, message: '请输入正确的账号 (4到30位之间)', trigger: 'blur', min:4, max:30}
-        ],
-        appsecret: [
-          { required: true, message: '请输入正确的密码 (6到32位之间)', trigger: 'blur', min:6, max:32 }
-        ],
-        title: [
-          {message: '请输入正确的描述 (不能多于200位数)', trigger: 'blur', max:200 }
-        ]
+        appid: [{ required: true, message: '请输入正确的账号 (4到30位之间)', trigger: 'blur', min: 4, max: 30 }],
+        appsecret: [{ required: true, message: '请输入正确的密码 (6到32位之间)', trigger: 'blur', min: 6, max: 32 }],
+        title: [{ message: '请输入正确的描述 (不能多于200位数)', trigger: 'blur', max: 200 }],
       },
       editValidate: {
-        appsecret: [
-          { required: false, message: '请输入正确的密码 (6到32位之间)', trigger: 'blur', min:6, max:32 }
-        ]
+        appsecret: [{ required: false, message: '请输入正确的密码 (6到32位之间)', trigger: 'blur', min: 6, max: 32 }],
       },
     };
   },
@@ -261,16 +298,77 @@ export default {
     },
     // 添加
     add() {
-      this.modals = true
-      this.type = 0
+      this.modals = true;
+      this.type = 0;
+      this.modalsdate = {
+        appid: '',
+        appsecret: '',
+        title: '',
+        rules: [],
+      };
+      this.getIntList();
+    },
+    selectTree(e, i) {
+      console.log(e, i);
+    },
+    getIntList(type, list) {
+      interfaceList().then((res) => {
+        this.intList = res.data;
+        if (!type) {
+          this.intList.map((item) => {
+            if (item.id === 1) {
+              item.checked = true;
+              item.disableCheckbox = true;
+              if (item.children.length) {
+                item.children.map((v) => {
+                  v.checked = true;
+                  v.disableCheckbox = true;
+                });
+              }
+            }
+          });
+        } else {
+          list.map((item) => {
+            this.intList.map((e) => {
+              if (e.id === 1) {
+                e.checked = true;
+                e.disableCheckbox = true;
+                if (e.children.length) {
+                  e.children.map((v) => {
+                    v.checked = true;
+                    v.disableCheckbox = true;
+                  });
+                }
+              }
+              listData(e.children || [], item);
+            });
+          });
+        }
+        function listData(list, id) {
+          if (list.length) {
+            list.map((v) => {
+              if (v.id == id) {
+                v.checked = true;
+              }
+              if (v.children) {
+                listData(v.children);
+              }
+            });
+          }
+        }
+      });
     },
     // 编辑
     edit(row) {
-      this.modals = true
-      this.modalsdate.appid = row.appid
-      this.modalsdate.title = row.title
-      this.modalsid = row.id
-      this.type = 1
+      this.modals = true;
+      this.modalsdate.appid = row.appid;
+      this.modalsdate.title = row.title;
+      this.modalsdate.rules = row.rules.map((e) => {
+        return Number(e);
+      });
+      this.modalsid = row.id;
+      this.type = 1;
+      this.getIntList('edit', this.modalsdate.rules);
     },
     // 删除
     del(row, tit, num) {
@@ -290,6 +388,10 @@ export default {
           this.$Message.error(res.msg);
         });
     },
+    // 编辑
+    setUp(row) {
+      this.$modalForm(outSetUp(row.id)).then(() => this.getList());
+    },
     // 搜索
     userSearchs() {
       this.formValidate.status = this.status === 'all' ? '' : this.status;
@@ -297,74 +399,61 @@ export default {
       this.list = [];
       this.getList();
     },
-    ok(name){
+    ok(name) {
+      console.log(this.$refs.tree.getCheckedAndIndeterminateNodes());
+      let fuc = this.modalsid ? outSavesApi : outSaveApi;
       this.$refs[name].validate((valid) => {
         if (valid) {
-          outSaveApi(this.modalsdate).then(res=>{
-            this.modalsdate = {
-              appid: "",
-              appsecret: '',
-              title: ''
-            }
-            this.modals = false,
-            this.$Message.success(res.msg);
-            this.modalsid = ''
-            this.getList()
-          }).catch(err=>{
-            this.$Message.error(err.msg);
-          })
+          this.modalsdate.rules = [];
+          this.$refs.tree.getCheckedAndIndeterminateNodes().map((node) => {
+            this.modalsdate.rules.push(node.id);
+          });
+          if (this.modalsid) this.modalsdate.id = this.modalsid;
+          fuc(this.modalsdate)
+            .then((res) => {
+              this.modalsdate = {
+                appid: '',
+                appsecret: '',
+                title: '',
+                rules: [],
+              };
+              (this.modals = false), this.$Message.success(res.msg);
+              this.modalsid = '';
+              this.getList();
+            })
+            .catch((err) => {
+              this.$Message.error(err.msg);
+            });
         } else {
-          this.$Message.warning("请完善数据");
+          this.$Message.warning('请完善数据');
         }
       });
     },
-    oks(name){
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          delete this.modalsdate.appid
-          outSavesApi(this.modalsid,this.modalsdate).then(res=>{
-            this.modalsdate = {
-              appid: "",
-              appsecret: '',
-              title: ''
-            }
-            this.modals = false,
-            this.$Message.success(res.msg);
-            this.modalsid = ''
-            this.getList()
-          }).catch(err=>{
-            this.$Message.error(err.msg);
-          })
-        } else {
-          this.$Message.warning("请完善数据");
-        }
-      });
-    },
-    cancel(){
-      this.modalsid = ''
+    cancel() {
+      this.modalsid = '';
       this.modalsdate = {
-        appid: "",
+        appid: '',
         appsecret: '',
-        title: ''
-      }
-      this.modals = false
+        title: '',
+      };
+      this.modals = false;
     },
-    reset(){
-      let len = 16
-      let chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678' 
-      let maxPos = chars.length
-      let pwd = ''
+    reset() {
+      let len = 16;
+      let chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+      let maxPos = chars.length;
+      let pwd = '';
       for (let i = 0; i < len; i++) {
-        pwd += chars.charAt(Math.floor(Math.random() * maxPos))
+        pwd += chars.charAt(Math.floor(Math.random() * maxPos));
       }
-      this.modalsdate.appsecret =  pwd
+      this.modalsdate.appsecret = pwd;
     },
   },
 };
 </script>
 
 <style scoped>
-  .reset {
-    margin-left: 10px;
-  }
+.reset {
+  margin-left: 10px;
+}
 </style>

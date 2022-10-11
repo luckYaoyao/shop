@@ -101,7 +101,7 @@
           "
         />
         <template>
-          <Dropdown @on-click="changeMenu(row, $event)" transfer="true">
+          <Dropdown @on-click="changeMenu(row, $event)" :transfer="true">
             <a href="javascript:void(0)"
               >更多
               <Icon type="ios-arrow-down"></Icon>
