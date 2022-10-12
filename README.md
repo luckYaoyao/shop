@@ -152,11 +152,15 @@ git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git
 
 ## 推荐项目
 
- :star: CRMChat客服系统： https://gitee.com/ZhongBangKeJi/CRMChat
+| 项目名称  | 关注量  |  项目介绍 |
+| ------------ | ------------ | ------------ |
+| [![](https://img.shields.io/badge/就眠儀式-LayuiVue-blue.svg)](https://gitee.com/layui/layui-vue) | [![](https://gitee.com/layui/layui-vue/badge/star.svg)](http://https://gitee.com/layui/layui-vue/stargazers) | layui - vue（谐音：类 UI) 是 一 套 Vue 3.0 的 桌 面 端 组 件 库.  |
+| [![](https://img.shields.io/badge/CRMEB-CRMChat-blue.svg)](https://gitee.com/ZhongBangKeJi/CRMChat) | [![](https://gitee.com/ZhongBangKeJi/CRMChat/badge/star.svg)](http://https://gitee.com/ZhongBangKeJi/CRMChat/stargazers) | CRMChat客服系统.  |
+| [![](https://img.shields.io/badge/CRMEB-crmeb_java-blue.svg)](https://gitee.com/ZhongBangKeJi/crmeb_java) | [![](https://gitee.com/ZhongBangKeJi/crmeb_java/badge/star.svg)](http://https://gitee.com/ZhongBangKeJi/crmeb_java/stargazers) | JAVA版商城.  |
 
-JAVA版商城：https://gitee.com/ZhongBangKeJi/crmeb_java
 
-知识付费：https://gitee.com/ZhongBangKeJi/crmeb_zzff_class
+
+
 
 
 ## 特别鸣谢
