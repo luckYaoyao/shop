@@ -1,6 +1,18 @@
 ![输入图片说明](readme/pic/gitee.jpg)
 <p align="center" >
     <img src="https://images.gitee.com/uploads/images/2021/1109/164354_0aafe3d2_892944.gif" />
+    <a href="http://www.crmeb.com">
+        <img src="https://img.shields.io/badge/Licence-GPL3.0-green.svg?style=flat" />
+    </a>
+    <a href="http://www.crmeb.com">
+        <img src="https://img.shields.io/badge/Edition-4.5-blue.svg" />
+    </a>
+     <a href="https://gitee.com/ZhongBangKeJi/CRMEB/repository/archive/master.zip">
+        <img src="https://img.shields.io/badge/download-150m-red.svg" />
+    </a>
+    <a href='https://gitee.com/ZhongBangKeJi/CRMEB/stargazers'>
+       <img src='https://gitee.com/ZhongBangKeJi/CRMEB/badge/star.svg?theme=gvp' alt='star'></img>
+    </a>
 </p>
 
 <h3 align="center"> 码云开源项目php语言排名前三的开源GVP项目！</h3> 
