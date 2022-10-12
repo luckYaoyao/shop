@@ -154,11 +154,10 @@ git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git
 
 | 项目名称  | 关注量  |  项目介绍 |
 | ------------ | ------------ | ------------ |
-| [![](https://img.shields.io/badge/就眠儀式-LayuiVue-blue.svg)](https://gitee.com/layui/layui-vue) | [![](https://gitee.com/layui/layui-vue/badge/star.svg)](http://https://gitee.com/layui/layui-vue/stargazers) | layui - vue（谐音：类 UI) 是 一 套 Vue 3.0 的 桌 面 端 组 件 库.  |
 | [![](https://img.shields.io/badge/CRMEB-CRMChat-blue.svg)](https://gitee.com/ZhongBangKeJi/CRMChat) | [![](https://gitee.com/ZhongBangKeJi/CRMChat/badge/star.svg)](http://https://gitee.com/ZhongBangKeJi/CRMChat/stargazers) | CRMChat客服系统.  |
 | [![](https://img.shields.io/badge/CRMEB-crmeb_java-blue.svg)](https://gitee.com/ZhongBangKeJi/crmeb_java) | [![](https://gitee.com/ZhongBangKeJi/crmeb_java/badge/star.svg)](http://https://gitee.com/ZhongBangKeJi/crmeb_java/stargazers) | JAVA版商城.  |
-
-
+| [![](https://img.shields.io/badge/xaboy-formbuilder-blue.svg)](https://gitee.com/layui/layui-vue) | [![](https://gitee.com/xaboy/form-builder/badge/star.svg)](http://https://gitee.com/xaboy/form-builder/stargazers) | PHP表单生成器，快速生成现代化的form表单。包含复选框、单选框、输入框、下拉选择框等元素以及省市区三级联动、时间选择、日期选择、颜色选择、树型、文件/图片上传等功能  |
+| [![](https://img.shields.io/badge/就眠儀式-LayuiVue-blue.svg)](https://gitee.com/layui/layui-vue) | [![](https://gitee.com/layui/layui-vue/badge/star.svg)](http://https://gitee.com/layui/layui-vue/stargazers) | layui - vue（谐音：类 UI) 是 一 套 Vue 3.0 的 桌 面 端 组 件 库.  |
 
 
 
