@@ -159,7 +159,7 @@ git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git
 | [![](https://img.shields.io/badge/xaboy-formbuilder-blue.svg)](https://gitee.com/xaboy/form-builder) | [![](https://gitee.com/xaboy/form-builder/badge/star.svg)](http://https://gitee.com/xaboy/form-builder/stargazers) | PHP表单生成器，快速生成现代化的form表单。 |
 | [![](https://img.shields.io/badge/就眠儀式-LayuiVue-blue.svg)](https://gitee.com/layui/layui-vue) | [![](https://gitee.com/layui/layui-vue/badge/star.svg)](http://https://gitee.com/layui/layui-vue/stargazers) | layui-vue(谐音:类UI)是一套Vue3.0 的桌面端组件库.  |
 | [![](https://img.shields.io/badge/逆天的蝈蝈-TpFlow-blue.svg)](https://gitee.com/ntdgg/tpflow) | [![](https://gitee.com/ntdgg/tpflow/badge/star.svg?theme=gvp)](http://https://gitee.com/ntdgg/tpflow/stargazers) | TpFlow工作流引擎是一套规范化的流程管理系统，基于业务而驱动系统生命力的一套引擎.  |
-| [![](https://img.shields.io/badge/你的昵称-项目名称-blue.svg)](https://gitee.com/ZhongBangKeJi/CRMEB) | [![](https://gitee.com/ZhongBangKeJi/CRMEB/badge/star.svg?theme=gvp)](http://https://gitee.com/ZhongBangKeJi/CRMEB/stargazers) | 你的项目简介.欢迎合作！  |
+| [![](https://img.shields.io/badge/你的昵称-项目名称-blue.svg)](https://gitee.com/ZhongBangKeJi/CRMEB) | [![](https://gitee.com/ZhongBangKeJi/CRMEB/badge/star.svg?theme=gvp)](http://https://gitee.com/ZhongBangKeJi/CRMEB/stargazers) | 你的项目简介.欢迎合作！QQ：763569752  |
 
 
 
