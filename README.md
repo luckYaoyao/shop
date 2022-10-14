@@ -1,5 +1,4 @@
-### 
-
+![输入图片说明](readme/pic/gitee.jpg)
 <div align="center" >
     <img src="https://images.gitee.com/uploads/images/2021/1109/164354_0aafe3d2_892944.gif" />
 </div>
@@ -8,7 +7,6 @@
 支持免费商用的PHP **多语言** 商城系统
 
 </div>
-
 
 <div align="center" >
     <a href="http://www.crmeb.com">
@@ -39,13 +37,13 @@
 <a href="https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md">宽 屏 预 览</a>
 </div>
 
-![输入图片说明](readme/pic/gitee.jpg)
+        CRMEB打通版是历经6年时间匠心之作！系统全开源可商用，包含小程序商城、H5商城、公众号商城、PC商城、App，
 
-### 介绍 
+    多种分销模式、拼团、砍价、秒杀、优惠券、抽奖、积分、会员等级、小程序直播、页面DIY，前后端分离全部100%开源。
 
- CRMEB打通版是历经6年时间匠心之作！系统全开源可商用，包含小程序商城、H5商城、公众号商城、PC商城、App，多种分销模式、拼团、砍价、秒杀、优惠券、抽奖、积分、会员等级、小程序直播、页面DIY，前后端分离全部100%开源。方便二开，更有详细使用文档、接口文档、数据字典、二开文档/视频教程。
+    方便二开，更有详细使用文档、接口文档、数据字典、二开文档/视频教程。
  
-#### 为开发者赋能，助力企业发展、国家富强，致力于打造最受欢迎的商城项目
+    为开发者赋能，助力企业发展、国家富强，致力于打造最受欢迎的商城项目
 
 
 [![](readme/pic/zhongqiu.jpg)](http://www.crmeb.com/news/detail/796)
