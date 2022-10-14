@@ -112,7 +112,7 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 ![输入图片说明](readme/pic/gitee开源版详情_05.jpg)
 
 <div align="center">
-<a href='http://s.crmeb.com/goods_detail/739' target='_blank'><h3>点击查看高清版全套UI设计图</h3></a>
+<a href='http://s.crmeb.com/goods_detail/739' target='_blank'>点击查看高清版全套UI设计图</a>
 </div>
 
 
@@ -120,8 +120,8 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 
 | 项目名称  | 关注量  |  项目介绍 |
 | ------------ | ------------ | ------------ |
-| [![](https://img.shields.io/badge/CRMEB-CRMChat-blue.svg)](https://gitee.com/ZhongBangKeJi/CRMChat) | [![](https://gitee.com/ZhongBangKeJi/CRMChat/badge/star.svg)](http://https://gitee.com/ZhongBangKeJi/CRMChat/stargazers) | CRMChat客服系统.  |
-| [![](https://img.shields.io/badge/CRMEB-crmeb_java-blue.svg)](https://gitee.com/ZhongBangKeJi/crmeb_java) | [![](https://gitee.com/ZhongBangKeJi/crmeb_java/badge/star.svg)](http://https://gitee.com/ZhongBangKeJi/crmeb_java/stargazers) | JAVA版商城.  |
+| [![](https://img.shields.io/badge/CRMEB-CRMChat-blue.svg)](https://gitee.com/ZhongBangKeJi/CRMChat) | [![](https://gitee.com/ZhongBangKeJi/CRMChat/badge/star.svg)](http://https://gitee.com/ZhongBangKeJi/CRMChat/stargazers) | CRMChat客服系统，支持接入各种渠道.  |
+| [![](https://img.shields.io/badge/CRMEB-crmeb_java-blue.svg)](https://gitee.com/ZhongBangKeJi/crmeb_java) | [![](https://gitee.com/ZhongBangKeJi/crmeb_java/badge/star.svg)](http://https://gitee.com/ZhongBangKeJi/crmeb_java/stargazers) | JAVA版开源商城.  |
 | [![](https://img.shields.io/badge/xaboy-formbuilder-blue.svg)](https://gitee.com/xaboy/form-builder) | [![](https://gitee.com/xaboy/form-builder/badge/star.svg)](http://https://gitee.com/xaboy/form-builder/stargazers) | PHP表单生成器，快速生成现代化的form表单。 |
 | [![](https://img.shields.io/badge/就眠儀式-LayuiVue-blue.svg)](https://gitee.com/layui/layui-vue) | [![](https://gitee.com/layui/layui-vue/badge/star.svg)](http://https://gitee.com/layui/layui-vue/stargazers) | layui-vue(谐音:类UI)是一套Vue3.0 的桌面端组件库.  |
 | [![](https://img.shields.io/badge/逆天的蝈蝈-TpFlow-blue.svg)](https://gitee.com/ntdgg/tpflow) | [![](https://gitee.com/ntdgg/tpflow/badge/star.svg?theme=gvp)](http://https://gitee.com/ntdgg/tpflow/stargazers) | TpFlow工作流引擎是一套规范化的流程管理系统，基于业务而驱动系统生命力的一套引擎.  |
