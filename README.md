@@ -1,8 +1,13 @@
 ![输入图片说明](readme/pic/gitee.jpg)
-<p align="center" >
+<div align="center" >
     <img src="https://images.gitee.com/uploads/images/2021/1109/164354_0aafe3d2_892944.gif" />
-</p>
-<p align="center" >
+</div>
+<div align="center">
+
+支持免费商用的PHP **多语言** 商城系统
+
+</div>
+<div align="center" >
     <a href="http://www.crmeb.com">
         <img src="https://img.shields.io/badge/Licence-GPL3.0-green.svg?style=flat" />
     </a>
@@ -15,65 +20,43 @@
     <a href='https://gitee.com/ZhongBangKeJi/CRMEB/stargazers'>
        <img src='https://gitee.com/ZhongBangKeJi/CRMEB/badge/star.svg?theme=gvp' alt='star'></img>
     </a>
-</p>
+</div>
+<div align="center">
 
-<h3 align="center"> 码云开源项目php语言排名前三的开源GVP项目！</h3> 
+[官网](https://www.crmeb.com/) |
+[在线体验](http://v4.crmeb.net/admin/) |
+[帮助文档](https://doc.crmeb.com/single/crmeb_v4) |
+[一键安装](https://saas.crmeb.com/)
 
-  
-
- CRMEB打通版是一款全开源支持免费商用的PHP **多语言** 商城系统；
+</div>
  
- CRMEB技术团队（官网：www.crmeb.com)历经6年时间匠心之作！系统采用前后端分离技术，基于TP6+Uni-app框架开发；客户移动端采用uni-app开发，管理后台前端使用iviewUI开发。系统支持微信公众号端、微信小程序端、H5端、PC端多端账号同步，可快速打包生成APP；
- 
- 赋能开发者，减少重复造轮子；系统支持自动检查安装环境一键安装部署，使用简单方便；围绕方便二次开发，系统内置强大灵活的权限管理，可以控制到每一个菜单；通过内置组合数据,管理碎片化数据,系统配置快速添加系统配置参数，所有用户操作地方都内置钩子，代码严格分控制层（中间件、路由）、Services层、Dao层、Model层；后台应用form-builder PHP快速生成现代化表单；并提供详细的使用文档、开发文档、接口文档、数据字典等相关文档；及十几个技术交流群、技术论坛答疑；让您二开无忧，帮助更多开发者快速上手，节省开发时间，提升开发效率；助力企业实现数字化经营！
+## 介绍
+ CRMEB打通版是历经6年时间匠心之作！系统全开源可商用，包含小程序商城、H5商城、公众号商城、PC商城、App，支持分销、拼团、砍价、秒杀、优惠券、积分、会员等级、小程序直播、页面IDY，前后端分离，方便二开，更有详细使用文档、接口文档、数据字典、二开文档/视频教程。为开发者赋能，助力企业发展、国家富强，致力于打造最受欢迎的商城项目。
+
 
 [![](readme/pic/zhongqiu.jpg)](http://www.crmeb.com/news/detail/796)
-<p align="center" >
+## 系统亮点
+~~~
+多 语 言：后台随时配置语言包，移动端支持多语言切换；
+高 性 能：redis缓存、队列、长连接、多种云储存、支持集群部署；
+个 性 UI：多种风格切换、支持DIY各种首页/专题页面
+前后端分离：后端TP6，管理端iviewui，移动端uniapp；
+代码规范：遵循PSR-2命名规范、Restful标准接口、代码严格分层、注释齐全、统一错误码；
+权限管理：内置强大灵活的权限管理，可以控制到每一个菜单；
+开发配置：低代码增加配置、系统组合数据模块；
+二开效率：PHP快速生成表单、内置所有事件、后台在线编辑器、代码注释齐全、完整接口文档；
+快速上手：详细帮助文档、接口文档、数据库字典、代码注释、一键安装；
+系统安全：系统操作日志、系统生产日志、文件校验、数据备份；
+系统功能：请看帮助文档 https://doc.crmeb.com/single/crmeb_v4/1758
+用户体验：等您来评！
+~~~
+<div align="center" >
 <a href="https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md"> 宽屏预览 </a>
-</p>
-
+</div>
 
 - - -
 
-   :fa-th-list:  [官网地址](https://www.crmeb.com)
- | [服务市场](https://s.crmeb.com)
- | [系统功能](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E5%8A%9F%E8%83%BD)
- | [系统演示](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%B3%BB%E7%BB%9F%E6%BC%94%E7%A4%BA)
- | [使用手册](https://doc.crmeb.com/web/single/crmeb_v4/998)
- | [二开手册](https://gitee.com/ZhongBangKeJi/CRMEB/wikis/%E5%BA%8F%E8%A8%80?sort_id=4100490)
- | [论坛地址](https://q.crmeb.com)
- | [TP6开发手册](https://www.kancloud.cn/manual/thinkphp6_0/content)
- | [推荐服务器](https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z)
- | [留言评论](https://gitee.com/ZhongBangKeJi/CRMEB#%E7%89%88%E6%9D%83%E4%BF%A1%E6%81%AF)
-- - -
-
-## 相关文档
-
-系统功能：<a href="https://doc.crmeb.com/web/single/crmeb_v4/1758"  target="_blank">功能清单</a>
-
-系统脑图：<a href="https://doc.crmeb.com/web/single/crmeb_v4/1756"  target="_blank">思维脑图</a>
-
-接口文档：<a href="https://doc.crmeb.com/web/single/crmeb_v4/1760"  target="_blank">在线接口</a>
-
-目录结构：<a href="https://doc.crmeb.com/web/single/crmeb_v4/1129"  target="_blank">目录结构</a>
-
-数据字典：<a href="https://doc.crmeb.com/web/single/crmeb_v4/1130"  target="_blank">数据字典</a>
-
-安装教程：<a href="https://doc.crmeb.com/web/single/crmeb_v4/892"  target="_blank">安装教程</a>
-
-二开教程：<a href="https://ke.qq.com/course/4125326?tuin=5e252c1"  target="_blank">CRMEB Uniapp前端二开视频教程 点击学习</a>
-
-二开文档：<a href="https://gitee.com/ZhongBangKeJi/CRMEB-Min/wikis/%E5%BA%8F%E8%A8%80?sort_id=3303670"  target="_blank">二开文档</a>
-
-技术交流社区：<a href="https://q.crmeb.com"  target="_blank">https://q.crmeb.com
-
-#### 不懂服务器？不懂技术？无法解决高并发？想数据私有化？还想后期定制开发？
-
-推荐云部署版一键解决以上所有问题，超低价格低至 :collision:  9.9元/年，点击了解 https://saas.crmeb.com/saas-home-software-detail-50043-s-y.html
-
-#### 推荐服务器（虚拟空间不支持）
-
-服务器环境推荐要求：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z" target="_blank">  查看 </a>
+## 运行环境
 
 ```
 Nignx/Apache/IIS
@@ -82,8 +65,26 @@ MySQL 5.7
 Redis
 ```
 
+#### 不懂服务器？不懂技术？无法解决高并发？想数据私有化？还想后期定制开发？
 
-推荐使用bt宝塔面板，简单易用，服务器推荐阿里云ecs或腾讯云cvm 云服务器。
+推荐云部署版一键解决以上所有问题，超低价格低至 :collision:  9.9元/年，点击了解 https://saas.crmeb.com/saas-home-software-detail-50043-s-y.html
+
+
+（虚拟空间不支持，推荐使用bt宝塔面板简单易用，服务器推荐阿里云ecs或腾讯云cvm 云服务器：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z" target="_blank">  查看 </a>
+
+
+##  系统演示
+
+![输入图片说明](readme/pic/20公众号.jpg)
+
+管理后台： http://v4.crmeb.net/admin 账号：demo 密码：crmeb.com
+
+H5端：http://v4.crmeb.net/（移动端打开）
+
+PC端：http://v4.crmeb.net/（电脑端打开）
+
+APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CRMEB下载）
+####  CRMEB云部署快速体验完整功能 <a href='https://saas.crmeb.com/' target='_blank'>【点击体验】</a>
 
 
 
@@ -96,30 +97,6 @@ Redis
 提交BUG、产品建议反馈  欢迎参与：https://q.crmeb.com/?categoryId=147
 
 
-## 技术亮点
-~~~
-    1.自主研发独立客服系统；
-    2.管理端页面使用iviewUI开发；
-    3.PHPExcel数据导出,导出表格更加美观,可视；
-    4.EasyWeChat部署微信开发,微信接入更加快捷,简单；
-    5.使用强大的workerman实现定时任务和长连接；
-    6.内置强大灵活的权限管理，可以控制到每一个菜单；
-    7.内置组合数据,系统配置,管理碎片化数据；
-    8.客户端完善的交互效果和动画；
-    9.对接公众号和小程序,并且数据同步；
-    10.后台应用form-builder PHP快速生成现代化表单；
-    11.高频数据缓存支持高并发；
-    12.数据备份和恢复让数据更安全；
-    13.Restful标准接口、前后端分离，内部预留钩子,二次开发更方便;
-    14.长连接减少CPU及内存使用及网络堵塞，减少请求响应时长；
-    15.支持队列降低流量高峰，解除耦合，高可用;
-    16.一键安装自动检查系统环境一键安装；
-    17.移动端使用uni-app进行开发，方便编译成各种格式的代码；
-    18.严格代码规范，层次分明；
-    19.移动端支持多语言切换；
-    20.后台返回错误码统一
-~~~
-
 ## 页面展示
 (页面仅展示部分UI)
 ![输入图片说明](readme/pic/gitee开源版详情_01.jpg)
@@ -129,18 +106,6 @@ Redis
 ![输入图片说明](readme/pic/gitee开源版详情_05.jpg)
 ### <a href='http://s.crmeb.com/goods_detail/739' target='_blank'>点击查看高清版全套UI设计图</a>
 
-
-##  系统演示
-
-![输入图片说明](readme/pic/20公众号.jpg)
-
-演示站： http://v4.crmeb.net/admin  
-
-账号：demo  
-
-密码：crmeb.com
-
-####  CRMEB云部署快速体验完整功能 <a href='https://saas.crmeb.com/' target='_blank'>【点击体验】</a>
 
 
 ## 程序下载 
@@ -168,15 +133,6 @@ git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git
 
 排名不分先后，感谢这些软件的开发者：thinkphp、iview、vue、mysql、redis、uniapp、echarts、tree-table-vue、swiper、form-create等，如有遗漏请联系我！
 
-## 参与开发
-
-感谢大神们提交代码（排名不分先后）
-
-### @yizhisamoye，@bys1123，@xaboy，@youngxj0，@jacklincheung，@392256866，@sxsea
-
-欢迎反馈问题 [反馈问题](https://gitee.com/ZhongBangKeJi/CRMEB/issues)。
-
-欢迎提交代码 [提交代码](https://gitee.com/ZhongBangKeJi/CRMEB/pulls)。
 
 ## 开源版使用须知
 
@@ -199,12 +155,18 @@ CRMEB® 商标和著作权所有者为西安众邦网络科技有限公司。
 
 ## 参与开发人员
 
-##### 技术：等风来、最后一片叶、吴汐、旺仔、小小、娜娜、归来仍是少年
+##### 技术：聆听、等风来、xaboy、最后一片叶、吴汐、旺仔、小小、娜娜、归来仍是少年
 ##### 产品：木子刀客
 ##### 设计：xy-yyds、LXT
 ##### 测试：夏天、绵绵羊、。ws
 
-注：排名不分前后
+### 感谢大神们提交代码（排名不分先后）
+
+### @yizhisamoye，@bys1123，@xaboy，@youngxj0，@jacklincheung，@392256866，@sxsea
+
+欢迎反馈问题 [反馈问题](https://gitee.com/ZhongBangKeJi/CRMEB/issues)。
+
+欢迎提交代码 [提交代码](https://gitee.com/ZhongBangKeJi/CRMEB/pulls)。
 
 ![](readme/pic/gitee打通版-横.jpg)
 [![](readme/pic/1思维脑图功能清单.jpg)](https://s.crmeb.com/goods_detail/739)
