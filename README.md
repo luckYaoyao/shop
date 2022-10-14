@@ -31,7 +31,7 @@
 </div>
 <div align="center" >
 <a href="https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md"> 
-<img src="https://img.shields.io/badge/宽 屏-预 览-grey.svg?logo=Fortinet&logoColor=orange" /> 
+<img src="https://img.shields.io/badge/宽 屏-预 览-black.svg?logo=Fortinet&logoColor=orange" /> 
 </a>
 </div>
 
