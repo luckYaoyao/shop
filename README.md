@@ -72,7 +72,7 @@ Redis
 推荐云部署版一键解决以上所有问题，超低价格低至 :collision:  9.9元/年，点击了解 https://saas.crmeb.com/saas-home-software-detail-50043-s-y.html
 
 
-（虚拟空间不支持，推荐使用bt宝塔面板简单易用，服务器推荐阿里云ecs或腾讯云cvm 云服务器：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z" target="_blank">  查看 </a>
+虚拟空间不支持，推荐使用bt宝塔面板简单易用，服务器推荐阿里云ecs或腾讯云cvm 云服务器：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z" target="_blank">  查看 </a>
 
 
 ##  系统演示
