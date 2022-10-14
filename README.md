@@ -30,20 +30,22 @@
 [帮助文档](https://doc.crmeb.com/single/crmeb_v4) |
 [技术社区](https://q.crmeb.com/)
 
+[comment]: <> ([宽屏预览]&#40;https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md&#41;)
+
 </div>
 <div align="center" >
 <a href="https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md">宽 屏 预 览</a>
 </div>
 
 - - -
-## 介绍
+### 介绍
  CRMEB打通版是历经6年时间匠心之作！系统全开源可商用，包含小程序商城、H5商城、公众号商城、PC商城、App，多种分销模式、拼团、砍价、秒杀、优惠券、抽奖、积分、会员等级、小程序直播、页面DIY，前后端分离全部100%开源。方便二开，更有详细使用文档、接口文档、数据字典、二开文档/视频教程。
  
 #### 为开发者赋能，助力企业发展、国家富强，致力于打造最受欢迎的商城项目
 
 
 [![](readme/pic/zhongqiu.jpg)](http://www.crmeb.com/news/detail/796)
-## 系统亮点
+### 系统亮点
 ~~~
 多 语 言：后台随时配置语言包，移动端支持多语言切换；
 高 性 能：redis缓存、队列、长连接、多种云储存、支持集群部署；
@@ -60,7 +62,7 @@
 ~~~
 
 
-## 运行环境
+### 运行环境
 
 ```
 Nignx/Apache/IIS
@@ -73,7 +75,7 @@ Redis
 > 温馨提示：虚拟空间不支持，推荐使用bt宝塔面板，服务器推荐阿里云ecs或腾讯云cvm 云服务器：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z" target="_blank">  查看 </a>
 
 
-##  系统演示
+###  系统演示
 
 ![输入图片说明](readme/pic/20公众号.jpg)
 
@@ -100,7 +102,7 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 产品BUG、优化建议，欢迎社区反馈：https://q.crmeb.com/?categoryId=147
 
 
-## 页面展示
+### 页面展示
 (页面仅展示部分UI)
 ![输入图片说明](readme/pic/gitee开源版详情_01.jpg)
 ![输入图片说明](readme/pic/gitee开源版详情_02.jpg)
@@ -112,7 +114,7 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 </div>
 
 
-## 推荐项目
+### 推荐项目
 
 | 项目名称  | 关注量  |  项目介绍 |
 | ------------ | ------------ | ------------ |
@@ -126,12 +128,12 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 
 
 
-## 特别鸣谢
+### 特别鸣谢
 
 排名不分先后，感谢这些软件的开发者：thinkphp、iview、vue、mysql、redis、uniapp、echarts、tree-table-vue、swiper、form-create等，如有遗漏请联系我！
 
 
-## 使用须知
+### 使用须知
 
 1.允许用于个人学习、毕业设计、教学案例、公益事业、商业使用;
 
@@ -139,7 +141,7 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 
 3.禁止将本项目的代码和资源进行任何形式的出售，产生的一切任何后果责任由侵权者自负。
 
-## 版权信息
+### 版权信息
 
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
@@ -150,7 +152,7 @@ All rights reserved。
 
 CRMEB® 商标和著作权所有者为西安众邦网络科技有限公司。
 
-## 核心开发团队
+### 核心开发团队
 产品：木子刀客
 
 技术：聆听、等风来、xaboy、吴汐、最后一片叶、旺仔、小小、娜娜、归来仍是少年
@@ -159,7 +161,7 @@ UI：xy-yyds、LXT
 
 测试：夏天、绵绵羊、。ws
 
-## 感谢开发者
+### 感谢开发者
 感谢大神们提交代码（排名不分先后）
 
 @yizhisamoye，@bys1123，@xaboy，@youngxj0，@jacklincheung，@392256866，@sxsea
