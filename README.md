@@ -15,7 +15,7 @@
         <img src="https://img.shields.io/badge/Edition-4.5-blue.svg" />
     </a>
      <a href="https://gitee.com/ZhongBangKeJi/CRMEB/repository/archive/master.zip">
-        <img src="https://img.shields.io/badge/download-150m-red.svg" />
+        <img src="https://img.shields.io/badge/Download-150m-red.svg" />
     </a>
     <a href='https://gitee.com/ZhongBangKeJi/CRMEB/stargazers'>
        <img src='https://gitee.com/ZhongBangKeJi/CRMEB/badge/star.svg?theme=gvp' alt='star'></img>
@@ -30,7 +30,9 @@
 
 </div>
 <div align="center" >
-<a href="https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md"> 宽屏预览 </a>
+<a href="https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md"> 
+<img src="https://img.shields.io/badge/宽屏-预览-red.svg" /> 
+</a>
 </div>
 
 - - -
