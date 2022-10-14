@@ -68,7 +68,7 @@ Redis
 ```
 
 
-> 温馨提示：虚拟空间不支持，推荐使用bt宝塔面板简单易用，服务器推荐阿里云ecs或腾讯云cvm 云服务器：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z" target="_blank">  查看 </a>
+> 温馨提示：虚拟空间不支持，推荐使用bt宝塔面板，服务器推荐阿里云ecs或腾讯云cvm 云服务器：<a href="https://promotion.aliyun.com/ntms/yunparter/invite.html?userCode=dligum2z" target="_blank">  查看 </a>
 
 
 ##  系统演示
@@ -85,10 +85,10 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 
 ---
 
-#### 
-> 不懂服务器？不懂技术？无法解决高并发？想数据私有化？还想后期定制开发？
-> 
-> 推荐云部署版一键超低价格低至 :collision:  9.9元/年，解决以上所有问题<a href='https://saas.crmeb.com/saas-home-software-detail-50043-s-y.html' target='_blank'>点击了解 </a>
+#### 体验云部署
+ 不懂服务器？不懂技术？无法解决高并发？想数据私有化？还想后期定制开发？
+
+ 推荐云部署版一键超低价格低至 :collision:  9.9元/年，解决以上所有问题<a href='https://saas.crmeb.com/saas-home-software-detail-50043-s-y.html' target='_blank'>点击了解 </a>
 
 ---
 
