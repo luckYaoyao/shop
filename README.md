@@ -94,11 +94,8 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 
 ### 官方技术交流群
 ![输入图片说明](readme/pic/image.jpg)
-### CRMEB官方论坛：https://q.crmeb.com
 
-技术交流、安装搭建问题、系统建议反馈 欢迎光临CRMEB官方论坛！
-
-提交BUG、产品建议反馈  欢迎参与：https://q.crmeb.com/?categoryId=147
+产品BUG、优化建议，欢迎社区反馈：https://q.crmeb.com/?categoryId=147
 
 
 ## 页面展示
@@ -108,16 +105,10 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 ![输入图片说明](readme/pic/gitee开源版详情_03.jpg)
 ![输入图片说明](readme/pic/gitee开源版详情_04.jpg)
 ![输入图片说明](readme/pic/gitee开源版详情_05.jpg)
-### <a href='http://s.crmeb.com/goods_detail/739' target='_blank'>点击查看高清版全套UI设计图</a>
+<div align="center">
+<a href='http://s.crmeb.com/goods_detail/739' target='_blank'><h3>点击查看高清版全套UI设计图</h3></a>
+</div>
 
-
-
-## 程序下载 
-
-老版本v3.2.9 下载（功能全，后台非前后端分离，适合新手二开）
-```
-git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git
-```
 
 ## 推荐项目
 
@@ -138,7 +129,7 @@ git clone -b v3.2.9 https://gitee.com/ZhongBangKeJi/CRMEB.git
 排名不分先后，感谢这些软件的开发者：thinkphp、iview、vue、mysql、redis、uniapp、echarts、tree-table-vue、swiper、form-create等，如有遗漏请联系我！
 
 
-## 开源版使用须知
+## 使用须知
 
 1.允许用于个人学习、毕业设计、教学案例、公益事业、商业使用;
 
@@ -157,16 +148,18 @@ All rights reserved。
 
 CRMEB® 商标和著作权所有者为西安众邦网络科技有限公司。
 
-## 参与开发人员
+## 核心开发团队
+产品：木子刀客
 
-##### 技术：聆听、等风来、xaboy、最后一片叶、吴汐、旺仔、小小、娜娜、归来仍是少年
-##### 产品：木子刀客
-##### 设计：xy-yyds、LXT
-##### 测试：夏天、绵绵羊、。ws
+技术：聆听、等风来、xaboy、吴汐、最后一片叶、旺仔、小小、娜娜、归来仍是少年
+
+UI：xy-yyds、LXT
+
+测试：夏天、绵绵羊、。ws
 
 ### 感谢大神们提交代码（排名不分先后）
 
-### @yizhisamoye，@bys1123，@xaboy，@youngxj0，@jacklincheung，@392256866，@sxsea
+@yizhisamoye，@bys1123，@xaboy，@youngxj0，@jacklincheung，@392256866，@sxsea
 
 欢迎反馈问题 [反馈问题](https://gitee.com/ZhongBangKeJi/CRMEB/issues)。
 
