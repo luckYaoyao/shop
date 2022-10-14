@@ -110,12 +110,13 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 ![输入图片说明](readme/pic/gitee开源版详情_03.jpg)
 ![输入图片说明](readme/pic/gitee开源版详情_04.jpg)
 ![输入图片说明](readme/pic/gitee开源版详情_05.jpg)
+
 <div align="center">
 <a href='http://s.crmeb.com/goods_detail/739' target='_blank'><h3>点击查看高清版全套UI设计图</h3></a>
 </div>
 
 
-### 推荐项目
+### 推荐项目(欢迎合作，QQ：763569752 )
 
 | 项目名称  | 关注量  |  项目介绍 |
 | ------------ | ------------ | ------------ |
@@ -124,25 +125,15 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 | [![](https://img.shields.io/badge/xaboy-formbuilder-blue.svg)](https://gitee.com/xaboy/form-builder) | [![](https://gitee.com/xaboy/form-builder/badge/star.svg)](http://https://gitee.com/xaboy/form-builder/stargazers) | PHP表单生成器，快速生成现代化的form表单。 |
 | [![](https://img.shields.io/badge/就眠儀式-LayuiVue-blue.svg)](https://gitee.com/layui/layui-vue) | [![](https://gitee.com/layui/layui-vue/badge/star.svg)](http://https://gitee.com/layui/layui-vue/stargazers) | layui-vue(谐音:类UI)是一套Vue3.0 的桌面端组件库.  |
 | [![](https://img.shields.io/badge/逆天的蝈蝈-TpFlow-blue.svg)](https://gitee.com/ntdgg/tpflow) | [![](https://gitee.com/ntdgg/tpflow/badge/star.svg?theme=gvp)](http://https://gitee.com/ntdgg/tpflow/stargazers) | TpFlow工作流引擎是一套规范化的流程管理系统，基于业务而驱动系统生命力的一套引擎.  |
-| [![](https://img.shields.io/badge/你的昵称-项目名称-blue.svg)](https://gitee.com/ZhongBangKeJi/CRMEB) | [![](https://gitee.com/ZhongBangKeJi/CRMEB/badge/star.svg?theme=gvp)](http://https://gitee.com/ZhongBangKeJi/CRMEB/stargazers) | 你的项目简介.欢迎合作！QQ：763569752  |
 
+### 贡献支持
+开源不易，以下如果有需要，请支持一下，感谢您的支持，让我们更多动力！
 
-### 使用须知
-
-1.允许用于个人学习、毕业设计、教学案例、公益事业、商业使用;
-
-2.如果商用必须保留版权信息，请自觉遵守;
-
-3.禁止将本项目的代码和资源进行任何形式的出售，产生的一切任何后果责任由侵权者自负。
-
-### 核心开发团队
-产品：木子刀客
-
-技术：聆听、等风来、xaboy、吴汐、最后一片叶、旺仔、小小、娜娜、归来仍是少年
-
-UI：xy-yyds、LXT
-
-测试：夏天、绵绵羊、。ws
+![](readme/pic/gitee打通版-横.jpg)
+[![](readme/pic/1思维脑图功能清单.jpg)](https://s.crmeb.com/goods_detail/739)
+[![](readme/pic/2高清UI设计图.jpg)](https://s.crmeb.com/goods_detail/739)
+[![](readme/pic/3前后端接口文档.jpg)](https://s.crmeb.com/goods_detail/739)
+[![](readme/pic/4PC端前端模板.jpg)](https://s.crmeb.com/goods_detail/739)
 
 ### 感谢参与开发者
 感谢大神们提交代码（排名不分先后）
@@ -153,26 +144,29 @@ UI：xy-yyds、LXT
 
 欢迎提交代码 [提交代码](https://gitee.com/ZhongBangKeJi/CRMEB/pulls)。
 
----
-### 感谢支持
-开源不易，以下如果有需要，请支持一下，感谢您的支持，让我们更多动力！
-
-![](readme/pic/gitee打通版-横.jpg)
-[![](readme/pic/1思维脑图功能清单.jpg)](https://s.crmeb.com/goods_detail/739)
-[![](readme/pic/2高清UI设计图.jpg)](https://s.crmeb.com/goods_detail/739)
-[![](readme/pic/3前后端接口文档.jpg)](https://s.crmeb.com/goods_detail/739)
-[![](readme/pic/4PC端前端模板.jpg)](https://s.crmeb.com/goods_detail/739)
-
-
 ### 特别鸣谢
 
----
 排名不分先后，感谢这些软件的开发者：thinkphp、iview、vue、mysql、redis、uniapp、echarts、tree-table-vue、swiper、form-create等，如有遗漏请联系我！
 
+### 核心开发团队
+产品：木子刀客
+
+技术：聆听、等风来、xaboy、吴汐、最后一片叶、旺仔、小小、娜娜、归来仍是少年
+
+UI：xy-yyds、LXT
+
+测试：夏天、绵绵羊、。ws
+
+### 使用须知
+
+1.允许用于个人学习、毕业设计、教学案例、公益事业、商业使用;
+
+2.如果商用必须保留版权信息，请自觉遵守;
+
+3.禁止将本项目的代码和资源进行任何形式的出售，产生的一切任何后果责任由侵权者自负。
 
 ### 版权信息
 
----
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
 版权所有Copyright © 2017-2022 by CRMEB (https://www.crmeb.com)
