@@ -29,7 +29,11 @@
 [技术社区](https://q.crmeb.com/)
 
 </div>
- 
+<div align="center" >
+<a href="https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md"> 宽屏预览 </a>
+</div>
+
+- - -
 ## 介绍
  CRMEB打通版是历经6年时间匠心之作！系统全开源可商用，包含小程序商城、H5商城、公众号商城、PC商城、App，多种分销模式、拼团、砍价、秒杀、优惠券、抽奖、积分、会员等级、小程序直播、页面DIY，前后端分离全部100%开源。方便二开，更有详细使用文档、接口文档、数据字典、二开文档/视频教程。
  
@@ -52,11 +56,7 @@
 系统功能：请看帮助文档 https://doc.crmeb.com/single/crmeb_v4/1758
 用户体验：等您来评！
 ~~~
-<div align="center" >
-<a href="https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md"> 宽屏预览 </a>
-</div>
 
-- - -
 
 ## 运行环境
 
