@@ -31,7 +31,7 @@
 </div>
  
 ## 介绍
- CRMEB打通版是历经6年时间匠心之作！系统全开源可商用，包含小程序商城、H5商城、公众号商城、PC商城、App，多种分销模式、拼团、砍价、秒杀、优惠券、抽奖、积分、会员等级、小程序直播、页面DIY，前后端分离，方便二开，更有详细使用文档、接口文档、数据字典、二开文档/视频教程。
+ CRMEB打通版是历经6年时间匠心之作！系统全开源可商用，包含小程序商城、H5商城、公众号商城、PC商城、App，多种分销模式、拼团、砍价、秒杀、优惠券、抽奖、积分、会员等级、小程序直播、页面DIY，前后端分离全部100%开源。方便二开，更有详细使用文档、接口文档、数据字典、二开文档/视频教程。
  
 #### 为开发者赋能，助力企业发展、国家富强，致力于打造最受欢迎的商城项目
 
@@ -157,7 +157,8 @@ UI：xy-yyds、LXT
 
 测试：夏天、绵绵羊、。ws
 
-### 感谢大神们提交代码（排名不分先后）
+## 感谢开发者
+感谢大神们提交代码（排名不分先后）
 
 @yizhisamoye，@bys1123，@xaboy，@youngxj0，@jacklincheung，@392256866，@sxsea
 
@@ -165,11 +166,15 @@ UI：xy-yyds、LXT
 
 欢迎提交代码 [提交代码](https://gitee.com/ZhongBangKeJi/CRMEB/pulls)。
 
+---
+开源不易，以下如果有需要，请支持一下，感谢您的支持，让我们更多动力！
+
 ![](readme/pic/gitee打通版-横.jpg)
 [![](readme/pic/1思维脑图功能清单.jpg)](https://s.crmeb.com/goods_detail/739)
 [![](readme/pic/2高清UI设计图.jpg)](https://s.crmeb.com/goods_detail/739)
 [![](readme/pic/3前后端接口文档.jpg)](https://s.crmeb.com/goods_detail/739)
 [![](readme/pic/4PC端前端模板.jpg)](https://s.crmeb.com/goods_detail/739)
 
+---
 [返回顶部 :fa-arrow-circle-up: ](https://gitee.com/ZhongBangKeJi/CRMEB#%E9%A1%B9%E7%9B%AE%E4%BB%8B%E7%BB%8D)
 
