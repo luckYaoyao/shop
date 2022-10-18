@@ -103,7 +103,7 @@ class WechatReplyServices extends BaseServices
         if ($id == 'undefined') {
             $id = 0;
         }
-        if ($data['content'] == '' && $data['src'] == '') $data = $data['list'][0] ?? [];
+        if (isset($data['content']) && $data['content'] == '' && isset($data['src']) && $data['src'] == '') $data = $data['list'][0] ?? [];
         try {
             $res = $this->{$method}($data, $id);
         } catch (\Throwable $e) {
@@ -292,6 +292,9 @@ class WechatReplyServices extends BaseServices
      */
     public function tidyNews($data, $id = 0)
     {
+        if ($id != 0) {
+            $data = $data['list'][0];
+        }
         if (!count($data)) {
             throw new AdminException(400709);
         }
