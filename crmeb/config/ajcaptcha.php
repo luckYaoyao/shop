@@ -10,7 +10,12 @@ return [
     //滑动验证码
     'block_puzzle' => [
         /*背景图片路径， 不填使用默认值， 支持string与array两种数据结构。string为默认图片的目录，array索引数组则为具体图片的地址*/
-        'backgrounds' => [],
+        'backgrounds' => [
+            public_path().'statics/images/check1.jpg',
+            public_path().'statics/images/check2.jpg',
+            public_path().'statics/images/check3.jpg',
+            public_path().'statics/images/check4.jpg',
+        ],
 
         /*模板图,格式同上支持string与array*/
         'templates' => [],
