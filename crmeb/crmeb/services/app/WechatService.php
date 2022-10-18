@@ -78,8 +78,8 @@ class WechatService
                 'app_id' => $appId,
                 'merchant_id' => trim($payment['pay_weixin_mchid']),
                 'key' => trim($payment['pay_weixin_key']),
-                'cert_path' => public_path() . $payment['pay_weixin_client_cert'],
-                'key_path' => public_path() . $payment['pay_weixin_client_key'],
+                'cert_path' => substr(public_path(parse_url($payment['pay_weixin_client_cert'])['path']), 0, strlen(public_path(parse_url($payment['pay_weixin_client_cert'])['path'])) - 1),
+                'key_path' => substr(public_path(parse_url($payment['pay_weixin_client_key'])['path']), 0, strlen(public_path(parse_url($payment['pay_weixin_client_key'])['path'])) - 1),
                 'notify_url' => trim(sys_config('site_url')) . '/api/wechat/notify'
             ];
         }

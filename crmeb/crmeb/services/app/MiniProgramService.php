@@ -91,7 +91,7 @@ class MiniProgramService
     public static function options()
     {
         $wechat = SystemConfigService::more(['wechat_app_appsecret', 'wechat_app_appid', 'site_url', 'routine_appId', 'routine_appsecret']);
-        $payment = SystemConfigService::more(['pay_weixin_mchid', 'pay_weixin_key', 'pay_weixin_client_cert', 'pay_weixin_client_key', 'pay_weixin_open','pay_new_weixin_open','pay_new_weixin_mchid']);
+        $payment = SystemConfigService::more(['pay_weixin_mchid', 'pay_weixin_key', 'pay_weixin_client_cert', 'pay_weixin_client_key', 'pay_weixin_open', 'pay_new_weixin_open', 'pay_new_weixin_mchid']);
         $config = [];
         if (request()->isApp()) {
             $appId = isset($wechat['wechat_app_appid']) ? trim($wechat['wechat_app_appid']) : '';
@@ -108,10 +108,10 @@ class MiniProgramService
         ];
         $config['payment'] = [
             'app_id' => $appId,
-            'merchant_id' =>  empty($payment['pay_new_weixin_open']) ? trim($payment['pay_weixin_mchid']) : trim($payment['pay_new_weixin_mchid']),
+            'merchant_id' => empty($payment['pay_new_weixin_open']) ? trim($payment['pay_weixin_mchid']) : trim($payment['pay_new_weixin_mchid']),
             'key' => trim($payment['pay_weixin_key']),
-            'cert_path' => public_path() . $payment['pay_weixin_client_cert'],
-            'key_path' => public_path() . $payment['pay_weixin_client_key'],
+            'cert_path' => substr(public_path(parse_url($payment['pay_weixin_client_cert'])['path']), 0, strlen(public_path(parse_url($payment['pay_weixin_client_cert'])['path'])) - 1),
+            'key_path' => substr(public_path(parse_url($payment['pay_weixin_client_key'])['path']), 0, strlen(public_path(parse_url($payment['pay_weixin_client_key'])['path'])) - 1),
             'notify_url' => trim($wechat['site_url']) . Url::buildUrl('/api/routine/notify')
         ];
         return $config;
@@ -343,6 +343,7 @@ class MiniProgramService
             }
         }
     }
+
     /**
      * 获得下单ID
      * @param $openid
@@ -368,7 +369,7 @@ class MiniProgramService
                 Cache::set($key, $result->payment_params, 7000);
                 return $result->payment_params;
             } else {
-                exception('微信支付错误返回：'.'['.$result->errcode.']'. $result->errmsg);
+                exception('微信支付错误返回：' . '[' . $result->errcode . ']' . $result->errmsg);
                 exit;
             }
         }
@@ -451,6 +452,7 @@ class MiniProgramService
             return self::paymentService()->refundByTransactionId($orderNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundAccount, $refundReason);
         }
     }
+
     /**
      * 使用商户订单号退款
      * @param $orderNo
@@ -469,11 +471,11 @@ class MiniProgramService
 
         $order = [
             'openid' => $opt['open_id'],
-            'trade_no'=>$opt['order_id'],
-            'transaction_id'=>$opt['trade_no'],
-            'refund_no'=>$opt['refund_no'],
-            'total_amount'=>$totalFee,
-            'refund_amount'=>$refundFee,
+            'trade_no' => $opt['order_id'],
+            'transaction_id' => $opt['trade_no'],
+            'refund_no' => $opt['refund_no'],
+            'total_amount' => $totalFee,
+            'refund_amount' => $refundFee,
         ];
         return self::application()->minipay->refundorder($order);
     }
