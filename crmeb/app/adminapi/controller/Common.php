@@ -418,7 +418,7 @@ class Common extends AuthController
 
         if ($services->count(['menu_name' => 'nncnL_crmeb_copyright_image'])) {
             $services->update([
-                'menu_name' => 'nncnL_crmeb_copyright_imge'
+                'menu_name' => 'nncnL_crmeb_copyright_image'
             ], [
                 'value' => json_encode($copyrightImg)
             ]);
