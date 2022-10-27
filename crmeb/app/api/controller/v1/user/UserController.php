@@ -140,6 +140,9 @@ class UserController
      * 静默绑定推广人
      * @param Request $request
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function spread(Request $request)
     {
@@ -148,8 +151,8 @@ class UserController
             ['code', 0]
         ], true);
         $uid = (int)$request->uid();
-        $this->services->spread($uid, (int)$spreadUid, $code);
-        return app('json')->success();
+        $res = $this->services->spread($uid, (int)$spreadUid, $code);
+        return app('json')->success($res);
     }
 
     /**

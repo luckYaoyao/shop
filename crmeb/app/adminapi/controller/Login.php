@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\adminapi\controller;
 
+use crmeb\services\CacheService;
 use think\facade\App;
 use crmeb\utils\Captcha;
 use app\services\system\admin\SystemAdminServices;
@@ -84,18 +85,13 @@ class Login extends AuthController
      */
     public function login()
     {
-        [$account, $password, $imgcode, $key, $captchaVerification, $captchaType] = $this->request->postMore([
+        [$account, $password, $key, $captchaVerification, $captchaType] = $this->request->postMore([
             'account',
             'pwd',
-            ['imgcode', ''],
             ['key', ''],
             ['captchaVerification', ''],
             ['captchaType', '']
         ], true);
-
-        if (!app()->make(Captcha::class)->check($imgcode)) {
-            return app('json')->fail(400336);
-        }
 
         if ($captchaVerification != '') {
             try {
@@ -106,8 +102,17 @@ class Login extends AuthController
         }
 
         $this->validate(['account' => $account, 'pwd' => $password], \app\adminapi\validate\setting\SystemAdminValidata::class, 'get');
-
-        return app('json')->success($this->services->login($account, $password, 'admin', $key));
+        $result = $this->services->login($account, $password, 'admin', $key);
+        if (!$result) {
+            $num = CacheService::redisHandler()->get('login_captcha',1);
+            if ($num > 1) {
+                return app('json')->fail(400140, ['login_captcha' => 1]);
+            }
+            CacheService::redisHandler()->set('login_captcha', $num + 1, 60);
+            return app('json')->fail(400140, ['login_captcha' => 0]);
+        }
+        CacheService::redisHandler()->delete('login_captcha');
+        return app('json')->success($result);
     }
 
     /**

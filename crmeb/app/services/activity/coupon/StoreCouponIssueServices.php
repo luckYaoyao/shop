@@ -8,7 +8,7 @@
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-declare (strict_types = 1);
+declare (strict_types=1);
 
 namespace app\services\activity\coupon;
 
@@ -481,11 +481,11 @@ class StoreCouponIssueServices extends BaseServices
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function beUsableCouponList(int $uid, $cartId, bool $new)
+    public function beUsableCouponList(int $uid, $cartId, bool $new, int $shippingType = 1)
     {
         /** @var StoreCartServices $services */
         $services = app()->make(StoreCartServices::class);
-        $cartGroup = $services->getUserProductCartListV1($uid, $cartId, $new);
+        $cartGroup = $services->getUserProductCartListV1($uid, $cartId, $new, [], $shippingType);
         /** @var StoreCouponUserServices $coupServices */
         $coupServices = app()->make(StoreCouponUserServices::class);
         return $coupServices->getUsableCouponList($uid, $cartGroup);

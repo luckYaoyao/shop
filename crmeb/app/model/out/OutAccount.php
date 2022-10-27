@@ -73,6 +73,8 @@ class OutAccount extends BaseModel
      */
     public function searchIsDelAttr($query, $value)
     {
-        $query->where('is_del', $value);
+        if ($value !== '') {
+            $query->where('is_del', $value);
+        }
     }
 }

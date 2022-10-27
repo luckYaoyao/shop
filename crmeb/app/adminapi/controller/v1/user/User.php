@@ -337,8 +337,11 @@ class User extends AuthController
 
     /**
      * 执行编辑其他
-     * @param int $id
+     * @param $id
      * @return mixed
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function update_other($id)
     {
@@ -357,22 +360,10 @@ class User extends AuthController
     }
 
     /**
-     * 修改user表状态
-     *
-     * @return array
-     */
-    public function set_status($status, $id)
-    {
-//        if ($status == '' || $id == 0) return app('json')->fail('参数错误');
-//        UserModel::where(['uid' => $id])->update(['status' => $status]);
-
-        return app('json')->success(100014);
-    }
-
-    /**
      * 编辑会员信息
      * @param $id
-     * @return mixed|\think\response\Json|void
+     * @return mixed
+     * @throws \FormBuilder\Exception\FormBuilderException
      */
     public function edit($id)
     {
@@ -380,6 +371,14 @@ class User extends AuthController
         return app('json')->success($this->services->edit($id));
     }
 
+    /**
+     * 修改用户
+     * @param $id
+     * @return mixed
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
     public function update($id)
     {
         $data = $this->request->postMore([
@@ -429,7 +428,7 @@ class User extends AuthController
 
     /**
      * 获取单个用户信息
-     * @param $id 用户id
+     * @param $id
      * @return mixed
      */
     public function oneUserInfo($id)

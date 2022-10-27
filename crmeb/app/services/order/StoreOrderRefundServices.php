@@ -165,7 +165,9 @@ class StoreOrderRefundServices extends BaseServices
                 /** @var StoreOrderStatusServices $services */
                 $services = app()->make(StoreOrderStatusServices::class);
                 if (!$services->count(['oid' => $splitOrderInfo['id'], 'change_type' => 'refund_price'])) {
-                    $this->regressionStock($splitOrderInfo);
+                    /** @var StoreOrderServices $orderServices */
+                    $orderServices = app()->make(StoreOrderServices::class);
+                    $this->regressionStock($orderServices->get($splitOrderInfo['id']));
                 }
             }
 
@@ -996,7 +998,7 @@ class StoreOrderRefundServices extends BaseServices
         //提醒推送
         event('notice.notice', [['order' => $order], 'send_order_apply_refund']);
         //推送订单
-        event('out.outPush', ['refund_create_push', (int)$order['id']]);
+        event('out.outPush', ['refund_create_push', ['order_id' => (int)$order['id']]]);
         try {
             ChannelService::instance()->send('NEW_REFUND_ORDER', ['order_id' => $order['order_id']]);
         } catch (\Exception $e) {
@@ -1253,7 +1255,7 @@ class StoreOrderRefundServices extends BaseServices
         //售后订单取消后置事件
         event('order.orderRefundCancelAfter', [$orderRefundInfo]);
         // 推送订单
-        event('out.outPush', ['order_pay_push', (int)$orderRefundInfo['id']]);
+        event('out.outPush', ['refund_cancel_push', ['order_id' => (int)$orderRefundInfo['id']]]);
         return true;
     }
 

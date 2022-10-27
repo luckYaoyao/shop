@@ -19,10 +19,12 @@ use app\services\user\UserExtractServices;
 use crmeb\exceptions\AdminException;
 use app\dao\system\admin\SystemAdminDao;
 use app\services\system\SystemMenusServices;
+use crmeb\services\CacheService;
 use crmeb\services\FormBuilder;
 use crmeb\services\workerman\ChannelService;
 use think\facade\Config;
 use think\facade\Event;
+use think\Model;
 
 /**
  * 管理员service
@@ -54,7 +56,7 @@ class SystemAdminServices extends BaseServices
      * 管理员登陆
      * @param string $account
      * @param string $password
-     * @return array|\think\Model
+     * @return array|bool|Model
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
@@ -62,14 +64,9 @@ class SystemAdminServices extends BaseServices
     public function verifyLogin(string $account, string $password)
     {
         $adminInfo = $this->dao->accountByAdmin($account);
-        if (!$adminInfo) {
-            throw new AdminException(400594);
-        }
+        if (!$adminInfo || !password_verify($password, $adminInfo->pwd)) return false;
         if (!$adminInfo->status) {
             throw new AdminException(400595);
-        }
-        if (!password_verify($password, $adminInfo->pwd)) {
-            throw new AdminException(400140);
         }
         $adminInfo->last_time = time();
         $adminInfo->last_ip = app('request')->ip();
@@ -83,7 +80,7 @@ class SystemAdminServices extends BaseServices
      * 文件管理员登陆
      * @param string $account
      * @param string $password
-     * @return array|\think\Model
+     * @return array|Model
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
@@ -113,7 +110,7 @@ class SystemAdminServices extends BaseServices
      * @param string $account
      * @param string $password
      * @param string $type
-     * @return array
+     * @return array|bool
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
@@ -121,6 +118,7 @@ class SystemAdminServices extends BaseServices
     public function login(string $account, string $password, string $type, string $key = '')
     {
         $adminInfo = $this->verifyLogin($account, $password);
+        if (!$adminInfo) return false;
         $tokenInfo = $this->createToken($adminInfo->id, $type, $adminInfo->pwd);
         /** @var SystemMenusServices $services */
         $services = app()->make(SystemMenusServices::class);
@@ -157,7 +155,7 @@ class SystemAdminServices extends BaseServices
     {
         $key = uniqid();
         event('admin.info', [$key]);
-        return [
+        $data = [
             'slide' => sys_data('admin_login_slide') ?? [],
             'logo_square' => sys_config('site_logo_square'),//透明
             'logo_rectangle' => sys_config('site_logo'),//方形
@@ -165,8 +163,13 @@ class SystemAdminServices extends BaseServices
             'site_name' => sys_config('site_name'),
             'copyright' => sys_config('nncnL_crmeb_copyright', ''),
             'version' => get_crmeb_version(),
-            'key' => $key
+            'key' => $key,
+            'login_captcha' => 0
         ];
+        if (CacheService::redisHandler()->get('login_captcha', 1) > 1) {
+            $data['login_captcha'] = 1;
+        }
+        return $data;
     }
 
     /**

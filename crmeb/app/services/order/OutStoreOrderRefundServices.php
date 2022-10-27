@@ -288,7 +288,7 @@ class OutStoreOrderRefundServices extends BaseServices
             throw new AdminException(400118);
         }
         $refundInfo['order'] = $orderInfo->toArray();
-        return $this->push($pushUrl, $refundInfo, $id, '售后单');
+        return out_push($pushUrl, $refundInfo, '售后单');
     }
 
     /**
@@ -307,26 +307,6 @@ class OutStoreOrderRefundServices extends BaseServices
             throw new AdminException(400118);
         }
         $refundInfo['order'] = $orderInfo->toArray();
-        return $this->push($pushUrl, $refundInfo, $id, '取消售后单');
-    }
-
-    /**
-     * 发送请求
-     * @param string $pushUrl
-     * @param array $refundInfo
-     * @param int $id
-     * @param string $tip
-     * @return bool
-     */
-    public function push(string $pushUrl, array $refundInfo, int $id, string $tip): bool
-    {
-        $param = json_encode($refundInfo, JSON_UNESCAPED_UNICODE);
-        $res = HttpService::postRequest($pushUrl, $param, ['Content-Type:application/json', 'Content-Length:' . strlen($param)]);
-        $res = $res ? json_decode($res, true) : [];
-        if (!$res || !isset($res['code']) || $res['code'] != 0) {
-            Log::error(['msg' => $tip . '推送失败', 'id' => $id, 'data' => $res]);
-            return false;
-        }
-        return true;
+        return out_push($pushUrl, $refundInfo, '取消售后单');
     }
 }

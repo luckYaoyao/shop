@@ -57,9 +57,9 @@ class SystemOutAccount extends AuthController
      */
     public function set_status($id = '', $status = '')
     {
-        if ($status == '' || $id == '') return $this->fail('缺少参数');
+        if ($status == '' || $id == '') return app('json')->fail(100100);
         $this->services->update($id, ['status' => $status]);
-        return app('json')->success($status == 1 ? '开启成功' : '关闭成功');
+        return app('json')->success($status == 1 ? 100012 : 100013);
     }
 
     /**
@@ -69,9 +69,9 @@ class SystemOutAccount extends AuthController
      */
     public function delete($id)
     {
-        if ($id == '') return $this->fail('缺少参数');
+        if ($id == '') return app('json')->fail(100100);
         $this->services->update($id, ['is_del' => 1]);
-        return app('json')->success('删除成功!');
+        return app('json')->success(100002);
     }
 
     /**
@@ -99,9 +99,9 @@ class SystemOutAccount extends AuthController
         $data['add_time'] = time();
         $data['rules'] = implode(',', $data['rules']);
         if (!$this->services->save($data)) {
-            return app('json')->fail('添加失败');
+            return app('json')->fail(100006);
         } else {
-            return app('json')->success('添加成功');
+            return app('json')->success(100000);
         }
     }
 
@@ -131,24 +131,10 @@ class SystemOutAccount extends AuthController
         $data['rules'] = implode(',', $data['rules']);
         $res = $this->services->update($id, $data);
         if (!$res) {
-            return app('json')->fail('修改失败');
+            return app('json')->fail(100006);
         } else {
-            return app('json')->success('修改成功!');
+            return app('json')->success(100000);
         }
-    }
-
-    /**
-     * 设置账号推送接口表单
-     * @param $id
-     * @return mixed
-     * @throws \FormBuilder\Exception\FormBuilderException
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
-     */
-    public function outSetUpForm($id)
-    {
-        return app('json')->success($this->services->outSetUpForm($id));
     }
 
     /**
@@ -160,13 +146,17 @@ class SystemOutAccount extends AuthController
     {
         $data = $this->request->postMore([
             ['push_open', 0],
+            ['push_account', ''],
+            ['push_password', ''],
+            ['push_token_url', ''],
+            ['user_update_push', ''],
             ['order_create_push', ''],
             ['order_pay_push', ''],
             ['refund_create_push', ''],
             ['refund_cancel_push', ''],
         ]);
         $this->services->outSetUpSave($id, $data);
-        return app('json')->success('修改成功');
+        return app('json')->success(100000);
     }
 
     /**
@@ -180,5 +170,92 @@ class SystemOutAccount extends AuthController
     public function outInterfaceList(OutInterfaceServices $service)
     {
         return app('json')->success($service->outInterfaceList());
+    }
+
+    /**
+     * 保存接口文档
+     * @param $id
+     * @param OutInterfaceServices $service
+     * @return mixed
+     */
+    public function saveInterface($id, OutInterfaceServices $service)
+    {
+        $data = $this->request->postMore([
+            ['pid', 0], //上级id
+            ['type', 0], //类型 0菜单 1接口
+            ['name', ''], //名称
+            ['describe', ''], //说明
+            ['method', ''], //方法
+            ['url', ''], //链接地址
+            ['request_params', []], //请求参数
+            ['return_params', []], //返回参数
+            ['request_example', ''], //请求示例
+            ['return_example', ''], //返回示例
+            ['error_code', []] //错误码
+        ]);
+        $service->saveInterface((int)$id, $data);
+        return app('json')->success(100000);
+    }
+
+    /**
+     * 对外接口文档
+     * @param $id
+     * @param OutInterfaceServices $service
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function interfaceInfo($id, OutInterfaceServices $service)
+    {
+        return app('json')->success($service->interfaceInfo($id));
+    }
+
+    /**
+     * 修改接口名称
+     * @param OutInterfaceServices $service
+     * @return mixed
+     */
+    public function editInterfaceName(OutInterfaceServices $service)
+    {
+        $data = $this->request->postMore([
+            ['id', 0], //上级id
+            ['name', ''], //名称
+        ]);
+        if (!$data['id'] || !$data['name']) {
+            return app('json')->success(100100);
+        }
+        $service->editInterfaceName($data);
+        return app('json')->success(100001);
+    }
+
+    /**
+     * 删除接口
+     * @param $id
+     * @param OutInterfaceServices $service
+     * @return mixed
+     */
+    public function delInterface($id, OutInterfaceServices $service)
+    {
+        if (!$id) return app('json')->success(100100);
+        $service->delInterface($id);
+        return app('json')->success(100002);
+    }
+
+    /**
+     * 测试获取token接口
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function textOutUrl()
+    {
+        $data = $this->request->postMore([
+            ['push_account', 0],
+            ['push_password', 0],
+            ['push_token_url', '']
+        ]);
+        return app('json')->success('100014',$this->services->textOutUrl($data));
     }
 }

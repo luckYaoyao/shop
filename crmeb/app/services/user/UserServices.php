@@ -759,8 +759,12 @@ class UserServices extends BaseServices
 
     /**
      * 修改提交处理
-     * @param $id
-     * @return mixed
+     * @param int $id
+     * @param array $data
+     * @return bool
+     * @throws Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function updateInfo(int $id, array $data)
     {
@@ -786,6 +790,7 @@ class UserServices extends BaseServices
                 }
                 $res1 = $userMoneyServices->income('system_sub', $user['uid'], $data['money'], $edit['now_money'], $data['adminId'] ?? 0);
             }
+            event('out.outPush', ['user_update_push', ['uid' => $id, 'type' => 'money', 'value' => $data['money_status'] == 2 ? -floatval($data['money']) : $data['money']]]);
         } else {
             $res1 = true;
         }
@@ -806,6 +811,7 @@ class UserServices extends BaseServices
                 $integral_data['mark'] = '系统扣除了' . floatval($data['integration']) . '积分';
                 $res2 = $userBill->expendIntegral($user['uid'], 'system_sub', $integral_data);
             }
+            event('out.outPush', ['user_update_push', ['uid' => $id, 'type' => 'point', 'value' => $data['integration_status'] == 2 ? -intval($data['integration']) : $data['integration']]]);
         } else {
             $res2 = true;
         }
@@ -1583,8 +1589,13 @@ class UserServices extends BaseServices
 
     /**
      * 静默绑定推广人
-     * @param Request $request
-     * @return mixed
+     * @param int $uid
+     * @param int $spreadUid
+     * @param $code
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function spread(int $uid, int $spreadUid, $code)
     {
@@ -1599,6 +1610,7 @@ class UserServices extends BaseServices
                 $spreadUid = $info['third_id'];
             }
         }
+        if ($spreadUid == 0) return '不绑定';
         $userSpreadUid = $this->dao->value(['uid' => $spreadUid], 'spread_uid');
         //记录好友关系
         if ($spreadUid && $uid && $spreadUid != $uid) {
@@ -1609,26 +1621,38 @@ class UserServices extends BaseServices
                 'friends_uid' => $spreadUid,
             ]);
         }
-        //记录上下级关系
-        if (!$userInfo['spread_uid'] && $spreadUid != $uid && $userSpreadUid != $userInfo['uid']) {
-            if ((sys_config('brokerage_bindind') == 2 && $userInfo['add_time'] == $userInfo['last_time']) || sys_config('brokerage_bindind') == 1) {
-                $spreadInfo = $this->dao->get($spreadUid);
-                $data = [];
-                $data['spread_uid'] = $spreadUid;
-                $data['spread_time'] = time();
-                $data['division_id'] = $spreadInfo['division_id'];
-                $data['agent_id'] = $spreadInfo['agent_id'];
-                $data['staff_id'] = $spreadInfo['staff_id'];
-                if (!$this->dao->update($uid, $data, 'uid')) {
-                    throw new ApiException(410288);
+        $check = false;
+        if (sys_config('brokerage_bindind') == 1) {
+            if (sys_config('store_brokerage_binding_status') == 1) {
+                if (!$userInfo['spread_uid']) {
+                    $check = true;
                 }
-                /** @var UserBillServices $userBill */
-                $userBill = app()->make(UserBillServices::class);
-                //邀请新用户增加经验
-                $userBill->inviteUserIncExp((int)$spreadUid);
+            } elseif (sys_config('store_brokerage_binding_status') == 2 && (($userInfo['spread_time'] + (sys_config('store_brokerage_binding_time') * 86400)) < time())) {
+                $check = true;
+            } elseif (sys_config('store_brokerage_binding_status') == 3) {
+                $check = true;
+            }
+        } elseif (sys_config('brokerage_bindind') == 2) {
+            if ($userInfo['add_time'] == $userInfo['last_time']) {
+                $check = true;
             }
         }
-        return true;
+        if ($userInfo['uid'] == $userSpreadUid || $userInfo['spread_uid'] == $spreadUid) $check = false;
+        if ($check) {
+            $spreadInfo = $this->dao->get($spreadUid);
+            $data = [];
+            $data['spread_uid'] = $spreadUid;
+            $data['spread_time'] = time();
+            $data['division_id'] = $spreadInfo['division_id'];
+            $data['agent_id'] = $spreadInfo['agent_id'];
+            $data['staff_id'] = $spreadInfo['staff_id'];
+            if (!$this->dao->update($uid, $data, 'uid')) {
+                throw new ApiException(410288);
+            }
+            return '绑定上级成功，上级uid为' . $spreadUid;
+        } else {
+            return '不绑定';
+        }
     }
 
     /**
@@ -2129,7 +2153,7 @@ class UserServices extends BaseServices
             /** @var UserMoneyServices $userMoneyServices */
             $userMoneyServices = app()->make(UserMoneyServices::class);
             $edit['now_money'] = bcadd($user['now_money'], $reward_money, 2);
-            $res1 = $userMoneyServices->income('register_system_add', $user['uid'], $reward_money, $edit['now_money'],  1);
+            $res1 = $userMoneyServices->income('register_system_add', $user['uid'], $reward_money, $edit['now_money'], 1);
         } else {
             $res1 = true;
         }
@@ -2151,5 +2175,16 @@ class UserServices extends BaseServices
         if ($res1 && $res2 && $res3)
             return true;
         else throw new AdminException(100007);
+    }
+
+    /**
+     * 推送用户信息
+     * @param $data
+     * @param $pushUrl
+     * @return bool
+     */
+    public function userUpdate($data, $pushUrl)
+    {
+        return out_push($pushUrl, $data, '更新用户信息');
     }
 }

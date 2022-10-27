@@ -11,6 +11,7 @@
 
 // 应用公共文件
 use crmeb\services\CacheService;
+use crmeb\services\HttpService;
 use Fastknife\Service\ClickWordCaptchaService;
 use think\exception\ValidateException;
 use crmeb\services\FormBuilder as Form;
@@ -989,7 +990,7 @@ if (!function_exists('aj_captcha_check_two')) {
      * @param string $pointJson
      * @return bool
      */
-    function aj_captcha_check_two(string $captchaType, string $captchaVerification )
+    function aj_captcha_check_two(string $captchaType, string $captchaVerification)
     {
         aj_get_serevice($captchaType)->verificationByEncryptCode($captchaVerification);
         return true;
@@ -1028,5 +1029,26 @@ if (!function_exists('aj_get_serevice')) {
                 throw new ValidateException('captchaType参数不正确！');
         }
         return $service;
+    }
+}
+
+if (!function_exists('out_push')) {
+    /**
+     * 默认数据推送
+     * @param string $pushUrl
+     * @param array $data
+     * @param string $tip
+     * @return bool
+     */
+    function out_push(string $pushUrl, array $data, string $tip = ''): bool
+    {
+        $param = json_encode($data, JSON_UNESCAPED_UNICODE);
+        $res = HttpService::postRequest($pushUrl, $param, ['Content-Type:application/json', 'Content-Length:' . strlen($param)]);
+        $res = $res ? json_decode($res, true) : [];
+        if (!$res || !isset($res['code']) || $res['code'] != 0) {
+            \think\facade\Log::error(['msg' => $tip . '推送失败', 'data' => $res]);
+            return false;
+        }
+        return true;
     }
 }

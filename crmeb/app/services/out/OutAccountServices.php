@@ -13,9 +13,11 @@ namespace app\services\out;
 
 use app\dao\out\OutAccountDao;
 use app\services\BaseServices;
+use crmeb\exceptions\AdminException;
 use crmeb\exceptions\AuthException;
 use crmeb\services\CacheService;
 use crmeb\services\FormBuilder as Form;
+use crmeb\services\HttpService;
 use crmeb\utils\JwtAuth;
 use Firebase\JWT\ExpiredException;
 
@@ -113,6 +115,9 @@ class OutAccountServices extends BaseServices
      * 获取列表
      * @param array $where
      * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function getList(array $where = [])
     {
@@ -134,6 +139,10 @@ class OutAccountServices extends BaseServices
      * 刷新token
      * @param string $token
      * @return array
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function refresh(string $token): array
     {
@@ -238,26 +247,6 @@ class OutAccountServices extends BaseServices
     }
 
     /**
-     * 设置账号推送接口表单
-     * @param $id
-     * @return array
-     * @throws \FormBuilder\Exception\FormBuilderException
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
-     */
-    public function outSetUpForm($id)
-    {
-        $info = $this->dao->get($id);
-        $f[] = Form::radio('push_open', '推送开关', $info['push_open'] ?? 0)->options([['label' => '开启', 'value' => 1], ['label' => '关闭', 'value' => 0]]);
-        $f[] = Form::input('order_create_push', '订单创建推送', $info['order_create_push'] ?? '');
-        $f[] = Form::input('order_pay_push', '订单支付推送', $info['order_pay_push'] ?? '');
-        $f[] = Form::input('refund_create_push', '退款单创建推送', $info['refund_create_push'] ?? '');
-        $f[] = Form::input('refund_cancel_push', '退款单取消推送', $info['refund_cancel_push'] ?? '');
-        return create_form('设置推送', $f, $this->url('/setting/system_out_account/set_up/' . $id), 'PUT');
-    }
-
-    /**
      * 设置账号推送接口
      * @param $id
      * @param $data
@@ -266,5 +255,23 @@ class OutAccountServices extends BaseServices
     public function outSetUpSave($id, $data)
     {
         return $this->dao->update($id, $data);
+    }
+
+    /**
+     * 测试获取token接口
+     * @param $data
+     * @return int[]|mixed
+     */
+    public function textOutUrl($data)
+    {
+        if (!$data['push_account'] || !$data['push_password'] || !$data['push_token_url']) throw new AdminException(100100);
+        $param = ['push_account' => $data['push_account'], 'push_password' => $data['push_password']];
+        $res = HttpService::getRequest($data['push_token_url'], $param);
+        $res = $res ? json_decode($res, true) : ['status' => 400];
+        if ($res['status'] != 200) {
+            throw new AdminException(100015);
+        } else {
+            return $res['data'];
+        }
     }
 }

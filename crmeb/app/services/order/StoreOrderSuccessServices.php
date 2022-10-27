@@ -98,7 +98,7 @@ class StoreOrderSuccessServices extends BaseServices
         //支付成功给客服发送消息
         event('notice.notice', [$orderInfo, 'admin_pay_success_code']);
         // 推送订单
-        event('out.outPush', ['order_pay_push', (int)$orderInfo['id']]);
+        event('out.outPush', ['order_pay_push', ['order_id' => (int)$orderInfo['id']]]);
         $res = $res1 && $resPink;
         return false !== $res;
     }

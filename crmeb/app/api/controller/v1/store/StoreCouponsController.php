@@ -40,7 +40,7 @@ class StoreCouponsController
         $where = $request->getMore([
             ['type', 0],
             ['product_id', 0],
-            ['num',0]
+            ['num', 0]
         ]);
         if ($request->getFromType() == 'pc') $where['type'] = -1;
         return app('json')->success($this->services->getIssueCouponList($request->uid(), $where)['list']);
@@ -88,8 +88,8 @@ class StoreCouponsController
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function order(Request $request, StoreCouponIssueServices $service, $cartId, $new)
+    public function order(Request $request, StoreCouponIssueServices $service, $cartId, $new, $shippingType)
     {
-        return app('json')->success($service->beUsableCouponList((int)$request->uid(), $cartId, !!$new));
+        return app('json')->success($service->beUsableCouponList((int)$request->uid(), $cartId, !!$new, (int)$shippingType));
     }
 }

@@ -165,14 +165,24 @@ Route::group('setting', function () {
     Route::post('system_out_account/update/:id', 'v1.setting.SystemOutAccount/update')->option(['real_name' => '对外接口账号修改']);
     //设置账号是否禁用
     Route::put('system_out_account/set_status/:id/:status', 'v1.setting.SystemOutAccount/set_status')->option(['real_name' => '设置账号是否禁用']);
-    //设置账号推送接口表单
-    Route::get('system_out_account/set_up/:id', 'v1.setting.SystemOutAccount/outSetUpForm')->option(['real_name' => '设置账号推送接口表单']);
     //设置账号推送接口
     Route::put('system_out_account/set_up/:id', 'v1.setting.SystemOutAccount/outSetUpSave')->option(['real_name' => '设置账号推送接口']);
     //删除账号
     Route::delete('system_out_account/:id', 'v1.setting.SystemOutAccount/delete')->option(['real_name' => '删除账号']);
+    //测试获取token接口
+    Route::post('system_out_account/text_out_url', 'v1.setting.SystemOutAccount/textOutUrl')->option(['real_name' => '测试获取token接口']);
+
     //对外接口列表
     Route::get('system_out_interface/list', 'v1.setting.SystemOutAccount/outInterfaceList')->option(['real_name' => '对外接口列表']);
+    //新增修改对外接口
+    Route::post('system_out_interface/save/:id', 'v1.setting.SystemOutAccount/saveInterface')->option(['real_name' => '新增修改对外接口']);
+    //对外接口信息
+    Route::get('system_out_interface/info/:id', 'v1.setting.SystemOutAccount/interfaceInfo')->option(['real_name' => '对外接口信息']);
+    //修改接口名称
+    Route::put('system_out_interface/edit_name', 'v1.setting.SystemOutAccount/editInterfaceName')->option(['real_name' => '修改接口名称']);
+    //删除接口
+    Route::delete('system_out_interface/del/:id', 'v1.setting.SystemOutAccount/delInterface')->option(['real_name' => '删除接口']);
+
 
     /** 多语言 */
     //语言国家列表

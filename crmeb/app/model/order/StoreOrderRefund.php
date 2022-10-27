@@ -171,4 +171,15 @@ class StoreOrderRefund extends BaseModel
                 'pay_time'
             ]);
     }
+
+    /**
+     * @param $query
+     * @param $value
+     */
+    public function searchKeywordsAttr($query, $value)
+    {
+        if ($value !== '') {
+            $query->where('order_id|refund_phone', 'like', '%' . $value . '%');
+        }
+    }
 }

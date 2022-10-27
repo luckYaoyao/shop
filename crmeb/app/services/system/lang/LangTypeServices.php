@@ -61,6 +61,7 @@ class LangTypeServices extends BaseServices
     {
         if ($data['id']) {
             $this->dao->update($data['id'], $data);
+            $id = $data['id'];
         } else {
             unset($data['id']);
             $res = $this->dao->save($data);
@@ -77,9 +78,10 @@ class LangTypeServices extends BaseServices
             } else {
                 throw new AdminException(100006);
             }
+            $id = $res->id;
         }
         //设置默认
-        if ($data['is_default'] == 1) $this->dao->update([['id', '<>', $res->id]], ['is_default' => 0]);
+        if ($data['is_default'] == 1) $this->dao->update([['id', '<>', $id]], ['is_default' => 0]);
         return true;
     }
 

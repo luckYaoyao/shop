@@ -226,6 +226,9 @@ class AgentManage extends AuthController
         $spreadInfo->save();
         $userInfo->spread_uid = $spreadUid;
         $userInfo->spread_time = time();
+        $userInfo->division_id = $spreadInfo->division_id;
+        $userInfo->agent_id = $spreadInfo->agent_id;
+        $userInfo->is_staff = $spreadInfo->is_staff;
         $userInfo->save();
         return app('json')->success(100001);
     }

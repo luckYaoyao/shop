@@ -8,7 +8,7 @@
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-declare (strict_types = 1);
+declare (strict_types=1);
 
 namespace app\services\message;
 
@@ -51,40 +51,23 @@ class SystemNotificationServices extends BaseServices
         return $this->dao->getOne($where);
     }
 
-
     /**
      * 后台获取列表
-     * @param $where
+     * @param array $where
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function getNotList(array $where)
     {
-        $industry = CacheService::get('wechat_industry', function () {
-            try {
-                $cache = (new Template('wechat'))->getIndustry();
-                if ($cache['primary_industry']['first_class'] != 'IT科技' || $cache['primary_industry']['second_class'] != '互联网|电子商务' || $cache['secondary_industry']['first_class'] != 'IT科技' || $cache['secondary_industry']['second_class'] != 'IT软件与服务') {
-                    (new Template('wechat'))->setIndustry(1, 2);
-                }
-                return $cache->toArray();
-            } catch (\Exception $e) {
-                return $e->getMessage();
-            }
-        }, 0) ?: [];
-        !is_array($industry) && $industry = [];
-        $industry['primary_industry'] = isset($industry['primary_industry']) ? $industry['primary_industry']['first_class'] . ' | ' . $industry['primary_industry']['second_class'] : '未选择';
-        $industry['secondary_industry'] = isset($industry['secondary_industry']) ? $industry['secondary_industry']['first_class'] . ' | ' . $industry['secondary_industry']['second_class'] : '未选择';
-        $list = [
-            'industry' => $industry,
-            'list' => $this->dao->getList($where),
-        ];
-        return $list;
-//        return $this->dao->getList($where);
+        return $this->dao->getList($where);
     }
 
     /**
      * 获取单条数据
      * @param array $where
      * @return array
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
@@ -129,6 +112,10 @@ class SystemNotificationServices extends BaseServices
     /**
      * 保存数据
      * @param array $data
+     * @return bool|\crmeb\basic\BaseModel|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function saveData(array $data)
     {

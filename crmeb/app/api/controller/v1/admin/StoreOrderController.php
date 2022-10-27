@@ -535,6 +535,7 @@ class StoreOrderController
             ['order_id', ''],
             ['time', ''],
             ['refund_type', 0],
+            ['keywords', ''],
         ]);
         $where['is_cancel'] = 0;
         $data = $services->refundList($where)['list'];

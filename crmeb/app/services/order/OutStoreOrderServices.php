@@ -399,7 +399,7 @@ class OutStoreOrderServices extends BaseServices
     public function orderCreatePush(int $id, string $pushUrl): bool
     {
         $orderInfo = $this->getInfo('', $id);
-        return $this->push($pushUrl, $orderInfo, $id, '订单');
+        return out_push($pushUrl, $orderInfo, '订单');
     }
 
     /**
@@ -411,27 +411,6 @@ class OutStoreOrderServices extends BaseServices
     public function paySuccessPush(int $id, string $pushUrl): bool
     {
         $orderInfo = $this->getInfo('', $id);
-        return $this->push($pushUrl, $orderInfo, $id, '订单支付');
+        return out_push($pushUrl, $orderInfo, '订单支付');
     }
-
-    /**
-     * 发送请求
-     * @param string $pushUrl
-     * @param array $orderInfo
-     * @param int $id
-     * @param string $tip
-     * @return bool
-     */
-    public function push(string $pushUrl, array $orderInfo, int $id, string $tip): bool
-    {
-        $param = json_encode($orderInfo, JSON_UNESCAPED_UNICODE);
-        $res = HttpService::postRequest($pushUrl, $param, ['Content-Type:application/json', 'Content-Length:' . strlen($param)]);
-        $res = $res ? json_decode($res, true) : [];
-        if (!$res || !isset($res['code']) || $res['code'] != 0) {
-            Log::error(['msg' => $tip . '推送失败', 'id' => $id, 'data' => $res]);
-            return false;
-        }
-        return true;
-    }
-
 }

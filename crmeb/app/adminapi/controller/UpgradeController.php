@@ -613,7 +613,7 @@ class UpgradeController
             $uids = $storeOrderServices->getColumn([['id','in',array_column($list,'oid')]],'uid','id');
             foreach ($list as $cart) {
                 $cartData['id'] = $cart['id'];
-                $cartData['uid'] = $uids[$cart['oid']];
+                $cartData['uid'] = $uids[$cart['oid']] ?? 0;
                 $allData[] = $cartData;
             }
             if ($allData) {
