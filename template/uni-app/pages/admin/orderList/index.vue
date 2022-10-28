@@ -371,11 +371,15 @@
 
 <style lang="scss" scoped>
 	.pos-order-list {
+		padding-top: 96rpx;
 		.search {
 			padding-left: 30rpx;
 			padding-top: 30rpx;
 			background-color: #fff;
-
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: 999;
 			.input {
 				width: 598rpx;
 				background-color: #f7f7f7;

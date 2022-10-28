@@ -9,7 +9,7 @@
 			<navigator url="/pages/goods/goods_search/index" class="input acea-row row-middle skeleton-rect"
 				:class="[boxStyle?'':'fillet',logoConfig?'':'on',txtStyle?'row-center':'']" hover-class="none"><text
 					class="iconfont icon-sousuo"></text>
-				{{$t(`搜索商品名称`)}}</navigator>
+				{{$t(`搜索商品`)}}</navigator>
 		</view>
 	</view>
 	<!-- #endif -->

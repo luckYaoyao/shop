@@ -216,17 +216,28 @@
 			userLogin() {
 				Routine.getCode()
 					.then(code => {
+						uni.showLoading({
+							title: this.$t(`正在登录中`)
+						});
 						authLogin({
 							code,
 							spread_spid: app.globalData.spid,
 							spread_code: app.globalData.code
 						}).then(res => {
-							let time = res.data.expires_time - this.$Cache.time();
-							this.$store.commit('LOGIN', {
-								token: res.data.token,
-								time: time
-							});
-							this.getUserInfo()
+							if (res.data.key !== undefined && res.data.key) {
+								uni.hideLoading();
+								this.authKey = res.data.key;
+								this.isPhoneBox = true;
+							} else {
+								uni.hideLoading();
+								let time = res.data.expires_time - this.$Cache.time();
+								this.$store.commit('LOGIN', {
+									token: res.data.token,
+									time: time
+								});
+								this.getUserInfo()
+							}
+
 						})
 					})
 					.catch(err => {

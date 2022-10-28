@@ -563,6 +563,7 @@
 						captchaVerification: data.captchaVerification
 					})
 					.then(res => {
+						this.sendCode()
 						that.$util.Tips({
 							title: res.msg
 						});

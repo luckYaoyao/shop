@@ -26,15 +26,19 @@ import pageLoading from './components/pageLoading.vue'
 import skeleton from './components/skeleton/index.vue'
 
 Vue.component('skeleton', skeleton)
-Vue.component('pageLoading',pageLoading) 
+Vue.component('pageLoading', pageLoading)
 
 
 // #ifdef H5
 
 
-import { parseQuery } from "./utils";
+import {
+	parseQuery
+} from "./utils";
 import Auth from './libs/wechat';
-import { SPREAD } from './config/cache';
+import {
+	SPREAD
+} from './config/cache';
 Vue.prototype.$wechat = Auth;
 
 
@@ -57,8 +61,8 @@ if (urlSpread !== undefined) {
 }
 
 if (vconsole !== undefined) {
-  if (vconsole === md5UnCrmeb && Cache.has(cookieName))
-	  Cache.clear(cookieName);
+	if (vconsole === md5UnCrmeb && Cache.has(cookieName))
+		Cache.clear(cookieName);
 } else vconsole = Cache.get(cookieName);
 
 import VConsole from './pages/extension/components/vconsole.min.js'
@@ -71,6 +75,10 @@ if (vconsole !== undefined && vconsole === md5Crmeb) {
 // let snsapiBase = 'snsapi_base';
 // Auth.isWeixin() && Auth.oAuth(snsapiBase);
 
+// 记录进入app时的url
+if (typeof window.entryUrl === 'undefined' || window.entryUrl === '') {
+	window.entryUrl = location.href
+}
 
 //全局路由前置守卫
 // #endif
@@ -79,7 +87,7 @@ App.mpType = 'app'
 
 
 const app = new Vue({
-    ...App,
+	...App,
 	store,
 	Cache,
 	i18n,

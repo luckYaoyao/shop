@@ -27,10 +27,12 @@
 					<view class="refund-address">
 						{{orderInfo._status.refund_address}}
 					</view>
-					<view class="refund-tip"><text class="iconfont icon-zhuyi-copy"></text>{{$t(`请按以上退货信息将商品退回`)}}</view>
+					<view class="refund-tip"><text class="iconfont icon-zhuyi-copy"></text>{{$t(`请按以上退货信息将商品退回`)}}
+					</view>
 				</view>
 				<view v-else>
-					<view class="refund-tip1 "><text class="iconfont icon-zhuyi-copy"></text>{{$t(`请联系管理员获取退货地址`)}}</view>
+					<view class="refund-tip1 "><text class="iconfont icon-zhuyi-copy"></text>{{$t(`请联系管理员获取退货地址`)}}
+					</view>
 				</view>
 			</view>
 			<view class='line' v-if="[4,5].includes(orderInfo.refund_type)">
@@ -43,7 +45,8 @@
 						<view :class="status.type == 1 || status.type == 5 ? 'on':''">
 							{{orderInfo.shipping_type==1 ? $t(`待发货`):$t(`待核销`)}}
 						</view>
-						<view :class="status.type == 2 ? 'on':''" v-if="orderInfo.shipping_type == 1">{{$t(`待收货`)}}</view>
+						<view :class="status.type == 2 ? 'on':''" v-if="orderInfo.shipping_type == 1">{{$t(`待收货`)}}
+						</view>
 						<view :class="status.type == 3 ? 'on':''">{{$t(`待评价`)}}</view>
 						<view :class="status.type == 4 ? 'on':''">{{$t(`已完成`)}}</view>
 					</view>
@@ -105,7 +108,8 @@
 							<view class="rulesTitle acea-row row-middle">
 								<text class="iconfont icon-shuoming1"></text>{{$t(`使用说明`)}}
 							</view>
-							<view class="info">{{orderInfo.shipping_type == 2?$t(`可将二维码出示给店员扫描或提供数字核销码`):$t(`可将二维码出示给配送员进行核销`)}}
+							<view class="info">
+								{{orderInfo.shipping_type == 2?$t(`可将二维码出示给店员扫描或提供数字核销码`):$t(`可将二维码出示给配送员进行核销`)}}
 							</view>
 						</view>
 					</view>
@@ -152,8 +156,8 @@
 			</orderGoods>
 			<orderGoods :evaluate='evaluate' :deliveryType="orderInfo.shipping_type" :statusType="status.type"
 				:sendType="orderInfo.delivery_type" :orderId="order_id" :oid="orderInfo.id" :cartInfo="cartInfo"
-				:pid="pid" :jump="true" :refund_status="orderInfo.refund_status" :paid="orderInfo.paid" :virtualType="orderInfo.virtual_type"
-				@openSubcribe="openSubcribe">
+				:pid="pid" :jump="true" :refund_status="orderInfo.refund_status" :paid="orderInfo.paid"
+				:virtualType="orderInfo.virtual_type" @openSubcribe="openSubcribe">
 			</orderGoods>
 			<!-- #ifdef H5 || APP-PLUS -->
 			<div class="goodCall" @click="goGoodCall">
@@ -178,7 +182,7 @@
 					<view class='conter acea-row row-middle row-right'>
 						<text>{{orderInfo.order_id}}</text>
 						<!-- #ifndef H5 -->
-						<text class='copy' @tap='copy'>{{$t(`复制`)}}</text>
+						<text class='copy' @tap='copy(orderInfo.order_id)'>{{$t(`复制`)}}</text>
 						<!-- #endif -->
 						<!-- #ifdef H5 -->
 						<text class='copy copy-data' :data-clipboard-text="orderInfo.order_id">{{$t(`复制`)}}</text>
@@ -205,7 +209,17 @@
 				</view>
 				<view class='item acea-row row-between' v-if="orderInfo.remark">
 					<view>{{$t(`商家备注`)}}：</view>
-					<view class='conter'>{{orderInfo.remark}}</view>
+					<view class='conter'>{{orderInfo.remark}}
+						<!-- #ifndef H5 -->
+						<view v-if="orderInfo.virtual_type == 1" class='copy' @tap='copy(orderInfo.remark)'>{{$t(`复制`)}}
+						</view>
+						<!-- #endif -->
+						<!-- #ifdef H5 -->
+						<view v-if="orderInfo.virtual_type == 1" class='copy copy-data'
+							:data-clipboard-text="orderInfo.remark">{{$t(`复制`)}}</view>
+						<!-- #endif -->
+					</view>
+
 				</view>
 			</view>
 			<view class='wrapper' v-if="customForm && customForm.length">
@@ -280,7 +294,8 @@
 				<view class='item acea-row row-between'>
 					<view>{{$t(`商品总价`)}}：</view>
 					<view class='conter'>
-						{{$t(`￥`)}}{{(parseFloat(orderInfo.total_price)+parseFloat(orderInfo.vip_true_price)).toFixed(2)}}</view>
+						{{$t(`￥`)}}{{(parseFloat(orderInfo.total_price)+parseFloat(orderInfo.vip_true_price)).toFixed(2)}}
+					</view>
 				</view>
 				<view class='item acea-row row-between' v-if="orderInfo.pay_postage > 0">
 					<view>{{$t(`配送运费`)}}：</view>
@@ -307,7 +322,8 @@
 							{{orderInfo.help_info.pay_nickname}}
 						</view>
 					</view>
-					{{$t(`总代付`)}}：<text class='money font-color'>{{$t(`￥`)}}{{parseFloat(orderInfo.pay_price).toFixed(2)}}</text>
+					{{$t(`总代付`)}}：<text
+						class='money font-color'>{{$t(`￥`)}}{{parseFloat(orderInfo.pay_price).toFixed(2)}}</text>
 				</view>
 			</view>
 			<view style='height:120rpx;'></view>
@@ -317,12 +333,16 @@
 				<view class="more" v-if="(invoice_func || invoiceData) && orderInfo.paid && !orderInfo.refund_status"
 					@click="more">{{$t(`更多`)}}<span class='iconfont icon-xiangshang'></span></view>
 				<view class="more-box" v-if="moreBtn">
-					<view class="more-btn" v-if="invoice_func && !invoiceData" @click="invoiceApply">{{$t(`申请开票`)}}</view>
+					<view class="more-btn" v-if="invoice_func && !invoiceData" @click="invoiceApply">{{$t(`申请开票`)}}
+					</view>
 					<view class="more-btn" v-if="invoiceData" @click="aleartStatusChange">{{$t(`查看发票`)}}</view>
 				</view>
 
-				<view class="qs-btn" v-if="status.type == 0 || status.type == -9" @click.stop="cancelOrder">{{$t(`取消订单`)}}</view>
-				<view class='bnt bg-color' v-if="status.type==0" @tap='pay_open(orderInfo.order_id)'>{{$t(`立即付款`)}}</view>
+				<view class="qs-btn" v-if="status.type == 0 || status.type == -9" @click.stop="cancelOrder">
+					{{$t(`取消订单`)}}
+				</view>
+				<view class='bnt bg-color' v-if="status.type==0" @tap='pay_open(orderInfo.order_id)'>{{$t(`立即付款`)}}
+				</view>
 				<view
 					@click="openSubcribe(`/pages/goods/${cartInfo.length > 1 ? 'goods_return_list' : 'goods_return'}/index?orderId=`+orderInfo.order_id+ '&id=' + orderInfo.id)"
 					class='bnt cancel'
@@ -331,21 +351,28 @@
 				</view>
 				<navigator class='bnt cancel'
 					v-if="orderInfo.delivery_type == 'express' && status.class_status==3 && status.type==2 && !split.length"
-					hover-class='none' :url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id">{{$t(`查看物流`)}}
+					hover-class='none' :url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id">
+					{{$t(`查看物流`)}}
 				</navigator>
 				<view class='bnt bg-color' v-if="orderInfo.type==3" @tap='goJoinPink'>{{$t(`查看拼团`)}}</view>
-				<view class='bnt bg-color' v-if="status.class_status==3 && !split.length" @click='confirmOrder()'>{{$t(`确认收货`)}}
+				<view class='bnt bg-color' v-if="status.class_status==3 && !split.length" @click='confirmOrder()'>
+					{{$t(`确认收货`)}}
 				</view>
-				<view class='bnt cancel' v-if="status.type==4 &&  !split.length ||status.type==-2" @tap='delOrder'>{{$t(`删除订单`)}}
+				<view class='bnt cancel' v-if="status.type==4 &&  !split.length ||status.type==-2" @tap='delOrder'>
+					{{$t(`删除订单`)}}
 				</view>
 				<view class='bnt bg-color' v-if="status.class_status==5" @tap='goOrderConfirm'>{{$t(`再次购买`)}}
 				</view>
 				<view class='bnt bg-color refundBnt'
-					v-if="[1,2,4].includes(orderInfo.refund_type) && !orderInfo.is_cancel" @tap='cancelRefundOrder'>{{$t(`取消申请`)}}
+					v-if="[1,2,4].includes(orderInfo.refund_type) && !orderInfo.is_cancel" @tap='cancelRefundOrder'>
+					{{$t(`取消申请`)}}
 				</view>
-				<view class='bnt bg-color refundBnt' v-if="orderInfo.refund_type== 4" @tap='refundInput'>{{$t(`填写退货信息`)}}</view>
+				<view class='bnt bg-color refundBnt' v-if="orderInfo.refund_type== 4" @tap='refundInput'>
+					{{$t(`填写退货信息`)}}
+				</view>
 				<navigator class='bnt cancel refundBnt' v-if="orderInfo.refund_type == 5" hover-class='none'
-					:url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id + '&type=refund'">{{$t(`查看退货物流`)}}
+					:url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id + '&type=refund'">
+					{{$t(`查看退货物流`)}}
 				</navigator>
 			</view>
 		</view>
@@ -375,8 +402,9 @@
 		</invoiceModal>
 		<view class="mask invoice-mask" v-if="aleartStatus" @click="aleartStatus = false"></view>
 		<view class="mask more-mask" v-if="moreBtn" @click="moreBtn = false"></view>
-		<invoice-picker :inv-show="invShow" :is-special="special_invoice" :url-query="urlQuery" :inv-checked="invChecked" :order-id='order_id'
-			:inv-list="invList" :is-order="1" @inv-close="invClose" @inv-change="invSub" @inv-cancel="invCancel">
+		<invoice-picker :inv-show="invShow" :is-special="special_invoice" :url-query="urlQuery"
+			:inv-checked="invChecked" :order-id='order_id' :inv-list="invList" :is-order="1" @inv-close="invClose"
+			@inv-change="invSub" @inv-cancel="invCancel">
 		</invoice-picker>
 	</view>
 </template>
@@ -526,7 +554,7 @@
 				customerInfo: {},
 				userInfo: {},
 				isReturen: '',
-				urlQuery:''
+				urlQuery: ''
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -980,10 +1008,10 @@
 			 * 剪切订单号
 			 */
 			// #ifndef H5
-			copy: function() {
+			copy: function(text) {
 				let that = this;
 				uni.setClipboardData({
-					data: this.orderInfo.order_id
+					data: text
 				});
 			},
 			// #endif
@@ -1165,8 +1193,7 @@
 								.catch(() => {
 									self.getOrderInfo();
 								});
-						} else if (res.cancel) {
-						}
+						} else if (res.cancel) {}
 					}
 				});
 			},
@@ -1424,6 +1451,7 @@
 		display: flex;
 		flex-wrap: nowrap;
 	}
+
 	.order-details .wrapper .item {
 		font-size: 28rpx;
 		color: #282828;
@@ -1910,6 +1938,7 @@
 	.order-details .wrapper .item .conter .copy {
 		font-size: 20rpx;
 		color: #333;
+		height: max-content;
 		border-radius: 3rpx;
 		border: 1rpx solid #666;
 		padding: 3rpx 15rpx;

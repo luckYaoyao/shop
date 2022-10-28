@@ -143,9 +143,6 @@
 		toLogin
 	} from '@/libs/login.js';
 	import {
-		silenceBindingSpread
-	} from "@/utils";
-	import {
 		getUserInfo
 	} from '@/api/user.js';
 	// #ifdef APP-PLUS
@@ -270,7 +267,6 @@
 					//res.windowHeight:获取整个窗口高度为px，*2为rpx；98为头部占据的高度；
 				},
 			});
-			this.isLogin && silenceBindingSpread();
 			// #ifdef H5
 			that.navH = 96;
 			// #endif

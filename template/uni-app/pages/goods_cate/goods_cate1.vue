@@ -125,6 +125,13 @@
 		},
 		mounted() {
 			let that = this
+			// #ifdef H5
+			uni.getSystemInfo({
+				success: function(res) {
+					that.pageHeight = res.windowHeight + 'px'
+				}
+			});
+			// #endif
 			let routes = getCurrentPages();
 			let curRoute = routes[routes.length - 1].route
 			this.activeRouter = '/' + curRoute
@@ -137,13 +144,7 @@
 			// 	})
 			// }
 
-			// #ifdef H5
-			uni.getSystemInfo({
-				success: function(res) {
-					that.pageHeight = res.windowHeight + 'px'
-				}
-			});
-			// #endif
+
 		},
 		methods: {
 			getNav() {

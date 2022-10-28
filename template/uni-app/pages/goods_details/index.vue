@@ -462,7 +462,6 @@
 	import kefuIcon from "@/components/kefuIcon";
 	import menuIcon from "@/components/menuIcon.vue";
 	import {
-		silenceBindingSpread,
 		updateURLParameter
 	} from "@/utils";
 	import ClipboardJS from "@/plugin/clipboard/clipboard.js";
@@ -663,14 +662,8 @@
 			} else {
 				that.id = options.id;
 			}
-			//记录推广人uid
-			if (options.spid) app.globalData.spid = options.spid;
 			// #endif
 			that.getGoodsDetails();
-			// that.getCouponList(0);
-			//#ifdef H5
-			that.isLogin && silenceBindingSpread();
-			//#endif
 		},
 		onReady: function() {
 			this.isNodes++;

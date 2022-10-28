@@ -20,14 +20,8 @@
 							<view>
 								<!-- 注释这个是加的bnt -->
 								<!-- #ifdef H5 -->
-								<button class="bntImg" v-if="userInfo.is_complete == 0 && isWeixin"
+								<!-- <button class="bntImg" v-if="userInfo.is_complete == 0 && isWeixin"
 									@click="getWechatuserinfo">
-									<image class="avatar" src='/static/images/f.png'></image>
-									<view class="avatarName">{{$t('获取头像')}}</view>
-								</button>
-								<!-- #endif -->
-								<!-- #ifdef MP -->
-								<!-- <button class="bntImg" v-if="userInfo.is_complete == 0" @tap="getUserProfile">
 									<image class="avatar" src='/static/images/f.png'></image>
 									<view class="avatarName">{{$t('获取头像')}}</view>
 								</button> -->

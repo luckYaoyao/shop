@@ -43,7 +43,7 @@
 					</view>
 					<view class='item acea-row row-between-wrapper'>
 						<view>{{$t(`昵称`)}}</view>
-						<view class='input'><input type='nickname' name='nickname' :value='userInfo.nickname'></input>
+						<view class='input'><input type='nickname' name='nickname' :maxlength="16" :value='userInfo.nickname'></input>
 						</view>
 					</view>
 					<view class='item acea-row row-between-wrapper'>
@@ -254,12 +254,15 @@
 			},
 			bindPickerChange(e, item) {
 				this.setIndex = e.detail.value
-				uni.setStorageSync('locale', this.array[this.setIndex].value);
+				Cache.set('locale', this.array[this.setIndex].value)
 				getLangJson().then(res => {
-					Cache.set('localeJson', res.data, 600)
-					this.$i18n.locale = this.array[this.setIndex].value;
-					this.$i18n.setLocaleMessage(this.array[this.setIndex].value, res.data[this
-						.array[this.setIndex].value]);
+					uni.setStorageSync('localeJson', res.data);
+					this.$i18n.setLocaleMessage(this.array[this.setIndex].value, res.data[this.array[
+						this.setIndex].value]);
+					this.$nextTick(e => {
+						this.$i18n.locale = this.array[this.setIndex].value;
+					})
+					Cache.set('localeSet', true, 600)
 				})
 			},
 
@@ -463,7 +466,6 @@
 				const {
 					avatarUrl
 				} = e.detail
-				console.log(avatarUrl)
 				this.$util.uploadImgs('upload/image', avatarUrl, (res) => {
 					this.userInfo.avatar = res.data.url
 				}, (err) => {
@@ -611,7 +613,7 @@
 		padding: 30rpx 30rpx 30rpx 0;
 		border-bottom: 1rpx solid #f2f2f2;
 		margin-left: 30rpx;
-		font-size: 32rpx;
+		font-size: 28rpx;
 		color: #282828;
 	}
 
@@ -636,17 +638,20 @@
 	}
 
 	.personal-data .list .item .input {
-		width: 415rpx;
+		max-width: 400rpx;
 		text-align: right;
 		color: #868686;
+		.icon-suozi{
+			margin-left: 10rpx;
+		}
 	}
 
 	.personal-data .list .item .input .id {
-		width: 365rpx;
+		// width: 180rpx;
 	}
 
 	.personal-data .list .item .input .iconfont {
-		font-size: 35rpx;
+		font-size: 24rpx;
 	}
 
 	.personal-data .modifyBnt {

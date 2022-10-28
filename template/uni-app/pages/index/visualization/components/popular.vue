@@ -17,10 +17,10 @@
 				<view class='text'>
 					<view class='name line1'>
 						<text class="iconfont icon-shoufaxinpin"></text>
-						{{titleInfo[0].val}}
+						{{$t(titleInfo[0].val)}}
 						<!-- <text class='new font-color'>NEW~</text> -->
 					</view>
-					<view class='line1 txt-btn'>{{titleInfo[1].val}}</view>
+					<view class='line1 txt-btn'>{{$t(titleInfo[1].val)}}</view>
 				</view>
 				<view class='more' @click="gopage(titleInfo[2].val)">
 					{{$t(`更多`)}}

@@ -6,7 +6,7 @@
 					<view class='pictrue'>
 						<image class="skeleton-radius" :src='item.img'></image>
 					</view>
-					<view class="menu-txt">{{item.info[0].value}}</view>
+					<view class="menu-txt">{{$t(item.info[0].value)}}</view>
 				</view>
 			</block>
 		</view>

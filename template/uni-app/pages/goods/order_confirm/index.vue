@@ -809,6 +809,7 @@
 					that.$set(that, 'store_self_mention', res.data.store_self_mention);
 					that.$set(that, 'virtual_type', res.data.virtual_type || 0);
 					that.$set(that, 'integral_open', res.data.integral_open);
+					uni.hideLoading()
 					//微信支付是否开启
 					that.cartArr[0].payStatus = res.data.pay_weixin_open || 0
 					//支付宝是否开启
@@ -834,7 +835,6 @@
 					if (this.addressId) {
 						this.computedPrice();
 					}
-					uni.hideLoading()
 				}).catch(err => {
 					uni.hideLoading()
 					return this.$util.Tips({
@@ -872,10 +872,12 @@
 			 * 
 			 */
 			getCouponList: function() {
+				let shippingType = this.shippingType;
 				let that = this;
 				let data = {
 					cartId: this.cartId,
-					'new': this.news
+					'new': this.news,
+					'shippingType': parseInt(shippingType) + 1
 				}
 				getCouponsOrderPrice(this.totalPrice, data).then(res => {
 					that.$set(that.coupon, 'list', res.data);

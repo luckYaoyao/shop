@@ -714,9 +714,8 @@
 		color: #333;
 		border-radius: 3rpx;
 		border: 1px solid #666;
-		padding: 0rpx 15rpx;
+		padding: 2rpx 15rpx;
 		margin-left: 24rpx;
-		height: 40rpx;
 	}
 
 	.order-details .wrapper .actualPay {
@@ -866,7 +865,6 @@
 		border: 1px solid #666;
 		padding: 0px 7px;
 		margin-left: 12px;
-		height: 20px;
 	}
 
 	.upload .pictrue {

@@ -153,7 +153,6 @@ class Routine {
 			uni.login({
 				provider: provider,
 				success(res) {
-					console.log(res, '22222')
 					if (res.code) Cache.set(STATE_R_KEY, res.code, 10800);
 					return resolve(res.code);
 				},

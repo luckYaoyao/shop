@@ -81,6 +81,44 @@
 				}
 			}
 		},
+		onShow() {
+			const queryData = uni.getEnterOptionsSync()  // uni-app版本 3.5.1+ 支持
+			if (queryData.query.spread) {
+				this.$Cache.set('spread', queryData.query.spread);
+				this.globalData.spid = queryData.query.spread;
+				this.globalData.pid = queryData.query.spread;
+				silenceBindingSpread(this.globalData)
+			}
+			if (queryData.query.spid) {
+				this.$Cache.set('spread', queryData.query.spid);
+				this.globalData.spid = queryData.query.spid;
+				this.globalData.pid = queryData.query.spid;
+				silenceBindingSpread(this.globalData)
+			}
+			// #ifdef MP
+			if (queryData.query.scene) {
+				switch (queryData.scene) {
+					//扫描小程序码
+					case 1047:
+						this.globalData.code = queryData.query.scene;
+						break;
+						//长按图片识别小程序码
+					case 1048:
+						this.globalData.code = queryData.query.scene;
+						break;
+						//手机相册选取小程序码
+					case 1049:
+						this.globalData.code = queryData.query.scene;
+						break;
+						//直接进入小程序
+					case 1001:
+						this.globalData.spid = queryData.query.scene;
+						break;
+				}
+				silenceBindingSpread(this.globalData)
+			}
+			// #endif
+		},
 		async onLaunch(option) {
 			let that = this;
 			colorChange('color_change').then(res => {
@@ -113,25 +151,14 @@
 						break
 				}
 			});
-			console.log(Cache.has('localeJson', true))
-			if (!Cache.has('localeJson', true)) {
+			if (!Cache.has('localeSet')) {
 				getLangJson().then(res => {
-					Cache.set('localeJson', res.data, 600);
-					// uni.setStorageSync('localeJson', res.data)
+					Cache.set('locale', Object.keys(res.data)[0])
+					uni.setStorageSync('localeJson', res.data);
+					Cache.set('localeSet', true, 600) // 语言类型缓存时间
 				})
 			}
-			if (option.query.spread) {
-				that.$Cache.set('spread', option.query.spread);
-				that.globalData.spid = option.query.spread;
-				that.globalData.pid = option.query.spread;
-				silenceBindingSpread()
-			}
-			if (option.query.spid) {
-				that.$Cache.set('spread', option.query.spid);
-				that.globalData.spid = option.query.spid;
-				that.globalData.pid = option.query.spid;
-				// silenceBindingSpread()
-			}
+
 			// #ifdef APP-PLUS || H5
 			uni.getSystemInfo({
 				success: function(res) {
@@ -155,53 +182,43 @@
 				);
 				return false;
 			}
-			if (option.query.hasOwnProperty('scene')) {
 
-				switch (option.scene) {
-					//扫描小程序码
-					case 1047:
-						let val = that.$util.getUrlParams(decodeURIComponent(option.query.scene));
-						that.globalData.code = val.pid === undefined ? val : val.pid;
-						break;
-						//长按图片识别小程序码
-					case 1048:
-						that.globalData.code = option.query.scene;
-						break;
-						//手机相册选取小程序码
-					case 1049:
-						that.globalData.code = option.query.scene;
-						break;
-						//直接进入小程序
-					case 1001:
-						that.globalData.spid = option.query.scene;
-						break;
-				}
-			}
 			const updateManager = wx.getUpdateManager();
-
-			updateManager.onCheckForUpdate(function(res) {
-				// 请求完新版本信息的回调
-			});
-
-			updateManager.onUpdateReady(function() {
-				wx.showModal({
-					title: '更新提示',
-					content: '新版本已经准备好，是否重启应用？',
-					success: function(res) {
-						if (res.confirm) {
-							// 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
-							updateManager.applyUpdate();
-						}
+			const startParamObj = wx.getEnterOptionsSync();
+			if (wx.canIUse('getUpdateManager') && startParamObj.scene != 1154) {
+				const updateManager = wx.getUpdateManager()
+				console.log(updateManager);
+				updateManager.onCheckForUpdate(function(res) {
+					// 请求完新版本信息的回调
+					// console.log(res.hasUpdate)
+					if (res.hasUpdate) {
+						updateManager.onUpdateFailed(function() {
+							return that.Tips({
+								title: '新版本下载失败'
+							});
+						});
+						updateManager.onUpdateReady(function() {
+							wx.showModal({
+								title: '更新提示',
+								content: '新版本已经下载好，是否重启当前应用？',
+								success(res) {
+									if (res.confirm) {
+										updateManager.applyUpdate()
+									}
+								}
+							})
+						})
+						updateManager.onUpdateFailed(function() {
+							wx.showModal({
+								title: '发现新版本',
+								content: '请删除当前小程序，重启搜索打开...',
+							})
+						})
 					}
-				});
-			});
-
-			updateManager.onUpdateFailed(function() {
-				return that.Tips({
-					title: '新版本下载失败'
-				});
-			});
+				})
+			}
 			// #endif
+
 			// getShopConfig().then(res => {
 			// 	this.$store.commit('SETPHONESTATUS', res.data.status);
 			// });
@@ -215,7 +232,7 @@
 			let menuButtonInfo = uni.getMenuButtonBoundingClientRect();
 			that.globalData.navH = menuButtonInfo.top * 2 + menuButtonInfo.height / 2;
 			const version = uni.getSystemInfoSync().SDKVersion
-			if (Routine.compareVersion(version, '2.21.2') >= 0) {
+			if (Routine.compareVersion(version, '2.21.3') >= 0) {
 				console.log(version)
 				that.$Cache.set('MP_VERSION_ISNEW', true)
 			} else {

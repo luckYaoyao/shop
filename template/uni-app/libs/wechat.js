@@ -48,9 +48,9 @@ class AuthWechat {
 	}
 
 	signLink() {
-		if (typeof window.entryUrl === 'undefined' || window.entryUrl === '') {
-			window.entryUrl = document.location.href
-		}
+		// if (typeof window.entryUrl === 'undefined' || window.entryUrl === '') {
+		// 	window.entryUrl = encodeURI(window.location.href)
+		// }
 		return /(Android)/i.test(navigator.userAgent) ? document.location.href : window.entryUrl;
 	}
 

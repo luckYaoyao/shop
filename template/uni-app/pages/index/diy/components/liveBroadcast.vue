@@ -162,10 +162,10 @@
 				listStyle: this.dataConfig.listStyle.type,
 				mbConfig: this.dataConfig.mbConfig.val,
 				liveList: [],
-				custom_params:''
+				custom_params:'',
 				// bg:this.dataConfig.bg.color[0].item,
 				// boxShadow: this.dataConfig.boxShadow.color[0].item,
-				// limit:this.dataConfig.limit.val
+				limit:this.dataConfig.limit.val
 			};
 		},
 		created() {},

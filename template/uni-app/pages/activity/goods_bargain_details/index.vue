@@ -271,9 +271,6 @@
 	import countDown from '@/components/countDown';
 	import home from '@/components/home';
 	import parser from '@/components/jyf-parser/jyf-parser';
-	import {
-		silenceBindingSpread
-	} from '@/utils';
 	// #ifdef APP-PLUS
 	import {
 		TOKENNAME,
@@ -479,8 +476,6 @@
 					`/pages/activity/goods_bargain_details/index?id=${options.id}&bargain=${this.bargainUid}`);
 				toLogin();
 			}
-
-			this.isLogin && silenceBindingSpread();
 			uni.setNavigationBarTitle({
 				title: this.$t(`砍价详情`)
 			});

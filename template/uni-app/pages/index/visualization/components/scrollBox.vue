@@ -3,8 +3,8 @@
 		<view class='index-wrapper skeleton-rect' v-if="isShow && fastList.length">
 			<view class='title acea-row row-between-wrapper'>
 				<view class='text'>
-					<view class='name line1'>{{titleInfo[0].val}}</view>
-					<view class='line1 txt-btn'>{{titleInfo[1].val}}</view>
+					<view class='name line1'>{{$t(titleInfo[0].val)}}</view>
+					<view class='line1 txt-btn'>{{$t(titleInfo[1].val)}}</view>
 				</view>
 				<navigator class='more' open-type="switchTab" :url="titleInfo[2].val">{{$t(`更多`)}}<text
 						class='iconfont icon-jiantou'></text></navigator>
@@ -17,7 +17,7 @@
 							<view class='img-box'>
 								<image :src='item.pic'></image>
 							</view>
-							<view class='pro-info line1'>{{item.cate_name}}</view>
+							<view class='pro-info line1'>{{$t(item.cate_name)}}</view>
 						</view>
 					</block>
 				</scroll-view>

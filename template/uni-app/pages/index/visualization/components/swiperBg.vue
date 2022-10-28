@@ -137,9 +137,15 @@
 									url: urls
 								})
 							} else {
-								uni.reLaunch({
-									url: urls
+								uni.switchTab({
+									url: urls,
+									fail() {
+										uni.reLaunch({
+											url: urls
+										})
+									}
 								})
+
 							}
 						}
 					}

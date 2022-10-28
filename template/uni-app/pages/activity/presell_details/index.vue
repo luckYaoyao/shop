@@ -265,9 +265,6 @@
 	import userEvaluation from '@/components/userEvaluation';
 	import shareRedPackets from '@/components/shareRedPackets';
 	import kefuIcon from '@/components/kefuIcon';
-	import {
-		silenceBindingSpread
-	} from '@/utils';
 	import parser from '@/components/jyf-parser/jyf-parser';
 	import ClipboardJS from '@/plugin/clipboard/clipboard.js';
 	// #ifdef MP
@@ -444,10 +441,6 @@
 			if (options.spid) app.globalData.spid = options.spid;
 			// #endif
 			that.getGoodsDetails();
-			// that.getCouponList(0);
-			//#ifdef H5
-			that.isLogin && silenceBindingSpread();
-			//#endif
 		},
 		onReady: function() {
 			this.$nextTick(function() {

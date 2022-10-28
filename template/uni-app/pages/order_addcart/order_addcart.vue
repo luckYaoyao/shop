@@ -9,7 +9,8 @@
 			<view class='nav acea-row row-between-wrapper'>
 				<view>{{$t(`购物数量`)}} <text class='num font-num'>{{cartCount}}</text></view>
 				<view v-if="cartList.valid.length > 0 || cartList.invalid.length > 0"
-					class='administrate acea-row row-center-wrapper' @click='manage'>{{ footerswitch ? $t(`管理`) : $t(`取消`)}}
+					class='administrate acea-row row-center-wrapper' @click='manage'>
+					{{ footerswitch ? $t(`管理`) : $t(`取消`)}}
 				</view>
 			</view>
 			<view v-if="(cartList.valid.length > 0 || cartList.invalid.length > 0) && canShow ">
@@ -38,7 +39,8 @@
 											{{item.productInfo.store_name}}
 										</view>
 										<view class='infor line1' v-if="item.productInfo.attrInfo">
-											{{$t(`属性`)}}：{{item.productInfo.attrInfo.suk}}</view>
+											{{$t(`属性`)}}：{{item.productInfo.attrInfo.suk}}
+										</view>
 										<view class='money' v-if="item.attrStatus">{{$t(`￥`)}}{{item.truePrice}}</view>
 										<view class="reElection acea-row row-between-wrapper" v-else>
 											<view class="title">{{$t(`请重新选择商品规格`)}}</view>
@@ -65,8 +67,10 @@
 				<view class='invalidGoods' v-if="cartList.invalid.length > 0">
 					<view class='goodsNav acea-row row-between-wrapper'>
 						<view @click='goodsOpen'><text class='iconfont'
-								:class='goodsHidden==true?"icon-xiangxia":"icon-xiangshang"'></text>{{$t(`失效商品`)}}</view>
-						<view class='del' @click='unsetCart'><text class='iconfont icon-shanchu1'></text>{{$t(`清空`)}}</view>
+								:class='goodsHidden==true?"icon-xiangxia":"icon-xiangshang"'></text>{{$t(`失效商品`)}}
+						</view>
+						<view class='del' @click='unsetCart'><text class='iconfont icon-shanchu1'></text>{{$t(`清空`)}}
+						</view>
 					</view>
 					<view class='goodsList' :hidden='goodsHidden'>
 						<block v-for="(item,index) in cartList.invalid" :key='index'>
@@ -80,7 +84,8 @@
 								<view class='text acea-row row-column-between'>
 									<view class='line1 name'>{{item.productInfo.store_name}}</view>
 									<view class='infor line1' v-if="item.productInfo.attrInfo">
-										{{$t(`属性`)}}：{{item.productInfo.attrInfo.suk}}</view>
+										{{$t(`属性`)}}：{{item.productInfo.attrInfo.suk}}
+									</view>
 									<view class='acea-row row-between-wrapper'>
 										<!-- <view>￥{{item.truePrice}}</view> -->
 										<view class='end'>{{$t(`该商品已失效`)}}</view>
@@ -101,9 +106,9 @@
 			<view class='noCart' v-if="cartList.valid.length == 0 && cartList.invalid.length == 0 && canShow">
 				<view class='emptyBox'>
 					<image :src="imgHost + '/statics/images/no-thing.png'"></image>
-					<view class="tips">{{$t(`全选`)}}</view>
+					<view class="tips">{{$t(`暂无商品`)}}</view>
 				</view>
-				<recommend :hostProduct='hostProduct'></recommend>
+				<recommend v-if="hostProduct.length" :hostProduct='hostProduct'></recommend>
 			</view>
 			<view style='height:120rpx;color: #F5F5F5;'></view>
 			<view class='footer acea-row row-between-wrapper' v-if="cartList.valid.length > 0 && canShow"
@@ -193,7 +198,9 @@
 	// #endif
 	import pageFooter from '@/components/pageFooter/index.vue'
 	import colors from "@/mixins/color";
-	import {HTTP_REQUEST_URL} from '@/config/app';
+	import {
+		HTTP_REQUEST_URL
+	} from '@/config/app';
 	import {
 		getNavigation
 	} from '@/api/public.js'
@@ -210,7 +217,7 @@
 		mixins: [colors],
 		data() {
 			return {
-				imgHost:HTTP_REQUEST_URL,
+				imgHost: HTTP_REQUEST_URL,
 				is_diy: uni.getStorageSync('is_diy'),
 				canShow: false,
 				cartCount: 0,
@@ -1356,14 +1363,16 @@
 		/* 兼容 IOS>11.2 */
 		height: calc(100rpx + env(safe-area-inset-bottom));
 	}
-	
-	.emptyBox{
+
+	.emptyBox {
 		text-align: center;
-		padding-top: 20rpx;
-		.tips{
+		padding: 80rpx 0;
+
+		.tips {
 			color: #aaa;
 			font-size: 26rpx;
 		}
+
 		image {
 			width: 414rpx;
 			height: 304rpx;

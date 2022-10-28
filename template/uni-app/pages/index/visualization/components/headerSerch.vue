@@ -4,7 +4,7 @@
 		<view class="serch-wrapper row-middle">
 			<view class="logo">
 				<image class="skeleton-rect" :src="logoConfig" mode="heightFix"></image>
-				<view class="swiger">{{titleInfo.length ? titleInfo[0].val : ''}}</view>
+				<view class="swiger">{{titleInfo.length ? $t(titleInfo[0].val) : ''}}</view>
 
 			</view>
 			<view class="input acea-row row-middle fillet skeleton-rect" hover-class="none" @click="goPage"><text

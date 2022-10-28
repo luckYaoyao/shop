@@ -55,7 +55,7 @@
 			// 小程序获取手机号码
 			getphonenumber(e) {
 				uni.showLoading({
-					title: this.$t(`加载中`)
+					title: this.$t(`正在登录中`)
 				});
 				Routine.getCode()
 					.then(code => {

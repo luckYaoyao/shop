@@ -47,7 +47,7 @@
 						<view class='nav acea-row row-between-wrapper'>
 							<view class='money'>{{$t(`￥`)}}<text class='num'>{{storeInfo.price}}</text>
 								<text
-									v-if="attribute.productAttr.length && (attribute.productAttr.length?attribute.productAttr[0].attr_values.length:0) > 1">{{$t(`onwards`)}}</text>
+									v-if="attribute.productAttr.length && (attribute.productAttr.length?attribute.productAttr[0].attr_values.length:0) > 1">{{$t(`起`)}}</text>
 								<text class='y-money'>{{$t(`￥`)}}{{storeInfo.ot_price}}</text>
 							</view>
 							<view class='acea-row row-middle'>
@@ -257,9 +257,6 @@
 		toLogin
 	} from '@/libs/login.js';
 	import {
-		silenceBindingSpread
-	} from "@/utils";
-	import {
 		getUserInfo
 	} from '@/api/user.js';
 	// #ifdef APP-PLUS
@@ -403,7 +400,6 @@
 					//res.windowHeight:获取整个窗口高度为px，*2为rpx；98为头部占据的高度；
 				},
 			});
-			this.isLogin && silenceBindingSpread();
 			// #ifdef MP
 			this.navH = app.globalData.navHeight;
 			// #endif

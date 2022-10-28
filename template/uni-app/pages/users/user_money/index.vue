@@ -10,8 +10,9 @@
 								<view class='money'>{{userInfo.now_money || 0}}</view>
 							</view>
 							<!-- #ifdef APP-PLUS || H5 -->
-							<navigator url="/pages/users/user_payment/index" hover-class="none"
-								class='recharge'>{{$t(`充值`)}}</navigator>
+							<navigator url="/pages/users/user_payment/index" hover-class="none" class='recharge'>
+								{{$t(`充值`)}}
+							</navigator>
 							<!-- #endif -->
 							<!-- #ifdef MP -->
 							<view v-if="recharge_switch" @click="openSubscribe('/pages/users/user_payment/index')"
@@ -47,7 +48,8 @@
 						<view class='iconfont icon-s-xiaofeijilu'></view>
 						<view>{{$t(`消费记录`)}}</view>
 					</navigator>
-					<navigator class='item' hover-class='none' url='/pages/users/user_bill/index?type=2' v-if="recharge_switch">
+					<navigator class='item' hover-class='none' url='/pages/users/user_bill/index?type=2'
+						v-if="recharge_switch">
 						<view class='iconfont icon-s-chongzhijilu'></view>
 						<view>{{$t(`充值记录`)}}</view>
 					</navigator>
@@ -299,6 +301,7 @@
 	.my-account .wrapper .header .headerCon .account .assets .money {
 		font-size: 72rpx;
 		color: #fff;
+		margin-top: 6rpx;
 		font-family: 'Guildford Pro';
 	}
 
@@ -328,19 +331,19 @@
 		color: #fff;
 		margin-top: 6rpx;
 	}
-	
+
 	.my-account .wrapper .nav {
 		height: 155rpx;
 		border-bottom: 1rpx solid #f5f5f5;
 	}
-	
+
 	.my-account .wrapper .nav .item {
 		flex: 1;
 		text-align: center;
 		font-size: 26rpx;
 		color: #999;
 	}
-	
+
 	.my-account .wrapper .nav .item .iconfont {
 		font-size: 44rpx;
 		margin: 0 auto;
@@ -362,6 +365,7 @@
 		box-sizing: border-box;
 		font-size: 24rpx;
 		color: #e44609;
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1),
 	}
 
 	.my-account .wrapper .advert .item.on {

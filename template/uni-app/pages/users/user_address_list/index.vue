@@ -7,7 +7,8 @@
 			<radio-group class="radio-group" @change="radioChange" v-if="addressList.length">
 				<view class='item' v-for="(item,index) in addressList" :key="index">
 					<view class='address' @click='goOrder(item.id)'>
-						<view class='consignee'>{{$t(`收货人`)}}：{{item.real_name}}<text class='phone'>{{item.phone}}</text></view>
+						<view class='consignee'>{{$t(`收货人`)}}：{{item.real_name}}<text
+								class='phone'>{{item.phone}}</text></view>
 						<view>{{$t(`收货地址`)}}：{{item.province}}{{item.city}}{{item.district}}{{item.detail}}</view>
 					</view>
 					<view class='operation acea-row row-between-wrapper'>
@@ -22,8 +23,10 @@
 						</radio>
 						<!-- #endif -->
 						<view class='acea-row row-middle'>
-							<view @click='editAddress(item.id)'><text class='iconfont icon-bianji'></text>{{$t(`编辑`)}}</view>
-							<view @click='delAddress(index)'><text class='iconfont icon-shanchu'></text>{{$t(`删除`)}}</view>
+							<view @click='editAddress(item.id)'><text class='iconfont icon-bianji'></text>{{$t(`编辑`)}}
+							</view>
+							<view @click='delAddress(index)'><text class='iconfont icon-shanchu'></text>{{$t(`删除`)}}
+							</view>
 						</view>
 					</view>
 				</view>
@@ -45,13 +48,14 @@
 				<!-- #ifdef MP-->
 				<view class='addressBnt wxbnt' @click='addAddress'><text
 						class='iconfont icon-tianjiadizhi'></text>{{$t(`添加新地址`)}}</view>
-				<view class='addressBnt' @click='getWxAddress'><text class='iconfont icon-weixin2'></text>{{$t(`导入微信地址`)}}
+				<view class='addressBnt' @click='getWxAddress'><text
+						class='iconfont icon-weixin2'></text>{{$t(`导入微信地址`)}}
 				</view>
 				<!-- #endif -->
 				<!-- #ifdef H5-->
 				<view class='addressBnt' :class="this.$wechat.isWeixin()?'wxbnt':'on'" @click='addAddress'><text
 						class='iconfont icon-tianjiadizhi'></text>{{$t(`添加新地址`)}}</view>
-				<view class=""></view>		
+				<view class=""></view>
 				<view class='addressBnt' @click='getAddress' v-if="this.$wechat.isWeixin()"><text
 						class='iconfont icon-weixin2'></text>{{$t(`导入微信地址`)}}</view>
 				<!-- #endif -->
@@ -85,7 +89,9 @@
 	// #endif
 	import home from '@/components/home';
 	import colors from '@/mixins/color.js';
-	import {HTTP_REQUEST_URL} from '@/config/app';
+	import {
+		HTTP_REQUEST_URL
+	} from '@/config/app';
 	export default {
 		components: {
 			// #ifdef MP
@@ -93,10 +99,10 @@
 			// #endif
 			home
 		},
-		mixins:[colors],
+		mixins: [colors],
 		data() {
 			return {
-				imgHost:HTTP_REQUEST_URL,
+				imgHost: HTTP_REQUEST_URL,
 				addressList: [],
 				cartId: '',
 				pinkId: 0,
@@ -142,6 +148,7 @@
 			 */
 			getWxAddress: function() {
 				let that = this;
+				console.log('111')
 				uni.authorize({
 					scope: 'scope.address',
 					success: function(res) {
@@ -151,6 +158,7 @@
 								addressP.province = res.provinceName;
 								addressP.city = res.cityName;
 								addressP.district = res.countyName;
+								
 								editAddress({
 									address: addressP,
 									is_default: 1,
@@ -173,8 +181,9 @@
 									});
 								});
 							},
-							fail: function(res) {
-								if (res.errMsg == 'chooseAddress:cancel') return that.$util
+							fail: function(err) {
+								console.log(err)
+								if (err.errMsg == 'chooseAddress:cancel') return that.$util
 									.Tips({
 										title: that.$t(`取消选择`)
 									});
@@ -365,7 +374,7 @@
 						url: '/pages/goods/order_confirm/index?is_address=1&new=' + this.news + '&cartId=' +
 							cartId + '&addressId=' + id + '&pinkId=' +
 							pinkId + '&couponId=' + couponId + '&noCoupon=' + this.noCoupon
-							
+
 					})
 				}
 			}
