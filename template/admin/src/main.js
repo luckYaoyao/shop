@@ -65,9 +65,12 @@ import dialog from '@/libs/dialog';
 import timeOptions from '@/libs/timeOptions';
 import scroll from '@/libs/loading';
 import * as tools from '@/libs/tools';
+import VueTreeList from 'vue-tree-list';
+
+Vue.use(VueTreeList);
 // 版本升级
 import upgrade from '@/components/upGrade/index.vue';
-Vue.component('upgrade', upgrade)
+Vue.component('upgrade', upgrade);
 //日期
 import moment from 'moment';
 Vue.prototype.$moment = moment;

@@ -3,7 +3,7 @@
     <div class="i-layout-page-header">
       <div class="i-layout-page-header">
         <span class="ivu-page-header-title">{{ title }}</span>
-        <div>
+        <div v-if="headerList.length">
           <Tabs v-model="currentTab" @on-click="changeTab">
             <TabPane
               :icon="item.icon"

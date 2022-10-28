@@ -4,7 +4,7 @@
       <a :href="item.href" target="_blank" v-for="(item, index) in links" :key="index">{{ item.title }}</a>
     </div>
     <div class="ivu-global-footer-copyright" v-if="copyright">{{ copyright }}</div>
-    <div class="ivu-global-footer-copyright">
+    <div class="ivu-global-footer-copyright" v-else>
       Copyright © 2014-2022 
       <a href="https://www.crmeb.com" target="_blank">{{ version }}</a>
     </div>

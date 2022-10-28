@@ -47,6 +47,10 @@
       :columns="columns4"
       :data="tableList2"
     >
+      <template slot-scope="{ row, index }" slot="nickname">
+        <div>{{ row.nickname }}</div>
+        <div style="color: red">{{ row.is_del ? '用户已注销' : '' }}</div>
+      </template>
       <template slot-scope="{ row, index }" slot="headimgurl">
         <div class="tabBox_img" v-viewer>
           <img v-lazy="row.headimgurl" />
@@ -123,6 +127,7 @@ export default {
               h('Radio', {
                 props: {
                   value: flag,
+                  disabled: !!params.row.is_del,
                 },
                 on: {
                   'on-change': () => {
@@ -159,7 +164,7 @@ export default {
         },
         {
           title: '微信用户名称',
-          key: 'nickname',
+          slot: 'nickname',
           minWidth: 180,
         },
         {

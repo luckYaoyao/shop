@@ -137,12 +137,100 @@
         <Button @click="cancel">取消</Button>
       </div>
     </Modal>
+    <Modal v-model="settingModals" scrollable title="设置推送" :mask-closable="false" width="900" :closable="false">
+      <Form
+        class="setting-style"
+        ref="settingData"
+        :model="settingData"
+        :rules="type == 0 ? ruleValidate : editValidate"
+        :label-width="140"
+        label-position="right"
+      >
+        <FormItem label="推送开关" prop="switch">
+          <Switch v-model="settingData.push_open" :true-value="1" :false-value="0" />
+        </FormItem>
+        <FormItem label="推送账号" prop="push_account">
+          <div class="form-content">
+            <Input type="text" v-model="settingData.push_account" placeholder="请输入推送账号"></Input>
+            <span class="trip">接受推送方获取token的账号</span>
+          </div>
+        </FormItem>
+        <FormItem label="推送密码" prop="push_password">
+          <div class="form-content">
+            <Input type="text" v-model="settingData.push_password" placeholder="请输入推送密码"></Input>
+            <span class="trip">接受推送方获取token的密码</span>
+          </div>
+        </FormItem>
+        <FormItem label="获取TOKEN接口" prop="push_token_url">
+          <div class="form-content">
+            <div class="input-button">
+              <Input type="text" v-model="settingData.push_token_url" placeholder="请输入获取TOKEN接口"></Input>
+              <Button class="ml10" type="primary" @click="textOutUrl(settingData.id)">测试链接</Button>
+            </div>
+            <span class="trip"
+              >接受推送方获取token的URL地址，POST方法，传入push_account和push_password，返回token和有效时间time(秒)</span
+            >
+          </div>
+        </FormItem>
+        <FormItem label="用户数据修改推送接口" prop="user_update_push">
+          <div class="form-content">
+            <Input type="text" v-model="settingData.user_update_push" placeholder="请输入用户数据修改推送接口"></Input>
+            <span class="trip">用户修改积分，余额，经验等将用户信息推送至该地址，POST方法</span>
+          </div>
+        </FormItem>
+        <FormItem label="订单创建推送接口" prop="order_create_push">
+          <div class="form-content">
+            <Input type="text" v-model="settingData.order_create_push" placeholder="请输入订单创建推送接口"></Input>
+            <span class="trip">订单创建时推送订单信息至该地址，POST方法</span>
+          </div>
+        </FormItem>
+        <FormItem label="订单支付推送接口" prop="order_pay_push">
+          <div class="form-content">
+            <Input type="text" v-model="settingData.order_pay_push" placeholder="请输入订单支付推送接口"></Input>
+            <span class="trip">订单完成支付时推送订单已支付信息至该地址，POST方法</span>
+          </div>
+        </FormItem>
+        <FormItem label="售后订单创建推送接口" prop="refund_create_push">
+          <div class="form-content">
+            <Input
+              type="text"
+              v-model="settingData.refund_create_push"
+              placeholder="请输入售后订单创建推送接口"
+            ></Input>
+            <span class="trip">售后订单生成时推送售后单信息至该地址，POST方法</span>
+          </div>
+        </FormItem>
+        <FormItem label="售后订单取消推送接口" prop="refund_cancel_push">
+          <div class="form-content">
+            <Input
+              type="text"
+              v-model="settingData.refund_cancel_push"
+              placeholder="请输入售后订单取消推送接口"
+            ></Input>
+            <span class="trip">售后订单取消时推送售后单取消信息至该地址，POST方法</span>
+          </div>
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button type="primary" @click="submit('settingData')">确定</Button>
+        <Button @click="settingModals = false">取消</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import { accountListApi, outSaveApi, outSavesApi, setShowApi, outSetUp, interfaceList } from '@/api/systemOutAccount';
+import {
+  accountListApi,
+  outSaveApi,
+  outSavesApi,
+  setShowApi,
+  outSetUp,
+  interfaceList,
+  setUpPush,
+  textOutUrl,
+} from '@/api/systemOutAccount';
 export default {
   name: 'systemOut',
   data() {
@@ -235,6 +323,11 @@ export default {
         appsecret: '',
         title: '',
         rules: [],
+      },
+      settingModals: false,
+      settingData: {
+        switch: 1,
+        name: '',
       },
       ruleValidate: {
         appid: [{ required: true, message: '请输入正确的账号 (4到30位之间)', trigger: 'blur', min: 4, max: 30 }],
@@ -390,7 +483,8 @@ export default {
     },
     // 编辑
     setUp(row) {
-      this.$modalForm(outSetUp(row.id)).then(() => this.getList());
+      this.settingModals = true;
+      this.settingData = row;
     },
     // 搜索
     userSearchs() {
@@ -398,6 +492,22 @@ export default {
       this.formValidate.page = 1;
       this.list = [];
       this.getList();
+    },
+    submit(name) {
+      setUpPush(this.settingData).then((res) => {
+        this.$Message.success(res.msg);
+        this.settingModals = false;
+        this.getList();
+      });
+    },
+    textOutUrl() {
+      textOutUrl(this.settingData)
+        .then((res) => {
+          this.$Message.success(res.msg);
+        })
+        .catch((err) => {
+          this.$Message.error(err.msg);
+        });
     },
     ok(name) {
       console.log(this.$refs.tree.getCheckedAndIndeterminateNodes());
@@ -455,5 +565,19 @@ export default {
 <style scoped>
 .reset {
   margin-left: 10px;
+}
+.form-content {
+  display: flex;
+  flex-direction: column;
+}
+.input-button {
+  display: flex;
+}
+w .trip {
+  color: #aaa;
+  line-height: 20px;
+}
+.setting-style /deep/ .ivu-form-item {
+  margin-bottom: 14px;
 }
 </style>

@@ -29,7 +29,7 @@
       <div id="content" :style="{ top: contentTop + 'px' || '', width: contentWidth }" ref="content">
         <vue-waterfall-easy
           :imgsArr="imgsArr"
-          :maxCols="cols"
+          :maxCols="maxCol"
           :width="screenWidth"
           @click="clickFn"
           @scrollReachBottom="getData"
@@ -159,14 +159,19 @@ export default {
         limit: 10,
       },
       screenWidth: document.body.clientWidth - 200,
+      maxCol: 1,
     };
   },
   created() {
+    if (this.maxCols === 5) {
+      this.$set(this, 'maxCol', this.screenWidth / 240);
+    } else {
+      this.maxCol = this.maxCols;
+    }
+    console.log(this.maxCol);
     this.getData();
   },
-  mounted() {
-    this.$set(this, 'cols', this.screenWidth / 240);
-  },
+  mounted() {},
   computed: {},
   methods: {
     // 发送图文消息

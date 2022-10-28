@@ -7,7 +7,7 @@
     </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
       <div v-if="isShowList" class="backs" @click="goBack(false)">
-        <Icon type="ios-folder-outline" class="mr5" /><span>返回上级</span>
+        <Icon type="ios-folder-outline" class="mr5 icon" /><span>返回上级</span>
       </div>
       <Table
         v-if="isShowList"
@@ -582,6 +582,7 @@ export default {
     initEditor() {
       let that = this;
       that.$nextTick(() => {
+        console.log(monaco);
         // 初始化编辑器，确保dom已经渲染
         that.editor = monaco.editor.create(document.getElementById('container_' + that.indexEditor), {
           value: that.code, //编辑器初始显示文字
@@ -861,6 +862,8 @@ export default {
 .backs
    cursor pointer;
    display inline-block;
+   .icon
+    margin-bottom 3px
 >>>.CodeMirror
  height: 70vh !important;
 
@@ -910,7 +913,6 @@ export default {
 .diy-button
 	// float: left;
 	height: 35px;
-	line-height: 35px;
 	padding: 0 15px;
 	font-size: 13px;
 	text-align: center;
@@ -975,7 +977,6 @@ export default {
 	.diy-button
 		width: 50%;
 		height: 25px;
-		line-height: 25px;
 	.diy-button-list
 		display: flex;
 		align-items: center;

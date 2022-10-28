@@ -393,5 +393,14 @@ export default {
       },
       component: () => import('@/pages/marketing/sign/index'),
     },
+    {
+      path: `member/system_config/:type?/:tab_id?`,
+      name: `${pre}member`,
+      meta: {
+        auth: ['marketing-member-system_config'],
+        title: '会员配置',
+      },
+      component: () => import('@/pages/setting/setSystem/index'),
+    },
   ],
 };

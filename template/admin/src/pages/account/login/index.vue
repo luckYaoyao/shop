@@ -32,7 +32,7 @@
               size="large"
             />
           </FormItem>
-          <FormItem prop="code">
+          <!-- <FormItem prop="code">
             <div class="code">
               <Input
                 type="text"
@@ -43,7 +43,7 @@
               />
               <img :src="imgcode" class="pictrue" @click="captchas" />
             </div>
-          </FormItem>
+          </FormItem> -->
           <FormItem>
             <Button type="primary" long :loading="loading" size="large" @click="handleSubmit('formInline')" class="btn"
               >登录</Button
@@ -61,7 +61,9 @@
     ></Verify>
     <div class="footer">
       <div class="pull-right" v-if="copyright">{{ copyright }}</div>
-      <div class="pull-right" v-else>Copyright © 2014-2022 <a href="https://www.crmeb.com" target="_blank">{{version}}</a></div>
+      <div class="pull-right" v-else>
+        Copyright © 2014-2022 <a href="https://www.crmeb.com" target="_blank">{{ version }}</a>
+      </div>
     </div>
   </div>
 </template>
@@ -91,14 +93,12 @@ export default {
       formInline: {
         username: '',
         password: '',
-        code: '',
       },
       ruleInline: {
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
-        code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
       },
-      errorNum: 0,
+      login_captcha: 0,
       // jigsaw: null,
       login_logo: '',
       swiperList: [],
@@ -135,9 +135,7 @@ export default {
         }, 400);
       }
     },
-    $route(n) {
-      this.captchas();
-    },
+    $route(n) {},
   },
   mounted: function () {
     this.$nextTick(() => {
@@ -159,7 +157,6 @@ export default {
       }
       this.swiperData();
     });
-    this.captchas();
   },
   methods: {
     swiperData() {
@@ -172,6 +169,7 @@ export default {
           this.key = data.key;
           this.copyright = data.copyright;
           this.version = data.version;
+          this.login_captcha = data.login_captcha;
         })
         .catch((err) => {
           this.$Message.error(err);
@@ -193,7 +191,6 @@ export default {
       AccountLogin({
         account: this.formInline.username,
         pwd: this.formInline.password,
-        imgcode: this.formInline.code,
         key: this.key,
         captchaType: 'blockPuzzle',
         captchaVerification: params ? params.captchaVerification : '',
@@ -221,6 +218,7 @@ export default {
           this.$store.commit('userInfo/logoSmall', data.logo_square);
           this.$store.commit('userInfo/version', data.version);
           this.$store.commit('userInfo/newOrderAudioLink', data.newOrderAudioLink);
+          this.login_captcha = 0;
 
           // if (this.jigsaw) this.jigsaw.reset();
 
@@ -247,12 +245,9 @@ export default {
         })
         .catch((res) => {
           msg();
-          this.formInline.code = '';
           let data = res === undefined ? {} : res;
-          this.errorNum++;
-          this.captchas();
+          this.login_captcha = res.data.login_captcha;
           this.$Message.error(data.msg || '登录失败');
-          // if (this.jigsaw) this.jigsaw.reset();
         });
       setTimeout((e) => {
         this.loading = false;
@@ -306,13 +301,10 @@ export default {
         document.getElementsByTagName('canvas')[0].className = 'index_bg';
       }
     },
-    captchas: function () {
-      this.imgcode = Setting.apiBaseURL + '/captcha_pro?' + Date.parse(new Date());
-    },
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          if (this.errorNum > 2) {
+          if (this.login_captcha == 1) {
             this.$refs.verify.show();
           } else {
             this.closeModel();
@@ -391,7 +383,7 @@ export default {
 }
 
 .index_from {
-  padding: 0 40px 32px 40px;
+  padding: 32px 40px 32px 40px;
   height: 400px;
   box-sizing: border-box;
 }

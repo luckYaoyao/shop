@@ -18,9 +18,10 @@
       ><Icon style="float: right" v-if="!hideTitle" type="ios-arrow-forward" :size="16"
     /></a>
     <DropdownMenu ref="dropdown" slot="list">
-      <template v-for="child in children">
+      <div v-for="child in children">
         <template v-if="child.auth === undefined">
           <collapsed-menu
+            class="child-menu"
             v-if="showChildren(child)"
             :icon-size="iconSize"
             :parent-item="child"
@@ -32,7 +33,7 @@
             }}</span></DropdownItem
           >
         </template>
-      </template>
+      </div>
     </DropdownMenu>
   </Dropdown>
 </template>
@@ -76,3 +77,16 @@ export default {
   },
 };
 </script>
+<style lang="stylus" scoped>
+>>> .menu-title {
+  // width: 100px !important;
+}
+.collased-menu-dropdown{
+  width 100%
+}
+.child-menu{
+  display flex
+  justify-content space-between
+  width 100%
+}
+</style>

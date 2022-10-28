@@ -33,7 +33,7 @@
                     <div class="msg-wrapper">
                       <!-- 文档 -->
                       <template v-if="item.msn_type <= 2">
-                        <div class="txt-wrapper pad16" v-html="item.msn"></div>
+                        <div class="txt-wrapper pad16">{{item.msn}}</div>
                       </template>
                       <!-- 图片 -->
                       <template v-if="item.msn_type == 3">
@@ -134,9 +134,8 @@
                 v-model="chatCon"
                 type="textarea"
                 :rows="4"
-                @keydown.native="listen($event)"
+                @on-keydown="listen($event)"
                 placeholder="请输入文字内容"
-                @on-enter="bindEnter"
                 style="font-size: 14px"
               />
               <div class="send-btn">
@@ -381,13 +380,7 @@ export default {
     handleFormatError(file) {
       this.$Message.error('上传图片只能是 jpg、jpg、jpeg、gif 格式!');
     },
-    bindEnter(e) {
-      if (e.target.value == '') {
-        return this.$Message.error('请输入消息');
-      }
-      this.sendMsg(e.target.value, 1);
-      this.chatCon = '';
-    },
+    bindEnter(e) {},
     //微信截图上传图片时触发
     handleParse(e) {
       let file = null;
@@ -446,9 +439,14 @@ export default {
     },
     // 阻止浏览器默认换行操作
     listen(e) {
-      if (e.keyCode == 13) {
-        e.preventDefault();
-        return false;
+      if (e.shiftKey && e.keyCode == 13) {
+        console.log('换行');
+      } else if (e.keyCode == 13) {
+        if (e.target.value == '') {
+          return this.$Message.error('请输入消息');
+        }
+        this.sendMsg(e.target.value, 1);
+        this.chatCon = '';
       }
     },
     // 输入框选择表情
@@ -701,6 +699,7 @@ textarea.ivu-input {
 
             .txt-wrapper {
               word-break: break-all;
+              white-space: pre-wrap;
             }
 
             .pad16 {
@@ -946,4 +945,3 @@ textarea.ivu-input {
   width: 0;
 }
 </style>
-

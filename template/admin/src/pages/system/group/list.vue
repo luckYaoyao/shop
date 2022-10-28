@@ -1,16 +1,16 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <Button
-          icon="ios-arrow-back"
-          size="small"
-          @click="back"
-          class="mr20"
-          v-if="$route.meta.auth[0] === 'system-config-system_config-list'"
-          >返回</Button
+    <div class="i-layout-page-header header_top">
+      <div class="i-layout-page-header fl_header">
+        <router-link :to="{ path: '/admin/system/config/system_group/index' }"
+          ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         >
-        <span class="ivu-page-header-title mr20" v-text="$route.meta.title"></span>
+        <Divider type="vertical" />
+        <span
+          class="ivu-page-header-title mr20"
+          style="padding: 0"
+          v-text="$route.meta.title"
+        ></span>
       </div>
     </div>
     <Card :bordered="false" dis-hover class="ivu-mt">

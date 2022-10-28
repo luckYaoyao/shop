@@ -1,11 +1,13 @@
 <template>
   <div class="message">
     <div class="i-layout-page-header">
-      <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-      <div>
-        <Tabs v-model="currentTab" @on-click="changeTab">
+      <div class="i-layout-page-header">
+        <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
+        <div>
+          <Tabs v-model="currentTab" @on-click="changeTab">
           <TabPane :label="item.label" :name="item.value.toString()" v-for="(item, index) in headerList" :key="index" />
         </Tabs>
+        </div>
       </div>
     </div>
     <div class="table-box">
@@ -30,24 +32,10 @@
             >
           </Col>
         </Row>
-        <Alert v-if="industry && currentTab == 1">
+        <Alert v-if="currentTab == 1">
           <template slot="desc">
-            <div>
-              主营行业：{{
-                industry.primary_industry.first_class
-                  ? industry.primary_industry.first_class + '||'
-                  : industry.primary_industry
-              }}
-              {{ industry.primary_industry.second_class ? industry.primary_industry.second_class : '' }}
-            </div>
-            <div>
-              副营行业：{{
-                industry.secondary_industry.first_class
-                  ? industry.secondary_industry.first_class + '||'
-                  : industry.secondary_industry
-              }}
-              {{ industry.secondary_industry.second_class ? industry.secondary_industry.second_class : '' }}
-            </div>
+            登录微信公众号后台，选择模版消息，将模版消息的所在行业修改副行业为《其他/其他》<br />登录微信小程序后台，基本设置，服务类目增加《生活服务
+            > 百货/超市/便利店》
           </template>
         </Alert>
         <Table
@@ -212,7 +200,6 @@ export default {
       currentTab: '1',
       loading: false,
       formData: {},
-      industry: null,
     };
   },
   created() {
@@ -230,8 +217,7 @@ export default {
     },
     changeTab(data) {
       getNotificationList(data).then((res) => {
-        this.levelLists = res.data.list;
-        this.industry = res.data.industry;
+        this.levelLists = res.data;
       });
     },
     // 同步订阅消息

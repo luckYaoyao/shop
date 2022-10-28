@@ -16,8 +16,8 @@
             <Input type="text" v-model="formInline.account" prefix="ios-contact-outline" placeholder="请输入手机号" />
           </FormItem> -->
             <FormItem prop="sms_token" class="maxInpt">
-              <Input type="password" v-model="formInline.password" prefix="ios-lock-outline" placeholder="请输入密码" />
-              <span class="trip">提示：config/filesystem.php中手动配置password后使用，不能为空</span>
+              <Input type="password" size="large" v-model="formInline.password" prefix="ios-lock-outline" placeholder="请输入密码" />
+              <div class="trip">提示：config/filesystem.php中手动配置password后使用，不能为空</div>
             </FormItem>
             <FormItem class="maxInpt">
               <Button type="primary" long size="large" @click="handleSubmit('formInline')" class="btn">登录</Button>
@@ -104,23 +104,35 @@ export default {
     margin-left auto
     margin-right auto
 }
+.index_from{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .trip{
+    width 400px
+    text-align: left;
     color #aaa
 }
 .page-account-container{
     text-align center
-    padding 50px 0
+    padding 200px 0
 }
 .page-account-top{
-    margin-bottom 20px
+    margin-bottom 50px
 }
 .page-account-top-tit
-    font-size 21px
+    font-size 30px
     color #1890FF
+    font-weight 500
 .page-account-other
     text-align center
     color #1890FF
     font-size 12px
     span
         cursor pointer
+>>> .btn{
+  font-size: 15px !important;
+}
 </style>

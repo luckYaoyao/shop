@@ -47,16 +47,16 @@
         <Button v-auth="['product-crawl-save']" type="success" class="bnt mr15" @click="onCopy">商品采集</Button>
         <Dropdown class="bnt mr15" @on-click="batchSelect" :transfer="true">
           <Button type="info">
-            批量操作
+            批量修改
             <Icon type="ios-arrow-down"></Icon>
           </Button>
           <DropdownMenu slot="list">
-            <DropdownItem :name="1">分类设置</DropdownItem>
+            <DropdownItem :name="1">商品分类</DropdownItem>
             <DropdownItem :name="2">物流设置</DropdownItem>
-            <DropdownItem :name="3">赠送积分</DropdownItem>
-            <DropdownItem :name="4">赠送优惠券</DropdownItem>
-            <DropdownItem :name="5">用户标签</DropdownItem>
-            <DropdownItem :name="6">商品推荐</DropdownItem>
+            <DropdownItem :name="3">购买送积分</DropdownItem>
+            <DropdownItem :name="4">购买送优惠券</DropdownItem>
+            <DropdownItem :name="5">关联用户标签</DropdownItem>
+            <DropdownItem :name="6">活动推荐</DropdownItem>
           </DropdownMenu>
         </Dropdown>
         <Button
@@ -287,6 +287,7 @@ import {
   productUnshowApi,
   storeProductApi,
   batchSetting,
+  productGetTemplateApi,
 } from '@/api/product';
 import userLabel from '@/components/labelList';
 
@@ -489,7 +490,8 @@ export default {
     },
     // 批量设置商品
     batchSelect(type) {
-      if (this.ids.length === 0) {
+      console.log(type);
+      if (!this.ids.length) {
         this.$Message.warning('请选择要设置的商品');
       } else {
         this.batchType = type;

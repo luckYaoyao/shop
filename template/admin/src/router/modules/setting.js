@@ -621,6 +621,15 @@ export default {
       component: () => import('@/pages/setting/systemOutAccount/index'),
     },
     {
+      path: 'system_out_interface/index',
+      name: `${pre}systemOutAccount`,
+      meta: {
+        auth: ['setting-system-out-interface-index'],
+        title: '接口文档',
+      },
+      component: () => import('@/pages/setting/systemOutInterface/index'),
+    },
+    {
       path: 'lang/list',
       name: `${pre}langList`,
       meta: {

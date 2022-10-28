@@ -1,18 +1,8 @@
 <template>
   <div>
-    <div class="i-layout-page-header header_top">
-      <div class="i-layout-page-header fl_header">
-        <router-link :to="{ path: '/admin/app/wechat/reply/keyword' }"
-          ><Button icon="ios-arrow-back" size="small" type="text" v-show="$route.params.id">返回</Button></router-link
-        >
-        <Divider type="vertical" />
-        <span
-          class="ivu-page-header-title mr20"
-          style="padding: 0"
-          v-text="$route.params.key || $route.params.id !== '0' ? '关键字编辑' : '关键字添加'"
-          v-if="$route.params.id"
-        ></span>
-        <span class="ivu-page-header-title mr20" style="padding: 0" v-text="$route.meta.title" v-else></span>
+    <div class="i-layout-page-header">
+      <div class="i-layout-page-header">
+        <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
       </div>
     </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
