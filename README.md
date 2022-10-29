@@ -95,8 +95,8 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 
 ---
 
-### 官方技术交流群
-![输入图片说明](readme/pic/image.jpg)
+### 官方论坛
+
 
 产品BUG、优化建议，欢迎社区反馈：https://q.crmeb.com/?categoryId=147
 
