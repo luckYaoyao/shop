@@ -44,8 +44,6 @@ CRMEB打通版是历经6年时间匠心之作！系统全开源可商用，包�
 
 
 
-[![](readme/pic/zhongqiu.jpg)](http://www.crmeb.com/news/detail/796)
-
 ### 系统亮点
 ~~~
 多 语 言：后台随时配置语言包，移动端支持多语言切换；
