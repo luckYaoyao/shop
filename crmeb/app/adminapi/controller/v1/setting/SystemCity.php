@@ -27,7 +27,7 @@ class SystemCity extends AuthController
      * 构造方法
      * SystemCity constructor.
      * @param App $app
-     * @param SystemStoreServices $services
+     * @param SystemCityServices $services
      */
     public function __construct(App $app, SystemCityServices $services)
     {
@@ -133,8 +133,7 @@ class SystemCity extends AuthController
      */
     public function clean_cache()
     {
-        $res = CacheService::delete('tree_city_list');
-        $res = $res && CacheService::delete('CITY_LIST');
+        $res = CacheService::delete('CITY_LIST');
         if ($res) {
             return app('json')->success(400185);
         } else {
