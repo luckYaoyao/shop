@@ -49,20 +49,20 @@ class UserGroupServices extends BaseServices
 
     /**
      * 获取分组列表
-     * @param string $feild
+     * @param string $field
      * @return array
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function getGroupList($feild = 'id,group_name', bool $is_page = false)
+    public function getGroupList(string $field = 'id,group_name', bool $is_page = false): array
     {
         $page = $limit = 0;
         if ($is_page) {
             [$page, $limit] = $this->getPageValue();
             $count = $this->dao->count([]);
         }
-        $list = $this->dao->getList([], $feild, $page, $limit);
+        $list = $this->dao->getList([], $field, $page, $limit);
 
         return $is_page ? compact('list', 'count') : $list;
     }
@@ -70,6 +70,7 @@ class UserGroupServices extends BaseServices
     /**
      * 获取一些用户的分组名称
      * @param array $ids
+     * @return array
      */
     public function getUsersGroupName(array $ids)
     {
@@ -133,6 +134,7 @@ class UserGroupServices extends BaseServices
     /**
      * 删除
      * @param int $id
+     * @return string
      */
     public function delGroup(int $id)
     {

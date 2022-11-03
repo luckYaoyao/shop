@@ -35,14 +35,21 @@ class UserGroupDao extends BaseDao
     /**
      * 获取列表
      * @param array $where
-     * @param string $feild
+     * @param string $field
+     * @param int $page
+     * @param int $limit
      * @return array
+     * @throws \ReflectionException
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function getList(array $where = [], string $feild = '*', int $page = 0, int $limit)
+    public function getList(array $where = [], string $field = '*', int $page = 0, int $limit = 0)
     {
-        return $this->search($where)->field($feild)->page($page, $limit)->select()->toArray();
+        return $this->search($where)
+            ->field($field)
+            ->when($page && $limit, function ($query) use ($page, $limit) {
+                $query->page($page, $limit);
+            })->select()->toArray();
     }
 }

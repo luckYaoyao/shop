@@ -63,12 +63,10 @@ class LiveGoodsServices extends BaseServices
     }
 
     /**
-     * @param array $data
-     * @return bool|mixed
-     * @throws \EasyWeChat\Core\Exceptions\InvalidArgumentException
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * 添加直播商品
+     * @param array $goods_info
+     * @return bool
+     * @throws \Exception
      */
     public function add(array $goods_info)
     {

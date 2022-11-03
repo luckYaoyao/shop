@@ -875,7 +875,9 @@ class UserServices extends BaseServices
      */
     public function setGroup($uids)
     {
-        $userGroup = app()->make(UserGroupServices::class)->getGroupList();
+        /** @var UserGroupServices $groupServices */
+        $groupServices = app()->make(UserGroupServices::class);
+        $userGroup = $groupServices->getGroupList();
         if (count($uids) == 1) {
             $user = $this->getUserInfo($uids[0], ['group_id']);
             $setOptionUserGroup = function () use ($userGroup) {
@@ -925,7 +927,9 @@ class UserServices extends BaseServices
      */
     public function setLabel($uids)
     {
-        $userLabel = app()->make(UserLabelServices::class)->getLabelList();
+        /** @var UserLabelServices $labelServices */
+        $labelServices = app()->make(UserLabelServices::class);
+        $userLabel = $labelServices->getLabelList();
         if (count($uids) == 1) {
             $lids = app()->make(UserLabelRelationServices::class)->getUserLabels($uids[0]);
             $setOptionUserLabel = function () use ($userLabel) {

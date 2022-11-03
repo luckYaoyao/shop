@@ -377,6 +377,7 @@ switch ($step) {
                 $tables = mysqli_fetch_all($result);//参数MYSQL_ASSOC、MYSQLI_NUM、MYSQLI_BOTH规定产生数组类型
                 $bl_table = array('eb_system_admin'
                 , 'eb_system_role'
+                , 'eb_cache'
                 , 'eb_agent_level'
                 , 'eb_page_link'
                 , 'eb_page_categroy'
@@ -387,6 +388,9 @@ switch ($step) {
                 , 'eb_express'
                 , 'eb_system_group'
                 , 'eb_system_group_data'
+                , 'eb_lang_code'
+                , 'eb_lang_country'
+                , 'eb_lang_type'
                 , 'eb_template_message'
                 , 'eb_shipping_templates'
                 , "eb_shipping_templates_region"
@@ -397,6 +401,7 @@ switch ($step) {
                 , 'eb_agreement'
                 , 'eb_store_service_speechcraft'
                 , 'eb_system_user_level'
+                , 'eb_out_interface'
                 , 'eb_cache');
                 foreach ($bl_table as $k => $v) {
                     $bl_table[$k] = str_replace('eb_', $dbPrefix, $v);
@@ -477,6 +482,7 @@ switch ($step) {
         $host = $_SERVER['HTTP_HOST'];
         $curent_version = getversion();
         $version = trim($curent_version['version']);
+        $platform = trim($curent_version['platform']);
         installlog();
         include_once("./templates/step5.php");
         @touch('../install.lock');
