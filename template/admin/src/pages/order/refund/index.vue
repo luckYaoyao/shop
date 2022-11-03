@@ -539,7 +539,7 @@ export default {
     getRefundData(id, refund_type) {
       if (refund_type == 2) {
         this.delfromData = {
-          title: '是否立即退货退款?',
+          title: '立即退货退款',
           url: `/refund/agree/${id}`,
           method: 'get',
         };

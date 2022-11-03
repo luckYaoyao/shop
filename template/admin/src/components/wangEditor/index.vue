@@ -135,7 +135,7 @@ export default {
       let _this = this;
       _this.modalVideo = false;
       this.video = data;
-      let videoHTML = '<video src="' + this.video + '" controls style="max-width:100%"></video>';
+      let videoHTML = '<video src="' + this.video + '" controls style="max-width:100%;min-height:500rpx"></video>';
       this.editor.cmd.do('insertHTML', videoHTML);
     },
 

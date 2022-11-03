@@ -20,12 +20,7 @@
         </div>
       </div>
     </Card>
-    <Card
-      :bordered="false"
-      dis-hover
-      class="ivu-mt"
-      v-if="!copyright && status == 1"
-    >
+    <Card :bordered="false" dis-hover class="ivu-mt" v-if="!copyright && status == 1">
       <!-- v-if="copyright == '0' && status == 1" -->
       <div class="auth acea-row row-between-wrapper">
         <div class="acea-row row-middle">
@@ -50,14 +45,14 @@
         </div>
         <Button type="primary" @click="saveCopyRight">保存</Button>
       </div>
-      <div class="authorized" @click="modalPicTap('单选')">
+      <div class="authorized">
         <div>
           <span class="update">上传授权图片:</span>
         </div>
         <div class="uploadPictrue" v-if="authorizedPicture">
           <img v-lazy="authorizedPicture" />
         </div>
-        <div class="upload" v-else>
+        <div class="upload" v-else @click="modalPicTap('单选')">
           <div class="iconfont">+</div>
         </div>
       </div>
@@ -74,12 +69,7 @@
       width="447"
       @on-cancel="cancel"
     >
-      <iframe
-        width="100%"
-        height="580"
-        :src="iframeUrl"
-        frameborder="0"
-      ></iframe>
+      <iframe width="100%" height="580" :src="iframeUrl" frameborder="0"></iframe>
     </Modal>
     <Modal
       v-model="modalPic"
@@ -102,18 +92,12 @@
   </div>
 </template>
 <script>
-import uploadPictures from '@/components/uploadPictures'
-import {
-  auth,
-  getVersion,
-  crmebProduct,
-  saveCrmebCopyRight,
-  getCrmebCopyRight,
-} from '@/api/system'
-import { mapState } from 'vuex'
-import { formatDate } from '@/utils/validate'
-import QRCode from 'qrcodejs2'
-import Vcode from 'vue-puzzle-vcode'
+import uploadPictures from '@/components/uploadPictures';
+import { auth, getVersion, crmebProduct, saveCrmebCopyRight, getCrmebCopyRight } from '@/api/system';
+import { mapState } from 'vuex';
+import { formatDate } from '@/utils/validate';
+import QRCode from 'qrcodejs2';
+import Vcode from 'vue-puzzle-vcode';
 
 export default {
   name: 'system_auth',
@@ -121,10 +105,10 @@ export default {
     ...mapState('admin/layout', ['isMobile']),
     ...mapState('admin/userLevel', ['categoryId']),
     labelWidth() {
-      return this.isMobile ? undefined : 85
+      return this.isMobile ? undefined : 85;
     },
     labelPosition() {
-      return this.isMobile ? 'top' : 'right'
+      return this.isMobile ? 'top' : 'right';
     },
   },
 
@@ -168,13 +152,13 @@ export default {
         sm: 8,
         xs: 8,
       },
-    }
+    };
   },
   filters: {
     formatDate(time) {
       if (time !== 0) {
-        let date = new Date(time * 1000)
-        return formatDate(date, 'yyyy-MM-dd hh:mm')
+        let date = new Date(time * 1000);
+        return formatDate(date, 'yyyy-MM-dd hh:mm');
       }
     },
   },
@@ -183,26 +167,26 @@ export default {
     uploadPictures,
   },
   mounted() {
-    this.getAuth()
-    this.getVersion()
+    this.getAuth();
+    this.getVersion();
     window.addEventListener('message', (e) => {
       if (e.data.event === 'onCancel') {
-        this.cancel()
+        this.cancel();
       }
-    })
+    });
   },
   methods: {
     getVersion() {
       getVersion().then((res) => {
-        this.version = res.data.version
-        this.label = res.data.label
-      })
+        this.version = res.data.version;
+        this.label = res.data.label;
+      });
     },
     getCrmebCopyRight() {
       getCrmebCopyRight().then((res) => {
-        this.getAuth()
-        return this.$Message.success(res.msg)
-      })
+        this.getAuth();
+        return this.$Message.success(res.msg);
+      });
     },
     //保存版权信息
     saveCopyRight() {
@@ -210,101 +194,93 @@ export default {
         copyright: this.copyrightText,
         copyright_img: this.authorizedPicture,
       }).then((res) => {
-        return this.$Message.success(res.msg)
-      })
+        return this.$Message.success(res.msg);
+      });
     },
     // 选择图片
     modalPicTap() {
-      this.modalPic = true
+      this.modalPic = true;
     },
     // 选中图片
     getPic(pc) {
-      this.authorizedPicture = pc.att_dir
-      this.modalPic = false
+      this.authorizedPicture = pc.att_dir;
+      this.modalPic = false;
     },
     //获取版权信息
     getCopyRight() {
       getCrmebCopyRight().then((res) => {
-        this.copyrightText = res.data.copyrightContext || ''
-        this.authorizedPicture = res.data.copyrightImage || ''
-      })
+        this.copyrightText = res.data.copyrightContext || '';
+        this.authorizedPicture = res.data.copyrightImage || '';
+      });
     },
     cancel() {
       if (this.productType === 'copyright') {
-        this.getCrmebCopyRight()
+        this.getCrmebCopyRight();
       } else {
-        this.getAuth()
+        this.getAuth();
       }
-      this.iframeUrl = ''
-      this.isTemplate = false
+      this.iframeUrl = '';
+      this.isTemplate = false;
     },
     loginTabSwitch(index) {
-      this.active = index
+      this.active = index;
     },
     getAuth() {
       auth()
         .then((res) => {
-          let data = res.data || {}
-          this.authCode = data.authCode || ''
-          this.status = data.status === undefined ? -1 : data.status
-          this.dayNum = data.day || 0
-          this.copyright = data.copyright
+          let data = res.data || {};
+          this.authCode = data.authCode || '';
+          this.status = data.status === undefined ? -1 : data.status;
+          this.dayNum = data.day || 0;
+          this.copyright = data.copyright;
           if (this.copyright) {
-            this.getCopyRight()
+            this.getCopyRight();
           }
         })
         .catch((err) => {
-          this.$Message.error(err.msg)
-        })
+          this.$Message.error(err.msg);
+        });
     },
     toCrmeb() {
-      window.open('http://www.crmeb.com')
+      window.open('http://www.crmeb.com');
     },
     getProduct() {
       crmebProduct({ type: 'copyright' })
         .then((res) => {
-          this.price = res.data.attr.price
-          this.productStatus = true
+          this.price = res.data.attr.price;
+          this.productStatus = true;
         })
         .catch((err) => {
-          this.$Message.error(err.msg)
-        })
+          this.$Message.error(err.msg);
+        });
       crmebProduct({ type: 'pro' })
         .then((res) => {
-          this.proPrice = res.data.attr.price
+          this.proPrice = res.data.attr.price;
         })
         .catch((err) => {
-          this.$Message.error(err.msg)
-        })
+          this.$Message.error(err.msg);
+        });
     },
     payment(product) {
-      this.productType = product
-      let host = location.host
-      let hostData = host.split('.')
+      this.productType = product;
+      let host = location.host;
+      let hostData = host.split('.');
       if (hostData[0] === 'test' && hostData.length === 4) {
-        host = host.replace('test.', '')
+        host = host.replace('test.', '');
       } else if (hostData[0] === 'www' && hostData.length === 3) {
-        host = host.replace('www.', '')
+        host = host.replace('www.', '');
       }
       this.iframeUrl =
-        this.baseUrl +
-        '?url=' +
-        host +
-        '&product=' +
-        product +
-        '&version=' +
-        this.version +
-        '&label=' +
-        this.label
-      this.isTemplate = true
+        this.baseUrl + '?url=' + host + '&product=' + product + '&version=' + this.version + '&label=' + this.label;
+      this.isTemplate = true;
     },
     // 用户点击遮罩层，应该关闭模态框
     onClose() {
-      this.isShow = false
+      this.isShow = false;
     },
   },
   destroyed() {},
-}
+};
 </script>
 <style scoped lang="stylus">
 .auth {

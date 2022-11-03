@@ -47,7 +47,7 @@
 							<view class='money font-color'>
 								{{$t(`￥`)}}<text class='num'>{{storeInfo.price || 0}}</text>
 								<text
-									v-if="attribute.productAttr.length && (attribute.productAttr.length?attribute.productAttr[0].attr_values.length:0) > 1">{{$t(`onwards`)}}</text>
+									v-if="attribute.productAttr.length && (attribute.productAttr.length?attribute.productAttr[0].attr_values.length:0) > 1">{{$t(`起`)}}</text>
 								<text class='y-money'>{{$t(`￥`)}}{{storeInfo.product_price || 0}}</text>
 							</view>
 							<view class='iconfont icon-fenxiang' @click="listenerActionSheet"></view>

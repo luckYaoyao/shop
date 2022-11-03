@@ -142,7 +142,7 @@
           </Row>
         </FormItem>
       </Form>
-      <Button class="submit" type="primary" @click="save" :disabled="disabled">立即提交</Button>
+      <Button class="submit" type="primary" @click="save" :loading="loading" :disabled="disabled">立即提交</Button>
     </Card>
     <Modal v-model="customerShow" scrollable title="请选择商城用户" :closable="false" width="800">
       <customerInfo v-if="customerShow" @imageObject="imageObject"></customerInfo>
@@ -244,6 +244,7 @@ export default {
       },
       id: 0,
       dataLabel: [],
+      loading: false,
     };
   },
   computed: {
@@ -384,6 +385,7 @@ export default {
         }
       }
       this.disabled = false;
+      this.loading = true;
       wechatQrcodeSaveApi(this.id, this.formData)
         .then((res) => {
           this.disabled = true;

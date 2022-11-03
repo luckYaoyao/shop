@@ -62,8 +62,8 @@
 			classStyle() {
 				colorChange('category').then(res => {
 					let status = res.data.status;
-					this.status = res.data.status
 					this.category = status
+					this.status = res.data.status
 					if (status == 2) {
 						if (this.isLogin) {
 							this.$refs.classTwo.getCartNum();

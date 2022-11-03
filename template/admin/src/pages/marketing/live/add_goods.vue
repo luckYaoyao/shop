@@ -59,7 +59,7 @@
         </Table>
 
         <div class="sub_btn">
-          <Button type="primary" style="width: 8%" @click="bindSub">提交</Button>
+          <Button type="primary" style="width: 8%" @click="bindSub" :disabled="disabled" :loading="loadings">提交</Button>
         </div>
       </div>
     </Card>
@@ -136,6 +136,8 @@ export default {
         { slot: 'action', fixed: 'right', title: '操作' },
       ],
       tabList: [],
+      disabled: false,
+      loadings: false,
     };
   },
   methods: {
@@ -172,16 +174,20 @@ export default {
     },
     // 提交
     bindSub() {
+      this.disabled = true;
+      this.loadings = true;
       liveGoodsAdd({
         goods_info: this.tabList,
       })
         .then((res) => {
           this.$Message.success('添加成功');
+          this.disabled = false;
           setTimeout(() => {
             this.$router.push({ path: '/admin/marketing/live/live_goods' });
           }, 500);
         })
         .catch((error) => {
+          this.disabled = false;
           this.$Message.error(error.msg);
         });
     },

@@ -141,7 +141,6 @@
 						if (!vm.update_info.platform) {
 							// 后台未配置当前系统的升级数据
 						} else {
-							console.log('111111111111111')
 							vm.checkUpdate(); ///检查是否更新
 						}
 					})

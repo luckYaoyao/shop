@@ -253,7 +253,6 @@ export default {
       meta: {
         auth: true,
         title: '直播间商品管理',
-        keepAlive: true,
       },
       component: () => import('@/pages/marketing/live/live_goods'),
     },

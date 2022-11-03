@@ -21,8 +21,8 @@
 							<view class="acea-row row-middle">
 								<!-- <i class="icon iconfont icon-yonghu3"></i> -->
 								<text class="item-name">{{$t(`用户姓名`)}}</text>
-								<input type="text" :placeholder="$t(`请输入姓名`)" v-model="merchantData.name" @input="validateBtn"
-									placeholder-class='placeholder' />
+								<input type="text" :placeholder="$t(`请输入姓名`)" v-model="merchantData.name"
+									@input="validateBtn" placeholder-class='placeholder' />
 							</view>
 						</view>
 						<view class="item">
@@ -37,10 +37,10 @@
 							<view class="acea-row row-middle">
 								<!-- <i class="icon iconfont icon-yanzhengma"></i> -->
 								<text class="item-name">{{$t(`验证码`)}}</text>
-								<input type="text" :placeholder="$t(`填写验证码`)" v-model="merchantData.code" @input="validateBtn"
-									class="codeIput" placeholder-class='placeholder' />
+								<input type="text" :placeholder="$t(`填写验证码`)" v-model="merchantData.code"
+									@input="validateBtn" class="codeIput" placeholder-class='placeholder' />
 								<button class="code" :disabled="disabled" :class="disabled === true ? 'on' : ''"
-									@click="getCode">
+									@click="code">
 									{{ text }}
 								</button>
 
@@ -79,11 +79,14 @@
 							</checkbox-group>
 							<button class="settleAgree" @click="getAgentAgreement">《{{$t(`代理商协议`)}}》</button>
 						</view>
-						<button class='submitBtn' :class="isAgree === true ? 'on':''" @click="formSubmit">{{$t(`提交申请`)}}</button>
+						<button class='submitBtn' :class="isAgree === true ? 'on':''"
+							@click="formSubmit">{{$t(`提交申请`)}}</button>
 
 					</view>
 			</view>
 		</form>
+		<Verify @success="success" :captchaType="'blockPuzzle'" :imgSize="{ width: '330px', height: '155px' }"
+			ref="verify"></Verify>
 		<view class="settlementAgreement" v-if="showProtocol">
 			<view class="setAgCount">
 				<i class="icon iconfont icon-cha" @click="showProtocol = false"></i>
@@ -132,6 +135,7 @@
 					{{$t(`返回首页`)}}
 				</view>
 		</view>
+
 	</view>
 </template>
 <script>
@@ -157,15 +161,18 @@
 	import authorize from '@/components/Authorize';
 	// #endif
 	import colors from "@/mixins/color";
+	import Verify from '@/pages/users/components/verify/verify.vue';
+	import sendVerifyCode from "@/mixins/SendVerifyCode";
 	const app = getApp();
 	export default {
 		components: {
+			Verify,
 			"jyf-parser": parser,
 			// #ifdef MP
 			authorize,
 			// #endif
 		},
-		mixins: [colors],
+		mixins: [sendVerifyCode, colors],
 		data() {
 			return {
 				inloading: true,
@@ -205,7 +212,9 @@
 				mer_i_id: null, // 代理商申请id
 				isType: false,
 				id: 0,
-				refusal_reason: ""
+				refusal_reason: "",
+				keyCode: '',
+				type: ''
 			};
 		},
 		beforeDestroy() {
@@ -245,17 +254,61 @@
 					this.protocol = res.data.content
 				})
 			},
-			// 获取验证码api
-			getCode() {
+			code() {
 				let that = this
-				getCodeApi().then(res => {
-					that.keyCode = res.data.key;
-					this.code()
-				}).catch(res => {
-					that.$util.Tips({
-						title: res
-					});
+				if (!that.merchantData.phone) return that.$util.Tips({
+					title: that.$t(`请填写手机号码`)
 				});
+				if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.merchantData.phone)) return that.$util.Tips({
+					title: that.$t(`请输入正确的手机号码`)
+				});
+				this.$refs.verify.show()
+			},
+			// 获取验证码api
+			// code() {
+			// 	let that = this
+			// 	getCodeApi().then(res => {
+			// 		that.keyCode = res.data.key;
+			// 		this.code()
+			// 	}).catch(res => {
+			// 		that.$util.Tips({
+			// 			title: res
+			// 		});
+			// 	});
+			// },
+			success(data) {
+				this.$refs.verify.hide()
+				getCodeApi()
+					.then(res => {
+						this.keyCode = res.data.key;
+						this.getCode(data);
+					})
+					.catch(res => {
+						this.$util.Tips({
+							title: res
+						});
+					});
+			},
+			async getCode(data) {
+				let that = this;
+				await registerVerify({
+						phone: that.merchantData.phone,
+						type: that.type,
+						key: that.keyCode,
+						captchaType: 'blockPuzzle',
+						captchaVerification: data.captchaVerification
+					})
+					.then(res => {
+						this.sendCode()
+						that.$util.Tips({
+							title: res.msg
+						});
+					})
+					.catch(res => {
+						that.$util.Tips({
+							title: res
+						});
+					});
 			},
 			// 获取历史提交数据详情
 			getGoodsDetails() {
@@ -345,28 +398,28 @@
 			},
 
 			// 获取验证码
-			async code() {
-				let that = this;
-				if (!that.merchantData.phone) return that.$util.Tips({
-					title: that.$t(`请输入手机号`)
-				});
-				if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.merchantData.phone)) return that.$util.Tips({
-					title: that.$t(`请输入正确的手机号码`)
-				});
-				await registerVerify({
-					phone: that.merchantData.phone,
-					key: that.keyCode,
-				}).then(res => {
-					that.$util.Tips({
-						title: res.msg
-					});
-					that.sendCode();
-				}).catch(err => {
-					return that.$util.Tips({
-						title: err
-					})
-				})
-			},
+			// async code() {
+			// 	let that = this;
+			// 	if (!that.merchantData.phone) return that.$util.Tips({
+			// 		title: that.$t(`请输入手机号`)
+			// 	});
+			// 	if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(that.merchantData.phone)) return that.$util.Tips({
+			// 		title: that.$t(`请输入正确的手机号码`)
+			// 	});
+			// 	await registerVerify({
+			// 		phone: that.merchantData.phone,
+			// 		key: that.keyCode,
+			// 	}).then(res => {
+			// 		that.$util.Tips({
+			// 			title: res.msg
+			// 		});
+			// 		that.sendCode();
+			// 	}).catch(err => {
+			// 		return that.$util.Tips({
+			// 			title: err
+			// 		})
+			// 	})
+			// },
 			getcaptcha() {
 				let that = this
 				getCaptcha().then(data => {

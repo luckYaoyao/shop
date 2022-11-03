@@ -24,7 +24,6 @@ import store from '@/store';
  * @param {Object} puid
  */
 export function silenceBindingSpread(app) {
-	console.log(app)
 	//#ifdef H5
 	let puid = Cache.get('spread'),
 		code = 0;
