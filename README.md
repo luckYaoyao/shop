@@ -30,7 +30,7 @@
 [官网](https://www.crmeb.com/) |
 [在线体验](http://v4.crmeb.net/admin/) |
 [帮助文档](https://doc.crmeb.com/single/crmeb_v4) |
-[技术社区](https://q.crmeb.com/)
+[技术社区](https://www.crmeb.com/ask/)
 
 [comment]: <> ([宽屏预览]&#40;https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md&#41;)
 
@@ -98,7 +98,7 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 ### 官方论坛
 
 
-产品BUG、优化建议，欢迎社区反馈：https://q.crmeb.com/?categoryId=147
+产品BUG、优化建议，欢迎社区反馈：https://www.crmeb.com/ask/thread/list?id=147
 
 
 ### 页面展示
