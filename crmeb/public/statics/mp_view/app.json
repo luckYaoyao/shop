@@ -219,5 +219,6 @@
   "usingComponents": {
     "skeleton": "/components/skeleton/index",
     "page-loading": "/components/pageLoading"
-  }
+  },
+  "sitemapLocation": "sitemap.json"
 }
