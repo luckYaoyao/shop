@@ -610,23 +610,27 @@ class PublicController
      */
     public function getLangJson()
     {
+        /** @var LangTypeServices $langTypeServices */
+        $langTypeServices = app()->make(LangTypeServices::class);
+        /** @var LangCountryServices $langCountryServices */
+        $langCountryServices = app()->make(LangCountryServices::class);
+
         $request = app()->request;
         //获取接口传入的语言类型
         if (!$range = $request->header('cb-lang')) {
-            if ($request->header('accept-language') !== null) {
-                $range = explode(',', $request->header('accept-language'))[0];
-            } else {
-                $range = 'zh-CN';
-            }
+//            //根据浏览器语言显示，如果浏览器语言在库中找不到，则使用简体中文
+//            if ($request->header('accept-language') !== null) {
+//                $range = explode(',', $request->header('accept-language'))[0];
+//            } else {
+//                $range = 'zh-CN';
+//            }
+            //没有传入则使用系统默认语言显示
+            $range = $langTypeServices->value(['is_default'=>1],'file_name');
         }
         // 获取type_id
-        /** @var LangCountryServices $langCountryServices */
-        $langCountryServices = app()->make(LangCountryServices::class);
         $typeId = $langCountryServices->value(['code' => $range], 'type_id') ?: 1;
 
         // 获取缓存key
-        /** @var LangTypeServices $langTypeServices */
-        $langTypeServices = app()->make(LangTypeServices::class);
         $langData = $langTypeServices->getColumn(['status' => 1, 'is_del' => 0], 'file_name', 'id');
         $langStr = 'api_lang_' . str_replace('-', '_', $langData[$typeId]);
 

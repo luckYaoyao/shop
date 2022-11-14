@@ -1368,7 +1368,7 @@ class StoreProductServices extends BaseServices
 
         /** @var StoreProductReplyServices $storeProductReplyService */
         $storeProductReplyService = app()->make(StoreProductReplyServices::class);
-        $data['reply'] = get_thumb_water($storeProductReplyService->getRecProductReply($id), 'small', ['pics']);
+        $data['reply'] = get_thumb_water($storeProductReplyService->getRecProductReply($id), 'big', ['pics']);
         [$replyCount, $goodReply, $replyChance] = $storeProductReplyService->getProductReplyData($id);
         $data['replyChance'] = $replyChance;
         $data['replyCount'] = $replyCount;

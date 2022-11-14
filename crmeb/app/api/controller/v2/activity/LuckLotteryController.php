@@ -33,7 +33,7 @@ class LuckLotteryController
     public function LotteryInfo(Request $request, $factor)
     {
         if (!$factor) return app('json')->fail(100100);
-        $lottery = $this->services->getFactorLottery((int)$factor);
+        $lottery = $this->services->getFactorLottery((int)$factor, '*', ['prize'], true);
         if (!$lottery) {
             return app('json')->fail(410318);
         }
@@ -62,6 +62,9 @@ class LuckLotteryController
      * 参与抽奖
      * @param Request $request
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function luckLottery(Request $request)
     {

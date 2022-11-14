@@ -24,11 +24,13 @@ class OutInterfaceServices extends BaseServices
     {
         $rule = trim(strtolower($request->rule()->getRule()));
         $method = trim(strtolower($request->method()));
-        $authList = $this->dao->getColumn([['id', 'in', $request->outInfo()['rules']]], 'method,url');
+        $authList = $this->dao->getColumn([['id', 'in', $request->outInfo()['rules']], ['type', '=', 1]], 'method,url');
         $rolesAuth = [];
         foreach ($authList as $item) {
             $rolesAuth[trim(strtolower($item['method']))][] = trim(strtolower(str_replace(' ', '', $item['url'])));
         }
+        $rule = str_replace('<', '{', $rule);
+        $rule = str_replace('>', '}', $rule);
         if (in_array('/' . $rule, $rolesAuth[$method])) {
             return true;
         } else {

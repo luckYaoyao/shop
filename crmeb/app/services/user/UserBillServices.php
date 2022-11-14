@@ -408,8 +408,11 @@ class UserBillServices extends BaseServices
      * @param array $where_time
      * @param string $field
      * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
-    public function getIntegralList(int $uid = 0, $where_time = [], string $field = '*')
+    public function getIntegralList(int $uid = 0, array $where_time = [], string $field = '*')
     {
         [$page, $limit] = $this->getPageValue();
         $where = ['category' => 'integral'];

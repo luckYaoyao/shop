@@ -67,6 +67,7 @@ class SystemMsgService extends NoticeService
                 $sdata['title'] = $title;
                 $sdata['type'] = 1;
                 $sdata['add_time'] = time();
+                $sdata['data'] = json_encode($data);
                 /** @var MessageSystemServices $MessageSystemServices */
                 $MessageSystemServices = app()->make(MessageSystemServices::class);
                 $MessageSystemServices->save($sdata);
@@ -105,6 +106,7 @@ class SystemMsgService extends NoticeService
                     $save[$key]['title'] = $title;
                     $save[$key]['type'] = 2;
                     $save[$key]['add_time'] = time();
+                    $save[$key]['data'] = json_encode($data);
                 }
                 $MessageSystemServices->saveAll($save);
             }

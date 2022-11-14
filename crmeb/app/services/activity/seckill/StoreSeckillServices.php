@@ -511,22 +511,28 @@ class StoreSeckillServices extends BaseServices
 
         //获取秒杀商品状态
         if ($storeInfo['status'] == 1) {
-            /** @var SystemGroupDataServices $systemGroupDataService */
-            $systemGroupDataService = app()->make(SystemGroupDataServices::class);
-            $seckillTime = array_column($systemGroupDataService->getConfigNameValue('routine_seckill_time'), null, 'id');
-            $config = $seckillTime[$storeInfo['time_id']] ?? false;
-            if (!$config) {
-                throw new ApiException(410322);
-            }
-            $now_hour = date('H', time());
-            $start_hour = $config['time'];
-            $end_hour = (int)$start_hour + (int)$config['continued'];
-            if ($start_hour <= $now_hour && $end_hour > $now_hour) {
-                $storeInfo['status'] = 1;
-            } else if ($start_hour > $now_hour) {
+            if ($storeInfo['start_time'] > time()) {
                 $storeInfo['status'] = 2;
-            } else {
+            } elseif ($storeInfo['end_time'] < time()) {
                 $storeInfo['status'] = 0;
+            } else {
+                /** @var SystemGroupDataServices $systemGroupDataService */
+                $systemGroupDataService = app()->make(SystemGroupDataServices::class);
+                $seckillTime = array_column($systemGroupDataService->getConfigNameValue('routine_seckill_time'), null, 'id');
+                $config = $seckillTime[$storeInfo['time_id']] ?? false;
+                if (!$config) {
+                    throw new ApiException(410322);
+                }
+                $now_hour = date('H', time());
+                $start_hour = $config['time'];
+                $end_hour = (int)$start_hour + (int)$config['continued'];
+                if ($start_hour <= $now_hour && $end_hour > $now_hour) {
+                    $storeInfo['status'] = 1;
+                } else if ($start_hour > $now_hour) {
+                    $storeInfo['status'] = 2;
+                } else {
+                    $storeInfo['status'] = 0;
+                }
             }
         } else {
             $storeInfo['status'] == 0;

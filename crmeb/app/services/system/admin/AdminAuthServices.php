@@ -43,7 +43,7 @@ class AdminAuthServices extends BaseServices
      * @return array
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
-    public function parseToken(string $token,int $code = 110003): array
+    public function parseToken(string $token, int $code = 110003): array
     {
         /** @var CacheService $cacheService */
         $cacheService = app()->make(CacheService::class);
@@ -96,7 +96,7 @@ class AdminAuthServices extends BaseServices
             $this->authFailAfter($id, $type);
             throw new AuthException($code);
         }
-        if ($pwd !== md5($adminInfo->pwd)) {
+        if ($pwd !== '' && $pwd !== md5($adminInfo->pwd)) {
             throw new AuthException($code);
         }
 

@@ -184,7 +184,7 @@ class StoreProductController
         /** @var StoreProductReplyServices $replyService */
         $replyService = app()->make(StoreProductReplyServices::class);
         $list = $replyService->getProductReplyList($id, $type);
-        return app('json')->success(get_thumb_water($list, 'mid', ['pics']));
+        return app('json')->success(get_thumb_water($list, 'big', ['pics']));
     }
 
     /**

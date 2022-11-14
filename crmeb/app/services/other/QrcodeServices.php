@@ -52,7 +52,7 @@ class QrcodeServices extends BaseServices
         $where['third_id'] = $id;
         $where['third_type'] = $type;
         $res = $this->dao->getOne($where);
-        if ($res) {
+        if (!$res) {
             $this->createTemporaryQrcode($id, $type);
             $res = $this->getTemporaryQrcode($type, $id);
         } else if (empty($res['expire_seconds']) || $res['expire_seconds'] < time()) {
