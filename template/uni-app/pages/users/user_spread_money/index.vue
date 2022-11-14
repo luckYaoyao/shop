@@ -19,7 +19,7 @@
 							<view class='listn'>
 								<block v-for="(child,indexn) in item.child" :key="indexn">
 									<view class='itemn acea-row row-between-wrapper'>
-										<view>
+										<view class="title">
 											<view class='name line1'>{{$t(child.title)}}</view>
 											<view>{{child.add_time}}</view>
 											<view class="fail-msg" v-if="child.fail_msg">
@@ -200,5 +200,14 @@
 
 	.commission-details .promoterHeader .headerCon .money .num {
 		font-family: 'Guildford Pro';
+	}
+	.sign-record .list .item .listn .itemn .name{
+		width: 100%;
+		// max-width: 100%;
+		white-space: break-spaces;
+	}
+	.sign-record .list .item .listn .itemn .title {
+		padding-right: 30rpx;
+		flex: 1;
 	}
 </style>

@@ -9,7 +9,7 @@
 							<image class="avatar" :src="userInfo.avatar" mode=""></image>
 							<view class="nickname">{{userInfo.nickname}}</view>
 							<view v-if="userInfo.is_agent_level" class="level" @click="jumbPath">
-								<text>{{userInfo.agent_level_name?userInfo.agent_level_name:$t(`分销等级`)}}</text>
+								<text>{{userInfo.agent_level_name?$t(userInfo.agent_level_name):$t(`分销等级`)}}</text>
 								<text v-if="userInfo.is_agent_level" class='iconfont icon-xiangyou'></text>
 							</view>
 						</view>

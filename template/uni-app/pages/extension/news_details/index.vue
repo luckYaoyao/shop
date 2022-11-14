@@ -112,7 +112,7 @@
 				this.shareInfoStatus = false
 			},
 			setShareInfo: function() {
-				let href = location.href;
+				let href = location.href + '&spid=' + this.$store.state.app.uid;
 				let configAppMessage = {
 					title: this.articleInfo.title,
 					desc: this.articleInfo.synopsis,

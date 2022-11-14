@@ -24,7 +24,7 @@
 							<span class='line-title' :class='item.is_use && coupon.count?"gray":""' v-else-if='item.type===1'>{{$t(`品类券`)}}</span>
 							<span class='line-title' :class='item.is_use && coupon.count?"gray":""' v-else>{{$t(`商品券`)}}</span>
 							<image src='../../static/images/fvip.png' class="pic" v-if="item.receive_type===4"></image>
-							<span class='name'>{{item.title}}</span>
+							<span class='name'>{{$t(item.title)}}</span>
 						</view>
 						<view class='data acea-row row-between-wrapper'>
 							<view v-if="item.coupon_time">{{$t(`领取后`)}}{{item.coupon_time}}{{$t(`天内可用`)}}</view>

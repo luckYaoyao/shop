@@ -228,8 +228,12 @@
 				let that = this;
 				extractBank().then(res => {
 					let array = res.data.extractBank;
-					array.unshift(that.$t(`请选择银行`));
+					array.unshift('请选择银行');
+					array.forEach((v, i) => {
+					    array.splice(i,1,that.$t(v))
+					})
 					that.$set(that, 'array', array);
+					console.log(array)
 					that.minPrice = res.data.minPrice;
 					that.brokerageType = res.data.brokerageType ? parseInt(res.data.brokerageType) : 0;
 				});

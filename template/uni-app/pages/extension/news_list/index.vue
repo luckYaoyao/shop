@@ -94,7 +94,9 @@
 	} from '@/api/api.js';
 	import home from '@/components/home';
 	import colors from "@/mixins/color";
-	import {HTTP_REQUEST_URL} from '@/config/app';
+	import {
+		HTTP_REQUEST_URL
+	} from '@/config/app';
 	export default {
 		components: {
 			home
@@ -102,7 +104,7 @@
 		mixins: [colors],
 		data() {
 			return {
-				imgHost:HTTP_REQUEST_URL,
+				imgHost: HTTP_REQUEST_URL,
 				coutList: [],
 				imgUrls: [],
 				articleList: [],
@@ -200,11 +202,11 @@
 						this.coutList = item.children || []
 						this.$set(this, 'articleList', []);
 						this.getCidArticle(this.activeCou);
-					}else{
+					} else {
 						this.page = 1;
 						this.status = false;
 						this.$set(this, 'articleList', []);
-						this.getCidArticle(item.id,true);
+						this.getCidArticle(item.id, true);
 					}
 
 				}
@@ -217,13 +219,16 @@
 	.noCommodity {
 		border-top-width: 0;
 		padding-bottom: 30rpx;
-		.emptyBox{
+
+		.emptyBox {
 			margin-top: 50rpx;
 			text-align: center;
-			.tips{
+
+			.tips {
 				color: #aaa;
 				font-size: 26rpx;
 			}
+
 			image {
 				width: 414rpx;
 				height: 304rpx;

@@ -5,7 +5,7 @@
 		<view class="live" v-if="isIframe">
 			<view v-if="isIframe && liveList.length>0">
 				<view class="title-box" v-if="titleInfo.length">
-					<text class="title">{{titleInfo[0].val}}</text>
+					<text class="title">{{$t(titleInfo[0].val)}}</text>
 					<navigator class="more">{{$t(`查看更多`)}}<text class="iconfont icon-jiantou"></text></navigator>
 				</view>
 				<view class="live-wrapper-a">
@@ -28,7 +28,7 @@
 							<image :src="item.share_img"></image>
 						</view>
 						<view class="info">
-							<view class="title line1">{{item.name}}</view>
+							<view class="title line1">{{$t(item.name)}}</view>
 							<!-- <view class="people">
 							<image :src="item.anchor_img" alt="">
 								<text>{{item.anchor_name}}</text>

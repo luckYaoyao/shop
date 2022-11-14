@@ -151,6 +151,9 @@
 				// if (!that.$store.getters.isLogin && uni.getStorageSync('authIng')) {
 				// 	uni.setStorageSync('authIng', false)
 				// }
+				if (options.back_url) {
+					uni.setStorageSync('snRouter', options.back_url);
+				}
 				if (!that.$store.getters.isLogin && Auth.isWeixin()) {
 					let code
 					if (options.code instanceof Array) {

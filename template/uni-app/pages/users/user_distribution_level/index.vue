@@ -15,7 +15,7 @@
 										<view class="text">
 											<view class="name">{{userInfo.nickname}}</view>
 											<view class="level" :class="{'level-sty':item.grade > (levelInfo.grade || 0)}">
-												{{item.name}}
+												{{$t(item.name)}}
 											</view>
 										</view>
 									</view>
@@ -71,7 +71,7 @@
 						<view class="text">
 							<view class="title">
 								<view class="name line2">
-									{{item.name}}
+									{{$t(item.name)}}
 									<text class="iconfont icon-wenti" @click="opHelp(index)"></text>
 								</view>
 
@@ -83,7 +83,7 @@
 									class="fill"></view>
 							</view>
 							<view class="info-box">
-								<view class="info">{{item.finish ? '' : item.task_type_title}}</view>
+								<view class="info">{{item.finish ? '' : $t(item.task_type_title)}}</view>
 								<view class="link" hover-class="none">
 									<text class="new-number">{{item.new_number}}</text>
 									/{{item.number}}

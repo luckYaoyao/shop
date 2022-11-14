@@ -2,14 +2,14 @@
 	<view class="aleart" v-if="aleartStatus">
 		<image src="../../../../static/images/poster-close.png" class="close" @click="posterImageClose"></image>
 		<view class="title">
-			{{aleartData.title}}
+			{{$t(aleartData.title)}}
 		</view>
 		<view class="aleart-body">
 			<image v-if="aleartData.img" class="goods-img" :src="aleartData.img" mode=""></image>
-			<text class="msg">{{aleartData.msg}}</text>
+			<text class="msg">{{$t(aleartData.msg)}}</text>
 		</view>
 		<view class="btn" @click="posterImageClose()">
-			{{aleartData.btn}}
+			{{$t('我知道了')}}
 		</view>
 	</view>
 </template>
@@ -37,16 +37,19 @@
 			aleartType(type) {
 				if (type === 1) {
 					this.aleartData = {
-						title: this.$t(`no_raffle`),
-						msg: this.$t(`lottery_msg`),
-						btn: this.$t(`i_see`)
+						title: '暂无抽奖资格',
+						msg: `1、您未关注公众号
+2、您未获得VIP权限，获取VIP途径：
+（1）购买过打通版的用户可在会员群联系官方客服开通
+（2）官方小程序商城购买CRMEB打通版、企业版后自动开通`,
+						btn: '我知道了'
 					}
 				} else if (type === 2) {
 					this.aleartData = {
-						title: this.$t(`lottery_result`),
+						title: '中奖记录',
 						img: this.alData.image,
 						msg: this.alData.prompt,
-						btn: this.$t(`ok`),
+						btn: '我知道了',
 						type: this.alData.type
 					}
 				}

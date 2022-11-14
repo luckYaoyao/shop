@@ -59,7 +59,7 @@
 								@click="changeSort(item, index)" :class="{ on: curSort == index }">
 								<image :src="item.pic" mode="" v-if="item.pic"></image>
 								<image src="/static/images/sort-img.png" mode="" v-else></image>
-								<view class="txt">{{ item.cate_name }}</view>
+								<view class="txt">{{ $t(item.cate_name) }}</view>
 							</view>
 						</view>
 					</scroll-view>
@@ -99,7 +99,7 @@
 								@click="changeSort(item, index)" :class="{ on: curSort == index }">
 								<image :src="item.pic" mode="" v-if="item.pic"></image>
 								<image src="/static/images/sort-img.png" mode="" v-else></image>
-								<view class="txt">{{ item.cate_name }}</view>
+								<view class="txt">{{ $t(item.cate_name) }}</view>
 							</view>
 						</view>
 					</scroll-view>

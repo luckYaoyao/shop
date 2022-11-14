@@ -15,7 +15,7 @@
 					<view class="pic-box pic-box-color acea-row row-center-wrapper row-column" :class="activePic == index ? 'pic-box-color-active' : ''"
 					 v-for="(item, index) in picList" :key="index" @click="picCharge(index, item)" v-if="item.price">
 						<view class="pic-number-pic">
-							<span class="pic-number"> {{$t(`元`)}}</span>{{ item.price }}
+							{{ item.price }}<span class="pic-number"> {{$t(`元`)}}</span>
 						</view>
 						<view class="pic-number">{{$t(`赠送`)}}：{{ item.give_money }} {{$t(`元`)}} </view>
 					</view>
@@ -26,7 +26,7 @@
 					<view class="tips-box">
 						<view class="tips mt-30">{{$t(`注意事项`)}}：</view>
 						<view class="tips-samll" v-for="item in rechargeAttention" :key="item">
-							{{ item }}
+							{{ $t(item) }}
 						</view>
 					</view>
 
@@ -40,7 +40,7 @@
 					<view class="tips-box">
 						<view class="tips mt-30">{{$t(`注意事项`)}}：</view>
 						<view class="tips-samll" v-for="item in rechargeAttention" :key="item">
-							{{ item }}
+							{{ $t(item) }}
 						</view>
 					</view>
 				</view>

@@ -8,7 +8,7 @@
 				</view>
 			</view>
 			<view class="read-all" @click="allLook()">
-				全部已读
+				{{$t(`全部已读`)}}
 			</view>
 		</view>
 		<view v-if="list.length && type ===1" class="list">

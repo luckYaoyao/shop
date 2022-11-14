@@ -41,7 +41,7 @@
 					</view>
 					<view class='item acea-row row-between-wrapper' v-for="(item,index) in integralList" :key="index">
 						<view>
-							<view class='state'>{{$t(item.mark)}}</view>
+							<view class='state'>{{$t(item.title)}}</view>
 							<view>{{item.add_time}}</view>
 						</view>
 						<view class='num font-color' v-if="item.pm">+{{item.number}}</view>

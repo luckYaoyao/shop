@@ -7,7 +7,7 @@
 			<view v-if="expList.length" class="list">
 				<view class="item acea-row row-between-wrapper" v-for="(item,index) in expList">
 					<view class="text">
-						<view class="name">{{item.title}}</view>
+						<view class="name">{{$t(item.title)}}</view>
 						<view class="data">{{item.add_time}}</view>
 					</view>
 					<view class="num" v-if="item.pm">+{{item.number}}</view>

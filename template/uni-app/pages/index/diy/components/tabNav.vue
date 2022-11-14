@@ -80,7 +80,7 @@
 				getCategoryList().then(res => {
 					res.data.unshift({
 						"id": -99,
-						'cate_name': that.$t(`首页`)
+						'cate_name': '首页'
 					})
 					that.tabTitle = res.data;
 					setTimeout((e) => {
