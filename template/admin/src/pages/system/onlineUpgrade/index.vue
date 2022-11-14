@@ -24,7 +24,7 @@
                 <div class="time">{{item.release_time}}</div>
                 <Timeline class="list">
                     <TimelineItem>
-                        <Icon :type="index==0 ? 'md-radio-button-on' : 'md-radio-button-off'" slot="dot"/>
+                        <!-- <Icon :type="index==0 ? 'md-radio-button-on' : 'md-radio-button-off'" slot="dot"/> -->
                         <Collapse simple>
                             <Panel hide-arrow>
                                 {{item.title}} v{{item.first_version}}.{{item.second_version}}.{{item.third_version}}.{{item.fourth_version}}<Icon type="ios-arrow-down" />
@@ -37,7 +37,7 @@
                         </Collapse>
                     </TimelineItem>
                     <Button v-if="item.client_package_link" type="success"  class="primary btn" @click="downloadFile(item.client_package_link)">移动端源码</Button>
-                    <Button v-if="item.pc_package_link" type="primary" class="primary btn1" @click="downloadFile(item.client_package_link)">PC端源码</Button>
+                    <Button v-if="item.pc_package_link" type="primary" class="primary btn1" @click="downloadFile(item.pc_package_link)">PC端源码</Button>
                 </Timeline>
             </div>
         </div>
@@ -119,7 +119,7 @@
           <div class="success">升级失败</div>
         </div> -->
         <div v-if="upgradeProgress.speed == '100.0'" slot="footer" class="footer2">
-          <div><Button class="confirm" type="primary" shape="circle" @click="back()">确认</Button></div>
+          <Button class="confirm" type="primary" shape="circle" @click="back()">确认</Button>
           <!-- <div><Button class="back" shape="circle" @click="backSure()">返回</Button></div> -->
         </div>
     </Modal>
@@ -554,19 +554,20 @@ export default {
 <style lang="stylus" scoped>
 .active {
   padding: 6px 0;
-  background-color: #eee !important;
+  // background-color: #eee !important;
 }
 
 .active .ivu-collapse-simple {
-  background-color: #eee !important;
+  // background-color: #eee !important;
 }
 
 .active .ivu-collapse-content {
-  background-color: #eee !important;
+  // background-color: #eee !important;
 }
 
 .active .ivu-timeline-item-head-custom {
-  background-color: #eee !important;
+  // background-color: #fff !important;
+  // z-index 9999
 }
 
 .active .btn {
@@ -651,7 +652,7 @@ export default {
 
 .upgrade .contentTime .ivu-collapse > .ivu-collapse-item > .ivu-collapse-header {
   height: unset !important;
-  line-height: unset !important;
+  line-height: 20px !important;
   border: 0 !important;
   font-size: 16px !important;
   color: #333333;
@@ -690,6 +691,7 @@ export default {
 
 .upgrade .contentTime .time {
   font-size: 14px;
+  line-height: 14px;
   color: #999;
   text-align: right;
   padding-right: 28px;
@@ -699,10 +701,10 @@ export default {
 .upgrade .contentTime .ivu-timeline-item:after {
   content: ' ';
   position: absolute;
-  top: 0;
-  left: 7px;
+  top: 13px;
+  left: 6.5px;
   width: 1px;
-  height: 100%;
+  height: calc(100% - 13px);
   background-color: #e8eaec;
 }
 
@@ -718,12 +720,18 @@ export default {
 .ivu-timeline-item-head-custom {
   left: -24px;
 }
-
+.upgrade .contentTimed .on{
+  display:flex;
+  flex-wrap: nowrap;
+}
 .upgrade .contentTime .on:first-child .ivu-timeline-item-head-custom {
   color: #1890FF;
   font-size: 18px;
 }
+/deep/ .ivu-collapse > .ivu-collapse-item > .ivu-collapse-header{
+  line-height: 20px;
 
+}
 .upgrade .contentTimed .on .ivu-collapse > .ivu-collapse-item > .ivu-collapse-header {
   color: #1890FF;
 }
@@ -820,7 +828,14 @@ export default {
     top: 0;
   }
 }
-
+/deep/ .vertical-center-modal .ivu-modal-header{
+  padding: 0 !important;
+  border: none;
+}
+/deep/ .ivu-modal-content{
+  border-radius: 14px 14px 0 0;
+  overflow hidden
+}
 .footer {
   display: flex;
   justify-content: space-around;
@@ -870,6 +885,8 @@ export default {
 .footer2 {
   display: flex;
   flex-wrap: wrap;
+  justify-content center
+  align-items: center
   flex-direction: column;
 
   .confirm, .back {
