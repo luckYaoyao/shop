@@ -1,7 +1,7 @@
 <template>
-  <a @click="handleChange" type="text" :class="['sider-trigger-a', collapsed ? 'collapsed' : '']"
+  <span @click="handleChange" type="text" :class="['sider-trigger-a', collapsed ? 'collapsed' : '']"
     ><i class="iconfont" :class="collapsed ? 'iconcaidanzhankai' : 'iconcaidanshouqi'"></i
-  ></a>
+  ></span>
 </template>
 <script>
 export default {
@@ -25,12 +25,7 @@ export default {
 };
 </script>
 <style lang="less" scoped>
-@import './sider-trigger.less';
-.sider-trigger-a {
-  padding: 14px 6px;
-  margin-left: 10px;
-  line-height: 16px;
-}
+@import 'sider-trigger.less';
 .iconcaidanshouqi {
   font-size: 16px;
 }

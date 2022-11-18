@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt10">
     <!--头部-->
     <base-info ref="baseInfo" />
     <!--小方块-->
