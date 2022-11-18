@@ -30,7 +30,7 @@ use app\dao\system\upgrade\UpgradeLogDao;
  */
 class UpgradeServices extends BaseServices
 {
-    const LOGIN_URL = 'http:/upgrade.crmeb.net/api/login';
+    const LOGIN_URL = 'http://upgrade.crmeb.net/api/login';
     const UPGRADE_URL = 'http://upgrade.crmeb.net/api/upgrade/list';
     const UPGRADE_CURRENT_URL = 'http://upgrade.crmeb.net/api/upgrade/current_list';
     const AGREEMENT_URL = 'http://upgrade.crmeb.net/api/upgrade/agreement';
