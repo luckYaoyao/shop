@@ -4,6 +4,7 @@
   "author": "Lison<lison16new@163.com>",
   "private": false,
   "scripts": {
+    "dev": "vue-cli-service serve --open --mode=dev",
     "serve": "vue-cli-service serve --open --mode=dev",
     "build": "vue-cli-service build --mode=production",
     "eslint:comment": "使用 ESLint 检查并自动修复 src 目录下所有扩展名为 .js 和 .vue 的文件",
