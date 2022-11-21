@@ -287,7 +287,7 @@ export default {
   height: 50px;
 }
 .main .tag-nav-wrapper {
-  // height: 10px;
+  height: 42px;
   background: unset;
 }
 .open-image {
