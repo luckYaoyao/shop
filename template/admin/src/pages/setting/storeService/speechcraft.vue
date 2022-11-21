@@ -1,10 +1,5 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-      </div>
-    </div>
     <Row class="ivu-mt box-wrapper">
       <Col span="3" class="left-wrapper">
         <Menu :theme="theme3" :active-name="sortName" width="auto">

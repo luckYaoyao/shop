@@ -1,6 +1,5 @@
 <template>
   <div>
-    Î
     <div class="i-layout-page-header">
       <router-link :to="{ path: '/admin/setting/pages/devise' }"
         ><Button icon="ios-arrow-back" size="small" class="mr20">返回</Button></router-link

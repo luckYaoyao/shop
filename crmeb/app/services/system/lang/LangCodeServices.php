@@ -6,6 +6,7 @@ use app\dao\system\lang\LangCodeDao;
 use app\services\BaseServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\CacheService;
+use crmeb\utils\Translate;
 
 class LangCodeServices extends BaseServices
 {
@@ -138,5 +139,31 @@ class LangCodeServices extends BaseServices
             CacheService::redisHandler()->delete($langStr);
         }
         return true;
+    }
+
+    /**
+     * 机器翻译
+     * @param string $text
+     * @return array
+     * @throws \Throwable
+     */
+    public function langCodeTranslate(string $text = ''): array
+    {
+        $translator = Translate::getInstance();
+        $translator->setAccessKey('');
+        $translator->setSecretKey('');
+        /** @var LangTypeServices $langTypeServices */
+        $langTypeServices = app()->make(LangTypeServices::class);
+        $typeList = $langTypeServices->getColumn([['status', '=', 1], ['is_del', '=', 0]], 'language_name,file_name,id', 'id');
+        $data = [];
+        foreach ($typeList as $item) {
+            if ($item['file_name'] == 'zh-Hant') {
+                $lang = 'zh-Hant';
+            } else {
+                $lang = substr($item['file_name'], 0, 2);
+            }
+            $data[$item['id']] = $translator->translateText("", $lang, array($text))[0]['Translation'];
+        }
+        return $data;
     }
 }

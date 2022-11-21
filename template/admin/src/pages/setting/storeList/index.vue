@@ -1,18 +1,13 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">提货点</span>
-      </div>
-      <div>
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <div class="mb20">
         <Tabs v-model="artFrom.type" @on-click="onClickTab">
           <TabPane :label="headeNum.show.name + '(' + headeNum.show.num + ')'" name="0" />
           <TabPane :label="headeNum.hide.name + '(' + headeNum.hide.num + ')'" name="1" />
           <TabPane :label="headeNum.recycle.name + '(' + headeNum.recycle.num + ')'" name="2" />
         </Tabs>
       </div>
-    </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
       <Form
         ref="artFrom"
         :model="artFrom"

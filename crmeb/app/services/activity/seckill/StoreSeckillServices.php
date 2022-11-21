@@ -513,7 +513,7 @@ class StoreSeckillServices extends BaseServices
         if ($storeInfo['status'] == 1) {
             if ($storeInfo['start_time'] > time()) {
                 $storeInfo['status'] = 2;
-            } elseif ($storeInfo['end_time'] < time()) {
+            } elseif ($storeInfo['stop_time'] < time()) {
                 $storeInfo['status'] = 0;
             } else {
                 /** @var SystemGroupDataServices $systemGroupDataService */

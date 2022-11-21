@@ -211,6 +211,8 @@ Route::group('setting', function () {
     Route::post('lang_code/save', 'v1.setting.LangCode/langCodeSave')->option(['real_name' => '保存修改语言']);
     //删除语言
     Route::delete('lang_code/del/:id', 'v1.setting.LangCode/langCodeDel')->option(['real_name' => '删除语言']);
+    //机器翻译
+    Route::post('lang_code/translate', 'v1.setting.LangCode/langCodeTranslate')->option(['real_name' => '机器翻译']);
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,

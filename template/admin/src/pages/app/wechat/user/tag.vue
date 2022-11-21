@@ -1,10 +1,5 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-      </div>
-    </div>
     <Card :bordered="false" dis-hover class="save_from ivu-mt">
       <Button type="primary" icon="md-add" @click="add">{{ '添加' + $route.meta.title }}</Button>
       <Table

@@ -1,13 +1,5 @@
 <template>
   <div :style="bgcolors">
-    <div class="i-layout-page-header">
-      <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
-      <div>
-        <div style="float: right">
-          <!-- <Button class="bnt" type="primary" @click="save">保存</Button> -->
-        </div>
-      </div>
-    </div>
     <div class="box-wrapper">
       <div v-if="name == 'user_recharge_quota'" class="iframe">
         <div class="iframe-boxs">

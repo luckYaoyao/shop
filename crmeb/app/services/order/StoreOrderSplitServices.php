@@ -170,6 +170,7 @@ class StoreOrderSplitServices extends BaseServices
                 $new_order = $this->dao->get($new_id);
                 $storeOrderCartInfoServices->clearOrderCartInfo($new_id);
                 $this->splitComputeOrder((int)$new_id, $cart_data_all, (float)($change_price ? $order_pay_price : 0), (float)$orderInfo['pay_price'], (float)($new_order['pay_price'] ?? 0));
+                $new_order = $this->dao->get($new_id);
                 if ($key == 'new') {
                     $order = $new_order;
                 } else {

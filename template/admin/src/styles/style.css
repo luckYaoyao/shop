@@ -508,6 +508,7 @@ body {
 }
 .i-layout-page-header {
   margin: 0 -18px;
+  /* display: none; */
   background-color: #fff;
   padding: 7px 32px 0 32px;
 }

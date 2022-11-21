@@ -1,10 +1,5 @@
 <template>
   <div class="diy-page">
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title mr20">页面设计</span>
-      </div>
-    </div>
     <Card :bordered="false" dis-hover class="ivu-mt" style="margin: 0 10px">
       <div class="diy-wrapper" :style="'height:' + clientHeight + 'px;'">
         <!-- 左侧 -->

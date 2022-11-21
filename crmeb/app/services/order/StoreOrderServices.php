@@ -2418,6 +2418,9 @@ HTML;
         if (count($res) == 2) {
             return ['type' => 0];
         } else {
+            if ($res[0] == 2 && sys_config('store_self_mention') == 0) {
+                return ['type' => 1];
+            }
             return ['type' => (int)$res[0]];
         }
     }

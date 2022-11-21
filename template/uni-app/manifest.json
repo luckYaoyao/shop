@@ -3,7 +3,7 @@
     "appid" : "__UNI__A3F1ED4",
     "description" : "CRMEB标准版",
     "versionName" : "4.6.0",
-    "versionCode" : 460,
+    "versionCode" : 461,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -173,7 +173,7 @@
     "quickapp" : {},
     /* 小程序特有相关 */
     "mp-weixin" : {
-        "appid" : "wx3b82801238ca1b57",
+        "appid" : "wx1234567890",
         "setting" : {
             "urlCheck" : false,
             "minified" : true,

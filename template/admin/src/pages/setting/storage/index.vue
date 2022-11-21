@@ -1,15 +1,17 @@
 <template>
   <div class="message">
-    <div class="i-layout-page-header">
-      <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-      <div>
-        <Tabs v-model="currentTab" @on-click="changeTab">
-          <TabPane :label="item.label" :name="item.value.toString()" v-for="(item, index) in headerList" :key="index" />
-        </Tabs>
-      </div>
-    </div>
     <div class="table-box" style="padding-bottom: 0">
       <Card :bordered="false" dis-hover class="">
+        <div class="mb20">
+          <Tabs v-model="currentTab" @on-click="changeTab">
+            <TabPane
+              :label="item.label"
+              :name="item.value.toString()"
+              v-for="(item, index) in headerList"
+              :key="index"
+            />
+          </Tabs>
+        </div>
         <h3>使用说明</h3>
         <template v-if="currentTab == 1">
           <p>上传图片时会生成缩略图</p>

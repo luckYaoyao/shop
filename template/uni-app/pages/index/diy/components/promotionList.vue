@@ -2,8 +2,8 @@
 	<view class="index-product-wrapper" :class="iSshowH?'on':''" :style="'margin-top:'+mbConfig*2+'rpx;'" v-show="!isSortType">
 		<view class="nav-bd" :style="{justifyContent:titleConfig===0?'flex-start':titleConfig===1?'space-around':'flex-end'}">
 			<view class="item" v-for="(item,index) in explosiveMoney" :index="index" @click="ProductNavTab(item.link.activeVal,index)">
-				<view class="txt" :style="{ 'color': index==ProductNavindex ? themeColor : '' }">{{item.chiild[0].val}}</view>
-				<view class="label" :style="{ 'background': index==ProductNavindex ? themeColor : '','color': index==ProductNavindex ? '#fff' : '' }">{{item.chiild[1].val}}</view>
+				<view class="txt" :style="{ 'color': index==ProductNavindex ? themeColor : '' }">{{$t(item.chiild[0].val)}}</view>
+				<view class="label" :style="{ 'background': index==ProductNavindex ? themeColor : '','color': index==ProductNavindex ? '#fff' : '' }">{{$t(item.chiild[1].val)}}</view>
 			</view>
 		</view>
 		<!-- 首发新品 -->

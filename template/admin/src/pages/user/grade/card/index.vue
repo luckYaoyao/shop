@@ -1,10 +1,5 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-      </div>
-    </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
       <Form :model="gradeFrom" :label-width="labelWidth" :label-position="labelPosition" @submit.native.prevent>
         <Row type="flex" :gutter="24">

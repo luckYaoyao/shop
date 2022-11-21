@@ -1,18 +1,5 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">发票管理</span>
-        <div>
-          <Tabs v-model="currentTab" @on-click="onClickTab" v-if="tablists">
-            <TabPane :label="'全部发票（' + tablists.all + '）'" name=" " />
-            <TabPane :label="'待开发票（' + tablists.noOpened + '）'" name="1" />
-            <TabPane :label="'已开发票（' + tablists.opened + '）'" name="2" />
-            <TabPane :label="'退款发票（' + tablists.refund + '）'" name="3" />
-          </Tabs>
-        </div>
-      </div>
-    </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
       <div class="table_box">
         <Form
@@ -81,6 +68,12 @@
           </Row>
         </Form>
       </div>
+      <Tabs v-model="currentTab" @on-click="onClickTab" v-if="tablists" class="mb20">
+        <TabPane :label="'全部发票（' + tablists.all + '）'" name=" " />
+        <TabPane :label="'待开发票（' + tablists.noOpened + '）'" name="1" />
+        <TabPane :label="'已开发票（' + tablists.opened + '）'" name="2" />
+        <TabPane :label="'退款发票（' + tablists.refund + '）'" name="3" />
+      </Tabs>
       <Table
         :columns="columns"
         :data="orderList"

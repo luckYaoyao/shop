@@ -1,11 +1,6 @@
 <template>
   <div>
-    <div class="i-layout-page-header mb20">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-      </div>
-    </div>
-    <Card :bordered="false" dis-hover>
+    <Card :bordered="false" dis-hover class="ivu-mt">
       <div class="headers">
         <div class="search">
           <div>

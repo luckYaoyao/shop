@@ -147,15 +147,18 @@ class UpgradeController
 //                file_put_contents(app()->getRootPath() . '.version', "version=" . $data['new_version'] . "\nversion_code=" . $data['new_code']);
 //                return app('json')->success(['sleep' => -1]);
 //            }
-            $limit = 100;
-            if (!$this->setIsUpgrade('cartInfo')) {
-                $res = $this->handleCartInfo((int)$sleep, (int)$page, (int)$limit);
-                return app('json')->success($res);
-            } else {
-                file_put_contents(app()->getRootPath() . '.version', "version=" . $data['new_version'] . "\nversion_code=" . $data['new_code'] . "\napp_id=ze7x9rxsv09l6pvsyo" . "\napp_key=fuF7U9zaybLa5gageVQzxtxQMFnvU2OI");
-                $this->services->generateSignature();
-                return app('json')->success(['sleep' => -1]);
-            }
+//            $limit = 100;
+//            if (!$this->setIsUpgrade('cartInfo')) {
+//                $res = $this->handleCartInfo((int)$sleep, (int)$page, (int)$limit);
+//                return app('json')->success($res);
+//            } else {
+//                file_put_contents(app()->getRootPath() . '.version', "version=" . $data['new_version'] . "\nversion_code=" . $data['new_code'] . "\napp_id=ze7x9rxsv09l6pvsyo" . "\napp_key=fuF7U9zaybLa5gageVQzxtxQMFnvU2OI");
+//                $this->services->generateSignature();
+//                return app('json')->success(['sleep' => -1]);
+//            }
+            file_put_contents(app()->getRootPath() . '.version', "version=" . $data['new_version'] . "\nversion_code=" . $data['new_code'] . "\nplatform=CRMEB\napp_id=ze7x9rxsv09l6pvsyo" . "\napp_key=fuF7U9zaybLa5gageVQzxtxQMFnvU2OI");
+            $this->services->generateSignature();
+            return app('json')->success(['sleep' => -1]);
         }
         $sql = $sql_arr[$sleep];
         Db::startTrans();

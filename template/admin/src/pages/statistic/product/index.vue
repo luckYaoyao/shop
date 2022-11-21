@@ -1,10 +1,5 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">商品统计</span>
-      </div>
-    </div>
     <product-info></product-info>
     <product-ranking></product-ranking>
   </div>

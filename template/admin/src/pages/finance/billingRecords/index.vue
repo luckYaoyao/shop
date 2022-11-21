@@ -1,46 +1,36 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-        <div>
-          <Tabs @on-click="onClickTab">
-            <TabPane label="日账单" name="day" />
-            <TabPane label="周账单" name="week" />
-            <TabPane label="月账单" name="month" />
-          </Tabs>
-        </div>
-      </div>
-    </div>
-
-    <Card :bordered="false" dis-hover class="ivu-mt box">
-      <Form
-        ref="formValidate"
-        :model="formValidate"
-        :label-width="labelWidth"
-        :label-position="labelPosition"
-        @submit.native.prevent
-      >
-        <FormItem label="创建时间：">
-          <DatePicker
-            :editable="false"
-            :clearable="false"
-            @on-change="onchangeTime"
-            :value="timeVal"
-            format="yyyy/MM/dd"
-            type="daterange"
-            placement="bottom-start"
-            placeholder="请选择时间"
-            style="width: 200px"
-            :options="options"
-            class="mr20"
-          ></DatePicker>
-        </FormItem>
-      </Form>
-    </Card>
-
     <Card :bordered="false" dis-hover class="ive-mt tablebox">
-      <div class="btnbox"></div>
+      <div class="ive-mt tabbox">
+        <Tabs @on-click="onClickTab" class="mb20">
+          <TabPane label="日账单" name="day" />
+          <TabPane label="周账单" name="week" />
+          <TabPane label="月账单" name="month" />
+        </Tabs>
+        <Form
+          ref="formValidate"
+          :model="formValidate"
+          :label-width="labelWidth"
+          :label-position="labelPosition"
+          @submit.native.prevent
+        >
+          <FormItem label="创建时间：">
+            <DatePicker
+              :editable="false"
+              :clearable="false"
+              @on-change="onchangeTime"
+              :value="timeVal"
+              format="yyyy/MM/dd"
+              type="daterange"
+              placement="bottom-start"
+              placeholder="请选择时间"
+              style="width: 200px"
+              :options="options"
+              class="mr20"
+            ></DatePicker>
+          </FormItem>
+        </Form>
+      </div>
       <div class="table">
         <Table
           :columns="columns"

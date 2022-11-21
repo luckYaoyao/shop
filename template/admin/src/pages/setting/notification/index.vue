@@ -1,86 +1,79 @@
 <template>
   <div class="message">
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-        <div>
-          <Tabs v-model="currentTab" @on-click="changeTab">
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <div class="mb20">
+        <Tabs v-model="currentTab" @on-click="changeTab">
           <TabPane :label="item.label" :name="item.value.toString()" v-for="(item, index) in headerList" :key="index" />
         </Tabs>
-        </div>
       </div>
-    </div>
-    <div class="table-box">
-      <Card :bordered="false" dis-hover class="ivu-mt">
-        <Row type="flex" class="mb20" v-if="currentTab == 1">
-          <Col v-bind="grid">
-            <Button
-              v-auth="['app-wechat-template-sync']"
-              icon="md-list"
-              type="success"
-              @click="routineTemplate"
-              style="margin-left: 20px"
-              >同步小程序订阅消息</Button
-            >
-            <Button
-              v-auth="['app-wechat-template-sync']"
-              icon="md-list"
-              type="success"
-              @click="wechatTemplate"
-              style="margin-left: 20px"
-              >同步微信模版消息</Button
-            >
-          </Col>
-        </Row>
-        <Alert v-if="currentTab == 1">
-          <template slot="desc">
-            登录微信公众号后台，选择模版消息，将模版消息的所在行业修改副行业为《其他/其他》<br />登录微信小程序后台，基本设置，服务类目增加《生活服务
-            > 百货/超市/便利店》
-          </template>
-        </Alert>
-        <Table
-          :columns="currentTab == 1 ? columns : columns2"
-          :data="levelLists"
-          ref="table"
-          class="mt25"
-          :loading="loading"
-          highlight-row
-          no-userFrom-text="暂无数据"
-          no-filtered-userFrom-text="暂无筛选结果"
-        >
-          <template slot-scope="{ row, index }" slot="name">
-            <span class="table">
-              {{ row.name }}
-            </span>
-          </template>
-          <template slot-scope="{ row, index }" slot="title">
-            <span class="table">{{ row.title }}</span>
-          </template>
-          <template
-            slot-scope="{ row }"
-            v-for="item in ['is_system', 'is_wechat', 'is_routine', 'is_sms', 'is_ent_wechat']"
-            :slot="item"
+      <Row type="flex" class="mb20" v-if="currentTab == 1">
+        <Col v-bind="grid">
+          <Button
+            v-auth="['app-wechat-template-sync']"
+            icon="md-list"
+            type="success"
+            @click="routineTemplate"
+            style="margin-left: 20px"
+            >同步小程序订阅消息</Button
           >
-            <div v-if="item === 'is_ent_wechat' && currentTab == 1" :key="index">--</div>
-            <i-switch
-              v-model="row[item]"
-              :value="row[item]"
-              :true-value="1"
-              :false-value="2"
-              @on-change="changeSwitch(row, item)"
-              size="large"
-              v-if="row[item] > 0 && currentTab !== 1"
-            >
-              <span slot="open">开启</span>
-              <span slot="close">关闭</span>
-            </i-switch>
-          </template>
-          <template slot-scope="{ row, index }" slot="setting">
-            <span class="setting btn" @click="setting(item, row)">设置</span>
-          </template>
-        </Table>
-      </Card>
-    </div>
+          <Button
+            v-auth="['app-wechat-template-sync']"
+            icon="md-list"
+            type="success"
+            @click="wechatTemplate"
+            style="margin-left: 20px"
+            >同步微信模版消息</Button
+          >
+        </Col>
+      </Row>
+      <Alert v-if="currentTab == 1">
+        <template slot="desc">
+          登录微信公众号后台，选择模版消息，将模版消息的所在行业修改副行业为《其他/其他》<br />登录微信小程序后台，基本设置，服务类目增加《生活服务
+          > 百货/超市/便利店》
+        </template>
+      </Alert>
+      <Table
+        :columns="currentTab == 1 ? columns : columns2"
+        :data="levelLists"
+        ref="table"
+        class="mt25"
+        :loading="loading"
+        highlight-row
+        no-userFrom-text="暂无数据"
+        no-filtered-userFrom-text="暂无筛选结果"
+      >
+        <template slot-scope="{ row, index }" slot="name">
+          <span class="table">
+            {{ row.name }}
+          </span>
+        </template>
+        <template slot-scope="{ row, index }" slot="title">
+          <span class="table">{{ row.title }}</span>
+        </template>
+        <template
+          slot-scope="{ row }"
+          v-for="item in ['is_system', 'is_wechat', 'is_routine', 'is_sms', 'is_ent_wechat']"
+          :slot="item"
+        >
+          <div v-if="item === 'is_ent_wechat' && currentTab == 1" :key="index">--</div>
+          <i-switch
+            v-model="row[item]"
+            :value="row[item]"
+            :true-value="1"
+            :false-value="2"
+            @on-change="changeSwitch(row, item)"
+            size="large"
+            v-if="row[item] > 0 && currentTab !== 1"
+          >
+            <span slot="open">开启</span>
+            <span slot="close">关闭</span>
+          </i-switch>
+        </template>
+        <template slot-scope="{ row, index }" slot="setting">
+          <span class="setting btn" @click="setting(item, row)">设置</span>
+        </template>
+      </Table>
+    </Card>
   </div>
 </template>
 

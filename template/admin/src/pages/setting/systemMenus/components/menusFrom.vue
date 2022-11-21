@@ -56,7 +56,7 @@
               <Input v-model="formValidate.api_url" placeholder="请输入接口地址" prop="api_url"></Input>
             </FormItem>
           </Col>
-          <!-- <Col v-bind="grid" v-if="authType">
+          <!-- <Col v-bind="grid" v-show="authType">
             <FormItem label="接口参数：">
               <Input
                 v-model="formValidate.params"
@@ -64,7 +64,7 @@
               ></Input>
             </FormItem>
           </Col> -->
-          <Col v-bind="grid" v-if="authType">
+          <Col v-bind="grid" v-show="authType">
             <FormItem label="路由地址：" prop="menu_path">
               <Input v-model="formValidate.menu_path" placeholder="请输入路由地址"></Input>
             </FormItem>
@@ -74,7 +74,7 @@
               <Input v-model="formValidate.unique_auth" placeholder="请输入权限标识"></Input>
             </FormItem>
           </Col>
-          <Col v-bind="grid" v-if="authType">
+          <Col v-bind="grid" v-show="authType">
             <FormItem label="图标：">
               <Input
                 v-model="formValidate.icon"
@@ -84,7 +84,7 @@
               ></Input>
             </FormItem>
           </Col>
-          <!--<Col v-bind="grid" v-if="authType">-->
+          <!--<Col v-bind="grid" v-show="authType">-->
           <!--<FormItem label="顶部菜单：">-->
           <!--<Select v-model="formValidate.header" filterable allow-create @on-create="handleCreate1">-->
           <!--<Option v-for="(item,i) in headerOptionsList" :value="item.value" :key="i">{{ item.label-->
@@ -99,7 +99,7 @@
               <Input type="number" v-model="formValidate.sort" placeholder="请输入排序" number></Input>
             </FormItem>
           </Col>
-          <Col v-bind="grid" v-if="authType">
+          <Col v-bind="grid" v-show="authType">
             <FormItem label="隐藏菜单：">
               <RadioGroup v-model="formValidate.is_show_path">
                 <Radio :label="item.value" v-for="(item, i) in isShowPathRadio" :key="i">

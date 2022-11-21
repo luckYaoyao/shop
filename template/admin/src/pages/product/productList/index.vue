@@ -1,21 +1,14 @@
 <template>
   <div class="article-manager">
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">商品管理</span>
-        <div>
-          <Tabs v-model="artFrom.type" @on-click="onClickTab">
-            <TabPane
-              :label="item.name + '(' + item.count + ')'"
-              :name="item.type.toString()"
-              v-for="(item, index) in headeNum"
-              :key="index"
-            />
-          </Tabs>
-        </div>
-      </div>
-    </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
+      <Tabs class="mb20" v-model="artFrom.type" @on-click="onClickTab">
+        <TabPane
+          :label="item.name + '(' + item.count + ')'"
+          :name="item.type.toString()"
+          v-for="(item, index) in headeNum"
+          :key="index"
+        />
+      </Tabs>
       <Form ref="artFrom" :model="artFrom" :label-width="75" label-position="right" @submit.native.prevent>
         <Row type="flex" :gutter="24">
           <Col v-bind="grid">

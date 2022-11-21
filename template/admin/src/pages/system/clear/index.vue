@@ -1,10 +1,5 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-      </div>
-    </div>
     <div class="acea-row row-center clear_tit">
       <Button type="primary" @click="clearCache" class="mr20">清除缓存</Button>
       <Button type="primary" @click="clearlog">清除日志</Button>

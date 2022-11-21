@@ -33,7 +33,7 @@
                     <div class="msg-wrapper">
                       <!-- 文档 -->
                       <template v-if="item.msn_type <= 2">
-                        <div class="txt-wrapper pad16">{{item.msn}}</div>
+                        <div class="txt-wrapper pad16" v-html="item.msn"></div>
                       </template>
                       <!-- 图片 -->
                       <template v-if="item.msn_type == 3">

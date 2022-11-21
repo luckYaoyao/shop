@@ -1,10 +1,5 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-      </div>
-    </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="160" label-position="right">
         <FormItem label="账号" prop="">

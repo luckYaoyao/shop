@@ -182,11 +182,12 @@ class UserExtractServices extends BaseServices
         }
 
         $insertData = ['order_id' => $order_id, 'nickname' => $nickname, 'phone' => $phone];
-
-        $openid = $wechatServices->getWechatOpenid($userExtract['uid'], 'wechat');
-
+        
         //自动提现到零钱
-        if ($userExtract['extract_type'] == 'weixin' && sys_config('brokerage_type', 0) && $openid) {
+        if ($userExtract['extract_type'] == 'weixin' && sys_config('brokerage_type', 0)) {
+
+            $openid = $wechatServices->uidToOpenid($userExtract['uid'], 'wechat');
+            if (!$openid) $openid = $wechatServices->uidToOpenid($userExtract['uid'], 'routine');
 
             /** @var StoreOrderCreateServices $services */
             $services = app()->make(StoreOrderCreateServices::class);
@@ -405,7 +406,10 @@ class UserExtractServices extends BaseServices
 
         /** @var WechatUserServices $wechatServices */
         $wechatServices = app()->make(WechatUserServices::class);
-        if ($data['extract_type'] == 'weixin' && sys_config('brokerage_type', 0) && !$wechatServices->uidToOpenid($uid, 'wechat')) {
+        $openid = $wechatServices->uidToOpenid($uid, 'wechat');
+        if (!$openid) $openid = $wechatServices->uidToOpenid($uid, 'routine');
+
+        if ($data['extract_type'] == 'weixin' && sys_config('brokerage_type', 0) && !$openid) {
             throw new ApiException(410024);
         }
 
@@ -435,7 +439,6 @@ class UserExtractServices extends BaseServices
         if ($data['money'] <= 0) {
             throw new ApiException(400664);
         }
-        $openid = '';
         $insertData = [
             'uid' => $user['uid'],
             'extract_type' => $data['extract_type'],
@@ -462,9 +465,6 @@ class UserExtractServices extends BaseServices
         } else if ($data['extract_type'] == 'weixin') {
             $insertData['qrcode_url'] = $data['qrcode_url'];
             $mark = '使用微信提现' . $insertData['extract_price'] . '元';
-            /** @var WechatUserServices $wechatServices */
-            $wechatServices = app()->make(WechatUserServices::class);
-            $openid = $wechatServices->getWechatOpenid($uid, 'wechat');
             if (sys_config('brokerage_type', 0) && $openid) {
                 if ($data['money'] < 1) {
                     throw new ApiException(400665);
@@ -484,28 +484,6 @@ class UserExtractServices extends BaseServices
             /** @var UserBrokerageServices $userBrokerageServices */
             $userBrokerageServices = app()->make(UserBrokerageServices::class);
             $userBrokerageServices->income('extract', $uid, ['mark' => $mark, 'number' => $data['money']], $balance, $res1['id']);
-
-            /** @var WechatUserServices $wechatServices */
-            $wechatServices = app()->make(WechatUserServices::class);
-            $openid = $wechatServices->uidToOpenid($uid, 'wechat');
-
-            //自动提现到零钱
-            if ($insertData['extract_type'] == 'weixin' && $insertData['status'] == 1 && isset($insertData['wechat_order_id'])) {
-                $res = WechatService::merchantPay($openid, $insertData['wechat_order_id'], $data['money'], '提现佣金到零钱');
-                if (!$res) {
-                    throw new ApiException(400658);
-                }
-                /** @var CapitalFlowServices $capitalFlowServices */
-                $capitalFlowServices = app()->make(CapitalFlowServices::class);
-                $capitalFlowServices->setFlow([
-                    'order_id' => $insertData['wechat_order_id'],
-                    'uid' => $uid,
-                    'price' => bcmul('-1', $data['money'], 2),
-                    'pay_type' => 'weixin',
-                    'nickname' => $user['nickname'],
-                    'phone' => $user['phone']
-                ], 'extract');
-            }
             return $res1;
         });
 

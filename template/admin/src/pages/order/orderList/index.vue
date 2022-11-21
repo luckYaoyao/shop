@@ -1,17 +1,15 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">订单管理</span>
-        <div>
-          <Tabs v-model="currentTab" @on-click="onClickTab" v-if="tablists">
-            <TabPane v-for="(item, index) in tabs" :label="item.label" :name="item.type" :key="index" />
-          </Tabs>
-        </div>
-      </div>
-    </div>
-    <productlist-details v-if="currentTab === 'article' || 'project' || 'app'" ref="productlist"></productlist-details>
-    <Spin size="large" fix v-if="spinShow"></Spin>
+    <Card :bordered="false" dis-hover class="mt10">
+      <Tabs class="mb20" v-model="currentTab" @on-click="onClickTab" v-if="tablists">
+        <TabPane v-for="(item, index) in tabs" :label="item.label" :name="item.type" :key="index" />
+      </Tabs>
+      <productlist-details
+        v-if="currentTab === 'article' || 'project' || 'app'"
+        ref="productlist"
+      ></productlist-details>
+      <Spin size="large" fix v-if="spinShow"></Spin>
+    </Card>
   </div>
 </template>
 

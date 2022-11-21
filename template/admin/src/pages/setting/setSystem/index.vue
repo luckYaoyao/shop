@@ -1,22 +1,15 @@
 <template>
   <div class="article-manager">
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">{{ title }}</span>
-        <div v-if="headerList.length">
-          <Tabs v-model="currentTab" @on-click="changeTab">
-            <TabPane
-              :icon="item.icon"
-              :label="item.label"
-              :name="item.value.toString()"
-              v-for="(item, index) in headerList"
-              :key="index"
-            />
-          </Tabs>
-        </div>
-      </div>
-    </div>
     <Card :bordered="false" dis-hover class="ivu-mt fromBox">
+      <Tabs v-model="currentTab" @on-click="changeTab" v-if="headerList.length">
+        <TabPane
+          :icon="item.icon"
+          :label="item.label"
+          :name="item.value.toString()"
+          v-for="(item, index) in headerList"
+          :key="index"
+        />
+      </Tabs>
       <Tabs type="card" v-model="childrenId" v-if="headerChildrenList.length" @on-click="changeChildrenTab">
         <TabPane
           :label="item.label"

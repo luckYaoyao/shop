@@ -1,9 +1,6 @@
 <template>
   <div class="article-manager">
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">用户统计</span>
-      </div>
+    <div class="i-layout-page-header  pt10">
       <Form ref="formInline" :model="formInline" inline>
         <FormItem class="mr20">
           用户渠道:
@@ -111,4 +108,15 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.pt10{
+  padding-top: 10px;
+}
+.i-layout-page-header{
+  margin: 10px 0 10px 0;
+}
+.ivu-form-item{
+  padding-bottom: 10px;
+  margin-bottom: 0;
+}
+  </style>

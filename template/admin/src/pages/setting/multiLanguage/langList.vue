@@ -1,11 +1,5 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-      </div>
-    </div>
-
     <Card :bordered="false" dis-hover class="ivu-mt">
       <Form
         ref="formValidate"
@@ -55,8 +49,8 @@
     <Alert class="mt10">
       使用说明
       <template slot="desc"
-        >添加用户端页面语言，添加完成之后状态码为中文文字，前端页面使用 $t(`xxxx`)，js文件中使用 this.t(`xxxx`)
-        或者使用 that.t(`xxxx`)<br />添加后端接口语言，添加完成之后状态码为6位数字，后台抛错或者控制器返回文字的时候直接填写状态码数字</template
+        >添加用户端页面语言，添加完成之后状态码为中文文字，前端页面使用 $t(`xxxx`)，js文件中使用 this.t(`xxxx`) 或者使用
+        that.t(`xxxx`)<br />添加后端接口语言，添加完成之后状态码为6位数字，后台抛错或者控制器返回文字的时候直接填写状态码数字</template
       >
     </Alert>
     <Card :bordered="false" dis-hover>
@@ -107,11 +101,17 @@
         </FormItem>
         <Input v-model="langFormData.edit" v-show="false"></Input>
         <FormItem label="语言说明：" prop="remarks" class="mb20">
-          <Input v-model="langFormData.remarks" placeholder="请输入语言说明" style="width: 330px"></Input>
+          <Input
+            v-model="langFormData.remarks"
+            placeholder="请输入语言说明"
+            style="width: 330px"
+            @on-search="translate"
+          ></Input>
         </FormItem>
         <FormItem label="对应语言：" prop="remark" class="mb20">
           <Table
             ref="langTable"
+            :loading="traTabLoading"
             :columns="langColumns"
             :data="langFormData.list"
             no-data-text="暂无数据"
@@ -128,11 +128,12 @@
 </template>
 <script>
 import { mapState } from 'vuex';
-import { langCodeList, langCodeInfo, langCodeSettingSave } from '@/api/setting';
+import { langCodeList, langCodeInfo, langCodeSettingSave, langCodeTranslate } from '@/api/setting';
 export default {
   data() {
     return {
       addlangModal: false,
+      traTabLoading: false,
       langType: {},
       formValidate: {
         is_admin: 0,
@@ -219,6 +220,26 @@ export default {
     this.getList();
   },
   methods: {
+    translate() {
+      if (!this.langFormData.remarks.trim()) {
+        return this.$Message.warning('请先输入翻译内容');
+      }
+      this.traTabLoading = true;
+      langCodeTranslate({
+        text: this.langFormData.remarks,
+      })
+        .then((res) => {
+          console.log(this.langFormData.list);
+
+          this.langFormData.list.map((e) => {
+            e.lang_explain = res.data[e.type_id];
+          });
+          this.traTabLoading = false;
+        })
+        .catch((err) => {
+          this.$Message.error(err);
+        });
+    },
     add() {
       this.langFormData.list = this.langType.langType.map((e) => {
         return {
@@ -354,5 +375,8 @@ export default {
     width: 100%;
     height: 100%;
   }
+}
+.mb20 /deep/ .ivu-table-wrapper > .ivu-spin-fix{
+  border: none;
 }
 </style>

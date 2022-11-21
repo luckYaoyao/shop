@@ -168,6 +168,6 @@ class Express extends AuthController
     public function syncExpress()
     {
         $this->services->syncExpress();
-        return app('json')->success(100039);
+        return app('json')->success(100038);
     }
 }

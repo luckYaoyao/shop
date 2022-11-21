@@ -1,10 +1,5 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">交易统计</span>
-      </div>
-    </div>
     <to-day></to-day>
     <transaction-from></transaction-from>
   </div>

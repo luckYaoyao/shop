@@ -1100,3 +1100,14 @@ export function saveType(type) {
     method: 'put',
   });
 }
+
+/**
+ * @description 一键翻译
+ */
+ export function langCodeTranslate(data) {
+  return request({
+    url: `setting/lang_code/translate`,
+    method: 'post',
+    data,
+  });
+}

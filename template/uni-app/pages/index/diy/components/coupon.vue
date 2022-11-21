@@ -9,7 +9,7 @@
 				 :key="index" hover-class="none">
 					<view class="itemCon acea-row row-between-wrapper">
 						<view class="text">
-							<view class="money"><text>{{$t(`$`)}}</text>{{item.coupon_price}}</view>
+							<view class="money"><text>{{$t(`¥`)}}</text>{{item.coupon_price}}</view>
 							<view class="info">{{$t(`满`)}}{{item.use_min_price}}{{$t(`元可用`)}}</view>
 						</view>
 						<view class="bnt" v-if="item.is_use===true"><text>{{$t(`已领取`)}}</text></view>

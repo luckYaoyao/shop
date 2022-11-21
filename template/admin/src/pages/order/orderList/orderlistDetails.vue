@@ -4,10 +4,8 @@
       :cardLists="cardLists"
       v-if="cardLists.length >= 0"
     ></cards-data> -->
-    <Card :bordered="false" dis-hover class="mt10">
       <table-form @getList="getData" />
       <table-list ref="table" @on-changeCards="getCards" @changeGetTabs="changeGetTabs" />
-    </Card>
   </div>
 </template>
 

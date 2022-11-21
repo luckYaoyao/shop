@@ -1,10 +1,5 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-      </div>
-    </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
       <div v-if="isShowList" class="backs" @click="goBack(false)">
         <Icon type="ios-folder-outline" class="mr5 icon" /><span>返回上级</span>

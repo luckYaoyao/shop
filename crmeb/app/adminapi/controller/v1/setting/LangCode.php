@@ -88,4 +88,18 @@ class LangCode extends AuthController
         $this->services->langCodeDel($id);
         return app('json')->success(100002);
     }
+
+    /**
+     * 机器翻译
+     * @return mixed
+     * @throws \Throwable
+     */
+    public function langCodeTranslate()
+    {
+        [$text] = $this->request->postMore([
+            ['text', '']
+        ], true);
+        if ($text == '') return app('json')->fail(100100);
+        return app('json')->success($this->services->langCodeTranslate($text));
+    }
 }

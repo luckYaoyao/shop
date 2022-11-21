@@ -121,7 +121,7 @@ class SystemRoleServices extends BaseServices
 
         // 获取管理员的接口权限列表，存在时放行
         $auth = $this->getRolesByAuth($request->adminInfo()['roles'], 2);
-        if (in_array($rule, $auth[$method])) {
+        if (isset($auth[$method]) && in_array($rule, $auth[$method])) {
             return true;
         } else {
             throw new AuthException(110000);
