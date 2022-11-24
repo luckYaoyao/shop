@@ -11,6 +11,7 @@
 namespace app\adminapi\controller\v1\application\wechat;
 
 use app\adminapi\controller\AuthController;
+use app\jobs\notice\SyncMessageJob;
 use crmeb\exceptions\AdminException;
 use app\services\message\TemplateMessageServices;
 use crmeb\services\app\WechatService;
@@ -47,23 +48,14 @@ class WechatTemplate extends AuthController
         if (!sys_config('wechat_appid') || !sys_config('wechat_appsecret')) {
             throw new AdminException(400248);
         }
-        $tempall = $this->services->getTemplateList(['status' => 1, 'type' => 1]);
-        //获取微信平台已经添加的模版
-        $list = WechatService::getPrivateTemplates();//获取所有模版
-        foreach ($list->template_list as $v)
-        {
-            //删除已有模版
+        $all = $this->services->getTemplateList(['status' => 1, 'type' => 1]);
+        $list = WechatService::getPrivateTemplates();
+        foreach ($list->template_list as $v) {
             WechatService::deleleTemplate($v['template_id']);
         }
-
-        foreach ($tempall['list'] as $temp)
-        {
-            //添加模版消息
-            $res = WechatService::addTemplateId($temp['tempkey']);
-            if(!$res->errcode && $res->template_id){
-                $this->services->update($temp['id'],['tempid'=>$res->template_id]);
-            }
+        foreach ($all['list'] as $template) {
+            SyncMessageJob::dispatchDo('SyncWechat', [$template]);
         }
-        return app('json')->success(400249);
+        return app('json')->success(100038);
     }
 }

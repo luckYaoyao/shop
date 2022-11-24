@@ -16,6 +16,7 @@ use crmeb\services\SystemConfigService;
 use app\services\pay\PayNotifyServices;
 use crmeb\services\easywechat\Application;
 use EasyWeChat\Payment\Order;
+use think\facade\Log;
 use think\facade\Route as Url;
 use crmeb\utils\Hook;
 use think\facade\Cache;
@@ -252,12 +253,36 @@ class MiniProgramService
             if (isset($res['errcode']) && $res['errcode'] == 0 && isset($res['priTmplId'])) {
                 return $res['priTmplId'];
             } else {
-                throw new AdminException($res['errmsg']);
+                Log::error('添加订阅消息模版失败：' . $res['errmsg']);
             }
         } catch (\Throwable $e) {
-            throw new AdminException($e);
+            Log::error('添加订阅消息模版失败：' . $e->getMessage());
         }
+        return true;
     }
+
+    /**
+     * 删除订阅消息模版
+     * @param string $tid
+     * @param array $kidList
+     * @param string $sceneDesc
+     * @return mixed
+     */
+    public static function delSubscribeTemplate(string $priTmplId)
+    {
+        try {
+            $res = self::SubscribenoticeService()->delTemplate($priTmplId);
+            if (isset($res['errcode']) && $res['errcode'] == 0) {
+                return true;
+            } else {
+                Log::error('删除订阅消息模版失败：' . $res['errmsg']);
+            }
+        } catch (\Throwable $e) {
+            Log::error('删除订阅消息模版失败：' . $e->getMessage());
+        }
+        return true;
+    }
+
 
     /**
      * 获取模版标题的关键词列表
@@ -275,6 +300,19 @@ class MiniProgramService
             }
         } catch (\Throwable $e) {
             throw new AdminException($e);
+        }
+    }
+
+    /**
+     * 获取订阅消息列表
+     * @return mixed
+     */
+    public static function getSubscribeTemplateList()
+    {
+        try {
+            return self::SubscribenoticeService()->getTemplateList();
+        } catch (\Exception $e) {
+            throw new AdminException($e->getMessage());
         }
     }
 

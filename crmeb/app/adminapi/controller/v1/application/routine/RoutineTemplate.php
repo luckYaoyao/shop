@@ -10,6 +10,7 @@
 // +----------------------------------------------------------------------
 namespace app\adminapi\controller\v1\application\routine;
 
+use app\jobs\notice\SyncMessageJob;
 use app\services\other\QrcodeServices;
 use app\services\message\TemplateMessageServices;
 use app\services\system\attachment\SystemAttachmentServices;
@@ -54,61 +55,16 @@ class RoutineTemplate extends AuthController
             throw new AdminException(400236);
         }
         $all = $this->services->getTemplateList(['status' => 1, 'type' => 0]);
-        $errData = [];
-        $errCode = [-1, 40001, 40002, 40013, 40125, 41002, 41004, 43104, 45009, 200011, 200012, 200014];
+        $list = MiniProgramService::getSubscribeTemplateList();
+        foreach ($list->data as $v) {
+            MiniProgramService::delSubscribeTemplate($v['priTmplId']);
+        }
         if ($all['list']) {
-            $time = time();
             foreach ($all['list'] as $template) {
-                if ($template['tempkey']) {
-                    if (!isset($template['kid'])) {
-                        return app('json')->fail('数据库模版表(template_message)缺少字段：kid');
-                    }
-                    if (isset($template['kid']) && $template['kid']) {
-                        continue;
-                    }
-                    $works = [];
-                    try {
-                        $works = MiniProgramService::getSubscribeTemplateKeyWords($template['tempkey']);
-                    } catch (\Throwable $e) {
-                        $wechatErr = $e->getMessage();
-                        if (is_string($wechatErr)) throw new AdminException($wechatErr);
-                        if (in_array($wechatErr->getCode(), $errCode)) {
-                            throw new AdminException($wechatErr->getCode());
-                        }
-                        $errData[1] = '获取关键词列表失败：' . $wechatErr->getMessage();
-                    }
-                    $kid = [];
-                    if ($works) {
-                        $works = array_combine(array_column($works, 'name'), $works);
-                        $content = is_array($template['content']) ? $template['content'] : explode("\n", $template['content']);
-                        foreach ($content as $c) {
-                            $name = explode('{{', $c)[0] ?? '';
-                            if ($name && isset($works[$name])) {
-                                $kid[] = $works[$name]['kid'];
-                            }
-                        }
-                    }
-                    if ($kid && isset($template['kid']) && !$template['kid']) {
-                        $tempid = '';
-                        try {
-                            $tempid = MiniProgramService::addSubscribeTemplate($template['tempkey'], $kid, $template['name']);
-                        } catch (\Throwable $e) {
-                            $wechatErr = $e->getMessage();
-                            if (is_string($wechatErr)) throw new AdminException($wechatErr);
-                            if (in_array($wechatErr->getCode(), $errCode)) {
-                                throw new AdminException($wechatErr->getCode());
-                            }
-                            $errData[2] = '添加订阅消息模版失败：' . $wechatErr->getMessage();
-                        }
-                        if ($tempid != $template['tempid']) {
-                            $this->services->update($template['id'], ['tempid' => $tempid, 'kid' => json_encode($kid), 'add_time' => $time], 'id');
-                        }
-                    }
-                }
+                SyncMessageJob::dispatchDo('SyncSubscribe', [$template]);
             }
         }
-        $msg = $errData ? implode('\n', $errData) : '同步成功';
-        return app('json')->success($msg);
+        return app('json')->success(100038);
     }
 
     /**
