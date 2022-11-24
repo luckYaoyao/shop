@@ -82,7 +82,7 @@
 			}
 		},
 		onShow() {
-			const queryData = uni.getEnterOptionsSync()  // uni-app版本 3.5.1+ 支持
+			const queryData = uni.getEnterOptionsSync() // uni-app版本 3.5.1+ 支持
 			if (queryData.query.spread) {
 				this.$Cache.set('spread', queryData.query.spread);
 				this.globalData.spid = queryData.query.spread;
@@ -120,6 +120,7 @@
 			// #endif
 		},
 		async onLaunch(option) {
+			uni.hideTabBar()
 			let that = this;
 			colorChange('color_change').then(res => {
 				uni.setStorageSync('is_diy', res.data.is_diy)

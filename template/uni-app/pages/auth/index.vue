@@ -51,7 +51,7 @@
 	import {
 		registerVerify
 	} from '@/api/user.js'
-	import Verify from '@/pages/users/components/verify/verify.vue';
+	import Verify from '@/components/verify/verify.vue';
 	export default {
 		name: "Auth",
 		components: {

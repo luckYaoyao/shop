@@ -161,7 +161,7 @@
 	import authorize from '@/components/Authorize';
 	// #endif
 	import colors from "@/mixins/color";
-	import Verify from '@/pages/users/components/verify/verify.vue';
+	import Verify from '@/components/verify/verify.vue';
 	import sendVerifyCode from "@/mixins/SendVerifyCode";
 	const app = getApp();
 	export default {

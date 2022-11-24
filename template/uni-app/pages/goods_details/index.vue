@@ -1,9 +1,7 @@
 <template>
 	<view class="product-con" :style="colorStyle">
-		<skeleton :show="showSkeleton" :isNodes="isNodes" ref="skeleton" loading="chiaroscuro" selector="skeleton"
-			bgcolor="#FFF"></skeleton>
 
-		<view class="product-con skeleton" :style="{ visibility: showSkeleton ? 'hidden' : 'visible' }">
+		<view class="product-con">
 
 			<!-- #ifndef APP-PLUS -->
 			<view class="navbar" :style="{ height: navH + 'rpx', opacity: opacity }">
@@ -47,11 +45,11 @@
 						<!-- #ifdef APP-PLUS || MP -->
 						<view class="" :style="'width:100%;' + 'height:'+sysHeight"></view>
 						<!-- #endif -->
-						<productConSwiper class="skeleton-rect" :imgUrls="storeInfo.slider_image"
+						<productConSwiper ref="proSwiper" :imgUrls="storeInfo.slider_image"
 							:videoline="storeInfo.video_link" @videoPause="videoPause"></productConSwiper>
 						<view class="wrapper">
 							<view class="share acea-row row-between row-bottom">
-								<view class="money font-color skeleton-rect">
+								<view class="money font-color">
 									{{$t(`￥`)}}
 									<text class="num" v-text="storeInfo.price || 0"></text>
 									<text v-if="storeInfo.spec_type">{{$t(`起`)}}</text>
@@ -68,20 +66,20 @@
 					  svip_price_open == 1
                     " src="../../static/images/svip.gif"></image>
 								</view>
-								<view class="iconfont icon-fenxiang skeleton-rect" @click="listenerActionSheet"></view>
+								<view class="iconfont icon-fenxiang" @click="listenerActionSheet"></view>
 							</view>
-							<view class="introduce skeleton-rect" v-text="storeInfo.store_name"></view>
+							<view class="introduce" v-text="storeInfo.store_name"></view>
 							<view class="limit_good" v-if="storeInfo.limit_type > 0">
 								{{storeInfo.limit_type == 1 ? $t(`单次限购`) : $t(`永久限购`)}}{{storeInfo.limit_num}}{{$t(storeInfo.unit_name)}}
 							</view>
 							<view class="label acea-row row-between-wrapper" style="padding-bottom: 20rpx">
-								<view class="skeleton-rect">
+								<view class="">
 									{{$t(`划线价`)}} : {{$t(`￥`)}}{{storeInfo.ot_price || 0}}
 								</view>
-								<view class="skeleton-rect">{{$t(`库存`)}} : {{storeInfo.stock || 0}}
+								<view class="">{{$t(`库存`)}} : {{storeInfo.stock || 0}}
 									{{$t(storeInfo.unit_name) || ''}}
 								</view>
-								<view class="skeleton-rect">{{$t(`销量`)}} : {{storeInfo.fsales || 0}}
+								<view class="">{{$t(`销量`)}} : {{storeInfo.fsales || 0}}
 									{{$t(storeInfo.unit_name) || ''}}
 								</view>
 							</view>
@@ -113,7 +111,7 @@
 										<view class='activity'>赠送 {{storeInfo.give_integral}} 积分</view>
 									</view>
 								</view> -->
-							<view v-if="couponList.length" class="coupon acea-row row-between-wrapper skeleton-rect"
+							<view v-if="couponList.length" class="coupon acea-row row-between-wrapper"
 								@click="couponTap" style="margin-top: 0rpx">
 								<view class="hide line1 acea-row">
 									{{$t(`优惠券`)}}：
@@ -125,7 +123,7 @@
 								</view>
 								<view class="iconfont icon-jiantou"></view>
 							</view>
-							<view class="coupon acea-row row-between-wrapper skeleton-rect" v-if="activity.length">
+							<view class="coupon acea-row row-between-wrapper" v-if="activity.length">
 								<view class="line1 acea-row">
 									<text>{{$t(`活动`)}}：</text>
 									<view v-for="(item, index) in activity" :key="index" @click="goActivity(item)">
@@ -169,7 +167,7 @@
 								</view>
 							</view>
 						</view>
-						<view class="attribute acea-row row-between-wrapper skeleton-rect" @click="selecAttr"
+						<view class="attribute acea-row row-between-wrapper" @click="selecAttr"
 							v-if="attr.productAttr.length">
 							<view class="flex">
 								<view style="display: flex; align-items: center; width: 90%">
@@ -190,7 +188,7 @@
 							</view>
 						</view>
 					</view>
-					<view class="userEvaluation skeleton-rect" id="past1" v-if="replyCount">
+					<view class="userEvaluation" id="past1" v-if="replyCount">
 						<view class="title acea-row row-between-wrapper">
 							<view>{{$t(`用户评价`)}}({{ replyCount }})</view>
 							<navigator class="praise" hover-class="none"
@@ -261,22 +259,22 @@
 						<view>客服</view>
 					</button> -->
 
-				<navigator hover-class="none" class="item skeleton-rect" open-type="switchTab" url="/pages/index/index">
+				<navigator hover-class="none" class="item" open-type="switchTab" url="/pages/index/index">
 					<view class="iconfont icon-shouye6"></view>
 					<view class="p_center">{{$t(`首页`)}}</view>
 				</navigator>
-				<view @click="setCollect" class="item skeleton-rect">
+				<view @click="setCollect" class="item">
 					<view class="iconfont icon-shoucang1" v-if="storeInfo.userCollect"></view>
 					<view class="iconfont icon-shoucang" v-else></view>
 					<view class="p_center">{{$t(`收藏`)}}</view>
 				</view>
-				<view class="animated item skeleton-rect" :class="animated == true ? 'bounceIn' : ''" @click="goCart">
+				<view class="animated item" :class="animated == true ? 'bounceIn' : ''" @click="goCart">
 					<view class="iconfont icon-gouwuche1">
 						<text class="num bg-color" v-if="parseFloat(CartCount) > 0">{{
               CartCount || 0
             }}</text>
 					</view>
-					<view class="p_center skeleton-rect">{{$t(`购物车`)}}</view>
+					<view class="p_center">{{$t(`购物车`)}}</view>
 				</view>
 				<view v-if="a" class="presale">
 					<view class="acea-row">
@@ -301,7 +299,7 @@
 								</button>
 							</form>
 						</view>
-						<view class="bnt acea-row skeleton-rect" v-else>
+						<view class="bnt acea-row" v-else>
 							<form v-if="storeInfo.cart_button" @submit="joinCart" class="joinCart bnts">
 								<button class="joinCart bnts" form-type="submit">
 									{{$t(`加入购物车`)}}
@@ -832,6 +830,7 @@
 				);
 			},
 			scroll(e) {
+				this.$refs.proSwiper.videoPause()
 				var that = this,
 					scrollY = e.detail.scrollTop;
 				var opacity = scrollY / 200;
@@ -1130,9 +1129,6 @@
 						// #endif
 						that.DefaultSelect();
 						that.getCartCount();
-						setTimeout(() => {
-							this.showSkeleton = false;
-						}, 100);
 					})
 					.catch((err) => {
 						//状态异常返回上级页面
@@ -1371,6 +1367,7 @@
 			 * 打开属性插件
 			 */
 			selecAttr: function() {
+				this.$refs.proSwiper.videoIsPause()
 				this.$set(this.attr, "cartAttr", true);
 				this.$set(this, "isOpen", true);
 			},
@@ -1382,6 +1379,7 @@
 				if (that.isLogin === false) {
 					toLogin();
 				} else {
+					this.$refs.proSwiper.videoIsPause()
 					that.getCouponList();
 					that.$set(that.coupon, "coupon", true);
 				}
@@ -1399,10 +1397,12 @@
 				if (this.isLogin === false) {
 					toLogin();
 				} else {
+					this.$refs.proSwiper.videoIsPause()
 					this.goCat();
 				}
 			},
 			goCart() {
+
 				uni.switchTab({
 					url: '/pages/order_addcart/order_addcart'
 				})
@@ -1510,6 +1510,7 @@
 				if (this.isLogin === false) {
 					toLogin();
 				} else {
+					this.$refs.proSwiper.videoIsPause()
 					this.goCat(true);
 				}
 			},

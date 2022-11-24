@@ -21,7 +21,8 @@
 		<!-- #ifdef MP -->
 		<view class="indexTip" :style="'top:' + (navH + 50) + 'px'" :hidden="iShidden">
 			<view class="tip acea-row row-between-wrapper">
-				<view class="text">{{$t(`点击`)}}“<image src="/static/images/spot.png"></image>”{{$t(`添加到我的小程序， 微信首页下拉即可访问商城。`)}}</view>
+				<view class="text">{{$t(`点击`)}}“<image src="/static/images/spot.png"></image>
+					”{{$t(`添加到我的小程序， 微信首页下拉即可访问商城。`)}}</view>
 				<view class="iconfont icon-guanbi1" @click="closeTip"></view>
 			</view>
 		</view>
@@ -103,7 +104,9 @@
 				<view class="title">{{$t(`服务协议与隐私政策`)}}</view>
 				<view class="content">
 					{{$t(`请务必审慎阅读、充分理解“服务协议与 隐私政策”各条款，包括但不限于：为了 向你提供即时通讯、内容分享等服务，我 们需要收集你的设备信息、操作日志等个 人信息。你可以在“设置”中查看、变更、删除个人信息并管理你的授权。`)}}<br>
-					{{$t(`你可以阅读`)}}<navigator url="/pages/users/privacy/index?type=3">{{$t(`《服务协议与隐私政策》`)}}</navigator>{{$t(`了解详细信息。如你同意，请点击“我同意”开始接受我们的服务。`)}}
+					{{$t(`你可以阅读`)}}
+					<navigator url="/pages/users/privacy/index?type=3">{{$t(`《服务协议与隐私政策》`)}}</navigator>
+					{{$t(`了解详细信息。如你同意，请点击“我同意”开始接受我们的服务。`)}}
 				</view>
 				<view class="btn-box">
 					<view class="btn-item" @click="confirmApp">{{$t(`我同意`)}}</view>
@@ -178,7 +181,9 @@
 	import {
 		toLogin
 	} from "@/libs/login.js";
-	import {HTTP_REQUEST_URL} from '@/config/app';
+	import {
+		HTTP_REQUEST_URL
+	} from '@/config/app';
 	import colors from "@/mixins/color";
 	import skeletons from "./components/skeleton.vue";
 	let app = getApp();
@@ -218,7 +223,7 @@
 		mixins: [colors],
 		data() {
 			return {
-				imgHost:HTTP_REQUEST_URL,
+				imgHost: HTTP_REQUEST_URL,
 				showSkeleton: true, //骨架屏显示隐藏
 				isNodes: 0, //控制什么时候开始抓取元素节点,只要数值改变就重新抓取
 				isSortType: 0,
@@ -289,6 +294,7 @@
 			// this.$nextTick(() => {
 			// 	// this.$refs.appUpdate.update(); //调用子组件 检查更新
 			// });
+
 			// #endif
 			let that = this;
 			// #ifdef H5
@@ -313,6 +319,7 @@
 			}
 			this.getFollow();
 			// #endif
+
 			this.diyData();
 			this.getIndexData();
 			// #ifdef MP
@@ -475,7 +482,7 @@
 			// #ifdef MP
 			getTempIds() {
 				getTempIds().then((res) => {
-					if (res.data){
+					if (res.data) {
 						wx.setStorageSync(SUBSCRIBE_MESSAGE, JSON.stringify(res.data));
 					}
 				});
@@ -518,6 +525,23 @@
 					setTimeout(() => {
 						this.showSkeleton = false;
 					}, 300);
+				}).catch(error => {
+					// #ifdef APP-PLUS
+					if (error.status) {
+						uni.showToast({
+							title: this.$t(`连接失败`),
+							icon: 'none',
+							duration: 2000
+						})
+						setTimeout(e => {
+							this.diyData();
+							this.getIndexData();
+							getShare().then(res => {
+								this.shareInfo = res.data;
+							});
+						}, 2000)
+					}
+					// #endif
 				});
 			},
 			getIndexData() {
@@ -819,14 +843,16 @@
 	.sort-product {
 		margin: 20rpx;
 	}
-	
-	.emptyBox{
+
+	.emptyBox {
 		text-align: center;
 		padding: 150rpx 0;
-		.tips{
+
+		.tips {
 			color: #aaa;
 			font-size: 26rpx;
 		}
+
 		image {
 			width: 414rpx;
 			height: 304rpx;

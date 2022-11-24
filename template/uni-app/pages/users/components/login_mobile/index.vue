@@ -14,7 +14,6 @@
 
 		<Verify @success="success" :captchaType="'blockPuzzle'" :imgSize="{ width: '330px', height: '155px' }"
 			ref="verify"></Verify>
-
 	</view>
 </template>
 
@@ -22,7 +21,7 @@
 	const app = getApp();
 	import sendVerifyCode from "@/mixins/SendVerifyCode";
 	import Routine from '@/libs/routine';
-	import Verify from './../verify/verify.vue';
+	import Verify from '@/components/verify/verify.vue';
 	import Cache from '@/utils/cache';
 	import {
 		loginMobile,

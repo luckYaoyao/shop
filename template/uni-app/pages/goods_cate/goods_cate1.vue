@@ -150,11 +150,6 @@
 			getNav() {
 				getNavigation().then(res => {
 					this.newData = res.data
-					if (this.newData.status && this.newData.status.status) {
-						uni.hideTabBar()
-					} else {
-						uni.showTabBar()
-					}
 				})
 			},
 			goRouter(item) {

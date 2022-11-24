@@ -265,6 +265,7 @@
 		},
 		computed: mapGetters(['isLogin']),
 		onLoad(options) {
+			uni.hideTabBar()
 			if (this.is_diy) {
 				if (uni.getStorageSync('FOOTER_BAR')) {
 					uni.hideTabBar()
@@ -273,11 +274,6 @@
 				}
 				getNavigation().then(res => {
 					this.newData = res.data
-					if (this.newData.status && this.newData.status.status) {
-						uni.hideTabBar()
-					} else {
-						uni.showTabBar()
-					}
 				})
 			} else {
 				uni.hideTabBar()

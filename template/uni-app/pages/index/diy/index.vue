@@ -386,11 +386,6 @@
 			})
 			getNavigation().then(res => {
 				this.newData = res.data
-				if (this.newData.status && this.newData.status.status) {
-					uni.hideTabBar()
-				} else {
-					uni.showTabBar()
-				}
 			})
 			let routes = getCurrentPages(); // 获取当前打开过的页面路由数组
 			let curRoute = routes[routes.length - 1].route //获取当前页面路由

@@ -6,7 +6,6 @@
 /crmeb/runtime/log
 /crmeb/runtime/session
 /crmeb/runtime/temp
-/crmeb/public/uploads
 /crmeb/app/adminapi/controller/v1/statistic/BalanceStatistic.php
 /crmeb/app/adminapi/controller/v1/statistic/OrderStatistic.php
 /crmeb/app/adminapi/controller/v1/statistic/ProductStatistic.php
