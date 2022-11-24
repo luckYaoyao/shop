@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "登录",
   "usingComponents": {
-    "verify": "/pages/users/components/verify/verify"
+    "verify": "/components/verify/verify"
   }
 }

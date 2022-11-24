@@ -2,7 +2,7 @@
   "navigationBarTitleText": "代理商申请",
   "usingComponents": {
     "jyf-parser": "/components/jyf-parser/jyf-parser",
-    "verify": "/pages/users/components/verify/verify",
+    "verify": "/components/verify/verify",
     "authorize": "/components/Authorize"
   }
 }
