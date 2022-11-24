@@ -150,8 +150,8 @@ class LangCodeServices extends BaseServices
     public function langCodeTranslate(string $text = ''): array
     {
         $translator = Translate::getInstance();
-        $translator->setAccessKey('');
-        $translator->setSecretKey('');
+        $translator->setAccessKey(sys_config('hs_accesskey'));
+        $translator->setSecretKey(sys_config('hs_secretkey'));
         /** @var LangTypeServices $langTypeServices */
         $langTypeServices = app()->make(LangTypeServices::class);
         $typeList = $langTypeServices->getColumn([['status', '=', 1], ['is_del', '=', 0]], 'language_name,file_name,id', 'id');
