@@ -2,7 +2,7 @@
 //文件签名
 $fileValue = '';
 //最低php版本要求
-define('PHP_EDITION','7.1.0');
+define('PHP_EDITION', '7.1.0');
 //服务环境检测
 if (function_exists('saeAutoLoader') || isset($_SERVER['HTTP_BAE_ENV_APPID']))
     showHtml('对不起，当前环境不支持本系统，请使用独立服务或云主机！');
@@ -344,7 +344,7 @@ switch ($step) {
              */
             $counts = count($sqlFormat);
             for ($i = $n; $i < $counts; $i++) {
-                $sql = trim($sqlFormat[$i]);
+                $sql = str_replace('demo.crmeb.com', $_SERVER['SERVER_NAME'], trim($sqlFormat[$i]));
                 if (strstr($sql, 'CREATE TABLE')) {
                     preg_match('/CREATE TABLE (IF NOT EXISTS)? `eb_([^ ]*)`/is', $sql, $matches);
                     mysqli_query($conn, "DROP TABLE IF EXISTS `$matches[2]");
