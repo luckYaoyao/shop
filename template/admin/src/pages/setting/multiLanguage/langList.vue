@@ -105,6 +105,8 @@
             v-model="langFormData.remarks"
             placeholder="请输入语言说明"
             style="width: 330px"
+            search
+            enter-button="翻译"
             @on-search="translate"
           ></Input>
         </FormItem>

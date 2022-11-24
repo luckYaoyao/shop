@@ -49,7 +49,7 @@
         <div>
           <span class="update">上传授权图片:</span>
         </div>
-        <div class="uploadPictrue" v-if="authorizedPicture">
+        <div class="uploadPictrue" v-if="authorizedPicture" @click="modalPicTap('单选')">
           <img v-lazy="authorizedPicture" />
         </div>
         <div class="upload" v-else @click="modalPicTap('单选')">
