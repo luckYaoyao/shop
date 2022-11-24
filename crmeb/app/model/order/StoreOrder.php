@@ -63,8 +63,9 @@ class StoreOrder extends BaseModel
      * 创建时间修改器
      * @return int
      */
-    protected function setAddTimeAttr()
+    protected function setAddTimeAttr($time = 0)
     {
+        if ($time) return $time;
         return time();
     }
 

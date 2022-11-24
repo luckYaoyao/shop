@@ -200,9 +200,6 @@ class StoreOrderRefundServices extends BaseServices
                         if ($refundOrder['is_channel'] == 1) {
                             $refundData['trade_no'] = $refundOrder['trade_no'];
                             $refundData['pay_new_weixin_open'] = sys_config('pay_new_weixin_open');
-                            /** @var StoreOrderCreateServices $storeOrderCreateServices */
-                            $storeOrderCreateServices = app()->make(StoreOrderCreateServices::class);
-                            $refundData['refund_no'] = $refundData['refund_no'];
                             //小程序退款
                             $pay->refund($no, $refundData);//小程序
                         } else {

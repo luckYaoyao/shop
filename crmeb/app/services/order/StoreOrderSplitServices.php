@@ -98,7 +98,6 @@ class StoreOrderSplitServices extends BaseServices
                     $order_data['order_id'] = $storeOrderCreateServices->getNewOrderId('cp');
                     $order_data['cart_id'] = [];
                     $order_data['unique'] = $storeOrderCreateServices->getNewOrderId('');
-                    $order_data['add_time'] = time();
                     $new_order = $this->dao->save($order_data);
                     if (!$new_order) {
                         throw new AdminException(400544);
