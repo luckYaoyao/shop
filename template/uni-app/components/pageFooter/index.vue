@@ -92,25 +92,17 @@
 			this.activeRouter = '/' + curRoute
 		},
 		onShow() {
+			uni.hideTabBar()
 			getNavigation().then(res => {
 				uni.setStorageSync('pageFoot', res.data)
 				this.$store.commit('FOOT_UPLOAD', res.data)
 				this.newData = res.data
-				if (this.newData.status && this.newData.status.status) {
-					// uni.hideTabBar()
-				} else {
-					uni.showTabBar()
-				}
 			})
 		},
 		mounted() {
 			let that = this
+			uni.hideTabBar()
 			this.newData = this.$store.state.app.pageFooter
-			if (this.newData.status && this.newData.status.status) {
-				uni.hideTabBar()
-			} else {
-				uni.showTabBar()
-			}
 			console.log(this.newData)
 			if (this.isLogin) {
 				this.getCartNum()

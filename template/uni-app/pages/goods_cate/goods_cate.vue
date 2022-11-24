@@ -53,11 +53,7 @@
 		},
 		methods: {
 			jumpIndex() {
-				if (this.is_diy) {
-					if (!uni.getStorageSync('FOOTER_BAR')) {
-						uni.showTabBar()
-					}
-				}
+				if (this.is_diy) {}
 			},
 			classStyle() {
 				colorChange('category').then(res => {
