@@ -53,8 +53,8 @@
 				</scroll-view>
 			</view>
 		</view>
-		<tabBar v-if="!is_diy" :pagePath="'/pages/goods_cate/goods_cate'"></tabBar>
-		<view class="foot" v-else-if="is_diy && newData.status && newData.status.status">
+		<!-- <tabBar v-if="!is_diy" :pagePath="'/pages/goods_cate/goods_cate'"></tabBar> -->
+		<view class="foot" v-if="newData.menuList && newData.menuList.length">
 			<view class="page-footer" id="target" :style="{'background-color':newData.bgColor.color[0].item}">
 				<view class="foot-item" v-for="(item,index) in newData.menuList" :key="index" @click="goRouter(item)">
 					<block v-if="item.link == activeRouter">
@@ -114,7 +114,6 @@
 				// #ifdef APP-PLUS
 				pageHeight: app.globalData.windowHeight,
 				// #endif
-				footerStatus: false,
 				lock: false
 			}
 		},
@@ -136,13 +135,6 @@
 			let curRoute = routes[routes.length - 1].route
 			this.activeRouter = '/' + curRoute
 			this.getAllCategory();
-			// if (uni.getStorageSync('FOOTER_BAR')) {
-			// 	this.footerStatus = true
-			// 	uni.hideTabBar()
-			// 	getNavigation().then(res => {
-			// 		this.newData = res.data
-			// 	})
-			// }
 
 
 		},

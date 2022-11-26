@@ -272,8 +272,8 @@
 				<view class="uni-p-b-98"></view>
 			</scroll-view>
 		</view>
-		<tabBar v-if="!is_diy" :pagePath="'/pages/user/index'"></tabBar>
-		<view class="foot" v-else-if="is_diy && newData.status && newData.status.status">
+		<!-- <tabBar v-if="!is_diy" :pagePath="'/pages/user/index'"></tabBar> -->
+		<view class="foot" v-if="newData.menuList && newData.menuList.length">
 			<view class="page-footer" id="target" :style="{'background-color':newData.bgColor.color[0].item}">
 				<view class="foot-item" v-for="(item,index) in newData.menuList" :key="index" @click="goRouter(item)">
 					<block v-if="item.link == activeRouter">
@@ -412,14 +412,9 @@
 		onLoad(option) {
 			uni.hideTabBar()
 			let that = this;
-			if (this.is_diy) {
-				if (uni.getStorageSync('FOOTER_BAR')) {
-					uni.hideTabBar()
-				}
-				getNavigation().then(res => {
-					this.newData = res.data
-				})
-			}
+			getNavigation().then(res => {
+				this.newData = res.data
+			})
 			// #ifdef MP
 			// 小程序静默授权
 			if (!this.$store.getters.isLogin) {

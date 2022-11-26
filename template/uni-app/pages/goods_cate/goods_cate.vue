@@ -44,11 +44,7 @@
 			if (this.status == 2 || this.status == 3) {
 				uni.hideTabBar();
 			} else if (this.status == 1) {
-				if (!this.is_diy) {
-					uni.hideTabBar();
-				} else {
-					this.$refs.classOne.getNav();
-				}
+				this.$refs.classOne.getNav();
 			}
 		},
 		methods: {
@@ -79,9 +75,8 @@
 					} else {
 						if (!this.is_diy) {
 							uni.hideTabBar()
-						} else {
-							this.$refs.classOne.getNav();
-						}
+						} else {}
+						this.$refs.classOne.getNav();
 					}
 				})
 			}

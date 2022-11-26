@@ -41,7 +41,7 @@
 				<text class="loading iconfont icon-jiazai" :hidden="loading == false"></text>
 				{{ loadTitle }}
 			</view>
-			<view class="foot" v-if="newData.menuList && footerStatus">
+			<view class="foot" v-if="newData.menuList && newData.status.status">
 				<view class="page-footer" id="target" :style="{'background-color':newData.bgColor.color[0].item}">
 					<view class="foot-item" v-for="(item,index) in newData.menuList" :key="index"
 						@click="goRouter(item)">
@@ -183,7 +183,6 @@
 				sortMpTop: 0,
 				newData: {},
 				activeRouter: '',
-				footerStatus: false,
 				bgColor: '',
 				bgPic: '',
 				bgTabVal: '',
@@ -353,7 +352,7 @@
 			// 对象转数组
 			objToArr(data) {
 				console.log(data)
-				if(!data) return
+				if (!data) return
 				const keys = Object.keys(data)
 				keys.sort((a, b) => a - b)
 				const m = keys.map(key => data[key]);
@@ -391,7 +390,6 @@
 							that.$store.commit('FOOT_UPLOAD', item)
 							arr.splice(index, 1)
 							this.newData = item
-							this.footerStatus = item.status.status
 						}
 						if (item.name == 'promotionList') {
 							that.numConfig = item.numConfig.val;

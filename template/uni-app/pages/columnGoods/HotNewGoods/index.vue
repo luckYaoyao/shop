@@ -27,7 +27,7 @@
 		<!-- #ifndef MP -->
 		<home></home>
 		<!-- #endif -->
-		<pageFooter v-if="footerStatus"></pageFooter>
+		<pageFooter></pageFooter>
 	</div>
 </template>
 <script>
@@ -69,14 +69,9 @@
 				page: 1,
 				limit: 8,
 				isScroll: true,
-				footerStatus: false
 			};
 		},
 		onLoad: function(option) {
-			if (uni.getStorageSync('FOOTER_BAR')) {
-				this.footerStatus = true
-				uni.hideTabBar()
-			}
 			this.type = option.type;
 			this.titleInfo();
 			this.name = option.name;

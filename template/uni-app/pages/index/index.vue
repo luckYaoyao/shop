@@ -23,6 +23,7 @@
 			visualization
 		},
 		onShow() {
+			uni.hideTabBar()
 			uni.$on('is_diy', (data) => {
 				this.isDiy = data
 			})

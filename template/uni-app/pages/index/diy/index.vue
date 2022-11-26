@@ -141,12 +141,12 @@
 				<!-- #endif -->
 				<couponWindow :window="isCouponShow" @onColse="couponClose" :couponImage="couponObj.image"
 					:couponList="couponObj.list"></couponWindow>
-				<view class="uni-p-b-98" v-if="footerStatus"></view>
+				<view class="uni-p-b-98"></view>
 				<!-- #ifndef MP -->
 				<view v-if="site_config" class="site-config" @click="goICP">{{ site_config }}</view>
 				<!-- #endif -->
 				<!-- <pageFooter v-if="footerStatus"></pageFooter> -->
-				<view class="foot" v-if="newData.status && newData.status.status">
+				<view class="foot">
 					<view class="page-footer" id="target" :style="{'background-color':newData.bgColor.color[0].item}">
 						<view class="foot-item" v-for="(item,index) in newData.menuList" :key="index"
 							@click="goRouter(item)">
@@ -361,7 +361,6 @@
 				site_config: '',
 				errorNetwork: false, // 是否断网
 				privacyStatus: false, // 隐私政策是否同意过
-				footerStatus: false,
 				isHeaderSerch: false,
 				bgColor: '',
 				bgPic: '',
@@ -715,10 +714,6 @@
 							console.log(item.status)
 							if (item.status && item.status.status) {
 								this.newData = item
-								setTimeout((e) => {
-									that.$set(that, 'footerStatus', true);
-									console.log(this.footerStatus)
-								}, 50)
 							}
 							uni.setStorageSync('FOOTER_BAR', item.status && item.status.status ? true :
 								false)
