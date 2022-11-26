@@ -33202,8 +33202,8 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (415, 'pay_weixin_key_v3', 'text', 'input', 4, '', 1, '', 100, 0, '\"\"', 'V3支付Key', 'V3支付秘钥', 0, 1),
 (416, 'reward_money', 'text', 'number', 105, '', 1, '', 0, 0, '\"0\"', '赠送余额(元)', '新用户奖励金额，必须大于等于0，0为不赠送', 0, 1),
 (417, 'reward_integral', 'text', 'number', 105, '', 1, '', 0, 0, '\"0\"', '赠送积分', '新用户奖励积分，必须大于等于0，0为不赠送', 0, 1),
-(418, 'hs_accesskey', 'text', 'input', 106, '', 1, '', 0, 0, '\"\"', '火山翻译AccessKey', '机器翻译仅支持火山翻译', 1, 1),
-(419, 'hs_secretkey', 'text', 'input', 106, '', 1, '', 0, 0, '\"\"', '火山翻译SecretKey', '机器翻译仅支持火山翻译', 0, 1);
+(418, 'hs_accesskey', 'text', 'input', 106, '', 1, '', 0, 0, '\"AKLTMzkzZTEzNjg3OTg2NDViM2IwNmFlYzhmNzE4MmI4YmI\"', '火山翻译AccessKey', '机器翻译仅支持火山翻译', 1, 1),
+(419, 'hs_secretkey', 'text', 'input', 106, '', 1, '', 0, 0, '\"TVRneU16STFOVFV4WVRkbE5ERTJaV0pqWm1aaU1UaGlNVFppWldZeE1HUQ==\"', '火山翻译SecretKey', '机器翻译仅支持火山翻译', 0, 1);
 -- --------------------------------------------------------
 
 --

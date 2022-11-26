@@ -149,6 +149,9 @@ class LangCodeServices extends BaseServices
      */
     public function langCodeTranslate(string $text = ''): array
     {
+        if (sys_config('hs_accesskey') == '' || sys_config('hs_secretkey') == '') {
+            throw new AdminException('请先配置火山翻译key');
+        }
         $translator = Translate::getInstance();
         $translator->setAccessKey(sys_config('hs_accesskey'));
         $translator->setSecretKey(sys_config('hs_secretkey'));
