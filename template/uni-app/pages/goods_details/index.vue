@@ -830,7 +830,6 @@
 				);
 			},
 			scroll(e) {
-				this.$refs.proSwiper.videoPause()
 				var that = this,
 					scrollY = e.detail.scrollTop;
 				var opacity = scrollY / 200;
@@ -840,6 +839,7 @@
 				that.$set(that, "showAnimate", false);
 				that.$set(that, "showMenuIcon", false);
 				that.$set(that, 'currentPage', false);
+				this.$refs.proSwiper.videoIsPause()
 				if (that.lock) {
 					that.$set(that, "lock", false);
 					return;
@@ -1213,6 +1213,7 @@
 					this.$set(productAttr[i], "index", value[i]);
 				}
 				//sort();排序函数:数字-英文-汉字；
+				
 				let productSelect = this.productValue[value.join(",")];
 				if (productSelect && productAttr.length) {
 					this.$set(

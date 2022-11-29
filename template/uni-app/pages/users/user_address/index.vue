@@ -166,14 +166,14 @@
 				});
 				that.district[this.valueRegion[0]].c.forEach((item, i) => {
 					if (this.region[1] == item.c) {
-						this.valueRegio[1] = i
+						this.valueRegion[1] = i
 						this.multiIndex[1] = i
 					}
 					city.push(item.n);
 				});
 				that.district[this.valueRegion[0]].c[this.valueRegion[1]].c.forEach((item, i) => {
 					if (this.region[2] == item.c) {
-						this.valueRegio[2] = i
+						this.valueRegion[2] = i
 						this.multiIndex[2] = i
 					}
 					area.push(item.n);

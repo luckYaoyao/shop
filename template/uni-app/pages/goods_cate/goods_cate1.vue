@@ -53,8 +53,8 @@
 				</scroll-view>
 			</view>
 		</view>
-		<!-- <tabBar v-if="!is_diy" :pagePath="'/pages/goods_cate/goods_cate'"></tabBar> -->
-		<view class="foot" v-if="newData.menuList && newData.menuList.length">
+		<tabBar v-if="!is_diy" :pagePath="'/pages/goods_cate/goods_cate'"></tabBar>
+		<view class="foot" v-if="is_diy && newData.menuList && newData.menuList.length">
 			<view class="page-footer" id="target" :style="{'background-color':newData.bgColor.color[0].item}">
 				<view class="foot-item" v-for="(item,index) in newData.menuList" :key="index" @click="goRouter(item)">
 					<block v-if="item.link == activeRouter">

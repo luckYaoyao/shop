@@ -91,7 +91,7 @@
 				// #endif
 			},
 			videoIsPause() {
-				console.log('stop')
+				this.videoContext = uni.createVideoContext('myVideo', this);
 				this.videoContext.pause();
 			},
 			bindPause: function() {
