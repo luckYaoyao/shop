@@ -74,8 +74,14 @@ class DownloadImage
         if (!$name) {
             //TODO 获取要下载的文件名称
             $downloadImageInfo = $this->getImageExtname($url);
+            $ext = $downloadImageInfo['ext_name'];
             $name = $downloadImageInfo['file_name'];
             if (!$name) throw new AdminException(400725);
+        } else {
+            $ext = $this->getImageExtname($name)['ext_name'];
+        }
+        if (in_array($ext, ['php', 'js', 'html'])) {
+            throw new AdminException(400558);
         }
         if (strstr($url, 'http://') === false && strstr($url, 'https://') === false) {
             $url = 'http:' . $url;

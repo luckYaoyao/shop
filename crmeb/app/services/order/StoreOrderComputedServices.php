@@ -201,11 +201,11 @@ class StoreOrderComputedServices extends BaseServices
             if (!$flag) {
                 throw new ApiException(410243);
             }
-            $payPrice = (float)bcsub((string)$payPrice, (string)$couponInfo['coupon_price'], 2);
             if ($isCreate) {
                 $res1 = $couponServices->useCoupon($couponId);
             }
-            $couponPrice = $couponInfo['coupon_price'];
+            $couponPrice = $couponInfo['coupon_price'] > $price ? $price : $couponInfo['coupon_price'];
+            $payPrice = (float)bcsub((string)$payPrice, (string)$couponPrice, 2);
         } else {
             $couponPrice = 0;
         }
