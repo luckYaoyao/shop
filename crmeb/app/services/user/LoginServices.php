@@ -224,7 +224,7 @@ class LoginServices extends BaseServices
         $data['add_ip'] = app('request')->ip();
         $data['last_time'] = time();
         $data['last_ip'] = app('request')->ip();
-        $data['nickname'] = substr(md5($account . time()), 0, 12);
+        $data['nickname'] = substr_replace($account, '****', 3, 4);
         $data['avatar'] = sys_config('h5_avatar');
         $data['city'] = '';
         $data['language'] = '';
