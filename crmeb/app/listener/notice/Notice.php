@@ -249,6 +249,7 @@ class Notice implements ListenerInterface
                         //模板消息公众号模版消息
                         $WechatTemplateList->sendBargainSuccess($uid, $bargainInfo, $bargainUserInfo, $uid);
                         //模板消息小程序订阅消息
+                        $bargainInfo['title'] = Str::substrUTf8($bargainInfo['title'], 20, 'UTF-8', '');
                         $RoutineTemplateList->sendBargainSuccess($uid, $bargainInfo, $bargainUserInfo, $uid);
                         break;
                     //开团成功
@@ -283,6 +284,7 @@ class Notice implements ListenerInterface
                         //模板消息公众号模版消息
                         $WechatTemplateList->sendOrderPinkSuccess($list['uid'], $list, $title);
                         //模板消息小程序订阅消息
+                        $title = Str::substrUTf8($title, 20, 'UTF-8', '');
                         $RoutineTemplateList->sendPinkSuccess($list['uid'], $title, $list['nickname'], $list['add_time'], $list['people'], $url);
                         break;
                     //取消拼团

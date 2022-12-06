@@ -125,6 +125,7 @@ class WechatServices extends BaseServices
         if (!$user) {
             $user = $wechatUserServices->wechatOauthAfter($createData);
         } else {
+            if (!$user['status']) throw new ApiException(410027);
             //更新用户信息
             $wechatUserServices->wechatUpdata([$user['uid'], $wechatInfo]);
         }
@@ -175,6 +176,7 @@ class WechatServices extends BaseServices
         } else if (!$user) {
             $user = $wechatUserServices->wechatOauthAfter($createData);
         } else {
+            if (!$user['status']) throw new ApiException(410027);
             //更新用户信息
             $wechatUserServices->wechatUpdata([$user['uid'], $wechatInfo]);
         }

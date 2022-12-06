@@ -286,7 +286,7 @@ class RoutineTemplateListService extends NoticeService
     {
         return $this->sendTemplate((int)$uid, [
             'thing1' => $pinkTitle,
-            'name3' => $nickname,
+            'thing12' => $nickname,
             'date5' => date('Y-m-d H:i:s', $pinkTime),
             'number2' => $count
         ], $link);

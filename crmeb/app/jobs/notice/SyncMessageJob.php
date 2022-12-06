@@ -108,5 +108,6 @@ class SyncMessageJob extends BaseJobs
         if(!$res->errcode && $res->template_id){
             $templateMessageServices->update($template['id'],['tempid'=>$res->template_id]);
         }
+        return true;
     }
 }

@@ -84,8 +84,6 @@ class LoginServices extends BaseServices
     public function updateUserInfo($user, $userInfo, $is_new = false)
     {
         $data = [];
-        $data['nickname'] = !isset($user['nickname']) || !$user['nickname'] ? $userInfo->nickname : $user['nickname'];
-        $data['avatar'] = !isset($user['headimgurl']) || !$user['headimgurl'] ? $userInfo->avatar : $user['headimgurl'];
         $data['phone'] = !isset($user['phone']) || !$user['phone'] ? $userInfo->phone : $user['phone'];
         $data['last_time'] = time();
         $data['last_ip'] = app()->request->ip();

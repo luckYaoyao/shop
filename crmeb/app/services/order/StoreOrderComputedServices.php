@@ -442,7 +442,7 @@ class StoreOrderComputedServices extends BaseServices
                     }
                 }
                 if (count($storePostage_arr)) {
-					$maxStorePostage = max($storePostage_arr);
+                    $maxStorePostage = max($storePostage_arr);
                     //获取运费计算中的最大值
                     $storePostage = bcadd((string)$storePostage, (string)$maxStorePostage, 2);
                 }

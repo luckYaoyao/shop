@@ -280,6 +280,7 @@ class RoutineServices extends BaseServices
             } else
                 throw new ApiException(410019);
         } else {
+            if (!$user['status']) throw new ApiException(410027);
             //更新用户信息
             $wechatUserServices->wechatUpdata([$user['uid'], ['code' => $spid]]);
             $token = $this->createToken((int)$user['uid'], 'routine');
