@@ -73,15 +73,15 @@ export default {
           typeName: 'error',
           type: 'recycle',
         },
-        // {
-        //     title: '清除用户数据',
-        //     tlt: '用户相关的所有表都将被清除，谨慎操作',
-        //     typeName: 'error',
-        //     type: 'user'
-        // },
+        {
+            title: '清除用户数据',
+            tlt: '用户相关的所有表都将被清除，谨慎操作',
+            typeName: 'error',
+            type: 'user'
+        },
         {
           title: '清除商城数据',
-          tlt: '清除商城数据，谨慎操作',
+          tlt: '清除所有商城数据，谨慎操作',
           typeName: 'error',
           type: 'store',
         },
@@ -109,12 +109,6 @@ export default {
           typeName: 'error',
           type: 'wechat',
         },
-        // {
-        //     title: '清除微信用户',
-        //     tlt: '清除用户表和微信用户表,谨慎操作',
-        //     typeName: 'error',
-        //     type: 'wechatuser'
-        // },
         {
           title: '清除内容分类',
           tlt: '清除添加的文章和文章分类,谨慎操作',
