@@ -270,7 +270,7 @@ $ cd admin
 $ npm install
 
 # 启动项目(本地开发环境)
-$ npm run serve
+$ npm run dev
 
 # 打包项目
 $ npm run build

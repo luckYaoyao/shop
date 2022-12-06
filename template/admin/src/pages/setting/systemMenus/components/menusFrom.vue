@@ -12,7 +12,7 @@
       @on-cancel="handleReset"
       @on-visible-change="visible"
     >
-      <Form ref="formValidate" :model="formValidate" :label-width="110" :rules="ruleValidate" @submit.native.prevent>
+      <Form ref="formValidate" :model="formValidate" :label-width="110" @submit.native.prevent>
         <Row type="flex" :gutter="24">
           <Col span="24">
             <FormItem label="类型：">
@@ -31,7 +31,7 @@
               <div class="add">
                 <Input v-model="formValidate.menu_name" :placeholder="!authType ? '请输入接口名称' : '请输入按钮名称'">
                 </Input>
-                <Button class="ml10 df" v-show="!authType" @click="getRuleList()" icon="ios-apps"> </Button>
+                <Button class="ml10 df" v-show="!authType" @click="getRuleList()" icon="ios-apps"></Button>
               </div>
             </FormItem>
           </Col>
@@ -179,40 +179,35 @@
 </template>
 
 <script>
-import { addMenusApi, addMenus, getRuleList } from '@/api/systemMenus';
-import icon from '@/utils/icon';
+import { addMenusApi, addMenus, getRuleList } from "@/api/systemMenus";
+import icon from "@/utils/icon";
+
 export default {
-  name: 'menusFrom',
+  name: "menusFrom",
   props: {
     formValidate: {
       type: Object,
-      default: null,
+      default: null
     },
     titleFrom: {
       type: String,
-      default: '',
-    },
+      default: ""
+    }
   },
   data() {
     return {
       arrs: [],
-      searchRule: '',
-      iconVal: '',
+      searchRule: "",
+      iconVal: "",
       grid: {
         xl: 12,
         lg: 12,
         md: 12,
         sm: 24,
-        xs: 24,
+        xs: 24
       },
       modals: false,
       modal12: false,
-      ruleValidate: {
-        menu_name: [{ required: true, message: '请输入按钮名称', trigger: 'blur' }],
-        menu_path: [{ required: true, message: '请输入路由地址', trigger: 'blur' }],
-        methods: [{ required: true, message: '请选择接口请求方式', trigger: 'blur' }],
-        api_url: [{ required: true, message: '请填写接口请求地址', trigger: 'blur' }],
-      },
       FromData: [],
       valids: false,
       list2: [],
@@ -220,27 +215,28 @@ export default {
       authType: true,
       search: icon,
       ruleModal: false,
-      ruleList: [],
+      ruleList: []
     };
   },
   watch: {
-    'formValidate.header': function (n) {
+    "formValidate.header": function(n) {
       this.formValidate.is_header = n ? 1 : 0;
     },
-    'formValidate.auth_type': function (n) {
+    "formValidate.auth_type": function(n) {
       if (n === undefined) {
         n = 1;
       }
       this.authType = n === 1;
     },
-    'formValidate.data': function (n) {},
+    "formValidate.data": function(n) {
+    }
   },
   computed: {
     /* eslint-disable */
     optionsList() {
       let a = [];
       this.FromData.map((item) => {
-        if ('pid' === item.field) {
+        if ("pid" === item.field) {
           a = item.options;
         }
       });
@@ -249,7 +245,7 @@ export default {
     headerOptionsList() {
       let a = [];
       this.FromData.map((item) => {
-        if ('header' === item.field) {
+        if ("header" === item.field) {
           a = item.options;
         }
       });
@@ -258,7 +254,7 @@ export default {
     optionsListmodule() {
       let a = [];
       this.FromData.map((item) => {
-        if ('module' === item.field) {
+        if ("module" === item.field) {
           a = item.options;
         }
       });
@@ -267,7 +263,7 @@ export default {
     optionsRadio() {
       let a = [];
       this.FromData.map((item) => {
-        if ('auth_type' === item.field) {
+        if ("auth_type" === item.field) {
           a = item.options;
         }
       });
@@ -276,7 +272,7 @@ export default {
     isheaderRadio() {
       let a = [];
       this.FromData.map((item) => {
-        if ('is_header' === item.field) {
+        if ("is_header" === item.field) {
           a = item.options;
         }
       });
@@ -285,7 +281,7 @@ export default {
     isShowRadio() {
       let a = [];
       this.FromData.map((item) => {
-        if ('is_show' === item.field) {
+        if ("is_show" === item.field) {
           a = item.options;
         }
       });
@@ -294,7 +290,7 @@ export default {
     isShowPathRadio() {
       let a = [];
       this.FromData.map((item) => {
-        if ('is_show_path' === item.field) {
+        if ("is_show_path" === item.field) {
           a = item.options;
         }
       });
@@ -303,12 +299,12 @@ export default {
     menuList() {
       let a = [];
       this.FromData.map((item) => {
-        if ('menu_list' === item.field) {
+        if ("menu_list" === item.field) {
           a = item.props.data;
         }
       });
       return a;
-    },
+    }
   },
   methods: {
     // 获取权限列表
@@ -321,7 +317,7 @@ export default {
     modalchange(type) {
       if (!type) {
         this.arrs = [];
-        this.ruleModal = '';
+        this.ruleModal = "";
         this.ruleModal = false;
       }
     },
@@ -331,7 +327,7 @@ export default {
       }
     },
     selectRule(data) {
-      this.$emit('selectRule', data);
+      this.$emit("selectRule", data);
       this.$nextTick((e) => {
         this.ruleModal = false;
       });
@@ -363,13 +359,13 @@ export default {
       }
     },
     init() {
-      this.searchRule = '';
+      this.searchRule = "";
       this.arrs = [];
     },
     handleCreate1(val) {
       this.headerOptionsList.push({
         value: val,
-        label: val,
+        label: val
       });
     },
     // 获取新增表单
@@ -397,40 +393,53 @@ export default {
         this.formValidate.pid = this.formValidate.path[length - 1] || 0;
       }
       let data = {
-        url: this.formValidate.id ? `/setting/menus/${this.formValidate.id}` : '/setting/menus',
-        method: this.formValidate.id ? 'put' : 'post',
-        datas: this.formValidate,
+        url: this.formValidate.id ? `/setting/menus/${this.formValidate.id}` : "/setting/menus",
+        method: this.formValidate.id ? "put" : "post",
+        datas: this.formValidate
       };
-      this.$refs[name].validate((valid) => {
-        if (valid) {
-          this.valids = true;
-          addMenusApi(data)
-            .then(async (res) => {
-              this.$Message.success(res.msg);
-              this.modals = false;
-              this.$emit('getList');
-              this.getAddFrom();
-              this.$store.dispatch('admin/menus/getMenusNavList');
-            })
-            .catch((res) => {
-              this.$Message.error(res.msg);
-            });
-        } else {
-          if (!this.formValidate.menu_name) return this.$Message.error('请添加按钮名称！');
+      if (this.authType) {
+        if (!this.formValidate.menu_name) {
+          return this.$Message.warning("请填写按钮名称");
         }
-      });
+        if (!this.formValidate.menu_path) {
+          return this.$Message.warning("请填写路由地址");
+        }
+      } else {
+        if (!this.formValidate.menu_name) {
+          return this.$Message.warning("请填写接口名称");
+        }
+        if (!this.formValidate.methods) {
+          return this.$Message.warning("请选择请求方式");
+        }
+        if (!this.formValidate.api_url) {
+          return this.$Message.warning("请选择接口地址");
+        }
+      }
+      this.valids = true;
+      addMenusApi(data)
+        .then(async (res) => {
+          this.$Message.success(res.msg);
+          this.modals = false;
+          this.$emit("getList");
+          this.getAddFrom();
+          this.$store.dispatch("admin/menus/getMenusNavList");
+        })
+        .catch((res) => {
+          this.valids = false;
+          this.$Message.error(res.msg);
+        });
     },
     handleReset() {
       this.modals = false;
       this.authType = true;
-      this.$refs['formValidate'].resetFields();
-      this.$emit('clearFrom');
-    },
+      this.$refs["formValidate"].resetFields();
+      this.$emit("clearFrom");
+    }
   },
   created() {
     this.list = this.search;
     this.getAddFrom();
-  },
+  }
 };
 </script>
 
@@ -441,6 +450,7 @@ export default {
   border-radius: 4px;
   overflow: hidden;
 }
+
 .scollhide {
   width: 100%;
   height: 100%;
@@ -449,6 +459,7 @@ export default {
   padding: 10px 0 10px 0;
   box-sizing: border-box;
 }
+
 .content {
   font-size: 12px;
 }
@@ -471,21 +482,25 @@ export default {
   position: relative;
   padding-top: 10px;
 }
+
 .icons-item .ivu-icon {
   font-size: 16px;
 }
+
 .search-rule {
   display: flex;
   align-items: center;
   padding: 10px;
   background-color: #f2f2f2;
 }
+
 .rule {
   display: flex;
   flex-wrap: wrap;
   max-height: 700px;
   overflow: scroll;
 }
+
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
 .rule::-webkit-scrollbar {
   width: 10px;
@@ -504,6 +519,7 @@ export default {
   border-radius: 4px;
   background-color: #555;
 }
+
 .rule-list {
   background-color: #f2f2f2;
   width: 32%;
@@ -514,19 +530,24 @@ export default {
   cursor: pointer;
   transition: all 0.1s;
 }
+
 .rule-list:hover {
   background-color: #c5d1dd;
 }
+
 .rule-list div {
   white-space: nowrap;
 }
+
 .select-rule {
   background-color: #c5d1dd;
 }
+
 .add {
   display: flex;
   align-items: center;
 }
+
 .df {
   display: flex;
   justify-content: center;

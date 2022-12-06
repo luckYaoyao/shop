@@ -21,6 +21,12 @@
             <img v-lazy="row.icon" />
           </div>
         </template>
+        <template slot-scope="{ row, index }" slot="language_name">
+          <div class="acea-row row-middle">
+            <span>{{row.language_name}}</span>
+            <Tag class="ml10" color="default" v-if="row.is_default">默认</Tag>
+          </div>
+        </template>
         <template slot-scope="{ row, index }" slot="status">
           <i-switch
             v-model="row.status"
@@ -70,7 +76,7 @@ export default {
         },
         {
           title: '语言名称',
-          key: 'language_name',
+          slot: 'language_name',
           minWidth: 200,
         },
         {

@@ -892,7 +892,7 @@ export default {
   .main-btn {}
   .card-tree{
     width: 270px;
-    height: calc(100vh - 290px);
+    height: calc(100vh - 190px);
     overflow-y: scroll;
   }
   >>> .tree {
@@ -981,7 +981,7 @@ export default {
   }
   .right-card {
     flex: 1;
-      height: calc(100vh - 290px);
+    max-height: calc(100vh - 190px);
     overflow-y: scroll;
   }
 
@@ -1034,7 +1034,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 600px;
+    min-height: 800px;
 
     .box:hover {
       border: 1px solid pink;

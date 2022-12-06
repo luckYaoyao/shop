@@ -13,7 +13,7 @@
         <!--<Button size="small" style="margin-left: 10px" v-clipboard:copy="item.example"-->
         <!--v-clipboard:success="onCopy"-->
         <!--v-clipboard:error="onError">复制</Button>-->
-        <span class="copy copy-data" :data-clipboard-text="item.example">复制</span>
+        <span class="copy copy-data" @click="onCopy(item.example)">复制</span>
       </div>
     </div>
   </div>
@@ -61,9 +61,15 @@ export default {
     this.clipboard.destroy();
   },
   methods: {
-    // onCopy () {
-    //     this.$Message.success('复制成功');
-    // },
+    onCopy(copyData) {
+      this.$copyText(copyData)
+        .then((message) => {
+          this.$Message.success('复制成功');
+        })
+        .catch((err) => {
+          this.$Message.error('复制失败');
+        });
+    },
     // onError () {
     //     this.$Message.error('复制成功');
     // }

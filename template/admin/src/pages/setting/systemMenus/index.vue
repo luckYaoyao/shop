@@ -210,10 +210,11 @@ export default {
         method: 'DELETE',
         ids: '',
       };
+
       this.$modalSure(delfromData)
         .then((res) => {
           this.$Message.success(res.msg);
-          // this.getData();
+          this.getData();
           this.$store.dispatch('menus/getMenusNavList');
         })
         .catch((res) => {

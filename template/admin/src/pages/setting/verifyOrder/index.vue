@@ -1,7 +1,7 @@
 <template>
   <div>
     <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form ref="formValidate" :model="formValidate" :label-width="100" @submit.native.prevent>
+      <Form ref="formValidate" :model="formValidate" :label-width="80" @submit.native.prevent>
         <Row :gutter="24" type="flex">
           <Col span="24" class="ivu-text-left">
             <FormItem label="核销日期：">
@@ -54,9 +54,7 @@
           </Col>
         </Row>
       </Form>
-    </Card>
-    <Card :bordered="false" dis-hover>
-      <Table
+       <Table
         :columns="columns"
         :data="orderList"
         ref="table"
@@ -160,7 +158,7 @@ export default {
         {
           title: '商品信息',
           slot: 'info',
-          minWidth: 360,
+          minWidth: 300,
         },
         {
           title: '实际支付',
@@ -297,8 +295,15 @@ img {
     display: flex;
     align-items: center;
     justify-content: center;}
+.ivu-mt{
+  margin-bottom 12px
+}
 .ivu-mt a
    color #515a6e
 .ivu-mt a:hover
     color: #2D8cF0;
+.ivu-mt /deep/ .ivu-form-item{
+  padding 7px 0;
+  margin-bottom 0
+}
 </style>

@@ -61,13 +61,7 @@
               </div>
               <div class="lable">
                 <p class="txt">例如：{{ item.example }}</p>
-                <Button
-                  size="small"
-                  v-clipboard:copy="item.example"
-                  v-clipboard:success="onCopy"
-                  v-clipboard:error="onError"
-                  >复制
-                </Button>
+                <Button size="small" @click="onCopy(item.example)">复制 </Button>
               </div>
             </div>
           </div>
@@ -328,8 +322,14 @@ export default {
       if (e.relatedContext.element.name == 'nav_bar') return false;
       return true;
     },
-    onCopy() {
-      this.$Message.success('复制成功');
+    onCopy(copyData) {
+      this.$copyText(copyData)
+        .then((message) => {
+          this.$Message.success('复制成功');
+        })
+        .catch((err) => {
+          this.$Message.error('复制失败');
+        });
     },
     onError() {
       this.$Message.error('复制失败');
