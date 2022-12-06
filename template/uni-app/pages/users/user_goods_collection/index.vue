@@ -130,14 +130,11 @@
 				this.checkbox_show = !this.checkbox_show
 			},
 			checkboxChange(e) {
-				console.log(this.ids.length,'ids')
-				console.log(e.detail.value)
 				if (e.detail.value.length < this.ids.length) {
 					this.$set(this, 'isAllSelect', false);
 				} else if (e.detail.value.length === this.collectProductList.length) {
 					this.$set(this, 'isAllSelect', true);
 				}
-				console.log(this.isAllSelect)
 				this.$set(this, 'ids', e.detail.value);
 			},
 			subDel() {
@@ -161,7 +158,6 @@
 
 			},
 			checkboxAllChange(event) {
-				console.log(event.detail.value)
 				let value = event.detail.value;
 				if (value.length > 0) {
 					this.setAllSelectValue(1)
@@ -186,7 +182,6 @@
 						return item;
 					});
 					that.$set(that, 'collectProductList', newValid);
-					console.log(selectValue)
 					that.$set(that, 'ids', selectValue);
 				}
 			},

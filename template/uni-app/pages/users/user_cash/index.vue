@@ -233,7 +233,6 @@
 					    array.splice(i,1,that.$t(v))
 					})
 					that.$set(that, 'array', array);
-					console.log(array)
 					that.minPrice = res.data.minPrice;
 					that.brokerageType = res.data.brokerageType ? parseInt(res.data.brokerageType) : 0;
 				});

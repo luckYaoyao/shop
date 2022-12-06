@@ -74,7 +74,6 @@
 		methods: {
 			getDetail() {
 				friendDetail(this.orderId).then(res => {
-					console.log(res)
 					if (this.resData.paid == 0) {
 						return this.$util.Tips({
 							title: this.$t(`该订单暂未支付`)

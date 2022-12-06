@@ -163,7 +163,6 @@
 			// }
 		},
 		onLoad() {
-			console.log('aaaa')
 			this.$nextTick(() => {
 				uni.createSelectorQuery().select('#cart').boundingClientRect(res => {
 					const {
@@ -297,7 +296,6 @@
 				let that = this;
 				getCartCounts().then(res => {
 					that.cartCount = res.data.count;
-					console.log(that.$refs.goodClass)
 					that.$refs.goodClass.addIng = false
 				});
 			},

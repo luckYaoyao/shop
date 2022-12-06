@@ -141,8 +141,13 @@
 							that.wechatPhone();
 						}
 					})
-					.catch(error => {
-						// location.replace("/");
+					.catch(err => {
+						uni.hideLoading();
+						uni.showToast({
+							title: err,
+							icon: 'none',
+							duration: 2000
+						});
 					});
 			} else if (code && this.options.scope == 'snsapi_base' && !this.$Cache.has('snsapiKey')) {
 				//公众号静默授权
@@ -223,25 +228,32 @@
 							title: this.$t(`正在登录中`)
 						});
 						authLogin({
-							code,
-							spread_spid: app.globalData.spid,
-							spread_code: app.globalData.code
-						}).then(res => {
-							if (res.data.key !== undefined && res.data.key) {
+								code,
+								spread_spid: app.globalData.spid,
+								spread_code: app.globalData.code
+							}).then(res => {
+								if (res.data.key !== undefined && res.data.key) {
+									uni.hideLoading();
+									this.authKey = res.data.key;
+									this.isPhoneBox = true;
+								} else {
+									uni.hideLoading();
+									let time = res.data.expires_time - this.$Cache.time();
+									this.$store.commit('LOGIN', {
+										token: res.data.token,
+										time: time
+									});
+									this.getUserInfo()
+								}
+							})
+							.catch(err => {
 								uni.hideLoading();
-								this.authKey = res.data.key;
-								this.isPhoneBox = true;
-							} else {
-								uni.hideLoading();
-								let time = res.data.expires_time - this.$Cache.time();
-								this.$store.commit('LOGIN', {
-									token: res.data.token,
-									time: time
+								uni.showToast({
+									title: err,
+									icon: 'none',
+									duration: 2000
 								});
-								this.getUserInfo()
-							}
-
-						})
+							});
 					})
 					.catch(err => {
 						console.log(err)
@@ -459,7 +471,6 @@
 			},
 			// 输入手机号后的回调
 			wechatPhone() {
-				console.log(2222)
 				this.$Cache.clear('snsapiKey');
 				if (this.options.back_url) {
 					let url = uni.getStorageSync('snRouter');

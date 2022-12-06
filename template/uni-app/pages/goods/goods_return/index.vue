@@ -200,6 +200,9 @@
 			 * 申请退货
 			 */
 			subRefund: function(e) {
+				uni.showLoading({
+					title: this.$t(`申请中`)
+				});
 				let that = this,
 					value = e.detail.value;
 				//收集form表单
@@ -221,6 +224,7 @@
 					uni: that.orderId,
 					cart_ids: this.cartIds
 				}).then(res => {
+					uni.hideLoading();
 					return this.$util.Tips({
 						title: this.$t(`申请成功`),
 						icon: 'success'
@@ -229,6 +233,7 @@
 						url: '/pages/users/user_return_list/index?isT=1'
 					});
 				}).catch(err => {
+					uni.hideLoading();
 					return this.$util.Tips({
 						title: err
 					});

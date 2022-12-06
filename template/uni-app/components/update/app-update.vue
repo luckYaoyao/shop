@@ -121,7 +121,6 @@
 				//向后台发起请求，获取最新版本号
 				getUpdateInfo(this.platform === "ios" ? 2 : 1)
 					.then((res) => {
-						console.log(res)
 						if(Array.isArray(res.data)){
 						 return	this.$emit('isNew')
 						}
@@ -146,7 +145,6 @@
 					})
 					.catch((err) => {
 						vm.popup_show = false
-						console.log(err);
 					});
 			},
 			// 检查是否更新

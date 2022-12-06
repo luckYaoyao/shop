@@ -240,7 +240,6 @@
 			// #endif
 			// 初始化
 			if (app.globalData.isWsOpen) {
-				console.log('2222')
 				this.$socket.send({
 					data: {
 						token: this.$store.state.app.token,

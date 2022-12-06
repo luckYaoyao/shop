@@ -188,7 +188,6 @@
 			const startParamObj = wx.getEnterOptionsSync();
 			if (wx.canIUse('getUpdateManager') && startParamObj.scene != 1154) {
 				const updateManager = wx.getUpdateManager()
-				console.log(updateManager);
 				updateManager.onCheckForUpdate(function(res) {
 					// 请求完新版本信息的回调
 					// console.log(res.hasUpdate)
@@ -234,7 +233,6 @@
 			that.globalData.navH = menuButtonInfo.top * 2 + menuButtonInfo.height / 2;
 			const version = uni.getSystemInfoSync().SDKVersion
 			if (Routine.compareVersion(version, '2.21.3') >= 0) {
-				console.log(version)
 				that.$Cache.set('MP_VERSION_ISNEW', true)
 			} else {
 				that.$Cache.set('MP_VERSION_ISNEW', false)

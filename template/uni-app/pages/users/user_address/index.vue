@@ -271,7 +271,6 @@
 					let region = [res.data.province, res.data.city, res.data.district];
 					that.$set(that, 'userAddress', res.data);
 					that.$set(that, 'region', region);
-					console.log(this.region)
 					that.cityId = res.data.city_id
 				});
 			},

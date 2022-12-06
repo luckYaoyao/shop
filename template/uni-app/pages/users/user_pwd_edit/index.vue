@@ -132,7 +132,6 @@
 			async success(data) {
 				let that = this;
 				this.$refs.verify.hide()
-				console.log(that.userInfo.phone)
 				await registerVerify({
 					phone: that.userInfo.phone,
 					type: 'reset',

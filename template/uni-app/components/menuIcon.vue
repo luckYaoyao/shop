@@ -104,7 +104,6 @@
 				// #ifdef MP
 				this.menuButton = uni.getMenuButtonBoundingClientRect();
 				const query = uni.createSelectorQuery().in(this);
-				console.log(this.menuButton)
 				query
 					.select('#home')
 					.boundingClientRect(data => {

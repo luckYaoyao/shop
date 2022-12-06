@@ -684,7 +684,6 @@ export default {
 					.app.token
 			},
 			success: (res) => {
-				console.log(res)
 				uni.hideLoading();
 				if (res.statusCode == 403) {
 					that.Tips({
@@ -708,7 +707,6 @@ export default {
 				}
 			},
 			fail: (err) => {
-				console.log(err)
 				uni.hideLoading();
 				that.Tips({
 					title: i18n.t(

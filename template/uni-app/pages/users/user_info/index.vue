@@ -225,7 +225,6 @@
 				this.formatSize()
 				// 获取版本号
 				plus.runtime.getProperty(plus.runtime.appid, (inf) => {
-					console.log(inf.version)
 					this.version = inf.version;
 				});
 				// #endif 

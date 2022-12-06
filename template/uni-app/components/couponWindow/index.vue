@@ -15,7 +15,7 @@
 				</view>
 			</view>
 			<view class='lid'>
-				<navigator hover-class='none' url='/pages/users/user_get_coupon/index' class='bnt'>{{$t(`立即领取`)}}</navigator>
+				<navigator v-if="window" hover-class='none' url='/pages/users/user_get_coupon/index' class='bnt'>{{$t(`立即领取`)}}</navigator>
 				<view class='iconfont icon-guanbi3' @click="close"></view>
 			</view>
 		</view>

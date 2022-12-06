@@ -326,7 +326,6 @@
 				}
 			},
 			agreeExpress(item) {
-				console.log(3333)
 				let that = this;
 				agreeExpress({
 					id: item.id

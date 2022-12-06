@@ -174,7 +174,6 @@
 				nVal.forEach((item, index) => {
 					num += item.cart_num
 				})
-				console.log(num)
 				this.totalNmu = num
 			}
 		},
@@ -184,7 +183,6 @@
 				this.cartInfo.forEach((item, index) => {
 					num += item.cart_num
 				})
-				console.log(num)
 				this.$set(this, 'totalNmu', num)
 			})
 

@@ -630,7 +630,6 @@
 			 *
 			 */
 			ChangeAttr: function(res) {
-				console.log(this.productValue[res])
 				let productSelect = this.productValue[res];
 				this.$set(this, "selectSku", productSelect);
 				if (productSelect && productSelect.stock > 0) {
@@ -1058,7 +1057,6 @@
 			},
 			// 授权关闭
 			authColse: function(e) {
-				console.log(e, 'eeeee');
 				this.isShowAuth = e;
 			},
 			/**
@@ -1311,12 +1309,10 @@
 			},
 			//滑动轮播图选择商品
 			changeSwitch(e) {
-				console.log(this.skuArr, e)
 				let productSelect = this.skuArr[e];
 				this.$set(this, "selectSku", productSelect);
 				var skuList = productSelect.suk.split(",");
 				this.$set(this.attr.productAttr[0], "index", skuList[0]);
-				console.log(this.skuList)
 				if (skuList.length == 2) {
 					this.$set(this.attr.productAttr[0], "index", skuList[0]);
 					this.$set(this.attr.productAttr[1], "index", skuList[1]);

@@ -40,8 +40,6 @@ Socket.prototype = {
 	},
 	onOpen() {
 		this.init();
-		console.log('创建连接了!')
-		
 		this.send({
 			type: "login",
 			data: $store.state.app.token

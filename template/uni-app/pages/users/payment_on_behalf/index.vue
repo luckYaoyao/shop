@@ -197,7 +197,6 @@
 					this.ShareInfo(this.resData)
 					//#endif
 				}).catch((err) => {
-					console.log('1',err)
 					that.$util.Tips({
 						title: err
 					}, {

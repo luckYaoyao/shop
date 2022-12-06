@@ -161,7 +161,6 @@
 		methods: {
 			qrR(res) {
 				this.codeSrc = res
-				console.log(res)
 			},
 			showCode() {
 				this.codeModal = true

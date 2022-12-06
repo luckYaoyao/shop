@@ -595,7 +595,6 @@
 			getAttrs(id) {
 				let that = this;
 				getAttr(id, 0).then(res => {
-					console.log(res.data)
 					uni.hideLoading();
 					that.$set(that.attr, 'productAttr', res.data.productAttr);
 					that.$set(that, 'productValue', res.data.productValue);

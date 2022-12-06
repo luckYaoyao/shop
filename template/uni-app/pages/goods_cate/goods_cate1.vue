@@ -422,7 +422,7 @@
 			justify-content: center;
 			flex-direction: column;
 			position: relative;
-
+			width: 100%;
 			.count-num {
 				position: absolute;
 				display: flex;

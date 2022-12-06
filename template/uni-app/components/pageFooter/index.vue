@@ -103,7 +103,6 @@
 			let that = this
 			uni.hideTabBar()
 			this.newData = this.$store.state.app.pageFooter
-			console.log(this.newData)
 			if (this.isLogin) {
 				this.getCartNum()
 			}
@@ -169,7 +168,7 @@
 			justify-content: center;
 			flex-direction: column;
 			position: relative;
-
+			width: 100%;
 			.count-num {
 				position: absolute;
 				display: flex;

@@ -693,7 +693,6 @@
 							return getCustomer(url)
 
 						} else if (name === '订单核销') {
-							console.log(`${url}`)
 							return uni.navigateTo({
 								url: url
 							});
@@ -1357,7 +1356,7 @@
 			justify-content: center;
 			flex-direction: column;
 			position: relative;
-
+			width: 100%;
 			.count-num {
 				position: absolute;
 				display: flex;

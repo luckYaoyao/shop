@@ -564,7 +564,6 @@
 				}
 			},
 			subOrder(event) {
-				console.log(event)
 				let that = this,
 					selectValue = that.selectValue;
 				if (selectValue.length > 0) {
@@ -700,7 +699,6 @@
 			},
 			blurInput: function(index) {
 				let item = this.cartList.valid[index];
-				console.log(item)
 				if (!item.cart_num) {
 					item.cart_num = 1;
 					this.$set(this.cartList, 'valid', this.cartList.valid)
@@ -749,10 +747,8 @@
 			setCartNum(cartId, cartNum, successCallback) {
 				let that = this;
 				changeCartNum(cartId, cartNum).then(res => {
-					console.log(res)
 					successCallback && successCallback(res.data);
 				}).catch(err => {
-					console.log(err)
 					return that.$util.Tips({
 						title: err
 					});
@@ -996,6 +992,7 @@
 			justify-content: center;
 			flex-direction: column;
 			position: relative;
+			width: 100%;
 
 			.count-num {
 				position: absolute;
@@ -1145,8 +1142,10 @@
 	}
 
 	.shoppingCart .list .item .picTxt .text .reElection .reBnt {
-		width: 120rpx;
-		height: 46rpx;
+		// width: 120rpx;
+		padding: 0 10rpx;
+		// height: 46rpx;
+		margin-top: 6rpx;
 		border-radius: 23rpx;
 		font-size: 26rpx;
 	}
@@ -1166,7 +1165,7 @@
 	.shoppingCart .list .item .picTxt .carnum {
 		height: 47rpx;
 		position: absolute;
-		bottom: 7rpx;
+		bottom: 0rpx;
 		right: 0;
 	}
 

@@ -61,7 +61,6 @@
 		},
 		created() {},
 		mounted() {
-			console.log('121212',this.conStyle);
 			this.getCidArticle();
 		},
 		methods: {

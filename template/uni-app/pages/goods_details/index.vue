@@ -1,8 +1,6 @@
 <template>
 	<view class="product-con" :style="colorStyle">
-
 		<view class="product-con">
-
 			<!-- #ifndef APP-PLUS -->
 			<view class="navbar" :style="{ height: navH + 'rpx', opacity: opacity }">
 				<view class="navbarH" :style="'height:' + navH + 'rpx;'">
@@ -276,7 +274,7 @@
 					</view>
 					<view class="p_center">{{$t(`购物车`)}}</view>
 				</view>
-				<view v-if="a" class="presale">
+				<view v-if="noGoods" class="presale">
 					<view class="acea-row">
 						<form class=" bnts bg-color-hui"><button class=" bnts bg-color-hui"
 								form-type="submit">{{$t(`暂无产品`)}}</button></form>
@@ -510,7 +508,7 @@
 			return {
 				imgHost: HTTP_REQUEST_URL,
 				sysHeight: sysHeight,
-				a: false,
+				noGoods: false,
 				showSkeleton: true, //骨架屏显示隐藏
 				isNodes: 0, //控制什么时候开始抓取元素节点,只要数值改变就重新抓取
 				Active: false,
@@ -951,14 +949,14 @@
 					this.$util.Tips({
 						title: this.$t(`重新选择`),
 						success: () => {
-							this.a = true
+							this.noGoods = true
 							this.attr.productSelect.stock = 0
 							this.attr.productSelect.quota = 0
 							this.attr.productSelect.cart_num = 0
 						},
 					});
 				} else {
-					this.a = false
+					this.noGoods = false
 				}
 				this.$set(this, "selectSku", productSelect);
 				if (productSelect && productSelect.stock > 0) {
@@ -1019,8 +1017,13 @@
 			 */
 			getGoodsDetails: function() {
 				let that = this;
+				uni.showLoading({
+					title: '加载中',
+					mask: true
+				})
 				getProductDetail(that.id)
 					.then((res) => {
+						uni.hideLoading();
 						let storeInfo = res.data.storeInfo;
 						let good_list = res.data.good_list || [];
 						let count = Math.ceil(good_list.length / 6);
@@ -1131,6 +1134,7 @@
 						that.getCartCount();
 					})
 					.catch((err) => {
+						uni.hideLoading();
 						//状态异常返回上级页面
 						return that.$util.Tips({
 							title: err.toString(),
@@ -1213,7 +1217,7 @@
 					this.$set(productAttr[i], "index", value[i]);
 				}
 				//sort();排序函数:数字-英文-汉字；
-				
+
 				let productSelect = this.productValue[value.join(",")];
 				if (productSelect && productAttr.length) {
 					this.$set(

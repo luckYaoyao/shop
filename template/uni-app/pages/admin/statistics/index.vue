@@ -208,7 +208,6 @@
 				let tempDay = []
 				let tempNum = []
 				var that = this;
-				console.log('ffff',that.where);
 				getStatisticsTime(that.where).then(
 					res => {
 						var _info = res.data.chart,

@@ -667,11 +667,9 @@
 			},
 			//滑动轮播图选择商品
 			changeSwitch(e) {
-				console.log(this.skuArr[e])
 				let productSelect = this.skuArr[e];
 				this.$set(this, "selectSku", productSelect);
 				var skuList = productSelect.suk.split(",");
-				console.log(this.attribute.productAttr)
 				this.$set(this.attribute.productAttr[0], "index", skuList[0]);
 				if (skuList.length == 2) {
 					this.$set(this.attribute.productAttr[0], "index", skuList[0]);

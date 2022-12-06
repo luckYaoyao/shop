@@ -11,8 +11,12 @@ import {
 	imageBase64
 } from "@/api/public";
 import {
-	getProductCode
+	getProductCode, // 普通商品小程序code
 } from "@/api/store.js";
+import {
+	scombinationCode, // 拼团code
+	seckillCode // 秒杀
+} from '@/api/activity.js';
 import i18n from '../utils/lang.js';
 let sysHeight = uni.getSystemInfoSync().statusBarHeight + 'px';
 export const sharePoster = {
@@ -148,14 +152,15 @@ export const sharePoster = {
 		/**
 		 * 生成海报
 		 */
-		async goPoster() {
+		async goPoster(type) {
 			let that = this;
 			that.posters = false;
 			that.$set(that, "canvasStatus", true);
 			let arr2
 			// #ifdef MP
-			getProductCode(that.id)
-				.then((res) => {
+			let met = type === 'scombination' ? scombinationCode(that.id) : type === 'seckill' ? seckillCode(that
+				.id) : getProductCode(that.id)
+			met.then((res) => {
 					uni.downloadFile({
 						url: that.setDomain(res.data.code),
 						success: function(res) {
@@ -182,16 +187,12 @@ export const sharePoster = {
 			// #endif
 			// #ifdef H5 || APP-PLUS
 			arr2 = [that.posterbackgd, that.storeImageBase64, that.PromotionCode];
-			console.log(arr2)
 			if (!that.storeImageBase64)
 				return that.$util.Tips({
 					title: i18n.t(`正在下载海报,请稍后再试`),
 				});
 			that.initPoster(arr2)
 			// #endif
-			console.log(arr2, 'arr2s')
-
-
 		},
 		//替换安全域名
 		setDomain(url) {

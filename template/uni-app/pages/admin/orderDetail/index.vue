@@ -26,7 +26,7 @@
 				<span class="copy copy-data"
 					:data-clipboard-text="`${orderInfo.real_name} ${orderInfo.user_phone} ${orderInfo.user_address}`">{{$t(`复制`)}}</span>
 				<!-- #endif -->
-				<!-- #ifdef MP -->
+				<!-- #ifndef H5 -->
 				<span class="copy copy-data"
 					@click="copyNum(`${orderInfo.real_name} ${orderInfo.user_phone} ${orderInfo.user_address}`)">{{$t(`复制`)}}</span>
 				<!-- #endif -->
@@ -73,7 +73,7 @@
 					<!-- #ifdef H5 -->
 					<span class="copy copy-data" :data-clipboard-text="orderInfo.order_id">{{$t(`复制`)}}</span>
 					<!-- #endif -->
-					<!-- #ifdef MP -->
+					<!-- #ifndef H5 -->
 					<span class="copy copy-data" @click="copyNum(orderInfo.order_id)">{{$t(`复制`)}}</span>
 					<!-- #endif -->
 				</view>
@@ -150,7 +150,7 @@
 					<!-- #ifdef H5 -->
 					<span class="copy copy-data" :data-clipboard-text="orderInfo.delivery_id">{{$t(`复制`)}}</span>
 					<!-- #endif -->
-					<!-- #ifdef MP -->
+					<!-- #ifndef H5 -->
 					<span class="copy copy-data" @click="copyNum(orderInfo.delivery_id)">{{$t(`复制`)}}</span>
 					<!-- #endif -->
 				</view>
@@ -238,7 +238,6 @@
 			}
 		},
 		onShow() {
-			console.log('111')
 			this.getIndex();
 		},
 		onLoad(option) {
@@ -308,7 +307,6 @@
 				);
 			},
 			agreeExpress(id) {
-				console.log(3333)
 				let that = this;
 				agreeExpress({
 					id
@@ -426,7 +424,7 @@
 					}
 				);
 			},
-			// #ifdef MP
+			// #ifndef H5
 			copyNum(id) {
 
 				uni.setClipboardData({
@@ -668,6 +666,8 @@
 	}
 
 	.order-details .address .name {
+		display: flex;
+		align-items: center;
 		font-size: 30upx;
 		color: #282828;
 		margin-bottom: 0.1rem;

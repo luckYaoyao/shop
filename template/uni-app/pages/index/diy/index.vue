@@ -141,11 +141,10 @@
 				<!-- #endif -->
 				<couponWindow :window="isCouponShow" @onColse="couponClose" :couponImage="couponObj.image"
 					:couponList="couponObj.list"></couponWindow>
-				<view class="uni-p-b-98"></view>
 				<!-- #ifndef MP -->
 				<view v-if="site_config" class="site-config" @click="goICP">{{ site_config }}</view>
 				<!-- #endif -->
-				<!-- <pageFooter v-if="footerStatus"></pageFooter> -->
+				<view class="uni-p-b-98"></view>
 				<view class="foot">
 					<view class="page-footer" id="target" :style="{'background-color':newData.bgColor.color[0].item}">
 						<view class="foot-item" v-for="(item,index) in newData.menuList" :key="index"
@@ -711,7 +710,6 @@
 							this.isHeaderSerch = true
 						}
 						if (item.name == 'pageFoot') {
-							console.log(item.status)
 							if (item.status && item.status.status) {
 								this.newData = item
 							}
@@ -845,7 +843,6 @@
 				});
 			},
 			onsollBotton() {
-				console.log('????', this.isSortType)
 				if (this.isSortType == 0) {
 					// this.getGroomList();
 				} else {
@@ -1188,7 +1185,7 @@
 			justify-content: center;
 			flex-direction: column;
 			position: relative;
-
+			width: 100%;
 			.count-num {
 				position: absolute;
 				display: flex;
@@ -1215,8 +1212,6 @@
 
 		.foot-item .txt {
 			font-size: 24rpx;
-
-
 			&.active {}
 		}
 	}

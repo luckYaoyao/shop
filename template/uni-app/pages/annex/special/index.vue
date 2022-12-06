@@ -191,7 +191,6 @@
 			};
 		},
 		onLoad(options) {
-			console.log(options)
 			let that = this
 			this.$nextTick(function() {
 				uni.getSystemInfo({
@@ -351,7 +350,6 @@
 			// #endif
 			// 对象转数组
 			objToArr(data) {
-				console.log(data)
 				if (!data) return
 				const keys = Object.keys(data)
 				keys.sort((a, b) => a - b)
@@ -382,7 +380,6 @@
 						title: res.data.title
 					})
 					let temp = []
-					console.log(res.data)
 					let lastArr = that.objToArr(res.data.value)
 					lastArr.forEach((item, index, arr) => {
 						if (item.name == 'pageFoot') {

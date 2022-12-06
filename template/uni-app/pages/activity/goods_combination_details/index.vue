@@ -230,7 +230,7 @@
 				<view class="">{{$t(`微信朋友圈`)}}</view>
 			</view>
 			<!-- #endif -->
-			<button class="item" hover-class='none' @tap="goPoster">
+			<button class="item" hover-class='none' @tap="goPoster('scombination')">
 				<view class="iconfont icon-haibao"></view>
 				<view class="">{{$t(`生成海报`)}}</view>
 			</button>
@@ -418,7 +418,7 @@
 			isLogin: {
 				handler: function(newV, oldV) {
 					if (newV) {
-						this.downloadFilePromotionCode();
+						// this.downloadFilePromotionCode();
 						this.combinationDetail();
 					}
 				},
@@ -647,7 +647,7 @@
 					// #endif
 					// #ifdef MP
 					that.downloadFilestoreImage();
-					that.downloadFilePromotionCode();
+					// that.downloadFilePromotionCode();
 					// #endif
 					// that.setProductSelect();
 					that.DefaultSelect();

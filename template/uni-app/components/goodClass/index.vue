@@ -89,7 +89,6 @@
 				this.$emit('ChangeCartNumDan', false, index, item);
 			},
 			CartNumAdd(index, item) {
-				console.log('2')
 				if (this.addIng) return
 				this.addIng = true
 				this.$emit('ChangeCartNumDan', true, index, item);

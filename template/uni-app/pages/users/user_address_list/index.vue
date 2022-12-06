@@ -148,7 +148,6 @@
 			 */
 			getWxAddress: function() {
 				let that = this;
-				console.log('111')
 				uni.authorize({
 					scope: 'scope.address',
 					success: function(res) {
@@ -182,7 +181,6 @@
 								});
 							},
 							fail: function(err) {
-								console.log(err)
 								if (err.errMsg == 'chooseAddress:cancel') return that.$util
 									.Tips({
 										title: that.$t(`取消选择`)

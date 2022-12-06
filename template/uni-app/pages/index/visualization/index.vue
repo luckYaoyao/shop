@@ -428,7 +428,6 @@
 				// #ifndef H5
 				this.domOffsetTop = data.top - 110;
 				// #endif
-				console.log(this.domOffsetTop);
 			},
 			// 优惠券弹窗
 			getCoupon() {
@@ -441,7 +440,6 @@
 						const {
 							data
 						} = res;
-						console.log(res)
 						if (data.list.length) {
 							this.isCouponShow = true;
 							this.couponObj = data;

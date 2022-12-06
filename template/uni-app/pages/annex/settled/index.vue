@@ -222,7 +222,6 @@
 		},
 		computed: mapGetters(['isLogin']),
 		onLoad(options) {
-			console.log(options)
 			if (this.isLogin) {
 				this.$nextTick(function() {
 					this.getGoodsDetails()
@@ -313,7 +312,6 @@
 			// 获取历史提交数据详情
 			getGoodsDetails() {
 				getGoodsDetails().then(res => {
-					console.log(res)
 					this.status = res.data.status
 					let resData = res.data
 					if (res.data.status !== -1) {

@@ -66,7 +66,6 @@
 					title: this.$t(`正在加载中`),
 				});
 				getApplicationRecordList(this.pageData).then(res => {
-					console.log(res)
 					this.count = res.data.count
 					this.listData = this.listData.concat(res.data.list)
 					uni.hideLoading();
@@ -75,7 +74,6 @@
 			},
 			// 跳转逻辑
 			jump(item) {
-				console.log(item)
 				if ([0, 2].includes(item.status)) {
 					uni.navigateTo({
 						url: `/pages/store/settled/index?mer_i_id=${item.mer_intention_id}`

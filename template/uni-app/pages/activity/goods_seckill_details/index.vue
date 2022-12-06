@@ -195,7 +195,7 @@
 				<view class="">{{$t(`微信朋友圈`)}}</view>
 			</view>
 			<!-- #endif -->
-			<button class="item" hover-class='none' @tap="goPoster">
+			<button class="item" hover-class='none' @tap="goPoster('seckill')">
 				<view class="iconfont icon-haibao"></view>
 				<view class="">{{$t(`生成海报`)}}</view>
 			</button>
@@ -577,7 +577,7 @@
 					// #endif
 					// #ifndef H5 || APP-PLUS
 					that.downloadFilestoreImage();
-					that.downloadFilePromotionCode();
+					// that.downloadFilePromotionCode();
 					// #endif
 					that.DefaultSelect();
 					setTimeout(() => {
@@ -596,7 +596,6 @@
 					// wxParse.wxParse('description', 'html', that.data.storeInfo.description || '', that, 0);
 					// wxh.time(that.data.time, that);
 				}).catch(err => {
-					console.log(err)
 					that.$util.Tips({
 						title: err
 					})
@@ -1092,11 +1091,9 @@
 			},
 			//滑动轮播图选择商品
 			changeSwitch(e) {
-				console.log(this.skuArr[e])
 				let productSelect = this.skuArr[e];
 				this.$set(this, "selectSku", productSelect);
 				var skuList = productSelect.suk.split(",");
-				console.log(this.attribute.productAttr)
 				this.$set(this.attribute.productAttr[0], "index", skuList[0]);
 				if (skuList.length == 2) {
 					this.$set(this.attribute.productAttr[0], "index", skuList[0]);
