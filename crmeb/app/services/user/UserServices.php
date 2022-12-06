@@ -781,6 +781,21 @@ class UserServices extends BaseServices
             if ($data['money_status'] == 1) {//增加
                 $edit['now_money'] = bcadd($user['now_money'], $data['money'], 2);
                 $res1 = $userMoneyServices->income('system_add', $user['uid'], $data['money'], $edit['now_money'], $data['adminId'] ?? 0);
+                //增加充值记录
+                $recharge_data = [
+                    'order_id' => app()->make(StoreOrderCreateServices::class)->getNewOrderId('cz'),
+                    'uid' => $id,
+                    'price' => $data['money'],
+                    'recharge_type' => 'system',
+                    'paid' => 1,
+                    'add_time' => time(),
+                    'give_price' => 0,
+                    'channel_type' => 'system',
+                    'pay_time' => time(),
+                ];
+                /** @var UserRechargeServices $rechargeServices */
+                $rechargeServices = app()->make(UserRechargeServices::class);
+                $rechargeServices->save($recharge_data);
             } else if ($data['money_status'] == 2) {//减少
                 if ($user['now_money'] > $data['money']) {
                     $edit['now_money'] = bcsub($user['now_money'], $data['money'], 2);

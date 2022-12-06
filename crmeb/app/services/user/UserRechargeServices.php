@@ -109,6 +109,9 @@ class UserRechargeServices extends BaseServices
                 case 'weixin':
                     $item['_recharge_type'] = '公众号充值';
                     break;
+                case 'system':
+                    $item['_recharge_type'] = '系统充值';
+                    break;
                 default:
                     $item['_recharge_type'] = '其他充值';
                     break;
@@ -116,6 +119,7 @@ class UserRechargeServices extends BaseServices
             $item['_pay_time'] = $item['pay_time'] ? date('Y-m-d H:i:s', $item['pay_time']) : '暂无';
             $item['_add_time'] = $item['add_time'] ? date('Y-m-d H:i:s', $item['add_time']) : '暂无';
             $item['paid_type'] = $item['paid'] ? '已支付' : '未支付';
+            $item['avatar'] = strpos($item['avatar'], 'http') === false ? (sys_config('site_url') . $item['avatar']) : $item['avatar'];
             unset($item['user']);
         }
         return compact('list', 'count');
