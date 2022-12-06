@@ -11,6 +11,13 @@
 namespace app\adminapi\controller\v1\system;
 
 
+use app\services\product\product\StoreDescriptionServices;
+use app\services\product\product\StoreProductCateServices;
+use app\services\product\product\StoreProductCouponServices;
+use app\services\product\product\StoreProductReplyServices;
+use app\services\product\sku\StoreProductAttrResultServices;
+use app\services\product\sku\StoreProductAttrServices;
+use app\services\product\sku\StoreProductAttrValueServices;
 use think\facade\App;
 use app\adminapi\controller\AuthController;
 use app\services\system\SystemClearServices;
@@ -47,37 +54,26 @@ class SystemClearData extends AuthController
         switch ($type) {
             case 'temp':
                 return $this->userTemp();
-                break;
             case 'recycle':
                 return $this->recycleProduct();
-                break;
             case 'store':
                 return $this->storeData();
-                break;
             case 'category':
                 return $this->categoryData();
-                break;
             case 'order':
                 return $this->orderData();
-                break;
             case 'kefu':
                 return $this->kefuData();
-                break;
             case 'wechat':
                 return $this->wechatData();
-                break;
-            case 'attachment':
-                return $this->attachmentData();
-                break;
             case 'article':
                 return $this->articleData();
-                break;
+            case 'attachment':
+                return $this->attachmentData();
             case 'system':
                 return $this->systemData();
-                break;
             case 'user':
                 return $this->userRelevantData();
-                break;
             default:
                 return app('json')->fail(100100);
         }
@@ -106,6 +102,47 @@ class SystemClearData extends AuthController
      */
     public function recycleProduct()
     {
+        /** @var StoreProductServices $product */
+        $product = app()->make(StoreProductServices::class);
+        $ids = $product->getColumn(['is_del' => 1], 'id');
+        //清除规格表数据
+        /** @var StoreProductAttrServices $ProductAttr */
+        $productAttr = app()->make(StoreProductAttrServices::class);
+        $productAttr->delete([['product_id', 'in', $ids], ['type', '=', '0']]);
+
+        /** @var StoreProductAttrResultServices $productAttrResult */
+        $productAttrResult = app()->make(StoreProductAttrResultServices::class);
+        $productAttrResult->delete([['product_id', 'in', $ids], ['type', '=', '0']]);
+
+        /** @var StoreProductAttrValueServices $productAttrValue */
+        $productAttrValue = app()->make(StoreProductAttrValueServices::class);
+        $productAttrValue->delete([['product_id', 'in', $ids], ['type', '=', '0']]);
+
+        //删除商品详情
+        /** @var StoreDescriptionServices $productDescription */
+        $productDescription = app()->make(StoreDescriptionServices::class);
+        $productDescription->delete([['product_id', 'in', $ids], ['type', '=', '0']]);
+
+        //删除商品关联分类数据
+        /** @var StoreProductCateServices $productCate */
+        $productCate = app()->make(StoreProductCateServices::class);
+        $productCate->delete([['product_id', 'in', $ids]]);
+
+        //删除商品关联优惠券数据
+        /** @var StoreProductCouponServices $productCoupon */
+        $productCoupon = app()->make(StoreProductCouponServices::class);
+        $productCoupon->delete([['product_id', 'in', $ids]]);
+
+        //删除商品收藏记录
+        /** @var StoreProductReplyServices $productRelation */
+        $productRelation = app()->make(StoreProductReplyServices::class);
+        $productRelation->delete([['product_id', 'in', $ids], ['category', '=', 'product']]);
+
+        //删除商品的评论
+        /** @var StoreProductReplyServices $productReply */
+        $productReply = app()->make(StoreProductReplyServices::class);
+        $productReply->delete([['product_id', 'in', $ids]]);
+
         /** @var StoreProductServices $services */
         $services = app()->make(StoreProductServices::class);
         $services->delete(1, 'is_del');
@@ -187,110 +224,107 @@ class SystemClearData extends AuthController
     public function storeData()
     {
         $this->services->clearData([
-            'eb_agent_level',
-            'eb_agent_level_task',
-            'eb_agent_level_task_record',
-            'eb_article',
-            'eb_article_category',
-            'eb_article_content',
-            'eb_auxiliary',
-            'eb_cache',
-            'eb_capital_flow',
-            'eb_category',
-            'eb_delivery_service',
-            'eb_division_agent_apply',
-            'eb_live_anchor',
-            'eb_live_goods',
-            'eb_live_room',
-            'eb_live_room_goods',
-            'eb_luck_lottery',
-            'eb_luck_lottery_record',
-            'eb_luck_prize',
-            'eb_member_card',
-            'eb_member_card_batch',
-            'eb_member_right',
-            'eb_member_ship',
-            'eb_message_system',
-            'eb_other_order',
-            'eb_other_order_status',
-            'eb_qrcode',
-            'eb_sms_record',
-            'eb_store_advance',
-            'eb_store_bargain',
-            'eb_store_bargain_user',
-            'eb_store_bargain_user_help',
-            'eb_store_cart',
-            'eb_store_category',
-            'eb_store_combination',
-            'eb_store_coupon_issue',
-            'eb_store_coupon_issue_user',
-            'eb_store_coupon_product',
-            'eb_store_coupon_user',
-            'eb_store_integral',
-            'eb_store_integral_order',
-            'eb_store_integral_order_status',
-            'eb_store_order',
-            'eb_store_order_cart_info',
-            'eb_store_order_economize',
-            'eb_store_order_invoice',
-            'eb_store_order_refund',
-            'eb_store_order_status',
-            'eb_store_pink',
-            'eb_store_product',
-            'eb_store_product_attr',
-            'eb_store_product_attr_result',
-            'eb_store_product_attr_value',
-            'eb_store_product_cate',
-            'eb_store_product_coupon',
-            'eb_store_product_description',
-            'eb_store_product_log',
-            'eb_store_product_relation',
-            'eb_store_product_reply',
-            'eb_store_product_rule',
-            'eb_store_product_virtual',
-            'eb_store_seckill',
-            'eb_store_service',
-            'eb_store_service_feedback',
-            'eb_store_service_log',
-            'eb_store_service_record',
-            'eb_store_visit',
-            'eb_system_file',
-            'eb_system_log',
-            'eb_system_notice',
-            'eb_system_notice_admin',
-            'eb_system_store',
-            'eb_system_store_staff',
-            'eb_user',
-            'eb_user_address',
-            'eb_user_bill',
-            'eb_user_brokerage',
-            'eb_user_brokerage_frozen',
-            'eb_user_cancel',
-            'eb_user_enter',
-            'eb_user_extract',
-            'eb_user_friends',
-            'eb_user_group',
-            'eb_user_invoice',
-            'eb_user_label',
-            'eb_user_label_relation',
-            'eb_user_level',
-            'eb_user_money',
-            'eb_user_notice',
-            'eb_user_notice_see',
-            'eb_user_recharge',
-            'eb_user_search',
-            'eb_user_sign',
-            'eb_user_spread',
-            'eb_user_visit',
-            'eb_wechat_key',
-            'eb_wechat_media',
-            'eb_wechat_message',
-            'eb_wechat_news_category',
-            'eb_wechat_qrcode',
-            'eb_wechat_qrcode_cate',
-            'eb_wechat_qrcode_record',
-            'eb_wechat_reply',
-            'eb_wechat_user',
+            'agent_level_task',
+            'agent_level_task_record',
+            'article',
+            'article_category',
+            'article_content',
+            'auxiliary',
+            'cache',
+            'capital_flow',
+            'category',
+            'delivery_service',
+            'division_agent_apply',
+            'live_anchor',
+            'live_goods',
+            'live_room',
+            'live_room_goods',
+            'luck_lottery',
+            'luck_lottery_record',
+            'luck_prize',
+            'member_card',
+            'member_card_batch',
+            'message_system',
+            'other_order',
+            'other_order_status',
+            'qrcode',
+            'sms_record',
+            'store_advance',
+            'store_bargain',
+            'store_bargain_user',
+            'store_bargain_user_help',
+            'store_cart',
+            'store_category',
+            'store_combination',
+            'store_coupon_issue',
+            'store_coupon_issue_user',
+            'store_coupon_product',
+            'store_coupon_user',
+            'store_integral',
+            'store_integral_order',
+            'store_integral_order_status',
+            'store_order',
+            'store_order_cart_info',
+            'store_order_economize',
+            'store_order_invoice',
+            'store_order_refund',
+            'store_order_status',
+            'store_pink',
+            'store_product',
+            'store_product_attr',
+            'store_product_attr_result',
+            'store_product_attr_value',
+            'store_product_cate',
+            'store_product_coupon',
+            'store_product_description',
+            'store_product_log',
+            'store_product_relation',
+            'store_product_reply',
+            'store_product_rule',
+            'store_product_virtual',
+            'store_seckill',
+            'store_service',
+            'store_service_feedback',
+            'store_service_log',
+            'store_service_record',
+            'store_visit',
+            'system_file',
+            'system_log',
+            'system_notice',
+            'system_notice_admin',
+            'system_store',
+            'system_store_staff',
+            'user',
+            'user_address',
+            'user_bill',
+            'user_brokerage',
+            'user_brokerage_frozen',
+            'user_cancel',
+            'user_enter',
+            'user_extract',
+            'user_friends',
+            'user_group',
+            'user_invoice',
+            'user_label',
+            'user_label_relation',
+            'user_level',
+            'user_money',
+            'user_notice',
+            'user_notice_see',
+            'user_recharge',
+            'user_search',
+            'user_sign',
+            'user_spread',
+            'user_visit',
+            'wechat_key',
+            'wechat_media',
+            'wechat_message',
+            'wechat_news_category',
+            'wechat_qrcode',
+            'wechat_qrcode_cate',
+            'wechat_qrcode_record',
+            'wechat_reply',
+            'wechat_user',
         ], true);
         return app('json')->success(100046);
     }
