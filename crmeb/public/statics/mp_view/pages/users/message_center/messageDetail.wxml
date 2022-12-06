@@ -1,1 +1,1 @@
-<view class="msg-det data-v-61d974d4"><view class="title data-v-61d974d4">{{''+$root.m0+''}}</view><view class="content data-v-61d974d4">{{''+msgData.content+''}}</view><view class="add-time data-v-61d974d4">{{''+$root.m1+msgData.add_time+''}}</view></view>
+<view class="msg-det data-v-8c751c9a"><view class="title data-v-8c751c9a">{{''+$root.m0+''}}</view><view class="content data-v-8c751c9a">{{''+msgData.content+''}}</view><view class="add-time data-v-8c751c9a">{{''+$root.m1+msgData.add_time+''}}</view></view>
