@@ -145,23 +145,7 @@
 		<view class="uni-p-b-98"></view>
 		<!-- <pageFooter :countNum="cartCount"></pageFooter> -->
 		<tabBar v-if="!is_diy" :pagePath="'/pages/order_addcart/order_addcart'"></tabBar>
-		<view class="foot" v-if="is_diy && newData.menuList && newData.menuList.length">
-			<view class="page-footer" id="target" :style="{'background-color':newData.bgColor.color[0].item}">
-				<view class="foot-item" v-for="(item,index) in newData.menuList" :key="index" @click="goRouter(item)">
-					<block v-if="item.link == activeRouter">
-						<image :src="item.imgList[0]"></image>
-						<view class="txt" :style="{color:newData.activeTxtColor.color[0].item}">{{item.name}}</view>
-					</block>
-					<block v-else>
-						<image :src="item.imgList[1]"></image>
-						<view class="txt" :style="{color:newData.txtColor.color[0].item}">{{item.name}}</view>
-					</block>
-					<div class="count-num" v-if="item.link === '/pages/order_addcart/order_addcart' && cartCount > 0">
-						{{cartCount}}
-					</div>
-				</view>
-			</view>
-		</view>
+		<pageFooter v-else></pageFooter>
 	</view>
 </template>
 
@@ -201,9 +185,6 @@
 	import {
 		HTTP_REQUEST_URL
 	} from '@/config/app';
-	import {
-		getNavigation
-	} from '@/api/public.js'
 	export default {
 		components: {
 			pageFooter,
@@ -266,9 +247,6 @@
 		computed: mapGetters(['isLogin']),
 		onLoad(options) {
 			uni.hideTabBar()
-			getNavigation().then(res => {
-				this.newData = res.data
-			})
 			let that = this;
 			if (that.isLogin == false) {
 				toLogin();
@@ -968,64 +946,6 @@
 </script>
 
 <style scoped lang="scss">
-	.page-footer {
-		position: fixed;
-		bottom: 0;
-		z-index: 30;
-		display: flex;
-		align-items: center;
-		justify-content: space-around;
-		width: 100%;
-		height: calc(98rpx+ constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
-		height: calc(98rpx + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
-		box-sizing: border-box;
-		border-top: solid 1rpx #F3F3F3;
-		background-color: #fff;
-		box-shadow: 0px 0px 17rpx 1rpx rgba(206, 206, 206, 0.32);
-		padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
-		padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
-
-		.foot-item {
-			display: flex;
-			width: max-content;
-			align-items: center;
-			justify-content: center;
-			flex-direction: column;
-			position: relative;
-			width: 100%;
-
-			.count-num {
-				position: absolute;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				width: 40rpx;
-				height: 40rpx;
-				top: 0rpx;
-				right: -15rpx;
-				color: #fff;
-				font-size: 20rpx;
-				background-color: #FD502F;
-				border-radius: 50%;
-				padding: 4rpx;
-			}
-		}
-
-		.foot-item image {
-			height: 50rpx;
-			width: 50rpx;
-			text-align: center;
-			margin: 0 auto;
-		}
-
-		.foot-item .txt {
-			font-size: 24rpx;
-
-
-			&.active {}
-		}
-	}
-
 	.shoppingCart {
 		/* #ifdef H5 */
 		// padding-bottom: 0;

@@ -145,26 +145,7 @@
 				<view v-if="site_config" class="site-config" @click="goICP">{{ site_config }}</view>
 				<!-- #endif -->
 				<view class="uni-p-b-98"></view>
-				<view class="foot">
-					<view class="page-footer" id="target" :style="{'background-color':newData.bgColor.color[0].item}">
-						<view class="foot-item" v-for="(item,index) in newData.menuList" :key="index"
-							@click="goRouter(item)">
-							<block v-if="item.link == activeRouter">
-								<image :src="item.imgList[0]"></image>
-								<view class="txt" :style="{color:newData.activeTxtColor.color[0].item}">{{$t(item.name)}}
-								</view>
-							</block>
-							<block v-else>
-								<image :src="item.imgList[1]"></image>
-								<view class="txt" :style="{color:newData.txtColor.color[0].item}">{{$t(item.name)}}</view>
-							</block>
-							<div class="count-num"
-								v-if="item.link === '/pages/order_addcart/order_addcart' && countNum > 0">
-								{{countNum}}
-							</div>
-						</view>
-					</view>
-				</view>
+				<pageFooter></pageFooter>
 			</view>
 		</view>
 		<view v-else>
@@ -208,9 +189,6 @@
 		getCouponNewUser,
 		siteConfig
 	} from '@/api/api.js';
-	import {
-		getNavigation
-	} from '@/api/public.js';
 	// #ifdef H5
 	import mConfig from './components/index.js';
 	// #endif
@@ -381,9 +359,6 @@
 						that.windowHeight = res.windowHeight;
 					}
 				});
-			})
-			getNavigation().then(res => {
-				this.newData = res.data
 			})
 			let routes = getCurrentPages(); // 获取当前打开过的页面路由数组
 			let curRoute = routes[routes.length - 1].route //获取当前页面路由
@@ -708,20 +683,6 @@
 					lastArr.forEach((item, index, arr) => {
 						if (item.name == 'headerSerch') {
 							this.isHeaderSerch = true
-						}
-						if (item.name == 'pageFoot') {
-							if (item.status && item.status.status) {
-								this.newData = item
-							}
-							uni.setStorageSync('FOOTER_BAR', item.status && item.status.status ? true :
-								false)
-							item.menuList.map((path, index) => {
-								if (path.link === '/pages/order_addcart/order_addcart') {
-									uni.setStorageSync('FOOTER_ADDCART', index)
-								}
-							})
-							arr.splice(index, 1);
-
 						}
 						if (item.name == 'promotionList') {
 							that.numConfig = item.numConfig.val;
@@ -1158,61 +1119,6 @@
 			bottom: 69px;
 			left: 0;
 			width: 100%;
-		}
-	}
-
-	.page-footer {
-		position: fixed;
-		bottom: 0;
-		z-index: 30;
-		display: flex;
-		align-items: center;
-		justify-content: space-around;
-		width: 100%;
-		height: calc(98rpx+ constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
-		height: calc(98rpx + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
-		box-sizing: border-box;
-		border-top: solid 1rpx #F3F3F3;
-		background-color: #fff;
-		box-shadow: 0px 0px 17rpx 1rpx rgba(206, 206, 206, 0.32);
-		padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
-		padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
-
-		.foot-item {
-			display: flex;
-			width: max-content;
-			align-items: center;
-			justify-content: center;
-			flex-direction: column;
-			position: relative;
-			width: 100%;
-			.count-num {
-				position: absolute;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				width: 40rpx;
-				height: 40rpx;
-				top: 0rpx;
-				right: -15rpx;
-				color: #fff;
-				font-size: 20rpx;
-				background-color: #FD502F;
-				border-radius: 50%;
-				padding: 4rpx;
-			}
-		}
-
-		.foot-item image {
-			height: 50rpx;
-			width: 50rpx;
-			text-align: center;
-			margin: 0 auto;
-		}
-
-		.foot-item .txt {
-			font-size: 24rpx;
-			&.active {}
 		}
 	}
 </style>

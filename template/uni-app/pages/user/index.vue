@@ -273,23 +273,7 @@
 			</scroll-view>
 		</view>
 		<tabBar v-if="!is_diy" :pagePath="'/pages/user/index'"></tabBar>
-		<view class="foot" v-if="is_diy && newData.menuList && newData.menuList.length">
-			<view class="page-footer" id="target" :style="{'background-color':newData.bgColor.color[0].item}">
-				<view class="foot-item" v-for="(item,index) in newData.menuList" :key="index" @click="goRouter(item)">
-					<block v-if="item.link == activeRouter">
-						<image :src="item.imgList[0]"></image>
-						<view class="txt" :style="{color:newData.activeTxtColor.color[0].item}">{{$t(item.name)}}</view>
-					</block>
-					<block v-else>
-						<image :src="item.imgList[1]"></image>
-						<view class="txt" :style="{color:newData.txtColor.color[0].item}">{{$t(item.name)}}</view>
-					</block>
-					<div class="count-num" v-if="item.link === '/pages/order_addcart/order_addcart' && cartNum > 0">
-						{{cartNum}}
-					</div>
-				</view>
-			</view>
-		</view>
+		<pageFooter v-else></pageFooter>
 	</view>
 </template>
 <script>
@@ -302,7 +286,6 @@
 	} from '@/api/user.js';
 	import {
 		wechatAuthV2,
-		getNavigation,
 		silenceAuth
 	} from '@/api/public.js'
 	import {
@@ -320,12 +303,14 @@
 	import Routine from '@/libs/routine';
 	import colors from '@/mixins/color';
 	import tabBar from "@/pages/index/visualization/components/tabBar.vue";
+	import pageFooter from '@/components/pageFooter/index.vue'
 	import {
 		getCustomer
 	} from '@/utils/index.js'
 	export default {
 		components: {
 			tabBar,
+			pageFooter
 		},
 		// computed: mapGetters(['isLogin','cartNum']),
 		computed: {
@@ -390,7 +375,6 @@
 				sysHeight: sysHeight,
 				mpHeight: 0,
 				showStatus: 1,
-				newData: {},
 				activeRouter: '',
 				// #ifdef H5 || MP
 				pageHeight: '100%',
@@ -412,9 +396,6 @@
 		onLoad(option) {
 			uni.hideTabBar()
 			let that = this;
-			getNavigation().then(res => {
-				this.newData = res.data
-			})
 			// #ifdef MP
 			// 小程序静默授权
 			if (!this.$store.getters.isLogin) {
@@ -1329,63 +1310,6 @@
 
 		.iconfont {
 			font-size: 40rpx;
-		}
-	}
-
-	.page-footer {
-		position: fixed;
-		bottom: 0;
-		z-index: 30;
-		display: flex;
-		align-items: center;
-		justify-content: space-around;
-		width: 100%;
-		height: calc(98rpx+ constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
-		height: calc(98rpx + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
-		box-sizing: border-box;
-		border-top: solid 1rpx #F3F3F3;
-		background-color: #fff;
-		box-shadow: 0px 0px 17rpx 1rpx rgba(206, 206, 206, 0.32);
-		padding-bottom: constant(safe-area-inset-bottom); ///兼容 IOS<11.2/
-		padding-bottom: env(safe-area-inset-bottom); ///兼容 IOS>11.2/
-
-		.foot-item {
-			display: flex;
-			width: max-content;
-			align-items: center;
-			justify-content: center;
-			flex-direction: column;
-			position: relative;
-			width: 100%;
-			.count-num {
-				position: absolute;
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				width: 40rpx;
-				height: 40rpx;
-				top: 0rpx;
-				right: -15rpx;
-				color: #fff;
-				font-size: 20rpx;
-				background-color: #FD502F;
-				border-radius: 50%;
-				padding: 4rpx;
-			}
-		}
-
-		.foot-item image {
-			height: 50rpx;
-			width: 50rpx;
-			text-align: center;
-			margin: 0 auto;
-		}
-
-		.foot-item .txt {
-			font-size: 24rpx;
-
-
-			&.active {}
 		}
 	}
 
