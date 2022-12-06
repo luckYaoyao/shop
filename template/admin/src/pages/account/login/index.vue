@@ -226,14 +226,14 @@ export default {
             if (data.queue === false) {
               this.$Notice.warning({
                 title: '温馨提示',
-                desc: '您的【消息队列】未开启，没有开启会导致异步任务无法执行。请尽快执行命令开启！！',
+                desc: '您的【消息队列】未开启，没有开启会导致异步任务无法执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/6963" target="_blank">点击查看开启方法</a>',
                 duration: 30,
               });
             }
             if (data.timer === false) {
               this.$Notice.warning({
                 title: '温馨提示',
-                desc: '您的【定时任务】未开启，没有开启会导致定时执行的任务无法执行。请尽快执行命令开启！！',
+                desc: '您的【定时任务】未开启，没有开启会导致定时执行的任务无法执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/6962" target="_blank">点击查看开启方法</a>',
                 duration: 30,
               });
             }
@@ -267,7 +267,7 @@ export default {
             isNotice = true;
             this.$Notice.warning({
               title: '温馨提示',
-              desc: '您的【长连接】未开启，没有开启会导致客服消息无法发送,后台订单通知无法收到。请尽快执行命令开启！！',
+              desc: '您的【长连接】未开启，没有开启会导致客服消息无法发送,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/6931" target="_blank">点击查看开启方法</a>',
               duration: 30,
             });
           }
@@ -277,7 +277,7 @@ export default {
             isNotice = true;
             this.$Notice.warning({
               title: '温馨提示',
-              desc: '您的【长连接】未开启，没有开启会导致客服消息无法发送,后台订单通知无法收到。请尽快执行命令开启！！',
+              desc: '您的【长连接】未开启，没有开启会导致客服消息无法发送,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/6931" target="_blank">点击查看开启方法</a>',
               duration: 30,
             });
           }

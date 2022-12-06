@@ -56,14 +56,6 @@
               <Input v-model="formValidate.api_url" placeholder="请输入接口地址" prop="api_url"></Input>
             </FormItem>
           </Col>
-          <!-- <Col v-bind="grid" v-show="authType">
-            <FormItem label="接口参数：">
-              <Input
-                v-model="formValidate.params"
-                placeholder="举例:a/123/b/234"
-              ></Input>
-            </FormItem>
-          </Col> -->
           <Col v-bind="grid" v-show="authType">
             <FormItem label="路由地址：" prop="menu_path">
               <Input v-model="formValidate.menu_path" placeholder="请输入路由地址"></Input>
@@ -84,15 +76,6 @@
               ></Input>
             </FormItem>
           </Col>
-          <!--<Col v-bind="grid" v-show="authType">-->
-          <!--<FormItem label="顶部菜单：">-->
-          <!--<Select v-model="formValidate.header" filterable allow-create @on-create="handleCreate1">-->
-          <!--<Option v-for="(item,i) in headerOptionsList" :value="item.value" :key="i">{{ item.label-->
-          <!--}}-->
-          <!--</Option>-->
-          <!--</Select>-->
-          <!--</FormItem>-->
-          <!--</Col>-->
 
           <Col v-bind="grid">
             <FormItem label="排序：">
