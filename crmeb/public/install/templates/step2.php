@@ -172,6 +172,38 @@
 
 
             </table>
+<!--            <table width="100%">-->
+<!--                <tr>-->
+<!--                  <td class="td1" width="25%">函数检测必须开启</td>-->
+<!--                  <td class="td1" width="25%">当前状态</td>-->
+<!--                  <td class="td1" width="25%">函数检测必须开启</td>-->
+<!--                  <td class="td1" width="25%">当前状态</td>-->
+<!--                </tr>-->
+<!--              <tr>-->
+<!--                    <td>file_put_contents</td>-->
+<!--                    <td>--><?php //echo $file_put_contents; ?><!--</td>-->
+<!--                <td>imagettftext</td>-->
+<!--                <td>--><?php //echo $imagettftext; ?><!--</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>proc_open</td>-->
+<!--                    <td>--><?php //echo $proc_open; ?><!--</td>-->
+<!--                    <td>pcntl_signal</td>-->
+<!--                    <td>--><?php //echo $pcntl_signal; ?><!--</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>pcntl_signal_dispatch</td>-->
+<!--                    <td>--><?php //echo $pcntl_signal_dispatch; ?><!--</td>-->
+<!--                    <td>pcntl_fork</td>-->
+<!--                    <td>--><?php //echo $pcntl_fork; ?><!--</td>-->
+<!--                </tr>-->
+<!--                <tr>-->
+<!--                    <td>pcntl_wait</td>-->
+<!--                    <td>--><?php //echo $pcntl_wait; ?><!--</td>-->
+<!--                    <td>pcntl_alarm</td>-->
+<!--                    <td>--><?php //echo $pcntl_alarm; ?><!--</td>-->
+<!--                </tr>-->
+<!--            </table>-->
         </div>
         <div class="bottom tac">
             <a href="<?php echo $_SERVER['PHP_SELF']; ?>?step=2" class="btn">重新检测</a>

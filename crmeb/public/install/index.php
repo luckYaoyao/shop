@@ -148,6 +148,58 @@ switch ($step) {
             '.version',
             '.constant',
         );
+        //必须开启函数
+//        $disabled = explode(',', ini_get('disable_functions'));
+//
+//
+//        if (function_exists('file_put_contents')) {
+//            $file_put_contents = '<span class="correct_span">&radic;</span> 启用';
+//        } else {
+//            $file_put_contents = '<span class="correct_span error_span">&radic;</span> 禁用';
+//            $err++;
+//        }
+//        if (function_exists('imagettftext')) {
+//            $imagettftext = '<span class="correct_span">&radic;</span> 启用';
+//        } else {
+//            $imagettftext = '<span class="correct_span error_span">&radic;</span> 禁用';
+//            $err++;
+//        }
+//        if (!in_array('proc_open', $disabled)) {
+//            $proc_open = '<span class="correct_span">&radic;</span> 启用';
+//        } else {
+//            $proc_open = '<span class="correct_span error_span">&radic;</span> 禁用';
+//            $err++;
+//        }
+//        if (!in_array('pcntl_signal', $disabled)) {
+//            $pcntl_signal = '<span class="correct_span">&radic;</span> 启用';
+//        } else {
+//            $pcntl_signal = '<span class="correct_span error_span">&radic;</span> 禁用';
+//            $err++;
+//        }
+//        if (!in_array('pcntl_signal_dispatch', $disabled)) {
+//            $pcntl_signal_dispatch = '<span class="correct_span">&radic;</span> 启用';
+//        } else {
+//            $pcntl_signal_dispatch = '<span class="correct_span error_span">&radic;</span> 禁用';
+//            $err++;
+//        }
+//        if (!in_array('pcntl_fork', $disabled)) {
+//            $pcntl_fork = '<span class="correct_span">&radic;</span> 启用';
+//        } else {
+//            $pcntl_fork = '<span class="correct_span error_span">&radic;</span> 禁用';
+//            $err++;
+//        }
+//        if (!in_array('pcntl_wait', $disabled)) {
+//            $pcntl_wait = '<span class="correct_span">&radic;</span> 启用';
+//        } else {
+//            $pcntl_wait = '<span class="correct_span error_span">&radic;</span> 禁用';
+//            $err++;
+//        }
+//        if (!in_array('pcntl_alarm', $disabled)) {
+//            $pcntl_alarm = '<span class="correct_span">&radic;</span> 启用';
+//        } else {
+//            $pcntl_alarm = '<span class="correct_span error_span">&radic;</span> 禁用';
+//            $err++;
+//        }
         include_once("./templates/step2.php");
         exit();
 

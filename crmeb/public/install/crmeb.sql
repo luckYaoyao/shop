@@ -34289,7 +34289,6 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (1002, 34, '', '积分统计', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/marketing/point_statistic', '27/34', 1, '', 0, 'marketing-point_statistic-index', 0),
 (1003, 35, '', '余额记录', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/finance/balance', '35', 1, '', 0, 'finance-balance-index', 0),
 (1004, 1003, '', '余额记录', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/finance/balance/balance', '35/1003', 1, '', 0, 'finance-user-balance', 0),
-(1005, 716, '', '余额统计', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/statistic/balance', '716', 1, '', 0, 'admin-statistic', 0),
 (1006, 69, '', '公众号配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/wechat_config/3/2', '135/69', 1, '', 0, 'setting-system-config', 0),
 (1007, 993, '', '小程序配置', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/routine_config/3/7', '135/993', 1, '', 0, 'setting-system-config', 0),
 (1008, 135, '', 'PC端', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/app/pc', '135', 1, '', 0, 'admin-pc', 0),

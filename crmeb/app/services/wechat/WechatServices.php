@@ -294,24 +294,6 @@ class WechatServices extends BaseServices
         $userInfoKey = md5($openid . '_' . time() . '_wechat');
         Cache::setTokenBucket($userInfoKey, $createData, 7200);
         return ['auth_login' => 1, 'key' => $userInfoKey];
-//        if (!$user) {//没有注册用户也没有强制手机号绑定 返回让微信授权登录
-//            $createData = [$openid, $wechatInfo, $spread, '', 'wechat'];
-//            $userInfoKey = md5($openid . '_' . time() . '_wechat');
-//            Cache::setTokenBucket($userInfoKey, $createData, 7200);
-//            return ['auth_login' => 1, 'key' => $userInfoKey];
-//        } else {
-//            //更新用户信息
-//            $wechatUserServices->wechatUpdata([$user['uid'], ['code' => $spread]]);
-//            $token = $this->createToken((int)$user['uid'], 'wechat');
-//            if ($token) {
-//                /** @var UserVisitServices $visitServices */
-//                $visitServices = app()->make(UserVisitServices::class);
-//                $visitServices->loginSaveVisit($user);
-//                $token['userInfo'] = $user;
-//                return $token;
-//            } else
-//                throw new ApiException(410019);
-//        }
     }
 
     /**
