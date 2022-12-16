@@ -29,18 +29,20 @@ class PrintJob extends BaseJobs
 
     /**
      * 小票打印
-     * @param $switch
-     * @param $adminList
+     * @param $type
+     * @param $configData
      * @param $order
-     * @return bool
+     * @param $product
+     * @return bool|void
      */
-    public function doJob($type, $configdata, $order, $product)
+    public function doJob($type, $configData, $order, $product)
     {
 
         try {
-            $printer = new Printer($type, $configdata);
+            $printer = new Printer($type, $configData);
             $printer->setPrinterContent([
                 'name' => sys_config('site_name'),
+                'url' => sys_config('site_url'),
                 'orderInfo' => is_object($order) ? $order->toArray() : $order,
                 'product' => $product
             ])->startPrinter();
