@@ -92,6 +92,9 @@ class StoreOrderDao extends BaseDao
                 case -4://已删除
                     $query->where('is_del', 1);
                     break;
+                case 9://全部用户未删除的订单
+                    $query->where('is_del', 0);
+                    break;
             }
         })->when(isset($where['paid']) && $where['paid'] !== '', function ($query) use ($where) {
             if (in_array($where['paid'], [0, 1])) {
