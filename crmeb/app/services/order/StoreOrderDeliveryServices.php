@@ -263,7 +263,7 @@ class StoreOrderDeliveryServices extends BaseServices
             case 'express':
                 /** @var ExpressServices $expressServices */
                 $expressServices = app()->make(ExpressServices::class);
-                $f[] = Form::select('delivery_code', '快递公司', (string)$orderInfo->getData('delivery_code'))->setOptions($expressServices->expressSelectForm(['is_show' => 1]))->required('请选择快递公司');
+                $f[] = Form::select('delivery_code', '快递公司', (string)$orderInfo->getData('delivery_code'))->setOptions($expressServices->expressSelectForm(['is_show' => 1]))->required('请选择快递公司')->filterable(true);
                 $f[] = Form::input('delivery_id', '快递单号', $orderInfo->getData('delivery_id'))->required('请填写快递单号');
                 break;
         }
