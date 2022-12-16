@@ -921,25 +921,32 @@ if (!function_exists('getLang')) {
      */
     function getLang($code, array $replace = [])
     {
+        /** @var LangCountryServices $langCountryServices */
+        $langCountryServices = app()->make(LangCountryServices::class);
+        /** @var LangTypeServices $langTypeServices */
+        $langTypeServices = app()->make(LangTypeServices::class);
+        /** @var LangCodeServices $langCodeServices */
+        $langCodeServices = app()->make(LangCodeServices::class);
+
         $request = app()->request;
         //获取接口传入的语言类型
         if (!$range = $request->header('cb-lang')) {
-            if ($request->header('accept-language') !== null) {
-                $range = explode(',', $request->header('accept-language'))[0];
-            } else {
-                $range = 'zh-CN';
+            //没有传入则使用系统默认语言显示
+            if (!$range = $langTypeServices->value(['is_default' => 1], 'file_name')) {
+                //系统没有设置默认语言的话，根据浏览器语言显示，如果浏览器语言在库中找不到，则使用简体中文
+                if ($request->header('accept-language') !== null) {
+                    $range = explode(',', $request->header('accept-language'))[0];
+                } else {
+                    $range = 'zh-CN';
+                }
             }
         }
 
         // 获取type_id
-        /** @var LangCountryServices $langCountryServices */
-        $langCountryServices = app()->make(LangCountryServices::class);
         $typeId = $langCountryServices->value(['code' => $range], 'type_id') ?: 1;
 
         // 获取类型
-        $langData = CacheService::redisHandler()->remember('lang_type_data', function () {
-            /** @var LangTypeServices $langTypeServices */
-            $langTypeServices = app()->make(LangTypeServices::class);
+        $langData = CacheService::redisHandler()->remember('lang_type_data', function () use ($langTypeServices) {
             return $langTypeServices->getColumn(['status' => 1, 'is_del' => 0], 'file_name', 'id');
         }, 3600);
 
@@ -947,9 +954,7 @@ if (!function_exists('getLang')) {
         $langStr = 'lang_' . str_replace('-', '_', $langData[$typeId]);
 
         //读取当前语言的语言包
-        $lang = CacheService::redisHandler()->remember($langStr, function () use ($typeId, $range) {
-            /** @var LangCodeServices $langCodeServices */
-            $langCodeServices = app()->make(LangCodeServices::class);
+        $lang = CacheService::redisHandler()->remember($langStr, function () use ($typeId, $range, $langCodeServices) {
             return $langCodeServices->getColumn(['type_id' => $typeId, 'is_admin' => 1], 'lang_explain', 'code');
         }, 3600);
         //获取返回文字

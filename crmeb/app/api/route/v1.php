@@ -386,6 +386,8 @@ Route::group(function () {
     Route::get('get_lang_type_list', 'v1.PublicController/getLangTypeList')->name('getLangTypeList');
     //获取当前语言json
     Route::get('get_lang_json', 'v1.PublicController/getLangJson')->name('getLangJson');
+    //获取当前后台设置的默认语言类型
+    Route::get('get_default_lang_type', 'v1.PublicController/getDefaultLangType')->name('getLangJson');
 })->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class)->middleware(\app\api\middleware\AuthTokenMiddleware::class, false);
 
 Route::miss(function () {

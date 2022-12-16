@@ -618,14 +618,15 @@ class PublicController
         $request = app()->request;
         //获取接口传入的语言类型
         if (!$range = $request->header('cb-lang')) {
-//            //根据浏览器语言显示，如果浏览器语言在库中找不到，则使用简体中文
-//            if ($request->header('accept-language') !== null) {
-//                $range = explode(',', $request->header('accept-language'))[0];
-//            } else {
-//                $range = 'zh-CN';
-//            }
             //没有传入则使用系统默认语言显示
-            $range = $langTypeServices->value(['is_default'=>1],'file_name');
+            if (!$range = $langTypeServices->value(['is_default' => 1], 'file_name')) {
+                //系统没有设置默认语言的话，根据浏览器语言显示，如果浏览器语言在库中找不到，则使用简体中文
+                if ($request->header('accept-language') !== null) {
+                    $range = explode(',', $request->header('accept-language'))[0];
+                } else {
+                    $range = 'zh-CN';
+                }
+            }
         }
         // 获取type_id
         $typeId = $langCountryServices->value(['code' => $range], 'type_id') ?: 1;
@@ -641,6 +642,18 @@ class PublicController
             return $langCodeServices->getColumn(['type_id' => $typeId, 'is_admin' => 0], 'lang_explain', 'code');
         }, 3600);
         return app('json')->success([$range => $lang]);
+    }
+
+    /**
+     * 获取当前后台设置的默认语言类型
+     * @return mixed
+     */
+    public function getDefaultLangType()
+    {
+        /** @var LangTypeServices $langTypeServices */
+        $langTypeServices = app()->make(LangTypeServices::class);
+        $lang_type = $langTypeServices->value(['is_default' => 1], 'file_name');
+        return app('json')->success(compact('lang_type'));
     }
 
     /**
