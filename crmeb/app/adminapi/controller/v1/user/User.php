@@ -15,7 +15,6 @@ use app\adminapi\controller\AuthController;
 use think\exception\ValidateException;
 use think\facade\App;
 
-
 class User extends AuthController
 {
     /**
@@ -30,21 +29,8 @@ class User extends AuthController
     }
 
     /**
-     * 显示资源列表头部
-     *
-     * @return \think\Response
-     */
-    public function type_header()
-    {
-        $list = $this->services->typeHead();
-        return app('json')->success(compact('list'));
-    }
-
-
-    /**
-     * 显示资源列表
-     *
-     * @return \think\Response
+     * 用户列表
+     * @return mixed
      */
     public function index()
     {
@@ -75,9 +61,9 @@ class User extends AuthController
     }
 
     /**
-     * 显示创建资源表单页.
-     *
-     * @return \think\Response
+     * 添加用户表单
+     * @return mixed
+     * @throws \FormBuilder\Exception\FormBuilderException
      */
     public function create()
     {
@@ -86,7 +72,7 @@ class User extends AuthController
 
     /**
      * 添加编辑用户信息时候的信息
-     * @param int $uid
+     * @param $uid
      * @return mixed
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -99,10 +85,9 @@ class User extends AuthController
     }
 
     /**
-     * 保存新建的资源
-     *
-     * @param \think\Request $request
-     * @return \think\Response
+     * 保存新建用户
+     * @return mixed
+     * @throws \think\Exception
      */
     public function save()
     {
@@ -180,10 +165,9 @@ class User extends AuthController
     }
 
     /**
-     * 显示指定的资源
-     *
-     * @param int $id
-     * @return \think\Response
+     * 获取用户账户详情
+     * @param $id
+     * @return mixed
      */
     public function read($id)
     {
@@ -194,21 +178,21 @@ class User extends AuthController
     }
 
     /**
-     * 赠送会员等级
-     * @param int $uid
+     * 赠送会员等级表单
+     * @param $id
      * @return mixed
-     * */
+     */
     public function give_level($id)
     {
         if (!$id) return app('json')->fail(100100);
         return app('json')->success($this->services->giveLevel((int)$id));
     }
 
-    /*
+    /**
      * 执行赠送会员等级
-     * @param int $uid
+     * @param $id
      * @return mixed
-     * */
+     */
     public function save_give_level($id)
     {
         if (!$id) return app('json')->fail(100100);
@@ -219,21 +203,21 @@ class User extends AuthController
     }
 
     /**
-     * 赠送付费会员时长
-     * @param int $uid
+     * 赠送付费会员时长表单
+     * @param $id
      * @return mixed
-     * */
+     */
     public function give_level_time($id)
     {
         if (!$id) return app('json')->fail(100100);
         return app('json')->success($this->services->giveLevelTime((int)$id));
     }
 
-    /*
+    /**
      * 执行赠送付费会员时长
-     * @param int $uid
+     * @param $id
      * @return mixed
-     * */
+     */
     public function save_give_level_time($id)
     {
         if (!$id) return app('json')->fail(100100);
@@ -245,8 +229,8 @@ class User extends AuthController
 
     /**
      * 清除会员等级
-     * @param int $uid
-     * @return json
+     * @param $id
+     * @return mixed
      */
     public function del_level($id)
     {
@@ -256,12 +240,7 @@ class User extends AuthController
 
     /**
      * 设置会员分组
-     * @param $id
      * @return mixed
-     * @throws \FormBuilder\Exception\FormBuilderException
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
      */
     public function set_group()
     {
@@ -274,7 +253,6 @@ class User extends AuthController
 
     /**
      * 保存会员分组
-     * @param $id
      * @return mixed
      */
     public function save_set_group()
@@ -292,10 +270,6 @@ class User extends AuthController
     /**
      * 设置用户标签
      * @return mixed
-     * @throws \FormBuilder\Exception\FormBuilderException
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
      */
     public function set_label()
     {
