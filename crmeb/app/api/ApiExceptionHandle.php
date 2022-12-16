@@ -78,27 +78,18 @@ class ApiExceptionHandle extends Handle
     public function render($request, Throwable $e): Response
     {
         $massageData = Env::get('app_debug', false) ? [
+            'message' => $e->getMessage(),
             'file' => $e->getFile(),
             'line' => $e->getLine(),
             'trace' => $e->getTrace(),
             'previous' => $e->getPrevious(),
         ] : [];
+        $message = Env::get('app_debug', false) ? '接口报错：' . $e->getMessage() : '很抱歉，系统开小差了';
         // 添加自定义异常处理机制
-        if ($e instanceof DbException) {
-            return app('json')->fail(100102, $massageData);
-        } elseif ($e instanceof ValidateException) {
-            return app('json')->fail($e->getMessage(), $massageData);
-        } elseif ($e instanceof AuthException || $e instanceof AdminException || $e instanceof ApiException) {
-            return app('json')->make($e->getCode() ?: 400, $e->getMessage(), $massageData);
+        if ($e instanceof AuthException || $e instanceof AdminException || $e instanceof ApiException) {
+            return app('json')->make($e->getCode() ?: 400, $message, $massageData);
         } else {
-            return app('json')->fail('很抱歉!系统开小差了', Env::get('app_debug', false) ? [
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'code' => $e->getCode(),
-                'line' => $e->getLine(),
-                'trace' => $e->getTrace(),
-                'previous' => $e->getPrevious(),
-            ] : []);
+            return app('json')->fail($message, $massageData);
         }
     }
 
