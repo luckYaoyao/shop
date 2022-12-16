@@ -127,7 +127,7 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 ### 贡献支持
 开源不易，以下如果有需要，请支持一下，感谢您的支持，让我们更多动力！
 
-[![](readme/pic/gitee2.jpg)](https://www.crmeb.com/index/criteria)
+[![](readme/pic/gitee2.png)](https://www.crmeb.com/index/criteria)
 
 ### 感谢参与开发者
 感谢大神们提交代码（排名不分先后）
