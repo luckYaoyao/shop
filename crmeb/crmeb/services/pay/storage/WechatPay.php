@@ -54,10 +54,8 @@ class WechatPay extends BasePay implements PayInterface
         switch ($this->payType) {
             case Order::NATIVE:
                 return WechatService::nativePay(null, $orderId, $totalFee, $attach, $body, $detail);
-                break;
             case Order::APP:
                 return WechatService::appPay($options['openid'], $orderId, $totalFee, $attach, $body, $detail);
-                break;
             case Order::JSAPI:
                 if (empty($options['openid'])) {
                     throw new PayException('缺少openid');

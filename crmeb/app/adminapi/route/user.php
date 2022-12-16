@@ -22,8 +22,6 @@ Route::group('user', function () {
     Route::get('user/syncUsers', 'v1.user.user/syncWechatUsers')->option(['real_name' => '同步微信用户']);
     //用户信息
     Route::get('user/user_save_info/:uid', 'v1.user.user/userSaveInfo')->option(['real_name' => '添加编辑用户信息时候的信息']);
-    //用户表单头
-    Route::get('user/type_header', 'v1.user.user/type_header')->option(['real_name' => '用户列表头部数据']);
     //赠送会员等级
     Route::get('give_level/:id', 'v1.user.user/give_level')->option(['real_name' => '赠送用户等级']);
     //执行赠送会员等级

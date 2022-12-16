@@ -545,33 +545,6 @@ class UserServices extends BaseServices
     }
 
     /**
-     * 显示资源列表头部
-     * @return array[]
-     */
-    public function typeHead()
-    {
-        //全部会员
-        $all = $this->getCount([]);
-        /** @var UserWechatuserServices $userWechatUser */
-        $userWechatUser = app()->make(UserWechatuserServices::class);
-        //小程序会员
-        $routine = $userWechatUser->getCount([['w.user_type', '=', 'routine']]);
-        //公众号会员
-        $wechat = $userWechatUser->getCount([['w.user_type', '=', 'wechat']]);
-        //H5会员
-        $h5 = $userWechatUser->getCount(['w.openid' => '', 'u.user_type' => 'h5']);
-        //pc会员
-        $pc = $userWechatUser->getCount(['w.openid' => '', 'u.user_type' => 'pc']);
-        return [
-            ['user_type' => '', 'name' => '全部会员', 'count' => $all],
-            ['user_type' => 'routine', 'name' => '小程序会员', 'count' => $routine],
-            ['user_type' => 'wechat', 'name' => '公众号会员', 'count' => $wechat],
-            ['user_type' => 'h5', 'name' => 'H5会员', 'count' => $h5],
-            ['user_type' => 'pc', 'name' => 'PC会员', 'count' => $pc],
-        ];
-    }
-
-    /**
      * 会员列表
      * @param array $where
      * @return array
