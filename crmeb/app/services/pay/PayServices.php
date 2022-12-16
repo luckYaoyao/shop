@@ -92,6 +92,9 @@ class PayServices
             return $pay->create($orderId, $price, $successAction, $body, '', ['openid' => $openid, 'isCode' => $isCode, 'pay_new_weixin_open' => (bool)sys_config('pay_new_weixin_open')]);
 
         } catch (\Exception $e) {
+            if (strpos($e->getMessage(), 'api unauthorized rid') !== false) {
+                throw new ApiException('请在微信支付配置中将小程序商户号选择改为商户号绑定');
+            }
             throw new ApiException($e->getMessage());
         }
     }
