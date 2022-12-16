@@ -55,7 +55,7 @@ class MiniProgram extends BaseStorage implements OAuthInterface
             $userInfoCong = MiniProgramService::getUserInfo($code);
             $session_key = $userInfoCong['session_key'];
         } catch (\Exception $e) {
-            throw new OAuthException(410076);
+            throw new OAuthException($e->getMessage());
         }
 
         if (!isset($userInfoCong['openid'])) {
