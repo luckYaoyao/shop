@@ -268,7 +268,7 @@ class OutAccountServices extends BaseServices
         $param = ['push_account' => $data['push_account'], 'push_password' => $data['push_password']];
         $res = HttpService::getRequest($data['push_token_url'], $param);
         $res = $res ? json_decode($res, true) : ['status' => 400];
-        if ($res['status'] != 200) {
+        if (!isset($res['status']) && $res['status'] != 200) {
             throw new AdminException(100015);
         } else {
             return $res['data'];
