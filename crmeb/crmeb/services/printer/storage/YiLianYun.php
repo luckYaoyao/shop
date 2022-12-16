@@ -39,7 +39,7 @@ class YiLianYun extends BasePrinter
         if (!$this->printerContent) {
             return $this->setError('Missing print');
         }
-        $request = $this->accessToken->postRequest($this->accessToken->getApiUrl('print/index'), [
+        $request = $this->accessToken->postRequest('https://open-api.10ss.net/print/index', [
             'client_id' => $this->accessToken->clientId,
             'access_token' => $this->accessToken->getAccessToken(),
             'machine_code' => $this->accessToken->machineCode,
@@ -103,6 +103,4 @@ class YiLianYun extends BasePrinter
 CONTENT;
         return $this;
     }
-
-
 }

@@ -80,7 +80,6 @@ class AccessToken extends HttpService
         $this->machineCode = $config['terminal'] ?? null;
         $this->name = $name;
         $this->configFile = $configFile;
-        $this->apiUrl = Config::get($this->configFile . '.stores.' . $this->name . '.apiUrl', 'https://open-api.10ss.net/');
     }
 
     /**
@@ -112,7 +111,7 @@ class AccessToken extends HttpService
         /** @var CacheServices $cacheServices */
         $cacheServices = app()->make(CacheServices::class);
         $this->accessToken[$this->name] = $cacheServices->getDbCache('YLY_access_token', function () {
-            $request = self::postRequest($this->apiUrl . 'oauth/oauth', [
+            $request = self::postRequest('https://open-api.10ss.net/auth/oauth', [
                 'client_id' => $this->clientId,
                 'grant_type' => 'client_credentials',
                 'sign' => strtolower(md5($this->clientId . time() . $this->apiKey)),
@@ -127,20 +126,11 @@ class AccessToken extends HttpService
                 return $request['body']['access_token'] ?? '';
             }
             return '';
-        },86400);
+        }, 86400);
         if (!$this->accessToken[$this->name])
             throw new AdminException(400718);
 
         return $this->accessToken[$this->name];
-    }
-
-    /**
-     * 获取请求链接
-     * @return string
-     */
-    public function getApiUrl(string $url = '')
-    {
-        return $url ? $this->apiUrl . $url : $this->apiUrl;
     }
 
     /**
