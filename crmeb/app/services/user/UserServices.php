@@ -1195,6 +1195,11 @@ class UserServices extends BaseServices
         return [$integral_count, $sign_count, $balanceChang_count];
     }
 
+    /**
+     * 用户详情
+     * @param int $uid
+     * @return array
+     */
     public function read(int $uid)
     {
         $userInfo = $this->getUserInfo($uid);
@@ -1514,6 +1519,7 @@ class UserServices extends BaseServices
         $user['integral'] = intval($user['integral']);
         $user['is_agent_level'] = $agentLevelServices->count(['status' => 1, 'is_del' => 0]) > 0 ? 1 : 0;
         $user['division_open'] = (int)sys_config('division_status', 0);
+        $user['is_default_avatar'] = $user['avatar'] == sys_config('h5_avatar') ? 1 : 0;
         $user['avatar'] = strpos($user['avatar'], '/statics/system_images/') !== false ? set_file_url($user['avatar']) : $user['avatar'];
         return $user;
     }
