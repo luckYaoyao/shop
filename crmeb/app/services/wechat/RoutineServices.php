@@ -276,6 +276,7 @@ class RoutineServices extends BaseServices
             $user = $wechatUserServices->wechatOauthAfter($createData);
             $token = $this->createToken((int)$user['uid'], 'routine');
             if ($token) {
+                $token['new_user'] = 1;
                 return $token;
             } else
                 throw new ApiException(410019);
@@ -288,6 +289,7 @@ class RoutineServices extends BaseServices
             $visitServices = app()->make(UserVisitServices::class);
             $visitServices->loginSaveVisit($user);
             if ($token) {
+                $token['new_user'] = 0;
                 return $token;
             } else
                 throw new ApiException(410019);
@@ -389,6 +391,7 @@ class RoutineServices extends BaseServices
         $visitServices = app()->make(UserVisitServices::class);
         $visitServices->loginSaveVisit($user);
         if ($token) {
+            $token['new_user'] = $user['new_user'];
             return $token;
         } else
             throw new ApiException(410019);

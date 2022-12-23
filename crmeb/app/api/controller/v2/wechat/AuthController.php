@@ -76,7 +76,7 @@ class AuthController
         if ($token && isset($token['key'])) {
             return app('json')->success(410022, $token);
         } else if ($token) {
-            return app('json')->success(410001, ['token' => $token['token'], 'expires_time' => $token['params']['exp']]);
+            return app('json')->success(410001, ['token' => $token['token'], 'expires_time' => $token['params']['exp'], 'new_user' => $token['new_user']]);
         } else
             return app('json')->fail(410019);
     }
@@ -123,7 +123,7 @@ class AuthController
         CacheService::delete('code_' . $phone);
         $token = $this->services->silenceAuthBindingPhone($code, $spread_code, $spread_spid, $phone);
         if ($token) {
-            return app('json')->success(410001, ['token' => $token['token'], 'expires_time' => $token['params']['exp']]);
+            return app('json')->success(410001, ['token' => $token['token'], 'expires_time' => $token['params']['exp'], 'new_user' => $token['new_user']]);
         } else
             return app('json')->fail(410019);
     }
@@ -138,7 +138,7 @@ class AuthController
      * @param string $key
      * @return mixed
      */
-    public function authBindingPhone($code = '', $iv = '', $encryptedData ='', $spread_code ='', $spread_spid = '', $key = '')
+    public function authBindingPhone($code = '', $iv = '', $encryptedData = '', $spread_code = '', $spread_spid = '', $key = '')
     {
         if (!$code || !$iv || !$encryptedData)
             return app('json')->fail(100100);
