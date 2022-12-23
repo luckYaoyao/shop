@@ -556,32 +556,11 @@ class PublicController
      */
     public function copyright()
     {
-        try {
-            if (Cache::has('nncnL_crmeb_copyright')) {
-                $copyrightContext = Cache::get('nncnL_crmeb_copyright');
-            } else {
-                /** @var SystemConfigServices $services */
-                $services = app()->make(SystemConfigServices::class);
-                $copyrightContext = $services->value(['menu_name' => 'nncnL_crmeb_copyright'], 'value');
-                $copyrightContext = $copyrightContext ? json_decode($copyrightContext, true) : null;
-                Cache::set('nncnL_crmeb_copyright', $copyrightContext, 3600);
-            }
-
-            // dump(Cache::has('nncnL_crmeb_copyright_image'));
-            if (Cache::has('nncnL_crmeb_copyright_image')) {
-                $copyrightImage = Cache::get('nncnL_crmeb_copyright_image');
-            } else {
-                /** @var SystemConfigServices $services */
-                $services = app()->make(SystemConfigServices::class);
-                $copyrightImage = $services->value(['menu_name' => 'nncnL_crmeb_copyright_image'], 'value');
-                $copyrightImage = $copyrightImage ? json_decode($copyrightImage, true) : null;
-                Cache::set('nncnL_crmeb_copyright_image', $copyrightImage, 3600);
-            }
-        } catch (\Throwable $e) {
-            $copyrightContext = '';
-            $copyrightImage = '';
-        }
-        return app('json')->success(compact('copyrightContext', 'copyrightImage'));
+        $copyrightContext = sys_config('nncnL_crmeb_copyright', '');
+        $copyrightImage = sys_config('nncnL_crmeb_copyright_image', '');
+        $siteName = sys_config('site_name', '');
+        $siteLogo = sys_config('wap_login_logo', '');
+        return app('json')->success(compact('copyrightContext', 'copyrightImage', 'siteName', 'siteLogo'));
     }
 
     /**
