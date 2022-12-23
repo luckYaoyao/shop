@@ -324,9 +324,27 @@ class StoreCartServices extends BaseServices
         if (!$id || !$number || !$uid) return false;
         $where = ['uid' => $uid, 'id' => $id];
         $carInfo = $this->dao->getOne($where, 'product_id,combination_id,seckill_id,bargain_id,product_attr_unique,cart_num');
-        /** @var StoreProductServices $StoreProduct */
-        $StoreProduct = app()->make(StoreProductServices::class);
-        $stock = $StoreProduct->getProductStock($carInfo->product_id, $carInfo->product_attr_unique);
+
+        //购物车修改数量检查限购
+        /** @var StoreProductServices $productServices */
+        $productServices = app()->make(StoreProductServices::class);
+        $limitInfo = $productServices->get($carInfo->product_id, ['is_limit', 'limit_type', 'limit_num']);
+        if ($limitInfo['is_limit']) {
+            if ($limitInfo['limit_type'] == 1 && $number > $limitInfo['limit_num']) {
+                throw new ApiException(410239, ['limit' => $limitInfo['limit_num']]);
+            } else if ($limitInfo['limit_type'] == 2) {
+                /** @var StoreOrderCartInfoServices $orderCartServices */
+                $orderCartServices = app()->make(StoreOrderCartInfoServices::class);
+                $orderPayNum = $orderCartServices->sum(['uid' => $uid, 'product_id' => $carInfo->product_id], 'cart_num');
+                $orderRefundNum = $orderCartServices->sum(['uid' => $uid, 'product_id' => $carInfo->product_id], 'refund_num');
+                $orderNum = $orderPayNum - $orderRefundNum;
+                if (($number + $orderNum) > $limitInfo['limit_num']) {
+                    throw new ApiException(410240, ['limit' => $limitInfo['limit_num'], 'pay_num' => $orderNum]);
+                }
+            }
+        }
+
+        $stock = $productServices->getProductStock($carInfo->product_id, $carInfo->product_attr_unique);
         if (!$stock) throw new ApiException(410237);
         if ($stock < $number) throw new ApiException(410297, ['num' => $number]);
         if ($carInfo->cart_num == $number) return true;
