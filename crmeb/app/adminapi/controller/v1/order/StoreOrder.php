@@ -479,9 +479,15 @@ class StoreOrder extends AuthController
 
         $orderInfo = $this->services->tidyOrder($orderInfo->toArray(), true, true);
         //核算优惠金额
-        $vipTruePrice = array_column($orderInfo['cartInfo'], 'vip_sum_truePrice');
-        $vipTruePrice = round(array_sum($vipTruePrice), 2);
-        $orderInfo['vip_true_price'] = $vipTruePrice ?: 0;
+        $vipTruePrice = $levelPrice = $memberPrice = 0;
+        foreach ($orderInfo['cartInfo'] as $cart) {
+            $vipTruePrice = bcadd((string)$vipTruePrice, (string)$cart['vip_sum_truePrice'], 2);
+            if ($cart['price_type'] == 'member') $memberPrice = bcadd((string)$memberPrice, (string)$cart['vip_sum_truePrice'], 2);
+            if ($cart['price_type'] == 'level') $levelPrice = bcadd((string)$levelPrice, (string)$cart['vip_sum_truePrice'], 2);
+        }
+        $orderInfo['vip_true_price'] = $vipTruePrice;
+        $orderInfo['levelPrice'] = $levelPrice;
+        $orderInfo['memberPrice'] = $memberPrice;
         $orderInfo['total_price'] = bcadd($orderInfo['total_price'], $orderInfo['vip_true_price'], 2);
         if ($orderInfo['store_id'] && $orderInfo['shipping_type'] == 2) {
             /** @var  $storeServices */

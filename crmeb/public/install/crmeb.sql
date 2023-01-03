@@ -27857,6 +27857,7 @@ CREATE TABLE IF NOT EXISTS `eb_store_coupon_issue` (
   `end_time` int(10) NOT NULL DEFAULT '0' COMMENT '优惠券领取结束时间',
   `total_count` int(10) NOT NULL DEFAULT '0' COMMENT '优惠券领取数量',
   `remain_count` int(10) NOT NULL DEFAULT '0' COMMENT '优惠券剩余领取数量',
+  `receive_limit` int(10) NOT NULL DEFAULT '0' COMMENT '每个人个领取的优惠券数量',
   `is_permanent` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否无限张数',
   `status` tinyint(1) NOT NULL DEFAULT '1' COMMENT '1 正常 0 未开启 -1 已无效',
   `is_give_subscribe` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否首次关注赠送 0-否(默认) 1-是',
@@ -27901,8 +27902,7 @@ INSERT INTO `eb_store_coupon_issue` (`id`, `cid`, `coupon_title`, `start_time`, 
 CREATE TABLE IF NOT EXISTS `eb_store_coupon_issue_user` (
   `uid` int(10) NOT NULL DEFAULT '0' COMMENT '领取优惠券用户ID',
   `issue_coupon_id` int(10) NOT NULL DEFAULT '0' COMMENT '优惠券前台领取ID',
-  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '领取时间',
-  UNIQUE KEY `uid` (`uid`,`issue_coupon_id`) USING BTREE
+  `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '领取时间'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='优惠券前台用户领取记录表';
 
 -- --------------------------------------------------------
@@ -27914,6 +27914,7 @@ CREATE TABLE IF NOT EXISTS `eb_store_coupon_issue_user` (
 CREATE TABLE IF NOT EXISTS `eb_store_coupon_product` (
   `coupon_id` int(11) NOT NULL DEFAULT '0' COMMENT '优惠卷模板id',
   `product_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品id',
+  `category_id` int(11) NOT NULL DEFAULT '0' COMMENT '分类id',
   KEY `coupon_id` (`coupon_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='优惠卷模板关联列表';
 
@@ -33177,7 +33178,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (383, 'tengxun_appid', 'text', 'input', 82, '', 0, '', 0, 0, '\"\"', '腾讯云APPID', '腾讯云APPID', 0, 1),
 (384, 'extract_type', 'checkbox', 'input', 74, '0=>银行卡\n1=>微信\n2=>支付宝', 1, '', 0, 0, '[\"0\",\"1\",\"2\"]', '提现方式', '提现方式', 0, 1),
 (385, 'integral_frozen', 'text', 'input', 11, '', 1, '', 100, 0, '\"0\"', '积分冻结(天)', '积分冻结(天)', 0, 1),
-(386, 'print_type', 'radio', 'input', 86, '1=>易联云', 1, '', 0, 0, '\"1\"', '平台选择', '平台选择', 0, 1),
+(386, 'print_type', 'radio', 'input', 86, '1=>易联云\n2=>飞鹅云', 1, '', 0, 0, '1', '平台选择', '平台选择', 0, 1),
 (387, 'config_export_type', 'radio', 'input', 93, '1=>一号通', 1, '', 0, 0, '\"1\"', '电子面单类型', '电子面单类型', 0, 1),
 (388, 'customer_corpId', 'text', 'input', 69, '', 1, '', 100, 0, '\"\"', '企业ID', '小程序需要跳转企业微信客服的话需要配置此项', 0, 1),
 (389, 'create_wechat_user', 'radio', 'input', 2, '1=>开启\r\n0=>关闭', 1, '', 0, 0, '0', '关注公众号是否生成用户', '关注公众号是否生成用户', 0, 1),
@@ -33203,7 +33204,11 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (416, 'reward_money', 'text', 'number', 105, '', 1, '', 0, 0, '\"0\"', '赠送余额(元)', '新用户奖励金额，必须大于等于0，0为不赠送', 0, 1),
 (417, 'reward_integral', 'text', 'number', 105, '', 1, '', 0, 0, '\"0\"', '赠送积分', '新用户奖励积分，必须大于等于0，0为不赠送', 0, 1),
 (418, 'hs_accesskey', 'text', 'input', 106, '', 1, '', 0, 0, '\"AKLTMzkzZTEzNjg3OTg2NDViM2IwNmFlYzhmNzE4MmI4YmI\"', '火山翻译AccessKey', '机器翻译仅支持火山翻译', 1, 1),
-(419, 'hs_secretkey', 'text', 'input', 106, '', 1, '', 0, 0, '\"TVRneU16STFOVFV4WVRkbE5ERTJaV0pqWm1aaU1UaGlNVFppWldZeE1HUQ==\"', '火山翻译SecretKey', '机器翻译仅支持火山翻译', 0, 1);
+(419, 'hs_secretkey', 'text', 'input', 106, '', 1, '', 0, 0, '\"TVRneU16STFOVFV4WVRkbE5ERTJaV0pqWm1aaU1UaGlNVFppWldZeE1HUQ==\"', '火山翻译SecretKey', '机器翻译仅支持火山翻译', 0, 1),
+(420, 'fey_user', 'text', 'input', 107, '', 1, '', 0, 0, '\"\"', '飞鹅云USER', '飞鹅云后台注册账号', 10, 1),
+(421, 'fey_ukey', 'text', 'input', 107, '', 1, '', 0, 0, '\"\"', '飞鹅云UYEK', '飞鹅云后台注册账号后生成的UKEY 【备注：这不是填打印机的KEY】', 7, 1),
+(422, 'fey_sn', 'text', 'input', 107, '', 1, '', 100, 0, '\"\"', '飞鹅云SN', '打印机标签上的编号，必须要在管理后台里添加打印机或调用API接口添加之后，才能调用API', 0, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -33284,7 +33289,8 @@ INSERT INTO `eb_system_config_tab` (`id`, `pid`, `title`, `eng_title`, `status`,
 (103, 102, '基础配置', 'out_basic', 1, 0, '', 3, 0),
 (104, 102, '推送配置', 'out_push', 1, 0, '', 3, 0),
 (105, 100, '新用户设置', 'new_user_setting', 1, 0, '', 0, 0),
-(106, 5, '机器翻译配置', 'online_translation', 1, 0, '', 0, 0);
+(106, 5, '机器翻译配置', 'online_translation', 1, 0, '', 0, 0),
+(107, 21, '飞鹅云配置', 'fey_config', 1, 0, '', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -34331,7 +34337,8 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (1071, 56, '', '文件管理', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/system/maintain/system_file/opendir', '25/56', 1, '', 0, 'system-maintain-system-file', 0),
 (1072, 1064, '', '接口文档', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/setting/system_out_interface/index', '56/1064', 1, '', 0, 'setting-system-out-interface-index', 0),
 (1073, 25, '', '数据维护', 'admin', '', '', '', '', '[]', 7, 1, 0, 1, 'system/database/index', '25', 1, '', 0, 'system-database-index', 0),
-(1075, 731, '', '会员配置', 'admin', '', '', '', '', '[]', 6, 1, 0, 1, '/admin/marketing/member/system_config/3/67', '27/731', 1, '', 0, 'marketing-member-system_config', 0);
+(1075, 731, '', '会员配置', 'admin', '', '', '', '', '[]', 6, 1, 0, 1, '/admin/marketing/member/system_config/3/67', '27/731', 1, '', 0, 'marketing-member-system_config', 0),
+(1076, 56, '', '定时任务', 'admin', '', '', '', '', '[]', 0, 1, 0, 1, '/admin/system/crontab', '25/56', 1, '', 0, 'system-crontab-index', 0);
 
 -- --------------------------------------------------------
 
@@ -34527,6 +34534,46 @@ CREATE TABLE IF NOT EXISTS `eb_system_store_staff` (
   `add_time` int(10) NOT NULL DEFAULT '0' COMMENT '添加时间',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='门店店员表';
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `eb_system_timer`
+--
+
+CREATE TABLE IF NOT EXISTS `eb_system_timer` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '定时器名称',
+  `mark` varchar(255) NOT NULL DEFAULT '' COMMENT '标签',
+  `content` varchar(255) NOT NULL DEFAULT '' COMMENT '说明',
+  `type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '周期状态 1=每隔多少秒 2=每隔多少分钟 3=每隔多少小时 4=每隔多少天 5=每天几点执行 6=每周周几几点执行 7=每月几号几点执行',
+  `week` int(11) NOT NULL DEFAULT '0' COMMENT '周',
+  `day` int(11) NOT NULL DEFAULT '0' COMMENT '日',
+  `hour` int(11) NOT NULL DEFAULT '0' COMMENT '时',
+  `minute` int(11) NOT NULL DEFAULT '0' COMMENT '分',
+  `second` int(11) NOT NULL DEFAULT '0' COMMENT '秒',
+  `last_execution_time` int(11) NOT NULL DEFAULT '0' COMMENT '上次执行时间',
+  `next_execution_time` int(11) NOT NULL DEFAULT '0' COMMENT '下次执行时间',
+  `add_time` int(11) NOT NULL DEFAULT '0' COMMENT '添加时间',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+  `is_open` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否开启',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='定时器';
+
+--
+-- 转存表中的数据 `eb_system_timer`
+--
+
+INSERT INTO `eb_system_timer` (`id`, `name`, `mark`, `content`, `type`, `week`, `day`, `hour`, `minute`, `second`, `last_execution_time`, `next_execution_time`, `add_time`, `is_del`, `is_open`) VALUES
+(1, '未支付自动取消订单', 'order_cancel', '每隔30秒执行自动取消到期未支付的订单', 1, 1, 1, 1, 30, 30, 0, 1670642407, 1670642377, 0, 1),
+(2, '拼团到期订单处理', 'pink_expiration', '每隔1分钟拼团到期之后的操作', 2, 1, 1, 1, 1, 0, 0, 1670642487, 1670642427, 0, 1),
+(3, '到期自动解绑上级', 'agent_unbind', '每隔1分钟执行到期的绑定关系的解除', 2, 1, 1, 1, 1, 0, 0, 1670642534, 1670642474, 0, 1),
+(4, '自动更新直播商品状态', 'live_product_status', '每隔3分钟执行更新直播商品状态', 2, 1, 1, 1, 3, 0, 0, 1670642694, 1670642514, 0, 1),
+(5, '自动更新直播间状态', 'live_room_status', '每隔3分钟执行更新直播间状态', 2, 1, 1, 1, 3, 0, 0, 1670642709, 1670642529, 0, 1),
+(6, '订单自动收货', 'take_delivery', '每隔5分钟执行订单到期自动收货', 2, 1, 1, 1, 5, 0, 0, 1670642891, 1670642591, 0, 1),
+(7, '预售商品到期自动下架', 'advance_off', '每隔5分钟执行预售商品到期下架', 2, 1, 1, 1, 5, 0, 0, 1670642913, 1670642613, 0, 1),
+(8, '订单商品自动好评', 'product_replay', '每隔5分钟执行订单到期商品好评', 2, 1, 1, 1, 5, 0, 0, 1670642933, 1670642633, 0, 1),
+(9, '清除昨日海报', 'clear_poster', '每天0时30分0秒执行一次清除昨日海报', 5, 1, 1, 0, 30, 0, 0, 1670862600, 1670815378, 0, 1);
 
 -- --------------------------------------------------------
 

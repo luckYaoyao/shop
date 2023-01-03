@@ -83,21 +83,32 @@ class NoticeService extends BaseServices
         if (!$product) {
             throw new AdminException(400463);
         }
-        $configdata = [
-            'clientId' => sys_config('printing_client_id', ''),
-            'apiKey' => sys_config('printing_api_key', ''),
-            'partner' => sys_config('develop_id', ''),
-            'terminal' => sys_config('terminal_number', '')
-        ];
         $switch = (bool)sys_config('pay_success_printing_switch');
         if (!$switch) {
             throw new AdminException(400464);
         }
-        if (!$configdata['clientId'] || !$configdata['apiKey'] || !$configdata['partner'] || !$configdata['terminal']) {
-            throw new AdminException(400465);
+        if (sys_config('print_type', 1) == 1) {
+            $name = 'yi_lian_yun';
+            $configData = [
+                'clientId' => sys_config('printing_client_id', ''),
+                'apiKey' => sys_config('printing_api_key', ''),
+                'partner' => sys_config('develop_id', ''),
+                'terminal' => sys_config('terminal_number', '')
+            ];
+            if (!$configData['clientId'] || !$configData['apiKey'] || !$configData['partner'] || !$configData['terminal']) {
+                throw new AdminException(400465);
+            }
+        } else {
+            $name = 'fei_e_yun';
+            $configData = [
+                'feyUser' => sys_config('fey_user', ''),
+                'feyUkey' => sys_config('fey_ukey', ''),
+                'feySn' => sys_config('fey_sn', '')
+            ];
+            if (!$configData['feyUser'] || !$configData['feyUkey'] || !$configData['feySn']) {
+                throw new AdminException(400465);
+            }
         }
-        PrintJob::dispatch('doJob', ['yi_lian_yun', $configdata, $order, $product]);
+        PrintJob::dispatch('doJob', [$name, $configData, $order, $product]);
     }
-
-
 }

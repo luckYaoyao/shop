@@ -14,7 +14,6 @@ namespace crmeb\services\printer;
 use app\services\other\CacheServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\HttpService;
-use think\facade\Config;
 use think\helper\Str;
 
 /**
@@ -72,12 +71,33 @@ class AccessToken extends HttpService
      */
     protected $apiKey;
 
+    /**
+     * 飞鹅云SN
+     * @var string
+     */
+    protected $feySn;
+
+    /**
+     * 飞鹅云UYEK
+     * @var string
+     */
+    protected $feyUkey;
+
+    /**
+     * 飞鹅云USER
+     * @var string
+     */
+    protected $feyUser;
+
     public function __construct(array $config = [], string $name, string $configFile)
     {
         $this->clientId = $config['clientId'] ?? null;
         $this->apiKey = $config['apiKey'] ?? null;
         $this->partner = $config['partner'] ?? null;
         $this->machineCode = $config['terminal'] ?? null;
+        $this->feyUser = $config['feyUser'] ?? null;
+        $this->feyUkey = $config['feyUkey'] ?? null;
+        $this->feySn = $config['feySn'] ?? null;
         $this->name = $name;
         $this->configFile = $configFile;
     }
@@ -150,7 +170,7 @@ class AccessToken extends HttpService
      */
     public function __get($name)
     {
-        if (in_array($name, ['clientId', 'apiKey', 'accessToken', 'partner', 'terminal', 'machineCode'])) {
+        if (in_array($name, ['clientId', 'apiKey', 'accessToken', 'partner', 'terminal', 'machineCode', 'feyUser', 'feyUkey', 'feySn'])) {
             return $this->{$name};
         }
     }

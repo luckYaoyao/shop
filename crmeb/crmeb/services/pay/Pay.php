@@ -20,7 +20,7 @@ use think\facade\Config;
 
 /**
  * 第三方支付
- * Class Pay
+ * Class AllinPay
  * @package crmeb\services\pay
  * @mixin AliPay
  * @mixin WechatPay

@@ -1454,16 +1454,29 @@ HTML;
         if (!$product) {
             throw new AdminException(400533);
         }
-        $data = [
-            'clientId' => sys_config('printing_client_id', ''),
-            'apiKey' => sys_config('printing_api_key', ''),
-            'partner' => sys_config('develop_id', ''),
-            'terminal' => sys_config('terminal_number', '')
-        ];
-        if (!$data['clientId'] || !$data['apiKey'] || !$data['partner'] || !$data['terminal']) {
-            throw new AdminException(400099);
+        if (sys_config('print_type', 1) == 1) {
+            $name = 'yi_lian_yun';
+            $configData = [
+                'clientId' => sys_config('printing_client_id', ''),
+                'apiKey' => sys_config('printing_api_key', ''),
+                'partner' => sys_config('develop_id', ''),
+                'terminal' => sys_config('terminal_number', '')
+            ];
+            if (!$configData['clientId'] || !$configData['apiKey'] || !$configData['partner'] || !$configData['terminal']) {
+                throw new AdminException(400465);
+            }
+        } else {
+            $name = 'fei_e_yun';
+            $configData = [
+                'feyUser' => sys_config('fey_user', ''),
+                'feyUkey' => sys_config('fey_ukey', ''),
+                'feySn' => sys_config('fey_sn', '')
+            ];
+            if (!$configData['feyUser'] || !$configData['feyUkey'] || !$configData['feySn']) {
+                throw new AdminException(400465);
+            }
         }
-        $printer = new Printer('yi_lian_yun', $data);
+        $printer = new Printer($name, $configData);
         $res = $printer->setPrinterContent([
             'name' => sys_config('site_name'),
             'orderInfo' => is_object($order) ? $order->toArray() : $order,
@@ -2334,9 +2347,11 @@ HTML;
         $order['ali_pay_status'] = (bool)sys_config('ali_pay_status');//支付包支付 1 开启 0 关闭
         $order['friend_pay_status'] = (int)sys_config('friend_pay_status') ?? 0;//好友代付 1 开启 0 关闭
         $orderData = $this->tidyOrder($order, true, true);
-        $vipTruePrice = 0;
+        $vipTruePrice = $memberPrice = $levelPrice = 0;
         foreach ($orderData['cartInfo'] ?? [] as $key => $cart) {
             $vipTruePrice = bcadd((string)$vipTruePrice, (string)$cart['vip_sum_truePrice'], 2);
+            if ($cart['price_type'] == 'member') $memberPrice = bcadd((string)$memberPrice, (string)$cart['vip_sum_truePrice'], 2);
+            if ($cart['price_type'] == 'level') $levelPrice = bcadd((string)$levelPrice, (string)$cart['vip_sum_truePrice'], 2);
             if (isset($splitNum[$cart['id']])) {
                 $orderData['cartInfo'][$key]['cart_num'] = $cart['cart_num'] - $splitNum[$cart['id']];
                 if ($orderData['cartInfo'][$key]['cart_num'] == 0) unset($orderData['cartInfo'][$key]);
@@ -2344,6 +2359,8 @@ HTML;
         }
         $orderData['cartInfo'] = array_merge($orderData['cartInfo']);
         $orderData['vip_true_price'] = $vipTruePrice;
+        $orderData['levelPrice'] = $levelPrice;
+        $orderData['memberPrice'] = $memberPrice;
         $economize = $services->get(['order_id' => $order['order_id']], ['postage_price', 'member_price']);
         if ($economize) {
             $orderData['postage_price'] = $economize['postage_price'];

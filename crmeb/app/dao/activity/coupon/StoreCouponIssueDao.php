@@ -101,7 +101,9 @@ class StoreCouponIssueDao extends BaseDao
             }])
             ->where('type', $type)
             ->when($type == 1, function ($query) use ($typeId) {
-                if ($typeId) $query->where('category_id', 'in', $typeId);
+                if ($typeId) $query->where('id', 'in', function ($query) use ($typeId) {
+                    $query->name('store_coupon_product')->whereIn('category_id', $typeId)->field(['coupon_id'])->select();
+                })->whereOr('category_id', 'in', $typeId);
             })
             ->when($type == 2, function ($query) use ($typeId) {
                 if ($typeId) $query->whereFindinSet('product_id', $typeId);
@@ -138,7 +140,9 @@ class StoreCouponIssueDao extends BaseDao
                 $query->where('uid', $uid);
             }])->where(function ($query) use ($product_id, $cate_ids) {
                 if ($product_id != 0 && $cate_ids != []) {
-                    $query->whereFindinSet('product_id', $product_id)->whereOr('category_id', 'in', $cate_ids)->whereOr('type', 0);
+                    $query->whereFindinSet('product_id', $product_id)->whereOr('id', 'in', function ($query) use ($cate_ids) {
+                        $query->name('store_coupon_product')->whereIn('category_id', $cate_ids)->field(['coupon_id'])->select();
+                    })->whereOr('category_id', 'in', $cate_ids)->whereOr('type', 0);
                 }
             })->when($limit > 0, function ($query) use ($limit) {
                 $query->limit($limit);

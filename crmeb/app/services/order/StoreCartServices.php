@@ -16,7 +16,6 @@ use app\services\activity\advance\StoreAdvanceServices;
 use app\services\BaseServices;
 use app\dao\order\StoreCartDao;
 use app\services\activity\coupon\StoreCouponIssueServices;
-use app\services\activity\coupon\StoreCouponIssueUserServices;
 use app\services\shipping\ShippingTemplatesNoDeliveryServices;
 use app\services\system\SystemUserLevelServices;
 use app\services\user\member\MemberCardServices;
@@ -171,11 +170,6 @@ class StoreCartServices extends BaseServices
                     $issueCoupon = app()->make(StoreCouponIssueServices::class);
                     if (!$issueCoupon->getCount(['id' => $attrInfo['coupon_id'], 'status' => 1, 'is_del' => 0])) {
                         throw new ApiException(410234);
-                    }
-                    /** @var StoreCouponIssueUserServices $issueUserCoupon */
-                    $issueUserCoupon = app()->make(StoreCouponIssueUserServices::class);
-                    if ($issueUserCoupon->getCount(['uid' => $uid, 'issue_coupon_id' => $attrInfo['coupon_id']])) {
-                        throw new ApiException(410235);
                     }
                 }
                 $stockNum = $this->dao->value(['product_id' => $productId, 'product_attr_unique' => $unique, 'uid' => $uid, 'status' => 1], 'cart_num') ?: 0;
