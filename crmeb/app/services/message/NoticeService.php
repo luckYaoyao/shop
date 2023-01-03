@@ -79,7 +79,7 @@ class NoticeService extends BaseServices
     {
         /** @var StoreOrderCartInfoServices $cartServices */
         $cartServices = app()->make(StoreOrderCartInfoServices::class);
-        $product = $cartServices->getCartInfoPrintProduct($order['cart_id']);
+        $product = $cartServices->getCartInfoPrintProduct($order['id']);
         if (!$product) {
             throw new AdminException(400463);
         }

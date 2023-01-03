@@ -157,7 +157,7 @@ class Notice implements ListenerInterface
                     case 'price_revision':
                         $order = $data['order'];
                         $pay_price = $data['pay_price'];
-                        $order['storeName'] = $orderInfoServices->getCarIdByProductTitle($order['id'], $order['cart_id']);
+                        $order['storeName'] = $orderInfoServices->getCarIdByProductTitle((int)$order['id']);
                         //短信
                         $NoticeSms->sendSms($order['user_phone'], ['order_id' => $order['order_id'], 'pay_price' => $pay_price]);
                         //站内信
@@ -170,7 +170,7 @@ class Notice implements ListenerInterface
                         $order = $data['order'];
                         $order['refund_price'] = $datas['refund_price'];
                         $order['refund_no'] = $datas['refund_no'];
-                        $storeName = $orderInfoServices->getCarIdByProductTitle($order['id'], $order['cart_id']);
+                        $storeName = $orderInfoServices->getCarIdByProductTitle((int)$order['id']);
                         $storeTitle = Str::substrUTf8($storeName, 20, 'UTF-8', '');
                         //站内信
                         $SystemMsg->sendMsg($order['uid'], ['order_id' => $order['order_id'], 'pay_price' => $order['pay_price'], 'refund_price' => $datas['refund_price']]);
@@ -334,7 +334,7 @@ class Notice implements ListenerInterface
                     case 'order_pay_false':
                         $order = $data['order'];
                         $order_id = $order['order_id'];
-                        $order['storeName'] = $orderInfoServices->getCarIdByProductTitle($order['id'], $order['cart_id']);
+                        $order['storeName'] = $orderInfoServices->getCarIdByProductTitle((int)$order['id']);
                         //短信
                         $NoticeSms->sendSms($order['user_phone'], compact('order_id'));
                         //站内信
@@ -349,7 +349,7 @@ class Notice implements ListenerInterface
                         //短信
                         $NoticeSms->sendAdminPaySuccess($order);
                         //公众号小程序
-                        $storeName = $orderInfoServices->getCarIdByProductTitle($order['id'], $order['cart_id']);
+                        $storeName = $orderInfoServices->getCarIdByProductTitle((int)$order['id']);
                         $title = '亲，来新订单啦！';
                         $status = '新订单';
                         $link = '/pages/admin/orderDetail/index?id=' . $order['order_id'];
@@ -366,7 +366,7 @@ class Notice implements ListenerInterface
                         //短信
                         $NoticeSms->sendAdminConfirmTakeOver($order);
                         //公众号
-                        $storeName = $orderInfoServices->getCarIdByProductTitle($order['id'], $order['cart_id']);
+                        $storeName = $orderInfoServices->getCarIdByProductTitle((int)$order['id']);
                         $title = '亲，用户已经收到货物啦！';
                         $status = '订单收货';
                         $link = '/pages/admin/orderDetail/index?id=' . $order['order_id'];
@@ -384,7 +384,7 @@ class Notice implements ListenerInterface
                         //企业微信通知
                         $EnterpriseWechat->sendMsg(['order_id' => $order['order_id']]);
                         //公众号
-                        $storeName = $orderInfoServices->getCarIdByProductTitle($order['id'], $order['cart_id']);
+                        $storeName = $orderInfoServices->getCarIdByProductTitle((int)$order['id']);
                         $title = '亲，您有个退款订单待处理！';
                         $status = '订单退款';
                         $link = '/pages/admin/orderDetail/index?id=' . $order['refund_no'] . '&types=-3';

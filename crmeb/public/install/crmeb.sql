@@ -28052,7 +28052,7 @@ CREATE TABLE IF NOT EXISTS `eb_store_order` (
   `real_name` varchar(32) NOT NULL DEFAULT '' COMMENT '用户姓名',
   `user_phone` varchar(18) NOT NULL DEFAULT '' COMMENT '用户电话',
   `user_address` varchar(100) NOT NULL DEFAULT '' COMMENT '详细地址',
-  `cart_id` varchar(256) NOT NULL DEFAULT '[]' COMMENT '购物车id',
+  `cart_id` text COMMENT '购物车id',
   `freight_price` decimal(8,2) NOT NULL DEFAULT '0.00' COMMENT '运费金额',
   `total_num` int(11) UNSIGNED NOT NULL DEFAULT '0' COMMENT '订单商品总数',
   `total_price` decimal(8,2) UNSIGNED NOT NULL DEFAULT '0.00' COMMENT '订单总价',

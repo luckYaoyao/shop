@@ -78,7 +78,7 @@ class OrderPayServices
         } else {
             /** @var StoreOrderCartInfoServices $orderInfoServices */
             $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);
-            $body = $orderInfoServices->getCarIdByProductTitle((int)$orderInfo['id'], $orderInfo['cart_id']);
+            $body = $orderInfoServices->getCarIdByProductTitle((int)$orderInfo['id']);
             $body = Str::substrUTf8($site_name . '--' . $body, 20);
             $successAction = "product";
             /** @var StoreOrderServices $orderServices */
@@ -117,7 +117,7 @@ class OrderPayServices
         } else {
             /** @var StoreOrderCartInfoServices $orderInfoServices */
             $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);
-            $body = $orderInfoServices->getCarIdByProductTitle($orderInfo['id'], $orderInfo['cart_id']);
+            $body = $orderInfoServices->getCarIdByProductTitle((int)$orderInfo['id']);
             $body = Str::substrUTf8($site_name . '--' . $body, 30);
             $successAction = "product";
             /** @var StoreOrderServices $orderServices */
