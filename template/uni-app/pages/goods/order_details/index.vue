@@ -301,9 +301,13 @@
 					<view>{{$t(`配送运费`)}}：</view>
 					<view class='conter'>{{$t(`￥`)}}{{parseFloat(orderInfo.pay_postage).toFixed(2)}}</view>
 				</view>
-				<view v-if="orderInfo.vip_true_price > 0" class='item acea-row row-between'>
-					<view>{{$t(`会员商品优惠`)}}：</view>
-					<view class='conter'>-{{$t(`￥`)}}{{parseFloat(orderInfo.vip_true_price).toFixed(2)}}</view>
+				<view v-if="orderInfo.levelPrice > 0" class='item acea-row row-between'>
+					<view>{{$t(`用户等级优惠`)}}：</view>
+					<view class='conter'>-{{$t(`￥`)}}{{parseFloat(orderInfo.levelPrice).toFixed(2)}}</view>
+				</view>
+				<view v-if="orderInfo.memberPrice > 0" class='item acea-row row-between'>
+					<view>{{$t(`付费会员优惠`)}}：</view>
+					<view class='conter'>-{{$t(`￥`)}}{{parseFloat(orderInfo.memberPrice).toFixed(2)}}</view>
 				</view>
 				<view class='item acea-row row-between' v-if='orderInfo.coupon_price > 0'>
 					<view>{{$t(`优惠券抵扣`)}}：</view>

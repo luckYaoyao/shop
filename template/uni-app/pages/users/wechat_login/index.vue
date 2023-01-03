@@ -38,6 +38,12 @@
 			<routinePhone :logoUrl="logoUrl" :isPhoneBox="isPhoneBox" @close="bindPhoneClose" :authKey="authKey">
 			</routinePhone>
 		</block>
+		<block>
+			<!-- <uni-popup ref="popup" type="bottom" background-color="#fff"> -->
+			<editUserModal :isShow="isShow" @closeEdit="closeEdit" @editSuccess="editSuccess">
+			</editUserModal>
+			<!-- </uni-popup> -->
+		</block>
 	</view>
 </template>
 
@@ -46,6 +52,7 @@
 	let statusBarHeight = uni.getSystemInfoSync().statusBarHeight + 'px';
 	import mobileLogin from '../components/login_mobile/index.vue';
 	import routinePhone from '../components/login_mobile/routine_phone.vue';
+	import editUserModal from '@/components/eidtUserModal/index.vue'
 	import {
 		getLogo,
 		silenceAuth,
@@ -75,6 +82,7 @@
 				statusBarHeight: statusBarHeight,
 				isHome: false,
 				isPhoneBox: false,
+				isShow: false,
 				logoUrl: '',
 				code: '',
 				authKey: '',
@@ -87,7 +95,8 @@
 		},
 		components: {
 			mobileLogin,
-			routinePhone
+			routinePhone,
+			editUserModal
 		},
 		onLoad(options) {
 			if (uni.getUserProfile) {
@@ -243,7 +252,7 @@
 										token: res.data.token,
 										time: time
 									});
-									this.getUserInfo()
+									this.getUserInfo(res.data.new_user || 0)
 								}
 							})
 							.catch(err => {
@@ -259,6 +268,13 @@
 						console.log(err)
 					});
 			},
+			editSuccess() {
+				this.isShow = false
+			},
+			closeEdit() {
+				this.isShow = false
+				uni.navigateBack();
+			},
 			back() {
 				uni.navigateBack();
 			},
@@ -268,18 +284,26 @@
 				})
 			},
 			// 弹窗关闭
-			maskClose() {
+			maskClose(new_user) {
 				this.isUp = false;
+				if (new_user) {
+					this.isShow = true
+				}
 			},
 			bindPhoneClose(data) {
 				if (data.isStatus) {
 					this.isPhoneBox = false;
-					this.$util.Tips({
-						title: this.$t(`登录成功`),
-						icon: 'success'
-					}, {
-						tab: 3
-					});
+					if (data.new_user) {
+						this.isShow = true
+					} else {
+						this.$util.Tips({
+							title: this.$t(`登录成功`),
+							icon: 'success'
+						}, {
+							tab: 3
+						});
+					}
+
 				} else {
 					this.isPhoneBox = false;
 				}
@@ -332,19 +356,28 @@
 			/**
 			 * 获取个人用户信息
 			 */
-			getUserInfo: function() {
+			getUserInfo: function(new_user) {
 				let that = this;
 				getUserInfo().then(res => {
 					uni.hideLoading();
 					that.userInfo = res.data;
 					that.$store.commit('SETUID', res.data.uid);
 					that.$store.commit('UPDATE_USERINFO', res.data);
-					that.$util.Tips({
-						title: that.$t(`登录成功`),
-						icon: 'success'
-					}, {
-						tab: 3
-					});
+					if (new_user) {
+						that.$util.Tips({
+							title: that.$t(`登录成功`),
+							icon: 'success'
+						});
+						this.isShow = true
+					} else {
+						that.$util.Tips({
+							title: that.$t(`登录成功`),
+							icon: 'success'
+						}, {
+							tab: 3
+						});
+					}
+
 				});
 			},
 			setUserInfo(e) {

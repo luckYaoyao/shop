@@ -201,11 +201,11 @@ export default {
           slot: 'is_shows',
           minWidth: 120,
         },
-        {
-          title: '等级说明',
-          key: 'explain',
-          minWidth: 120,
-        },
+        // {
+        //   title: '等级说明',
+        //   key: 'explain',
+        //   minWidth: 120,
+        // },
         {
           title: '操作',
           slot: 'action',

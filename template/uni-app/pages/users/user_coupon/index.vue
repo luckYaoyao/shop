@@ -122,11 +122,7 @@
 					url = '/pages/goods/goods_list/index?title=默认'
 				}
 				if (item.category_id != 0) {
-					if (item.category_type == 1) {
-						url = '/pages/goods/goods_list/index?cid='+item.category_id+'&title='+item.category_name
-					}else{
-						url = '/pages/goods/goods_list/index?sid='+item.category_id+'&title='+item.category_name
-					}
+					url = '/pages/goods/goods_list/index?coupon_category_id='+item.category_id
 				}
 				if (item.product_id != '') {
 					let arr = item.product_id.split(',');

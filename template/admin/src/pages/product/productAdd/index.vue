@@ -1258,13 +1258,7 @@
               </div>
               <div class="add-more" v-if="disk_type == 2">
                 <Button type="primary" @click="handleAdd" icon="md-add">新增</Button>
-                <Upload
-                  class="ml10"
-                  :action="cardUrl"
-                  :data="uploadData"
-                  :headers="header"
-                  :on-success="upFile"
-                >
+                <Upload class="ml10" :action="cardUrl" :data="uploadData" :headers="header" :on-success="upFile">
                   <Button icon="ios-cloud-upload-outline">导入卡密</Button>
                 </Upload>
               </div>

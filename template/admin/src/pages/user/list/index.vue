@@ -133,21 +133,19 @@
                   </RadioGroup>
                 </FormItem>
               </Col>
-              <Col v-bind="grid">
-                <FormItem label="身份：" label-for="is_promoter">
-                  <RadioGroup v-model="userFrom.is_promoter" type="button">
-                    <Radio label="">
-                      <span>全部</span>
-                    </Radio>
-                    <Radio label="1">
-                      <span>推广员</span>
-                    </Radio>
-                    <Radio label="0">
-                      <span>普通用户</span>
-                    </Radio>
-                  </RadioGroup>
-                </FormItem>
-              </Col>
+              <FormItem label="身份：" label-for="is_promoter">
+                <RadioGroup v-model="userFrom.is_promoter" type="button">
+                  <Radio label="">
+                    <span>全部</span>
+                  </Radio>
+                  <Radio label="1">
+                    <span>推广员</span>
+                  </Radio>
+                  <Radio label="0">
+                    <span>普通用户</span>
+                  </Radio>
+                </RadioGroup>
+              </FormItem>
             </Col>
             <Col span="18">
               <Col v-bind="grid">
@@ -355,13 +353,13 @@
         @onceGetList="onceGetList"
       ></userLabel>
     </Modal>
-    <Modal v-model="modals" title="用户信息填写" class="order_box" :closable="false" width="600" :z-index="50">
+    <Drawer :closable="false" width="700" v-model="modals" title="用户信息填写">
       <userEdit ref="userEdit" v-if="modals" :userData="userData"></userEdit>
-      <div slot="footer">
-        <Button @click="modals = false">取消</Button>
+      <div class="demo-drawer-footer">
+        <Button style="margin-right: 8px" @click="modals = false">取消</Button>
         <Button type="primary" @click="setUser">提交</Button>
       </div>
-    </Modal>
+    </Drawer>
     <!-- 用户标签 -->
     <Modal
       v-model="selectLabelShow"
@@ -1290,4 +1288,14 @@ img {
     color: #808695;
   }
 }
+.demo-drawer-footer{
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        border-top: 1px solid #e8e8e8;
+        padding: 10px 16px;
+        text-align: right;
+        background: #fff;
+    }
 </style>

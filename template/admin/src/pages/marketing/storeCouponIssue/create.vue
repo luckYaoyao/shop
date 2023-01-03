@@ -20,9 +20,9 @@
         </FormItem>
         <FormItem label="发送方式">
           <RadioGroup v-model="formData.receive_type">
-            <Radio :label="1">手动领取</Radio>
+            <Radio :label="1">普通券</Radio>
             <Radio :label="2">新人券</Radio>
-            <Radio :label="3">赠送券</Radio>
+            <!-- <Radio :label="3">赠送券</Radio> -->
             <Radio :label="4">会员券</Radio>
           </RadioGroup>
         </FormItem>
@@ -45,7 +45,7 @@
           <div class="info">选择商品</div>
         </FormItem>
         <FormItem v-show="formData.type === 1">
-          <Select v-model="formData.category_id" style="width: 320px">
+          <Select v-model="formData.category_id" style="width: 320px" multiple>
             <Option v-for="item in categoryList" :value="item.id" :key="item.id">{{ item.cate_name }}</Option>
           </Select>
           <div class="info">选择商品的品类</div>
@@ -96,7 +96,7 @@
             @on-change="timeChange"
           ></DatePicker>
         </FormItem>
-        <FormItem label="是否限量" v-if="formData.receive_type != 2 && formData.receive_type != 3">
+        <FormItem label="优惠券发布数量" v-if="formData.receive_type != 2 && formData.receive_type != 3">
           <RadioGroup v-model="formData.is_permanent">
             <Radio :label="0">限量</Radio>
             <Radio :label="1">不限量</Radio>
@@ -109,6 +109,10 @@
         >
           <InputNumber :min="1" :max="100000000" v-model="formData.total_count" :precision="0"></InputNumber>
           <div class="info">填写优惠券的发布数量</div>
+        </FormItem>
+        <FormItem label="用户领取数量" v-if="formData.receive_type != 2 && formData.receive_type != 3">
+          <InputNumber :min="1" :max="100000000" v-model="formData.receive_limit" :precision="0"></InputNumber>
+          <div class="info">填写每个用户可以领取多少张</div>
         </FormItem>
         <!--                <FormItem label="排序">-->
         <!--                    <InputNumber-->
@@ -172,6 +176,7 @@ export default {
         status: 1,
         product_id: '',
         category_id: 0,
+        receive_limit: 1,
       },
       categoryList: [],
       productList: [],
@@ -224,6 +229,7 @@ export default {
           this.formData.end_time = data.end_time;
           this.formData.total_count = data.total_count;
           this.formData.sort = data.sort;
+          this.formData.receive_limit = data.receive_limit;
           if ('productInfo' in data) {
             this.productList = data.productInfo;
           }
@@ -308,6 +314,19 @@ export default {
         if (this.formData.total_count < 1) {
           return this.$Message.error('发布数量不能小于1');
         }
+      }
+      if (this.formData.receive_limit < 1) {
+        return this.$Message.error('每个用户可以领取数量不能小于1');
+      }
+      if (this.formData.type == 0) {
+        this.formData.product_id = '';
+        this.formData.category_id = '';
+        this.productList = [];
+      } else if (this.formData.type == 1) {
+        this.formData.product_id = '';
+        this.productList = [];
+      } else if (this.formData.type == 2) {
+        this.formData.category_id = '';
       }
 
       this.disabled = false;

@@ -41,6 +41,7 @@
 				default: '',
 			}
 		},
+		
 		data() {
 			return {
 				keyCode: '',
@@ -98,13 +99,14 @@
 					that.$store.commit("SETUID", res.data.uid);
 					that.$store.commit("UPDATE_USERINFO", res.data);
 					that.isStatus = true
-					this.close()
+					this.close(res.data.new_user || 0)
 				});
 			},
 			// #endif
-			close() {
+			close(new_user) {
 				this.$emit('close', {
-					isStatus: this.isStatus
+					isStatus: this.isStatus,
+					new_user
 				})
 			}
 		}

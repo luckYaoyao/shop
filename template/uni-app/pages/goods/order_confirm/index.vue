@@ -182,9 +182,14 @@
 					</view>
 				</view>
 				<view class='item acea-row row-between-wrapper'
-					v-if="priceGroup.vipPrice > 0 && userInfo.vip && !pinkId && !BargainId && !combinationId && !seckillId && !discountId">
-					<view>{{$t(`会员商品优惠`)}}：</view>
-					<view class='money'>-{{$t(`￥`)}}{{parseFloat(priceGroup.vipPrice).toFixed(2)}}</view>
+					v-if="priceGroup.levelPrice > 0 && userInfo.vip && !pinkId && !BargainId && !combinationId && !seckillId && !discountId">
+					<view>{{$t(`用户等级优惠`)}}：</view>
+					<view class='money'>-{{$t(`￥`)}}{{parseFloat(priceGroup.levelPrice).toFixed(2)}}</view>
+				</view>
+				<view class='item acea-row row-between-wrapper'
+					v-if="priceGroup.memberPrice > 0 && userInfo.vip && !pinkId && !BargainId && !combinationId && !seckillId && !discountId">
+					<view>{{$t(`付费会员优惠`)}}：</view>
+					<view class='money'>-{{$t(`￥`)}}{{parseFloat(priceGroup.memberPrice).toFixed(2)}}</view>
 				</view>
 				<view class='item acea-row row-between-wrapper' v-if="priceGroup.storePostageDiscount > 0">
 					<view>{{$t(`会员运费优惠`)}}：</view>

@@ -251,7 +251,7 @@
 				</scroll-view>
 			</view>
 			<!-- <view class="uni-p-b-98"></view> -->
-			<view class="footer acea-row row-between-wrapper">
+			<view class="footer acea-row row-between-wrapper" :class="{'eject':storeInfo.id}">
 				<!-- <button open-type="contact" hover-class='none' class='item'>
 						<view class='iconfont icon-kefu'></view>
 						<view>客服</view>
@@ -520,7 +520,7 @@
 					list: [],
 					count: [],
 				},
-				showAnimate: true,
+				showAnimate: false,
 				showMenuIcon: false,
 				attrTxt: this.$t(`请选择`), //属性页面提示
 				attrValue: "", //已选属性
@@ -1132,6 +1132,7 @@
 						// #endif
 						that.DefaultSelect();
 						that.getCartCount();
+						this.showAnimate = true
 					})
 					.catch((err) => {
 						uni.hideLoading();
@@ -1329,8 +1330,8 @@
 			},
 			ChangCouponsUseState(index) {
 				let that = this;
-				that.coupon.list[index].is_use = true;
-				that.$set(that.coupon, "list", that.coupon.list);
+				that.coupon.list[index].is_use++;
+				// that.$set(that.coupon, "list", that.coupon.list);
 				that.$set(that.coupon, "coupon", false);
 			},
 			/**
@@ -1815,12 +1816,15 @@
 		bottom: 0;
 		width: 100%;
 		box-sizing: border-box;
-		background-color: #fff;
+		background-color: rgba(255, 255, 255, 0.85);
+		backdrop-filter: blur(10px);
 		z-index: 277;
 		border-top: 1rpx solid #f0f0f0;
 		height: 100rpx;
 		height: calc(100rpx+ constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
 		height: calc(100rpx + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
+		transform: translate3d(0, 100%, 0);
+		transition: all .3s cubic-bezier(.25, .5, .5, .9);
 	}
 
 	.product-con .footer .item {

@@ -67,10 +67,10 @@ import scroll from '@/libs/loading';
 import * as tools from '@/libs/tools';
 import VueTreeList from 'vue-tree-list';
 // 复制到粘贴板插件
-import VueClipboard from 'vue-clipboard2'
+import VueClipboard from 'vue-clipboard2';
 
-VueClipboard.config.copyText = true
-Vue.use(VueClipboard)
+VueClipboard.config.copyText = true;
+Vue.use(VueClipboard);
 Vue.use(VueTreeList);
 // 版本升级
 import upgrade from '@/components/upGrade/index.vue';
