@@ -764,3 +764,6 @@ uni-toast .uni-toast {
 	height: var(--status-bar-height);
 	background: #e93323;
 }
+.eject{
+	transform: translate3d(0, 0, 0) !important;
+}
