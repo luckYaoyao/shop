@@ -101,9 +101,11 @@ class StoreCouponIssueDao extends BaseDao
             }])
             ->where('type', $type)
             ->when($type == 1, function ($query) use ($typeId) {
-                if ($typeId) $query->where('id', 'in', function ($query) use ($typeId) {
-                    $query->name('store_coupon_product')->whereIn('category_id', $typeId)->field(['coupon_id'])->select();
-                })->whereOr('category_id', 'in', $typeId);
+                $query->where(function ($query) use ($typeId) {
+                    $query->where('id', 'in', function ($query) use ($typeId) {
+                        $query->name('store_coupon_product')->whereIn('category_id', $typeId)->field(['coupon_id'])->select();
+                    })->whereOr('category_id', 'in', $typeId);
+                });
             })
             ->when($type == 2, function ($query) use ($typeId) {
                 if ($typeId) $query->whereFindinSet('product_id', $typeId);

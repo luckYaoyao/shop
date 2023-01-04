@@ -145,7 +145,7 @@ class StoreCouponUserServices extends BaseServices
                     case 1://品类券
                         /** @var StoreCategoryServices $storeCategoryServices */
                         $storeCategoryServices = app()->make(StoreCategoryServices::class);
-                        $coupon_category = explode(',', $coupon['category_id']);
+                        $coupon_category = explode(',', (string)$coupon['category_id']);
                         $category_ids = $storeCategoryServices->getAllById($coupon_category);
                         if ($category_ids) {
                             $cateIds = array_column($category_ids, 'id');

@@ -650,7 +650,7 @@ class StoreOrderCreateServices extends BaseServices
                     case 1://品类券
                         /** @var StoreCategoryServices $storeCategoryServices */
                         $storeCategoryServices = app()->make(StoreCategoryServices::class);
-                        $coupon_category = explode(',', $couponInfo['category_id']);
+                        $coupon_category = explode(',', (string)$couponInfo['category_id']);
                         $category_ids = $storeCategoryServices->getAllById($coupon_category);
                         if ($category_ids) {
                             $cateIds = array_column($category_ids, 'id');
