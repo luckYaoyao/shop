@@ -74,7 +74,7 @@ class StoreCouponIssueDao extends BaseDao
      * 获取优惠券列表
      * @param int $uid 用户ID
      * @param int $type 0通用，1分类，2商品
-     * @param int $typeId 分类ID或商品ID
+     * @param array|int $typeId 分类ID或商品ID
      * @param int $page
      * @param int $limit
      * @return array
@@ -101,11 +101,13 @@ class StoreCouponIssueDao extends BaseDao
             }])
             ->where('type', $type)
             ->when($type == 1, function ($query) use ($typeId) {
-                $query->where(function ($query) use ($typeId) {
-                    $query->where('id', 'in', function ($query) use ($typeId) {
-                        $query->name('store_coupon_product')->whereIn('category_id', $typeId)->field(['coupon_id'])->select();
-                    })->whereOr('category_id', 'in', $typeId);
-                });
+                if ($typeId) {
+                    $query->where(function ($query) use ($typeId) {
+                        $query->where('id', 'in', function ($query) use ($typeId) {
+                            $query->name('store_coupon_product')->whereIn('category_id', $typeId)->field(['coupon_id'])->select();
+                        })->whereOr('category_id', 'in', $typeId);
+                    });
+                }
             })
             ->when($type == 2, function ($query) use ($typeId) {
                 if ($typeId) $query->whereFindinSet('product_id', $typeId);
@@ -153,11 +155,11 @@ class StoreCouponIssueDao extends BaseDao
 
     /**
      * 获取优惠券数量
-     * @param int $productId
-     * @param int $cateId
+     * @param $productId
+     * @param $cateId
      * @return mixed
      */
-    public function getIssueCouponCount($productId = 0, $cateId = 0)
+    public function getIssueCouponCount($productId, $cateId)
     {
         $model = function ($query) {
             $query->where('status', 1)
@@ -174,12 +176,18 @@ class StoreCouponIssueDao extends BaseDao
                 });
         };
         $count[0] = $this->getModel()->where($model)->where('type', 0)->count();
-        $count[1] = $this->getModel()->where($model)->where('type', 1)->when($cateId != 0, function ($query) use ($cateId) {
-            if ($cateId) $query->where('category_id', 'in', $cateId);
-        })->count();
-        $count[2] = $this->getModel()->where($model)->where('type', 2)->when($productId != 0, function ($query) use ($productId) {
-            if ($productId) $query->whereFindinSet('product_id', $productId);
-        })->count();
+        $count[1] = $this->getModel()->where($model)->where('type', 1)
+            ->when(count($cateId) != 0, function ($query) use ($cateId) {
+                $query->where(function ($query) use ($cateId) {
+                    $query->where('id', 'in', function ($query) use ($cateId) {
+                        $query->name('store_coupon_product')->whereIn('category_id', $cateId)->field(['coupon_id'])->select();
+                    })->whereOr('category_id', 'in', $cateId);
+                });
+            })->count();
+        $count[2] = $this->getModel()->where($model)->where('type', 2)
+            ->when($productId != 0, function ($query) use ($productId) {
+                if ($productId) $query->whereFindinSet('product_id', $productId);
+            })->count();
         return $count;
     }
 

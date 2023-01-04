@@ -296,24 +296,22 @@ class StoreCouponIssueServices extends BaseServices
     public function getIssueCouponList(int $uid, array $where)
     {
         [$page, $limit] = $this->getPageValue();
+        $cateId = [];
         if ($where['product_id'] == 0) {
-            $typeId = 0;
-            $cateId = 0;
             if ($where['type'] == -1) { // PC端获取优惠券
-                $list = $this->dao->getPcIssueCouponList($uid, [], 0, 0);
+                $list = $this->dao->getPcIssueCouponList($uid, []);
             } else {
-                $list = $this->dao->getIssueCouponList($uid, (int)$where['type'], $typeId, $page, $limit);
-                if (!$list) $list = $this->dao->getIssueCouponList($uid, 1, $typeId, $page, $limit);
-                if (!$list) $list = $this->dao->getIssueCouponList($uid, 2, $typeId, $page, $limit);
+                $list = $this->dao->getIssueCouponList($uid, (int)$where['type'], 0, $page, $limit);
+                if (!$list) $list = $this->dao->getIssueCouponList($uid, 1, 0, $page, $limit);
+                if (!$list) $list = $this->dao->getIssueCouponList($uid, 2, 0, $page, $limit);
             }
         } else {
             /** @var StoreProductServices $storeProductService */
             $storeProductService = app()->make(StoreProductServices::class);
             /** @var StoreCategoryServices $storeCategoryService */
             $storeCategoryService = app()->make(StoreCategoryServices::class);
-
             $cateId = $storeProductService->value(['id' => $where['product_id']], 'cate_id');
-            $cateId = explode(',', $cateId);
+            $cateId = explode(',', (string)$cateId);
             $cateId = array_merge($cateId, $storeCategoryService->cateIdByPid($cateId));
             $cateId = array_diff($cateId, [0]);
             if ($where['type'] == -1) { // PC端获取优惠券
