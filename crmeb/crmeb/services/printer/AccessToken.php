@@ -131,7 +131,7 @@ class AccessToken extends HttpService
         /** @var CacheServices $cacheServices */
         $cacheServices = app()->make(CacheServices::class);
         $this->accessToken[$this->name] = $cacheServices->getDbCache('YLY_access_token', function () {
-            $request = self::postRequest('https://open-api.10ss.net/auth/oauth', [
+            $request = self::postRequest('https://open-api.10ss.net/oauth/oauth', [
                 'client_id' => $this->clientId,
                 'grant_type' => 'client_credentials',
                 'sign' => strtolower(md5($this->clientId . time() . $this->apiKey)),
