@@ -615,6 +615,8 @@ class StoreCartServices extends BaseServices
                     $item['truePrice'] = $truePrice;
                     $item['vip_truePrice'] = $vip_truePrice;
                     $item['price_type'] = $type;
+                } else {
+                    $item['price_type'] = 'activity';
                 }
             } else {
                 $item['costPrice'] = $item['productInfo']['cost'] ?? 0;
@@ -626,6 +628,8 @@ class StoreCartServices extends BaseServices
                     $item['truePrice'] = $truePrice;
                     $item['vip_truePrice'] = $vip_truePrice;
                     $item['price_type'] = $type;
+                } else {
+                    $item['price_type'] = 'activity';
                 }
             }
             if (isset($item['status']) && $item['status'] == 0) {
