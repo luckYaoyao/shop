@@ -131,7 +131,7 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 
 [![](readme/pic/gitee2.png)](https://www.crmeb.com/index/criteria)
 
-🔥庆祝：CRMEB开源商城系统Gitee star突破10000+  专属活动福利 点击了解 https://www.crmeb.com/ask/thread/20738
+###🔥🔥庆祝：CRMEB开源商城系统Gitee star突破10000+  专属活动福利 [点击了解](https://www.crmeb.com/ask/thread/20738)
 
 ### 感谢参与开发者
 感谢大神们提交代码（排名不分先后）
