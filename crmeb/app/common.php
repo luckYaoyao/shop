@@ -26,27 +26,33 @@ use think\facade\Config;
 if (!function_exists('get_pay_type')) {
 
     /**
+     * @param string $payType
+     * @return string
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/2/9
-     * @param string $paytype
-     * @return string
      */
-    function get_pay_type(string $paytype)
+    function get_pay_type(string $payType)
     {
-        $wechatPay = (int)sys_config('pay_weixin_open') == 1;
         $allinPay = (int)sys_config('allin_pay_status') == 1;
+
         //微信支付没有开启，通联支付开启，用户访问端在小程序或者公众号的时候，使用通联微信H5支付
-        if ($paytype == PayServices::WEIXIN_PAY && !$wechatPay && $allinPay && (request()->isRoutine() || request()->isWechat())) {
-            $paytype = PayServices::ALLIN_PAY;
+        if ($payType == PayServices::WEIXIN_PAY) {
+            $wechat_pay_type = (int)sys_config('wechat_pay_type', 0);
+            if ($wechat_pay_type == 1 && $allinPay && (request()->isRoutine() || request()->isWechat())) {
+                $payType = PayServices::ALLIN_PAY;
+            }
         }
 
-        $aliPay = (bool)sys_config('ali_pay_status');
         //支付宝没有开启，通联支付开了，用户使用支付宝支付，并且在app端访问的时候，使用通联app支付宝支付
-        if (!$aliPay && $paytype == PayServices::ALIAPY_PAY && request()->isApp()) {
-            $paytype = PayServices::ALLIN_PAY;
+        if ($payType == PayServices::ALIAPY_PAY) {
+            $alipay_pay_type = (int)sys_config('alipay_pay_type', 0);
+            if ($alipay_pay_type == 1 && $allinPay && request()->isApp()) {
+                $payType = PayServices::ALLIN_PAY;
+            }
         }
-        return $paytype;
+
+        return $payType;
     }
 }
 
@@ -59,17 +65,17 @@ if (!function_exists('is_wechat_pay')) {
      */
     function is_wecaht_pay()
     {
+        $wechat_pay_type = (int)sys_config('wechat_pay_type', 0);
         $wechatPay = (int)sys_config('pay_weixin_open') == 1;
         $allinPay = (int)sys_config('allin_pay_status') == 1;
 
-        if ($wechatPay) {
+        if ($wechat_pay_type == 0 && $wechatPay) {
             return true;
-        } else {
-            if ((request()->isRoutine() || request()->isWechat()) && $allinPay) {
+        } elseif ($wechat_pay_type == 1 && $allinPay) {
+            if ((request()->isRoutine() || request()->isWechat())) {
                 return true;
             }
         }
-
         return false;
     }
 }
@@ -83,13 +89,14 @@ if (!function_exists('is_ali_pay')) {
      */
     function is_ali_pay()
     {
-        $aliPay = (bool)sys_config('ali_pay_status');
+        $alipay_pay_type = (int)sys_config('alipay_pay_type', 0);
+        $aliPay = (int)sys_config('ali_pay_status') == 1;
         $allinPay = (int)sys_config('allin_pay_status') == 1;
 
-        if ($aliPay) {
+        if ($alipay_pay_type == 0 && $aliPay) {
             return true;
-        } else {
-            if (request()->isApp() && $allinPay) {
+        } elseif ($alipay_pay_type == 1 && $allinPay) {
+            if (request()->isApp()) {
                 return true;
             }
         }
@@ -1007,7 +1014,10 @@ if (!function_exists('getLang')) {
         //获取接口传入的语言类型
         if (!$range = $request->header('cb-lang')) {
             //没有传入则使用系统默认语言显示
-            if (!$range = $langTypeServices->value(['is_default' => 1], 'file_name')) {
+            $range = $langTypeServices->cacheDriver()->remember('range_name', function () use ($langTypeServices) {
+                return $langTypeServices->value(['is_default' => 1], 'file_name');
+            });
+            if (!$range) {
                 //系统没有设置默认语言的话，根据浏览器语言显示，如果浏览器语言在库中找不到，则使用简体中文
                 if ($request->header('accept-language') !== null) {
                     $range = explode(',', $request->header('accept-language'))[0];
@@ -1018,7 +1028,9 @@ if (!function_exists('getLang')) {
         }
 
         // 获取type_id
-        $typeId = $langCountryServices->value(['code' => $range], 'type_id') ?: 1;
+        $typeId = $langCountryServices->cacheDriver()->remember('type_id_' . $range, function () use ($langCountryServices, $range) {
+            return $langCountryServices->value(['code' => $range], 'type_id') ?: 1;
+        }, 3600);
 
         // 获取类型
         $langData = CacheService::remember('lang_type_data', function () use ($langTypeServices) {

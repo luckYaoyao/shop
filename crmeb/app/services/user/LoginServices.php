@@ -252,7 +252,7 @@ class LoginServices extends BaseServices
      */
     public function reset($account, $password)
     {
-        $user = $this->dao->getOne(['account|phone' => $account, 'is_del' => 0]);
+        $user = $this->dao->getOne(['account|phone' => $account, 'is_del' => 0], 'uid');
         if (!$user) {
             throw new ApiException(410032);
         }

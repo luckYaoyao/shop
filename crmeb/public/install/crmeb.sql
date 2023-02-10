@@ -27890,8 +27890,8 @@ CREATE TABLE IF NOT EXISTS `eb_store_coupon_issue` (
 -- 转存表中的数据 `eb_store_coupon_issue`
 --
 
-INSERT INTO `eb_store_coupon_issue` (`id`, `cid`, `coupon_title`, `start_time`, `end_time`, `total_count`, `remain_count`, `is_permanent`, `status`, `is_give_subscribe`, `is_full_give`, `full_reduction`, `is_del`, `add_time`, `title`, `integral`, `coupon_price`, `use_min_price`, `coupon_time`, `product_id`, `category_id`, `type`, `receive_type`, `start_use_time`, `end_use_time`, `sort`) VALUES
-(1, 0, '优惠券', 0, 0, 0, 0, 1, 1, 0, 0, '0.00', 0, 1642574082, '优惠券', 0, '10.00', '30.00', 15, '', 0, 0, 1, 0, 0, 0);
+INSERT INTO `eb_store_coupon_issue` (`id`, `cid`, `coupon_title`, `start_time`, `end_time`, `total_count`, `remain_count`, `receive_limit`, `is_permanent`, `status`, `is_give_subscribe`, `is_full_give`, `full_reduction`, `is_del`, `add_time`, `title`, `integral`, `coupon_price`, `use_min_price`, `coupon_time`, `product_id`, `category_id`, `type`, `receive_type`, `start_use_time`, `end_use_time`, `sort`) VALUES
+(1, 0, '优惠券', 0, 0, 0, 0, 0, 1, 1, 0, 0, '0.00', 0, 1642574082, '优惠券', 0, '10.00', '30.00', 15, '', 0, 0, 1, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -33033,7 +33033,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (26, 'pay_weixin_client_cert', 'upload', 'input', 4, '', 3, '', 0, 0, '\"\"', '微信支付证书', '微信支付证书，在微信商家平台中可以下载！文件名一般为apiclient_cert.pem', 0, 1),
 (27, 'pay_weixin_client_key', 'upload', 'input', 4, '', 3, '', 0, 0, '\"\"', '微信支付证书密钥', '微信支付证书密钥，在微信商家平台中可以下载！文件名一般为apiclient_key.pem', 0, 1),
 (28, 'pay_weixin_key', 'text', 'input', 4, '', 0, '', 100, 0, '\"\"', 'Key', '商户支付密钥Key。审核通过后，在微信发送的邮件中查看。', 0, 1),
-(29, 'pay_weixin_open', 'radio', 'input', 4, '1=>开启\n0=>关闭', 0, '', 0, 0, '1', '开启', '是否启用微信支付', 0, 1),
+(29, 'pay_weixin_open', 'radio', 'input', 109, '1=>开启\n0=>关闭', 1, '', 0, 0, '\"1\"', '微信支付', '是否启用微信支付', 100, 1),
 (32, 'store_free_postage', 'text', 'number', 27, '', 0, 'number:true,min:-1', 100, 0, '1000000', '满额包邮', '商城商品满多少金额即可包邮，此项优先于其他的运费设置', 100, 1),
 (33, 'offline_postage', 'radio', 'input', 27, '1=>包邮\n0=>不包邮', 1, '', 0, 0, '0', '线下支付是否包邮', '用户选择线下支付时是否包邮', 97, 1),
 (34, 'integral_ratio', 'text', 'input', 11, '', 0, 'number:true', 100, 0, '\"0.1\"', '积分抵用', '积分抵用比例(1积分抵多少金额)单位：元', 10, 1),
@@ -33063,7 +33063,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (123, 'sms_account', 'text', 'input', 18, '', 0, '', 100, 0, '\"\"', '一号通账号', '短信后台的登录账号', 0, 1),
 (137, 'sms_token', 'text', 'input', 18, '', 0, '', 100, 0, '\"\"', '一号通密码', '短信后台的登录密码)', 0, 1),
 (138, 'h5_avatar', 'upload', 'input', 101, '', 1, '', 0, 0, '\"\\/statics\\/system_images\\/default_avatar.jpeg\"', '用户默认头像', '用户默认头像，后台添加用户以及用户登录的默认头像显示，尺寸(80*80)', 3, 1),
-(139, 'offline_pay_status', 'radio', '', 29, '1=>开启\n2=>关闭', 0, '', 0, 0, '1', '线下支付状态', '线下支付请选择开启或关闭', 0, 1),
+(139, 'offline_pay_status', 'radio', 'input', 109, '1=>开启\n2=>关闭', 1, '', 0, 0, '\"1\"', '线下支付', '线下支付请选择开启或关闭', 89, 1),
 (141, 'recharge_switch', 'radio', 'input', 28, '1=>开启\n0=>关闭', 1, '', 0, 0, '0', '小程序充值开关', '仅小程序端的充值开关，小程序提交审核前,需要关闭此功能', 4, 1),
 (142, 'tengxun_map_key', 'text', 'input', 26, '', 1, '', 0, 0, '\"SMJBZ-WCHK4-ZPZUA-DSIXI-XDDVQ-XWFX7\"', '腾讯地图KEY', '腾讯地图KEY，申请地址：https://lbs.qq.com', 0, 1),
 (143, 'store_self_mention', 'radio', 'input', 27, '1=>开启\n0=>关闭', 1, '', 0, 0, '1', '是否开启到店自提', '开启后下单页面支持到店自提，需要在设置->发货设置->提货点设置中添加提货点，关闭则隐藏此功能', 95, 1),
@@ -33084,7 +33084,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (160, 'store_brokerage_price', 'text', 'input', 72, '', 0, '', 100, 0, '\"100\"', '满额分销最低金额', '满额分销满足金额开通分销权限', 0, 1),
 (162, 'price_revision_switch', 'radio', 'input', 20, '0=>关闭\n1=>开启', 0, '', 0, 0, '0', '改价短信提醒开关', '改价短信提醒开关', 0, 1),
 (168, 'site_logo_square', 'upload', 'input', 26, '', 1, '', 0, 0, '\"\\/statics\\/system_images\\/admin_logo_small.png\"', '后台小LOGO', '后台菜单缩进小LOGO，尺寸180*180', 6, 1),
-(170, 'yue_pay_status', 'radio', '', 30, '1=>开启\n2=>关闭', 0, '', 0, 0, '1', '余额支付状态', '余额支付请选择开启或关闭', 0, 1),
+(170, 'yue_pay_status', 'radio', 'input', 109, '1=>开启\n2=>关闭', 1, '', 0, 0, '\"1\"', '余额支付', '余额支付请选择开启或关闭', 95, 1),
 (171, 'login_logo', 'upload', 'input', 26, '', 1, '', 0, 0, '\"\\/statics\\/system_images\\/admin_login_logo.png\"', '后台登录页LOGO', '后台登录页LOGO，建议尺寸270x75', 8, 1),
 (173, 'qiniu_accessKey', 'text', 'input', 80, '', 0, '', 100, 0, '\"\"', 'accessKey', '七牛云accessKey', 0, 1),
 (174, 'qiniu_secretKey', 'text', 'input', 80, '', 0, '', 100, 0, '\"\"', 'secretKey', '七牛云secretKey', 0, 1),
@@ -33105,7 +33105,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (236, 'verify_expire_time', 'text', 'input', 20, '', 0, '', 100, 0, '\"5\"', '短信验证码过期时间（分钟）', '短信验证码过期时间（分钟）', 0, 1),
 (246, 'invoice_func_status', 'radio', '', 50, '1=>开启\n0=>关闭', 0, '', 0, 0, '1', '发票功能启用', '发票功能开启|关闭', 0, 1),
 (247, 'special_invoice_status', 'radio', '', 50, '1=>开启\n0=>关闭', 0, '', 0, 0, '1', '专用发票启用', '专用发票功能开启|关闭', 0, 1),
-(287, 'ali_pay_status', 'radio', '', 63, '1=>开启\n0=>关闭', 0, '', 0, 0, '1', '支付宝支付状态', '支付宝支付请选择开启(启用)或关闭(不启用)', 100, 1),
+(287, 'ali_pay_status', 'radio', 'input', 109, '1=>开启\n0=>关闭', 1, '', 0, 0, '\"1\"', '支付宝支付', '支付宝支付请选择开启(启用)或关闭(不启用)', 98, 1),
 (288, 'alipay_public_key', 'textarea', '', 63, '', 1, '', 100, 5, '\"\"', '支付应用公钥', '支付宝加签完成后申城的支付宝公钥', 0, 1),
 (289, 'alipay_merchant_private_key', 'textarea', '', 63, '', 0, '', 100, 5, '\"\"', '支付应用私钥', '支付应用私钥', 0, 1),
 (290, 'ali_pay_appid', 'text', 'input', 63, '', 0, '', 100, 0, '\"\"', '支付应用Appid', '支付应用Appid', 91, 1),
@@ -33180,7 +33180,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (387, 'config_export_type', 'radio', 'input', 93, '1=>一号通', 1, '', 0, 0, '1', '电子面单类型', '电子面单类型', 0, 1),
 (388, 'customer_corpId', 'text', 'input', 69, '', 1, '', 0, 0, '\"\"', '企业ID', '如果客服链接填写企业微信客服，小程序需要跳转企业微信客服的话需要配置此项，并且在小程序客服中绑定企业ID', 0, 1),
 (389, 'create_wechat_user', 'radio', 'input', 2, '1=>开启\r\n0=>关闭', 1, '', 0, 0, '0', '关注公众号是否生成用户', '关注公众号是否生成用户', 0, 1),
-(390, 'friend_pay_status', 'radio', 'input', 95, '1=>开启\r\n0=>关闭', 1, '', 0, 0, '0', '好友代付开关', '好友代付开关，关闭后付款类型不显示好友代付', 0, 1),
+(390, 'friend_pay_status', 'radio', 'input', 109, '1=>开启\r\n0=>关闭', 1, '', 0, 0, '0', '好友代付', '好友代付开关，关闭后付款类型不显示好友代付', 0, 1),
 (392, 'brokerage_level', 'radio', 'input', 72, '1=>一级分销\r\n2=>二级分销', 1, '', 0, 0, '2', '分销层级', '分销层级，一级是只返上级一层的佣金，二级是返上级和上上级的佣金', 98, 1),
 (393, 'sms_type', 'radio', 'input', 97, '0=>一号通\r\n1=>阿里云\r\n2=>腾讯云', 1, '', 0, 0, '0', '短信类型', '短信类型，选择发送的短信类型', 0, 1),
 (394, 'aliyun_AccessKeyId', 'text', 'input', 98, '', 1, '', 0, 0, '\"\"', '阿里云AccessKeyId', '阿里云AccessKeyId', 100, 1),
@@ -33201,18 +33201,19 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (415, 'pay_weixin_key_v3', 'text', 'input', 4, '', 1, '', 100, 0, '\"\"', 'V3支付Key', 'V3支付秘钥', 0, 1),
 (416, 'reward_money', 'text', 'number', 105, '', 1, '', 0, 0, '\"0\"', '赠送余额(元)', '新用户奖励金额，必须大于等于0，0为不赠送', 0, 1),
 (417, 'reward_integral', 'text', 'number', 105, '', 1, '', 0, 0, '\"0\"', '赠送积分', '新用户奖励积分，必须大于等于0，0为不赠送', 0, 1),
-(418, 'hs_accesskey', 'text', 'input', 106, '', 1, '', 0, 0, '\"AKLTMzkzZTEzNjg3OTg2NDViM2IwNmFlYzhmNzE4MmI4YmI\"', '火山翻译AccessKey', '机器翻译仅支持火山翻译', 1, 1),
-(419, 'hs_secretkey', 'text', 'input', 106, '', 1, '', 0, 0, '\"TVRneU16STFOVFV4WVRkbE5ERTJaV0pqWm1aaU1UaGlNVFppWldZeE1HUQ==\"', '火山翻译SecretKey', '机器翻译仅支持火山翻译', 0, 1),
+(418, 'hs_accesskey', 'text', 'input', 106, '', 1, '', 0, 0, '\"\"', '火山翻译AccessKey', '机器翻译仅支持火山翻译', 1, 1),
+(419, 'hs_secretkey', 'text', 'input', 106, '', 1, '', 0, 0, '\"\"', '火山翻译SecretKey', '机器翻译仅支持火山翻译', 0, 1),
 (420, 'fey_user', 'text', 'input', 107, '', 1, '', 0, 0, '\"\"', '飞鹅云USER', '飞鹅云后台注册账号', 10, 1),
 (421, 'fey_ukey', 'text', 'input', 107, '', 1, '', 0, 0, '\"\"', '飞鹅云UYEK', '飞鹅云后台注册账号后生成的UKEY 【备注：这不是填打印机的KEY】', 7, 1),
 (422, 'fey_sn', 'text', 'input', 107, '', 1, '', 100, 0, '\"\"', '飞鹅云SN', '打印机标签上的编号，必须要在管理后台里添加打印机或调用API接口添加之后，才能调用API', 0, 1),
 (423, 'allin_private_key', 'textarea', 'input', 108, '', 1, '', 100, 5, '\"\"', '通联RSA私钥', '通联支付的RSA私钥，可以在商户后台设置中进行配置', 96, 1),
-(424, 'allin_public_key', 'textarea', 'input', 108, '', 1, '', 100, 5, '\"\"', '通联RSA公钥', '通联支付的RSA公钥，可以在商户后台的设置中进行配置', 97, 1),
 (425, 'allin_cusid', 'text', '', 108, '', 1, '', 100, 0, '\"\"', '通联商户号', '通联支付商户号，由贵公司申请获得', 99, 1),
 (426, 'allin_appid', 'text', '', 108, '', 1, '', 100, 0, '\"\"', '通联支付Appid', '通联商户后台的设置-》对接设置中查看', 98, 1),
-(427, 'allin_pay_status', 'radio', 'input', 108, '0=>关闭\n1=>开启', 1, '', 0, 0, '1', '开关', '开启可以在微信公众号和微信小程序中使用通联支付', 100, 1),
+(427, 'allin_pay_status', 'radio', 'input', 108, '1=>开启\n0=>关闭', 1, '', 0, 0, '0', '通联支付开关', '开启可以在微信公众号和微信小程序中使用通联支付', 100, 1),
 (428, 'queue_open', 'radio', 'input', 26, '0=>关闭\n1=>开启', 1, '', 0, 0, '\"0\"', '消息队列', '是否启用消息队列，启用后提升程序运行速度，启用前必须配置Redis缓存', 0, 1),
-(429, 'get_avatar', 'radio', 'input', 7, '0=>关闭\n1=>开启', 1, '', 0, 0, '\"0\"', '强制获取昵称头像', '是否在小程序用户授权之后，弹窗获取用户的昵称和头像', 0, 1);
+(429, 'get_avatar', 'radio', 'input', 7, '0=>关闭\n1=>开启', 1, '', 0, 0, '\"0\"', '强制获取昵称头像', '是否在小程序用户授权之后，弹窗获取用户的昵称和头像', 0, 1),
+(430, 'wechat_pay_type', 'radio', 'input', 4, '0=>普通微信支付\n1=>通联微信支付', 1, '', 0, 0, '\"0\"', '支付方式', '微信支付的支付方式，普通微信支付或者通联聚合支付中的微信支付', 0, 1),
+(431, 'alipay_pay_type', 'radio', 'input', 63, '0=>默认支付宝支付\n1=>通联支付宝支付', 1, '', 0, 0, '\"0\"', '支付方式', '支付宝支付方式，普通支付宝支付和通联聚合支付中支付宝支付', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -33251,8 +33252,6 @@ INSERT INTO `eb_system_config_tab` (`id`, `pid`, `title`, `eng_title`, `status`,
 (26, 1, '站点配置', 'web_site', 1, 0, '', 0, 100),
 (27, 5, '商城基础配置', 'store_base', 1, 0, '', 0, 100),
 (28, 100, '用户充值配置', 'recharge_site', 1, 0, '', 0, 2),
-(29, 23, '线下支付配置', 'offline_pay', 1, 0, '', 3, 0),
-(30, 23, '余额支付配置', 'balance_pay', 1, 0, '', 3, 0),
 (31, 79, '基础配置', 'base_config', 0, 0, '', 0, 0),
 (41, 65, '采集商品配置', 'copy_product', 1, 0, '', 3, 0),
 (45, 100, '用户等级配置', 'store_member', 1, 0, '', 0, 3),
@@ -33283,7 +33282,6 @@ INSERT INTO `eb_system_config_tab` (`id`, `pid`, `title`, `eng_title`, `status`,
 (92, 64, '阿里云配置', 'logistics_aliyun', 1, 0, '', 3, 0),
 (93, 66, '基础配置', 'electronic_basic', 1, 0, '', 3, 0),
 (94, 66, '一号通配置', 'system_electronic_config', 1, 0, '', 3, 0),
-(95, 23, '好友代付', 'friend_pay', 1, 0, '', 3, 0),
 (96, 65, '短信接口配置', 'sms_config', 1, 0, '', 3, 0),
 (97, 96, '基础配置', 'sms_config_basic', 1, 0, '', 3, 0),
 (98, 96, '阿里云配置', 'sms_aliyun', 1, 0, '', 3, 0),
@@ -33296,7 +33294,8 @@ INSERT INTO `eb_system_config_tab` (`id`, `pid`, `title`, `eng_title`, `status`,
 (105, 100, '新用户设置', 'new_user_setting', 1, 0, '', 0, 0),
 (106, 5, '机器翻译配置', 'online_translation', 1, 0, '', 0, 0),
 (107, 21, '飞鹅云配置', 'fey_config', 1, 0, '', 3, 0),
-(108, 23, '通联支付', 'allinpay', 1, 0, '', 3, 0);
+(108, 23, '通联支付', 'allinpay', 1, 0, '', 3, 0),
+(109, 23, '基础配置', 'pay_basic', 1, 0, '', 3, 100);
 
 -- --------------------------------------------------------
 

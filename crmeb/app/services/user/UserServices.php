@@ -1551,7 +1551,7 @@ class UserServices extends BaseServices
      */
     public function eidtNickname(int $uid, array $data)
     {
-        if (!$this->getUserInfo($uid)) {
+        if (!$this->dao->count(['uid' => $uid])) {
             throw new ApiException(400214);
         }
         if (!$this->dao->update($uid, $data, 'uid')) {
@@ -1597,7 +1597,7 @@ class UserServices extends BaseServices
      */
     public function spread(int $uid, int $spreadUid, $code)
     {
-        $userInfo = $this->getUserInfo($uid);
+        $userInfo = $this->dao->value(['uid' => $uid], 'uid,spread_uid,spread_time,add_time,last_time');
         if (!$userInfo) {
             throw new ApiException(100026);
         }
@@ -1637,7 +1637,7 @@ class UserServices extends BaseServices
         }
         if ($userInfo['uid'] == $userSpreadUid || $userInfo['spread_uid'] == $spreadUid) $check = false;
         if ($check) {
-            $spreadInfo = $this->dao->get($spreadUid);
+            $spreadInfo = $this->dao->get($spreadUid, ['division_id', 'agent_id', 'staff_id']);
             $data = [];
             $data['spread_uid'] = $spreadUid;
             $data['spread_time'] = time();
@@ -1660,7 +1660,7 @@ class UserServices extends BaseServices
      */
     public function setVisit(array $data)
     {
-        $userInfo = $this->getUserInfo($data['uid']);
+        $userInfo = $this->getUserInfo($data['uid'], 'uid,user_type');
         if (!$userInfo) {
             throw new ApiException(100026);
         }
@@ -1780,7 +1780,7 @@ class UserServices extends BaseServices
     public function checkUserPromoter(int $uid, $user = [])
     {
         if (!$user) {
-            $user = $this->getUserInfo($uid);
+            $user = $this->getUserInfo($uid, 'spread_open,is_promoter');
         }
         if (!$user) {
             return false;
@@ -1902,7 +1902,7 @@ class UserServices extends BaseServices
     public function setMemberOverdueTime($vip_day, int $user_id, int $is_money_level, $member_type = false)
     {
         if ($vip_day == 0) throw new ApiException(410289);
-        $user_info = $this->getUserInfo($user_id);
+        $user_info = $this->getUserInfo($user_id, 'is_money_level,overdue_time');
         if (!$user_info) throw new ApiException(410032);
         if (!$member_type) $member_type = "month";
         if ($member_type == 'ever') {
@@ -1936,7 +1936,7 @@ class UserServices extends BaseServices
     {
         if (!$uid) return false;
         if (!$userInfo) {
-            $userInfo = $this->dao->get($uid);
+            $userInfo = $this->dao->get($uid, ['is_ever_level', 'is_money_level', 'overdue_time']);
         }
         if (!$userInfo) return false;
         if ($userInfo['is_ever_level'] == 0 && $userInfo['is_money_level'] > 0 && $userInfo['overdue_time'] < time()) {

@@ -102,13 +102,6 @@ class SystemConfigServices extends BaseServices
             ],
             'show_value' => 1
         ],
-        'wss_open' => [
-            'son_type' => [
-                'wss_local_cert' => '',
-                'wss_local_pk' => '',
-            ],
-            'show_value' => 1
-        ],
         'invoice_func_status' => [
             'son_type' => [
                 'special_invoice_status' => '',
@@ -131,32 +124,24 @@ class SystemConfigServices extends BaseServices
             ],
             'show_value' => 1
         ],
-        'ali_pay_status' => [
+        'allin_pay_status' => [
             'son_type' => [
-                'ali_pay_appid' => '',
-                'alipay_merchant_private_key' => '',
-                'alipay_public_key' => '',
+                'allin_appid' => '',
+                'allin_cusid' => '',
+                'allin_private_key' => '',
             ],
             'show_value' => 1
         ],
-        'pay_weixin_open' => [
+        'pay_wechat_type' => [
             'son_type' => [
-                'pay_weixin_mchid' => '',
-                'pay_wechat_type' => [
-                    'son_type' => [
-                        'pay_weixin_key' => '',
-                    ],
-                    'show_value' => 0
-                ],
-                'pay_wechat_type@' => [
-                    'son_type' => [
-                        'pay_weixin_serial_no' => '',
-                        'pay_weixin_key_v3' => ''
-                    ],
-                    'show_value' => 1
-                ],
-                'pay_weixin_client_cert' => '',
-                'pay_weixin_client_key' => '',
+                'pay_weixin_key' => '',
+            ],
+            'show_value' => 0
+        ],
+        'pay_wechat_type@' => [
+            'son_type' => [
+                'pay_weixin_serial_no' => '',
+                'pay_weixin_key_v3' => ''
             ],
             'show_value' => 1
         ],
