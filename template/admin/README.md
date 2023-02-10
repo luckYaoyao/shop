@@ -22,7 +22,7 @@ product 商品
 ├─ product 商品管理
 ├─ productList 商品管理目录
 ├─ index.vue  首页
-├─ components  组件
+├─ components  组建
 ├─ tableFrom.vue
 ├─ tableList.vue
 ├─ handle 操作功能页面目录
@@ -30,7 +30,7 @@ product 商品
 ├─ productCategory 商品分类目录
 ├─ index.vue 商品分类首页
 
-页面命名、组件、文件夹 命名格式小驼峰命名法,例如：用户列表 userList
+页面命名、组建、文件夹 命名格式小驼峰命名法,例如：用户列表 userList
 
 类名函数命名 大驼峰式 例如：addUser
 变量命名 小驼峰式 例如：user 或者 userInfo _userinfo user-info
@@ -39,13 +39,13 @@ product 商品
 ### 文件管理规范
 pages 页面模块必须件文件夹区分
 api 接口一个模块一个文件
-组件 一个组件一个文件夹
+组建 一个组建一个文件夹
 plugins 插件一个插件一个文件夹
 vuex 路由状态管理，一个模块在modules 中建一个文件夹
 router 一个模块一个模块在modules 中建一个文件夹
-style 样式尽量采用iView自带组件，common.less 系统通用样式不要轻易动
+style 样式尽量采用iView自带组建，common.less 系统通用样式不要轻易动
 自定义通用样式 style.less,每次添加必须加注释，页面独立样式在在页面内写，后缀less 格式
-组件样式 styles 中添加文件夹 composents 对应components 目录新建样式文件
+组建样式 styles 中添加文件夹 composents 对应components 目录新建样式文件
 utils 自定义工具js 独立命名，一般不用新建文件夹
 
 ## 模块命名

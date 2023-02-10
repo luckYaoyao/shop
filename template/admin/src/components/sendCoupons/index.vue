@@ -13,7 +13,7 @@
       <div class="acea-row">
         <span class="sp">优惠券名称：</span
         ><Input
-          v-model="page.title"
+          v-model="page.coupon_title"
           search
           enter-button
           placeholder="请输入优惠券名称"

@@ -262,7 +262,7 @@ export default {
           width: 100,
         },
         {
-          title: '支付状态',
+          title: '支付方式',
           key: 'pay_type_name',
           width: 80,
         },

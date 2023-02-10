@@ -271,6 +271,7 @@ export default {
         .then((res) => {
           this.$Message.success(res.msg);
           this.levelLists.splice(num, 1);
+          this.total--
         })
         .catch((res) => {
           this.$Message.error(res.msg);

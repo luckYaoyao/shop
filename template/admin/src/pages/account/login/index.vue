@@ -73,7 +73,6 @@ import { getWorkermanUrl } from '@/api/kefu';
 import { setCookies } from '@/libs/util';
 import '@/assets/js/canvas-nest.min';
 import Verify from '@/components/verifition/Verify';
-
 export default {
   components: {
     Verify,
@@ -243,10 +242,10 @@ export default {
           return this.$router.replace({ path: '/admin/home/' || '/admin/' });
         })
         .catch((res) => {
-          msg();
+          msg()
           let data = res === undefined ? {} : res;
-          this.login_captcha = res.data.login_captcha;
           this.$Message.error(data.msg || '登录失败');
+          this.login_captcha = res.data.login_captcha;
         });
       setTimeout((e) => {
         this.loading = false;

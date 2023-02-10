@@ -1135,7 +1135,8 @@
                   <Input
                     v-model.trim="item.title"
                     :placeholder="'留言标题' + (index + 1)"
-                    style="width: 100px; margin-right: 10px"
+                    style="width: 150px; margin-right: 10px"
+                    :maxlength="10"
                   />
                   <Select v-model="item.label" style="width: 200px; margin-left: 6px; margin-right: 10px">
                     <Option v-for="items in CustomList" :value="items.value" :key="items.value">{{
@@ -1374,7 +1375,7 @@ export default {
       virtual: [
         { tit: '普通商品', id: 0, tit2: '物流发货' },
         { tit: '卡密/网盘', id: 1, tit2: '自动发货' },
-        { tit: '优惠卷', id: 2, tit2: '自动发货' },
+        { tit: '优惠券', id: 2, tit2: '自动发货' },
         { tit: '虚拟商品', id: 3, tit2: '虚拟发货' },
       ],
       seletVideo: 0, //选择视频类型

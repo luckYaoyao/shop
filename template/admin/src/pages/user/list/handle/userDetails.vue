@@ -159,11 +159,6 @@ export default {
                     minWidth: 90,
                   },
                   {
-                    title: '商品总价',
-                    key: 'total_price',
-                    minWidth: 110,
-                  },
-                  {
                     title: '实付金额',
                     key: 'pay_price',
                     minWidth: 120,

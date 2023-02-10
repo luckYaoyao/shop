@@ -16,7 +16,7 @@
     <Card :bordered="false" dis-hover class="ivu-mt">
       <Form :model="formData" :label-width="150">
         <FormItem label="优惠券名称">
-          <Input v-model="formData.coupon_title" placeholder="请输入优惠券名称"></Input>
+          <Input v-model="formData.coupon_title" :maxlength="18" placeholder="请输入优惠券名称"></Input>
         </FormItem>
         <FormItem label="发送方式">
           <RadioGroup v-model="formData.receive_type">
@@ -51,7 +51,7 @@
           <div class="info">选择商品的品类</div>
         </FormItem>
         <FormItem label="优惠券面值">
-          <InputNumber :min="1" :max="100000000" v-model="formData.coupon_price"></InputNumber>
+          <InputNumber :min="1" :max="99999" v-model="formData.coupon_price"></InputNumber>
         </FormItem>
         <FormItem label="使用门槛">
           <RadioGroup v-model="isMinPrice">
@@ -60,7 +60,7 @@
           </RadioGroup>
         </FormItem>
         <FormItem v-if="isMinPrice">
-          <InputNumber :min="1" :max="100000000" v-model="formData.use_min_price"></InputNumber>
+          <InputNumber :min="1" :max="99999" v-model="formData.use_min_price"></InputNumber>
           <div class="info">填写优惠券的最低消费金额</div>
         </FormItem>
         <FormItem label="使用时间">
@@ -107,11 +107,11 @@
           label=""
           v-if="formData.receive_type != 2 && formData.receive_type != 3"
         >
-          <InputNumber :min="1" :max="100000000" v-model="formData.total_count" :precision="0"></InputNumber>
+          <InputNumber :min="1" :max="99999" v-model="formData.total_count" :precision="0"></InputNumber>
           <div class="info">填写优惠券的发布数量</div>
         </FormItem>
         <FormItem label="用户领取数量" v-if="formData.receive_type != 2 && formData.receive_type != 3">
-          <InputNumber :min="1" :max="100000000" v-model="formData.receive_limit" :precision="0"></InputNumber>
+          <InputNumber :min="1" :max="99999" v-model="formData.receive_limit" :precision="0"></InputNumber>
           <div class="info">填写每个用户可以领取多少张</div>
         </FormItem>
         <!--                <FormItem label="排序">-->
@@ -328,19 +328,20 @@ export default {
       } else if (this.formData.type == 2) {
         this.formData.category_id = '';
       }
-
-      this.disabled = false;
+      if (this.disabled) return;
+      this.disabled = true;
       couponSaveApi(this.formData)
         .then((res) => {
-          this.disabled = true;
           this.$Message.success(res.msg);
           setTimeout(() => {
+            this.disabled = false;
             this.$router.push({
               path: '/admin/marketing/store_coupon_issue/index',
             });
           }, 1000);
         })
         .catch((err) => {
+          this.disabled = false;
           this.$Message.error(err.msg);
         });
     },
