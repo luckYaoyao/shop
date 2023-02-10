@@ -679,7 +679,7 @@
 					}
 					this.pageShow = data.is_show
 					uni.setNavigationBarTitle({
-						title: res.data.title
+						title: this.$t(res.data.title)
 					});
 					let temp = [];
 					let lastArr = that.objToArr(res.data.value);

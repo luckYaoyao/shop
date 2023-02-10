@@ -175,7 +175,8 @@
 						{{$t(`￥`)}}{{(parseFloat(priceGroup.totalPrice)+parseFloat(priceGroup.vipPrice)).toFixed(2)}}
 					</view>
 				</view>
-				<view class='item acea-row row-between-wrapper' v-if="priceGroup.storePostage > 0">
+				<view class='item acea-row row-between-wrapper'
+					v-if="priceGroup.storePostage > 0 || priceGroup.storePostageDiscount > 0">
 					<view>{{$t(`配送运费`)}}：</view>
 					<view class='money'>
 						{{$t(`￥`)}}{{(parseFloat(priceGroup.storePostage)+parseFloat(priceGroup.storePostageDiscount)).toFixed(2)}}
@@ -231,7 +232,6 @@
 			@changePayType="changePayType" @onChangeFun="onChangeFun"></payment>
 		<canvas canvas-id="canvas" v-if="canvasStatus"
 			:style="{width: canvasWidth + 'px', height: canvasHeight + 'px',position: 'absolute',left:'-100000px',top:'-100000px'}"></canvas>
-
 	</view>
 </template>
 <script>
@@ -337,7 +337,15 @@
 						value: 'friend',
 						title: this.$t(`找微信好友支付`),
 						payStatus: 1,
+					},
+					{
+						"name": this.$t(`通联支付`),
+						"icon": "icon-tonglianzhifu1",
+						value: 'allinpay',
+						title: this.$t(`使用通联支付付款`),
+						payStatus: 1,
 					}
+
 				],
 				virtual_type: 0,
 				formContent: '',
@@ -414,6 +422,7 @@
 				inputTrip: false,
 				focus: true,
 				integral_open: false,
+				jumpData: {}
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -479,6 +488,44 @@
 		 */
 		onShow: function() {
 			let _this = this
+			let options = wx.getEnterOptionsSync();
+			if (options.scene == '1038' && options.referrerInfo.appId == 'wxef277996acc166c3' && this.initIn) {
+				// 代表从收银台小程序返回
+				let extraData = options.referrerInfo.extraData;
+				this.initIn = false
+				if (!extraData) {
+					// "当前通过物理按键返回，未接收到返参，建议自行查询交易结果";
+					this.$util.Tips({
+						title: this.$t(`取消支付`)
+					}, {
+						tab: 5,
+						url: `/pages/goods/order_pay_status/index?order_id=${this.jumpData.orderId}&msg=${this.$t(`取消支付`)}&type=3&totalPrice=${this.totalPrice}&status=2`
+					});
+				} else {
+					if (extraData.code == 'success') {
+						this.$util.Tips({
+							title: this.$t(`支付成功`),
+							icon: 'success'
+						}, {
+							tab: 5,
+							url: `/pages/goods/order_pay_status/index?order_id=${this.jumpData.orderId}&msg=${this.jumpData.msg}&type=3&totalPrice=${this.totalPrice}`
+						});
+					} else if (extraData.code == 'cancel') {
+						// "支付已取消";
+						this.$util.Tips({
+							title: this.$t(`取消支付`)
+						}, {
+							tab: 5,
+							url: `/pages/goods/order_pay_status/index?order_id=${this.jumpData.orderId}&msg=${this.$t(`取消支付`)}&type=3&totalPrice=${this.totalPrice}&status=2`
+						});
+					} else {
+						// "支付失败：" + extraData.errmsg;
+						uni.reLaunch({
+							url: `/pages/goods/order_pay_status/index?order_id=${this.jumpData.orderId}&msg=${this.$t(`支付失败`)}&totalPrice=${this.totalPrice}`
+						})
+					}
+				}
+			}
 			uni.$on("handClick", res => {
 				if (res) {
 					_this.system_store = res.address
@@ -486,6 +533,7 @@
 				// 清除监听
 				uni.$off('handClick');
 			})
+
 		},
 		methods: {
 			checkShipping() {
@@ -821,6 +869,7 @@
 					that.cartArr[1].payStatus = res.data.ali_pay_status || 0;
 					//#ifdef MP
 					that.cartArr[1].payStatus = 0;
+					that.cartArr[5].payStatus = res.data.pay_allin_open || 0;
 					//#endif
 					//余额支付是否开启
 					// that.cartArr[2].title = '可用余额:' + res.data.userInfo.now_money;
@@ -938,13 +987,39 @@
 			},
 			onAddress: function() {
 				let that = this;
-				that.textareaStatus = false;
-				that.address.address = true;
-				that.pagesUrl = '/pages/users/user_address_list/index?news=' + this.news + '&cartId=' + this.cartId +
-					'&pinkId=' +
-					this.pinkId +
-					'&couponId=' +
-					this.couponId;
+				if (this.addressInfo.real_name) {
+					that.textareaStatus = false;
+					that.address.address = true;
+					that.pagesUrl = '/pages/users/user_address_list/index?news=' + this.news + '&cartId=' + this
+						.cartId +
+						'&pinkId=' +
+						this.pinkId +
+						'&couponId=' +
+						this.couponId;
+				} else {
+					uni.navigateTo({
+						url: '/pages/users/user_address/index?cartId=' + this.cartId + '&pinkId=' + this
+							.pinkId +
+							'&couponId=' + this.couponId + '&new=' + this.news
+					})
+				}
+			},
+			formpost(url, postData) {
+				let tempform = document.createElement("form");
+				tempform.action = url;
+				tempform.method = "post";
+				tempform.target = "_self";
+				tempform.style.display = "none";
+				for (let x in postData) {
+					let opt = document.createElement("input");
+					opt.name = x;
+					opt.value = postData[x];
+					tempform.appendChild(opt);
+				}
+				document.body.appendChild(tempform);
+				this.$nextTick(e => {
+					tempform.submit();
+				})
 			},
 			payment(data) {
 				let that = this;
@@ -960,6 +1035,52 @@
 					switch (status) {
 						case 'ORDER_EXIST':
 						case 'EXTEND_ORDER':
+							uni.hideLoading();
+							return that.$util.Tips({
+								title: res.msg
+							}, {
+								tab: 5,
+								url: goPages
+							});
+						case 'ALLINPAY_PAY':
+							uni.hideLoading();
+							// #ifdef MP
+							this.initIn = true
+							wx.openEmbeddedMiniProgram({
+								appId: 'wxef277996acc166c3',
+								extraData: {
+									cusid: jsConfig.cusid,
+									appid: jsConfig.appid,
+									version: jsConfig.version,
+									trxamt: jsConfig.trxamt,
+									reqsn: jsConfig.reqsn,
+									notify_url: jsConfig.notify_url,
+									body: jsConfig.body,
+									remark: jsConfig.remark,
+									validtime: jsConfig.validtime,
+									randomstr: jsConfig.randomstr,
+									paytype: jsConfig.paytype,
+									sign: jsConfig.sign,
+									signtype: jsConfig.signtype
+								}
+							})
+							this.jumpData = {
+								orderId: res.data.result.orderId,
+								msg: res.msg,
+							}
+							// #endif
+							// #ifdef APP-PLUS
+							plus.runtime.openURL(jsConfig.payinfo);
+							setTimeout(e => {
+								uni.reLaunch({
+									url: goPages
+								})
+							}, 1000)
+							// #endif
+							// #ifdef H5
+							this.formpost(res.data.result.pay_url, jsConfig)
+							// #endif
+							break;
 						case 'PAY_ERROR':
 							uni.hideLoading();
 							return that.$util.Tips({
@@ -1117,6 +1238,7 @@
 								url: goPages + '&status=1'
 							});
 							break;
+
 						case "WECHAT_H5_PAY":
 							uni.hideLoading();
 							that.$util.Tips({

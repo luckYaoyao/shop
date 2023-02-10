@@ -560,9 +560,23 @@
 					that.storeImage = that.storeInfo.image
 					that.getImageBase64();
 					// #endif
+					if (!this.storeInfo.wechat_code) {
+						// #ifdef H5
+						this.codeVal = window.location.origin +
+							'/pages/activity/goods_seckill_details/index?id=' +
+							that.id + '&spid=' + that.storeInfo.uid
+						// #endif	
+						// #ifdef APP-PLUS
+						this.codeVal = HTTP_REQUEST_URL + '/pages/activity/goods_seckill_details/index?id=' +
+							that
+							.id + '&spid=' + that.storeInfo.uid
+						// #endif	
+					} else {
+						that.$set(that, "PromotionCode", this.storeInfo.wechat_code);
+					}
 					// #ifdef APP-PLUS
 					uni.downloadFile({
-						url: that.setDomain(res.data.storeInfo.code_base),
+						url: that.setDomain(res.data.storeInfo.wechat_code),
 						success: function(res) {
 							that.PromotionCode = res.tempFilePath;
 						},
@@ -572,7 +586,8 @@
 							});
 						},
 					});
-					// that.PromotionCode = res.data.storeInfo.code_base
+
+
 					that.downloadFilestoreImage();
 					// #endif
 					// #ifdef H5
@@ -586,14 +601,7 @@
 					setTimeout(() => {
 						that.infoScroll();
 					}, 500);
-					// #ifdef H5
-					this.codeVal = window.location.origin + '/pages/activity/goods_seckill_details/index?id=' +
-						that.id + '&spid=' + that.storeInfo.uid
-					// #endif	
-					// #ifdef APP-PLUS
-					this.codeVal = HTTP_REQUEST_URL + '/pages/activity/goods_seckill_details/index?id=' + that
-						.id + '&spid=' + that.storeInfo.uid
-					// #endif	
+
 					app.globalData.openPages = '/pages/activity/goods_seckill_details/index?id=' + that.id +
 						'&spid=' + that.storeInfo.uid;
 					// wxParse.wxParse('description', 'html', that.data.storeInfo.description || '', that, 0);

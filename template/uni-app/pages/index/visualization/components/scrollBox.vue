@@ -218,6 +218,7 @@
 	}
 
 	.scroll-product .item .pro-info {
+		max-width: 180rpx;
 		font-size: 24rpx;
 		text-align: center;
 		height: 60rpx;

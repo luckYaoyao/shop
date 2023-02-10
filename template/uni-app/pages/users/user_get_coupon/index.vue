@@ -241,8 +241,9 @@
 	.coupon-list .item .text .condition .name {
 		font-size: 26rpx;
 		font-weight: 500;
-		display: flex;
-		align-items: center;
+		line-height: 40rpx;
+		/* display: flex;
+		align-items: center; */
 	}
 	
 	.coupon-list .item .text .condition .pic {
@@ -256,12 +257,12 @@
 	
 	.condition .line-title {
 		width: 90rpx;
-		height: 32rpx !important;
-		line-height: 30rpx;
+		height: 40rpx !important;
+		line-height: 40rpx;
 		text-align: center;
 		box-sizing: border-box;
 		background: rgba(255, 247, 247, 1);
-		border: 1px solid var(--view-theme);
+		border: 1rpx solid var(--view-theme);
 		opacity: 1;
 		border-radius: 20rpx;
 		font-size: 18rpx !important;

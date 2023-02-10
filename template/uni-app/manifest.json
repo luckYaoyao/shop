@@ -185,6 +185,9 @@
                 "desc" : "你的位置信息将用于和门店的距离长度"
             }
         },
+        "optimization" : {
+            "subPackages" : true
+        },
         "usingComponents" : true,
         "requiredPrivateInfos" : [
             "getLocation",
@@ -221,7 +224,8 @@
         "optimization" : {
             "treeShaking" : {
                 "enable" : true
-            }
+            },
+            "subPackages" : true
         },
         "async" : {
             "timeout" : 200000
@@ -233,7 +237,8 @@
             "immersed" : true
         }
     },
-    "_spaceID" : "679f0930-8f60-425c-9033-8c135f397ea5"
+    "_spaceID" : "679f0930-8f60-425c-9033-8c135f397ea5",
+    "lazyCodeLoading" : "requiredComponents"
 }
 /* ios打包配置 */
 

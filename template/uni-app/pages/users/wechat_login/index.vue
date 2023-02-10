@@ -28,21 +28,20 @@
 				<button v-else hover-class="none" open-type="getUserInfo" @getuserinfo="setUserInfo"
 					class="bg-green btn1">{{$t(`微信登录`)}}</button>
 				<!-- #endif -->
-				<button hover-class="none" @click="isUp = true" class="btn2">{{$t(`手机号登录`)}}</button>
+				<!-- <button hover-class="none" @click="phoneLogin" class="btn2">{{$t(`手机号登录`)}}</button> -->
 			</view>
 		</view>
 		<block v-if="isUp">
-			<mobileLogin :isUp="isUp" @close="maskClose" :authKey="authKey" @wechatPhone="wechatPhone"></mobileLogin>
+			<mobileLogin :isUp="isUp" :canClose="canClose" @close="maskClose" :authKey="authKey"
+				@wechatPhone="wechatPhone"></mobileLogin>
 		</block>
 		<block v-if="isPhoneBox">
-			<routinePhone :logoUrl="logoUrl" :isPhoneBox="isPhoneBox" @close="bindPhoneClose" :authKey="authKey">
+			<routinePhone :logoUrl="logoUrl" :isPhoneBox="isPhoneBox" @loginSuccess="bindPhoneClose" :authKey="authKey">
 			</routinePhone>
 		</block>
 		<block>
-			<!-- <uni-popup ref="popup" type="bottom" background-color="#fff"> -->
 			<editUserModal :isShow="isShow" @closeEdit="closeEdit" @editSuccess="editSuccess">
 			</editUserModal>
-			<!-- </uni-popup> -->
 		</block>
 	</view>
 </template>
@@ -78,6 +77,7 @@
 		data() {
 			return {
 				isUp: false,
+				canClose: true,
 				phone: '',
 				statusBarHeight: statusBarHeight,
 				isHome: false,
@@ -138,6 +138,7 @@
 						if (res.key !== undefined && res.key) {
 							that.authKey = res.key;
 							that.isUp = true;
+							that.canClose = false;
 						} else {
 							let time = res.expires_time - that.$Cache.time();
 							that.$store.commit('LOGIN', {
@@ -271,9 +272,18 @@
 			editSuccess() {
 				this.isShow = false
 			},
+			phoneLogin() {
+				this.canClose = true
+				this.isUp = true;
+			},
 			closeEdit() {
 				this.isShow = false
-				uni.navigateBack();
+				this.$util.Tips({
+					title: this.$t(`登录成功`),
+					icon: 'success'
+				}, {
+					tab: 3
+				});
 			},
 			back() {
 				uni.navigateBack();
@@ -286,26 +296,26 @@
 			// 弹窗关闭
 			maskClose(new_user) {
 				this.isUp = false;
+				// #ifdef MP
 				if (new_user) {
 					this.isShow = true
 				}
+				// #endif
 			},
 			bindPhoneClose(data) {
+				this.isPhoneBox = false;
 				if (data.isStatus) {
-					this.isPhoneBox = false;
-					if (data.new_user) {
-						this.isShow = true
-					} else {
-						this.$util.Tips({
-							title: this.$t(`登录成功`),
-							icon: 'success'
-						}, {
-							tab: 3
-						});
-					}
-
-				} else {
-					this.isPhoneBox = false;
+					// #ifdef MP
+					this.getUserInfo(data.new_user)
+					// #endif
+					// #ifndef MP
+					this.$util.Tips({
+						title: this.$t(`登录成功`),
+						icon: 'success'
+					}, {
+						tab: 3
+					});
+					// #endiff
 				}
 			},
 			// #ifdef MP
@@ -342,12 +352,13 @@
 						this.$store.commit('SETUID', res.data.userInfo.uid);
 						this.$store.commit('UPDATE_USERINFO', res.data.userInfo);
 						this.$Cache.clear('snsapiKey');
-						this.$util.Tips({
-							title: this.$t(`登录成功`),
-							icon: 'success'
-						}, {
-							tab: 3
-						});
+						this.getUserInfo(res.data.userInfo.new_user || 0)
+						// this.$util.Tips({
+						// 	title: this.$t(`登录成功`),
+						// 	icon: 'success'
+						// }, {
+						// 	tab: 3
+						// });
 					})
 					.catch(res => {
 						uni.hideLoading();
@@ -364,10 +375,6 @@
 					that.$store.commit('SETUID', res.data.uid);
 					that.$store.commit('UPDATE_USERINFO', res.data);
 					if (new_user) {
-						that.$util.Tips({
-							title: that.$t(`登录成功`),
-							icon: 'success'
-						});
 						this.isShow = true
 					} else {
 						that.$util.Tips({

@@ -170,9 +170,10 @@
 
 	/* 转圈 */
 	.spin-circle {
-		background: url('~@/static/easy-loadimage/loading.gif') no-repeat center;
+		background: url('~@/static/easy-loadimage/loading.png') no-repeat center;
 		background-size: 60%;
 	}
+
 
 	/* 动态灰色若隐若现 */
 	.looming-gray {

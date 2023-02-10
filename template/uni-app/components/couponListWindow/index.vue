@@ -36,7 +36,7 @@
 						</view>
 						<view class='data acea-row row-between-wrapper'>
 							<view v-if="item.coupon_time">{{$t(`领取后`)}}{{item.coupon_time}}{{$t(`天内可用`)}}</view>
-							<view v-else>{{ item.start_time ? item.start_time + "-" : ""}}{{ item.end_time }}</view>
+							<view v-else>{{ item.start_use_time ? item.start_use_time + "-" : ""}}{{ item.end_use_time }}</view>
 							<view v-if="coupon.count">
 								<view class='bnt gray' v-if="item.is_use >= item.receive_limit">
 									{{item.use_title || $t(`已领取`)}}</view>

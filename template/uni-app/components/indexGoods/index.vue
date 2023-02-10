@@ -130,8 +130,7 @@
 			display: flex;
 			flex-direction: column;
 			justify-content: space-between;
-
-			/deep/,
+			
 			/deep/image,
 			/deep/.easy-loadimage,
 			/deep/uni-image {

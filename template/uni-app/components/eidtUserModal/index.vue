@@ -67,8 +67,8 @@
 		mixins: [colors],
 		props: {
 			isShow: {
-				type: Number,
-				value: 0
+				type: Boolean,
+				default: false
 			}
 		},
 		data() {

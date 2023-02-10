@@ -345,9 +345,11 @@
 				@closeChange="closeChange" :showAnimate="showAnimate" @boxStatus="boxStatus">
 			</shareRedPackets>
 			<!-- 组件 -->
-			<productWindow :attr="attr" :isShow="1" :iSplus="1" @myevent="onMyEvent" @ChangeAttr="ChangeAttr"
+			<productWindow :attr="attr" :isShow="1" :iSplus="1" :limitNum="storeInfo.limit_num"
+				:unitName="storeInfo.unit_name" @myevent="onMyEvent" @ChangeAttr="ChangeAttr"
 				@ChangeCartNum="ChangeCartNum" @attrVal="attrVal" @iptCartNum="iptCartNum" id="product-window"
-				:is_vip="is_vip" @getImg="showImg" :is_virtual="storeInfo.is_virtual"></productWindow>
+				:is_vip="is_vip" @getImg="showImg" :is_virtual="storeInfo.is_virtual">
+			</productWindow>
 			<cus-previewImg ref="cusPreviewImg" :list="skuArr" @changeSwitch="changeSwitch"
 				@shareFriend="listenerActionSheet" />
 			<couponListWindow :coupon="coupon" v-if="coupon" @ChangCouponsClone="ChangCouponsClone"
@@ -663,14 +665,6 @@
 		},
 		onReady: function() {
 			this.isNodes++;
-			// #ifdef H5
-			this.codeVal = window.location.origin + '/pages/goods_details/index?id=' + this.id +
-				'&spid=' + this.$store.state.app.uid
-			// #endif	
-			// #ifdef APP-PLUS
-			this.codeVal = HTTP_REQUEST_URL + '/pages/goods_details/index?id=' + this.id +
-				'&spid=' + this.$store.state.app.uid
-			// #endif	
 			this.$nextTick(function() {
 				// #ifdef MP
 				const menuButton = uni.getMenuButtonBoundingClientRect();
@@ -706,7 +700,18 @@
 				path: "/pages/goods_details/index?id=" + that.id + "&spid=" + that.uid,
 			};
 		},
-
+		onShareTimeline() {
+			let that = this;
+			userShare();
+			return {
+				title: that.storeInfo.store_name,
+				query: {
+					id: that.id,
+					spid: that.uid || 0,
+				},
+				imageUrl: that.storeInfo.image,
+			};
+		},
 		// #endif
 		onNavigationBarButtonTap(e) {
 			this.currentPage = !this.currentPage
@@ -914,9 +919,10 @@
 				if (productSelect === undefined && !this.attr.productAttr.length)
 					productSelect = this.attr.productSelect;
 				//无属性值即库存为0；不存在加减；
-				if (productSelect === undefined) return;
 				let stock = productSelect.stock || 0;
 				let num = this.attr.productSelect;
+				if (productSelect === undefined || (this.storeInfo.limit_num && num.cart_num >= this.storeInfo
+						.limit_num && changeValue)) return;
 				if (changeValue) {
 					num.cart_num++;
 					if (num.cart_num > stock) {
@@ -1065,7 +1071,19 @@
 						that.$set(that, "systemStore", res.data.system_store);
 						that.$set(that, "storeSelfMention", res.data.store_self_mention);
 						that.$set(that, "good_list", goodArray);
-						// that.$set(that, "PromotionCode", storeInfo.code_base);
+						
+						if (!storeInfo.wechat_code) {
+							// #ifdef H5
+							this.codeVal = window.location.origin + '/pages/goods_details/index?id=' + this.id +
+								'&spid=' + this.$store.state.app.uid
+							// #endif	
+							// #ifdef APP-PLUS
+							this.codeVal = HTTP_REQUEST_URL + '/pages/goods_details/index?id=' + this.id +
+								'&spid=' + this.$store.state.app.uid
+							// #endif	
+						} else {
+							that.$set(that, "PromotionCode", storeInfo.wechat_code);
+						}
 						that.$set(
 							that,
 							"activity",

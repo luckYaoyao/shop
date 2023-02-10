@@ -1,6 +1,6 @@
 <template>
 	<view v-if="isPhoneBox">
-		<view class="mobile-bg" @click="close"></view>
+		<view class="mobile-bg"></view>
 		<view class="mobile-mask animated" :class="{slideInUp:isUp}">
 			<view class="info-box">
 				<image :src="logoUrl"></image>
@@ -41,7 +41,7 @@
 				default: '',
 			}
 		},
-		
+
 		data() {
 			return {
 				keyCode: '',
@@ -60,6 +60,7 @@
 				});
 				Routine.getCode()
 					.then(code => {
+
 						this.getUserPhoneNumber(e.detail.encryptedData, e.detail.iv, code);
 					})
 					.catch(error => {
@@ -82,7 +83,11 @@
 							token: res.data.token,
 							time: time
 						});
-						this.getUserInfo();
+						// this.getUserInfo();
+						this.$emit('loginSuccess', {
+							isStatus: true,
+							new_user: res.data.userInfo.new_user
+						})
 					})
 					.catch(res => {
 						uni.hideLoading();

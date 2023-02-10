@@ -47,6 +47,10 @@
 				type: Boolean,
 				default: false,
 			},
+			canClose: {
+				type: Boolean,
+				default: true,
+			},
 			authKey: {
 				type: String,
 				default: '',
@@ -108,7 +112,9 @@
 				});
 			},
 			close(new_user) {
-				this.$emit('close', new_user)
+				if (this.canClose) {
+					this.$emit('close', new_user)
+				}
 			},
 			// 登录
 			loginBtn() {

@@ -134,7 +134,8 @@
 									class='iconfont icon-xiangxia'></text></view>
 							<view class='more' @tap='hideAll'
 								v-else-if="pink.length === AllIndex && pink.length !== AllIndexDefault">
-								{{$t(`收起`)}}<text class='iconfont icon-xiangshang'></text></view>
+								{{$t(`收起`)}}<text class='iconfont icon-xiangshang'></text>
+							</view>
 						</template>
 					</view>
 					<view class='playWay'>
@@ -462,7 +463,6 @@
 			});
 			//扫码携带参数处理
 			// #ifdef MP
-
 			if (options.scene) {
 				let value = this.$util.getUrlParams(decodeURIComponent(options.scene));
 				if (value.id) options.id = value.id;
@@ -509,14 +509,7 @@
 					})
 				}
 			};
-			// #ifdef H5
-			this.codeVal = window.location.origin + '/pages/activity/goods_combination_details/index?id=' + this.id +
-				'&spid=' + this.$store.state.app.uid
-			// #endif	
-			// #ifdef APP-PLUS
-			this.codeVal = HTTP_REQUEST_URL + '/pages/activity/goods_combination_details/index?id=' + this.id +
-				'&spid=' + this.$store.state.app.uid
-			// #endif	
+
 		},
 		onNavigationBarButtonTap(e) {
 			this.currentPage = !this.currentPage
@@ -608,7 +601,7 @@
 			combinationDetail() {
 				var that = this;
 				var data = that.id;
-				getCombinationDetail(data).then(function(res) {
+				getCombinationDetail(data).then((res)=> {
 					that.dataShow = 1;
 					uni.setNavigationBarTitle({
 						title: res.data.storeInfo.title.substring(0, 16)
@@ -627,7 +620,20 @@
 					that.replyChance = res.data.replyChance;
 					that.attribute.productAttr = res.data.productAttr;
 					that.productValue = res.data.productValue;
-					// that.PromotionCode = res.data.storeInfo.code_base;
+					if (!this.storeInfo.wechat_code) {
+						// #ifdef H5
+						this.codeVal = window.location.origin +
+							'/pages/activity/goods_combination_details/index?id=' + this.id +
+							'&spid=' + this.$store.state.app.uid
+						// #endif	
+						// #ifdef APP-PLUS
+						this.codeVal = HTTP_REQUEST_URL + '/pages/activity/goods_combination_details/index?id=' +
+							this.id +
+							'&spid=' + this.$store.state.app.uid
+						// #endif	
+					} else {
+						that.$set(that, "PromotionCode", this.storeInfo.wechat_code);
+					}
 					that.routineContact = Number(res.data.routine_contact_type);
 					for (let key in res.data.productValue) {
 						let obj = res.data.productValue[key];
@@ -659,6 +665,7 @@
 					}, 500);
 
 				}).catch(function(err) {
+					console.log(err)
 					that.$util.Tips({
 						title: err
 					}, {
