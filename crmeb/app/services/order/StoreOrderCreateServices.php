@@ -355,7 +355,7 @@ class StoreOrderCreateServices extends BaseServices
         //删除购物车
         if ($group['news']) {
             array_map(function ($key) {
-                CacheService::redisHandler()->delete($key);
+                CacheService::delete($key);
             }, $group['cartIds']);
         } else {
             /** @var StoreCartServices $cartServices */

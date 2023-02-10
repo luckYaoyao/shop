@@ -30,12 +30,12 @@ class SystemTimer implements ListenerInterface
         foreach ($list as &$item) {
             //获取定时任务时间字符串
             $timeStr = $this->getTimerStr($item);
-            Log::error('mark:'.$item['mark']);
-            Log::error($timeStr);
+//            Log::error('mark:'.$item['mark']);
+//            Log::error($timeStr);
 
             if ($item['mark'] == 'order_cancel') {
                 new Crontab($timeStr, function () {
-                    Log::error('每隔30秒执行一次自动取消订单 '.date('Y-m-d H:i:s'));
+//                    Log::error('每隔30秒执行一次自动取消订单 '.date('Y-m-d H:i:s'));
                     //未支付自动取消订单
                     try {
                         /** @var StoreOrderServices $orderServices */
@@ -49,7 +49,7 @@ class SystemTimer implements ListenerInterface
 
             if ($item['mark'] == 'pink_expiration') {
                 new Crontab($timeStr, function () {
-                    Log::error('每隔1分钟执行一次拼团到期订单处理 '.date('Y-m-d H:i:s'));
+//                    Log::error('每隔1分钟执行一次拼团到期订单处理 '.date('Y-m-d H:i:s'));
                     //拼团到期订单处理
                     try {
                         /** @var StorePinkServices $storePinkServices */
@@ -63,7 +63,7 @@ class SystemTimer implements ListenerInterface
 
             if ($item['mark'] == 'agent_unbind') {
                 new Crontab($timeStr, function () {
-                    Log::error('每隔1分钟执行一次自动解除上级绑定 '.date('Y-m-d H:i:s'));
+//                    Log::error('每隔1分钟执行一次自动解除上级绑定 '.date('Y-m-d H:i:s'));
                     //自动解绑上级绑定
                     try {
                         /** @var AgentManageServices $agentManage */
@@ -77,7 +77,7 @@ class SystemTimer implements ListenerInterface
 
             if ($item['mark'] == 'live_product_status') {
                 new Crontab($timeStr, function () {
-                    Log::error('每隔3分钟执行一次更新直播商品状态 '.date('Y-m-d H:i:s'));
+//                    Log::error('每隔3分钟执行一次更新直播商品状态 '.date('Y-m-d H:i:s'));
                     //更新直播商品状态
                     try {
                         /** @var LiveGoodsServices $liveGoods */
@@ -91,7 +91,7 @@ class SystemTimer implements ListenerInterface
 
             if ($item['mark'] == 'live_room_status') {
                 new Crontab($timeStr, function () {
-                    Log::error('每隔3分钟执行一次更新直播间状态 '.date('Y-m-d H:i:s'));
+//                    Log::error('每隔3分钟执行一次更新直播间状态 '.date('Y-m-d H:i:s'));
                     //更新直播间状态
                     try {
                         /** @var LiveRoomServices $liveRoom */
@@ -105,7 +105,7 @@ class SystemTimer implements ListenerInterface
 
             if ($item['mark'] == 'take_delivery') {
                 new Crontab($timeStr, function () {
-                    Log::error('每隔5分钟执行一次自动收货 '.date('Y-m-d H:i:s'));
+//                    Log::error('每隔5分钟执行一次自动收货 '.date('Y-m-d H:i:s'));
                     //自动收货
                     try {
                         /** @var StoreOrderTakeServices $services */
@@ -119,7 +119,7 @@ class SystemTimer implements ListenerInterface
 
             if ($item['mark'] == 'advance_off') {
                 new Crontab($timeStr, function () {
-                    Log::error('每隔5分钟执行一次查询预售到期商品自动下架 '.date('Y-m-d H:i:s'));
+//                    Log::error('每隔5分钟执行一次查询预售到期商品自动下架 '.date('Y-m-d H:i:s'));
                     //查询预售到期商品自动下架
                     try {
                         /** @var StoreProductServices $product */
@@ -133,7 +133,7 @@ class SystemTimer implements ListenerInterface
 
             if ($item['mark'] == 'product_replay') {
                 new Crontab($timeStr, function () {
-                    Log::error('每隔5分钟执行一次自动好评 '.date('Y-m-d H:i:s'));
+//                    Log::error('每隔5分钟执行一次自动好评 '.date('Y-m-d H:i:s'));
                     //自动好评
                     try {
                         /** @var StoreOrderServices $orderServices */
@@ -145,9 +145,9 @@ class SystemTimer implements ListenerInterface
                 });
             }
 
-            if ($item['mark'] == 'product_replay') {
+            if ($item['mark'] == 'clear_poster') {
                 new Crontab($timeStr, function () {
-                    Log::error('每天0时30分0秒执行一次清除昨日海报 '.date('Y-m-d H:i:s'));
+//                    Log::error('每天0时30分0秒执行一次清除昨日海报 '.date('Y-m-d H:i:s'));
                     //清除昨日海报
                     try {
                         /** @var SystemAttachmentServices $attach */

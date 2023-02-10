@@ -355,7 +355,7 @@ class WechatUserServices extends BaseServices
                 if (!$this->dao->save($wechatInfo)) {
                     throw new AuthException(410083);
                 }
-                $userInfo['new_user'] = 1;
+                $userInfo['new_user'] = (int)sys_config('get_avatar', 0);
                 return $userInfo;
             });
         }

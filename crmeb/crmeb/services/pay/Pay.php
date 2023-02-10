@@ -22,9 +22,7 @@ use think\facade\Config;
  * 第三方支付
  * Class AllinPay
  * @package crmeb\services\pay
- * @mixin AliPay
  * @mixin WechatPay
- * @mixin V3WechatPay
  */
 class Pay extends BaseManager
 {

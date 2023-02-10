@@ -126,8 +126,9 @@ class FeiEYun extends BasePrinter
                         break;
                     } else {
                         $next_new = mb_substr($str, $m, $j, 'utf-8');
-                        if (mb_strwidth($next_new, 'utf-8') < $blankNum) continue;
-                        else {
+                        if (mb_strwidth($next_new, 'utf-8') < $blankNum) {
+                            continue;
+                        } else {
                             $m = $i + 1;
                             $result[] = $new;
                             $j = 1;

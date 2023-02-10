@@ -17,7 +17,6 @@ use app\services\BaseServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\FormBuilder;
 use app\services\other\UploadService;
-use crmeb\traits\ServicesTrait;
 
 /**
  * Class SystemStorageServices
@@ -25,7 +24,6 @@ use crmeb\traits\ServicesTrait;
  */
 class SystemStorageServices extends BaseServices
 {
-    use ServicesTrait;
 
     /**
      * SystemStorageServices constructor.

@@ -11,6 +11,9 @@
 
 namespace app\listener\notice;
 
+use app\jobs\notice\EnterpriseWechatJob;
+use app\jobs\notice\PrintJob;
+use app\services\order\StoreOrderServices;
 use app\services\message\notice\{
     EnterpriseWechatService,
     RoutineTemplateListService,
@@ -18,7 +21,6 @@ use app\services\message\notice\{
     SystemMsgService,
     WechatTemplateListService
 };
-use app\services\message\NoticeService;
 use app\services\order\StoreOrderCartInfoServices;
 use app\services\user\UserServices;
 use crmeb\interfaces\ListenerInterface;
@@ -36,9 +38,6 @@ class Notice implements ListenerInterface
         try {
             [$data, $mark] = $event;
 
-            /** @var NoticeService $NoticeService */
-            $NoticeService = app()->make(NoticeService::class);
-
             /** @var WechatTemplateListService $WechatTemplateList */
             $WechatTemplateList = app()->make(WechatTemplateListService::class);
 
@@ -51,7 +50,7 @@ class Notice implements ListenerInterface
             /** @var EnterpriseWechatService $EnterpriseWechat */
             $EnterpriseWechat = app()->make(EnterpriseWechatService::class);
 
-            /** @var  SmsService $NoticeSms */
+            /** @var SmsService $NoticeSms */
             $NoticeSms = app()->make(SmsService::class);
 
             /** @var StoreOrderCartInfoServices $orderInfoServices */
@@ -93,7 +92,7 @@ class Notice implements ListenerInterface
                         $RoutineTemplateList->sendOrderSuccess($data['uid'], $data['pay_price'], $data['order_id']);
                         //小票打印
                         if (isset($data['cart_id']) && $data['cart_id']) {
-                            $NoticeService->orderPrint($data);
+                            PrintJob::dispatch([$data['id']]);
                         }
                         break;
                     //发货给用户
@@ -355,7 +354,7 @@ class Notice implements ListenerInterface
                         $link = '/pages/admin/orderDetail/index?id=' . $order['order_id'];
                         $WechatTemplateList->sendAdminOrder($order['order_id'], $storeName, $title, $status, $link);
                         //企业微信通知
-                        $EnterpriseWechat->sendMsg(['order_id' => $order['order_id']]);
+                        EnterpriseWechatJob::dispatch(['order_id' => $order['order_id']]);
                         break;
                     //确认收货给客服
                     case 'send_admin_confirm_take_over':
@@ -372,7 +371,7 @@ class Notice implements ListenerInterface
                         $link = '/pages/admin/orderDetail/index?id=' . $order['order_id'];
                         $WechatTemplateList->sendAdminOrder($order['order_id'], $storeName, $title, $status, $link);
                         //企业微信通知
-                        $EnterpriseWechat->sendMsg(['storeTitle' => $storeTitle, 'order_id' => $order['order_id']]);
+                        EnterpriseWechatJob::dispatch(['storeTitle' => $storeTitle, 'order_id' => $order['order_id']]);
                         break;
                     //申请退款给客服发消息
                     case 'send_order_apply_refund':
@@ -382,7 +381,7 @@ class Notice implements ListenerInterface
                         //短信
                         $NoticeSms->sendAdminRefund($order);
                         //企业微信通知
-                        $EnterpriseWechat->sendMsg(['order_id' => $order['order_id']]);
+                        EnterpriseWechatJob::dispatch(['order_id' => $order['order_id']]);
                         //公众号
                         $storeName = $orderInfoServices->getCarIdByProductTitle((int)$order['id']);
                         $title = '亲，您有个退款订单待处理！';
@@ -395,7 +394,7 @@ class Notice implements ListenerInterface
                         //站内信
                         $SystemMsg->kefuSystemSend($data);
                         //企业微信通知
-                        $EnterpriseWechat->sendMsg($data);
+                        EnterpriseWechatJob::dispatch($data);
                         break;
                 }
 

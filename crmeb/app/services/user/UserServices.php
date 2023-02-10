@@ -1426,7 +1426,7 @@ class UserServices extends BaseServices
         $user['is_complete'] = $wechatUserInfo['is_complete'] ?? 0;
         $user['couponCount'] = $storeCoupon->getUserValidCouponCount((int)$uid);
         $user['like'] = app()->make(StoreProductRelationServices::class)->getUserCollectCount($user['uid']);
-        $user['orderStatusNum'] = $storeOrder->getOrderData($uid, true, true);
+        $user['orderStatusNum'] = $storeOrder->getOrderData($uid);
         $user['notice'] = 0;
         /** @var UserMoneyServices $userMoney */
         $userMoney = app()->make(UserMoneyServices::class);

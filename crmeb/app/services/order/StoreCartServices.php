@@ -87,9 +87,8 @@ class StoreCartServices extends BaseServices
         if ($new) {
             $cartIds = explode(',', $cartIds);
             $cartInfo = [];
-            $redis = CacheService::redisHandler();
             foreach ($cartIds as $key) {
-                $info = $redis->get($key);
+                $info = CacheService::get($key);
                 if ($info) {
                     $cartInfo[] = $info;
                 }
@@ -272,7 +271,7 @@ class StoreCartServices extends BaseServices
             $info['trueStock'] = $info['productInfo']['attrInfo']['stock'];
             $info['costPrice'] = $info['productInfo']['attrInfo']['cost'];
             try {
-                CacheService::redisHandler()->set($key, $info, 3600);
+                CacheService::set($key, $info, 3600);
             } catch (\Throwable $e) {
                 throw new ApiException($e->getMessage());
             }

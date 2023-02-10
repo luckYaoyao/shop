@@ -46,7 +46,7 @@ class OrderPayServices
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function orderPay(array $orderInfo, string $payType)
+    public function orderPay(array $orderInfo, string $payType, array $options = [])
     {
         if ($orderInfo['paid']) {
             throw new ApiException(410174);
@@ -54,8 +54,9 @@ class OrderPayServices
         if ($orderInfo['pay_price'] <= 0) {
             throw new ApiException(410274);
         }
+
         $openid = '';
-        if (!in_array($payType, ['weixinh5', 'pc']) && !request()->isApp()) {
+        if (!in_array($payType, ['weixinh5', 'pc', 'allinpay']) && !request()->isApp()) {
             if ($payType === 'weixin') {
                 $userType = 'wechat';
             } else {
@@ -90,7 +91,7 @@ class OrderPayServices
             throw new ApiException(410276);
         }
 
-        return $this->payServices->pay($payType, $openid, $orderInfo['order_id'], $orderInfo['pay_price'], $successAction, $body);
+        return $this->payServices->setOptions($options)->pay($payType, $openid, $orderInfo['order_id'], $orderInfo['pay_price'], $successAction, $body);
     }
 
     /**
@@ -128,8 +129,6 @@ class OrderPayServices
         if (!$body) {
             throw new ApiException(410276);
         }
-
-
 
         return $this->payServices->pay('alipay', $quitUrl, $orderInfo['order_id'], $orderInfo['pay_price'], $successAction, $body, $isCode);
     }

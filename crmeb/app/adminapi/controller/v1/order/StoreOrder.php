@@ -693,15 +693,17 @@ class StoreOrder extends AuthController
     }
 
     /**
-     * 易联云打印机打印
+     * 小票打印机打印
      * @param $id
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function order_print($id)
     {
         if (!$id) return app('json')->fail(100100);
-
-        $res = $this->services->orderPrint($id);
+        $res = $this->services->orderPrintTicket($id, true);
         if ($res) {
             return app('json')->success(100010);
         } else {

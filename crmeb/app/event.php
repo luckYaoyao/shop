@@ -23,8 +23,7 @@ return [
         'LogLevel' => [],
         'LogWrite' => [],
         'queue.start' => [\app\listener\queue\QueueStart::class],
-        'user.login' => [\app\listener\user\Login::class], //
-        'admin.info' => [\app\listener\admin\AdminInfo::class],//管理员登录前获取登录信息事件
+        'user.login' => [\app\listener\user\Login::class],
         'admin.login' => [\app\listener\admin\AdminLogin::class],//管理员登录
         'user.register' => [\app\listener\user\Register::class], //用户注册后置事件
         'wechat.auth' => [\app\listener\wechat\Auth::class], //用户授权后置事件
