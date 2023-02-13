@@ -17,11 +17,11 @@ if (file_exists('../install.lock')) {
 
 @set_time_limit(1000);
 
-if (PHP_EDITION >= phpversion()) {
-    showHtml('您的php版本过低，不能安装本软件，兼容php版本7.1~7.4，谢谢！');
+if ('7.1.0' > phpversion()) {
+    exit('您的php版本过低，不能安装本软件，兼容php版本7.2~7.4，谢谢！');
 }
-if (phpversion() > 8.0) {
-    showHtml('您的php版本太高，不能安装本软件，兼容php版本7.1~7.4，谢谢！');
+if (phpversion() >= '8.0.0') {
+    exit('您的php版本太高，不能安装本软件，兼容php版本7.2~7.4，谢谢！');
 }
 
 date_default_timezone_set('PRC');
@@ -61,8 +61,8 @@ switch ($step) {
         exit();
 
     case '2':
-        if (phpversion() <= PHP_EDITION || phpversion() > 8.0) {
-            die('本系统需要PHP为 7.2~7.4 版本，当前PHP版本为：' . phpversion());
+        if (phpversion() < '7.1.0' || phpversion() >= '8.0.0') {
+            die('本系统需要PHP为 7.1~7.4 版本，当前PHP版本为：' . phpversion());
         }
 
         $passOne = $passTwo = 'yes';
