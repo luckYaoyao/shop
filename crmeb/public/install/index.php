@@ -2,7 +2,7 @@
 //文件签名
 $fileValue = '';
 //最低php版本要求
-define('PHP_EDITION', '7.2.0');
+define('PHP_EDITION', '7.1.0');
 //服务环境检测
 if (function_exists('saeAutoLoader') || isset($_SERVER['HTTP_BAE_ENV_APPID'])) {
     showHtml('对不起，当前环境不支持本系统，请使用独立服务或云主机！');
@@ -18,10 +18,10 @@ if (file_exists('../install.lock')) {
 @set_time_limit(1000);
 
 if (PHP_EDITION >= phpversion()) {
-    showHtml('您的php版本过低，不能安装本软件，兼容php版本7.2~7.4，谢谢！');
+    showHtml('您的php版本过低，不能安装本软件，兼容php版本7.1~7.4，谢谢！');
 }
 if (phpversion() > 8.0) {
-    showHtml('您的php版本太高，不能安装本软件，兼容php版本7.2~7.4，谢谢！');
+    showHtml('您的php版本太高，不能安装本软件，兼容php版本7.1~7.4，谢谢！');
 }
 
 date_default_timezone_set('PRC');
