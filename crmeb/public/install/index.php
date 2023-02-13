@@ -254,8 +254,8 @@ switch ($step) {
             }
             mysqli_set_charset($conn, "utf8"); //,character_set_client=binary,sql_mode='';
             $version = mysqli_get_server_info($conn);
-            if ($version < 5.7 || $version >= 5.8) {
-                $arr['msg'] = '数据库版本必须是5.7版本';
+            if ($version < 5.1) {
+                $arr['msg'] = '数据库版本太低! 必须5.1以上';
                 exit(json_encode($arr));
             }
 
