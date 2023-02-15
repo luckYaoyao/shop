@@ -167,7 +167,7 @@ UI：xy-yyds、LXT
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
-版权所有Copyright © 2017-2022 by CRMEB (https://www.crmeb.com)
+版权所有Copyright © 2017-2023 by CRMEB (https://www.crmeb.com)
 
 All rights reserved。
 
