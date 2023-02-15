@@ -2,7 +2,7 @@
 //文件签名
 $fileValue = '';
 //最低php版本要求
-define('PHP_EDITION', '7.2.0');
+define('PHP_EDITION', '7.1.0');
 //服务环境检测
 if (function_exists('saeAutoLoader') || isset($_SERVER['HTTP_BAE_ENV_APPID'])) {
     showHtml('对不起，当前环境不支持本系统，请使用独立服务或云主机！');
@@ -17,11 +17,11 @@ if (file_exists('../install.lock')) {
 
 @set_time_limit(1000);
 
-if (PHP_EDITION >= phpversion()) {
-    showHtml('您的php版本过低，不能安装本软件，兼容php版本7.2~7.4，谢谢！');
+if ('7.1.0' > phpversion()) {
+    exit('您的php版本过低，不能安装本软件，兼容php版本7.1~7.4，谢谢！');
 }
-if (phpversion() > 8.0) {
-    showHtml('您的php版本太高，不能安装本软件，兼容php版本7.2~7.4，谢谢！');
+if (phpversion() >= '8.0.0') {
+    exit('您的php版本太高，不能安装本软件，兼容php版本7.1~7.4，谢谢！');
 }
 
 date_default_timezone_set('PRC');
@@ -61,8 +61,8 @@ switch ($step) {
         exit();
 
     case '2':
-        if (phpversion() <= PHP_EDITION || phpversion() > 8.0) {
-            die('本系统需要PHP为 7.2~7.4 版本，当前PHP版本为：' . phpversion());
+        if (phpversion() < '7.1.0' || phpversion() >= '8.0.0') {
+            die('本系统需要PHP为 7.1~7.4 版本，当前PHP版本为：' . phpversion());
         }
 
         $passOne = $passTwo = 'yes';
@@ -254,8 +254,8 @@ switch ($step) {
             }
             mysqli_set_charset($conn, "utf8"); //,character_set_client=binary,sql_mode='';
             $version = mysqli_get_server_info($conn);
-            if ($version < 5.7 || $version >= 5.8) {
-                $arr['msg'] = '数据库版本必须是5.7版本';
+            if ($version < 5.1) {
+                $arr['msg'] = '数据库版本太低! 必须5.1以上';
                 exit(json_encode($arr));
             }
 
