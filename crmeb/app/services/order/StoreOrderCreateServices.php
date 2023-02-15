@@ -64,7 +64,7 @@ class StoreOrderCreateServices extends BaseServices
         $snowflake = new \Godruoyi\Snowflake\Snowflake();
 
         if (Config::get('cache.default') == 'file') {
-            //32位
+            //32位 
             if (PHP_INT_SIZE == 4) {
                 $id = abs($snowflake->id());
             } else {
