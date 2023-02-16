@@ -17,6 +17,7 @@ use app\model\user\UserRecharge;
 use app\services\user\UserRechargeServices;
 use app\services\wechat\WechatUserServices;
 use crmeb\exceptions\ApiException;
+use Darabonba\GatewaySpi\Models\InterceptorContext\request;
 
 /**
  *
@@ -44,29 +45,40 @@ class RechargeServices
         if ($recharge['paid'] == 1) {
             throw new ApiException(410174);
         }
-        $userType = '';
+        $payType = '';
         switch ($recharge['recharge_type']) {
             case 'weixin':
             case 'weixinh5':
-                $userType = 'wechat';
-                break;
             case 'routine':
-                $userType = 'routine';
+                $payType = PayServices::WEIXIN_PAY;
                 break;
             case PayServices::ALIAPY_PAY:
-                $userType = PayServices::ALIAPY_PAY;
+                $payType = PayServices::ALIAPY_PAY;
                 break;
         }
 
-        $userType = get_pay_type($userType);
+        $payType = app()->make(OrderPayServices::class)->getPayType($payType);
 
-        if (!$userType) {
+        if (!$payType) {
             throw new ApiException(410278);
         }
-        /** @var WechatUserServices $wechatUser */
-        $wechatUser = app()->make(WechatUserServices::class);
-        $openid = $wechatUser->uidToOpenid((int)$recharge['uid'], $userType);
-        if (in_array($recharge['recharge_type'], ['weixin', 'routine']) && !request()->isApp()) {
+
+        if ($recharge['recharge_type'] == PayServices::WEIXIN_PAY && !request()->isH5()) {
+
+            /** @var WechatUserServices $wechatUser */
+            $wechatUser = app()->make(WechatUserServices::class);
+            if (request()->isApp()) {
+                $userType = 'app';
+            } else if (request()->isRoutine()) {
+                $userType = 'routine';
+            } else if (request()->isWechat()) {
+                $userType = 'wechat';
+            } else {
+                throw new ApiException(410275);
+            }
+
+            $openid = $wechatUser->uidToOpenid((int)$recharge['uid'], $userType);
+
             if (!$openid) {
                 throw new ApiException(410275);
             }
@@ -76,11 +88,19 @@ class RechargeServices
 
         $res = $this->pay->pay($recharge['recharge_type'], $openid, $recharge['order_id'], $recharge['price'], 'user_recharge', '用户充值');
 
-        if ($userType === PayServices::ALLIN_PAY) {
-            $res['pay_type'] = $userType;
+        if ($payType == PayServices::WEIXIN_PAY) {
+            if (request()->isH5()) {
+                $payStstus = 'wechat_h5_pay';
+            } else {
+                $payStstus = 'wechat_pay';
+            }
+        } else if ($payType == PayServices::ALIAPY_PAY) {
+            $payStstus = 'alipay_pay';
+        } else if ($payType == PayServices::ALLIN_PAY) {
+            $payStstus = 'allinpay_pay';
         }
 
-        return $res;
+        return ['jsConfig' => $res, 'order_id' => $recharge['order_id'], 'pay_type' => strtoupper($payStstus)];
     }
 
 }

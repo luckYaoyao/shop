@@ -240,6 +240,7 @@ export default {
         fromTxt: [
           { text: '全部', val: '' },
           { text: '今天', val: 'today' },
+          { text: '昨天', val: 'yesterday' },
           { text: '本周', val: 'week' },
           { text: '本月', val: 'month' },
           { text: '本季度', val: 'quarter' },

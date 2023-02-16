@@ -69,6 +69,7 @@ class StoreOrderSuccessServices extends BaseServices
     {
         $updata = ['paid' => 1, 'pay_type' => $paytype, 'pay_time' => time()];
         $orderInfo['pay_time'] = $updata['pay_time'];
+        $orderInfo['pay_type'] = $paytype;
         if ($other && isset($other['trade_no'])) {
             $updata['trade_no'] = $other['trade_no'];
         }

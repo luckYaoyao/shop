@@ -14,6 +14,7 @@ use app\services\order\StoreOrderDeliveryServices;
 use app\services\order\StoreOrderInvoiceServices;
 use app\services\order\StoreOrderServices;
 use app\services\order\StoreOrderStatusServices;
+use app\services\pay\PayServices;
 use app\services\product\product\StoreProductCouponServices;
 use app\services\product\sku\StoreProductAttrValueServices;
 use app\services\product\sku\StoreProductVirtualServices;
@@ -63,14 +64,14 @@ class OrderPaySuccess implements ListenerInterface
         $orderInvoiceServices->update(['order_id' => $orderInfo['id']], ['is_pay' => 1]);
 
         //虚拟商品自动发货
-        if($orderInfo['virtual_type'] > 0){
+        if ($orderInfo['virtual_type'] > 0) {
             /** @var StoreOrderDeliveryServices $orderDeliveryServices */
             $orderDeliveryServices = app()->make(StoreOrderDeliveryServices::class);
             $orderDeliveryServices->virtualSend($orderInfo);
         }
 
         // 写入资金流水
-        if ($orderInfo['pay_type'] == 'weixin' || $orderInfo['pay_type'] == 'alipay') {
+        if ($orderInfo['pay_type'] == 'weixin' || $orderInfo['pay_type'] == 'alipay' || $orderInfo['pay_type'] == PayServices::ALLIN_PAY) {
             /** @var UserServices $userServices */
             $userServices = app()->make(UserServices::class);
             $userInfo = $userServices->get($orderInfo['uid']);

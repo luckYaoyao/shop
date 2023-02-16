@@ -65,7 +65,7 @@
 								</view>
 								<!-- #endif -->
 								<view class="name" v-if="userInfo.uid">
-									{{userInfo.nickname}}
+									<text class="line1 nickname">{{userInfo.nickname}}</text>
 									<image class="live" :src="userInfo.vip_icon" v-if="userInfo.vip_icon"></image>
 									<view class="vip" v-if="userInfo.is_money_level> 0 && userInfo.svip_open">
 										<image src="/static/images/svip.png"></image>
@@ -1008,7 +1008,9 @@
 							align-items: center;
 							color: #fff;
 							font-size: 31rpx;
-
+							.nickname{
+								max-width: 8em;
+							}
 							.vip {
 								margin-left: 10rpx;
 

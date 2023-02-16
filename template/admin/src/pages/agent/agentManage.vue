@@ -273,7 +273,7 @@ export default {
           minWidth: 120,
         },
         {
-          title: '佣金金额',
+          title: '佣金总金额',
           key: 'brokerage_money',
           minWidth: 120,
         },

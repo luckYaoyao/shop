@@ -30,17 +30,16 @@ class Notify
      */
     public function handle($event)
     {
-        [$notify] = $event;
+        [$notify, $payType] = $event;
 
         if (isset($notify['attach']) && $notify['attach']) {
             if (($count = strpos($notify['out_trade_no'], '_')) !== false) {
                 $notify['out_trade_no'] = substr($notify['out_trade_no'], $count + 1);
             }
-            return (new Hook(PayNotifyServices::class, 'wechat'))->listen($notify['attach'], $notify['out_trade_no'], $notify['transaction_id']);
+            return (new Hook(PayNotifyServices::class, 'wechat'))->listen($notify['attach'], $notify['out_trade_no'], $notify['transaction_id'], $payType);
         }
 
-        if($notify['attach'] === 'wechat' && isset($notify['out_trade_no']))
-        {
+        if ($notify['attach'] === 'wechat' && isset($notify['out_trade_no'])) {
             /** @var WechatMessageServices $wechatMessageService */
             $wechatMessageService = app()->make(WechatMessageServices::class);
             $wechatMessageService->setOnceMessage($notify, $notify['openid'], 'payment_success', $notify['out_trade_no']);

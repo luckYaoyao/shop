@@ -148,6 +148,10 @@
 		},
 		onLoad: function(options) {
 			this.options = options
+			console.log(options, 'options')
+			uni.setNavigationBarTitle({
+				title: ''
+			});
 			if (!options.order_id) return this.$util.Tips({
 				title: this.$t(`缺少参数无法查看订单支付状态`)
 			}, {

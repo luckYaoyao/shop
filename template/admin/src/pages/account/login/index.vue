@@ -44,7 +44,7 @@
               <img :src="imgcode" class="pictrue" @click="captchas" />
             </div>
           </FormItem> -->
-          <FormItem>
+          <FormItem class="pt10">
             <Button type="primary" long :loading="loading" size="large" @click="handleSubmit('formInline')" class="btn"
               >登录</Button
             >
@@ -231,7 +231,7 @@ export default {
             if (data.timer === false) {
               this.$Notice.warning({
                 title: '温馨提示',
-                desc: '您的【定时任务】未开启，没有开启会导致定时执行的任务无法执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/6962" target="_blank">点击查看开启方法</a>',
+                desc: '您的【定时任务】未开启，没有开启会导致自动收货、未支付自动取消订单、订单自动好评、拼团到期退款等任务无法正常执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/6962" target="_blank">点击查看开启方法</a>',
                 duration: 30,
               });
             }
@@ -265,7 +265,7 @@ export default {
             isNotice = true;
             this.$Notice.warning({
               title: '温馨提示',
-              desc: '您的【长连接】未开启，没有开启会导致客服消息无法发送,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/6931" target="_blank">点击查看开启方法</a>',
+              desc: '您的【长连接】未开启，没有开启会导致系统默认客服无法使用,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/6931" target="_blank">点击查看开启方法</a>',
               duration: 30,
             });
           }
@@ -275,7 +275,7 @@ export default {
             isNotice = true;
             this.$Notice.warning({
               title: '温馨提示',
-              desc: '您的【长连接】未开启，没有开启会导致客服消息无法发送,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/6931" target="_blank">点击查看开启方法</a>',
+              desc: '您的【长连接】未开启，没有开启会导致系统默认客服无法使用,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/6931" target="_blank">点击查看开启方法</a>',
               duration: 30,
             });
           }
@@ -387,7 +387,7 @@ export default {
 }
 
 .page-account-top {
-  padding: 20px 0 !important;
+  padding: 20px 0 24px 0!important;
   box-sizing: border-box !important;
   display: flex;
   justify-content: center;

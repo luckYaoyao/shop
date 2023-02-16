@@ -105,6 +105,49 @@ class PayServices
      * @param string $body
      * @return array|string
      */
+    public function payV2(string $payType, string $orderId, string $price, string $successAction, string $body, array $options = [])
+    {
+        try {
+
+            //这些全都是微信支付
+            if (in_array($payType, ['routine', 'weixinh5', 'weixin', 'pc', 'store'])) {
+                $payType = 'wechat_pay';
+                //判断是否使用v3
+                if (sys_config('pay_wechat_type') == 1) {
+                    $payType = 'v3_wechat_pay';
+                }
+            } else {
+                if ($payType == 'alipay') {
+                    $payType = 'ali_pay';
+                } elseif ($payType == 'allinpay') {
+                    $payType = 'allin_pay';
+                }
+            }
+
+            /** @var Pay $pay */
+            $pay = app()->make(Pay::class, [$payType]);
+
+
+            return $pay->create($orderId, $price, $successAction, $body, '', ['pay_new_weixin_open' => (bool)sys_config('pay_new_weixin_open')] + $options);
+
+        } catch (\Exception $e) {
+            if (strpos($e->getMessage(), 'api unauthorized rid') !== false) {
+                throw new ApiException('请在微信支付配置中将小程序商户号选择改为商户号绑定');
+            }
+            throw new ApiException($e->getMessage());
+        }
+    }
+
+    /**
+     * 发起支付
+     * @param string $payType
+     * @param string $openid
+     * @param string $orderId
+     * @param string $price
+     * @param string $successAction
+     * @param string $body
+     * @return array|string
+     */
     public function pay(string $payType, string $openid, string $orderId, string $price, string $successAction, string $body, bool $isCode = false)
     {
         try {

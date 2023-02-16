@@ -303,8 +303,9 @@
 				}
 
 				image {
-					width: 100%;
 					// height: 346rpx;
+					width: 347rpx;
+					height: 347rpx;
 					height: 100%;
 					display: block;
 				}

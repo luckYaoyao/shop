@@ -78,6 +78,12 @@
 			pageFooter,
 			tabBar
 		},
+		props: {
+			isNew: {
+				type: Boolean,
+				default: false
+			}
+		},
 		data() {
 			return {
 				navlist: [],
@@ -107,6 +113,7 @@
 			})
 		},
 		mounted() {
+			console.log(this.version)
 			let that = this
 			// #ifdef H5
 			uni.getSystemInfo({
@@ -173,12 +180,21 @@
 			},
 			getAllCategory: function() {
 				let that = this;
-				getCategoryList().then(res => {
-					that.productList = res.data;
+				console.log(this.version,'1',uni.getStorageSync('CAT_VERSION'))
+				if (this.version !== uni.getStorageSync('CAT_VERSION')) {
+					getCategoryList().then(res => {
+						uni.setStorageSync('CAT1_DATA', res.data)
+						that.productList = res.data;
+						that.$nextTick(res => {
+							that.infoScroll();
+						})
+					})
+				} else {
+					that.productList = uni.getStorageSync('CAT1_DATA')
 					that.$nextTick(res => {
 						that.infoScroll();
 					})
-				})
+				}
 			},
 			scroll: function(e) {
 				let scrollTop = e.detail.scrollTop;

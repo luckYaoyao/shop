@@ -328,11 +328,11 @@ class AgentLevelServices extends BaseServices
     {
         /** @var UserServices $userServices */
         $userServices = app()->make(UserServices::class);
-        $userInfo = $userServices->getUserInfo($uid);
+        $userInfo = $userServices->getUserInfo($uid, 'uid');
         if (!$userInfo) {
             throw new AdminException(400214);
         }
-        $levelInfo = $this->getLevelInfo($id);
+        $levelInfo = $this->getLevelInfo($id, 'id');
         if (!$levelInfo) {
             throw new AdminException(400442);
         }

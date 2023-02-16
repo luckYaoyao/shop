@@ -20,18 +20,26 @@
               />
             </FormItem>
           </Col>
-          <Col :xl="8" :lg="12" :md="13" :sm="12" :xs="24">
+          <Col :xl="6" :lg="12" :md="13" :sm="12" :xs="24">
             <FormItem label="佣金范围：" class="tab_data">
-              <Input
+              <Input-number
+                type="number"
+                :min="0"
                 enter-button
                 placeholder="￥"
                 element-id="price_min"
                 class="mr10"
                 v-model="formValidate.price_min"
-                clearable
               />
               <span class="mr10">一</span>
-              <Input enter-button placeholder="￥" element-id="price_max" v-model="formValidate.price_max" clearable />
+              <Input-number
+                type="number"
+                :min="0"
+                enter-button
+                placeholder="￥"
+                element-id="price_max"
+                v-model="formValidate.price_max"
+              />
             </FormItem>
           </Col>
           <Col span="4">
@@ -202,12 +210,15 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-.lines
-  padding-top 6px !important
+.lines {
+  padding-top: 6px !important;
+}
 
-.tabform .export
-  margin-left 10px;
+.tabform .export {
+  margin-left: 10px;
+}
 
-.tab_data >>> .ivu-form-item-content
-  display flex !important
+.tab_data >>> .ivu-form-item-content {
+  display: flex !important;
+}
 </style>

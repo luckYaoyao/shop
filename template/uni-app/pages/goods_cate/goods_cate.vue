@@ -1,8 +1,8 @@
 <template>
 	<view :style="colorStyle">
-		<goodsCate1 v-show="category==1" ref="classOne"></goodsCate1>
-		<goodsCate2 v-show="category==2" ref="classTwo" @jumpIndex="jumpIndex"></goodsCate2>
-		<goodsCate3 v-show="category==3" ref="classThree" @jumpIndex="jumpIndex"></goodsCate3>
+		<goodsCate1 v-if="category==1" ref="classOne" :isNew="isNew"></goodsCate1>
+		<goodsCate2 v-if="category==2" ref="classTwo" :isNew="isNew" @jumpIndex="jumpIndex"></goodsCate2>
+		<goodsCate3 v-if="category==3" ref="classThree" :isNew="isNew" @jumpIndex="jumpIndex"></goodsCate3>
 	</view>
 </template>
 
@@ -17,6 +17,9 @@
 	import {
 		mapGetters
 	} from 'vuex';
+	import {
+		getCategoryVersion
+	} from '@/api/public.js'
 	import tabBar from "@/pages/index/visualization/components/tabBar.vue"
 	export default {
 		computed: mapGetters(['isLogin', 'uid']),
@@ -32,22 +35,31 @@
 				category: '',
 				is_diy: uni.getStorageSync('is_diy'),
 				status: 0,
+				version: '',
+				isNew: false
 			}
 		},
-		onLoad() {
-			this.classStyle();
-		},
+		onLoad() {},
 		onReady() {
-
+			this.getCategoryVersion()
 		},
 		onShow() {
-			if (this.status == 2 || this.status == 3) {
-				uni.hideTabBar();
-			} else if (this.status == 1) {
-				this.$refs.classOne.getNav();
-			}
+
 		},
 		methods: {
+			getCategoryVersion() {
+				getCategoryVersion().then(res => {
+					if (!uni.getStorageSync('CAT_VERSION') || res.data.version != uni.getStorageSync(
+							'CAT_VERSION')) {
+						this.isNew = true
+						uni.setStorageSync('CAT_VERSION', res.data.version)
+					} else {
+						this.isNew = false
+					}
+					this.classStyle();
+				})
+
+			},
 			jumpIndex() {
 				if (this.is_diy) {}
 			},
@@ -56,28 +68,36 @@
 					let status = res.data.status;
 					this.category = status
 					this.status = res.data.status
-					if (status == 2) {
-						if (this.isLogin) {
-							this.$refs.classTwo.getCartNum();
-							this.$refs.classTwo.getCartList(1);
+					this.$nextTick(e => {
+						if (this.status == 2 || this.status == 3) {
+							uni.hideTabBar();
+						} else if (this.status == 1) {
+							this.$refs.classOne.getNav();
 						}
-						this.$refs.classTwo.getAllCategory()
-					}
-					if (status == 3) {
-						if (this.isLogin) {
-							this.$refs.classThree.getCartNum();
-							this.$refs.classThree.getCartList(1);
+						if (status == 2) {
+							if (this.isLogin) {
+								this.$refs.classTwo.getCartNum();
+								this.$refs.classTwo.getCartList(1);
+							}
+							this.$refs.classTwo.getAllCategory()
 						}
-						this.$refs.classThree.getAllCategory()
-					}
-					if (status == 2 || status == 3) {
-						uni.hideTabBar()
-					} else {
-						if (!this.is_diy) {
+						if (status == 3) {
+							if (this.isLogin) {
+								this.$refs.classThree.getCartNum();
+								this.$refs.classThree.getCartList(1);
+							}
+							this.$refs.classThree.getAllCategory()
+						}
+						if (status == 2 || status == 3) {
 							uni.hideTabBar()
-						} else {}
-						this.$refs.classOne.getNav();
-					}
+						} else {
+							if (!this.is_diy) {
+								uni.hideTabBar()
+							} else {}
+							this.$refs.classOne.getNav();
+						}
+					})
+
 				})
 			}
 		},

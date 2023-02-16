@@ -74,13 +74,12 @@
 			<indexGoods v-if="!isIframe && tabNav.default && tabNav.default.isShow.val" :dataLists="goodLists"
 				@click.native="bindEdit('List')"></indexGoods>
 			<!-- <recommend :dataConfig="goodList.aa" @click.native="bindEdit('goodList','aa')"></recommend> -->
-			<Loading class="loading-sty" :loaded="loaded" :loading="loading"></Loading>
+			<!-- <Loading class="loading-sty" :loaded="loaded" :loading="loading"></Loading> -->
 			<view class="" v-if="
           !isIframe &&
           tabNav.default &&
           tabNav.default.isShow.val &&
-          goodLists.length == 0 &&
-          !loading
+          goodLists.length == 0
         ">
 				<view class='emptyBox'>
 					<image :src="imgHost + '/statics/images/no-thing.png'"></image>
@@ -498,6 +497,10 @@
 				// #endif
 			},
 			onLoadFun() {},
+			reconnect() {
+				this.diyData();
+				this.getIndexData();
+			},
 			diyData() {
 				let that = this;
 				getDiy().then((res) => {
@@ -524,6 +527,7 @@
 					setTimeout(() => {
 						this.showSkeleton = false;
 					}, 300);
+					uni.setStorageSync('VIS_DATA', res.data)
 				}).catch(error => {
 					// #ifdef APP-PLUS
 					if (error.status) {

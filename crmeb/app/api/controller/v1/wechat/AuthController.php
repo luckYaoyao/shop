@@ -79,7 +79,7 @@ class AuthController
      */
     public function notify()
     {
-        $this->services->notify();
+        return $this->services->notify();
     }
 
     /**

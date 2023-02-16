@@ -274,10 +274,10 @@ class StoreOrderRefundServices extends BaseServices
 
             return $splitOrderInfo;
         });
+        //处理开票
+        app()->make(StoreOrderInvoiceServices::class)->update(['order_id' => $order['id']], ['is_refund' => 1]);
         //订单退款记录
         ProductLogJob::dispatch(['refund', ['uid' => $order['uid'], 'order_id' => $order['id']]]);
-        //订单同意退款事件
-        event('order.refund', [$refundData, $order, 'order_refund']);
         event('notice.notice', [['data' => $refundData, 'order' => $order], 'order_refund']);
         return true;
     }
@@ -286,6 +286,12 @@ class StoreOrderRefundServices extends BaseServices
      * 商家同意用户退货
      * @param $id
      * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/02/16
      */
     public function agreeExpress($id)
     {

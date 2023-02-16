@@ -23,38 +23,6 @@ use app\services\system\lang\LangCodeServices;
 use app\services\system\lang\LangCountryServices;
 use think\facade\Config;
 
-if (!function_exists('get_pay_type')) {
-
-    /**
-     * @param string $payType
-     * @return string
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/2/9
-     */
-    function get_pay_type(string $payType)
-    {
-//        $allinPay = (int)sys_config('allin_pay_status') == 1;
-//
-//        //微信支付没有开启，通联支付开启，用户访问端在小程序或者公众号的时候，使用通联微信H5支付
-//        if ($payType == PayServices::WEIXIN_PAY) {
-//            $wechat_pay_type = (int)sys_config('wechat_pay_type', 0);
-//            if ($wechat_pay_type == 1 && $allinPay && (request()->isRoutine() || request()->isWechat())) {
-//                $payType = PayServices::ALLIN_PAY;
-//            }
-//        }
-//
-//        //支付宝没有开启，通联支付开了，用户使用支付宝支付，并且在app端访问的时候，使用通联app支付宝支付
-//        if ($payType == PayServices::ALIAPY_PAY) {
-//            $alipay_pay_type = (int)sys_config('alipay_pay_type', 0);
-//            if ($alipay_pay_type == 1 && $allinPay && request()->isApp()) {
-//                $payType = PayServices::ALLIN_PAY;
-//            }
-//        }
-
-        return $payType;
-    }
-}
 
 if (!function_exists('is_wechat_pay')) {
     /**
@@ -65,7 +33,18 @@ if (!function_exists('is_wechat_pay')) {
      */
     function is_wecaht_pay()
     {
-        return (int)sys_config('pay_weixin_open') == 1;
+        $wechat_pay_type = (int)sys_config('wechat_pay_type', 0);
+        $wechatPay = (int)sys_config('pay_weixin_open') == 1;
+        $allinPay = (int)sys_config('allin_pay_status') == 1;
+
+        if ($wechat_pay_type == 0 && $wechatPay) {
+            return true;
+        } elseif ($wechat_pay_type == 1 && $allinPay) {
+            if ((request()->isRoutine() || request()->isWechat())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 
@@ -78,7 +57,18 @@ if (!function_exists('is_ali_pay')) {
      */
     function is_ali_pay()
     {
-        return (int)sys_config('ali_pay_status') == 1;
+        $alipay_pay_type = (int)sys_config('alipay_pay_type', 0);
+        $aliPay = (int)sys_config('ali_pay_status') == 1;
+        $allinPay = (int)sys_config('allin_pay_status') == 1;
+
+        if ($alipay_pay_type == 0 && $aliPay) {
+            return true;
+        } elseif ($alipay_pay_type == 1 && $allinPay) {
+            if (request()->isApp()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

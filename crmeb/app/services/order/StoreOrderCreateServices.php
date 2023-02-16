@@ -64,7 +64,7 @@ class StoreOrderCreateServices extends BaseServices
         $snowflake = new \Godruoyi\Snowflake\Snowflake();
 
         if (Config::get('cache.default') == 'file') {
-            //32位 
+            //32位
             if (PHP_INT_SIZE == 4) {
                 $id = abs($snowflake->id());
             } else {
@@ -768,8 +768,8 @@ class StoreOrderCreateServices extends BaseServices
 
                 //指定返佣金额
                 if (isset($productInfo['is_sub']) && $productInfo['is_sub'] == 1) {
-                    $oneBrokerage = $storeBrokerageRatio > 0 ? bcmul((string)($productInfo['attrInfo']['brokerage'] ?? '0'), $cartNum, 2) : 0;
-                    $twoBrokerage = $storeBrokerageTwo > 0 ? bcmul((string)($productInfo['attrInfo']['brokerage_two'] ?? '0'), $cartNum, 2) : 0;
+                    $oneBrokerage = bcmul((string)($productInfo['attrInfo']['brokerage'] ?? '0'), $cartNum, 2);
+                    $twoBrokerage = bcmul((string)($productInfo['attrInfo']['brokerage_two'] ?? '0'), $cartNum, 2);
                 } else {
                     if ($price) {
                         //一级返佣比例 小于等于零时直接返回 不返佣
@@ -794,6 +794,7 @@ class StoreOrderCreateServices extends BaseServices
             $cart['agent_brokerage'] = $agentBrokerage;
             $cart['division_brokerage'] = $divisionBrokerage;
         }
+
         return [$cartInfo, [$spread_one_uid, $spread_two_uid]];
     }
 }

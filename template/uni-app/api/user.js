@@ -342,9 +342,17 @@ export function rechargeRoutine(data) {
 }
 /*
  * 公众号充值
- * */
+ * 
+ */
 export function rechargeWechat(data) {
 	return request.post("recharge/wechat", data);
+}
+/*
+ * 公众号充值
+ * 
+ */
+export function recharge(data) {
+	return request.post("recharge/recharge", data);
 }
 /**
  * 获取默认地址

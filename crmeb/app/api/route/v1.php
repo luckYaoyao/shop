@@ -15,9 +15,6 @@ use think\facade\Config;
 use think\Response;
 
 Route::any('wechat/serve', 'v1.wechat.WechatController/serve');//公众号服务
-Route::any('wechat/notify', 'v1.wechat.WechatController/notify');//公众号支付回调
-Route::any('wechat/v3notify', 'v1.wechat.WechatController/v3notify');//公众号支付回调
-Route::any('routine/notify', 'v1.wechat.AuthController/notify');//小程序支付回调
 Route::any('pay/notify/:type', 'v1.PayController/notify');//支付回调
 Route::get('get_script', 'v1.PublicController/getScript');//获取统计代码
 Route::get('version', 'v1.PublicController/getVersion');//获取统计代码
@@ -166,6 +163,7 @@ Route::group(function () {
     Route::post('order/pay', 'v1.order.StoreOrderController/pay')->name('orderPay'); //订单支付
     Route::post('order/product', 'v1.order.StoreOrderController/product')->name('orderProduct'); //订单商品信息
     Route::post('order/comment', 'v1.order.StoreOrderController/comment')->name('orderComment'); //订单评价
+    Route::get('order/cashier/:orderId/[:type]', 'v1.order.StoreOrderController/cashier')->name('orderCashier'); //订单收银台
     //活动---砍价
     Route::get('bargain/detail/:id', 'v1.activity.StoreBargainController/detail')->name('bargainDetail');//砍价商品详情
     Route::post('bargain/start', 'v1.activity.StoreBargainController/start')->name('bargainStart');//砍价开启

@@ -351,12 +351,12 @@ export default {
       } else {
         this.showTitle();
       }
-      this.clientHeight = `${document.documentElement.clientHeight}` - 65.81; //获取浏览器可视区域高度
+      this.clientHeight = `${document.documentElement.clientHeight}`; //获取浏览器可视区域高度
       let H = `${document.documentElement.clientHeight}` - 180;
       this.rollHeight = H > 650 ? 650 : H;
       let that = this;
       window.onresize = function () {
-        that.clientHeight = `${document.documentElement.clientHeight}` - 65.81;
+        that.clientHeight = `${document.documentElement.clientHeight}`;
         let H = `${document.documentElement.clientHeight}` - 180;
         that.rollHeight = H > 650 ? 650 : H;
       };

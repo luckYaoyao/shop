@@ -113,7 +113,12 @@
 			cartList,
 			ParabalaBall
 		},
-		props: {},
+		props: {
+			isNew: {
+				type: Boolean,
+				default: false
+			}
+		},
 		data() {
 			return {
 				categoryList: [],
@@ -662,8 +667,30 @@
 			},
 			getAllCategory: function() {
 				let that = this;
-				getCategoryList().then(res => {
-					let data = res.data;
+				if (this.isNew) {
+					getCategoryList().then(res => {
+						let data = res.data;
+						uni.setStorageSync('CAT3_DATA', data)
+						data.forEach(item => {
+							item.children.unshift({
+								'id': 0,
+								'cate_name': that.$t(`全部`)
+							})
+						})
+						that.categoryTitle = data[0].cate_name;
+						that.cid = data[0].id;
+						that.sid = 0;
+						that.navActive = 0;
+						that.tabClick = 0;
+						that.categoryList = data;
+						that.categoryErList = res.data[0].children ? res.data[0].children : [];
+						that.page = 1;
+						that.loadend = false;
+						that.tempArr = [];
+						that.productslist();
+					})
+				} else {
+					let data = uni.getStorageSync('CAT3_DATA')
 					data.forEach(item => {
 						item.children.unshift({
 							'id': 0,
@@ -681,7 +708,8 @@
 					that.loadend = false;
 					that.tempArr = [];
 					that.productslist();
-				})
+				}
+
 			},
 			tapNav(index, item) {
 				let list = this.categoryList[index];

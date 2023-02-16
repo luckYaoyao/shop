@@ -13,6 +13,7 @@ namespace crmeb\services\app;
 
 use app\services\message\wechat\MessageServices;
 use app\services\order\StoreOrderServices;
+use app\services\pay\PayServices;
 use app\services\wechat\WechatMessageServices;
 use app\services\wechat\WechatReplyServices;
 use crmeb\exceptions\AdminException;
@@ -80,7 +81,7 @@ class WechatService
                 'key' => trim($payment['pay_weixin_key']),
                 'cert_path' => substr(public_path(parse_url($payment['pay_weixin_client_cert'])['path']), 0, strlen(public_path(parse_url($payment['pay_weixin_client_cert'])['path'])) - 1),
                 'key_path' => substr(public_path(parse_url($payment['pay_weixin_client_key'])['path']), 0, strlen(public_path(parse_url($payment['pay_weixin_client_key'])['path'])) - 1),
-                'notify_url' => trim(sys_config('site_url')) . '/api/wechat/notify'
+                'notify_url' => trim(sys_config('site_url')) . '/api/pay/notify/wechat'
             ];
         }
         return $config;
@@ -167,7 +168,7 @@ class WechatService
                             $data['out_trade_no'] = $message['order_info']['trade_no'];
                             $data['transaction_id'] = $message['order_info']['transaction_id'];
                             $data['opneid'] = $message['FromUserName'];
-                            if (Event::until('pay.notify', [$data])) {
+                            if (Event::until('pay.notify', [$data, PayServices::WEIXIN_PAY])) {
                                 $response = 'success';
                             } else {
                                 $response = 'faild';
@@ -619,18 +620,19 @@ class WechatService
     public static function handleNotify()
     {
         return self::paymentService()->handleNotify(function ($notify, $successful) {
-            if ($successful && isset($notify->out_trade_no)) {
-                if (isset($notify->attach) && $notify->attach) {
-                    if (($count = strpos($notify->out_trade_no, '_')) !== false) {
-                        $notify->out_trade_no = substr($notify->out_trade_no, $count + 1);
-                    }
-                    return (new Hook(PayNotifyServices::class, 'wechat'))->listen($notify->attach, $notify->out_trade_no, $notify->transaction_id);
-                }
-                /** @var WechatMessageServices $wechatMessageService */
-                $wechatMessageService = app()->make(WechatMessageServices::class);
-                $wechatMessageService->setOnceMessage($notify, $notify->openid, 'payment_success', $notify->out_trade_no);
-                return false;
+
+            if ($successful) {
+
+                $data = [
+                    'attach' => $notify->attach,
+                    'out_trade_no' => $notify->out_trade_no,
+                    'transaction_id' => $notify->transaction_id
+                ];
+
+                return Event::until('pay.notify', [$data, PayServices::WEIXIN_PAY]);
             }
+
+            return false;
         });
     }
 

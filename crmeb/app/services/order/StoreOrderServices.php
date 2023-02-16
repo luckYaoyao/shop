@@ -23,6 +23,7 @@ use app\services\product\product\StoreProductLogServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use app\services\system\store\SystemStoreServices;
 use app\services\user\UserInvoiceServices;
+use app\services\user\UserRechargeServices;
 use app\services\user\UserServices;
 use app\services\product\product\StoreProductReplyServices;
 use app\services\user\UserAddressServices;
@@ -31,6 +32,7 @@ use app\services\user\UserLevelServices;
 use app\services\wechat\WechatUserServices;
 use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
+use crmeb\exceptions\PayException;
 use crmeb\services\CacheService;
 use crmeb\services\FormBuilder as Form;
 use crmeb\services\printer\Printer;
@@ -496,6 +498,9 @@ class StoreOrderServices extends BaseServices
                         break;
                     case PayServices::ALIAPY_PAY:
                         $item['pay_type_name'] = '支付宝支付';
+                        break;
+                    case PayServices::ALLIN_PAY:
+                        $item['pay_type_name'] = '通联支付';
                         break;
                     default:
                         $item['pay_type_name'] = '其他支付';
@@ -1856,7 +1861,7 @@ HTML;
     {
         /** @var UserServices $userServices */
         $userServices = app()->make(UserServices::class);
-        $user = $userServices->getUserInfo($uid);
+        $user = $userServices->getUserInfo($uid, 'uid');
         if (!$user) {
             throw new AdminException(100026);
         }
@@ -2290,7 +2295,7 @@ HTML;
         if (!$orderInfo) {
             throw new ApiException(410264);
         }
-        return $payServices->alipayOrder($orderInfo->toArray(), $quitUrl);
+        return $payServices->beforePay($orderInfo->toArray(), PayServices::ALIAPY_PAY, ['quitUrl' => $quitUrl]);
     }
 
     /**
@@ -2392,7 +2397,7 @@ HTML;
         if ($orderData['uid'] != $orderData['pay_uid']) {
             /** @var UserServices $userServices */
             $userServices = app()->make(UserServices::class);
-            $payUser = $userServices->get($orderData['pay_uid']);
+            $payUser = $userServices->get($orderData['pay_uid'], ['nickname', 'avatar']);
             $orderData['help_info'] = [
                 'pay_uid' => $orderData['pay_uid'],
                 'pay_nickname' => $payUser['nickname'],
@@ -2471,5 +2476,80 @@ HTML;
             AutoCommentJob::dispatch([$item['id'], $item['cart_id']]);
         }
         return true;
+    }
+
+    /**
+     * @param string $orderId
+     * @param string $type
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/2/13
+     */
+    public function getCashierInfo(int $uid, string $orderId, string $type)
+    {
+        //支付类型开关
+        $data = [
+            'ali_pay_status' => is_ali_pay(),
+            'wechat_pay_status' => is_wecaht_pay(),
+            'offline_pay_status' => (int)sys_config('offline_pay_status') == 1,
+            'friend_pay_status' => (int)sys_config('friend_pay_status') == 1,
+            'yue_pay_status' => (int)sys_config('balance_func_status') && (int)sys_config('yue_pay_status') == 1,
+        ];
+
+        $data['order_id'] = $orderId;
+        $data['pay_price'] = '0';
+        $data['now_money'] = app()->make(UserServices::class)->value(['uid' => $uid], 'now_money');
+
+        switch ($type) {
+            case 'order':
+                $info = $this->dao->get(['order_id' => $orderId], ['pay_price', 'add_time', 'combination_id', 'seckill_id', 'bargain_id']);
+                if (!$info) {
+                    throw new PayException('您支付的订单不存在');
+                }
+                $orderCancelTime = (int)sys_config('order_cancel_time', 0);
+                $orderActivityTime = (int)sys_config('order_activity_time', 0);
+                if ($info->combination_id) {
+                    $time = ((int)sys_config('order_pink_time', 0) ?: $orderActivityTime) * 60 * 60 + ((int)$info->add_time);
+                } else if ($info->seckill_id) {
+                    $time = ((int)sys_config('order_seckill_time', 0) ?: $orderActivityTime) * 60 * 60 + ((int)$info->add_time);
+                } else if ($info->bargain_id) {
+                    $time = ((int)sys_config('order_bargain_time', 0) ?: $orderActivityTime) * 60 * 60 + ((int)$info->add_time);
+                } else {
+                    $time = $orderCancelTime * 60 * 60 + ((int)$info->add_time);
+                }
+
+                if ($time < 0) {
+                    $time = 0;
+                }
+
+                $data['pay_price'] = $info['pay_price'];
+                $data['invalid_time'] = $time;
+
+                break;
+            case 'svip':
+                $info = app()->make(OtherOrderServices::class)->get(['order_id' => $orderId], ['pay_price', 'add_time']);
+                if (!$info) {
+                    throw new PayException('您支付的订单不存在');
+                }
+                $data['pay_price'] = $info['pay_price'];
+                $data['invalid_time'] = $info->add_time + 86400;
+                break;
+            case 'recharge':
+                $info = app()->make(UserRechargeServices::class)->get(['order_id' => $orderId], ['price', 'add_time']);
+                if (!$info) {
+                    throw new PayException('您支付的订单不存在');
+                }
+                $data['pay_price'] = $info['price'];
+                $data['invalid_time'] = $info->add_time + 86400;
+                break;
+            default:
+                throw new PayException('暂不支持其他类型订单支付');
+        }
+
+        return $data;
     }
 }
