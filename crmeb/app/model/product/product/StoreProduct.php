@@ -343,6 +343,16 @@ class StoreProduct extends BaseModel
      * @param $query
      * @param $value
      */
+    public function searchIdsAttr($query, $value)
+    {
+        if ($value != '') $query->whereIn('id', $value);
+    }
+
+    /**
+     * 不在当前id中查询
+     * @param $query
+     * @param $value
+     */
     public function searchNotIdsAttr($query, $value)
     {
         if ($value != '') $query->whereNotIn('id', $value);
