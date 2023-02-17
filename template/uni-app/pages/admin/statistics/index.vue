@@ -49,7 +49,7 @@
 		</div>
 		<div class="chart">
 			<div class="chart-title">
-				{{$t(`单位`)}}（{{where.type == 1?$t(`元.`):$t(`分.`)}}）
+				{{$t(`单位`)}}（{{where.type == 1?$t(`元.`):$t(`份`)}}）
 			</div>
 			<canvas canvas-id="canvasLineA" id="canvasLineA" class="charts" disable-scroll=true @touchstart="touchLineA"
 			 @touchmove="moveLineA" @touchend="touchEndLineA">
