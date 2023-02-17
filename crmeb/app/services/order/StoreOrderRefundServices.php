@@ -1104,7 +1104,13 @@ class StoreOrderRefundServices extends BaseServices
     /**
      * 退款订单详情
      * @param $uni
-     * @return mixed
+     * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/02/17
      */
     public function refundDetail($uni)
     {
@@ -1129,6 +1135,12 @@ class StoreOrderRefundServices extends BaseServices
         $orderData['store_order_sn'] = $orderInfo['order_id'];
         $orderData['cartInfo'] = $orderData['cart_info'];
         $orderData['_pay_time'] = date('Y-m-d H:i:s', $orderInfo['pay_time']);
+        $orderData['type'] = 0;
+        if ($orderInfo['seckill_id'] || $orderInfo['bargain_id'] || $orderInfo['combination_id']) {
+            if ($orderInfo['seckill_id']) $orderData['type'] = 1;
+            if ($orderInfo['bargain_id']) $orderData['type'] = 2;
+            if ($orderInfo['combination_id']) $orderData['type'] = 3;
+        }
         //核算优惠金额
         $vipTruePrice = 0;
         $total_price = 0;
