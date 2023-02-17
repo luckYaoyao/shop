@@ -409,6 +409,7 @@ class StoreOrderController
         $uid = $type == 1 ? (int)$request->uid() : $orderInfo->uid;
         $orderInfo->pay_uid = $uid;
         $orderInfo->save();
+        $orderInfo = $orderInfo->toArray();
         $order = $this->services->get(['order_id' => $uni]);
         if (!$order)
             return app('json')->fail(410173);
@@ -455,7 +456,7 @@ class StoreOrderController
             $success = app()->make(StoreOrderSuccessServices::class);
             $payPriceStatus = $success->zeroYuanPayment($orderInfo, $uid, $paytype);
             if ($payPriceStatus)//0元支付成功
-                return app('json')->status('success', 410195, ['order_id' => $orderInfo['order_id'], 'key' => $orderInfo['unique ']]);
+                return app('json')->status('success', 410195, ['order_id' => $orderInfo['order_id'], 'key' => $orderInfo['unique']]);
             else
                 return app('json')->status('pay_error');
         }

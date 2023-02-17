@@ -110,7 +110,8 @@ class ExportExcel extends AuthController
         $where = $this->request->getMore([
             ['store_name', ''],
             ['cate_id', ''],
-            ['type', 1]
+            ['type', 1],
+            ['ids', []]
         ]);
         return app('json')->success($this->service->exportProductList($where));
     }

@@ -93,8 +93,14 @@ class StoreProductServices extends BaseServices
 
     /**
      * 获取列表
-     * @param $where
+     * @param array $where
      * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/02/17
      */
     public function getList(array $where)
     {
