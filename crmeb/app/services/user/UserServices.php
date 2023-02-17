@@ -9,8 +9,6 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 
-//declare (strict_types=1);
-
 namespace app\services\user;
 
 use app\jobs\UserJob;
@@ -44,7 +42,6 @@ use think\Exception;
 use think\facade\Route as Url;
 
 /**
- *
  * Class UserServices
  * @package app\services\user
  * @method array getUserInfoArray(array $where, string $field, string $key) 根据条件查询对应的用户信息以数组形式返回
@@ -1597,7 +1594,7 @@ class UserServices extends BaseServices
      */
     public function spread(int $uid, int $spreadUid, $code)
     {
-        $userInfo = $this->dao->value(['uid' => $uid], 'uid,spread_uid,spread_time,add_time,last_time');
+        $userInfo = $this->dao->getOne(['uid' => $uid], 'uid,spread_uid,spread_time,add_time,last_time');
         if (!$userInfo) {
             throw new ApiException(100026);
         }
@@ -1635,7 +1632,7 @@ class UserServices extends BaseServices
                 $check = true;
             }
         }
-        if ($userInfo['uid'] == $userSpreadUid || $userInfo['spread_uid'] == $spreadUid) $check = false;
+        if ($userInfo['uid'] == $spreadUid || $userInfo['spread_uid'] == $userSpreadUid) $check = false;
         if ($check) {
             $spreadInfo = $this->dao->get($spreadUid, ['division_id', 'agent_id', 'staff_id']);
             $data = [];
