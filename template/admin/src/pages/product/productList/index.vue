@@ -561,6 +561,7 @@ export default {
       let excelData = JSON.parse(JSON.stringify(this.artFrom));
       excelData.page = 1;
       excelData.limit = 50;
+      excelData.ids = this.ids;
       for (let i = 0; i < excelData.page + 1; i++) {
         let lebData = await this.getExcelData(excelData);
         if (!fileName) fileName = lebData.filename;
