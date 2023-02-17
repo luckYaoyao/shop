@@ -53,6 +53,7 @@ use think\facade\Log;
  * @method getTrendData($time, $type, $timeType, $str) 用户趋势
  * @method getRegion($time, $channelType) 地域统计
  * @method getProductTrend($time, $timeType, $field, $str) 商品趋势
+ * @method getList(array $where, array $field, int $page = 0, int $limit = 0, array $with = [])
  */
 class StoreOrderServices extends BaseServices
 {
