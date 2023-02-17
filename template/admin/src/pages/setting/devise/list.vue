@@ -291,6 +291,12 @@ export default {
     cancel() {
       this.$refs['formItem'].resetFields();
     },
+    refreshFrame() {
+      this.imgUrl = '';
+      setTimeout((e) => {
+        this.imgUrl = `${location.origin}/pages/index/index?type=iframeWindow`;
+      }, 200);
+    },
     getChildData(e) {
       this.loadingExist = e;
     },
@@ -454,26 +460,10 @@ export default {
             type: 1,
           })
             .then((res) => {
+              this.refreshFrame();
               this.$Message.success(res.msg);
               this.$Modal.remove();
               this.getList();
-              // if (res.data.status) {
-              //   this.$Message.success(res.data.msg);
-              //   this.$Modal.remove();
-              //   this.getList();
-              // } else {
-              //   setTimeout((e) => {
-              //     this.$Modal.confirm({
-              //       title: "提示",
-              //       content: "<p>尚未安装模板，请购买安装后再试！</p>",
-              //       loading: false,
-              //       okText: "点击购买",
-              //       onOk: () => {
-              //         window.open("http://s.crmeb.com/goods_cate", `_blank`);
-              //       },
-              //     });
-              //   }, 200);
-              // }
             })
             .catch((res) => {
               this.$Modal.remove();
