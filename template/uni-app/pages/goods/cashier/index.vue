@@ -505,17 +505,11 @@
 
 						case 'ALIPAY_PAY':
 							//#ifdef H5
-							if (this.from === 'weixin') {
-								uni.redirectTo({
-									url: `/pages/users/alipay_invoke/index?id=${orderId}&pay_key=${res.data.result.pay_key}`
-								});
-							} else {
-								uni.hideLoading();
-								that.formContent = res.data.result.jsConfig;
-								that.$nextTick(() => {
-									document.getElementById('alipaysubmit').submit();
-								})
-							}
+							uni.hideLoading();
+							that.formContent = res.data.result.jsConfig;
+							that.$nextTick(() => {
+								document.getElementById('alipaysubmit').submit();
+							})
 							//#endif
 							// #ifdef MP
 							uni.navigateTo({
