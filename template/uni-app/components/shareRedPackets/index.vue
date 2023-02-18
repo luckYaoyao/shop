@@ -140,7 +140,12 @@
 	.sharing-packets .sharing-con .text .shareBut {
 		font-size: 22rpx;
 		color: #fff;
+		// #ifdef H5
 		margin-top: 14rpx;
+		// #endif
+		// #ifndef H5
+		margin-top: 26rpx;
+		// #endif
 		height: 50rpx;
 		line-height: 50rpx;
 	}
