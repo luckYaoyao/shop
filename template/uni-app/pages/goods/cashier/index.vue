@@ -30,9 +30,12 @@
 				<view class="iconfont" :class="active==index?'icon-xuanzhong11 font-num':'icon-weixuan'"></view>
 			</view>
 		</view>
-		<view class="button acea-row row-center-wrapper" @click='goPay(number, paytype)'>{{$t(`确认支付`)}}
+		<view class="btn">
+			<view class="button acea-row row-center-wrapper" @click='goPay(number, paytype)'>{{$t(`确认支付`)}}</view>
+			<view class="wait-pay" @click="waitPay">暂不支付</view>
 		</view>
 		<view v-show="false" v-html="formContent"></view>
+	</view>
 	</view>
 </template>
 
@@ -222,8 +225,13 @@
 					tempform.submit();
 				})
 			},
-			goPay: function(number, paytype) {
-				console.log(paytype)
+			waitPay() {
+				uni.reLaunch({
+					url: '/pages/goods/order_pay_status/index?order_id=' + this.orderId + '&msg=取消支付&type=3' +
+						'&status=2&totalPrice=' + this.payPrice
+				})
+			},
+			goPay(number, paytype) {
 				let that = this;
 				if (!that.orderId) return that.$util.Tips({
 					title: that.$t(`请选择要支付的订单`)
@@ -247,12 +255,6 @@
 					uni: that.orderId,
 					paytype: paytype,
 					type: that.friendPay ? 1 : 0,
-					// #ifdef MP 
-					'from': 'routine',
-					// #endif
-					// #ifdef H5
-					'from': this.$wechat.isWeixin() ? 'weixin' : 'weixinh5',
-					// #endif
 					// #ifdef H5
 					quitUrl: location.port ? location.protocol + '//' + location.hostname + ':' + location
 						.port +
@@ -336,21 +338,25 @@
 							break;
 						case 'SUCCESS':
 							uni.hideLoading();
-							console.log('shiwo ')
-							return that.$util.Tips({
-								title: res.msg,
-								icon: 'success'
-							}, {
-								tab: 4,
-								url: goPages
-							});
-							return that.$util.Tips({
-								title: res.msg,
-								icon: 'success'
-							}, {
-								tab: 4,
-								url: data.payType == 'friend' ? friendPay : goPages
-							});
+							if (paytype !== 'friend') {
+								return that.$util.Tips({
+									title: res.msg,
+									icon: 'success'
+								}, {
+									tab: 4,
+									url: goPages
+								});
+							} else {
+								return that.$util.Tips({
+									title: res.msg,
+									icon: 'success'
+								}, {
+									tab: 4,
+									url: friendPay
+								});
+							}
+
+
 							break;
 						case 'WECHAT_PAY':
 							that.toPay = true;
@@ -723,17 +729,30 @@
 			color: #F34C3E !important;
 		}
 
-		.button {
+		.btn {
 			position: fixed;
 			left: 30rpx;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
 			bottom: 30rpx;
+			bottom: calc(30rpx + constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
+			bottom: calc(30rpx + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
+		}
+
+		.wait-pay {
+			color: #aaa;
+			font-size: 24rpx;
+			padding-top: 20rpx;
+		}
+
+		.button {
 			width: 690rpx;
 			height: 90rpx;
 			border-radius: 45rpx;
 			color: #FFFFFF;
 			background-color: #E93323;
-			bottom: calc(30rpx + constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
-			bottom: calc(30rpx + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
+
 		}
 
 	}
