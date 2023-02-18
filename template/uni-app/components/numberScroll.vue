@@ -78,7 +78,6 @@
 			let arr = new Array(num.toString().length);
 			arr.fill(0);
 			this.indexArr = arr;
-			console.log(this.indexArr)
 		},
 		watch: {
 			num: function(val, oldVal) {
@@ -99,7 +98,6 @@
 					this.indexArr = arr;
 				}
 				this.numChange(val);
-				console.log(this.indexArr)
 			}
 		},
 		mounted() {
@@ -129,7 +127,6 @@
 						}
 					}
 					this.indexArr = copyIndexArr;
-					console.log(this.indexArr)
 				})
 			}
 		}
