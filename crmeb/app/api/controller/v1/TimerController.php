@@ -10,15 +10,27 @@ use app\services\order\StoreOrderServices;
 use app\services\order\StoreOrderTakeServices;
 use app\services\product\product\StoreProductServices;
 use app\services\system\attachment\SystemAttachmentServices;
+use app\services\system\timer\SystemTimerServices;
 
 class TimerController
 {
+    /**
+     * 定时任务调用接口
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/02/17
+     */
+    public function timerRun()
+    {
+        app()->make(SystemTimerServices::class)->timerRun();
+    }
+
     /**
      * 检测定时任务是否正常，必须6秒执行一次
      */
     public function timerCheck()
     {
-        file_put_contents(runtime_path() . '.timer', time());
+        file_put_contents(root_path() . 'runtime/.timer', time());
     }
 
     /**

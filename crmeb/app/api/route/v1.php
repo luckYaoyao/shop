@@ -390,6 +390,8 @@ Route::group(function () {
     Route::get('get_default_lang_type', 'v1.PublicController/getDefaultLangType')->name('getLangJson');
 
     /** 定时任务接口 */
+    //定时任务调用接口
+    Route::get('timer/run', 'v1.TimerController/timerRun')->name('timerRun');
     //检测定时任务接口
     Route::get('timer/check', 'v1.TimerController/timerCheck')->name('timerCheck');
     //未支付自动取消订单

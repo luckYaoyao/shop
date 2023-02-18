@@ -151,8 +151,23 @@ class StorePinkServices extends BaseServices
         $where['cid'] = $id;
         $where['k_id'] = 0;
         $where['is_refund'] = 0;
-        $list = $this->dao->pinkList($where);
-        $ids = array_column($list, 'id');
+        $pinkList = $this->dao->pinkList($where);
+        $ids = array_column($pinkList, 'id');
+        $orderIdKey = array_column($pinkList, 'order_id_key');
+        $refunList = [];
+        if ($orderIdKey) {
+            $refunList = app()->make(StoreOrderRefundServices::class)->getColumn([['store_order_id', 'in', $orderIdKey]], 'id', 'store_order_id');
+        }
+        if ($refunList) {
+            $list = [];
+            foreach ($pinkList as $item) {
+                if (!isset($refunList[$item['order_id_key']])) {
+                    $list[] = $item;
+                }
+            }
+        } else {
+            $list = $pinkList;
+        }
         $counts = $this->dao->getPinkPeopleCount($ids);
         if ($type) {
             $pinkAll = [];
