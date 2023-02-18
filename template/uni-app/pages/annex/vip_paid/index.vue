@@ -50,7 +50,7 @@
 					@click="checkType(item)">
 					<view>{{item.title}}</view>
 					<view class="new">{{$t(`￥`)}}<text class="num">{{item.pre_price | moneyFormat}}</text></view>
-					<view v-if="item.type === 'free'" class="info">{{$t(`试用`)}}{{item.vip_day}}{{$t(`天.`)}}</view>
+					<view v-if="item.type === 'free'" class="info">{{$t(`试用`)}}{{item.vip_day}}{{$t(`天`)}}</view>
 					<view v-else class="old">{{$t(`￥`)}}{{item.price | moneyFormat}}</view>
 				</view>
 			</scroll-view>
