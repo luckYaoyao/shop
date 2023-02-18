@@ -660,7 +660,7 @@
         <!-- 营销设置-->
         <Row :gutter="24" type="flex" v-show="headTab.length === 6 ? currentTab === '5' : currentTab === '4'">
           <Col span="24">
-            <FormItem label="虚拟销量：">
+            <FormItem label="已售数量：">
               <InputNumber :min="0" :max="999999" v-model="formValidate.ficti" placeholder="请输入虚拟销量" />
             </FormItem>
           </Col>

@@ -70,7 +70,7 @@
       <Row type="flex">
         <Col v-bind="grid">
           <Button v-auth="['product-reply-save_fictitious_reply']" type="primary" icon="md-add" @click="add"
-            >添加虚拟评论</Button
+            >添加自评</Button
           >
         </Col>
       </Row>
