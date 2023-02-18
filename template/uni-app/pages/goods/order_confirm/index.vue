@@ -1363,7 +1363,6 @@
 					addressId: that.addressId,
 					formId: '',
 					couponId: that.couponId,
-					payType: that.payType,
 					useIntegral: that.useIntegral,
 					bargainId: that.BargainId,
 					combinationId: that.combinationId,
