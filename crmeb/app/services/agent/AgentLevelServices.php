@@ -90,6 +90,9 @@ class AgentLevelServices extends BaseServices
         $this->checkUserLevelFinish($uid);
 
         $list = $this->dao->getList(['is_del' => 0, 'status' => 1]);
+        foreach ($list as &$item) {
+            $item['image'] = set_file_url($item['image']);
+        }
         $agent_level = $user['agent_level'] ?? 0;
         //没等级默认最低等级
         if (!$agent_level) {
