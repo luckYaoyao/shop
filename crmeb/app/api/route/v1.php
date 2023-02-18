@@ -42,8 +42,8 @@ Route::group(function () {
     Route::post('register/reset', 'v1.LoginController/reset')->name('registerReset');
     // 绑定手机号(静默授权 还未有用户信息)
     Route::post('binding', 'v1.LoginController/binding_phone')->name('bindingPhone');
-    // 支付宝复制链接支付
-    Route::get('ali_pay', 'v1.order.StoreOrderController/aliPay')->name('aliPay');
+    // 支付宝复制链接支付 弃用
+//    Route::get('ali_pay', 'v1.order.StoreOrderController/aliPay')->name('aliPay');
     //查询版权
     Route::get('copyright', 'v1.PublicController/copyright')->option(['real_name' => '申请版权']);
 

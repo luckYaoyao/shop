@@ -86,7 +86,7 @@ class RechargeServices
             $openid = '';
         }
 
-        $res = $this->pay->pay($recharge['recharge_type'], $openid, $recharge['order_id'], $recharge['price'], 'user_recharge', '用户充值');
+        $res = $this->pay->pay($recharge['recharge_type'], $recharge['order_id'], $recharge['price'], 'user_recharge', '用户充值', ['openid' => $openid]);
 
         if ($payType == PayServices::WEIXIN_PAY) {
             if (request()->isH5()) {
@@ -100,7 +100,7 @@ class RechargeServices
             $payStstus = 'allinpay_pay';
         }
 
-        return ['jsConfig' => $res, 'order_id' => $recharge['order_id'], 'pay_type' => strtoupper($payStstus)];
+        return ['jsConfig' => $res, 'pay_key' => md5($recharge['order_id']), 'order_id' => $recharge['order_id'], 'pay_type' => strtoupper($payStstus)];
     }
 
 }

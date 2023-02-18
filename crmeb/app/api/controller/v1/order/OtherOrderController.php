@@ -157,8 +157,8 @@ class OtherOrderController
      */
     public function pay_type(Request $request)
     {
-        $payType['ali_pay_status'] = sys_config('ali_pay_status', 0) != 0;
-        $payType['pay_weixin_open'] = sys_config('pay_weixin_open', 0) != 0;
+        $payType['ali_pay_status'] = sys_config('ali_pay_status', '0') != '0';
+        $payType['pay_weixin_open'] = sys_config('pay_weixin_open', '0') != '0';
         $payType['site_name'] = sys_config('site_name');
         $payType['now_money'] = $request->user('now_money');
         $payType['offline_pay_status'] = true;
