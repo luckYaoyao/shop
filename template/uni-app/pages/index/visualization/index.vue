@@ -59,12 +59,10 @@
 			<newGoods :dataConfig="goodList.cc" @click.native="bindEdit('goodList', 'cc')"></newGoods>
 			<!-- 精品推荐 -->
 			<!-- <mBanner :dataConfig="swiperBg.cc" @click.native="bindEdit('swiperBg','cc')"></mBanner> -->
-
 			<!-- <titles :dataConfig="titles.default" :sty="'off'" @click.native="bindEdit('titles','default')"></titles> -->
 			<!-- 商品轮播 -->
-
 			<!-- 		<customerService :dataConfig="customerService.default" @click.native="bindEdit('customerService','default')"></customerService> -->
-			<!-- 促销单品 -->
+			<!-- 精选单品 -->
 			<promotion :dataConfig="goodList.dd" @click.native="bindEdit('goodList', 'dd')"></promotion>
 			<!-- 商品分类 -->
 			<tabNav class="sticky-box" :style="'top:' + isTop + 'px;'" :dataConfig="tabNav.default"
