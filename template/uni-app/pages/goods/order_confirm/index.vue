@@ -1363,7 +1363,6 @@
 					addressId: that.addressId,
 					formId: '',
 					couponId: that.couponId,
-					payType: that.payType,
 					useIntegral: that.useIntegral,
 					bargainId: that.BargainId,
 					combinationId: that.combinationId,
@@ -1615,8 +1614,8 @@
 
 		.mark {
 			background-color: #f9f9f9;
-			width: 345px;
-			height: 70px;
+			// width: 345px;
+			min-height: 70px;
 			border-radius: 1px;
 			margin-top: 15px;
 			padding: 12px 14px;
@@ -1627,7 +1626,7 @@
 
 		.mark-msg {
 			color: #333;
-			font-size: 32rpx;
+			font-size: 28rpx;
 		}
 	}
 
@@ -1670,11 +1669,12 @@
 
 	.order-submission .wrapper .item textarea {
 		background-color: #f9f9f9;
-		width: 690rpx;
-		height: 140rpx;
+		width: 100%;
+		height: 135rpx;
 		border-radius: 3rpx;
 		margin-top: 30rpx;
 		padding: 25rpx 28rpx;
+		font-size: 28rpx;
 		box-sizing: border-box;
 	}
 

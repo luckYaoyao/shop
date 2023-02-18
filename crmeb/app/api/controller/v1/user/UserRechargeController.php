@@ -61,7 +61,7 @@ class UserRechargeController
     }
 
     /**
-     * 小程序充值
+     * TODO 小程序充值 弃用
      * @param Request $request
      * @return mixed
      */
@@ -82,7 +82,7 @@ class UserRechargeController
     }
 
     /**
-     * 公众号充值
+     * TODO 公众号充值 弃用
      * @param Request $request
      * @return mixed
      */

@@ -2137,6 +2137,7 @@ export default {
     },
     end() {
       this.moveIndex = '';
+      this.generate(1)
     },
     // 单独设置会员设置
     checkAllGroupChange(data) {

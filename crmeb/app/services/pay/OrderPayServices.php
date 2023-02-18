@@ -159,7 +159,7 @@ class OrderPayServices
         }
 
         //发起支付
-        $jsConfig = $this->payServices->payV2($payType, $orderInfo['order_id'], $orderInfo['pay_price'], $successAction, $body, $options);
+        $jsConfig = $this->payServices->pay($payType, $orderInfo['order_id'], $orderInfo['pay_price'], $successAction, $body, $options);
 
         //发起支付后处理返回参数
         $payInfo = $this->afterPay($orderInfo, $jsConfig, $payType);
