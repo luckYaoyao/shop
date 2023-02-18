@@ -40,11 +40,9 @@
 			}
 		},
 		onLoad() {},
-		onReady() {
-			this.getCategoryVersion()
-		},
+		onReady() {},
 		onShow() {
-
+			this.getCategoryVersion()
 		},
 		methods: {
 			getCategoryVersion() {
@@ -58,7 +56,6 @@
 					}
 					this.classStyle();
 				})
-
 			},
 			jumpIndex() {
 				if (this.is_diy) {}

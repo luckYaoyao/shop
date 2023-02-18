@@ -127,6 +127,13 @@
 			this.activeRouter = '/' + curRoute
 			this.getAllCategory();
 		},
+		watch: {
+			isNew(newVal) {
+				if (newVal) {
+					this.getAllCategory();
+				}
+			}
+		},
 		methods: {
 			getNav() {
 				getNavigation().then(res => {
@@ -180,8 +187,8 @@
 			},
 			getAllCategory: function() {
 				let that = this;
-				console.log(this.version,'1',uni.getStorageSync('CAT_VERSION'))
-				if (this.version !== uni.getStorageSync('CAT_VERSION')) {
+				console.log(this.version, '1', uni.getStorageSync('CAT_VERSION'))
+				if (this.isNew || !uni.getStorageSync('CAT1_DATA')) {
 					getCategoryList().then(res => {
 						uni.setStorageSync('CAT1_DATA', res.data)
 						that.productList = res.data;

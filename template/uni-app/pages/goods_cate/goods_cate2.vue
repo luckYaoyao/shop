@@ -115,6 +115,13 @@
 				default: false
 			}
 		},
+		watch: {
+			isNew(newVal) {
+				if (newVal) {
+					this.getAllCategory();
+				}
+			}
+		},
 		computed: mapGetters(['isLogin', 'uid']),
 		components: {
 			productWindow,
@@ -631,7 +638,7 @@
 			},
 			getAllCategory: function() {
 				let that = this;
-				if (this.isNew) {
+				if (this.isNew || !uni.getStorageSync('CAT2_DATA')) {
 					getCategoryList().then(res => {
 						uni.setStorageSync('CAT2_DATA', res.data)
 						let data = res.data;
