@@ -660,6 +660,7 @@
 			diyData() {
 				let that = this;
 				getDiy(0).then(res => {
+					uni.hideLoading()
 					uni.setStorageSync('DIY_DATA', res.data)
 					setTimeout(() => {
 						this.isNodes++;
@@ -696,7 +697,6 @@
 					}
 					temp.sort(sortNumber)
 					that.styleConfig = temp;
-					uni.hideLoading()
 					setTimeout(() => {
 						this.showSkeleton = false
 					}, 300)
