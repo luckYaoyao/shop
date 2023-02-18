@@ -124,14 +124,6 @@ class SystemConfigServices extends BaseServices
             ],
             'show_value' => 1
         ],
-        'allin_pay_status' => [
-            'son_type' => [
-                'allin_appid' => '',
-                'allin_cusid' => '',
-                'allin_private_key' => '',
-            ],
-            'show_value' => 1
-        ],
         'pay_wechat_type' => [
             'son_type' => [
                 'pay_weixin_key' => '',
@@ -410,7 +402,7 @@ class SystemConfigServices extends BaseServices
             foreach ($parameter as $v) {
                 if (strstr($v, $this->cuttingStr) !== false) {
                     $pdata = explode($this->cuttingStr, $v);
-                    $options[] = ['label' => $pdata[1], 'value' => (int)$pdata[0]];
+                    $options[] = ['label' => $pdata[1], 'value' => $pdata[0]];
                 }
             }
             $formbuider[] = $radio = $this->builder->radio($data['menu_name'], $data['info'], (int)$data['value'])->options($options)->appendRule('suffix', [

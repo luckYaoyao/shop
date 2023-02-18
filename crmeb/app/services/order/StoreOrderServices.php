@@ -171,6 +171,7 @@ class StoreOrderServices extends BaseServices
         $data['refunded_count'] = (string)$storeOrderRefundServices->count($refund_where + ['refund_type' => 6]);
         $data['refund_count'] = bcadd(bcadd($data['refunding_count'], $data['refunded_count'], 0), $data['no_refund_count'], 0);
         $data['yue_pay_status'] = (int)sys_config('balance_func_status') && (int)sys_config('yue_pay_status') == 1 ? (int)1 : (int)2;//余额支付 1 开启 2 关闭
+        $data['pc_order_count'] = $data['order_count'] + $data['refunding_count'] + $data['refunded_count'];
         $data['pay_weixin_open'] = is_wecaht_pay();//微信支付 1 开启 0 关闭
         $data['ali_pay_status'] = is_ali_pay();//支付包支付 1 开启 0 关闭
         $data['friend_pay_status'] = (int)sys_config('friend_pay_status') ?? 0;//好友代付 1 开启 0 关闭
