@@ -484,7 +484,7 @@ class StoreOrderController
     }
 
     /**
-     * 支付宝单独支付
+     * TODO 支付宝单独支付 弃用
      * @param OrderPayServices $payServices
      * @param OtherOrderServices $services
      * @param string $key
@@ -494,11 +494,11 @@ class StoreOrderController
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function aliPay(OrderPayServices $payServices, OtherOrderServices $services, string $key, string $quitUrl)
-    {
-        $payInfo = $this->services->aliPayOrder($payServices, $services, $key, $quitUrl);
-        return app('json')->success(['pay_content' => $payInfo]);
-    }
+//    public function aliPay(OrderPayServices $payServices, OtherOrderServices $services, string $key, string $quitUrl)
+//    {
+//        $payInfo = $this->services->aliPayOrder($payServices, $services, $key, $quitUrl);
+//        return app('json')->success(['pay_content' => $payInfo]);
+//    }
 
     /**
      * 订单列表
