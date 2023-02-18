@@ -469,7 +469,7 @@
 						this.groomList();
 						uni.hideLoading();
 						uni.showToast({
-							title: this.$t(`成功开启0元试用`),
+							title: this.$t(`成功开启试用`),
 						});
 					}
 				}).catch(err => {
@@ -488,7 +488,7 @@
 						this.groomList();
 						uni.hideLoading();
 						uni.showToast({
-							title: this.$t(`成功开启0元试用`),
+							title: this.$t(`成功开启试用`),
 						});
 					}
 				}).catch(err => {
