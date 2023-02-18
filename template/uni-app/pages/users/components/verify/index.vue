@@ -38,7 +38,7 @@
 	 * Verify 验证码组件
 	 * @description 分发验证码使用
 	 * */
-	import VerifySlide from './verifySlider/verifySlider'
+	import VerifySlide from './verifySlider/index.vue'
 	import verifySliderPc from './verifySlider/verifySliderPc'
 	import VerifyPoint from "./verifyPoint/verifyPoint"
 

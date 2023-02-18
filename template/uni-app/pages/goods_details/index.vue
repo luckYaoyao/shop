@@ -757,10 +757,10 @@
 					summary: that.storeInfo.store_info,
 					imageUrl: that.storeInfo.small_image,
 					success: function(res) {
-						uni.showToast({
-							title: that.$t(`分享成功`),
-							icon: "success",
-						});
+						// uni.showToast({
+						// 	title: that.$t(`分享成功`),
+						// 	icon: "success",
+						// });
 						that.posters = false;
 					},
 					fail: function(err) {
