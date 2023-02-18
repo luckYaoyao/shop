@@ -20,7 +20,7 @@ class SystemTimer implements ListenerInterface
     public function handle($event): void
     {
         new Crontab('*/6 * * * * *', function () {
-            file_put_contents(runtime_path() . '.timer', time());
+            file_put_contents(root_path() . 'runtime/.timer', time());
         });
 
         /** @var SystemTimerServices $systemTimerServices */

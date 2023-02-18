@@ -3,7 +3,15 @@
 namespace app\services\system\timer;
 
 use app\dao\system\timer\SystemTimerDao;
+use app\services\activity\combination\StorePinkServices;
+use app\services\activity\live\LiveGoodsServices;
+use app\services\activity\live\LiveRoomServices;
+use app\services\agent\AgentManageServices;
 use app\services\BaseServices;
+use app\services\order\StoreOrderServices;
+use app\services\order\StoreOrderTakeServices;
+use app\services\product\product\StoreProductServices;
+use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\exceptions\AdminException;
 
 class SystemTimerServices extends BaseServices
@@ -121,7 +129,7 @@ class SystemTimerServices extends BaseServices
     }
 
     /**
-     * 计算定时任务下次执行时间（弃用）
+     * 计算定时任务下次执行时间
      * @param $data
      * @param int $time
      * @return false|float|int|mixed
@@ -137,10 +145,10 @@ class SystemTimerServices extends BaseServices
                 $cycle_time = $time + ($data['minute'] * 60);
                 break;
             case 3: // 每隔几时
-                $cycle_time = $time + ($data['hour'] * 3600);
+                $cycle_time = $time + ($data['hour'] * 3600) + ($data['minute'] * 60);
                 break;
             case 4: // 每隔几日
-                $cycle_time = $time + ($data['day'] * 86400);
+                $cycle_time = $time + ($data['day'] * 86400) + ($data['hour'] * 3600) + ($data['minute'] * 60);
                 break;
             case 5: // 每日几时几分几秒
                 $cycle_time = strtotime(date('Y-m-d ' . $data['hour'] . ':' . $data['minute'] . ':' . $data['second'], time()));
@@ -183,5 +191,54 @@ class SystemTimerServices extends BaseServices
                 break;
         }
         return $cycle_time;
+    }
+
+    /**
+     * 执行任务
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/02/17
+     */
+    public function timerRun()
+    {
+        file_put_contents(root_path() . 'runtime/.timer', time()); //检测定时任务是否正常
+        $list = $this->dao->selectList(['is_open' => 1, 'is_del' => 0])->toArray();
+        foreach ($list as $item) {
+            if ($item['next_execution_time'] < time()) {
+                if ($item['mark'] == 'order_cancel') {
+                    //未支付自动取消订单
+                    app()->make(StoreOrderServices::class)->orderUnpaidCancel();
+                } elseif ($item['mark'] == 'pink_expiration') {
+                    //拼团到期订单处理
+                    app()->make(StorePinkServices::class)->statusPink();
+                } elseif ($item['mark'] == 'agent_unbind') {
+                    //自动解绑上级绑定
+                    app()->make(AgentManageServices::class)->removeSpread();
+                } elseif ($item['mark'] == 'live_product_status') {
+                    //更新直播商品状态
+                    app()->make(LiveGoodsServices::class)->syncGoodStatus();
+                } elseif ($item['mark'] == 'live_room_status') {
+                    //更新直播间状态
+                    app()->make(LiveRoomServices::class)->syncRoomStatus();
+                } elseif ($item['mark'] == 'take_delivery') {
+                    //自动收货
+                    app()->make(StoreOrderTakeServices::class)->autoTakeOrder();
+                } elseif ($item['mark'] == 'advance_off') {
+                    //查询预售到期商品自动下架
+                    app()->make(StoreProductServices::class)->downAdvance();
+                } elseif ($item['mark'] == 'product_replay') {
+                    //自动好评
+                    app()->make(StoreOrderServices::class)->autoComment();
+                } elseif ($item['mark'] == 'clear_poster') {
+                    //清除昨日海报
+                    app()->make(SystemAttachmentServices::class)->emptyYesterdayAttachment();
+                }
+                //写入本次执行时间和下次执行时间
+                $this->dao->update(['mark' => $item['mark']], ['last_execution_time' => time(), 'next_execution_time' => $this->getTimerCycleTime($item)]);
+            }
+        }
     }
 }
