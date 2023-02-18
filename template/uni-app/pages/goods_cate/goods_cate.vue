@@ -66,6 +66,7 @@
 					this.category = status
 					this.status = res.data.status
 					this.$nextTick(e => {
+						this.$refs.classOne.is_diy = this.is_diy
 						if (this.status == 2 || this.status == 3) {
 							uni.hideTabBar();
 						} else if (this.status == 1) {
