@@ -53,7 +53,8 @@
 				<view class="money">
 					<view class="x-money">{{$t(`￥`)}}{{ item.productInfo.price }}</view>
 					<view class="num">x{{ item.cart_num }}</view>
-					<view class="y-money">{{$t(`￥`)}}{{ item.productInfo.ot_price }}</view>
+					<view class="y-money" v-if='item.productInfo.attrInfo'>{{$t(`￥`)}}{{ item.productInfo.attrInfo.ot_price }}</view>
+					<view class="y-money" v-else>{{$t(`￥`)}}{{ item.productInfo.ot_price }}</view>
 				</view>
 			</navigator>
 		</view>
