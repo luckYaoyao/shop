@@ -172,8 +172,8 @@ class StoreOrderServices extends BaseServices
         $data['refund_count'] = bcadd(bcadd($data['refunding_count'], $data['refunded_count'], 0), $data['no_refund_count'], 0);
         $data['yue_pay_status'] = (int)sys_config('balance_func_status') && (int)sys_config('yue_pay_status') == 1 ? (int)1 : (int)2;//余额支付 1 开启 2 关闭
         $data['pc_order_count'] = $data['order_count'] + $data['refunding_count'] + $data['refunded_count'];
-        $data['pay_weixin_open'] = is_wecaht_pay();//微信支付 1 开启 0 关闭
-        $data['ali_pay_status'] = is_ali_pay();//支付包支付 1 开启 0 关闭
+        $data['pay_weixin_open'] = sys_config('pay_weixin_open', '0') != '0';//微信支付 1 开启 0 关闭
+        $data['ali_pay_status'] = sys_config('ali_pay_status', '0') != '0';//支付包支付 1 开启 0 关闭
         $data['friend_pay_status'] = (int)sys_config('friend_pay_status') ?? 0;//好友代付 1 开启 0 关闭
         return $data;
     }
@@ -1584,7 +1584,7 @@ HTML;
         $data['integralRatio'] = $other['integralRatio'];
         $data['offline_pay_status'] = (int)sys_config('offline_pay_status') ?? (int)2;
         $data['yue_pay_status'] = (int)sys_config('balance_func_status') && (int)sys_config('yue_pay_status') == 1 ? (int)1 : (int)2;//余额支付 1 开启 2 关闭
-        $data['pay_weixin_open'] = is_wecaht_pay();//微信支付 1 开启 0 关闭
+        $data['pay_weixin_open'] = sys_config('pay_weixin_open', '0') != '0';//微信支付 1 开启 0 关闭
         $data['friend_pay_status'] = (int)sys_config('friend_pay_status') ?? 0;//好友代付 1 开启 0 关闭
         $data['store_self_mention'] = (int)sys_config('store_self_mention') ?? 0;//门店自提是否开启
         /** @var SystemStoreServices $systemStoreServices */
@@ -1592,7 +1592,7 @@ HTML;
         $store_count = $systemStoreServices->count(['type' => 0]);
         $data['store_self_mention'] = $data['store_self_mention'] && $store_count;
 
-        $data['ali_pay_status'] = is_ali_pay();//支付包支付 1 开启 0 关闭
+        $data['ali_pay_status'] = sys_config('ali_pay_status', '0') != '0';//支付包支付 1 开启 0 关闭
         $data['system_store'] = [];//门店信息
         /** @var UserInvoiceServices $userInvoice */
         $userInvoice = app()->make(UserInvoiceServices::class);
@@ -1696,7 +1696,7 @@ HTML;
         $res = false;
         switch ($payType) {
             case PayServices::WEIXIN_PAY:
-                $res = (bool)sys_config('pay_weixin_open');
+                $res = sys_config('pay_weixin_open', '0') != '0';
                 break;
             case PayServices::YUE_PAY:
                 $res = sys_config('balance_func_status') && sys_config('yue_pay_status') == 1;
@@ -1705,7 +1705,7 @@ HTML;
                 $res = sys_config('offline_pay_status') == 1;
                 break;
             case PayServices::ALIAPY_PAY:
-                $res = sys_config('ali_pay_status') == 1;
+                $res = sys_config('ali_pay_status', '0') != '0';
                 break;
             case PayServices::FRIEND:
                 $res = sys_config('friend_pay_status', 1) == 1;
@@ -2354,8 +2354,8 @@ HTML;
         }
         $order['mapKey'] = sys_config('tengxun_map_key');
         $order['yue_pay_status'] = (int)sys_config('balance_func_status') && (int)sys_config('yue_pay_status') == 1 ? (int)1 : (int)2;//余额支付 1 开启 2 关闭
-        $order['pay_weixin_open'] = (int)sys_config('pay_weixin_open') ?? 0;//微信支付 1 开启 0 关闭
-        $order['ali_pay_status'] = (bool)sys_config('ali_pay_status');//支付包支付 1 开启 0 关闭
+        $order['pay_weixin_open'] = sys_config('pay_weixin_open') != '0';//微信支付 1 开启 0 关闭
+        $order['ali_pay_status'] = sys_config('ali_pay_status', '0') != '0';//支付包支付 1 开启 0 关闭
         $order['friend_pay_status'] = (int)sys_config('friend_pay_status') ?? 0;//好友代付 1 开启 0 关闭
         $orderData = $this->tidyOrder($order, true, true);
         $vipTruePrice = $memberPrice = $levelPrice = 0;
@@ -2495,8 +2495,8 @@ HTML;
     {
         //支付类型开关
         $data = [
-            'ali_pay_status' => is_ali_pay(),
-            'wechat_pay_status' => is_wecaht_pay(),
+            'ali_pay_status' => sys_config('ali_pay_status', '0') != '0',
+            'wechat_pay_status' => sys_config('pay_weixin_open', '0') != '0',
             'offline_pay_status' => (int)sys_config('offline_pay_status') == 1,
             'friend_pay_status' => (int)sys_config('friend_pay_status') == 1,
             'yue_pay_status' => (int)sys_config('balance_func_status') && (int)sys_config('yue_pay_status') == 1,

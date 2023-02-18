@@ -364,7 +364,7 @@
 				{
 					"path": "user_cancellation/index",
 					"style": {
-						"navigationBarTitleText": "注销说明",
+						"navigationBarTitleText": "注销协议",
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {

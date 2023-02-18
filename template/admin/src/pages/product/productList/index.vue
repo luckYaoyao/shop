@@ -55,6 +55,7 @@
         <Button
           v-auth="['product-product-product_show']"
           class="bnt mr15"
+          type="info"
           @click="onDismount"
           v-show="artFrom.type === '1'"
           >批量下架</Button
@@ -485,7 +486,7 @@ export default {
     batchSelect(type) {
       console.log(type);
       if (!this.ids.length) {
-        this.$Message.warning('请选择要设置的商品');
+        this.$Message.warning('请选择要修改的商品');
       } else {
         this.batchType = type;
         this.batchModal = true;

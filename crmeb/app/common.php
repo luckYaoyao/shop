@@ -23,55 +23,6 @@ use app\services\system\lang\LangCodeServices;
 use app\services\system\lang\LangCountryServices;
 use think\facade\Config;
 
-
-if (!function_exists('is_wechat_pay')) {
-    /**
-     * @return bool
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/2/8
-     */
-    function is_wecaht_pay()
-    {
-        $wechat_pay_type = (int)sys_config('wechat_pay_type', 0);
-        $wechatPay = (int)sys_config('pay_weixin_open') == 1;
-        $allinPay = (int)sys_config('allin_pay_status') == 1;
-
-        if ($wechat_pay_type == 0 && $wechatPay) {
-            return true;
-        } elseif ($wechat_pay_type == 1 && $allinPay) {
-            if ((request()->isRoutine() || request()->isWechat())) {
-                return true;
-            }
-        }
-        return false;
-    }
-}
-
-if (!function_exists('is_ali_pay')) {
-    /**
-     * @return bool
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/2/8
-     */
-    function is_ali_pay()
-    {
-        $alipay_pay_type = (int)sys_config('alipay_pay_type', 0);
-        $aliPay = (int)sys_config('ali_pay_status') == 1;
-        $allinPay = (int)sys_config('allin_pay_status') == 1;
-
-        if ($alipay_pay_type == 0 && $aliPay) {
-            return true;
-        } elseif ($alipay_pay_type == 1 && $allinPay) {
-            if (request()->isApp()) {
-                return true;
-            }
-        }
-        return false;
-    }
-}
-
 if (!function_exists('getWorkerManUrl')) {
 
     /**

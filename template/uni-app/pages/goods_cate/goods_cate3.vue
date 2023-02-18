@@ -119,6 +119,13 @@
 				default: false
 			}
 		},
+		watch: {
+			isNew(newVal) {
+				if (newVal) {
+					this.getAllCategory();
+				}
+			}
+		},
 		data() {
 			return {
 				categoryList: [],
@@ -667,7 +674,7 @@
 			},
 			getAllCategory: function() {
 				let that = this;
-				if (this.isNew) {
+				if (this.isNew || !uni.getStorageSync('CAT3_DATA')) {
 					getCategoryList().then(res => {
 						let data = res.data;
 						uni.setStorageSync('CAT3_DATA', data)
