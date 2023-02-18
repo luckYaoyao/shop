@@ -1461,7 +1461,7 @@ class UserServices extends BaseServices
             $user['vip'] = (bool)$userLevel;
             if ($user['vip']) {
                 $user['vip_id'] = $userLevel['id'] ?? 0;
-                $user['vip_icon'] = $userLevel['icon'] ?? '';
+                $user['vip_icon'] = set_file_url($userLevel['icon']) ?? '';
                 $user['vip_name'] = $userLevel['name'] ?? '';
             }
         }

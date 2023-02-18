@@ -430,17 +430,23 @@ class StoreOrderRefundServices extends BaseServices
      */
     public function integralAndCouponBack($order)
     {
+        /** @var StoreOrderStatusServices $statusService */
+        $statusService = app()->make(StoreOrderStatusServices::class);
         $res = true;
         //回退优惠卷 拆分子订单不退优惠券
         if (!$order['pid'] && $order['coupon_id'] && $order['coupon_price']) {
             /** @var StoreCouponUserServices $coumonUserServices */
             $coumonUserServices = app()->make(StoreCouponUserServices::class);
             $res = $res && $coumonUserServices->recoverCoupon((int)$order['coupon_id']);
+            $statusService->save([
+                'oid' => $order['id'],
+                'change_type' => 'coupon_back',
+                'change_message' => '商品退优惠券',
+                'change_time' => time()
+            ]);
         }
         //回退积分
         $order = $this->regressionIntegral($order);
-        /** @var StoreOrderStatusServices $statusService */
-        $statusService = app()->make(StoreOrderStatusServices::class);
         $statusService->save([
             'oid' => $order['id'],
             'change_type' => 'integral_back',

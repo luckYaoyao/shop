@@ -65,15 +65,7 @@ class StoreOrderTakeServices extends BaseServices
             throw new ApiException(410266);
         }
         $order->status = 2;
-        /** @var StoreOrderStatusServices $statusService */
-        $statusService = app()->make(StoreOrderStatusServices::class);
-        $res = $order->save() && $statusService->save([
-                'oid' => $order['id'],
-                'change_type' => 'user_take_delivery',
-                'change_message' => '用户已收货',
-                'change_time' => time()
-            ]);
-        $res = $res && $this->storeProductOrderUserTakeDelivery($order);
+        $res = $order->save() && $this->storeProductOrderUserTakeDelivery($order);
         if (!$res) {
             throw new ApiException(410205);
         }

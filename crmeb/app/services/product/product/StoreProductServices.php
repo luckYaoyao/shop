@@ -2017,13 +2017,15 @@ class StoreProductServices extends BaseServices
                 break;
             case 2:
                 foreach ($ids as $product_id) {
-                    $batchData[] = [
-                        'id' => $product_id,
-                        'logistics' => implode(',', $data['logistics']),
-                        'freight' => $data['freight'],
-                        'postage' => $data['freight'] == 2 ? $data['postage'] : 0,
-                        'temp_id' => $data['freight'] == 3 ? $data['temp_id'] : 0
-                    ];
+                    if ($this->dao->value(['id' => $product_id], 'virtual_type') == 0) {
+                        $batchData[] = [
+                            'id' => $product_id,
+                            'logistics' => implode(',', $data['logistics']),
+                            'freight' => $data['freight'],
+                            'postage' => $data['freight'] == 2 ? $data['postage'] : 0,
+                            'temp_id' => $data['freight'] == 3 ? $data['temp_id'] : 0
+                        ];
+                    }
                 }
                 if (count($batchData)) $this->dao->saveAll($batchData);
                 break;
