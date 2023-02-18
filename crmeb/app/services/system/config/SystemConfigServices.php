@@ -402,10 +402,12 @@ class SystemConfigServices extends BaseServices
             foreach ($parameter as $v) {
                 if (strstr($v, $this->cuttingStr) !== false) {
                     $pdata = explode($this->cuttingStr, $v);
-                    $options[] = ['label' => $pdata[1], 'value' => $pdata[0]];
+                    $res = preg_match('/^[0-9]$/', $pdata[0]);
+                    $options[] = ['label' => $pdata[1], 'value' => $res ? (int)$pdata[0] : $pdata[0]];
                 }
             }
-            $formbuider[] = $radio = $this->builder->radio($data['menu_name'], $data['info'], (int)$data['value'])->options($options)->appendRule('suffix', [
+            $res = preg_match('/^[0-9]$/', $data['value']);
+            $formbuider[] = $radio = $this->builder->radio($data['menu_name'], $data['info'], $res ? (int)$data['value'] : $data['value'])->options($options)->appendRule('suffix', [
                 'type' => 'div',
                 'class' => 'tips-info',
                 'domProps' => ['innerHTML' => $data['desc']]
