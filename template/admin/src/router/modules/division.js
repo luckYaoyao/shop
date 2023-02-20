@@ -9,13 +9,15 @@
 // +---------------------------------------------------------------------
 
 import BasicLayout from '@/components/main';
+import setting  from '@/setting'
+let roterPre = setting.roterPre;
 
 const pre = 'division_';
 const meta = {
   auth: true,
 };
 export default {
-  path: '/admin/division',
+  path: roterPre + '/division',
   name: 'division',
   header: 'division',
   redirect: {

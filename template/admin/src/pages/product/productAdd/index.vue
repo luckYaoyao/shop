@@ -2,7 +2,7 @@
   <div class="" id="shopp-manager">
     <div class="i-layout-page-header header_top">
       <div class="i-layout-page-header fl_header">
-        <router-link :to="{ path: '/admin/product/product_list' }"
+        <router-link :to="{ path: $routeProStr + '/product/product_list' }"
           ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         >
         <Divider type="vertical" />
@@ -2052,7 +2052,7 @@ export default {
       this.content = data;
     },
     cancel() {
-      this.$router.push({ path: '/admin/product/product_list' });
+      this.$router.push({ path: this.$routeProStr + '/product/product_list' });
     },
     // 上传头部token
     getToken() {
@@ -2762,7 +2762,7 @@ export default {
               }
               setTimeout(() => {
                 this.openSubimit = false;
-                this.$router.push({ path: '/admin/product/product_list' });
+                this.$router.push({ path: this.$routeProStr + '/product/product_list' });
               }, 500);
             })
             .catch((res) => {

@@ -9,11 +9,13 @@
 // +---------------------------------------------------------------------
 
 import BasicLayout from '@/components/main';
+import setting  from '@/setting'
+let roterPre = setting.roterPre;
 
 const pre = 'echarts_';
 
 export default {
-  path: '/admin/echarts',
+  path: roterPre+'/echarts',
   name: 'echarts',
   header: 'echarts',
   redirect: {

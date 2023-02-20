@@ -289,18 +289,18 @@ export default {
 
     // 添加
     add() {
-      this.$router.push({ path: '/admin/marketing/store_combination/create' });
+      this.$router.push({ path: this.$routeProStr + '/marketing/store_combination/create' });
     },
     // 编辑
     edit(row) {
       this.$router.push({
-        path: '/admin/marketing/store_combination/create/' + row.id + '/0',
+        path: this.$routeProStr + '/marketing/store_combination/create/' + row.id + '/0',
       });
     },
     // 一键复制
     copy(row) {
       this.$router.push({
-        path: '/admin/marketing/store_combination/create/' + row.id + '/1',
+        path: this.$routeProStr + '/marketing/store_combination/create/' + row.id + '/1',
       });
     },
     // 删除
@@ -323,7 +323,7 @@ export default {
     },
     viewInfo(row) {
       this.$router.push({
-        path: '/admin/marketing/store_combination/statistics/' + row.id,
+        path: this.$routeProStr + '/marketing/store_combination/statistics/' + row.id,
       });
     },
     // 列表

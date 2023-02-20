@@ -458,7 +458,7 @@ export default {
   methods: {
     mealPay(val) {
       this.$router.push({
-        path: '/admin/setting/sms/sms_pay/index',
+        path: this.$routeProStr + '/setting/sms/sms_pay/index',
         query: { type: val },
       });
     },
@@ -663,7 +663,7 @@ export default {
         function (editor, uiName) {
           // 创建 dialog
           let dialog = new window.UE.ui.Dialog({
-            iframeUrl: '/admin/widget.images/index.html?fodder=dialog',
+            iframeUrl: this.$routeProStr + '/widget.images/index.html?fodder=dialog',
             editor: editor,
             name: uiName,
             title: '上传图片',

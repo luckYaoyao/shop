@@ -239,7 +239,7 @@ export default {
             this.checkSocket();
           } catch (e) {}
 
-          return this.$router.replace({ path: '/admin/home/' || '/admin/' });
+          return this.$router.replace({ path: this.$routeProStr + '/home/' || this.$routeProStr + '/' });
         })
         .catch((res) => {
           msg()

@@ -2,7 +2,7 @@
   <div>
     <div class="i-layout-page-header header_top">
       <div class="i-layout-page-header fl_header">
-        <router-link :to="{ path: '/admin/system/config/system_group/index' }"
+        <router-link :to="{ path: $routeProStr + '/system/config/system_group/index' }"
           ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         >
         <Divider type="vertical" />
@@ -188,7 +188,7 @@ export default {
     },
     // 返回
     back() {
-      this.$router.push({ path: '/admin/system/config/system_group/index' });
+      this.$router.push({ path: this.$routeProStr + '/system/config/system_group/index' });
     },
     getUrl(type) {
       let url = 'setting/group_data' + type;

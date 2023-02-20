@@ -242,7 +242,7 @@ export default {
     // 设置
     setting(item, row) {
       this.$router.push({
-        path: '/admin/setting/notification/notificationEdit?id=' + row.id,
+        path: this.$routeProStr + '/setting/notification/notificationEdit?id=' + row.id,
       });
     },
     getData(keys, row, item) {

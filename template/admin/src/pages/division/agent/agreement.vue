@@ -31,7 +31,7 @@ export default {
         autoHeightEnabled: false,
         initialFrameHeight: 500,
         initialFrameWidth: '100%',
-        UEDITOR_HOME_URL: '/admin/UEditor/',
+        UEDITOR_HOME_URL: '/UEditor/',
         serverUrl: '',
       },
       agreement: {

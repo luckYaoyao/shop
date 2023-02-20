@@ -126,5 +126,7 @@ module.exports = {
   // devServer: {
   //   proxy: 'localhost:3000'
   // }
-  publicPath: env === 'development' ? '/admin/' : '/admin/',
+  publicPath: '/',
+    assetsDir: 'system_static',
+    indexPath: process.env.NODE_ENV === 'development' ? 'index.html' : 'system.html',
 };

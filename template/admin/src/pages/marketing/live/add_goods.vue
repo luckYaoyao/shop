@@ -2,7 +2,7 @@
   <div>
     <div class="i-layout-page-header header_top">
       <div class="i-layout-page-header fl_header">
-        <router-link :to="{ path: '/admin/marketing/live/live_goods' }"
+        <router-link :to="{ path: $routeProStr + '/marketing/live/live_goods' }"
           ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         >
         <Divider type="vertical" />
@@ -185,7 +185,7 @@ export default {
           this.$Message.success('添加成功');
           this.disabled = false;
           setTimeout(() => {
-            this.$router.push({ path: '/admin/marketing/live/live_goods' });
+            this.$router.push({ path: this.$routeProStr + '/marketing/live/live_goods' });
           }, 500);
         })
         .catch((error) => {

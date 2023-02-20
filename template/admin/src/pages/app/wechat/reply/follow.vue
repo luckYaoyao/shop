@@ -398,13 +398,13 @@ export default {
           onCancel: () => {
             setTimeout(() => {
               this.$Modal.remove();
-              this.$router.push({ path: '/admin/app/wechat/reply/keyword' });
+              this.$router.push({ path: this.$routeProStr + '/app/wechat/reply/keyword' });
             }, 500);
           },
         });
       } else if (this.$route.params.id && this.$route.params.id !== '0') {
         this.$Modal.remove();
-        this.$router.push({ path: '/admin/app/wechat/reply/keyword' });
+        this.$router.push({ path: this.$routeProStr + '/app/wechat/reply/keyword' });
       }
     },
   },

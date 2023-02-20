@@ -392,7 +392,7 @@ export default {
           this.$Message.success(res.msg);
           setTimeout(() => {
             this.$router.push({
-              path: '/admin/marketing/channel_code/channelCodeIndex',
+              path: this.$routeProStr + '/marketing/channel_code/channelCodeIndex',
             });
           }, 1000);
         })

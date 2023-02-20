@@ -58,7 +58,12 @@
           </Col>
           <Col v-bind="grid" v-show="authType">
             <FormItem label="路由地址：" prop="menu_path">
-              <Input v-model="formValidate.menu_path" placeholder="请输入路由地址"></Input>
+              <Input v-model="formValidate.menu_path" placeholder="请输入路由地址">
+                <template #prepend>
+                  <span>{{$routeProStr}}</span>
+                </template>
+
+              </Input>
             </FormItem>
           </Col>
           <Col v-bind="grid">
@@ -398,6 +403,7 @@ export default {
         }
       }
       this.valids = true;
+      data.datas.menu_path = this.$routeProStr + this.formValidate.menu_path
       addMenusApi(data)
         .then(async (res) => {
           this.$Message.success(res.msg);

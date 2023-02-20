@@ -326,7 +326,7 @@ export default {
           break;
         case '2':
           this.$router.push({
-            path: '/admin/marketing/channel_code/code_statistic?id=' + row.id,
+            path: this.$routeProStr + '/marketing/channel_code/code_statistic?id=' + row.id,
           });
           break;
         case '3':
@@ -460,13 +460,13 @@ export default {
     // 编辑
     edit(row) {
       this.$router.push({
-        path: '/admin/marketing/channel_code/create?id=' + row.id,
+        path: this.$routeProStr + '/marketing/channel_code/create?id=' + row.id,
       });
     },
     // 添加
     add() {
       this.$router.push({
-        path: '/admin/marketing/channel_code/create',
+        path: this.$routeProStr + '/marketing/channel_code/create',
       });
     },
     //

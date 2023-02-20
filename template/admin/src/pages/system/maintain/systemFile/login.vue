@@ -83,7 +83,7 @@ export default {
               // 记录用户登陆信息
               setCookies('file_token', res.data.token, expires);
               this.$router.push({
-                path: '/admin/system/maintain/system_file/opendir',
+                path: this.$routeProStr + '/system/maintain/system_file/opendir',
               });
             })
             .catch((res) => {

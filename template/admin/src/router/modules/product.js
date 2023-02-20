@@ -9,11 +9,13 @@
 // +---------------------------------------------------------------------
 
 import BasicLayout from '@/components/main';
+import setting  from '@/setting'
+let roterPre = setting.roterPre;
 
 const pre = 'product_';
 
 export default {
-  path: '/admin/product',
+  path: roterPre+'/product',
   name: 'product',
   header: 'product',
   meta: {

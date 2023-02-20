@@ -8,12 +8,14 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +---------------------------------------------------------------------
 
+import setting  from '@/setting'
+let roterPre = setting.roterPre;
 const pre = 'kefu_';
 
 export default [
   // 登录
   {
-    path: '/admin/login',
+    path: roterPre+'/login',
     name: 'login',
     meta: {
       title: '登录',

@@ -66,7 +66,7 @@
                       v-if="row.is_diy === 1"
                       class="target"
                       ref="target"
-                      :href="`${url}/admin/setting/pages/diy_index?id=${row.id}&name=${row.template_name || 'moren'}`"
+                      :href="`${url}${$routeProStr}/setting/pages/diy_index?id=${row.id}&name=${row.template_name || 'moren'}`"
                       target="_blank"
                     >
                       编辑</a
@@ -356,7 +356,7 @@ export default {
         if (valid) {
           setCookies('moveLink', this.formItem.link);
           this.$router.push({
-            path: '/admin/setting/pages/diy',
+            path: this.$routeProStr + '/setting/pages/diy',
             query: { id: this.formItem.id, type: 1 },
           });
         } else {
@@ -414,7 +414,7 @@ export default {
           this.$Message.error('请先设为首页在进行编辑');
         } else {
           this.$router.push({
-            path: '/admin/setting/pages/diy',
+            path: this.$routeProStr + '/setting/pages/diy',
             query: { id: row.id, type: 0 },
           });
         }
@@ -427,7 +427,7 @@ export default {
     // 添加
     add() {
       this.$router.push({
-        path: '/admin/setting/pages/diy_index',
+        path: this.$routeProStr + '/setting/pages/diy_index',
         query: { id: 0, name: '首页', type: 1 },
       });
     },
