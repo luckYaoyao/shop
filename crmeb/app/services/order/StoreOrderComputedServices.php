@@ -448,7 +448,7 @@ class StoreOrderComputedServices extends BaseServices
         }
         //会员邮费享受折扣
         if ($storePostage) {
-            $express_rule_number = 0;
+            $express_rule_number = 100;
             if (!$userInfo) {
                 /** @var UserServices $userService */
                 $userService = app()->make(UserServices::class);

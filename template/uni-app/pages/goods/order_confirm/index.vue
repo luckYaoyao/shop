@@ -342,7 +342,7 @@
 				],
 				virtual_type: 0,
 				formContent: '',
-				payType: 'weixin', //支付方式
+				payType: '', //支付方式
 				openType: 1, //优惠券打开方式 1=使用
 				active: 0, //支付方式切换
 				coupon: {
@@ -1284,9 +1284,6 @@
 				let that = this,
 					data = {};
 
-				if (!that.payType) return that.$util.Tips({
-					title: that.$t(`请选择支付方式`)
-				});
 				if (!that.addressId && !that.shippingType && !that.virtual_type) return that.$util.Tips({
 					title: that.$t(`请选择收货地址`)
 				});

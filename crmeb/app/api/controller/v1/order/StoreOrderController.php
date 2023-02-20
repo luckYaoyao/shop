@@ -125,7 +125,7 @@ class StoreOrderController
         if ($this->services->be(['order_id|unique' => $key, 'uid' => $uid, 'is_del' => 0]))
             return app('json')->status('extend_order', 410173, ['orderId' => $key, 'key' => $key]);
         list($addressId, $couponId, $payType, $useIntegral, $mark, $combinationId, $pinkId, $seckill_id, $bargainId, $shipping_type) = $request->postMore([
-            'addressId', 'couponId', ['payType', 'yue'], ['useIntegral', 0], 'mark', ['combinationId', 0], ['pinkId', 0], ['seckill_id', 0], ['bargainId', ''],
+            'addressId', 'couponId', ['payType', ''], ['useIntegral', 0], 'mark', ['combinationId', 0], ['pinkId', 0], ['seckill_id', 0], ['bargainId', ''],
             ['shipping_type', 1],
         ], true);
         $payType = strtolower($payType);
