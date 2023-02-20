@@ -117,8 +117,8 @@
 							v-if="item.activity && item.activity.type === '2'">{{$t(`砍价`)}}</span>
 						<span class="pictrue_log_big pictrue_log_class" :style="'background-color:'+labelColor"
 							v-if="item.activity && item.activity.type === '3'">{{$t(`拼团`)}}</span>
-						<image :src="item.recommend_image" mode="aspectFill" v-if="item.recommend_image"></image>
-						<image :src="item.image" mode="widthFix" v-else></image>
+						<image :src="item.recommend_image" mode="" v-if="item.recommend_image"></image>
+						<image :src="item.image" mode="" v-else></image>
 					</view>
 					<view class="name line2"><span class="coupon"
 							:style="'border:1px solid '+labelColor+';color:'+labelColor"
