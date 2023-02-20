@@ -52,7 +52,7 @@
 								<!-- #endif -->
 							</view>
 							<view class="info">
-								<!-- #ifdef MP -->
+								<!-- #ifdef MP || APP-PLUS -->
 								<view class="name" v-if="!userInfo.uid" @click="openAuto"
 									style="height: 100%; display: flex; align-items: center;">
 									{{$t('请点击授权')}}
