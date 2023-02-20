@@ -294,7 +294,7 @@
             >
               <!-- 批量设置-->
 
-              <Col span="24" v-if="!formValidate.is_virtual">
+              <Col span="24" v-if="[0, 3].includes(formValidate.virtual_type)">
                 <FormItem label="批量设置：" class="labeltop">
                   <Table :data="oneFormBatch" :columns="formValidate.is_virtual ? columns3 : columns2" border>
                     <template slot-scope="{ row, index }" slot="pic">
@@ -2137,7 +2137,7 @@ export default {
     },
     end() {
       this.moveIndex = '';
-      this.generate(1)
+      this.generate(1);
     },
     // 单独设置会员设置
     checkAllGroupChange(data) {

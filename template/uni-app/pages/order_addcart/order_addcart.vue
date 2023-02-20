@@ -706,18 +706,19 @@
 			addCart: function(index) {
 				let that = this;
 				let item = that.cartList.valid[index];
-				item.cart_num = Number(item.cart_num) + 1;
+				let lastnum = Number(item.cart_num) + 1
 				let productInfo = item.productInfo;
-				if (productInfo.hasOwnProperty('attrInfo') && item.cart_num >= item.productInfo.attrInfo.stock) {
-					item.cart_num = item.productInfo.attrInfo.stock;
+				if (productInfo.hasOwnProperty('attrInfo') && lastnum >= item.productInfo.attrInfo.stock) {
+					lastnum = item.productInfo.attrInfo.stock;
 					item.numAdd = true;
 					item.numSub = false;
 				} else {
 					item.numAdd = false;
 					item.numSub = false;
 				}
-				that.setCartNum(item.id, item.cart_num, function(data) {
+				that.setCartNum(item.id, lastnum, (data) => {
 					that.cartList.valid[index] = item;
+					item.cart_num = Number(item.cart_num) + 1;
 					that.getCartNum();
 					that.switchSelect();
 				});
