@@ -399,8 +399,8 @@ class StoreOrderController
     {
         [$uni, $paytype, $from, $quitUrl, $type] = $request->postMore([
             ['uni', ''],
-            ['paytype', 'weixin'],
-            ['from', 'weixin'],
+            ['paytype', ''],
+            ['from', ''],
             ['quitUrl', ''],
             ['type', 0]
         ], true);

@@ -183,11 +183,6 @@ class StoreOrderCreateServices extends BaseServices
         if ($deduction) {
             $couponId = 0;
             $useIntegral = false;
-            $systemPayType = PayServices::PAY_TYPE;
-            unset($systemPayType['offline']);
-            if ($payType != 'pc' && !array_key_exists($payType, $systemPayType)) {
-                throw new ApiException(410246);
-            }
         }
         //$shipping_type = 1 快递发货 $shipping_type = 2 门店自提
         $storeSelfMention = sys_config('store_self_mention') ?? 0;
