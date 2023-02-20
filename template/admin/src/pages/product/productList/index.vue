@@ -145,12 +145,12 @@
       v-model="batchModal"
       class="batch-box"
       scrollable
-      closable
+      :closable="false"
       title="批量设置"
       :mask-closable="false"
       width="1000"
       @on-ok="batchSub"
-      @on-visible-change="clearBatchData"
+      @on-cancel="clearBatchData"
     >
       <Form
         class="batchFormData"
@@ -326,7 +326,7 @@ export default {
         limit: 15,
         cate_id: '',
         type: '1',
-        store_name: ''
+        store_name: '',
       },
       list: [],
       tableList: [],
@@ -458,7 +458,9 @@ export default {
         .then((res) => {
           this.$Message.success(res.msg);
           this.getDataList();
-          this.clearBatchData();
+          this.clearBatchData(false);
+          this.ids = [];
+          this.clearAll(false);
         })
         .catch((err) => {
           this.$Message.error(err.msg);
@@ -477,9 +479,7 @@ export default {
           coupon_ids: [],
           recommend: [],
         };
-        this.ids = [];
         this.dataLabel = [];
-        this.clearAll(false);
       }
     },
     // 批量设置商品
