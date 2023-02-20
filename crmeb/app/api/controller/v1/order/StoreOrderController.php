@@ -166,7 +166,7 @@ class StoreOrderController
         $uid = (int)$request->uid();
         if ($checkOrder = $this->services->getOne(['order_id|unique' => $key, 'uid' => $uid, 'is_del' => 0]))
             return app('json')->status('extend_order', 410209, ['orderId' => $checkOrder['order_id'], 'key' => $key]);
-        [$addressId, $couponId, $payType, $useIntegral, $mark, $combinationId, $pinkId, $seckill_id, $bargainId, $from, $shipping_type, $real_name, $phone, $storeId, $news, $invoice_id, $quitUrl, $advanceId, $virtual_type, $customForm] = $request->postMore([
+        [$addressId, $couponId, $payType, $useIntegral, $mark, $combinationId, $pinkId, $seckill_id, $bargainId, $shipping_type, $real_name, $phone, $storeId, $news, $invoice_id, $quitUrl, $advanceId, $virtual_type, $customForm] = $request->postMore([
             [['addressId', 'd'], 0],
             [['couponId', 'd'], 0],
             ['payType', ''],
@@ -176,7 +176,6 @@ class StoreOrderController
             [['pinkId', 'd'], 0],
             [['seckill_id', 'd'], 0],
             [['bargainId', 'd'], ''],
-            ['from', 'weixin'],
             [['shipping_type', 'd'], 1],
             ['real_name', ''],
             ['phone', ''],
@@ -214,7 +213,6 @@ class StoreOrderController
             }
         }
 
-        $isChannel = $this->getChennel[$from] ?? ($request->isApp() ? 0 : 1);
         $cartInfo = null;
         if ($seckill_id || $combinationId || $bargainId || $advanceId) {
             $cartInfo = $cartGroup['cartInfo'];
@@ -237,7 +235,7 @@ class StoreOrderController
             }
         }
         $virtual_type = $cartGroup['cartInfo'][0]['productInfo']['virtual_type'] ?? 0;
-        $order = $createServices->createOrder($uid, $key, $cartGroup, $request->user()->toArray(), $addressId, $payType, !!$useIntegral, $couponId, $mark, $combinationId, $pinkId, $seckill_id, $bargainId, $isChannel, $shipping_type, $real_name, $phone, $storeId, !!$news, $advanceId, $virtual_type, $customForm);
+        $order = $createServices->createOrder($uid, $key, $cartGroup, $request->user()->toArray(), $addressId, $payType, !!$useIntegral, $couponId, $mark, $combinationId, $pinkId, $seckill_id, $bargainId, $shipping_type, $real_name, $phone, $storeId, !!$news, $advanceId, $virtual_type, $customForm);
         if ($order === false) {
             if ($seckill_id || $combinationId || $advanceId || $bargainId) {
                 foreach ($cartInfo as $item) {
@@ -397,10 +395,9 @@ class StoreOrderController
      */
     public function pay(Request $request, StorePinkServices $services, OrderPayServices $payServices, YuePayServices $yuePayServices)
     {
-        [$uni, $paytype, $from, $quitUrl, $type] = $request->postMore([
+        [$uni, $paytype, $quitUrl, $type] = $request->postMore([
             ['uni', ''],
             ['paytype', ''],
-            ['from', ''],
             ['quitUrl', ''],
             ['type', 0]
         ], true);
@@ -418,36 +415,9 @@ class StoreOrderController
         if ($order['pink_id'] && $services->isPinkStatus($order['pink_id'])) {
             return app('json')->fail(410215);
         }
-        $isChannel = $this->getChennel[$from];
-        //缓存不存在 ｜｜ 切换另一端支付
-        if (!Cache::get('pay_' . $order['order_id']) || $isChannel != $order['is_channel']) {
-            switch ($from) {
-                case 'weixin':
-                    if ($type == 1 || in_array($order['is_channel'], [1, 2, 3, 4])) {//0
-                        $order['order_id'] = mt_rand(100, 999) . '_' . $order['order_id'];
-                    }
-                    break;
-                case 'weixinh5':
-                    if ($type == 1 || in_array($order['is_channel'], [0, 1, 3, 4])) {
-                        $order['order_id'] = mt_rand(100, 999) . '_' . $order['order_id'];
-                    }
-                    break;
-                case 'routine':
-                    if ($type == 1 || in_array($order['is_channel'], [0, 2, 3, 4])) {
-                        $order['order_id'] = mt_rand(100, 999) . '_' . $order['order_id'];
-                    }
-                    break;
-                case 'app':
-                    if ($type == 1 || in_array($order['is_channel'], [0, 1, 2, 3])) {
-                        $order['order_id'] = mt_rand(100, 999) . '_' . $order['order_id'];
-                    }
-                    break;
-                case 'pc':
-                case 'aliapy':
-                    $order['order_id'] = mt_rand(100, 999) . '_' . $order['order_id'];
-                    break;
-            }
-        }
+
+        //重新生成订单号去支付
+        $order['order_id'] = mt_rand(100, 999) . '_' . $order['order_id'];
 
         //0元支付
         if (bcsub((string)$orderInfo['pay_price'], '0', 2) <= 0) {

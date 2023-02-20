@@ -120,7 +120,6 @@ class StoreOrderCreateServices extends BaseServices
      * @param int $pinkId
      * @param int $seckillId
      * @param int $bargainId
-     * @param int $isChannel
      * @param int $shippingType
      * @param string $real_name
      * @param string $phone
@@ -132,7 +131,7 @@ class StoreOrderCreateServices extends BaseServices
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function createOrder($uid, $key, $cartGroup, $userInfo, $addressId, $payType, $useIntegral = false, $couponId = 0, $mark = '', $combinationId = 0, $pinkId = 0, $seckillId = 0, $bargainId = 0, $isChannel = 0, $shippingType = 1, $real_name = '', $phone = '', $storeId = 0, $news = false, $advanceId = 0, $virtual_type = 0, $customForm = [])
+    public function createOrder($uid, $key, $cartGroup, $userInfo, $addressId, $payType, $useIntegral = false, $couponId = 0, $mark = '', $combinationId = 0, $pinkId = 0, $seckillId = 0, $bargainId = 0, $shippingType = 1, $real_name = '', $phone = '', $storeId = 0, $news = false, $advanceId = 0, $virtual_type = 0, $customForm = [])
     {
         /** @var StoreOrderComputedServices $computedServices */
         $computedServices = app()->make(StoreOrderComputedServices::class);
@@ -214,7 +213,6 @@ class StoreOrderCreateServices extends BaseServices
             'bargain_id' => $bargainId,
             'advance_id' => $advance_id,
             'cost' => $priceGroup['costPrice'],
-            'is_channel' => $isChannel,
             'add_time' => time(),
             'unique' => $key,
             'shipping_type' => $shippingType,
