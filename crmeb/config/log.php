@@ -24,6 +24,8 @@ return [
     'success_log'  => false,
     //是否开启业务失败日志
     'fail_log'     => false,
+    //是否开启定时任务日志
+    'timer_log'    => false,
     // 日志通道列表
     'channels'     => [
         'file' => [

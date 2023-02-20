@@ -256,7 +256,7 @@ class AgentLevelServices extends BaseServices
      */
     public function createForm()
     {
-        $field[] = Form::input('name', '等级名称')->col(24);
+        $field[] = Form::input('name', '等级名称')->maxlength(8)->col(24);
         $field[] = Form::number('grade', '等级', 0)->min(0)->precision(0);
         $field[] = Form::frameImage('image', '背景图', Url::buildUrl('admin/widget.images/index', array('fodder' => 'image')))->icon('ios-add')->width('950px')->height('505px')->modal(['footer-hide' => true]);
         $field[] = Form::number('one_brokerage', '一级上浮', 0)->info('在分销一级佣金基础上浮（0-1000之间整数）百分比')->min(0)->max(1000)->precision(0);
@@ -278,7 +278,7 @@ class AgentLevelServices extends BaseServices
             throw new AdminException(100026);
         $field = [];
         $field[] = Form::hidden('id', $id);
-        $field[] = Form::input('name', '等级名称', $levelInfo['name'])->col(24);
+        $field[] = Form::input('name', '等级名称', $levelInfo['name'])->maxlength(8)->col(24);
         $field[] = Form::number('grade', '等级', $levelInfo['grade'])->min(0)->precision(0);
         $field[] = Form::frameImage('image', '背景图', Url::buildUrl('admin/widget.images/index', array('fodder' => 'image')), $levelInfo['image'])->icon('ios-add')->width('950px')->height('505px')->modal(['footer-hide' => true]);
         $field[] = Form::number('one_brokerage', '一级上浮', $levelInfo['one_brokerage'])->info('在分销一级佣金基础上浮（0-1000之间整数）百分比')->min(0)->max(1000)->precision(0);
