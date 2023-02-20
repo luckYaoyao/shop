@@ -125,7 +125,7 @@
                 <a @click="delTask(row, '删除这条信息', index)">删除</a>
               </template>
             </Table>
-            <div class="acea-row row-right page">
+            <!-- <div class="acea-row row-right page">
               <Page
                 :total="taskTotal"
                 :current="taskData.page"
@@ -134,7 +134,7 @@
                 @on-change="pageTaskChange"
                 :page-size="taskData.limit"
               />
-            </div>
+            </div> -->
           </div>
         </div>
       </Modal>

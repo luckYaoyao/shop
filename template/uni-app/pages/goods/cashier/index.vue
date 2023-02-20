@@ -1,9 +1,9 @@
 <template>
-	<view class="page" v-if="payPrice">
+	<view class="page" v-if="payPriceShow">
 		<view class="pay-price">
 			<view class="price">
 				<text class="unit">{{$t(`￥`)}}</text>
-				<numberScroll :num='payPrice' color="#E93323" width='30' height='50' fontSize='50'></numberScroll>
+				<numberScroll :num='payPriceShow' color="#E93323" width='30' height='50' fontSize='50'></numberScroll>
 			</view>
 			<view class="count-down">
 				{{$t(`支付剩余时间`)}}：
@@ -95,6 +95,9 @@
 				fromType: '',
 				active: 0,
 				payPrice: 0,
+				payPriceShow: 0,
+				payPostage: 0,
+				offlinePostage: false,
 				invalidTime: 0,
 				initIn: false,
 				jumpData: {
@@ -140,7 +143,7 @@
 						title: this.$t(`取消支付`)
 					}, {
 						tab: 5,
-						url: `/pages/goods/order_pay_status/index?order_id=${this.orderId}&msg=${this.$t(`取消支付`)}&type=3&totalPrice=${this.payPrice}&status=2`
+						url: `/pages/goods/order_pay_status/index?order_id=${this.orderId}&msg=${this.$t(`取消支付`)}&type=3&totalPrice=${this.payPriceShow}&status=2`
 					});
 				} else {
 					if (extraData.code == 'success') {
@@ -149,7 +152,7 @@
 							icon: 'success'
 						}, {
 							tab: 5,
-							url: `/pages/goods/order_pay_status/index?order_id=${this.orderId}&msg=${this.jumpData.msg}&type=3&totalPrice=${this.payPrice}`
+							url: `/pages/goods/order_pay_status/index?order_id=${this.orderId}&msg=${this.jumpData.msg}&type=3&totalPrice=${this.payPriceShow}`
 						});
 					} else if (extraData.code == 'cancel') {
 						// "支付已取消";
@@ -157,12 +160,12 @@
 							title: this.$t(`取消支付`)
 						}, {
 							tab: 5,
-							url: `/pages/goods/order_pay_status/index?order_id=${this.orderId}&msg=${this.$t(`取消支付`)}&type=3&totalPrice=${this.payPrice}&status=2`
+							url: `/pages/goods/order_pay_status/index?order_id=${this.orderId}&msg=${this.$t(`取消支付`)}&type=3&totalPrice=${this.payPriceShow}&status=2`
 						});
 					} else {
 						// "支付失败：" + extraData.errmsg;
 						uni.reLaunch({
-							url: `/pages/goods/order_pay_status/index?order_id=${this.orderId}&msg=${this.$t(`支付失败`)}&totalPrice=${this.payPrice}`
+							url: `/pages/goods/order_pay_status/index?order_id=${this.orderId}&msg=${this.$t(`支付失败`)}&totalPrice=${this.payPriceShow}`
 						})
 					}
 				}
@@ -175,7 +178,9 @@
 				});
 				getCashierOrder(this.orderId, this.fromType).then(res => {
 					console.log(res)
-					this.payPrice = res.data.pay_price
+					this.payPrice = this.payPriceShow = res.data.pay_price
+					this.payPostage = res.data.pay_postage
+					this.offlinePostage = res.data.offline_postage
 					this.invalidTime = res.data.invalid_time
 					//微信支付是否开启
 					this.cartArr[0].payStatus = res.data.wechat_pay_status || 0
@@ -207,6 +212,14 @@
 				this.active = index;
 				this.paytype = paytype;
 				this.number = number;
+				if (this.offlinePostage) {
+					if (paytype == 'offline') {
+						this.payPriceShow = this.$util.$h.Sub(this.payPrice, this.payPostage);
+					} else {
+						this.payPriceShow = this.payPrice;
+					}
+
+				}
 			},
 			formpost(url, postData) {
 				let tempform = document.createElement("form");
@@ -228,7 +241,7 @@
 			waitPay() {
 				uni.reLaunch({
 					url: '/pages/goods/order_pay_status/index?order_id=' + this.orderId + '&msg=取消支付&type=3' +
-						'&status=2&totalPrice=' + this.payPrice
+						'&status=2&totalPrice=' + this.payPriceShow
 				})
 			},
 			goPay(number, paytype) {
@@ -236,7 +249,7 @@
 				if (!that.orderId) return that.$util.Tips({
 					title: that.$t(`请选择要支付的订单`)
 				});
-				if (paytype == 'yue' && parseFloat(number) < parseFloat(that.payPrice)) return that.$util.Tips({
+				if (paytype == 'yue' && parseFloat(number) < parseFloat(that.payPriceShow)) return that.$util.Tips({
 					title: that.$t(`余额不足`)
 				});
 				uni.showLoading({
@@ -272,7 +285,7 @@
 						goPages = '/pages/goods/order_pay_status/index?order_id=' + this.orderId + '&msg=' +
 						res
 						.msg +
-						'&type=3' + '&totalPrice=' + this.payPrice,
+						'&type=3' + '&totalPrice=' + this.payPriceShow,
 						friendPay = '/pages/users/payment_on_behalf/index?order_id=' + this.orderId +
 						'&spread=' +
 						this
@@ -505,17 +518,11 @@
 
 						case 'ALIPAY_PAY':
 							//#ifdef H5
-							if (this.from === 'weixin') {
-								uni.redirectTo({
-									url: `/pages/users/alipay_invoke/index?id=${orderId}&pay_key=${res.data.result.pay_key}`
-								});
-							} else {
-								uni.hideLoading();
-								that.formContent = res.data.result.jsConfig;
-								that.$nextTick(() => {
-									document.getElementById('alipaysubmit').submit();
-								})
-							}
+							uni.hideLoading();
+							that.formContent = res.data.result.jsConfig;
+							that.$nextTick(() => {
+								document.getElementById('alipaysubmit').submit();
+							})
 							//#endif
 							// #ifdef MP
 							uni.navigateTo({

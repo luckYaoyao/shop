@@ -1724,6 +1724,24 @@ HTML;
      */
     public function setOrderTypePayOffline(string $orderId)
     {
+        if (($count = strpos($orderId, '_')) !== false) {
+            $orderId = substr($orderId, $count + 1);
+        }
+        if (sys_config('offline_postage', 0) == 1) {
+            $orderInfo = $this->dao->get(['order_id' => $orderId]);
+            $cartInfoService = app()->make(StoreOrderCartInfoServices::class);
+            $cartInfo = $cartInfoService->getColumn(['oid' => $orderInfo['id']], 'cart_info', 'id');
+            foreach ($cartInfo as $key => &$item) {
+                $item_arr = json_decode($item, true);
+                $item_arr['postage_price'] = $item_arr['origin_postage_price'] = 0;
+                $cartInfoService->update(['id' => $key], ['cart_info' => json_encode($item_arr)]);
+            }
+            return $this->dao->update($orderId, [
+                'pay_type' => 'offline',
+                'pay_price' => bcsub((string)$orderInfo['pay_price'], (string)$orderInfo['pay_postage'], 2),
+                'pay_postage' => 0
+            ], 'order_id');
+        }
         return $this->dao->update($orderId, ['pay_type' => 'offline'], 'order_id');
     }
 
@@ -2508,7 +2526,7 @@ HTML;
 
         switch ($type) {
             case 'order':
-                $info = $this->dao->get(['order_id' => $orderId], ['pay_price', 'add_time', 'combination_id', 'seckill_id', 'bargain_id']);
+                $info = $this->dao->get(['order_id' => $orderId], ['pay_price', 'add_time', 'combination_id', 'seckill_id', 'bargain_id', 'pay_postage']);
                 if (!$info) {
                     throw new PayException('您支付的订单不存在');
                 }
@@ -2529,6 +2547,8 @@ HTML;
                 }
 
                 $data['pay_price'] = $info['pay_price'];
+                $data['pay_postage'] = $info['pay_postage'];
+                $data['offline_postage'] = sys_config('offline_postage', 0);
                 $data['invalid_time'] = $time;
 
                 break;

@@ -37,7 +37,8 @@
 
 				</view>
 				<view class="tip" v-else>
-					<view class='input'><text>{{$t(`￥`)}}</text><input v-model="number" placeholder="0.00" type='number' placeholder-class='placeholder' name="number"></input></view>
+					<view class='input'><text>{{$t(`￥`)}}</text><input v-model="number" placeholder="0.00" type='number'
+							placeholder-class='placeholder' name="number"></input></view>
 					<view class="tips-title">
 						<view style="font-weight: bold; font-size: 26rpx;">{{$t(`提示`)}}：</view>
 						<view style="margin-top: 10rpx;">{{$t(`当前可转入佣金为`)}} <text
@@ -56,7 +57,7 @@
 		</form>
 		<payment :payMode="payMode" :pay_close="pay_close" :is-call="true" @onChangeFun="onChangeFun"
 			:totalPrice="numberPic"></payment>
-			<view v-show="false" v-html="formContent"></view>
+		<view v-show="false" v-html="formContent"></view>
 		<!-- #ifdef MP -->
 		<!-- <authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse"></authorize> -->
 		<!-- #endif -->
@@ -100,7 +101,7 @@
 				navRecharge: [this.$t(`账户充值`), this.$t(`佣金转入`)],
 				active: 0,
 				number: '',
-				formContent:'',
+				formContent: '',
 				userinfo: {},
 				placeholder: "0.00",
 				from: '',
@@ -413,17 +414,11 @@
 
 						case 'ALIPAY_PAY':
 							//#ifdef H5
-							if (this.from === 'weixin') {
-								uni.redirectTo({
-									url: `/pages/users/alipay_invoke/index?id=${orderId}&pay_key=${res.data.result.pay_key}`
-								});
-							} else {
-								uni.hideLoading();
-								that.formContent = res.data.result.jsConfig;
-								that.$nextTick(() => {
-									document.getElementById('alipaysubmit').submit();
-								})
-							}
+							uni.hideLoading();
+							that.formContent = res.data.result.jsConfig;
+							that.$nextTick(() => {
+								document.getElementById('alipaysubmit').submit();
+							})
 							//#endif
 							// #ifdef MP
 							uni.navigateTo({

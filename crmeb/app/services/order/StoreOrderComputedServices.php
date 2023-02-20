@@ -82,11 +82,6 @@ class StoreOrderComputedServices extends BaseServices
         $offlinePayStatus = (int)sys_config('offline_pay_status') ?? (int)2;
         $systemPayType = PayServices::PAY_TYPE;
         if ($offlinePayStatus == 2) unset($systemPayType['offline']);
-        if (strtolower($payType) != 'pc' && strtolower($payType) != 'friend') {
-            if (!array_key_exists($payType, $systemPayType)) {
-                throw new ApiException(410241);
-            }
-        }
         if (!$userInfo) {
             /** @var UserServices $userServices */
             $userServices = app()->make(UserServices::class);
@@ -453,7 +448,7 @@ class StoreOrderComputedServices extends BaseServices
         }
         //会员邮费享受折扣
         if ($storePostage) {
-            $express_rule_number = 0;
+            $express_rule_number = 100;
             if (!$userInfo) {
                 /** @var UserServices $userService */
                 $userService = app()->make(UserServices::class);

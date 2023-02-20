@@ -342,7 +342,7 @@
 				],
 				virtual_type: 0,
 				formContent: '',
-				payType: 'weixin', //支付方式
+				payType: '', //支付方式
 				openType: 1, //优惠券打开方式 1=使用
 				active: 0, //支付方式切换
 				coupon: {
@@ -1284,9 +1284,6 @@
 				let that = this,
 					data = {};
 
-				if (!that.payType) return that.$util.Tips({
-					title: that.$t(`请选择支付方式`)
-				});
 				if (!that.addressId && !that.shippingType && !that.virtual_type) return that.$util.Tips({
 					title: that.$t(`请选择收货地址`)
 				});
@@ -1614,8 +1611,8 @@
 
 		.mark {
 			background-color: #f9f9f9;
-			width: 345px;
-			height: 70px;
+			// width: 345px;
+			min-height: 70px;
 			border-radius: 1px;
 			margin-top: 15px;
 			padding: 12px 14px;
@@ -1626,7 +1623,7 @@
 
 		.mark-msg {
 			color: #333;
-			font-size: 32rpx;
+			font-size: 28rpx;
 		}
 	}
 
@@ -1669,11 +1666,12 @@
 
 	.order-submission .wrapper .item textarea {
 		background-color: #f9f9f9;
-		width: 690rpx;
-		height: 140rpx;
+		width: 100%;
+		height: 135rpx;
 		border-radius: 3rpx;
 		margin-top: 30rpx;
 		padding: 25rpx 28rpx;
+		font-size: 28rpx;
 		box-sizing: border-box;
 	}
 
