@@ -9,11 +9,13 @@
 // +---------------------------------------------------------------------
 
 import BasicLayout from '@/components/main';
+import setting  from '@/setting'
+let roterPre = setting.roterPre;
 
 const pre = 'order_';
 
 export default {
-  path: '/admin/order',
+  path: roterPre+'/order',
   name: 'order',
   header: 'order',
   redirect: {

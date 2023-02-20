@@ -2,6 +2,7 @@
 /.idea
 *.log
 *.DS_Store
+/crmeb/.env
 /crmeb/runtime/cache
 /crmeb/runtime/log
 /crmeb/runtime/session

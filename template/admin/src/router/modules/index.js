@@ -9,6 +9,8 @@
 // +---------------------------------------------------------------------
 
 import BasicLayout from '@/components/main';
+import setting  from '@/setting'
+let roterPre = setting.roterPre;
 
 // export default {
 //   path: '/',
@@ -40,7 +42,7 @@ const meta = {
 const pre = 'home_';
 
 export default {
-  path: '/',
+  path: roterPre + '/',
   name: 'home',
   header: 'home',
   redirect: {
@@ -50,7 +52,7 @@ export default {
   component: BasicLayout,
   children: [
     {
-      path: 'admin/home/',
+      path: roterPre+'/home/',
       name: `${pre}index`,
       header: 'home',
       meta: {

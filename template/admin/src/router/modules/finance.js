@@ -9,10 +9,12 @@
 // +---------------------------------------------------------------------
 
 import BasicLayout from '@/components/main';
+import setting  from '@/setting'
+let roterPre = setting.roterPre;
 
 const pre = 'finance_';
 export default {
-  path: '/admin/finance',
+  path: roterPre+'/finance',
   name: 'finance',
   header: 'finance',
   meta: {

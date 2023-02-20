@@ -1,11 +1,11 @@
 <template>
   <div class="custom-bread-crumb">
     <Breadcrumb :style="{ fontSize: `${fontSize}px` }">
-      <BreadcrumbItem v-for="item in list" :key="`${item.path}`" v-if="listLast[0].path !== '/admin/home/'">
+      <BreadcrumbItem v-for="item in list" :key="`${item.path}`" v-if="listLast[0].path !== homePath">
         <common-icon style="margin-right: 4px" :type="item.icon || ''" />
         {{ item.title }}
       </BreadcrumbItem>
-      <BreadcrumbItem v-if="listLast[0].path === '/admin/home/'">
+      <BreadcrumbItem v-if="listLast[0].path === homePath">
         <common-icon style="margin-right: 4px" :type="listLast[0].icon || ''" />
         {{ listLast[0].title }}
       </BreadcrumbItem>
@@ -19,6 +19,7 @@
 <script>
 import { showTitle } from '@/libs/util';
 import CommonIcon from '_c/common-icon';
+import settings  from '@/setting'
 import './custom-bread-crumb.less';
 export default {
   name: 'customBreadCrumb',
@@ -43,6 +44,11 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
+  data(){
+    return {
+      homePath: settings.roterPre + '/home',
+    };
   },
   methods: {
     showTitle(item) {

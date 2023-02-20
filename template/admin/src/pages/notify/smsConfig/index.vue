@@ -151,7 +151,7 @@ export default {
       this.$refs.tableLists.onOpenIndex(val);
     },
     mealPay(val) {
-      this.$router.push({ path: '/admin/setting/sms/sms_pay/index', query: { type: val } });
+      this.$router.push({ path: this.$routeProStr + '/setting/sms/sms_pay/index', query: { type: val } });
     },
     // 开通服务
     openService(val) {

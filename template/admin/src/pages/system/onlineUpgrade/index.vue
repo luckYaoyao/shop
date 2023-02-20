@@ -46,7 +46,7 @@
             <div class="acea-row row-top off" @mouseenter="quearyEvear(item.id,index)" v-for="(item,index) in upgradeLogList" :key="index" :class="{active:index==dynamic}">
                 <div class="time">
                     <div v-if="index == 0">最近更新</div>
-                    <div>{{item.upgrade_time}}</div>  
+                    <div>{{item.upgrade_time}}</div>
                   </div>
                 <Timeline class="list">
                     <TimelineItem>
@@ -68,7 +68,7 @@
             </div>
         </div>
         </Scroll>
-        
+
     </Card>
     <!-- 免责声明 -->
     <Modal :loading="modal_loading" v-model="declaration" width="340" height="96" :closable="false" class-name="vertical-center-modal" :mask-closable="false">
@@ -269,7 +269,7 @@ export default {
           this.$Message.error(res.msg);
         });
     },
- 
+
     // 可升级列表
     async getupgradeableList() {
       let res = await upgradeableListApi();
@@ -286,8 +286,8 @@ export default {
         this.params_key = this.upgradeableList[0].package_key
         this.forceVersion = firstVer.first_version + '.' + firstVer.second_version + '.' + firstVer.third_version + '.' + firstVer.fourth_version
       }
- 
-      
+
+
       // arr.forEach((item) => {
       //   this.$set(
       //     item,
@@ -444,7 +444,7 @@ export default {
       AccountLogout()
         .then((res) => {
           this.$Message.success('您已成功退出');
-          this.$router.replace('/admin/login');
+          this.$router.replace(this.$routeProStr + '/login');
           localStorage.clear();
           removeCookies('token');
           removeCookies('expires_time');

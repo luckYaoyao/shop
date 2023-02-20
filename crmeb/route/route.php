@@ -10,9 +10,10 @@ Route::miss(function () {
         $appRequest = str_replace('//', '/', $appRequest);
         $appName = explode('/', $appRequest)[0] ?? '';
     }
+
     switch (strtolower($appName)) {
-        case 'admin':
-            return view(app()->getRootPath() . 'public' . DS . 'admin' . DS . 'index.html');
+        case config('app.admin_prefix','admin'):
+            return view(app()->getRootPath() . 'public'  . DS . 'system.html');
         case 'home':
             if (request()->isMobile()) {
                 return redirect(app()->route->buildUrl('/'));

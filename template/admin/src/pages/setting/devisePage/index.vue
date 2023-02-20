@@ -2,7 +2,7 @@
   <div>
     <div class="i-layout-page-header header_top">
       <div class="i-layout-page-header fl_header">
-        <router-link :to="{ path: '/admin/setting/pages/devise' }"
+        <router-link :to="{ path: $routeProStr + '/setting/pages/devise' }"
           ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         >
         <Divider type="vertical" />
@@ -51,11 +51,11 @@ export default {
     let pageId = this.$route.query.id;
     let defaultData = this.$store.state.moren.defaultConfig;
     this.pageId = parseInt(pageId);
-    let moveLink = getCookies('moveLink');
+    let moveLink = 'http://open.net';getCookies('moveLink');
     if (Number(this.$route.query.type) === 1) {
-      this.iframeUrl = `${moveLink}/pages/index/index?type=iframeWindow`;
+      this.iframeUrl = `http://open.net/pages/index/index?type=iframeWindow`;
     } else {
-      this.iframeUrl = `${location.origin}/pages/index/index?type=iframeWindow`;
+      this.iframeUrl = `http://open.net/pages/index/index?type=iframeWindow`;
     }
     diyGetInfo(parseInt(pageId)).then((datas) => {
       let data = datas.data.info.value;

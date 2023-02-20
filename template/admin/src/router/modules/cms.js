@@ -9,11 +9,13 @@
 // +---------------------------------------------------------------------
 
 import BasicLayout from '@/components/main';
+import setting  from '@/setting'
+let roterPre = setting.roterPre;
 
 const pre = 'cms_';
 
 export default {
-  path: '/admin/cms',
+  path: roterPre + '/cms',
   name: 'cms',
   header: 'cms',
   redirect: {

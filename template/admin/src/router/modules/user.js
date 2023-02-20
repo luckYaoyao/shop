@@ -9,6 +9,8 @@
 // +---------------------------------------------------------------------
 
 import BasicLayout from '@/components/main';
+import setting  from '@/setting'
+let roterPre = setting.roterPre;
 
 const meta = {
   auth: true,
@@ -17,7 +19,7 @@ const meta = {
 const pre = 'user_';
 
 export default {
-  path: '/admin/user',
+  path: roterPre+'/user',
   name: 'user',
   header: 'user',
   redirect: {

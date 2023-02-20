@@ -1058,7 +1058,7 @@ class StoreOrderRefundServices extends BaseServices
         if ($list) {
             foreach ($list as &$item) {
                 $item['paid'] = 1;
-                $item['add_time'] = isset($item['add_time']) ? date('Y-m-d H:i', (int)$item['add_time']) : '';
+                $item['add_time'] = $item['_add_time'] = isset($item['add_time']) ? date('Y-m-d H:i', (int)$item['add_time']) : '';
                 $item['cartInfo'] = $item['cart_info'];
                 if (in_array($item['refund_type'], [1, 2, 4, 5])) {
                     $item['refund_status'] = 1;

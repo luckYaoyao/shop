@@ -120,7 +120,6 @@ class StoreOrderCreateServices extends BaseServices
      * @param int $pinkId
      * @param int $seckillId
      * @param int $bargainId
-     * @param int $isChannel
      * @param int $shippingType
      * @param string $real_name
      * @param string $phone
@@ -132,7 +131,7 @@ class StoreOrderCreateServices extends BaseServices
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function createOrder($uid, $key, $cartGroup, $userInfo, $addressId, $payType, $useIntegral = false, $couponId = 0, $mark = '', $combinationId = 0, $pinkId = 0, $seckillId = 0, $bargainId = 0, $isChannel = 0, $shippingType = 1, $real_name = '', $phone = '', $storeId = 0, $news = false, $advanceId = 0, $virtual_type = 0, $customForm = [])
+    public function createOrder($uid, $key, $cartGroup, $userInfo, $addressId, $payType, $useIntegral = false, $couponId = 0, $mark = '', $combinationId = 0, $pinkId = 0, $seckillId = 0, $bargainId = 0, $shippingType = 1, $real_name = '', $phone = '', $storeId = 0, $news = false, $advanceId = 0, $virtual_type = 0, $customForm = [])
     {
         /** @var StoreOrderComputedServices $computedServices */
         $computedServices = app()->make(StoreOrderComputedServices::class);
@@ -183,11 +182,6 @@ class StoreOrderCreateServices extends BaseServices
         if ($deduction) {
             $couponId = 0;
             $useIntegral = false;
-            $systemPayType = PayServices::PAY_TYPE;
-            unset($systemPayType['offline']);
-            if ($payType != 'pc' && !array_key_exists($payType, $systemPayType)) {
-                throw new ApiException(410246);
-            }
         }
         //$shipping_type = 1 快递发货 $shipping_type = 2 门店自提
         $storeSelfMention = sys_config('store_self_mention') ?? 0;
@@ -219,7 +213,6 @@ class StoreOrderCreateServices extends BaseServices
             'bargain_id' => $bargainId,
             'advance_id' => $advance_id,
             'cost' => $priceGroup['costPrice'],
-            'is_channel' => $isChannel,
             'add_time' => time(),
             'unique' => $key,
             'shipping_type' => $shippingType,

@@ -34,7 +34,7 @@
         </Row>
       </Form>
       <div class="Button">
-        <router-link v-auth="['product-product-save']" :to="'/admin/product/add_product'"
+        <router-link v-auth="['product-product-save']" :to="$routeProStr + '/product/add_product'"
           ><Button type="primary" class="bnt mr15" icon="md-add">添加商品</Button></router-link
         >
         <Button v-auth="['product-crawl-save']" type="success" class="bnt mr15" @click="onCopy">商品采集</Button>
@@ -109,7 +109,7 @@
           <Divider type="vertical" />
           <a @click="edit(row)">编辑</a>
           <Divider type="vertical" />
-          <router-link :to="{ path: '/admin/product/product_reply/' + row.id }"><a>查看评论</a></router-link>
+          <router-link :to="{ path: $routeProStr + '/product/product_reply/' + row.id }"><a>查看评论</a></router-link>
           <Divider type="vertical" />
           <a @click="del(row, '恢复商品', index)" v-if="artFrom.type === '6'">恢复商品</a>
           <a @click="del(row, '移入回收站', index)" v-else>移到回收站</a>
@@ -428,7 +428,7 @@ export default {
   },
   watch: {
     $route() {
-      if (this.$route.fullPath === '/admin/product/product_list?type=5') {
+      if (this.$route.fullPath === (this.$routeProStr + '/product/product_list?type=5')) {
         this.getPath();
       }
     },
@@ -437,7 +437,7 @@ export default {
   activated() {
     this.goodHeade();
     this.goodsCategory();
-    if (this.$route.fullPath === '/admin/product/product_list?type=5') {
+    if (this.$route.fullPath === (this.$routeProStr + '/product/product_list?type=5')) {
       this.getPath();
     } else {
       this.getDataList();
@@ -697,7 +697,7 @@ export default {
     // 复制淘宝
     onCopy() {
       this.$router.push({
-        path: '/admin/product/add_product',
+        path: this.$routeProStr + '/product/add_product',
         query: { type: -1 },
       });
       // this.modals = true
@@ -819,7 +819,7 @@ export default {
     },
     // 编辑
     edit(row) {
-      this.$router.push({ path: '/admin/product/add_product/' + row.id });
+      this.$router.push({ path: this.$routeProStr + '/product/add_product/' + row.id });
     },
     // 确认
     del(row, tit, num) {

@@ -137,7 +137,7 @@ export default {
     // 跳转到配置列表页面
     goList(row) {
       this.$router.push({
-        path: '/admin/system/config/system_config_tab/list/' + row.id,
+        path: this.$routeProStr + '/system/config/system_config_tab/list/' + row.id,
       });
     },
     // 添加配置分类

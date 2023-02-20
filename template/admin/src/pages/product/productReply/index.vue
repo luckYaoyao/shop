@@ -2,7 +2,7 @@
   <div class="article-manager">
     <div class="i-layout-page-header">
       <div class="i-layout-page-header">
-        <router-link :to="{ path: '/admin/product/product_list' }" v-if="$route.params.id"
+        <router-link :to="{ path: $routeProStr + '/product/product_list' }" v-if="$route.params.id"
           ><Button icon="ios-arrow-back" size="small" class="mr20">返回</Button></router-link
         >
         <span class="ivu-page-header-title mr20">商品评论管理</span>

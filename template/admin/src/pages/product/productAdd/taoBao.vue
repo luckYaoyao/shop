@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     mealPay(val) {
-      this.$router.push({ path: '/admin/setting/sms/sms_pay/index', query: { type: val } });
+      this.$router.push({ path: this.$routeProStr + '/setting/sms/sms_pay/index', query: { type: val } });
     },
     getCopyConfig() {
       copyConfigApi().then((res) => {
