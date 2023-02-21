@@ -203,55 +203,68 @@ class SystemTimerServices extends BaseServices
      * @email 442384644@qq.com
      * @date 2023/02/17
      */
-    public function timerRun()
+    public function crontabRun()
     {
-        $time = time();
-        $date = date('Y-m-d H:i:s', time());
-        $timer_log_open = config("log.timer_log", false);
-        file_put_contents(root_path() . 'runtime/.timer', $time); //检测定时任务是否正常
+        file_put_contents(root_path() . 'runtime/.timer', time()); //检测定时任务是否正常
         $list = $this->dao->selectList(['is_open' => 1, 'is_del' => 0])->toArray();
         foreach ($list as $item) {
             if ($item['next_execution_time'] < $time) {
                 if ($item['mark'] == 'order_cancel') {
                     //未支付自动取消订单
                     app()->make(StoreOrderServices::class)->orderUnpaidCancel();
-                    if($timer_log_open) Log::notice($date . ' 执行未支付自动取消订单');
+                    $this->crontabLog(' 执行未支付自动取消订单');
                 } elseif ($item['mark'] == 'pink_expiration') {
                     //拼团到期订单处理
                     app()->make(StorePinkServices::class)->statusPink();
-                    if($timer_log_open) Log::notice($date . ' 执行拼团到期订单处理');
+                    $this->crontabLog(' 执行拼团到期订单处理');
                 } elseif ($item['mark'] == 'agent_unbind') {
                     //自动解绑上级绑定
                     app()->make(AgentManageServices::class)->removeSpread();
-                    if($timer_log_open) Log::notice($date . ' 执行自动解绑上级绑定');
+                    $this->crontabLog(' 执行自动解绑上级绑定');
                 } elseif ($item['mark'] == 'live_product_status') {
                     //更新直播商品状态
                     app()->make(LiveGoodsServices::class)->syncGoodStatus();
-                    if($timer_log_open) Log::notice($date . ' 执行更新直播商品状态');
+                    $this->crontabLog(' 执行更新直播商品状态');
                 } elseif ($item['mark'] == 'live_room_status') {
                     //更新直播间状态
                     app()->make(LiveRoomServices::class)->syncRoomStatus();
-                    if($timer_log_open) Log::notice($date . ' 执行更新直播间状态');
+                    $this->crontabLog(' 执行更新直播间状态');
                 } elseif ($item['mark'] == 'take_delivery') {
                     //自动收货
                     app()->make(StoreOrderTakeServices::class)->autoTakeOrder();
-                    if($timer_log_open) Log::notice($date . ' 执行自动收货');
+                    $this->crontabLog(' 执行自动收货');
                 } elseif ($item['mark'] == 'advance_off') {
                     //查询预售到期商品自动下架
                     app()->make(StoreProductServices::class)->downAdvance();
-                    if($timer_log_open) Log::notice($date . ' 执行预售到期商品自动下架');
+                    $this->crontabLog(' 执行预售到期商品自动下架');
                 } elseif ($item['mark'] == 'product_replay') {
                     //自动好评
                     app()->make(StoreOrderServices::class)->autoComment();
-                    if($timer_log_open) Log::notice($date . ' 执行自动好评');
+                    $this->crontabLog(' 执行自动好评');
                 } elseif ($item['mark'] == 'clear_poster') {
                     //清除昨日海报
                     app()->make(SystemAttachmentServices::class)->emptyYesterdayAttachment();
-                    if($timer_log_open) Log::notice($date . ' 执行清除昨日海报');
+                    $this->crontabLog(' 执行清除昨日海报');
                 }
                 //写入本次执行时间和下次执行时间
                 $this->dao->update(['mark' => $item['mark']], ['last_execution_time' => $time, 'next_execution_time' => $this->getTimerCycleTime($item)]);
             }
+        }
+    }
+
+    /**
+     * 定时任务日志
+     * @param $msg
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/02/21
+     */
+    public function crontabLog($msg)
+    {
+        $timer_log_open = config("log.timer_log", false);
+        if ($timer_log_open) {
+            $date = date('Y-m-d H:i:s', time());
+            Log::notice($date . $msg);
         }
     }
 }

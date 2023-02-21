@@ -20,9 +20,9 @@ class TimerController
      * @email 442384644@qq.com
      * @date 2023/02/17
      */
-    public function timerRun()
+    public function crontabRun()
     {
-        app()->make(SystemTimerServices::class)->timerRun();
+        app()->make(SystemTimerServices::class)->crontabRun();
     }
 
     /**

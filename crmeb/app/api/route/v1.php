@@ -391,7 +391,7 @@ Route::group(function () {
 
     /** 定时任务接口 */
     //定时任务调用接口
-    Route::get('timer/run', 'v1.TimerController/timerRun')->name('timerRun');
+    Route::get('crontab/run', 'v1.TimerController/crontabRun')->name('crontabRun');
     //检测定时任务接口
     Route::get('timer/check', 'v1.TimerController/timerCheck')->name('timerCheck');
     //未支付自动取消订单
