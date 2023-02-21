@@ -219,7 +219,6 @@
 			},
 			//图片转符合安全域名路径
 			downloadFilestoreImage(url) {
-				url = this.setDomain(url)
 				return new Promise((resolve, reject) => {
 					let that = this;
 					uni.downloadFile({

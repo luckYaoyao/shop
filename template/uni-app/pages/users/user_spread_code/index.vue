@@ -220,7 +220,7 @@
 					// #endif
 					// #ifdef APP-PLUS
 					img = await this.imgToBase(res.data.spread[i].pic, res.data.qrcode)
-					arr2 = [img.code || this.codeSrc, img.image]
+					arr2 = [this.codeSrc, img.image]
 					// #endif
 					that.$util.userPosterCanvas(arr2, res.data.nickname, res.data.site_name, i, this.wd, this.hg, (
 						tempFilePath) => {
@@ -247,6 +247,7 @@
 				this.mpUrl = res.data.url
 			},
 			async imgToBase(url, code) {
+				console.log(url, code);
 				let res = await imgToBase({
 					image: url,
 					code: code

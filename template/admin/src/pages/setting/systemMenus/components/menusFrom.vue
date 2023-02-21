@@ -403,7 +403,6 @@ export default {
         }
       }
       this.valids = true;
-      data.datas.menu_path = this.$routeProStr + this.formValidate.menu_path
       addMenusApi(data)
         .then(async (res) => {
           this.$Message.success(res.msg);

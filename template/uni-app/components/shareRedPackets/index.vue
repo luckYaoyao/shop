@@ -13,7 +13,9 @@
 </template>
 
 <script>
-	import {HTTP_REQUEST_URL} from '@/config/app';
+	import {
+		HTTP_REQUEST_URL
+	} from '@/config/app';
 	export default {
 
 		props: {
@@ -40,7 +42,7 @@
 		},
 		data() {
 			return {
-				imgHost:HTTP_REQUEST_URL,
+				imgHost: HTTP_REQUEST_URL,
 				isAnimate: true
 			};
 		},
@@ -117,12 +119,14 @@
 		position: absolute;
 		top: 30rpx;
 		font-size: 20rpx;
+		line-height: 30rpx;
 		width: 100%;
 		text-align: center;
 	}
 
 	.sharing-packets .sharing-con .text .money {
 		font-size: 32rpx;
+		line-height: 42rpx;
 		font-weight: bold;
 		margin-top: 5rpx;
 	}
@@ -133,20 +137,22 @@
 
 	.sharing-packets .sharing-con .text .tip {
 		font-size: 18rpx;
+		line-height: 18rpx;
 		color: #999;
 		margin-top: 5rpx;
 	}
 
 	.sharing-packets .sharing-con .text .shareBut {
 		font-size: 22rpx;
+		line-height: 48rpx;
 		color: #fff;
-		// #ifdef H5
-		margin-top: 14rpx;
-		// #endif
-		// #ifndef H5
+		/* #ifdef H5 */
+		margin-top: 28rpx;
+		/* #endif */
+
+		/* #ifndef H5 */
 		margin-top: 26rpx;
-		// #endif
-		height: 50rpx;
-		line-height: 50rpx;
+		/* #endif */
+
 	}
 </style>
