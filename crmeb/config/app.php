@@ -47,5 +47,5 @@ return [
     // 没有开启消息队列命令或者定时任务命令的提醒开关
     'console_remind'   => true,
     // admin路由前缀
-    'admin_prefix'     => 'administration',
+    'admin_prefix'     => 'admin',
 ];
