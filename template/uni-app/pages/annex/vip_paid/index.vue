@@ -669,7 +669,7 @@
 						uni.showToast({
 							title: data.msg,
 							success() {
-								location.href = jsConfig.mweb_url;
+								location.href = jsConfig.h5_url;
 							}
 						});
 						break;

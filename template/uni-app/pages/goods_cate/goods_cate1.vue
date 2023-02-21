@@ -113,7 +113,6 @@
 			})
 		},
 		mounted() {
-			console.log(this.version)
 			let that = this
 			// #ifdef H5
 			uni.getSystemInfo({
@@ -187,7 +186,6 @@
 			},
 			getAllCategory: function() {
 				let that = this;
-				console.log(this.version, '1', uni.getStorageSync('CAT_VERSION'))
 				if (this.isNew || !uni.getStorageSync('CAT1_DATA')) {
 					getCategoryList().then(res => {
 						uni.setStorageSync('CAT1_DATA', res.data)
