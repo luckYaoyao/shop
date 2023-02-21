@@ -19,7 +19,7 @@ use think\Response;
  * Class Create
  * @package app\listener\http
  */
-class HttpEnd
+class HttpEndListener
 {
     public function handle(Response $response):void
     {

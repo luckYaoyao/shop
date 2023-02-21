@@ -9,10 +9,10 @@ use crmeb\interfaces\ListenerInterface;
 
 /**
  * 写入用户访问
- * Class UserVisit
+ * Class UserVisitListener
  * @package app\listener\user
  */
-class UserVisit implements ListenerInterface
+class UserVisitListener implements ListenerInterface
 {
     public function handle($event): void
     {

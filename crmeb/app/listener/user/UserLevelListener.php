@@ -9,10 +9,10 @@ use crmeb\interfaces\ListenerInterface;
 
 /**
  * 用户升级事件
- * Class UserLevel
+ * Class UserLevelListener
  * @package app\listener\user
  */
-class UserLevel implements ListenerInterface
+class UserLevelListener implements ListenerInterface
 {
     public function handle($event): void
     {

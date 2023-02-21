@@ -18,7 +18,7 @@ use Workerman\Crontab\Crontab;
 /**
  * 系统定时任务
  */
-class SystemCrontab implements ListenerInterface
+class SystemCrontabListener implements ListenerInterface
 {
     public function handle($event): void
     {

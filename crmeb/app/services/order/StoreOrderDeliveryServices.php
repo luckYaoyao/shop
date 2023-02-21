@@ -364,6 +364,12 @@ class StoreOrderDeliveryServices extends BaseServices
      * @param int $id
      * @param array $data
      * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/02/21
      */
     public function splitDelivery(int $id, array $data)
     {
@@ -396,10 +402,8 @@ class StoreOrderDeliveryServices extends BaseServices
         }
 
         $cart_ids = $data['cart_ids'];
-        /** @var StoreOrderCartInfoServices $storeOrderCartInfoServices */
-        $storeOrderCartInfoServices = app()->make(StoreOrderCartInfoServices::class);
         unset($data['cart_ids']);
-        $this->transaction(function () use ($id, $cart_ids, $orderInfo, $data, $storeOrderCartInfoServices) {
+        $this->transaction(function () use ($id, $cart_ids, $orderInfo, $data) {
             /** @var StoreOrderSplitServices $storeOrderSplitServices */
             $storeOrderSplitServices = app()->make(StoreOrderSplitServices::class);
             //订单拆单
