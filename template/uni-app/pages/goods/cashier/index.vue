@@ -512,7 +512,7 @@
 								url: goPages + '&status=0'
 							});
 							setTimeout(() => {
-								location.href = res.data.result.jsConfig.mweb_url;
+								location.href = res.data.result.jsConfig.h5_url;
 							}, 2000);
 							break;
 
