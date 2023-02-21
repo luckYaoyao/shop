@@ -25,7 +25,7 @@ import statistic from './modules/statistic';
 import frameOut from './modules/frameOut';
 import division from './modules/division';
 import settings  from '@/setting'
-let roterPre = settings.roterPre;
+let routePre = settings.routePre;
 /**
  * 在主框架内显示
  */
@@ -51,7 +51,7 @@ const frameIn = [
       //   component: () => import('@/pages/system/log')
       // },
       {
-        path: roterPre+'/system/user',
+        path: routePre+'/system/user',
         name: `systemUser`,
         meta: {
           auth: true,
@@ -60,7 +60,7 @@ const frameIn = [
         component: () => import('@/pages/setting/user/index'),
       },
       {
-        path: roterPre+'/system/files',
+        path: routePre+'/system/files',
         name: `systemFiles`,
         meta: {
           auth: ['admin-setting-files'],
@@ -95,7 +95,7 @@ const frameIn = [
     ],
   },
   {
-    path: roterPre+'/widget.images/index.html',
+    path: routePre+'/widget.images/index.html',
     name: `images`,
     meta: {
       auth: ['admin-user-user-index'],
@@ -104,7 +104,7 @@ const frameIn = [
     component: () => import('@/components/uploadPictures/widgetImg'),
   },
   {
-    path: roterPre+'/widget.widgets/icon.html',
+    path: routePre+'/widget.widgets/icon.html',
     name: `imagesIcon`,
     meta: {
       auth: ['admin-user-user-index'],
@@ -113,7 +113,7 @@ const frameIn = [
     component: () => import('@/components/iconFrom/index'),
   },
   {
-    path: roterPre+'/store.StoreProduct/index.html',
+    path: routePre+'/store.StoreProduct/index.html',
     name: `storeProduct`,
     meta: {
       title: '选择商品',
@@ -121,7 +121,7 @@ const frameIn = [
     component: () => import('@/components/goodsList/index'),
   },
   {
-    path: roterPre+'/system.User/list.html',
+    path: routePre+'/system.User/list.html',
     name: `changeUser`,
     meta: {
       title: '选择用户',
@@ -129,7 +129,7 @@ const frameIn = [
     component: () => import('@/components/customerInfo/index'),
   },
   {
-    path: roterPre+'/widget.video/index.html',
+    path: routePre+'/widget.video/index.html',
     name: `video`,
     meta: {
       title: '上传视频',
@@ -163,7 +163,7 @@ const frameOuts = frameOut;
 
 const errorPage = [
   {
-    path: roterPre+'/403',
+    path: routePre+'/403',
     name: '403',
     meta: {
       title: '403',
@@ -171,7 +171,7 @@ const errorPage = [
     component: () => import('@/pages/system/error/403'),
   },
   {
-    path: roterPre+'/500',
+    path: routePre+'/500',
     name: '500',
     meta: {
       title: '500',
@@ -179,7 +179,7 @@ const errorPage = [
     component: () => import('@/pages/system/error/500'),
   },
   {
-    path: roterPre+'/*',
+    path: routePre+'/*',
     name: '404',
     meta: {
       title: '404',

@@ -10,12 +10,12 @@
 
 import BasicLayout from '@/components/main';
 import setting  from '@/setting'
-let roterPre = setting.roterPre;
+let routePre = setting.routePre;
 
 const pre = 'echarts_';
 
 export default {
-  path: roterPre+'/echarts',
+  path: routePre+'/echarts',
   name: 'echarts',
   header: 'echarts',
   redirect: {

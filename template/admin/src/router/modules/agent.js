@@ -10,14 +10,14 @@
 
 import BasicLayout from '@/components/main';
 import setting  from '@/setting'
-let roterPre = setting.roterPre;
+let routePre = setting.routePre;
 
 const pre = 'agent_';
 const meta = {
   auth: true,
 };
 export default {
-  path: `${roterPre}/agent`,
+  path: `${routePre}/agent`,
   name: 'agent',
   header: 'agent',
   redirect: {

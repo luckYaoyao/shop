@@ -47,7 +47,7 @@ export default {
   },
   data(){
     return {
-      homePath: settings.roterPre + '/home',
+      homePath: settings.routePre + '/home',
     };
   },
   methods: {

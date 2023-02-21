@@ -90,7 +90,7 @@ Router.prototype.push = function push(location) {
 };
 import settings  from '@/setting'
 
-Vue.prototype.$routeProStr = settings.roterPre
+Vue.prototype.$routeProStr = settings.routePre
 
 // 实际打包时应该不引入mock
 /* eslint-disable */

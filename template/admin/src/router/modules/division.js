@@ -10,14 +10,14 @@
 
 import BasicLayout from '@/components/main';
 import setting  from '@/setting'
-let roterPre = setting.roterPre;
+let routePre = setting.routePre;
 
 const pre = 'division_';
 const meta = {
   auth: true,
 };
 export default {
-  path: roterPre + '/division',
+  path: routePre + '/division',
   name: 'division',
   header: 'division',
   redirect: {

@@ -10,12 +10,12 @@
 
 import BasicLayout from '@/components/main';
 import setting  from '@/setting'
-let roterPre = setting.roterPre;
+let routePre = setting.routePre;
 
 const pre = 'system_';
 
 export default {
-  path: roterPre+'/system',
+  path: routePre+'/system',
   name: 'system',
   header: 'system',
   redirect: {

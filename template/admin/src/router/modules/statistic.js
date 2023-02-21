@@ -10,7 +10,7 @@
 
 import BasicLayout from '@/components/main';
 import setting  from '@/setting'
-let roterPre = setting.roterPre;
+let routePre = setting.routePre;
 
 const meta = {
   auth: true,
@@ -19,7 +19,7 @@ const meta = {
 const pre = 'statistic_';
 
 export default {
-  path: roterPre+'/statistic',
+  path: routePre+'/statistic',
   name: 'statistic',
   header: 'statistic',
   redirect: {

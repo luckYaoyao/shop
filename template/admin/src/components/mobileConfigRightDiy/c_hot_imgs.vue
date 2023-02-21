@@ -153,7 +153,7 @@ export default {
         'test-dialog',
         function (editor, uiName) {
           let dialog = new window.UE.ui.Dialog({
-            iframeUrl: settings.roterPre +'/widget.images/index.html?fodder=dialog',
+            iframeUrl: settings.routePre +'/widget.images/index.html?fodder=dialog',
             editor: editor,
             name: uiName,
             title: '上传图片',

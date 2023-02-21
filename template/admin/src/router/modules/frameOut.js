@@ -9,13 +9,13 @@
 // +---------------------------------------------------------------------
 
 import setting  from '@/setting'
-let roterPre = setting.roterPre;
+let routePre = setting.routePre;
 const pre = 'kefu_';
 
 export default [
   // 登录
   {
-    path: roterPre+'/login',
+    path: routePre+'/login',
     name: 'login',
     meta: {
       title: '登录',
