@@ -1632,7 +1632,7 @@ class UserServices extends BaseServices
                 $check = true;
             }
         }
-        if ($userInfo['uid'] == $spreadUid || $userInfo['spread_uid'] == $userSpreadUid) $check = false;
+        if ($userInfo['uid'] == $spreadUid || $userInfo['uid'] == $userSpreadUid) $check = false;
         if ($check) {
             $spreadInfo = $this->dao->get($spreadUid, ['division_id', 'agent_id', 'staff_id']);
             $data = [];
