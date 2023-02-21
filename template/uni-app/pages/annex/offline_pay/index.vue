@@ -322,7 +322,7 @@
 						uni.showToast({
 							title: res.msg,
 							success() {
-								location.href = jsConfig.mweb_url;
+								location.href = jsConfig.h5_url;
 							}
 						});
 						break;

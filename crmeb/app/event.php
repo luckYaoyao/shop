@@ -38,7 +38,7 @@ return [
         'user.userVisit' => [\app\listener\user\UserVisit::class], //用户访问事件
         'notice.notice' => [\app\listener\notice\Notice::class], //通知->消息事件
         'pay.notify' => [\app\listener\pay\Notify::class],//支付异步回调
-        'SystemTimer' => [\app\listener\timer\SystemTimer::class],//定时任务事件
+        'Crontab' => [\app\listener\crontab\SystemCrontab::class],//定时任务事件
     ],
 ];
 

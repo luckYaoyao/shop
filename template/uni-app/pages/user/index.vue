@@ -59,9 +59,9 @@
 								</view>
 								<!-- #endif -->
 								<!-- #ifdef H5 -->
-								<view class="name" v-if="!userInfo.uid && isWeixin" @click="openAuto"
+								<view class="name" v-if="!userInfo.uid" @click="openAuto"
 									style="height: 100%; display: flex; align-items: center;">
-									{{$t('请点击授权')}}
+									{{$t(isWeixin ? '请点击授权' : '请点击登录')}}
 								</view>
 								<!-- #endif -->
 								<view class="name" v-if="userInfo.uid">
@@ -1008,9 +1008,11 @@
 							align-items: center;
 							color: #fff;
 							font-size: 31rpx;
-							.nickname{
+
+							.nickname {
 								max-width: 8em;
 							}
+
 							.vip {
 								margin-left: 10rpx;
 
