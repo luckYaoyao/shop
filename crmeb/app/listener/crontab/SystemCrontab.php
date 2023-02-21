@@ -22,10 +22,8 @@ class SystemCrontab implements ListenerInterface
 {
     public function handle($event): void
     {
+        //自动写入文件方便检测是否启动定时任务命令
         $time = time();
-        $date = date('Y-m-d H:i:s', time());
-        $timer_log_open = config("log.timer_log", false);
-
         new Crontab('*/6 * * * * *', function () use ($time) {
             file_put_contents(root_path() . 'runtime/.timer', $time);
         });
@@ -50,7 +48,7 @@ class SystemCrontab implements ListenerInterface
                 });
             }
             //拼团到期订单处理
-            if ($item['mark'] == 'pink_expiration') {
+            elseif ($item['mark'] == 'pink_expiration') {
                 new Crontab($timeStr, function () {
                     try {
                         /** @var StorePinkServices $storePinkServices */
@@ -63,7 +61,7 @@ class SystemCrontab implements ListenerInterface
                 });
             }
             //自动解绑上级绑定
-            if ($item['mark'] == 'agent_unbind') {
+            elseif ($item['mark'] == 'agent_unbind') {
                 new Crontab($timeStr, function () {
                     try {
                         /** @var AgentManageServices $agentManage */
@@ -76,7 +74,7 @@ class SystemCrontab implements ListenerInterface
                 });
             }
             //更新直播商品状态
-            if ($item['mark'] == 'live_product_status') {
+            elseif ($item['mark'] == 'live_product_status') {
                 new Crontab($timeStr, function () {
                     try {
                         /** @var LiveGoodsServices $liveGoods */
@@ -89,7 +87,7 @@ class SystemCrontab implements ListenerInterface
                 });
             }
             //更新直播间状态
-            if ($item['mark'] == 'live_room_status') {
+            elseif ($item['mark'] == 'live_room_status') {
                 new Crontab($timeStr, function () {
                     try {
                         /** @var LiveRoomServices $liveRoom */
@@ -103,7 +101,7 @@ class SystemCrontab implements ListenerInterface
                 });
             }
             //自动收货
-            if ($item['mark'] == 'take_delivery') {
+            elseif ($item['mark'] == 'take_delivery') {
                 new Crontab($timeStr, function () {
                     try {
                         /** @var StoreOrderTakeServices $services */
@@ -116,7 +114,7 @@ class SystemCrontab implements ListenerInterface
                 });
             }
             //查询预售到期商品自动下架
-            if ($item['mark'] == 'advance_off') {
+            elseif ($item['mark'] == 'advance_off') {
                 new Crontab($timeStr, function () {
                     try {
                         /** @var StoreProductServices $product */
@@ -129,7 +127,7 @@ class SystemCrontab implements ListenerInterface
                 });
             }
             //自动好评
-            if ($item['mark'] == 'product_replay') {
+            elseif ($item['mark'] == 'product_replay') {
                 new Crontab($timeStr, function () {
                     try {
                         /** @var StoreOrderServices $orderServices */
@@ -142,7 +140,7 @@ class SystemCrontab implements ListenerInterface
                 });
             }
             //清除昨日海报
-            if ($item['mark'] == 'clear_poster') {
+            elseif ($item['mark'] == 'clear_poster') {
                 new Crontab($timeStr, function () {
                     try {
                         /** @var SystemAttachmentServices $attach */
@@ -153,6 +151,10 @@ class SystemCrontab implements ListenerInterface
                         Log::error('清除昨日海报失败,失败原因:' . $e->getMessage());
                     }
                 });
+            }
+            //
+            else {
+
             }
         }
     }
