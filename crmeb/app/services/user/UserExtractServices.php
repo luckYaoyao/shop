@@ -142,7 +142,7 @@ class UserExtractServices extends BaseServices
             }
         });
 
-        event('notice.notice', [['uid' => $uid, 'userType' => strtolower($user['user_type']), 'extract_number' => $extract_number, 'nickname' => $user['nickname'], 'message' => $message], 'user_balance_change']);
+        event('noticeListener', [['uid' => $uid, 'userType' => strtolower($user['user_type']), 'extract_number' => $extract_number, 'nickname' => $user['nickname'], 'message' => $message], 'user_balance_change']);
         return true;
     }
 
@@ -164,7 +164,7 @@ class UserExtractServices extends BaseServices
         $userType = $userServices->value(['uid' => $userExtract['uid']], 'user_type');
         $nickname = $userServices->value(['uid' => $userExtract['uid']], 'nickname');
         $phone = $userServices->value(['uid' => $userExtract['uid']], 'phone');
-        event('notice.notice', [['uid' => $userExtract['uid'], 'userType' => strtolower($userType), 'extractNumber' => $extractNumber, 'nickname' => $nickname], 'user_extract']);
+        event('noticeListener', [['uid' => $userExtract['uid'], 'userType' => strtolower($userType), 'extractNumber' => $extractNumber, 'nickname' => $nickname], 'user_extract']);
 
         if (!$this->dao->update($id, ['status' => 1])) {
             throw new AdminException(100007);
@@ -511,7 +511,7 @@ class UserExtractServices extends BaseServices
         $systemAdmin = app()->make(SystemAdminServices::class);
         $systemAdmin->adminNewPush();
         //消息
-        event('notice.notice', [['nickname' => $user['nickname'], 'money' => $data['money']], 'kefu_send_extract_application']);
+        event('noticeListener', [['nickname' => $user['nickname'], 'money' => $data['money']], 'kefu_send_extract_application']);
 
         return true;
     }

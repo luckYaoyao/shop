@@ -209,7 +209,7 @@ class AliPayService
                     'transaction_id' => $notify->trade_no
                 ];
 
-                return Event::until('pay.notify', [$data, PayServices::ALIAPY_PAY]);
+                return Event::until('notifyListener', [$data, PayServices::ALIAPY_PAY]);
             }
             return false;
         });

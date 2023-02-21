@@ -266,9 +266,9 @@ class StoreOrderCreateServices extends BaseServices
         });
 
         // 订单创建成功后置事件
-        event('order.orderCreateAfter', [$order, compact('cartInfo', 'priceData', 'addressId', 'cartIds', 'news'), $uid, $key, $combinationId, $seckillId, $bargainId]);
+        event('orderCreateAfterListener', [$order, compact('cartInfo', 'priceData', 'addressId', 'cartIds', 'news'), $uid, $key, $combinationId, $seckillId, $bargainId]);
         // 推送订单
-        event('out.outPush', ['order_create_push', ['order_id' => (int)$order['id']]]);
+        event('outPushListener', ['order_create_push', ['order_id' => (int)$order['id']]]);
         return $order;
     }
 

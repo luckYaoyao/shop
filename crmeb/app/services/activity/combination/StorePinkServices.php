@@ -300,9 +300,9 @@ class StorePinkServices extends BaseServices
     {
         $pink = $this->dao->getOne([['id|k_id', '=', $pid], ['uid', '=', $uid]], '*', ['getProduct']);
         if ($isRemove) {
-            event('notice.notice', [['uid' => $uid, 'pink' => $pink, 'user_type' => $channel], 'send_order_pink_clone']);
+            event('noticeListener', [['uid' => $uid, 'pink' => $pink, 'user_type' => $channel], 'send_order_pink_clone']);
         } else {
-            event('notice.notice', [['uid' => $uid, 'pink' => $pink, 'user_type' => $channel], 'send_order_pink_fial']);
+            event('noticeListener', [['uid' => $uid, 'pink' => $pink, 'user_type' => $channel], 'send_order_pink_fial']);
         }
         $this->dao->update([['id|k_id', '=', $pid]], ['status' => 3, 'stop_time' => time()]);
     }
@@ -390,7 +390,7 @@ class StorePinkServices extends BaseServices
         foreach ($pinkList as $item) {
             $item['nickname'] = $pinkT_name;
             //用户发送消息
-            event('notice.notice', [
+            event('noticeListener', [
                 [
                     'list' => $item,
                     'title' => $title,
@@ -439,7 +439,7 @@ class StorePinkServices extends BaseServices
                 $res = $this->save($pink);
             }
             // 拼团团成功发送模板消息
-            event('notice.notice', [['orderInfo' => $orderInfo, 'title' => $product['title'], 'pink' => $pink], 'can_pink_success']);
+            event('noticeListener', [['orderInfo' => $orderInfo, 'title' => $product['title'], 'pink' => $pink], 'can_pink_success']);
 
             //处理拼团完成
             list($pinkAll, $pinkT, $count, $idAll, $uidAll) = $this->getPinkMemberAndPinkK($pink);
@@ -483,7 +483,7 @@ class StorePinkServices extends BaseServices
 
             PinkJob::dispatchSecs((int)(($product->effective_time * 3600) + 60), [$pink['id']]);
             // 开团成功发送模板消息
-            event('notice.notice', [['orderInfo' => $orderInfo, 'title' => $product['title'], 'pink' => $pink], 'open_pink_success']);
+            event('noticeListener', [['orderInfo' => $orderInfo, 'title' => $product['title'], 'pink' => $pink], 'open_pink_success']);
 
             if ($res) return true;
             else return false;

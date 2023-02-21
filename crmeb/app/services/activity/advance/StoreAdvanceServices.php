@@ -319,7 +319,7 @@ class StoreAdvanceServices extends BaseServices
         $data['productValue'] = $productValue;
         $data['routine_contact_type'] = sys_config('routine_contact_type', 0);
         //用户访问事件
-        event('user.userVisit', [$uid, $id, 'advance', $storeInfo['product_id'], 'view']);
+        event('userVisitListener', [$uid, $id, 'advance', $storeInfo['product_id'], 'view']);
         //浏览记录
         ProductLogJob::dispatch(['visit', ['uid' => $uid, 'product_id' => $storeInfo['product_id']]]);
         return $data;
