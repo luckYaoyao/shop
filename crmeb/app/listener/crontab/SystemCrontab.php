@@ -38,7 +38,7 @@ class SystemCrontab implements ListenerInterface
             $timeStr = $this->getTimerStr($item);
             //未支付自动取消订单
             if ($item['mark'] == 'order_cancel') {
-                new Crontab($timeStr, function () use ($date, $timer_log_open) {
+                new Crontab($timeStr, function () {
                     try {
                         /** @var StoreOrderServices $orderServices */
                         $orderServices = app()->make(StoreOrderServices::class);
@@ -51,7 +51,7 @@ class SystemCrontab implements ListenerInterface
             }
             //拼团到期订单处理
             if ($item['mark'] == 'pink_expiration') {
-                new Crontab($timeStr, function () use ($date, $timer_log_open) {
+                new Crontab($timeStr, function () {
                     try {
                         /** @var StorePinkServices $storePinkServices */
                         $storePinkServices = app()->make(StorePinkServices::class);
@@ -64,7 +64,7 @@ class SystemCrontab implements ListenerInterface
             }
             //自动解绑上级绑定
             if ($item['mark'] == 'agent_unbind') {
-                new Crontab($timeStr, function () use ($date, $timer_log_open) {
+                new Crontab($timeStr, function () {
                     try {
                         /** @var AgentManageServices $agentManage */
                         $agentManage = app()->make(AgentManageServices::class);
@@ -77,7 +77,7 @@ class SystemCrontab implements ListenerInterface
             }
             //更新直播商品状态
             if ($item['mark'] == 'live_product_status') {
-                new Crontab($timeStr, function () use ($date, $timer_log_open) {
+                new Crontab($timeStr, function () {
                     try {
                         /** @var LiveGoodsServices $liveGoods */
                         $liveGoods = app()->make(LiveGoodsServices::class);
@@ -90,7 +90,7 @@ class SystemCrontab implements ListenerInterface
             }
             //更新直播间状态
             if ($item['mark'] == 'live_room_status') {
-                new Crontab($timeStr, function () use ($date, $timer_log_open) {
+                new Crontab($timeStr, function () {
                     try {
                         /** @var LiveRoomServices $liveRoom */
                         $liveRoom = app()->make(LiveRoomServices::class);
@@ -104,7 +104,7 @@ class SystemCrontab implements ListenerInterface
             }
             //自动收货
             if ($item['mark'] == 'take_delivery') {
-                new Crontab($timeStr, function () use ($date, $timer_log_open) {
+                new Crontab($timeStr, function () {
                     try {
                         /** @var StoreOrderTakeServices $services */
                         $services = app()->make(StoreOrderTakeServices::class);
@@ -117,7 +117,7 @@ class SystemCrontab implements ListenerInterface
             }
             //查询预售到期商品自动下架
             if ($item['mark'] == 'advance_off') {
-                new Crontab($timeStr, function () use ($date, $timer_log_open) {
+                new Crontab($timeStr, function () {
                     try {
                         /** @var StoreProductServices $product */
                         $product = app()->make(StoreProductServices::class);
@@ -130,7 +130,7 @@ class SystemCrontab implements ListenerInterface
             }
             //自动好评
             if ($item['mark'] == 'product_replay') {
-                new Crontab($timeStr, function () use ($date, $timer_log_open) {
+                new Crontab($timeStr, function () {
                     try {
                         /** @var StoreOrderServices $orderServices */
                         $orderServices = app()->make(StoreOrderServices::class);
@@ -143,7 +143,7 @@ class SystemCrontab implements ListenerInterface
             }
             //清除昨日海报
             if ($item['mark'] == 'clear_poster') {
-                new Crontab($timeStr, function () use ($date, $timer_log_open) {
+                new Crontab($timeStr, function () {
                     try {
                         /** @var SystemAttachmentServices $attach */
                         $attach = app()->make(SystemAttachmentServices::class);
@@ -165,7 +165,7 @@ class SystemCrontab implements ListenerInterface
         $timer_log_open = config("log.timer_log", false);
         if ($timer_log_open){
             $date = date('Y-m-d H:i:s', time());
-            Log::notice($date . ' 执行清除昨日海报');
+            Log::notice($date . $msg);
         }
     }
     /**
