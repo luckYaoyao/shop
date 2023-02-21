@@ -404,9 +404,6 @@
 
 						case "WECHAT_H5_PAY":
 							uni.hideLoading();
-							that.$util.Tips({
-								title: that.$t(`订单创建成功`)
-							});
 							setTimeout(() => {
 								location.href = res.data.result.jsConfig.h5_url;
 							}, 2000);

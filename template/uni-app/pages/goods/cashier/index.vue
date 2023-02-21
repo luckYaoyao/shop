@@ -505,15 +505,12 @@
 
 						case "WECHAT_H5_PAY":
 							uni.hideLoading();
-							that.$util.Tips({
-								title: that.$t(`订单创建成功`)
-							}, {
-								tab: 4,
+							uni.reLaunch({
 								url: goPages + '&status=0'
-							});
+							})
 							setTimeout(() => {
 								location.href = res.data.result.jsConfig.h5_url;
-							}, 2000);
+							}, 1000);
 							break;
 
 						case 'ALIPAY_PAY':
