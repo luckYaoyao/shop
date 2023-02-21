@@ -70,6 +70,12 @@ class StoreOrderCreateServices extends BaseServices
             } else {
                 $id = $snowflake->setStartTimeStamp(strtotime('2022-01-01') * 1000)->id();
             }
+            $replace = '';
+            $chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            for ($i = 0; $i < 3; $i++) {
+                $replace .= $chars[mt_rand(0, strlen($chars) - 1)];
+            }
+            $id = substr_replace($id, $replace, -3);
         } else {
             $is_callable = function ($currentTime) {
                 $redis = Cache::store('redis');
@@ -266,9 +272,9 @@ class StoreOrderCreateServices extends BaseServices
         });
 
         // 订单创建成功后置事件
-        event('orderCreateAfterListener', [$order, compact('cartInfo', 'priceData', 'addressId', 'cartIds', 'news'), $uid, $key, $combinationId, $seckillId, $bargainId]);
+        event('OrderCreateAfterListener', [$order, compact('cartInfo', 'priceData', 'addressId', 'cartIds', 'news'), $uid, $key, $combinationId, $seckillId, $bargainId]);
         // 推送订单
-        event('outPushListener', ['order_create_push', ['order_id' => (int)$order['id']]]);
+        event('OutPushListener', ['order_create_push', ['order_id' => (int)$order['id']]]);
         return $order;
     }
 

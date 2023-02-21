@@ -56,7 +56,7 @@ class Listen extends Command
         $sleep   = $input->getOption('sleep');
         $tries   = $input->getOption('tries');
         
-        $this->app->event->trigger('queueStartListener', [$output]);
+        $this->app->event->trigger('QueueStartListener', [$output]);
 
         $this->listener->listen($connection, $queue, $delay, $sleep, $tries, $memory, $timeout);
     }

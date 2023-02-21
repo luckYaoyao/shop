@@ -40,7 +40,7 @@ class UnpaidOrderSend extends BaseJobs
             return true;
         }
         //收货给用户发送消息
-        event('noticeListener', [['order' => $orderInfo], 'order_pay_false']);
+        event('NoticeListener', [['order' => $orderInfo], 'order_pay_false']);
         return true;
     }
 

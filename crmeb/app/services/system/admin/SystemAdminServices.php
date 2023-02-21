@@ -126,7 +126,7 @@ class SystemAdminServices extends BaseServices
         [$menus, $uniqueAuth] = $services->getMenusList($adminInfo->roles, (int)$adminInfo['level']);
         $remind = Config::get('app.console_remind', false);
         if ($remind) {
-            [$queue, $timer] = Event::until('adminLoginListener', [$key]);
+            [$queue, $timer] = Event::until('AdminLoginListener', [$key]);
         }
         return [
             'token' => $tokenInfo['token'],

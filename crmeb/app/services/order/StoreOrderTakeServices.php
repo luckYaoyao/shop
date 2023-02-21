@@ -106,11 +106,11 @@ class StoreOrderTakeServices extends BaseServices
         if ($res) {
             try {
                 // 收货成功后置队列
-                event('orderTakeListener', [$order, $userInfo, $storeTitle]);
+                event('OrderTakeListener', [$order, $userInfo, $storeTitle]);
                 //收货给用户发送消息
-                event('noticeListener', [['order' => $order, 'storeTitle' => $storeTitle], 'order_take']);
+                event('NoticeListener', [['order' => $order, 'storeTitle' => $storeTitle], 'order_take']);
                 //收货给客服发送消息
-                event('noticeListener', [['order' => $order, 'storeTitle' => $storeTitle], 'send_admin_confirm_take_over']);
+                event('NoticeListener', [['order' => $order, 'storeTitle' => $storeTitle], 'send_admin_confirm_take_over']);
             } catch (\Throwable $exception) {
 
             }
@@ -182,7 +182,7 @@ class StoreOrderTakeServices extends BaseServices
             /** @var StoreOrderServices $orderServices */
             $orderServices = app()->make(StoreOrderServices::class);
             $orderServices->update($order['id'], ['gain_integral' => $give_integral], 'id');
-            event('noticeListener', [['order' => $order, 'storeTitle' => $storeTitle, 'give_integral' => $give_integral, 'integral' => $integral], 'integral_accout']);
+            event('NoticeListener', [['order' => $order, 'storeTitle' => $storeTitle, 'give_integral' => $give_integral, 'integral' => $integral], 'integral_accout']);
             return true;
         }
         return true;
@@ -473,7 +473,7 @@ class StoreOrderTakeServices extends BaseServices
             $goodsPrice = $brokeragePrice;
         }
         //提醒推送
-        event('noticeListener', [['spread_uid' => $spread_uid, 'userType' => $userType, 'brokeragePrice' => $brokeragePrice, 'goodsName' => $goodsName, 'goodsPrice' => $goodsPrice, 'add_time' => $orderInfo['add_time'] ?? time()], 'order_brokerage']);
+        event('NoticeListener', [['spread_uid' => $spread_uid, 'userType' => $userType, 'brokeragePrice' => $brokeragePrice, 'goodsName' => $goodsName, 'goodsPrice' => $goodsPrice, 'add_time' => $orderInfo['add_time'] ?? time()], 'order_brokerage']);
     }
 
 
@@ -510,7 +510,7 @@ class StoreOrderTakeServices extends BaseServices
         }
 
         //用户升级事件
-        event('userLevelListener', [$order['uid']]);
+        event('UserLevelListener', [$order['uid']]);
 
         return $res;
     }

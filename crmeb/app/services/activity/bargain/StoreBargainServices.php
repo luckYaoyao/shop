@@ -505,7 +505,7 @@ class StoreBargainServices extends BaseServices
         $data['bargain']['price'] = bcsub($data['bargain']['price'], (string)$userBargainInfo['alreadyPrice'], 2);
 
         //用户访问事件
-        event('userVisitListener', [$user['uid'], $id, 'bargain', $bargain['product_id'], 'view']);
+        event('UserVisitListener', [$user['uid'], $id, 'bargain', $bargain['product_id'], 'view']);
 
         //浏览记录
         ProductLogJob::dispatch(['visit', ['uid' => $user['uid'], 'product_id' => $bargain['product_id']]]);
@@ -646,7 +646,7 @@ class StoreBargainServices extends BaseServices
         $price = $userHelpService->setBargainRecord($uid, $bargainUserInfo, $bargainInfo);
         if ($price) {
             if (!$bargainUserService->getSurplusPrice($bargainUserTableId, 1)) {
-                event('noticeListener', [['uid' => $bargainUserUid, 'bargainInfo' => $bargainInfo, 'bargainUserInfo' => $bargainUserInfo,], 'bargain_success']);
+                event('NoticeListener', [['uid' => $bargainUserUid, 'bargainInfo' => $bargainInfo, 'bargainUserInfo' => $bargainUserInfo,], 'bargain_success']);
             }
         }
         return ['bargainUserInfo' => $bargainUserInfo, 'price' => $price];

@@ -93,13 +93,13 @@ class StoreOrderSuccessServices extends BaseServices
         }
         $orderInfo['send_name'] = $orderInfo['real_name'];
         //订单支付成功后置事件
-        event('orderPaySuccessListener', [$orderInfo]);
+        event('OrderPaySuccessListener', [$orderInfo]);
         //用户推送消息事件
-        event('noticeListener', [$orderInfo, 'order_pay_success']);
+        event('NoticeListener', [$orderInfo, 'order_pay_success']);
         //支付成功给客服发送消息
-        event('noticeListener', [$orderInfo, 'admin_pay_success_code']);
+        event('NoticeListener', [$orderInfo, 'admin_pay_success_code']);
         // 推送订单
-        event('outPushListener', ['order_pay_push', ['order_id' => (int)$orderInfo['id']]]);
+        event('OutPushListener', ['order_pay_push', ['order_id' => (int)$orderInfo['id']]]);
         $res = $res1 && $resPink;
         return false !== $res;
     }

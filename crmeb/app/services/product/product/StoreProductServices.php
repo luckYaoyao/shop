@@ -1393,7 +1393,7 @@ class StoreProductServices extends BaseServices
             }
             $data['priceName'] = $this->getPacketPrice($storeInfo, $attrValue, $uid);
             //用户访问事件
-            event('userVisitListener', [$uid, $id, 'product', $storeInfo['cate_id'], 'view']);
+            event('UserVisitListener', [$uid, $id, 'product', $storeInfo['cate_id'], 'view']);
         }
 
         /** @var StoreProductReplyServices $storeProductReplyService */

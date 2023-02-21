@@ -278,7 +278,7 @@ class UserRechargeServices extends BaseServices
         $userMoneyServices->income('user_recharge_refund', $UserRecharge['uid'], $number, $now_money, $id);
 
         //提醒推送
-        event('noticeListener', [['user_type' => strtolower($userInfo['user_type']), 'data' => $data, 'UserRecharge' => $UserRecharge, 'now_money' => $refund_price], 'recharge_order_refund_status']);
+        event('NoticeListener', [['user_type' => strtolower($userInfo['user_type']), 'data' => $data, 'UserRecharge' => $UserRecharge, 'now_money' => $refund_price], 'recharge_order_refund_status']);
         return true;
     }
 
@@ -471,7 +471,7 @@ class UserRechargeServices extends BaseServices
         $capitalFlowServices->setFlow($order, 'recharge');
 
         //提醒推送
-        event('noticeListener', [['order' => $order, 'now_money' => $now_money], 'recharge_success']);
+        event('NoticeListener', [['order' => $order, 'now_money' => $now_money], 'recharge_success']);
         return true;
     }
 
