@@ -750,7 +750,7 @@ class UserBillServices extends BaseServices
         $where_data = [];
         $where_data['time'] = $where['time'];
         if (isset($where['nickname']) && $where['nickname']) {
-            $where_data[] = ['u.account|u.nickname|u.uid|u.phone', 'LIKE', "%$where[nickname]%"];
+            $where_data[] = ['u.nickname|u.uid', 'LIKE', "%$where[nickname]%"];
         }
         if (isset($where['price_max']) && isset($where['price_min'])) {
             if ($where['price_max'] != '' && $where['price_min'] != '') {
