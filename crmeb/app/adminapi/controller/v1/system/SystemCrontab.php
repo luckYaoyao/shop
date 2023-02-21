@@ -3,12 +3,12 @@
 namespace app\adminapi\controller\v1\system;
 
 use app\adminapi\controller\AuthController;
-use app\services\system\timer\SystemTimerServices;
+use app\services\system\crontab\SystemCrontabServices;
 use think\facade\App;
 
-class SystemTimer extends AuthController
+class SystemCrontab extends AuthController
 {
-    public function __construct(App $app, SystemTimerServices $services)
+    public function __construct(App $app, SystemCrontabServices $services)
     {
         parent::__construct($app);
         $this->services = $services;

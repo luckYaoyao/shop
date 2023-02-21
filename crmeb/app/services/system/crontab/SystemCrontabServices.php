@@ -1,8 +1,8 @@
 <?php
 
-namespace app\services\system\timer;
+namespace app\services\system\crontab;
 
-use app\dao\system\timer\SystemTimerDao;
+use app\dao\system\crontab\SystemCrontabDao;
 use app\services\activity\combination\StorePinkServices;
 use app\services\activity\live\LiveGoodsServices;
 use app\services\activity\live\LiveRoomServices;
@@ -15,7 +15,7 @@ use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\exceptions\AdminException;
 use think\facade\Log;
 
-class SystemTimerServices extends BaseServices
+class SystemCrontabServices extends BaseServices
 {
     /**
      * 定时任务类型
@@ -33,7 +33,7 @@ class SystemTimerServices extends BaseServices
         'clear_poster' => '清除昨日海报',
     ];
 
-    public function __construct(SystemTimerDao $dao)
+    public function __construct(SystemCrontabDao $dao)
     {
         $this->dao = $dao;
     }

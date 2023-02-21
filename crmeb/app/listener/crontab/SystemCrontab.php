@@ -10,7 +10,7 @@ use app\services\order\StoreOrderServices;
 use app\services\order\StoreOrderTakeServices;
 use app\services\product\product\StoreProductServices;
 use app\services\system\attachment\SystemAttachmentServices;
-use app\services\system\timer\SystemTimerServices;
+use app\services\system\crontab\SystemCrontabServices;
 use crmeb\interfaces\ListenerInterface;
 use think\facade\Log;
 use Workerman\Crontab\Crontab;
@@ -27,9 +27,9 @@ class SystemCrontab implements ListenerInterface
             file_put_contents(root_path() . 'runtime/.timer', time());
         });
 
-        /** @var SystemTimerServices $systemTimerServices */
-        $systemTimerServices = app()->make(SystemTimerServices::class);
-        $list = $systemTimerServices->selectList(['is_del' => 0, 'is_open' => 1])->toArray();
+        /** @var SystemCrontabServices $systemTimerServices */
+        $systemCrontabServices = app()->make(SystemCrontabServices::class);
+        $list = $systemCrontabServices->selectList(['is_del' => 0, 'is_open' => 1])->toArray();
         foreach ($list as &$item) {
             //获取定时任务时间字符串
             $timeStr = $this->getTimerStr($item);
