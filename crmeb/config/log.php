@@ -17,7 +17,7 @@ return [
     // 默认日志记录通道
     'default'      => Env::get('log.channel', 'file'),
     // 日志记录级别
-    'level'        => ['error', 'warning', 'fail', 'success'],
+    'level'        => ['error', 'warning', 'fail', 'success', 'info', 'notice'],
     // 日志类型记录的通道 ['error'=>'email',...]
     'type_channel' => [],
     //是否开启业务成功日志

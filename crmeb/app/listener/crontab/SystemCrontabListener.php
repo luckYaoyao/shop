@@ -148,7 +148,7 @@ class SystemCrontabListener implements ListenerInterface
         $timer_log_open = config("log.timer_log", false);
         if ($timer_log_open){
             $date = date('Y-m-d H:i:s', time());
-            Log::notice($date . $msg);
+            Log::info($date . $msg);
         }
     }
 
