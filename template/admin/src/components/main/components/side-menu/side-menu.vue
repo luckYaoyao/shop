@@ -185,7 +185,6 @@ export default {
       this.catName = sessionStorage.getItem('menuActiveTitle');
       this.getChildrenList(sessionStorage.getItem('menuActive'));
     } else {
-      console.log(this.openedNames);
       this.handleSelect(this.openedNames[0]);
     }
   },
@@ -193,7 +192,6 @@ export default {
     getChildrenList(path) {
       this.menuList.map((e) => {
         if (e.path === path) {
-          console.log(e, 'eeee');
           this.childList = e.children || [];
         }
       });
@@ -202,12 +200,9 @@ export default {
       this.childOptions = [];
       this.menuList.map((e) => {
         if (e.path === name) {
-          console.log(e, 'eeee');
           if (e.children && e.children.length) {
-            console.log(e.children, 'e.children');
             this.jump(e.children);
             this.catName = e.title;
-            console.log('1');
             // this.activeMenuPath = e.path;
             this.childList = e.children || [];
             sessionStorage.setItem('menuActive', e.path);
@@ -220,8 +215,6 @@ export default {
             //   this.$emit('on-select', e.children[0].path);
             // }
           } else {
-            console.log('2');
-
             if (!type) {
               this.$emit('on-select', name);
             }
@@ -235,11 +228,8 @@ export default {
     },
     jump(data) {
       if (data[0].children && data[0].children.length) {
-        console.log('3');
         this.jump(data[0].children);
       } else {
-        console.log('4');
-
         this.catName = data[0].title;
         // this.activeMenuPath = data[0].path;
         this.activeChildName = data[0].path;
