@@ -300,6 +300,7 @@
 
 	.collectionGoods .item .text {
 		height: 130rpx;
+		flex: 1;
 		font-size: 28rpx;
 		color: #282828;
 	}
