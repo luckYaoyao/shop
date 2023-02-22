@@ -139,9 +139,9 @@ class UserServices extends BaseServices
         //新用户注册奖励
         $this->rewardNewUser((int)$res->uid);
         //用户生成后置事件
-        event('user.register', [$spreadUid, $userType, $user['nickname'], $res->uid, 1]);
+        event('UserRegisterListener', [$spreadUid, $userType, $user['nickname'], $res->uid, 1]);
         //推送消息
-        event('notice.notice', [['spreadUid' => $spreadUid, 'user_type' => $userType, 'nickname' => $user['nickname']], 'bind_spread_uid']);
+        event('NoticeListener', [['spreadUid' => $spreadUid, 'user_type' => $userType, 'nickname' => $user['nickname']], 'bind_spread_uid']);
         return $res;
     }
 
@@ -775,7 +775,7 @@ class UserServices extends BaseServices
                 }
                 $res1 = $userMoneyServices->income('system_sub', $user['uid'], $data['money'], $edit['now_money'], $data['adminId'] ?? 0);
             }
-            event('out.outPush', ['user_update_push', ['uid' => $id, 'type' => 'money', 'value' => $data['money_status'] == 2 ? -floatval($data['money']) : $data['money']]]);
+            event('OutPushListener', ['user_update_push', ['uid' => $id, 'type' => 'money', 'value' => $data['money_status'] == 2 ? -floatval($data['money']) : $data['money']]]);
         } else {
             $res1 = true;
         }
@@ -796,7 +796,7 @@ class UserServices extends BaseServices
                 $integral_data['mark'] = '系统扣除了' . floatval($data['integration']) . '积分';
                 $res2 = $userBill->expendIntegral($user['uid'], 'system_sub', $integral_data);
             }
-            event('out.outPush', ['user_update_push', ['uid' => $id, 'type' => 'point', 'value' => $data['integration_status'] == 2 ? -intval($data['integration']) : $data['integration']]]);
+            event('OutPushListener', ['user_update_push', ['uid' => $id, 'type' => 'point', 'value' => $data['integration_status'] == 2 ? -intval($data['integration']) : $data['integration']]]);
         } else {
             $res2 = true;
         }

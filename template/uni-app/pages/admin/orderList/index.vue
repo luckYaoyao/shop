@@ -177,9 +177,6 @@
 			},
 			searchBut() {
 				let that = this;
-				if (!that.where.keywords.trim()) return this.$util.Tips({
-					title: that.$t(`请输入要搜索的商品`)
-				});
 				that.focus = false;
 				that.where.page = 1;
 				that.loading = false;

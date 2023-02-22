@@ -519,10 +519,16 @@
 						case 'ALIPAY_PAY':
 							//#ifdef H5
 							uni.hideLoading();
+							that.$util.Tips({
+								title: that.$t(`等待支付中`)
+							}, {
+								tab: 4,
+								url: goPages + '&status=0'
+							});
 							that.formContent = res.data.result.jsConfig;
-							that.$nextTick(() => {
+							setTimeout(() => {
 								document.getElementById('alipaysubmit').submit();
-							})
+							}, 1500);
 							//#endif
 							// #ifdef MP
 							uni.navigateTo({

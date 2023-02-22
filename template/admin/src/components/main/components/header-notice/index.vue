@@ -24,7 +24,7 @@
   font-size: 14px !important;
   font-weight: 400;
   line-height: 22px;
-  color: #515a6e;
+  color: #fff;
 }
 .header-notice .ivu-dropdown-item ~ .ivu-dropdown-item {
   border-top: 1px solid #e8eaec;

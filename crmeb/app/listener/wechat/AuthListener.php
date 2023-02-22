@@ -8,10 +8,10 @@ use crmeb\interfaces\ListenerInterface;
 
 /**
  * 用户授权后置事件
- * Class Auth
+ * Class AuthListener
  * @package app\listener\wechat
  */
-class Auth implements ListenerInterface
+class AuthListener implements ListenerInterface
 {
     public function handle($event): void
     {

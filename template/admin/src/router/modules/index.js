@@ -42,7 +42,7 @@ const meta = {
 const pre = 'home_';
 
 export default {
-  path: routePre + '/',
+  path: routePre + '/home',
   name: 'home',
   header: 'home',
   redirect: {

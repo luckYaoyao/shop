@@ -201,8 +201,6 @@ class V3WechatPay extends BasePay implements PayInterface
     {
         return $this->instance->v3pay->handleNotify(function ($notify, $successful) {
 
-            Log::info('支付回调:' . json_encode($notify));
-
             if ($successful) {
                 $data = [
                     'attach' => $notify->attach,
@@ -210,7 +208,7 @@ class V3WechatPay extends BasePay implements PayInterface
                     'transaction_id' => $notify->transaction_id
                 ];
 
-                return Event::until('pay.notify', [$data, PayServices::WEIXIN_PAY]);
+                return Event::until('NotifyListener', [$data, PayServices::WEIXIN_PAY]);
             }
 
             return false;

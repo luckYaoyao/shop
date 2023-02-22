@@ -2,15 +2,15 @@
   <div class="header-bar">
     <sider-trigger :collapsed="collapsed" @on-change="handleCollpasedChange"></sider-trigger>
     <span class="i-layout-header-trigger" @click="handleReload">
-      <Icon type="ios-refresh" />
+      <Icon type="ios-refresh" color='#fff' />
     </span>
-    <custom-bread-crumb
+    <!-- <custom-bread-crumb
       show-icon
       style="margin-left: 30px"
       :list="breadCrumbList"
       :listLast="crumbPast"
       :collapsed="collapsed"
-    ></custom-bread-crumb>
+    ></custom-bread-crumb> -->
     <div class="custom-content-con">
       <slot></slot>
     </div>
@@ -18,7 +18,6 @@
 </template>
 <style scoped lang="less">
 .ivu-icon-ios-refresh {
-  color: #999 !important;
   font-size: 23px;
 }
 .i-layout-header-trigger {

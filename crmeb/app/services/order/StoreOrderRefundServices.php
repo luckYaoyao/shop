@@ -278,7 +278,7 @@ class StoreOrderRefundServices extends BaseServices
         app()->make(StoreOrderInvoiceServices::class)->update(['order_id' => $order['id']], ['is_refund' => 1]);
         //订单退款记录
         ProductLogJob::dispatch(['refund', ['uid' => $order['uid'], 'order_id' => $order['id']]]);
-        event('notice.notice', [['data' => $refundData, 'order' => $order], 'order_refund']);
+        event('NoticeListener', [['data' => $refundData, 'order' => $order], 'order_refund']);
         return true;
     }
 
@@ -599,7 +599,7 @@ class StoreOrderRefundServices extends BaseServices
             $capitalFlowServices->setFlow($order, 'refund');
         }
 
-        event('notice.notice', [['data' => $data, 'order' => $order], 'order_refund']);
+        event('NoticeListener', [['data' => $data, 'order' => $order], 'order_refund']);
     }
 
     /**
@@ -693,7 +693,7 @@ class StoreOrderRefundServices extends BaseServices
                 'change_time' => time()
             ]);
         });
-        event('notice.notice', [['orderInfo' => $orderRefundInfo], 'send_order_refund_no_status']);
+        event('NoticeListener', [['orderInfo' => $orderRefundInfo], 'send_order_refund_no_status']);
         return true;
     }
 
@@ -850,7 +850,7 @@ class StoreOrderRefundServices extends BaseServices
         } catch (\Exception $e) {
         }
         //提醒推送
-        event('notice.notice', [['order' => $order], 'send_order_apply_refund']);
+        event('NoticeListener', [['order' => $order], 'send_order_apply_refund']);
 
         return true;
 
@@ -1012,11 +1012,11 @@ class StoreOrderRefundServices extends BaseServices
         });
         $storeOrderCartInfoServices->clearOrderCartInfo($order['id']);
         //申请退款事件
-        event('order.orderRefundCreateAfter', [$order]);
+        event('OrderRefundCreateAfterListener', [$order]);
         //提醒推送
-        event('notice.notice', [['order' => $order], 'send_order_apply_refund']);
+        event('NoticeListener', [['order' => $order], 'send_order_apply_refund']);
         //推送订单
-        event('out.outPush', ['refund_create_push', ['order_id' => (int)$order['id']]]);
+        event('OutPushListener', ['refund_create_push', ['order_id' => (int)$order['id']]]);
         try {
             ChannelService::instance()->send('NEW_REFUND_ORDER', ['order_id' => $order['order_id']]);
         } catch (\Exception $e) {
@@ -1294,9 +1294,9 @@ class StoreOrderRefundServices extends BaseServices
         ]);
 
         //售后订单取消后置事件
-        event('order.orderRefundCancelAfter', [$orderRefundInfo]);
+        event('OrderRefundCancelAfterListener', [$orderRefundInfo]);
         // 推送订单
-        event('out.outPush', ['refund_cancel_push', ['order_id' => (int)$orderRefundInfo['id']]]);
+        event('OutPushListener', ['refund_cancel_push', ['order_id' => (int)$orderRefundInfo['id']]]);
         return true;
     }
 

@@ -10,7 +10,7 @@ use app\services\order\StoreOrderServices;
 use app\services\order\StoreOrderTakeServices;
 use app\services\product\product\StoreProductServices;
 use app\services\system\attachment\SystemAttachmentServices;
-use app\services\system\timer\SystemTimerServices;
+use app\services\system\crontab\SystemCrontabServices;
 use crmeb\interfaces\ListenerInterface;
 use think\facade\Log;
 use Workerman\Crontab\Crontab;
@@ -18,19 +18,18 @@ use Workerman\Crontab\Crontab;
 /**
  * 系统定时任务
  */
-class SystemCrontab implements ListenerInterface
+class SystemCrontabListener implements ListenerInterface
 {
     public function handle($event): void
     {
         //自动写入文件方便检测是否启动定时任务命令
-        $time = time();
-        new Crontab('*/6 * * * * *', function () use ($time) {
-            file_put_contents(root_path() . 'runtime/.timer', $time);
+        new Crontab('*/6 * * * * *', function () {
+            file_put_contents(root_path() . 'runtime/.timer', time());
         });
 
-        /** @var SystemTimerServices $systemTimerServices */
-        $systemTimerServices = app()->make(SystemTimerServices::class);
-        $list = $systemTimerServices->selectList(['is_del' => 0, 'is_open' => 1])->toArray();
+        /** @var SystemCrontabServices $systemTimerServices */
+        $systemCrontabServices = app()->make(SystemCrontabServices::class);
+        $list = $systemCrontabServices->selectList(['is_del' => 0, 'is_open' => 1])->toArray();
         foreach ($list as &$item) {
             //获取定时任务时间字符串
             $timeStr = $this->getTimerStr($item);
@@ -38,9 +37,7 @@ class SystemCrontab implements ListenerInterface
             if ($item['mark'] == 'order_cancel') {
                 new Crontab($timeStr, function () {
                     try {
-                        /** @var StoreOrderServices $orderServices */
-                        $orderServices = app()->make(StoreOrderServices::class);
-                        $orderServices->orderUnpaidCancel();
+                        app()->make(StoreOrderServices::class)->orderUnpaidCancel();
                         $this->crontabLog(' 执行未支付自动取消订单');
                     } catch (\Throwable $e) {
                         Log::error('自动取消订单失败,失败原因:' . $e->getMessage());
@@ -51,9 +48,7 @@ class SystemCrontab implements ListenerInterface
             elseif ($item['mark'] == 'pink_expiration') {
                 new Crontab($timeStr, function () {
                     try {
-                        /** @var StorePinkServices $storePinkServices */
-                        $storePinkServices = app()->make(StorePinkServices::class);
-                        $storePinkServices->statusPink();
+                        app()->make(StorePinkServices::class)->statusPink();
                         $this->crontabLog(' 执行拼团到期订单处理');
                     } catch (\Throwable $e) {
                         Log::error('拼团到期订单处理失败,失败原因:' . $e->getMessage());
@@ -64,9 +59,7 @@ class SystemCrontab implements ListenerInterface
             elseif ($item['mark'] == 'agent_unbind') {
                 new Crontab($timeStr, function () {
                     try {
-                        /** @var AgentManageServices $agentManage */
-                        $agentManage = app()->make(AgentManageServices::class);
-                        $agentManage->removeSpread();
+                        app()->make(AgentManageServices::class)->removeSpread();
                         $this->crontabLog(' 执行自动解绑上级绑定');
                     } catch (\Throwable $e) {
                         Log::error('自动解除上级绑定失败,失败原因:' . $e->getMessage());
@@ -77,9 +70,7 @@ class SystemCrontab implements ListenerInterface
             elseif ($item['mark'] == 'live_product_status') {
                 new Crontab($timeStr, function () {
                     try {
-                        /** @var LiveGoodsServices $liveGoods */
-                        $liveGoods = app()->make(LiveGoodsServices::class);
-                        $liveGoods->syncGoodStatus();
+                        app()->make(LiveGoodsServices::class)->syncGoodStatus();
                         $this->crontabLog(' 执行更新直播商品状态');
                     } catch (\Throwable $e) {
                         Log::error('更新直播商品状态失败,失败原因:' . $e->getMessage());
@@ -90,11 +81,8 @@ class SystemCrontab implements ListenerInterface
             elseif ($item['mark'] == 'live_room_status') {
                 new Crontab($timeStr, function () {
                     try {
-                        /** @var LiveRoomServices $liveRoom */
-                        $liveRoom = app()->make(LiveRoomServices::class);
-                        $liveRoom->syncRoomStatus();
+                        app()->make(LiveRoomServices::class)->syncRoomStatus();
                         $this->crontabLog(' 执行更新直播间状态');
-
                     } catch (\Throwable $e) {
                         Log::error('更新直播间状态失败,失败原因:' . $e->getMessage());
                     }
@@ -104,9 +92,7 @@ class SystemCrontab implements ListenerInterface
             elseif ($item['mark'] == 'take_delivery') {
                 new Crontab($timeStr, function () {
                     try {
-                        /** @var StoreOrderTakeServices $services */
-                        $services = app()->make(StoreOrderTakeServices::class);
-                        $services->autoTakeOrder();
+                        app()->make(StoreOrderTakeServices::class)->autoTakeOrder();
                         $this->crontabLog(' 执行自动收货');
                     } catch (\Throwable $e) {
                         Log::error('自动收货失败,失败原因:' . $e->getMessage());
@@ -117,9 +103,7 @@ class SystemCrontab implements ListenerInterface
             elseif ($item['mark'] == 'advance_off') {
                 new Crontab($timeStr, function () {
                     try {
-                        /** @var StoreProductServices $product */
-                        $product = app()->make(StoreProductServices::class);
-                        $product->downAdvance();
+                        app()->make(StoreProductServices::class)->downAdvance();
                         $this->crontabLog(' 执行预售到期商品自动下架');
                     } catch (\Throwable $e) {
                         Log::error('预售到期商品自动下架失败,失败原因:' . $e->getMessage());
@@ -130,9 +114,7 @@ class SystemCrontab implements ListenerInterface
             elseif ($item['mark'] == 'product_replay') {
                 new Crontab($timeStr, function () {
                     try {
-                        /** @var StoreOrderServices $orderServices */
-                        $orderServices = app()->make(StoreOrderServices::class);
-                        $orderServices->autoComment();
+                        app()->make(StoreOrderServices::class)->autoComment();
                         $this->crontabLog(' 执行自动好评');
                     } catch (\Throwable $e) {
                         Log::error('自动好评失败,失败原因:' . $e->getMessage());
@@ -143,9 +125,7 @@ class SystemCrontab implements ListenerInterface
             elseif ($item['mark'] == 'clear_poster') {
                 new Crontab($timeStr, function () {
                     try {
-                        /** @var SystemAttachmentServices $attach */
-                        $attach = app()->make(SystemAttachmentServices::class);
-                        $attach->emptyYesterdayAttachment();
+                        app()->make(SystemAttachmentServices::class)->emptyYesterdayAttachment();
                         $this->crontabLog(' 执行清除昨日海报');
                     } catch (\Throwable $e) {
                         Log::error('清除昨日海报失败,失败原因:' . $e->getMessage());
@@ -159,7 +139,8 @@ class SystemCrontab implements ListenerInterface
         }
     }
 
-    /** 定时任务日志
+    /**
+     * 定时任务日志
      * @param $msg
      */
     public function crontabLog($msg)
@@ -167,9 +148,10 @@ class SystemCrontab implements ListenerInterface
         $timer_log_open = config("log.timer_log", false);
         if ($timer_log_open){
             $date = date('Y-m-d H:i:s', time());
-            Log::notice($date . $msg);
+            Log::info($date . $msg);
         }
     }
+
     /**
      *  0   1   2   3   4   5
      * |   |   |   |   |   |

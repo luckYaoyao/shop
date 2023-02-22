@@ -9,28 +9,28 @@
     <a
       class="drop-menu-a"
       type="text"
+      :class="{ on: parentItem.path == activeMenuPath }"
       @mouseover="handleMousemove($event, children)"
       :style="{ textAlign: !hideTitle ? 'left' : '' }"
-      ><common-icon :size="rootIconSize" :color="textColor" :type="parentItem.icon" /><span
-        class="menu-title"
+      ><common-icon :color="textColor" :type="parentItem.icon" /><Icon
+        style="float: right"
         v-if="!hideTitle"
-        >{{ parentItem.title }}</span
-      ><Icon style="float: right" v-if="!hideTitle" type="ios-arrow-forward" :size="16"
-    /></a>
+        type="ios-arrow-forward"
+        :size="16"
+      />
+      <span class="title">{{ parentItem.title }}</span></a
+    >
     <DropdownMenu ref="dropdown" slot="list">
       <div v-for="child in children">
         <template v-if="child.auth === undefined">
           <collapsed-menu
             class="child-menu"
             v-if="showChildren(child)"
-            :icon-size="iconSize"
             :parent-item="child"
             :key="`drop-${child.path}`"
           ></collapsed-menu>
           <DropdownItem v-else :key="`drop-${child.path}`" :name="child.path"
-            ><common-icon :size="iconSize" :type="child.icon" /><span class="menu-title">{{
-              child.title
-            }}</span></DropdownItem
+            ><common-icon :type="child.icon" /><span class="menu-title">{{ child.title }}1</span></DropdownItem
           >
         </template>
       </div>
@@ -53,6 +53,10 @@ export default {
     rootIconSize: {
       type: Number,
       default: 16,
+    },
+    activeMenuPath: {
+      type: String,
+      default: '',
     },
   },
   data() {

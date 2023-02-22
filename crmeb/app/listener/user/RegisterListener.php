@@ -13,10 +13,10 @@ use crmeb\interfaces\ListenerInterface;
 
 /**
  * 注册完成后置事件
- * Class Register
+ * Class RegisterListener
  * @package app\listener\user
  */
-class Register implements ListenerInterface
+class RegisterListener implements ListenerInterface
 {
     /**
      * 注册完成后置事件

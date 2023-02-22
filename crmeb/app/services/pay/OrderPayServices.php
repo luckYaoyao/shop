@@ -186,12 +186,17 @@ class OrderPayServices
         $payKey = md5($order['order_id']);
         switch ($payType) {
             case PayServices::ALIAPY_PAY:
-                $jsConfig->invalid = time() + 60;
+                if (request()->isPc()) $jsConfig->invalid = time() + 60;
                 CacheService::set($payKey, ['order_id' => $order['order_id'], 'other_pay_type' => false], 300);
                 break;
             case PayServices::ALLIN_PAY:
                 if (request()->isWechat()) {
                     $jsConfig['pay_url'] = AllinPay::UNITODER_H5UNIONPAY;
+                }
+                break;
+            case PayServices::WEIXIN_PAY:
+                if (isset($jsConfig['mweb_url'])) {
+                    $jsConfig['h5_url'] = $jsConfig['mweb_url'];
                 }
         }
 

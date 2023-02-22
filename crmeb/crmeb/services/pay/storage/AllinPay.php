@@ -147,7 +147,7 @@ class AllinPay extends BasePay implements PayInterface
                     'transaction_id' => $notify['trxid']
                 ];
 
-                return Event::until('pay.notify', [$data, PayServices::ALLIN_PAY]);
+                return Event::until('NotifyListener', [$data, PayServices::ALLIN_PAY]);
             }
             return false;
         });

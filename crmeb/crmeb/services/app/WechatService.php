@@ -174,7 +174,7 @@ class WechatService
                             $data['out_trade_no'] = $message['order_info']['trade_no'];
                             $data['transaction_id'] = $message['order_info']['transaction_id'];
                             $data['opneid'] = $message['FromUserName'];
-                            if (Event::until('pay.notify', [$data, PayServices::WEIXIN_PAY])) {
+                            if (Event::until('NotifyListener', [$data, PayServices::WEIXIN_PAY])) {
                                 $response = 'success';
                             } else {
                                 $response = 'faild';
@@ -635,7 +635,7 @@ class WechatService
                     'transaction_id' => $notify->transaction_id
                 ];
 
-                return Event::until('pay.notify', [$data, PayServices::WEIXIN_PAY]);
+                return Event::until('NotifyListener', [$data, PayServices::WEIXIN_PAY]);
             }
 
             return false;

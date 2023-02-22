@@ -11,10 +11,10 @@ use think\facade\Log;
 
 /**
  * 订单确认收货
- * Class OrderTake
+ * Class OrderTakeListener
  * @package app\listener\order
  */
-class OrderTake implements ListenerInterface
+class OrderTakeListener implements ListenerInterface
 {
     public function handle($event): void
     {

@@ -3,17 +3,18 @@
 namespace app\listener\order;
 
 use app\jobs\RefundOrderJob;
+use app\services\order\OutStoreOrderRefundServices;
 use crmeb\interfaces\ListenerInterface;
 
 /**
- * 售后单取消
- * Class OrderRefundCancelAfter
+ * 售后单生成
+ * Class orderRefundCreateAfter
  * @package app\listener\order
  */
-class OrderRefundCancelAfter implements ListenerInterface
+class OrderRefundCreateAfterListener implements ListenerInterface
 {
     public function handle($event): void
     {
-        [$orderRefundInfo] = $event;
+        [$order] = $event;
     }
 }

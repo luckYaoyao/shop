@@ -231,7 +231,7 @@ export default {
             if (data.timer === false) {
               this.$Notice.warning({
                 title: '温馨提示',
-                desc: '您的【定时任务】未开启，没有开启会导致自动收货、未支付自动取消订单、订单自动好评、拼团到期退款等任务无法正常执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/6962" target="_blank">点击查看开启方法</a>',
+                desc: '您的【定时任务】未开启，没有开启会导致自动收货、未支付自动取消订单、订单自动好评、拼团到期退款等任务无法正常执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7211" target="_blank">点击查看开启方法</a>',
                 duration: 30,
               });
             }
@@ -239,10 +239,10 @@ export default {
             this.checkSocket();
           } catch (e) {}
 
-          return this.$router.replace({ path: this.$routeProStr + '/home/' || this.$routeProStr + '/' });
+          return this.$router.replace({ path: res.data.menus[0].path || this.$routeProStr + '/' });
         })
         .catch((res) => {
-          msg()
+          msg();
           let data = res === undefined ? {} : res;
           this.$Message.error(data.msg || '登录失败');
           this.login_captcha = res.data.login_captcha;
