@@ -92,7 +92,7 @@
 				loadend: false,
 				collectProductList: [],
 				count: 0,
-				limit: 8,
+				limit: 15,
 				page: 1,
 				isAuto: false, //没有授权的不会自动授权
 				isShowAuth: false, //是否隐藏授权
