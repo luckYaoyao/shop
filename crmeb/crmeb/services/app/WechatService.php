@@ -80,7 +80,7 @@ class WechatService
         ];
         if (isset($wechat['wechat_encode']) && (int)$wechat['wechat_encode'] > 0 && isset($wechat['wechat_encodingaeskey']) && !empty($wechat['wechat_encodingaeskey']))
             $config['aes_key'] = $wechat['wechat_encodingaeskey'];
-        if (isset($payment['pay_weixin_open']) && $payment['pay_weixin_open'] == 'weixin') {
+        if (isset($payment['pay_weixin_open'])) {
             $config['payment'] = [
                 'app_id' => $appId,
                 'merchant_id' => trim($payment['pay_weixin_mchid']),
