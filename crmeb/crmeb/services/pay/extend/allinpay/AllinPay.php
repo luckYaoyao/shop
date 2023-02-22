@@ -198,7 +198,9 @@ class AllinPay extends Client
         $this->api = self::UNITODER_PAY_API;
         $this->payType = $isWechat ? 'W01' : 'A01';
         $this->version = self::VERSION_NUM_11;
-        return $this->create($trxamt, $orderId, $body, null, null, null, '', $remark);
+        $res = $this->create($trxamt, $orderId, $body, null, null, null, '', $remark);
+        $invalid = time() + 60;
+        return ['invalid' => $invalid, 'logo' => sys_config('wap_login_logo'), 'code_url' => $res['payinfo']];
     }
 
     /**
