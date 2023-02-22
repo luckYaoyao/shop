@@ -1,45 +1,45 @@
 <template>
   <Layout style="height: 100%" class="main">
-    <Sider
-      hide-trigger
-      collapsible
-      :width="200"
-      :collapsed-width="isMobile ? 0 : 80"
-      v-model="collapsed"
-      class="left-sider"
-      :style="{ overflow: 'hidden' }"
-      v-if="!headMenuNoShow"
-    >
-      <side-menu
-        accordion
-        ref="sideMenu"
-        :active-name="$route.path"
-        :collapsed="collapsed"
-        @on-select="turnToPage"
-        :menu-list="menuList"
-      >
-        <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
-        <div class="logo-con">
-          <img v-show="!collapsed" :src="maxLogo" key="max-logo" />
-          <img v-show="collapsed" :src="minLogo" key="min-logo" />
-        </div>
-      </side-menu>
-    </Sider>
+    <Header class="header-con" v-if="!headMenuNoShow">
+      <div class="logo-con">
+        <img v-show="!collapsed" :src="maxLogo" key="max-logo" />
+        <img v-show="collapsed" :src="minLogo" key="min-logo" />
+      </div>
+      <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange" @on-reload="handleReload">
+        <user :message-unread-count="unreadCount" :user-avatar="userAvatar" />
+        <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px" :lang="local" />
+        <header-notice></header-notice>
+        <fullscreen v-model="isFullscreen" style="margin-right: 10px" />
+        <error-store
+          v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader"
+          :has-read="hasReadErrorPage"
+          :count="errorCount"
+        ></error-store>
+        <header-search></header-search>
+      </header-bar>
+    </Header>
     <Layout>
-      <Header class="header-con" v-if="!headMenuNoShow">
-        <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange" @on-reload="handleReload">
-          <user :message-unread-count="unreadCount" :user-avatar="userAvatar" />
-          <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px" :lang="local" />
-          <header-notice></header-notice>
-          <fullscreen v-model="isFullscreen" style="margin-right: 10px" />
-          <error-store
-            v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader"
-            :has-read="hasReadErrorPage"
-            :count="errorCount"
-          ></error-store>
-          <header-search></header-search>
-        </header-bar>
-      </Header>
+      <Sider
+        hide-trigger
+        collapsible
+        :width="childMenuList.length ? 220 : 90"
+        :collapsed-width="isMobile ? 0 : 90"
+        v-model="collapsed"
+        class="left-sider"
+        :style="{ overflow: 'hidden' }"
+        v-if="!headMenuNoShow"
+      >
+        <side-menu
+          accordion
+          ref="sideMenu"
+          :active-name="$route.path"
+          :collapsed="collapsed"
+          @on-select="turnToPage"
+          :menu-list="menuList"
+        >
+          <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
+        </side-menu>
+      </Sider>
       <Content class="main-content-con">
         <Layout class="main-layout-con">
           <div class="tag-nav-wrapper" v-if="!headMenuNoShow">
@@ -115,6 +115,7 @@ export default {
     };
   },
   computed: {
+    ...mapState('menus', ['childMenuList']),
     ...mapGetters(['errorCount']),
     ...mapState('media', ['isMobile']),
     tagNavList() {
@@ -281,10 +282,13 @@ export default {
 </script>
 <style lang="less">
 .main .header-con {
-  padding: 0 20px 0 0px;
+  padding: 0 0px 0 0px;
+  display: flex;
+  background: linear-gradient(270deg, #1570ef 0%, #1570ef 100%);
 }
 .main .logo-con img {
   height: 50px;
+  transition: all 1s;
 }
 .main .tag-nav-wrapper {
   // height: 10px;

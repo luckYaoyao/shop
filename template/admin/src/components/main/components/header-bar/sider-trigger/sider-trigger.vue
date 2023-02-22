@@ -1,6 +1,6 @@
 <template>
   <a @click="handleChange" type="text" :class="['sider-trigger-a', collapsed ? 'collapsed' : '']"
-    ><i class="iconfont" :class="collapsed ? 'iconcaidanzhankai' : 'iconcaidanshouqi'"></i
+    ><i class="iconfont" color='#fff' :class="collapsed ? 'iconcaidanzhankai' : 'iconcaidanshouqi'"></i
   ></a>
 </template>
 <script>
