@@ -17,7 +17,7 @@ namespace app\listener\admin;
  * Class AdminLogin
  * @package app\listener\admin
  */
-class AdminLogin
+class AdminLoginListener
 {
 
     public function handle($event)

@@ -1,11 +1,11 @@
 <?php
 
-namespace app\model\system\timer;
+namespace app\model\system\crontab;
 
 use crmeb\basic\BaseModel;
 use crmeb\traits\ModelTrait;
 
-class SystemTimer extends BaseModel
+class SystemCrontab extends BaseModel
 {
     use ModelTrait;
 

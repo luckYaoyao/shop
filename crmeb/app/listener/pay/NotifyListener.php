@@ -18,10 +18,10 @@ use crmeb\utils\Hook;
 
 /**
  * 支付异步回调
- * Class Notify
+ * Class NotifyListener
  * @package app\listener\pay
  */
-class Notify
+class NotifyListener
 {
     /**
      * @param $event

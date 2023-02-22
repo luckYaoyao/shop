@@ -9,10 +9,10 @@ use crmeb\interfaces\ListenerInterface;
 
 /**
  * 订单到期自动收货
- * Class OrderDelivery
+ * Class OrderDeliveryListener
  * @package app\listener\order
  */
-class OrderDelivery implements ListenerInterface
+class OrderDeliveryListener implements ListenerInterface
 {
     public function handle($event): void
     {

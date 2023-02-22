@@ -523,6 +523,7 @@
 						},
 					})
 				} else {
+					if(this.numberPic == '') this.numberPic = this.money;
 					this.pay()
 				}
 			}

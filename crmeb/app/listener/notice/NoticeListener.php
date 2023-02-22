@@ -31,7 +31,7 @@ use crmeb\utils\Str;
  * Class Create
  * @package app\listener\order
  */
-class Notice implements ListenerInterface
+class NoticeListener implements ListenerInterface
 {
     public function handle($event): void
     {

@@ -16,7 +16,7 @@ namespace app\listener\queue;
 
 use think\console\Output;
 
-class QueueStart
+class QueueStartListener
 {
 
     public function handle(Output $output)

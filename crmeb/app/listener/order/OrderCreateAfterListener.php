@@ -18,10 +18,10 @@ use crmeb\utils\Arr;
 
 /**
  * 订单创建后置事件
- * Class OrderCreateAfter
+ * Class OrderCreateAfterListener
  * @package app\listener\order
  */
-class OrderCreateAfter implements ListenerInterface
+class OrderCreateAfterListener implements ListenerInterface
 {
     public function handle($event): void
     {

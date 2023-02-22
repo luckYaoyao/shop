@@ -207,6 +207,7 @@ class ExportExcel extends AuthController
             ['price_max', ''],
             ['price_min', ''],
             ['excel', '1'],
+            ['time', ''],
         ]);
         $data = $services->getCommissionList($where, false);
         return app('json')->success($this->service->userCommission($data['list'] ?? []));

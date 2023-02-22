@@ -922,6 +922,7 @@
 		color: #333333;
 		height: 85rpx;
 		font-weight: 800;
+		line-height: 40rpx;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		display: -webkit-box;

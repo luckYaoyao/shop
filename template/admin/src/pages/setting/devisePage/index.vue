@@ -51,11 +51,11 @@ export default {
     let pageId = this.$route.query.id;
     let defaultData = this.$store.state.moren.defaultConfig;
     this.pageId = parseInt(pageId);
-    let moveLink = 'http://open.net';getCookies('moveLink');
+    let moveLink = getCookies('moveLink');
     if (Number(this.$route.query.type) === 1) {
-      this.iframeUrl = `http://open.net/pages/index/index?type=iframeWindow`;
+      this.iframeUrl = `${moveLink}/pages/index/index?type=iframeWindow`;
     } else {
-      this.iframeUrl = `http://open.net/pages/index/index?type=iframeWindow`;
+      this.iframeUrl = `${location.origin}/pages/index/index?type=iframeWindow`;
     }
     diyGetInfo(parseInt(pageId)).then((datas) => {
       let data = datas.data.info.value;

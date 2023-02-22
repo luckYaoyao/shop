@@ -27,10 +27,10 @@ use think\facade\Log;
 
 /**
  * 订单支付成功后
- * Class OrderPaySuccess
+ * Class OrderPaySuccessListener
  * @package app\listener\order
  */
-class OrderPaySuccess implements ListenerInterface
+class OrderPaySuccessListener implements ListenerInterface
 {
     public function handle($event): void
     {

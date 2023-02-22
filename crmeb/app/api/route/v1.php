@@ -391,27 +391,27 @@ Route::group(function () {
 
     /** 定时任务接口 */
     //定时任务调用接口
-    Route::get('timer/run', 'v1.TimerController/timerRun')->name('timerRun');
+    Route::get('crontab/run', 'v1.CrontabController/crontabRun')->name('crontabRun');
     //检测定时任务接口
-    Route::get('timer/check', 'v1.TimerController/timerCheck')->name('timerCheck');
+    Route::get('crontab/check', 'v1.CrontabController/crontabCheck')->name('crontabCheck');
     //未支付自动取消订单
-    Route::get('timer/order_cancel', 'v1.TimerController/orderUnpaidCancel')->name('orderUnpaidCancel');
+    Route::get('crontab/order_cancel', 'v1.CrontabController/orderUnpaidCancel')->name('orderUnpaidCancel');
     //拼团到期订单处理
-    Route::get('timer/pink_expiration', 'v1.TimerController/pinkExpiration')->name('pinkExpiration');
+    Route::get('crontab/pink_expiration', 'v1.CrontabController/pinkExpiration')->name('pinkExpiration');
     //自动解绑上级绑定
-    Route::get('timer/agent_unbind', 'v1.TimerController/agentUnbind')->name('agentUnbind');
+    Route::get('crontab/agent_unbind', 'v1.CrontabController/agentUnbind')->name('agentUnbind');
     //更新直播商品状态
-    Route::get('timer/live_product_status', 'v1.TimerController/syncGoodStatus')->name('syncGoodStatus');
+    Route::get('crontab/live_product_status', 'v1.CrontabController/syncGoodStatus')->name('syncGoodStatus');
     //更新直播间状态
-    Route::get('timer/live_room_status', 'v1.TimerController/syncRoomStatus')->name('syncRoomStatus');
+    Route::get('crontab/live_room_status', 'v1.CrontabController/syncRoomStatus')->name('syncRoomStatus');
     //自动收货
-    Route::get('timer/take_delivery', 'v1.TimerController/autoTakeOrder')->name('autoTakeOrder');
+    Route::get('crontab/take_delivery', 'v1.CrontabController/autoTakeOrder')->name('autoTakeOrder');
     //查询预售到期商品自动下架
-    Route::get('timer/advance_off', 'v1.TimerController/downAdvance')->name('downAdvance');
+    Route::get('crontab/advance_off', 'v1.CrontabController/downAdvance')->name('downAdvance');
     //自动好评
-    Route::get('timer/product_replay', 'v1.TimerController/autoComment')->name('autoComment');
+    Route::get('crontab/product_replay', 'v1.CrontabController/autoComment')->name('autoComment');
     //清除昨日海报
-    Route::get('timer/clear_poster', 'v1.TimerController/emptyYesterdayAttachment')->name('emptyYesterdayAttachment');
+    Route::get('crontab/clear_poster', 'v1.CrontabController/emptyYesterdayAttachment')->name('emptyYesterdayAttachment');
 
 
 })->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class)->middleware(\app\api\middleware\AuthTokenMiddleware::class, false);

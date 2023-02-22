@@ -210,7 +210,7 @@ class V3WechatPay extends BasePay implements PayInterface
                     'transaction_id' => $notify->transaction_id
                 ];
 
-                return Event::until('pay.notify', [$data, PayServices::WEIXIN_PAY]);
+                return Event::until('NotifyListener', [$data, PayServices::WEIXIN_PAY]);
             }
 
             return false;

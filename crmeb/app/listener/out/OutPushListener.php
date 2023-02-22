@@ -9,7 +9,7 @@ use crmeb\services\CacheService;
 use crmeb\services\HttpService;
 use think\facade\Log;
 
-class OutPush implements ListenerInterface
+class OutPushListener implements ListenerInterface
 {
     public function handle($event): void
     {
