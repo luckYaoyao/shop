@@ -19,7 +19,7 @@ export default {
   name: 'marketing',
   header: 'marketing',
   redirect: {
-    name: `${pre}storeCoupon`,
+    name: `${pre}storeCouponIssue`,
   },
   component: BasicLayout,
   children: [

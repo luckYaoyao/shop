@@ -42,10 +42,10 @@
       </Sider>
       <Content class="main-content-con">
         <Layout class="main-layout-con">
-          <div class="tag-nav-wrapper" v-if="!headMenuNoShow">
-            <tags-nav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag" />
-          </div>
           <Content class="content-wrapper">
+            <div class="tag-nav-wrapper" v-if="!headMenuNoShow">
+              <tags-nav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag" />
+            </div>
             <!-- <keep-alive :include="cacheList">
               <router-view v-if="reload" style="min-height: 600px" />
             </keep-alive> -->
@@ -104,7 +104,7 @@ export default {
   },
   data() {
     return {
-      collapsed: JSON.parse(getCookies('collapsed') || 'false'),
+      collapsed: JSON.parse(getCookies('collapsed') || 'true'),
       minLogo,
       maxLogo,
       isFullscreen: false,

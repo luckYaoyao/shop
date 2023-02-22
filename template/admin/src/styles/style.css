@@ -186,6 +186,7 @@ body {
 
 .ivu-layout-content {
   overflow-x: hidden !important;
+  height: 100%;
 }
 
 .page {
@@ -682,7 +683,7 @@ body {
 /* form-create tips 样式 */
 .tips-info {
   line-height: 18px;
-  margin-top: 8px;
+  margin-top: 3px;
   color: rgb(153, 153, 153);
 }
 .pt10{

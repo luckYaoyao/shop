@@ -30,7 +30,7 @@
             :key="`drop-${child.path}`"
           ></collapsed-menu>
           <DropdownItem v-else :key="`drop-${child.path}`" :name="child.path"
-            ><common-icon :type="child.icon" /><span class="menu-title">{{ child.title }}1</span></DropdownItem
+            ><common-icon :type="child.icon" /><span class="menu-title">{{ child.title }}</span></DropdownItem
           >
         </template>
       </div>

@@ -146,28 +146,107 @@ export default {
       catName: '',
     };
   },
+  computed: {
+    ...mapState('menus', ['openMenus']),
+    textColor() {
+      return this.theme === 'dark' ? '#fff' : '#495060';
+    },
+  },
+  watch: {
+    activeName(name) {
+      if (this.accordion) this.openedNames = this.getOpenedNamesByActiveName();
+      else this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName());
+      // this.handleSelect(this.activeName);
+    },
+    openNames(newNames) {
+      this.openedNames = newNames;
+    },
+    openedNames() {
+      this.$nextTick(() => {
+        this.$refs.menu.updateOpened();
+      });
+    },
+    $route(newRoute) {},
+    $route: {
+      handler(newRoute) {
+        console.log(newRoute, 'newRoutenewRoute');
+        this.activePath = newRoute.path;
+        // this.activeMenuPath = newRoute.matched[0].path;
+        this.handleUpdateMenuState();
+      },
+      immediate: true,
+    },
+  },
+  mounted() {
+    console.log(this.menuList);
+    this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName());
+    if (sessionStorage.getItem('menuActive')) {
+      this.activeMenuPath = sessionStorage.getItem('menuActive');
+      this.catName = sessionStorage.getItem('menuActiveTitle');
+      this.getChildrenList(sessionStorage.getItem('menuActive'));
+    } else {
+      console.log(this.openedNames);
+      this.handleSelect(this.openedNames[0]);
+    }
+  },
   methods: {
+    getChildrenList(path) {
+      this.menuList.map((e) => {
+        if (e.path === path) {
+          console.log(e, 'eeee');
+          this.childList = e.children || [];
+        }
+      });
+    },
     handleSelect(name, type) {
-      if (!type) {
-        this.$emit('on-select', name);
-      }
       this.childOptions = [];
       this.menuList.map((e) => {
         if (e.path === name) {
           console.log(e, 'eeee');
-          if (e.children) {
+          if (e.children && e.children.length) {
+            console.log(e.children, 'e.children');
+            this.jump(e.children);
             this.catName = e.title;
-            this.activeMenuPath = e.path;
+            console.log('1');
+            // this.activeMenuPath = e.path;
             this.childList = e.children || [];
-            this.activeChildName = e.children[0].path;
-            this.childOptions = [e.children[0].path];
+            sessionStorage.setItem('menuActive', e.path);
+            sessionStorage.setItem('menuActiveTitle', e.title);
+            this.activeMenuPath = e.path;
+            // this.activeChildName = e.children[0].path;
+            // this.childOptions = [e.children[0].path];
             this.$store.commit('menus/childMenuList', this.childList);
+            // if (!type) {
+            //   this.$emit('on-select', e.children[0].path);
+            // }
           } else {
+            console.log('2');
+
+            if (!type) {
+              this.$emit('on-select', name);
+            }
+            this.activeMenuPath = e.path;
+
             this.childList = [];
             this.$store.commit('menus/childMenuList', []);
           }
         }
       });
+    },
+    jump(data) {
+      if (data[0].children && data[0].children.length) {
+        console.log('3');
+        this.jump(data[0].children);
+      } else {
+        console.log('4');
+
+        this.catName = data[0].title;
+        // this.activeMenuPath = data[0].path;
+        this.activeChildName = data[0].path;
+        this.childOptions = [data[0].path];
+        this.$store.commit('menus/childMenuList', this.childList);
+        this.$emit('on-select', data[0].path);
+      }
     },
     handleChildSelect(name) {
       this.turnToPage(name);
@@ -211,43 +290,6 @@ export default {
         }
       });
     },
-  },
-  computed: {
-    ...mapState('menus', ['openMenus']),
-    textColor() {
-      return this.theme === 'dark' ? '#fff' : '#495060';
-    },
-  },
-  watch: {
-    activeName(name) {
-      if (this.accordion) this.openedNames = this.getOpenedNamesByActiveName();
-      else this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName());
-      // this.handleSelect(this.activeName);
-    },
-    openNames(newNames) {
-      this.openedNames = newNames;
-    },
-    openedNames() {
-      this.$nextTick(() => {
-        this.$refs.menu.updateOpened();
-      });
-    },
-    $route(newRoute) {},
-    $route: {
-      handler(newRoute) {
-        console.log(newRoute, 'newRoutenewRoute');
-        this.activePath = newRoute.path;
-        this.activeMenuPath = newRoute.matched[0].path;
-        this.handleUpdateMenuState();
-        console.log(activeMenuPath, 'activeMenuPath');
-      },
-      immediate: true,
-    },
-  },
-  mounted() {
-    this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName());
-    this.handleSelect(this.openedNames[0], 'one');
-    this.activeMenuPath = this.openedNames[0];
   },
 };
 </script>
@@ -345,6 +387,7 @@ export default {
       display: flex;
       align-items: center;
       .title {
+        font-size: 14px;
         line-height: 14px;
       }
     }
@@ -355,11 +398,12 @@ export default {
   .child-menu {
     z-index: 88;
     .ivu-menu-vertical .ivu-menu-item {
-      padding: 12px 10px;
+      padding: 13px 10px;
       display: flex;
       align-items: center;
       .title {
-        line-height: 14px;
+        font-size: 13px;
+        line-height: 13px;
       }
     }
     .ivu-menu-submenu {
@@ -373,11 +417,12 @@ export default {
       }
     }
     .ivu-menu-vertical .ivu-menu-submenu-title {
+      font-size: 13px;
       padding: 12px 10px;
       line-height: 16px;
     }
     .cat-name {
-      font-size: 16px;
+      font-size: 14px;
       line-height: 16px;
       font-weight: 600;
       color: #303133;

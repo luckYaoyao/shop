@@ -62,11 +62,12 @@ export default {
           AccountLogout()
             .then((res) => {
               that.$Message.success('您已成功退出');
-              that.$router.replace({name:'login'});
+              that.$router.replace({ name: 'login' });
               localStorage.clear();
               removeCookies('token');
               removeCookies('expires_time');
               removeCookies('uuid');
+              sessionStorage.clear();
               // window.location.reload()
             })
             .catch((res) => {});
@@ -74,10 +75,10 @@ export default {
       });
     },
     userCenter() {
-      this.$router.push({name:'systemUser'});
+      this.$router.push({ name: 'systemUser' });
     },
     fileEdit() {
-      this.$router.push({name:'systemFiles'});
+      this.$router.push({ name: 'systemFiles' });
     },
     message() {
       this.$router.push({
