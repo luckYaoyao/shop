@@ -14,7 +14,7 @@
 								v-if="item.activity && item.activity.type === '2'">{{$t(`砍价`)}}</span>
 							<span class="pictrue_log pictrue_log_class" :style="'background-color:'+labelColor"
 								v-if="item.activity && item.activity.type === '3'">{{$t(`拼团`)}}</span>
-							<image :src="item.image" mode="aspectFit"></image>
+							<image :src="item.image" mode=""></image>
 						</view>
 						<view class="text-info"
 							style="display: flex; flex-direction: column; justify-content: space-between;">
@@ -304,8 +304,9 @@
 
 				image {
 					// height: 346rpx;
-					width: 347rpx;
-					height: 347rpx;
+					// width: 347rpx;
+					// height: 347rpx;
+					width: 100%;
 					height: 100%;
 					display: block;
 				}
@@ -371,8 +372,8 @@
 					width: 100%;
 
 					.pictrue {
-						width: 220rpx;
-						height: 220rpx;
+						width: 220rpx !important;
+						height: 220rpx !important;
 					}
 
 					.text-info {
