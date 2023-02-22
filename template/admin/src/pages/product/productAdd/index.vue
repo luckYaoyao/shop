@@ -1944,6 +1944,7 @@ export default {
               this.formValidate.spec_type = this.spec_type;
               this.$Message.error(res.msg);
             });
+        } else {
           if (this.formValidate.spec_type == 1) {
             this.generate(1);
           }
