@@ -239,10 +239,10 @@ export default {
             this.checkSocket();
           } catch (e) {}
 
-          return this.$router.replace({ path: this.$routeProStr + '/home/' || this.$routeProStr + '/' });
+          return this.$router.replace({ path: res.data.menus[0].path || this.$routeProStr + '/' });
         })
         .catch((res) => {
-          msg()
+          msg();
           let data = res === undefined ? {} : res;
           this.$Message.error(data.msg || '登录失败');
           this.login_captcha = res.data.login_captcha;
