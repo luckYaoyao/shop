@@ -200,7 +200,12 @@ class AllinPay extends Client
         $this->version = self::VERSION_NUM_11;
         $res = $this->create($trxamt, $orderId, $body, null, null, null, '', $remark);
         $invalid = time() + 60;
-        return ['invalid' => $invalid, 'logo' => sys_config('wap_login_logo'), 'code_url' => $res['payinfo']];
+        if ($isWechat) {
+            $key = 'code_url';
+        } else {
+            $key = 'qrCode';
+        }
+        return ['invalid' => $invalid, 'logo' => sys_config('wap_login_logo'), $key => $res['payinfo']];
     }
 
     /**
