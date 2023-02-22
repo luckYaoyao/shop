@@ -184,7 +184,7 @@ class RefundOrder extends AuthController
             $refund_data['open_id'] = $wechatUserServices->uidToOpenid((int)$order['uid'], 'routine') ?? '';
             $refund_data['refund_no'] = $orderRefund['order_id'];
             //修改订单退款状态
-            unset($data['refund_price']);
+            $data['refund_price'] = $data['refunded_price'];
             if ($this->services->agreeRefund($id, $refund_data)) {
                 $this->services->update($id, $data);
                 return app('json')->success(400149);
