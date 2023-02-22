@@ -186,7 +186,7 @@ class OrderPayServices
         $payKey = md5($order['order_id']);
         switch ($payType) {
             case PayServices::ALIAPY_PAY:
-                $jsConfig->invalid = time() + 60;
+                if (request()->isPc()) $jsConfig->invalid = time() + 60;
                 CacheService::set($payKey, ['order_id' => $order['order_id'], 'other_pay_type' => false], 300);
                 break;
             case PayServices::ALLIN_PAY:
