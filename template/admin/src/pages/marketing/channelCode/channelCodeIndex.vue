@@ -109,7 +109,7 @@
               <Divider type="vertical" />
               <a @click="del(row, '删除二维码', index)">删除</a>
               <Divider type="vertical" />
-              <Dropdown @on-click="changeMenu(row, $event)" transfer="true">
+              <Dropdown @on-click="changeMenu(row, $event)" :transfer="true">
                 <a href="javascript:void(0)"
                   >更多
                   <Icon type="ios-arrow-down"></Icon>
