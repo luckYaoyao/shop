@@ -205,10 +205,11 @@ class SystemCrontabServices extends BaseServices
      */
     public function crontabRun()
     {
-        file_put_contents(root_path() . 'runtime/.timer', time()); //检测定时任务是否正常
+        $time = time();
+        file_put_contents(root_path() . 'runtime/.timer', $time); //检测定时任务是否正常
         $list = $this->dao->selectList(['is_open' => 1, 'is_del' => 0])->toArray();
         foreach ($list as $item) {
-            if ($item['next_execution_time'] < time()) {
+            if ($item['next_execution_time'] < $time) {
                 if ($item['mark'] == 'order_cancel') {
                     //未支付自动取消订单
                     app()->make(StoreOrderServices::class)->orderUnpaidCancel();
