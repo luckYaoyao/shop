@@ -5,11 +5,13 @@
         <img v-show="!collapsed" :src="maxLogo" key="max-logo" />
         <img v-show="collapsed" :src="minLogo" key="min-logo" />
       </div>
-      <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange" @on-reload="handleReload">
+      <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
         <user :message-unread-count="unreadCount" :user-avatar="userAvatar" />
         <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px" :lang="local" />
         <header-notice></header-notice>
         <fullscreen v-model="isFullscreen" style="margin-right: 10px" />
+        <Reload  @on-reload="handleReload"></Reload>
+
         <error-store
           v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader"
           :has-read="hasReadErrorPage"
@@ -77,6 +79,7 @@ import Language from './components/language';
 import ErrorStore from './components/error-store';
 import HeaderSearch from './components/header-search';
 import HeaderNotice from './components/header-notice';
+import Reload from './components/reload';
 
 import Setting from '@/setting';
 import iView from 'iview';
@@ -101,6 +104,7 @@ export default {
     iCopyright,
     HeaderSearch,
     HeaderNotice,
+    Reload
   },
   data() {
     return {

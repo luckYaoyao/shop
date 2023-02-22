@@ -1,9 +1,9 @@
 <template>
   <div class="header-bar">
     <sider-trigger :collapsed="collapsed" @on-change="handleCollpasedChange"></sider-trigger>
-    <span class="i-layout-header-trigger" @click="handleReload">
+    <!-- <span class="i-layout-header-trigger" @click="handleReload">
       <Icon type="ios-refresh" color='#fff' />
-    </span>
+    </span> -->
     <!-- <custom-bread-crumb
       show-icon
       style="margin-left: 30px"
