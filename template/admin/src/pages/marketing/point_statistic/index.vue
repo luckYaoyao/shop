@@ -375,6 +375,6 @@ export default {
 .num {
   white-space: nowrap;
   margin: 0 10px;
-  width: 15px;
+  width: 17px;
 }
 </style>

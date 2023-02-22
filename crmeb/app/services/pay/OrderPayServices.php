@@ -51,12 +51,12 @@ class OrderPayServices
     public function getPayType(string $payType)
     {
         //微信支付没有开启，通联支付开启，用户访问端在小程序或者公众号的时候，使用通联微信H5支付
-        if ($payType == PayServices::WEIXIN_PAY) {
+        if ($payType == PayServices::WEIXIN_PAY && !request()->isH5() && !request()->isApp()) {
             $payType = sys_config('pay_weixin_open', 0);
         }
 
         //支付宝没有开启，通联支付开了，用户使用支付宝支付，并且在app端访问的时候，使用通联app支付宝支付
-        if ($payType == PayServices::ALIAPY_PAY) {
+        if ($payType == PayServices::ALIAPY_PAY && request()->isApp()) {
             $payType = sys_config('ali_pay_status', 0);
         }
 
@@ -106,6 +106,8 @@ class OrderPayServices
      */
     public function beforePay(array $orderInfo, string $payType, array $options = [])
     {
+        $wehcat = $payType == PayServices::WEIXIN_PAY;
+
         $payType = $this->getPayType($payType);
 
         if ($orderInfo['paid']) {
@@ -132,6 +134,11 @@ class OrderPayServices
                     }
                 }
                 $options['openid'] = $openid;
+                break;
+            case PayServices::ALLIN_PAY:
+                if ($wehcat) {
+                    $options['wechat'] = $wehcat;
+                }
                 break;
         }
 
@@ -186,7 +193,7 @@ class OrderPayServices
         $payKey = md5($order['order_id']);
         switch ($payType) {
             case PayServices::ALIAPY_PAY:
-                $jsConfig->invalid = time() + 60;
+                if (request()->isPc()) $jsConfig->invalid = time() + 60;
                 CacheService::set($payKey, ['order_id' => $order['order_id'], 'other_pay_type' => false], 300);
                 break;
             case PayServices::ALLIN_PAY:

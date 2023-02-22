@@ -1171,6 +1171,8 @@ class StoreOrderRefundServices extends BaseServices
         $orderData['pay_postage'] = $this->getOrderSumPrice($orderData['cart_info'], 'origin_postage_price', false);
         $orderData['member_price'] = 0;
         $orderData['routine_contact_type'] = sys_config('routine_contact_type', 0);
+        $orderData['levelPrice'] = $this->getOrderSumPrice($orderData['cart_info'], 'level');//获取会员等级优惠
+        $orderData['memberPrice'] = $this->getOrderSumPrice($orderData['cart_info'], 'member');//获取付费会员优惠
 
         switch ($orderInfo['pay_type']) {
             case PayServices::WEIXIN_PAY:
@@ -1184,6 +1186,9 @@ class StoreOrderRefundServices extends BaseServices
                 break;
             case PayServices::ALIAPY_PAY:
                 $pay_type_name = '支付宝支付';
+                break;
+            case PayServices::ALLIN_PAY:
+                $pay_type_name = '通联支付';
                 break;
             default:
                 $pay_type_name = '其他支付';

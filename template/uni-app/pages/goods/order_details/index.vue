@@ -369,7 +369,7 @@
 					<view class='bnt bg-color' v-if="status.class_status==5" @tap='goOrderConfirm'>{{$t(`再次购买`)}}
 					</view>
 					<view class='bnt bg-color refundBnt'
-						v-if="[1,2,4].includes(orderInfo.refund_type) && !orderInfo.is_cancel && orderInfo.type !=3"
+						v-if="[1,2,4].includes(orderInfo.refund_type) && !orderInfo.is_cancel && orderInfo.type !=3 && orderInfo.refund_status != 2"
 						@tap='cancelRefundOrder'>
 						{{$t(`取消申请`)}}
 					</view>
