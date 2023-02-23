@@ -64,9 +64,10 @@
 				colorChange('category').then(res => {
 					let status = res.data.status;
 					this.category = status
+					uni.setStorageSync('is_diy', res.data.is_diy)
 					this.status = res.data.status
+					this.$refs.classOne.is_diy = res.data.is_diy
 					this.$nextTick(e => {
-						this.$refs.classOne.is_diy = this.is_diy
 						if (this.status == 2 || this.status == 3) {
 							uni.hideTabBar();
 						} else if (this.status == 1) {

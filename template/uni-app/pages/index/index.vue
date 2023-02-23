@@ -41,7 +41,9 @@
 			getVersion(name) {
 				getVersion(name).then(res => {
 					this.version = res.data.version
+					this.isDiy = res.data.is_diy
 					this.loading = true
+					uni.setStorageSync('is_diy', res.data.is_diy)
 					if (!uni.getStorageSync('DIY_VERSION') || res.data.version != uni.getStorageSync(
 							'DIY_VERSION')) {
 						if (uni.getStorageSync('DIY_VERSION')) {
