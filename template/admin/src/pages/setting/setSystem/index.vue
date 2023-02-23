@@ -223,5 +223,6 @@ export default {
 
 .fromBox {
   min-height: 600px;
+  margin-top 0px !important ;
 }
 </style>

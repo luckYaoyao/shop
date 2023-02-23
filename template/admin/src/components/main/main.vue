@@ -2,8 +2,8 @@
   <Layout style="height: 100%" class="main">
     <Header class="header-con" v-if="!headMenuNoShow">
       <div class="logo-con">
-        <img v-show="!collapsed" :src="maxLogo" key="max-logo" />
-        <img v-show="collapsed" :src="minLogo" key="min-logo" />
+        <img :src="maxLogo" key="max-logo" />
+        <!-- <img v-show="collapsed" :src="minLogo" key="min-logo" /> -->
       </div>
       <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
         <user :message-unread-count="unreadCount" :user-avatar="userAvatar" />
