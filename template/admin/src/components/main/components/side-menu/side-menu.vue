@@ -31,7 +31,7 @@
           :open-names="openMenus"
           :accordion="accordion"
           :theme="theme"
-          width="140px"
+          width="145px"
           @on-open-change="openChildNameData"
           @on-select="handleChildSelect"
         >

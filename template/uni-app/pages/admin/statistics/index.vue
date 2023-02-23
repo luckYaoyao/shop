@@ -25,7 +25,7 @@
 		</div>
 		<div class="wrapper">
 			<div class="title">
-				{{ time == 'date'?'':title }}{{ this.where.type == 1 ? $t(`营业额（元）`) : $t(`订单量（份）`) }}
+				{{ time == 'date'?'':title }}{{ where.type == 1 ? $t(`营业额（元）`) : $t(`订单量（份）`) }}
 			</div>
 			<div class="money">{{ time_price }}</div>
 			<div class="increase acea-row row-between-wrapper">
