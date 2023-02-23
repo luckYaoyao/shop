@@ -198,7 +198,7 @@ class OrderPayServices
                 break;
             case PayServices::ALLIN_PAY:
                 if (request()->isWechat()) {
-                    $jsConfig['pay_url'] = AllinPay::UNITODER_H5UNIONPAY;
+                    $payUrl = AllinPay::UNITODER_H5UNIONPAY;
                 }
                 break;
             case PayServices::WEIXIN_PAY:
@@ -207,6 +207,6 @@ class OrderPayServices
                 }
         }
 
-        return ['jsConfig' => $jsConfig, 'order_id' => $order['order_id'], 'pay_key' => $payKey];
+        return ['jsConfig' => $jsConfig, 'order_id' => $order['order_id'], 'pay_key' => $payKey, 'pay_url' => $payUrl ?? ''];
     }
 }
