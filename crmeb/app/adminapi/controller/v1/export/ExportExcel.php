@@ -95,6 +95,7 @@ class ExportExcel extends AuthController
             ['pay_type', ''],
             ['order', ''],
             ['field_key', ''],
+            ['ids', []],
         ]);
         $where['is_system_del'] = 0;
         $where['pid'] = 0;

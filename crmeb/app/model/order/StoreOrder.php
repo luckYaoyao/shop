@@ -589,4 +589,13 @@ class StoreOrder extends BaseModel
     {
         if ($value !== '') $query->where('agent_id', $value);
     }
+
+    /**
+     * @param $query
+     * @param $value
+     */
+    public function searchIdsAttr($query, $value)
+    {
+        if ($value !== '') $query->whereIn('id', $value);
+    }
 }
