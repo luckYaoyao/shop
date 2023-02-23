@@ -1386,7 +1386,6 @@ export default {
   padding: 20px;
   background-color: #fff;
   border-radius: 5px;
-  margin: 20px;
 }
 
 .iview-video-style {
