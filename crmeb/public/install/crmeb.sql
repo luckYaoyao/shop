@@ -33342,7 +33342,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (58, 'replenishment_num', 'text', 'number', 27, '', 0, 'required:true,number:true,min:0', 100, 0, '5', '待补货数量', '商品待补货数量低于多少时，提示补货', 0, 1),
 (59, 'routine_appId', 'text', 'input', 7, '', 0, '', 100, 0, '\"\"', 'appId', '小程序appID', 0, 1),
 (60, 'routine_appsecret', 'text', 'input', 7, '', 0, '', 100, 0, '\"\"', 'AppSecret', '小程序AppSecret', 0, 1),
-(61, 'api', 'text', 'input', 2, '', 1, '', 0, 0, '\"\\/api\\/wechat\\/serve\"', '接口地址', '配置服务器域名使用的接口地址，填入https://您的域名/api/wechat/serve', 92, 1),
+(61, 'api', 'text', 'input', 2, '', 1, '', 0, 0, '\"\\/api\\/wechat\\/serve\"', '接口地址', '配置服务器域名使用的接口地址，直接复制输入框内容（此项系统生成，无法修改）', 92, 1),
 (74, 'routine_name', 'text', 'input', 7, '', 0, '', 100, 0, '\"\"', '小程序名称', '小程序名称', 0, 1),
 (77, 'store_stock', 'text', 'number', 27, '', 1, '', 0, 0, '\"2\"', '警戒库存', '商品待补货数量低于多少时，提示库存不足', 0, 1),
 (85, 'stor_reason', 'textarea', 'input', 71, '', 1, '', 100, 8, '\"\\u6536\\u8d27\\u5730\\u5740\\u586b\\u9519\\u4e86\\n\\u4e0e\\u63cf\\u8ff0\\u4e0d\\u7b26\\n\\u4fe1\\u606f\\u586b\\u9519\\u4e86\\uff0c\\u91cd\\u65b0\\u62cd\\n\\u6536\\u5230\\u5546\\u54c1\\u635f\\u574f\\u4e86\\n\\u672a\\u6309\\u9884\\u5b9a\\u65f6\\u95f4\\u53d1\\u8d27\\n\\u5176\\u5b83\\u539f\\u56e0\"', '退货理由', '配置退货理由，一行一个理由', 0, 1),

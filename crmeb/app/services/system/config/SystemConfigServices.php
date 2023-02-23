@@ -358,11 +358,19 @@ class SystemConfigServices extends BaseServices
                 break;
             default:
                 $data['value'] = isset($data['value']) ? json_decode($data['value'], true) : '';
-                $formbuider[] = $this->builder->input($data['menu_name'], $data['info'], $data['value'])->appendRule('suffix', [
-                    'type' => 'div',
-                    'class' => 'tips-info',
-                    'domProps' => ['innerHTML' => $data['desc']]
-                ])->col(13);
+                if ($data['menu_name'] == 'api') {
+                    $formbuider[] = $this->builder->input($data['menu_name'], $data['info'], strpos($data['value'], 'http') === false ? sys_config('site_url') . $data['value'] : $data['value'])->appendRule('suffix', [
+                        'type' => 'div',
+                        'class' => 'tips-info',
+                        'domProps' => ['innerHTML' => $data['desc']]
+                    ])->col(13)->readonly(true);
+                } else {
+                    $formbuider[] = $this->builder->input($data['menu_name'], $data['info'], $data['value'])->appendRule('suffix', [
+                        'type' => 'div',
+                        'class' => 'tips-info',
+                        'domProps' => ['innerHTML' => $data['desc']]
+                    ])->col(13);
+                }
                 break;
         }
         return $formbuider;
