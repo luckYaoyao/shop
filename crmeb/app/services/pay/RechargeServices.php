@@ -14,10 +14,9 @@ namespace app\services\pay;
 
 
 use app\model\user\UserRecharge;
-use app\services\user\UserRechargeServices;
 use app\services\wechat\WechatUserServices;
 use crmeb\exceptions\ApiException;
-use Darabonba\GatewaySpi\Models\InterceptorContext\request;
+use crmeb\services\pay\extend\allinpay\AllinPay;
 
 /**
  *
@@ -100,7 +99,7 @@ class RechargeServices
             $payStstus = 'allinpay_pay';
         }
 
-        return ['jsConfig' => $res, 'pay_key' => md5($recharge['order_id']), 'order_id' => $recharge['order_id'], 'pay_type' => strtoupper($payStstus)];
+        return ['pay_url' => AllinPay::UNITODER_H5UNIONPAY, 'jsConfig' => $res, 'pay_key' => md5($recharge['order_id']), 'order_id' => $recharge['order_id'], 'pay_type' => strtoupper($payStstus)];
     }
 
 }
