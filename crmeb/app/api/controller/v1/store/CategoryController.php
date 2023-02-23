@@ -48,6 +48,6 @@ class CategoryController
     public function getCategoryVersion()
     {
         $data = $this->services->getCategoryVersion();
-        return app('json')->success(['version' => $data['version'], 'is_diy' => $data['diy']]);
+        return app('json')->success(['version' => $data['version'], 'is_diy' => $data['is_diy']]);
     }
 }
