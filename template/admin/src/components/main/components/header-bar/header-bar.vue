@@ -1,6 +1,6 @@
 <template>
   <div class="header-bar">
-    <sider-trigger :collapsed="collapsed" @on-change="handleCollpasedChange"></sider-trigger>
+    <!-- <sider-trigger :collapsed="collapsed" @on-change="handleCollpasedChange"></sider-trigger> -->
     <!-- <span class="i-layout-header-trigger" @click="handleReload">
       <Icon type="ios-refresh" color='#fff' />
     </span> -->

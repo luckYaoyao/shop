@@ -1,7 +1,9 @@
 <template>
-  <a @click="handleChange" type="text" :class="['sider-trigger-a', collapsed ? 'collapsed' : '']"
-    ><i class="iconfont" color='#fff' :class="collapsed ? 'iconcaidanzhankai' : 'iconcaidanshouqi'"></i
-  ></a>
+  <div class="sider-menu" @click="handleChange">
+    <a type="text" :class="['sider-trigger-a', collapsed ? 'collapsed' : '']"
+      ><i class="iconfont" color="#fff" :class="collapsed ? 'iconcaidanzhankai' : 'iconcaidanshouqi'"></i
+    ></a>
+  </div>
 </template>
 <script>
 export default {
@@ -25,6 +27,19 @@ export default {
 };
 </script>
 <style lang="less" scoped>
+.sider-menu {
+  position: absolute;
+  width: 100%;
+  max-width: 90px;
+  left: 0;
+  bottom: 0;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #d9dadd;
+  color: #515a6e;
+}
 @import './sider-trigger.less';
 .sider-trigger-a {
   padding: 14px 6px;

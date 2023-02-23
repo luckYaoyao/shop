@@ -563,6 +563,9 @@ class OtherOrderServices extends BaseServices
                     case "alipay" :
                         $v['pay_type'] = "支付宝";
                         break;
+                    case 'allinpay':
+                        $v['pay_type'] = "通联支付";
+                        break;
                     case "admin" :
                         $v['pay_type'] = "后台赠送";
                         break;

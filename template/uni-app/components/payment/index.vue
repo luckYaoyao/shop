@@ -169,7 +169,7 @@
 				}).then(res => {
 					let jsConfig = res.data.result.jsConfig;
 					console.log(paytype)
-					if (res.data.status === 'ALLINPAY_PAY') {
+					if (res.data.status == 'ALLINPAY_PAY') {
 						uni.hideLoading();
 						// #ifdef MP
 						wx.openEmbeddedMiniProgram({
@@ -197,11 +197,6 @@
 						// #endif
 						// #ifdef APP-PLUS
 						plus.runtime.openURL(jsConfig.payinfo);
-						setTimeout(e => {
-							uni.reLaunch({
-								url: goPages
-							})
-						}, 1000)
 						// #endif
 						// #ifdef H5
 						this.formpost(res.data.result.pay_url, jsConfig)
