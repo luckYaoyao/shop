@@ -14,6 +14,7 @@ namespace app\services\product\product;
 
 use app\dao\product\product\StoreCategoryDao;
 use app\services\BaseServices;
+use app\services\diy\DiyServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\CacheService;
 use crmeb\services\FormBuilder as Form;
@@ -214,6 +215,12 @@ class StoreCategoryServices extends BaseServices
      * 保存修改数据
      * @param $id
      * @param $data
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/02/23
      */
     public function editData($id, $data)
     {
@@ -267,7 +274,10 @@ class StoreCategoryServices extends BaseServices
     public function getCategoryVersion()
     {
         return $this->cacheDriver()->remember('category_version', function () {
-            return uniqid();
+            return [
+                'is_diy' => app()->make(DiyServices::class)->value(['status' => 1], 'is_diy'),
+                'version' => uniqid()
+            ];
         });
     }
 
@@ -275,6 +285,12 @@ class StoreCategoryServices extends BaseServices
      * 获取指定id下的分类,一=以数组形式返回
      * @param string $cateIds
      * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/02/23
      */
     public function getCateArray(string $cateIds)
     {
@@ -283,7 +299,14 @@ class StoreCategoryServices extends BaseServices
 
     /**
      * 前台分类列表
-     * @return bool|mixed|null
+     * @param array $where
+     * @return array|mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/02/23
      */
     public function getCategory(array $where)
     {
