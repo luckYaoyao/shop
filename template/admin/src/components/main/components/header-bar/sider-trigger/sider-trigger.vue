@@ -33,18 +33,16 @@ export default {
   max-width: 90px;
   left: 0;
   bottom: 0;
-  height: 50px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid #d9dadd;
+  border-top: 1px solid #f2f2f2;
   color: #515a6e;
 }
 @import './sider-trigger.less';
 .sider-trigger-a {
   padding: 14px 6px;
-  margin-left: 10px;
-  line-height: 16px;
 }
 .iconcaidanshouqi {
   font-size: 16px;

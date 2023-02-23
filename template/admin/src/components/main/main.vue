@@ -9,8 +9,9 @@
         <user :message-unread-count="unreadCount" :user-avatar="userAvatar" />
         <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px" :lang="local" />
         <header-notice></header-notice>
-        <fullscreen v-model="isFullscreen" style="margin-right: 10px" />
         <Reload @on-reload="handleReload"></Reload>
+
+        <fullscreen v-model="isFullscreen" style="margin-right: 10px" />
         <error-store
           v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader"
           :has-read="hasReadErrorPage"

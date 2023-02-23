@@ -1,6 +1,6 @@
 <template>
-  <div class="full-screen-btn-con" @click="handleReload">
-      <Icon class="icon" type="md-refresh" color='#fff' />
+  <div class="refresh-btn-con" @click="handleReload">
+      <Icon class="icon" type="ios-refresh" color="rgba(255,255,255,.8)" />
   </div>
 </template>
 
@@ -18,10 +18,11 @@ export default {
 };
 </script>
 <style scoped lang="less">
-.full-screen-btn-con {
+.refresh-btn-con {
   margin-right: 17px !important;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 28px;
+  color: #f2f2f2;
 }
 .icon:hover{
   animation: rotate 6s linear infinite; 

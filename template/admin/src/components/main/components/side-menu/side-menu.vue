@@ -176,6 +176,10 @@ export default {
         console.log(newRoute, 'newRoutenewRoute');
         this.activePath = newRoute.path;
         // this.activeMenuPath = newRoute.matched[0].path;
+        if (this.collapsed) {
+          sessionStorage.setItem('menuActive', newRoute.matched[0].path);
+          this.activeMenuPath = newRoute.matched[0].path;
+        }
         this.handleUpdateMenuState();
       },
       immediate: true,
@@ -185,9 +189,9 @@ export default {
     console.log(this.menuList);
     this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName());
     if (sessionStorage.getItem('menuActive')) {
-      this.activeMenuPath = sessionStorage.getItem('menuActive');
-      this.catName = sessionStorage.getItem('menuActiveTitle');
-      this.getChildrenList(sessionStorage.getItem('menuActive'));
+      // this.activeMenuPath = sessionStorage.getItem('menuActive');
+      // this.catName = sessionStorage.getItem('menuActiveTitle');
+      // this.getChildrenList(sessionStorage.getItem('menuActive'));
     } else {
       this.handleSelect(this.openedNames[0]);
     }
@@ -202,9 +206,9 @@ export default {
     },
     handleCollpasedChange(state) {
       console.log(state);
-      this.collapsed = state;
+      // this.collapsed = state;
       this.$emit('on-coll-change', state);
-      setCookies('collapsed', state);
+      // setCookies('collapsed', state);
     },
     handleSelect(name, type) {
       this.childOptions = [];
@@ -252,8 +256,44 @@ export default {
       this.turnToPage(name);
     },
     collHandleSelect(name) {
+      this.activeMenuPath = this.findParentById(this.menuList, name);
       this.turnToPage(name);
     },
+    findParentById(arr, path) {
+      var parentId = '没有父元素',
+        hasParentId = (function loop(arr) {
+          return arr.some((item) => {
+            if (item.path === path) {
+              return true;
+            } else if (Array.isArray(item.children)) {
+              parentId = item.path;
+              return loop(item.children);
+            } else {
+              return false;
+            }
+          });
+        })(arr);
+      return hasParentId ? parentId : '未找到对应父元素';
+    },
+
+    // findParentsById(arr, id) {
+    //   var parentIds = [],
+    //     index = 0,
+    //     hasParentId = (function loop(arr, index) {
+    //       return arr.some((item) => {
+    //         if (item.MENU_ID === id) {
+    //           parentIds = parentIds.slice(0, index);
+    //           return true;
+    //         } else if (Array.isArray(item.MENU_INFO)) {
+    //           parentIds[index] = item.MENU_ID;
+    //           return loop(item.MENU_INFO, index + 1);
+    //         } else {
+    //           return false;
+    //         }
+    //       });
+    //     })(arr, index);
+    //   return hasParentId ? parentIds : [];
+    // },
     turnToPage(route, all) {
       let { path, name, params, query } = {};
       if (typeof route === 'string' && !all) path = route;
@@ -298,6 +338,7 @@ export default {
 </script>
 <style lang="less">
 @import './side-menu.less';
+
 .ivu-menu {
   .side-menu-wrapper {
     position: relative;
@@ -340,6 +381,7 @@ export default {
     background-color: #2d8cf0 !important;
     color: #fff !important;
   }
+
   .ivu-select-dropdown.ivu-dropdown-transfer
     .collased-menu-dropdown:hover
     > .ivu-dropdown-rel
@@ -393,8 +435,8 @@ export default {
       display: flex;
       align-items: center;
       .title {
-        font-size: 14px;
-        line-height: 14px;
+        font-size: 13px;
+        line-height: 13px;
       }
     }
     .ivu-menu-vertical .ivu-menu-item:first-child {
@@ -432,8 +474,8 @@ export default {
       line-height: 16px;
       font-weight: 600;
       color: #303133;
-      padding: 18px;
-      border-bottom: 1px solid #eee;
+      padding: 15px;
+      border-bottom: 1px solid #f2f2f2;
     }
   }
   > .ivu-menu {
@@ -447,8 +489,22 @@ export default {
     width: 0px;
   }
 }
+/deep/ .ivu-select-dropdown {
+  left: 95px !important;
+}
+.ivu-dropdown-rel {
+  min-width: 75px !important;
+}
 .menu-collapsed {
   padding: 0 8px;
+  .drop-menu-a:hover {
+    color: #1890ff;
+    background-color: rgba(24, 144, 255, 0.1) !important;
+    border-radius: 4px;
+    .ivu-icon {
+      color: #1890ff !important;
+    }
+  }
   .drop-menu-a.on {
     background-color: #1890ff !important;
     color: #fff !important;

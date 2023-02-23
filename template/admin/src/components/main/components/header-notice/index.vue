@@ -3,7 +3,7 @@
     <Dropdown @on-click="jumpUrl" :transfer="true">
       <div>
         <Badge dot :count="needList.length ? needList.length : 0">
-          <Icon type="ios-notifications-outline" size="26"></Icon>
+          <Icon type="ios-notifications-outline" size="24"></Icon>
         </Badge>
       </div>
       <DropdownMenu slot="list">
@@ -24,7 +24,7 @@
   font-size: 14px !important;
   font-weight: 400;
   line-height: 22px;
-  color: #fff;
+  color: #515a6e;
 }
 .header-notice .ivu-dropdown-item ~ .ivu-dropdown-item {
   border-top: 1px solid #e8eaec;

@@ -66,8 +66,8 @@ export default {
   },
   methods: {
     handleClick(name) {
-      console.log(name)
-      this.$emit('on-click', name);
+      console.log(name, this.activeMenuPath);
+      this.$emit('on-click', name, this.activeMenuPath);
     },
     handleMousemove(event, children) {
       const { pageY } = event;
