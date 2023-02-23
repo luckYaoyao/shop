@@ -10,8 +10,7 @@
         <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px" :lang="local" />
         <header-notice></header-notice>
         <fullscreen v-model="isFullscreen" style="margin-right: 10px" />
-        <Reload  @on-reload="handleReload"></Reload>
-
+        <Reload @on-reload="handleReload"></Reload>
         <error-store
           v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader"
           :has-read="hasReadErrorPage"
@@ -34,6 +33,7 @@
         <side-menu
           accordion
           ref="sideMenu"
+          @on-coll-change="handleCollapsedChange"
           :active-name="$route.path"
           :collapsed="collapsed"
           @on-select="turnToPage"
@@ -104,7 +104,7 @@ export default {
     iCopyright,
     HeaderSearch,
     HeaderNotice,
-    Reload
+    Reload,
   },
   data() {
     return {

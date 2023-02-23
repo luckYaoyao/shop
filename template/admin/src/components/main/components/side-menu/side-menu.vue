@@ -1,6 +1,7 @@
 <template>
   <div class="side-menu-wrapper">
     <slot></slot>
+    <sider-trigger :collapsed="collapsed" @on-change="handleCollpasedChange"></sider-trigger>
     <div class="side-menu-box" v-show="!collapsed">
       <div class="parent-menu">
         <Menu
@@ -99,6 +100,8 @@ import { getUnion } from '@/libs/tools';
 import { mapState } from 'vuex';
 import mixin from './mixin';
 import itemMixin from './item-mixin';
+import { setCookies } from '@/libs/util';
+import siderTrigger from '../header-bar/sider-trigger';
 
 export default {
   name: 'SideMenu',
@@ -106,6 +109,7 @@ export default {
   components: {
     SideMenuItem,
     CollapsedMenu,
+    siderTrigger,
   },
   props: {
     menuList: {
@@ -196,7 +200,12 @@ export default {
         }
       });
     },
-
+    handleCollpasedChange(state) {
+      console.log(state);
+      this.collapsed = state;
+      this.$emit('on-coll-change', state);
+      setCookies('collapsed', state);
+    },
     handleSelect(name, type) {
       this.childOptions = [];
       this.menuList.map((e) => {
@@ -290,6 +299,9 @@ export default {
 <style lang="less">
 @import './side-menu.less';
 .ivu-menu {
+  .side-menu-wrapper {
+    position: relative;
+  }
   .side-menu-wrapper a.drop-menu-a {
     padding: 1px !important;
   }
