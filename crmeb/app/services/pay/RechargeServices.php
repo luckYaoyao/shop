@@ -85,7 +85,7 @@ class RechargeServices
             $openid = '';
         }
 
-        $res = $this->pay->pay($recharge['recharge_type'], $recharge['order_id'], $recharge['price'], 'user_recharge', '用户充值', ['openid' => $openid]);
+        $res = $this->pay->pay($payType, $recharge['order_id'], $recharge['price'], 'user_recharge', '用户充值', ['openid' => $openid]);
 
         if ($payType == PayServices::WEIXIN_PAY) {
             if (request()->isH5()) {
