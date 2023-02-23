@@ -391,6 +391,7 @@ body {
 .fl_header {
   display: flex;
   align-items: center;
+  padding-left: 0px !important;
 }
 .header_top {
   padding-bottom: 16px !important;
@@ -517,8 +518,6 @@ body {
   color: #17233d;
   font-weight: 500;
   font-size: 20px;
-  padding-bottom: 16px;
-  margin-left: 10px;
 }
 .main .content-wrapper {
   padding-top: 0;
