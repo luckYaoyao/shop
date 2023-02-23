@@ -27,7 +27,6 @@
         :width="childMenuList.length ? 220 : 90"
         :collapsed-width="isMobile ? 0 : 90"
         v-model="collapsed"
-        class="left-sider"
         :style="{ overflow: 'hidden' }"
         v-if="!headMenuNoShow"
       >

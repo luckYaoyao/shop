@@ -170,6 +170,15 @@ export default {
         this.$refs.menu.updateOpened();
       });
     },
+    collapsed(val) {
+      if (!val) {
+        console.log(this.$route, this.findParentById(this.menuList, this.$route.path));
+        this.handleSelect(this.findParentById(this.menuList, this.$route.path));
+        this.$nextTick(() => {
+          this.$refs.childMenu.updateOpened();
+        });
+      }
+    },
     $route(newRoute) {},
     $route: {
       handler(newRoute) {
@@ -189,9 +198,9 @@ export default {
     console.log(this.menuList);
     this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName());
     if (sessionStorage.getItem('menuActive')) {
-      // this.activeMenuPath = sessionStorage.getItem('menuActive');
-      // this.catName = sessionStorage.getItem('menuActiveTitle');
-      // this.getChildrenList(sessionStorage.getItem('menuActive'));
+      this.activeMenuPath = sessionStorage.getItem('menuActive');
+      this.catName = sessionStorage.getItem('menuActiveTitle');
+      this.getChildrenList(sessionStorage.getItem('menuActive'));
     } else {
       this.handleSelect(this.openedNames[0]);
     }
@@ -256,11 +265,12 @@ export default {
       this.turnToPage(name);
     },
     collHandleSelect(name) {
+      console.log(this.menuList)
       this.activeMenuPath = this.findParentById(this.menuList, name);
       this.turnToPage(name);
     },
     findParentById(arr, path) {
-      var parentId = '没有父元素',
+      var parentId = '',
         hasParentId = (function loop(arr) {
           return arr.some((item) => {
             if (item.path === path) {
@@ -338,7 +348,6 @@ export default {
 </script>
 <style lang="less">
 @import './side-menu.less';
-
 .ivu-menu {
   .side-menu-wrapper {
     position: relative;
@@ -381,7 +390,6 @@ export default {
     background-color: #2d8cf0 !important;
     color: #fff !important;
   }
-
   .ivu-select-dropdown.ivu-dropdown-transfer
     .collased-menu-dropdown:hover
     > .ivu-dropdown-rel
@@ -492,9 +500,6 @@ export default {
 /deep/ .ivu-select-dropdown {
   left: 95px !important;
 }
-.ivu-dropdown-rel {
-  min-width: 75px !important;
-}
 .menu-collapsed {
   padding: 0 8px;
   .drop-menu-a:hover {
@@ -526,6 +531,7 @@ export default {
       margin-right: 8px;
     }
     .title {
+      font-size: 13px;
       white-space: nowrap;
     }
   }
