@@ -225,4 +225,7 @@ export default {
   min-height: 600px;
   margin-top 0px !important ;
 }
+.article-manager /deep/ .ivu-form-item{
+  margin-bottom: 20px !important;
+}
 </style>

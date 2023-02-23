@@ -15,6 +15,7 @@ import VuexPersistence from 'vuex-persist';
 import user from './module/user';
 import app from './module/app';
 import menus from './module/menus';
+import menu from './module/menu';
 import userInfo from './module/userInfo';
 import userLevel from './module/userLevel';
 import order from './module/order';
@@ -51,6 +52,7 @@ export default new Vuex.Store({
         user: state.user, //这个就是存入localStorage的值
         app: state.app,
         menus: state.menus,
+        menu: state.menu,
         userInfo: state.userInfo,
         userLevel: state.userLevel,
         order: state.order,
@@ -67,6 +69,7 @@ export default new Vuex.Store({
     user,
     app,
     menus,
+    menu,
     userInfo,
     userLevel,
     order,

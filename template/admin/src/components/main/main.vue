@@ -24,7 +24,7 @@
       <Sider
         hide-trigger
         collapsible
-        :width="childMenuList.length ? 220 : 90"
+        :width="sider.length ? 220 : 90"
         :collapsed-width="isMobile ? 0 : 90"
         v-model="collapsed"
         :style="{ overflow: 'hidden' }"
@@ -52,13 +52,13 @@
               <router-view v-if="reload" style="min-height: 600px" />
             </keep-alive> -->
             <keep-alive>
-              <router-view v-if="$route.meta.keepAlive && reload" style="min-height: 600px"></router-view>
+              <router-view v-if="$route.meta.keepAlive && reload" class="main-warper"></router-view>
             </keep-alive>
-            <router-view v-if="!$route.meta.keepAlive && reload" style="min-height: 600px"></router-view>
+            <router-view v-if="!$route.meta.keepAlive && reload" class="main-warper"></router-view>
             <!-- <router-view v-if="reload" style="min-height: 600px" /> -->
-            <!--<ABackTop :height="100" :bottom="80" :right="50" container=".content-wrapper"></ABackTop>-->
+            <ABackTop :height="100" :bottom="80" :right="50" container=".content-wrapper"></ABackTop>
+            <i-copyright v-if="!headMenuNoShow" />
           </Content>
-          <i-copyright v-if="!headMenuNoShow" />
         </Layout>
       </Content>
     </Layout>
@@ -118,9 +118,14 @@ export default {
       headMenuNoShow: false,
     };
   },
+  watch: {
+    sider(val) {
+      console.log(val);
+    },
+  },
   computed: {
-    ...mapState('menus', ['childMenuList']),
     ...mapGetters(['errorCount']),
+    ...mapState('menu', ['sider']),
     ...mapState('media', ['isMobile']),
     tagNavList() {
       return this.$store.state.app.tagNavList;
@@ -312,5 +317,8 @@ export default {
   img {
     width: 800px;
   }
+}
+.main-warper{
+  min-height: calc(~'100vh - 166px');
 }
 </style>
