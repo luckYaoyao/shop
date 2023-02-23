@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="mt10">
+    <Card :bordered="false" dis-hover>
       <Tabs class="mb20" v-model="currentTab" @on-click="onClickTab" v-if="tablists">
         <TabPane v-for="(item, index) in tabs" :label="item.label" :name="item.type" :key="index" />
       </Tabs>
