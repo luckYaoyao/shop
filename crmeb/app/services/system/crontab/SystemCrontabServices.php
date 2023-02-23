@@ -265,7 +265,7 @@ class SystemCrontabServices extends BaseServices
         $timer_log_open = config("log.timer_log", false);
         if ($timer_log_open) {
             $date = date('Y-m-d H:i:s', time());
-            Log::info($date . $msg);
+            Log::write($date . $msg, 'crontab');
         }
     }
 }

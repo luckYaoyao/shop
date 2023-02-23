@@ -368,11 +368,11 @@ export default {
     }
     .ivu-menu-submenu {
       .ivu-menu-item {
-        padding-left: 16px !important;
+        padding-left: 23px !important;
       }
       .ivu-menu-submenu {
         .ivu-menu-submenu-title {
-          padding-left: 16px !important;
+          padding-left: 23px !important;
         }
       }
     }
