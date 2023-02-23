@@ -43,6 +43,7 @@
 .section {
     height: 100%;
     z-index: 11;
+    text-align: left;
     position: absolute;
     background: rgba(34, 34, 34, 0.6);
     border-radius: 36px 36px 36px 36px;

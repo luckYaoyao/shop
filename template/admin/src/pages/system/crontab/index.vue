@@ -1,5 +1,11 @@
 <template>
   <Card :bordered="false" dis-hover>
+    <Alert>
+      <template slot="desc">
+        如果使用命令启动定时任务，修改定时任务之后需要重新启动命令才能生效<br />
+        使用接口访问情况下，修改定时任务不需要重新启动，接口地址 https://您的域名/api/crontab/run
+      </template>
+    </Alert>
     <Button type="primary" @click="addTask">添加定时任务</Button>
     <Table :columns="columns" :data="tableData" :loading="loading" class="ivu-mt">
       <template slot-scope="{ row }" slot="execution_cycle">
@@ -164,4 +170,8 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+.ivu-mt {
+  padding-top:10px
+}
+</style>
