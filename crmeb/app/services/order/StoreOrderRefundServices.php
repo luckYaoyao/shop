@@ -1037,7 +1037,13 @@ class StoreOrderRefundServices extends BaseServices
         foreach ($cartInfo as $cart) {
             if (isset($cart['cart_info'])) $cart = $cart['cart_info'];
             if ($is_unit) {
-                $SumPrice = bcadd($SumPrice, bcmul($cart['cart_num'] ?? 1, $cart[$key] ?? 0, 2), 2);
+                if ($key == 'level' || $key == 'member') {
+                    if ($cart['price_type'] == $key) {
+                        $SumPrice = bcadd($SumPrice, bcmul($cart['cart_num'] ?? 1, $cart['vip_truePrice'], 2), 2);
+                    }
+                } else {
+                    $SumPrice = bcadd($SumPrice, bcmul($cart['cart_num'] ?? 1, $cart[$key] ?? 0, 2), 2);
+                }
             } else {
                 $SumPrice = bcadd($SumPrice, $cart[$key] ?? 0, 2);
             }
