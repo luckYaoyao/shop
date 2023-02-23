@@ -552,8 +552,8 @@
 							}
 						})
 						this.jumpData = {
-							orderId: res.data.result.orderId,
-							msg: res.msg,
+							orderId: data.data.result.orderId,
+							msg: data.msg,
 						}
 						// #endif
 						// #ifdef APP-PLUS
@@ -565,7 +565,7 @@
 						}, 1000)
 						// #endif
 						// #ifdef H5
-						this.formpost(res.data.result.pay_url, jsConfig)
+						this.formpost(data.data.result.pay_url, jsConfig)
 						// #endif
 						break;
 					case 'PAY_ERROR':
