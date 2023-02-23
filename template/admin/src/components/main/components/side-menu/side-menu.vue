@@ -69,7 +69,7 @@
       <template v-for="item in menuList">
         <collapsed-menu
           v-if="item.children && item.children.length > 0"
-          @on-click="handleSelect"
+          @on-click="collHandleSelect"
           :hide-title="true"
           :activeMenuPath="activeMenuPath"
           :root-icon-size="rootIconSize"
@@ -80,7 +80,7 @@
         ></collapsed-menu>
         <Tooltip transfer v-else :content="item.title" placement="right" :key="`drop-menu-${item.path}`">
           <a
-            @click="handleSelect(item)"
+            @click="collHandleSelect(item)"
             class="drop-menu-a"
             :class="{ on: item.path == activeMenuPath }"
             :style="{ textAlign: 'center' }"
@@ -196,6 +196,7 @@ export default {
         }
       });
     },
+
     handleSelect(name, type) {
       this.childOptions = [];
       this.menuList.map((e) => {
@@ -239,6 +240,9 @@ export default {
       }
     },
     handleChildSelect(name) {
+      this.turnToPage(name);
+    },
+    collHandleSelect(name) {
       this.turnToPage(name);
     },
     turnToPage(route, all) {
