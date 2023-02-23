@@ -305,6 +305,7 @@ export default {
       let excelData = JSON.parse(JSON.stringify(this.orderData));
       excelData.page = 1;
       excelData.limit = 200;
+      excelData.ids = this.delIdList;
       for (let i = 0; i < excelData.page + 1; i++) {
         let lebData = await this.getExcelData(excelData);
         if (!fileName) fileName = lebData.filename;

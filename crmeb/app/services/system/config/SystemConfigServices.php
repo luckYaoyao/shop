@@ -91,7 +91,6 @@ class SystemConfigServices extends BaseServices
                 'spread_banner' => '',
                 'brokerage_level' => '',
                 'division_status' => '',
-                'member_brokerage' => '',
             ],
             'show_value' => 1
         ],
