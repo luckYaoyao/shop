@@ -3251,7 +3251,6 @@ export default {
   font-size: 12px;
   font-weight: 400;
   color: #999999;
-  margin-top: 14px;
 }
 
 .videbox {

@@ -22,6 +22,7 @@
 <style>
 .search .ivu-select-selection {
   margin-right: 20px;
+  border-radius: 30px;
 }
 .search .ivu-select-visible .ivu-select-selection {
   box-shadow: unset !important;
@@ -32,6 +33,9 @@
 .search .select .ivu-select-input,
 .search .select .ivu-select-item {
   font-size: 14px !important;
+}
+.ivu-select-input{
+  background-color: rgba(255,255,255,0.3);
 }
 </style>
 <script>

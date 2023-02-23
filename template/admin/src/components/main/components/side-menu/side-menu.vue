@@ -6,7 +6,7 @@
       <div class="parent-menu">
         <Menu
           ref="menu"
-          :active-name="activeMenuPath"
+          :active-name="headerName"
           :open-names="openedNames"
           :accordion="accordion"
           :theme="theme"
@@ -14,7 +14,7 @@
           @on-open-change="openNameData"
           @on-select="handleSelect"
         >
-          <template v-for="item in menuList">
+          <template v-for="item in header">
             <template>
               <menu-item :name="item.path" :key="`menu${item.path}`"
                 ><common-icon :type="item.icon || ''" /><span class="title">{{ item.title }}</span></menu-item
@@ -23,20 +23,19 @@
           </template>
         </Menu>
       </div>
-
-      <div class="child-menu" v-if="childList.length">
-        <div class="cat-name">{{ catName }}</div>
+      <div class="child-menu" v-show="sider.length">
+        <div class="cat-name">{{ oneMenuName }}</div>
         <Menu
           ref="childMenu"
           :active-name="activePath"
-          :open-names="openMenus"
+          :open-names="openNames"
           :accordion="accordion"
           :theme="theme"
           width="145px"
           @on-open-change="openChildNameData"
           @on-select="handleChildSelect"
         >
-          <template v-for="item in childList">
+          <template v-for="item in sider">
             <template v-if="item.auth === undefined">
               <template v-if="item.children && item.children.length >= 1">
                 <side-menu-item
@@ -72,7 +71,7 @@
           v-if="item.children && item.children.length > 0"
           @on-click="collHandleSelect"
           :hide-title="true"
-          :activeMenuPath="activeMenuPath"
+          :activeMenuPath="headerName"
           :root-icon-size="rootIconSize"
           :icon-size="iconSize"
           :theme="theme"
@@ -83,7 +82,7 @@
           <a
             @click="collHandleSelect(item)"
             class="drop-menu-a"
-            :class="{ on: item.path == activeMenuPath }"
+            :class="{ on: item.path == headerName }"
             :style="{ textAlign: 'center' }"
             ><common-icon :color="textColor" :type="item.icon || (item.children && item.children[0].icon)" />
             <span class="title">{{ item.title }}</span>
@@ -97,7 +96,7 @@
 import SideMenuItem from './side-menu-item.vue';
 import CollapsedMenu from './collapsed-menu.vue';
 import { getUnion } from '@/libs/tools';
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import mixin from './mixin';
 import itemMixin from './item-mixin';
 import { setCookies } from '@/libs/util';
@@ -134,10 +133,10 @@ export default {
       default: 16,
     },
     accordion: Boolean,
-    openNames: {
-      type: Array,
-      default: () => [],
-    },
+    // openNames: {
+    //   type: Array,
+    //   default: () => [],
+    // },
   },
   data() {
     return {
@@ -145,74 +144,49 @@ export default {
       childList: [],
       activeChildName: '',
       childOptions: [],
-      activePath: '',
+      // activePath: '',
       activeMenuPath: '',
       catName: '',
     };
   },
   computed: {
     ...mapState('menus', ['openMenus']),
+    ...mapState('menu', ['activePath', 'openNames', 'header', 'headerName', 'sider', 'oneMenuName']),
+    ...mapGetters('menu', ['filterSider']),
+
     textColor() {
       return this.theme === 'dark' ? '#fff' : '#495060';
     },
   },
   watch: {
-    activeName(name) {
-      if (this.accordion) this.openedNames = this.getOpenedNamesByActiveName();
-      else this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName());
-      // this.handleSelect(this.activeName);
-    },
-    openNames(newNames) {
-      this.openedNames = newNames;
-    },
     openedNames() {
       this.$nextTick(() => {
         this.$refs.menu.updateOpened();
+        this.$refs.childMenu.updateActiveName();
+      });
+    },
+    oneMenuName() {
+      this.$nextTick(() => {});
+    },
+    activePath() {
+      this.$nextTick(() => {
+        console.log();
+        this.$refs.childMenu.updateOpened();
+        this.$refs.childMenu.updateActiveName();
       });
     },
     collapsed(val) {
       if (!val) {
-        console.log(this.$route, this.findParentById(this.menuList, this.$route.path));
-        this.handleSelect(this.findParentById(this.menuList, this.$route.path));
         this.$nextTick(() => {
+          this.$refs.menu.updateOpened();
+          this.$refs.childMenu.updateActiveName();
           this.$refs.childMenu.updateOpened();
         });
       }
     },
-    $route(newRoute) {},
-    $route: {
-      handler(newRoute) {
-        console.log(newRoute, 'newRoutenewRoute');
-        this.activePath = newRoute.path;
-        // this.activeMenuPath = newRoute.matched[0].path;
-        if (this.collapsed) {
-          sessionStorage.setItem('menuActive', newRoute.matched[0].path);
-          this.activeMenuPath = newRoute.matched[0].path;
-        }
-        this.handleUpdateMenuState();
-      },
-      immediate: true,
-    },
   },
-  mounted() {
-    console.log(this.menuList);
-    this.openedNames = getUnion(this.openedNames, this.getOpenedNamesByActiveName());
-    if (sessionStorage.getItem('menuActive')) {
-      this.activeMenuPath = sessionStorage.getItem('menuActive');
-      this.catName = sessionStorage.getItem('menuActiveTitle');
-      this.getChildrenList(sessionStorage.getItem('menuActive'));
-    } else {
-      this.handleSelect(this.openedNames[0]);
-    }
-  },
+  mounted() {},
   methods: {
-    getChildrenList(path) {
-      this.menuList.map((e) => {
-        if (e.path === path) {
-          this.childList = e.children || [];
-        }
-      });
-    },
     handleCollpasedChange(state) {
       console.log(state);
       // this.collapsed = state;
@@ -220,90 +194,35 @@ export default {
       // setCookies('collapsed', state);
     },
     handleSelect(name, type) {
-      this.childOptions = [];
+      console.log(name, 'name');
       this.menuList.map((e) => {
         if (e.path === name) {
           if (e.children && e.children.length) {
             this.jump(e.children);
             this.catName = e.title;
-            // this.activeMenuPath = e.path;
-            this.childList = e.children || [];
-            sessionStorage.setItem('menuActive', e.path);
-            sessionStorage.setItem('menuActiveTitle', e.title);
-            this.activeMenuPath = e.path;
-            // this.activeChildName = e.children[0].path;
-            // this.childOptions = [e.children[0].path];
-            this.$store.commit('menus/childMenuList', this.childList);
-            // if (!type) {
-            //   this.$emit('on-select', e.children[0].path);
-            // }
           } else {
-            if (!type) {
-              this.$emit('on-select', name);
-            }
-            this.activeMenuPath = e.path;
-
-            this.childList = [];
-            this.$store.commit('menus/childMenuList', []);
+            // if (!type) {
+            //   this.$emit('on-select', name);
+            // }
           }
         }
       });
+    },
+    handleChildSelect(name) {
+      this.turnToPage(name);
     },
     jump(data) {
       if (data[0].children && data[0].children.length) {
         this.jump(data[0].children);
       } else {
-        this.catName = data[0].title;
-        // this.activeMenuPath = data[0].path;
-        this.activeChildName = data[0].path;
-        this.childOptions = [data[0].path];
-        this.$store.commit('menus/childMenuList', this.childList);
-        this.$emit('on-select', data[0].path);
+        console.log(data[0].path, 'data[0].path');
+        this.turnToPage(data[0].path);
       }
     },
-    handleChildSelect(name) {
-      this.turnToPage(name);
-    },
-    collHandleSelect(name) {
-      console.log(this.menuList)
-      this.activeMenuPath = this.findParentById(this.menuList, name);
-      this.turnToPage(name);
-    },
-    findParentById(arr, path) {
-      var parentId = '',
-        hasParentId = (function loop(arr) {
-          return arr.some((item) => {
-            if (item.path === path) {
-              return true;
-            } else if (Array.isArray(item.children)) {
-              parentId = item.path;
-              return loop(item.children);
-            } else {
-              return false;
-            }
-          });
-        })(arr);
-      return hasParentId ? parentId : '未找到对应父元素';
-    },
 
-    // findParentsById(arr, id) {
-    //   var parentIds = [],
-    //     index = 0,
-    //     hasParentId = (function loop(arr, index) {
-    //       return arr.some((item) => {
-    //         if (item.MENU_ID === id) {
-    //           parentIds = parentIds.slice(0, index);
-    //           return true;
-    //         } else if (Array.isArray(item.MENU_INFO)) {
-    //           parentIds[index] = item.MENU_ID;
-    //           return loop(item.MENU_INFO, index + 1);
-    //         } else {
-    //           return false;
-    //         }
-    //       });
-    //     })(arr, index);
-    //   return hasParentId ? parentIds : [];
-    // },
+    collHandleSelect(name) {
+      this.turnToPage(name);
+    },
     turnToPage(route, all) {
       let { path, name, params, query } = {};
       if (typeof route === 'string' && !all) path = route;
@@ -321,27 +240,12 @@ export default {
         query,
       });
     },
-    getOpenedNamesByActiveName() {
-      return this.$route.matched.map((item) => item.path).filter((item) => item !== name);
-    },
-    updateOpenName(name) {
-      if (name === this.$config.homeName) this.openedNames = [];
-      else this.openedNames = this.getOpenedNamesByActiveName();
-    },
     openNameData(n) {
       // this.openedNames = n
       // this.$store.commit('menus/getopenMenus', n)
     },
     openChildNameData(e) {
       console.log(e);
-    },
-    handleUpdateMenuState() {
-      this.$nextTick(() => {
-        if (this.$refs.childMenu) {
-          this.$refs.childMenu.updateActiveName();
-          if (this.accordion) this.$refs.childMenu.updateOpened();
-        }
-      });
     },
   },
 };

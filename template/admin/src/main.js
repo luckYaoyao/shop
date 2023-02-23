@@ -55,7 +55,7 @@ import Viewer from 'v-viewer';
 import VueDND from 'awe-dnd';
 import formCreate from '@form-create/iview';
 import modalForm from '@/utils/modalForm';
-import exportExcel from '@/utils/newToExcel.js'
+import exportExcel from '@/utils/newToExcel.js';
 import videoCloud from '@/utils/videoCloud';
 import { modalSure } from '@/utils/public';
 import { authLapse } from '@/utils/authLapse';
@@ -67,6 +67,8 @@ import timeOptions from '@/libs/timeOptions';
 import scroll from '@/libs/loading';
 import * as tools from '@/libs/tools';
 import VueTreeList from 'vue-tree-list';
+import { getHeaderName, getHeaderSider, getMenuSider, getSiderSubmenu } from '@/libs/system';
+
 // 复制到粘贴板插件
 import VueClipboard from 'vue-clipboard2';
 
@@ -88,9 +90,9 @@ const routerPush = Router.prototype.push;
 Router.prototype.push = function push(location) {
   return routerPush.call(this, location).catch((error) => error);
 };
-import settings  from '@/setting'
+import settings from '@/setting';
 
-Vue.prototype.$routeProStr = settings.routePre
+Vue.prototype.$routeProStr = settings.routePre;
 
 // 实际打包时应该不引入mock
 /* eslint-disable */
@@ -193,11 +195,45 @@ new Vue({
   watch: {
     // 监听路由 控制侧边栏显示 标记当前顶栏菜单（如需要）
     $route(to, from) {
+      const path = to.path;
+      let menus = this.$store.state.menus.menusName;
+      console.log(menus, 'menus');
+      const menuSider = menus;
+
+      this.$store.commit('menu/setActivePath', path);
+      const openNames = getSiderSubmenu(to, menuSider);
+      this.$store.commit('menu/setOpenNames', openNames);
+      // 设置顶栏菜单 后台添加一个接口，设置顶部菜单
+      const headerSider = getHeaderSider(menuSider);
+      console.log(headerSider, 'headerSider');
+      this.$store.commit('menu/setHeader', headerSider);
+      // 指定当前侧边栏隶属顶部菜单名称。如果你没有使用顶部菜单，则设置为默认的（一般为 home）名称即可
+      const headerName = getHeaderName(to, menuSider);
+      this.$store.commit('menu/setHeaderName', headerName);
+      // 获取侧边栏菜单
+      const filterMenuSider = getMenuSider(menuSider, headerName);
+      console.log(filterMenuSider, 'filterMenuSider');
+      // 指定当前显示的侧边菜单
+      this.$store.commit('menu/setOpenMenuName', filterMenuSider[0].title);
+      this.$store.commit('menu/setSider', filterMenuSider[0]?.children || []);
       if (to.meta.kefu) {
         document.getElementsByTagName('body')[0].className = 'kf_mobile';
       } else {
         document.getElementsByTagName('body')[0].className = '';
       }
+      // var storage = window.localStorage;
+      // let menus = JSON.parse(storage.getItem('menuList'));
+      // this.getMenus().then(menus => {
+      // 处理手动清除db 跳转403问题
+      if (!menus.length) {
+        if (path !== '/admin/login') {
+          this.$router.replace('/admin/login');
+        }
+        return;
+      }
+      // 在 404 时，是没有 headerName 的
+      
+      // });
     },
   },
 });

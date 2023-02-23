@@ -66,7 +66,6 @@ export default {
   },
   methods: {
     handleClick(name) {
-      console.log(name, this.activeMenuPath);
       this.$emit('on-click', name, this.activeMenuPath);
     },
     handleMousemove(event, children) {
@@ -93,5 +92,8 @@ export default {
   display flex
   justify-content space-between
   width 100%
+}
+.drop-menu-a /deep/ .ivu-dropdown-rel {
+  min-width: 75px !important;
 }
 </style>
