@@ -153,12 +153,12 @@ export default {
     },
   },
   watch: {
-    openedNames() {
-      this.$nextTick(() => {
-        this.$refs.menu.updateOpened();
-        this.$refs.childMenu.updateActiveName();
-      });
-    },
+    // openedNames() {
+    //   this.$nextTick(() => {
+    //     this.$refs.menu.updateOpened();
+    //     this.$refs.childMenu.updateActiveName();
+    //   });
+    // },
     activePath() {
       this.$nextTick(() => {
         this.$refs.childMenu.updateOpened();
