@@ -348,12 +348,19 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-.tabBox_img
-    width 36px
-    height 36px
-    border-radius:4px
-    cursor pointer
-    img
-        width 100%
-        height 100%
+.article-manager{
+  margin-top: 3px;
+}
+.tabBox_img{
+  width: 36px;
+  height: 36px;
+  border-radius:4px;
+  cursor: pointer;
+  img{
+    width: 100%;
+    height: 100%;
+  }
+
+}
+
 </style>

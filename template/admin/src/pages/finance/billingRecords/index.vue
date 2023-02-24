@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ive-mt tablebox">
+    <Card :bordered="false" dis-hover class="ive-mt">
       <div class="ive-mt tabbox">
         <Tabs @on-click="onClickTab" class="mb20">
           <TabPane label="日账单" name="day" />

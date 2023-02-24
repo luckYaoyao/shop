@@ -1,8 +1,10 @@
 <template>
   <div>
+    <div class="i-layout-page-header" style="padding: 18px 32px;border-bottom: 1px solid #f2f2f2;">
+      <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
+    </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
       <Table
-        class="mt25"
         :columns="thead"
         :data="tbody"
         :loading="loading"
