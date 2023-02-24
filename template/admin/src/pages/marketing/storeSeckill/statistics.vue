@@ -247,7 +247,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang='less' scoped>
 .cl {
   margin-right: 20px;
 }
@@ -261,6 +261,15 @@ export default {
 }
 .ech-box {
   margin-top: 10px;
+}
+.i-layout-page-header {
+  padding-left: 5px;
+  padding-bottom: 1px;
+  margin-bottom: 10px;
+}
+/deep/ .ivu-tabs-nav-scroll{
+  background-color: #fff;
+  padding-top: 5px;
 }
 .change-style {
   border: 1px solid #ccc;
