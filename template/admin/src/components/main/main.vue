@@ -44,10 +44,10 @@
       </Sider>
       <Content class="main-content-con">
         <Layout class="main-layout-con">
+          <div class="tag-nav-wrapper" v-if="!headMenuNoShow">
+            <tags-nav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag" />
+          </div>
           <Content class="content-wrapper">
-            <div class="tag-nav-wrapper" v-if="!headMenuNoShow">
-              <tags-nav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag" />
-            </div>
             <!-- <keep-alive :include="cacheList">
               <router-view v-if="reload" style="min-height: 600px" />
             </keep-alive> -->
@@ -302,6 +302,7 @@ export default {
 .main .tag-nav-wrapper {
   // height: 10px;
   background: unset;
+  padding:  0 15px;
 }
 .open-image {
   display: flex;
@@ -318,7 +319,7 @@ export default {
     width: 800px;
   }
 }
-.main-warper{
+.main-warper {
   min-height: calc(~'100vh - 166px');
 }
 </style>
