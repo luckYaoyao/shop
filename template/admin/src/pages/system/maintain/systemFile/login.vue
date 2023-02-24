@@ -1,9 +1,7 @@
 <template>
   <div>
     <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-      </div>
     </div>
     <Row type="flex">
       <Col span="24">
@@ -105,10 +103,13 @@ export default {
 </script>
 
 <style scoped lang="stylus">
+.i-layout-page-header{
+  padding: 18px 32px;
+}
 .maxInpt{
-    max-width 400px
-    margin-left auto
-    margin-right auto
+    max-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
 }
 .index_from{
   display: flex;
@@ -117,27 +118,33 @@ export default {
   align-items: center;
 }
 .trip{
-    width 400px
+    width: 400px;
     text-align: left;
-    color #aaa
+    color: #aaa;
 }
 .page-account-container{
-    text-align center
-    padding 200px 0
+    text-align: center;
+    padding: 200px 0;
 }
 .page-account-top{
-    margin-bottom 50px
+    margin-bottom: 50px;
 }
-.page-account-top-tit
-    font-size 30px
-    color #1890FF
-    font-weight 500
-.page-account-other
-    text-align center
-    color #1890FF
-    font-size 12px
-    span
-        cursor pointer
+.page-account-top-tit{
+  font-size:30px;
+  color:#1890FF;
+  font-weight:500;
+}
+
+.page-account-other{
+  text-align:center;
+  color:#1890FF;
+  font-size:12px;
+  span{
+    cursor: pointe;
+  }
+}
+
+
 >>> .btn{
   font-size: 15px !important;
 }

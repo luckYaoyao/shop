@@ -65,8 +65,8 @@
       </div>
     </div>
 
-    <div class="menu-collapsed" v-show="collapsed" :list="menuList">
-      <template v-for="item in menuList">
+    <div class="menu-collapsed" v-show="collapsed">
+      <template v-for="item in menusName">
         <collapsed-menu
           v-if="item.children && item.children.length > 0"
           @on-click="collHandleSelect"
@@ -111,12 +111,6 @@ export default {
     siderTrigger,
   },
   props: {
-    menuList: {
-      type: Array,
-      default() {
-        return [];
-      },
-    },
     collapsed: {
       type: Boolean,
     },
@@ -150,7 +144,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('menus', ['openMenus']),
+    ...mapState('menus', ['menusName']),
     ...mapState('menu', ['activePath', 'openNames', 'header', 'headerName', 'sider', 'oneMenuName']),
     ...mapGetters('menu', ['filterSider']),
 
@@ -159,18 +153,14 @@ export default {
     },
   },
   watch: {
-    openedNames() {
-      this.$nextTick(() => {
-        this.$refs.menu.updateOpened();
-        this.$refs.childMenu.updateActiveName();
-      });
-    },
-    oneMenuName() {
-      this.$nextTick(() => {});
-    },
+    // openedNames() {
+    //   this.$nextTick(() => {
+    //     this.$refs.menu.updateOpened();
+    //     this.$refs.childMenu.updateActiveName();
+    //   });
+    // },
     activePath() {
       this.$nextTick(() => {
-        console.log();
         this.$refs.childMenu.updateOpened();
         this.$refs.childMenu.updateActiveName();
       });
@@ -188,13 +178,10 @@ export default {
   mounted() {},
   methods: {
     handleCollpasedChange(state) {
-      console.log(state);
-      // this.collapsed = state;
       this.$emit('on-coll-change', state);
-      // setCookies('collapsed', state);
     },
     handleSelect(name, type) {
-      this.menuList.map((e) => {
+      this.menusName.map((e) => {
         if (e.path === name) {
           this.turnToPage(this.getChilden(e));
         }
@@ -210,14 +197,6 @@ export default {
     handleChildSelect(name) {
       this.turnToPage(name);
     },
-    jump(data) {
-      if (data[0].children) {
-        this.jump(data[0].children);
-      } else {
-        this.turnToPage(data[0].path);
-      }
-    },
-
     collHandleSelect(name) {
       this.turnToPage(name);
     },
@@ -238,14 +217,12 @@ export default {
         query,
       });
     },
-    openNameData(n) {
-      // this.openedNames = n
-      // this.$store.commit('menus/getopenMenus', n)
-    },
+    openNameData(n) {},
     openChildNameData(e) {},
   },
 };
 </script>
+<style lang="less" scoped></style>
 <style lang="less">
 @import './side-menu.less';
 .ivu-menu {
@@ -338,6 +315,14 @@ export default {
       color: #fff !important;
       border-radius: 4px;
     }
+    .ivu-menu-vertical .ivu-menu-item:hover {
+      color: #1890ff !important;
+      background-color: rgba(24, 144, 255, 0.1) !important;
+      border-radius: 4px;
+      .ivu-icon {
+        color: #1890ff !important;
+      }
+    }
     .ivu-menu-vertical .ivu-menu-item {
       padding: 10px 10px;
       margin-bottom: 8px;
@@ -371,6 +356,9 @@ export default {
       .ivu-menu-submenu {
         .ivu-menu-submenu-title {
           padding-left: 23px !important;
+        }
+        .ivu-menu-item {
+          padding-left: 35px !important;
         }
       }
     }
@@ -438,6 +426,7 @@ export default {
       white-space: nowrap;
     }
   }
+
   .drop-menu-a {
     padding: 0;
   }

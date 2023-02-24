@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="article-manager">
     <Card :bordered="false" dis-hover class="ivu-mt fromBox">
       <Tabs v-model="currentTab" @on-click="changeTab" v-if="headerList.length">
@@ -21,6 +22,7 @@
       <form-create :option="option" :rule="rules" @submit="onSubmit" v-if="rules.length !== 0"></form-create>
       <Spin size="large" fix v-if="spinShow"></Spin>
     </Card>
+  </div>
   </div>
 </template>
 

@@ -1,13 +1,11 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
+    <div class="i-layout-page-header header-title">
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
         <div class="clear_tit">
           <Icon type="md-information-circle" color="#ED4014" />
           <span>清除数据请谨慎，清除就无法恢复哦！</span>
         </div>
-      </div>
     </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
       <Row type="flex" :gutter="24">
