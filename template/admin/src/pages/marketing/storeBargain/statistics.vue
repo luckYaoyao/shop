@@ -412,7 +412,13 @@ export default {
 }
 
 .i-layout-page-header {
-  padding-left: 13px;
+  padding-left: 5px;
+  padding-bottom: 1px;
+  margin-bottom: 10px;
+}
+/deep/ .ivu-tabs-nav-scroll{
+  background-color: #fff;
+  padding-top: 5px;
 }
 
 .tabBox_img {

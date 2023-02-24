@@ -1,8 +1,5 @@
 <template>
   <div >
-    <div class="i-layout-page-header header_top">
-      <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-    </div>
     <div class="message">
       <Card :bordered="false" dis-hover class="">
         <div class="mb20">

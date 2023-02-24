@@ -37,7 +37,6 @@
           :active-name="$route.path"
           :collapsed="collapsed"
           @on-select="turnToPage"
-          :menu-list="menuList"
         >
           <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
         </side-menu>
@@ -145,20 +144,6 @@ export default {
       ];
       return list;
     },
-    menuList() {
-      let menus = this.$store.state.menus.menusName;
-      let newArray = [];
-      menus.forEach((now, index) => {
-        newArray[index] = now;
-        if (newArray[index].children && now.children) {
-          newArray[index].children = now.children.filter((item) => {
-            return !item.auth;
-          });
-        }
-      });
-      return newArray;
-      // return this.$store.state.menus.menusName
-    },
     local() {
       return this.$store.state.app.local;
     },
@@ -237,8 +222,6 @@ export default {
   watch: {
     $route(newRoute) {
       this.headMenuNoShow = this.$route.meta.fullScreen;
-      let openNames = getMenuopen(newRoute, this.menuList);
-      this.$store.commit('menus/setopenMenus', openNames);
       const { name, query, params, meta } = newRoute;
       this.addTag({
         route: { name, query, params, meta },

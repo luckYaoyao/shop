@@ -1,7 +1,7 @@
 <template>
   <div class="" id="shopp-manager">
-    <div class="i-layout-page-header header_top">
-      <div class="i-layout-page-header fl_header">
+    <div class="i-layout-page-header header-title">
+      <div class=" fl_header">
         <router-link :to="{ path: $routeProStr + '/product/product_list' }"
           ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         >
