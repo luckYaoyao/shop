@@ -1,21 +1,5 @@
 <template>
   <div>
-    <div class="i-layout-page-header header_top">
-      <div class="i-layout-page-header fl_header">
-        <!-- <router-link :to="{ path: '/admin/marketing/lottery/index' }"
-          ><Button icon="ios-arrow-back" size="small" type="text"
-            >返回</Button
-          ></router-link
-        > -->
-        <!-- <Divider type="vertical" /> -->
-        <span
-          class="ivu-page-header-title mr20"
-          style="padding: 0"
-          v-text="$route.params.id ? '编辑抽奖信息' : '添加抽奖信息'"
-        ></span>
-      </div>
-    </div>
-
     <Card :bordered="false" dis-hover class="ivu-mt">
       <div>
         <Tabs v-model="formValidate.factor" @on-click="onClickTab">
