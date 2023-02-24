@@ -32,7 +32,7 @@
 }
 .search .select .ivu-select-input,
 .search .select .ivu-select-item {
-  font-size: 14px !important;
+  font-size: 13px !important;
 }
 .search .ivu-select-input{
   padding-left: 19px;
