@@ -6,7 +6,7 @@
           <Icon type="ios-notifications-outline" size="24"></Icon>
         </Badge>
       </div>
-      <DropdownMenu slot="list">
+      <DropdownMenu slot="list" v-show="needList.length">
         <DropdownItem :name="item.url" v-for="(item, index) in needList" :key="index"
           ><Icon :type="item.icon" :style="'background-color:' + item.iconColor" class="iconImg" />{{
             item.title
