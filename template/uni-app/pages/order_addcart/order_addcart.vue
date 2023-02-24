@@ -241,7 +241,8 @@
 				sysHeight: sysHeight,
 				newData: {},
 				activeRouter: '',
-				is_diy_set: false
+				is_diy_set: false,
+				adding: false
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -700,28 +701,32 @@
 						that.cartList.valid[index] = item;
 						that.getCartNum();
 						that.switchSelect();
-					});
+					}).catch(err => {
+						item.cart_num = Number(item.cart_num) + 1
+					})
 				}
 			},
 			addCart: function(index) {
 				let that = this;
+				if (this.adding) return
 				let item = that.cartList.valid[index];
-				let lastnum = Number(item.cart_num) + 1
+				item.cart_num = Number(item.cart_num) + 1
 				let productInfo = item.productInfo;
-				if (productInfo.hasOwnProperty('attrInfo') && lastnum >= item.productInfo.attrInfo.stock) {
-					lastnum = item.productInfo.attrInfo.stock;
+				if (productInfo.hasOwnProperty('attrInfo') && item.cart_num >= item.productInfo.attrInfo.stock) {
+					item.cart_num = item.productInfo.attrInfo.stock;
 					item.numAdd = true;
 					item.numSub = false;
 				} else {
 					item.numAdd = false;
 					item.numSub = false;
 				}
-				that.setCartNum(item.id, lastnum, (data) => {
+				that.setCartNum(item.id, item.cart_num, (data) => {
 					that.cartList.valid[index] = item;
-					item.cart_num = Number(item.cart_num) + 1;
 					that.getCartNum();
 					that.switchSelect();
-				});
+				}).catch(err => {
+					item.cart_num = Number(item.cart_num) - 1
+				})
 			},
 			setCartNum(cartId, cartNum, successCallback) {
 				let that = this;
@@ -737,6 +742,7 @@
 				let that = this;
 				getCartCounts().then(res => {
 					that.cartCount = res.data.count;
+					this.adding = false
 					this.$store.commit('indexData/setCartNum', res.data.count > 99 ? '..' : res.data.count)
 					if (res.data.count > 0) {
 						wx.setTabBarBadge({

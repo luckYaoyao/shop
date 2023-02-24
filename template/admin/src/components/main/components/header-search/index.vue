@@ -6,6 +6,7 @@
       placeholder="菜单搜索"
       filterable
       remote
+      clearable
       :remote-method="remoteMethod"
       :loading="loading"
     >
