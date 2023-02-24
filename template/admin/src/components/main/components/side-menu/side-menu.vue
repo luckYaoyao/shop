@@ -381,6 +381,9 @@ export default {
         .ivu-menu-submenu-title {
           padding-left: 23px !important;
         }
+        .ivu-menu-item {
+        padding-left: 35px !important;
+      }
       }
     }
     .ivu-menu-vertical .ivu-menu-submenu-title {

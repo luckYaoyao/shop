@@ -697,3 +697,12 @@ export function getLangJson() {
 		noAuth: true
 	})
 }
+
+/**
+ * 
+ * 小程序绑定手机号
+ * @param object data
+ */
+export function mpBindingPhone(data) {
+	return request.post('v2/routine/binding_phone', data);
+}
