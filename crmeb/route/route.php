@@ -21,7 +21,7 @@ Route::miss(function () {
                 return view(app()->getRootPath() . 'public' . DS . 'home' . DS . 'index.html');
             }
         case 'kefu':
-            return view(app()->getRootPath() . 'public' . DS . 'admin' . DS . 'index.html');
+            return view(app()->getRootPath() . 'public'  . DS . 'system.html');
         case 'pages':
             return view(app()->getRootPath() . 'public' .DS . 'index.html');
         default:
