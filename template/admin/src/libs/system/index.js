@@ -65,7 +65,7 @@ export { getHeaderName };
  * @param {Array} menuList 所有路径
  * */
 function getHeaderSider(menuList) {
-  return menuList.filter((item) => item.is_header === 1);
+  return menuList.filter((item) => item.pid === 0);
 }
 
 export { getHeaderSider };
