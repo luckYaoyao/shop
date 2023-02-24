@@ -892,7 +892,7 @@ export default {
   .main-btn {}
   .card-tree{
     width: 270px;
-    height: calc(100vh - 190px);
+    height: calc(100vh - 115px);
     overflow-y: scroll;
   }
   >>> .tree {
@@ -981,7 +981,7 @@ export default {
   }
   .right-card {
     flex: 1;
-    max-height: calc(100vh - 190px);
+    max-height: calc(100vh - 115px);
     overflow-y: scroll;
   }
 

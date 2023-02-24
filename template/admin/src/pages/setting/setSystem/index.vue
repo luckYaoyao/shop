@@ -1,4 +1,9 @@
 <template>
+  <div>
+    <div class="i-layout-page-header" style="padding: 18px 32px;border-bottom: 1px solid #f2f2f2;">
+      <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
+    </div>
+
   <div class="article-manager">
     <Card :bordered="false" dis-hover class="ivu-mt fromBox">
       <Tabs v-model="currentTab" @on-click="changeTab" v-if="headerList.length">
@@ -21,6 +26,7 @@
       <form-create :option="option" :rule="rules" @submit="onSubmit" v-if="rules.length !== 0"></form-create>
       <Spin size="large" fix v-if="spinShow"></Spin>
     </Card>
+  </div>
   </div>
 </template>
 

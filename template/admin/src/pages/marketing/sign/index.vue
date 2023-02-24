@@ -1,5 +1,8 @@
 <template>
   <div :style="bgcolors">
+    <div class="i-layout-page-header">
+      <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
+    </div>
     <div class="box-wrapper">
       <div v-if="name == 'sign_day_num'" class="iframe" :bordered="false">
         <div class="iframe-box">
@@ -1174,7 +1177,6 @@ export default {
   padding: 20px;
   background-color: #fff;
   border-radius: 5px;
-  margin: 20px;
 }
 
 .iview-video-style {
