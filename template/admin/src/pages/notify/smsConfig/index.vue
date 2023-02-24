@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
+    <div class="i-layout-page-header pt10">
         <span class="ivu-page-header-title" v-if="!isShowList">短信账户</span>
         <div v-if="isShowList" class="acea-row row-between-wrapper picTxt">
           <div slot="content">
@@ -83,9 +82,8 @@
             </div>
           </div>
         </div>
-      </div>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <Card :bordered="false" dis-hover class="ivu-mt" style="min-height: 600px">
       <login-from
         @on-change="onChangePasssword"
         v-if="isShowLogn"
