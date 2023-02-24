@@ -596,6 +596,7 @@ class StoreOrder extends BaseModel
      */
     public function searchIdsAttr($query, $value)
     {
-        if ($value !== '') $query->whereIn('id', $value);
+        if (is_string($value)) $value = explode(',', $value);
+        if (count($value)) $query->whereIn('id', $value);
     }
 }

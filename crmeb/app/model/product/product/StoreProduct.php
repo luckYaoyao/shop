@@ -339,13 +339,14 @@ class StoreProduct extends BaseModel
     }
 
     /**
-     * 不在当前id中查询
+     * 在当前id中查询
      * @param $query
      * @param $value
      */
     public function searchIdsAttr($query, $value)
     {
-        if ($value != '') $query->whereIn('id', $value);
+        if (is_string($value)) $value = explode(',', $value);
+        if (count($value)) $query->whereIn('id', $value);
     }
 
     /**
