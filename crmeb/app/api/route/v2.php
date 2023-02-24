@@ -35,7 +35,9 @@ Route::group('v2', function () {
         //是否强制绑定手机号
         Route::get('bind_status', 'v2.PublicController/bindPhoneStatus');
         //小程序授权绑定手机号
-        Route::post('auth_bindind_phone', 'v2.wechat.AuthController/authBindingPhone');
+        Route::post('auth_bindind_phone', 'v2.wechat.AuthController/bindingPhone');
+        //小程序授权后绑定手机号
+        Route::post('routine/binding_phone', 'v2.wechat.AuthController/authBindingPhone');
         //小程序手机号登录直接绑定
         Route::post('phone_silence_auth', 'v2.wechat.AuthController/silenceAuthBindingPhone');
         //微信手机号登录直接绑定
