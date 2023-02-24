@@ -514,8 +514,9 @@ body {
   padding: 7px 32px 0 32px;
 }
 .header-title {
-  padding: 18px 32px;
+  padding: 10px 16px;
   border-bottom: 1px solid #f2f2f2;
+  margin-bottom: 10px;
 }
 .ivu-page-header-title {
   display: inline-block;
