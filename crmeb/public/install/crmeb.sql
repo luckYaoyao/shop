@@ -33903,7 +33903,7 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (147, 32, '', '添加拼团', 'admin', 'marketing.store_combination', 'create', '', '', '[]', 0, 1, 1, 1, '/marketing/store_combination/create', '', 1, '', 0, 'marketing-store_combination-create', 0),
 (148, 33, '', '添加秒杀', 'admin', 'marketing.store_seckill', 'create', '', '', '[]', 0, 1, 1, 1, '/marketing/store_seckill/create', '', 1, '', 0, 'marketing-store_seckill-create', 0),
 (154, 34, '', '签到配置', 'admin', 'setting.system_group_data', 'index', '', '', '[]', 0, 1, 0, 1, '/marketing/sign', '', 1, '', 0, 'marketing-sign-index', 0),
-(165, 0, 'md-chatboxes', '客服', 'admin', 'setting.storeService', 'index', '', '', '[]', 104, 1, 0, 1, '/kefu', '', 1, '', 0, 'setting-store-service', 0),
+(165, 0, 'md-chatboxes', '客服', 'admin', 'setting.storeService', 'index', '', '', '[]', 104, 1, 0, 1, '/kefu', '', 1, '', 1, 'setting-store-service', 0),
 (166, 65, '', '日志', 'admin', '', '', '', '', '[]', 0, 1, 1, 1, '/system/log', '25/65', 1, '', 0, 'system-log', 0),
 (169, 577, '', '商品删除', 'admin', 'product', '商品删除', 'product/product/<id>', 'DELETE', '[]', 0, 0, 0, 1, '', '', 2, '0', 1, '', 0),
 (170, 3, '', '分类列表', 'admin', '', '', 'product/category', 'GET', '[]', 0, 0, 0, 1, 'product/category', '', 2, '', 0, '', 0),
