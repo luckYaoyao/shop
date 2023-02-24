@@ -481,10 +481,10 @@ class RoutineServices extends BaseServices
         }
         $uid = app()->make(WechatUserServices::class)->openidTouid($userInfoCong['openid']);
         $userServices = app()->make(UserServices::class);
-        if ($userServices->count(['phone|account' => $userInfo['purePhoneNumber']])) {
+        if ($userServices->count(['phone' => $userInfo['purePhoneNumber']])) {
             throw new ApiException(410028);
         }
-        $res = app()->make(UserServices::class)->update(['id' => $uid], ['phone' => $userInfo['purePhoneNumber']]);
+        $res = app()->make(UserServices::class)->update(['uid' => $uid], ['phone' => $userInfo['purePhoneNumber']]);
         if ($res) return true;
         throw new ApiException(410017);
     }
