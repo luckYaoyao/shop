@@ -246,6 +246,7 @@ export default {
   },
 };
 </script>
+<style lang="less" scoped></style>
 <style lang="less">
 @import './side-menu.less';
 .ivu-menu {
@@ -337,6 +338,14 @@ export default {
       background-color: #1890ff !important;
       color: #fff !important;
       border-radius: 4px;
+    }
+    .ivu-menu-vertical .ivu-menu-item:hover {
+      color: #1890ff !important;
+      background-color: rgba(24, 144, 255, 0.1) !important;
+      border-radius: 4px;
+      .ivu-icon {
+        color: #1890ff !important;
+      }
     }
     .ivu-menu-vertical .ivu-menu-item {
       padding: 10px 10px;
@@ -438,6 +447,7 @@ export default {
       white-space: nowrap;
     }
   }
+
   .drop-menu-a {
     padding: 0;
   }
