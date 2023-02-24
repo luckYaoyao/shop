@@ -1,7 +1,7 @@
 <template>
   <div class="newsBox">
-    <div class="i-layout-page-header header_top">
-      <div class="i-layout-page-header fl_header">
+    <div class="i-layout-page-header header-title">
+      <div class="fl_header">
         <router-link :to="{ path: $routeProStr + '/app/wechat/news_category/index' }"
           ><Button icon="ios-arrow-back" size="small" type="text" v-show="$route.params.id">返回</Button></router-link
         >

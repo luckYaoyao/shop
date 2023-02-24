@@ -1,6 +1,6 @@
 <template>
   <div :style="bgcolors">
-    <div class="i-layout-page-header">
+    <div class="i-layout-page-header header-title">
       <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div style="float: right">
         <Button class="bnt" type="primary" @click="onsubmit('formValidate')">保存</Button>

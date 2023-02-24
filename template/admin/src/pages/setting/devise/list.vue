@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <span class="ivu-page-header-title mr20">页面装修</span>
+    <div class="i-layout-page-header header-title">
+      <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div>
         <div style="float: right" v-if="cardShow == 1 || cardShow == 2">
           <Button class="bnt" type="primary" @click="submit" :loading="loadingExist">保存</Button>
@@ -513,9 +513,6 @@ export default {
 }
 
 /deep/.i-layout-page-header {
-  height: 66px;
-  background-color: #fff;
-  border-bottom: 1px solid #e8eaec;
   display: flex;
   align-items: center;
   justify-content: space-between;

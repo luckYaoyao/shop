@@ -1,6 +1,6 @@
 <template>
   <div :style="bgcolors">
-    <div class="i-layout-page-header">
+    <div class="i-layout-page-header header-title">
       <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div>
         <div style="float: right">
@@ -1773,12 +1773,6 @@ export default {
   // width 80px!important
 }
 
-/deep/.i-layout-page-header {
-  height: 66px;
-  background-color: #fff;
-  border-bottom: 1px solid #e8eaec;
-}
-
 /deep/.ivu-page-header {
   border-bottom: unset;
   position: fixed;
@@ -1787,9 +1781,6 @@ export default {
 }
 
 /deep/.i-layout-page-header {
-  height: 66px;
-  background-color: #fff;
-  border-bottom: 1px solid #e8eaec;
   display: flex;
   align-items: center;
   justify-content: space-between;
