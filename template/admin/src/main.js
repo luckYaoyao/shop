@@ -197,22 +197,18 @@ new Vue({
     $route(to, from) {
       const path = to.path;
       let menus = this.$store.state.menus.menusName;
-      console.log(menus, 'menus');
       const menuSider = menus;
-
       this.$store.commit('menu/setActivePath', path);
       const openNames = getSiderSubmenu(to, menuSider);
       this.$store.commit('menu/setOpenNames', openNames);
       // 设置顶栏菜单 后台添加一个接口，设置顶部菜单
       const headerSider = getHeaderSider(menuSider);
-      console.log(headerSider, 'headerSider');
       this.$store.commit('menu/setHeader', headerSider);
       // 指定当前侧边栏隶属顶部菜单名称。如果你没有使用顶部菜单，则设置为默认的（一般为 home）名称即可
       const headerName = getHeaderName(to, menuSider);
       this.$store.commit('menu/setHeaderName', headerName);
       // 获取侧边栏菜单
       const filterMenuSider = getMenuSider(menuSider, headerName);
-      console.log(filterMenuSider, 'filterMenuSider');
       // 指定当前显示的侧边菜单
       this.$store.commit('menu/setOpenMenuName', filterMenuSider[0].title);
       this.$store.commit('menu/setSider', filterMenuSider[0]?.children || []);

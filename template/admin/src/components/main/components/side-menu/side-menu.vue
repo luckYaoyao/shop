@@ -194,28 +194,26 @@ export default {
       // setCookies('collapsed', state);
     },
     handleSelect(name, type) {
-      console.log(name, 'name');
       this.menuList.map((e) => {
         if (e.path === name) {
-          if (e.children && e.children.length) {
-            this.jump(e.children);
-            this.catName = e.title;
-          } else {
-            // if (!type) {
-            //   this.$emit('on-select', name);
-            // }
-          }
+          this.turnToPage(this.getChilden(e));
         }
       });
+    },
+    // 递归处理顶部菜单问题
+    getChilden(data) {
+      if (data.children) {
+        return this.getChilden(data.children[0]);
+      }
+      return data.path;
     },
     handleChildSelect(name) {
       this.turnToPage(name);
     },
     jump(data) {
-      if (data[0].children && data[0].children.length) {
+      if (data[0].children) {
         this.jump(data[0].children);
       } else {
-        console.log(data[0].path, 'data[0].path');
         this.turnToPage(data[0].path);
       }
     },
@@ -244,9 +242,7 @@ export default {
       // this.openedNames = n
       // this.$store.commit('menus/getopenMenus', n)
     },
-    openChildNameData(e) {
-      console.log(e);
-    },
+    openChildNameData(e) {},
   },
 };
 </script>
@@ -332,7 +328,7 @@ export default {
     }
   }
   .parent-menu {
-    z-index: 99;
+    z-index: 8;
     padding: 0 8px;
     box-shadow: 2px 0px 4px 0px rgba(0, 0, 0, 0.06);
     height: calc(~'100vh - 50px');
@@ -356,7 +352,7 @@ export default {
     }
   }
   .child-menu {
-    z-index: 88;
+    z-index: 8;
     .ivu-menu-vertical .ivu-menu-item {
       padding: 13px 10px;
       display: flex;
