@@ -34,7 +34,9 @@
 .search .select .ivu-select-item {
   font-size: 14px !important;
 }
-.ivu-select-input{
+.search .ivu-select-input{
+  padding-left: 19px;
+  border-radius: 30px;
   background-color: rgba(255,255,255,0.3);
 }
 </style>

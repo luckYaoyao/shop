@@ -311,6 +311,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 75px !important;
 }
 
 .side-menu-box {
@@ -328,7 +329,7 @@ export default {
     }
   }
   .parent-menu {
-    z-index: 8;
+    z-index: 9;
     padding: 0 8px;
     box-shadow: 2px 0px 4px 0px rgba(0, 0, 0, 0.06);
     height: calc(~'100vh - 50px');
@@ -342,6 +343,7 @@ export default {
       margin-bottom: 8px;
       display: flex;
       align-items: center;
+      justify-content: center;
       .title {
         font-size: 13px;
         line-height: 13px;
@@ -432,6 +434,7 @@ export default {
     }
     .title {
       font-size: 13px;
+      line-height: 13px;
       white-space: nowrap;
     }
   }
