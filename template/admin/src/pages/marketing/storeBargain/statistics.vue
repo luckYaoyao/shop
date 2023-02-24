@@ -228,37 +228,37 @@ export default {
       ],
       cardLists: [
         {
-          col: 6,
+          col: 8,
           count: 0,
           name: '活动参与人数（人）',
           className: 'ios-speedometer-outline',
         },
         {
-          col: 6,
+          col: 8,
           count: 0,
           name: '推广人数（人）',
           className: 'ios-speedometer-outline',
         },
         {
-          col: 6,
+          col: 8,
           count: 0,
           name: '发起砍价数',
           className: 'ios-speedometer-outline',
         },
         {
-          col: 6,
+          col: 8,
           count: 0,
           name: '砍价成功数',
           className: 'ios-speedometer-outline',
         },
         {
-          col: 6,
+          col: 8,
           count: 0,
           name: '支付订单额（元）',
           className: 'ios-speedometer-outline',
         },
         {
-          col: 6,
+          col: 8,
           count: 0,
           name: '支付人数（人）',
           className: 'ios-speedometer-outline',
