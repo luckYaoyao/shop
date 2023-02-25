@@ -1,7 +1,7 @@
 <template>
   <div class="diy-page">
-    <div class="i-layout-page-header header_top">
-      <div class="i-layout-page-header fl_header">
+    <div class="i-layout-page-header header-title">
+      <div class="fl_header">
         <router-link :to="{ path: $routeProStr + '/setting/pages/devise' }"
           ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         >
@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <Card :bordered="false" dis-hover class="ivu-mt" style="margin: 0 10px">
+    <Card :bordered="false" dis-hover class="ivu-mt">
       <div class="diy-wrapper" :style="'height:' + (clientHeight - 150) + 'px;'">
         <!-- 左侧 -->
         <div class="left">
@@ -883,6 +883,7 @@ export default {
 </script>
 
 <style scoped lang="stylus">
+
 .ysize {
   background-size: 100%;
 }
@@ -1000,8 +1001,6 @@ export default {
   min-width: 1100px;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
-
   /* height: 84.5vh; */
   .left {
     min-width: 300px;
@@ -1363,6 +1362,7 @@ export default {
 
 /deep/ .ivu-card-body {
   width: 100%;
+  padding: 0px !important;
 }
 
 .rbtn {
