@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="i-layout-page-header header-title" v-if="!headerChildrenList.length">
+      <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
+    </div>
   <div class="article-manager">
     <Card :bordered="false" dis-hover class="ivu-mt fromBox">
       <Tabs v-model="currentTab" @on-click="changeTab" v-if="headerList.length">
