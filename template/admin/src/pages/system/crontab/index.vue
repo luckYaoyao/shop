@@ -1,9 +1,10 @@
 <template>
   <Card :bordered="false" dis-hover>
-    <Alert>
+    <Alert closable="true">
       <template slot="desc">
-        如果使用命令启动定时任务，修改定时任务之后需要重新启动命令才能生效<br />
-        使用接口访问情况下，修改定时任务不需要重新启动，接口地址 https://您的域名/api/crontab/run
+        启动定时任务两种方式：<br />
+        1、使用命令启动：php think timer start --d<br />
+        2、使用接口触发定时任务，接口地址 https://您的域名/api/crontab/run
       </template>
     </Alert>
     <Button type="primary" @click="addTask">添加定时任务</Button>
