@@ -9,8 +9,8 @@
       </div>
     </div>
     <Card :bordered="false" dis-hover class="ivu-mt">
-      <Row class="ivu-mt box-wrapper">
-        <Col :xs="24" :sm="24" :md="6" :lg="3" class="left-wrapper">
+      <Row class="box-wrapper">
+        <Col :xs="24" :sm="24" :md="6" :lg="3">
           <div class="left_box">
             <div class="left_cont" :class="pageId == 1 ? 'on' : ''" @click="menu(1)">网站LOGO</div>
             <div class="left_cont" :class="pageId == 'pc_home_banner' ? 'on' : ''" @click="menu('pc_home_banner')">
@@ -477,7 +477,9 @@ export default {
 /deep/ .ivu-menu-vertical.ivu-menu-light:after {
   display: none;
 }
-
+.ivu-mt {
+  min-height: calc(100vh - 280px);
+}
 .nofonts {
   text-align: center;
   line-height: 137px;
@@ -620,12 +622,6 @@ export default {
     cursor: pointer;
     padding: 14px 24px;
   }
-}
-
-.left-wrapper {
-  // height 904px
-  background: #fff;
-  border-right: 1px solid #dcdee2;
 }
 
 .on {

@@ -1491,7 +1491,7 @@ export default {
 .left-wrapper {
   min-width: 213px;
   background: #fff;
-  border-right: 1px solid #dcdee2;
+  border-right: 1px solid #f2f2f2;
 }
 
 .menu-item {
