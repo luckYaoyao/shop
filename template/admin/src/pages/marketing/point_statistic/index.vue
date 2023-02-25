@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <Card :bordered="false" dis-hover class="ivu-mb-16">
       <dateRadio @selectDate="onSelectDate"></dateRadio>
       <DatePicker
         :editable="false"
@@ -16,7 +16,7 @@
         class="mr20"
       ></DatePicker>
     </Card>
-    <cards-data class="mt10" :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
+    <cards-data  :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
     <Card :bordered="false" dis-hover>
       <h3>积分使用趋势</h3>
       <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
