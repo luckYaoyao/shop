@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="i-layout-page-header header_top">
-      <div class="i-layout-page-header fl_header">
+    <div class="i-layout-page-header header-title">
+      <div class="fl_header">
         <router-link v-if="$route.params.id != 49" :to="{ path: $routeProStr + '/system/config/system_group/index' }"
           ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         >
@@ -345,9 +345,6 @@ export default {
 }
 /deep/ .ivu-menu-vertical.ivu-menu-light:after{
     display none
-}
-/deep/ .i-layout-page-header{
-  padding-left: 10px!important;
 }
 .left-wrapper
     height 904px
