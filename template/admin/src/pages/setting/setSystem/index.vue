@@ -227,8 +227,8 @@ export default {
 }
 
 .fromBox {
-  min-height: 600px;
-  margin-top 0px !important ;
+  min-height: calc(100vh - 200px);
+  margin-top: 0px !important ;
 }
 .article-manager /deep/ .ivu-form-item{
   margin-bottom: 20px !important;
