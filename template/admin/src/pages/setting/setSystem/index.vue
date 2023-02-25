@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="i-layout-page-header header-title" v-if="!headerChildrenList.length">
+    <div class="i-layout-page-header header-title" v-if="!headerList.length">
       <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
     </div>
   <div class="article-manager">
