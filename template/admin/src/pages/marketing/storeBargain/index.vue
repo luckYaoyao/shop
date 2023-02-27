@@ -194,7 +194,7 @@ export default {
           title: '操作',
           slot: 'action',
           fixed: 'right',
-          minWidth: 130,
+          minWidth: 160,
         },
       ],
       tableList: [],
