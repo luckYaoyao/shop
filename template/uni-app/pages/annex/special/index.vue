@@ -449,13 +449,11 @@
 					});
 			},
 			goDetail(item) {
-
 				goShopDetail(item, this.uid).then(res => {
 					uni.navigateTo({
 						url: `/pages/goods_details/index?id=${item.id}`
 					});
 				});
-
 			},
 			// #ifdef H5
 			// 微信分享；

@@ -191,7 +191,7 @@ export default {
         {
           slot: 'image',
           minWidth: 35,
-          title: '图标',
+          title: '背景图',
         },
         {
           key: 'name',
@@ -219,7 +219,6 @@ export default {
           title: '是否显示',
         },
         {
-          fixed: 'right',
           minWidth: 120,
           slot: 'action',
           title: '操作',
