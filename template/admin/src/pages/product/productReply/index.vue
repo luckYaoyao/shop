@@ -76,7 +76,7 @@
         ref="table"
         :columns="columns"
         :data="tableList"
-        class="ivu-mt"
+        class="ivu-mt mt25"
         :loading="loading"
         @on-sort-change="sortMethod"
         no-data-text="暂无数据"

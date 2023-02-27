@@ -456,8 +456,11 @@
 						this.chatList = [...res.data.serviceList, ...this.chatList];
 
 						this.$nextTick(() => {
-							this.setPageScrollTo(selector);
-							this.isScroll = res.data.serviceList.length >= this.limit;
+							if (this.chatList.length) {
+								this.setPageScrollTo(selector);
+								this.isScroll = res.data.serviceList.length >= this.limit;
+							}
+
 						});
 						this.$socket.send({
 							data: {

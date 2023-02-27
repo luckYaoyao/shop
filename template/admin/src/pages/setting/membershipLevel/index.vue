@@ -26,7 +26,6 @@
         :columns="columns1"
         :data="tabList"
         ref="table"
-        class="mt25"
         :loading="loading"
         highlight-row
         no-userFrom-text="暂无数据"
@@ -525,6 +524,7 @@ export default {
 
 .headers {
   background-color: #fff;
+  margin-bottom 20px
 }
 
 /deep/ .ivu-modal-mask {

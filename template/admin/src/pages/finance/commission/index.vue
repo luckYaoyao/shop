@@ -54,7 +54,6 @@
         ref="table"
         :columns="columns"
         :data="tabList"
-        class="mt25"
         :loading="loading"
         no-data-text="暂无数据"
         no-filtered-data-text="暂无筛选结果"

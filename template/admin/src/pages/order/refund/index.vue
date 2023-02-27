@@ -53,7 +53,6 @@
         :columns="thead"
         :data="tbody"
         ref="table"
-        class="mt25"
         :loading="loading"
         highlight-row
         no-userFrom-text="暂无数据"
@@ -668,7 +667,9 @@ export default {
 .code {
   position: relative;
 }
-
+.ivu-form-item{
+  
+}
 .QRpic {
   width: 180px;
   height: 259px;

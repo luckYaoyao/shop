@@ -73,7 +73,7 @@
         ref="table"
         :columns="artFrom.type !== '1' && artFrom.type !== '2' ? columns2 : columns"
         :data="tableList"
-        class="ivu-mt"
+        class="ivu-mt mt25"
         :loading="loading"
         highlight-row
         @on-select="handleSelectRow"
