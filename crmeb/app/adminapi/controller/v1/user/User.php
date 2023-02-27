@@ -378,6 +378,12 @@ class User extends AuthController
             ['spread_open', 1]
         ]);
         if (!$id) return app('json')->fail(100100);
+        if (!$data['real_name']) {
+            return app('json')->fail(410245);
+        }
+        if (!$data['phone']) {
+            return app('json')->fail(410245);
+        }
         if ($data['phone']) {
             if (!preg_match("/^1[3456789]\d{9}$/", $data['phone'])) return app('json')->fail(400252);
         }
