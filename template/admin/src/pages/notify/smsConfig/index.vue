@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="i-layout-page-header pt10">
+    <div class="i-layout-page-header header-title">
         <span class="ivu-page-header-title" v-if="!isShowList">短信账户</span>
         <div v-if="isShowList" class="acea-row row-between-wrapper picTxt">
           <div slot="content">

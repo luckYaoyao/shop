@@ -6,7 +6,7 @@
           <TabPane v-for="(item, index) in tabs" :label="item.name" :name="item.type" :key="index" />
         </Tabs>
       </div>
-      <Row type="flex" class="mt30 acea-row row-middle row-center">
+      <Row type="flex" class="mt10 acea-row row-middle row-center">
         <Col span="23">
           <Form
             class="form mt30"

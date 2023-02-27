@@ -1,15 +1,14 @@
 <template>
   <div>
-    <div class="i-layout-page-header header">
-      <div class="i-layout-page-header fl_header">
-        <span class="">
+    <div class="i-layout-page-header header-title">
+      <div class="fl_header">
+        <span>
           <Button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
         </span>
-        <Divider class="" type="vertical" />
-        <span class="ivu-page-header-title mr20" v-text="$route.query.id ? '编辑渠道码' : '添加渠道码'"></span>
+        <Divider type="vertical"/>
+        <span class="ivu-page-header-title">{{ $route.query.id ? '编辑渠道码' : '添加渠道码' }}</span>
       </div>
     </div>
-
     <Card :bordered="false" dis-hover class="ivu-mt">
       <Form :model="formData" :label-width="150" :rules="ruleValidate">
         <FormItem label="二维码名称">
@@ -499,10 +498,6 @@ export default {
   margin: 30px 0 30px 50px;
 }
 
-.fl_header {
-  padding-bottom: 10px;
-}
-
 textarea {
   padding: 5px;
   border-radius: 3px;
@@ -570,10 +565,6 @@ textarea {
     width: 100%;
     height: 150px;
   }
-}
-
-.i-layout-page-header {
-  padding-left: 13px;
 }
 
 .labelInput {

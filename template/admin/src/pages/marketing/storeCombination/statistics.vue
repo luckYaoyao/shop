@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-      <div class="i-layout-page-header">
+    <div class="i-layout-page-header header-title">
+      <div class="fl_header">
         <span>
-          <Button class="return" icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
+          <Button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
         </span>
-        <Divider class="return" type="vertical" />
+        <Divider type="vertical" />
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
       </div>
     </div>
@@ -406,11 +406,6 @@ export default {
   margin-bottom: 6px;
 }
 
-.i-layout-page-header {
-  padding-left: 5px;
-  padding-bottom 1px
-  margin-bottom 10px
-}
 /deep/ .ivu-tabs-nav-scroll{
   background-color: #fff;
   padding-top 5px

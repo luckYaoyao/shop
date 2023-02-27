@@ -1,6 +1,6 @@
 <template>
   <div class="agreemant">
-    <Card :bordered="false" dis-hover class="ivu-mt" :padding="0">
+    <Card :bordered="false" dis-hover class="ivu-mt">
       <div class="new_card_pd">
         <Tabs v-model="currentTab" @on-click="changeTab">
           <TabPane :label="item.label" :name="item.value.toString()" v-for="(item, index) in headerList" :key="index" />
@@ -8,7 +8,7 @@
       </div>
     </Card>
 
-    <Row class="mb10 content">
+    <Row class="content">
       <Col span="16">
         <WangEditor style="width: 100%" :content="formValidate.content" @editorContent="getEditorContent"></WangEditor>
       </Col>
@@ -107,12 +107,10 @@ export default {
 <style lang="stylus" scoped>
 .agreemant {
   background-color: #fff;
-  padding: 5px 15px ;
-  margin-top 10px;
 }
 
 .content {
-  padding: 10px 0px;
+  padding: 10px 16px;
 }
 
 .ifam {

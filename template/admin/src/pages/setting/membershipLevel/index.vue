@@ -16,7 +16,7 @@
             <Input v-model="formValidate.keyword" placeholder="请输入等级名称" style="width: 200px" />
           </div>
           <Button type="primary" @click="search">搜索</Button>
-          <Button type="success" icon="md-add" @click="groupAdd()" class="ml20">添加数据</Button>
+          <Button type="success" icon="md-add" @click="groupAdd()" class="ml20">添加等级</Button>
         </div>
       </div>
       <Row type="flex">
@@ -454,7 +454,7 @@ export default {
 .left-wrapper {
   height: 904px;
   background: #fff;
-  border-right: 1px solid #dcdee2;
+  border-right: 1px solid #f2f2f2;
 }
 
 .menu-item {

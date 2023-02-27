@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class="i-layout-page-header header-title" v-if="!headerList.length">
+      <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
+    </div>
   <div class="article-manager">
     <Card :bordered="false" dis-hover class="ivu-mt fromBox">
       <Tabs v-model="currentTab" @on-click="changeTab" v-if="headerList.length">
@@ -224,8 +227,8 @@ export default {
 }
 
 .fromBox {
-  min-height: 600px;
-  margin-top 0px !important ;
+  min-height: calc(100vh - 200px);
+  margin-top: 0px !important ;
 }
 .article-manager /deep/ .ivu-form-item{
   margin-bottom: 20px !important;

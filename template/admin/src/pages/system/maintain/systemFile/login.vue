@@ -1,8 +1,5 @@
 <template>
   <div>
-    <div class="i-layout-page-header">
-        <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-    </div>
     <Row type="flex">
       <Col span="24">
         <div class="index_from page-account-container">
@@ -103,9 +100,7 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-.i-layout-page-header{
-  padding: 18px 32px;
-}
+
 .maxInpt{
     max-width: 400px;
     margin-left: auto;

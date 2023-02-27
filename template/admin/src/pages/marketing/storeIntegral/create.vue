@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="i-layout-page-header header_top">
-      <div class="i-layout-page-header fl_header">
+    <div class="i-layout-page-header header-title">
+      <div class="fl_header">
         <router-link :to="{ path: $routeProStr + '/marketing/store_integral/index' }"
           ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         >

@@ -514,9 +514,19 @@ body {
   padding: 7px 32px 0 32px;
 }
 .header-title {
-  padding: 10px 16px;
+  padding: 10px 20px;
   border-bottom: 1px solid #f2f2f2;
   margin-bottom: 10px;
+  border-radius:5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
 }
 .ivu-page-header-title {
   display: inline-block;
@@ -526,6 +536,12 @@ body {
 }
 .main .content-wrapper {
   padding-top: 0;
+}
+.left-wrapper{
+  height: calc(100vh - 120px);
+  background: #fff;
+  border-right: 1px solid #f2f2f2;
+
 }
 .ivu-tabs-bar {
   margin-bottom: 0;

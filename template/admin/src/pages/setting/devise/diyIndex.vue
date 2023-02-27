@@ -881,6 +881,7 @@ export default {
 </script>
 
 <style scoped lang="stylus">
+
 .ysize {
   background-size: 100%;
 }
