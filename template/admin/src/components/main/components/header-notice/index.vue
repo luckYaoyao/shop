@@ -3,7 +3,7 @@
     <Dropdown @on-click="jumpUrl" :transfer="true">
       <div>
         <Badge dot :count="needList.length ? needList.length : 0">
-          <Icon type="ios-notifications-outline" size="24"></Icon>
+          <Icon type="ios-notifications-outline" size="23"></Icon>
         </Badge>
       </div>
       <DropdownMenu slot="list" v-show="needList.length">
@@ -17,17 +17,18 @@
   </div>
 </template>
 <style scoped>
-.ivu-dropdown-item{
+.ivu-dropdown-item {
   display: flex;
   align-items: center;
 }
-.ivu-dropdown-item .iconImg{
+.ivu-dropdown-item .iconImg {
   margin-right: 10px;
 }
 </style>
 <style lang="less">
 .header-notice {
   margin-right: 30px;
+  cursor: pointer;
 }
 .header-notice .ivu-dropdown-item {
   font-size: 14px !important;
@@ -57,6 +58,8 @@
 }
 .header-notice .ivu-badge-dot {
   z-index: 0 !important;
+  top: 4px;
+  right: -4px;
 }
 </style>
 <script>

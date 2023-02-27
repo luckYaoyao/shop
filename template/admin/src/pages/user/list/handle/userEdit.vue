@@ -181,10 +181,10 @@ export default {
         levelInfo: [],
       },
       ruleValidate: {
-        real_name: [{ required: true, message: '请输入真实姓名', trigger: 'blur' }],
-        phone: [{ required: true, message: '请输入手机号码', trigger: 'blur' }],
-        pwd: [{ required: true, message: '请输入登录密码', trigger: 'blur' }],
-        true_pwd: [{ required: true, message: '请输入确认密码', trigger: 'blur' }],
+        real_name: [{ required: true, message: ' ', trigger: 'blur' }],
+        phone: [{ required: true, message: ' ', trigger: 'blur' }],
+        pwd: [{ required: true, message: ' ', trigger: 'blur' }],
+        true_pwd: [{ required: true, message: ' ', trigger: 'blur' }],
       },
       dataLabel: [],
     };
