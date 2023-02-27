@@ -192,8 +192,9 @@ export default {
   margin-bottom: 0px !important;
 }
 
-.i-layout-page-header /deep/ .ivu-badge-count-alone {
+/deep/ .ivu-badge-count-alone {
   top: -7px;
+  right: 2px;
 }
 
 .i-layout-page-header /deep/ .ivu-badge-count {

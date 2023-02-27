@@ -20,7 +20,6 @@
       </template>
       <template slot-scope="{ row }" slot="action">
         <a @click="edit(row.id)">编辑</a>
-
         <Divider type="vertical" />
         <a @click="handleDelete(row, '删除秒杀商品', index)">删除</a>
       </template>
@@ -76,7 +75,6 @@ export default {
           title: '操作',
           slot: 'action',
           align: 'center',
-          fixed: 'right',
           minWidth: 100,
         },
       ],

@@ -199,7 +199,6 @@ new Vue({
       let menus = this.$store.state.menus.menusName;
       const menuSider = menus;
       const headerName = getHeaderName(to, menuSider);
-      console.log(headerName, to, 'headerName');
       if (headerName !== null) {
         this.$store.commit('menu/setActivePath', path);
         const openNames = getSiderSubmenu(to, menuSider);
