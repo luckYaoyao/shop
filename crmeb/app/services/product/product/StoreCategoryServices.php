@@ -118,7 +118,6 @@ class StoreCategoryServices extends BaseServices
             throw new AdminException(100005);
         } else {
             $this->cacheDriver()->clear();
-            $this->cacheDriver()->set('category_version', uniqid());
         }
     }
 
@@ -206,7 +205,6 @@ class StoreCategoryServices extends BaseServices
         if (!$res) throw new AdminException(100006);
 
         $this->cacheDriver()->clear();
-        $this->cacheDriver()->set('category_version', uniqid());
 
         return (int)$res->id;
     }
@@ -246,7 +244,6 @@ class StoreCategoryServices extends BaseServices
         });
 
         $this->cacheDriver()->clear();
-        $this->cacheDriver()->set('category_version', uniqid());
     }
 
     /**
@@ -262,7 +259,6 @@ class StoreCategoryServices extends BaseServices
         if (!$res) throw new AdminException(100008);
 
         $this->cacheDriver()->clear();
-        $this->cacheDriver()->set('category_version', uniqid());
     }
 
     /**
