@@ -55,7 +55,7 @@
       </template>
     </Alert>
     <Card :bordered="false" dis-hover>
-      <Row type="flex">
+      <Row type="flex" class="mb15">
         <Col>
           <Button type="primary" icon="md-add" @click="add">添加语句</Button>
         </Col>
