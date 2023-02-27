@@ -62,6 +62,7 @@ class Util extends Command
             "UPDATE `{$prefix}article_content` SET `content` = replace(`content` ,'{$siteUrl}','{$url}')",
             "UPDATE `{$prefix}store_category` SET `pic` = replace(`pic` ,'{$siteUrl}','{$url}')",
             "UPDATE `{$prefix}system_group_data` SET `value` = replace(value ,'{$siteUrlJosn}','{$valueJosn}')",
+            "UPDATE `{$prefix}eb_diy` SET `value` = replace(value ,'{$siteUrlJosn}','{$valueJosn}')",
             "UPDATE `{$prefix}store_product_description` SET `description`= replace(description,'{$siteUrl}','{$url}')"
         ];
         return Db::transaction(function () use ($sql) {
