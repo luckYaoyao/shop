@@ -4,7 +4,7 @@
       <template slot="desc">
         启动定时任务两种方式：<br />
         1、使用命令启动：php think timer start --d<br />
-        2、使用接口触发定时任务，接口地址 https://您的域名/api/crontab/run
+        2、使用接口触发定时任务，建议每分钟调用一次，接口地址 https://您的域名/api/crontab/run
       </template>
     </Alert>
     <Button type="primary" @click="addTask">添加定时任务</Button>
