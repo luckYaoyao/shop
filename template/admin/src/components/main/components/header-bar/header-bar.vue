@@ -19,6 +19,7 @@
 <style scoped lang="less">
 .ivu-icon-ios-refresh {
   font-size: 23px;
+  width: 20px;
 }
 .i-layout-header-trigger {
   position: absolute;
