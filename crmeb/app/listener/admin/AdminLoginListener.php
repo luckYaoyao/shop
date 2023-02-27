@@ -35,13 +35,11 @@ class AdminLoginListener
         }
 
         try {
-
             $timerPath = root_path('runtime') . '.timer';
             $timer = file_get_contents($timerPath);
-            if ($timer && $timer <= time() && $timer > (time() - 10)) {
+            if ($timer && $timer <= time() && $timer > (time() - 70)) {
                 $res1 = true;
             }
-
         } catch (\Throwable $e) {
         }
 

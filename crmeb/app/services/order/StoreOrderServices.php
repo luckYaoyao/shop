@@ -988,10 +988,46 @@ HTML;
                     ]
                 ]]
                 ];
+                $series3 = ['normal' => ['color' => [
+                    'x' => 0, 'y' => 0, 'x2' => 0, 'y2' => 1,
+                    'colorStops' => [
+                        [
+                            'offset' => 0,
+                            'color' => '#69cdff'
+                        ],
+                        [
+                            'offset' => 0.5,
+                            'color' => '#3eb3f7'
+                        ],
+                        [
+                            'offset' => 1,
+                            'color' => '#1495eb'
+                        ]
+                    ]
+                ]]
+                ];
+                $series4 = ['normal' => ['color' => [
+                    'x' => 0, 'y' => 0, 'x2' => 0, 'y2' => 1,
+                    'colorStops' => [
+                        [
+                            'offset' => 0,
+                            'color' => '#6fdeab'
+                        ],
+                        [
+                            'offset' => 0.5,
+                            'color' => '#44d693'
+                        ],
+                        [
+                            'offset' => 1,
+                            'color' => '#2cc981'
+                        ]
+                    ]
+                ]]
+                ];
                 $chartdata['series'][] = ['name' => $chartdata['legend'][0], 'type' => 'bar', 'itemStyle' => $series1, 'data' => $data['pre']['price']];//分类1值
-                $chartdata['series'][] = ['name' => $chartdata['legend'][1], 'type' => 'bar', 'itemStyle' => $series1, 'data' => $data['now']['price']];//分类1值
-                $chartdata['series'][] = ['name' => $chartdata['legend'][2], 'type' => 'line', 'itemStyle' => $series2, 'data' => $data['pre']['count'], 'yAxisIndex' => 1];//分类2值
-                $chartdata['series'][] = ['name' => $chartdata['legend'][3], 'type' => 'line', 'itemStyle' => $series2, 'data' => $data['now']['count'], 'yAxisIndex' => 1];//分类2值
+                $chartdata['series'][] = ['name' => $chartdata['legend'][1], 'type' => 'bar', 'itemStyle' => $series2, 'data' => $data['now']['price']];//分类1值
+                $chartdata['series'][] = ['name' => $chartdata['legend'][2], 'type' => 'line', 'itemStyle' => $series3, 'data' => $data['pre']['count'], 'yAxisIndex' => 1];//分类2值
+                $chartdata['series'][] = ['name' => $chartdata['legend'][3], 'type' => 'line', 'itemStyle' => $series4, 'data' => $data['now']['count'], 'yAxisIndex' => 1];//分类2值
 
                 //统计总数上期
                 $pre_total = $this->dao->preTotalFind($datebefor, $dateafter);
@@ -1109,10 +1145,46 @@ HTML;
                     ]
                 ]]
                 ];
+                $series3 = ['normal' => ['color' => [
+                    'x' => 0, 'y' => 0, 'x2' => 0, 'y2' => 1,
+                    'colorStops' => [
+                        [
+                            'offset' => 0,
+                            'color' => '#69cdff'
+                        ],
+                        [
+                            'offset' => 0.5,
+                            'color' => '#3eb3f7'
+                        ],
+                        [
+                            'offset' => 1,
+                            'color' => '#1495eb'
+                        ]
+                    ]
+                ]]
+                ];
+                $series4 = ['normal' => ['color' => [
+                    'x' => 0, 'y' => 0, 'x2' => 0, 'y2' => 1,
+                    'colorStops' => [
+                        [
+                            'offset' => 0,
+                            'color' => '#6fdeab'
+                        ],
+                        [
+                            'offset' => 0.5,
+                            'color' => '#44d693'
+                        ],
+                        [
+                            'offset' => 1,
+                            'color' => '#2cc981'
+                        ]
+                    ]
+                ]]
+                ];
                 $chartdata['series'][] = ['name' => $chartdata['legend'][0], 'type' => 'bar', 'itemStyle' => $series1, 'data' => $data['pre']['price']];//分类1值
-                $chartdata['series'][] = ['name' => $chartdata['legend'][1], 'type' => 'bar', 'itemStyle' => $series1, 'data' => $data['now']['price']];//分类1值
-                $chartdata['series'][] = ['name' => $chartdata['legend'][2], 'type' => 'line', 'itemStyle' => $series2, 'data' => $data['pre']['count'], 'yAxisIndex' => 1];//分类2值
-                $chartdata['series'][] = ['name' => $chartdata['legend'][3], 'type' => 'line', 'itemStyle' => $series2, 'data' => $data['now']['count'], 'yAxisIndex' => 1];//分类2值
+                $chartdata['series'][] = ['name' => $chartdata['legend'][1], 'type' => 'bar', 'itemStyle' => $series2, 'data' => $data['now']['price']];//分类1值
+                $chartdata['series'][] = ['name' => $chartdata['legend'][2], 'type' => 'line', 'itemStyle' => $series3, 'data' => $data['pre']['count'], 'yAxisIndex' => 1];//分类2值
+                $chartdata['series'][] = ['name' => $chartdata['legend'][3], 'type' => 'line', 'itemStyle' => $series4, 'data' => $data['now']['count'], 'yAxisIndex' => 1];//分类2值
 
                 //统计总数上期
                 $pre_total = $this->dao->preTotalFind($datebefor, $dateafter);
@@ -1228,10 +1300,46 @@ HTML;
                     ]
                 ]]
                 ];
+                $series3 = ['normal' => ['color' => [
+                    'x' => 0, 'y' => 0, 'x2' => 0, 'y2' => 1,
+                    'colorStops' => [
+                        [
+                            'offset' => 0,
+                            'color' => '#69cdff'
+                        ],
+                        [
+                            'offset' => 0.5,
+                            'color' => '#3eb3f7'
+                        ],
+                        [
+                            'offset' => 1,
+                            'color' => '#1495eb'
+                        ]
+                    ]
+                ]]
+                ];
+                $series4 = ['normal' => ['color' => [
+                    'x' => 0, 'y' => 0, 'x2' => 0, 'y2' => 1,
+                    'colorStops' => [
+                        [
+                            'offset' => 0,
+                            'color' => '#6fdeab'
+                        ],
+                        [
+                            'offset' => 0.5,
+                            'color' => '#44d693'
+                        ],
+                        [
+                            'offset' => 1,
+                            'color' => '#2cc981'
+                        ]
+                    ]
+                ]]
+                ];
                 $chartdata['series'][] = ['name' => $chartdata['legend'][0], 'type' => 'bar', 'itemStyle' => $series1, 'data' => $data['pre']['price']];//分类1值
-                $chartdata['series'][] = ['name' => $chartdata['legend'][1], 'type' => 'bar', 'itemStyle' => $series1, 'data' => $data['now']['price']];//分类1值
-                $chartdata['series'][] = ['name' => $chartdata['legend'][2], 'type' => 'line', 'itemStyle' => $series2, 'data' => $data['pre']['count'], 'yAxisIndex' => 1];//分类2值
-                $chartdata['series'][] = ['name' => $chartdata['legend'][3], 'type' => 'line', 'itemStyle' => $series2, 'data' => $data['now']['count'], 'yAxisIndex' => 1];//分类2值
+                $chartdata['series'][] = ['name' => $chartdata['legend'][1], 'type' => 'bar', 'itemStyle' => $series2, 'data' => $data['now']['price']];//分类1值
+                $chartdata['series'][] = ['name' => $chartdata['legend'][2], 'type' => 'line', 'itemStyle' => $series3, 'data' => $data['pre']['count'], 'yAxisIndex' => 1];//分类2值
+                $chartdata['series'][] = ['name' => $chartdata['legend'][3], 'type' => 'line', 'itemStyle' => $series4, 'data' => $data['now']['count'], 'yAxisIndex' => 1];//分类2值
 
                 //统计总数上期
                 $pre_total = $this->dao->preTotalFind($datebefor, $dateafter);
