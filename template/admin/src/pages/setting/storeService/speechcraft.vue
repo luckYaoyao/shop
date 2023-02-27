@@ -13,10 +13,10 @@
               @click.native="bindMenuItem(item, index)"
             >
               {{ item.name }}
-              <div class="icon-box" v-if="index != 0">
+              <div class="icon-box" v-if="item.id != 0">
                 <Icon type="ios-more" size="24" @click.stop="showMenu(item)" />
               </div>
-              <div class="right-menu ivu-poptip-inner" v-show="item.status" v-if="index != 0">
+              <div class="right-menu ivu-poptip-inner" v-show="item.status" v-if="item.id != 0">
                 <div class="ivu-poptip-body" @click="labelEdit(item)">
                   <div class="ivu-poptip-body-content"><div class="ivu-poptip-body-content-inner">编辑小组</div></div>
                 </div>
