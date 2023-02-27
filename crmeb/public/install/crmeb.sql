@@ -33849,7 +33849,7 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (26, 0, 'ios-people', '分销', 'admin', 'agent', '', '', '', '[]', 104, 1, 0, 1, '/agent', '', 1, 'user', 1, 'admin-agent', 0),
 (27, 0, 'ios-paper-plane', '营销', 'admin', 'marketing', '', '', '', '[]', 110, 1, 0, 1, '/marketing', '', 1, 'home', 1, 'admin-marketing', 0),
 (28, 26, '', '分销设置', 'admin', 'setting.system_config', '', '', '', '[]', 1, 1, 0, 1, '/setting/system_config_retail/2/9', '', 1, 'setting', 0, 'setting-system-config', 0),
-(29, 26, '', '分销员管理', 'admin', 'agent.agent_manage', 'index', '', '', '[]', 1, 1, 0, 1, '/agent/agent_manage/index', '', 1, 'user', 0, 'agent-agent-manage', 0),
+(29, 26, '', '分销员管理', 'admin', 'agent.agent_manage', 'index', '', '', '[]', 99, 1, 0, 1, '/agent/agent_manage/index', '', 1, 'user', 0, 'agent-agent-manage', 0),
 (30, 27, '', '优惠券', 'admin', 'marketing.store_coupon', '', '', '', '[]', 100, 1, 0, 1, '/marketing/store_coupon', '27', 1, 'marketing', 0, 'marketing-store_coupon-index', 0),
 (31, 27, '', '砍价管理', 'admin', 'marketing.store_bargain', '', '', '', '[]', 85, 1, 0, 1, '/marketing/store_bargain', '27', 1, 'marketing', 0, 'marketing-store_bargain-index', 0),
 (32, 27, '', '拼团管理', 'admin', 'marketing.store_combination', '', '', '', '[]', 80, 1, 0, 1, '/marketing/store_combination', '27', 1, 'marketing', 0, 'marketing-store_combination-index', 0),
