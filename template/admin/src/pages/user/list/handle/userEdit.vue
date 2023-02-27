@@ -40,7 +40,7 @@
           class="form-sty"
           type="password"
           v-model="formItem.pwd"
-          placeholder="请输入登录密码"
+          placeholder="请输入登录密码（修改用户可不填写，不填写不修改原密码）"
           style="width: 80%"
         ></Input>
       </FormItem>
@@ -49,7 +49,7 @@
           class="form-sty"
           type="password"
           v-model="formItem.true_pwd"
-          placeholder="请输入确认密码"
+          placeholder="请输入确认密码（修改用户可不填写，不填写不修改原密码）"
           style="width: 80%"
         ></Input>
       </FormItem>
