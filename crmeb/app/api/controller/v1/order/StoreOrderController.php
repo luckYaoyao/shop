@@ -196,10 +196,7 @@ class StoreOrderController
         if ($bargainId) {
             $bargainServices->checkBargainUser((int)$bargainId, $uid);
         }
-        //下单前发票验证
-        if ($invoice_id) {
-            $userInvoiceServices->checkInvoice((int)$invoice_id, $uid);
-        }
+
         if ($pinkId) {
             $pinkId = (int)$pinkId;
             /** @var StorePinkServices $pinkServices */
@@ -235,7 +232,7 @@ class StoreOrderController
             }
         }
         $virtual_type = $cartGroup['cartInfo'][0]['productInfo']['virtual_type'] ?? 0;
-        $order = $createServices->createOrder($uid, $key, $cartGroup, $request->user()->toArray(), $addressId, $payType, !!$useIntegral, $couponId, $mark, $combinationId, $pinkId, $seckill_id, $bargainId, $shipping_type, $real_name, $phone, $storeId, !!$news, $advanceId, $virtual_type, $customForm);
+        $order = $createServices->createOrder($uid, $key, $cartGroup, $request->user()->toArray(), $addressId, $payType, !!$useIntegral, $couponId, $mark, $combinationId, $pinkId, $seckill_id, $bargainId, $shipping_type, $real_name, $phone, $storeId, !!$news, $advanceId, $virtual_type, $customForm, $invoice_id);
         if ($order === false) {
             if ($seckill_id || $combinationId || $advanceId || $bargainId) {
                 foreach ($cartInfo as $item) {
@@ -261,14 +258,8 @@ class StoreOrderController
         if (!$orderInfo || !isset($orderInfo['paid'])) {
             return app('json')->fail(410194);
         }
-        //创建开票数据
-        if ($invoice_id) {
-            $storeOrderInvoiceServices->makeUp($uid, $orderId, (int)$invoice_id);
-        }
 
-        $info = compact('orderId', 'key');
-
-        return app('json')->status('success', 410203, $info);
+        return app('json')->status('success', 410203, compact('orderId', 'key'));
 
 //        if ($orderId) {
 //            switch ($payType) {
