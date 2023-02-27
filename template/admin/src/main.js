@@ -199,7 +199,6 @@ new Vue({
       let menus = this.$store.state.menus.menusName;
       const menuSider = menus;
       const headerName = getHeaderName(to, menuSider);
-
       if (headerName !== null) {
         this.$store.commit('menu/setActivePath', path);
         const openNames = getSiderSubmenu(to, menuSider);
@@ -216,9 +215,11 @@ new Vue({
         this.$store.commit('menu/setSider', filterMenuSider[0]?.children || []);
       } else {
         //子路由给默认 如果你没有使用顶部菜单，则设置为默认的（一般为 home）名称即可
-        // this.$store.commit('menu/setHeaderName', 'home');
+        this.$store.commit('menu/setHeaderName', settings.routePre + '/home/');
+        if (to.name == 'home_index') {
+          this.$store.commit('menu/setSider', []);
+        }
         // 指定当前显示的侧边菜单
-        // this.$store.commit('menu/setSider', menuSider);
       }
 
       if (to.meta.kefu) {

@@ -12,7 +12,7 @@
       @on-select-all="selectAll"
       @on-select-all-cancel="selectAll"
       @on-select-cancel="onSelectCancel"
-      class="orderData mt25"
+      class="orderData"
     >
       <template slot-scope="{ row, index }" slot="order_id">
         <span v-text="row.order_id" style="display: block"></span>

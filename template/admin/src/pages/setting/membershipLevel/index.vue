@@ -26,7 +26,6 @@
         :columns="columns1"
         :data="tabList"
         ref="table"
-        class="mt25"
         :loading="loading"
         highlight-row
         no-userFrom-text="暂无数据"
@@ -38,6 +37,18 @@
               <img v-lazy="row.image" />
             </div>
           </viewer>
+        </template>
+        <template slot-scope="{ row }" slot="one_brokerage">
+          <span>{{row.one_brokerage}}%</span>
+        </template>
+        <template slot-scope="{ row }" slot="one_brokerage_ratio">
+           <span>{{row.one_brokerage_ratio}}%</span>
+        </template>
+        <template slot-scope="{ row }" slot="two_brokerage">
+           <span>{{row.two_brokerage}}%</span>
+        </template>
+        <template slot-scope="{ row }" slot="two_brokerage_ratio">
+           <span>{{row.two_brokerage_ratio}}%</span>
         </template>
         <template slot-scope="{ row }" slot="status">
           <i-switch
@@ -192,7 +203,7 @@ export default {
         {
           slot: 'image',
           minWidth: 35,
-          title: '图标',
+          title: '背景图',
         },
         {
           key: 'name',
@@ -205,14 +216,24 @@ export default {
           title: '等级',
         },
         {
-          key: 'one_brokerage',
+          slot: 'one_brokerage',
           minWidth: 35,
-          title: '一级返佣上浮比例(%)',
+          title: '一级上浮比例',
         },
         {
-          key: 'two_brokerage',
+          slot: 'one_brokerage_ratio',
           minWidth: 35,
-          title: '二级返佣上浮比例(%)',
+          title: '一级分佣比例(上浮后)',
+        },
+        {
+          slot: 'two_brokerage',
+          minWidth: 35,
+          title: '二级上浮比例',
+        },
+        {
+          slot: 'two_brokerage_ratio',
+          minWidth: 35,
+          title: '二级分佣比例(上浮后)',
         },
         {
           slot: 'status',
@@ -220,7 +241,6 @@ export default {
           title: '是否显示',
         },
         {
-          fixed: 'right',
           minWidth: 120,
           slot: 'action',
           title: '操作',
@@ -525,6 +545,7 @@ export default {
 
 .headers {
   background-color: #fff;
+  margin-bottom: 20px;
 }
 
 /deep/ .ivu-modal-mask {

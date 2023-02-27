@@ -66,6 +66,10 @@ class AgentLevelServices extends BaseServices
             $query->field('count(*) as sum');
         }], $page, $limit);
         $count = $this->dao->count($where);
+        foreach ($list as &$item) {
+            $item['one_brokerage_ratio'] = bcdiv(bcmul((string)sys_config('store_brokerage_ratio'), bcadd('100', (string)$item['one_brokerage'], 2), 2), '100', 2);
+            $item['two_brokerage_ratio'] = bcdiv(bcmul((string)sys_config('store_brokerage_two'), bcadd('100', (string)$item['two_brokerage'], 2), 2), '100', 2);
+        }
         return compact('count', 'list');
     }
 
@@ -259,8 +263,16 @@ class AgentLevelServices extends BaseServices
         $field[] = Form::input('name', '等级名称')->maxlength(8)->col(24);
         $field[] = Form::number('grade', '等级', 0)->min(0)->precision(0);
         $field[] = Form::frameImage('image', '背景图', Url::buildUrl('admin/widget.images/index', array('fodder' => 'image')))->icon('ios-add')->width('950px')->height('505px')->modal(['footer-hide' => true]);
-        $field[] = Form::number('one_brokerage', '一级上浮', 0)->info('在分销一级佣金基础上浮（0-1000之间整数）百分比')->min(0)->max(1000)->precision(0);
-        $field[] = Form::number('two_brokerage', '二级上浮', 0)->info('在分销二级佣金基础上浮（0-1000之间整数）百分比')->min(0)->max(1000)->precision(0);
+        $field[] = Form::number('one_brokerage', '一级上浮', 0)->appendRule('suffix', [
+            'type' => 'div',
+            'class' => 'tips-info',
+            'domProps' => ['innerHTML' => '在分销一级佣金基础上浮（0-1000之间整数）百分比，目前一级返佣比率：10%，上浮5%，则返佣比率：一级返佣比率 * (1 + 一级上浮比率) = 10.50%']
+        ])->max(1000)->precision(0);
+        $field[] = Form::number('two_brokerage', '二级上浮', 0)->appendRule('suffix', [
+            'type' => 'div',
+            'class' => 'tips-info',
+            'domProps' => ['innerHTML' => '在分销二级佣金基础上浮（0-1000之间整数）百分比，目前二级返佣比率：10%，上浮2%，则返佣比率：二级返佣比率 * (1 + 二级上浮比率) = 5.10%']
+        ])->min(0)->max(1000)->precision(0);
         $field[] = Form::radio('status', '是否显示', 1)->options([['value' => 1, 'label' => '显示'], ['value' => 0, 'label' => '隐藏']]);
         return create_form('添加分销员等级', $field, Url::buildUrl('/agent/level'), 'POST');
     }
@@ -281,8 +293,16 @@ class AgentLevelServices extends BaseServices
         $field[] = Form::input('name', '等级名称', $levelInfo['name'])->maxlength(8)->col(24);
         $field[] = Form::number('grade', '等级', $levelInfo['grade'])->min(0)->precision(0);
         $field[] = Form::frameImage('image', '背景图', Url::buildUrl('admin/widget.images/index', array('fodder' => 'image')), $levelInfo['image'])->icon('ios-add')->width('950px')->height('505px')->modal(['footer-hide' => true]);
-        $field[] = Form::number('one_brokerage', '一级上浮', $levelInfo['one_brokerage'])->info('在分销一级佣金基础上浮（0-1000之间整数）百分比')->min(0)->max(1000)->precision(0);
-        $field[] = Form::number('two_brokerage', '二级上浮', $levelInfo['two_brokerage'])->info('在分销二级佣金基础上浮（0-1000之间整数）百分比')->min(0)->max(1000)->precision(0);
+        $field[] = Form::number('one_brokerage', '一级上浮', $levelInfo['one_brokerage'])->appendRule('suffix', [
+            'type' => 'div',
+            'class' => 'tips-info',
+            'domProps' => ['innerHTML' => '在分销一级佣金基础上浮（0-1000之间整数）百分比，目前一级返佣比率：10%，上浮5%，则返佣比率：一级返佣比率 * (1 + 一级上浮比率) = 10.50%']
+        ])->min(0)->max(1000)->precision(0);
+        $field[] = Form::number('two_brokerage', '二级上浮', $levelInfo['two_brokerage'])->appendRule('suffix', [
+            'type' => 'div',
+            'class' => 'tips-info',
+            'domProps' => ['innerHTML' => '在分销二级佣金基础上浮（0-1000之间整数）百分比，目前二级返佣比率：10%，上浮2%，则返佣比率：二级返佣比率 * (1 + 二级上浮比率) = 5.10%']
+        ])->min(0)->max(1000)->precision(0);
         $field[] = Form::radio('status', '是否显示', $levelInfo['status'])->options([['value' => 1, 'label' => '显示'], ['value' => 0, 'label' => '隐藏']]);
 
         return create_form('编辑分销员等级', $field, Url::buildUrl('/agent/level/' . $id), 'PUT');

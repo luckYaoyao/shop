@@ -26520,7 +26520,17 @@ INSERT INTO `eb_lang_code` (`id`, `type_id`, `code`, `remarks`, `lang_explain`, 
 (24977, 7, '500028', '请填写邀请码', '초대 코드를 입력하십시오.', 1),
 (24978, 8, '500028', '请填写邀请码', 'Урилгын кодыг бөглөнө үү', 1),
 (24979, 9, '500028', '请填写邀请码', 'กรุณากรอกรหัสเชิญ', 1),
-(24980, 10, '500028', '请填写邀请码', 'Vui lòng điền mã mời', 1);
+(24980, 10, '500028', '请填写邀请码', 'Vui lòng điền mã mời', 1),
+(24981, 1, '500029', '金额最多两位小数', '金额最多两位小数', 1),
+(24982, 2, '500029', '金额最多两位小数', 'Amount Up to two decimal places', 1),
+(24983, 3, '500029', '金额最多两位小数', '金額最多兩位小數', 1),
+(24984, 4, '500029', '金额最多两位小数', 'Montant Jusquà deux décimales', 1),
+(24985, 5, '500029', '金额最多两位小数', 'Importo Fino a due decimali', 1),
+(24986, 6, '500029', '金额最多两位小数', '金額は小数点以下2桁まで', 1),
+(24987, 7, '500029', '金额最多两位小数', '양 소수점 이하 두 자리까지', 1),
+(24988, 8, '500029', '金额最多两位小数', 'Хэмжээ Хоёр аравтын бутархай газар хүртэл', 1),
+(24989, 9, '500029', '金额最多两位小数', 'จำนวนทศนิยมสูงสุดสองตำแหน่ง', 1),
+(24990, 10, '500029', '金额最多两位小数', 'Số tiền tối đa hai chữ số thập phân', 1);
 
 -- --------------------------------------------------------
 
@@ -33839,7 +33849,7 @@ INSERT INTO `eb_system_menus` (`id`, `pid`, `icon`, `menu_name`, `module`, `cont
 (26, 0, 'ios-people', '分销', 'admin', 'agent', '', '', '', '[]', 104, 1, 0, 1, '/agent', '', 1, 'user', 1, 'admin-agent', 0),
 (27, 0, 'ios-paper-plane', '营销', 'admin', 'marketing', '', '', '', '[]', 110, 1, 0, 1, '/marketing', '', 1, 'home', 1, 'admin-marketing', 0),
 (28, 26, '', '分销设置', 'admin', 'setting.system_config', '', '', '', '[]', 1, 1, 0, 1, '/setting/system_config_retail/2/9', '', 1, 'setting', 0, 'setting-system-config', 0),
-(29, 26, '', '分销员管理', 'admin', 'agent.agent_manage', 'index', '', '', '[]', 1, 1, 0, 1, '/agent/agent_manage/index', '', 1, 'user', 0, 'agent-agent-manage', 0),
+(29, 26, '', '分销员管理', 'admin', 'agent.agent_manage', 'index', '', '', '[]', 99, 1, 0, 1, '/agent/agent_manage/index', '', 1, 'user', 0, 'agent-agent-manage', 0),
 (30, 27, '', '优惠券', 'admin', 'marketing.store_coupon', '', '', '', '[]', 100, 1, 0, 1, '/marketing/store_coupon', '27', 1, 'marketing', 0, 'marketing-store_coupon-index', 0),
 (31, 27, '', '砍价管理', 'admin', 'marketing.store_bargain', '', '', '', '[]', 85, 1, 0, 1, '/marketing/store_bargain', '27', 1, 'marketing', 0, 'marketing-store_bargain-index', 0),
 (32, 27, '', '拼团管理', 'admin', 'marketing.store_combination', '', '', '', '[]', 80, 1, 0, 1, '/marketing/store_combination', '27', 1, 'marketing', 0, 'marketing-store_combination-index', 0),
