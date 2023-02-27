@@ -1431,24 +1431,24 @@ HTML;
         $yesterday_sales = $this->dao->todaySales('yesterday');
         //日同比
         $sales_today_ratio = $this->growth($today_sales, $yesterday_sales);
-        //周销售额
-        //本周
-        $this_week_sales = $this->dao->thisWeekSales('week');
-        //上周
-        $last_week_sales = $this->dao->thisWeekSales('last week');
-        //周同比
-        $sales_week_ratio = $this->growth($this_week_sales, $last_week_sales);
+//        //周销售额
+//        //本周
+//        $this_week_sales = $this->dao->thisWeekSales('week');
+//        //上周
+//        $last_week_sales = $this->dao->thisWeekSales('last week');
+//        //周同比
+//        $sales_week_ratio = $this->growth($this_week_sales, $last_week_sales);
         //总销售额
         $total_sales = $this->dao->totalSales('month');
         $sales = [
             'today' => $today_sales,
             'yesterday' => $yesterday_sales,
             'today_ratio' => $sales_today_ratio,
-            'week' => $this_week_sales,
-            'last_week' => $last_week_sales,
-            'week_ratio' => $sales_week_ratio,
+//            'week' => $this_week_sales,
+//            'last_week' => $last_week_sales,
+//            'week_ratio' => $sales_week_ratio,
             'total' => $total_sales . '元',
-            'date' => '昨日'
+            'date' => '今日'
         ];
         //TODO:用户访问量
         //今日访问量
@@ -1457,23 +1457,23 @@ HTML;
         $yesterday_visits = $productLogServices->count(['time' => 'yesterday', 'type' => 'visit']);
         //日同比
         $visits_today_ratio = $this->growth($today_visits, $yesterday_visits);
-        //本周访问量
-        $this_week_visits = $productLogServices->count(['time' => 'week', 'type' => 'visit']);
-        //上周访问量
-        $last_week_visits = $productLogServices->count(['time' => 'last week', 'type' => 'visit']);
-        //周同比
-        $visits_week_ratio = $this->growth($this_week_visits, $last_week_visits);
+//        //本周访问量
+//        $this_week_visits = $productLogServices->count(['time' => 'week', 'type' => 'visit']);
+//        //上周访问量
+//        $last_week_visits = $productLogServices->count(['time' => 'last week', 'type' => 'visit']);
+//        //周同比
+//        $visits_week_ratio = $this->growth($this_week_visits, $last_week_visits);
         //总访问量
         $total_visits = $productLogServices->count(['time' => 'month', 'type' => 'visit']);
         $visits = [
             'today' => $today_visits,
             'yesterday' => $yesterday_visits,
             'today_ratio' => $visits_today_ratio,
-            'week' => $this_week_visits,
-            'last_week' => $last_week_visits,
-            'week_ratio' => $visits_week_ratio,
+//            'week' => $this_week_visits,
+//            'last_week' => $last_week_visits,
+//            'week_ratio' => $visits_week_ratio,
             'total' => $total_visits . 'Pv',
-            'date' => '昨日'
+            'date' => '今日'
         ];
         //TODO 订单量
         //今日订单量
@@ -1482,23 +1482,23 @@ HTML;
         $yesterday_order = $this->dao->todayOrderVisit('yesterday', 1);
         //订单日同比
         $order_today_ratio = $this->growth($today_order, $yesterday_order);
-        //本周订单量
-        $this_week_order = $this->dao->todayOrderVisit('week', 2);
-        //上周订单量
-        $last_week_order = $this->dao->todayOrderVisit('last week', 2);
-        //订单周同比
-        $order_week_ratio = $this->growth($this_week_order, $last_week_order);
+//        //本周订单量
+//        $this_week_order = $this->dao->todayOrderVisit('week', 2);
+//        //上周订单量
+//        $last_week_order = $this->dao->todayOrderVisit('last week', 2);
+//        //订单周同比
+//        $order_week_ratio = $this->growth($this_week_order, $last_week_order);
         //总订单量
         $total_order = $this->dao->count(['time' => 'month', 'paid' => 1, 'refund_status' => 0, 'pid' => 0]);
         $order = [
             'today' => $today_order,
             'yesterday' => $yesterday_order,
             'today_ratio' => $order_today_ratio,
-            'week' => $this_week_order,
-            'last_week' => $last_week_order,
-            'week_ratio' => $order_week_ratio,
+//            'week' => $this_week_order,
+//            'last_week' => $last_week_order,
+//            'week_ratio' => $order_week_ratio,
             'total' => $total_order . '单',
-            'date' => '昨日'
+            'date' => '今日'
         ];
         //TODO 用户
         //今日新增用户
@@ -1507,23 +1507,23 @@ HTML;
         $yesterday_user = $uSercice->todayAddVisits('yesterday', 1);
         //新增用户日同比
         $user_today_ratio = $this->growth($today_user, $yesterday_user);
-        //本周新增用户
-        $this_week_user = $uSercice->todayAddVisits('week', 2);
-        //上周新增用户
-        $last_week_user = $uSercice->todayAddVisits('last week', 2);
-        //新增用户周同比
-        $user_week_ratio = $this->growth($this_week_user, $last_week_user);
+//        //本周新增用户
+//        $this_week_user = $uSercice->todayAddVisits('week', 2);
+//        //上周新增用户
+//        $last_week_user = $uSercice->todayAddVisits('last week', 2);
+//        //新增用户周同比
+//        $user_week_ratio = $this->growth($this_week_user, $last_week_user);
         //所有用户
         $total_user = $uSercice->count(['time' => 'month']);
         $user = [
             'today' => $today_user,
             'yesterday' => $yesterday_user,
             'today_ratio' => $user_today_ratio,
-            'week' => $this_week_user,
-            'last_week' => $last_week_user,
-            'week_ratio' => $user_week_ratio,
+//            'week' => $this_week_user,
+//            'last_week' => $last_week_user,
+//            'week_ratio' => $user_week_ratio,
             'total' => $total_user . '人',
-            'date' => '昨日'
+            'date' => '今日'
         ];
         $info = array_values(compact('sales', 'visits', 'order', 'user'));
         $info[0]['title'] = '销售额';
