@@ -315,12 +315,21 @@ export default {
       color: #fff !important;
       border-radius: 4px;
     }
+
     .ivu-menu-vertical .ivu-menu-item:hover {
       color: #1890ff !important;
       background-color: rgba(24, 144, 255, 0.1) !important;
       border-radius: 4px;
       .ivu-icon {
         color: #1890ff !important;
+      }
+    }
+    .ivu-menu-item.ivu-menu-item-active:hover {
+      background-color: #1890ff !important;
+      color: #fff !important;
+      border-radius: 4px;
+      .ivu-icon {
+        color: #fff !important;
       }
     }
     .ivu-menu-vertical .ivu-menu-item {
@@ -398,6 +407,14 @@ export default {
     border-radius: 4px;
     .ivu-icon {
       color: #1890ff !important;
+    }
+  }
+  .drop-menu-a.on:hover {
+    background-color: #1890ff !important;
+    color: #fff !important;
+    border-radius: 4px;
+    .ivu-icon {
+      color: #fff !important;
     }
   }
   .drop-menu-a.on {
