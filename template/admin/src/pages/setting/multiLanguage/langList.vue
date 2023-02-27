@@ -57,7 +57,7 @@
     <Card :bordered="false" dis-hover>
       <Row type="flex">
         <Col>
-          <Button type="primary" icon="md-add" @click="add">添加语言</Button>
+          <Button type="primary" icon="md-add" @click="add">添加语句</Button>
         </Col>
       </Row>
       <Table
@@ -89,7 +89,7 @@
     <Modal
       v-model="addlangModal"
       width="750"
-      title="添加语言"
+      title="添加需要翻译的语句"
       :loading="FormLoading"
       @on-ok="ok"
       @on-cancel="addlangModal = false"
