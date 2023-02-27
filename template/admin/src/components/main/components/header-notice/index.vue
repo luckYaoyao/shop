@@ -16,6 +16,15 @@
     </Dropdown>
   </div>
 </template>
+<style scoped>
+.ivu-dropdown-item{
+  display: flex;
+  align-items: center;
+}
+.ivu-dropdown-item .iconImg{
+  margin-right: 10px;
+}
+</style>
 <style lang="less">
 .header-notice {
   margin-right: 30px;
@@ -36,7 +45,7 @@
   border-radius: 50%;
   color: #fff;
   font-size: 18px;
-  margin-right: 10px;
+  padding-right: 10px;
   vertical-align: middle;
 }
 .header-notice .ivu-dropdown {

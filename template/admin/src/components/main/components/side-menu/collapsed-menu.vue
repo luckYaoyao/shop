@@ -93,7 +93,10 @@ export default {
   justify-content space-between
   width 100%
 }
+/deep/ .ivu-dropdown-rel {
+  width: 75px !important;
+}
 .drop-menu-a /deep/ .ivu-dropdown-rel {
-  min-width: 75px !important;
+  width: 75px !important;
 }
 </style>
