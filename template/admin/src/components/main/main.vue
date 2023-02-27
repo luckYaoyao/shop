@@ -41,7 +41,7 @@
           <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
         </side-menu>
       </Sider>
-      <Content class="main-content-con">
+      <Content class="main-content-con" :class="{ 'all-desk': headMenuNoShow }">
         <Layout class="main-layout-con">
           <div class="tag-nav-wrapper" v-if="!headMenuNoShow">
             <tags-nav :value="$route" @input="handleClick" :list="tagNavList" @on-close="handleCloseTag" />
@@ -55,7 +55,13 @@
             </keep-alive>
             <router-view v-if="!$route.meta.keepAlive && reload" class="main-warper"></router-view>
             <!-- <router-view v-if="reload" style="min-height: 600px" /> -->
-            <ABackTop :height="100" :bottom="80" :right="50" container=".content-wrapper"></ABackTop>
+            <ABackTop
+              v-if="!headMenuNoShow"
+              :height="100"
+              :bottom="80"
+              :right="50"
+              container=".content-wrapper"
+            ></ABackTop>
             <i-copyright v-if="!headMenuNoShow" />
           </Content>
         </Layout>
@@ -285,7 +291,7 @@ export default {
 .main .tag-nav-wrapper {
   // height: 10px;
   background: unset;
-  padding:  0 15px;
+  padding: 0 15px;
 }
 .open-image {
   display: flex;
@@ -304,5 +310,18 @@ export default {
 }
 .main-warper {
   min-height: calc(~'100vh - 166px');
+}
+.all-desk {
+  height: 100vh !important;
+  padding: 0 !important;
+  .main-content-con,
+  .main-warper,
+  .main-layout-con,
+  .content-wrapper {
+    height: 100vh !important;
+  }
+  .content-wrapper {
+    padding: 0;
+  }
 }
 </style>
