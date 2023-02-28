@@ -9,6 +9,7 @@
       clearable
       :remote-method="remoteMethod"
       :loading="loading"
+      @on-change="remoteMethod"
     >
       <Option
         v-for="(option, index) in menusList"
