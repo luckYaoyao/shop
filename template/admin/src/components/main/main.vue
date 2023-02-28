@@ -113,7 +113,7 @@ export default {
   },
   data() {
     return {
-      collapsed: JSON.parse(getCookies('collapsed') || 'true'),
+      collapsed: JSON.parse(getCookies('collapsed') || 'false'),
       minLogo,
       maxLogo,
       isFullscreen: false,
