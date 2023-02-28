@@ -21,6 +21,7 @@ use app\services\product\product\StoreCategoryServices;
 use app\services\shipping\ShippingTemplatesFreeServices;
 use app\services\shipping\ShippingTemplatesRegionServices;
 use app\services\shipping\ShippingTemplatesServices;
+use app\services\user\UserInvoiceServices;
 use app\services\wechat\WechatUserServices;
 use app\services\BaseServices;
 use crmeb\exceptions\ApiException;
@@ -131,14 +132,22 @@ class StoreOrderCreateServices extends BaseServices
      * @param string $phone
      * @param int $storeId
      * @param bool $news
+     * @param int $advanceId
+     * @param int $virtual_type
+     * @param array $customForm
+     * @param int $invoice_id
      * @return mixed
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function createOrder($uid, $key, $cartGroup, $userInfo, $addressId, $payType, $useIntegral = false, $couponId = 0, $mark = '', $combinationId = 0, $pinkId = 0, $seckillId = 0, $bargainId = 0, $shippingType = 1, $real_name = '', $phone = '', $storeId = 0, $news = false, $advanceId = 0, $virtual_type = 0, $customForm = [])
+    public function createOrder($uid, $key, $cartGroup, $userInfo, $addressId, $payType, $useIntegral = false, $couponId = 0, $mark = '', $combinationId = 0, $pinkId = 0, $seckillId = 0, $bargainId = 0, $shippingType = 1, $real_name = '', $phone = '', $storeId = 0, $news = false, $advanceId = 0, $virtual_type = 0, $customForm = [], $invoice_id = 0)
     {
+        //下单前发票验证
+        if ($invoice_id) {
+            app()->make(UserInvoiceServices::class)->checkInvoice((int)$invoice_id, $uid);
+        }
+
         /** @var StoreOrderComputedServices $computedServices */
         $computedServices = app()->make(StoreOrderComputedServices::class);
         $priceData = $computedServices->computedOrder($uid, $userInfo, $cartGroup, $addressId, $payType, $useIntegral, $couponId, true, $shippingType);
@@ -270,6 +279,11 @@ class StoreOrderCreateServices extends BaseServices
             $cartServices->setCartInfo($order['id'], $uid, $cartInfo);
             return $order;
         });
+
+        //创建开票数据
+        if ($invoice_id) {
+            app()->make(StoreOrderInvoiceServices::class)->makeUp($uid, $order['order_id'], (int)$invoice_id);
+        }
 
         // 订单创建成功后置事件
         event('OrderCreateAfterListener', [$order, compact('cartInfo', 'priceData', 'addressId', 'cartIds', 'news'), $uid, $key, $combinationId, $seckillId, $bargainId]);
