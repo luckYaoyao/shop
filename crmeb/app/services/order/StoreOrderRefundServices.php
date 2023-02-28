@@ -502,6 +502,8 @@ class StoreOrderRefundServices extends BaseServices
                 //记录赠送积分收回
                 $integral = $integral - $give_integral;
                 $res2 = $userBillServices->income('integral_refund', $order['uid'], $give_integral, $integral, $order['id']);
+                //清除积分冻结
+                $userBillServices->update(['link_id' => $order['id']], ['frozen_time' => 0]);
             }
         }
         //返还下单使用积分
