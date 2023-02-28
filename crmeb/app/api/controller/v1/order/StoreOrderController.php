@@ -154,8 +154,8 @@ class StoreOrderController
      * @param StoreOrderInvoiceServices $storeOrderInvoiceServices
      * @param StoreCombinationServices $combinationServices
      * @param $key
+     * @return \think\Response
      * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \think\Exception
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
@@ -260,87 +260,6 @@ class StoreOrderController
         }
 
         return app('json')->status('success', 410203, compact('orderId', 'key'));
-
-//        if ($orderId) {
-//            switch ($payType) {
-//                case PayServices::WEIXIN_PAY:
-//                    if ($orderInfo['paid']) return app('json')->fail(410174);
-//                    //支付金额为0
-//                    if (bcsub((string)$orderInfo['pay_price'], '0', 2) <= 0) {
-//                        //创建订单jspay支付
-//                        /** @var StoreOrderSuccessServices $success */
-//                        $success = app()->make(StoreOrderSuccessServices::class);
-//                        $payPriceStatus = $success->zeroYuanPayment($orderInfo, $uid, PayServices::WEIXIN_PAY);
-//                        if ($payPriceStatus)//0元支付成功
-//                            return app('json')->status('success', 410195, $info);
-//                        else
-//                            return app('json')->status('pay_error');
-//                    } else {
-//                        /** @var OrderPayServices $payServices */
-//                        $payServices = app()->make(OrderPayServices::class);
-//                        if ($from == 'app' && $request->isApp()) {
-//                            $from = 'weixin';
-//                        }
-//                        $info['jsConfig'] = $payServices->orderPay($orderInfo, $from);
-//                        if ($from == 'weixinh5') {
-//                            return app('json')->status('wechat_h5_pay', 410203, $info);
-//                        } else {
-//                            return app('json')->status('wechat_pay', 410203, $info);
-//                        }
-//                    }
-//                case PayServices::YUE_PAY:
-//                    /** @var YuePayServices $yueServices */
-//                    $yueServices = app()->make(YuePayServices::class);
-//                    $pay = $yueServices->yueOrderPay($orderInfo, $uid);
-//                    if ($pay['status'] === true)
-//                        return app('json')->status('success', 410197, $info);
-//                    else {
-//                        if (is_array($pay))
-//                            return app('json')->status($pay['status'], $pay['msg'], $info);
-//                        else
-//                            return app('json')->status('pay_error', $pay);
-//                    }
-//                case PayServices::ALIAPY_PAY:
-//                    if (!$quitUrl && ($request->isH5() || $request->isWechat())) {
-//                        return app('json')->status('pay_error', 410198, $info);
-//                    }
-//                    [$url, $param] = explode('?', $quitUrl);
-//                    $quitUrl = $url . '?order_id=' . $orderInfo['order_id'];
-//                    //支付金额为0
-//                    if (bcsub((string)$orderInfo['pay_price'], '0', 2) <= 0) {
-//                        //创建订单jspay支付
-//                        /** @var StoreOrderSuccessServices $success */
-//                        $success = app()->make(StoreOrderSuccessServices::class);
-//                        $payPriceStatus = $success->zeroYuanPayment($orderInfo, $uid, PayServices::ALIAPY_PAY);
-//                        if ($payPriceStatus)//0元支付成功
-//                            return app('json')->status('success', 410199, $info);
-//                        else
-//                            return app('json')->status('pay_error');
-//                    } else {
-//                        /** @var OrderPayServices $payServices */
-//                        $payServices = app()->make(OrderPayServices::class);
-//                        $info['jsConfig'] = $payServices->alipayOrder($orderInfo, $quitUrl, $from == 'routine');
-//                        $payKey = md5($orderInfo['order_id']);
-//                        CacheService::set($payKey, ['order_id' => $orderInfo['order_id'], 'other_pay_type' => false], 300);
-//                        $info['pay_key'] = $payKey;
-//                        return app('json')->status(PayServices::ALIAPY_PAY . '_pay', 410203, $info);
-//                    }
-//                case PayServices::OFFLINE_PAY:
-//                case 'pc':
-//                case 'friend':
-//                    return app('json')->status('success', 410203, $info);
-//                case PayServices::ALLIN_PAY:
-//                    /** @var OrderPayServices $payServices */
-//                    $payServices = app()->make(OrderPayServices::class);
-//                    $info['jsConfig'] = $payServices->orderPay($orderInfo, $payType, [
-//                        'returl' => sys_config('site_url') . '/pages/index/index',
-//                    ]);
-//                    if ($request->isWechat()) {
-//                        $info['pay_url'] = AllinPay::UNITODER_H5UNIONPAY;
-//                    }
-//                    return app('json')->status(PayServices::ALLIN_PAY . '_pay', 410203, $info);
-//            }
-//        } else return app('json')->fail(410200);
     }
 
     /**

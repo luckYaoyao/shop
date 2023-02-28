@@ -132,8 +132,11 @@ class StoreOrderCreateServices extends BaseServices
      * @param string $phone
      * @param int $storeId
      * @param bool $news
+     * @param int $advanceId
+     * @param int $virtual_type
+     * @param array $customForm
+     * @param int $invoice_id
      * @return mixed
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
