@@ -68,8 +68,15 @@ class UserServices extends BaseServices
 
     /**
      * 获取用户信息
-     * @param $id
-     * @param $field
+     * @param int $uid
+     * @param string $field
+     * @return array|\think\Model|null
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/03/01
      */
     public function getUserInfo(int $uid, $field = '*')
     {
@@ -1014,13 +1021,24 @@ class UserServices extends BaseServices
 
     /**
      * 赠送付费会员时长
-     * @param int $uid
-     * @return mixed
-     * */
+     * @param $id
+     * @return array
+     * @throws \FormBuilder\Exception\FormBuilderException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/03/01
+     */
     public function giveLevelTime($id)
     {
-        if (!$this->getUserInfo($id)) {
+        $userInfo = $this->getUserInfo($id);
+        if (!$userInfo) {
             throw new AdminException(400214);
+        }
+        $timeDiff = $userInfo['is_ever_level'] == 1 ? '永久' : date('Y-m-d H:i:s', $userInfo['overdue_time']);
+        $dayDiff = intval(($userInfo['overdue_time'] - time()) / 86400);
+        $field[] = Form::input('time_diff', '到期时间', $timeDiff)->style(['width' => '200px'])->readonly(true);
+        if ($userInfo['is_ever_level'] == 0) {
+            $field[] = Form::input('day_diff', '剩余天数', $dayDiff)->style(['width' => '200px'])->readonly(true);
         }
         $field[] = Form::number('days', '增加时长(天)')->precision(0)->style(['width' => '200px'])->required();
         return create_form('赠送付费会员时长', $field, Url::buildUrl('/user/save_give_level_time/' . $id), 'PUT');
