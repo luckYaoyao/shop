@@ -234,7 +234,7 @@ class StoreOrderController
 //            }
 //        }
 //        $virtual_type = $cartGroup['cartInfo'][0]['productInfo']['virtual_type'] ?? 0;
-        $order = $createServices->createOrder($uid, $key, $request->user()->toArray(), $addressId, $payType, !!$useIntegral, $couponId, $mark, $combinationId, $pinkId, $seckill_id, $bargainId, $shipping_type, $real_name, $phone, $storeId, !!$news, $advanceId, $customForm, $invoice_id);
+        $order = $createServices->createOrder($uid, $key, $request->user()->toArray(), $addressId, $payType, !!$useIntegral, $couponId, $mark, $combinationId, $pinkId, $seckillId, $bargainId, $shipping_type, $real_name, $phone, $storeId, !!$news, $advanceId, $customForm, $invoice_id);
 //        if ($order === false) {
 //            if ($seckill_id || $combinationId || $advanceId || $bargainId) {
 //                foreach ($cartInfo as $item) {
@@ -339,7 +339,7 @@ class StoreOrderController
             if ($payPriceStatus)//0元支付成功
                 return app('json')->status('success', 410195, ['order_id' => $orderInfo['order_id'], 'key' => $orderInfo['unique']]);
             else
-                return app('json')->status('pay_error');
+                return app('json')->status('pay_error', 410216);
         }
 
         switch ($paytype) {

@@ -119,11 +119,10 @@ class StoreOrderCreateServices extends BaseServices
      * 创建订单
      * @param $uid
      * @param $key
-     * @param $cartGroup
      * @param $userInfo
      * @param $addressId
      * @param $payType
-     * @param bool $useIntegral
+     * @param false $useIntegral
      * @param int $couponId
      * @param string $mark
      * @param int $combinationId
@@ -134,15 +133,19 @@ class StoreOrderCreateServices extends BaseServices
      * @param string $real_name
      * @param string $phone
      * @param int $storeId
-     * @param bool $news
+     * @param false $news
      * @param int $advanceId
-     * @param int $virtual_type
      * @param array $customForm
      * @param int $invoice_id
      * @return mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \Throwable
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/03/01
      */
     public function createOrder($uid, $key, $userInfo, $addressId, $payType, $useIntegral = false, $couponId = 0, $mark = '', $combinationId = 0, $pinkId = 0, $seckillId = 0, $bargainId = 0, $shippingType = 1, $real_name = '', $phone = '', $storeId = 0, $news = false, $advanceId = 0, $customForm = [], $invoice_id = 0)
     {
