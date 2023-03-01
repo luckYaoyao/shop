@@ -5,7 +5,7 @@
         <span>
           <Button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
         </span>
-        <Divider type="vertical"/>
+        <Divider type="vertical" />
         <span class="ivu-page-header-title">{{ $route.query.id ? '编辑渠道码' : '添加渠道码' }}</span>
       </div>
     </div>
@@ -278,6 +278,9 @@ export default {
     getDetail() {
       wechatQrcodeDetail(this.id).then((res) => {
         this.formData = res.data;
+        if (res.data.time > 0) {
+          this.isReceiveTime = 1;
+        }
         if (res.data.label_id.length) {
           this.dataLabel = res.data.label_id;
         }
