@@ -123,7 +123,7 @@ class UserRechargeServices extends BaseServices
             $item['_pay_time'] = $item['pay_time'] ? date('Y-m-d H:i:s', $item['pay_time']) : '暂无';
             $item['_add_time'] = $item['add_time'] ? date('Y-m-d H:i:s', $item['add_time']) : '暂无';
             $item['paid_type'] = $item['paid'] ? '已支付' : '未支付';
-            $item['avatar'] = strpos($item['avatar'], 'http') === false ? (sys_config('site_url') . $item['avatar']) : $item['avatar'];
+            $item['avatar'] = strpos($item['avatar'] ?? '', 'http') === false ? (sys_config('site_url') . $item['avatar']) : $item['avatar'];
             unset($item['user']);
         }
         return compact('list', 'count');

@@ -165,8 +165,8 @@ class StoreOrderController
     public function create(Request $request, StoreBargainServices $bargainServices, StorePinkServices $pinkServices, StoreOrderCreateServices $createServices, StoreSeckillServices $seckillServices, UserInvoiceServices $userInvoiceServices, StoreOrderInvoiceServices $storeOrderInvoiceServices, StoreCombinationServices $combinationServices, $key)
     {
         if (!$key) return app('json')->fail(100100);
-        $uid = (int)$request->uid();
-        if ($checkOrder = $this->services->getOne(['order_id|unique' => $key, 'uid' => $uid, 'is_del' => 0]))
+        $userInfo = $request->user()->toArray();
+        if ($checkOrder = $this->services->getOne(['order_id|unique' => $key, 'uid' => $userInfo['uid'], 'is_del' => 0]))
             return app('json')->status('extend_order', 410209, ['orderId' => $checkOrder['order_id'], 'key' => $key]);
         [$addressId, $couponId, $payType, $useIntegral, $mark, $combinationId, $pinkId, $seckillId, $bargainId, $shipping_type, $real_name, $phone, $storeId, $news, $invoice_id, $quitUrl, $advanceId, $virtual_type, $customForm] = $request->postMore([
             [['addressId', 'd'], 0],
@@ -190,76 +190,10 @@ class StoreOrderController
             ['custom_form', []],
         ], true);
         $payType = strtolower($payType);
-//        $cartGroup = $this->services->getCacheOrderInfo($uid, $key);
-//        if (!$cartGroup) {
-//            return app('json')->fail(410208);
-//        }
-//        //下单前砍价验证
-//        if ($bargainId) {
-//            $bargainServices->checkBargainUser((int)$bargainId, $uid);
-//        }
-//
-//        if ($pinkId) {
-//            $pinkId = (int)$pinkId;
-//            /** @var StorePinkServices $pinkServices */
-//            $pinkServices = app()->make(StorePinkServices::class);
-//            if ($pinkServices->isPink($pinkId, $uid))
-//                return app('json')->status('ORDER_EXIST', 410210, ['orderId' => $this->services->getStoreIdPink($pinkId, $uid)]);
-//            if ($this->services->getIsOrderPink($pinkId, $uid))
-//                return app('json')->status('ORDER_EXIST', 410211, ['orderId' => $this->services->getStoreIdPink($pinkId, $uid)]);
-//            if (!CacheService::checkStock(md5($pinkId), 1, 3) || !CacheService::popStock(md5($pinkId), 1, 3)) {
-//                return app('json')->fail(410212);
-//            }
-//        }
-//
-//        $cartInfo = null;
-//        if ($seckill_id || $combinationId || $bargainId || $advanceId) {
-//            $cartInfo = $cartGroup['cartInfo'];
-//            foreach ($cartInfo as $item) {
-//                $type = 0;
-//                if (!isset($item['product_attr_unique']) || !$item['product_attr_unique']) continue;
-//                if ($item['seckill_id']) {
-//                    $type = 1;
-//                } elseif ($item['bargain_id']) {
-//                    $type = 2;
-//                } elseif ($item['combination_id']) {
-//                    $type = 3;
-//                } elseif ($item['advance_id']) {
-//                    $type = 6;
-//                }
-//                if ($type && (!CacheService::checkStock($item['product_attr_unique'], (int)$item['cart_num'], $type) || !CacheService::popStock($item['product_attr_unique'], (int)$item['cart_num'], $type))) {
-//                    return app('json')->fail(410214, null, ['cart_num' => $item['cart_num'], 'unit_name' => $item['productInfo']['unit_name']]);
-//
-//                }
-//            }
-//        }
-//        $virtual_type = $cartGroup['cartInfo'][0]['productInfo']['virtual_type'] ?? 0;
-        $order = $createServices->createOrder($uid, $key, $request->user()->toArray(), $addressId, $payType, !!$useIntegral, $couponId, $mark, $combinationId, $pinkId, $seckillId, $bargainId, $shipping_type, $real_name, $phone, $storeId, !!$news, $advanceId, $customForm, $invoice_id);
-//        if ($order === false) {
-//            if ($seckill_id || $combinationId || $advanceId || $bargainId) {
-//                foreach ($cartInfo as $item) {
-//                    $value = $item['cart_info'];
-//                    $type = 0;
-//                    if (!isset($value['product_attr_unique']) || $value['product_attr_unique']) continue;
-//                    if ($value['seckill_id']) {
-//                        $type = 1;
-//                    } elseif ($value['bargain_id']) {
-//                        $type = 2;
-//                    } elseif ($value['combination_id']) {
-//                        $type = 3;
-//                    } elseif ($value['advance_id']) {
-//                        $type = 6;
-//                    }
-//                    if ($type) CacheService::setStock($value['product_attr_unique'], (int)$value['cart_num'], $type, false);
-//                }
-//            }
-//            throw new ApiException(410200);
-//        }
+        $order = CacheService::lock('orderCreat' . $key, function () use ($createServices, $userInfo, $key, $addressId, $payType, $useIntegral, $couponId, $mark, $combinationId, $pinkId, $seckillId, $bargainId, $shipping_type, $real_name, $phone, $storeId, $news, $advanceId, $customForm, $invoice_id) {
+            return $createServices->createOrder($userInfo['uid'], $key, $userInfo, $addressId, $payType, !!$useIntegral, $couponId, $mark, $combinationId, $pinkId, $seckillId, $bargainId, $shipping_type, $real_name, $phone, $storeId, !!$news, $advanceId, $customForm, $invoice_id);
+        });
         $orderId = $order['order_id'];
-//        $orderInfo = $this->services->getOne(['order_id' => $orderId]);
-//        if (!$orderInfo || !isset($orderInfo['paid'])) {
-//            return app('json')->fail(410194);
-//        }
         return app('json')->status('success', 410203, compact('orderId', 'key'));
     }
 

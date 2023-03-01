@@ -46,14 +46,6 @@ class OrderPaySuccessListener implements ListenerInterface
             'change_time' => time()
         ]);
 
-        //回退秒杀库存占用
-        /** @var StoreOrderCartInfoServices $cartServices */
-        $cartServices = app()->make(StoreOrderCartInfoServices::class);
-        $cartInfo = $cartServices->getOrderCartInfo($orderInfo['id']);
-        /** @var StoreSeckillServices $seckiiServices */
-        $seckiiServices = app()->make(StoreSeckillServices::class);
-        $seckiiServices->cancelOccupySeckillStock($cartInfo, $orderInfo['unique']);
-
         //赠送购买商品优惠券
         /** @var StoreProductCouponServices $storeProductCouponServices */
         $storeProductCouponServices = app()->make(StoreProductCouponServices::class);

@@ -131,9 +131,6 @@ class StorePinkServices extends BaseServices
         } else if ($countY) {//团员
             $res = $this->dao->update($countY['id'], ['stop_time' => time() - 1, 'k_id' => 0, 'is_refund' => $id, 'status' => 3]);
         }
-        if ($res) {
-            CacheService::setStock(md5((string)$id), 1, 3, false);
-        }
         return $res;
     }
 
@@ -477,9 +474,6 @@ class StorePinkServices extends BaseServices
                 $res = $res1 && $res2;
                 $pink['id'] = $res1['id'];
             }
-
-            $number = (int)bcsub((string)$pink['people'], '1', 0);
-            if ($number) CacheService::setStock(md5($pink['id']), $number, 3);
 
             PinkJob::dispatchSecs((int)(($product->effective_time * 3600) + 60), [$pink['id']]);
             // 开团成功发送模板消息
