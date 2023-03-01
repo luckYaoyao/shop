@@ -14,6 +14,7 @@ use app\services\product\product\StoreProductServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use crmeb\exceptions\AdminException;
 use think\facade\Log;
+use think\helper\Str;
 
 class SystemCrontabServices extends BaseServices
 {
@@ -205,67 +206,19 @@ class SystemCrontabServices extends BaseServices
      */
     public function crontabRun()
     {
+        $crontabRunServices = app()->make(CrontabRunServices::class);
         $time = time();
         file_put_contents(root_path() . 'runtime/.timer', $time); //检测定时任务是否正常
         $list = $this->dao->selectList(['is_open' => 1, 'is_del' => 0])->toArray();
         foreach ($list as $item) {
             if ($item['next_execution_time'] < $time) {
-                if ($item['mark'] == 'order_cancel') {
-                    //未支付自动取消订单
-                    app()->make(StoreOrderServices::class)->orderUnpaidCancel();
-                    $this->crontabLog(' 执行未支付自动取消订单');
-                } elseif ($item['mark'] == 'pink_expiration') {
-                    //拼团到期订单处理
-                    app()->make(StorePinkServices::class)->statusPink();
-                    $this->crontabLog(' 执行拼团到期订单处理');
-                } elseif ($item['mark'] == 'agent_unbind') {
-                    //自动解绑上级绑定
-                    app()->make(AgentManageServices::class)->removeSpread();
-                    $this->crontabLog(' 执行自动解绑上级绑定');
-                } elseif ($item['mark'] == 'live_product_status') {
-                    //更新直播商品状态
-                    app()->make(LiveGoodsServices::class)->syncGoodStatus();
-                    $this->crontabLog(' 执行更新直播商品状态');
-                } elseif ($item['mark'] == 'live_room_status') {
-                    //更新直播间状态
-                    app()->make(LiveRoomServices::class)->syncRoomStatus();
-                    $this->crontabLog(' 执行更新直播间状态');
-                } elseif ($item['mark'] == 'take_delivery') {
-                    //自动收货
-                    app()->make(StoreOrderTakeServices::class)->autoTakeOrder();
-                    $this->crontabLog(' 执行自动收货');
-                } elseif ($item['mark'] == 'advance_off') {
-                    //查询预售到期商品自动下架
-                    app()->make(StoreProductServices::class)->downAdvance();
-                    $this->crontabLog(' 执行预售到期商品自动下架');
-                } elseif ($item['mark'] == 'product_replay') {
-                    //自动好评
-                    app()->make(StoreOrderServices::class)->autoComment();
-                    $this->crontabLog(' 执行自动好评');
-                } elseif ($item['mark'] == 'clear_poster') {
-                    //清除昨日海报
-                    app()->make(SystemAttachmentServices::class)->emptyYesterdayAttachment();
-                    $this->crontabLog(' 执行清除昨日海报');
-                }
+                //转化小驼峰方法名
+                $functionName = Str::camel($item['mark']);
+                //执行定时任务
+                $crontabRunServices->$functionName();
                 //写入本次执行时间和下次执行时间
                 $this->dao->update(['mark' => $item['mark']], ['last_execution_time' => $time, 'next_execution_time' => $this->getTimerCycleTime($item)]);
             }
-        }
-    }
-
-    /**
-     * 定时任务日志
-     * @param $msg
-     * @author 吴汐
-     * @email 442384644@qq.com
-     * @date 2023/02/21
-     */
-    public function crontabLog($msg)
-    {
-        $timer_log_open = config("log.timer_log", false);
-        if ($timer_log_open) {
-            $date = date('Y-m-d H:i:s', time());
-            Log::write($date . $msg, 'crontab');
         }
     }
 }
