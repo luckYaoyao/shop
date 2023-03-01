@@ -19,7 +19,7 @@ use think\helper\Str;
 class SystemCrontabServices extends BaseServices
 {
     /**
-     * 定时任务类型
+     * 定时任务类型 每一个定义的类型会对应CrontabRunServices类中的一个方法
      * @var string[]
      */
     private $markList = [
