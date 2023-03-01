@@ -6,7 +6,6 @@ use app\services\activity\combination\StorePinkServices;
 use app\services\activity\live\LiveGoodsServices;
 use app\services\activity\live\LiveRoomServices;
 use app\services\agent\AgentManageServices;
-use app\services\BaseServices;
 use app\services\order\StoreOrderServices;
 use app\services\order\StoreOrderTakeServices;
 use app\services\product\product\StoreProductServices;
@@ -19,7 +18,7 @@ use think\facade\Log;
  * @email 442384644@qq.com
  * @date 2023/03/01
  */
-class CrontabRunServices extends BaseServices
+class CrontabRunServices
 {
     /**
      * 调用不存在的方法
@@ -39,7 +38,7 @@ class CrontabRunServices extends BaseServices
      * 定时任务日志
      * @param $msg
      */
-    public function crontabLog($msg)
+    protected function crontabLog($msg)
     {
         $timer_log_open = config("log.timer_log", false);
         if ($timer_log_open) {
