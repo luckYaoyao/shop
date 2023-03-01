@@ -336,7 +336,7 @@
               <img v-lazy="formInline.image" />
             </div>
             <div class="upLoad acea-row row-center-wrapper" v-else>
-              <Icon type="ios-camera-outline" size="26" />
+              <Icon type="md-person" size="26" />
             </div>
           </div>
         </FormItem>
@@ -594,7 +594,7 @@ export default {
           align: 'center',
         },
         {
-          title: 'ID',
+          title: '用户ID',
           key: 'uid',
           width: 80,
         },
