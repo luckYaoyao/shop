@@ -159,7 +159,8 @@ export default {
     swiperData() {
       loginInfoApi()
         .then((res) => {
-          localStorage.setItem('ADMIN_TITLE', res.data.site_name);
+          window.document.title = `${res.data.site_name} - 登录`
+          localStorage.setItem('ADMIN_TITLE', res.data.site_name || '');
           let data = res.data || {};
           this.login_logo = data.login_logo ? data.login_logo : require('@/assets/images/logo.png');
           this.swiperList = data.slide.length ? data.slide : [{ slide: this.defaultSwiperList }];
