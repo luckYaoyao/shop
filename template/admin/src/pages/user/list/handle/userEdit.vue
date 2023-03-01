@@ -1,7 +1,7 @@
 <template>
   <div>
     <Form ref="formItem" :rules="ruleValidate" :model="formItem" :label-width="100" @submit.native.prevent>
-      <FormItem label="编号：" v-if="formItem.uid">
+      <FormItem label="用户ID：" v-if="formItem.uid">
         <Input class="form-sty" disabled v-model="formItem.uid" placeholder="请输入编号" style="width: 80%"></Input>
       </FormItem>
       <FormItem label="真实姓名：" prop="real_name">
