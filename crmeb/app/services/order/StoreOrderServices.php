@@ -1930,10 +1930,6 @@ HTML;
                 throw new ApiException(100020);
             }
         });
-        /** @var StoreSeckillServices $seckiiServices */
-        $seckiiServices = app()->make(StoreSeckillServices::class);
-        $seckiiServices->cancelOccupySeckillStock($cartInfo, $order['unique']);
-        $seckiiServices->rollBackStock($cartInfo);
         return true;
     }
 
@@ -2154,10 +2150,6 @@ HTML;
                     /** @var StoreOrderCartInfoServices $cartServices */
                     $cartServices = app()->make(StoreOrderCartInfoServices::class);
                     $cartInfo = $cartServices->getOrderCartInfo((int)$order['id']);
-                    /** @var StoreSeckillServices $seckiiServices */
-                    $seckiiServices = app()->make(StoreSeckillServices::class);
-                    $seckiiServices->cancelOccupySeckillStock($cartInfo, $order['unique']);
-                    $seckiiServices->rollBackStock($cartInfo);
 
                 } catch (\Throwable $e) {
                     Log::error('自动取消订单失败,失败原因:' . $e->getMessage(), $e->getTrace());

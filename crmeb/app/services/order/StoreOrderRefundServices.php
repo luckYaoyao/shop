@@ -526,6 +526,10 @@ class StoreOrderRefundServices extends BaseServices
      * 回退库存
      * @param $order
      * @return bool
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/03/01
      */
     public function regressionStock($order)
     {
@@ -533,7 +537,6 @@ class StoreOrderRefundServices extends BaseServices
         $combination_id = $order['combination_id'];
         $seckill_id = $order['seckill_id'];
         $bargain_id = $order['bargain_id'];
-        $advance_id = $order['advance_id'];
         $res5 = true;
         /** @var StoreOrderCartInfoServices $cartServices */
         $cartServices = app()->make(StoreOrderCartInfoServices::class);
@@ -553,20 +556,15 @@ class StoreOrderRefundServices extends BaseServices
             //增库存减销量
             $unique = isset($cart['cart_info']['productInfo']['attrInfo']) ? $cart['cart_info']['productInfo']['attrInfo']['unique'] : '';
             $cart_num = (int)$cart['cart_info']['cart_num'];
-            $type = 0;
             if ($combination_id) {
-                $type = 3;
                 $res5 = $res5 && $pinkServices->incCombinationStock($cart_num, (int)$combination_id, $unique);
             } else if ($seckill_id) {
-                $type = 1;
                 $res5 = $res5 && $seckillServices->incSeckillStock($cart_num, (int)$seckill_id, $unique);
             } else if ($bargain_id) {
-                $type = 2;
                 $res5 = $res5 && $bargainServices->incBargainStock($cart_num, (int)$bargain_id, $unique);
             } else {
                 $res5 = $res5 && $services->incProductStock($cart_num, (int)$cart['cart_info']['productInfo']['id'], $unique);
             }
-            if ($type) CacheService::setStock($unique, $cart_num, $type, false);
         }
         return $res5;
     }

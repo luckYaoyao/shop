@@ -167,9 +167,6 @@ class StoreOrderCreateServices extends BaseServices
                 throw new ApiStatusException('ORDER_EXIST', 410210, ['orderId' => $storeOrderServices->getStoreIdPink($pinkId, $uid)]);
             if ($storeOrderServices->getIsOrderPink($pinkId, $uid))
                 throw new ApiStatusException('ORDER_EXIST', 410211, ['orderId' => $storeOrderServices->getStoreIdPink($pinkId, $uid)]);
-            if (!CacheService::checkStock(md5($pinkId), 1, 3) || !CacheService::popStock(md5($pinkId), 1, 3)) {
-                throw new ApiException(410212);
-            }
         }
         $virtual_type = $cartGroup['cartInfo'][0]['productInfo']['virtual_type'] ?? 0;
 
@@ -297,8 +294,6 @@ class StoreOrderCreateServices extends BaseServices
             /** @var UserServices $userService */
             $userService = app()->make(UserServices::class);
             $userService->update(['uid' => $uid], ['real_name' => $orderInfo['real_name'], 'record_phone' => $orderInfo['user_phone']]);
-            //占用库存
-            $seckillServices->occupySeckillStock($cartInfo, $key);
             //积分抵扣
             if ($priceData['usedIntegral'] > 0) {
                 $this->deductIntegral($userInfo, $useIntegral, $priceData, (int)$userInfo['uid'], $order['id']);

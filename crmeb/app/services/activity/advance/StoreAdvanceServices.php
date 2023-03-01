@@ -115,13 +115,6 @@ class StoreAdvanceServices extends BaseServices
                 $valueGroup = $storeProductAttrServices->saveProductAttr($skuList, (int)$res->id, 6);
                 if (!$res) throw new AdminException(100022);
             }
-            $res = true;
-            foreach ($valueGroup->toArray() as $item) {
-                $res = $res && CacheService::setStock($item['unique'], (int)$item['quota_show'], 6);
-            }
-            if (!$res) {
-                throw new AdminException(400092);
-            }
         });
     }
 
