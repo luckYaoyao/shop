@@ -138,8 +138,6 @@ class StoreOrderCreateServices extends BaseServices
      * @param array $customForm
      * @param int $invoice_id
      * @return mixed
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \Throwable
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
@@ -173,191 +171,148 @@ class StoreOrderCreateServices extends BaseServices
                 throw new ApiException(410212);
             }
         }
-        $cartInfo = null;
-        if ($seckillId || $combinationId || $bargainId || $advanceId) {
-            $cartInfo = $cartGroup['cartInfo'];
-            foreach ($cartInfo as $item) {
-                $type = 0;
-                if (!isset($item['product_attr_unique']) || !$item['product_attr_unique']) continue;
-                if ($item['seckill_id']) {
-                    $type = 1;
-                } elseif ($item['bargain_id']) {
-                    $type = 2;
-                } elseif ($item['combination_id']) {
-                    $type = 3;
-                } elseif ($item['advance_id']) {
-                    $type = 6;
-                }
-                if ($type && (!CacheService::checkStock($item['product_attr_unique'], (int)$item['cart_num'], $type) || !CacheService::popStock($item['product_attr_unique'], (int)$item['cart_num'], $type))) {
-                    throw new ApiException(410214, ['cart_num' => $item['cart_num'], 'unit_name' => $item['productInfo']['unit_name']]);
-
-                }
-            }
-        }
-
         $virtual_type = $cartGroup['cartInfo'][0]['productInfo']['virtual_type'] ?? 0;
 
-        try {
-            //下单前发票验证
-            if ($invoice_id) {
-                app()->make(UserInvoiceServices::class)->checkInvoice((int)$invoice_id, $uid);
-            }
+        //下单前发票验证
+        if ($invoice_id) {
+            app()->make(UserInvoiceServices::class)->checkInvoice((int)$invoice_id, $uid);
+        }
 
-            /** @var StoreOrderComputedServices $computedServices */
-            $computedServices = app()->make(StoreOrderComputedServices::class);
-            $priceData = $computedServices->computedOrder($uid, $userInfo, $cartGroup, $addressId, $payType, $useIntegral, $couponId, true, $shippingType);
-            /** @var WechatUserServices $wechatServices */
-            $wechatServices = app()->make(WechatUserServices::class);
-            /** @var UserAddressServices $addressServices */
-            $addressServices = app()->make(UserAddressServices::class);
-            if ($shippingType == 1 && $virtual_type == 0) {
-                if (!$addressId) {
-                    throw new ApiException(410045);
-                }
-                if (!$addressInfo = $addressServices->getOne(['uid' => $uid, 'id' => $addressId, 'is_del' => 0]))
-                    throw new ApiException(410046);
-                $addressInfo = $addressInfo->toArray();
-            } else {
-                if ((!$real_name || !$phone) && $virtual_type == 0) {
-                    throw new ApiException(410245);
-                }
-                $addressInfo['real_name'] = $real_name;
-                $addressInfo['phone'] = $phone;
-                $addressInfo['province'] = '';
-                $addressInfo['city'] = '';
-                $addressInfo['district'] = '';
-                $addressInfo['detail'] = '';
+        /** @var StoreOrderComputedServices $computedServices */
+        $computedServices = app()->make(StoreOrderComputedServices::class);
+        $priceData = $computedServices->computedOrder($uid, $userInfo, $cartGroup, $addressId, $payType, $useIntegral, $couponId, true, $shippingType);
+        /** @var WechatUserServices $wechatServices */
+        $wechatServices = app()->make(WechatUserServices::class);
+        /** @var UserAddressServices $addressServices */
+        $addressServices = app()->make(UserAddressServices::class);
+        if ($shippingType == 1 && $virtual_type == 0) {
+            if (!$addressId) {
+                throw new ApiException(410045);
             }
-            $cartInfo = $cartGroup['cartInfo'];
-            $priceGroup = $cartGroup['priceGroup'];
-            $cartIds = [];
-            $totalNum = 0;
-            $gainIntegral = 0;
-            foreach ($cartInfo as $cart) {
-                $cartIds[] = $cart['id'];
-                $totalNum += $cart['cart_num'];
-                if (!$seckillId) $seckillId = $cart['seckill_id'];
-                if (!$bargainId) $bargainId = $cart['bargain_id'];
-                if (!$combinationId) $combinationId = $cart['combination_id'];
-                if (!$advanceId) $advanceId = $cart['advance_id'];
-                $cartInfoGainIntegral = isset($cart['productInfo']['give_integral']) ? bcmul((string)$cart['cart_num'], (string)$cart['productInfo']['give_integral'], 0) : 0;
-                $gainIntegral = bcadd((string)$gainIntegral, (string)$cartInfoGainIntegral, 0);
+            if (!$addressInfo = $addressServices->getOne(['uid' => $uid, 'id' => $addressId, 'is_del' => 0]))
+                throw new ApiException(410046);
+            $addressInfo = $addressInfo->toArray();
+        } else {
+            if ((!$real_name || !$phone) && $virtual_type == 0) {
+                throw new ApiException(410245);
             }
-            if (count($cartInfo) == 1 && isset($cartInfo[0]['productInfo']['presale']) && $cartInfo[0]['productInfo']['presale'] == 1) {
-                $advance_id = $cartInfo[0]['product_id'];
-            } else {
-                $advance_id = 0;
-            }
-            $deduction = $seckillId || $bargainId || $combinationId;
-            if ($deduction) {
-                $couponId = 0;
-                $useIntegral = false;
-            }
-            //$shipping_type = 1 快递发货 $shipping_type = 2 门店自提
-            $storeSelfMention = sys_config('store_self_mention') ?? 0;
-            if (!$storeSelfMention) $shippingType = 1;
+            $addressInfo['real_name'] = $real_name;
+            $addressInfo['phone'] = $phone;
+            $addressInfo['province'] = '';
+            $addressInfo['city'] = '';
+            $addressInfo['district'] = '';
+            $addressInfo['detail'] = '';
+        }
+        $cartInfo = $cartGroup['cartInfo'];
+        $priceGroup = $cartGroup['priceGroup'];
+        $cartIds = [];
+        $totalNum = 0;
+        $gainIntegral = 0;
+        foreach ($cartInfo as $cart) {
+            $cartIds[] = $cart['id'];
+            $totalNum += $cart['cart_num'];
+            if (!$seckillId) $seckillId = $cart['seckill_id'];
+            if (!$bargainId) $bargainId = $cart['bargain_id'];
+            if (!$combinationId) $combinationId = $cart['combination_id'];
+            if (!$advanceId) $advanceId = $cart['advance_id'];
+            $cartInfoGainIntegral = isset($cart['productInfo']['give_integral']) ? bcmul((string)$cart['cart_num'], (string)$cart['productInfo']['give_integral'], 0) : 0;
+            $gainIntegral = bcadd((string)$gainIntegral, (string)$cartInfoGainIntegral, 0);
+        }
+        if (count($cartInfo) == 1 && isset($cartInfo[0]['productInfo']['presale']) && $cartInfo[0]['productInfo']['presale'] == 1) {
+            $advance_id = $cartInfo[0]['product_id'];
+        } else {
+            $advance_id = 0;
+        }
+        $deduction = $seckillId || $bargainId || $combinationId;
+        if ($deduction) {
+            $couponId = 0;
+            $useIntegral = false;
+        }
+        //$shipping_type = 1 快递发货 $shipping_type = 2 门店自提
+        $storeSelfMention = sys_config('store_self_mention') ?? 0;
+        if (!$storeSelfMention) $shippingType = 1;
 
-            $orderInfo = [
-                'uid' => $uid,
-                'order_id' => $this->getNewOrderId('cp'),
-                'real_name' => $addressInfo['real_name'],
-                'user_phone' => $addressInfo['phone'],
-                'user_address' => $addressInfo['province'] . ' ' . $addressInfo['city'] . ' ' . $addressInfo['district'] . ' ' . $addressInfo['detail'],
-                'cart_id' => $cartIds,
-                'total_num' => $totalNum,
-                'total_price' => $priceGroup['totalPrice'],
-                'total_postage' => $shippingType == 1 ? $priceGroup['storePostage'] : 0,
-                'coupon_id' => $couponId,
-                'coupon_price' => $priceData['coupon_price'],
-                'pay_price' => $priceData['pay_price'],
-                'pay_postage' => $priceData['pay_postage'],
-                'deduction_price' => $priceData['deduction_price'],
-                'paid' => 0,
-                'pay_type' => $payType,
-                'use_integral' => $priceData['usedIntegral'],
-                'gain_integral' => $gainIntegral,
-                'mark' => htmlspecialchars($mark),
-                'combination_id' => $combinationId,
-                'pink_id' => $pinkId,
-                'seckill_id' => $seckillId,
-                'bargain_id' => $bargainId,
-                'advance_id' => $advance_id,
-                'cost' => $priceGroup['costPrice'],
-                'add_time' => time(),
-                'unique' => $key,
-                'shipping_type' => $shippingType,
-                'channel_type' => $userInfo['user_type'],
-                'province' => strval($userInfo['user_type'] == 'wechat' || $userInfo['user_type'] == 'routine' ? $wechatServices->value(['uid' => $uid, 'user_type' => $userInfo['user_type']], 'province') : ''),
-                'spread_uid' => 0,
-                'spread_two_uid' => 0,
-                'virtual_type' => $virtual_type,
-                'pay_uid' => $uid,
-                'custom_form' => json_encode($customForm),
-                'division_id' => $userInfo['division_id'],
-                'agent_id' => $userInfo['agent_id'],
-                'staff_id' => $userInfo['staff_id'],
-            ];
+        $orderInfo = [
+            'uid' => $uid,
+            'order_id' => $this->getNewOrderId('cp'),
+            'real_name' => $addressInfo['real_name'],
+            'user_phone' => $addressInfo['phone'],
+            'user_address' => $addressInfo['province'] . ' ' . $addressInfo['city'] . ' ' . $addressInfo['district'] . ' ' . $addressInfo['detail'],
+            'cart_id' => $cartIds,
+            'total_num' => $totalNum,
+            'total_price' => $priceGroup['totalPrice'],
+            'total_postage' => $shippingType == 1 ? $priceGroup['storePostage'] : 0,
+            'coupon_id' => $couponId,
+            'coupon_price' => $priceData['coupon_price'],
+            'pay_price' => $priceData['pay_price'],
+            'pay_postage' => $priceData['pay_postage'],
+            'deduction_price' => $priceData['deduction_price'],
+            'paid' => 0,
+            'pay_type' => $payType,
+            'use_integral' => $priceData['usedIntegral'],
+            'gain_integral' => $gainIntegral,
+            'mark' => htmlspecialchars($mark),
+            'combination_id' => $combinationId,
+            'pink_id' => $pinkId,
+            'seckill_id' => $seckillId,
+            'bargain_id' => $bargainId,
+            'advance_id' => $advance_id,
+            'cost' => $priceGroup['costPrice'],
+            'add_time' => time(),
+            'unique' => $key,
+            'shipping_type' => $shippingType,
+            'channel_type' => $userInfo['user_type'],
+            'province' => strval($userInfo['user_type'] == 'wechat' || $userInfo['user_type'] == 'routine' ? $wechatServices->value(['uid' => $uid, 'user_type' => $userInfo['user_type']], 'province') : ''),
+            'spread_uid' => 0,
+            'spread_two_uid' => 0,
+            'virtual_type' => $virtual_type,
+            'pay_uid' => $uid,
+            'custom_form' => json_encode($customForm),
+            'division_id' => $userInfo['division_id'],
+            'agent_id' => $userInfo['agent_id'],
+            'staff_id' => $userInfo['staff_id'],
+        ];
 
-            if ($shippingType == 2) {
-                $orderInfo['verify_code'] = $this->getStoreCode();
-                /** @var SystemStoreServices $storeServices */
-                $storeServices = app()->make(SystemStoreServices::class);
-                $orderInfo['store_id'] = $storeServices->getStoreDispose($storeId, 'id');
-                if (!$orderInfo['store_id']) {
-                    throw new ApiException(410247);
-                }
+        if ($shippingType == 2) {
+            $orderInfo['verify_code'] = $this->getStoreCode();
+            /** @var SystemStoreServices $storeServices */
+            $storeServices = app()->make(SystemStoreServices::class);
+            $orderInfo['store_id'] = $storeServices->getStoreDispose($storeId, 'id');
+            if (!$orderInfo['store_id']) {
+                throw new ApiException(410247);
             }
-            /** @var StoreOrderCartInfoServices $cartServices */
-            $cartServices = app()->make(StoreOrderCartInfoServices::class);
-            /** @var StoreSeckillServices $seckillServices */
-            $seckillServices = app()->make(StoreSeckillServices::class);
-            $priceData['coupon_id'] = $couponId;
-            $order = $this->transaction(function () use ($cartIds, $orderInfo, $cartInfo, $key, $userInfo, $useIntegral, $priceData, $combinationId, $seckillId, $bargainId, $cartServices, $seckillServices, $uid, $addressId, $advanceId) {
-                //创建订单
-                $order = $this->dao->save($orderInfo);
-                if (!$order) {
-                    throw new ApiException(410200);
-                }
-                //记录自提人电话和姓名
-                /** @var UserServices $userService */
-                $userService = app()->make(UserServices::class);
-                $userService->update(['uid' => $uid], ['real_name' => $orderInfo['real_name'], 'record_phone' => $orderInfo['user_phone']]);
-                //占用库存
-                $seckillServices->occupySeckillStock($cartInfo, $key);
-                //积分抵扣
-                if ($priceData['usedIntegral'] > 0) {
-                    $this->deductIntegral($userInfo, $useIntegral, $priceData, (int)$userInfo['uid'], $order['id']);
-                }
-                //扣库存
-                $this->decGoodsStock($cartInfo, $combinationId, $seckillId, $bargainId, $advanceId);
-                //保存购物车商品信息
-                $cartServices->setCartInfo($order['id'], $uid, $cartInfo);
-                return $order;
-            });
+        }
+        /** @var StoreOrderCartInfoServices $cartServices */
+        $cartServices = app()->make(StoreOrderCartInfoServices::class);
+        /** @var StoreSeckillServices $seckillServices */
+        $seckillServices = app()->make(StoreSeckillServices::class);
+        $priceData['coupon_id'] = $couponId;
+        $order = $this->transaction(function () use ($cartIds, $orderInfo, $cartInfo, $key, $userInfo, $useIntegral, $priceData, $combinationId, $seckillId, $bargainId, $cartServices, $seckillServices, $uid, $addressId, $advanceId) {
+            //创建订单
+            $order = $this->dao->save($orderInfo);
+            if (!$order) {
+                throw new ApiException(410200);
+            }
+            //记录自提人电话和姓名
+            /** @var UserServices $userService */
+            $userService = app()->make(UserServices::class);
+            $userService->update(['uid' => $uid], ['real_name' => $orderInfo['real_name'], 'record_phone' => $orderInfo['user_phone']]);
+            //占用库存
+            $seckillServices->occupySeckillStock($cartInfo, $key);
+            //积分抵扣
+            if ($priceData['usedIntegral'] > 0) {
+                $this->deductIntegral($userInfo, $useIntegral, $priceData, (int)$userInfo['uid'], $order['id']);
+            }
+            //扣库存
+            $this->decGoodsStock($cartInfo, $combinationId, $seckillId, $bargainId, $advanceId);
+            //保存购物车商品信息
+            $cartServices->setCartInfo($order['id'], $uid, $cartInfo);
+            return $order;
+        });
 
-            //创建开票数据
-            if ($invoice_id) {
-                app()->make(StoreOrderInvoiceServices::class)->makeUp($uid, $order['order_id'], (int)$invoice_id);
-            }
-        } catch (\Throwable $e) {
-            if ($seckillId || $combinationId || $advanceId || $bargainId) {
-                foreach ($cartInfo as $item) {
-                    $value = $item['cart_info'];
-                    $type = 0;
-                    if (!isset($value['product_attr_unique']) || $value['product_attr_unique']) continue;
-                    if ($value['seckill_id']) {
-                        $type = 1;
-                    } elseif ($value['bargain_id']) {
-                        $type = 2;
-                    } elseif ($value['combination_id']) {
-                        $type = 3;
-                    } elseif ($value['advance_id']) {
-                        $type = 6;
-                    }
-                    if ($type) CacheService::setStock($value['product_attr_unique'], (int)$value['cart_num'], $type, false);
-                }
-            }
-            throw $e;
+        //创建开票数据
+        if ($invoice_id) {
+            app()->make(StoreOrderInvoiceServices::class)->makeUp($uid, $order['order_id'], (int)$invoice_id);
         }
 
         // 订单创建成功后置事件

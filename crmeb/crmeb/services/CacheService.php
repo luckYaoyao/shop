@@ -298,4 +298,22 @@ class CacheService
             return Cache::store('redis');
         }
     }
+
+    /**
+     * 数据库锁
+     * @param $key
+     * @param $fn
+     * @param int $ex
+     * @return mixed
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/03/01
+     */
+    public static function lock($key, $fn, int $ex = 6)
+    {
+        if (Config::get('cache.default') == 'file') {
+            return $fn();
+        }
+        return app()->make(LockService::class)->exec($key, $fn, $ex);
+    }
 }
