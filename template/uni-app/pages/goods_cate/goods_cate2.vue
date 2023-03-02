@@ -674,7 +674,7 @@
 					that.navActive = 0;
 					that.tabClick = 0;
 					that.categoryList = data;
-					that.categoryErList = res.data[0].children ? res.data[0].children : [];
+					that.categoryErList = data[0].children ? data[0].children : [];
 					that.page = 1;
 					that.loadend = false;
 					that.tempArr = [];
