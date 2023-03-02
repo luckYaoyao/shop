@@ -12,7 +12,8 @@
       :class="{ on: parentItem.path == activeMenuPath }"
       @mouseover="handleMousemove($event, children)"
       :style="{ textAlign: !hideTitle ? 'left' : '' }"
-      ><common-icon :color="textColor" :type="parentItem.icon" /><Icon
+      @click="handClick(parentItem.path)"
+      ><common-icon :type="parentItem.icon" /><Icon
         style="float: right"
         v-if="!hideTitle"
         type="ios-arrow-forward"
@@ -20,7 +21,7 @@
       />
       <span class="title">{{ parentItem.title }}</span></a
     >
-    <DropdownMenu ref="dropdown" slot="list">
+    <DropdownMenu ref="dropdown" slot="list" v-if="children">
       <div v-for="child in children">
         <template v-if="child.auth === undefined">
           <collapsed-menu
@@ -66,6 +67,10 @@ export default {
   },
   methods: {
     handleClick(name) {
+      console.log(name, '1');
+      this.$emit('on-click', name, this.activeMenuPath);
+    },
+    handClick(name) {
       this.$emit('on-click', name, this.activeMenuPath);
     },
     handleMousemove(event, children) {
@@ -81,22 +86,21 @@ export default {
   },
 };
 </script>
-<style lang="stylus" scoped>
->>> .menu-title {
-  // width: 100px !important;
+<style lang="less" scoped>
+@import './side-menu.less';
+
+.collased-menu-dropdown {
+  width: 100%;
 }
-.collased-menu-dropdown{
-  width 100%
-}
-.child-menu{
-  display flex
-  justify-content space-between
-  width 100%
+.child-menu {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
 }
 /deep/ .ivu-dropdown-rel {
-  width: 75px !important;
+  width: @side-width !important;
 }
 .drop-menu-a /deep/ .ivu-dropdown-rel {
-  width: 75px !important;
+  width: @side-width !important;
 }
 </style>

@@ -1,16 +1,16 @@
 <template>
   <div class="side-menu-wrapper">
-    <slot></slot>
-    <sider-trigger :collapsed="collapsed" @on-change="handleCollpasedChange"></sider-trigger>
+    <!-- <sider-trigger :collapsed="collapsed" @on-change="handleCollpasedChange"></sider-trigger> -->
     <div class="side-menu-box" v-show="!collapsed">
       <div class="parent-menu">
+        <slot></slot>
         <Menu
           ref="menu"
+          class="parent-menus"
           :active-name="headerName"
           :open-names="openedNames"
           :accordion="accordion"
           :theme="theme"
-          width="75px"
           @on-open-change="openNameData"
           @on-select="handleSelect"
         >
@@ -31,7 +31,7 @@
           :open-names="openNames"
           :accordion="accordion"
           :theme="theme"
-          width="145px"
+          class="child-menus"
           @on-open-change="openChildNameData"
           @on-select="handleChildSelect"
         >
@@ -44,7 +44,7 @@
                   :parent-item="item"
                 ></side-menu-item>
                 <menu-item v-else :name="item.path" :key="`menu${item.path}`"
-                  ><common-icon :type="item.children[0].icon || ''" /><span class="title">{{
+                  ><span class="title">{{
                     item.children[0].title
                   }}</span></menu-item
                 >
@@ -56,7 +56,7 @@
                   :parent-item="item"
                 ></side-menu-item>
                 <menu-item v-else :name="item.path" :key="`menu${item.path}`"
-                  ><common-icon :type="item.icon || ''" /><span class="title">{{ item.title }}</span></menu-item
+                  ><span class="title">{{ item.title }}</span></menu-item
                 >
               </template>
             </template>
@@ -66,9 +66,9 @@
     </div>
 
     <div class="menu-collapsed" v-show="collapsed">
+      <slot></slot>
       <template v-for="item in menusName">
         <collapsed-menu
-          v-if="item.children && item.children.length > 0"
           @on-click="collHandleSelect"
           :hide-title="true"
           :activeMenuPath="headerName"
@@ -78,16 +78,16 @@
           :parent-item="item"
           :key="`drop-menu-${item.path}`"
         ></collapsed-menu>
-        <Tooltip transfer v-else :content="item.title" placement="right" :key="`drop-menu-${item.path}`">
+        <!-- <Tooltip transfer v-else :content="item.title" placement="right" :key="`drop-menu-${item.path}`">
           <a
             @click="collHandleSelect(item)"
             class="drop-menu-a"
             :class="{ on: item.path == headerName }"
             :style="{ textAlign: 'center' }"
-            ><common-icon :color="textColor" :type="item.icon || (item.children && item.children[0].icon)" />
+            ><common-icon :type="item.icon || (item.children && item.children[0].icon)" />
             <span class="title">{{ item.title }}</span>
           </a>
-        </Tooltip>
+        </Tooltip> -->
       </template>
     </div>
   </div>
@@ -222,9 +222,17 @@ export default {
   },
 };
 </script>
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+/deep/ .ivu-menu-vertical .ivu-menu-submenu-title-icon {
+  right: 8px;
+}
+
+</style>
 <style lang="less">
 @import './side-menu.less';
+.ivu-layout-sider{
+  overflow: unset !important;
+}
 .ivu-menu {
   .side-menu-wrapper {
     position: relative;
@@ -284,12 +292,6 @@ export default {
     color: #fff !important;
   }
 }
-.side-menu-wrapper a.drop-menu-a {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 75px !important;
-}
 
 .side-menu-box {
   display: flex;
@@ -298,8 +300,6 @@ export default {
     line-height: 14px;
     display: flex;
     align-items: center;
-    padding: 10px 10px;
-    margin-bottom: 4px;
     .ivu-icon {
       font-size: 14px;
       margin-right: 8px;
@@ -307,19 +307,26 @@ export default {
   }
   .parent-menu {
     z-index: 9;
-    padding: 0 8px;
-    box-shadow: 2px 0px 4px 0px rgba(0, 0, 0, 0.06);
-    height: calc(~'100vh - 50px');
+    width: @side-width;
+    background-color: @side-dark-theme !important;
+    height: 100vh;
+    .parent-menus {
+      width: @side-width !important;
+    }
+    .ivu-menu {
+      color: #fff !important;
+    }
+    .ivu-menu-light {
+      background-color: unset;
+    }
     .ivu-menu-item-selected {
       background-color: #1890ff !important;
       color: #fff !important;
-      border-radius: 4px;
     }
 
     .ivu-menu-vertical .ivu-menu-item:hover {
       color: #1890ff !important;
       background-color: rgba(24, 144, 255, 0.1) !important;
-      border-radius: 4px;
       .ivu-icon {
         color: #1890ff !important;
       }
@@ -327,61 +334,72 @@ export default {
     .ivu-menu-item.ivu-menu-item-active:hover {
       background-color: #1890ff !important;
       color: #fff !important;
-      border-radius: 4px;
       .ivu-icon {
         color: #fff !important;
       }
     }
     .ivu-menu-vertical .ivu-menu-item {
-      padding: 10px 10px;
-      margin-bottom: 8px;
+      padding: 18px 10px;
       display: flex;
       align-items: center;
       justify-content: center;
       .title {
-        font-size: 13px;
-        line-height: 13px;
+        font-size: 14px;
+        line-height: 14px;
       }
     }
     .ivu-menu-vertical .ivu-menu-item:first-child {
-      margin-top: 8px;
+      // margin-top: 8px;
     }
   }
   .child-menu {
     z-index: 8;
+    box-shadow: 2px 0px 4px 0px rgba(0, 0, 0, 0.06);
+    .child-menus {
+      width: @side-child-width !important;
+    }
+    .ivu-divider {
+      height: 50px;
+      line-height: 50px;
+      margin: 0;
+      width: @side-child-width !important;
+    }
     .ivu-menu-vertical .ivu-menu-item {
-      padding: 13px 10px;
+      height: @child-menu-height;
       display: flex;
       align-items: center;
       .title {
-        font-size: 13px;
-        line-height: 13px;
+        font-size: 14px;
+        line-height: 14px;
       }
     }
-    .ivu-menu-submenu {
-      .ivu-menu-item {
-        padding-left: 23px !important;
-      }
-      .ivu-menu-submenu {
-        .ivu-menu-submenu-title {
-          padding-left: 23px !important;
-        }
-        .ivu-menu-item {
-          padding-left: 35px !important;
-        }
-      }
-    }
-    .ivu-menu-vertical .ivu-menu-submenu-title {
-      font-size: 13px;
-      padding: 12px 10px;
-      line-height: 16px;
-    }
+    // .ivu-menu-submenu {
+    //   .ivu-menu-item {
+    //     padding-left: 23px !important;
+    //   }
+    //   .ivu-menu-submenu {
+    //     .ivu-menu-submenu-title {
+    //       padding-left: 23px !important;
+    //     }
+    //     .ivu-menu-item {
+    //       padding-left: 35px !important;
+    //     }
+    //   }
+    // }
+    // .ivu-menu-vertical .ivu-menu-submenu-title {
+    //   font-size: 14px;
+    //   padding: 12px 10px;
+    //   line-height: 16px;
+    // }
     .cat-name {
+      width: 100%;
       font-size: 14px;
+      height: 50px;
       line-height: 16px;
       font-weight: 600;
       color: #303133;
       padding: 15px;
+      text-align: center;
       border-bottom: 1px solid #f2f2f2;
     }
   }
@@ -400,11 +418,16 @@ export default {
   left: 95px !important;
 }
 .menu-collapsed {
-  padding: 0 8px;
+  .side-menu-wrapper a.drop-menu-a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: @side-dark-theme-font-color;
+    width: @side-width !important;
+  }
   .drop-menu-a:hover {
-    color: #1890ff;
+    color: #1890ff !important;
     background-color: rgba(24, 144, 255, 0.1) !important;
-    border-radius: 4px;
     .ivu-icon {
       color: #1890ff !important;
     }
@@ -412,7 +435,6 @@ export default {
   .drop-menu-a.on:hover {
     background-color: #1890ff !important;
     color: #fff !important;
-    border-radius: 4px;
     .ivu-icon {
       color: #fff !important;
     }
@@ -420,7 +442,6 @@ export default {
   .drop-menu-a.on {
     background-color: #1890ff !important;
     color: #fff !important;
-    border-radius: 4px;
     .ivu-icon {
       color: #fff !important;
     }
@@ -429,17 +450,17 @@ export default {
     font-size: 14px;
     line-height: 14px;
     display: flex;
+    padding: 18px 0;
     align-items: center;
-    padding: 10px 11px;
-    margin-bottom: 4px;
+    width: @side-width;
     flex-wrap: nowrap;
     .ivu-icon {
       font-size: 14px;
       margin-right: 8px;
     }
     .title {
-      font-size: 13px;
-      line-height: 13px;
+      font-size: 14px;
+      line-height: 14px;
       white-space: nowrap;
     }
   }

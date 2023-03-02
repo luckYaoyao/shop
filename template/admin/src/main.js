@@ -68,6 +68,7 @@ import scroll from '@/libs/loading';
 import * as tools from '@/libs/tools';
 import VueTreeList from 'vue-tree-list';
 import { getHeaderName, getHeaderSider, getMenuSider, getSiderSubmenu } from '@/libs/system';
+import { getMenuopen } from '@/libs/util';
 
 // 复制到粘贴板插件
 import VueClipboard from 'vue-clipboard2';
@@ -201,6 +202,9 @@ new Vue({
       const headerName = getHeaderName(to, menuSider);
       if (headerName !== null) {
         this.$store.commit('menu/setActivePath', path);
+        let openNameList = getMenuopen(to, menuSider);
+        this.$store.commit('menus/setopenMenus', openNameList);
+        console.log(openNameList, 'openNameList');
         const openNames = getSiderSubmenu(to, menuSider);
         this.$store.commit('menu/setOpenNames', openNames);
         // 设置顶栏菜单 后台添加一个接口，设置顶部菜单

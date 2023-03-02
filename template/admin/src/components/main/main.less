@@ -1,7 +1,8 @@
+@bar-height: 50px;
+
 .main {
   .logo-con {
-    height: 50px;
-    margin-left: 10px;
+    height: @bar-height;
     img {
       height: 44px;
       width: auto;
@@ -15,8 +16,8 @@
     width: 100%;
   }
   .ivu-layout-header {
-    height: 50px;
-    line-height: 50px;
+    height: @bar-height;
+    line-height: @bar-height;
   }
   .main-layout-con {
     height: calc(~"100vh - 60px");

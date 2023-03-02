@@ -66,11 +66,11 @@
 					this.category = status
 					uni.setStorageSync('is_diy', res.data.is_diy)
 					this.status = res.data.status
-					this.$refs.classOne.is_diy = res.data.is_diy
 					this.$nextTick(e => {
 						if (this.status == 2 || this.status == 3) {
 							uni.hideTabBar();
 						} else if (this.status == 1) {
+							this.$refs.classOne.is_diy = res.data.is_diy
 							this.$refs.classOne.getNav();
 						}
 						if (status == 2) {

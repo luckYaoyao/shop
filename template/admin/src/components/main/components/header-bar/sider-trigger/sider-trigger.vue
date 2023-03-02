@@ -28,21 +28,18 @@ export default {
 </script>
 <style lang="less" scoped>
 .sider-menu {
-  position: absolute;
-  width: 100%;
-  max-width: 90px;
-  left: 0;
-  bottom: 0;
-  height: 40px;
+  height: 50px;
+  // border-top: 1px solid #f2f2f2;
+  color: #515a6e;
+  padding: 0 16px;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid #f2f2f2;
-  color: #515a6e;
 }
 @import './sider-trigger.less';
 .sider-trigger-a {
-  padding: 14px 6px;
+  height: 50px;
+  color: rgba(0, 0, 0, 0.65);
 }
 .iconcaidanshouqi {
   font-size: 16px;
