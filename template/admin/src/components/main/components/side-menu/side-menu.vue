@@ -392,7 +392,7 @@ export default {
       width: 100%;
       font-size: 16px;
       height: 50px;
-      line-height: 16px;
+      line-height: 20px;
       font-weight: 600;
       color: #606266;
       padding: 15px 23px;
