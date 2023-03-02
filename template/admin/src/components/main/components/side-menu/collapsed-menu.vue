@@ -5,6 +5,7 @@
     :class="hideTitle ? '' : 'collased-menu-dropdown'"
     :transfer="hideTitle"
     :placement="placement"
+    transfer-class-name="dro-style"
   >
     <a
       class="drop-menu-a"
@@ -89,18 +90,32 @@ export default {
 <style lang="less" scoped>
 @import './side-menu.less';
 
-.collased-menu-dropdown {
+/deep/ .collased-menu-dropdown {
   width: 100%;
 }
+
 .child-menu {
   display: flex;
   justify-content: space-between;
   width: 100%;
 }
-/deep/ .ivu-dropdown-rel {
-  width: @side-width !important;
+.ivu-dropdown-menu /deep/ .ivu-dropdown-rel {
+  width: 100% !important;
+  font-size: 14px;
+  line-height: 14px;
+  padding: 14px 10px;
+
+}
+.ivu-dropdown-menu /deep/ .ivu-dropdown-item {
+  width: 130px !important;
+  padding: 14px 10px;
+  font-size: 14px !important;
+  line-height: 14px;
 }
 .drop-menu-a /deep/ .ivu-dropdown-rel {
-  width: @side-width !important;
+  width: 160px !important;
+  font-size: 14px;
+  line-height: 14px;
+  color: #fff;
 }
 </style>

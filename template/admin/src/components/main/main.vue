@@ -287,11 +287,6 @@ export default {
   height: 50px;
   transition: all 1s;
 }
-.main .tag-nav-wrapper {
-  // height: 10px;
-  background: unset;
-  padding: 0 15px 0 17px;
-}
 .open-image {
   display: flex;
   align-items: center;

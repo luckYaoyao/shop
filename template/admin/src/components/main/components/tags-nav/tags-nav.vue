@@ -41,6 +41,7 @@
             @contextmenu.prevent.native="contextMenu(item, $event)"
             >{{ showTitleInside(item) }}</Tag
           >
+          <!-- <div class="tag" v-for="(item, index) in list" :key="`tag-nav-${index}`">{{ showTitleInside(item) }}</div> -->
         </transition-group>
       </div>
     </div>

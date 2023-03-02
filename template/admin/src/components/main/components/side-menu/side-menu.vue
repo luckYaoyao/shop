@@ -44,9 +44,7 @@
                   :parent-item="item"
                 ></side-menu-item>
                 <menu-item v-else :name="item.path" :key="`menu${item.path}`"
-                  ><span class="title">{{
-                    item.children[0].title
-                  }}</span></menu-item
+                  ><span class="title">{{ item.children[0].title }}</span></menu-item
                 >
               </template>
               <template v-else>
@@ -226,11 +224,10 @@ export default {
 /deep/ .ivu-menu-vertical .ivu-menu-submenu-title-icon {
   right: 8px;
 }
-
 </style>
 <style lang="less">
 @import './side-menu.less';
-.ivu-layout-sider{
+.ivu-layout-sider {
   overflow: unset !important;
 }
 .ivu-menu {
@@ -373,24 +370,24 @@ export default {
         line-height: 14px;
       }
     }
-    // .ivu-menu-submenu {
-    //   .ivu-menu-item {
-    //     padding-left: 23px !important;
-    //   }
-    //   .ivu-menu-submenu {
-    //     .ivu-menu-submenu-title {
-    //       padding-left: 23px !important;
-    //     }
-    //     .ivu-menu-item {
-    //       padding-left: 35px !important;
-    //     }
-    //   }
-    // }
-    // .ivu-menu-vertical .ivu-menu-submenu-title {
-    //   font-size: 14px;
-    //   padding: 12px 10px;
-    //   line-height: 16px;
-    // }
+    .ivu-menu-submenu {
+      .ivu-menu-item {
+        padding-left: 35px !important;
+      }
+      .ivu-menu-submenu {
+        .ivu-menu-submenu-title {
+          padding-left: 35px !important;
+        }
+        .ivu-menu-item {
+          padding-left: 48px !important;
+        }
+      }
+    }
+    .ivu-menu-vertical .ivu-menu-submenu-title {
+      font-size: 14px;
+      padding: 16px 20px;
+      line-height: 16px;
+    }
     .cat-name {
       width: 100%;
       font-size: 14px;
@@ -456,7 +453,7 @@ export default {
     flex-wrap: nowrap;
     .ivu-icon {
       font-size: 14px;
-      margin-right: 8px;
+      margin-right: 6px;
     }
     .title {
       font-size: 14px;
