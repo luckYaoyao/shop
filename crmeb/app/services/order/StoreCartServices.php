@@ -208,9 +208,6 @@ class StoreCartServices extends BaseServices
             if ($product_stock < $cartNum) {
                 throw new ApiException(410297, ['num' => $cartNum]);
             }
-            if ($type != 5 && !CacheService::checkStock($unique, (int)$cartNum, $type)) {
-                throw new ApiException(410297, ['num' => $cartNum]);
-            }
         }
         return [$attrInfo, $unique, $bargainUserInfo['bargain_price_min'] ?? 0, $cartNum, $productInfo];
     }

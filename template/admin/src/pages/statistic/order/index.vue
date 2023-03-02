@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <Card :bordered="false" dis-hover class="ivu-mb-16">
       <dateRadio @selectDate="onSelectDate"></dateRadio>
       <DatePicker
         :editable="false"
@@ -17,7 +17,7 @@
       ></DatePicker>
     </Card>
     <cards-data :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
-    <Card :bordered="false" dis-hover>
+    <Card class="ivu-mb-16" :bordered="false" dis-hover>
       <h3>营业趋势</h3>
       <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
     </Card>
@@ -361,10 +361,10 @@ export default {
 .code-row-bg {
   display: flex;
   flex-wrap: nowrap;
+  justify-content: space-between;
 }
 .code-row-bg .ivu-mt {
-  width: 100%;
-  margin: 0 5px;
+  width: calc(50% - 10px);
 }
 .ech-box {
   margin-top: 10px;
