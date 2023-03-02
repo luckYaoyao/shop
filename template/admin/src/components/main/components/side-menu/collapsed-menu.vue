@@ -99,6 +99,10 @@ export default {
   justify-content: space-between;
   width: 100%;
 }
+.ivu-dropdown-menu {
+  padding: 5px 10px;
+  width: 140px !important;
+}
 .ivu-dropdown-menu /deep/ .ivu-dropdown-rel {
   width: 100% !important;
   font-size: 14px;

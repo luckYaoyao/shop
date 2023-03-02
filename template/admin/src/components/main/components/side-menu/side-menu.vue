@@ -372,20 +372,20 @@ export default {
     }
     .ivu-menu-submenu {
       .ivu-menu-item {
-        padding-left: 35px !important;
+        padding-left: 38px !important;
       }
       .ivu-menu-submenu {
         .ivu-menu-submenu-title {
-          padding-left: 35px !important;
+          padding-left: 38px !important;
         }
         .ivu-menu-item {
-          padding-left: 48px !important;
+          padding-left: 52px !important;
         }
       }
     }
     .ivu-menu-vertical .ivu-menu-submenu-title {
       font-size: 14px;
-      padding: 16px 20px;
+      padding: 16px 24px;
       line-height: 16px;
     }
     .cat-name {
