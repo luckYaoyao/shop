@@ -212,7 +212,7 @@ class PayClient extends BaseClient
         $totalFee = '0';
         $amount = bcadd($amount, '0', 2);
         foreach ($transferDetailList as &$item) {
-            if ($item['transfer_amount'] >= 2000 && !empty($item['user_name'])) {
+            if ($item['transfer_amount'] >= 2000 && empty($item['user_name'])) {
                 throw new PayException('明细金额大于等于2000时,收款人姓名必须填写');
             }
             $totalFee = bcadd($totalFee, $item['transfer_amount'], 2);

@@ -20,7 +20,8 @@
                 <Radio :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</Radio>
               </RadioGroup>
               <DatePicker
-                :editable="false"
+                :editable="true"
+                :clearable="true"
                 @on-change="onchangeTime"
                 :value="timeVal"
                 format="yyyy/MM/dd"
