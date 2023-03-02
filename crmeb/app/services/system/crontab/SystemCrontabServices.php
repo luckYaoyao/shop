@@ -18,22 +18,6 @@ use think\helper\Str;
 
 class SystemCrontabServices extends BaseServices
 {
-    /**
-     * 定时任务类型 每一个定义的类型会对应CrontabRunServices类中的一个方法
-     * @var string[]
-     */
-    private $markList = [
-        'order_cancel' => '未支付自动取消订单',
-        'pink_expiration' => '拼团到期订单处理',
-        'agent_unbind' => '到期自动解绑上级',
-        'live_product_status' => '自动更新直播商品状态',
-        'live_room_status' => '自动更新直播间状态',
-        'take_delivery' => '订单自动收货',
-        'advance_off' => '预售商品到期自动下架',
-        'product_replay' => '订单商品自动好评',
-        'clear_poster' => '清除昨日海报',
-    ];
-
     public function __construct(SystemCrontabDao $dao)
     {
         $this->dao = $dao;
@@ -80,7 +64,7 @@ class SystemCrontabServices extends BaseServices
      */
     public function getMarkList(): array
     {
-        return $this->markList;
+        return app()->make(CrontabRunServices::class)->markList;
     }
 
     /**
@@ -93,7 +77,7 @@ class SystemCrontabServices extends BaseServices
         if (!$data['id'] && $this->dao->getCount(['mark' => $data['mark'], 'is_del' => 0])) {
             throw new AdminException('该定时任务已存在，请勿重复添加');
         }
-        $data['name'] = $this->markList[$data['mark']];
+        $data['name'] = $this->getMarkList()[$data['mark']];
         $data['add_time'] = time();
         if (!$data['id']) {
             unset($data['id']);

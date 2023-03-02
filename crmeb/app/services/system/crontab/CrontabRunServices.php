@@ -21,6 +21,22 @@ use think\facade\Log;
 class CrontabRunServices
 {
     /**
+     * 定时任务类型 每一个定义的类型会对应CrontabRunServices类中的一个方法
+     * @var string[]
+     */
+    public $markList = [
+        'orderCancel' => '未支付自动取消订单',
+        'pinkExpiration' => '拼团到期订单处理',
+        'agentUnbind' => '到期自动解绑上级',
+        'liveProductStatus' => '自动更新直播商品状态',
+        'liveRoomStatus' => '自动更新直播间状态',
+        'takeDelivery' => '订单自动收货',
+        'advanceOff' => '预售商品到期自动下架',
+        'productReplay' => '订单商品自动好评',
+        'clearPoster' => '清除昨日海报',
+    ];
+
+    /**
      * 调用不存在的方法
      * @param $name
      * @param $arguments

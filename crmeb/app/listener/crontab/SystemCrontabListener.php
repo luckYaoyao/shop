@@ -36,7 +36,8 @@ class SystemCrontabListener implements ListenerInterface
     }
 
     /**
-     *  0   1   2   3   4   5
+     * 获取定时任务时间表达式
+     * 0   1   2   3   4   5
      * |   |   |   |   |   |
      * |   |   |   |   |   +------ day of week (0 - 6) (Sunday=0)
      * |   |   |   |   +------ month (1 - 12)
@@ -44,9 +45,6 @@ class SystemCrontabListener implements ListenerInterface
      * |   |   +---------- hour (0 - 23)
      * |   +------------ min (0 - 59)
      * +-------------- sec (0-59)[可省略，如果没有0位,则最小时间粒度是分钟]
-     */
-    /**
-     * 获取定时任务时间表达式
      * @param $data
      * @return string
      */
