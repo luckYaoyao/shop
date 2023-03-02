@@ -45,7 +45,7 @@
 .search /deep/ .ivu-select-input {
   padding-left: 19px;
   border-radius: 30px;
-  background-color: #f0faff;
+  background-color: #f8f8f9;
 }
 </style>
 <script>
