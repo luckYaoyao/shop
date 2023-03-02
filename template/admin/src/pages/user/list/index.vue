@@ -14,7 +14,7 @@
         <Row :gutter="16">
           <Col span="18">
             <Col span="24">
-              <Col v-bind="grid">
+              <Col span="20">
                 <FormItem label="用户搜索：" label-for="nickname">
                   <Input v-model="userFrom.nickname" placeholder="请输入用户" element-id="nickname" clearable>
                     <Select v-model="field_key" slot="prepend" style="width: 80px">
@@ -536,7 +536,7 @@ export default {
       contentWidth: '98%',
       grid: {
         xl: 8,
-        lg: 8,
+        lg: 12,
         md: 12,
         sm: 24,
         xs: 24,
