@@ -1,7 +1,7 @@
 <template>
   <div class="refresh-btn-con" @click="handleReload">
     <Tooltip content="刷新" placement="bottom">
-      <Icon class="icon" type="ios-refresh" color="rgba(255,255,255,.8)" />
+      <Icon class="icon" type="ios-refresh" />
     </Tooltip>
   </div>
 </template>
@@ -24,7 +24,12 @@ export default {
   margin-right: 17px !important;
   cursor: pointer;
   font-size: 28px;
-  color: #f2f2f2;
+  color: rgba(0, 0, 0, 0.65);
+}
+.icon {
+  font-size: 24px;
+  width: 20px;
+  color: rgba(0, 0, 0, 0.65);
 }
 // .icon:hover{
 //   animation: rotate 6s linear infinite;

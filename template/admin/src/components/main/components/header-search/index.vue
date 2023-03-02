@@ -25,9 +25,15 @@
 .search /deep/ .ivu-select-selection {
   margin-right: 20px;
   border-radius: 30px;
+  border: none !important;
 }
 .search /deep/ .ivu-select-visible .ivu-select-selection {
   box-shadow: unset !important;
+  border: none !important;
+}
+.search /deep/ .ivu-select-selection:hover,
+.search /deep/ .ivu-select-selection:active {
+  border: none;
 }
 .search /deep/ li.ivu-select-item {
   text-align: left;
@@ -36,7 +42,7 @@
 .search /deep/ .select .ivu-select-item {
   font-size: 13px !important;
 }
-.search /deep/ .ivu-select-input{
+.search /deep/ .ivu-select-input {
   padding-left: 19px;
   border-radius: 30px;
   background-color: #f0faff;

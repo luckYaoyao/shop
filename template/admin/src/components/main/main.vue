@@ -1,46 +1,44 @@
 <template>
   <Layout style="height: 100%" class="main">
-    <Header class="header-con" v-if="!headMenuNoShow">
-      <div class="logo-con">
-        <img :src="maxLogo" key="max-logo" />
-        <!-- <img v-show="collapsed" :src="minLogo" key="min-logo" /> -->
-      </div>
-      <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
-        <user :message-unread-count="unreadCount" :user-avatar="userAvatar" />
-        <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px" :lang="local" />
-        <header-notice></header-notice>
-        <Reload @on-reload="handleReload"></Reload>
-
-        <fullscreen v-model="isFullscreen" style="margin-right: 10px" />
-        <error-store
-          v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader"
-          :has-read="hasReadErrorPage"
-          :count="errorCount"
-        ></error-store>
-        <header-search></header-search>
-      </header-bar>
-    </Header>
-    <Layout>
-      <Sider
-        hide-trigger
-        collapsible
-        :width="sider.length ? 220 : 90"
-        :collapsed-width="isMobile ? 0 : 90"
-        v-model="collapsed"
-        :style="{ overflow: 'hidden' }"
-        v-if="!headMenuNoShow"
+    <Sider
+      hide-trigger
+      collapsible
+      :width="sider.length ? 240 : 80"
+      :collapsed-width="isMobile ? 0 : 80"
+      v-model="collapsed"
+      :style="{ overflow: 'hidden' }"
+      v-if="!headMenuNoShow"
+    >
+      <side-menu
+        accordion
+        ref="sideMenu"
+        @on-coll-change="handleCollapsedChange"
+        :active-name="$route.path"
+        :collapsed="collapsed"
+        @on-select="turnToPage"
       >
-        <side-menu
-          accordion
-          ref="sideMenu"
-          @on-coll-change="handleCollapsedChange"
-          :active-name="$route.path"
-          :collapsed="collapsed"
-          @on-select="turnToPage"
-        >
-          <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
-        </side-menu>
-      </Sider>
+        <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
+        <div class="logo-con">
+          <img :src="minLogo" key="min-logo" />
+        </div>
+      </side-menu>
+    </Sider>
+    <Layout>
+      <Header class="header-con" v-if="!headMenuNoShow">
+        <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
+          <user :message-unread-count="unreadCount" :user-avatar="userAvatar" />
+          <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px" :lang="local" />
+          <header-notice></header-notice>
+          <Reload @on-reload="handleReload"></Reload>
+          <fullscreen v-model="isFullscreen" style="margin-right: 10px" />
+          <error-store
+            v-if="$config.plugin['error-store'] && $config.plugin['error-store'].showInHeader"
+            :has-read="hasReadErrorPage"
+            :count="errorCount"
+          ></error-store>
+          <header-search></header-search>
+        </header-bar>
+      </Header>
       <Content class="main-content-con" :class="{ 'all-desk': headMenuNoShow }">
         <Layout class="main-layout-con">
           <div class="tag-nav-wrapper" v-if="!headMenuNoShow">
@@ -282,7 +280,8 @@ export default {
 .main .header-con {
   padding: 0 0px 0 0px;
   display: flex;
-  background: linear-gradient(270deg, #1570ef 0%, #1570ef 100%);
+  background: #fff;
+  box-shadow: 1px 1px 4px rgba(49, 103, 154, 0.08);
 }
 .main .logo-con img {
   height: 50px;
@@ -291,7 +290,7 @@ export default {
 .main .tag-nav-wrapper {
   // height: 10px;
   background: unset;
-  padding: 0 15px;
+  padding: 0 15px 0 17px;
 }
 .open-image {
   display: flex;

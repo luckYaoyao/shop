@@ -1,26 +1,25 @@
 <template>
   <div class="header-bar">
-    <!-- <sider-trigger :collapsed="collapsed" @on-change="handleCollpasedChange"></sider-trigger> -->
-    <!-- <span class="i-layout-header-trigger" @click="handleReload">
+    <div class="header-l">
+      <sider-trigger :collapsed="collapsed" @on-change="handleCollpasedChange"></sider-trigger>
+      <!-- <span class="i-layout-header-trigger" @click="handleReload">
       <Icon type="ios-refresh" color='#fff' />
     </span> -->
-    <!-- <custom-bread-crumb
-      show-icon
-      style="margin-left: 30px"
-      :list="breadCrumbList"
-      :listLast="crumbPast"
-      :collapsed="collapsed"
-    ></custom-bread-crumb> -->
+      <custom-bread-crumb
+        show-icon
+        :list="breadCrumbList"
+        :listLast="crumbPast"
+        :collapsed="collapsed"
+      ></custom-bread-crumb>
+    </div>
+
     <div class="custom-content-con">
       <slot></slot>
     </div>
   </div>
 </template>
 <style scoped lang="less">
-.ivu-icon-ios-refresh {
-  font-size: 23px;
-  width: 20px;
-}
+
 .i-layout-header-trigger {
   position: absolute;
   margin: 0 10px;
@@ -61,6 +60,7 @@ export default {
           });
         });
       }
+      console.log('selectMenu',openMenus)
       return selectMenu;
       // return this.$store.state.app.breadCrumbList
     },
