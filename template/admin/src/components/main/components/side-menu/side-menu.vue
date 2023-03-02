@@ -350,7 +350,7 @@ export default {
     }
   }
   .child-menu {
-    z-index: 8;
+    z-index: 999;
     box-shadow: 2px 0px 4px 0px rgba(0, 0, 0, 0.06);
     .child-menus {
       width: @side-child-width !important;
@@ -390,13 +390,13 @@ export default {
     }
     .cat-name {
       width: 100%;
-      font-size: 14px;
+      font-size: 16px;
       height: 50px;
       line-height: 16px;
       font-weight: 600;
-      color: #303133;
-      padding: 15px;
-      text-align: center;
+      color: #606266;
+      padding: 15px 23px;
+      text-align: left;
       border-bottom: 1px solid #f2f2f2;
     }
   }
