@@ -33391,7 +33391,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (159, 'extract_time', 'text', 'input', 73, '', 0, '', 100, 0, '\"0\"', '冻结时间', '防止用户退款，佣金被提现了，所以需要设置佣金冻结时间(天)', 0, 1),
 (160, 'store_brokerage_price', 'text', 'input', 72, '', 0, '', 100, 0, '\"100\"', '满额分销最低金额', '满额分销满足金额开通分销权限', 0, 1),
 (162, 'price_revision_switch', 'radio', 'input', 20, '0=>关闭\n1=>开启', 0, '', 0, 0, '0', '改价短信提醒开关', '改价短信提醒开关', 0, 1),
-(168, 'site_logo_square', 'upload', 'input', 26, '', 1, '', 0, 0, '\"\\/statics\\/system_images\\/admin_logo_small.png\"', '后台小LOGO', '后台菜单缩进小LOGO，尺寸180*180', 6, 0),
+(168, 'site_logo_square', 'upload', 'input', 26, '', 1, '', 0, 0, '\"\\/statics\\/system_images\\/admin_logo_small.png\"', '后台小LOGO', '后台菜单缩进小LOGO，尺寸180*180', 6, 1),
 (170, 'yue_pay_status', 'radio', 'input', 109, '1=>开启\n2=>关闭', 1, '', 0, 0, '\"1\"', '余额支付', '余额支付请选择开启或关闭', 95, 1),
 (171, 'login_logo', 'upload', 'input', 26, '', 1, '', 0, 0, '\"\\/statics\\/system_images\\/admin_login_logo.png\"', '后台登录页LOGO', '后台登录页LOGO，建议尺寸270x75', 8, 1),
 (173, 'qiniu_accessKey', 'text', 'input', 80, '', 0, '', 100, 0, '\"\"', 'accessKey', '七牛云accessKey', 0, 1),
