@@ -488,10 +488,8 @@ class StoreOrderCreateServices extends BaseServices
             $cart['coupon_price'] = 0.00;
         }
         try {
-            [$cartInfo, $spread_ids] = $this->computeOrderProductBrokerage($uid, $cartInfo, $orderInfo);
             $cartInfo = $this->computeOrderProductCoupon($cartInfo, $priceData);
             $cartInfo = $this->computeOrderProductIntegral($cartInfo, $priceData);
-//            $cartInfo = $this->computeOrderProductPostage($cartInfo, $priceData, $addressId);
         } catch (\Throwable $e) {
             Log::error('订单商品结算失败,File：' . $e->getFile() . ',Line：' . $e->getLine() . ',Message：' . $e->getMessage());
             throw new ApiException(410248);
@@ -512,6 +510,12 @@ class StoreOrderCreateServices extends BaseServices
                 $uni_integral_price = (string)bcdiv((string)$integral_price, (string)$cart['cart_num'], 4);
                 $cart['truePrice'] = $cart['truePrice'] > $uni_integral_price ? bcsub((string)$cart['truePrice'], $uni_integral_price, 2) : 0;
             }
+        }
+        try {
+            [$cartInfo, $spread_ids] = $this->computeOrderProductBrokerage($uid, $cartInfo, $orderInfo);
+        } catch (\Throwable $e) {
+            Log::error('订单商品结算失败,File：' . $e->getFile() . ',Line：' . $e->getLine() . ',Message：' . $e->getMessage());
+            throw new ApiException(410248);
         }
         return [$cartInfo, $spread_ids];
     }
@@ -794,11 +798,18 @@ class StoreOrderCreateServices extends BaseServices
                 $productInfo = $cart['productInfo'];
 
                 //计算商品金额
-                if (isset($productInfo['attrInfo'])) {
-                    $price = bcmul((string)($productInfo['attrInfo']['price'] ?? '0'), $cartNum, 4);
+                if (sys_config('user_brokerage_type') == 1) {
+                    //按照实际支付价格返佣
+                    $price = bcmul((string)$cart['truePrice'], $cartNum, 4);
                 } else {
-                    $price = bcmul((string)($productInfo['price'] ?? '0'), $cartNum, 4);
+                    //按照商品价格返佣
+                    if (isset($productInfo['attrInfo'])) {
+                        $price = bcmul((string)($productInfo['attrInfo']['price'] ?? '0'), $cartNum, 4);
+                    } else {
+                        $price = bcmul((string)($productInfo['price'] ?? '0'), $cartNum, 4);
+                    }
                 }
+
 
                 $staffBrokerage = bcmul((string)$price, (string)bcdiv($staffPercent, 100, 4), 2);
                 $agentBrokerage = bcmul((string)$price, (string)bcdiv($agentPercent, 100, 4), 2);
