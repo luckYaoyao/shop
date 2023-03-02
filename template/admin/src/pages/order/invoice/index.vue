@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <Card :bordered="false" dis-hover class="ivu-mb-16">
       <div class="table_box">
         <Form
           ref="orderData"
@@ -68,6 +68,8 @@
           </Row>
         </Form>
       </div>
+    </card>
+    <Card :bordered="false" dis-hover>
       <Tabs v-model="currentTab" @on-click="onClickTab" v-if="tablists" class="mb20">
         <TabPane :label="'全部发票（' + tablists.all + '）'" name=" " />
         <TabPane :label="'待开发票（' + tablists.noOpened + '）'" name="1" />
@@ -349,9 +351,9 @@ export default {
         ],
       },
       grid: {
-        xl: 8,
-        lg: 8,
-        md: 8,
+        xl: 12,
+        lg: 16,
+        md: 24,
         sm: 24,
         xs: 24,
       },
