@@ -537,7 +537,10 @@ body {
   font-size: 20px;
 }
 .main .content-wrapper {
-  padding-top: 0;
+  padding: 16px;
+  height: calc(100% - 80px);
+  overflow: auto;
+  background-color: #f5f7f9;
 }
 .left-wrapper{
   height: calc(100vh - 120px);
