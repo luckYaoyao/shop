@@ -210,7 +210,7 @@ export default {
       formatVoice: ['mp3', 'wma', 'wav', 'amr'],
       header: {},
       formValidate: {
-        status: 1,
+        status: -1,
         type: '',
         key: this.$route.params.key || '',
         data: {
@@ -287,6 +287,10 @@ export default {
       }
       keywordsinfoApi(url, data)
         .then(async (res) => {
+          if (res.data.info.data instanceof Array) {
+            this.formValidate.status = 0;
+            return;
+          }
           let info = res.data.info || {};
           let data = info.data || {};
           this.formValidate = {
