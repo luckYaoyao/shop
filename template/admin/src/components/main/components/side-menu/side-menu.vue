@@ -350,7 +350,7 @@ export default {
     }
   }
   .child-menu {
-    z-index: 999;
+    z-index: 9;
     box-shadow: 2px 0px 4px 0px rgba(0, 0, 0, 0.06);
     .child-menus {
       width: @side-child-width !important;
