@@ -100,19 +100,19 @@ export default {
   width: 100%;
 }
 .ivu-dropdown-menu {
-  padding: 5px 10px;
+  padding: 5px 0px;
   width: 140px !important;
 }
 .ivu-dropdown-menu /deep/ .ivu-dropdown-rel {
   width: 100% !important;
   font-size: 14px;
   line-height: 14px;
-  padding: 14px 10px;
+  padding: 14px 20px;
 
 }
 .ivu-dropdown-menu /deep/ .ivu-dropdown-item {
-  width: 130px !important;
-  padding: 14px 10px;
+  width: 140px !important;
+  padding: 14px 20px;
   font-size: 14px !important;
   line-height: 14px;
 }
