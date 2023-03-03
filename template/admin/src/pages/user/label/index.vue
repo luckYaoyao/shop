@@ -282,7 +282,7 @@ export default {
 }
 
 .left-wrapper {
-  height: 904px;
+  height: 920px;
   background: #fff;
   border-right: 1px solid #f2f2f2;
 }
