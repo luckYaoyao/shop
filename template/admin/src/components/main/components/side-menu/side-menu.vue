@@ -229,6 +229,7 @@ export default {
 @import './side-menu.less';
 .ivu-layout-sider {
   overflow: unset !important;
+  transition: all 0.3s ease !important;
 }
 .ivu-menu {
   .side-menu-wrapper {
@@ -415,6 +416,7 @@ export default {
   left: 95px !important;
 }
 .menu-collapsed {
+  width: @side-width;
   .side-menu-wrapper a.drop-menu-a {
     display: flex;
     align-items: center;
