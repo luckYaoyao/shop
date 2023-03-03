@@ -30,7 +30,7 @@
               <Select
                 placeholder="请选择"
                 clearable
-                style="width: 150px"
+                style="width: 200px"
                 v-model="tableFrom.is_show"
                 @on-change="userSearchs"
               >
