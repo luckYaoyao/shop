@@ -184,8 +184,8 @@ export default {
       }
       this.visible = true;
       const offsetLeft = this.$el.getBoundingClientRect().left;
-      this.contextMenuLeft = e.clientX - offsetLeft + 10;
-      this.contextMenuTop = e.clientY - 64;
+      this.contextMenuLeft = e.clientX - offsetLeft;
+      this.contextMenuTop = e.clientY - 34;
     },
     closeMenu() {
       this.visible = false;
