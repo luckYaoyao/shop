@@ -416,7 +416,7 @@
 			},
 			// 聊天表情转换
 			replace_em(str) {
-				str = str.replace(/\[em-([\s\S]*)\]/g, "<span class='em em-$1' style='background-image:url(" + this
+				str = str.replace(/\[([^\[\]]+)\]/g, "<span class='em $1' style='background-image:url(" + this
 					.httpUrl + ")'></span>");
 				return str;
 			},
