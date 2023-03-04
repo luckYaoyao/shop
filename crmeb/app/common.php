@@ -24,6 +24,20 @@ use app\services\system\lang\LangCountryServices;
 use think\facade\Config;
 use think\facade\Log;
 
+if (!function_exists('crmebLog')) {
+    /**
+     * CRMEB Log 日志
+     * @param $msg
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/03/03
+     */
+    function crmebLog($msg)
+    {
+        Log::write($msg, 'crmeb');
+    }
+}
+
 if (!function_exists('getWorkerManUrl')) {
 
     /**
