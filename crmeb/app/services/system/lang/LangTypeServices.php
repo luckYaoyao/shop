@@ -46,11 +46,12 @@ class LangTypeServices extends BaseServices
         if ($id) $info = $this->dao->get($id);
         $field = [];
         $field[] = Form::input('language_name', '语言名称', $info['language_name'] ?? '')->required('请填写语言名称');
-        $field[] = Form::input('file_name', '语言标识', $info['file_name'] ?? '')->required('请填写语言标识')->appendRule('suffix', [
-            'type' => 'div',
-            'class' => 'tips-info',
-            'domProps' => ['innerHTML' => '请选择或输入浏览器标识']
-        ]);
+        $langCountryList = app()->make(LangCountryServices::class)->selectList([])->toArray();
+        $options = [];
+        foreach ($langCountryList as $item) {
+            $options[] = ['value' => $item['code'], 'label' => $item['name']];
+        }
+        $field[] = Form::select('file_name', '语言标识', $info['file_name'] ?? '')->setOptions(Form::setOptions($options));
         $field[] = Form::radio('is_default', '是否默认', $info['is_default'] ?? 0)->options([['label' => '开启', 'value' => 1], ['label' => '关闭', 'value' => 0]]);
         $field[] = Form::radio('status', '状态', $info['status'] ?? 1)->options([['label' => '开启', 'value' => 1], ['label' => '关闭', 'value' => 0]]);
         return create_form($id ? '修改语言类型' : '新增语言类型', $field, Url::buildUrl('/setting/lang_type/save/' . $id), 'POST');
