@@ -1,7 +1,7 @@
 <template>
   <div class="side-menu-wrapper">
     <!-- <sider-trigger :collapsed="collapsed" @on-change="handleCollpasedChange"></sider-trigger> -->
-    <div class="side-menu-box" v-if="!collapsed">
+    <div class="side-menu-box" v-if="!menuCollapse">
       <div class="parent-menu">
         <slot></slot>
         <Menu
@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <div class="menu-collapsed" v-if="collapsed">
+    <div class="menu-collapsed" v-if="menuCollapse">
       <slot></slot>
       <template v-for="item in menusName">
         <collapsed-menu
@@ -109,9 +109,9 @@ export default {
     siderTrigger,
   },
   props: {
-    collapsed: {
-      type: Boolean,
-    },
+    // collapsed: {
+    //   type: Boolean,
+    // },
     theme: {
       type: String,
       default: 'light',
@@ -145,7 +145,7 @@ export default {
     ...mapState('menus', ['menusName']),
     ...mapState('menu', ['activePath', 'openNames', 'header', 'headerName', 'sider', 'oneMenuName']),
     ...mapGetters('menu', ['filterSider']),
-
+    ...mapState('layout', ['menuCollapse']),
     textColor() {
       return this.theme === 'dark' ? '#fff' : '#495060';
     },
@@ -163,7 +163,7 @@ export default {
         this.$refs.childMenu.updateActiveName();
       });
     },
-    collapsed(val) {
+    menuCollapse(val) {
       if (!val) {
         this.$nextTick(() => {
           this.$refs.menu.updateOpened();
@@ -400,6 +400,7 @@ export default {
       color: #606266;
       padding: 15px 23px;
       text-align: left;
+      white-space: nowrap;
       border-bottom: 1px solid #f2f2f2;
     }
   }

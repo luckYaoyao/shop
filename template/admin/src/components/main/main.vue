@@ -5,7 +5,7 @@
       collapsible
       :width="sider.length ? 240 : 80"
       :collapsed-width="isMobile ? 0 : 80"
-      v-model="collapsed"
+      v-model="menuCollapse"
       :style="{ overflow: 'hidden' }"
       v-if="!headMenuNoShow"
     >
@@ -14,7 +14,6 @@
         ref="sideMenu"
         @on-coll-change="handleCollapsedChange"
         :active-name="$route.path"
-        :collapsed="collapsed"
         @on-select="turnToPage"
       >
         <!-- 需要放在菜单上面的内容，如Logo，写在side-menu标签内部，如下 -->
@@ -25,7 +24,7 @@
     </Sider>
     <Layout>
       <Header class="header-con" v-if="!headMenuNoShow">
-        <header-bar :collapsed="collapsed" @on-coll-change="handleCollapsedChange">
+        <header-bar  @on-coll-change="handleCollapsedChange">
           <user :message-unread-count="unreadCount" :user-avatar="userAvatar" />
           <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px" :lang="local" />
           <header-notice></header-notice>
@@ -111,7 +110,7 @@ export default {
   },
   data() {
     return {
-      collapsed: JSON.parse(getCookies('collapsed') || 'false'),
+      // collapsed: JSON.parse(getCookies('collapsed') || 'false'),
       minLogo,
       maxLogo,
       isFullscreen: false,
@@ -130,6 +129,8 @@ export default {
     ...mapGetters(['errorCount']),
     ...mapState('menu', ['sider']),
     ...mapState('media', ['isMobile']),
+    ...mapState('layout', ['menuCollapse']),
+
     tagNavList() {
       return this.$store.state.app.tagNavList;
     },
@@ -179,8 +180,8 @@ export default {
       });
     },
     handleCollapsedChange(state) {
-      this.collapsed = state;
-      setCookies('collapsed', state);
+      // this.collapsed = state;
+      // setCookies('collapsed', state);
     },
     handleCloseTag(res, type, route) {
       if (type !== 'others') {
@@ -244,11 +245,13 @@ export default {
       return (() => {
         this.screenWidth = document.body.clientWidth;
         if (this.screenWidth <= 1060) {
-          this.collapsed = true;
-          setCookies('collapsed', true);
+          // this.collapsed = true;
+          // setCookies('collapsed', true);
+          this.$store.commit('layout/changeCol', true);
         } else {
-          this.collapsed = false;
-          setCookies('collapsed', false);
+          // this.collapsed = false;
+          // setCookies('collapsed', false);
+          this.$store.commit('layout/changeCol', false);
         }
       })();
     };

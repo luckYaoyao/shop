@@ -1,15 +1,16 @@
 <template>
   <div class="sider-menu" @click="handleChange">
-    <a type="text" :class="['sider-trigger-a', collapsed ? 'collapsed' : '']"
-      ><i class="iconfont" color="#fff" :class="collapsed ? 'iconcaidanzhankai' : 'iconcaidanshouqi'"></i
+    <a type="text" :class="['sider-trigger-a', menuCollapse ? 'menuCollapse' : '']"
+      ><i class="iconfont" color="#fff" :class="menuCollapse ? 'iconcaidanzhankai' : 'iconcaidanshouqi'"></i
     ></a>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex';
 export default {
   name: 'siderTrigger',
   props: {
-    collapsed: Boolean,
+    // collapsed: Boolean,
     icon: {
       type: String,
       default: 'navicon-round',
@@ -19,9 +20,16 @@ export default {
       default: 18,
     },
   },
+  computed: {
+    ...mapState('layout', ['menuCollapse']),
+  },
+  data() {
+    return {};
+  },
   methods: {
     handleChange() {
-      this.$emit('on-change', !this.collapsed);
+      this.$emit('on-change', !this.menuCollapse);
+      this.$store.commit('layout/changeCol', !this.menuCollapse);
     },
   },
 };
