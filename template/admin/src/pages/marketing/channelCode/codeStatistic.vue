@@ -5,7 +5,7 @@
         <span>
           <Button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
         </span>
-        <Divider type="vertical"/>
+        <Divider type="vertical" />
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
       </div>
     </div>
@@ -165,9 +165,7 @@ export default {
       return datetime;
     },
 
-    selectChange(e) {
-      console.log(this.timeG(e.split(',')[0]), this.timeG(e.split(',')[1]));
-    },
+    selectChange(e) {},
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;

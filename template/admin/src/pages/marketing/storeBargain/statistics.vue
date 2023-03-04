@@ -306,7 +306,6 @@ export default {
   methods: {
     // 统计
     getStatistics(id) {
-      console.log(id);
       getbargainStatistics(id).then((res) => {
         let arr = [
           'people_count',

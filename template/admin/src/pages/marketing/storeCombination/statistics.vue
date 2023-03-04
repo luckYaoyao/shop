@@ -309,7 +309,6 @@ export default {
   methods: {
     // 统计
     getStatistics(id) {
-      console.log(id);
       getcombinationStatistics(id).then((res) => {
         let arr = ['people_count', 'spread_count', 'start_count', 'success_count', 'pay_price', 'pay_count'];
         this.cardLists.map((i, index) => {

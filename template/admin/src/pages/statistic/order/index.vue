@@ -240,9 +240,7 @@ export default {
         this.loading2 = false;
       });
     },
-    selectChange(e) {
-      console.log(this.timeG(e.split(',')[0]), this.timeG(e.split(',')[1]));
-    },
+    selectChange(e) {},
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;

@@ -69,16 +69,10 @@ export default {
   },
   methods: {
     handleClick(name) {
-      console.log(name, '1');
       this.$emit('on-click', name, this.activeMenuPath);
     },
     handClick(name) {
-      console.log(name, this.activeMenuPath);
       this.$emit('on-click', name, this.activeMenuPath);
-
-      // if (name == settings.routePre + '/home/') {
-      //   this.$emit('on-click', name, this.activeMenuPath);
-      // }
     },
     handleMousemove(event, children) {
       const { pageY } = event;

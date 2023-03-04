@@ -231,7 +231,6 @@ export default {
       }
     },
     handleClick(tab, event) {
-      console.log(tab, event)
       this.page = 1
       if(tab == 1){
         this.getupgradeableList();
@@ -249,7 +248,6 @@ export default {
       let res = await upgradeListApi(data);
       this.upgradeList = res.data.list;
       this.upgradeList = res.data.list;
-      console.log('升级列表', this.upgradeList);
     },
     // 升级记录
     getUpgradeLogList() {
@@ -273,14 +271,11 @@ export default {
     // 可升级列表
     async getupgradeableList() {
       let res = await upgradeableListApi();
-      console.log('111111')
       this.upgradeableList = res.data;
       let firstVer = res.data[0]
       if(this.$store.state.upgrade.toggleStatus || this.upgradeStatus.force_reminder){
         const data = res.data.find(item => item.force_reminder === 1)
         this.newKey = data.package_key;
-        console.log('data',data)
-
         this.forceVersion = data.first_version + '.' + data.second_version + '.' + data.third_version + '.' + data.fourth_version
       }else{
         this.params_key = this.upgradeableList[0].package_key
@@ -322,15 +317,11 @@ export default {
     },
     // 下载升级包
     getdownload() {
-      console.log(this.newKey);
-      console.log(this.$store.state.upgrade.toggleStatus);
       if (this.$store.state.upgrade.toggleStatus || this.upgradeStatus.force_reminder) {
         this.params_key = this.newKey;
       }
-      console.log('下载key', this.params_key);
       downloadApi(this.params_key)
         .then((res) => {
-          console.log('下载升级包调用成功', res.status);
           // this.downloadStatus = res.status;
           if (res.status == 200) {
             if (this.upgradeProgress.speed !== '100.0') {

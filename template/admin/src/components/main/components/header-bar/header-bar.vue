@@ -59,9 +59,7 @@ export default {
           });
         });
       }
-      console.log('selectMenu', openMenus);
       return selectMenu;
-      // return this.$store.state.app.breadCrumbList
     },
     crumbPast() {
       let that = this;

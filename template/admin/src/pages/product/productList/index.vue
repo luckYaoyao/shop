@@ -445,7 +445,6 @@ export default {
   },
   methods: {
     batchSub() {
-      console.log(this.selectedIds, this.ids);
       let data = this.batchFormData;
       data.ids = this.ids;
       data.type = this.batchType;
@@ -484,7 +483,6 @@ export default {
     },
     // 批量设置商品
     batchSelect(type) {
-      console.log(type);
       if (!this.ids.length) {
         this.$Message.warning('请选择要修改的商品');
       } else {

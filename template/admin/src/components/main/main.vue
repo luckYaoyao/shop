@@ -24,7 +24,7 @@
     </Sider>
     <Layout>
       <Header class="header-con" v-if="!headMenuNoShow">
-        <header-bar  @on-coll-change="handleCollapsedChange">
+        <header-bar @on-coll-change="handleCollapsedChange">
           <user :message-unread-count="unreadCount" :user-avatar="userAvatar" />
           <language v-if="$config.useI18n" @on-lang-change="setLocal" style="margin-right: 10px" :lang="local" />
           <header-notice></header-notice>
@@ -121,9 +121,7 @@ export default {
     };
   },
   watch: {
-    sider(val) {
-      console.log(val);
-    },
+    sider(val) {},
   },
   computed: {
     ...mapGetters(['errorCount']),

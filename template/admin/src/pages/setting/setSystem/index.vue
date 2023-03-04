@@ -169,7 +169,6 @@ export default {
               return this.$authLapse(res.data);
             }
             this.FromData = res.data;
-            console.log(this.FromData);
             this.rules = res.data.rules;
             this.title = res.data.title;
           })
@@ -200,7 +199,6 @@ export default {
     },
     // 提交表单 group
     onSubmit(formData) {
-      console.log(formData);
       request({
         url: this.FromData.action,
         method: this.FromData.method,

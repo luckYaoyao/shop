@@ -440,7 +440,6 @@ export default {
     // 阻止浏览器默认换行操作
     listen(e) {
       if (e.shiftKey && e.keyCode == 13) {
-        console.log('换行');
       } else if (e.keyCode == 13) {
         if (e.target.value == '') {
           return this.$Message.error('请输入消息');

@@ -170,7 +170,6 @@ export default {
     } else {
       this.maxCol = this.maxCols;
     }
-    console.log(this.maxCol);
     this.getData();
   },
   mounted() {},

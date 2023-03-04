@@ -76,7 +76,6 @@ export default {
     ...mapState('admin/layout', ['isMobile']),
   },
   created() {
-    console.log(menuCollapse)
     this.changeTab(this.currentTab);
   },
   methods: {

@@ -125,11 +125,9 @@ export default {
         });
     },
     addTask() {
-      console.log(this.$refs.addTask);
       this.$refs.addTask.modal = true;
     },
     edit(id) {
-      console.log(id);
       this.$refs.addTask.timerInfo(id);
     },
     // 删除

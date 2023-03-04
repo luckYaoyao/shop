@@ -201,7 +201,6 @@ export default {
   methods: {
     // 统计
     getStatistics(id) {
-      console.log(id);
       getseckillStatistics(id).then((res) => {
         let arr = ['order_count', 'all_price', 'pay_count', 'pay_rate'];
         this.cardLists.map((i, index) => {
