@@ -49,9 +49,9 @@ class LangTypeServices extends BaseServices
         $langCountryList = app()->make(LangCountryServices::class)->selectList([])->toArray();
         $options = [];
         foreach ($langCountryList as $item) {
-            $options[] = ['value' => $item['code'], 'label' => $item['name']];
+            $options[] = ['value' => $item['code'], 'label' => $item['name'].' [ '.$item['code'].' ]'];
         }
-        $field[] = Form::select('file_name', '语言标识', $info['file_name'] ?? '')->setOptions(Form::setOptions($options));
+        $field[] = Form::select('file_name', '语言标识', $info['file_name'] ?? '')->setOptions(Form::setOptions($options))->filterable(1);
         $field[] = Form::radio('is_default', '是否默认', $info['is_default'] ?? 0)->options([['label' => '开启', 'value' => 1], ['label' => '关闭', 'value' => 0]]);
         $field[] = Form::radio('status', '状态', $info['status'] ?? 1)->options([['label' => '开启', 'value' => 1], ['label' => '关闭', 'value' => 0]]);
         return create_form($id ? '修改语言类型' : '新增语言类型', $field, Url::buildUrl('/setting/lang_type/save/' . $id), 'POST');
