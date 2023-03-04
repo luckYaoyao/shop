@@ -33,7 +33,7 @@ class ExportServices extends BaseServices
         /** @var UserServices $userServices */
         $userServices = app()->make(UserServices::class);
         $data = $userServices->index($where)['list'];
-        $header = ['用户ID', '昵称', '真实姓名', '性别', '电话', '用户等级', '用户分组', '用户标签', '用户类型', '用户余额', '最后登录时间', '注册时间'];
+        $header = ['用户ID', '昵称', '真实姓名', '性别', '电话', '用户等级', '用户分组', '用户标签', '用户类型', '用户余额', '最后登录时间', '注册时间', '是否注销'];
         $filename = '用户列表_' . date('YmdHis', time());
         $export = $fileKey = [];
         if (!empty($data)) {
@@ -51,7 +51,8 @@ class ExportServices extends BaseServices
                     'user_type' => $item['user_type'],
                     'now_money' => $item['now_money'],
                     'last_time' => date('Y-m-d H:i:s', $item['last_time']),
-                    'add_time' => date('Y-m-d H:i:s', $item['add_time'])
+                    'add_time' => date('Y-m-d H:i:s', $item['add_time']),
+                    'is_del' => $item['is_del'] ? '已注销' : '正常'
                 ];
                 $export[] = $one_data;
                 if ($i == 0) {
