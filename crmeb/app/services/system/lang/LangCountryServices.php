@@ -58,7 +58,11 @@ class LangCountryServices extends BaseServices
         if ($id) $info = $this->dao->get($id);
         $field = [];
         $field[] = Form::input('name', '所属地区', $info['name'] ?? '')->required('请填写所属地区');
-        $field[] = Form::input('code', '语言码', $info['code'] ?? '')->required('请填写语言码');
+        $field[] = Form::input('code', '语言识别码', $info['code'] ?? '')->required('请填写浏览器语言识别码')->appendRule('suffix', [
+            'type' => 'div',
+            'class' => 'tips-info',
+            'domProps' => ['innerHTML' => '浏览器语言识别码']
+        ]);;
         /** @var LangTypeServices $langTypeServices */
         $langTypeServices = app()->make(LangTypeServices::class);
         $list = $langTypeServices->getColumn(['is_del' => 0, 'status' => 1], 'language_name,file_name,id', 'id');
