@@ -303,7 +303,7 @@ export default {
   }
 }
 .main-warper {
-  min-height: calc(~'100vh - 166px');
+  min-height: calc(~'100vh - 196px');
 }
 .all-desk {
   height: 100vh !important;
@@ -313,9 +313,6 @@ export default {
   .main-layout-con,
   .content-wrapper {
     height: 100vh !important;
-  }
-  .content-wrapper {
-    padding: 0;
   }
 }
 </style>

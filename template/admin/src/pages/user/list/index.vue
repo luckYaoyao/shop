@@ -1,7 +1,7 @@
 <template>
   <div>
     <Card :bordered="false" dis-hover class="ivu-mt listbox">
-      <Tabs @on-click="onClickTab" class="mb20">
+      <Tabs @on-click="onClickTab" class="mb30">
         <TabPane :label="item.name" :name="item.type" v-for="(item, index) in headeNum" :key="index" />
       </Tabs>
       <Form
@@ -12,53 +12,41 @@
         @submit.native.prevent
       >
         <Row :gutter="16">
-          <Col span="18">
-            <Col span="24">
-              <Col span="20">
-                <FormItem label="用户搜索：" label-for="nickname">
-                  <Input v-model="userFrom.nickname" placeholder="请输入用户" element-id="nickname" clearable>
-                    <Select v-model="field_key" slot="prepend" style="width: 80px">
-                      <Option value="all">全部</Option>
-                      <Option value="uid">UID</Option>
-                      <Option value="phone">手机号</Option>
-                      <Option value="nickname">用户昵称</Option>
-                    </Select>
-                  </Input>
-                </FormItem>
-              </Col>
-            </Col>
+          <Col v-bind="grid">
+              <FormItem label="用户搜索：" label-for="nickname">
+                <Input v-model="userFrom.nickname" placeholder="请输入用户" element-id="nickname" clearable>
+                  <Select v-model="field_key" slot="prepend" style="width: 80px">
+                    <Option value="all">全部</Option>
+                    <Option value="uid">UID</Option>
+                    <Option value="phone">手机号</Option>
+                    <Option value="nickname">用户昵称</Option>
+                  </Select>
+                </Input>
+              </FormItem>
+          </Col>
+          <Col span="12" class="ivu-text-left userFrom" v-if="!collapse">
+            <FormItem>
+              <Button type="primary" icon="ios-search" label="default" class="mr15" @click="userSearchs">搜索</Button>
+              <Button class="ResetSearch" @click="reset('userFrom')">重置</Button>
+              <a class="ivu-ml-8 font14 ml10" @click="collapse = !collapse">
+                <template v-if="!collapse"> 展开 <Icon type="ios-arrow-down" /> </template>
+                <template v-else> 收起 <Icon type="ios-arrow-up" /> </template>
+              </a>
+            </FormItem>
           </Col>
           <template v-if="collapse">
             <Col span="18">
-              <Col v-bind="grid">
-                <FormItem label="用户等级：" label-for="level">
-                  <Select v-model="level" placeholder="请选择用户等级" element-id="level" clearable>
-                    <Option value="all">全部</Option>
-                    <Option :value="item.id" v-for="(item, index) in levelList" :key="index">{{ item.name }}</Option>
-                  </Select>
-                </FormItem>
-              </Col>
-              <Col v-bind="grid">
-                <FormItem label="用户分组：" label-for="group_id">
-                  <Select v-model="group_id" placeholder="请选择用户分组" element-id="group_id" clearable>
-                    <Option value="all">全部</Option>
-                    <Option :value="item.id" v-for="(item, index) in groupList" :key="index">{{
-                      item.group_name
-                    }}</Option>
-                  </Select>
-                </FormItem>
-              </Col>
               <Col v-bind="grid">
                 <FormItem label="用户标签：" label-for="label_id">
                   <div class="labelInput acea-row row-between-wrapper" @click="openSelectLabel">
                     <div style="width: 90%">
                       <div v-if="selectDataLabel.length">
                         <Tag
-                          :closable="false"
-                          v-for="(item, index) in selectDataLabel"
-                          @on-close="closeLabel(item)"
-                          :key="index"
-                          >{{ item.label_name }}</Tag
+                            :closable="false"
+                            v-for="(item, index) in selectDataLabel"
+                            @on-close="closeLabel(item)"
+                            :key="index"
+                        >{{ item.label_name }}</Tag
                         >
                       </div>
                       <span class="span" v-else>选择用户关联标签</span>
@@ -67,50 +55,37 @@
                   </div>
                 </FormItem>
               </Col>
-            </Col>
-            <Col span="18">
               <Col v-bind="grid">
-                <FormItem label="付费会员：" label-for="isMember">
-                  <!-- <Select
-                    v-model="userFrom.isMember"
-                    placeholder="请选择付费会员"
-                    element-id="isMember"
-                    clearable
-                    @on-change="changeMember"
-                  >
-                    <Option :value="1">是</Option>
-                    <Option :value="0">否</Option>
-                  </Select> -->
-                  <RadioGroup v-model="userFrom.isMember" type="button">
-                    <Radio label="">
-                      <span>全部</span>
-                    </Radio>
-                    <Radio label="1">
-                      <span>是</span>
-                    </Radio>
-                    <Radio label="0">
-                      <span>否</span>
-                    </Radio>
-                  </RadioGroup>
-                </FormItem>
-              </Col>
-              <Col v-bind="grid">
-                <FormItem label="国家：" label-for="country">
-                  <Select
-                    v-model="userFrom.country"
-                    placeholder="请选择国家"
-                    element-id="country"
-                    clearable
-                    @on-change="changeCountry"
-                  >
-                    <Option value="domestic">中国</Option>
-                    <Option value="abroad">外国</Option>
+                <FormItem label="下单次数：" label-for="pay_count">
+                  <Select v-model="pay_count" placeholder="请选择下单次数" element-id="pay_count" clearable>
+                    <Option value="all">全部</Option>
+                    <Option value="-1">0次</Option>
+                    <Option value="0">1次以上</Option>
+                    <Option value="1">2次以上</Option>
+                    <Option value="2">3次以上</Option>
+                    <Option value="3">4次以上</Option>
+                    <Option value="4">5次以上</Option>
                   </Select>
                 </FormItem>
               </Col>
-              <Col v-bind="grid" v-if="userFrom.country === 'domestic'">
-                <FormItem label="省份：">
-                  <Cascader :data="addresData" :value="address" v-model="address" @on-change="handleChange"></Cascader>
+            </Col>
+            <Col span="18">
+              <Col v-bind="grid">
+                <FormItem label="用户分组：" label-for="group_id">
+                  <Select v-model="group_id" placeholder="请选择用户分组" element-id="group_id" clearable>
+                    <Option value="all">全部</Option>
+                    <Option :value="item.id" v-for="(item, index) in groupList" :key="index">{{
+                        item.group_name
+                      }}</Option>
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col v-bind="grid">
+                <FormItem label="用户等级：" label-for="level">
+                  <Select v-model="level" placeholder="请选择用户等级" element-id="level" clearable>
+                    <Option value="all">全部</Option>
+                    <Option :value="item.id" v-for="(item, index) in levelList" :key="index">{{ item.name }}</Option>
+                  </Select>
                 </FormItem>
               </Col>
             </Col>
@@ -148,6 +123,31 @@
                   </RadioGroup>
                 </FormItem>
               </Col>
+              <Col v-bind="grid">
+                <FormItem label="付费会员：" label-for="isMember">
+                  <!-- <Select
+                    v-model="userFrom.isMember"
+                    placeholder="请选择付费会员"
+                    element-id="isMember"
+                    clearable
+                    @on-change="changeMember"
+                  >
+                    <Option :value="1">是</Option>
+                    <Option :value="0">否</Option>
+                  </Select> -->
+                  <RadioGroup v-model="userFrom.isMember" type="button">
+                    <Radio label="">
+                      <span>全部</span>
+                    </Radio>
+                    <Radio label="1">
+                      <span>是</span>
+                    </Radio>
+                    <Radio label="0">
+                      <span>否</span>
+                    </Radio>
+                  </RadioGroup>
+                </FormItem>
+              </Col>
             </Col>
             <Col span="18">
               <Col v-bind="grid">
@@ -180,21 +180,29 @@
             </Col>
             <Col span="18">
               <Col v-bind="grid">
-                <FormItem label="下单次数：" label-for="pay_count">
-                  <Select v-model="pay_count" placeholder="请选择下单次数" element-id="pay_count" clearable>
-                    <Option value="all">全部</Option>
-                    <Option value="-1">0次</Option>
-                    <Option value="0">1次以上</Option>
-                    <Option value="1">2次以上</Option>
-                    <Option value="2">3次以上</Option>
-                    <Option value="3">4次以上</Option>
-                    <Option value="4">5次以上</Option>
+                <FormItem label="地区：" label-for="country">
+                  <Select
+                      v-model="userFrom.country"
+                      placeholder="请选择国家"
+                      element-id="country"
+                      clearable
+                      @on-change="changeCountry"
+                  >
+                    <Option value="domestic">中国</Option>
+                    <Option value="abroad">外国</Option>
                   </Select>
+                </FormItem>
+              </Col>
+              <Col v-bind="grid" v-if="userFrom.country === 'domestic'">
+                <FormItem label="省份：">
+                  <Cascader :data="addresData" :value="address" v-model="address" @on-change="handleChange"></Cascader>
                 </FormItem>
               </Col>
             </Col>
           </template>
-          <Col span="6" class="ivu-text-right userFrom">
+        </Row>
+        <Row v-if="collapse">
+          <Col span="13" class="ivu-text-right userFrom">
             <FormItem>
               <Button type="primary" icon="ios-search" label="default" class="mr15" @click="userSearchs">搜索</Button>
               <Button class="ResetSearch" @click="reset('userFrom')">重置</Button>
@@ -209,11 +217,11 @@
       <Divider dashed />
       <Row type="flex" justify="space-between" class="mt20">
         <Col span="24">
-          <Button v-auth="['admin-user-save']" type="primary" class="mr20" @click="edit({ uid: 0 })">添加用户</Button>
-          <Button v-auth="['admin-user-coupon']" class="mr20" @click="onSend">发送优惠券</Button>
+          <Button v-auth="['admin-user-save']" type="primary" class="mr10" @click="edit({ uid: 0 })">添加用户</Button>
+          <Button v-auth="['admin-user-coupon']" class="mr10" @click="onSend">发送优惠券</Button>
           <Button
             v-auth="['admin-wechat-news']"
-            class="greens mr20"
+            class="greens mr10"
             size="default"
             @click="onSendPic"
             v-if="userFrom.user_type === 'wechat'"
@@ -221,9 +229,9 @@
             <Icon type="md-list"></Icon>
             发送图文消息
           </Button>
-          <Button v-auth="['admin-user-group_set']" class="mr20" @click="setGroup">批量设置分组</Button>
-          <Button v-auth="['admin-user-set_label']" class="mr20" @click="setLabel">批量设置标签</Button>
-          <Button class="mr20" icon="ios-share-outline" @click="exportList">导出</Button>
+          <Button v-auth="['admin-user-group_set']" class="mr10" @click="setGroup">批量设置分组</Button>
+          <Button v-auth="['admin-user-set_label']" class="mr10" @click="setLabel">批量设置标签</Button>
+          <Button class="mr10" icon="ios-share-outline" @click="exportList">导出</Button>
 
           <!-- <Button v-auth="['admin-user-synchro']" class="mr20" @click="synchro">同步公众号用户</Button> -->
         </Col>
@@ -236,7 +244,7 @@
       <Table
         :columns="columns"
         :data="userLists"
-        class="mt25"
+        class="mt10"
         ref="table"
         highlight-row
         :loading="loading"

@@ -9,7 +9,7 @@
 // +---------------------------------------------------------------------
 
 import BasicLayout from '@/components/main';
-import setting  from '@/setting'
+import setting from '@/setting';
 let routePre = setting.routePre;
 
 const meta = {
@@ -19,11 +19,11 @@ const meta = {
 const pre = 'setting_';
 
 export default {
-  path: routePre+'/setting',
+  path: routePre + '/setting',
   name: 'setting',
   header: 'setting',
   redirect: {
-    name: `${pre}systemRole`,
+    name: `${pre}setSystem`,
   },
   component: BasicLayout,
   children: [
@@ -384,6 +384,14 @@ export default {
         title: '主题风格',
       },
       component: () => import('@/pages/setting/themeStyle/index'),
+    },
+    {
+      path: 'pages',
+      name: `${pre}page`,
+      header: 'setting',
+      redirect: {
+        name: `${pre}devise`,
+      },
     },
     {
       path: 'pages/devise',

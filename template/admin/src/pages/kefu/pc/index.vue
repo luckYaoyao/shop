@@ -457,7 +457,7 @@ export default {
     },
     // 聊天表情转换
     replace_em(str) {
-      str = str.replace(/\[em-([\s\S]*)\]/g, "<span class='em em-$1'/></span>");
+      str = str.replace(/\[([^\[\]]+)\]/g, "<span class='em $1'/></span>");
       return str;
     },
     // 获取是否游客

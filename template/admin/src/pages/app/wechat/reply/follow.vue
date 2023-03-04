@@ -92,11 +92,13 @@
                       </Select>
                     </FormItem>
                     <FormItem label="消息内容：" prop="content" v-if="formValidate.type === 'text'">
-                      <textarea
+                      <Input
                         v-model="formValidate.data.content"
                         placeholder="请填写消息内容"
                         style="width: 90%"
-                      ></textarea>
+                        type="textarea"
+                        :rows="4"
+                      ></Input>
                     </FormItem>
                     <FormItem label="选取图文：" v-if="formValidate.type === 'news'">
                       <Button type="info" @click="changePic">选择图文消息</Button>
@@ -208,7 +210,7 @@ export default {
       formatVoice: ['mp3', 'wma', 'wav', 'amr'],
       header: {},
       formValidate: {
-        status: 1,
+        status: -1,
         type: '',
         key: this.$route.params.key || '',
         data: {
@@ -285,6 +287,10 @@ export default {
       }
       keywordsinfoApi(url, data)
         .then(async (res) => {
+          if (res.data.info.data instanceof Array) {
+            this.formValidate.status = 0;
+            return;
+          }
           let info = res.data.info || {};
           let data = info.data || {};
           this.formValidate = {

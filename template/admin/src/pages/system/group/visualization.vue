@@ -1792,6 +1792,7 @@ export default {
   padding: 20px;
   background-color: #fff;
   border-radius: 5px;
+  min-height: 600px;
 }
 
 .iview-video-style {

@@ -43,6 +43,7 @@
 import mixin from './mixin';
 import itemMixin from './item-mixin';
 import { findNodeUpperByClasses } from '@/libs/util';
+import settings from '@/setting';
 
 export default {
   name: 'CollapsedMenu',
@@ -72,7 +73,12 @@ export default {
       this.$emit('on-click', name, this.activeMenuPath);
     },
     handClick(name) {
+      console.log(name, this.activeMenuPath);
       this.$emit('on-click', name, this.activeMenuPath);
+
+      // if (name == settings.routePre + '/home/') {
+      //   this.$emit('on-click', name, this.activeMenuPath);
+      // }
     },
     handleMousemove(event, children) {
       const { pageY } = event;
@@ -91,7 +97,7 @@ export default {
 @import './side-menu.less';
 
 /deep/ .collased-menu-dropdown {
-  width: 100%;
+  width: @side-width;
 }
 
 .child-menu {
@@ -108,7 +114,6 @@ export default {
   font-size: 14px;
   line-height: 14px;
   padding: 14px 20px;
-
 }
 .ivu-dropdown-menu /deep/ .ivu-dropdown-item {
   width: 140px !important;

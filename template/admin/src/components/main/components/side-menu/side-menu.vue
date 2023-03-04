@@ -1,7 +1,7 @@
 <template>
   <div class="side-menu-wrapper">
     <!-- <sider-trigger :collapsed="collapsed" @on-change="handleCollpasedChange"></sider-trigger> -->
-    <div class="side-menu-box" v-show="!collapsed">
+    <div class="side-menu-box" v-if="!collapsed">
       <div class="parent-menu">
         <slot></slot>
         <Menu
@@ -23,7 +23,7 @@
           </template>
         </Menu>
       </div>
-      <div class="child-menu" v-show="sider.length">
+      <div class="child-menu"  v-if="sider.length">
         <div class="cat-name">{{ oneMenuName }}</div>
         <Menu
           ref="childMenu"
@@ -63,7 +63,7 @@
       </div>
     </div>
 
-    <div class="menu-collapsed" v-show="collapsed">
+    <div class="menu-collapsed" v-if="collapsed">
       <slot></slot>
       <template v-for="item in menusName">
         <collapsed-menu
@@ -229,6 +229,7 @@ export default {
 @import './side-menu.less';
 .ivu-layout-sider {
   overflow: unset !important;
+  transition: all 0.3s ease !important;
 }
 .ivu-menu {
   .side-menu-wrapper {
@@ -350,8 +351,10 @@ export default {
     }
   }
   .child-menu {
-    z-index: 999;
+    z-index: 9;
     box-shadow: 2px 0px 4px 0px rgba(0, 0, 0, 0.06);
+    transition: width .2s ease .2s;
+    overflow: hidden;
     .child-menus {
       width: @side-child-width !important;
     }
@@ -415,6 +418,7 @@ export default {
   left: 95px !important;
 }
 .menu-collapsed {
+  width: @side-width;
   .side-menu-wrapper a.drop-menu-a {
     display: flex;
     align-items: center;

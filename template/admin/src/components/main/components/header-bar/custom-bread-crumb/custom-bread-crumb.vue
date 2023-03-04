@@ -1,7 +1,12 @@
 <template>
   <div class="custom-bread-crumb">
     <Breadcrumb :style="{ fontSize: `${fontSize}px` }">
-      <BreadcrumbItem v-for="(item,index) in list" :key="`${item.path}`" :to="index !== 1 ? item.path : ''" v-if="listLast[0].path !== homePath">
+      <BreadcrumbItem
+        v-for="(item, index) in list"
+        :key="`${item.path}`"
+        :to="index !== 1 ? item.path : ''"
+        v-if="listLast[0].path !== homePath"
+      >
         <common-icon style="margin-right: 4px" :type="item.icon || ''" />
         {{ item.title }}
       </BreadcrumbItem>
@@ -65,6 +70,7 @@ export default {
 </script>
 <style lang="less">
 .ivu-breadcrumb-item-link {
+  font-weight: 400;
   .ivu-icon {
     line-height: 14px;
   }

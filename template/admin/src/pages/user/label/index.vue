@@ -69,7 +69,7 @@
             </template>
           </Table>
           <div class="acea-row row-right page">
-            <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="labelFrom.limit" />
+            <Page :total="total" :model-value="labelFrom.page" show-elevator show-total @on-change="pageChange" :page-size="labelFrom.limit" />
           </div>
         </Card>
       </Col>
@@ -191,7 +191,6 @@ export default {
         .then((res) => {
           this.$Message.success(res.msg);
           this.labelLists.splice(num, 1);
-          this.labelFrom.page = 1;
           this.getList();
         })
         .catch((res) => {
@@ -283,7 +282,7 @@ export default {
 }
 
 .left-wrapper {
-  height: 904px;
+  height: 920px;
   background: #fff;
   border-right: 1px solid #f2f2f2;
 }
