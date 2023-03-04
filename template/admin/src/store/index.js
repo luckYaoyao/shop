@@ -28,6 +28,7 @@ import kefu from './module/kefu';
 import integralOrder from './module/integralOrder';
 import mobildConfig from './module/mobildConfig';
 import upgrade from './module/upgrade';
+import layout from './module/layout';
 
 Vue.use(Vuex);
 // 持久化储存
@@ -61,6 +62,7 @@ export default new Vuex.Store({
         integralOrder: state.integralOrder,
         mobildConfig: state.mobildConfig,
         upgrade: state.upgrade,
+        layout: state.layout,
       }),
       storage: window.localStorage,
     }).plugin,
@@ -82,5 +84,6 @@ export default new Vuex.Store({
     mobildConfig,
     integralOrder,
     upgrade,
+    layout,
   },
 });
