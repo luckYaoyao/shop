@@ -84,7 +84,7 @@ export default {
       name: `${pre}distributionSet`,
       meta: {
         ...meta,
-        title: '分销设置',
+        title: '小程序配置',
       },
       component: () => import('@/pages/setting/setSystem/index'),
     },
