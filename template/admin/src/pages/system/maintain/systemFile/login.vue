@@ -18,7 +18,7 @@
                 prefix="ios-lock-outline"
                 placeholder="请输入密码"
               />
-              <div class="trip">提示：config/filesystem.php中手动配置password后使用，不能为空</div>
+              <div class="trip">提示：密码配置在 /config/filesystem.php 文件中修改 'password' => '密码'</div>
             </FormItem>
             <FormItem class="maxInpt">
               <Button type="primary" long size="large" @click="handleSubmit('formInline')" class="btn">登录</Button>
