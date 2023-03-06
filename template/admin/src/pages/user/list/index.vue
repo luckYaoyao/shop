@@ -892,7 +892,6 @@ export default {
       this.userFrom.user_time = this.timeVal.join('-');
     },
     userDetail(row) {
-      console.log(row.uid)
       this.$refs.userDetails.modals = true;
       this.$refs.userDetails.getDetails(row.uid);
     },

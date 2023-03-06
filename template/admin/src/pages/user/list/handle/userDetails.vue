@@ -112,13 +112,13 @@ export default {
   created() {},
   methods: {
     edit() {
+      this.activeName = 'user';
       this.isEdit = !this.isEdit;
     },
     editSave() {
       this.$refs.editForm.setUser();
     },
     draChange(status) {
-      console.log(status);
       if (!status) {
         this.isEdit = false;
       }
