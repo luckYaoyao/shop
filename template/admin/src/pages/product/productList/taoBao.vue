@@ -7,7 +7,7 @@
           >如何配置密钥</a
         >
         <span v-else
-          >您当前剩余{{ copyConfig.copy_num }}条采集次数，<a href="#" @click="mealPay('copy')">增加采集次数</a></span
+          >您当前剩余{{ copyConfig.copy_num }}条采集次数，<a class="add" @click="mealPay('copy')">增加采集次数</a></span
         >
       </div>
       <div>商品采集设置：设置 > 系统设置 > 第三方接口设置 > 采集商品配置</div>
@@ -721,7 +721,10 @@ export default {
 .Box .numPut {
   width: 100% !important;
 }
-
+.add{
+  color: #2D8cF0;
+  cursor pointer
+}
 .lunBox {
   /* width 80px */
   display: flex;
