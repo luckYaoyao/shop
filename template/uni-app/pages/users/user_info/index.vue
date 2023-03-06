@@ -298,7 +298,6 @@
 					this.$nextTick(e => {
 						this.$i18n.locale = this.array[this.setIndex].value;
 					})
-					Cache.set('localeSet', true, 600)
 				})
 			},
 
