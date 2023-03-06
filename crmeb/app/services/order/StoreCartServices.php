@@ -432,6 +432,9 @@ class StoreCartServices extends BaseServices
      */
     public function setCartNum($uid, $productId, $num, $unique, $type)
     {
+        //检查限购
+        $this->checkLimit($uid, $productId, $num, 0);
+
         /** @var StoreProductAttrValueServices $attrValueServices */
         $attrValueServices = app()->make(StoreProductAttrValueServices::class);
 
