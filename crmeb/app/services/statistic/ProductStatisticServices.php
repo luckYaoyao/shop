@@ -178,7 +178,7 @@ class ProductStatisticServices extends BaseServices
             $cost = array_column($storeOrder->getProductTrend($time, $timeType, 'pay_time', 'sum(cost)'), 'num', 'days');
             $orderIds = array_column($refundList, 'store_order_id');
             $ids = implode(',', $orderIds);
-            $totalNumList = $orderRefund->column(['refund_id' => $ids], 'refund_num', 'id');
+            $totalNumList = $orderRefund->getColumn(['refund_id' => $ids], 'refund_num', 'id');
             $refundNum = array_column($refundList, 'store_order_id', 'days');
             foreach ($refundNum as &$i) {
                 $oIds = explode(',', $i);
