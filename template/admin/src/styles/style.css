@@ -3,6 +3,10 @@
 .ivu-date-picker .ivu-select-dropdown {
   /* top: 33px!important; */
 }
+.vxe-tree-cell,
+.vxe-cell {
+  font-size: 12px;
+}
 .plusColor {
   color: #e83323;
 }
@@ -204,7 +208,7 @@ body {
 }
 
 /*表格公共样式*/
-.ivu-table-header .ivu-table-cell{
+.ivu-table-header .ivu-table-cell {
   color: #999;
   font-size: 13px;
   padding: 10px 5px !important;
@@ -519,7 +523,7 @@ body {
   padding: 10px 20px;
   border-bottom: 1px solid #f2f2f2;
   margin-bottom: 10px;
-  border-radius:5px;
+  border-radius: 5px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -542,11 +546,10 @@ body {
   overflow: auto;
   background-color: #f5f7f9;
 }
-.left-wrapper{
+.left-wrapper {
   height: calc(100vh - 120px);
   background: #fff;
   border-right: 1px solid #f2f2f2;
-
 }
 .ivu-tabs-bar {
   margin-bottom: 0;
@@ -710,6 +713,6 @@ body {
   margin-top: 3px;
   color: rgb(153, 153, 153);
 }
-.pt10{
+.pt10 {
   padding-top: 10px;
 }
