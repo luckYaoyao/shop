@@ -699,6 +699,16 @@ export function getLangJson() {
 }
 
 /**
+ * 获取多语言是否切换
+ */
+
+export function getLangVersion() {
+	return request.get('lang_version', {}, {
+		noAuth: true
+	})
+}
+
+/**
  * 
  * 小程序绑定手机号
  * @param object data
