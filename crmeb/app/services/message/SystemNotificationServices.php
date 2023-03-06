@@ -113,7 +113,7 @@ class SystemNotificationServices extends BaseServices
     {
         $type = $data['type'];
         $id = $data['id'];
-        $info = $this->dao->get($id, 'id');
+        $info = $this->dao->get($id);
         if (!$info) {
             throw new AdminException(100026);
         }
