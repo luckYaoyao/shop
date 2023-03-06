@@ -3,7 +3,7 @@
     <Breadcrumb :style="{ fontSize: `${fontSize}px` }">
       <BreadcrumbItem
         v-for="(item, index) in list"
-        :key="`${item.path}`"
+        :key="index"
         :to="index !== 1 ? item.path : ''"
         v-if="listLast[0].path !== homePath"
       >

@@ -159,7 +159,7 @@ export default {
     swiperData() {
       loginInfoApi()
         .then((res) => {
-          window.document.title = `${res.data.site_name} - 登录`
+          window.document.title = `${res.data.site_name} - 登录`;
           localStorage.setItem('ADMIN_TITLE', res.data.site_name || '');
           let data = res.data || {};
           this.login_logo = data.login_logo ? data.login_logo : require('@/assets/images/logo.png');
@@ -239,8 +239,10 @@ export default {
 
             this.checkSocket();
           } catch (e) {}
-
-          return this.$router.replace({ path: res.data.menus[0].path || this.$routeProStr + '/' });
+          // console.log(this.findFirstNonNullChildren(res.data.menus), 1111);
+          return this.$router.replace({
+            path: this.findFirstNonNullChildren(res.data.menus).path || this.$routeProStr + '/',
+          });
         })
         .catch((res) => {
           msg();
@@ -251,6 +253,26 @@ export default {
       setTimeout((e) => {
         this.loading = false;
       }, 1000);
+    },
+    findFirstNonNullChildren(arr) {
+      // 如果数组为空，返回null
+      if (!arr || arr.length === 0) {
+        return null;
+      }
+      // 找到第一个对象
+      const firstObj = arr[0];
+      // 如果第一个对象没有children属性，返回该对象
+      if (!firstObj.children) {
+        return firstObj;
+      }
+
+      // 如果第一个对象的children属性是数组，
+      // 递归查找children属性中的第一个非null children属性
+      if (Array.isArray(firstObj.children)) {
+        return this.findFirstNonNullChildren(firstObj.children);
+      }
+      // 如果数组中没有非null children属性，返回null
+      return null;
     },
     checkSocket() {
       getWorkermanUrl().then((res) => {
