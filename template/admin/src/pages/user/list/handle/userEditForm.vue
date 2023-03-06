@@ -138,9 +138,17 @@
       <div class="section">
         <div class="section-hd">用户备注</div>
         <div class="section-bd">
-          <FormItem label="用户备注：">
-            <Input class="form-sty" v-model="formItem.mark" placeholder="请输入用户备注"></Input>
-          </FormItem>
+          <div class="item">
+            <FormItem label="用户备注：">
+              <Input
+                class="form-sty"
+                type="textarea"
+                :rows="5"
+                v-model="formItem.mark"
+                placeholder="请输入用户备注"
+              ></Input>
+            </FormItem>
+          </div>
         </div>
       </div>
     </Form>
