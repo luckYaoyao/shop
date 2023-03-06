@@ -49,7 +49,7 @@ class LangTypeServices extends BaseServices
         $langCountryList = app()->make(LangCountryServices::class)->selectList([])->toArray();
         $options = [];
         foreach ($langCountryList as $item) {
-            $options[] = ['value' => $item['code'], 'label' => $item['name'].' [ '.$item['code'].' ]'];
+            $options[] = ['value' => $item['code'], 'label' => $item['name'] . ' [ ' . $item['code'] . ' ]'];
         }
         $field[] = Form::select('file_name', '语言标识', $info['file_name'] ?? '')->setOptions(Form::setOptions($options))->filterable(1);
         $field[] = Form::radio('is_default', '是否默认', $info['is_default'] ?? 0)->options([['label' => '开启', 'value' => 1], ['label' => '关闭', 'value' => 0]]);
@@ -100,6 +100,7 @@ class LangTypeServices extends BaseServices
     {
         $fileName = $this->dao->value(['is_default' => 1], 'file_name');
         $this->cacheDriver()->set('range_name', $fileName);
+        app()->make(LangCodeServices::class)->cacheDriver()->clear();
     }
 
     /**

@@ -388,6 +388,8 @@ Route::group(function () {
     Route::get('get_lang_json', 'v1.PublicController/getLangJson')->name('getLangJson');
     //获取当前后台设置的默认语言类型
     Route::get('get_default_lang_type', 'v1.PublicController/getDefaultLangType')->name('getLangJson');
+    //获取当前后台设置的默认语言类型
+    Route::get('lang_version', 'v1.PublicController/getLangVersion')->name('getLangVersion');
 
     /** 定时任务接口 */
     //定时任务调用接口
