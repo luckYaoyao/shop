@@ -13,16 +13,16 @@
       >
         <Row :gutter="16">
           <Col v-bind="grid">
-              <FormItem label="用户搜索：" label-for="nickname">
-                <Input v-model="userFrom.nickname" placeholder="请输入用户" element-id="nickname" clearable>
-                  <Select v-model="field_key" slot="prepend" style="width: 80px">
-                    <Option value="all">全部</Option>
-                    <Option value="uid">UID</Option>
-                    <Option value="phone">手机号</Option>
-                    <Option value="nickname">用户昵称</Option>
-                  </Select>
-                </Input>
-              </FormItem>
+            <FormItem label="用户搜索：" label-for="nickname">
+              <Input v-model="userFrom.nickname" placeholder="请输入用户" element-id="nickname" clearable>
+                <Select v-model="field_key" slot="prepend" style="width: 80px">
+                  <Option value="all">全部</Option>
+                  <Option value="uid">UID</Option>
+                  <Option value="phone">手机号</Option>
+                  <Option value="nickname">用户昵称</Option>
+                </Select>
+              </Input>
+            </FormItem>
           </Col>
           <Col span="12" class="ivu-text-left userFrom" v-if="!collapse">
             <FormItem>
@@ -42,11 +42,11 @@
                     <div style="width: 90%">
                       <div v-if="selectDataLabel.length">
                         <Tag
-                            :closable="false"
-                            v-for="(item, index) in selectDataLabel"
-                            @on-close="closeLabel(item)"
-                            :key="index"
-                        >{{ item.label_name }}</Tag
+                          :closable="false"
+                          v-for="(item, index) in selectDataLabel"
+                          @on-close="closeLabel(item)"
+                          :key="index"
+                          >{{ item.label_name }}</Tag
                         >
                       </div>
                       <span class="span" v-else>选择用户关联标签</span>
@@ -75,8 +75,8 @@
                   <Select v-model="group_id" placeholder="请选择用户分组" element-id="group_id" clearable>
                     <Option value="all">全部</Option>
                     <Option :value="item.id" v-for="(item, index) in groupList" :key="index">{{
-                        item.group_name
-                      }}</Option>
+                      item.group_name
+                    }}</Option>
                   </Select>
                 </FormItem>
               </Col>
@@ -182,11 +182,11 @@
               <Col v-bind="grid">
                 <FormItem label="地区：" label-for="country">
                   <Select
-                      v-model="userFrom.country"
-                      placeholder="请选择国家"
-                      element-id="country"
-                      clearable
-                      @on-change="changeCountry"
+                    v-model="userFrom.country"
+                    placeholder="请选择国家"
+                    element-id="country"
+                    clearable
+                    @on-change="changeCountry"
                   >
                     <Option value="domestic">中国</Option>
                     <Option value="abroad">外国</Option>
@@ -281,7 +281,8 @@
         <!--                </template>-->
         <template slot-scope="{ row, index }" slot="action">
           <template v-if="row.is_del != 1">
-            <a @click="edit(row)">编辑</a>
+            <a @click="userDetail(row)">详情</a>
+
             <Divider type="vertical" />
             <Dropdown @on-click="changeMenu(row, $event, index)" :transfer="true">
               <a href="javascript:void(0)">
@@ -289,7 +290,7 @@
                 <Icon type="ios-arrow-down"></Icon>
               </a>
               <DropdownMenu slot="list">
-                <DropdownItem name="1">账户详情</DropdownItem>
+                <!-- <DropdownItem name="1">编辑</DropdownItem> -->
                 <DropdownItem name="2">积分余额</DropdownItem>
                 <DropdownItem name="3">赠送会员</DropdownItem>
                 <!--                                <DropdownItem name="4" v-if="row.vip_name">清除等级</DropdownItem>-->
@@ -890,6 +891,11 @@ export default {
       this.timeVal = e;
       this.userFrom.user_time = this.timeVal.join('-');
     },
+    userDetail(row) {
+      console.log(row.uid)
+      this.$refs.userDetails.modals = true;
+      this.$refs.userDetails.getDetails(row.uid);
+    },
     // 操作
     changeMenu(row, name, index) {
       let uid = [];
@@ -897,8 +903,7 @@ export default {
       let uids = { uids: uid };
       switch (name) {
         case '1':
-          this.$refs.userDetails.modals = true;
-          this.$refs.userDetails.getDetails(row.uid);
+          this.edit(row);
           break;
         case '2':
           this.getOtherFrom(row.uid);

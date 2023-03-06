@@ -146,9 +146,6 @@ export default {
     return {
       modals: false,
       labelShow: false,
-      orderStatus: 0,
-      total_num: 0,
-      splitSwitch: true,
       formItem: {
         uid: 0,
         real_name: '',
@@ -166,12 +163,6 @@ export default {
         is_promoter: 0,
         status: 1,
       },
-      express: [],
-      expressTemp: [],
-      deliveryList: [],
-      temp: {},
-      export_open: true,
-      manyFormValidate: [],
       groupInfo: [],
       labelInfo: [],
       levelInfo: [],
