@@ -80,7 +80,7 @@
 								</view>
 							</view>
 							<!-- 订单 -->
-							<view class="order-box" v-if="item.msn_type == 6" @click="goOrder(item)">
+							<view class="order-box" v-if="item.msn_type == 6 && item.orderInfo.length" @click="goOrder(item)">
 								<view class="title">{{$t(`订单号`)}}: {{ item.orderInfo.order_id }}</view>
 								<view class="info">
 									<image :src="item.orderInfo.cartInfo[0].productInfo.image"></image>
@@ -434,7 +434,7 @@
 							if (this.uidTo == 0) {
 								selector = `#msg-${res.data.serviceList[res.data.serviceList.length - 1].id}`;
 							} else {
-								selector = `#msg-${this.chatList[0].id}`;
+								selector = `#msg-${this.chatList.length ? this.chatList[0].id : 0}`;
 							}
 						}
 						let arr = [];
@@ -451,7 +451,6 @@
 								el.msn = this.replace_em(el.msn);
 							}
 						});
-
 						this.loading = false;
 						this.chatList = [...res.data.serviceList, ...this.chatList];
 
@@ -568,7 +567,7 @@
 				let self = this;
 				if (this.isScroll) {
 					this.loading = true;
-					this.uidTo = this.chatList[0].id;
+					this.uidTo = this.chatList.length ? this.chatList[0].id : 0;
 					this.isScroll = false;
 					setTimeout(res => {
 						this.getChatList();
