@@ -84,7 +84,7 @@
                 <DropdownItem name="1">推广订单</DropdownItem>
                 <DropdownItem name="2">推广二维码</DropdownItem>
                 <DropdownItem name="3">修改上级推广人</DropdownItem>
-                <DropdownItem name="4">清除上级推广人</DropdownItem>
+                <DropdownItem name="4" v-if="row.spread_uid">清除上级推广人</DropdownItem>
                 <DropdownItem name="5">取消推广资格</DropdownItem>
                 <DropdownItem name="6">修改分销等级</DropdownItem>
               </DropdownMenu>
@@ -368,25 +368,24 @@ export default {
     changeMenu(row, name, index) {
       switch (name) {
         case '1':
-          this.promoters(row, 'order');//推广人订单
+          this.promoters(row, 'order'); //推广人订单
           break;
         case '2':
-          this.spreadQR(row);//推广方式二维码
+          this.spreadQR(row); //推广方式二维码
           break;
         case '3':
-          this.editS(row);//修改上级推广人
+          this.editS(row); //修改上级推广人
           break;
-        case '4'://清除上级推广人
+        case '4': //清除上级推广人
           this.del_parent(row, '清除【 ' + row.nickname + ' 】的上级推广人', index);
           break;
-        case '5'://取消推广资格
+        case '5': //取消推广资格
           this.del_agent(row, '取消【 ' + row.nickname + ' 】的推广资格', index);
           break;
-        case '6'://修改推广等级
+        case '6': //修改推广等级
           this.$modalForm(membershipDataAddApi({ uid: row.uid }, '/agent/get_level_form')).then(() => this.getList());
           break;
         default:
-
           break;
       }
     },
