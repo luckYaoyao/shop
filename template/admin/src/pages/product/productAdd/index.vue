@@ -3248,6 +3248,7 @@ export default {
 .titTip {
   display: inline-bolck;
   font-size: 12px;
+  line-height: 24px;
   font-weight: 400;
   color: #999999;
 }
