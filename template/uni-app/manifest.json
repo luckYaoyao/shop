@@ -15,6 +15,12 @@
             "autoclose" : true,
             "delay" : 0
         },
+        "screenOrientation" : [
+            "portrait-primary",
+            "portrait-secondary",
+            "landscape-primary",
+            "landscape-secondary"
+        ],
         /* 模块配置 */
         "modules" : {
             "Payment" : {},
