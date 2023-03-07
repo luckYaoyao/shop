@@ -206,6 +206,9 @@ switch ($step) {
             $rbselect = $_POST['rbselect'] ?? 0;
 
             try {
+                if (!class_exists('redis')) {
+                    exit(json_encode(-1));
+                }
                 $redis = new Redis();
                 if (!$redis) {
                     exit(json_encode(-1));
