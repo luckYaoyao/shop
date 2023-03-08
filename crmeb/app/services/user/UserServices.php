@@ -1035,7 +1035,7 @@ class UserServices extends BaseServices
             throw new AdminException(400214);
         }
         $timeDiff = $userInfo['is_ever_level'] == 1 ? '永久' : date('Y-m-d H:i:s', $userInfo['overdue_time']);
-        $dayDiff = intval(($userInfo['overdue_time'] - time()) / 86400);
+        $dayDiff = $userInfo['overdue_time'] > time() ? intval(($userInfo['overdue_time'] - time()) / 86400) : 0;
         $field[] = Form::input('time_diff', '到期时间', $timeDiff)->style(['width' => '200px'])->readonly(true);
         if ($userInfo['is_ever_level'] == 0) {
             $field[] = Form::input('day_diff', '剩余天数', $dayDiff)->style(['width' => '200px'])->readonly(true);

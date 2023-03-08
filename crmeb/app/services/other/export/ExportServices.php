@@ -482,23 +482,13 @@ class ExportServices extends BaseServices
         $export = [];
         if (!empty($data)) {
             foreach ($data as $item) {
-                switch ($item['recharge_type']) {
-                    case 'routine':
-                        $item['_recharge_type'] = '小程序充值';
-                        break;
-                    case 'weixin':
-                        $item['_recharge_type'] = '公众号充值';
-                        break;
-                    default:
-                        $item['_recharge_type'] = '其他充值';
-                        break;
-                }
                 $item['_pay_time'] = $item['pay_time'] ? date('Y-m-d H:i:s', $item['pay_time']) : '暂无';
                 $item['_add_time'] = $item['add_time'] ? date('Y-m-d H:i:s', $item['add_time']) : '暂无';
                 $item['paid_type'] = $item['paid'] ? '已支付' : '未支付';
 
                 $export[] = [
                     $item['nickname'],
+                    $item['order_id'],
                     $item['price'],
                     $item['paid_type'],
                     $item['_recharge_type'],
@@ -508,7 +498,7 @@ class ExportServices extends BaseServices
                 ];
             }
         }
-        $header = ['昵称/姓名', '充值金额', '是否支付', '充值类型', '支付时间', '是否退款', '添加时间'];
+        $header = ['昵称/姓名', '订单号', '充值金额', '是否支付', '充值类型', '支付时间', '是否退款', '添加时间'];
         $title = ['充值记录', '充值记录' . time(), ' 生成时间：' . date('Y-m-d H:i:s', time())];
         $filename = '充值记录_' . date('YmdHis', time());
         $suffix = 'xlsx';

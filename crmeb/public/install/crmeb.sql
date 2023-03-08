@@ -33351,7 +33351,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (26, 'pay_weixin_client_cert', 'upload', 'input', 4, '', 3, '', 0, 0, '\"\"', '微信支付证书', '微信支付证书，在微信商家平台中可以下载！文件名一般为apiclient_cert.pem', 0, 1),
 (27, 'pay_weixin_client_key', 'upload', 'input', 4, '', 3, '', 0, 0, '\"\"', '微信支付证书密钥', '微信支付证书密钥，在微信商家平台中可以下载！文件名一般为apiclient_key.pem', 0, 1),
 (28, 'pay_weixin_key', 'text', 'input', 4, '', 0, '', 100, 0, '\"\"', 'Key', '商户支付密钥Key。审核通过后，在微信发送的邮件中查看。', 0, 1),
-(29, 'pay_weixin_open', 'radio', 'input', 109, '0=>关闭\nweixin=>微信\nallinpay=>通联', 1, '', 0, 0, '\"0\"', '微信支付', '请选择微信支付通道，关闭用户端不展示', 100, 1),
+(29, 'pay_weixin_open', 'radio', 'input', 109, '0=>关闭\nweixin=>微信\nallinpay=>通联', 1, '', 0, 0, '\"weixin\"', '微信支付', '请选择微信支付通道，关闭用户端不展示', 100, 1),
 (32, 'store_free_postage', 'text', 'number', 27, '', 0, 'number:true,min:-1', 100, 0, '1000000', '满额包邮', '商城商品满多少金额即可包邮，此项优先于其他的运费设置', 100, 1),
 (33, 'offline_postage', 'radio', 'input', 27, '1=>包邮\n0=>不包邮', 1, '', 0, 0, '0', '线下支付是否包邮', '用户选择线下支付时是否包邮', 97, 1),
 (34, 'integral_ratio', 'text', 'input', 11, '', 0, 'number:true', 100, 0, '\"0.1\"', '积分抵用', '积分抵用比例(1积分抵多少金额)单位：元', 10, 1),
