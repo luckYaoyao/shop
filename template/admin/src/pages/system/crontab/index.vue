@@ -135,7 +135,7 @@ export default {
       let delfromData = {
         title: tit,
         num: num,
-        url: `system/timer/del/${row.id}`,
+        url: `system/crontab/del/${row.id}`,
         method: 'delete',
         ids: '',
       };
