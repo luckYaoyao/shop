@@ -197,7 +197,7 @@ class StoreOrderRefundServices extends BaseServices
                         }
                         /** @var Pay $pay */
                         $pay = app()->make(Pay::class, [$drivers]);
-                        if ($refundOrder['is_channel'] == 1) {
+                        if ($refundOrder['channel_type'] == 'routine') {
                             $refundData['trade_no'] = $refundOrder['trade_no'];
                             $refundData['pay_new_weixin_open'] = sys_config('pay_new_weixin_open');
                             //小程序退款
