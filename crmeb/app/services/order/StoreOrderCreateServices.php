@@ -75,11 +75,11 @@ class StoreOrderCreateServices extends BaseServices
                 $id = $snowflake->setStartTimeStamp(strtotime('2022-01-01') * 1000)->id();
             }
             $replace = '';
-            $chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-            for ($i = 0; $i < 3; $i++) {
+            $chars = '0123456789';
+            for ($i = 0; $i < 6; $i++) {
                 $replace .= $chars[mt_rand(0, strlen($chars) - 1)];
             }
-            $id = substr_replace($id, $replace, -3);
+            $id = substr_replace($id, $replace, -6);
         } else {
             $is_callable = function ($currentTime) {
                 $redis = Cache::store('redis');

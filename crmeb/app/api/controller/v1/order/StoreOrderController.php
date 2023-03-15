@@ -260,7 +260,7 @@ class StoreOrderController
         }
 
         //重新生成订单号去支付
-        $order['order_id'] = mt_rand(100, 999) . '_' . $order['order_id'];
+//        $order['order_id'] = mt_rand(100, 999) . '_' . $order['order_id'];
 
         //0元支付
         if (bcsub((string)$orderInfo['pay_price'], '0', 2) <= 0) {

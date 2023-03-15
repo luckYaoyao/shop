@@ -768,7 +768,7 @@ HTML;
         }
         /** @var StoreOrderCreateServices $createServices */
         $createServices = app()->make(StoreOrderCreateServices::class);
-        $data['order_id'] = $createServices->getNewOrderId();
+        $data['order_id'] = $createServices->getNewOrderId('cp');
         /** @var StoreOrderStatusServices $services */
         $services = app()->make(StoreOrderStatusServices::class);
         return $this->transaction(function () use ($id, $data, $services) {
