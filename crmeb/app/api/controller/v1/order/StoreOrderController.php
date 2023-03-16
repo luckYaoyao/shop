@@ -247,6 +247,7 @@ class StoreOrderController
         if (!$uni) return app('json')->fail(100100);
         $orderInfo = $this->services->get(['order_id' => $uni]);
         $uid = $type == 1 ? (int)$request->uid() : $orderInfo->uid;
+        $orderInfo->is_channel = $this->getChennel[$request->getFromType()] ?? ($request->isApp() ? 0 : 1);
         $orderInfo->pay_uid = $uid;
         $orderInfo->save();
         $orderInfo = $orderInfo->toArray();
