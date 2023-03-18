@@ -291,38 +291,43 @@ abstract class BaseDao
     }
 
     /**
-     * 获取搜索器和搜索条件key
-     * @param array $withSearch
+     * 获取搜索器和搜索条件key,以及不在搜索器的条件数组
+     * @param array $where
      * @return array[]
      * @throws \ReflectionException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/03/18
      */
-    private function getSearchData(array $withSearch)
+    private function getSearchData(array $where)
     {
         $with = [];
-        $whereKey = [];
+        $otherWhere = [];
         $responses = new \ReflectionClass($this->setModel());
-        foreach ($withSearch as $fieldName) {
-            $method = 'search' . Str::studly($fieldName) . 'Attr';
+        foreach ($where as $key => $value) {
+            $method = 'search' . Str::studly($key) . 'Attr';
             if ($responses->hasMethod($method)) {
-                $with[] = $fieldName;
+                $with[] = $key;
             } else {
-                $whereKey[] = $fieldName;
+                $otherWhere[] = $value;
             }
         }
-        return [$with, $whereKey];
+        return [$with, $otherWhere];
     }
 
     /**
      * 根据搜索器获取搜索内容
-     * @param array $withSearch
-     * @param array|null $data
+     * @param $where
      * @return BaseModel
      * @throws \ReflectionException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/03/18
      */
-    protected function withSearchSelect(array $withSearch, ?array $data = [])
+    protected function withSearchSelect($where)
     {
-        [$with] = $this->getSearchData($withSearch);
-        return $this->getModel()->withSearch($with, $data);
+        [$with, $otherWhere] = $this->getSearchData($where);
+        return $this->getModel()->withSearch($with, $where)->where($otherWhere);
     }
 
     /**
@@ -330,11 +335,14 @@ abstract class BaseDao
      * @param array $where
      * @return BaseModel
      * @throws \ReflectionException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/03/18
      */
     protected function search(array $where = [])
     {
         if ($where) {
-            return $this->withSearchSelect(array_keys($where), $where);
+            return $this->withSearchSelect($where);
         } else {
             return $this->getModel();
         }
