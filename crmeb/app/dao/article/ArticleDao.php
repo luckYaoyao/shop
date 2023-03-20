@@ -32,7 +32,7 @@ class ArticleDao extends BaseDao
 
     public function search(array $where = [])
     {
-        return parent::search($where, false)->when(isset($where['ids']) && count($where['ids']), function ($query) use ($where) {
+        return parent::search($where)->when(isset($where['ids']) && count($where['ids']), function ($query) use ($where) {
             $query->whereNotIn('id', $where['ids']);
         });
     }

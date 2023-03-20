@@ -40,7 +40,7 @@ class StoreOrderInvoiceDao extends BaseDao
         $fieldKey = $fieldKey == 'all' ? '' : $fieldKey;
         $type = $where['type'] ?? '';
         unset($where['type']);
-        return parent::search($where, false)->when($type, function ($query) use ($type) {
+        return parent::search($where)->when($type, function ($query) use ($type) {
             switch ($type) {
                 case 1://待开
                     $query->where('is_invoice', 0)->where('invoice_time', 0)->where('is_refund', 0);

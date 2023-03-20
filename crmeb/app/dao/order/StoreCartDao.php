@@ -49,7 +49,7 @@ class StoreCartDao extends BaseDao
      */
     public function search(array $where = [])
     {
-        return parent::search($where, false)->when(isset($where['id']) && $where['id'], function ($query) use ($where) {
+        return parent::search($where)->when(isset($where['id']) && $where['id'], function ($query) use ($where) {
             $query->whereIn('id', $where['id']);
         })->when(isset($where['status']), function ($query) use ($where) {
             //兼容之前老用户 数据库默认值null

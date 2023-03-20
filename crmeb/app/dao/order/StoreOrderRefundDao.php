@@ -26,7 +26,7 @@ class StoreOrderRefundDao extends BaseDao
         $realName = $where['real_name'] ?? '';
         $fieldKey = $where['field_key'] ?? '';
         $fieldKey = $fieldKey == 'all' ? '' : $fieldKey;
-        return parent::search($where, false)->when(isset($where['refund_type']) && $where['refund_type'] !== '', function ($query) use ($where) {
+        return parent::search($where)->when(isset($where['refund_type']) && $where['refund_type'] !== '', function ($query) use ($where) {
             if ($where['refund_type'] == 0) {
                 $query->where('refund_type', '>', 0);
             } else {

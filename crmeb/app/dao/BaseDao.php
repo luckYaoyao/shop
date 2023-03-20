@@ -318,36 +318,31 @@ abstract class BaseDao
     /**
      * 根据搜索器获取搜索内容
      * @param $where
-     * @param $search
      * @return BaseModel
      * @throws \ReflectionException
      * @author 吴汐
      * @email 442384644@qq.com
      * @date 2023/03/18
      */
-    protected function withSearchSelect($where, $search)
+    protected function withSearchSelect($where)
     {
         [$with, $otherWhere] = $this->getSearchData($where);
-        if (!$search) {
-            $otherWhere = [];
-        }
         return $this->getModel()->withSearch($with, $where)->where($otherWhere);
     }
 
     /**
      * 搜索
      * @param array $where
-     * @param bool $search
      * @return BaseModel
      * @throws \ReflectionException
      * @author 吴汐
      * @email 442384644@qq.com
      * @date 2023/03/18
      */
-    protected function search(array $where = [], $search = true)
+    protected function search(array $where = [])
     {
         if ($where) {
-            return $this->withSearchSelect($where, $search);
+            return $this->withSearchSelect($where);
         } else {
             return $this->getModel();
         }

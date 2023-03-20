@@ -38,7 +38,7 @@ class UserBrokerageFrozenDao extends BaseDao
      */
     public function search(array $where = [])
     {
-        return parent::search($where, false)->when(isset($where['isFrozen']), function ($query) use ($where) {
+        return parent::search($where)->when(isset($where['isFrozen']), function ($query) use ($where) {
             if ($where['isFrozen']) {
                 $query->where('frozen_time', '>', time());
             } else {

@@ -29,7 +29,7 @@ class StoreServiceAuxiliaryDao extends AuxiliaryDao
      */
     protected function search(array $where = [])
     {
-        return parent::search($where, false)->where('type', 0);
+        return parent::search($where)->where('type', 0);
     }
 
 }

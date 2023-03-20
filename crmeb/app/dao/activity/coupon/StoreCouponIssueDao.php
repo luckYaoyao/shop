@@ -38,7 +38,7 @@ class StoreCouponIssueDao extends BaseDao
      */
     public function search(array $where = [])
     {
-        return parent::search($where, false)->when(isset($where['type']) && $where['type'] != '', function ($query) use ($where) {
+        return parent::search($where)->when(isset($where['type']) && $where['type'] != '', function ($query) use ($where) {
             if ($where['type'] == 'send') {
                 $query->where('receive_type', 3)->where(function ($query1) {
                     $query1->where(function ($query2) {

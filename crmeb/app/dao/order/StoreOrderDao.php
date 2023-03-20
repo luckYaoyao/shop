@@ -41,7 +41,6 @@ class StoreOrderDao extends BaseDao
      * 订单搜索
      * @param array $where
      * @return \crmeb\basic\BaseModel|mixed|\think\Model
-     * @throws \ReflectionException
      */
     public function search(array $where = [])
     {
@@ -49,7 +48,7 @@ class StoreOrderDao extends BaseDao
         $realName = $where['real_name'] ?? '';
         $fieldKey = $where['field_key'] ?? '';
         $fieldKey = $fieldKey == 'all' ? '' : $fieldKey;
-        return parent::search($where, false)->when($isDel, function ($query) use ($where) {
+        return parent::search($where)->when($isDel, function ($query) use ($where) {
             $query->where('is_del', $where['is_del']);
         })->when(isset($where['is_system_del']), function ($query) {
             $query->where('is_system_del', 0);

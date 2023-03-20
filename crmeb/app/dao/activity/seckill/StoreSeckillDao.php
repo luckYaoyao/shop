@@ -39,7 +39,7 @@ class StoreSeckillDao extends BaseDao
      */
     protected function search(array $where = [])
     {
-        return parent::search($where, false)->when(isset($where['seckllTime']), function ($query) use ($where) {
+        return parent::search($where)->when(isset($where['seckllTime']), function ($query) use ($where) {
             [$startTime, $stopTime] = is_array($where['seckllTime']) ? $where['seckllTime'] : [time(), time() - 86400];
             $query->where('start_time', '<=', $startTime)->where('stop_time', '>=', $stopTime);
         })->when(isset($where['sid']) && $where['sid'], function ($query) use ($where) {
