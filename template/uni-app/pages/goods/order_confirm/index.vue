@@ -515,6 +515,7 @@
 						} else if (res.data.type == 2) {
 							that.is_shipping = false;
 							that.shippingType = 1;
+							this.addressType(1)
 							this.getConfirm();
 							this.getList();
 						}
