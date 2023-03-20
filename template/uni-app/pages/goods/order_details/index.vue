@@ -359,7 +359,7 @@
 						hover-class='none' :url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id">
 						{{$t(`查看物流`)}}
 					</navigator>
-					<view class='bnt bg-color' v-if="orderInfo.type == 3 && orderInfo.refund_type == 0"
+					<view class='bnt bg-color' v-if="orderInfo.type == 3 && orderInfo.refund_type == 0 && orderInfo.paid"
 						@tap='goJoinPink'>
 						{{$t(`查看拼团`)}}
 					</view>
