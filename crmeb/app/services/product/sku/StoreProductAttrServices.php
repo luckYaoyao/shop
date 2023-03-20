@@ -90,8 +90,6 @@ class StoreProductAttrServices extends BaseServices
                         ];
                         if (!$productVirtual->count(['card_no' => $items['key'], 'card_pwd' => $items['value']])) {
                             $productVirtual->save($data);
-                        } else {
-                            throw new AdminException(400590, ['key' => $items['key'], 'value' => $items['value']]);
                         }
                     }
                 }
