@@ -6,10 +6,9 @@
 			<swiper-item v-if="videoline">
 				<view class="item">
 					<view v-show="!controls" style="width:100%;height:100% ">
-						<video id="myVideo"  :src='videoline' objectFit="contain" controls
-							style="width:100%;height:100%" show-center-play-btn show-mute-btn="true"
-							auto-pause-if-navigate :custom-cache="false" :enable-progress-gesture="false"
-							:poster="imgUrls[0]" @pause="videoPause"></video>
+						<video id="myVideo" :src='videoline' objectFit="contain" controls style="width:100%;height:100%"
+							show-center-play-btn show-mute-btn="true" auto-pause-if-navigate :custom-cache="false"
+							:enable-progress-gesture="false" :poster="imgUrls[0]" @pause="videoPause"></video>
 					</view>
 					<view class="poster" v-show="controls">
 						<image class="image" :src="imgUrls[0]"></image>
@@ -34,7 +33,7 @@
 			<!-- #endif -->
 			<block v-for="(item,index) in imgUrls" :key='index'>
 				<swiper-item v-if="videoline?index>=1:index>=0">
-					<image :src="item" class="slide-image" />
+					<image :src="item" class="slide-image" @click="openImage(index)" />
 				</swiper-item>
 			</block>
 		</swiper>
@@ -108,6 +107,10 @@
 			},
 			change: function(e) {
 				this.$set(this, 'currents', e.detail.current + 1);
+			},
+			// 查看图片详情
+			openImage(index) {
+				this.$emit('showSwiperImg', index)
 			}
 		}
 	}
@@ -149,10 +152,11 @@
 		height: 100%;
 	}
 
-	.goods-video{
+	.goods-video {
 		width: 100%;
 		height: 100%;
 	}
+
 	.product-bg .item {
 		position: relative;
 		width: 100%;
