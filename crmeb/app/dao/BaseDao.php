@@ -309,7 +309,9 @@ abstract class BaseDao
             if ($responses->hasMethod($method)) {
                 $with[] = $key;
             } else {
-                $otherWhere[] = $value;
+                if ($key != 'timeKey') {
+                    $otherWhere[] = $value;
+                }
             }
         }
         return [$with, $otherWhere];
@@ -324,25 +326,28 @@ abstract class BaseDao
      * @email 442384644@qq.com
      * @date 2023/03/18
      */
-    protected function withSearchSelect($where)
+    protected function withSearchSelect($where, $search)
     {
         [$with, $otherWhere] = $this->getSearchData($where);
-        return $this->getModel()->withSearch($with, $where)->where($otherWhere);
+        return $this->getModel()->withSearch($with, $where)->when($search, function ($query) use ($otherWhere) {
+            $query->where($otherWhere);
+        });
     }
 
     /**
      * 搜索
      * @param array $where
+     * @param bool $search
      * @return BaseModel
      * @throws \ReflectionException
      * @author 吴汐
      * @email 442384644@qq.com
      * @date 2023/03/18
      */
-    protected function search(array $where = [])
+    public function search(array $where = [], bool $search = true)
     {
         if ($where) {
-            return $this->withSearchSelect($where);
+            return $this->withSearchSelect($where, $search);
         } else {
             return $this->getModel();
         }
