@@ -309,7 +309,9 @@ abstract class BaseDao
             if ($responses->hasMethod($method)) {
                 $with[] = $key;
             } else {
-                $otherWhere[] = $value;
+                if ($key != 'timeKey') {
+                    $otherWhere[] = $value;
+                }
             }
         }
         return [$with, $otherWhere];
