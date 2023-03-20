@@ -20,7 +20,7 @@ import cms from './modules/cms';
 import marketing from './modules/marketing';
 import app from './modules/app';
 import system from './modules/system';
-import BasicLayout from '@/components/main';
+import LayoutMain from '@/layout';
 import statistic from './modules/statistic';
 import frameOut from './modules/frameOut';
 import division from './modules/division';
@@ -39,7 +39,7 @@ const frameIn = [
     redirect: {
       name: 'home_index',
     },
-    component: BasicLayout,
+    component: LayoutMain,
     children: [
       // {
       //   path: '/admin/system/log',
@@ -102,7 +102,7 @@ const frameIn = [
     redirect: {
       name: 'home_index',
     },
-    component: BasicLayout,
+    component: LayoutMain,
   },
   {
     path: routePre + '/widget.images/index.html',

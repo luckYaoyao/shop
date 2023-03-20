@@ -8,7 +8,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +---------------------------------------------------------------------
 
-import BasicLayout from '@/components/main';
+import LayoutMain from '@/layout';
 import setting from '@/setting';
 let routePre = setting.routePre;
 
@@ -25,7 +25,7 @@ export default {
   redirect: {
     name: `${pre}setSystem`,
   },
-  component: BasicLayout,
+  component: LayoutMain,
   children: [
     {
       path: 'system_role/index',

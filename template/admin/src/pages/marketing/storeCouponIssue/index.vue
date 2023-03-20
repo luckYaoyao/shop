@@ -322,7 +322,7 @@ export default {
     },
     getReceivelist(row) {
       this.loading2 = true;
-      releasedissueLogApi(row.id)
+      releasedissueLogApi(row.id, this.receiveFrom)
         .then(async (res) => {
           let data = res.data;
           this.receiveList = data.list;

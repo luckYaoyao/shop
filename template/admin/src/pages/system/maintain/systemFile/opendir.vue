@@ -148,7 +148,7 @@ import {
 import CodeMirror from 'codemirror/lib/codemirror';
 import loginFrom from './components/loginFrom';
 import { setCookies, getCookies, removeCookies } from '@/libs/util';
-// import Fullscreen from '@/components/main/components/fullscreen';
+// import Fullscreen from '@/layout/components/fullscreen';
 import * as monaco from 'monaco-editor';
 export default {
   name: 'opendir',

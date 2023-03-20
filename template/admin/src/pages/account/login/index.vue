@@ -73,6 +73,8 @@ import { getWorkermanUrl } from '@/api/kefu';
 import { setCookies } from '@/libs/util';
 import '@/assets/js/canvas-nest.min';
 import Verify from '@/components/verifition/Verify';
+import { PrevLoading } from '@/utils/loading.js';
+
 export default {
   components: {
     Verify,
@@ -208,6 +210,7 @@ export default {
           // 保存菜单信息
           this.$store.commit('menus/setopenMenus', []);
           this.$store.commit('menus/getmenusNav', data.menus);
+          this.$store.dispatch('routesList/setRoutesList', data.menus);
 
           // 记录用户信息
           this.$store.commit('userInfo/name', data.user_info.account);
@@ -240,6 +243,8 @@ export default {
             this.checkSocket();
           } catch (e) {}
           // console.log(this.findFirstNonNullChildren(res.data.menus), 1111);
+          PrevLoading.start();
+
           return this.$router.replace({
             path: this.findFirstNonNullChildren(res.data.menus).path || this.$routeProStr + '/',
           });

@@ -77,6 +77,7 @@ export default {
     },
     addTag(state, { route, type = 'unshift' }) {
       let router = getRouteTitleHandled(route);
+      console.log(router,'routerrouterrouter')
       if (!routeHasExist(state.tagNavList, router)) {
         if (type === 'push') state.tagNavList.push(router);
         else {
