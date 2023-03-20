@@ -163,7 +163,7 @@ class OtherOrderDao extends BaseDao
 
     public function search(array $where = [])
     {
-        return parent::search($where)->when(isset($where['name']) && $where['name'], function ($query) use($where){
+        return parent::search($where, false)->when(isset($where['name']) && $where['name'], function ($query) use($where){
             $query->where('uid', 'in', function ($que) use($where){
                 $nickname = trim($where['name']);
                 $que->name('user')->where('nickname', 'like', $nickname.'%')->field(['uid'])->select();

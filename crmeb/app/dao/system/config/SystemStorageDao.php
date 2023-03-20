@@ -68,7 +68,7 @@ class SystemStorageDao extends BaseDao
      */
     public function search(array $where = [])
     {
-        return parent::search($where)->when(isset($where['type']), function ($query) use ($where) {
+        return parent::search($where, false)->when(isset($where['type']), function ($query) use ($where) {
             $query->where('type', $where['type']);
         })->where('is_delete', 0)->when(isset($where['access_key']), function ($query) use ($where) {
             $query->where('access_key', $where['access_key']);

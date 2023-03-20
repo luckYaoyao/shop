@@ -39,7 +39,7 @@ class StoreCombinationDao extends BaseDao
      */
     public function search(array $where = [])
     {
-        return parent::search($where)->when(isset($where['pinkIngTime']), function ($query) use ($where) {
+        return parent::search($where, false)->when(isset($where['pinkIngTime']), function ($query) use ($where) {
             $time = time();
             [$startTime, $stopTime] = is_array($where['pinkIngTime']) ? $where['pinkIngTime'] : [$time, $time];
             $query->where('start_time', '<=', $startTime)->where('stop_time', '>=', $stopTime);
@@ -100,6 +100,7 @@ class StoreCombinationDao extends BaseDao
                 $query->page($page, $limit);
             })->order('sort desc,id desc')->select()->toArray();
     }
+
     /**获取列表
      * @param array $where
      * @param int $page
@@ -164,6 +165,7 @@ class StoreCombinationDao extends BaseDao
     {
         return $this->search($where)->with('getPrice')->page($page, $limit)->order('sort desc,id desc')->select()->toArray();
     }
+
     /**
      * 条件获取数量
      * @param array $where
@@ -173,6 +175,7 @@ class StoreCombinationDao extends BaseDao
     {
         return $this->search($where)->count();
     }
+
     /**
      * 页面设计获取商拼团列表
      * @param array $where
@@ -183,9 +186,11 @@ class StoreCombinationDao extends BaseDao
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function diyCombinationList(array $where, int $page, int $limit){
+    public function diyCombinationList(array $where, int $page, int $limit)
+    {
         return $this->search($where)->with('getCategory')->page($page, $limit)->order('sort desc,id desc')->select()->toArray();
     }
+
     /**
      * 根据id获取拼团数据
      * @param array $ids

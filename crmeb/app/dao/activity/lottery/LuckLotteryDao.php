@@ -34,7 +34,7 @@ class LuckLotteryDao extends BaseDao
 
     public function search(array $data = [])
     {
-        return parent::search($data)->when(isset($data['id']) && $data['id'], function ($query) use ($data) {
+        return parent::search($data, false)->when(isset($data['id']) && $data['id'], function ($query) use ($data) {
             $query->where('id', $data['id']);
         })->when(isset($data['start']) && $data['start'] !== '', function ($query) use ($data) {
             $time = time();

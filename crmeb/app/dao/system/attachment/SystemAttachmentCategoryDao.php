@@ -62,7 +62,7 @@ class SystemAttachmentCategoryDao extends BaseDao
      */
     public function search(array $where = [])
     {
-        return parent::search($where)->when(isset($where['id']), function ($query) use ($where) {
+        return parent::search($where, false)->when(isset($where['id']), function ($query) use ($where) {
             $query->whereIn('id', $where['id']);
         });
     }
