@@ -951,31 +951,36 @@ export default {
     },
     // 赠送会员等级
     giveLevel(id) {
-      giveLevelApi(id)
-        .then(async (res) => {
-          if (res.data.status === false) {
-            return this.$authLapse(res.data);
-          }
-          this.FromData = res.data;
-          this.$refs.edits.modals = true;
-        })
-        .catch((res) => {
-          this.$Message.error(res.msg);
-        });
+      this.$modalForm(giveLevelApi(id)).then(() => this.getList(1));
+
+      // giveLevelApi(id)
+      //   .then(async (res) => {
+      //     if (res.data.status === false) {
+      //       return this.$authLapse(res.data);
+      //     }
+
+      //     this.FromData = res.data;
+      //     this.$refs.edits.modals = true;
+      //   })
+      //   .catch((res) => {
+      //     this.$Message.error(res.msg);
+      //   });
     },
     // 赠送会员等级
     giveLevelTime(id) {
-      giveLevelTimeApi(id)
-        .then(async (res) => {
-          if (res.data.status === false) {
-            return this.$authLapse(res.data);
-          }
-          this.FromData = res.data;
-          this.$refs.edits.modals = true;
-        })
-        .catch((res) => {
-          this.$Message.error(res.msg);
-        });
+      this.$modalForm(giveLevelTimeApi(id)).then(() => this.getList(1));
+      
+      // giveLevelTimeApi(id)
+      //   .then(async (res) => {
+      //     if (res.data.status === false) {
+      //       return this.$authLapse(res.data);
+      //     }
+      //     this.FromData = res.data;
+      //     this.$refs.edits.modals = true;
+      //   })
+      //   .catch((res) => {
+      //     this.$Message.error(res.msg);
+      //   });
     },
     // 删除
     del(row, tit, num, name) {
@@ -1131,32 +1136,9 @@ export default {
           this.$Message.error(res.msg);
         });
     },
-    // getUserFrom(id) {
-    //   getUserData(id)
-    //     .then(async (res) => {
-    //       if (res.data.status === false) {
-    //         return this.$authLapse(res.data);
-    //       }
-    //       this.FromData = res.data;
-    //       this.$refs.edits.modals = true;
-    //     })
-    //     .catch((res) => {
-    //       this.$Message.error(res.msg);
-    //     });
-    // },
     // 获取积分余额表单
     getOtherFrom(id) {
-      editOtherApi(id)
-        .then(async (res) => {
-          if (res.data.status === false) {
-            return this.$authLapse(res.data);
-          }
-          this.FromData = res.data;
-          this.$refs.edits.modals = true;
-        })
-        .catch((res) => {
-          this.$Message.error(res.msg);
-        });
+      this.$modalForm(editOtherApi(id)).then(() => this.getList(1));
     },
     // 修改状态
     onchangeIsShow(row) {
