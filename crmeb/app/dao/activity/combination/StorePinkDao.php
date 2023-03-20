@@ -54,7 +54,7 @@ class StorePinkDao extends BaseDao
      */
     public function getList(array $where, int $page = 0, int $limit = 0)
     {
-        return $this->search($where)->when($where['k_id'] != 0, function ($query) use ($where) {
+        return $this->search($where, false)->when($where['k_id'] != 0, function ($query) use ($where) {
             $query->whereOr('id', $where['k_id']);
         })->with('getProduct')->when($page != 0, function ($query) use ($page, $limit) {
             $query->page($page, $limit);
