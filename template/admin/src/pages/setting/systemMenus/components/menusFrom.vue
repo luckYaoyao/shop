@@ -4,7 +4,6 @@
       v-model="modals"
       width="700"
       scrollable
-      footer-hide
       closable
       :title="titleFrom"
       :mask-closable="false"
@@ -60,9 +59,8 @@
             <FormItem label="路由地址：" prop="menu_path">
               <Input v-model="formValidate.menu_path" placeholder="请输入路由地址">
                 <template #prepend>
-                  <span>{{$routeProStr}}</span>
+                  <span>{{ $routeProStr }}</span>
                 </template>
-
               </Input>
             </FormItem>
           </Col>
@@ -107,12 +105,12 @@
               </RadioGroup>
             </FormItem>
           </Col>
-
-          <Col span="24">
-            <Button type="primary" long @click="handleSubmit('formValidate')" :disabled="valids">提交</Button>
-          </Col>
         </Row>
       </Form>
+      <template #footer>
+        <Button @click="modals = false">取消</Button>
+        <Button type="primary" @click="handleSubmit('formValidate')" :disabled="valids">提交</Button>
+      </template>
     </Modal>
     <Modal v-model="modal12" scrollable width="600" title="图标选择" footer-hide>
       <Input
