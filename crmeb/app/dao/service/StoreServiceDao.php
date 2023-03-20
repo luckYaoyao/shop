@@ -57,7 +57,7 @@ class StoreServiceDao extends BaseDao
      */
     public function getServiceList(array $where, int $page, int $limit)
     {
-        return $this->search($where)->with('user')->when($page && $limit, function ($query) use ($page, $limit) {
+        return $this->search($where, false)->with('user')->when($page && $limit, function ($query) use ($page, $limit) {
             $query->page($page, $limit);
         })->when(isset($where['noId']), function ($query) use ($where) {
             $query->whereNotIn('uid', $where['noId']);

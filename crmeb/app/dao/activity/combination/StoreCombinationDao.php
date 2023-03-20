@@ -66,6 +66,7 @@ class StoreCombinationDao extends BaseDao
      * 获取指定条件下的条数
      * @param array $where
      * @return int
+     * @throws \ReflectionException
      */
     public function count(array $where = []): int
     {
@@ -147,6 +148,7 @@ class StoreCombinationDao extends BaseDao
      * @param array $ids ids 为空返回所有
      * @param array $field
      * @return array
+     * @throws \ReflectionException
      */
     public function getPinkIdsArray(array $ids = [], array $field = [])
     {
@@ -172,6 +174,7 @@ class StoreCombinationDao extends BaseDao
      * 条件获取数量
      * @param array $where
      * @return int
+     * @throws \ReflectionException
      */
     public function getCount(array $where)
     {

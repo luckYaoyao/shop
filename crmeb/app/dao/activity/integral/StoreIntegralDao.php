@@ -54,7 +54,7 @@ class StoreIntegralDao extends BaseDao
      */
     public function getList(array $where, int $page = 0, int $limit = 0, string $field = '*')
     {
-        return $this->search($where)->where('is_del', 0)
+        return $this->search($where, false)->where('is_del', 0)
             ->when(isset($where['integral_time']) && $where['integral_time'] !== '', function ($query) use ($where) {
                 list($startTime, $endTime) = explode('-', $where['integral_time']);
                 $query->where('add_time', '>', strtotime($startTime))

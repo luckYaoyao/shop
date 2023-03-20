@@ -39,7 +39,7 @@ class StoreProductDao extends BaseDao
      */
     public function getCount(array $where)
     {
-        return $this->search($where)->when(isset($where['sid']) && $where['sid'], function ($query) use ($where) {
+        return $this->search($where, false)->when(isset($where['sid']) && $where['sid'], function ($query) use ($where) {
             $query->whereIn('id', function ($query) use ($where) {
                 $query->name('store_product_cate')->where('cate_id', $where['sid'])->field('product_id')->select();
             });
@@ -112,7 +112,7 @@ class StoreProductDao extends BaseDao
     public function getSearchList(array $where, int $page = 0, int $limit = 0, array $field = ['*'], array $with = ['couponId', 'description'])
     {
         if (isset($where['star'])) $with[] = 'star';
-        return $this->search($where)->with($with)->when($page != 0 && $limit != 0, function ($query) use ($page, $limit) {
+        return $this->search($where, false)->with($with)->when($page != 0 && $limit != 0, function ($query) use ($page, $limit) {
             $query->page($page, $limit);
         })->when(isset($where['sid']) && $where['sid'], function ($query) use ($where) {
             $query->whereIn('id', function ($query) use ($where) {

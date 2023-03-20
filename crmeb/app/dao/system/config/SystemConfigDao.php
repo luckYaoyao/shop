@@ -91,6 +91,7 @@ class SystemConfigDao extends BaseDao
      * 获取上传配置中的上传类型
      * @param string $configName
      * @return array
+     * @throws \ReflectionException
      */
     public function getUploadTypeList(string $configName)
     {
