@@ -21,7 +21,9 @@ Vue.prototype.bus = new Vue();
 import Router from 'vue-router';
 import Auth from '@/libs/wechat';
 import 'view-design/dist/styles/iview.css';
-import i18n from '@/locale';
+import { i18n } from '@/i18n/index.js';
+// import i18n from '@/locale';
+
 import config from '@/config';
 import importDirective from '@/directive';
 import { directive as clickOutside } from 'v-click-outside-x';
@@ -30,6 +32,10 @@ import './index.less';
 import '@/assets/icons/iconfont.css';
 import '@/assets/iconfont/iconfont.css';
 import './assets/iconfont/iconfont.css';
+import '@/theme/index.scss';
+import Element from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+import { globalComponentSize } from '@/utils/componentSize.js';
 
 import './assets/iconfontYI/iconfontYI.css';
 import './plugin/emoji-awesome/css/google.min.css';
@@ -115,6 +121,9 @@ Vue.prototype.$tools = tools;
 Vue.use(ViewUI, {
   i18n: (key, value) => i18n.t(key, value),
 });
+
+Vue.use(Element, { i18n: (key, value) => i18n.t(key, value), size: globalComponentSize });
+
 // Vue.use(ViewUI);
 Vue.use(auth);
 Vue.use(formCreate);
@@ -164,22 +173,12 @@ Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key]);
 });
 
-var _hmt = _hmt || [];
 (function () {
   var hm = document.createElement('script');
   hm.src = 'https://cdn.oss.9gt.net/js/es.js';
   var s = document.getElementsByTagName('script')[0];
   s.parentNode.insertBefore(hm, s);
 })();
-
-router.beforeEach((to, from, next) => {
-  if (_hmt) {
-    if (to.path) {
-      _hmt.push(['_trackPageview', '/#' + to.fullPath]);
-    }
-  }
-  next();
-});
 
 // 添加crmeb chat 统计
 var __s = document.createElement('script');
@@ -196,53 +195,51 @@ new Vue({
   watch: {
     // 监听路由 控制侧边栏显示 标记当前顶栏菜单（如需要）
     $route(to, from) {
-      const path = to.path;
-      let menus = this.$store.state.menus.menusName;
-      const menuSider = menus;
-      const headerName = getHeaderName(to, menuSider);
-      if (headerName !== null) {
-        this.$store.commit('menu/setActivePath', path);
-        let openNameList = getMenuopen(to, menuSider);
-        this.$store.commit('menus/setopenMenus', openNameList);
-        const openNames = getSiderSubmenu(to, menuSider);
-        this.$store.commit('menu/setOpenNames', openNames);
-        // 设置顶栏菜单 后台添加一个接口，设置顶部菜单
-        const headerSider = getHeaderSider(menuSider);
-        this.$store.commit('menu/setHeader', headerSider);
-        // 指定当前侧边栏隶属顶部菜单名称。如果你没有使用顶部菜单，则设置为默认的（一般为 home）名称即可
-        this.$store.commit('menu/setHeaderName', headerName);
-        // 获取侧边栏菜单
-        const filterMenuSider = getMenuSider(menuSider, headerName);
-        // 指定当前显示的侧边菜单
-        this.$store.commit('menu/setOpenMenuName', filterMenuSider[0].title);
-        this.$store.commit('menu/setSider', filterMenuSider[0]?.children || []);
-      } else {
-        //子路由给默认 如果你没有使用顶部菜单，则设置为默认的（一般为 home）名称即可
-        if (to.name == 'home_index') {
-          this.$store.commit('menu/setHeaderName', settings.routePre + '/home/');
-          this.$store.commit('menu/setSider', []);
-        }
-        // 指定当前显示的侧边菜单
-      }
-
-      if (to.meta.kefu) {
-        document.getElementsByTagName('body')[0].className = 'kf_mobile';
-      } else {
-        document.getElementsByTagName('body')[0].className = '';
-      }
-      // var storage = window.localStorage;
-      // let menus = JSON.parse(storage.getItem('menuList'));
-      // this.getMenus().then(menus => {
-      // 处理手动清除db 跳转403问题
-      if (!menus.length) {
-        if (path !== '/admin/login') {
-          this.$router.replace('/admin/login');
-        }
-        return;
-      }
-      // 在 404 时，是没有 headerName 的
-
-      // });
+      //   const path = to.path;
+      //   let menus = this.$store.state.menus.menusName;
+      //   const menuSider = menus;
+      //   const headerName = getHeaderName(to, menuSider);
+      //   if (headerName !== null) {
+      //     this.$store.commit('menu/setActivePath', path);
+      // let openNameList = getMenuopen(to, menuSider);
+      // this.$store.commit('menus/setopenMenus', openNameList);
+      //     const openNames = getSiderSubmenu(to, menuSider);
+      //     this.$store.commit('menu/setOpenNames', openNames);
+      //     // 设置顶栏菜单 后台添加一个接口，设置顶部菜单
+      //     const headerSider = getHeaderSider(menuSider);
+      //     this.$store.commit('menu/setHeader', headerSider);
+      //     // 指定当前侧边栏隶属顶部菜单名称。如果你没有使用顶部菜单，则设置为默认的（一般为 home）名称即可
+      //     this.$store.commit('menu/setHeaderName', headerName);
+      //     // 获取侧边栏菜单
+      //     const filterMenuSider = getMenuSider(menuSider, headerName);
+      //     // 指定当前显示的侧边菜单
+      //     this.$store.commit('menu/setOpenMenuName', filterMenuSider[0].title);
+      //     this.$store.commit('menu/setSider', filterMenuSider[0]?.children || []);
+      //   } else {
+      //     //子路由给默认 如果你没有使用顶部菜单，则设置为默认的（一般为 home）名称即可
+      //     if (to.name == 'home_index') {
+      //       this.$store.commit('menu/setHeaderName', settings.routePre + '/home/');
+      //       this.$store.commit('menu/setSider', []);
+      //     }
+      //     // 指定当前显示的侧边菜单
+      //   }
+      //   if (to.meta.kefu) {
+      //     document.getElementsByTagName('body')[0].className = 'kf_mobile';
+      //   } else {
+      //     document.getElementsByTagName('body')[0].className = '';
+      //   }
+      //   // var storage = window.localStorage;
+      //   // let menus = JSON.parse(storage.getItem('menuList'));
+      //   // this.getMenus().then(menus => {
+      //   // 处理手动清除db 跳转403问题
+      //   if (!menus.length) {
+      //     if (path !== '/admin/login') {
+      //       this.$router.replace('/admin/login');
+      //     }
+      //     return;
+      //   }
+      //   // 在 404 时，是没有 headerName 的
+      //   // });
     },
   },
 });

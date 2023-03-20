@@ -8,7 +8,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +---------------------------------------------------------------------
 
-import BasicLayout from '@/components/main';
+import LayoutMain from '@/layout';
 import setting  from '@/setting'
 let routePre = setting.routePre;
 
@@ -24,7 +24,7 @@ export default {
   meta: {
     auth: ['admin-app'],
   },
-  component: BasicLayout,
+  component: LayoutMain,
   children: [
     {
       path: 'wechat/setting/menus/index',

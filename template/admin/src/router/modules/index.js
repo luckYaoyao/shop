@@ -8,7 +8,7 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +---------------------------------------------------------------------
 
-import BasicLayout from '@/components/main';
+import LayoutMain from '@/layout';
 import setting  from '@/setting'
 let routePre = setting.routePre;
 
@@ -16,7 +16,7 @@ let routePre = setting.routePre;
 //   path: '/',
 //   name: 'home',
 //   redirect: '/admin/home',
-//   component: BasicLayout,
+//   component: LayoutMain,
 //   meta: {
 //     hideInMenu: true,
 //     notCache: true,
@@ -49,10 +49,10 @@ export default {
     name: `${pre}index`,
   },
   meta,
-  component: BasicLayout,
+  component: LayoutMain,
   children: [
     {
-      path: routePre+'/home/',
+      path: routePre+'/home',
       name: `${pre}index`,
       header: 'home',
       meta: {

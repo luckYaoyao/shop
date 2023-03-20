@@ -196,8 +196,6 @@
 <script crossorigin="anonymous">
 import { categoryList, diyGetInfo, diySave, getUrl, setDefault, recovery } from '@/api/diy';
 import vuedraggable from 'vuedraggable';
-import mPage from '@/components/mobilePage/index.js';
-import mConfig from '@/components/mobileConfig/index.js';
 import footPage from '@/components/pagesFoot';
 import { mapState } from 'vuex';
 import html2canvas from 'html2canvas';
@@ -209,9 +207,7 @@ export default {
   components: {
     footPage,
     html2canvas,
-    draggable: vuedraggable,
-    ...mPage,
-    ...mConfig,
+    draggable: vuedraggable
   },
   filters: {
     filterTxt(val) {
