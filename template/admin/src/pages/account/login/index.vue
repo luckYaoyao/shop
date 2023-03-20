@@ -221,9 +221,6 @@ export default {
           this.$store.commit('userInfo/version', data.version);
           this.$store.commit('userInfo/newOrderAudioLink', data.newOrderAudioLink);
           this.login_captcha = 0;
-
-          // if (this.jigsaw) this.jigsaw.reset();
-
           try {
             if (data.queue === false) {
               this.$Notice.warning({
@@ -242,7 +239,6 @@ export default {
 
             this.checkSocket();
           } catch (e) {}
-          // console.log(this.findFirstNonNullChildren(res.data.menus), 1111);
           PrevLoading.start();
 
           return this.$router.replace({
@@ -258,6 +254,29 @@ export default {
       setTimeout((e) => {
         this.loading = false;
       }, 1000);
+    },
+    formatTwoStageRoutes(arr) {
+      if (arr.length <= 0) return false;
+      const newArr = [];
+      const cacheList = [];
+      arr.forEach((v) => {
+        if (v?.meta?.keepAlive) {
+          newArr.push({ ...v });
+          cacheList.push(v.name);
+          this.$store.dispatch('keepAliveNames/setCacheKeepAlive', cacheList);
+        }
+      });
+      return newArr;
+    },
+    // 多级嵌套数组处理成一维数组
+    formatFlatteningRoutes(arr) {
+      if (arr.length <= 0) return false;
+      for (let i = 0; i < arr.length; i++) {
+        if (arr[i].children) {
+          arr = arr.slice(0, i + 1).concat(arr[i].children, arr.slice(i + 1));
+        }
+      }
+      return arr;
     },
     findFirstNonNullChildren(arr) {
       // 如果数组为空，返回null
@@ -315,6 +334,7 @@ export default {
       let expiresTimeNum = expiresTime - nowTimeNum;
       return parseFloat(parseFloat(parseFloat(expiresTimeNum / 60) / 60) / 24);
     },
+
     closefail() {
       // if (this.jigsaw) this.jigsaw.reset();
       this.$Message.error('校验错误');

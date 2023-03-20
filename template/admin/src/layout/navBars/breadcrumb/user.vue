@@ -199,23 +199,21 @@ export default {
                 instance.confirmButtonText = this.$t('message.user.logOutExit');
                 setTimeout(() => {
                   AccountLogout().then((res) => {
-                    that.$Message.success('您已成功退出');
-                    that.$router.replace({ path: `${settings.routePre}/login` });
-                    localStorage.clear();
+                    this.$Message.success('您已成功退出');
+                    this.$router.replace({ path: `${settings.routePre}/login` });
                     removeCookies('token');
                     removeCookies('expires_time');
                     removeCookies('uuid');
-                    sessionStorage.clear();
                     // window.location.reload()
+                    setTimeout(() => {
+                      done();
+                      setTimeout(() => {
+                        instance.confirmButtonLoading = false;
+                      }, 300);
+                    }, 3000);
                   });
-                  done();
-                  setTimeout(() => {
-                    instance.confirmButtonLoading = false;
-                  }, 300);
                 }, 700);
               } else {
-                console.log('您已成功退出1');
-
                 done();
               }
             },
