@@ -86,7 +86,6 @@ export default {
       if (path) this.$router.push(path);
       else this.$router.push(path);
       // 一个路由设置自动收起菜单
-      // https://gitee.com/lyt-top/vue-next-admin/issues/I6HW7H
       if (!v.children || v.children.length <= 1) this.$store.state.themeConfig.themeConfig.isCollapse = true;
       else if (v.children.length > 1) this.$store.state.themeConfig.themeConfig.isCollapse = false;
       // this.bus.$emit('setSendColumnsChildren', getMenuSider(this.columnsAsideList, path));
@@ -110,7 +109,6 @@ export default {
       }
       this.onColumnsAsideDown(resData.item[0].k);
       // 刷新时，初始化一个路由设置自动收起菜单
-      // https://gitee.com/lyt-top/vue-next-admin/issues/I6HW7H
       resData.children.length > 0
         ? (this.$store.state.themeConfig.themeConfig.isCollapse = false)
         : (this.$store.state.themeConfig.themeConfig.isCollapse = true);

@@ -98,11 +98,6 @@ export default {
 		foundMsg: '您可以先檢查網址，然後重新輸入或給我們迴響問題。',
 		foundBtn: '返回首頁',
 	},
-	noAccess: {
-		accessTitle: '您未被授權，沒有操作許可權~',
-		accessMsg: '聯繫方式：加QQ群探討665452019',
-		accessBtn: '重新授權',
-	},
 	layout: {
 		configTitle: '佈局配寘',
 		oneTitle: '全域主題',
