@@ -70,9 +70,9 @@ class StoreOrderDeliveryServices extends BaseServices
             // 检测快递公司编码
             /** @var ExpressServices $expressServices */
             $expressServices = app()->make(ExpressServices::class);
-           if (!$expressServices->be(['code' => $data['delivery_code']])) {
-               throw new AdminException(410324);
-           }
+            if (!$expressServices->be(['code' => $data['delivery_code']])) {
+                throw new AdminException(410324);
+            }
         }
 
         /** @var StoreOrderRefundServices $storeOrderRefundServices */
@@ -609,6 +609,7 @@ class StoreOrderDeliveryServices extends BaseServices
                 /** @var StoreProductVirtualServices $virtualService */
                 $virtualService = app()->make(StoreProductVirtualServices::class);
                 $virtual = $virtualService->get(['attr_unique' => $unique, 'uid' => 0]);
+                if (!$virtual) throw new ApiException(100026);
                 $virtual->order_id = $orderInfo['order_id'];
                 $virtual->uid = $orderInfo['uid'];
                 $virtual->save();
