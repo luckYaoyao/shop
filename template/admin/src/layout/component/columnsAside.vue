@@ -74,6 +74,7 @@ export default {
   methods: {
     // 设置菜单高亮位置移动
     setColumnsAsideMove(k) {
+      console.log(k);
       if (k === undefined) return false;
       const els = this.$refs.columnsAsideOffsetTopRefs;
       this.liIndex = k;
@@ -140,12 +141,16 @@ export default {
     },
     // tagsView 点击时，根据路由查找下标 columnsAsideList，实现左侧菜单高亮
     setColumnsMenuHighlight(path) {
-      this.routeSplit = path.split('/');
-      this.routeSplit.shift();
-      const routeFirst = `/${this.routeSplit[0]}`;
-      const currentSplitRoute = this.columnsAsideList.find((v) => v.path === routeFirst);
+      // this.routeSplit = path.split('/');
+      // this.routeSplit.shift();
+      // const routeFirst = `/${this.routeSplit[0]}`;
+      console.log(path, this.columnsAsideList);
+      const currentSplitRoute = this.columnsAsideList.find((v) => v.path === path);
       console.log(currentSplitRoute, 'currentSplitRoute');
-      if (!currentSplitRoute) return false;
+      if (!currentSplitRoute) {
+        // this.onColumnsAsideDown(0);
+        return false;
+      }
       // 延迟拿值，防止取不到
       setTimeout(() => {
         this.onColumnsAsideDown(currentSplitRoute.k);
@@ -161,7 +166,6 @@ export default {
           ? (this.difference = 3)
           : (this.difference = 0);
         if (val.routesList.routesList.length === this.columnsAsideList.length) return false;
-        // this.setFilterRoutes();
       },
       deep: true,
     },
@@ -171,6 +175,8 @@ export default {
         this.setColumnsMenuHighlight(to.path);
         // this.setColumnsAsideMove();
         let HeadName = getHeaderName(to, this.columnsAsideList);
+        console.log(to, '1231');
+
         let asideList = getMenuSider(this.columnsAsideList, HeadName)[0]?.children;
         const resData = this.setSendChildren(HeadName);
         if (resData.length <= 0) return false;

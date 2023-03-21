@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div class="foot-box" @click="onGoToGiteeClick" v-if="newsList.length > 0">{{ $t('message.user.newGo') }}</div>
+    <!-- <div class="foot-box" @click="onGoToGiteeClick" v-if="newsList.length > 0">{{ $t('message.user.newGo') }}</div> -->
   </div>
 </template>
 

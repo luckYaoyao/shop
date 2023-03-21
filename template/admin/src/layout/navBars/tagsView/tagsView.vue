@@ -3,7 +3,7 @@
     <el-scrollbar ref="scrollbarRef" @wheel.native.prevent="onHandleScroll">
       <ul class="layout-navbars-tagsview-ul" :class="setTagsStyle" ref="tagsUlRef">
         <li
-          v-for="(v, k) in tagNavList"
+          v-for="(v, k) in tagsViewList"
           :key="k"
           class="layout-navbars-tagsview-ul-li"
           :data-name="v.name"
@@ -46,7 +46,7 @@ export default {
   data() {
     return {
       userInfo: {},
-      tagsViewList: [],
+      // tagsViewList: [],
       tagsDropdown: {
         x: '',
         y: '',
@@ -65,7 +65,7 @@ export default {
     setTagsStyle() {
       return this.$store.state.themeConfig.themeConfig.tagsStyle;
     },
-    tagNavList() {
+    tagsViewList() {
       return this.$store.state.app.tagNavList;
     },
   },
@@ -74,9 +74,11 @@ export default {
     this.bus.$on('onCurrentContextmenuClick', (data) => {
       this.onCurrentContextmenuClick(data);
     });
+    console.log(this.$store.state.app.tagNavList);
+    this.tagsViewRoutesList = this.$store.state.app.tagNavList;
   },
   mounted() {
-    this.getTagsViewRoutes();
+    // this.getTagsViewRoutes();
   },
   methods: {
     ...mapMutations(['setBreadCrumb', 'setTagNavList', 'addTag', 'setLocal', 'setHomeRoute', 'closeTag']),
@@ -192,7 +194,7 @@ export default {
     },
     // 存储 tagsViewList 到浏览器临时缓存中，页面刷新时，保留记录
     addBrowserSetSession(tagNavList) {
-      this.$store.commit('app/tagNavList', tagNavList);
+      this.setTagNavList(tagNavList);
     },
     // 初始化设置了 tagsView 数据
     initTagsViewList() {
@@ -259,13 +261,13 @@ export default {
     },
     // 2、关闭当前 tagsView：当前项 `tags-view` icon 关闭时点击，如果是设置了固定的（isAffix），不可以关闭
     closeCurrentTagsView(path) {
-      this.tagNavList.map((v, k, arr) => {
-        if (!v.isAffix) {
+      this.tagsViewList.map((v, k, arr) => {
+        if (!v.meta.isAffix) {
           if (v.path === path) {
-            this.tagNavList.splice(k, 1);
+            this.tagsViewList.splice(k, 1);
             setTimeout(() => {
               // 最后一个
-              if (this.tagNavList.length === k)
+              if (this.tagsViewList.length === k)
                 this.$router.push({ path: arr[arr.length - 1].path, query: arr[arr.length - 1].query });
               // 否则，跳转到下一个
               else this.$router.push({ path: arr[k].path, query: arr[k].query });
@@ -273,28 +275,31 @@ export default {
           }
         }
       });
-      this.setTagNavList();
+      this.setTagNavList(this.tagsViewList);
       //   this.addBrowserSetSession(this.tagNavList);
     },
     // 3、关闭其它 tagsView：如果是设置了固定的（isAffix），不进行关闭
     closeOtherTagsView(path) {
-      this.tagsViewList = [];
+      let tagsViewList = [];
       this.tagsViewRoutesList.map((v) => {
-        if (v.isAffix && !v.isHide) this.tagsViewList.push({ ...v });
+        if (v.meta.isAffix && !v.meta.isHide) tagsViewList.push({ ...v });
+        if ((v.path = path)) tagsViewList.push({ ...v });
+        console.log(tagsViewList);
       });
-      this.addTagsView(path);
+      this.addBrowserSetSession(tagsViewList);
+      // this.addTagsView(path);
     },
     // 4、关闭全部 tagsView：如果是设置了固定的（isAffix），不进行关闭
     closeAllTagsView(path) {
-      this.tagsViewList = [];
+      let tagsViewList = [];
       this.tagsViewRoutesList.map((v) => {
-        if (v.isAffix && !v.isHide) {
-          this.tagsViewList.push({ ...v });
-          if (this.tagsViewList.some((v) => v.path === path)) this.$router.push({ path, query: this.$route.query });
+        if (v.meta.isAffix && !v.meta.isHide) {
+          tagsViewList.push({ ...v });
+          if (tagsViewList.some((v) => v.path === path)) this.$router.push({ path, query: this.$route.query });
           else this.$router.push({ path: v.path, query: this.$route.query });
         }
       });
-      this.addBrowserSetSession(this.tagsViewList);
+      this.addBrowserSetSession(tagsViewList);
     },
   },
   watch: {

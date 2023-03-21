@@ -66,9 +66,11 @@ export default {
     this.bus.$on('setSendColumnsChildren', (res) => {
       console.log('收到了', res);
       this.menuList = res || [];
+      this.menuList.length > 0
+        ? (this.$store.state.themeConfig.themeConfig.isCollapse = false)
+        : (this.$store.state.themeConfig.themeConfig.isCollapse = true);
     });
     this.bus.$on('layoutMobileResize', (res) => {
-
       this.initMenuFixed(res.clientWidth);
     });
     // 菜单滚动条监听
