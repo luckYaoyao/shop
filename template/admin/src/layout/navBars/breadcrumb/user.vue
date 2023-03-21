@@ -227,7 +227,7 @@ export default {
             .catch(() => {});
         }, 150);
       } else if (path === 'wareHouse') {
-        window.open('https://gitee.com/lyt-top/vue-next-admin');
+        
       } else {
         this.$router.push(path);
       }

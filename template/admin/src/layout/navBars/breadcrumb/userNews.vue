@@ -166,7 +166,6 @@ export default {
     },
     // 前往通知中心点击
     onGoToGiteeClick() {
-      window.open('https://gitee.com/lyt-top/vue-next-admin');
     },
     getNotict() {
       jnoticeRequest()

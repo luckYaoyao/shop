@@ -21,7 +21,6 @@ const themeConfigModule = {
 			 * 菜单 / 顶栏
 			 * 请注意：
 			 * 需要同时修改 `/@/theme/common/var.scss` 对应的值，
-			 * 不提供像 vue-next-admin 一样的实现
 			 */
 			// 默认顶栏导航背景颜色
 			topBar: '#ffffff',

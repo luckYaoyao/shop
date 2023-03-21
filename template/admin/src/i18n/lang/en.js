@@ -98,11 +98,6 @@ export default {
 		foundMsg: 'You can check the web address first, and then re-enter or give us feedback.',
 		foundBtn: 'Back to home page',
 	},
-	noAccess: {
-		accessTitle: 'You are not authorized to operate~',
-		accessMsg: 'Contact information: add QQ group discussion 665452019',
-		accessBtn: 'Reauthorization',
-	},
 	layout: {
 		configTitle: 'Layout configuration',
 		oneTitle: 'Global Themes',
