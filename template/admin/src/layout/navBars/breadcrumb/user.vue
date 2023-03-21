@@ -59,7 +59,7 @@
         <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="/home">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
+        <el-dropdown-item :command="homePath">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
         <!-- <el-dropdown-item command="wareHouse">{{ $t('message.user.dropdown6') }}</el-dropdown-item>
         <el-dropdown-item command="/personal">{{ $t('message.user.dropdown2') }}</el-dropdown-item>
         <el-dropdown-item command="/404">{{ $t('message.user.dropdown3') }}</el-dropdown-item>
@@ -88,6 +88,7 @@ export default {
       isShowUserNewsPopover: false,
       disabledI18n: 'zh-cn',
       disabledSize: '',
+      homePath: `${settings.routePre}/home`,
     };
   },
   computed: {
@@ -227,7 +228,6 @@ export default {
             .catch(() => {});
         }, 150);
       } else if (path === 'wareHouse') {
-        
       } else {
         this.$router.push(path);
       }
