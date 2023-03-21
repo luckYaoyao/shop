@@ -1,76 +1,88 @@
 <template>
   <div>
-    <div class="i-layout-page-header header-title">
-      <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
-    </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Table
-        ref="selection"
-        :columns="columns4"
-        :data="tabList"
-        :loading="loading3"
-        no-data-text="暂无数据"
-        highlight-row
-        size="small"
-        no-filtered-data-text="暂无筛选结果"
-      >
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="ImportFile(row)">导入</a>
-          <Divider type="vertical" />
-          <a @click="del(row, '删除该备份', index)">删除</a>
-          <Divider type="vertical" />
-          <a @click="download(row)">下载</a>
-        </template>
-      </Table>
+    <Card :bordered="false" dis-hover class="ivu-mt listbox">
+      <Tabs @on-click="onClickTab" class="mb30">
+        <TabPane label="数据库列表" >
+          <Card :bordered="false" dis-hover class="tableBox mt10">
+            <div slot="title">
+<!--              <span class="ivu-pl-8 mr10">数据库表列表</span>-->
+              <Button type="primary" class="mr10" @click="getBackup">备份</Button>
+              <Button type="primary" class="mr10" @click="getOptimize">优化表</Button>
+              <Button type="primary" class="mr10" @click="getRepair">修复表</Button>
+              <Button type="primary" class="mr10" @click="exportData(1)">导出文件</Button>
+            </div>
+            <Table
+                ref="selection"
+                :columns="columns"
+                :data="tabList2"
+                :loading="loading"
+                highlight-row
+                no-data-text="暂无数据"
+                @on-selection-change="onSelectTab"
+                size="small"
+                no-filtered-data-text="暂无筛选结果"
+            >
+              <template slot-scope="{ row, index }" slot="action">
+                <a @click="Info(row)">详情</a>
+              </template>
+            </Table>
+          </Card>
+          <!-- 详情模态框-->
+          <Drawer
+              :closable="false"
+              width="740"
+              v-model="modals"
+              closable
+              :title="'[ ' + rows.name + ' ]' + rows.comment"
+          >
+<!--          <Modal-->
+<!--              v-model="modals"-->
+<!--              class="tableBox"-->
+<!--              scrollable-->
+<!--              footer-hide-->
+<!--              closable-->
+<!--              :title="'[ ' + rows.name + ' ]' + rows.comment"-->
+<!--              :mask-closable="false"-->
+<!--              width="750"-->
+<!--          >-->
+            <Table
+                ref="selection"
+                :columns="columns2"
+                :data="tabList3"
+                :loading="loading2"
+                no-data-text="暂无数据"
+                highlight-row
+                max-height="600"
+                size="small"
+                no-filtered-data-text="暂无筛选结果"
+            >
+            </Table>
+          </Drawer>
+        </TabPane>
+        <TabPane label="备份列表">
+          <Card :bordered="false" dis-hover class="">
+            <Table
+                ref="selection"
+                :columns="columns4"
+                :data="tabList"
+                :loading="loading3"
+                no-data-text="暂无数据"
+                highlight-row
+                size="small"
+                no-filtered-data-text="暂无筛选结果"
+            >
+              <template slot-scope="{ row, index }" slot="action">
+                <a @click="ImportFile(row)">导入</a>
+                <Divider type="vertical" />
+                <a @click="del(row, '删除该备份', index)">删除</a>
+                <Divider type="vertical" />
+                <a @click="download(row)">下载</a>
+              </template>
+            </Table>
+          </Card>
+        </TabPane>
+      </Tabs>
     </Card>
-    <Card :bordered="false" dis-hover class="ivu-mt tableBox">
-      <div slot="title">
-        <span class="ivu-pl-8 mr10">数据库表列表</span>
-        <Button type="primary" class="mr10" @click="getBackup">备份</Button>
-        <Button type="primary" class="mr10" @click="getOptimize">优化表</Button>
-        <Button type="primary" class="mr10" @click="getRepair">修复表</Button>
-        <Button type="primary" class="mr10" @click="exportData(1)">导出文件</Button>
-      </div>
-      <Table
-        ref="selection"
-        :columns="columns"
-        :data="tabList2"
-        :loading="loading"
-        highlight-row
-        no-data-text="暂无数据"
-        @on-selection-change="onSelectTab"
-        size="small"
-        no-filtered-data-text="暂无筛选结果"
-      >
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="Info(row)">详情</a>
-        </template>
-      </Table>
-    </Card>
-    <!-- 详情模态框-->
-    <Modal
-      v-model="modals"
-      class="tableBox"
-      scrollable
-      footer-hide
-      closable
-      :title="'[ ' + rows.name + ' ]' + rows.comment"
-      :mask-closable="false"
-      width="750"
-    >
-      <Table
-        ref="selection"
-        :columns="columns2"
-        :data="tabList3"
-        :loading="loading2"
-        no-data-text="暂无数据"
-        highlight-row
-        max-height="600"
-        size="small"
-        no-filtered-data-text="暂无筛选结果"
-      >
-      </Table>
-    </Modal>
   </div>
 </template>
 
