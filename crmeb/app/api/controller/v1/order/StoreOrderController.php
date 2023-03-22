@@ -211,9 +211,13 @@ class StoreOrderController
     }
 
     /**
+     * @param Request $request
      * @param $orderId
      * @param string $type
      * @return \think\Response
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/2/13
@@ -223,7 +227,6 @@ class StoreOrderController
         if (!$orderId) {
             return app('json')->fail(100100);
         }
-
         return app('json')->success($this->services->getCashierInfo((int)$request->uid(), $orderId, $type));
     }
 
