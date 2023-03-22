@@ -34,7 +34,10 @@
           <Col span="12">实际支付：{{ orderDatalist.orderInfo.pay_price }}</Col>
         </Row>
         <Row class="mb10">
-          <Col span="12" class="fontColor3 mb10" v-if="parseFloat(orderDatalist.orderInfo.refund_price)"
+          <Col
+            span="12"
+            class="fontColor3 mb10"
+            v-if="parseFloat(orderDatalist.orderInfo.refund_price) && orderDatalist.orderInfo.refund_type != 3"
             >退款金额：{{ parseFloat(orderDatalist.orderInfo.refund_price) }}</Col
           >
           <Col span="12" class="fontColor3 mb10" v-if="parseFloat(orderDatalist.orderInfo.use_integral)"
