@@ -172,7 +172,7 @@
 				<view class='item acea-row row-between-wrapper'>
 					<view>{{$t(`商品总价`)}}：</view>
 					<view class='money'>
-						{{$t(`￥`)}}{{(parseFloat(priceGroup.totalPrice)+parseFloat(priceGroup.vipPrice)).toFixed(2)}}
+						{{$t(`￥`)}}{{totalPriceAll || ''}}
 					</view>
 				</view>
 				<view class='item acea-row row-between-wrapper'
@@ -388,6 +388,7 @@
 				priceGroup: {},
 				animated: false,
 				totalPrice: 0,
+				totalPriceAll: 0,
 				integralRatio: "0",
 				pagesUrl: "",
 				orderKey: "",
@@ -819,6 +820,7 @@
 					that.$set(that, 'store_self_mention', res.data.store_self_mention);
 					that.$set(that, 'virtual_type', res.data.virtual_type || 0);
 					that.$set(that, 'integral_open', res.data.integral_open);
+					this.totalPriceAll=  (parseFloat(res.data.priceGroup.totalPrice) + parseFloat(res.data.priceGroup.vipPrice)).toFixed(2)
 					uni.hideLoading()
 					//微信支付是否开启
 					that.cartArr[0].payStatus = res.data.pay_weixin_open || 0
