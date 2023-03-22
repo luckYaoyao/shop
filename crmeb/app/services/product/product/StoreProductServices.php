@@ -654,7 +654,7 @@ class StoreProductServices extends BaseServices
 
                 //采集商品下载图片
                 if ($type == -1) {
-                    $s_image_down = $d_image_down = [];
+                    $s_image_down = [];
                     //下载商品轮播图
                     foreach ($slider_image as $s_image) {
                         if (sys_config('queue_open', 0) == 1) {
@@ -671,8 +671,7 @@ class StoreProductServices extends BaseServices
                         if (sys_config('queue_open', 0) == 1) {
                             ProductCopyJob::dispatch('copyDescriptionImage', [$res->id, $description, $d_image, count($match[1])]);
                         } else {
-                            if (!is_int(strpos($d_image, 'http'))) $d_image = 'http://' . ltrim($d_image, '\//');
-                            $d_image_down[] = $d_img = app()->make(CopyTaobaoServices::class)->downloadCopyImage($d_image);
+                            $d_img = app()->make(CopyTaobaoServices::class)->downloadCopyImage(!is_int(strpos($d_image, 'http')) ? 'http://' . ltrim($d_image, '\//') : $d_image);
                             $description = str_replace($d_image, $d_img, $description);
                         }
                     }
