@@ -101,6 +101,7 @@ export default {
 	layout: {
 		configTitle: '佈局配寘',
 		oneTitle: '全域主題',
+		menuBag: '菜單背景色',
 		twoTitle: '選單 / 頂欄',
 		twoTopBar: '頂欄背景',
 		twoMenuBar: '選單背景',

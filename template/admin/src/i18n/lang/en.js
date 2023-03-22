@@ -101,6 +101,7 @@ export default {
 	layout: {
 		configTitle: 'Layout configuration',
 		oneTitle: 'Global Themes',
+		menuBag: 'Menu BG Color',
 		twoTitle: 'Menu / top bar',
 		twoTopBar: 'Top bar background',
 		twoMenuBar: 'Menu background',

@@ -18,6 +18,13 @@
             </el-color-picker>
           </div>
         </div>
+        <div class="layout-breadcrumb-seting-bar-flex">
+          <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.menuBag') }}</div>
+          <div class="layout-breadcrumb-seting-bar-flex-value">
+            <el-color-picker v-model="getThemeConfig.menuBgColor" size="small" @change="onMenuBgColorChange">
+            </el-color-picker>
+          </div>
+        </div>
         <div class="layout-breadcrumb-seting-bar-flex mt15">
           <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fourIsDark') }}</div>
           <div class="layout-breadcrumb-seting-bar-flex-value">
@@ -331,6 +338,12 @@ export default {
           `${useChangeColor().getLightColor(this.getThemeConfig.primary, i / 10)}`,
         );
       }
+      this.setLocalThemeConfig();
+    },
+    onMenuBgColorChange() {
+      if (!this.getThemeConfig.menuBgColor) return;
+      // 颜色加深
+      document.documentElement.style.setProperty('--prev-bg-menuBar', this.getThemeConfig.menuBgColor);
       this.setLocalThemeConfig();
     },
     // 深色模式

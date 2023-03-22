@@ -101,6 +101,7 @@ export default {
 	layout: {
 		configTitle: '布局配置',
 		oneTitle: '全局主题',
+		menuBag: '菜单背景色',
 		twoTitle: '菜单 / 顶栏',
 		twoTopBar: '顶栏背景',
 		twoMenuBar: '菜单背景',

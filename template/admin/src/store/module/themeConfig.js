@@ -14,6 +14,8 @@ const themeConfigModule = {
 			 */
 			// 默认 primary 主题颜色
 			primary: '#409eff',
+			// 菜单背景色
+			menuBgColor: '#282c34',
 			// 是否开启深色模式
 			isIsDark: false,
 
@@ -27,11 +29,11 @@ const themeConfigModule = {
 			// 默认顶栏导航字体颜色
 			topBarColor: '#606266',
 			// 默认菜单导航背景颜色
-			menuBar: '#545c64',
+			menuBar: '#282c34',
 			// 默认菜单导航字体颜色
 			menuBarColor: '#eaeaea',
 			// 默认分栏菜单背景颜色
-			columnsMenuBar: '#545c64',
+			columnsMenuBar: '#282c34',
 			// 默认分栏菜单字体颜色
 			columnsMenuBarColor: '#e6e6e6',
 
