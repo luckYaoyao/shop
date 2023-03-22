@@ -5,7 +5,7 @@
         <span>
           <Button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
         </span>
-        <Divider type="vertical"/>
+        <Divider type="vertical" />
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
       </div>
     </div>
@@ -170,9 +170,15 @@ export default {
     },
     bindDelete(index) {
       this.goodsList.splice(index, 1);
+      if (this.tabList.length) {
+        let i = this.tabList.findIndex((e) => e.id == row.id);
+        this.tabList.splice(i, 1);
+      }
     },
     del(row, index) {
       this.tabList.splice(index, 1);
+      let i = this.goodsList.findIndex((e) => e.product_id == row.id);
+      this.goodsList.splice(i, 1);
     },
     // 提交
     bindSub() {
