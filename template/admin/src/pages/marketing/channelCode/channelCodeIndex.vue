@@ -86,7 +86,11 @@
             </template>
             <template slot-scope="{ row, index }" slot="add_time">
               <span v-if="row.stop === 0"> 永久 </span>
-              <span v-if="row.stop === 1"> {{ row.add_time }} - {{ row.end_time }}</span>
+              <span v-if="row.stop === 1">
+                <div>{{ row.add_time }}</div>
+                <div>-</div>
+                <div>{{ row.end_time }}</div>
+              </span>
               <span v-if="row.stop === -1">已过期</span>
             </template>
             <template slot-scope="{ row, index }" slot="status">
@@ -256,31 +260,36 @@ export default {
           title: '二维码',
           slot: 'image',
           width: 80,
+          align: 'center',
         },
         {
           title: '二维码名称',
           key: 'name',
-          minWidth: 120,
+          minWidth: 80,
+          align: 'center',
         },
         {
           title: '总关注数',
           key: 'follow',
-          minWidth: 120,
+          minWidth: 80,
+          align: 'center',
         },
         {
           title: '昨日新增关注',
           key: 'y_follow',
-          minWidth: 120,
+          minWidth: 80,
+          align: 'center',
         },
         {
           title: '用户标签',
           slot: 'label_name',
-          minWidth: 60,
+          minWidth: 80,
         },
         {
           title: '时间',
           slot: 'add_time',
-          minWidth: 120,
+          width: 140,
+          align: 'center',
         },
         {
           title: '关联推广员',
@@ -291,6 +300,7 @@ export default {
           title: '状态',
           slot: 'status',
           minWidth: 60,
+          align: 'center',
         },
         {
           title: '操作',
