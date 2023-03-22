@@ -768,7 +768,7 @@ HTML;
         }
         /** @var StoreOrderCreateServices $createServices */
         $createServices = app()->make(StoreOrderCreateServices::class);
-        $data['order_id'] = $createServices->getNewOrderId();
+        $data['order_id'] = $createServices->getNewOrderId('cp');
         /** @var StoreOrderStatusServices $services */
         $services = app()->make(StoreOrderStatusServices::class);
         return $this->transaction(function () use ($id, $data, $services) {
@@ -2599,6 +2599,7 @@ HTML;
     }
 
     /**
+     * @param int $uid
      * @param string $orderId
      * @param string $type
      * @return array
@@ -2630,14 +2631,14 @@ HTML;
                 if (!$info) {
                     throw new PayException('您支付的订单不存在');
                 }
-                $orderCancelTime = (int)sys_config('order_cancel_time', 0);
-                $orderActivityTime = (int)sys_config('order_activity_time', 0);
+                $orderCancelTime = sys_config('order_cancel_time', 0);
+                $orderActivityTime = sys_config('order_activity_time', 0);
                 if ($info->combination_id) {
-                    $time = ((int)sys_config('order_pink_time', 0) ?: $orderActivityTime) * 60 * 60 + ((int)$info->add_time);
+                    $time = (sys_config('order_pink_time', 0) ?: $orderActivityTime) * 60 * 60 + ((int)$info->add_time);
                 } else if ($info->seckill_id) {
-                    $time = ((int)sys_config('order_seckill_time', 0) ?: $orderActivityTime) * 60 * 60 + ((int)$info->add_time);
+                    $time = (sys_config('order_seckill_time', 0) ?: $orderActivityTime) * 60 * 60 + ((int)$info->add_time);
                 } else if ($info->bargain_id) {
-                    $time = ((int)sys_config('order_bargain_time', 0) ?: $orderActivityTime) * 60 * 60 + ((int)$info->add_time);
+                    $time = (sys_config('order_bargain_time', 0) ?: $orderActivityTime) * 60 * 60 + ((int)$info->add_time);
                 } else {
                     $time = $orderCancelTime * 60 * 60 + ((int)$info->add_time);
                 }
