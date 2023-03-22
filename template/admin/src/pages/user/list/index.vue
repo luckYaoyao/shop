@@ -90,7 +90,7 @@
               </Col>
             </Col>
             <Col span="18">
-              <Col v-bind="grid">
+              <!-- <Col v-bind="grid">
                 <FormItem label="性别：" label-for="sex">
                   <RadioGroup v-model="userFrom.sex" type="button">
                     <Radio label="">
@@ -107,7 +107,7 @@
                     </Radio>
                   </RadioGroup>
                 </FormItem>
-              </Col>
+              </Col> -->
               <Col v-bind="grid">
                 <FormItem label="身份：" label-for="is_promoter">
                   <RadioGroup v-model="userFrom.is_promoter" type="button">
