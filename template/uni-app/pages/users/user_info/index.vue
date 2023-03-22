@@ -257,29 +257,31 @@
 				});
 			},
 			getphonenumber(e) {
-				Routine.getCode()
-					.then(code => {
-						let data = {
-							code,
-							iv: e.detail.iv,
-							encryptedData: e.detail.encryptedData,
-						}
-						mpBindingPhone(data).then(res => {
-							this.getUserInfo()
-							this.$util.Tips({
-								title: res.msg,
-								icon: 'success'
-							});
-						}).catch(err => {
-							return this.$util.Tips({
-								title: err
-							});
+				console.log(e)
+				if (e.detail.errMsg == 'getPhoneNumber:ok') {
+					Routine.getCode()
+						.then(code => {
+							let data = {
+								code,
+								iv: e.detail.iv,
+								encryptedData: e.detail.encryptedData,
+							}
+							mpBindingPhone(data).then(res => {
+								this.getUserInfo()
+								this.$util.Tips({
+									title: res.msg,
+									icon: 'success'
+								});
+							}).catch(err => {
+								return this.$util.Tips({
+									title: err
+								});
+							})
 						})
-					})
-					.catch(error => {
-						uni.hideLoading();
-					});
-
+						.catch(error => {
+							uni.hideLoading();
+						});
+				}
 			},
 			setLang() {
 				this.array.map((item, i) => {
