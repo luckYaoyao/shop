@@ -73,7 +73,6 @@ class ArticleCategoryDao extends BaseDao
             ->where('hidden', 0)
             ->where('is_del', 0)
             ->where('status', 1)
-            ->where('pid', '>', 0)
             ->order('sort DESC')
             ->field('id,pid,title')
             ->select()->toArray();
