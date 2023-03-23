@@ -79,8 +79,8 @@
           <a @click="detail(row, '详情')">详情</a>
           <Divider type="vertical" />
           <a @click="del(row, '删除这条信息', index)">删除</a>
-          <Divider type="vertical" />
-          <a @click="addGoods(row)">添加商品</a>
+          <Divider type="vertical"  v-if="row.live_status == 102"/>
+          <a v-if="row.live_status == 102" @click="addGoods(row)">添加商品</a>
         </template>
       </Table>
       <div class="acea-row row-right page">

@@ -146,7 +146,7 @@ class RefundOrder extends AuthController
             return app('json')->fail(400144);
         }
 
-        if ($data['type'] == 1) {
+        if ($data['type'] == 1 || $data['type'] == 5) {
             $data['refund_type'] = 6;
         } else if ($data['type'] == 2) {
             $data['refund_type'] = 3;

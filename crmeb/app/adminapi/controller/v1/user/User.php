@@ -387,7 +387,7 @@ class User extends AuthController
         if ($data['phone']) {
             if (!preg_match("/^1[3456789]\d{9}$/", $data['phone'])) return app('json')->fail(400252);
         }
-        if ($this->services->count(['phone' => $data['phone'], 'is_del' => 0])) {
+        if ($this->services->count(['phone' => $data['phone'], 'is_del' => 0, 'not_uid' => $id])) {
             return app('json')->fail(400314);
         }
         if ($data['card_id']) {

@@ -26,7 +26,7 @@
         <template slot-scope="{ row, index }" slot="action">
           <a @click="edit(row.id)">修改</a>
           <Divider type="vertical" />
-          <a @click="del(row, '删除分组', index)">删除</a>
+          <a @click="del(row, '删除主播', index)">删除</a>
         </template>
       </Table>
       <div class="acea-row row-right page">
