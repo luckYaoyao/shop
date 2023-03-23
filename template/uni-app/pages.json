@@ -70,17 +70,8 @@
 					"path": "customer_list/chat",
 					"style": {
 						"navigationBarTitleText": "对话详情",
-						"navigationStyle": "custom",
-						"app-plus": {
-							"scrollIndicator": false //禁用原生导航栏
-								// #ifdef APP-PLUS
-								,
-							"titleNView": {
-								"type": "default"
-							}
-							// #endif
-						},
-						"disableScroll": true
+						"navigationBarBackgroundColor": "#3875EA",
+						"navigationBarTextStyle": "white"
 					}
 				},
 				{
@@ -318,7 +309,7 @@
 							// #endif
 						}
 					}
-				},{
+				}, {
 					"path": "cashier/index",
 					"style": {
 						"navigationBarTitleText": "收银台",
