@@ -798,7 +798,7 @@ class StoreOrderCreateServices extends BaseServices
                 //计算商品金额
                 if (sys_config('user_brokerage_type') == 1) {
                     //按照实际支付价格返佣
-                    $price = bcmul((string)$cart['truePrice'], $cartNum, 4);
+                    $price = bcmul((string)bcadd((string)$cart['truePrice'], (string)$cart['postage_price'], 2), $cartNum, 4);
                 } else {
                     //按照商品价格返佣
                     if (isset($productInfo['attrInfo'])) {
