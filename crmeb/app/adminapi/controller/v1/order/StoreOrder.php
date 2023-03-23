@@ -458,7 +458,7 @@ class StoreOrder extends AuthController
      */
     public function order_info($id)
     {
-        if (!$id || !($orderInfo = $this->services->get($id))) {
+        if (!$id || !($orderInfo = $this->services->get($id, [], ['refund']))) {
             return app('json')->fail(400118);
         }
         /** @var UserServices $services */
@@ -497,6 +497,13 @@ class StoreOrder extends AuthController
         } else
             $orderInfo['_store_name'] = '';
         $orderInfo['spread_name'] = $services->value(['uid' => $orderInfo['spread_uid']], 'nickname') ?? '无';
+        $orderInfo['_info'] = app()->make(StoreOrderCartInfoServices::class)->getOrderCartInfo((int)$orderInfo['id']);
+        $cart_num = 0;
+        $refund_num = array_sum(array_column($orderInfo['refund'], 'refund_num'));
+        foreach ($orderInfo['_info'] as $items) {
+            $cart_num += $items['cart_info']['cart_num'];
+        }
+        $orderInfo['is_all_refund'] = $refund_num == $cart_num;
         $userInfo = $userInfo->toArray();
         return app('json')->success(compact('orderInfo', 'userInfo'));
     }
