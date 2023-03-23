@@ -502,6 +502,7 @@ export default {
           this.invoiceShow = false;
           this.getList();
           this.empty();
+          this.getTabs();
         })
         .catch((err) => {
           this.$Message.error(err.msg);
