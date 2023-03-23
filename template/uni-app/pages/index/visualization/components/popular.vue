@@ -27,25 +27,27 @@
 					<text class='iconfont icon-jiantou'></text>
 				</view>
 			</view>
-			<view class='list acea-row row-middle'>
-				<block v-for="(item,index) in hotList" :key='index'>
-					<view class='item' @click="gopage('/pages/goods_details/index?id='+item.id)">
-						<view class='pictrue'>
-							<easy-loadimage mode="widthFix" :image-src="item.image"></easy-loadimage>
-							<image v-if="index == 0" src='/static/images/one.png' class='numPic'></image>
-							<image v-else-if="index == 1" src='/static/images/two.png' class='numPic'></image>
-							<image v-else-if="index == 2" src='/static/images/three.png' class='numPic'></image>
+			<view class='list'>
+				<scroll-view class="scroll-view_x" scroll-x style="width:auto;overflow:hidden;">
+					<block v-for="(item,index) in hotList" :key='index'>
+						<view class='item' @click="gopage('/pages/goods_details/index?id='+item.id)">
+							<view class='pictrue'>
+								<easy-loadimage mode="widthFix" :image-src="item.image"></easy-loadimage>
+								<image v-if="index == 0" src='/static/images/one.png' class='numPic'></image>
+								<image v-else-if="index == 1" src='/static/images/two.png' class='numPic'></image>
+								<image v-else-if="index == 2" src='/static/images/three.png' class='numPic'></image>
+							</view>
+							<view class="rectangle">
+								{{$t(`热度 TOP`)}} {{index+1}}
+							</view>
+							<view class='name line1'>{{item.store_name}}</view>
+							<!-- <view class='money font-color'>
+								￥
+								<text class='num'>{{item.price}}</text>
+							</view> -->
 						</view>
-						<view class="rectangle">
-							{{$t(`热度 TOP`)}} {{index+1}}
-						</view>
-						<view class='name line1'>{{item.store_name}}</view>
-						<!-- <view class='money font-color'>
-							￥
-							<text class='num'>{{item.price}}</text>
-						</view> -->
-					</view>
-				</block>
+					</block>
+				</scroll-view>
 			</view>
 		</view>
 		<view class='hotList index-wrapper' v-if="!isShow && isIframe && hotList.length">
@@ -181,7 +183,7 @@
 				newsOrder: '',
 				ids: '',
 				page: 1,
-				limit: 3,
+				limit: this.$config.LIMIT,
 				type: '',
 				numConfig: 0,
 				titleInfo: []
@@ -230,7 +232,10 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+	/deep/.uni-scroll-view-content{
+		display: flex;
+	}
 	.hotList {
 		background-color: #fff;
 		margin: $uni-index-margin-row $uni-index-margin-col;
@@ -302,7 +307,7 @@
 		width: 200rpx;
 		background: var(--view-op-ten);
 		border-radius: 12rpx;
-
+		margin-right: 20rpx;
 		.rectangle {
 			margin: 0 auto;
 			border-radius: 30rpx;
