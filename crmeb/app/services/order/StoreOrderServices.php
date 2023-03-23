@@ -2351,6 +2351,7 @@ HTML;
             }
         }
         $data['_status'] = $orderInfo['_status'] ?? [];
+        $data['_status']['is_back'] = $orderInfo['delivery_type'] == 'fictitious' || $orderInfo['virtual_type'] > 0;
         $data['cartInfo'] = $data['cartInfo'] ?? $cartInfo;
         return $data;
     }
