@@ -164,6 +164,7 @@ class UserDao extends BaseDao
             ->order('count desc')
             ->order('t0.uid desc')
             ->where('t1.spread_time', 'BETWEEN', $time)
+            ->where('t0.is_del', 0)
             ->page($page, $limit)
             ->group('t0.uid')
             ->select()->toArray();

@@ -15,7 +15,16 @@
         <div class="ivu-description-list-title">订单信息</div>
         <Row class="mb10">
           <Col span="12">订单ID：{{ orderDatalist.orderInfo.order_id }}</Col>
-          <Col span="12" class="fontColor1">订单状态：{{ orderDatalist.orderInfo._status._title }}</Col>
+          <Col span="12" class="fontColor1"
+            >订单状态：{{ orderDatalist.orderInfo._status._title }}
+            {{
+              orderDatalist.orderInfo.refund.length
+                ? orderDatalist.orderInfo.is_all_refund
+                  ? '退款中'
+                  : '部分退款中'
+                : ''
+            }}
+          </Col>
         </Row>
         <Row class="mb10">
           <Col span="12">商品总数：{{ orderDatalist.orderInfo.total_num }}</Col>
