@@ -59,6 +59,7 @@
 		<view class='noCommodity' v-if="productList.length==0 && where.page > 1">
 			<view class='emptyBox'>
 				<image :src="imgHost + '/statics/images/no-thing.png'"></image>
+				<view class="tips">{{$t(`暂无商品，去看点别的吧`)}}</view>
 			</view>
 			<recommend :hostProduct="hostProduct"></recommend>
 		</view>

@@ -1,13 +1,13 @@
 <template>
 	<view class="chat-box" :style="colorStyle">
 		<!-- #ifdef MP -->
-		<view class="head-box">
+<!-- 		<view class="head-box">
 			<view class="system-head" :style="{ height: sysHead }"></view>
 			<view class="title-hd">
 				<view class="iconfont icon-fanhui" @click="goBack"></view>
 				<view>{{ titleName }}</view>
 			</view>
-		</view>
+		</view> -->
 		<!-- #endif -->
 		<view class="broadcast-details_order">
 			<!-- 商品信息 -->

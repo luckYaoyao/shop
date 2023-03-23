@@ -22,14 +22,14 @@
 			<view class="item acea-row row-between-wrapper">
 				<view>{{$t(`发货方式`)}}</view>
 				<view class="mode acea-row row-middle row-right">
-					<view class="goods" :class="active === index ? 'on' : ''" v-for="(item, index) in types"
+					<view class="goods" :class="active === item.key ? 'on' : ''" v-for="(item, index) in types"
 						:key="index" @click="changeType(item, index)">
 						{{ item.title }}<span class="iconfont icon-xuanzhong2"></span>
 					</view>
 				</view>
 			</view>
 			<block v-if="logistics.length>0">
-				<view class="list" v-show="active === 0">
+				<view class="list" v-show="active === 1">
 					<view class="item acea-row row-between-wrapper" v-if="delivery.config_export_open == 1">
 						<view>{{$t(`发货类型`)}}</view>
 						<view class="mode acea-row row-middle row-right">
@@ -101,7 +101,7 @@
 				</view>
 			</block>
 
-			<view class="list" v-show="active === 1">
+			<view class="list" v-show="active === 2">
 				<view class="item acea-row row-between-wrapper">
 					<view>{{$t(`送货人`)}}</view>
 					<view class="select-box" v-if="postPeople.length>0">
@@ -113,8 +113,8 @@
 					</view>
 				</view>
 			</view>
-			<textarea v-show="active === 2" v-model="fictitious_content" class="textarea" @blur="bindTextAreaBlur"
-				:placeholder="$t(`remark`)" :maxlength="500" auto-height />
+			<textarea v-show="active === 3" v-model="fictitious_content" class="textarea" @blur="bindTextAreaBlur"
+				:placeholder="$t(`备注`)" :maxlength="500" auto-height />
 		</view>
 		<view style="height:1.2rem;"></view>
 		<view class="confirm" @click="saveInfo">{{$t(`确认提交`)}}</view>
@@ -143,11 +143,7 @@
 						title: this.$t(`发货`),
 						key: 1
 					},
-					{
-						type: "send",
-						title: this.$t(`送货`),
-						key: 2
-					},
+
 					{
 						type: "fictitious",
 						title: this.$t(`无需物流`),
@@ -164,7 +160,7 @@
 					},
 				],
 				curExpress: 1,
-				active: 0,
+				active: 1,
 				order_id: "",
 				delivery: [],
 				logistics: [],
@@ -239,7 +235,14 @@
 			// 获取配送员列表
 			geTorderOrderDelivery() {
 				orderOrderDelivery().then(res => {
-					this.postPeople = res.data
+					if (res.data.length) {
+						this.postPeople = res.data
+						this.types.push({
+							type: "send",
+							title: this.$t(`送货`),
+							key: 2
+						})
+					}
 				})
 			},
 			// 配送员选择
@@ -252,7 +255,7 @@
 				this.getLogistics(index || '');
 			},
 			changeType: function(item, index) {
-				this.active = index;
+				this.active = item.key;
 				this.delivery_type = item.key;
 			},
 			getIndex: function() {
@@ -324,7 +327,7 @@
 					}
 					if (!that.to_addr) {
 						return this.$util.Tips({
-							title: that.$t(`填写寄件人地址`) 
+							title: that.$t(`填写寄件人地址`)
 						})
 					}
 					if (that.expTemp.length == 0) {

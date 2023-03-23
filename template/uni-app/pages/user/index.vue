@@ -529,30 +529,30 @@
 				})
 			},
 			getphonenumber(e) {
-				Routine.getCode()
-					.then(code => {
-						let data = {
-							code,
-							iv: e.detail.iv,
-							encryptedData: e.detail.encryptedData,
-						}
-						mpBindingPhone(data).then(res => {
-							this.getUserInfo()
-							this.$util.Tips({
-								title: res.msg,
-								icon: 'success'
-							});
-						}).catch(err => {
-							return this.$util.Tips({
-								title: err
-							});
+				if (e.detail.errMsg == 'getPhoneNumber:ok') {
+					Routine.getCode()
+						.then(code => {
+							let data = {
+								code,
+								iv: e.detail.iv,
+								encryptedData: e.detail.encryptedData,
+							}
+							mpBindingPhone(data).then(res => {
+								this.getUserInfo()
+								this.$util.Tips({
+									title: res.msg,
+									icon: 'success'
+								});
+							}).catch(err => {
+								return this.$util.Tips({
+									title: err
+								});
+							})
 						})
-					})
-					.catch(error => {
-						uni.hideLoading();
-					});
-
-				console.log(e)
+						.catch(error => {
+							uni.hideLoading();
+						});
+				}
 			},
 			/**
 			 * 获取个人用户信息
