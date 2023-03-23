@@ -117,23 +117,23 @@ export default {
             });
           },
         },
-        {
-          key: 'cost_price',
-          title: '直播原价',
-          render: (h, params) => {
-            return h('Input', {
-              props: {
-                type: 'number',
-                value: params.row.cost_price,
-              },
-              on: {
-                input: (val) => {
-                  this.tabList[params.index].cost_price = val;
-                },
-              },
-            });
-          },
-        },
+        // {
+        //   key: 'cost_price',
+        //   title: '直播原价',
+        //   render: (h, params) => {
+        //     return h('Input', {
+        //       props: {
+        //         type: 'number',
+        //         value: params.row.cost_price,
+        //       },
+        //       on: {
+        //         input: (val) => {
+        //           this.tabList[params.index].cost_price = val;
+        //         },
+        //       },
+        //     });
+        //   },
+        // },
         { key: 'stock', title: '库存' },
         { slot: 'action', fixed: 'right', title: '操作' },
       ],
