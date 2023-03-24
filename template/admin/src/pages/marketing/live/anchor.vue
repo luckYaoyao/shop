@@ -122,8 +122,12 @@ export default {
         .then((res) => {
           this.$Message.success(res.msg);
           this.labelLists.splice(num, 1);
-
-          this.getList();
+          if (!this.labelLists.length && this.labelFrom.page != 1) {
+            this.labelFrom.page -= 1;
+            this.getList();
+          } else {
+            this.getList();
+          }
         })
         .catch((res) => {
           this.$Message.error(res.msg);
