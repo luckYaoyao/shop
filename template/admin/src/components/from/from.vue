@@ -58,6 +58,7 @@ export default {
     return {
       modals: false,
       type: 0,
+      loading: false,
       config: {
         global: {
           upload: {
@@ -83,6 +84,8 @@ export default {
     onSubmit(formData) {
       let datas = {};
       datas = formData;
+      if (this.loading) return;
+      this.loading = true;
       request({
         url: this.FromData.action,
         method: this.FromData.method,
@@ -95,8 +98,10 @@ export default {
           setTimeout(() => {
             this.$emit('submitFail');
           }, 1000);
+          this.loading = false;
         })
         .catch((res) => {
+          this.loading = false;
           this.$Message.error(res.msg);
         });
     },

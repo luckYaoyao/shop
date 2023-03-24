@@ -90,6 +90,7 @@ export default function (formRequestPromise, { width = '700' } = { width: '700' 
         };
         let btnStop = false;
         data.config.onSubmit = (formData, $f) => {
+          console.log('add')
           $f.btn.loading(true);
           $f.btn.disabled(true);
           if (btnStop) return;

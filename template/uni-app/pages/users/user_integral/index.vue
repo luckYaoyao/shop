@@ -417,4 +417,7 @@
 		align-items: center;
 		justify-content: center;
 	}
+	.empty-box{
+		padding-bottom:  300rpx;
+	}
 </style>

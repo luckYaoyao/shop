@@ -502,10 +502,11 @@ export default {
 }
 
 textarea {
-  padding: 5px;
+  padding: 0 5px;
   border-radius: 3px;
   border-color: #c5c8ce;
   outline-color: #2d8cf0;
+  font-size: 14px;
 }
 
 .picBox {
