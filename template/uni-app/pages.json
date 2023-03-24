@@ -395,7 +395,7 @@
 				{
 					"path": "user_invoice_order/index",
 					"style": {
-						"navigationBarTitleText": "订单详情",
+						"navigationBarTitleText": "发票详情",
 						"app-plus": {
 							// #ifdef APP-PLUS
 							"titleNView": {

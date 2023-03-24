@@ -68,7 +68,7 @@
           </Row>
         </Form>
       </div>
-    </card>
+    </Card>
     <Card :bordered="false" dis-hover>
       <Tabs v-model="currentTab" @on-click="onClickTab" v-if="tablists" class="mb20">
         <TabPane :label="'全部发票（' + tablists.all + '）'" name=" " />
@@ -535,7 +535,7 @@ export default {
       this.getList();
     },
     getTabs() {
-      orderInvoiceChart()
+      orderInvoiceChart(this.orderData)
         .then((res) => {
           this.tablists = res.data;
         })
@@ -546,6 +546,7 @@ export default {
     // 精确搜索()
     orderSearch() {
       this.orderData.page = 1;
+      this.getTabs();
       this.getList();
     },
     // 具体日期搜索()；
