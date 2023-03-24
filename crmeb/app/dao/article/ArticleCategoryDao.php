@@ -32,11 +32,15 @@ class ArticleCategoryDao extends BaseDao
     }
 
     /**
-     * 获取文章列表
+     * 获取文章分类列表
      * @param array $where
      * @param int $page
      * @param int $limit
      * @return mixed
+     * @throws \ReflectionException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function getList(array $where, int $page = 0, int $limit = 0)
     {
