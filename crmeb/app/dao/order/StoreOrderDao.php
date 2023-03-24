@@ -495,7 +495,7 @@ class StoreOrderDao extends BaseDao
      */
     public function chartTimePrice($start, $stop)
     {
-        return $this->search(['is_del' => 0, 'paid' => 1, 'refund_status' => 0])
+        return $this->search(['pid' => 0, 'is_del' => 0, 'paid' => 1, 'refund_status' => [0, 3]])
             ->where('add_time', '>=', $start)
             ->where('add_time', '<', $stop)
             ->field('sum(pay_price) as num,FROM_UNIXTIME(add_time, \'%Y-%m-%d\') as time')
@@ -511,7 +511,7 @@ class StoreOrderDao extends BaseDao
      */
     public function chartTimeNumber($start, $stop)
     {
-        return $this->search(['is_del' => 0, 'paid' => 1, 'refund_status' => 0])
+        return $this->search(['pid' => 0, 'is_del' => 0, 'paid' => 1, 'refund_status' => [0, 3]])
             ->where('add_time', '>=', $start)
             ->where('add_time', '<', $stop)
             ->field('count(id) as num,FROM_UNIXTIME(add_time, \'%Y-%m-%d\') as time')

@@ -1259,7 +1259,7 @@ class StoreProductServices extends BaseServices
             $page = 1;
             $limit = $num;
         }
-        $list = $this->dao->getSearchList($where, $page, $limit, ['id,store_name,cate_id,image,IFNULL(sales, 0) + IFNULL(ficti, 0) as sales,price,stock,activity,unit_name,presale']);
+        $list = $this->dao->getSearchList($where, $page, $limit, ['id,store_name,cate_id,image,IFNULL(sales, 0) + IFNULL(ficti, 0) as sales,price,stock,activity,unit_name,presale,is_vip,vip_price']);
         $list = $this->getActivityList($list);
         return $list;
     }

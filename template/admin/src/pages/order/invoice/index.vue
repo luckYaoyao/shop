@@ -151,7 +151,7 @@
           <div class="list">
             <div class="title row">联系信息</div>
             <Row class="row">
-              <Col span="12">真实姓名: {{ invoiceDetails.real_name }}</Col>
+              <Col span="12">真实姓名: {{ invoiceDetails.name }}</Col>
               <Col span="12">联系电话: {{ invoiceDetails.user_phone }}</Col>
             </Row>
             <Row class="row">
@@ -178,7 +178,7 @@
           <div class="list">
             <div class="title row">联系信息</div>
             <Row class="row">
-              <Col span="12">真实姓名: {{ invoiceDetails.real_name }}</Col>
+              <Col span="12">真实姓名: {{ invoiceDetails.name }}</Col>
               <Col span="12">联系电话: {{ invoiceDetails.user_phone }}</Col>
             </Row>
             <Row class="row">
@@ -555,6 +555,7 @@ export default {
       this.timeVal = e;
       this.orderData.data = this.timeVal[0] ? this.timeVal.join('-') : '';
       this.getList();
+      this.getTabs();
     },
     //订单状态搜索()
     selectChange() {

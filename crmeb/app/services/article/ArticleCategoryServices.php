@@ -39,23 +39,14 @@ class ArticleCategoryServices extends BaseServices
      * 获取文章分类列表
      * @param array $where
      * @return array
+     * @throws \ReflectionException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function getList(array $where)
     {
-        [$page, $limit] = $this->getPageValue();
         $list = $this->dao->getList($where);
-        if (!empty($list) && $where['title'] !== '') {
-            $pids = Arr::getUniqueKey($list, 'pid');
-            $parentList = $this->dao->getList(['id' => $pids]);
-            $list = array_merge($list, $parentList);
-            foreach ($list as $key => $item) {
-                $arr = $item;
-                unset($list[$key]);
-                if (!in_array($arr, $list)) {
-                    $list[] = $arr;
-                }
-            }
-        }
         $list = get_tree_children($list);
         $count = $this->dao->count($where);
         return compact('list', 'count');
