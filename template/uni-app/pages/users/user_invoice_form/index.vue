@@ -15,13 +15,14 @@
 				</view>
 				<view class="acea-row row-middle">
 					<view>{{$t(`发票类型`)}}</view>
-					<input name="type" :value="type === '2' && header_type === '2' ? $t(`增值税电子专用发票`) : $t(`增值税电子普通发票`)" disabled
-						@click="callType" />
+					<input name="type" :value="type === '2' && header_type === '2' ? $t(`增值税电子专用发票`) : $t(`增值税电子普通发票`)"
+						disabled @click="callType" />
 					<text class="iconfont icon-xiangyou"></text>
 				</view>
 				<view class="acea-row row-middle">
 					<view>{{$t(`发票抬头`)}}</view>
-					<input name="name" :value="name" :placeholder="header_type === '1' ? $t(`需要开具发票的姓名`) : $t(`需要开具发票的企业名称`)" />
+					<input name="name" :value="name"
+						:placeholder="header_type === '1' ? $t(`需要开具发票的姓名`) : $t(`需要开具发票的企业名称`)" />
 				</view>
 				<view v-show="header_type === '2'" class="acea-row row-middle">
 					<view>{{$t(`税号`)}}</view>
@@ -147,6 +148,9 @@
 			}
 		},
 		onLoad(options) {
+			if (options.id) uni.setNavigationBarTitle({
+				title: '编辑发票'
+			})
 			for (let key in options) {
 				switch (key) {
 					case 'couponTitle':
