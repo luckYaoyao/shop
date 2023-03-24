@@ -58,7 +58,7 @@
 				<navigator class="link" url="/pages/annex/vip_clause/index" hover-class="none">{{$t(`购买即视为同意`)}}《<text
 						class="mark">{{$t(`会员用户协议`)}}</text>》</navigator>
 			</view>
-			<view class="buy" @click="pay">{{$t(`立即支付`)}}</view>
+			<view class="buy" @click="pay">{{ type=== 'free'? $t(`立即试用`) : $t(`立即支付`)}}</view>
 			<view class="cash">
 				<text @click="drawMemberCard">{{$t(`点击兑换卡密`)}}</text>
 			</view>

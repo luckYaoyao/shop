@@ -128,7 +128,6 @@
         :columns="columns2"
         :data="receiveList"
         ref="table"
-        class="mt25"
         :loading="loading2"
         highlight-row
         no-userFrom-text="暂无数据"
