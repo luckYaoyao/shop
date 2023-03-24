@@ -185,7 +185,7 @@
 				if (!this.isLogin) {
 					toLogin();
 				}
-				let page = '/pages/activity/goods_bargain_details/index?id=' + item.id + '&bargain=' + userInfo.uid;
+				let page = '/pages/activity/goods_bargain_details/index?id=' + item.id + '&bargain=' + this.userInfo.uid;
 				// #ifndef MP
 				uni.navigateTo({
 					url: page
