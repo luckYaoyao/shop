@@ -155,7 +155,9 @@ class StoreOrderInvoiceServices extends BaseServices
         if (!$orderInvoice) {
             throw new ApiException(100026);
         }
-        $data['invoice_time'] = time();
+        if ($data['is_invoice'] == 1) {
+            $data['invoice_time'] = time();
+        }
         if (!$this->dao->update($id, $data, 'id')) {
             throw new ApiException(100015);
         }
