@@ -435,9 +435,9 @@ class StoreOrderRefundServices extends BaseServices
         $res = true;
         //回退优惠卷 拆分子订单不退优惠券
         if (!$order['pid'] && $order['coupon_id'] && $order['coupon_price']) {
-            /** @var StoreCouponUserServices $coumonUserServices */
-            $coumonUserServices = app()->make(StoreCouponUserServices::class);
-            $res = $res && $coumonUserServices->recoverCoupon((int)$order['coupon_id']);
+            /** @var StoreCouponUserServices $couponUserServices */
+            $couponUserServices = app()->make(StoreCouponUserServices::class);
+            $res = $couponUserServices->recoverCoupon((int)$order['coupon_id']);
             $statusService->save([
                 'oid' => $order['id'],
                 'change_type' => 'coupon_back',

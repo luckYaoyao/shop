@@ -679,6 +679,7 @@ class StoreCartServices extends BaseServices
      * @param $num
      * @param $new
      * @return bool
+     * @throws \ReflectionException
      */
     public function checkLimit($uid, $product_id, $num, $new)
     {
@@ -701,8 +702,8 @@ class StoreCartServices extends BaseServices
             }
         } else if ($limitInfo['limit_type'] == 2) {
             $cartNum = $this->dao->sum(['uid' => $uid, 'product_id' => $product_id], 'cart_num');
-            $orderPayNum = $orderCartServices->sum(['uid' => $uid, 'product_id' => $product_id], 'cart_num');
-            $orderRefundNum = $orderCartServices->sum(['uid' => $uid, 'product_id' => $product_id], 'refund_num');
+            $orderPayNum = $orderCartServices->sum(['uid' => $uid, 'product_id' => $product_id, 'pid' => 0], 'cart_num');
+            $orderRefundNum = $orderCartServices->sum(['uid' => $uid, 'product_id' => $product_id, 'pid' => 0], 'refund_num');
             $orderNum = $orderPayNum - $orderRefundNum;
             if (($num + $orderNum + $cartNum) > $limitInfo['limit_num']) {
                 throw new ApiException(410240, ['limit' => $limitInfo['limit_num'], 'pay_num' => $orderNum]);
