@@ -163,7 +163,6 @@
 				this.$set(this, 'couponsHidden', !this.couponsHidden);
 			},
 			getWiningIndex(callback) {
-				this.aleartType = 0
 				startLottery({
 					id: this.id
 				}).then(res => {
@@ -174,6 +173,7 @@
 							callback(this.lottery_draw_param);
 						}
 					})
+					this.aleartType = 0
 				}).catch(err => {
 					this.$util.Tips({
 						title: err

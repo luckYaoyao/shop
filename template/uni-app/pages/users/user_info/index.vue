@@ -43,7 +43,7 @@
 					</view>
 					<view class='item acea-row row-between-wrapper'>
 						<view>{{$t(`昵称`)}}</view>
-						<view class='input'><input type='nickname' name='nickname' :maxlength="16"
+						<view class='input'><input type='nickname' name='nickname' :maxlength="10"
 								:value='userInfo.nickname'></input>
 						</view>
 					</view>

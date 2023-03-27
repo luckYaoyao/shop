@@ -4,7 +4,7 @@
 			<view class="acea-row row-middle">
 				<image class="image" :src="userInfo.avatar"></image>
 				<view class="text">
-					<view class="name">{{userInfo.nickname}}</view>
+					<view class="name line1">{{userInfo.nickname}}</view>
 					<view v-if="userInfo.is_ever_level">{{$t(`永久SVIP会员`)}}</view>
 					<view v-else-if="userInfo.is_money_level">{{$t(`SVIP会员`)}} {{userInfo.overdue_time | dateFormat}}
 						{{$t(`到期`)}}
@@ -817,6 +817,7 @@
 			font-size: 30rpx;
 			line-height: 42rpx;
 			color: #333333;
+			max-width: 360rpx;
 		}
 
 		.info {

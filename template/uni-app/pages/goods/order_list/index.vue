@@ -226,7 +226,11 @@
 			};
 		},
 		computed: mapGetters(['isLogin']),
-		onLoad() {
+		/**
+		 * 生命周期函数--监听页面加载
+		 */
+		onLoad: function(options) {
+			if (options.status) this.orderStatus = options.status;
 			console.log('1')
 			if (this.isLogin) {
 				this.page = 1;
@@ -238,13 +242,10 @@
 			} else {
 				toLogin();
 			}
-		},
-		onShow() {
-			console.log('2')
-			let options = wx.getEnterOptionsSync();
-			if (options.scene == '1038' && options.referrerInfo.appId == 'wxef277996acc166c3' && this.initIn) {
+			let EnOptions = wx.getEnterOptionsSync();
+			if (EnOptions.scene == '1038' && EnOptions.referrerInfo.appId == 'wxef277996acc166c3' && this.initIn) {
 				// 代表从收银台小程序返回
-				let extraData = options.referrerInfo.extraData;
+				let extraData = EnOptions.referrerInfo.extraData;
 				this.initIn = false
 				if (!extraData) {
 					this.getOrderList();
@@ -295,12 +296,7 @@
 			payClose: function() {
 				this.pay_close = false;
 			},
-			/**
-			 * 生命周期函数--监听页面加载
-			 */
-			onLoad: function(options) {
-				if (options.status) this.orderStatus = options.status;
-			},
+		
 			/**
 			 * 获取订单统计数据
 			 *

@@ -373,7 +373,7 @@
 				}
 				formData.is_default = formData.is_default.length;
 				formData.id = this.id;
-				
+
 				uni.showLoading({
 					title: that.$t(`保存中`)
 				});
@@ -424,7 +424,14 @@
 			},
 			// 调起发票类型弹窗
 			callType() {
-				this.popupType = true;
+				if (this.header_type == 2) {
+					this.popupType = true;
+				} else {
+					uni.showToast({
+						title: this.$t(`个人仅支持普通发票`),
+						icon: 'none'
+					});
+				}
 			},
 			// 选择发票类型
 			changeType(e) {
