@@ -430,6 +430,7 @@ class StoreOrderController
      * 订单删除
      * @param Request $request
      * @return mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function del(Request $request)
     {

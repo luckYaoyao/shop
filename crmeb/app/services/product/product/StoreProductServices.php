@@ -1815,7 +1815,7 @@ class StoreProductServices extends BaseServices
             $memberCardService = app()->make(MemberCardServices::class);
             $vipStatus = $memberCardService->isOpenMemberCard('vip_price');
             foreach ($list as &$item) {
-                if (!($vipStatus && $item['is_vip'])) {
+                if (!$this->vipIsOpen(!!$item['is_vip'], $vipStatus)) {
                     $item['vip_price'] = 0;
                 }
             }

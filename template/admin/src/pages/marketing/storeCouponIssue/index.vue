@@ -22,10 +22,9 @@
               <Select v-model="receive_type" placeholder="请选择" clearable @on-change="userSearchs">
                 <Option value="all">全部</Option>
                 <Option value="1">手动领取</Option>
-                <Option value="2">新人券</Option>
-                <Option value="3">赠送券</Option>
-                <Option value="4">会员券</Option>
-                <Option value="5">购买券</Option>
+                <Option value="2">新用户自动发放</Option>
+                <Option value="3">后台赠送</Option>
+                <Option value="4">付费会员专享</Option>
               </Select>
             </FormItem>
           </Col>
