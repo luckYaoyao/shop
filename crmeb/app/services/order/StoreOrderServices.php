@@ -1855,9 +1855,10 @@ HTML;
 
     /**
      * 删除订单
-     * @param $uni
-     * @param $uid
+     * @param string $uni
+     * @param int $uid
      * @return bool
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function removeOrder(string $uni, int $uid)
     {
@@ -1879,21 +1880,6 @@ HTML;
             'change_time' => time()
         ]);
         if ($order->save() && $res) {
-            //未支付和已退款的状态下才可以退积分退库存退优惠券
-            if ($order['_status']['_type'] == 0 || $order['_status']['_type'] == -2) {
-                /** @var StoreOrderRefundServices $refundServices */
-                $refundServices = app()->make(StoreOrderRefundServices::class);
-                $this->transaction(function () use ($order, $refundServices) {
-                    //回退积分和优惠卷
-                    $res = $refundServices->integralAndCouponBack($order);
-                    //回退库存
-                    $res = $res && $refundServices->regressionStock($order);
-                    if (!$res) {
-                        throw new ApiException(100020);
-                    }
-                });
-
-            }
             return true;
         } else
             throw new ApiException(100020);
@@ -1924,7 +1910,7 @@ HTML;
         $refundServices = app()->make(StoreOrderRefundServices::class);
 
         $this->transaction(function () use ($refundServices, $order) {
-            $res = $refundServices->integralAndCouponBack($order) && $refundServices->regressionStock($order);
+            $res = $refundServices->integralAndCouponBack($order, 'cancel') && $refundServices->regressionStock($order);
             $order->is_del = 1;
             if (!($res && $order->save())) {
                 throw new ApiException(100020);
@@ -2136,7 +2122,7 @@ HTML;
                 try {
                     $this->transaction(function () use ($order, $refundServices) {
                         //回退积分和优惠卷
-                        $res = $refundServices->integralAndCouponBack($order);
+                        $res = $refundServices->integralAndCouponBack($order, 'cancel');
                         //回退库存和销量
                         $res = $res && $refundServices->regressionStock($order);
                         //修改订单状态
