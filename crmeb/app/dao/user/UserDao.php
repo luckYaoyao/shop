@@ -82,7 +82,9 @@ class UserDao extends BaseDao
 
     /**
      * @param $uid
+     * @param string $field
      * @return \think\Collection
+     * @throws \ReflectionException
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
