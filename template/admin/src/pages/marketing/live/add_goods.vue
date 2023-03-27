@@ -26,7 +26,7 @@
                   <img :src="item.image" alt="" />
                   <Icon type="ios-close-circle" size="20" @click="bindDelete(index)" />
                 </div>
-                <div class="upload-box" @click="modals = true">
+                <div class="upload-box" @click="selectGoods">
                   <Icon type="ios-camera-outline" size="36" />
                 </div>
               </div>
@@ -66,7 +66,13 @@
       </div>
     </Card>
     <Modal v-model="modals" title="商品列表" class="paymentFooter" scrollable width="900" :footer-hide="true">
-      <goods-list ref="goodslist" @getProductId="getProductId" v-if="modals" :ischeckbox="true"></goods-list>
+      <goods-list
+        ref="goodslist"
+        :selectIds="selectIds"
+        @getProductId="getProductId"
+        v-if="modals"
+        :ischeckbox="true"
+      ></goods-list>
     </Modal>
   </div>
 </template>
@@ -143,6 +149,13 @@ export default {
     };
   },
   methods: {
+    selectGoods() {
+      this.modals = true;
+      this.selectIds = this.goodsList.map((i) => {
+        return i.product_id;
+      });
+      console.log(this.selectIds,this.goodsList)
+    },
     // 生成直播商品
     liveGoods() {
       let array = [];
@@ -161,7 +174,7 @@ export default {
         });
     },
     getProductId(data) {
-      this.goodsList = this.goodsList.concat(data);
+      this.goodsList = data;
       this.$nextTick((res) => {
         setTimeout(() => {
           this.modals = false;
