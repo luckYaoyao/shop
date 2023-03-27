@@ -154,7 +154,7 @@ class ArticleCategoryServices extends BaseServices
      */
     public function getTreeList()
     {
-        $where['is_show'] = 1;
+        $where['status'] = 1;
         return sort_list_tier($this->dao->getMenus($where));
     }
 }
