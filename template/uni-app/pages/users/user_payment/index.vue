@@ -26,6 +26,7 @@
 						@click="picCharge(picList.length)">
 						<input type="number" :placeholder="$t(`其他`)" v-model="money"
 							class="pic-box-money pic-number-pic"
+							:placeholder-class="activePic == picList.length ? 'active' :''"
 							:class="activePic == picList.length ? 'pic-box-color-active' : ''" />
 					</view>
 					<view class="tips-box">
@@ -676,7 +677,9 @@
 			margin-right: 10rpx;
 			text-align: center;
 		}
-
+		.active{
+			color: #fff !important;
+		}
 		.pic-box-color-active {
 			background-color: var(--view-theme) !important;
 			color: #fff !important;
