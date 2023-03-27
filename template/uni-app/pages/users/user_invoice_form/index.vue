@@ -147,6 +147,10 @@
 				}
 			}
 		},
+		onHide() {
+			console.log('hide')
+			this.from = ''
+		},
 		onLoad(options) {
 			if (options.id) uni.setNavigationBarTitle({
 				title: '编辑发票'
@@ -377,39 +381,40 @@
 					uni.showToast({
 						title: res.msg,
 						icon: 'success',
-						success() {
-							switch (that.from) {
-								case 'order_confirm':
-									if (that.id) {
-										uni.navigateTo({
-											url: `/pages/goods/order_confirm/index${that.urlQuery}&invoice_id=${that.id}&invoice_type=${formData.type}`
-										})
-									} else {
-										uni.navigateTo({
-											url: `/pages/goods/order_confirm/index${that.urlQuery}&invoice_id=${res.data.id}&invoice_type=${formData.type}`
-										})
-									}
-									break;
-								case 'order_details':
-									if (that.id) {
-										uni.navigateTo({
-											url: `/pages/goods/order_details/index?order_id=${that.order_id}&invoice_id=${that.id}`
-										})
-									} else {
-										uni.navigateTo({
-											url: `/pages/goods/order_details/index?order_id=${that.order_id}&invoice_id=${res.data.id}`
-										})
-									}
-									break;
-								default:
-									uni.navigateTo({
-										url: '/pages/users/user_invoice_list/index?from=invoice_form'
-									});
-									break;
-							}
-
-						}
 					});
+					setTimeout(e => {
+						switch (that.from) {
+							case 'order_confirm':
+								if (that.id) {
+									console.log(that.from, that.id, that.urlQuery, formData.type);
+									uni.navigateTo({
+										url: `/pages/goods/order_confirm/index${that.urlQuery}&invoice_id=${that.id}&invoice_type=${formData.type}`
+									})
+								} else {
+									console.log(that.from, that.id, '2');
+									uni.navigateTo({
+										url: `/pages/goods/order_confirm/index${that.urlQuery}&invoice_id=${res.data.id}&invoice_type=${formData.type}`
+									})
+								}
+								break;
+							case 'order_details':
+								if (that.id) {
+									uni.navigateTo({
+										url: `/pages/goods/order_details/index?order_id=${that.order_id}&invoice_id=${that.id}`
+									})
+								} else {
+									uni.navigateTo({
+										url: `/pages/goods/order_details/index?order_id=${that.order_id}&invoice_id=${res.data.id}`
+									})
+								}
+								break;
+							default:
+								uni.navigateTo({
+									url: '/pages/users/user_invoice_list/index?from=invoice_form'
+								});
+								break;
+						}
+					}, 1000)
 				}).catch(err => {
 					uni.showToast({
 						title: err,
