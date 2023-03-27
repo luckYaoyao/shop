@@ -40,6 +40,10 @@ class LiveRoomServices extends BaseServices
         $where['is_del'] = 0;
         [$page, $limit] = $this->getPageValue();
         $list = $this->dao->getList($where, '*', [], $page, $limit);
+        $liveProductServices = app()->make(LiveRoomGoodsServices::class);
+        foreach ($list as &$item) {
+            $item['product_ids'] = array_column($liveProductServices->selectList(['live_room_id' => $item['id']])->toArray(), 'live_goods_id');
+        }
         $count = $this->dao->count($where);
         return compact('count', 'list');
     }
