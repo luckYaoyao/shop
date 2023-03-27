@@ -226,7 +226,8 @@
 			};
 		},
 		computed: mapGetters(['isLogin']),
-		onShow() {
+		onLoad() {
+			console.log('1')
 			if (this.isLogin) {
 				this.page = 1;
 				this.orderList = []
@@ -237,6 +238,9 @@
 			} else {
 				toLogin();
 			}
+		},
+		onShow() {
+			console.log('2')
 			let options = wx.getEnterOptionsSync();
 			if (options.scene == '1038' && options.referrerInfo.appId == 'wxef277996acc166c3' && this.initIn) {
 				// 代表从收银台小程序返回

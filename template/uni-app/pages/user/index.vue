@@ -88,12 +88,12 @@
 								<!-- #endif -->
 							</view>
 							<view class="message">
-								<navigator url="/pages/users/user_info/index" hover-class="none">
+								<navigator v-if="isLogin" url="/pages/users/user_info/index" hover-class="none">
 									<view class="iconfont icon-shezhi"></view>
 								</navigator>
 							</view>
 							<view class="message">
-								<navigator url="/pages/users/message_center/index" hover-class="none">
+								<navigator v-if="isLogin" url="/pages/users/message_center/index" hover-class="none">
 									<view v-if="userInfo.service_num" class="num">
 										{{userInfo.service_num >= 100 ? '99+' : userInfo.service_num}}
 									</view>

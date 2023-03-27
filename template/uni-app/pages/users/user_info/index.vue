@@ -257,7 +257,6 @@
 				});
 			},
 			getphonenumber(e) {
-				console.log(e)
 				if (e.detail.errMsg == 'getPhoneNumber:ok') {
 					Routine.getCode()
 						.then(code => {
@@ -546,7 +545,11 @@
 		color: var(--view-theme);
 		border: 1px solid var(--view-theme);
 	}
-
+	.personal-data{
+		padding-bottom: 50rpx;
+		padding-bottom: calc(50rpx+ constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
+		padding-bottom: calc(50rpx + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
+	}
 	.personal-data .wrapper {
 		margin: 10rpx 0;
 		background-color: #fff;

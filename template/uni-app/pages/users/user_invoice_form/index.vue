@@ -148,7 +148,6 @@
 			}
 		},
 		onHide() {
-			console.log('hide')
 			this.from = ''
 		},
 		onLoad(options) {
@@ -374,6 +373,7 @@
 				}
 				formData.is_default = formData.is_default.length;
 				formData.id = this.id;
+				
 				uni.showLoading({
 					title: that.$t(`保存中`)
 				});
