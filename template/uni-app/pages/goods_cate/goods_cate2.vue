@@ -521,10 +521,16 @@
 					if (
 						that.attr.productAttr.length &&
 						productSelect === undefined
-					)
+					) {
 						return that.$util.Tips({
 							title: that.$t(`该产品没有更多库存了`)
 						});
+					}
+					if (that.attr.productSelect.cart_num <= 0) {
+						return that.$util.Tips({
+							title: that.$t(`最少添加 1 件商品`)
+						});
+					}
 				}
 				let q = {
 					product_id: id,

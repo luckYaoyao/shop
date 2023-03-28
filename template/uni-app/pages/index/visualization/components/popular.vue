@@ -233,9 +233,12 @@
 </script>
 
 <style lang="scss" scoped>
-	/deep/.uni-scroll-view-content{
+	/deep/.uni-scroll-view-content,
+	.scroll-view_x {
 		display: flex;
+		flex-wrap: nowrap;
 	}
+
 	.hotList {
 		background-color: #fff;
 		margin: $uni-index-margin-row $uni-index-margin-col;
@@ -293,7 +296,6 @@
 	// }
 
 	.hotList .list {
-		width: 690rpx;
 		border-radius: 20rpx;
 		background-color: #fff;
 		margin: 0rpx auto 0 auto;
@@ -301,6 +303,8 @@
 		box-sizing: border-box;
 		display: flex;
 		justify-content: space-between;
+		width: 100%;
+		white-space: nowrap;
 	}
 
 	.hotList .list .item {
@@ -308,6 +312,8 @@
 		background: var(--view-op-ten);
 		border-radius: 12rpx;
 		margin-right: 20rpx;
+		display: inline-block;
+
 		.rectangle {
 			margin: 0 auto;
 			border-radius: 30rpx;
