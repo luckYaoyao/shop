@@ -768,6 +768,7 @@ class StoreSeckillServices extends BaseServices
         /** @var StoreOrderServices $orderServices */
         $orderServices = app()->make(StoreOrderServices::class);
         [$page, $limit] = $this->getPageValue();
+        $where['is_del'] = 0;
         $list = $orderServices->seckillOrder($id, $where, $page, $limit);
         $where['seckill_id'] = $id;
         $count = $orderServices->count($where);
