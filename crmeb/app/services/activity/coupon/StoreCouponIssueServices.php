@@ -123,6 +123,12 @@ class StoreCouponIssueServices extends BaseServices
             $data['is_permanent'] = 1;
             $data['total_count'] = 0;
         }
+
+        if ($data['is_permanent'] != 1 && $data['receive_limit'] > $data['total_count']) {
+            throw new AdminException(500031);
+        }
+
+
         $data['add_time'] = time();
         $res = $this->dao->save($data);
         if (($data['product_id'] !== '' || $data['category_id'] !== '') && $res) {
@@ -259,7 +265,7 @@ class StoreCouponIssueServices extends BaseServices
                     $data['add_time'] = $item['start_use_time'];
                     $data['end_time'] = $item['end_use_time'];
                 }
-                $data['type'] = 'get';
+                $data['type'] = 'send';
                 $issue['uid'] = $uid;
                 $issue['issue_coupon_id'] = $item['id'];
                 $issue['add_time'] = $time;

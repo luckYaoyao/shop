@@ -83,7 +83,7 @@
             @on-change="dateChange"
           ></DatePicker>
         </FormItem>
-        <FormItem label="领取时间">
+        <FormItem label="领取时间" v-if="formData.receive_type != 2 && formData.receive_type != 3">
           <RadioGroup v-model="isReceiveTime">
             <Radio :label="1">限时</Radio>
             <Radio :label="0">不限时</Radio>

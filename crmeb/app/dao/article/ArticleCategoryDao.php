@@ -86,9 +86,10 @@ class ArticleCategoryDao extends BaseDao
      * 添加修改选择上级分类列表
      * @param array $where
      * @return array
+     * @throws \ReflectionException
      */
     public function getMenus(array $where)
     {
-        return $this->search($where)->order('sort desc,id desc')->column('title,pid,id');
+        return $this->search($where)->order('sort desc,id desc')->column('title,pid,id,is_del,status');
     }
 }

@@ -151,10 +151,10 @@ class ArticleCategoryServices extends BaseServices
     /**
      * 树形列表
      * @return array
+     * @throws \ReflectionException
      */
     public function getTreeList()
     {
-        $where['status'] = 1;
-        return sort_list_tier($this->dao->getMenus($where));
+        return sort_list_tier($this->dao->getMenus([]));
     }
 }
