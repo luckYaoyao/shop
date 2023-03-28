@@ -151,7 +151,7 @@ class StoreSeckill extends AuthController
     public function seckillPeople($id)
     {
         [$keyword] = $this->request->getMore([
-            ['keyword', '']
+            ['real_name', '', '', 'keyword']
         ], true);
         return app('json')->success($this->services->seckillPeople($id, $keyword));
     }

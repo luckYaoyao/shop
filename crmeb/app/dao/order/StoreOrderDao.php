@@ -894,7 +894,7 @@ class StoreOrderDao extends BaseDao
      */
     public function seckillPeople($id, $keyword, $page = 0, $limit = 0)
     {
-        return $this->getModel()
+        return $this->getModel()->where('paid', 1)->whereIn('refund_type', [0, 3])
             ->when($id != 0, function ($query) use ($id) {
                 $query->where('seckill_id', $id);
             })->when($keyword != '', function ($query) use ($keyword) {
@@ -902,6 +902,7 @@ class StoreOrderDao extends BaseDao
             })->where('paid', 1)->field([
                 'real_name',
                 'uid',
+                'user_phone',
                 'SUM(total_num) as goods_num',
                 'COUNT(id) as order_num',
                 'SUM(pay_price) as total_price',

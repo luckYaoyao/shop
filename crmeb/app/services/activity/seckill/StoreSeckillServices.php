@@ -362,7 +362,7 @@ class StoreSeckillServices extends BaseServices
             $header[] = ['title' => $item['value'], 'key' => 'value' . ($key + 1), 'align' => 'center', 'minWidth' => 80];
         }
         $header[] = ['title' => '图片', 'slot' => 'pic', 'align' => 'center', 'minWidth' => 120];
-        $header[] = ['title' => '秒杀价', 'slot' => 'price', 'align' => 'center', 'minWidth' => 80];
+        $header[] = ['title' => '秒杀价', 'type' => 1, 'key' => 'price', 'align' => 'center', 'minWidth' => 80];
         $header[] = ['title' => '成本价', 'key' => 'cost', 'align' => 'center', 'minWidth' => 80];
         $header[] = ['title' => '原价', 'key' => 'ot_price', 'align' => 'center', 'minWidth' => 80];
         $header[] = ['title' => '库存', 'key' => 'stock', 'align' => 'center', 'minWidth' => 80];
@@ -732,7 +732,7 @@ class StoreSeckillServices extends BaseServices
         $orderServices = app()->make(StoreOrderServices::class);
         $pay_count = $orderServices->getDistinctCount([['seckill_id', '=', $id], ['paid', '=', 1]], 'uid', false);
         $order_count = $orderServices->getDistinctCount([['seckill_id', '=', $id]], 'uid', false);
-        $all_price = $orderServices->sum([['seckill_id', '=', $id], ['refund_type', 'in', [0, 3]]], 'pay_price');
+        $all_price = $orderServices->sum([['seckill_id', '=', $id], ['refund_type', 'in', [0, 3]], ['paid', '=', 1]], 'pay_price');
         $seckillInfo = $this->dao->get($id);
         $pay_rate = $seckillInfo['quota'] . '/' . $seckillInfo['quota_show'];
         return compact('pay_count', 'order_count', 'all_price', 'pay_rate');

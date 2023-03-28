@@ -950,7 +950,7 @@ class StoreProductServices extends BaseServices
         }
         $header[] = ['title' => '图片', 'slot' => 'pic', 'align' => 'center', 'minWidth' => 120];
         if ($type == 1) {
-            $header[] = ['title' => '秒杀价', 'slot' => 'price', 'align' => 'center', 'minWidth' => 80];
+            $header[] = ['title' => '秒杀价', 'type' => 1, 'key' => 'price', 'align' => 'center', 'minWidth' => 80];
             $header[] = ['title' => '成本价', 'key' => 'cost', 'align' => 'center', 'minWidth' => 80];
             $header[] = ['title' => '原价', 'key' => 'ot_price', 'align' => 'center', 'minWidth' => 80];
         } elseif ($type == 2) {
