@@ -41,6 +41,7 @@ class StoreOrderDao extends BaseDao
      * 订单搜索
      * @param array $where
      * @return \crmeb\basic\BaseModel|mixed|\think\Model
+     * @throws \ReflectionException
      */
     public function search(array $where = [])
     {
