@@ -8,7 +8,7 @@
 						{{$t(`评价完成`)}}
 					</text>
 					<text class="date">
-						{{new Date().toLocaleString()}}
+						{{$util.getNowTime()}}
 					</text>
 				</view>
 			</view>
@@ -48,6 +48,9 @@
 	import {
 		openOrderSubscribe
 	} from '@/utils/SubscribeMessage.js';
+	import {
+		getNowTime
+	} from '@/utils/util.js'
 	import {
 		toLogin
 	} from '@/libs/login.js';
