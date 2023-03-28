@@ -145,7 +145,7 @@
 			}
 		},
 		onShow: function() {
-			if (this.is_show) this.userSpreadNewList();
+			// if (this.is_show) this.userSpreadNewList();
 		},
 		onHide: function() {
 			this.is_show = true;
@@ -370,7 +370,7 @@
 	.no-data {
 		background-color: #fff;
 		padding-bottom: 30rpx;
-		padding: 100rpx 0;
+		padding: 180rpx 0 300rpx;
 
 		.emptyBox {
 			text-align: center;

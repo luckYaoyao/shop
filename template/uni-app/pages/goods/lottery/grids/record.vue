@@ -122,6 +122,8 @@
 						title: this.$t(`领取成功`)
 					});
 					this.addressModel = false
+					this.where.page = 1
+					this.getLotteryList()
 				}).catch(err => {
 					this.$util.Tips({
 						title: err

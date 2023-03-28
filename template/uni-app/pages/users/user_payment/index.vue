@@ -524,14 +524,18 @@
 						},
 					})
 				} else {
-					if(this.numberPic == '') this.numberPic = this.money;
+					if (this.numberPic == '') this.numberPic = this.money;
 					this.pay()
 				}
 			}
 		},
 	}
 </script>
-
+<style lang="scss">
+	.tip .pic-box-color .active {
+		color: #fff !important;
+	}
+</style>
 <style lang="scss" scoped>
 	page {
 		width: 100%;
@@ -677,9 +681,11 @@
 			margin-right: 10rpx;
 			text-align: center;
 		}
-		.active{
+
+		.active {
 			color: #fff !important;
 		}
+
 		.pic-box-color-active {
 			background-color: var(--view-theme) !important;
 			color: #fff !important;

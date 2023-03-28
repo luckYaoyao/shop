@@ -97,8 +97,8 @@ export default {
           this.modals = false;
           setTimeout(() => {
             this.$emit('submitFail');
+            this.loading = false;
           }, 1000);
-          this.loading = false;
         })
         .catch((res) => {
           this.loading = false;
