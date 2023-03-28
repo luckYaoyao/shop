@@ -400,6 +400,11 @@ class LuckLotteryServices extends BaseServices
      * 抽奖
      * @param int $uid
      * @param int $lottery_id
+     * @return mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function luckLottery(int $uid, int $lottery_id)
     {
