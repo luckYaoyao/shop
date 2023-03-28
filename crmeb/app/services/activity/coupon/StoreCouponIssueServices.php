@@ -259,7 +259,7 @@ class StoreCouponIssueServices extends BaseServices
                     $data['add_time'] = $item['start_use_time'];
                     $data['end_time'] = $item['end_use_time'];
                 }
-                $data['type'] = 'get';
+                $data['type'] = 'send';
                 $issue['uid'] = $uid;
                 $issue['issue_coupon_id'] = $item['id'];
                 $issue['add_time'] = $time;
