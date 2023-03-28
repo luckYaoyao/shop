@@ -365,30 +365,13 @@ class StoreCouponIssueServices extends BaseServices
         $issueCouponInfo = $this->dao->getInfo((int)$id);
         $uid = $user->uid;
         if (!$issueCouponInfo) throw new ApiException(400516);
-        /** @var MemberRightServices $memberRightService */
-        $memberRightService = app()->make(MemberRightServices::class);
-        if ($issueCouponInfo->receive_type == 4 && (!$user->is_money_level || !$memberRightService->getMemberRightStatus("coupon"))) {
-            if (!$user->is_money_level) throw new ApiException(400097);
-            if (!$memberRightService->getMemberRightStatus("coupon")) throw new ApiException(400098);
-        }
         /** @var StoreCouponIssueUserServices $issueUserService */
         $issueUserService = app()->make(StoreCouponIssueUserServices::class);
-        if ($is_receive) {
-            $alreadyReceived = $issueUserService->count(['uid' => $uid, 'issue_coupon_id' => $id]);
-            if ($alreadyReceived >= $issueCouponInfo['receive_limit']) {
-                throw new ApiException(400518);
-            }
-        }
         /** @var StoreCouponUserServices $couponUserService */
         $couponUserService = app()->make(StoreCouponUserServices::class);
-        if ($issueCouponInfo->remain_count <= 0 && !$issueCouponInfo->is_permanent) throw new ApiException(400518);
         $this->transaction(function () use ($issueUserService, $uid, $id, $couponUserService, $issueCouponInfo) {
             $issueUserService->save(['uid' => $uid, 'issue_coupon_id' => $id, 'add_time' => time()]);
-            $couponUserService->addUserCoupon($uid, $issueCouponInfo, "get");
-            if ($issueCouponInfo['total_count'] > 0) {
-                $issueCouponInfo['remain_count'] -= 1;
-                $issueCouponInfo->save();
-            }
+            $couponUserService->addUserCoupon($uid, $issueCouponInfo, "send");
         });
     }
 
@@ -429,6 +412,9 @@ class StoreCouponIssueServices extends BaseServices
      * @param int $uid
      * @param $types
      * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function getUserCouponList(int $uid, $types)
     {
@@ -512,6 +498,9 @@ class StoreCouponIssueServices extends BaseServices
      * 获取单个优惠券类型
      * @param array $where
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function getOne(array $where)
     {
@@ -538,6 +527,8 @@ class StoreCouponIssueServices extends BaseServices
     /**
      * 给会员发放优惠券
      * @param $uid
+     * @param int $couponId
+     * @return bool
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
