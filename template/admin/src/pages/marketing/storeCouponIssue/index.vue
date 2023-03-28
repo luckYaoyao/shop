@@ -129,6 +129,7 @@
         ref="table"
         :loading="loading2"
         highlight-row
+        height="500"
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
@@ -138,9 +139,9 @@
           </div>
         </template>
       </Table>
-      <div class="acea-row row-right page">
+      <!-- <div class="acea-row row-right page">
         <Page :total="total2" show-elevator show-total @on-change="receivePageChange" :page-size="receiveFrom.limit" />
-      </div>
+      </div> -->
     </Modal>
   </div>
 </template>
