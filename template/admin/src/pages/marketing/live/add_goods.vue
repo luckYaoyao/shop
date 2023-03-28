@@ -106,23 +106,24 @@ export default {
       columns1: [
         { key: 'id', title: '商品ID' },
         { slot: 'img', title: '商品信息' },
-        {
-          key: 'price',
-          title: '直播售价',
-          render: (h, params) => {
-            return h('Input', {
-              props: {
-                type: 'number',
-                value: params.row.price,
-              },
-              on: {
-                input: (val) => {
-                  this.tabList[params.index].price = val;
-                },
-              },
-            });
-          },
-        },
+        { slot: 'price', title: '直播售价' },
+        // {
+        //   key: 'price',
+        //   title: '直播售价',
+        //   render: (h, params) => {
+        //     return h('Input', {
+        //       props: {
+        //         type: 'number',
+        //         value: params.row.price,
+        //       },
+        //       on: {
+        //         input: (val) => {
+        //           this.tabList[params.index].price = val;
+        //         },
+        //       },
+        //     });
+        //   },
+        // },
         // {
         //   key: 'cost_price',
         //   title: '直播原价',
