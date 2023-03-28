@@ -1246,7 +1246,11 @@ class UserServices extends BaseServices
         $userInfo['birthday'] = $userInfo['birthday'] < 0 ? 0 : $userInfo['birthday'];
         if ($userInfo['addres'] == '') {
             $defaultAddressInfo = app()->make(UserAddressServices::class)->getUserDefaultAddress($uid);
-            $userInfo['addres'] = $defaultAddressInfo['province'] . $defaultAddressInfo['city'] . $defaultAddressInfo['district'] . $defaultAddressInfo['detail'];
+            if ($defaultAddressInfo) {
+                $userInfo['addres'] = $defaultAddressInfo['province'] . $defaultAddressInfo['city'] . $defaultAddressInfo['district'] . $defaultAddressInfo['detail'];
+            } else {
+                $userInfo['addres'] = '';
+            }
         }
         $userInfo['vip_name'] = app()->make(SystemUserLevelServices::class)->value(['grade' => $userInfo['level']], 'name');
         $userInfo['group_name'] = app()->make(UserGroupServices::class)->value(['id' => $userInfo['group_id']], 'group_name');
