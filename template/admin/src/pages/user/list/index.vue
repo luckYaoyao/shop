@@ -824,7 +824,7 @@ export default {
         this.$Message.warning('请选择要设置分组的用户');
       } else {
         let uids = { uids: this.ids };
-        this.$modalForm(userSetGroup(uids)).then(() => this.$refs.sends.getList());
+        this.$modalForm(userSetGroup(uids)).then(() => this.getList());
       }
     },
     // 批量设置标签；
