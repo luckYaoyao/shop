@@ -135,7 +135,11 @@ class StoreSeckill extends AuthController
 
     /**
      * 秒杀统计
+     * @param $id
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function seckillStatistics($id)
     {
