@@ -263,6 +263,9 @@ class StoreOrder extends AuthController
      * @param $id
      * @param StoreOrderDeliveryServices $services
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function split_delivery($id, StoreOrderDeliveryServices $services)
     {
@@ -317,7 +320,11 @@ class StoreOrder extends AuthController
 
     /**
      * 获取订单拆分子订单列表
+     * @param $id
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function split_order($id)
     {
@@ -455,6 +462,7 @@ class StoreOrder extends AuthController
      * 订单详情
      * @param $id 订单id
      * @return mixed
+     * @throws \ReflectionException
      */
     public function order_info($id)
     {
@@ -558,6 +566,7 @@ class StoreOrder extends AuthController
 
     /**
      * 不退款表单结构
+     * @param StoreOrderRefundServices $services
      * @param $id
      * @return mixed
      * @throws \FormBuilder\Exception\FormBuilderException

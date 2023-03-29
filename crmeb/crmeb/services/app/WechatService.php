@@ -392,7 +392,7 @@ class WechatService
         if ($result->return_code == 'SUCCESS' && $result->result_code != 'FAIL') {
             return true;
         } else {
-            throw new ApiException(410089);
+            throw new ApiException($result->err_code_des ?? 400658);
         }
     }
 

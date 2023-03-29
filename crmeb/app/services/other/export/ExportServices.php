@@ -306,7 +306,7 @@ class ExportServices extends BaseServices
                     'ot_price' => $item['ot_price'],
                     'quota' => $item['quota'],
                     'start_name' => $item['start_name'],
-                    'activity_time' => date('Y-m-d H:i:s', $item['start_time']) . '至' . date('Y-m-d H:i:s', $item['stop_time']),
+                    'activity_time' => date('Y-m-d', $item['start_time']) . '至' . date('Y-m-d', $item['stop_time']),
                     'add_time' => $item['add_time']
                 ];
                 $export[] = $one_data;

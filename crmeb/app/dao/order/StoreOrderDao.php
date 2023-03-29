@@ -41,6 +41,7 @@ class StoreOrderDao extends BaseDao
      * 订单搜索
      * @param array $where
      * @return \crmeb\basic\BaseModel|mixed|\think\Model
+     * @throws \ReflectionException
      */
     public function search(array $where = [])
     {
@@ -894,7 +895,7 @@ class StoreOrderDao extends BaseDao
      */
     public function seckillPeople($id, $keyword, $page = 0, $limit = 0)
     {
-        return $this->getModel()->where('paid', 1)->whereIn('refund_type', [0, 3])
+        return $this->getModel()->where('paid', 1)->whereIn('refund_type', [0, 3])->where('is_del', 0)
             ->when($id != 0, function ($query) use ($id) {
                 $query->where('seckill_id', $id);
             })->when($keyword != '', function ($query) use ($keyword) {

@@ -146,7 +146,7 @@ class V3WechatPay extends BasePay implements PayInterface
      */
     public function merchantPay(string $openid, string $orderId, string $amount, array $options = [])
     {
-        $res = $this->instance->v3pay->setType($options['type'])->batches(
+        return $this->instance->v3pay->setType($options['type'])->batches(
             $orderId,
             $amount,
             $options['batch_name'],
@@ -160,8 +160,6 @@ class V3WechatPay extends BasePay implements PayInterface
                 ]
             ]
         );
-
-        return $res;
     }
 
     /**
