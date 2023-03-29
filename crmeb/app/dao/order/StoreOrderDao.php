@@ -497,7 +497,7 @@ class StoreOrderDao extends BaseDao
      */
     public function chartTimePrice($start, $stop)
     {
-        return $this->search(['is_del' => 0, 'paid' => 1, 'refund_status' => 0])
+        return $this->search(['pid' => 0, 'is_del' => 0, 'paid' => 1, 'refund_status' => [0, 3]])
             ->where('add_time', '>=', $start)
             ->where('add_time', '<', $stop)
             ->field('sum(pay_price) as num,FROM_UNIXTIME(add_time, \'%Y-%m-%d\') as time')
@@ -513,7 +513,7 @@ class StoreOrderDao extends BaseDao
      */
     public function chartTimeNumber($start, $stop)
     {
-        return $this->search(['is_del' => 0, 'paid' => 1, 'refund_status' => 0])
+        return $this->search(['pid' => 0, 'is_del' => 0, 'paid' => 1, 'refund_status' => [0, 3]])
             ->where('add_time', '>=', $start)
             ->where('add_time', '<', $stop)
             ->field('count(id) as num,FROM_UNIXTIME(add_time, \'%Y-%m-%d\') as time')
@@ -896,7 +896,7 @@ class StoreOrderDao extends BaseDao
      */
     public function seckillPeople($id, $keyword, $page = 0, $limit = 0)
     {
-        return $this->getModel()
+        return $this->getModel()->where('paid', 1)->whereIn('refund_type', [0, 3])->where('is_del', 0)
             ->when($id != 0, function ($query) use ($id) {
                 $query->where('seckill_id', $id);
             })->when($keyword != '', function ($query) use ($keyword) {
@@ -904,6 +904,7 @@ class StoreOrderDao extends BaseDao
             })->where('paid', 1)->field([
                 'real_name',
                 'uid',
+                'user_phone',
                 'SUM(total_num) as goods_num',
                 'COUNT(id) as order_num',
                 'SUM(pay_price) as total_price',

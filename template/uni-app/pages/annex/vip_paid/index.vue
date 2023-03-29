@@ -4,7 +4,7 @@
 			<view class="acea-row row-middle">
 				<image class="image" :src="userInfo.avatar"></image>
 				<view class="text">
-					<view class="name">{{userInfo.nickname}}</view>
+					<view class="name line1">{{userInfo.nickname}}</view>
 					<view v-if="userInfo.is_ever_level">{{$t(`永久SVIP会员`)}}</view>
 					<view v-else-if="userInfo.is_money_level">{{$t(`SVIP会员`)}} {{userInfo.overdue_time | dateFormat}}
 						{{$t(`到期`)}}
@@ -58,7 +58,7 @@
 				<navigator class="link" url="/pages/annex/vip_clause/index" hover-class="none">{{$t(`购买即视为同意`)}}《<text
 						class="mark">{{$t(`会员用户协议`)}}</text>》</navigator>
 			</view>
-			<view class="buy" @click="pay">{{$t(`立即支付`)}}</view>
+			<view class="buy" @click="pay">{{ type=== 'free'? $t(`立即试用`) : $t(`立即支付`)}}</view>
 			<view class="cash">
 				<text @click="drawMemberCard">{{$t(`点击兑换卡密`)}}</text>
 			</view>
@@ -817,6 +817,7 @@
 			font-size: 30rpx;
 			line-height: 42rpx;
 			color: #333333;
+			max-width: 360rpx;
 		}
 
 		.info {

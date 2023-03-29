@@ -305,7 +305,8 @@
 					.name {
 						color: #333;
 						font-size: 30rpx;
-						height: 82rpx;
+						line-height: 38rpx;
+						height: 70rpx;
 					}
 
 					.bottom {

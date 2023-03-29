@@ -814,6 +814,9 @@
 					that.$set(that, 'totalPrice', that.$util.$h.Add(parseFloat(res.data.priceGroup.totalPrice),
 						parseFloat(res.data
 							.priceGroup.storePostage)));
+					that.$set(that, 'allPrice', that.$util.$h.Add(parseFloat(res.data.priceGroup.totalPrice),
+						parseFloat(res.data
+							.priceGroup.vipPrice)).toFixed(2));
 					that.$set(that, 'seckillId', parseInt(res.data.seckill_id));
 					that.$set(that, 'invoice_func', res.data.invoice_func);
 					that.$set(that, 'special_invoice', res.data.special_invoice);
@@ -1455,6 +1458,12 @@
 
 	.alipaysubmit {
 		display: none;
+	}
+
+	.order-submission {
+		/* #ifdef APP-PLUS */
+		padding-bottom: 70rpx;
+		/* #endif */
 	}
 
 	.order-submission .line {

@@ -263,9 +263,6 @@ class StoreOrderController
             return app('json')->fail(410215);
         }
 
-        //重新生成订单号去支付
-//        $order['order_id'] = mt_rand(100, 999) . '_' . $order['order_id'];
-
         //0元支付
         if (bcsub((string)$orderInfo['pay_price'], '0', 2) <= 0) {
             //创建订单jspay支付
@@ -430,6 +427,7 @@ class StoreOrderController
      * 订单删除
      * @param Request $request
      * @return mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function del(Request $request)
     {

@@ -723,3 +723,7 @@ body {
 .common-form-button{
   margin-right: 10px;
 }
+
+.pl10 {
+  padding-left: 10px;
+}

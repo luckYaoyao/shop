@@ -1602,7 +1602,6 @@
 			color: #333;
 			position: absolute;
 			left: 30rpx;
-			bottom: 110rpx;
 			background-color: #fff;
 			padding: 18rpx 24rpx;
 			border-radius: 4rpx;
@@ -1610,11 +1609,12 @@
 			-webkit-box-shadow: 0px 0px 3px 0px rgba(200, 200, 200, 0.75);
 			-moz-box-shadow: 0px 0px 3px 0px rgba(200, 200, 200, 0.75);
 			box-shadow: 0px 0px 3px 0px rgba(200, 200, 200, 0.75);
-			// #ifdef MP
+			bottom: 110rpx;
+			/* #ifdef APP-PLUS */ 
 			bottom: calc(110rpx + constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
 			bottom: calc(110rpx + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
 
-			// #endif
+			/* #endif */ 
 			.more-btn {
 				color: #333;
 				padding: 4rpx;

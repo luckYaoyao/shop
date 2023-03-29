@@ -15,6 +15,7 @@ use app\services\order\DeliveryServiceServices;
 use app\services\order\StoreOrderCartInfoServices;
 use app\services\order\StoreOrderCreateServices;
 use app\services\order\StoreOrderDeliveryServices;
+use app\services\order\StoreOrderEconomizeServices;
 use app\services\order\StoreOrderRefundServices;
 use app\services\order\StoreOrderServices;
 use app\services\order\StoreOrderWapServices;
@@ -105,17 +106,16 @@ class StoreOrderController
      * @param UserServices $userServices
      * @param $orderId
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function detail(Request $request, StoreOrderServices $services, UserServices $userServices, $orderId)
     {
-        $order = $this->service->getOne(['order_id' => $orderId], '*', ['pink']);
-        if (!$order) return app('json')->fail(410173);
-        $order = $order->toArray();
-        $nickname = $userServices->value(['uid' => $order['uid']], 'nickname');
-        $orderInfo = $services->tidyOrder($order, true);
-        unset($orderInfo['uid'], $orderInfo['seckill_id'], $orderInfo['pink_id'], $orderInfo['combination_id'], $orderInfo['bargain_id'], $orderInfo['status'], $orderInfo['total_postage']);
-        $orderInfo['nickname'] = $nickname;
-        return app('json')->success($orderInfo);
+        $economizeServices = app()->make(StoreOrderEconomizeServices::class);
+        $orderData = $services->getUserOrderByKey($economizeServices, $orderId, (int)$request->uid());
+        $orderData['nickname'] = $userServices->value(['uid' => $orderData['uid']], 'nickname');
+        return app('json')->success($orderData);
     }
 
     /**

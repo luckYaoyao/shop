@@ -49,10 +49,10 @@
 				getCategoryVersion().then(res => {
 					if (!uni.getStorageSync('CAT_VERSION') || res.data.version != uni.getStorageSync(
 							'CAT_VERSION')) {
-						this.isNew = true
+						this.isNew = !this.isNew
 						uni.setStorageSync('CAT_VERSION', res.data.version)
 					} else {
-						this.isNew = false
+						// this.isNew = false
 					}
 					this.classStyle();
 				})

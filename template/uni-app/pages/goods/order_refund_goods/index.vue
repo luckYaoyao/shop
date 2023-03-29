@@ -26,11 +26,11 @@
 					</view>
 					<view class='item acea-row row-between-wrapper'>
 						<view>{{$t(`快递单号`)}}</view>
-						<input type="text" :placeholder="$t(`填写快递单号`)" placeholder-class='placeholder' v-model="refundInfo.refund_express" />
+						<input class="input" type="text" :placeholder="$t(`填写快递单号`)" placeholder-class='placeholder' v-model="refundInfo.refund_express" />
 					</view>
 					<view class='item acea-row row-between-wrapper'>
 						<view>{{$t(`联系电话`)}}</view>
-						<input type="number" :placeholder="$t(`请输入手机号`)" placeholder-class='placeholder' v-model="refundInfo.refund_phone" />
+						<input  class="input" type="number" :placeholder="$t(`请输入手机号`)" placeholder-class='placeholder' v-model="refundInfo.refund_phone" />
 					</view>
 					<view class='item textarea acea-row row-between'>
 						<view>{{$t(`备注说明`)}}</view>
@@ -191,6 +191,9 @@
 		border-bottom: 1rpx solid #eee;
 		font-size: 30rpx;
 		color: #333;
+		.input{
+			text-align: right;
+		}
 	}
 
 	.apply-return .list .item .num {

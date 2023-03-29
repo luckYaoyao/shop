@@ -950,7 +950,7 @@ class StoreProductServices extends BaseServices
         }
         $header[] = ['title' => '图片', 'slot' => 'pic', 'align' => 'center', 'minWidth' => 120];
         if ($type == 1) {
-            $header[] = ['title' => '秒杀价', 'slot' => 'price', 'align' => 'center', 'minWidth' => 80];
+            $header[] = ['title' => '秒杀价', 'type' => 1, 'key' => 'price', 'align' => 'center', 'minWidth' => 80];
             $header[] = ['title' => '成本价', 'key' => 'cost', 'align' => 'center', 'minWidth' => 80];
             $header[] = ['title' => '原价', 'key' => 'ot_price', 'align' => 'center', 'minWidth' => 80];
         } elseif ($type == 2) {
@@ -1259,7 +1259,7 @@ class StoreProductServices extends BaseServices
             $page = 1;
             $limit = $num;
         }
-        $list = $this->dao->getSearchList($where, $page, $limit, ['id,store_name,cate_id,image,IFNULL(sales, 0) + IFNULL(ficti, 0) as sales,price,stock,activity,unit_name,presale']);
+        $list = $this->dao->getSearchList($where, $page, $limit, ['id,store_name,cate_id,image,IFNULL(sales, 0) + IFNULL(ficti, 0) as sales,price,stock,activity,unit_name,presale,is_vip,vip_price']);
         $list = $this->getActivityList($list);
         return $list;
     }
@@ -1815,7 +1815,7 @@ class StoreProductServices extends BaseServices
             $memberCardService = app()->make(MemberCardServices::class);
             $vipStatus = $memberCardService->isOpenMemberCard('vip_price');
             foreach ($list as &$item) {
-                if (!($vipStatus && $item['is_vip'])) {
+                if (!$this->vipIsOpen(!!$item['is_vip'], $vipStatus)) {
                     $item['vip_price'] = 0;
                 }
             }

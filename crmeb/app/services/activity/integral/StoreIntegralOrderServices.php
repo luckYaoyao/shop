@@ -725,12 +725,15 @@ class StoreIntegralOrderServices extends BaseServices
      * @param int $id
      * @param string $remark
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function remark(int $id, string $remark)
     {
         if (!$remark) throw new AdminException(400106);
         if (!$id) throw new AdminException(100100);
-        if (!$order = $this->services->get($id)) {
+        if (!$order = $this->dao->get($id)) {
            throw new AdminException(100025);
         }
 
