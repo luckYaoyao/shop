@@ -636,7 +636,7 @@ export default {
               h('InputNumber', {
                 props: {
                   min: 0,
-                  precision: 0,
+                  precision: key === 'price' ? 2 : 0,
                   value: key === 'price' ? params.row.price : params.row.quota,
                 },
                 on: {
