@@ -24,7 +24,7 @@
               <div class="box">
                 <div class="box-item" v-for="(item, index) in goodsList" :key="index">
                   <img :src="item.image" alt="" />
-                  <Icon type="ios-close-circle" size="20" @click="bindDelete(index)" />
+                  <Icon type="ios-close-circle" size="20" @click="bindDelete(index,item)" />
                 </div>
                 <div class="upload-box" @click="selectGoods">
                   <Icon type="ios-camera-outline" size="36" />
@@ -182,10 +182,10 @@ export default {
         }, 300);
       });
     },
-    bindDelete(index) {
+    bindDelete(index,item) {
       this.goodsList.splice(index, 1);
       if (this.tabList.length) {
-        let i = this.tabList.findIndex((e) => e.id == row.id);
+        let i = this.tabList.findIndex((e) => e.id == item.product_id);
         this.tabList.splice(i, 1);
       }
     },

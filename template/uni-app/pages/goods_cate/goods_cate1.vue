@@ -188,7 +188,6 @@
 				if (type || !uni.getStorageSync('CAT1_DATA')) {
 					getCategoryList().then(res => {
 						uni.setStorageSync('CAT1_DATA', res.data)
-						console.log('调了')
 						that.productList = res.data;
 						that.$nextTick(res => {
 							that.infoScroll();

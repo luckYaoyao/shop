@@ -50,10 +50,8 @@
 					if (!uni.getStorageSync('CAT_VERSION') || res.data.version != uni.getStorageSync(
 							'CAT_VERSION')) {
 						this.isNew = !this.isNew
-						console.log('变了')
 						uni.setStorageSync('CAT_VERSION', res.data.version)
 					} else {
-						console.log('没变')
 						// this.isNew = false
 					}
 					this.classStyle();
