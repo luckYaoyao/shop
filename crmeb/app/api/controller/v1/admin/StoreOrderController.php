@@ -113,7 +113,7 @@ class StoreOrderController
     public function detail(Request $request, StoreOrderServices $services, UserServices $userServices, $orderId)
     {
         $economizeServices = app()->make(StoreOrderEconomizeServices::class);
-        $orderData = $services->getUserOrderByKey($economizeServices, $orderId, (int)$request->uid());
+        $orderData = $services->getUserOrderByKey($economizeServices, $orderId, 0);
         $orderData['nickname'] = $userServices->value(['uid' => $orderData['uid']], 'nickname');
         return app('json')->success($orderData);
     }

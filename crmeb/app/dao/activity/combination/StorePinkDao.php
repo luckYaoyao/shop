@@ -138,6 +138,7 @@ class StorePinkDao extends BaseDao
     /**
      * 获取拼团完成的个数
      * @return float
+     * @throws \ReflectionException
      */
     public function getPinkOkSumTotalNum()
     {

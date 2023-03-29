@@ -88,6 +88,9 @@ class StorePinkServices extends BaseServices
      * 参团人员
      * @param int $id
      * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function getPinkMember(int $id)
     {
@@ -96,8 +99,11 @@ class StorePinkServices extends BaseServices
 
     /**
      * 拼团退款
-     * @param $id
+     * @param $order
      * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function setRefundPink($order)
     {
