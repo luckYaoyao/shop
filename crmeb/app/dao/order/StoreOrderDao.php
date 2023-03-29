@@ -447,8 +447,9 @@ class StoreOrderDao extends BaseDao
 
     /**
      * 获取订单详情
-     * @param $uid
-     * @param $key
+     * @param string $key
+     * @param int $uid
+     * @param array $with
      * @return array|\think\Model|null
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -456,7 +457,9 @@ class StoreOrderDao extends BaseDao
      */
     public function getUserOrderDetail(string $key, int $uid, $with = [])
     {
-        return $this->getOne(['order_id|unique' => $key, 'uid' => $uid, 'is_del' => 0], '*', $with);
+        $where = ['order_id|unique' => $key, 'is_del' => 0];
+        if ($uid > 0) $where = $where + ['uid' => $uid];
+        return $this->getOne($where, '*', $with);
     }
 
     /**
