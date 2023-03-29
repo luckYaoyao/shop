@@ -152,7 +152,7 @@
             <div class="title row">联系信息</div>
             <Row class="row">
               <Col span="12">真实姓名: {{ invoiceDetails.name }}</Col>
-              <Col span="12">联系电话: {{ invoiceDetails.user_phone }}</Col>
+              <Col span="12">联系电话: {{ invoiceDetails.drawer_phone }}</Col>
             </Row>
             <Row class="row">
               <Col span="12">联系邮箱: {{ invoiceDetails.email }}</Col>

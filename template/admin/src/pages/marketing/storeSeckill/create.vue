@@ -636,8 +636,9 @@ export default {
               h('InputNumber', {
                 props: {
                   min: 0,
-                  precision: key === 'price' ? 2 : 0,
                   value: key === 'price' ? params.row.price : params.row.quota,
+                  formatter: (value) =>
+                    key === 'price' ? `${value}`.match(/^\d+(?:\.\d{0,2})?/) : `${value}`.match(/^\d+(?:\.\d{0,-1})?/),
                 },
                 on: {
                   'on-change': (e) => {
