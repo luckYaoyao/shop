@@ -106,7 +106,7 @@ export default {
       columns1: [
         { key: 'id', title: '商品ID' },
         { slot: 'img', title: '商品信息' },
-        { slot: 'price', title: '直播售价' },
+        { key: 'price', title: '直播售价' },
         // {
         //   key: 'price',
         //   title: '直播售价',

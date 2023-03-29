@@ -2638,7 +2638,7 @@ HTML;
 
                 $data['pay_price'] = $info['pay_price'];
                 $data['pay_postage'] = $info['pay_postage'];
-                $data['offline_postage'] = sys_config('offline_postage', 0);
+                $data['offline_postage'] = (int)sys_config('offline_postage', 0);
                 $data['invalid_time'] = $time;
 
                 break;
