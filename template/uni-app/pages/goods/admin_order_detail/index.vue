@@ -3,7 +3,7 @@
 		<view class="header acea-row row-middle">
 			<view class="state">{{ $t(title) }}</view>
 			<view class="data">
-				<view class="order-num">{{$t(`订单号`)}}：{{ orderInfo.order_id }}</view>
+				<view class="order-num">{{$t(`订单`)}}：{{ orderInfo.order_id }}</view>
 				<view>
 					<span class="time">{{ orderInfo._add_time }}</span>
 				</view>
@@ -44,7 +44,7 @@
 			</navigator>
 		</view>
 		<view class="public-total">
-			{{$t(`共`)}}{{ orderInfo.total_num }}{{$t(`件商品`)}}
+			{{$t(`共`)}}{{ orderInfo.total_num }}{{$t(`件商品，应支付`)}}
 			<span class="money">{{$t(`￥`)}}{{ orderInfo.pay_price }}</span> ( {{$t(`邮费`)}} {{$t(`￥`)}}{{
         orderInfo.pay_postage
       }}
@@ -52,7 +52,7 @@
 		</view>
 		<view class="wrapper">
 			<view class="item acea-row row-between">
-				<view>{{$t(`订单号`)}}：</view>
+				<view>{{$t(`订单编号`)}}：</view>
 				<view class="conter acea-row row-middle row-right">
 					{{ orderInfo.order_id
           }}
@@ -90,25 +90,33 @@
 			</view>
 		</view>
 		<view class="wrapper">
-			<view class="item acea-row row-between">
-				<view>{{$t(`支付金额`)}}：</view>
-				<view class="conter">{{$t(`￥`)}}{{ orderInfo.total_price }}</view>
+			<view class='item acea-row row-between'>
+				<view>{{$t(`商品总价`)}}：</view>
+				<view class='conter'>
+					{{$t(`￥`)}}{{(parseFloat(orderInfo.total_price)+parseFloat(orderInfo.vip_true_price)).toFixed(2)}}
+				</view>
 			</view>
-			<view class='item acea-row row-between' v-if='orderInfo.coupon_id'>
+			<view class='item acea-row row-between' v-if="orderInfo.pay_postage > 0">
+				<view>{{$t(`配送运费`)}}：</view>
+				<view class='conter'>{{$t(`￥`)}}{{parseFloat(orderInfo.pay_postage).toFixed(2)}}</view>
+			</view>
+			<view v-if="orderInfo.levelPrice > 0" class='item acea-row row-between'>
+				<view>{{$t(`用户等级优惠`)}}：</view>
+				<view class='conter'>-{{$t(`￥`)}}{{parseFloat(orderInfo.levelPrice).toFixed(2)}}</view>
+			</view>
+			<view v-if="orderInfo.memberPrice > 0" class='item acea-row row-between'>
+				<view>{{$t(`付费会员优惠`)}}：</view>
+				<view class='conter'>-{{$t(`￥`)}}{{parseFloat(orderInfo.memberPrice).toFixed(2)}}</view>
+			</view>
+			<view class='item acea-row row-between' v-if='orderInfo.coupon_price > 0'>
 				<view>{{$t(`优惠券抵扣`)}}：</view>
-				<view class='conter'>-{{$t(`￥`)}}{{orderInfo.coupon_price}}</view>
+				<view class='conter'>-{{$t(`￥`)}}{{parseFloat(orderInfo.coupon_price).toFixed(2)}}</view>
 			</view>
 			<view class='item acea-row row-between' v-if="orderInfo.use_integral > 0">
 				<view>{{$t(`积分抵扣`)}}：</view>
-				<view class='conter'>-{{$t(`￥`)}}{{orderInfo.deduction_price}}</view>
+				<view class='conter'>-{{$t(`￥`)}}{{parseFloat(orderInfo.deduction_price).toFixed(2)}}</view>
 			</view>
-			<view class='item acea-row row-between' v-if="orderInfo.pay_postage > 0">
-				<view>{{$t(`运费`)}}：</view>
-				<view class='conter'>{{$t(`￥`)}}{{orderInfo.pay_postage}}</view>
-			</view>
-			<view class="actualPay acea-row row-right">
-				{{$t(`实际支付`)}}：<span class="money">{{$t(`￥`)}}{{ orderInfo.pay_price }}</span>
-			</view>
+			<view class='actualPay acea-row row-right'>{{$t(`实付款`)}}：<text class='money'>{{$t(`￥`)}}{{parseFloat(orderInfo.pay_price).toFixed(2)}}</text></view>
 		</view>
 		<view class="wrapper" v-if="
         orderInfo.delivery_type != 'fictitious' && orderInfo._status._type === 2
