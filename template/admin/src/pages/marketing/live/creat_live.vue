@@ -117,7 +117,7 @@
               />
             </FormItem>
           </Col>
-          <Col span="24">
+          <!-- <Col span="24">
             <FormItem label="显示样式：">
               <RadioGroup v-model="formValidate.screen_type">
                 <Radio :label="item.label" v-for="(item, index) in screen_type" :key="index">
@@ -125,7 +125,7 @@
                 </Radio>
               </RadioGroup>
             </FormItem>
-          </Col>
+          </Col> -->
           <Col span="24">
             <FormItem label="直播间类型：">
               <RadioGroup v-model="formValidate.type">

@@ -56,6 +56,8 @@ class StorePinkDao extends BaseDao
     {
         return $this->search($where, false)->when($where['k_id'] != 0, function ($query) use ($where) {
             $query->whereOr('id', $where['k_id']);
+        })->when(isset($where['keyword']) && $where['keyword'] != '', function ($query) use ($where) {
+            $query->where('uid|nickname', 'like', '%' . $where['keyword'] . '%');
         })->with('getProduct')->when($page != 0, function ($query) use ($page, $limit) {
             $query->page($page, $limit);
         })->order('add_time desc')->select()->toArray();

@@ -56,6 +56,9 @@ class StorePinkServices extends BaseServices
     /**
      * @param array $where
      * @return array
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function systemPage(array $where)
     {
