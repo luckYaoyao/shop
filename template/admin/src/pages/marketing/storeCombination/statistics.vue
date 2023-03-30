@@ -42,7 +42,7 @@
                 search
                 enter-button
                 v-model="pagination.real_name"
-                placeholder="请输入用户姓名|手机号|UID"
+                :placeholder="type == 1 ? '请输入用户|订单号|UID' : '请输入用户姓名|UID'"
                 @on-search="searchList"
               />
             </FormItem>
@@ -292,7 +292,7 @@ export default {
         },
         {
           title: '金额',
-          key: 'price',
+          key: 'total_price',
         },
         {
           title: '订单状态',
