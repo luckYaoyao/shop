@@ -1,5 +1,9 @@
 <template>
-  <div class="layout-logo" v-if="!$store.state.themeConfig.themeConfig.isCollapse" @click="onThemeConfigChange">
+  <div
+    class="layout-logo"
+    v-if="$store.state.themeConfig.themeConfig.layout !== 'columns' && !$store.state.themeConfig.themeConfig.isCollapse"
+    @click="onThemeConfigChange"
+  >
     <img v-if="maxLogo" class="layout-logo-medium-img" :src="maxLogo" />
   </div>
   <div class="layout-logo-size" v-else @click="onThemeConfigChange">
@@ -55,7 +59,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-//   box-shadow: 0px 1px 4px rgba(0, 21, 41, 2%);
+  //   box-shadow: 0px 1px 4px rgba(0, 21, 41, 2%);
   color: var(--prev-color-primary);
   font-size: 16px;
   cursor: pointer;

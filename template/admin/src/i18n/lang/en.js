@@ -133,6 +133,7 @@ export default {
 		fourWartermarkText: 'Watermark copy',
 		fiveTitle: 'Other settings',
 		fiveTagsStyle: 'Tagsview style',
+		themeStyle: 'Theme',
 		fiveAnimation: 'page animation',
 		fiveColumnsAsideStyle: 'Column style',
 		fiveColumnsAsideLayout: 'Column layout',

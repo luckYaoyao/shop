@@ -133,6 +133,7 @@ export default {
 		fourWartermarkText: '浮水印文案',
 		fiveTitle: '其它設定',
 		fiveTagsStyle: 'Tagsview 風格',
+		themeStyle: '主題',
 		fiveAnimation: '主頁面切換動畫',
 		fiveColumnsAsideStyle: '分欄高亮風格',
 		fiveColumnsAsideLayout: '分欄佈局風格',

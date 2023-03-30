@@ -1,6 +1,7 @@
 <template>
   <el-aside class="layout-aside" :class="setCollapseWidth" v-if="clientWidth > 1000">
-    <Logo v-if="setShowLogo && menuList.length" />
+    <!-- <Logo v-if="setShowLogo && menuList.length" /> -->
+    <el-divider v-if="menuList.length && !getThemeConfig.isCollapse" content-position="center">{{ catName }}</el-divider>
     <el-scrollbar class="flex-auto" ref="layoutAsideRef">
       <Vertical :menuList="menuList" :class="setCollapseWidth" />
     </el-scrollbar>
@@ -25,6 +26,7 @@ export default {
     return {
       menuList: [],
       clientWidth: '',
+      catName: '',
     };
   },
   computed: {
@@ -72,6 +74,9 @@ export default {
     });
     this.bus.$on('layoutMobileResize', (res) => {
       this.initMenuFixed(res.clientWidth);
+    });
+    this.bus.$on('oneCatName', (name) => {
+      this.catName = name;
     });
     // 菜单滚动条监听
     this.bus.$on('updateElScrollBar', () => {

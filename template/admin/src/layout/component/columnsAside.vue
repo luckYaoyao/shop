@@ -1,6 +1,7 @@
 <template>
   <div class="layout-columns-aside">
     <el-scrollbar>
+      <Logo />
       <ul>
         <li
           v-for="(v, k) in columnsAsideList"
@@ -41,9 +42,11 @@
 
 <script>
 import { getMenuSider, getHeaderName } from '@/libs/system';
+import Logo from '@/layout/logo/index.vue';
 
 export default {
   name: 'layoutColumnsAside',
+  components: { Logo },
   data() {
     return {
       columnsAsideList: [],
@@ -108,6 +111,7 @@ export default {
         this.$store.state.themeConfig.themeConfig.isCollapse = true;
         return false;
       }
+      this.bus.$emit('oneCatName', resData.item[0].title);
       this.onColumnsAsideDown(resData.item[0].k);
       // 刷新时，初始化一个路由设置自动收起菜单
       resData.children.length > 0
@@ -181,6 +185,7 @@ export default {
         const resData = this.setSendChildren(HeadName);
         if (resData.length <= 0) return false;
         this.onColumnsAsideDown(resData.item[0].k);
+        this.bus.$emit('oneCatName', resData.item[0].title);
         this.bus.$emit('setSendColumnsChildren', asideList || []);
       },
       deep: true,
@@ -235,12 +240,12 @@ export default {
     }
     .layout-columns-active,
     .layout-columns-active a {
-      color: var(--prev-color-text-white);
+      color: var(--prev-bg-columnsMenuActiveColor);
       transition: 0.3s ease-in-out;
     }
     .columns-round {
       background: var(--prev-color-primary);
-      color: var(--prev-color-text-white);
+      // color: var(--prev-color-text-white);
       position: absolute;
       left: 50%;
       top: 2px;

@@ -371,7 +371,7 @@ export default {
         transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
       }
       &:hover {
-        color: var(--prev-color-text-white);
+        color: var(--prev-color-primary-light-9);
         transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
         border-color: transparent;
         &::before {
@@ -380,7 +380,8 @@ export default {
           border-radius: 2px;
         }
         .is-tagsview-icon {
-          color: var(--prev-color-text-white);
+          color: var(--prev-color-primary-light-9);
+
           transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
         }
       }
@@ -388,7 +389,7 @@ export default {
         position: relative;
         left: -5px;
         top: 1px;
-        color: var(--prev-color-text-white);
+        color: var(--prev-color-primary-light-9);
       }
       &-icon {
         border-radius: 100%;
@@ -405,7 +406,7 @@ export default {
       }
     }
     .is-active {
-      color: var(--prev-color-text-white);
+      color: var(--prev-color-primary-light-9);
       transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
       border-color: transparent;
       &::before {
@@ -444,7 +445,7 @@ export default {
     }
     .is-active {
       background: none !important;
-      color: #fff !important;
+      color: var(--prev-bg-menu-hover-ba-color) !important;
     }
   }
   // 风格5
@@ -481,7 +482,7 @@ export default {
     .is-active {
       @extend .tags-style-five-svg;
       background: var(--prev-color-primary-light-9) !important;
-      color: var(--prev-color-primary) !important;
+      color: var(--prev-tag-active-color) !important;
       z-index: 1;
     }
   }
