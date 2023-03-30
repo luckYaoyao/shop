@@ -304,13 +304,14 @@ abstract class BaseDao
         $with = [];
         $otherWhere = [];
         $responses = new \ReflectionClass($this->setModel());
+
         foreach ($where as $key => $value) {
             $method = 'search' . Str::studly($key) . 'Attr';
             if ($responses->hasMethod($method)) {
                 $with[] = $key;
             } else {
                 if ($key != 'timeKey') {
-                    $otherWhere[] = $value;
+                    $otherWhere[] = is_array($value) ? $value : [$key, '=', $value];
                 }
             }
         }
@@ -320,6 +321,7 @@ abstract class BaseDao
     /**
      * 根据搜索器获取搜索内容
      * @param $where
+     * @param $search
      * @return BaseModel
      * @throws \ReflectionException
      * @author 吴汐

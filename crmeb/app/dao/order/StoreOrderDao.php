@@ -447,8 +447,9 @@ class StoreOrderDao extends BaseDao
 
     /**
      * 获取订单详情
-     * @param $uid
-     * @param $key
+     * @param string $key
+     * @param int $uid
+     * @param array $with
      * @return array|\think\Model|null
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
@@ -456,7 +457,9 @@ class StoreOrderDao extends BaseDao
      */
     public function getUserOrderDetail(string $key, int $uid, $with = [])
     {
-        return $this->getOne(['order_id|unique' => $key, 'uid' => $uid, 'is_del' => 0], '*', $with);
+        $where = ['order_id|unique' => $key, 'is_del' => 0];
+        if ($uid > 0) $where = $where + ['uid' => $uid];
+        return $this->getOne($where, '*', $with);
     }
 
     /**
@@ -965,9 +968,9 @@ class StoreOrderDao extends BaseDao
      */
     public function combinationStatisticsOrder($id, $where, $page = 0, $limit = 0)
     {
-        return $this->search($where)->where('combination_id', $id)
+        return $this->search($where)->where('combination_id', $id)->where('paid', 1)->whereIn('refund_type', [0, 3])->where('is_del', 0)
             ->when($page && $limit, function ($query) use ($page, $limit) {
                 $query->page($page, $limit);
-            })->field(['order_id', 'real_name', 'status', 'pay_price', 'total_num', 'add_time', 'pay_time', 'paid'])->select()->toArray();
+            })->field(['uid', 'order_id', 'real_name', 'status', 'pay_price', 'total_num', 'add_time', 'pay_time', 'paid'])->order('add_time desc')->select()->toArray();
     }
 }

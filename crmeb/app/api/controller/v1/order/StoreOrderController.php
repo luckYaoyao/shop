@@ -94,6 +94,10 @@ class StoreOrderController
      * @param Request $request
      * @param ShippingTemplatesServices $services
      * @return mixed
+     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function confirm(Request $request, ShippingTemplatesServices $services)
     {
@@ -298,23 +302,6 @@ class StoreOrderController
     }
 
     /**
-     * TODO 支付宝单独支付 弃用
-     * @param OrderPayServices $payServices
-     * @param OtherOrderServices $services
-     * @param string $key
-     * @param string $quitUrl
-     * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
-     */
-//    public function aliPay(OrderPayServices $payServices, OtherOrderServices $services, string $key, string $quitUrl)
-//    {
-//        $payInfo = $this->services->aliPayOrder($payServices, $services, $key, $quitUrl);
-//        return app('json')->success(['pay_content' => $payInfo]);
-//    }
-
-    /**
      * 订单列表
      * @param Request $request
      * @return mixed
@@ -467,8 +454,14 @@ class StoreOrderController
     /**
      * 订单 查看物流
      * @param Request $request
+     * @param StoreOrderCartInfoServices $services
+     * @param ExpressServices $expressServices
      * @param $uni
+     * @param string $type
      * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function express(Request $request, StoreOrderCartInfoServices $services, ExpressServices $expressServices, $uni, $type = '')
     {
@@ -535,6 +528,7 @@ class StoreOrderController
      * @param Request $request
      * @param StoreOrderCartInfoServices $cartInfoServices
      * @param StoreProductReplyServices $replyServices
+     * @return \think\Response|void
      * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function comment(Request $request, StoreOrderCartInfoServices $cartInfoServices, StoreProductReplyServices $replyServices)
@@ -726,37 +720,6 @@ class StoreOrderController
             return app('json')->success(100027);
         else
             return app('json')->fail(100028);
-    }
-
-    /**
-     * 订单申请退款审核
-     * @param Request $request
-     * @param StoreOrderRefundServices $services
-     */
-    public function refund_verify(Request $request, StoreOrderRefundServices $services)
-    {
-//        $data = $request->postMore([
-//            ['text', ''],
-//            ['refund_reason_wap_img', ''],
-//            ['refund_reason_wap_explain', ''],
-//            ['uni', ''],
-//            ['refund_type', 1],
-//            ['cart_id', 0],
-//            ['refund_num', 0]
-//        ]);
-//        $uni = $data['uni'];
-//        unset($data['uni']);
-//        if ($data['refund_reason_wap_img'] != '') {
-//            $data['refund_reason_wap_img'] = explode(',', $data['refund_reason_wap_img']);
-//        } else {
-//            $data['refund_reason_wap_img'] = [];
-//        }
-//        if (!$uni || $data['text'] == '' || $data['refund_num'] <= 0) return app('json')->fail('参数错误!');
-//        $res = $services->orderApplyRefund($this->services->getUserOrderDetail($uni, (int)$request->uid()), $data['text'], $data['refund_reason_wap_explain'], $data['refund_reason_wap_img'], $data['refund_type'], $data['cart_id'], $data['refund_num']);
-//        if ($res)
-//            return app('json')->success('提交申请成功');
-//        else
-//            return app('json')->fail('提交失败');
     }
 
     /**

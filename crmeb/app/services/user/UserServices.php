@@ -237,6 +237,7 @@ class UserServices extends BaseServices
      * 获取分销员ids
      * @param array $where
      * @return array
+     * @throws \ReflectionException
      */
     public function getAgentUserIds(array $where)
     {
