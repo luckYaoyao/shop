@@ -245,7 +245,7 @@ class StoreOrderRefundServices extends BaseServices
             $this->storeOrderServices->update($splitOrderInfo['id'], [
                 'status' => -2,
                 'refund_status' => 2,
-                'refund_type' => $orderRefundInfo['refund_type'],
+                'refund_type' => 6,
                 'refund_express' => $orderRefundInfo['refund_express'],
                 'refund_express_name' => $orderRefundInfo['refund_express_name'],
                 'refund_reason_wap_img' => $orderRefundInfo['refund_img'],
