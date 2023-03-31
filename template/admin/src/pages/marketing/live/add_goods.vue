@@ -24,7 +24,7 @@
               <div class="box">
                 <div class="box-item" v-for="(item, index) in goodsList" :key="index">
                   <img :src="item.image" alt="" />
-                  <Icon type="ios-close-circle" size="20" @click="bindDelete(index,item)" />
+                  <Icon type="ios-close-circle" size="20" @click="bindDelete(index, item)" />
                 </div>
                 <div class="upload-box" @click="selectGoods">
                   <Icon type="ios-camera-outline" size="36" />
@@ -155,7 +155,7 @@ export default {
       this.selectIds = this.goodsList.map((i) => {
         return i.product_id;
       });
-      console.log(this.selectIds,this.goodsList)
+      console.log(this.selectIds, this.goodsList);
     },
     // 生成直播商品
     liveGoods() {
@@ -182,17 +182,21 @@ export default {
         }, 300);
       });
     },
-    bindDelete(index,item) {
+    bindDelete(index, item) {
       this.goodsList.splice(index, 1);
-      if (this.tabList.length) {
-        let i = this.tabList.findIndex((e) => e.id == item.product_id);
-        this.tabList.splice(i, 1);
+      let i = this.tabList.findIndex((e) => e.id == item.product_id);
+      this.tabList.splice(i, 1);
+      if (!this.goodsList.length) {
+        this.isShowBox = false;
       }
     },
     del(row, index) {
       this.tabList.splice(index, 1);
       let i = this.goodsList.findIndex((e) => e.product_id == row.id);
       this.goodsList.splice(i, 1);
+      if (!this.tabList.length) {
+        this.isShowBox = false;
+      }
     },
     // 提交
     bindSub() {

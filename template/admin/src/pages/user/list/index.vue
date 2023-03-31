@@ -1048,6 +1048,9 @@ export default {
         });
         this.userFrom.label_id = activeIds.join(',');
       }
+      if (this.ids.length) {
+        this.userFrom.ids = this.ids;
+      }
       this.userFrom.user_type = this.userFrom.user_type || '';
       this.userFrom.status = this.userFrom.status || '';
       this.userFrom.sex = this.userFrom.sex || '';
@@ -1335,14 +1338,15 @@ img {
     color: #808695;
   }
 }
-.demo-drawer-footer{
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        border-top: 1px solid #e8e8e8;
-        padding: 10px 16px;
-        text-align: right;
-        background: #fff;
-    }
+
+.demo-drawer-footer {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-top: 1px solid #e8e8e8;
+  padding: 10px 16px;
+  text-align: right;
+  background: #fff;
+}
 </style>

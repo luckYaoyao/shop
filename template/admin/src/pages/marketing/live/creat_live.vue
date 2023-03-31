@@ -66,7 +66,7 @@
           </Col>
           <Col span="24">
             <div style="display: flex">
-              <FormItem label="分享图：">
+              <FormItem label="分享图：" prop="name">
                 <div @click="modalPicTap(1)" class="box">
                   <img :src="formValidate.share_img" alt="" v-if="formValidate.share_img" />
                   <div class="upload-box" v-else>
