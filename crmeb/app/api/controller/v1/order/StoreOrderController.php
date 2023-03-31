@@ -477,6 +477,7 @@ class StoreOrderController
             foreach ($order['cart_info'] as $k => $cart) {
                 $cartNew['cart_num'] = $cart['cart_num'];
                 $cartNew['truePrice'] = $cart['truePrice'];
+                $cartNew['postage_price'] = $cart['postage_price'];
                 $cartNew['productInfo']['image'] = $cart['productInfo']['image'];
                 $cartNew['productInfo']['store_name'] = $cart['productInfo']['store_name'];
                 $cartNew['productInfo']['unit_name'] = $cart['productInfo']['unit_name'] ?? '';
@@ -500,6 +501,7 @@ class StoreOrderController
                 $cart = json_decode($cart, true);
                 $cartNew['cart_num'] = $cart['cart_num'];
                 $cartNew['truePrice'] = $cart['truePrice'];
+                $cartNew['postage_price'] = $cart['postage_price'];
                 $cartNew['productInfo']['image'] = $cart['productInfo']['image'];
                 $cartNew['productInfo']['store_name'] = $cart['productInfo']['store_name'];
                 $cartNew['productInfo']['unit_name'] = $cart['productInfo']['unit_name'] ?? '';
