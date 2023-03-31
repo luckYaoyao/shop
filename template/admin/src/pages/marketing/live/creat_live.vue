@@ -66,7 +66,7 @@
           </Col>
           <Col span="24">
             <div style="display: flex">
-              <FormItem label="分享图：">
+              <FormItem label="分享图：" prop="name">
                 <div @click="modalPicTap(1)" class="box">
                   <img :src="formValidate.share_img" alt="" v-if="formValidate.share_img" />
                   <div class="upload-box" v-else>
@@ -117,7 +117,7 @@
               />
             </FormItem>
           </Col>
-          <Col span="24">
+          <!-- <Col span="24">
             <FormItem label="显示样式：">
               <RadioGroup v-model="formValidate.screen_type">
                 <Radio :label="item.label" v-for="(item, index) in screen_type" :key="index">
@@ -125,7 +125,7 @@
                 </Radio>
               </RadioGroup>
             </FormItem>
-          </Col>
+          </Col> -->
           <Col span="24">
             <FormItem label="直播间类型：">
               <RadioGroup v-model="formValidate.type">

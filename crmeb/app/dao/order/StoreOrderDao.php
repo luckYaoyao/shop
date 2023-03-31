@@ -967,9 +967,9 @@ class StoreOrderDao extends BaseDao
      */
     public function combinationStatisticsOrder($id, $where, $page = 0, $limit = 0)
     {
-        return $this->search($where)->where('combination_id', $id)
+        return $this->search($where)->where('combination_id', $id)->where('paid', 1)->whereIn('refund_type', [0, 3])->where('is_del', 0)
             ->when($page && $limit, function ($query) use ($page, $limit) {
                 $query->page($page, $limit);
-            })->field(['order_id', 'real_name', 'status', 'pay_price', 'total_num', 'add_time', 'pay_time', 'paid'])->select()->toArray();
+            })->field(['uid', 'order_id', 'real_name', 'status', 'pay_price', 'total_num', 'add_time', 'pay_time', 'paid'])->order('add_time desc')->select()->toArray();
     }
 }
