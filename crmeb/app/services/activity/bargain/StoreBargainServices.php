@@ -1027,6 +1027,7 @@ class StoreBargainServices extends BaseServices
         /** @var StoreOrderServices $orderServices */
         $orderServices = app()->make(StoreOrderServices::class);
         [$page, $limit] = $this->getPageValue();
+        $where = $where + ['paid' => 1, 'refund_status' => 0, 'is_del' => 0];
         $list = $orderServices->bargainStatisticsOrder($id, $where, $page, $limit);
         $where['bargain_id'] = $id;
         $count = $orderServices->count($where);
