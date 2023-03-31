@@ -1,12 +1,12 @@
 <template>
-  <div class="layout-navbars-breadcrumb" :style="{ display: isShowBreadcrumb }">
+  <div class="layout-navbars-breadcrumb">
     <!-- {{[...breadCrumbList,...crumbPast]}} -->
     <i
       class="layout-navbars-breadcrumb-icon"
       :class="getThemeConfig.isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"
       @click="onThemeConfigChange"
     ></i>
-    <el-breadcrumb class="layout-navbars-breadcrumb-hide">
+    <el-breadcrumb class="layout-navbars-breadcrumb-hide" :style="{ display: isShowBreadcrumb }">
       <transition-group name="breadcrumb" mode="out-in">
         <el-breadcrumb-item v-for="(v, k) in [...breadCrumbList, ...crumbPast]" :key="v.path">
           <span v-if="k == 1" class="layout-navbars-breadcrumb-span">

@@ -251,47 +251,29 @@
         <div class="layout-breadcrumb-seting-bar-flex mt15">
           <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fiveAnimation') }}</div>
           <div class="layout-breadcrumb-seting-bar-flex-value">
-            <el-select
-              v-model="getThemeConfig.animation"
-              placeholder="请选择"
-              size="mini"
-              style="width: 90px"
-              @change="setLocalThemeConfig"
-            >
-              <el-option label="slide-right" value="slide-right"></el-option>
-              <el-option label="slide-left" value="slide-left"></el-option>
-              <el-option label="opacitys" value="opacitys"></el-option>
-            </el-select>
+            <el-radio-group v-model="getThemeConfig.animation" size="mini" @change="setLocalThemeConfig">
+              <el-radio-button label="slide-right">右滑</el-radio-button>
+              <el-radio-button label="slide-left">左滑</el-radio-button>
+              <el-radio-button label="opacitys">透明</el-radio-button>
+            </el-radio-group>
           </div>
         </div>
-        <div class="layout-breadcrumb-seting-bar-flex mt15">
+        <div class="layout-breadcrumb-seting-bar-flex mt15" v-if="getThemeConfig.layout === 'columns'">
           <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fiveColumnsAsideStyle') }}</div>
           <div class="layout-breadcrumb-seting-bar-flex-value">
-            <el-select
-              v-model="getThemeConfig.columnsAsideStyle"
-              placeholder="请选择"
-              size="mini"
-              style="width: 90px"
-              @change="setLocalThemeConfig"
-            >
-              <el-option label="圆角" value="columns-round"></el-option>
-              <el-option label="卡片" value="columns-card"></el-option>
-            </el-select>
+            <el-radio-group v-model="getThemeConfig.columnsAsideStyle" size="mini" @change="setLocalThemeConfig">
+              <el-radio-button label="columns-round">圆角</el-radio-button>
+              <el-radio-button label="columns-card">卡片</el-radio-button>
+            </el-radio-group>
           </div>
         </div>
-        <div class="layout-breadcrumb-seting-bar-flex mt15 mb28">
+        <div class="layout-breadcrumb-seting-bar-flex mt15 mb28" v-if="getThemeConfig.layout === 'columns'">
           <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fiveColumnsAsideLayout') }}</div>
           <div class="layout-breadcrumb-seting-bar-flex-value">
-            <el-select
-              v-model="getThemeConfig.columnsAsideLayout"
-              placeholder="请选择"
-              size="mini"
-              style="width: 90px"
-              @change="setLocalThemeConfig"
-            >
-              <el-option label="水平" value="columns-horizontal"></el-option>
-              <el-option label="垂直" value="columns-vertical"></el-option>
-            </el-select>
+            <el-radio-group v-model="getThemeConfig.columnsAsideLayout" size="mini" @change="setLocalThemeConfig">
+              <el-radio-button label="columns-horizontal">水平</el-radio-button>
+              <el-radio-button label="columns-vertical">垂直</el-radio-button>
+            </el-radio-group>
           </div>
         </div>
         <!-- <div class="copy-config">
@@ -548,6 +530,9 @@ export default {
 }
 .mr5 {
   margin-right: 5px;
+}
+/deep/ .el-radio-button--mini .el-radio-button__inner{
+  padding: 7px 8px;
 }
 .layout-breadcrumb-seting-bar {
   height: calc(100vh - 50px);
