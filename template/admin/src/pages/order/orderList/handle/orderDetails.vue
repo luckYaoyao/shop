@@ -8,8 +8,8 @@
           <Col span="12">收货人：{{ orderDatalist.orderInfo.real_name }}</Col>
         </Row>
         <Row class="mb10">
-          <Col span="12">联系电话：{{ orderDatalist.orderInfo.user_phone }}</Col>
-          <Col span="12">收货地址：{{ orderDatalist.orderInfo.user_address }}</Col>
+          <Col span="12">联系电话：{{ orderDatalist.orderInfo.user_phone || '' }}</Col>
+          <Col span="12">收货地址：{{ orderDatalist.orderInfo.user_address || '' }}</Col>
         </Row>
         <Divider style="margin: 20px 0 !important" />
         <div class="ivu-description-list-title">订单信息</div>
@@ -18,7 +18,7 @@
           <Col span="12" class="fontColor1"
             >订单状态：{{ orderDatalist.orderInfo._status._title }}
             {{
-              orderDatalist.orderInfo.refund.length
+              orderDatalist.orderInfo.refund && orderDatalist.orderInfo.refund.length
                 ? orderDatalist.orderInfo.is_all_refund
                   ? '退款中'
                   : '部分退款中'

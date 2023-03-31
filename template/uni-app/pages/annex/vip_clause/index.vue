@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="title">{{agreement.title}}</view>
+		<view class="title">{{agreement.title || ''}}</view>
 		<view class="cont" v-html="agreement.content"></view>
 	</view>
 </template>

@@ -4,19 +4,19 @@
 			<view class="acea-row row-middle">
 				<image class="image" :src="userInfo.avatar"></image>
 				<view class="text">
-					<view class="name line1">{{userInfo.nickname}}</view>
+					<view class="name line1">{{userInfo.nickname || ''}}</view>
 					<view v-if="userInfo.is_ever_level">{{$t(`永久SVIP会员`)}}</view>
 					<view v-else-if="userInfo.is_money_level">{{$t(`SVIP会员`)}} {{userInfo.overdue_time | dateFormat}}
 						{{$t(`到期`)}}
 					</view>
-					<view v-else>{{$t(`您与`)}} {{userInfo.shop_name}} {{$t(`商城的第`)}} {{userInfo.register_days}}
+					<view v-else>{{$t(`您与`)}} {{userInfo.shop_name || ''}} {{$t(`商城的第`)}} {{userInfo.register_days || ''}}
 						{{$t(`天.`)}}
 					</view>
 				</view>
 			</view>
 			<view class="acea-row row-between-wrapper info">
 				<view v-if="userInfo.is_money_level">{{$t(`已累积为您节省`)}} {{$t(`￥`)}}<text
-						class="num">{{userInfo.economize_money}}</text>
+						class="num">{{userInfo.economize_money || ''}}</text>
 				</view>
 				<view v-else>{{$t(`开通即享会员权益`)}}</view>
 				<view class="btn" @click="scrollToCard" v-if="!userInfo.is_ever_level">
