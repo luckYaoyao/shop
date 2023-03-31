@@ -82,6 +82,7 @@ export const themeList = {
     '--prev-bg-columnsMenuBarColor': '#515a6e',
     '--prev-bg-columnsMenuActiveColor': '#fff',
     '--prev-color-primary-light-9': '#f0eefe',
+    '--prev-tag-active-color': '#6954f0',
   },
   'theme-7': {
     '--prev-bg-menuBar': '#282c34',
@@ -94,6 +95,7 @@ export const themeList = {
     '--prev-bg-columnsMenuBar': '#282c34',
     '--prev-bg-columnsMenuBarColor': '#fff',
     '--prev-bg-columnsMenuActiveColor': '#fff',
+    '--prev-tag-active-color': '#f34d37',
   },
   'theme-8': {
     '--prev-bg-menuBar': '#ffffff',
@@ -107,6 +109,7 @@ export const themeList = {
     '--prev-bg-columnsMenuBarColor': '#515a6e',
     '--prev-bg-columnsMenuActiveColor': '#fff',
     '--prev-color-primary-light-9': '#feedeb',
+    '--prev-tag-active-color': '#f34d37',
   },
   'theme-9': {
     '--prev-bg-menuBar': '#ffffff',

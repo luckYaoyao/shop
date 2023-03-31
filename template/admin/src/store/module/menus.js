@@ -38,6 +38,7 @@ export default {
       state.openMenus = openList;
     },
     childMenuList(state, list) {
+      console.log('bbbbb')
       state.childMenuList = list;
     },
   },

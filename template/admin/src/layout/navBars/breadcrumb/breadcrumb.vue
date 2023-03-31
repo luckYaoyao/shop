@@ -101,6 +101,13 @@ export default {
     },
     // breadcrumb icon 点击菜单展开与收起
     onThemeConfigChange() {
+      if (
+        this.$store.state.themeConfig.themeConfig.layout == 'columns' &&
+        !this.$store.state.menus.childMenuList.length &&
+        this.$store.state.themeConfig.themeConfig.isCollapse
+      ) {
+        return;
+      }
       this.$store.state.themeConfig.themeConfig.isCollapse = !this.$store.state.themeConfig.themeConfig.isCollapse;
       this.setLocalThemeConfig();
     },
@@ -175,7 +182,7 @@ export default {
 
 <style scoped lang="scss">
 .layout-navbars-breadcrumb {
-  flex: 1;
+  // flex: 1;
   height: inherit;
   display: flex;
   align-items: center;

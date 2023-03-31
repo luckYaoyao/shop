@@ -108,6 +108,8 @@ export default {
       const resData = this.setSendChildren(getHeaderName(this.$route, this.columnsAsideList));
       if (!resData.children) {
         this.bus.$emit('setSendColumnsChildren', []);
+        this.$store.commit('menus/childMenuList', []);
+
         this.$store.state.themeConfig.themeConfig.isCollapse = true;
         return false;
       }
@@ -118,6 +120,7 @@ export default {
         ? (this.$store.state.themeConfig.themeConfig.isCollapse = false)
         : (this.$store.state.themeConfig.themeConfig.isCollapse = true);
       this.bus.$emit('setSendColumnsChildren', resData?.children || []);
+      this.$store.commit('menus/childMenuList', resData?.children || []);
     },
     // 传送当前子级数据到菜单中
     setSendChildren(path) {
@@ -187,6 +190,7 @@ export default {
         this.onColumnsAsideDown(resData.item[0].k);
         this.bus.$emit('oneCatName', resData.item[0].title);
         this.bus.$emit('setSendColumnsChildren', asideList || []);
+        this.$store.commit('menus/childMenuList', asideList || []);
       },
       deep: true,
     },
@@ -199,6 +203,7 @@ export default {
   width: 70px;
   height: 100%;
   background: var(--prev-bg-columnsMenuBar);
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   ul {
     position: relative;
     li {

@@ -584,7 +584,7 @@ export default {
           border-radius: 2px;
         }
         .el-aside {
-          background-color: var(--prev-color-primary);
+          background-color: var(--prev-tag-active-color);
           border-radius: 2px;
         }
         .el-header {

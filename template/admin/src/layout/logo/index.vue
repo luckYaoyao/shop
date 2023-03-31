@@ -39,6 +39,12 @@ export default {
   methods: {
     // logo 点击实现菜单展开/收起
     onThemeConfigChange() {
+      if (
+        this.$store.state.themeConfig.themeConfig.layout == 'columns' &&
+        !this.$store.state.menus.childMenuList.length &&
+        this.$store.state.themeConfig.themeConfig.isCollapse
+      )
+        return;
       if (this.$store.state.themeConfig.themeConfig.layout === 'transverse') return false;
       this.$store.state.themeConfig.themeConfig.isCollapse = !this.$store.state.themeConfig.themeConfig.isCollapse;
     },
