@@ -469,7 +469,6 @@
 
 	.order-details .wrapper .item .conter {
 		color: #868686;
-		width: 500upx;
 		text-align: right;
 	}
 
