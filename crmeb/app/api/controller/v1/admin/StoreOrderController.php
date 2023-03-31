@@ -238,7 +238,7 @@ class StoreOrderController
             $start = $middle;
         }
         $space = bcsub($stop, $start, 0);//间隔时间段
-        $front = bcsub($start, $space, 0);//第一个时间段
+        $front = bcsub($start, $space, 0) - 1;//第一个时间段
         /** @var StoreOrderServices $orderService */
         $orderService = app()->make(StoreOrderServices::class);
         $order_where = [
@@ -246,10 +246,11 @@ class StoreOrderController
             'paid' => 1,
             'refund_status' => [0, 3],
             'is_del' => 0,
-            'is_system_del' => 0];
+            'is_system_del' => 0
+        ];
 
         if ($type == 1) {//销售额
-            $frontPrice = $orderService->sum($order_where + ['time' => [$front, $start]], 'pay_price', true);
+            $frontPrice = $orderService->sum($order_where + ['time' => [$front, $start - 1]], 'pay_price', true);
             $afterPrice = $orderService->sum($order_where + ['time' => [$start, $stop]], 'pay_price', true);
             $chartInfo = $orderService->chartTimePrice($start, $stop);
             $data['chart'] = $chartInfo;//营业额图表数据
@@ -262,7 +263,7 @@ class StoreOrderController
             $data['increase_time'] = abs($increase); //同比上个时间区间增长营业额
             $data['increase_time_status'] = $increase >= 0 ? 1 : 2; //同比上个时间区间增长营业额增长 1 减少 2
         } else {//订单数
-            $frontNumber = $orderService->count($order_where + ['time' => [$front, $start]]);
+            $frontNumber = $orderService->count($order_where + ['time' => [$front, $start - 1]]);
             $afterNumber = $orderService->count($order_where + ['time' => [$start, $stop]]);
             $chartInfo = $orderService->chartTimeNumber($start, $stop);
             $data['chart'] = $chartInfo;//订单数图表数据
