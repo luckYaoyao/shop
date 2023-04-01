@@ -106,7 +106,7 @@ class StoreBargainUserDao extends BaseDao
     {
         return $this->search($where)->with(['getBargain', 'getUser'])
             ->when(isset($where['real_name']) && $where['real_name'] != '', function ($query) use ($where) {
-                $query->where('uid|nickname', 'like', '%' . $where['keyword'] . '%');
+                $query->where('uid', $where['real_name']);
             })->when($page != 0, function ($query) use ($page, $limit) {
                 $query->page($page, $limit);
             })->order('add_time desc')->select()->toArray();
