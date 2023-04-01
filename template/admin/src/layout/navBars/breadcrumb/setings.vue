@@ -1,6 +1,7 @@
 <template>
   <div class="layout-breadcrumb-seting">
     <el-drawer
+      title="主题编辑"
       :visible.sync="getThemeConfig.isDrawer"
       direction="rtl"
       destroy-on-close
@@ -355,7 +356,7 @@ export default {
     },
     setLocalTheme(val) {
       let themeSelect = themeList[val];
-
+      console.log(this.getThemeConfig.layout);
       if (['theme-1', 'theme-3', 'theme-5', 'theme-7'].includes(val)) {
         // 这几个为黑色背景主题
         if (['classic', 'transverse'].includes(this.getThemeConfig.layout)) {
@@ -378,6 +379,37 @@ export default {
           } else if (val == 'theme-7') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#feedeb';
             themeSelect['--prev-color-primary'] = '#f34d37';
+          }
+        } else {
+          if (val == 'theme-1') {
+            themeSelect['--prev-bg-menuBar'] = '#282c34';
+            themeSelect['--prev-bg-menu-hover-ba-color'] = '#1890ff';
+            themeSelect['--prev-color-primary'] = '#1890ff';
+            themeSelect['--prev-bg-topBarColor'] = '#282c34';
+            themeSelect['--prev-bg-topBar'] = '#fff';
+            themeSelect['--prev-bg-menuBarColor'] = '#fff';
+            themeSelect['--prev-MenuActiveColor'] = '#fff';
+          } else if (val == 'theme-3') {
+            themeSelect['--prev-bg-menuBar'] = '#282c34';
+            themeSelect['--prev-bg-menu-hover-ba-color'] = '#41b584';
+            themeSelect['--prev-color-primary'] = '#fff';
+            themeSelect['--prev-bg-topBarColor'] = '#515a6e';
+            themeSelect['--prev-bg-menuBarColor'] = '#fff';
+            themeSelect['--prev-MenuActiveColor'] = '#fff';
+          } else if (val == 'theme-5') {
+            themeSelect['--prev-bg-menuBar'] = '#282c34';
+            themeSelect['--prev-bg-topBarColor'] = '#282c34';
+            themeSelect['--prev-bg-menu-hover-ba-color'] = '#6954f0';
+            themeSelect['--prev-color-primary'] = '#fff';
+            themeSelect['--prev-bg-menuBarColor'] = '#fff';
+            themeSelect['--prev-MenuActiveColor'] = '#fff';
+          } else if (val == 'theme-7') {
+            themeSelect['--prev-bg-menuBar'] = '#282c34';
+            themeSelect['--prev-bg-topBarColor'] = '#515a6e';
+            themeSelect['--prev-bg-menu-hover-ba-color'] = '#f34d37'; 
+            themeSelect['--prev-color-primary'] = '#fff';
+            themeSelect['--prev-bg-menuBarColor'] = '#fff';
+            themeSelect['--prev-MenuActiveColor'] = '#fff';
           }
         }
       } else {
@@ -531,7 +563,7 @@ export default {
 .mr5 {
   margin-right: 5px;
 }
-/deep/ .el-radio-button--mini .el-radio-button__inner{
+/deep/ .el-radio-button--mini .el-radio-button__inner {
   padding: 7px 8px;
 }
 .layout-breadcrumb-seting-bar {

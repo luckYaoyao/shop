@@ -125,7 +125,7 @@
 .el-menu--horizontal > .el-submenu:hover .el-submenu__title,
 .el-menu--horizontal .el-menu .el-menu-item.is-active,
 .el-menu--horizontal .el-menu .el-submenu.is-active > .el-submenu__title {
-  color: var(--prev-color-primary) !important;
+  color: var(--prev-MenuActiveColor) !important;
 }
 .el-menu.el-menu--horizontal {
   border-bottom: none !important;
@@ -151,10 +151,10 @@
 // 默认 hover 时
 .el-menu-item:hover,
 .el-submenu__title:hover {
-  color: var(--prev-color-primary) !important;
+  color: var(--prev-MenuActiveColor) !important;
   background-color: var(--prev-bg-menu-hover-ba-color) !important;
   i {
-    color: var(--prev-color-primary) !important;
+    color: var(--prev-MenuActiveColor) !important;
   }
 }
 // 鼠标 hover 时颜色
@@ -163,7 +163,7 @@
 }
 // 高亮时
 .el-menu-item.is-active {
-  color: var(--prev-color-primary) !important;
+  color: var(--prev-MenuActiveColor) !important;
   //   background-color: var(--prev-bg-menu-hover-ba-color) !important;
 }
 .el-menu-item.is-active,

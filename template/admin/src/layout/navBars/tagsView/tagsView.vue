@@ -363,7 +363,7 @@ export default {
         right: 0;
         bottom: 0;
         left: 0;
-        background: var(--prev-color-primary);
+        background: var(--prev-tag-active-color);
         z-index: -1;
         opacity: 0;
         transform: scale3d(0.7, 1, 1);
