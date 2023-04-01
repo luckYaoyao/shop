@@ -2566,12 +2566,12 @@ HTML;
     public function autoComment()
     {
         //自动评价天数
-        $systemCommentTime = (int)sys_config('system_comment_time', 0);
+        $systemCommentTime = sys_config('system_comment_time', 0);
         //0为取消自动默认好评功能
         if ($systemCommentTime == 0) {
             return true;
         }
-        $sevenDay = strtotime(date('Y-m-d H:i:s', strtotime('-' . $systemCommentTime . ' day')));
+        $sevenDay = bcsub((string)time(), bcmul((string)$systemCommentTime, '86400'));
         /** @var StoreOrderStoreOrderStatusServices $service */
         $service = app()->make(StoreOrderStoreOrderStatusServices::class);
         $orderList = $service->getTakeOrderIds([
@@ -2579,7 +2579,7 @@ HTML;
             'is_del' => 0,
             'paid' => 1,
             'status' => 2,
-            'change_type' => ['take_delivery']
+            'change_type' => ['take_delivery','user_take_delivery']
         ], 30);
         foreach ($orderList as $item) {
             AutoCommentJob::dispatch([$item['id'], $item['cart_id']]);

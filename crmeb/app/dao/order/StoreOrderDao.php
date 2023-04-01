@@ -932,7 +932,7 @@ class StoreOrderDao extends BaseDao
         return $this->search($where)->where('seckill_id', $id)
             ->when($page && $limit, function ($query) use ($page, $limit) {
                 $query->page($page, $limit);
-            })->field(['order_id', 'real_name', 'status', 'pay_price', 'total_num', 'add_time', 'pay_time', 'paid'])->select()->toArray();
+            })->field(['order_id', 'real_name', 'status', 'pay_price', 'total_num', 'add_time', 'pay_time', 'paid'])->order('add_time desc')->select()->toArray();
     }
 
     /**
@@ -951,7 +951,7 @@ class StoreOrderDao extends BaseDao
         return $this->search($where)->where('bargain_id', $id)
             ->when($page && $limit, function ($query) use ($page, $limit) {
                 $query->page($page, $limit);
-            })->field(['uid', 'order_id', 'real_name', 'status', 'pay_price', 'total_num', 'add_time', 'pay_time', 'paid'])->select()->toArray();
+            })->field(['uid', 'order_id', 'real_name', 'status', 'pay_price', 'total_num', 'add_time', 'pay_time', 'paid'])->order('add_time desc')->select()->toArray();
     }
 
     /**
