@@ -1,8 +1,8 @@
 <template>
   <el-aside class="layout-aside" :class="setCollapseWidth" v-if="clientWidth > 1000">
-    <Logo v-if="setShowLogo && menuList.length && $store.state.themeConfig.themeConfig.layout !== 'columns'" />
+    <Logo v-if="setShowLogo && menuList.length && getThemeConfig.layout !== 'columns'" />
     <el-divider
-      v-if="menuList.length && !getThemeConfig.isCollapse && $store.state.themeConfig.themeConfig.layout == 'columns'"
+      v-if="menuList.length && !getThemeConfig.isCollapse && getThemeConfig.layout == 'columns'"
       content-position="center"
       >{{ catName }}</el-divider
     >
