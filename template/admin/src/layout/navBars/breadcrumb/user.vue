@@ -197,23 +197,18 @@ export default {
               if (action === 'confirm') {
                 instance.confirmButtonLoading = true;
                 instance.confirmButtonText = this.$t('message.user.logOutExit');
-                setTimeout(() => {
-                  AccountLogout().then((res) => {
-                    this.$Message.success('您已成功退出');
-                    this.$router.replace({ path: `${settings.routePre}/login` });
-                    removeCookies('token');
-                    removeCookies('expires_time');
-                    removeCookies('uuid');
-                    // window.location.reload()
-                    done();
-
-                    setTimeout(() => {
-                      setTimeout(() => {
-                        instance.confirmButtonLoading = false;
-                      }, 300);
-                    }, 3000);
-                  });
-                }, 700);
+                AccountLogout().then((res) => {
+                  this.$Message.success('您已成功退出');
+                  this.$router.replace({ path: `${settings.routePre}/login` });
+                  removeCookies('token');
+                  removeCookies('expires_time');
+                  removeCookies('uuid');
+                  // window.location.reload()
+                  done();
+                  setTimeout(() => {
+                    instance.confirmButtonLoading = false;
+                  }, 300);
+                });
               } else {
                 done();
               }
