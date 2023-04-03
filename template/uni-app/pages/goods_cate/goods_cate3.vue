@@ -564,7 +564,6 @@
 						title: that.$t(`不能输入0喔`)
 					});
 				}
-				console.log(that.attr.productSelect.cart_num, 'that.attr.productSelect.cart_num')
 				let q = {
 					product_id: id,
 					num: duo ? that.attr.productSelect.cart_num : 1,

@@ -996,8 +996,8 @@ class StoreBargainServices extends BaseServices
         $spread_count = $bargainUserHelp->count(['bargain_id' => $id, 'type' => 0]);
         $start_count = $bargainUser->count(['bargain_id' => $id]);
         $success_count = $bargainUser->count(['bargain_id' => $id, 'status' => 3]);
-        $pay_price = $orderServices->sum(['bargain_id' => $id, 'paid' => 1], 'pay_price', true);
-        $pay_count = $orderServices->count(['bargain_id' => $id, 'paid' => 1]);
+        $pay_price = $orderServices->sum([['bargain_id', '=', $id], ['paid', '=', 1], ['refund_type', 'in', [0, 3]], ['is_del', '=', 0]], 'pay_price', false);
+        $pay_count = $orderServices->getDistinctCount([['bargain_id', '=', $id], ['paid', '=', 1], ['refund_type', 'in', [0, 3]], ['is_del', '=', 0]], 'uid', false);
         $pay_rate = $start_count > 0 ? bcmul(bcdiv((string)$pay_count, (string)$start_count, 2), '100', 2) : 0;
         return compact('people_count', 'spread_count', 'start_count', 'success_count', 'pay_price', 'pay_count', 'pay_rate');
     }
