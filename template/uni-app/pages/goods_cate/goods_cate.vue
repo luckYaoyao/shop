@@ -58,7 +58,9 @@
 				})
 			},
 			jumpIndex() {
-				if (this.is_diy) {}
+				// uni.reLaunch({
+				// 	url: '/pages/index/index'
+				// })
 			},
 			classStyle() {
 				colorChange('category').then(res => {
