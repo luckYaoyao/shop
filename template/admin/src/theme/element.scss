@@ -154,7 +154,7 @@
   color: var(--prev-MenuActiveColor) !important;
   background-color: var(--prev-bg-menu-hover-ba-color) !important;
   i {
-    color: var(--prev-MenuActiveColor) !important;
+    color: var(--prev-color-primary) !important;
   }
 }
 // 鼠标 hover 时颜色
@@ -165,6 +165,9 @@
 .el-menu-item.is-active {
   color: var(--prev-MenuActiveColor) !important;
   //   background-color: var(--prev-bg-menu-hover-ba-color) !important;
+  .el-submenu__title i {
+    color: var(--prev-color-primary) !important;
+  }
 }
 .el-menu-item.is-active,
 .el-sub-menu.is-active .el-sub-menu__title,

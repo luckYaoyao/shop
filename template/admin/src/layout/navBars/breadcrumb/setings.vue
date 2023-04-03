@@ -362,6 +362,8 @@ export default {
         if (['classic', 'transverse'].includes(this.getThemeConfig.layout)) {
           themeSelect['--prev-bg-topBar'] = '#282c34';
           themeSelect['--prev-bg-topBarColor'] = '#fff';
+          themeSelect['--prev-bg-menuBarColor'] = '#fff';
+          themeSelect['--prev-MenuActiveColor'] = '#fff';
         } else if (this.getThemeConfig.layout === 'columns') {
           themeSelect['--prev-bg-topBar'] = '#fff';
           themeSelect['--prev-bg-topBarColor'] = '#515a6e';
@@ -370,15 +372,19 @@ export default {
           if (val == 'theme-1') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#e8f4ff';
             themeSelect['--prev-color-primary'] = '#1890ff';
+            themeSelect['--prev-MenuActiveColor'] = '#1890ff';
           } else if (val == 'theme-3') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#ecf8f3';
             themeSelect['--prev-color-primary'] = '#41b584';
+            themeSelect['--prev-MenuActiveColor'] = '#fff';
           } else if (val == 'theme-5') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#f0eefe';
             themeSelect['--prev-color-primary'] = '#6954f0';
+            themeSelect['--prev-MenuActiveColor'] = '#6954f0';
           } else if (val == 'theme-7') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#feedeb';
             themeSelect['--prev-color-primary'] = '#f34d37';
+            themeSelect['--prev-MenuActiveColor'] = '#f34d37';
           }
         } else {
           if (val == 'theme-1') {
@@ -393,20 +399,22 @@ export default {
             themeSelect['--prev-bg-menuBar'] = '#282c34';
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#41b584';
             themeSelect['--prev-color-primary'] = '#fff';
-            themeSelect['--prev-bg-topBarColor'] = '#515a6e';
+            themeSelect['--prev-bg-topBar'] = '#fff';
+            themeSelect['--prev-bg-topBarColor'] = '#282c34';
             themeSelect['--prev-bg-menuBarColor'] = '#fff';
             themeSelect['--prev-MenuActiveColor'] = '#fff';
           } else if (val == 'theme-5') {
             themeSelect['--prev-bg-menuBar'] = '#282c34';
-            themeSelect['--prev-bg-topBarColor'] = '#282c34';
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#6954f0';
+            themeSelect['--prev-bg-topBarColor'] = '#282c34';
             themeSelect['--prev-color-primary'] = '#fff';
             themeSelect['--prev-bg-menuBarColor'] = '#fff';
             themeSelect['--prev-MenuActiveColor'] = '#fff';
           } else if (val == 'theme-7') {
             themeSelect['--prev-bg-menuBar'] = '#282c34';
-            themeSelect['--prev-bg-topBarColor'] = '#515a6e';
-            themeSelect['--prev-bg-menu-hover-ba-color'] = '#f34d37'; 
+            themeSelect['--prev-bg-topBar'] = '#fff';
+            themeSelect['--prev-bg-topBarColor'] = '#282c34';
+            themeSelect['--prev-bg-menu-hover-ba-color'] = '#f34d37';
             themeSelect['--prev-color-primary'] = '#fff';
             themeSelect['--prev-bg-menuBarColor'] = '#fff';
             themeSelect['--prev-MenuActiveColor'] = '#fff';
