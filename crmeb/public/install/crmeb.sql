@@ -33347,7 +33347,7 @@ INSERT INTO `eb_system_config` (`id`, `menu_name`, `type`, `input_type`, `config
 (19, 'wechat_qrcode', 'upload', 'input', 2, '', 1, '', 0, 0, '\"\"', '公众号关注二维码', '引导关注公众号显示的公众号关注二维码', 76, 1),
 (21, 'wechat_share_title', 'text', 'input', 70, '', 0, 'required:true', 100, 0, '\"CRMEB v4\\u6807\\u51c6\\u7248\"', '微信分享标题', '微信分享标题', 0, 1),
 (22, 'wechat_share_synopsis', 'textarea', '', 70, '', 0, '', 100, 5, '\"\\u5b8c\\u5584\\u7684\\u6587\\u6863 \\u5168\\u201c\\u5fc3\\u201d\\u800c\\u6765\\uff01\"', '微信分享简介', '微信分享简介', 0, 1),
-(25, 'pay_weixin_mchid', 'text', 'input', 4, '', 0, '', 100, 0, '\"\"', 'Mchid', '受理商ID，身份标识', 0, 1),
+(25, 'pay_weixin_mchid', 'text', 'input', 4, '', 0, '', 100, 0, '\"\"', 'Mchid', '微信商户商户号，微信商户商户号', 0, 1),
 (26, 'pay_weixin_client_cert', 'upload', 'input', 4, '', 3, '', 0, 0, '\"\"', '微信支付证书', '微信支付证书，在微信商家平台中可以下载！文件名一般为apiclient_cert.pem', 0, 1),
 (27, 'pay_weixin_client_key', 'upload', 'input', 4, '', 3, '', 0, 0, '\"\"', '微信支付证书密钥', '微信支付证书密钥，在微信商家平台中可以下载！文件名一般为apiclient_key.pem', 0, 1),
 (28, 'pay_weixin_key', 'text', 'input', 4, '', 0, '', 100, 0, '\"\"', 'Key', '商户支付密钥Key。审核通过后，在微信发送的邮件中查看。', 0, 1),
