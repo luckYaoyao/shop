@@ -117,7 +117,7 @@
 .el-menu--horizontal > .el-submenu.is-active .el-submenu__title {
   border-bottom: 3px solid !important;
   border-bottom-color: var(--prev-color-primary) !important;
-  color: var(--prev-color-primary) !important;
+  // color: var(--prev-color-primary) !important;
 }
 .el-menu--horizontal .el-menu-item:not(.is-disabled):focus,
 .el-menu--horizontal .el-menu-item:not(.is-disabled):hover,
@@ -154,7 +154,7 @@
   color: var(--prev-MenuActiveColor) !important;
   background-color: var(--prev-bg-menu-hover-ba-color) !important;
   i {
-    color: var(--prev-color-primary) !important;
+    color: var(--prev-MenuActiveColor) !important;
   }
 }
 // 鼠标 hover 时颜色
@@ -166,7 +166,7 @@
   color: var(--prev-MenuActiveColor) !important;
   //   background-color: var(--prev-bg-menu-hover-ba-color) !important;
   .el-submenu__title i {
-    color: var(--prev-color-primary) !important;
+    color: var(--prev-MenuActiveColor) !important;
   }
 }
 .el-menu-item.is-active,

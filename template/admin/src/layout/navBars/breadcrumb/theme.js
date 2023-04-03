@@ -2,7 +2,7 @@ export const themeList = {
   'theme-1': {
     '--prev-bg-menuBar': '#282c34',
     '--prev-bg-menuBarColor': '#fff',
-    '--prev-color-primary': '#fff',
+    '--prev-color-primary': '#1890ff',
     '--prev-color-text-white': '#fff',
     '--prev-bg-menu-hover-ba-color': '#1890ff',
     '--prev-bg-topBar': '#fff', //顶部菜单栏颜色
@@ -34,7 +34,7 @@ export const themeList = {
   'theme-3': {
     '--prev-bg-menuBar': '#282c34',
     '--prev-bg-menuBarColor': '#fff',
-    '--prev-color-primary': '#fff',
+    '--prev-color-primary': '#41b584',
     '--prev-color-text-white': '#fff',
     '--prev-bg-menu-hover-ba-color': '#41b584', // 菜单选中背景色
     '--prev-bg-topBar': '#fff', //顶部菜单栏颜色
@@ -66,7 +66,7 @@ export const themeList = {
   'theme-5': {
     '--prev-bg-menuBar': '#282c34',
     '--prev-bg-menuBarColor': '#fff',
-    '--prev-color-primary': '#fff',
+    '--prev-color-primary': '#6954f0',
     '--prev-color-text-white': '#fff',
     '--prev-bg-menu-hover-ba-color': '#6954f0', // 菜单选中背景色
     '--prev-bg-topBar': '#fff', //顶部菜单栏颜色
@@ -75,7 +75,6 @@ export const themeList = {
     '--prev-bg-columnsMenuBarColor': '#fff',
     '--prev-bg-columnsMenuActiveColor': '#fff',
     '--prev-MenuActiveColor': '#6954f0',
-
     '--prev-color-primary-light-9': '#f0eefe',
     '--prev-tag-active-color': '#6954f0',
   },
@@ -97,7 +96,7 @@ export const themeList = {
   'theme-7': {
     '--prev-bg-menuBar': '#282c34',
     '--prev-bg-menuBarColor': '#fff',
-    '--prev-color-primary': '#fff',
+    '--prev-color-primary': '#f34d37',
     '--prev-color-text-white': '#fff',
     '--prev-bg-menu-hover-ba-color': '#f34d37', // 菜单选中背景色
     '--prev-bg-topBar': '#fff', //顶部菜单栏颜色
