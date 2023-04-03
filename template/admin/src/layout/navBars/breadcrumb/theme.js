@@ -134,6 +134,7 @@ export const themeList = {
     '--prev-bg-columnsMenuBarColor': '#fff',
     '--prev-bg-columnsMenuActiveColor': '#fff',
     '--prev-tag-active-color': '#1890ff',
+    '--prev-MenuActiveColor': '#1890ff',
     '--prev-color-primary-light-9': '#e8f4ff',
   },
 };
