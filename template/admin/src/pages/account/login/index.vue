@@ -211,7 +211,8 @@ export default {
           this.$store.commit('menus/setopenMenus', []);
           this.$store.commit('menus/getmenusNav', data.menus);
           this.$store.dispatch('routesList/setRoutesList', data.menus);
-
+          let arr = this.formatFlatteningRoutes(this.$router.options.routes);
+          this.formatTwoStageRoutes(arr);
           // 记录用户信息
           this.$store.commit('userInfo/name', data.user_info.account);
           this.$store.commit('userInfo/avatar', data.user_info.head_pic);
@@ -257,15 +258,17 @@ export default {
     },
     formatTwoStageRoutes(arr) {
       if (arr.length <= 0) return false;
+      console.log(arr, 'arr');
       const newArr = [];
       const cacheList = [];
       arr.forEach((v) => {
-        if (v?.meta?.keepAlive) {
+        if (v && v.meta && v.meta.keepAlive) {
           newArr.push({ ...v });
           cacheList.push(v.name);
           this.$store.dispatch('keepAliveNames/setCacheKeepAlive', cacheList);
         }
       });
+      console.log(newArr, 'newArr');
       return newArr;
     },
     // 多级嵌套数组处理成一维数组
