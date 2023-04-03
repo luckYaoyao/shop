@@ -1340,7 +1340,6 @@ import WangEditor from '@/components/wangEditor/index.vue';
 import { userLabelAddApi } from '@/api/user';
 import {
   productInfoApi,
-  treeListApi,
   cascaderListApi,
   productAddApi,
   generateAttrApi,
