@@ -310,7 +310,7 @@ abstract class BaseDao
             if ($responses->hasMethod($method)) {
                 $with[] = $key;
             } else {
-                if ($key != 'timeKey') {
+                if (!in_array($key, ['timeKey', 'store_stock'])) {
                     $otherWhere[] = is_array($value) ? $value : [$key, '=', $value];
                 }
             }

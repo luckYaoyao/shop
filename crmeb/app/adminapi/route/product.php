@@ -15,6 +15,7 @@ Route::group('product', function () {
     Route::get('category', 'v1.product.StoreCategory/index')->option(['real_name' => '商品分类列表']);
     //商品树形列表
     Route::get('category/tree/:type', 'v1.product.StoreCategory/tree_list')->option(['real_name' => '商品分类树形列表']);
+    Route::get('category/cascader/:type', 'v1.product.StoreCategory/cascader_list')->option(['real_name' => '商品分类树形列表']);
     //商品分类新增表单
     Route::get('category/create', 'v1.product.StoreCategory/create')->option(['real_name' => '商品分类新增表单']);
     //商品分类新增
