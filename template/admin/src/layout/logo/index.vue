@@ -84,12 +84,15 @@ export default {
   }
 }
 .layout-logo-size {
-  width: 64px;
+  width: 50px;
   height: 50px;
   display: flex;
   cursor: pointer;
+  margin: auto;
+
   &-img {
-    width: 20px;
+    width: 50px;
+    height: 50px;
     margin: auto;
     animation: logoAnimation 0.3s ease-in-out;
   }
