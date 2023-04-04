@@ -91,12 +91,13 @@ abstract class Make
         $this->adminTemplatePath = dirname($this->app->getRootPath()) . DS . 'template' . DS . 'admin' . DS . 'src' . DS;
         $this->basePath = $this->app->getRootPath();
         $this->baseDir = $this->setBaseDir();
-        $this->authDrawVar();
-        $this->drawValueKeys();
+        $this->var = $this->authDrawVar();
+        $this->value = $this->drawValueKeys();
         $this->setDefaultValue();
     }
 
     /**
+     * 设置默认保存目录
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/4/4
@@ -107,6 +108,7 @@ abstract class Make
     }
 
     /**
+     * 获取保存文件的目录
      * @param string $path
      * @return string
      * @author 等风来
@@ -124,6 +126,7 @@ abstract class Make
     }
 
     /**
+     * 生成tab
      * @param int $num
      * @return string
      * @author 等风来
@@ -136,7 +139,7 @@ abstract class Make
     }
 
     /**
-     * 是否成功文件
+     * 是否生成文件
      * @param bool $isMake
      * @return $this
      * @author 等风来
@@ -150,7 +153,7 @@ abstract class Make
     }
 
     /**
-     * 执行
+     * 执行创建
      * @return mixed|void
      * @author 等风来
      * @email 136327134@qq.com
@@ -187,21 +190,19 @@ abstract class Make
     abstract protected function getStub(string $type = '');
 
     /**
-     * 自动
+     * 自动获取模板变量
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/3/29
      */
-    protected function authDrawVar()
+    protected function authDrawVar(): array
     {
         $content = file_get_contents($this->getStub());
         $pattern = '/\{\%+[a-zA-Z0-9_-]+\%\}/';
         preg_match_all($pattern, $content, $var);
         $varData = $var[0] ?? [];
         $varData = array_unique($varData);
-        if ($varData) {
-            $this->var = $varData;
-        }
+        return $varData;
     }
 
     /**
@@ -210,11 +211,13 @@ abstract class Make
      * @email 136327134@qq.com
      * @date 2023/3/29
      */
-    protected function drawValueKeys()
+    protected function drawValueKeys(): array
     {
+        $data = [];
         foreach ($this->var as $value) {
-            $this->value[str_replace(['{%', '%}'], '', $value)] = '';
+            $data[str_replace(['{%', '%}'], '', $value)] = '';
         }
+        return $data;
     }
 
     /**
@@ -237,6 +240,7 @@ abstract class Make
     }
 
     /**
+     * 提取模板文件
      * @param string $name
      * @return array
      * @author 等风来
@@ -293,7 +297,7 @@ abstract class Make
     }
 
     /**
-     * 获取文件路径
+     * 获取保存文件路径
      * @param string $name
      * @return string
      * @author 等风来
@@ -349,7 +353,7 @@ abstract class Make
 
     /**
      * 执行创建文件
-     * @return false
+     * @return string
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/3/13
