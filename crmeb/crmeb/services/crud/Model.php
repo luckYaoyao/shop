@@ -30,6 +30,17 @@ class Model extends Make
     protected $name = "model";
 
     /**
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/4
+     */
+    protected function setBaseDir(): string
+    {
+        return 'app' . DS . 'model' . DS . 'crud';
+    }
+
+    /**
      * 模板文件
      * @param string $type
      * @return string
@@ -39,6 +50,6 @@ class Model extends Make
      */
     protected function getStub(string $type = '')
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'model' . DIRECTORY_SEPARATOR . 'CrudModel.stub';
+        return __DIR__ . DS . 'stubs' . DS . 'model' . DS . 'CrudModel.stub';
     }
 }

@@ -29,7 +29,7 @@ abstract class Make
 {
 
     /**
-     * 命令名称
+     * 名称
      * @var string
      */
     protected $name = '';
@@ -64,9 +64,16 @@ abstract class Make
     protected $adminTemplatePath;
 
     /**
+     * 默认保存路径
      * @var string
      */
     protected $basePath;
+
+    /**
+     * 默认文件夹
+     * @var string
+     */
+    protected $baseDir;
 
     /**
      * @var
@@ -83,9 +90,37 @@ abstract class Make
         $this->app = $app;
         $this->adminTemplatePath = dirname($this->app->getRootPath()) . DS . 'template' . DS . 'admin' . DS . 'src' . DS;
         $this->basePath = $this->app->getRootPath();
+        $this->baseDir = $this->setBaseDir();
         $this->authDrawVar();
         $this->drawValueKeys();
         $this->setDefaultValue();
+    }
+
+    /**
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/4
+     */
+    protected function setBaseDir(): string
+    {
+        return 'crud';
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/4
+     */
+    protected function getBasePath(string $path = '')
+    {
+        //替换成本地路径格式
+        $path = str_replace('/', DS, $path);
+        //替换掉和基础目录相同的
+        $path = str_replace($this->baseDir, '', $path);
+        //多个斜杠的替换成一个
+        return str_replace(DS . DS, DS, $this->basePath . $this->baseDir . DS . ($path ? $path . DS : ''));
     }
 
     /**
@@ -127,7 +162,7 @@ abstract class Make
         [$nameData, $content] = $this->getStubContent($name);
 
         $this->value['name'] = $nameData;
-        if (isset($this->value['nameCamel'])) {
+        if (isset($this->value['nameCamel']) && !$this->value['nameCamel']) {
             $this->value['nameCamel'] = Str::studly($name);
         }
         if (isset($this->value['path'])) {
@@ -138,7 +173,7 @@ abstract class Make
 
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
 
-        return $this->makeFile($filePath, $contentStr);
+        return [$this->makeFile($filePath, $contentStr), $filePath];
     }
 
     /**
@@ -234,7 +269,7 @@ abstract class Make
 
         $path = ltrim(str_replace('\\', '/', $path), '/');
 
-        return $this->basePath . $path . DIRECTORY_SEPARATOR . $name . ucwords($this->name) . '.' . $this->fileMime;
+        return $this->getBasePath($path) . $name . ucwords($this->name) . '.' . $this->fileMime;
     }
 
     /**
@@ -326,13 +361,18 @@ abstract class Make
             throw new CrudException($this->name . ':' . $pathname . ' already exists!');
         }
 
-        if (!is_dir(dirname($pathname))) {
-            mkdir(dirname($pathname), 0755, true);
-        }
-
         $content = str_replace('﻿', '', $content);
 
         if ($this->isMake) {
+
+            try {
+                if (!is_dir(dirname($pathname))) {
+                    mkdir(dirname($pathname), 0755, true);
+                }
+            } catch (\Throwable $e) {
+                throw new CrudException('CRUD创建目录报错,无法创建:' . dirname($pathname));
+            }
+
             try {
                 file_put_contents($pathname, $content);
             } catch (\Throwable $e) {

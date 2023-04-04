@@ -30,10 +30,29 @@ class ViewRouter extends Make
      */
     protected $name = 'router';
 
+    /**
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/4
+     */
+    protected function setBaseDir(): string
+    {
+        return 'router' . DS . 'modules' . DS . 'crud';
+    }
 
+    /**
+     * @param string $name
+     * @param string $path
+     * @param array $options
+     * @return false|mixed|void
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/4
+     */
     public function handle(string $name, string $path, array $options = [])
     {
-        $this->basePath = $this->adminTemplatePath;
+        $this->basePath = $this->adminTemplatePath . 'router' . DS . 'modules' . DS . 'crud';
         $this->fileMime = 'js';
 
         [$nameData, $content] = $this->getStubContent($name);
@@ -58,12 +77,7 @@ class ViewRouter extends Make
 
         $makeContent = $this->makeFile($filePath, $contentStr);
 
-        dump($filePath);
-        $pathInfo = pathinfo($filePath);
-        dump($pathInfo);
-        $router = '';
-
-        return $makeContent;
+        return [$makeContent, $filePath];
     }
 
     /**
@@ -76,11 +90,8 @@ class ViewRouter extends Make
      */
     protected function getFilePathName(string $path, string $name): string
     {
-        $path = str_replace(['app\\', 'app/'], '', $path);
-
         $path = ltrim(str_replace('\\', '/', $path), '/');
-
-        return $this->basePath . $path . DIRECTORY_SEPARATOR . $name . '.' . $this->fileMime;
+        return $this->getBasePath($path) . $name . '.' . $this->fileMime;
     }
 
     /**
@@ -92,8 +103,6 @@ class ViewRouter extends Make
      */
     protected function getStub(string $type = '')
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'view' .
-            DIRECTORY_SEPARATOR . 'router' . DIRECTORY_SEPARATOR . 'modules' .
-            DIRECTORY_SEPARATOR . 'crud.stub';
+        return __DIR__ . DS . 'stubs' . DS . 'view' . DS . 'router' . DS . 'modules' . DS . 'crud.stub';
     }
 }

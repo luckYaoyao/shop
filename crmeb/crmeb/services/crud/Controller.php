@@ -33,6 +33,17 @@ class Controller extends Make
     protected $name = 'controller';
 
     /**
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/4
+     */
+    protected function setBaseDir(): string
+    {
+        return 'app' . DS . 'adminapi' . DS . 'controller' . DS . 'crud';
+    }
+
+    /**
      * @return mixed|void
      * @author 等风来
      * @email 136327134@qq.com
@@ -87,7 +98,7 @@ class Controller extends Make
 
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
 
-        return $this->makeFile($filePath, $contentStr);
+        return [$this->makeFile($filePath, $contentStr), $filePath];
     }
 
     /**
@@ -100,7 +111,7 @@ class Controller extends Make
      */
     protected function getStub(string $type = '')
     {
-        $controllerPath = __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'controller' . DIRECTORY_SEPARATOR;
+        $controllerPath = __DIR__ . DS . 'stubs' . DS . 'controller' . DS;
 
         $stubs = [
             'index' => $controllerPath . 'index.stub',
@@ -129,6 +140,6 @@ class Controller extends Make
 
         $path = ltrim(str_replace('\\', '/', $path), '/');
 
-        return $this->app->getBasePath() . $path . DIRECTORY_SEPARATOR . $name . '.' . $this->fileMime;
+        return $this->getBasePath($path) . $name . '.' . $this->fileMime;
     }
 }

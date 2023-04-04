@@ -24,6 +24,17 @@ class Dao extends Make
     protected $name = "dao";
 
     /**
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/4
+     */
+    protected function setBaseDir(): string
+    {
+        return 'app' . DS . 'dao' . DS . 'crud';
+    }
+
+    /**
      * 模板文件
      * @param string $type
      * @return string
@@ -33,6 +44,6 @@ class Dao extends Make
      */
     protected function getStub(string $type = '')
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'dao' . DIRECTORY_SEPARATOR . 'CrudDao.stub';
+        return __DIR__ . DS . 'stubs' . DS . 'dao' . DS . 'CrudDao.stub';
     }
 }

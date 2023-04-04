@@ -28,12 +28,23 @@ class Validate extends Make
     protected $name = 'validate';
 
     /**
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/4
+     */
+    protected function setBaseDir(): string
+    {
+        return 'app' . DS . 'adminapi' . DS . 'validate' . DS . 'crud';
+    }
+
+    /**
      * 模板文件配置
      * @param string $type
      * @return mixed
      */
     protected function getStub(string $type = '')
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'validate' . DIRECTORY_SEPARATOR . 'CrudValidate.stub';
+        return __DIR__ . DS . 'stubs' . DS . 'validate' . DS . 'CrudValidate.stub';
     }
 }

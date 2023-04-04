@@ -24,6 +24,17 @@ class Service extends Make
     protected $name = "services";
 
     /**
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/4
+     */
+    protected function setBaseDir(): string
+    {
+        return 'app' . DS . 'services' . DS . 'crud';
+    }
+
+    /**
      * @param string $name
      * @param string $path
      * @param array $options
@@ -81,7 +92,7 @@ class Service extends Make
 
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
 
-        return $this->makeFile($filePath, $contentStr);
+        return [$this->makeFile($filePath, $contentStr), $filePath];
     }
 
     /**
@@ -129,7 +140,7 @@ class Service extends Make
      */
     protected function getStub(string $type = 'services')
     {
-        $servicePath = __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'service' . DIRECTORY_SEPARATOR;
+        $servicePath = __DIR__ . DS . 'stubs' . DS . 'service' . DS;
 
         $stubs = [
             'index' => $servicePath . 'CrudListIndex.stub',

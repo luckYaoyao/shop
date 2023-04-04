@@ -31,6 +31,26 @@ class ViewApi extends Make
      */
     protected $name = 'api';
 
+    /**
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/4
+     */
+    protected function setBaseDir(): string
+    {
+        return 'api' . DS . 'crud';
+    }
+
+    /**
+     * @param string $name
+     * @param string $path
+     * @param array $options
+     * @return array
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/4
+     */
     public function handle(string $name, string $path, array $options = [])
     {
 
@@ -49,9 +69,11 @@ class ViewApi extends Make
             $contentJs .= file_get_contents($this->getStub($item)) . "\n";
         }
 
+        $nameCamel = Str::studly($name);
+
         if ($contentJs) {
             $var = ['{%name%}', '{%route%}', '{%nameCamel%}'];
-            $value = [$name, $route, Str::studly($name)];
+            $value = [$name, $route, $nameCamel];
             $contentJs = str_replace($var, $value, $contentJs);
         }
 
@@ -64,12 +86,27 @@ class ViewApi extends Make
 
         $this->basePath = $this->adminTemplatePath;
         $this->fileMime = 'js';
-        $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
+        $filePath = $this->getFilePathName($path, Str::camel($name));
 
         $content = $this->makeFile($filePath, $contentStr);
 
         return [$content, $filePath];
 
+    }
+
+    /**
+     * @param string $path
+     * @param string $name
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/4
+     */
+    protected function getFilePathName(string $path, string $name): string
+    {
+        $path = ltrim(str_replace('\\', '/', $path), '/');
+
+        return $this->getBasePath($path) . $name . '.' . $this->fileMime;
     }
 
     /**
@@ -79,15 +116,15 @@ class ViewApi extends Make
      */
     protected function getStub(string $type = 'api')
     {
-        $servicePath = __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR . 'api' . DIRECTORY_SEPARATOR;
+        $servicePath = __DIR__ . DS . 'stubs' . DS . 'view' . DS . 'api' . DS;
 
         $stubs = [
             'index' => $servicePath . 'getCrudListApi.stub',
-            'create' => $servicePath . 'CrudUpdate.stub',
-            'save' => $servicePath . 'CrudSave.stub',
-            'edit' => $servicePath . 'GetCrudForm.stub',
-            'update' => $servicePath . 'CrudUpdate.stub',
-            'api' => $servicePath . 'CrudService.stub',
+            'create' => $servicePath . 'crudUpdateApi.stub',
+            'save' => $servicePath . 'crudSaveApi.stub',
+            'edit' => $servicePath . 'getCrudEditApi.stub',
+            'update' => $servicePath . 'CrudUpdateApi.stub',
+            'api' => $servicePath . 'crud.stub',
         ];
 
         return $type ? $stubs[$type] : $stubs;
