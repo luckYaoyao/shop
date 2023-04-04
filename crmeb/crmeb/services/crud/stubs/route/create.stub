@@ -1,0 +1,1 @@
+Route::get('{%route%}/create', 'v1.{%route%}{%controller%}/create')->name('{%menus%}获取创建表单接口');

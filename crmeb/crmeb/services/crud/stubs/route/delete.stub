@@ -1,0 +1,1 @@
+Route::delete('{%route%}/:id', 'v1.{%route%}{%controller%}/delete')->name('{%menus%}删除数据接口');

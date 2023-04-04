@@ -8,93 +8,117 @@
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-namespace crmeb\command\crud;
+namespace crmeb\services\crud;
 
-
-use think\console\input\Option;
+use think\helper\Str;
 
 /**
  * Class Business
- * @package crmeb\command
+ * @package crmeb\services
  */
 class Service extends Make
 {
     /**
      * @var string
      */
-    protected $name = "service";
+    protected $name = "services";
 
     /**
-     * @var string[]
-     */
-    protected $var = [
-        '{%year%}',
-        '{%time%}',
-        '{%date%}',
-        '{%nameCamel%}',
-        '{%path%}',
-        '{%content-php%}'
-    ];
-
-    /**
-     * @var string[]
-     */
-    protected $value = [
-        'year' => '',
-        'time' => '',
-        'date' => '',
-        'nameCamel' => '',
-        'path' => '',
-        'content-php' => '',
-        'dao-php' => ''
-    ];
-
-    /**
-     * 配置指令
+     * @param string $name
+     * @param string $path
+     * @param array $options
+     * @return mixed|void
      * @author 等风来
      * @email 136327134@qq.com
-     * @date 2023/3/13
+     * @date 2023/3/23
      */
-    protected function configure()
+    public function handle(string $name, string $path, array $options = [])
     {
-        $this->preConfigure();
-        $this->addOption('a', null, Option::VALUE_OPTIONAL, '需要的生成的方法，可选参数：index、form、save、update；多个生成用英文逗号隔开');
-        $this->addOption('f', null, Option::VALUE_REQUIRED, 'service层文件存放');
-        $this->addOption('k', null, Option::VALUE_OPTIONAL, '需要的生成获取的数据字段;多个生成用英文逗号隔开');
-        $this->addOption('d', null, Option::VALUE_OPTIONAL, '关联dao层');
-        $this->setDescription('CRUD创建service层代码');
-    }
 
-    public function handle()
-    {
-        $this->setDefaultValue();
+        $this->value['use-php'] = $this->getDaoClassName($name, $path);
 
-        $name = $this->input->getArgument('name');
-        $action = $this->input->getOption('a');
-        $field = $this->input->getOption('k');
-        $path = $this->input->getOption('f');
+        $action = $options['action'] ?? [];
+        $field = $options['field'] ?? [];
 
-        if ($action) {
-            $action = explode(',', $action);
-        } else {
+        if (!$action) {
             $action = ['index', 'form', 'save', 'update'];
         }
 
-        $fieldData = [];;
-        if ($field) {
-            $fieldData = json_decode($field, true);
-            if ($fieldData === null && strstr($field, ',')) {
-                $fieldData = explode(',', $field);
+        $contentAction = '';
+        foreach ($action as $item) {
+            [$class, $stub] = $this->getStubContent($name, $item);
+            $contentAction .= $stub . "\n";
+        }
+
+        //生成form表单
+        if (in_array('save', $action) || in_array('update', $action)) {
+            $var = ['{%date%}', '{%route%}', '{%form-php%}', '{%menus%}'];
+            $value = [$this->value['date'], Str::snake($options['route'] ?? $name)];
+            $from = [];
+            foreach ($field as $item) {
+                $from[] = $this->tab(2) . '$rule[] = FormBuilder::' . $item['type'] . '("' . $item['field'] . '","' . $item['name'] . '",$info["' . $item['field'] . '"] ?? "")' . $this->getOptionContent($item['option'] ?? []) . (!empty($item['required']) ? '->required()' : '') . ';';
+            }
+            if ($from) {
+                $this->value['use-php'] .= "\n" . 'use crmeb\services\FormBuilder;';
+                $value[] = implode("\n", $from);
+            }
+            $value[] = $options['menus'] ?? $name;
+
+            if ($value && $var) {
+                $contentAction = str_replace($var, $value, $contentAction);
             }
         }
 
-//        $from = [];
-//        foreach ($fieldData as $item) {
-//            $from[] = '';
-//        }
-        $axja = php_sapi_name();
-        $this->writeln(compact('fieldData', 'axja'));
+        //生成service
+        [$className, $content] = $this->getStubContent($name, $this->name);
+
+        $this->value['nameCamel'] = Str::studly($name);
+        $this->value['name'] = $className;
+        $this->value['path'] = $this->getfolderPath($path);
+        $this->value['content-php'] = $contentAction;
+
+        $contentStr = str_replace($this->var, $this->value, $content);
+
+        $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
+
+        return $this->makeFile($filePath, $contentStr);
     }
+
+    /**
+     * @param array $option
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/3/23
+     */
+    protected function getOptionContent(array $option = [])
+    {
+        $php = '';
+        if ($option) {
+            $res = var_export($option, true);
+
+            $strOption = str_replace(['array', '(', ')'], ['', '[', ']'], $res);
+            $php = '->options(' . $strOption . ')';
+        }
+
+        return $php;
+    }
+
+    /**
+     * @param string $name
+     * @param string $path
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/3/23
+     */
+    protected function getDaoClassName(string $name, string $path)
+    {
+        $path = str_replace(['app\\services', 'app/services'], '', $path);
+        $path = ltrim(str_replace('\\', '/', $path), '/');
+        return 'use app\dao\\' . ($path ? $path . '\\' : '') . Str::studly($name) . 'Dao;';
+    }
+
 
     /**
      * @param string $type
@@ -103,7 +127,7 @@ class Service extends Make
      * @email 136327134@qq.com
      * @date 2023/3/13
      */
-    protected function getStub(string $type = 'service')
+    protected function getStub(string $type = 'services')
     {
         $servicePath = __DIR__ . DIRECTORY_SEPARATOR . 'stubs' . DIRECTORY_SEPARATOR . 'service' . DIRECTORY_SEPARATOR;
 
@@ -112,7 +136,7 @@ class Service extends Make
             'form' => $servicePath . 'GetCrudForm.stub',
             'save' => $servicePath . 'CrudSave.stub',
             'update' => $servicePath . 'CrudUpdate.stub',
-            'service' => $servicePath . 'CrudService.stub',
+            'services' => $servicePath . 'CrudService.stub',
         ];
 
         return $type ? $stubs[$type] : $stubs;

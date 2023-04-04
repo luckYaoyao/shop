@@ -1,0 +1,1 @@
+Route::get('{%route%}', 'v1.{%route%}{%controller%}/index')->name('{%menus%}列表接口');

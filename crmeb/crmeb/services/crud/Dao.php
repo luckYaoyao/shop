@@ -8,13 +8,12 @@
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-namespace crmeb\command\crud;
+namespace crmeb\services\crud;
 
-use think\console\input\Option;
 
 /**
  * Class Business
- * @package crmeb\command
+ * @package crmeb\services
  */
 class Dao extends Make
 {
@@ -23,44 +22,6 @@ class Dao extends Make
      * @var string
      */
     protected $name = "dao";
-
-    /**
-     * 变量名称
-     * @var string[]
-     */
-    protected $var = [
-        '{%year%}',
-        '{%time%}',
-        '{%path%}',
-        '{%name%}',
-        '{%nameCamel%}',
-        '{%date%}',
-    ];
-
-    /**
-     * @var null[]
-     */
-    protected $value = [
-        'year' => '',
-        'time' => '',
-        'path' => '',
-        'name' => '',
-        'nameCamel' => '',
-        'date' => '',
-    ];
-
-    /**
-     * 命令行配置
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/3/13
-     */
-    protected function configure()
-    {
-        $this->preConfigure();
-        $this->addOption('f', null, Option::VALUE_REQUIRED, 'dao层文件存放');
-        $this->setDescription('CRUD创建dao层代码');
-    }
 
     /**
      * 模板文件
