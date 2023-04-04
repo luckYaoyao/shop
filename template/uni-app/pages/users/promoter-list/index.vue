@@ -227,7 +227,9 @@
 			}
 		},
 		onReachBottom: function() {
-			this.userSpreadNewList();
+			if (this.teamCount > this.recordList.length) {
+				this.userSpreadNewList();
+			}
 		}
 	}
 </script>
@@ -370,7 +372,7 @@
 	.no-data {
 		background-color: #fff;
 		padding-bottom: 30rpx;
-		padding: 180rpx 0 300rpx;
+		padding: 180rpx 0 calc(100vh - 1030rpx);
 
 		.emptyBox {
 			text-align: center;

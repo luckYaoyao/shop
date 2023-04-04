@@ -1,6 +1,11 @@
 <template>
   <el-aside class="layout-aside" :class="setCollapseWidth" v-if="clientWidth > 1000">
-    <Logo v-if="setShowLogo && menuList.length" />
+    <Logo v-if="setShowLogo && menuList.length && getThemeConfig.layout !== 'columns'" />
+    <el-divider
+      v-if="menuList.length && !getThemeConfig.isCollapse && getThemeConfig.layout == 'columns'"
+      content-position="center"
+      >{{ catName }}</el-divider
+    >
     <el-scrollbar class="flex-auto" ref="layoutAsideRef">
       <Vertical :menuList="menuList" :class="setCollapseWidth" />
     </el-scrollbar>
@@ -25,10 +30,18 @@ export default {
     return {
       menuList: [],
       clientWidth: '',
+      catName: '',
     };
   },
   computed: {
     // 设置左侧菜单的具体宽度
+    // menuList() {
+    //   this.$store.state.menus.childMenuList.length > 0
+    //     ? (this.$store.state.themeConfig.themeConfig.isCollapse = false)
+    //     : (this.$store.state.themeConfig.themeConfig.isCollapse = true);
+    //   console.log(this.$store.state.menus.childMenuList, 'this.$store.state.menus.childMenuList');
+    //   return this.$store.state.menus.childMenuList;
+    // },
     setCollapseWidth() {
       let { layout, isCollapse } = this.$store.state.themeConfig.themeConfig;
       let asideBrColor = '';
@@ -61,6 +74,7 @@ export default {
     },
   },
   created() {
+    console.log(this.$store.state.menus, 'this.$store.state.menus');
     this.initMenuFixed(document.body.clientWidth);
     this.setFilterRoutes();
     this.bus.$on('setSendColumnsChildren', (res) => {
@@ -72,6 +86,9 @@ export default {
     });
     this.bus.$on('layoutMobileResize', (res) => {
       this.initMenuFixed(res.clientWidth);
+    });
+    this.bus.$on('oneCatName', (name) => {
+      this.catName = name;
     });
     // 菜单滚动条监听
     this.bus.$on('updateElScrollBar', () => {

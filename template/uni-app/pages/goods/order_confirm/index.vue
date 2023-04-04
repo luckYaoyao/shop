@@ -11,9 +11,9 @@
 						v-if='store_self_mention && is_shipping'></view>
 				</view>
 				<view class='address acea-row row-between-wrapper' @tap='onAddress' v-if='shippingType == 0'>
-					<view class='addressCon' v-if="addressInfo.real_name">
-						<view class='name'>{{addressInfo.real_name}}
-							<text class='phone'>{{addressInfo.phone}}</text>
+					<view class='addressCon' v-if="addressInfo.real_name || ''">
+						<view class='name'>{{addressInfo.real_name || ''}}
+							<text class='phone'>{{addressInfo.phone || ''}}</text>
 						</view>
 						<view class="line1">
 							<text class='default font-num'
@@ -29,8 +29,8 @@
 				<view class='address acea-row row-between-wrapper' v-else @tap="showStoreList">
 					<block v-if="storeList.length>0">
 						<view class='addressCon'>
-							<view class='name'>{{system_store.name}}
-								<text class='phone'>{{system_store.phone}}</text>
+							<view class='name'>{{system_store.name || ''}}
+								<text class='phone'>{{system_store.phone || ''}}</text>
 							</view>
 							<view class="line1"> {{system_store.address}}{{", " + system_store.detailed_address}}</view>
 						</view>
@@ -172,7 +172,7 @@
 				<view class='item acea-row row-between-wrapper'>
 					<view>{{$t(`商品总价`)}}：</view>
 					<view class='money'>
-						{{$t(`￥`)}}{{totalPriceAll || ''}}
+						{{$t(`￥`)}}{{allPrice || 0}}
 					</view>
 				</view>
 				<view class='item acea-row row-between-wrapper'
@@ -388,7 +388,6 @@
 				priceGroup: {},
 				animated: false,
 				totalPrice: 0,
-				totalPriceAll: 0,
 				integralRatio: "0",
 				pagesUrl: "",
 				orderKey: "",
@@ -823,7 +822,6 @@
 					that.$set(that, 'store_self_mention', res.data.store_self_mention);
 					that.$set(that, 'virtual_type', res.data.virtual_type || 0);
 					that.$set(that, 'integral_open', res.data.integral_open);
-					this.totalPriceAll=  (parseFloat(res.data.priceGroup.totalPrice) + parseFloat(res.data.priceGroup.vipPrice)).toFixed(2)
 					uni.hideLoading()
 					//微信支付是否开启
 					that.cartArr[0].payStatus = res.data.pay_weixin_open || 0

@@ -47,6 +47,7 @@ abstract class BaseDao
      * 读取数据条数
      * @param array $where
      * @return int
+     * @throws \ReflectionException
      */
     public function count(array $where = [])
     {
@@ -59,8 +60,10 @@ abstract class BaseDao
      * @param string $field
      * @param int $page
      * @param int $limit
+     * @param string $order
      * @param bool $search
      * @return \think\Collection
+     * @throws \ReflectionException
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
@@ -304,13 +307,14 @@ abstract class BaseDao
         $with = [];
         $otherWhere = [];
         $responses = new \ReflectionClass($this->setModel());
+
         foreach ($where as $key => $value) {
             $method = 'search' . Str::studly($key) . 'Attr';
             if ($responses->hasMethod($method)) {
                 $with[] = $key;
             } else {
-                if ($key != 'timeKey') {
-                    $otherWhere[] = $value;
+                if (!in_array($key, ['timeKey', 'store_stock', 'integral_time'])) {
+                    $otherWhere[] = is_array($value) ? $value : [$key, '=', $value];
                 }
             }
         }
@@ -320,6 +324,7 @@ abstract class BaseDao
     /**
      * 根据搜索器获取搜索内容
      * @param $where
+     * @param $search
      * @return BaseModel
      * @throws \ReflectionException
      * @author 吴汐
@@ -378,6 +383,9 @@ abstract class BaseDao
      * @param string|null $keyField
      * @param int $acc
      * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function bcInc($key, string $incField, string $inc, string $keyField = null, int $acc = 2)
     {
@@ -392,6 +400,9 @@ abstract class BaseDao
      * @param string|null $keyField
      * @param int $acc
      * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function bcDec($key, string $decField, string $dec, string $keyField = null, int $acc = 2)
     {
@@ -458,18 +469,6 @@ abstract class BaseDao
             })->dec($stock, $num)->inc($sales, $num)->update();
         }
         return false;
-//        $field = $isQuota ? [$stock, $sales, 'quota'] : [$stock, $sales];
-//        $info = $this->getModel()->where($where)->field($field)->find();
-//        if ($info) {
-//            if ($isQuota) {
-//                $info->quota = (int)$info->quota - $num;
-//            }
-//            $info->stock = (int)$info->stock - $num;
-//            $info->sales = (int)$info->sales + $num;
-//            return $info->save();
-//        } else {
-//            return false;
-//        }
     }
 
     /**
@@ -500,22 +499,6 @@ abstract class BaseDao
             })->inc($stock, $num)->dec($sales, $salesNum)->update();
         }
         return true;
-//        $field = $isQuota ? [$stock, $sales, 'quota'] : [$stock, $sales];
-//        $info = $this->getModel()->where($where)->field($field)->find();
-//        if ($info) {
-//            if ($isQuota) {
-//                $info->quota = (int)$info->quota + $num;
-//            }
-//            $info->stock = (int)$info->stock + $num;
-//            if ((int)$info->sales > $num) {
-//                $info->sales = (int)$info->sales - $num;
-//            } else {
-//                $info->sales = 0;
-//            }
-//            return $info->save();
-//        } else {
-//            return false;
-//        }
     }
 
     /**

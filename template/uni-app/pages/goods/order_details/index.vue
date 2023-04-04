@@ -146,7 +146,7 @@
 						<image src="../static/shuoming.png" mode=""></image>
 						{{$t(`拒绝退款`)}}
 					</view>
-					<view class="con">{{$t(`拒绝原因`)}}：{{orderInfo.refuse_reason}}</view>
+					<view class="con">{{$t(`拒绝原因`)}}：{{orderInfo.refuse_reason || ''}}</view>
 				</view>
 			</view>
 			<orderGoods v-for="(item,index) in split" :key="item.id" :evaluate='item._status._type == 3 ? 3 : 0'

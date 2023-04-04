@@ -157,7 +157,7 @@ import {
 } from '@/api/marketing';
 import { formatDate } from '@/utils/validate';
 export default {
-  name: 'storeCouponIssue',
+  name: 'marketing_storeCouponIssue',
   filters: {
     formatDate(time) {
       if (time !== 0) {

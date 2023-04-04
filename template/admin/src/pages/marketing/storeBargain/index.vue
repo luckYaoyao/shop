@@ -112,7 +112,7 @@ import { bargainListApi, bargainSetStatusApi, stroeBargainApi } from '@/api/mark
 import { formatDate } from '@/utils/validate';
 import { exportBargainList } from '@/api/export';
 export default {
-  name: 'storeBargain',
+  name: 'marketing_storeBargain',
   filters: {
     formatDate(time) {
       if (time !== 0) {

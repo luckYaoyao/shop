@@ -13,8 +13,8 @@
 							<image :src='item.image'></image>
 						</view>
 						<view class='text acea-row row-column-around'>
-							<view class='name line1'>{{item.title}}</view>
-							<view class='num'><text class='iconfont icon-pintuan'></text>{{item.people}}{{$t(`人正在参与`)}}
+							<view class='name line1'>{{item.title || ''}}</view>
+							<view class='num'><text class='iconfont icon-pintuan'></text>{{item.people || ''}}{{$t(`人正在参与`)}}
 							</view>
 							<view class='money'>{{$t(`最低`)}} : {{$t(`￥`)}}<text class='price'>{{item.min_price}}</text>
 							</view>

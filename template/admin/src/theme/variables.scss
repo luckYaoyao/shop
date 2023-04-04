@@ -304,8 +304,8 @@ $positions: 'top', 'right', 'bottom', 'left';
 /* Switch 开关
 ------------------------------- */
 .el-switch.is-checked .el-switch__core {
-  border-color: var(--prev-color-primary);
-  background-color: var(--prev-color-primary);
+  border-color: var(--prev-color-primary) !important;
+  background-color: var(--prev-color-primary) !important;
 }
 .el-switch__label.is-active {
   color: var(--prev-color-primary);
@@ -941,6 +941,7 @@ $positions: 'top', 'right', 'bottom', 'left';
 }
 .el-divider__text {
   color: var(--prev-color-text-primary);
+  white-space: nowrap;
 }
 .el-drawer__close-btn:hover {
   color: var(--prev-color-primary);

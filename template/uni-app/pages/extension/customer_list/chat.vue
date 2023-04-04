@@ -80,7 +80,7 @@
 								</view>
 							</view>
 							<!-- 订单 -->
-							<view class="order-box" v-if="item.msn_type == 6 && item.orderInfo.length"
+							<view class="order-box" v-if="item.msn_type == 6 && item.orderInfo"
 								@click="goOrder(item)">
 								<view class="title">{{$t(`订单号`)}}: {{ item.orderInfo.order_id }}</view>
 								<view class="info">

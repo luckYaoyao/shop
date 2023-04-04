@@ -63,7 +63,9 @@ class StoreProductDao extends BaseDao
      * @param array $where
      * @param int $page
      * @param int $limit
+     * @param string $order
      * @return array
+     * @throws \ReflectionException
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
@@ -71,7 +73,7 @@ class StoreProductDao extends BaseDao
     public function getList(array $where, int $page = 0, int $limit = 0, string $order = '')
     {
         $prefix = Config::get('database.connections.' . Config::get('database.default') . '.prefix');
-        return $this->search($where)->order(($order ? $order . ' ,' : '') . 'sort desc,id desc')
+        return $this->search($where, false)->order(($order ? $order . ' ,' : '') . 'sort desc,id desc')
             ->when($page != 0 && $limit != 0, function ($query) use ($page, $limit) {
                 $query->page($page, $limit);
             })->field([
@@ -79,7 +81,6 @@ class StoreProductDao extends BaseDao
                 '(SELECT count(*) FROM `' . $prefix . 'store_product_relation` WHERE `product_id` = `' . $prefix . 'store_product`.`id` AND `type` = \'collect\') as collect',
                 '(SELECT count(*) FROM `' . $prefix . 'store_product_relation` WHERE `product_id` = `' . $prefix . 'store_product`.`id` AND `type` = \'like\') as likes',
                 '(SELECT SUM(stock) FROM `' . $prefix . 'store_product_attr_value` WHERE `product_id` = `' . $prefix . 'store_product`.`id` AND `type` = 0) as stock',
-//                '(SELECT SUM(sales) FROM `' . $prefix . 'store_product_attr_value` WHERE `product_id` = `' . $prefix . 'store_product`.`id` AND `type` = 0) as sales',
                 '(SELECT count(*) FROM `' . $prefix . 'store_visit` WHERE `product_id` = `' . $prefix . 'store_product`.`id` AND `product_type` = \'product\') as visitor',
             ])->select()->toArray();
     }

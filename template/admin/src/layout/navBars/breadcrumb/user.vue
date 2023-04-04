@@ -47,9 +47,8 @@
     </div>
     <div class="layout-navbars-breadcrumb-user-icon mr10" @click="onScreenfullClick">
       <i
-        class="iconfont"
         :title="isScreenfull ? $t('message.user.title6') : $t('message.user.title5')"
-        :class="!isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"
+        :class="!isScreenfull ? 'el-icon-full-screen' : 'el-icon-crop'"
       ></i>
     </div>
     <el-dropdown :show-timeout="70" :hide-timeout="50" @command="onDropdownCommand">
@@ -198,22 +197,18 @@ export default {
               if (action === 'confirm') {
                 instance.confirmButtonLoading = true;
                 instance.confirmButtonText = this.$t('message.user.logOutExit');
-                setTimeout(() => {
-                  AccountLogout().then((res) => {
-                    this.$Message.success('您已成功退出');
-                    this.$router.replace({ path: `${settings.routePre}/login` });
-                    removeCookies('token');
-                    removeCookies('expires_time');
-                    removeCookies('uuid');
-                    // window.location.reload()
-                    setTimeout(() => {
-                      done();
-                      setTimeout(() => {
-                        instance.confirmButtonLoading = false;
-                      }, 300);
-                    }, 3000);
-                  });
-                }, 700);
+                AccountLogout().then((res) => {
+                  this.$Message.success('您已成功退出');
+                  this.$router.replace({ path: `${settings.routePre}/login` });
+                  removeCookies('token');
+                  removeCookies('expires_time');
+                  removeCookies('uuid');
+                  // window.location.reload()
+                  done();
+                  setTimeout(() => {
+                    instance.confirmButtonLoading = false;
+                  }, 300);
+                });
               } else {
                 done();
               }

@@ -10,14 +10,24 @@
     <template v-for="val in menuList">
       <el-submenu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
         <template slot="title">
-          <Icon class="mr10" :type="val.icon ? val.icon : ''" />
+          <Icon
+            :class="
+              ['defaults', 'classic'].includes(getThemeConfig.layout) && getThemeConfig.isCollapse ? 'center' : 'mr10'
+            "
+            :type="val.icon ? val.icon : ''"
+          />
           <span>{{ $t(val.title) }}</span>
         </template>
         <SubItem :chil="val.children" />
       </el-submenu>
       <template v-else>
         <el-menu-item :index="val.path" :key="val.path">
-          <Icon class="mr10" :type="val.icon ? val.icon : ''" />
+          <Icon
+            :class="
+              ['defaults', 'classic'].includes(getThemeConfig.layout) && getThemeConfig.isCollapse ? 'center' : 'mr10'
+            "
+            :type="val.icon ? val.icon : ''"
+          />
           <template slot="title" v-if="!val.isLink || (val.isLink && val.isIframe)">
             <span>{{ $t(val.title) }}</span>
           </template>
@@ -74,3 +84,10 @@ export default {
   },
 };
 </script>
+<style scoped>
+/deep/ .center {
+  text-align: center;
+  margin-right: 0 !important;
+  margin-left: 5px;
+}
+</style>

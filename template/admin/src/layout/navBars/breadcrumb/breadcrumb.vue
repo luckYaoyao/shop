@@ -1,12 +1,12 @@
 <template>
-  <div class="layout-navbars-breadcrumb" :style="{ display: isShowBreadcrumb }">
+  <div class="layout-navbars-breadcrumb">
     <!-- {{[...breadCrumbList,...crumbPast]}} -->
     <i
       class="layout-navbars-breadcrumb-icon"
       :class="getThemeConfig.isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"
       @click="onThemeConfigChange"
     ></i>
-    <el-breadcrumb class="layout-navbars-breadcrumb-hide">
+    <el-breadcrumb class="layout-navbars-breadcrumb-hide" :style="{ display: isShowBreadcrumb }">
       <transition-group name="breadcrumb" mode="out-in">
         <el-breadcrumb-item v-for="(v, k) in [...breadCrumbList, ...crumbPast]" :key="v.path">
           <span v-if="k == 1" class="layout-navbars-breadcrumb-span">
@@ -101,6 +101,13 @@ export default {
     },
     // breadcrumb icon 点击菜单展开与收起
     onThemeConfigChange() {
+      if (
+        this.$store.state.themeConfig.themeConfig.layout == 'columns' &&
+        !this.$store.state.menus.childMenuList.length &&
+        this.$store.state.themeConfig.themeConfig.isCollapse
+      ) {
+        return;
+      }
       this.$store.state.themeConfig.themeConfig.isCollapse = !this.$store.state.themeConfig.themeConfig.isCollapse;
       this.setLocalThemeConfig();
     },
@@ -175,7 +182,7 @@ export default {
 
 <style scoped lang="scss">
 .layout-navbars-breadcrumb {
-  flex: 1;
+  // flex: 1;
   height: inherit;
   display: flex;
   align-items: center;
