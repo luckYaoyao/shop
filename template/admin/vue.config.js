@@ -117,5 +117,5 @@ module.exports = {
   },
   publicPath: '/admin',
   assetsDir: 'system_static',
-  indexPath: process.env.NODE_ENV === 'development' ? 'index.html' : 'system.html',
+  indexPath: 'index.html',
 };
