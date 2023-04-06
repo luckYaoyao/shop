@@ -14,6 +14,7 @@
 namespace crmeb\services\crud;
 
 use crmeb\exceptions\CrudException;
+use think\App;
 use think\helper\Str;
 
 /**
@@ -29,6 +30,21 @@ class ViewRouter extends Make
      * @var string
      */
     protected $name = 'router';
+
+    /**
+     * @var string
+     */
+    protected $fileMime = 'js';
+
+    /**
+     * ViewRouter constructor.
+     * @param App $app
+     */
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
+        $this->basePath = $this->adminTemplatePath;
+    }
 
     /**
      * @return string
@@ -52,9 +68,6 @@ class ViewRouter extends Make
      */
     public function handle(string $name, string $path, array $options = [])
     {
-        $this->basePath = $this->adminTemplatePath . 'router' . DS . 'modules' . DS . 'crud';
-        $this->fileMime = 'js';
-
         [$nameData, $content] = $this->getStubContent($name);
 
         $menus = $options['menus'] ?? $name;
@@ -63,6 +76,7 @@ class ViewRouter extends Make
         if (!$route) {
             throw new CrudException('缺少路由名称');
         }
+
         $this->value['menus'] = $menus;
         $this->value['name'] = $nameData;
         $this->value['route'] = $route;

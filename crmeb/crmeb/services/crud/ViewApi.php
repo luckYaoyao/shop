@@ -14,6 +14,7 @@
 namespace crmeb\services\crud;
 
 use crmeb\exceptions\CrudException;
+use think\App;
 use think\helper\Str;
 
 /**
@@ -30,6 +31,21 @@ class ViewApi extends Make
      * @var string
      */
     protected $name = 'api';
+
+    /**
+     * @var string
+     */
+    protected $fileMime = 'js';
+
+    /**
+     * ViewApi constructor.
+     * @param App $app
+     */
+    public function __construct(App $app)
+    {
+        parent::__construct($app);
+        $this->basePath = $this->adminTemplatePath;
+    }
 
     /**
      * @return string
@@ -83,15 +99,11 @@ class ViewApi extends Make
         [$className, $content] = $this->getStubContent($name, $this->name);
 
         $contentStr = str_replace($this->var, $this->value, $content);
-
-        $this->basePath = $this->adminTemplatePath;
-        $this->fileMime = 'js';
         $filePath = $this->getFilePathName($path, Str::camel($name));
 
         $content = $this->makeFile($filePath, $contentStr);
 
         return [$content, $filePath];
-
     }
 
     /**

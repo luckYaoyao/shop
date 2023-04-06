@@ -1,0 +1,131 @@
+<?php
+/**
+ *  +----------------------------------------------------------------------
+ *  | CRMEB [ CRMEB赋能开发者，助力企业发展 ]
+ *  +----------------------------------------------------------------------
+ *  | Copyright (c) 2016~2022 https://www.crmeb.com All rights reserved.
+ *  +----------------------------------------------------------------------
+ *  | Licensed CRMEB并不是自由软件，未经许可不能去掉CRMEB相关版权
+ *  +----------------------------------------------------------------------
+ *  | Author: CRMEB Team <admin@crmeb.com>
+ *  +----------------------------------------------------------------------
+ */
+
+namespace app\services\system;
+
+
+use app\dao\system\SystemRouteDao;
+use app\services\BaseServices;
+use Darabonba\GatewaySpi\Models\InterceptorContext\response;
+use think\facade\Route;
+use think\helper\Str;
+
+/**
+ * Class SystemRouteServices
+ * @author 等风来
+ * @email 136327134@qq.com
+ * @date 2023/4/6
+ * @package app\services\system
+ */
+class SystemRouteServices extends BaseServices
+{
+
+    /**
+     * SystemRouteServices constructor.
+     * @param SystemRouteDao $dao
+     */
+    public function __construct(SystemRouteDao $dao)
+    {
+        $this->dao = $dao;
+    }
+
+    /**
+     * 获取某个应用下的所有路由权限
+     * @param string $app
+     * @return array
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/6
+     */
+    public function getRouteListAll(string $app = 'adminapi')
+    {
+        //获取所有的路由
+        $this->app = app();
+        $this->app->route->setTestMode(true);
+        $this->app->route->clear();
+        $path = $this->app->getRootPath() . 'app' . DS . $app . DS . 'route' . DS;
+        $files = is_dir($path) ? scandir($path) : [];
+        foreach ($files as $file) {
+            if (strpos($file, '.php')) {
+                include $path . $file;
+            }
+        }
+        return $this->app->route->getRuleList();
+    }
+
+    /**
+     * 同步路由
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/6
+     */
+    public function syncRoute(string $app = 'adminapi')
+    {
+        $listAll = $this->getRouteListAll($app);
+        //保持新增的权限路由
+        $data = $this->dao->selectList(['app_name' => $app], 'path,method')->toArray();
+        $save = [];
+        foreach ($listAll as $item) {
+            if (!$this->diffRoute($data, $item['rule'], $item['method']) && strstr($item['rule'], '<MISS>') === false) {
+                $save[] = [
+                    'name' => $item['option']['real_name'] ?? $item['name'],
+                    'path' => $item['rule'],
+                    'app_name' => $app,
+                    'type' => isset($item['option']['is_common']) && $item['option']['is_common'] ? 1 : 0,
+                    'method' => $item['method'],
+                    'add_time' => date('Y-m-d H:i:s'),
+                ];
+            }
+        }
+
+        if ($save) {
+            $this->dao->saveAll($save);
+        }
+        //删除不存在的权限路由
+        $data = $this->dao->selectList(['app_name' => $app], 'path,method,id')->toArray();
+        $delete = [];
+        foreach ($data as $item) {
+            if (!$this->diffRoute($listAll, $item['path'], $item['method'], 'rule') && $item['path'] !== '<MISS>') {
+                $delete[] = $item['id'];
+            }
+        }
+        if ($delete) {
+            $this->dao->delete([['id', 'in', $delete]]);
+        }
+    }
+
+    /**
+     * 对比路由
+     * @param array $data
+     * @param string $path
+     * @param string $method
+     * @return bool
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/6
+     */
+    protected function diffRoute(array $data, string $path, string $method, string $key = 'path')
+    {
+        $res = false;
+        foreach ($data as $item) {
+            if (strtolower($item['method']) == strtolower($method) && strtolower($item[$key]) == strtolower($path)) {
+                $res = true;
+                break;
+            } else if ($method === '*' && strtolower($item[$key]) == strtolower($path)) {
+                $res = true;
+                break;
+            }
+        }
+        return $res;
+    }
+}

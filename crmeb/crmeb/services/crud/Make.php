@@ -119,10 +119,19 @@ abstract class Make
     {
         //替换成本地路径格式
         $path = str_replace('/', DS, $path);
+        $pathAttr = explode(DS, $path);
+        $basePathAttr = explode(DS, $this->baseDir);
         //替换掉和基础目录相同的
-        $path = str_replace($this->baseDir, '', $path);
+        if (count($pathAttr) > 1) {
+            $newsPath = array_merge(array_diff($basePathAttr, $pathAttr))[0] ?? '';
+            if ($newsPath !== 'crud') {
+                $path = $newsPath;
+            } else {
+                $this->baseDir = '';
+            }
+        }
         //多个斜杠的替换成一个
-        return str_replace(DS . DS, DS, $this->basePath . $this->baseDir . DS . ($path ? $path . DS : ''));
+        return str_replace(DS . DS, DS, $this->basePath . ($this->baseDir ? $this->baseDir . DS : '') . ($path ? $path . DS : ''));
     }
 
     /**
@@ -269,8 +278,6 @@ abstract class Make
      */
     protected function getFilePathName(string $path, string $name): string
     {
-        $path = str_replace(['app\\', 'app/'], '', $path);
-
         $path = ltrim(str_replace('\\', '/', $path), '/');
 
         return $this->getBasePath($path) . $name . ucwords($this->name) . '.' . $this->fileMime;
