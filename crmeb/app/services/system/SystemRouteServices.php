@@ -16,8 +16,7 @@ namespace app\services\system;
 
 use app\dao\system\SystemRouteDao;
 use app\services\BaseServices;
-use Darabonba\GatewaySpi\Models\InterceptorContext\response;
-use think\facade\Route;
+use crmeb\services\FormBuilder;
 use think\helper\Str;
 
 /**
@@ -37,6 +36,44 @@ class SystemRouteServices extends BaseServices
     public function __construct(SystemRouteDao $dao)
     {
         $this->dao = $dao;
+    }
+
+    /**
+     * @param array $where
+     * @return array
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/7
+     */
+    public function getList(array $where)
+    {
+        [$page, $limit] = $this->getPageValue();
+        $list = $this->dao->selectList($where, 'name,path,method', $page, $limit)->toArray();
+        $count = $this->dao->count($where);
+        return compact('list', 'count');
+    }
+
+    /**
+     * 获取tree数据
+     * @param string $appName
+     * @return array
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/7
+     */
+    public function getTreeList(array $where, string $appName = 'adminapi')
+    {
+        $list = app()->make(SystemRouteCateServices::class)
+            ->selectList(['app_name' => $appName], '*', 0, 0, 'add_time desc', [
+                'children' => function ($query) use ($where) {
+                    $query->where('app_name', $where['app_name'])
+                        ->when('' !== $where['name_like'], function ($q) use ($where) {
+                            $q->where('name|path', 'LIKE', '%' . $where['name_like'] . '%');
+                        });
+                }
+            ])
+            ->toArray();
+        return get_tree_children($list);
     }
 
     /**
@@ -60,7 +97,23 @@ class SystemRouteServices extends BaseServices
                 include $path . $file;
             }
         }
-        return $this->app->route->getRuleList();
+
+        $route = $this->app->route->getRuleList();
+        $action_arr = ['index', 'read', 'create', 'save', 'edit', 'update', 'delete'];
+        
+        foreach ($route as &$item) {
+            $real_name = $item['option']['real_name'] ?? '';
+            if (is_array($real_name)) {
+                foreach ($action_arr as $action) {
+                    if (Str::contains($item['route'], $action)) {
+                        $real_name = $real_name[$action] ?? '';
+                    }
+                }
+            }
+            $item['option']['real_name'] = $real_name;
+        }
+
+        return $route;
     }
 
     /**
@@ -127,5 +180,46 @@ class SystemRouteServices extends BaseServices
             }
         }
         return $res;
+    }
+
+    /**
+     * 添加和修改路由
+     * @param int $id
+     * @return array
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/7
+     */
+    public function getFrom(int $id = 0, string $appName = 'adminapi')
+    {
+        $cateList = app()->make(SystemRouteCateServices::class)->getAllList($appName, 'name as label,path as value');
+
+        $url = '/system/route';
+        $routeInfo = [];
+        if ($id) {
+            $routeInfo = $this->dao->get($id);
+            $routeInfo = $routeInfo ? $routeInfo->toArray() : [];
+            $url .= '/' . $id;
+        }
+
+        $rule = [
+            FormBuilder::cascader('cate_id', '分类', $routeInfo['cate_id'] ?? 0)->data($cateList),
+            FormBuilder::input('name', '路由名称', $routeInfo['name'] ?? '')->required(),
+            FormBuilder::input('path', '路由路径', $routeInfo['path'] ?? '')->required(),
+            FormBuilder::select('method', '请求方式', $routeInfo['method'] ?? '')->options([
+                ['value' => 'POST', 'label' => 'POST'],
+                ['value' => 'GET', 'label' => 'GET'],
+                ['value' => 'DELETE', 'label' => 'DELETE'],
+                ['value' => 'PUT', 'label' => 'PUT'],
+                ['value' => '*', 'label' => '*'],
+            ])->required(),
+            FormBuilder::radio('type', '类型', $routeInfo['type'] ?? 0)->options([
+                ['value' => 0, 'lable' => '普通路由'],
+                ['value' => 1, 'lable' => '公共路由'],
+            ]),
+            FormBuilder::hidden('app_name', $appName),
+        ];
+
+        return create_form($id ? '修改路由' : '添加路由', $rule, $url, $id ? 'PUT' : 'POST');
     }
 }

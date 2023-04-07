@@ -38,4 +38,11 @@ class SystemRoute extends BaseModel
      * @var string
      */
     protected $key = 'id';
+
+    public function searchNameLikeAttr($query, $value)
+    {
+        if ('' !== $value) {
+            $query->where('name|path', 'LIKE', '%' . $value . '%');
+        }
+    }
 }
