@@ -39,11 +39,11 @@ class KefuAuthTokenMiddleware implements MiddlewareInterface
         /** @var LoginServices $services */
         $services = app()->make(LoginServices::class);
         $kefuInfo = $services->parseToken($token);
-        Request::macro('kefuId', function () use (&$kefuInfo) {
+        $request->macro('kefuId', function () use (&$kefuInfo) {
             return (int)$kefuInfo['id'];
         });
 
-        Request::macro('kefuInfo', function () use (&$kefuInfo) {
+        $request->macro('kefuInfo', function () use (&$kefuInfo) {
             return $kefuInfo;
         });
 

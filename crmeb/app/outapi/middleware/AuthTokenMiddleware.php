@@ -39,11 +39,11 @@ class AuthTokenMiddleware implements MiddlewareInterface
         /** @var OutAccountServices $services */
         $services = app()->make(OutAccountServices::class);
         $outInfo = $services->parseToken($token);
-        Request::macro('outId', function () use (&$outInfo) {
+        $request->macro('outId', function () use (&$outInfo) {
             return (int)$outInfo['id'];
         });
 
-        Request::macro('outInfo', function () use (&$outInfo) {
+        $request->macro('outInfo', function () use (&$outInfo) {
             return $outInfo;
         });
         /** @var OutInterfaceServices $outInterfaceServices */
