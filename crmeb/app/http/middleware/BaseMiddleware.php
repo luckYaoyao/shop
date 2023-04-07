@@ -23,14 +23,14 @@ class BaseMiddleware implements MiddlewareInterface
 {
     public function handle(Request $request, \Closure $next, bool $force = true)
     {
-        if (!Request::hasMacro('uid')) {
-            Request::macro('uid', function(){ return 0; });
+        if (!$request->hasMacro('uid')) {
+            $request->macro('uid', function(){ return 0; });
         }
-        if (!Request::hasMacro('adminId')) {
-            Request::macro('adminId', function(){ return 0; });
+        if (!$request->hasMacro('adminId')) {
+            $request->macro('adminId', function(){ return 0; });
         }
-        if (!Request::hasMacro('kefuId')) {
-            Request::macro('kefuId', function(){ return 0; });
+        if (!$request->hasMacro('kefuId')) {
+            $request->macro('kefuId', function(){ return 0; });
         }
 
         return $next($request);

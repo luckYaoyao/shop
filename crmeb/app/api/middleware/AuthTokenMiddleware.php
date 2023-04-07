@@ -16,7 +16,6 @@ use app\Request;
 use app\services\user\UserAuthServices;
 use crmeb\exceptions\AuthException;
 use crmeb\interfaces\MiddlewareInterface;
-use think\exception\DbException;
 
 /**
  * Class AuthTokenMiddleware
@@ -39,20 +38,20 @@ class AuthTokenMiddleware implements MiddlewareInterface
         }
 
         if (!is_null($authInfo)) {
-            Request::macro('user', function (string $key = null) use (&$authInfo) {
+            $request->macro('user', function (string $key = null) use (&$authInfo) {
                 if ($key) {
                     return $authInfo['user'][$key] ?? '';
                 }
                 return $authInfo['user'];
             });
-            Request::macro('tokenData', function () use (&$authInfo) {
+            $request->macro('tokenData', function () use (&$authInfo) {
                 return $authInfo['tokenData'];
             });
         }
-        Request::macro('isLogin', function () use (&$authInfo) {
+        $request->macro('isLogin', function () use (&$authInfo) {
             return !is_null($authInfo);
         });
-        Request::macro('uid', function () use (&$authInfo) {
+        $request->macro('uid', function () use (&$authInfo) {
             return is_null($authInfo) ? 0 : (int)$authInfo['user']->uid;
         });
 
