@@ -21,6 +21,15 @@ use crmeb\interfaces\MiddlewareInterface;
  */
 class BaseMiddleware implements MiddlewareInterface
 {
+    /**
+     * @param Request $request
+     * @param \Closure $next
+     * @param bool $force
+     * @return mixed
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/04/07
+     */
     public function handle(Request $request, \Closure $next, bool $force = true)
     {
         if (!$request->hasMacro('uid')) {
