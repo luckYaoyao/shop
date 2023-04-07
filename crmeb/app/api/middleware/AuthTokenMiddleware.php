@@ -23,6 +23,18 @@ use crmeb\interfaces\MiddlewareInterface;
  */
 class AuthTokenMiddleware implements MiddlewareInterface
 {
+    /**
+     * @param Request $request
+     * @param \Closure $next
+     * @param bool $force
+     * @return int|mixed|\think\Response
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/04/07
+     */
     public function handle(Request $request, \Closure $next, bool $force = true)
     {
         $authInfo = null;

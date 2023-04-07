@@ -28,6 +28,7 @@ class AuthTokenMiddleware implements MiddlewareInterface
     /**
      * @param Request $request
      * @param \Closure $next
+     * @return mixed
      * @throws \Psr\SimpleCache\InvalidArgumentException
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException

@@ -25,9 +25,19 @@ use crmeb\services\CacheService;
  */
 class AdminAuthTokenMiddleware implements MiddlewareInterface
 {
+    /**
+     * @param Request $request
+     * @param \Closure $next
+     * @return mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/04/07
+     */
     public function handle(Request $request, \Closure $next)
     {
-        $authInfo = null;
         $token = trim(ltrim($request->header(Config::get('cookie.token_name', 'Authori-zation')), 'Bearer'));
         /** @var AdminAuthServices $service */
         $service = app()->make(AdminAuthServices::class);
