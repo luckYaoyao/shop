@@ -41,41 +41,163 @@ class SystemRoute extends AuthController
 
     /**
      * 同步路由权限
-     * @param $appName
+     * @param string $appName
      * @return \think\Response
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/4/6
      */
-    public function syncRoute($appName)
+    public function syncRoute(string $appName = 'adminapi')
     {
         $this->services->syncRoute($appName);
         return app('json')->success();
     }
 
+    /**
+     * 列表数据
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/7
+     */
     public function index()
     {
+        $where = $this->request->getMore([
+            ['name_like', ''],
+            ['app_name', 'adminapi']
+        ]);
 
+        return app('json')->success($this->services->getList($where));
     }
 
+    /**
+     * tree数据
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/7
+     */
+    public function tree()
+    {
+        $where = $this->request->getMore([
+            ['name_like', ''],
+            ['app_name', 'adminapi']
+        ]);
+
+        return app('json')->success($this->services->getTreeList($where));
+    }
+
+    /**
+     * 创建
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/7
+     */
     public function create()
     {
-
+        return app('json')->success($this->services->getFrom(0, $this->request->get('app_name', 'adminapi')));
     }
 
+    /**
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/7
+     */
     public function save()
     {
+        $data = $this->request->getMore([
+            ['cate_id', 0],
+            ['name', ''],
+            ['path', ''],
+            ['method', ''],
+            ['type', 0],
+            ['app_name', ''],
+        ]);
 
+        if (!$data['name']) {
+            return app('json')->fail('请输入路由名称');
+        }
+        if (!$data['path']) {
+            return app('json')->fail('请输入路由路径');
+        }
+        if (!$data['method']) {
+            return app('json')->fail('请选择路由请求方式');
+        }
+        if (!$data['app_name']) {
+            return app('json')->fail('缺少应用名参数');
+        }
+
+        $this->services->save($data);
+
+        return app('json')->success('添加成功');
     }
 
-    public function update()
+    /**
+     * @param $id
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/7
+     */
+    public function edit($id)
     {
-
+        return app('json')->success($this->services->getFrom($id, $this->request->get('app_name', 'adminapi')));
     }
 
-    public function delete()
+    /**
+     * @param $id
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/7
+     */
+    public function update($id)
     {
+        $data = $this->request->getMore([
+            ['cate_id', 0],
+            ['name', ''],
+            ['path', ''],
+            ['method', ''],
+            ['type', 0],
+            ['app_name', ''],
+        ]);
 
+        if (!$data['name']) {
+            return app('json')->fail('请输入路由名称');
+        }
+        if (!$data['path']) {
+            return app('json')->fail('请输入路由路径');
+        }
+        if (!$data['method']) {
+            return app('json')->fail('请选择路由请求方式');
+        }
+        if (!$data['app_name']) {
+            return app('json')->fail('缺少应用名参数');
+        }
+
+        $this->services->update($id, $data);
+
+        return app('json')->success('修改成功');
+    }
+
+    /**
+     * @param $id
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/7
+     */
+    public function delete($id)
+    {
+        if (!$id) {
+            return app('json')->fail('缺少参数');
+        }
+
+        $this->services->delete($id);
+
+        return app('json')->success('删除成功');
     }
 
 

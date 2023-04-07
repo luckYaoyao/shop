@@ -28,4 +28,15 @@ class SystemRouteCate extends BaseModel
      * @var string
      */
     protected $pk = 'id';
+
+    /**
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/7
+     * @return \think\model\relation\HasMany
+     */
+    public function children()
+    {
+        return $this->hasMany(SystemRoute::class, 'id', 'cate_id')->field(['id', 'cate_id', 'name', 'path', 'method'])->order('add_time desc');
+    }
 }
