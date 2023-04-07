@@ -83,6 +83,7 @@ class SystemRouteCate extends AuthController
             return app('json')->fail('缺少分类名称');
         }
 
+        $data['add_time'] = time();
         $res = $this->services->save($data);
 
         $path = $this->services->getPathValue($data['pid']);
@@ -133,7 +134,7 @@ class SystemRouteCate extends AuthController
             $data['path'] = $this->services->setPathValue($path, $id);
         }
 
-        $this->services->update($data);
+        $this->services->update($id, $data);
 
         return app('json')->success('修改成功');
     }

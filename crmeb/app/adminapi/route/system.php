@@ -115,7 +115,7 @@ Route::group('system', function () {
     //获取路由tree行数据
     Route::get('route/tree', 'v1.system.SystemRoute/tree')->option(['real_name' => '获取路由tree']);
     //权限路由
-    Route::resource('route', 'v1.system.SystemRoute')->option([
+    Route::resource('route', 'v1.setting.SystemRoute')->option([
         'real_name' => [
             'index' => '获取路由列表',
             'create' => '获取创建路由表单',
@@ -126,7 +126,7 @@ Route::group('system', function () {
         ],
     ]);
     //路由分类
-    Route::resource('route_cate', 'v1.system.SystemRouteCate')->option([
+    Route::resource('route_cate', 'v1.setting.SystemRouteCate')->option([
         'real_name' => [
             'index' => '获取路由分类列表',
             'create' => '获取创建路由分类表单',

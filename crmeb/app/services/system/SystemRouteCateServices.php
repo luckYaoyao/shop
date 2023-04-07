@@ -63,7 +63,7 @@ class SystemRouteCateServices extends BaseServices
      */
     public function setPathValue(array $path, int $id)
     {
-        return '/' . implode('/', $path) . '/' . $id . '/';
+        return ($path ? '/' . implode('/', $path) : '') . '/' . $id . '/';
     }
 
     /**

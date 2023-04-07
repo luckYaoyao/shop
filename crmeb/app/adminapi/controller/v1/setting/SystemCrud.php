@@ -43,4 +43,25 @@ class SystemCrud extends AuthController
     {
 
     }
+
+    public function save()
+    {
+        $data = $this->request->postMore([
+            ['pid', 0],
+            ['menuName', ''],
+            ['tableName', ''],
+            ['tableComment', ''],//表备注
+            ['tableField', []],//表字段
+            ['tableIndex', []],//索引
+            ['tableTime', 0],//表是否增加修改和添加时间
+            ['tableDelete', 0],//表是否增加伪删除
+            ['fromField', []],
+            ['columnField', []],
+            ['filePath', []],
+        ]);
+
+        $this->services->createCrud($data);
+    }
+
+
 }

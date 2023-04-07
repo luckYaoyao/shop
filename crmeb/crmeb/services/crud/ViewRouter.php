@@ -72,7 +72,7 @@ class ViewRouter extends Make
 
         $menus = $options['menus'] ?? $name;
         $route = $options['route'] ?? Str::snake($name);
-        $pagePath = $options['$pagePath'] ?? Str::camel($name);
+        $pagePath = $options['pagePath'] ?? Str::camel($name);
         if (!$route) {
             throw new CrudException('缺少路由名称');
         }

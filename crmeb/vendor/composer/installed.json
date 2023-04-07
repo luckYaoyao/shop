@@ -5001,6 +5001,69 @@
             "install-path": "../topthink/think-image"
         },
         {
+            "name": "topthink/think-migration",
+            "version": "v3.0.4",
+            "version_normalized": "3.0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/top-think/think-migration.git",
+                "reference": "c5880669b277762d5ff935e551bc0d5c71de6811"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/top-think/think-migration/zipball/c5880669b277762d5ff935e551bc0d5c71de6811",
+                "reference": "c5880669b277762d5ff935e551bc0d5c71de6811",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "require": {
+                "topthink/framework": "^6.0",
+                "topthink/think-helper": "^3.0.3"
+            },
+            "require-dev": {
+                "fzaninotto/faker": "^1.8"
+            },
+            "suggest": {
+                "fzaninotto/faker": "Required to use the factory builder (^1.8)."
+            },
+            "time": "2022-10-26T07:57:54+00:00",
+            "type": "library",
+            "extra": {
+                "think": {
+                    "services": [
+                        "think\\migration\\Service"
+                    ]
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Phinx\\": "phinx/src/Phinx",
+                    "think\\migration\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "yunwuxin",
+                    "email": "448901948@qq.com"
+                }
+            ],
+            "support": {
+                "issues": "https://github.com/top-think/think-migration/issues",
+                "source": "https://github.com/top-think/think-migration/tree/v3.0.4"
+            },
+            "install-path": "../topthink/think-migration"
+        },
+        {
             "name": "topthink/think-multi-app",
             "version": "v1.0.14",
             "version_normalized": "1.0.14.0",

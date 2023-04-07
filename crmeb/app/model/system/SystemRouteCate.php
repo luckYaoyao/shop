@@ -29,11 +29,13 @@ class SystemRouteCate extends BaseModel
      */
     protected $pk = 'id';
 
+    protected $autoWriteTimestamp = false;
+
     /**
+     * @return \think\model\relation\HasMany
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/4/7
-     * @return \think\model\relation\HasMany
      */
     public function children()
     {

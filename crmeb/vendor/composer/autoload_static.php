@@ -97,6 +97,7 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         't' => 
         array (
             'think\\view\\driver\\' => 18,
+            'think\\migration\\' => 16,
             'think\\captcha\\' => 14,
             'think\\app\\' => 10,
             'think\\' => 6,
@@ -161,6 +162,7 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
             'Psr\\Container\\' => 14,
             'Psr\\Cache\\' => 10,
             'PhpOffice\\PhpSpreadsheet\\' => 25,
+            'Phinx\\' => 6,
         ),
         'O' => 
         array (
@@ -257,6 +259,10 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         'think\\view\\driver\\' => 
         array (
             0 => __DIR__ . '/..' . '/topthink/think-view/src',
+        ),
+        'think\\migration\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/topthink/think-migration/src',
         ),
         'think\\captcha\\' => 
         array (
@@ -399,6 +405,10 @@ class ComposerStaticInitf16474ac994ccc25392f403933800b79
         'PhpOffice\\PhpSpreadsheet\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoffice/phpspreadsheet/src/PhpSpreadsheet',
+        ),
+        'Phinx\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/topthink/think-migration/phinx/src/Phinx',
         ),
         'Overtrue\\Socialite\\' => 
         array (

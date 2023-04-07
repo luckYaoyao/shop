@@ -41,6 +41,17 @@ abstract class Make
     protected $fileMime = 'php';
 
     /**
+     * 文件全部路径
+     * @var string
+     */
+    protected $filePathName = null;
+
+    /**
+     * @var string
+     */
+    protected $fileBasePath;
+
+    /**
      * 变量名称
      * @var array
      */
@@ -131,7 +142,36 @@ abstract class Make
             }
         }
         //多个斜杠的替换成一个
-        return str_replace(DS . DS, DS, $this->basePath . ($this->baseDir ? $this->baseDir . DS : '') . ($path ? $path . DS : ''));
+        $this->fileBasePath = str_replace(DS . DS, DS, $this->basePath . ($this->baseDir ? $this->baseDir . DS : '') . ($path ? $path . DS : ''));
+
+        return $this->fileBasePath;
+    }
+
+    /**
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/7
+     */
+    public function getFileBasePath()
+    {
+        return $this->fileBasePath;
+    }
+
+    /**
+     * 设置文件保存就路径名称
+     * @param string $filePathName
+     * @return $this
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/7
+     */
+    public function setFilePathName(string $filePathName = '')
+    {
+        if ($filePathName) {
+            $this->filePathName = $filePathName;
+        }
+        return $this;
     }
 
     /**
@@ -367,6 +407,8 @@ abstract class Make
      */
     protected function makeFile(string $pathname, string $content)
     {
+
+        $pathname = $this->filePathName ?: $pathname;
 
         if (is_file($pathname)) {
             throw new CrudException($this->name . ':' . $pathname . ' already exists!');
