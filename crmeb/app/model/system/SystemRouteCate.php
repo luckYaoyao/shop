@@ -37,7 +37,7 @@ class SystemRouteCate extends BaseModel
      * @email 136327134@qq.com
      * @date 2023/4/7
      */
-    public function childrenList()
+    public function children()
     {
         return $this->hasMany(SystemRoute::class, 'cate_id', 'id')->field(['id', 'cate_id', 'name', 'path', 'method'])->order('add_time desc');
     }
