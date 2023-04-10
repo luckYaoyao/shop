@@ -73,7 +73,7 @@ class SystemRouteCate extends AuthController
     public function save(Request $request)
     {
         $data = $request->postMore([
-            ['pid', 0],
+            ['pid', ''],
             ['name', ''],
             ['sort', 0],
             ['app_name', ''],
@@ -84,10 +84,16 @@ class SystemRouteCate extends AuthController
         }
 
         $data['add_time'] = time();
+        $pathAttr = explode('/', $data['pid']);
+        $pathData = [];
+        foreach ($pathAttr as $item) {
+            if (!$item) {
+                $pathData[] = $item;
+            }
+        }
+        $data['pid'] = $pathData[count($pathData) - 1] ?? 0;
         $res = $this->services->save($data);
-
-        $path = $this->services->getPathValue($data['pid']);
-        $path = $this->services->setPathValue($path, $res->id);
+        $path = $this->services->setPathValue($data['pid'], $res->id);
         $res->path = $path;
         $res->save();
 
