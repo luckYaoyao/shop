@@ -406,10 +406,6 @@
 		<!-- #ifdef MP -->
 		<!-- <authorize @onLoadFun="onLoadFun" :isAuto="isAuto" :isShowAuth="isShowAuth" @authColse="authColse"></authorize> -->
 		<!-- #endif -->
-		<payment :payMode='payMode' :pay_close="pay_close" @onChangeFun='onChangeFun' :order_id="pay_order_id"
-			:totalPrice='totalPrice' :friendPay="true"></payment>
-
-
 		<invoiceModal :aleartStatus="aleartStatus" :invoiceData="invoiceData" @close="aleartStatus=false">
 		</invoiceModal>
 		<view class="mask invoice-mask" v-if="aleartStatus" @click="aleartStatus = false"></view>
@@ -448,7 +444,6 @@
 		makeUpinvoice
 	} from '@/api/user.js';
 	import home from '@/components/home';
-	import payment from '@/components/payment';
 	import orderGoods from "@/components/orderGoods";
 	import ClipboardJS from "@/plugin/clipboard/clipboard.js";
 	import {
@@ -466,7 +461,6 @@
 	import zbCode from '@/components/zb-code/zb-code.vue'
 	export default {
 		components: {
-			payment,
 			home,
 			invoicePicker,
 			invoiceModal,
@@ -587,7 +581,6 @@
 			}
 		},
 		onShow() {
-			this.payClose()
 			if (this.isLogin) {
 				this.getOrderInfo();
 				this.getUserInfo();
@@ -675,29 +668,6 @@
 					url: `/pages/goods/order_refund_goods/index?orderId=` + this.order_id
 				})
 			},
-			// refundSubmit() {
-			// 	if (!this.express_num.trim()) {
-			// 		return this.$util.Tips({
-			// 			title: '请输入物流单号'
-			// 		})
-			// 	}
-			// 	refundExpress({
-			// 		express_id: this.express_num,
-			// 		id: this.orderInfo.id
-			// 	}).then(res => {
-			// 		this.$util.Tips({
-			// 			title: '操作成功',
-			// 			icon: 'success'
-			// 		}, () => {
-			// 			this.refund_close = false
-			// 			this.getOrderInfo();
-			// 		});
-			// 	}).catch(err => {
-			// 		this.$util.Tips({
-			// 			title: err,
-			// 		})
-			// 	})
-			// },
 			getCustomerType() {
 				getCustomerType().then(res => {
 					this.customerInfo = res.data;
@@ -732,76 +702,7 @@
 				});
 				// #endif
 			},
-			// openSubcribe(e, type) {
-			// 	let page = e;
-			// 	// #ifdef MP
-			// 	uni.showLoading({
-			// 		title: '正在加载',
-			// 	})
-			// 	openOrderRefundSubscribe().then(res => {
-			// 		uni.hideLoading();
-			// 		uni.navigateTo({
-			// 			url: page,
-			// 			success: (res) => {
-			// 				if (!type) {
-			// 					let cartList = [];
-			// 					this.cartInfo.forEach((item) => {
-			// 						let i = {
-			// 							cart_info: item,
-			// 							cart_id: item.id,
-			// 							cart_num: item.cart_num,
-			// 							surplus_num: item.cart_num - item.refund_num
-			// 						}
-			// 						cartList.push(i)
-			// 					})
-			// 					res.eventChannel.emit('goodsData', {
-			// 						cartList: cartList,
-			// 						count: 1,
-			// 					})
-			// 				}
-			// 			}
-			// 		});
-			// 	}).catch(() => {
-			// 		uni.hideLoading();
-			// 	});
-			// 	// #endif
-			// 	// #ifndef MP
-			// 	uni.navigateTo({
-			// 		url: page,
-			// 		success: (res) => {
-			// 			if (!type) {
-			// 				let cartList = [];
-			// 				this.cartInfo.forEach((item) => {
-			// 					let i = {
-			// 						cart_info: item,
-			// 						cart_id: item.id,
-			// 						cart_num: item.cart_num,
-			// 						surplus_num: item.cart_num - item.refund_num
-			// 					}
-			// 					cartList.push(i)
-			// 				})
-			// 				res.eventChannel.emit('goodsData', {
-			// 					cartList: cartList,
-			// 					count: 1,
-			// 				})
-			// 			}
-			// 		}
-			// 	});
-			// 	// #endif
-			// },
-			goReturnGoods() {
-
-			},
-			/**
-			 * 事件回调
-			 * 
-			 */
-			onChangeFun: function(e) {
-				let opt = e;
-				let action = opt.action || null;
-				let value = opt.value != undefined ? opt.value : null;
-				(action && this[action]) && this[action](value);
-			},
+			goReturnGoods() {},
 			/**
 			 * 拨打电话
 			 */
@@ -830,13 +731,6 @@
 				});
 			},
 			/**
-			 * 关闭支付组件
-			 * 
-			 */
-			payClose: function() {
-				this.pay_close = false;
-			},
-			/**
 			 * 打开支付组件
 			 * 
 			 */
@@ -847,20 +741,6 @@
 				// this.pay_close = true;
 				// this.pay_order_id = this.orderInfo.order_id;
 				// this.totalPrice = this.orderInfo.pay_price;
-			},
-			/**
-			 * 支付成功回调
-			 * 
-			 */
-			pay_complete: function() {
-				this.pay_close = false;
-				this.pay_order_id = '';
-				uni.navigateTo({
-					url: '/pages/goods/order_pay_status/index?order_id=' + this.orderInfo.order_id + '&msg=' +
-						this.$t(`支付成功`) +
-						'&type=3' + '&totalPrice=' + this.totalPrice
-				})
-				this.getOrderInfo();
 			},
 			/**
 			 * 支付失败回调

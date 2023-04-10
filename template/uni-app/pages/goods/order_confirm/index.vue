@@ -228,8 +228,6 @@
 		<invoice-picker :inv-show="invShow" :inv-list="invList" :inv-checked="invChecked" :is-special="special_invoice"
 			:url-query="urlQuery" @inv-close="invClose" @inv-change="invChange" @inv-cancel="invCancel">
 		</invoice-picker>
-		<payment :payMode="cartArr" :pay_close="pay_close" :isCall="true" :totalPrice="totalPrice.toString()"
-			@changePayType="changePayType" @onChangeFun="onChangeFun"></payment>
 		<canvas canvas-id="canvas" v-if="canvasStatus"
 			:style="{width: canvasWidth + 'px', height: canvasHeight + 'px',position: 'absolute',left:'-100000px',top:'-100000px'}"></canvas>
 	</view>
