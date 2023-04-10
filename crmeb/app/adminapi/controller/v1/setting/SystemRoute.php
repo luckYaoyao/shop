@@ -50,6 +50,7 @@ class SystemRoute extends AuthController
     public function syncRoute(string $appName = 'adminapi')
     {
         $this->services->syncRoute($appName);
+        
         return app('json')->success();
     }
 
