@@ -17,6 +17,7 @@ namespace app\services\system;
 use app\dao\system\SystemRouteDao;
 use app\services\BaseServices;
 use crmeb\services\FormBuilder;
+use think\exception\ValidateException;
 use think\helper\Str;
 
 /**
@@ -51,6 +52,23 @@ class SystemRouteServices extends BaseServices
         $list = $this->dao->selectList($where, 'name,path,method', $page, $limit)->toArray();
         $count = $this->dao->count($where);
         return compact('list', 'count');
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/10
+     */
+    public function getInfo(int $id)
+    {
+        $routeInfo = $this->dao->get($id);
+        if (!$routeInfo) {
+            throw new ValidateException('修改的路由不存在');
+        }
+
+        return $routeInfo->toArray();
     }
 
     /**
