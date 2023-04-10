@@ -97,7 +97,7 @@ class SystemRoute extends AuthController
      */
     public function save($id = 0)
     {
-        $data = $this->request->getMore([
+        $data = $this->request->postMore([
             ['cate_id', 0],
             ['name', ''],
             ['path', ''],
@@ -126,6 +126,7 @@ class SystemRoute extends AuthController
         if ($id) {
             $this->services->update($id, $data);
         } else {
+            $data['add_time'] = date('Y-m-d H:i:s');
             $this->services->save($data);
         }
 
