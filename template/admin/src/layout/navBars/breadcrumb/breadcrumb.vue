@@ -118,7 +118,6 @@ export default {
     },
     // 递归设置 breadcrumb
     getBreadcrumbList(arr) {
-      console.log(this.routeSplit, 'routeSplit');
       arr.map((item) => {
         this.routeSplit.map((v, k, arrs) => {
           if (this.routeSplitFirst === item.path) {
@@ -129,7 +128,6 @@ export default {
           }
         });
       });
-      console.log(arr, 'arrarrarr');
     },
     // 当前路由分割处理
     initRouteSplit(path) {
@@ -143,12 +141,9 @@ export default {
         },
       ];
       //   this.routeSplit = path.split('/');
-      console.log(path.split('/'), 'path');
-
       //   this.routeSplit.shift();
       this.routeSplitFirst = path;
       this.routeSplitIndex = 1;
-      console.log(',,,,,');
       this.getBreadcrumbList(this.$store.state.routesList.routesList);
     },
   },
@@ -156,11 +151,9 @@ export default {
   watch: {
     $route: {
       handler(newVal) {
-        console.log(newVal, '123321`', this.$store.state.menus.menusName);
         // this.initRouteSplit(newVal.path);
         let menuList = this.$store.state.menus.menusName;
         let openMenus = getMenuopen(newVal, menuList);
-        console.log('11', openMenus);
         let allMenuList = R(menuList, []);
         let selectMenu = [];
         if (allMenuList.length > 0) {
@@ -172,7 +165,6 @@ export default {
             });
           });
         }
-        console.log(openMenus, 'selectMenu');
       },
       deep: true,
     },

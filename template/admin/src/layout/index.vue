@@ -34,7 +34,6 @@ export default {
   },
   watch: {
     $route(newRoute) {
-      console.log(newRoute, '出发了。。。');
       this.headMenuNoShow = this.$route.meta.fullScreen;
       const { name, query, params, meta, path } = newRoute;
       this.addTag({
@@ -46,7 +45,6 @@ export default {
     },
   },
   created() {
-    console.log(this.$route, 'this.$route.this.$route.');
     this.headMenuNoShow = this.$route.meta.fullScreen;
     this.onLayoutResize();
     window.addEventListener('resize', this.onLayoutResize);

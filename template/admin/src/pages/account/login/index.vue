@@ -258,7 +258,6 @@ export default {
     },
     formatTwoStageRoutes(arr) {
       if (arr.length <= 0) return false;
-      console.log(arr, 'arr');
       const newArr = [];
       const cacheList = [];
       arr.forEach((v) => {
@@ -268,7 +267,6 @@ export default {
           this.$store.dispatch('keepAliveNames/setCacheKeepAlive', cacheList);
         }
       });
-      console.log(newArr, 'newArr');
       return newArr;
     },
     // 多级嵌套数组处理成一维数组

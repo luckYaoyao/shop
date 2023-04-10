@@ -9,13 +9,13 @@
 // +---------------------------------------------------------------------
 
 import LayoutMain from '@/layout';
-import setting  from '@/setting'
+import setting from '@/setting';
 let routePre = setting.routePre;
 
 const pre = 'system_';
 
 export default {
-  path: routePre+'/system',
+  path: routePre + '/system',
   name: 'system',
   header: 'system',
   redirect: {
@@ -26,6 +26,24 @@ export default {
   },
   component: LayoutMain,
   children: [
+    {
+      path: 'code_generation',
+      name: `${pre}code_generation`,
+      meta: {
+        auth: ['system-config-code-generation'],
+        title: '代码生成',
+      },
+      component: () => import('@/pages/system/codeGeneration/index'),
+    },
+    {
+      path: 'backend_routing',
+      name: `${pre}backend_routing`,
+      meta: {
+        auth: ['system-config-backend-routing'],
+        title: '路由权限',
+      },
+      component: () => import('@/pages/system/backendRouting/index'),
+    },
     {
       path: 'file',
       name: `${pre}file`,

@@ -74,7 +74,6 @@ export default {
     this.bus.$on('onCurrentContextmenuClick', (data) => {
       this.onCurrentContextmenuClick(data);
     });
-    console.log(this.$store.state.app.tagNavList);
     this.tagsViewRoutesList = this.$store.state.app.tagNavList;
   },
   mounted() {
@@ -91,7 +90,6 @@ export default {
     onTagsClick(v, k) {
       this.tagsRoutePath = v.path;
       this.tagsRefsIndex = k;
-      console.log(v, k, '11111');
       this.$router.push(v);
     },
     // 获取 tagsView 的下标：用于处理 tagsView 点击时的横向滚动
@@ -189,7 +187,6 @@ export default {
       this.tagsViewList = [];
       if (!this.$store.state.themeConfig.themeConfig.isCacheTagsView) Session.remove('tagsViewList');
       this.tagsViewRoutesList = this.$store.state.tagsViewRoutes.tagsViewRoutes;
-      console.log(this.tagsViewRoutesList, 'tagsViewRoutesList');
       this.initTagsViewList();
     },
     // 存储 tagsViewList 到浏览器临时缓存中，页面刷新时，保留记录
@@ -198,11 +195,9 @@ export default {
     },
     // 初始化设置了 tagsView 数据
     initTagsViewList() {
-      console.log(Session.get('tagsViewList'), 'Session.get');
       if (Session.get('tagsViewList') && this.$store.state.themeConfig.themeConfig.isCacheTagsView) {
         this.tagsViewList = Session.get('tagsViewList');
       } else {
-        console.log(this.tagsViewRoutesList, 'this.tagsViewRoutesList');
         this.tagsViewRoutesList.map((v) => {
           if (v.isAffix && !v.isHide) this.tagsViewList.push({ ...v });
         });
@@ -224,14 +219,12 @@ export default {
     },
     // 右键菜单点击时显示菜单列表
     onContextmenu(v, e) {
-      console.log(v, e);
       let { clientX, clientY } = e;
       this.tagsDropdown.x = clientX;
       this.tagsDropdown.y = clientY;
       this.$refs.tagsContextmenu.openContextmenu(v);
     },
     onContextmenuIcon(e) {
-      console.log(e);
     },
     // 当前项右键菜单点击
     onCurrentContextmenuClick(data) {
@@ -256,7 +249,6 @@ export default {
     },
     // 1、刷新当前 tagsView：
     refreshCurrentTagsView(path) {
-      console.log(path);
       this.bus.$emit('onTagsViewRefreshRouterView', path);
     },
     // 2、关闭当前 tagsView：当前项 `tags-view` icon 关闭时点击，如果是设置了固定的（isAffix），不可以关闭
@@ -284,7 +276,6 @@ export default {
       this.tagsViewRoutesList.map((v) => {
         if (v.meta.isAffix && !v.meta.isHide) tagsViewList.push({ ...v });
         if ((v.path = path)) tagsViewList.push({ ...v });
-        console.log(tagsViewList);
       });
       this.addBrowserSetSession(tagsViewList);
       // this.addTagsView(path);

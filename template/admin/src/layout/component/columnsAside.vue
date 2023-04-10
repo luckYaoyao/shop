@@ -63,11 +63,9 @@ export default {
     },
     // 设置分栏布局风格
     setColumnsAsidelayout() {
-      console.log(this.$store.state.themeConfig.themeConfig.columnsAsideLayout, '122311');
       return this.$store.state.themeConfig.themeConfig.columnsAsideLayout;
     },
     Layout() {
-      console.log(this.$store.state.themeConfig.themeConfig.Layout, '122311444');
       return this.$store.state.themeConfig.themeConfig.Layout;
     },
   },
@@ -77,7 +75,6 @@ export default {
   methods: {
     // 设置菜单高亮位置移动
     setColumnsAsideMove(k) {
-      console.log(k);
       if (k === undefined) return false;
       const els = this.$refs.columnsAsideOffsetTopRefs;
       this.liIndex = k;
@@ -85,7 +82,6 @@ export default {
     },
     // 菜单高亮点击事件
     onColumnsAsideMenuClick(v) {
-      //   console.log(v, 'vvvv');
       let { path, redirect } = v;
       if (path) this.$router.push(path);
       else this.$router.push(path);
@@ -151,9 +147,7 @@ export default {
       // this.routeSplit = path.split('/');
       // this.routeSplit.shift();
       // const routeFirst = `/${this.routeSplit[0]}`;
-      console.log(path, this.columnsAsideList);
       const currentSplitRoute = this.columnsAsideList.find((v) => v.path === path);
-      console.log(currentSplitRoute, 'currentSplitRoute');
       if (!currentSplitRoute) {
         // this.onColumnsAsideDown(0);
         return false;
@@ -168,7 +162,6 @@ export default {
     // 监听 vuex 数据变化
     '$store.state': {
       handler(val) {
-        console.log('变了变了');
         val.themeConfig.themeConfig.columnsAsideStyle === 'columnsRound'
           ? (this.difference = 3)
           : (this.difference = 0);
@@ -182,8 +175,6 @@ export default {
         this.setColumnsMenuHighlight(to.path);
         // this.setColumnsAsideMove();
         let HeadName = getHeaderName(to, this.columnsAsideList);
-        console.log(to, '1231');
-
         let asideList = getMenuSider(this.columnsAsideList, HeadName)[0]?.children;
         const resData = this.setSendChildren(HeadName);
         if (resData.length <= 0) return false;

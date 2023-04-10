@@ -12,7 +12,8 @@
       <Card :bordered="false" dis-hover class="ivu-mt mr20 card-tree">
         <div class="tree">
           <div class="main-btn">
-            <Button class="mb10" type="primary" @click="clickMenu(4)" long>新增分类</Button>
+            <Button class="mb5 mr10" style="flex: 1" type="primary" @click="clickMenu(4)" long>新增分类</Button>
+            <Button type="success" @click="syncRoute()">同步</Button>
           </div>
 
           <vue-tree-list
@@ -148,16 +149,16 @@
             <Row :gutter="24" type="flex">
               <Col span="24">
                 <div class="title">调用方式</div>
-                <FormItem label="调用内容：" prop="url">
+                <FormItem label="路由地址：" prop="path">
                   <Input
                     v-if="isEdit"
                     class="perW20"
                     type="text"
                     :rows="4"
-                    v-model.trim="formValidate.url"
+                    v-model.trim="formValidate.path"
                     placeholder="请输入"
                   />
-                  <span v-else>{{ formValidate.url || '' }}</span>
+                  <span v-else>{{ formValidate.path || '' }}</span>
                 </FormItem>
                 <FormItem label="请求参数：">
                   <vxe-table
@@ -170,7 +171,7 @@
                     :export-config="{}"
                     :loading="loading"
                     :tree-config="{ transform: true, rowField: 'id', parentField: 'parentId' }"
-                    :data="formValidate.request_params"
+                    :data="formValidate.request"
                   >
                     <!-- <vxe-column type="checkbox" width="60"></vxe-column> -->
                     <vxe-column field="attribute" width="300" title="属性" tree-node :edit-render="{}">
@@ -241,7 +242,7 @@
                     :export-config="{}"
                     :loading="loading"
                     :tree-config="{ transform: true, rowField: 'id', parentField: 'parentId' }"
-                    :data="formValidate.return_params"
+                    :data="formValidate.response"
                   >
                     <!-- <vxe-column type="checkbox" width="60"></vxe-column> -->
                     <vxe-column field="attribute" title="属性" width="300" tree-node :edit-render="{}">
@@ -306,16 +307,16 @@
                   />
                   <span v-else class="text-area">{{ formValidate.request_example || '' }}</span>
                 </FormItem>
-                <FormItem label="返回数据示例：" prop="return_example">
+                <FormItem label="返回数据示例：" prop="response_example">
                   <Input
                     v-if="isEdit"
                     class="perW20"
                     type="textarea"
                     :rows="4"
-                    v-model.trim="formValidate.return_example"
+                    v-model.trim="formValidate.response_example"
                     placeholder="请输入"
                   />
-                  <span v-else class="text-area">{{ formValidate.return_example || '' }}</span>
+                  <span v-else class="text-area">{{ formValidate.response_example || '' }}</span>
                 </FormItem>
                 <FormItem label="错误码：">
                   <vxe-table
@@ -389,15 +390,30 @@
       <Input v-model="value" placeholder="请输入分组名称" style="width: 85%" />
     </Modal>
     <Modal v-model="debuggingModal" :title="formValidate.name" width="70%" footer-hide :loading="loading">
-      <debugging v-if="debuggingModal" :formValidate="formValidate" :typeList="typeList" :requestTypeList="requestTypeList" />
+      <debugging
+        v-if="debuggingModal"
+        :formValidate="formValidate"
+        :typeList="typeList"
+        :requestTypeList="requestTypeList"
+      />
     </Modal>
   </div>
 </template>
 
 <script>
-import { interfaceList, interfaceDet, interfaceSave, interfaceEditName, interfaceDel } from '@/api/systemOutAccount';
+import {
+  routeCate,
+  syncRoute,
+  routeList,
+  routeDet,
+  routeSave,
+  interfaceEditName,
+  routeDel,
+  routeCateDel,
+} from '@/api/systemBackendRouting';
 import { VueTreeList, Tree, TreeNode } from 'vue-tree-list';
 import debugging from './debugging.vue';
+
 import { mapState } from 'vuex';
 export default {
   name: 'systemOutInterface',
@@ -452,24 +468,24 @@ export default {
       ],
       requestTypeList: [
         {
-          value: 'get',
-          label: 'get',
+          value: 'GET',
+          label: 'GET',
         },
         {
-          value: 'post',
-          label: 'post',
+          value: 'POST',
+          label: 'POST',
         },
         {
-          value: 'delete',
-          label: 'delete',
+          value: 'DELETE',
+          label: 'DELETE',
         },
         {
-          value: 'put',
-          label: 'put',
+          value: 'PUT',
+          label: 'PUT',
         },
         {
-          value: 'options',
-          label: 'options',
+          value: '*',
+          label: '*',
         },
       ],
       contextData: null, //左侧导航右键点击是产生的数据对象
@@ -479,6 +495,7 @@ export default {
         size: 'small',
       },
       methodColor: '#fff',
+      app_name: 'adminapi',
     };
   },
   watch: {
@@ -511,6 +528,12 @@ export default {
     this.getInterfaceList('one');
   },
   methods: {
+    syncRoute() {
+      syncRoute(this.app_name).then((res) => {
+        this.getInterfaceList('one');
+        this.$Message.success(res.msg);
+      });
+    },
     debugging() {
       this.debuggingModal = true;
     },
@@ -535,13 +558,12 @@ export default {
       await $table.setActiveCell(data, 'name');
     },
     getInterfaceList(disk_type) {
-      interfaceList()
+      routeList()
         .then((res) => {
           res.data[0].expand = false;
           this.treeData = new Tree(res.data);
-
           if (res.data.length) {
-            if (res.data[0].children.length) {
+            if (res.data[0].children && res.data[0].children.length) {
               this.onClick(res.data[0].children[0]);
             }
           }
@@ -551,13 +573,15 @@ export default {
         });
     },
     onClick(params) {
+      console.log(params, 'params');
       if (params.method) {
         this.isEdit = false;
-        interfaceDet(params.id)
+        routeDet(params.id)
           .then((res) => {
             this.formValidate = res.data;
           })
           .catch((err) => {
+            console.log(err);
             this.$Message.error(err);
           });
       }
@@ -567,13 +591,14 @@ export default {
         return this.$Message.warning('请输入接口名称');
       } else if (!this.formValidate.method) {
         return this.$Message.warning('请选择请求类型');
-      } else if (!this.formValidate.url) {
-        return this.$Message.warning('请输入调用方式');
+      } else if (!this.formValidate.path) {
+        return this.$Message.warning('请输入路由地址');
       }
-      this.formValidate.request_params = await this.$refs.xTable.getTableData().tableData;
-      this.formValidate.return_params = await this.$refs.resTable.getTableData().tableData;
+      this.formValidate.request = await this.$refs.xTable.getTableData().tableData;
+      this.formValidate.response = await this.$refs.resTable.getTableData().tableData;
       this.formValidate.error_code = await this.$refs.codeTable.getTableData().tableData;
-      await interfaceSave(this.formValidate)
+      this.formValidate.app_name = this.app_name;
+      await routeSave(this.formValidate)
         .then((res) => {
           this.isEdit = false;
           this.$Message.success(res.msg);
@@ -660,17 +685,18 @@ export default {
     clickMenu(name, params) {
       if (name == 1) {
         this.formValidate = {};
-        this.formValidate.pid = params ? params.id : 0;
+        this.formValidate.cate_id = params ? params.id : 0;
         this.formValidate.id = 0;
         this.isEdit = true;
       } else if (name == 2) {
         this.value = params.name || '';
-        this.formValidate.id = params ? params.id : 0;
+        this.formValidate.cate_id = params ? params.id : 0;
         this.nameModal = true;
       } else if (name == 3) {
         this.onDel(params);
       } else if (name == 4) {
-        this.add();
+        // this.add();
+        this.$modalForm(routeCate(this.app_name)).then(() => this.getInterfaceList());
       }
     },
 
@@ -686,7 +712,7 @@ export default {
         type: 0,
         name: this.value,
       };
-      interfaceSave(data)
+      routeSave(data)
         .then((res) => {
           this.$Message.success(res.msg);
           this.getInterfaceList();
@@ -786,11 +812,13 @@ export default {
     },
     //
     onDel(node) {
+      console.log(node);
+      let method = node.cate_id ? routeDel : routeCateDel;
       this.$Modal.confirm({
         title: '警告',
         content: '<p>删除后无法恢复，请确认后删除！</p>',
         onOk: () => {
-          interfaceDel(node.id)
+          method(node.id)
             .then((res) => {
               this.$Message.success(res.msg);
               node.remove();
@@ -882,7 +910,9 @@ export default {
 .main {
   width: 100%;
   display: flex;
-  .main-btn {}
+  .main-btn {
+    display:flex;
+  }
   .card-tree{
     width: 270px;
     height: calc(100vh - 115px);

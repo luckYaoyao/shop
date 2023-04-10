@@ -356,7 +356,6 @@ export default {
     },
     setLocalTheme(val) {
       let themeSelect = themeList[val];
-      console.log(this.getThemeConfig.layout);
       if (['theme-1', 'theme-3', 'theme-5', 'theme-7'].includes(val)) {
         // 这几个为黑色背景主题
         if (['classic', 'transverse'].includes(this.getThemeConfig.layout)) {
@@ -422,16 +421,8 @@ export default {
             themeSelect['--prev-MenuActiveColor'] = '#fff';
           }
         }
-      } else {
-        if (this.getThemeConfig.layout === 'columns') {
-          if (val == 'theme-4') {
-            // themeSelect['--prev-bg-menu-hover-ba-color'] = '#ecf8f3';
-            // themeSelect['--prev-color-primary'] = '#41b584';
-          }
-        }
       }
       for (let key in themeSelect) {
-        console.log(key, themeSelect[key]);
         document.documentElement.style.setProperty(key, themeSelect[key]);
       }
     },
@@ -475,7 +466,6 @@ export default {
     },
     // 布局配置弹窗打开
     openDrawer() {
-      console.log('触发了');
       this.$store.state.themeConfig.themeConfig.isDrawer = true;
     },
     // 关闭弹窗时，初始化变量
@@ -511,7 +501,6 @@ export default {
     },
     // 设置布局切换，重置主题样式
     initSetLayoutChange() {
-      console.log(this.$store.state.themeConfig.themeConfig.layout);
 
       // if (this.$store.state.themeConfig.themeConfig.layout === 'classic') {
       //   this.onBgColorPickerChange('menuBar', '#282c34');

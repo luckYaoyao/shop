@@ -272,7 +272,6 @@ export default {
     } else {
       this.getList();
     }
-    console.log(this.diy);
   },
   methods: {
     productList() {
@@ -338,15 +337,12 @@ export default {
         }
         changeListApi(this.formValidate)
           .then(async (res) => {
-            console.log(this.selectIds);
-
             let data = res.data;
             if (this.selectIds.length) {
               let arr = [];
               this.selectIds.map((item) => {
                 data.list.map((i) => {
                   if (i.id == item) {
-                    console.log(i);
                     i._checked = true;
                     arr.push(i);
                   }
@@ -376,13 +372,10 @@ export default {
             data.list.forEach((el) => {
               el.image = el.cover_img;
             });
-
-            console.log(this.selectIds);
             if (this.selectIds.length) {
               this.selectIds.map((item) => {
                 data.list.map((i) => {
                   if (i.id == item) {
-                    console.log(i);
                     i._checked = true;
                   }
                 });

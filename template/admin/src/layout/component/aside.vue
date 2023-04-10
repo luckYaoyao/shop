@@ -74,11 +74,9 @@ export default {
     },
   },
   created() {
-    console.log(this.$store.state.menus, 'this.$store.state.menus');
     this.initMenuFixed(document.body.clientWidth);
     this.setFilterRoutes();
     this.bus.$on('setSendColumnsChildren', (res) => {
-      console.log('收到了', res);
       this.menuList = res || [];
       this.menuList.length > 0
         ? (this.$store.state.themeConfig.themeConfig.isCollapse = false)

@@ -22,7 +22,6 @@ export default {
   created() {
     this.keepAliveNameList = this.getKeepAliveNames();
     this.bus.$on('onTagsViewRefreshRouterView', (path) => {
-      console.log(path);
       if (this.$route.path !== path) return false;
       this.keepAliveNameList = this.getKeepAliveNames().filter((name) => this.$route.name !== name);
       this.refreshRouterViewKey = this.$route.path;

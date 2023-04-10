@@ -24,7 +24,6 @@ export default {
     // 设置 logo 是否显示
     setIsShowLogo() {
       let { isShowLogo, layout } = this.$store.state.themeConfig.themeConfig;
-      console.log(this.$store.state.themeConfig.themeConfig, layout, 'isShowLogo, layout');
       return (isShowLogo && layout === 'classic') || (isShowLogo && layout === 'transverse');
     },
     // 设置是否显示横向菜单
