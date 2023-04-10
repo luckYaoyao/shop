@@ -405,6 +405,21 @@ export function delFolder(params) {
 }
 
 /**
+ * 文件备注
+ * @param {*} id 
+ * @param {*} params 
+ * @returns 
+ */
+ export function fileMark(params) {
+  return request({
+    url: `system/file/mark`,
+    method: 'get',
+    params,
+    file_edit: true,
+  });
+}
+
+/**
  * @description 安全维护 -- 更换域名
  */
 export function replaceSiteUrlApi(data) {
