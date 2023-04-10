@@ -82,7 +82,7 @@ class SystemRouteServices extends BaseServices
     public function getTreeList(array $where, string $appName = 'adminapi')
     {
         $list = app()->make(SystemRouteCateServices::class)
-            ->selectList(['app_name' => $appName], '*', 0, 0, 'id asc', [
+            ->selectList(['app_name' => $appName], '*', 0, 0, 'id asc,sort desc', [
                 'children' => function ($query) use ($where) {
                     $query->where('app_name', $where['app_name'])
                         ->when('' !== $where['name_like'], function ($q) use ($where) {
