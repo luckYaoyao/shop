@@ -427,8 +427,10 @@ import editFrom from '../../../components/from/from';
 import sendFrom from '@/components/sendCoupons/index';
 import userDetails from './handle/userDetails';
 import newsCategory from '@/components/newsCategory/index';
-import city from '@/utils/city';
+// import city from '@/utils/city';
 import customerInfo from '@/components/customerInfo';
+import { cityList } from '@/api/app';
+
 export default {
   name: 'user_list',
   components: {
@@ -536,7 +538,7 @@ export default {
         { type: 'app', name: 'APP' },
       ],
       address: [],
-      addresData: city,
+      addresData: [],
       isShowSend: true,
       modal13: false,
       maxCols: 4,
@@ -688,6 +690,7 @@ export default {
   },
   created() {
     this.getList();
+    this.getCityList();
   },
   mounted() {
     this.userGroup();
@@ -695,6 +698,11 @@ export default {
     // this.groupLists();
   },
   methods: {
+    getCityList() {
+      cityList().then((res) => {
+        this.addresData = res.data;
+      });
+    },
     setUser() {
       let data = this.$refs.userEdit.formItem;
       let ids = [];
@@ -969,7 +977,7 @@ export default {
     // 赠送会员等级
     giveLevelTime(id) {
       this.$modalForm(giveLevelTimeApi(id)).then(() => this.getList(1));
-      
+
       // giveLevelTimeApi(id)
       //   .then(async (res) => {
       //     if (res.data.status === false) {

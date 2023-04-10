@@ -1111,3 +1111,14 @@ export function langCodeTranslate(data) {
     data,
   });
 }
+
+/**
+ * @description 代码生成
+ */
+export function codeCurd(data) {
+  return request({
+    url: `curd`,
+    method: 'post',
+    data,
+  });
+}
