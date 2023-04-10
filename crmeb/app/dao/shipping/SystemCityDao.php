@@ -96,6 +96,6 @@ class SystemCityDao extends BaseDao
      */
     public function fullList($field = '*')
     {
-        return $this->getModel()->with('children')->order('id asc')->field($field)->select()->toArray();
+        return $this->getModel()->order('id asc')->field($field)->select()->toArray();
     }
 }
