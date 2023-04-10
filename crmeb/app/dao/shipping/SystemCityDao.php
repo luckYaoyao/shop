@@ -94,8 +94,8 @@ class SystemCityDao extends BaseDao
      * @email 442384644@qq.com
      * @date 2023/04/10
      */
-    public function fullList()
+    public function fullList($field = '*')
     {
-        return $this->getModel()->with('children')->order('id asc')->select()->toArray();
+        return $this->getModel()->with('children')->order('id asc')->field($field)->select()->toArray();
     }
 }
