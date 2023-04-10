@@ -133,8 +133,9 @@ class SystemCity extends AuthController
      */
     public function clean_cache()
     {
-        $res = CacheService::delete('CITY_LIST');
-        if ($res) {
+        $res1 = CacheService::delete('CITY_LIST');
+        $res2 = CacheService::delete('CITY_FULL_LIST');
+        if ($res1 && $res2) {
             return app('json')->success(400185);
         } else {
             return app('json')->fail(400186);
@@ -150,6 +151,6 @@ class SystemCity extends AuthController
      */
     public function fullList()
     {
-        return app('json')->success($this->services->fullList());
+        return app('json')->success($this->services->fullList('parent_id,city_id,id,name,name as label,city_id as value'));
     }
 }
