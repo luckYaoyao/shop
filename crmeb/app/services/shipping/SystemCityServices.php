@@ -153,13 +153,36 @@ class SystemCityServices extends BaseServices
     }
 
     /**
-     * 获取城市数据
+     * 获取城市数据完整列表
      * @return mixed
      */
     public function fullList($field = '*')
     {
         return CacheService::remember('CITY_FULL_LIST', function () use ($field) {
-            return $this->dao->fullList($field);
+            return $this->fullListTree($this->dao->fullList($field));
         }, 0);
+    }
+
+    /**
+     * 格式化获取城市数据完整列表
+     * @param $data
+     * @param int $pid
+     * @param array $navList
+     * @return array|mixed
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/04/10
+     */
+    function fullListTree($data, $pid = 0, $navList = [])
+    {
+        foreach ($data as $k => $menu) {
+            if ($menu['parent_id'] == $pid) {
+                unset($menu['parent_id']);
+                unset($data[$k]);
+                $menu['children'] = $this->fullListTree($data, $menu['value']);
+                $navList[] = $menu;
+            }
+        }
+        return $navList;
     }
 }
