@@ -37,12 +37,8 @@ class SystemRouteCateServices extends BaseServices
         $this->dao = $dao;
     }
 
-    public function getPathValue(int $pid)
+    public function getPathValue(array $path)
     {
-        if (!$pid) {
-            return [];
-        }
-        $path = $this->dao->value($pid, 'path');
         $pathAttr = explode('/', $path);
         $pathData = [];
         foreach ($pathAttr as $item) {
@@ -91,14 +87,23 @@ class SystemRouteCateServices extends BaseServices
     {
         $url = '/system/route_cate';
         $cateInfo = [];
+        $path = [];
         if ($id) {
             $cateInfo = $this->dao->get($id);
             $cateInfo = $cateInfo ? $cateInfo->toArray() : [];
             $url .= '/' . $id;
+            $path = explode('/', $cateInfo['path']);
+            $newPath = [];
+            foreach ($path as $item) {
+                if ($item) {
+                    $newPath[] = $item;
+                }
+            }
+            $path = $newPath;
         }
-        $options = $this->dao->selectList(['app_name' => $appName], 'name as label,id as value')->toArray();
+        $options = $this->dao->selectList(['app_name' => $appName], 'name as label,id as value,id,pid')->toArray();
         $rule = [
-            FormBuilder::select('pid', '上级分类', (int)($cateInfo['pid'] ?? 0))->options($options),
+            FormBuilder::cascader('path', '上级分类', $path)->data(get_tree_children($options)),
             FormBuilder::input('name', '分类名称', $cateInfo['name'] ?? '')->required(),
             FormBuilder::number('sort', '排序', (int)($cateInfo['sort'] ?? 0)),
             FormBuilder::hidden('app_name', $appName)
