@@ -222,7 +222,17 @@ class SystemMenus extends AuthController
     public function ruleList()
     {
         //获取所有的路由
-        $ruleList = Route::getRuleList();
+        $this->app = app();
+        $this->app->route->setTestMode(true);
+        $this->app->route->clear();
+        $path = $this->app->getRootPath() . 'app' . DS . 'adminapi' . DS . 'route' . DS;
+        $files = is_dir($path) ? scandir($path) : [];
+        foreach ($files as $file) {
+            if (strpos($file, '.php')) {
+                include $path . $file;
+            }
+        }
+        $ruleList = $this->app->route->getRuleList();
         $menuApiList = $this->services->getColumn(['auth_type' => 2, 'is_del' => 0], "concat(`api_url`,'_',lower(`methods`)) as rule");
         if ($menuApiList) $menuApiList = array_column($menuApiList, 'rule');
         $list = [];

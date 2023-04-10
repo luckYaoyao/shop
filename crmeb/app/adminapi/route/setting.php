@@ -77,6 +77,8 @@ Route::group('setting', function () {
     Route::put('group_data/set_status/:id/:status', 'v1.setting.SystemGroupData/set_status')->option(['real_name' => '修改组合数据状态']);
     //数据配置保存
     Route::post('group_data/save_all', 'v1.setting.SystemGroupData/saveAll')->option(['real_name' => '提交数据配置']);
+    //获取城市数据完整列表
+    Route::get('city/full_list', 'v1.setting.SystemCity/fullList')->option(['real_name' => '获取城市数据完整列表']);
     //获取城市数据列表
     Route::get('city/list/:parent_id', 'v1.setting.SystemCity/index')->option(['real_name' => '获取城市数据列表']);
     //添加城市数据表单

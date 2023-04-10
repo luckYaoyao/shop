@@ -19,9 +19,11 @@ use crmeb\exceptions\AdminException;
 use crmeb\exceptions\AuthException;
 use crmeb\services\CacheService;
 use crmeb\services\FileService as FileClass;
+use crmeb\services\FormBuilder as Form;
 use crmeb\utils\JwtAuth;
 use Firebase\JWT\ExpiredException;
 use think\facade\Log;
+use think\facade\Route as Url;
 
 /**
  * 文件校验
@@ -233,10 +235,10 @@ class SystemFileServices extends BaseServices
     //打开目录
     public function opendir()
     {
+        $markList = app()->make(SystemFileInfoServices::class)->getColumn([], 'mark', 'full_path');
         $fileAll = array('dir' => [], 'file' => []);
         //根目录
         $rootdir = $this->formatPath(app()->getRootPath());
-//        return $rootdir;
         //当前目录
         $request_dir = app('request')->param('dir');
         //防止查看站点以外的目录
@@ -285,6 +287,7 @@ class SystemFileServices extends BaseServices
             $navList[$key]['isDir'] = $value['isDir'];
             $navList[$key]['pathname'] = $value['pathname'];
             $navList[$key]['contextmenu'] = true;
+            $list[$key]['mark'] = $markList[str_replace(root_path(), '/', $value['pathname'])] ?? '';
         }
         return compact('dir', 'list', 'navList');
     }
@@ -426,11 +429,46 @@ class SystemFileServices extends BaseServices
             $path = rtrim($path, DS);
             if ($name) $path = $path . DS . $name;
             $uname = php_uname('s');
-//            $search = '/';
             if (strstr($uname, 'Windows') !== false)
                 $path = ltrim(str_replace('\\', '\\\\', $path), '.');
 
         }
         return $path;
+    }
+
+    /**
+     * 文件备注表单
+     * @param $path
+     * @param $fileToken
+     * @return array
+     * @throws \FormBuilder\Exception\FormBuilderException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/04/10
+     */
+    public function markForm($path, $fileToken)
+    {
+        $full_path = str_replace(root_path(), '/', $path);
+        $mark = app()->make(SystemFileInfoServices::class)->value(['full_path' => str_replace(root_path(), '/', $path)], 'mark');
+        $f = [];
+        $f[] = Form::hidden('full_path', $full_path);
+        $f[] = Form::input('mark', '文件备注', $mark);
+        return create_form('文件备注', $f, Url::buildUrl('/system/file/mark/save?fileToken=' . $fileToken . '&type=mark'), 'POST');
+    }
+
+    /**
+     * 保存文件备注
+     * @param $full_path
+     * @param $mark
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/04/10
+     */
+    public function fileMarkSave($full_path, $mark)
+    {
+        $res = app()->make(SystemFileInfoServices::class)->update(['full_path' => $full_path], ['mark' => $mark]);
+        if (!$res) {
+            throw new AdminException(100006);
+        }
     }
 }

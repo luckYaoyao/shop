@@ -72,6 +72,29 @@ class SystemFile extends AuthController
         return app('json')->success($this->services->opendir());
     }
 
+    //文件备注
+    public function fileMark()
+    {
+        [$path, $fileToken] = $this->request->postMore([
+            ['path', ''],
+            ['fileToken', ''],
+        ], true);
+        if ($path == '') return app('json')->fail(100100);
+        return app('json')->success($this->services->markForm($path, $fileToken));
+    }
+
+    //文件备注保存
+    public function fileMarkSave()
+    {
+        [$full_path, $mark] = $this->request->postMore([
+            ['full_path', ''],
+            ['mark', ''],
+        ], true);
+        if ($full_path == '') return app('json')->fail(100100);
+        $this->services->fileMarkSave($full_path, $mark);
+        return app('json')->success(100000);
+    }
+
     //读取文件
     public function openfile()
     {

@@ -33,7 +33,10 @@ Route::group(function () {
     //一次验证
     Route::post('ajcheck', 'Login/ajcheck')->name('ajcheck')->option(['real_name' => '一次验证']);
     //获取客服数据
-    Route::get('get_workerman_url', 'PublicController/getWorkerManUrl')->option(['real_name' => '获取客服数据']);
+    Route::get('get_workerman_url', 'PublicController/getWorkerManUrl')->option([
+        'real_name' => '获取客服数据',
+        'is_common' => true,
+    ]);
     //测试
     Route::get('index', 'Test/index')->option(['real_name' => '测试地址']);
 })->middleware(AllowOriginMiddleware::class);

@@ -1,0 +1,13 @@
+    /**
+     * 主页数据接口
+     * @param array $where
+     * @return array
+     * @date {%date%}
+     */
+    public function getCrudListIndex(array $where = [])
+    {
+        [$page, $limit] = $this->getPageValue();
+        $model = $this->dao->selectModel($where, '*', $page, $limit);
+
+        return ['count' => $model->count(), 'list' => $model->select()->toArray()];
+    }

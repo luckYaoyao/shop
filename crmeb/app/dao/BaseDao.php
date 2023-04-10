@@ -68,7 +68,7 @@ abstract class BaseDao
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function selectList(array $where, string $field = '*', int $page = 0, int $limit = 0, string $order = '', bool $search = false)
+    public function selectList(array $where, string $field = '*', int $page = 0, int $limit = 0, string $order = '', array $with = [], bool $search = false)
     {
         if ($search) {
             $model = $this->search($where);
@@ -79,6 +79,8 @@ abstract class BaseDao
             $query->page($page, $limit);
         })->when($order !== '', function ($query) use ($order) {
             $query->order($order);
+        })->when($with, function ($query) use ($with) {
+            $query->with($with);
         })->select();
     }
 
@@ -193,14 +195,14 @@ abstract class BaseDao
 
     /**
      * 获取单个字段值
-     * @param array $where
+     * @param $where
      * @param string|null $field
      * @return mixed
      */
-    public function value(array $where, ?string $field = '')
+    public function value($where, ?string $field = '')
     {
         $pk = $this->getPk();
-        return $this->getModel()->where($where)->value($field ?: $pk);
+        return $this->search($this->setWhere($where))->value($field ?: $pk);
     }
 
     /**
@@ -245,6 +247,21 @@ abstract class BaseDao
             $where = [is_null($key) ? $this->getPk() : $key => $id];
         }
         return $this->getModel()::update($data, $where);
+    }
+
+    /**
+     * @param $where
+     * @return array|mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/6
+     */
+    protected function setWhere($where, ?string $key = null)
+    {
+        if (!is_array($where)) {
+            $where = [is_null($key) ? $this->getPk() : $key => $where];
+        }
+        return $where;
     }
 
     /**
