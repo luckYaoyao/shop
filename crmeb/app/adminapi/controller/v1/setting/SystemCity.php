@@ -150,6 +150,6 @@ class SystemCity extends AuthController
      */
     public function fullList()
     {
-        return app('json')->success($this->services->fullList());
+        return app('json')->success($this->services->fullList('parent_id,city_id,id,name,name as label,city_id as value'));
     }
 }
