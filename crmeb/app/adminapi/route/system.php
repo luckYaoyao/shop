@@ -111,7 +111,7 @@ Route::group('system', function () {
     //定时任务是否开启开关
     Route::get('crontab/set_open/:id/:is_open', 'v1.system.SystemCrontab/setTimerStatus')->option(['real_name' => '定时任务是否开启开关']);
     //同步路由接口
-    Route::get('route/sync_route/[:appName]', 'v1.system.SystemRoute/syncRoute')->option(['real_name' => '同步路由']);
+    Route::get('route/sync_route/[:appName]', 'v1.setting.SystemRoute/syncRoute')->option(['real_name' => '同步路由']);
     //获取路由tree行数据
     Route::get('route/tree', 'v1.setting.SystemRoute/tree')->option(['real_name' => '获取路由tree']);
     //权限路由
