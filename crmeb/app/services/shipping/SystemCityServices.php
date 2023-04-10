@@ -28,6 +28,7 @@ use crmeb\services\FormBuilder as Form;
  * @method update($id, array $data, ?string $key = null) 修改数据
  * @method value(array $where, ?string $field = '') 获取一条数据
  * @method getShippingCity() 获取运费模板城市数据
+ * @method fullList(?$field = '') 获取城市数据完整列表
  */
 class SystemCityServices extends BaseServices
 {
