@@ -96,7 +96,7 @@ class SystemRouteCateServices extends BaseServices
             $cateInfo = $cateInfo ? $cateInfo->toArray() : [];
             $url .= '/' . $id;
         }
-        $options = $this->dao->selectList(['app_name' => $appName])->toArray();
+        $options = $this->dao->selectList(['app_name' => $appName], 'name as label,path as value')->toArray();
         $rule = [
             FormBuilder::select('pid', '上级分类', (int)($cateInfo['pid'] ?? 0))->options($options),
             FormBuilder::input('name', '分类名称', $cateInfo['name'] ?? '')->required(),
