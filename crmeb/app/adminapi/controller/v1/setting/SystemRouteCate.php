@@ -60,7 +60,7 @@ class SystemRouteCate extends AuthController
      */
     public function create()
     {
-        return app('json')->success($this->services->getFrom());
+        return app('json')->success($this->services->getFrom(0, $this->request->get('app_name', 'adminapi')));
     }
 
     /**
