@@ -140,4 +140,16 @@ class SystemCity extends AuthController
             return app('json')->fail(400186);
         }
     }
+
+    /**
+     * 获取城市数据完整列表
+     * @return \think\Response
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/04/10
+     */
+    public function fullList()
+    {
+        return app('json')->success($this->services->fullList());
+    }
 }
