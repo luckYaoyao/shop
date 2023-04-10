@@ -83,7 +83,7 @@ class SystemRouteServices extends BaseServices
     {
         $list = app()->make(SystemRouteCateServices::class)
             ->selectList(['app_name' => $appName], '*', 0, 0, 'id asc,sort desc', [
-                'children' => function ($query) use ($where) {
+                'childrenList' => function ($query) use ($where) {
                     $query->where('app_name', $where['app_name'])
                         ->when('' !== $where['name_like'], function ($q) use ($where) {
                             $q->where('name|path', 'LIKE', '%' . $where['name_like'] . '%');
