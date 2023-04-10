@@ -73,7 +73,7 @@ class SystemRouteCate extends AuthController
     public function save(Request $request)
     {
         $data = $request->postMore([
-            ['pid', 0],
+            ['path', []],
             ['name', ''],
             ['sort', 0],
             ['app_name', ''],
@@ -84,12 +84,9 @@ class SystemRouteCate extends AuthController
         }
 
         $data['add_time'] = time();
-        $res = $this->services->save($data);
+        $data['pid'] = $data['path'][count($data['path']) - 1] ?? 0;
+        $this->services->save($data);
 
-        $path = $this->services->getPathValue($data['pid']);
-        $path = $this->services->setPathValue($path, $res->id);
-        $res->path = $path;
-        $res->save();
 
         return app('json')->success('保存成功');
 
@@ -118,7 +115,7 @@ class SystemRouteCate extends AuthController
     public function update(Request $request, $id)
     {
         $data = $request->postMore([
-            ['pid', 0],
+            ['path', []],
             ['name', ''],
             ['sort', 0],
             ['app_name', ''],
@@ -128,12 +125,7 @@ class SystemRouteCate extends AuthController
             return app('json')->fail('缺少分类名称');
         }
 
-        $pid = $this->services->value($id, 'pid');
-        if ($data['pid'] != $pid) {
-            $path = $this->services->getPathValue($data['pid']);
-            $data['path'] = $this->services->setPathValue($path, $id);
-        }
-
+        $data['pid'] = $data['path'][count($data['path']) - 1] ?? 0;
         $this->services->update($id, $data);
 
         return app('json')->success('修改成功');
