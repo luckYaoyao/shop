@@ -37,10 +37,8 @@ module.exports = {
   // 如果你不需要使用eslint，把lintOnSave设为false即可
   lintOnSave: false,
   // 打包优化
-  // 打包优化
   configureWebpack: (config) => {
-    const pluginsPro = [new BundleAnalyzerPlugin()];
-
+    const pluginsPro = [];
     pluginsPro.push(
       // js文件压缩
       new UglifyJsPlugin({
@@ -55,7 +53,6 @@ module.exports = {
         parallel: true, //使用多进程并行运行来提高构建速度。默认并发运行数：os.cpus().length - 1。
       }),
     );
-
     if (process.env.NODE_ENV === 'production') {
       config.plugins = [...config.plugins, ...pluginsPro];
     }

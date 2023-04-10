@@ -71,7 +71,6 @@ export default {
       }
     },
     getVersion() {
-      console.log(this.$route, 'this.$route.path', `${setting.routePre}/login`);
       this.isVersion = false;
       if (this.$route.path !== `${setting.routePre}/login` && this.$route.path !== '/') {
         if ((Local.get('version') && Local.get('version') !== config.version) || !Local.get('version'))
