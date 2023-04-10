@@ -17,6 +17,7 @@ namespace app\services\system;
 use app\dao\system\SystemRouteDao;
 use app\services\BaseServices;
 use crmeb\services\FormBuilder;
+use think\exception\ValidateException;
 use think\helper\Str;
 
 /**
@@ -51,6 +52,23 @@ class SystemRouteServices extends BaseServices
         $list = $this->dao->selectList($where, 'name,path,method', $page, $limit)->toArray();
         $count = $this->dao->count($where);
         return compact('list', 'count');
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/10
+     */
+    public function getInfo(int $id)
+    {
+        $routeInfo = $this->dao->get($id);
+        if (!$routeInfo) {
+            throw new ValidateException('修改的路由不存在');
+        }
+
+        return $routeInfo->toArray();
     }
 
     /**
@@ -100,7 +118,7 @@ class SystemRouteServices extends BaseServices
 
         $route = $this->app->route->getRuleList();
         $action_arr = ['index', 'read', 'create', 'save', 'edit', 'update', 'delete'];
-        
+
         foreach ($route as &$item) {
             $real_name = $item['option']['real_name'] ?? '';
             if (is_array($real_name)) {
@@ -124,6 +142,16 @@ class SystemRouteServices extends BaseServices
      */
     public function syncRoute(string $app = 'adminapi')
     {
+        $id = app()->make(SystemRouteCateServices::class)->value(['app_name' => $app, 'name' => '全部权限', 'pid' => 0], 'id');
+        if (!$id) {
+            $res = app()->make(SystemRouteCateServices::class)->save([
+                'app_name' => $app,
+                'name' => '全部权限',
+                'pid' => 0,
+                'add_time' => time(),
+            ]);
+            $id = $res->id;
+        }
         $listAll = $this->getRouteListAll($app);
         //保持新增的权限路由
         $data = $this->dao->selectList(['app_name' => $app], 'path,method')->toArray();
@@ -133,6 +161,7 @@ class SystemRouteServices extends BaseServices
                 $save[] = [
                     'name' => $item['option']['real_name'] ?? $item['name'],
                     'path' => $item['rule'],
+                    'cate_id' => $id,
                     'app_name' => $app,
                     'type' => isset($item['option']['is_common']) && $item['option']['is_common'] ? 1 : 0,
                     'method' => $item['method'],

@@ -50,6 +50,7 @@ class SystemRoute extends AuthController
     public function syncRoute(string $appName = 'adminapi')
     {
         $this->services->syncRoute($appName);
+
         return app('json')->success();
     }
 
@@ -87,17 +88,6 @@ class SystemRoute extends AuthController
         return app('json')->success($this->services->getTreeList($where));
     }
 
-    /**
-     * 创建
-     * @return \think\Response
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/4/7
-     */
-    public function create()
-    {
-        return app('json')->success($this->services->getFrom(0, $this->request->get('app_name', 'adminapi')));
-    }
 
     /**
      * @return \think\Response
@@ -105,7 +95,7 @@ class SystemRoute extends AuthController
      * @email 136327134@qq.com
      * @date 2023/4/7
      */
-    public function save()
+    public function save($id = 0)
     {
         $data = $this->request->getMore([
             ['cate_id', 0],
@@ -114,6 +104,11 @@ class SystemRoute extends AuthController
             ['method', ''],
             ['type', 0],
             ['app_name', ''],
+            ['request', []],
+            ['response', []],
+            ['request_example', []],
+            ['response_example', []],
+            ['describe', ''],
         ]);
 
         if (!$data['name']) {
@@ -128,10 +123,13 @@ class SystemRoute extends AuthController
         if (!$data['app_name']) {
             return app('json')->fail('缺少应用名参数');
         }
+        if ($id) {
+            $this->services->update($id, $data);
+        } else {
+            $this->services->save($data);
+        }
 
-        $this->services->save($data);
-
-        return app('json')->success('添加成功');
+        return app('json')->success($id ? '修改成功' : '添加成功');
     }
 
     /**
@@ -141,45 +139,9 @@ class SystemRoute extends AuthController
      * @email 136327134@qq.com
      * @date 2023/4/7
      */
-    public function edit($id)
+    public function read($id)
     {
-        return app('json')->success($this->services->getFrom($id, $this->request->get('app_name', 'adminapi')));
-    }
-
-    /**
-     * @param $id
-     * @return \think\Response
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/4/7
-     */
-    public function update($id)
-    {
-        $data = $this->request->getMore([
-            ['cate_id', 0],
-            ['name', ''],
-            ['path', ''],
-            ['method', ''],
-            ['type', 0],
-            ['app_name', ''],
-        ]);
-
-        if (!$data['name']) {
-            return app('json')->fail('请输入路由名称');
-        }
-        if (!$data['path']) {
-            return app('json')->fail('请输入路由路径');
-        }
-        if (!$data['method']) {
-            return app('json')->fail('请选择路由请求方式');
-        }
-        if (!$data['app_name']) {
-            return app('json')->fail('缺少应用名参数');
-        }
-
-        $this->services->update($id, $data);
-
-        return app('json')->success('修改成功');
+        return app('json')->success($this->services->getInfo((int)$id));
     }
 
     /**

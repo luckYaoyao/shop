@@ -45,4 +45,45 @@ class SystemRoute extends BaseModel
             $query->where('name|path', 'LIKE', '%' . $value . '%');
         }
     }
+
+    public function setRequestAttr($value)
+    {
+        return json_encode($value);
+    }
+
+    public function getRequestAttr($value)
+    {
+        return json_decode($value, true);
+    }
+
+    public function setResponseAttr($value)
+    {
+        return json_encode($value);
+    }
+
+    public function getResponseAttr($value)
+    {
+        return json_decode($value, true);
+    }
+
+    public function setRequestExampleAttr($value)
+    {
+        return json_encode($value);
+    }
+
+    public function getRequestExampleAttr($value)
+    {
+        return json_decode($value, true);
+    }
+
+
+    public function setResponseExampleAttr($value)
+    {
+        return json_encode($value);
+    }
+
+    public function getResponseExampleAttr($value)
+    {
+        return json_decode($value, true);
+    }
 }

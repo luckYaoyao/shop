@@ -113,18 +113,13 @@ Route::group('system', function () {
     //同步路由接口
     Route::get('route/sync_route/[:appName]', 'v1.system.SystemRoute/syncRoute')->option(['real_name' => '同步路由']);
     //获取路由tree行数据
-    Route::get('route/tree', 'v1.system.SystemRoute/tree')->option(['real_name' => '获取路由tree']);
+    Route::get('route/tree', 'v1.setting.SystemRoute/tree')->option(['real_name' => '获取路由tree']);
     //权限路由
-    Route::resource('route', 'v1.setting.SystemRoute')->option([
-        'real_name' => [
-            'index' => '获取路由列表',
-            'create' => '获取创建路由表单',
-            'save' => '保存路由',
-            'edit' => '获取修改路由表单',
-            'update' => '修改路由',
-            'delete' => '删除路由'
-        ],
-    ]);
+    Route::delete('route/:id', 'v1.setting.SystemRoute/delete')->option(['real_name' => '删除路由权限']);
+    //查看路由权限
+    Route::get('route/:id', 'v1.setting.SystemRoute/read')->option(['real_name' => '查看路由权限']);
+    //保存路由权限
+    Route::post('route/:id', 'v1.setting.SystemRoute/save')->option(['real_name' => '保存路由权限']);
     //路由分类
     Route::resource('route_cate', 'v1.setting.SystemRouteCate')->option([
         'real_name' => [
