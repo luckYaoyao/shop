@@ -335,6 +335,7 @@ class StoreOrderSplitServices extends BaseServices
      * 部分发货重新计算订单商品：实际金额、优惠、积分等金额
      * @param int $cart_num
      * @param array $cart_info
+     * @param string $orderType
      * @return array
      */
     public function slpitComputeOrderCart(int $cart_num, array $cart_info, $orderType = 'new')

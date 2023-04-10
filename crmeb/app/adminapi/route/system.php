@@ -155,6 +155,10 @@ Route::group('system', function () {
     Route::get('file/delFolder', 'v1.system.SystemFile/delFolder')->option(['real_name' => '删除文件夹']);
     //重命名文件
     Route::get('file/rename', 'v1.system.SystemFile/rename')->option(['real_name' => '重命名文件夹']);
+    //目录文件备注表单
+    Route::get('file/mark', 'v1.system.SystemFile/fileMark')->option(['real_name' => '目录文件备注表单']);
+    //目录文件备注保存
+    Route::post('file/mark/save', 'v1.system.SystemFile/fileMarkSave')->option(['real_name' => '目录文件备注保存']);
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,

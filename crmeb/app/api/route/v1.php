@@ -47,6 +47,9 @@ Route::group(function () {
     //查询版权
     Route::get('copyright', 'v1.PublicController/copyright')->option(['real_name' => '申请版权']);
 
+    //商城基础配置汇总接口
+    Route::get('basic_config', 'v1.PublicController/getMallBasicConfig')->option(['real_name' => '商城基础配置汇总接口']);
+
 })->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class);
 
 
