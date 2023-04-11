@@ -114,7 +114,7 @@ class SystemMenus extends AuthController
         $data = [];
 
         foreach ($menus as $menu) {
-            if (!empty($menu['menu_name'])) {
+            if (empty($menu['menu_name'])) {
                 return app('json')->fail(400198);
             }
             $data[] = [
