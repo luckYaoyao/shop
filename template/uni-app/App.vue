@@ -246,14 +246,6 @@
 			// #endif
 
 			// #ifdef H5
-			uni.getSystemInfo({
-				success(e) {
-					/* 窗口宽度大于420px且不在PC页面且不在移动设备时跳转至 PC.html 页面 */
-					if (e.windowWidth > 420 && !window.top.isPC && !/iOS|Android/i.test(e.system)) {
-						window.location.pathname = '/static/html/pc.html';
-					}
-				}
-			});
 			if (option.query.hasOwnProperty('type') && option.query.type == "iframeWindow") {
 				this.globalData.isIframe = true;
 			} else {
