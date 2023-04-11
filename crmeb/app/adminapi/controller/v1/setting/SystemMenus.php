@@ -114,14 +114,15 @@ class SystemMenus extends AuthController
         $data = [];
 
         foreach ($menus as $menu) {
-            if (!empty($menu['menu_name'])) {
+            if (empty($menu['menu_name'])) {
                 return app('json')->fail(400198);
             }
             $data[] = [
+                'methods' => $menu['method'],
                 'menu_name' => $menu['menu_name'],
                 'unique_auth' => $menu['unique_auth'] ?? '',
                 'api_url' => $menu['api_url'],
-                'path' => implode('/', $data['path']),
+                'pid' => $menu['path'],
             ];
         }
 
