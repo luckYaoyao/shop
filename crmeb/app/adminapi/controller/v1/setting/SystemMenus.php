@@ -98,6 +98,38 @@ class SystemMenus extends AuthController
     }
 
     /**
+     * 批量保存权限
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/11
+     */
+    public function batchSave()
+    {
+        $menus = $this->request->post('menus', []);
+        if (!$menus) {
+            return app('json')->fail(100026);
+        }
+        $data = [];
+
+        foreach ($menus as $menu) {
+            if (!empty($menu['menu_name'])) {
+                return app('json')->fail(400198);
+            }
+            $data[] = [
+                'menu_name' => $menu['menu_name'],
+                'unique_auth' => $menu['unique_auth'] ?? '',
+                'api_url' => $menu['api_url'],
+                'path' => implode('/', $data['path']),
+            ];
+        }
+
+        $this->services->saveAll($data);
+
+        return app('json')->success(100021);
+    }
+
+    /**
      * 获取一条菜单权限信息
      * @param int $id
      * @return \think\Response

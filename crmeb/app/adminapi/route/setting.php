@@ -27,6 +27,8 @@ Route::group('setting', function () {
     Route::put('update_admin', 'v1.setting.SystemAdmin/update_admin')->name('SystemAdminUpdateAdmin')->option(['real_name' => '修改当前管理员信息']);
     //设置文件管理密码
     Route::put('set_file_password', 'v1.setting.SystemAdmin/set_file_password')->name('SystemAdminSetFilePassword')->option(['real_name' => '设置当前文件管理密码']);
+    //批量保存权限
+    Route::post('menus/batch', 'v1.setting.SystemMenus/batchSave')->name('SystemMenusBatchSave')->option(['real_name' => '批量保存权限']);
     //权限菜单资源路由
     Route::resource('menus', 'v1.setting.SystemMenus')->option(['real_name' => '权限菜单']);
     //未添加的权限规则列表

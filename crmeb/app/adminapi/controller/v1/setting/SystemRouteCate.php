@@ -101,7 +101,7 @@ class SystemRouteCate extends AuthController
      */
     public function edit($id)
     {
-        return app('json')->success($this->services->getFrom($id));
+        return app('json')->success($this->services->getFrom($id, $this->request->get('app_name', 'adminapi')));
     }
 
     /**
