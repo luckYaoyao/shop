@@ -67,10 +67,10 @@ class SystemCrudServices extends BaseServices
 
     /**
      * 数据库字段类型
+     * @return \string[][]
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/4/11
-     * @return \string[][]
      */
     public function getTabelRule()
     {
@@ -97,7 +97,8 @@ class SystemCrudServices extends BaseServices
                 'point',
                 'linestring',
                 'polygon',
-            ];
+            ]
+        ];
     }
 
     /**
