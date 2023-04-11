@@ -99,7 +99,7 @@ export default {
           tableName: this.formItem.foundation.tableName,
           isTable: this.formItem.foundation.isTable,
           fromField: [],
-          columnField: '',
+          columnField: [],
         };
         crudFilePath(data).then((res) => {
           console.log(res);
