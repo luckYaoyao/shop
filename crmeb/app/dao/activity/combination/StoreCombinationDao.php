@@ -65,12 +65,13 @@ class StoreCombinationDao extends BaseDao
     /**
      * 获取指定条件下的条数
      * @param array $where
+     * @param bool $search
      * @return int
      * @throws \ReflectionException
      */
-    public function count(array $where = []): int
+    public function count(array $where = [], bool $search = true): int
     {
-        return $this->search($where)->count();
+        return $this->search($where, $search)->count();
     }
 
     /**
