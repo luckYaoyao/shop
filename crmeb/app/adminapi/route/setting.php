@@ -39,12 +39,13 @@ Route::group('setting', function () {
     //批量保存权限
     Route::post('menus/batch', 'v1.setting.SystemMenus/batchSave')->name('SystemMenusBatchSave')->option(['real_name' => '批量保存权限']);
     //权限菜单资源路由
-    Route::resource('menus', 'v1.setting.SystemMenus')->except(['read'])->option([
+    Route::resource('menus', 'v1.setting.SystemMenus')->option([
         'real_name' => [
             'index' => '获取权限菜单列表',
             'create' => '获取权限菜单表单',
             'save' => '保存权限菜单',
             'edit' => '获取修改权限菜单表单',
+            'read' => '查看权限菜单信息',
             'update' => '修改权限菜单',
             'delete' => '删除权限菜单'
         ],
