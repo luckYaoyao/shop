@@ -256,13 +256,12 @@ class SystemMenus extends AuthController
     public function ruleList()
     {
         //获取所有的路由
-        $ruleList = app()->make(SystemRouteServices::class)->selectList(['app_name' => 'adminapi'], 'name,path,method,type,id');
+        $ruleList = app()->make(SystemRouteServices::class)->selectList(['app_name' => 'adminapi'], 'name,path,method,type,id')->toArray();
         $menuApiList = $this->services->getColumn(['auth_type' => 2, 'is_del' => 0], "concat(`api_url`,'_',lower(`methods`)) as rule");
         if ($menuApiList) $menuApiList = array_column($menuApiList, 'rule');
         $list = [];
         foreach ($ruleList as $item) {
-            $item['path'] = str_replace('adminapi/', '', $item['path']);
-            if (!in_array($item['path'] . '_' . $item['method'], $menuApiList)) {
+            if (!in_array($item['path'] . '_' . strtolower($item['method']), $menuApiList)) {
                 $item['real_name'] = $item['name'] ?? '';
                 $item['method'] = strtoupper($item['method']);
                 $list[] = $item;

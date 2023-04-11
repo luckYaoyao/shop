@@ -80,7 +80,7 @@ class Route extends Make
 
         $contentStr = str_replace($this->var, $this->value, $content);
 
-        $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
+        $filePath = $this->getFilePathName($path, strtolower($name));
 
         return [$this->makeFile($filePath, $contentStr), $filePath];
     }

@@ -109,7 +109,7 @@ class Controller extends Make
      * @email 136327134@qq.com
      * @date 2023/3/13
      */
-    protected function getStub(string $type = '')
+    protected function getStub(string $type = 'controller')
     {
         $controllerPath = __DIR__ . DS . 'stubs' . DS . 'controller' . DS;
 
