@@ -27,6 +27,7 @@ use crmeb\services\crud\ViewPages;
 use crmeb\services\crud\ViewRouter;
 use think\exception\ValidateException;
 use think\facade\Db;
+use think\helper\Str;
 use think\migration\Migrator;
 use Phinx\Db\Adapter\MysqlAdapter;
 
@@ -47,6 +48,21 @@ class SystemCrudServices extends BaseServices
     public function __construct(SystemCrudDao $dao)
     {
         $this->dao = $dao;
+    }
+
+    /**
+     * @return array
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/11
+     */
+    public function getList()
+    {
+        [$page, $limit] = $this->getPageValue();
+        $list = $this->dao->selectList([], '*', $page, $limit, 'id desc');
+        $count = $this->dao->count();
+
+        return compact('list', 'count');
     }
 
     public function getTabelRule()
@@ -90,6 +106,14 @@ class SystemCrudServices extends BaseServices
         return $columns;
     }
 
+    /**
+     * 创建
+     * @param array $data
+     * @return mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/11
+     */
     public function createCrud(array $data)
     {
         $tableName = $data['tableName'];
@@ -108,9 +132,8 @@ class SystemCrudServices extends BaseServices
             throw new ValidateException('请先创建' . $tableName . '表');
         }
 
-        //TODO 没写完
-        $routeName = '';
-        $uniqueAuth = '';
+        $routeName = 'crud/' . Str::snake($tableName);
+        $uniqueAuth = $routeName . '-index-list';
 
         $make = $this->makeFile($tableName, $routeName, true, $data, $filePath);
         $makePath = [];
@@ -133,10 +156,72 @@ class SystemCrudServices extends BaseServices
         ];
         $menuInfo = app()->make(SystemMenusServices::class)->save($data);
         //写入路由权限
-        //TODO 没写完
-
+        $cateId = app()->make(SystemRouteServices::class)->topCateId('adminapi');
+        $ruleData = [
+            [
+                'path' => $routeName,
+                'method' => 'GET',
+                'name' => $data['menuName'] . '列表接口',
+                'app_name' => 'adminapi',
+                'cate_id' => $cateId,
+                'add_time' => date('Y-m-d H:i:s')
+            ],
+            [
+                'path' => $routeName . '/create',
+                'method' => 'GET',
+                'name' => $data['menuName'] . '获取创建表单接口',
+                'app_name' => 'adminapi',
+                'cate_id' => $cateId,
+                'add_time' => date('Y-m-d H:i:s')
+            ],
+            [
+                'path' => $routeName,
+                'method' => 'POST',
+                'name' => $data['menuName'] . '保存数据接口',
+                'app_name' => 'adminapi',
+                'cate_id' => $cateId,
+                'add_time' => date('Y-m-d H:i:s')
+            ],
+            [
+                'path' => $routeName . '/<id>/edit',
+                'method' => 'GET',
+                'name' => $data['menuName'] . '获取修改表单接口',
+                'app_name' => 'adminapi',
+                'cate_id' => $cateId,
+                'add_time' => date('Y-m-d H:i:s')
+            ],
+            [
+                'path' => $routeName . '/<id>',
+                'method' => 'PUT',
+                'name' => $data['menuName'] . '修改数据接口',
+                'app_name' => 'adminapi',
+                'cate_id' => $cateId,
+                'add_time' => date('Y-m-d H:i:s')
+            ],
+            [
+                'path' => $routeName . '/<id>',
+                'method' => 'DELETE',
+                'name' => $data['menuName'] . '删除数据接口',
+                'app_name' => 'adminapi',
+                'cate_id' => $cateId,
+                'add_time' => date('Y-m-d H:i:s')
+            ],
+        ];
+        app()->make(SystemRouteServices::class)->saveAll($ruleData);
+        //记录权限加入菜单表
+        $menuData = [];
+        foreach ($ruleData as $item) {
+            $menuData[] = [
+                'pid' => $menuInfo->id,
+                'method' => $item['method'],
+                'api_url' => $item['path'],
+                'name' => $item['name'],
+                'is_del' => 0,
+            ];
+        }
+        app()->make(SystemMenusServices::class)->saveAll($menuData);
         //记录crud生成
-        $this->dao->save([
+        $res = $this->dao->save([
             'pid' => $data['pid'],
             'name' => $data['menuName'],
             'table_name' => $tableName,
@@ -144,6 +229,7 @@ class SystemCrudServices extends BaseServices
             'make_path' => json_encode($makePath),
             'add_time' => time()
         ]);
+        return $res->toArray();
     }
 
     /**
