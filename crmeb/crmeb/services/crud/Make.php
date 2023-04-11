@@ -99,12 +99,23 @@ abstract class Make
     public function __construct(App $app)
     {
         $this->app = $app;
-        $this->adminTemplatePath = dirname($this->app->getRootPath()) . DS . 'template' . DS . 'admin' . DS . 'src' . DS;
+        $this->adminTemplatePath = self::adminTemplatePath();
         $this->basePath = $this->app->getRootPath();
         $this->baseDir = $this->setBaseDir();
         $this->var = $this->authDrawVar();
         $this->value = $this->drawValueKeys();
         $this->setDefaultValue();
+    }
+
+    /**
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/11
+     */
+    public static function adminTemplatePath()
+    {
+        return config('app.admin_template_path');
     }
 
     /**

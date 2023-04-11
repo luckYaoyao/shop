@@ -86,6 +86,21 @@ class Route extends Make
     }
 
     /**
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/11
+     * @param string $path
+     * @param string $name
+     * @return string
+     */
+    protected function getFilePathName(string $path, string $name): string
+    {
+        $path = ltrim(str_replace('\\', '/', $path), '/');
+
+        return $this->getBasePath($path) . $name . '.' . $this->fileMime;
+    }
+
+    /**
      * 设置模板
      * @param string $type
      * @return mixed|string|string[]

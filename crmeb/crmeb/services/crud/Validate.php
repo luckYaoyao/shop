@@ -45,6 +45,6 @@ class Validate extends Make
      */
     protected function getStub(string $type = '')
     {
-        return __DIR__ . DS . 'stubs' . DS . 'validate' . DS . 'CrudValidate.stub';
+        return __DIR__ . DS . 'stubs' . DS . 'validate' . DS . 'crudValidate.stub';
     }
 }

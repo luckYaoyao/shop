@@ -18,6 +18,7 @@ use app\dao\system\SystemCrudDao;
 use app\services\BaseServices;
 use crmeb\services\crud\Controller;
 use crmeb\services\crud\Dao;
+use crmeb\services\crud\Make;
 use crmeb\services\crud\Model;
 use crmeb\services\crud\Route;
 use crmeb\services\crud\Service;
@@ -318,6 +319,8 @@ class SystemCrudServices extends BaseServices
      */
     public function makeFile(string $tableName, string $routeName, bool $isMake = false, array $options = [], array $filePath = [])
     {
+        $options['fromField'] = is_array($options['fromField']) ? $options['fromField'] : [];
+        $options['columnField'] = is_array($options['columnField']) ? $options['columnField'] : [];
         //生成控制器
         $controller = app()->make(Controller::class);
         [$controllerContent, $controllerPath] = $controller->setFilePathName($filePath['controller'] ?? '')->isMake($isMake)->handle($tableName, '/');
@@ -336,7 +339,7 @@ class SystemCrudServices extends BaseServices
         //生成service
         $service = app()->make(Service::class);
         [$serviceContent, $servicePath] = $service->setFilePathName($filePath['service'] ?? '')->isMake($isMake)->handle($tableName, '/', [
-            'field' => $options['fromField']
+            'field' => $options['fromField'],
         ]);
         //生成验证器
         $validate = app()->make(Validate::class);
@@ -351,6 +354,7 @@ class SystemCrudServices extends BaseServices
         [$apiContent, $apiPath] = $viewApi->setFilePathName($filePath['api'] ?? '')->isMake($isMake)->handle($tableName, '/', [
             'route' => $routeName,
         ]);
+
         //生成前台页面
         $viewPages = app()->make(ViewPages::class);
         [$pagesContent, $pagesPath] = $viewPages->setFilePathName($filePath['pages'] ?? '')->isMake($isMake)->handle($tableName, '/', [
@@ -359,42 +363,47 @@ class SystemCrudServices extends BaseServices
 
         return [
             'controller' => [
-                'path' => $controllerContent,
-                'content' => $controllerPath
+                'path' => $this->replace($controllerPath),
+                'content' => $controllerContent
             ],
             'model' => [
-                'path' => $modelPath,
+                'path' => $this->replace($modelPath),
                 'content' => $modelContent
             ],
             'dao' => [
-                'path' => $daoPath,
+                'path' => $this->replace($daoPath),
                 'content' => $daoContent
             ],
             'route' => [
-                'path' => $routePath,
+                'path' => $this->replace($routePath),
                 'content' => $routeContent
             ],
             'service' => [
-                'path' => $servicePath,
+                'path' => $this->replace($servicePath),
                 'content' => $serviceContent
             ],
             'validate' => [
-                'path' => $validatePath,
+                'path' => $this->replace($validatePath),
                 'content' => $validateContent
             ],
             'router' => [
-                'path' => $routerPath,
+                'path' => $this->replace($routerPath),
                 'content' => $routerContent
             ],
             'api' => [
-                'path' => $apiPath,
+                'path' => $this->replace($apiPath),
                 'content' => $apiContent
             ],
             'pages' => [
-                'path' => $pagesPath,
+                'path' => $this->replace($pagesPath),
                 'content' => $pagesContent
             ],
         ];
+    }
+
+    protected function replace(string $path)
+    {
+        return str_replace([app()->getRootPath(), Make::adminTemplatePath()], '', $path);
     }
 
     /**

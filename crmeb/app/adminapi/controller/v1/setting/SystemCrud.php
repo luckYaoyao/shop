@@ -110,8 +110,11 @@ class SystemCrud extends AuthController
         }
 
         $tableField = [];
-        if (!$isTable) {
+        if ($isTable) {
             $field = $this->services->getColumnNamesList($tableName);
+            if (!$field) {
+                return app('json')->fail('表不存在');
+            }
             foreach ($field as $item) {
                 $tableField[] = ['value' => $item['name'], 'comment' => $item['comment'], 'label' => $item['name']];
             }
