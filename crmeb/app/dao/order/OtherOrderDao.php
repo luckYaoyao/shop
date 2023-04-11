@@ -181,8 +181,17 @@ class OtherOrderDao extends BaseDao
         });
     }
 
-    public function count(array $where = []): int
+    /**
+     * @param array $where
+     * @param bool $search
+     * @return int
+     * @throws \ReflectionException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/04/11
+     */
+    public function count(array $where = [], bool $search = true): int
     {
-        return $this->search($where)->count();
+        return $this->search($where, $search)->count();
     }
 }
