@@ -121,7 +121,7 @@ class SystemMenus extends AuthController
                 'menu_name' => $menu['menu_name'],
                 'unique_auth' => $menu['unique_auth'] ?? '',
                 'api_url' => $menu['api_url'],
-                'path' => implode('/', $data['path']),
+                'pid' => $menu['path'],
             ];
         }
 
