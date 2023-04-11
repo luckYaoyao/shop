@@ -27,7 +27,7 @@ Route::group('file', function () {
     //上传图片
     Route::post('upload/[:upload_type]', 'v1.file.SystemAttachment/upload')->option(['real_name' => '上传图片', 'is_common' => true]);
     //附件分类管理资源路由
-    Route::resource('category', 'v1.file.SystemAttachmentCategory')->option([
+    Route::resource('category', 'v1.file.SystemAttachmentCategory')->except(['read'])->option([
         'real_name' => [
             'index' => '获取附件分类管理列表',
             'create' => '获取附件分类管理表单',

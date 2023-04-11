@@ -43,7 +43,7 @@ Route::group('agent', function () {
     //积分配置保存数据
     Route::post('config/save_basics', 'v1.setting.SystemConfig/save_basics')->option(['real_name' => '积分配置保存数据']);
     //分销员等级资源路由
-    Route::resource('level', 'v1.agent.AgentLevel')->option([
+    Route::resource('level', 'v1.agent.AgentLevel')->except(['read'])->name('AgentLevel')->option([
         'real_name' => [
             'index' => '获取分销员等级列表',
             'create' => '获取分销员等级表单',
@@ -56,7 +56,7 @@ Route::group('agent', function () {
     //修改分销等级状态
     Route::put('level/set_status/:id/:status', 'v1.agent.AgentLevel/set_status')->name('levelSetStatus')->option(['real_name' => '修改分销等级状态']);
     //分销员等级任务资源路由
-    Route::resource('level_task', 'v1.agent.AgentLevelTask')->option([
+    Route::resource('level_task', 'v1.agent.AgentLevelTask')->except(['read'])->option([
         'real_name' => [
             'index' => '获取分销员等级任务列表',
             'create' => '获取分销员等级任务表单',

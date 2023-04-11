@@ -15,7 +15,7 @@ use think\facade\Route;
  */
 Route::group('cms', function () {
     //文章资源路由
-    Route::resource('cms', 'v1.cms.Article')->option([
+    Route::resource('cms', 'v1.cms.Article')->except(['read'])->option([
         'real_name' => [
             'index' => '获取文章列表',
             'create' => '获取文章表单',
@@ -30,7 +30,7 @@ Route::group('cms', function () {
     //取消关联
     Route::put('cms/unrelation/:id', 'v1.cms.Article/unrelation')->name('UnRelation')->option(['real_name' => '取消文章关联商品']);
     //文章分类资源路由
-    Route::resource('category', 'v1.cms.ArticleCategory')->option([
+    Route::resource('category', 'v1.cms.ArticleCategory')->except(['read'])->option([
         'real_name' => [
             'index' => '获取文章分类列表',
             'create' => '获取文章分类表单',

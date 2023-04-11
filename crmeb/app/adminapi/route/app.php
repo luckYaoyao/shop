@@ -15,7 +15,7 @@ use think\facade\Route;
  */
 Route::group('app', function () {
     //小程序模板资源路由
-    Route::resource('routine', 'v1.application.routine.RoutineTemplate')->option([
+    Route::resource('routine', 'v1.application.routine.RoutineTemplate')->except(['read'])->option([
         'real_name' => [
             'index' => '获取小程序订阅消息列表',
             'create' => '获取小程序订阅消息表单',
@@ -36,7 +36,7 @@ Route::group('app', function () {
     //保存菜单
     Route::post('wechat/menu', 'v1.application.wechat.menus/save')->option(['real_name' => '保存微信公众号菜单']);
     //微信模板消息资源路由
-    Route::resource('wechat/template', 'v1.application.wechat.WechatTemplate')->option([
+    Route::resource('wechat/template', 'v1.application.wechat.WechatTemplate')->except(['read'])->option([
         'real_name' => [
             'index' => '获取公众号模版消息列表',
             'create' => '获取公众号模版消息表单',
@@ -105,7 +105,7 @@ Route::group('app', function () {
         ]
     ]);
     //话术接口
-    Route::resource('wechat/speechcraft', 'v1.kefu.StoreServiceSpeechcraft')->option([
+    Route::resource('wechat/speechcraft', 'v1.kefu.StoreServiceSpeechcraft')->except(['read'])->option([
         'real_name' => [
             'index' => '获取客服话术列表',
             'create' => '获取客服话术表单',
@@ -116,7 +116,7 @@ Route::group('app', function () {
         ]
     ]);
     //话术分类接口
-    Route::resource('wechat/speechcraftcate', 'v1.kefu.StoreServiceSpeechcraftCate')->option([
+    Route::resource('wechat/speechcraftcate', 'v1.kefu.StoreServiceSpeechcraftCate')->except(['read'])->option([
         'real_name' => [
             'index' => '获取客服话术分类列表',
             'create' => '获取客服话术分类表单',
