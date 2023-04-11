@@ -93,6 +93,18 @@ class SystemRouteServices extends BaseServices
                 }
             ])
             ->toArray();
+
+        foreach ($list as $key => $item) {
+            if (!empty($item['children'])) {
+                foreach ($item['children'] as $k => $v) {
+                    if (isset($v['cate_id']) && isset($v['method']) && $v['method'] === 'DELETE') {
+                        $v['method'] = 'DEL';
+                        $list[$key]['children'][$k] = $v;
+                    }
+                }
+            }
+        }
+
         return get_tree_children($list);
     }
 
