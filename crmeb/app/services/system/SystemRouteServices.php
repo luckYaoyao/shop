@@ -151,12 +151,14 @@ class SystemRouteServices extends BaseServices
     }
 
     /**
-     * 同步路由
+     * 获取顶级id
+     * @param string $app
+     * @return mixed
      * @author 等风来
      * @email 136327134@qq.com
-     * @date 2023/4/6
+     * @date 2023/4/11
      */
-    public function syncRoute(string $app = 'adminapi')
+    public function topCateId(string $app)
     {
         $id = app()->make(SystemRouteCateServices::class)->value(['app_name' => $app, 'name' => '全部权限', 'pid' => 0], 'id');
         if (!$id) {
@@ -168,6 +170,19 @@ class SystemRouteServices extends BaseServices
             ]);
             $id = $res->id;
         }
+
+        return $id;
+    }
+
+    /**
+     * 同步路由
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/6
+     */
+    public function syncRoute(string $app = 'adminapi')
+    {
+        $id = $this->topCateId($app);
         $listAll = $this->getRouteListAll($app);
         //保持新增的权限路由
         $data = $this->dao->selectList(['app_name' => $app], 'path,method')->toArray();

@@ -12,7 +12,7 @@
       @on-visible-change="visible"
     >
       <Form ref="formValidate" :model="formValidate" :label-width="110" @submit.native.prevent>
-        <Row type="flex" :gutter="24">
+        <!-- <Row type="flex" :gutter="24">
           <Col span="24">
             <FormItem label="类型：">
               <RadioGroup v-model="formValidate.auth_type" @on-change="changeRadio">
@@ -23,14 +23,14 @@
               </RadioGroup>
             </FormItem>
           </Col>
-        </Row>
+        </Row> -->
         <Row type="flex" :gutter="24">
           <Col v-bind="grid">
             <FormItem :label="!authType ? '接口名称：' : '按钮名称：'" prop="menu_name">
               <div class="add">
                 <Input v-model="formValidate.menu_name" :placeholder="!authType ? '请输入接口名称' : '请输入按钮名称'">
                 </Input>
-                <Button class="ml10 df" v-show="!authType" @click="getRuleList()" icon="ios-apps"></Button>
+                <!-- <Button class="ml10 df" v-show="!authType" @click="getRuleList()" icon="ios-apps"></Button> -->
               </div>
             </FormItem>
           </Col>
@@ -95,7 +95,7 @@
               </RadioGroup>
             </FormItem>
           </Col>
-          <Col :xs="24">
+          <Col v-bind="grid">
             <FormItem label="状态：">
               <RadioGroup v-model="formValidate.is_show">
                 <Radio :label="item.value" v-for="(item, i) in isShowRadio" :key="i">
