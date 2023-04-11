@@ -94,3 +94,13 @@ export function getRuleList() {
     method: 'get',
   });
 }
+/**
+ * @description 权限列表
+ */
+export function menusBatch(data) {
+  return request({
+    url: `setting/menus/batch`,
+    method: 'post',
+    data,
+  });
+}

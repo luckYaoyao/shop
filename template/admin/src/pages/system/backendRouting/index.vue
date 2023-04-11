@@ -142,7 +142,27 @@
                     v-model.trim="formValidate.describe"
                     placeholder="请输入"
                   />
-                  <span v-else class="text-area">{{ formValidate.describe || '' }}</span>
+                  <span v-else class="text-area">{{ formValidate.describe || '--' }}</span>
+                </FormItem>
+                <FormItem label="所属分类：" prop="name" v-if="isEdit">
+                  <el-cascader
+                    v-model="formValidate.cate_id"
+                    size="small"
+                    :options="formValidate.cate_tree"
+                    :props="{ checkStrictly: true, multiple: false, emitPath: false, value: 'id', label: 'name' }"
+                    clearable
+                  ></el-cascader>
+                </FormItem>
+                <FormItem label="是否公共：" prop="name">
+                  <Switch v-if="isEdit" v-model="formValidate.type" :true-value="1" :false-value="0">
+                    <template #open>
+                      <span>是</span>
+                    </template>
+                    <template #close>
+                      <span>否</span>
+                    </template>
+                  </Switch>
+                  <span v-else class="text-area">{{ formValidate.type ? '是' : '否' }}</span>
                 </FormItem>
               </Col>
             </Row>
@@ -409,6 +429,7 @@ import {
   routeSave,
   interfaceEditName,
   routeDel,
+  routeEdit,
   routeCateDel,
 } from '@/api/systemBackendRouting';
 import { VueTreeList, Tree, TreeNode } from 'vue-tree-list';
@@ -558,32 +579,39 @@ export default {
       await $table.setActiveCell(data, 'name');
     },
     getInterfaceList(disk_type) {
-      routeList()
-        .then((res) => {
-          res.data[0].expand = false;
-          this.treeData = new Tree(res.data);
-          if (res.data.length) {
-            if (res.data[0].children && res.data[0].children.length) {
-              this.onClick(res.data[0].children[0]);
-            }
-          }
-        })
-        .catch((err) => {
-          this.$Message.error(err);
-        });
-    },
-    onClick(params) {
-      console.log(params, 'params');
-      if (params.method) {
-        this.isEdit = false;
-        routeDet(params.id)
+      try {
+        routeList()
           .then((res) => {
-            this.formValidate = res.data;
+            if (res.data.length) {
+              res.data[0].expand = false;
+              this.treeData = new Tree(res.data);
+              if (res.data[0].children && res.data[0].children.length) {
+                this.onClick(res.data[0].children[0]);
+              }
+            }
           })
           .catch((err) => {
-            console.log(err);
             this.$Message.error(err);
           });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    onClick(params) {
+      try {
+        if (params.method) {
+          this.isEdit = false;
+          routeDet(params.id)
+            .then((res) => {
+              this.formValidate = res.data;
+            })
+            .catch((err) => {
+              console.log(err);
+              this.$Message.error(err);
+            });
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
     async handleSubmit() {
@@ -689,9 +717,11 @@ export default {
         this.formValidate.id = 0;
         this.isEdit = true;
       } else if (name == 2) {
-        this.value = params.name || '';
-        this.formValidate.cate_id = params ? params.id : 0;
-        this.nameModal = true;
+        // this.value = params.name || '';
+        // this.formValidate.cate_id = params ? params.id : 0;
+        // this.nameModal = true;
+        // this.onEdit(params);
+        this.$modalForm(routeEdit(params.id, this.app_name)).then(() => this.getInterfaceList());
       } else if (name == 3) {
         this.onDel(params);
       } else if (name == 4) {
