@@ -69,9 +69,9 @@ class SystemRouteCateServices extends BaseServices
      * @email 136327134@qq.com
      * @date 2023/4/6
      */
-    public function getAllList(string $appName = 'outapi', string $field = '*')
+    public function getAllList(string $appName = 'outapi', string $field = '*', string $order = '')
     {
-        $list = $this->dao->selectList(['app_name' => $appName], $field)->toArray();
+        $list = $this->dao->selectList(['app_name' => $appName], $field, 0, 0, $order)->toArray();
         return get_tree_children($list);
     }
 

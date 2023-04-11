@@ -68,7 +68,9 @@ class SystemRouteServices extends BaseServices
             throw new ValidateException('修改的路由不存在');
         }
 
-        return $routeInfo->toArray();
+        $routeInfo = $routeInfo->toArray();
+        $routeInfo['cate_tree'] = app()->make(SystemRouteCateServices::class)->getAllList($routeInfo['app_name'], '*', 'id asc,sort desc');
+        return $routeInfo;
     }
 
     /**
