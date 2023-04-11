@@ -65,11 +65,39 @@ class SystemCrudServices extends BaseServices
         return compact('list', 'count');
     }
 
+    /**
+     * 数据库字段类型
+     * @return \string[][]
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/11
+     */
     public function getTabelRule()
     {
-        $adapter = app()->make(MysqlAdapter::class);
         return [
-            'types' => $adapter->getColumnTypes(),
+            'types' => [
+                'string',
+                'char',
+                'text',
+                'integer',
+                'biginteger',
+                'float',
+                'decimal',
+                'datetime',
+                'timestamp',
+                'time',
+                'date',
+                'blob',
+                'binary',
+                'varbinary',
+                'boolean',
+                'uuid',
+                // Geospatial data types
+                'geometry',
+                'point',
+                'linestring',
+                'polygon',
+            ]
         ];
     }
 

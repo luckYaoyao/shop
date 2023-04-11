@@ -22,7 +22,7 @@
                 size="small"
                 no-filtered-data-text="暂无筛选结果"
             >
-              <template slot-scope="{ row, index }" slot="action">
+              <template slot-scope="{ row }" slot="action">
                 <a @click="Info(row)">详情</a>
               </template>
             </Table>

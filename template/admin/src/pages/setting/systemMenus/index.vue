@@ -114,8 +114,8 @@
         <Button @click="init">重置</Button>
       </div>
       <Tabs v-model="routeType" @on-click="changTab">
-        <TabPane label="基础接口" name="1"></TabPane>
-        <TabPane label="公共接口" name="0"></TabPane>
+        <TabPane label="公共接口" name="1"></TabPane>
+        <TabPane label="基础接口" name="0"></TabPane>
       </Tabs>
       <div class="rule">
         <div
@@ -128,7 +128,7 @@
         >
           <div>接口名称：{{ item.real_name }}</div>
           <div>请求方式：{{ item.method }}</div>
-          <div>接口地址：{{ item.rule }}</div>
+          <div>接口地址：{{ item.path }}</div>
         </div>
       </div>
     </Modal>
@@ -250,6 +250,10 @@ export default {
     // 获取权限列表
     getRuleList() {
       getRuleList().then((res) => {
+        this.foundationList = [];
+        this.openList = [];
+        this.seletRouteIds = [];
+        this.seletRoute = [];
         res.data.map((e) => {
           if (e.type) {
             this.foundationList.push(e);
