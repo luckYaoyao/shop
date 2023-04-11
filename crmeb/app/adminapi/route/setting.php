@@ -16,7 +16,16 @@ use think\facade\Route;
 Route::group('setting', function () {
 
     //管理员资源路由
-    Route::resource('admin', 'v1.setting.SystemAdmin')->except(['read'])->option(['real_name' => '管理员']);
+    Route::resource('admin', 'v1.setting.SystemAdmin')->except(['read'])->option([
+        'real_name' => [
+            'index' => '获取管理员列表',
+            'create' => '获取管理员表单',
+            'save' => '保存管理员',
+            'edit' => '获取修改管理员表单',
+            'update' => '修改管理员',
+            'delete' => '删除管理员'
+        ]
+    ]);
     //退出登陆
     Route::get('admin/logout', 'v1.setting.SystemAdmin/logout')->name('SystemAdminLogout')->option(['real_name' => '退出登陆']);
     //修改状态
@@ -27,8 +36,20 @@ Route::group('setting', function () {
     Route::put('update_admin', 'v1.setting.SystemAdmin/update_admin')->name('SystemAdminUpdateAdmin')->option(['real_name' => '修改当前管理员信息']);
     //设置文件管理密码
     Route::put('set_file_password', 'v1.setting.SystemAdmin/set_file_password')->name('SystemAdminSetFilePassword')->option(['real_name' => '设置当前文件管理密码']);
+    //批量保存权限
+    Route::post('menus/batch', 'v1.setting.SystemMenus/batchSave')->name('SystemMenusBatchSave')->option(['real_name' => '批量保存权限']);
     //权限菜单资源路由
-    Route::resource('menus', 'v1.setting.SystemMenus')->option(['real_name' => '权限菜单']);
+    Route::resource('menus', 'v1.setting.SystemMenus')->option([
+        'real_name' => [
+            'index' => '获取权限菜单列表',
+            'create' => '获取权限菜单表单',
+            'save' => '保存权限菜单',
+            'edit' => '获取修改权限菜单表单',
+            'read' => '查看权限菜单信息',
+            'update' => '修改权限菜单',
+            'delete' => '删除权限菜单'
+        ],
+    ]);
     //未添加的权限规则列表
     Route::get('ruleList', 'v1.setting.SystemMenus/ruleList')->option(['real_name' => '未添加的权限规则列表']);
     //修改显示
@@ -46,11 +67,29 @@ Route::group('setting', function () {
     //删除身份
     Route::delete('role/:id', 'v1.setting.SystemRole/delete')->option(['real_name' => '删除管理员身份']);
     //配置分类资源路由
-    Route::resource('config_class', 'v1.setting.SystemConfigTab')->option(['real_name' => '系统配置分类']);
+    Route::resource('config_class', 'v1.setting.SystemConfigTab')->except(['read'])->option([
+        'real_name' => [
+            'index' => '获取系统配置分类列表',
+            'create' => '获取系统配置分类表单',
+            'save' => '保存系统配置分类',
+            'edit' => '获取修改系统配置分类表单',
+            'update' => '修改系统配置分类',
+            'delete' => '删除系统配置分类'
+        ],
+    ]);
     //修改配置分类状态
     Route::put('config_class/set_status/:id/:status', 'v1.setting.SystemConfigTab/set_status')->option(['real_name' => '修改配置分类状态']);
     //配置资源路由
-    Route::resource('config', 'v1.setting.SystemConfig')->option(['real_name' => '系统配置']);
+    Route::resource('config', 'v1.setting.SystemConfig')->except(['read'])->option([
+        'real_name' => [
+            'index' => '获取系统配置列表',
+            'create' => '获取系统配置表单',
+            'save' => '保存系统配置',
+            'edit' => '获取修改系统配置表单',
+            'update' => '修改系统配置',
+            'delete' => '删除系统配置'
+        ]
+    ]);
     //修改配置状态
     Route::put('config/set_status/:id/:status', 'v1.setting.SystemConfig/set_status')->option(['real_name' => '修改配置状态']);
     //基本配置编辑表单
@@ -66,11 +105,29 @@ Route::group('setting', function () {
     //获取某个分类下的所有配置信息
     Route::get('config_list/:tabId', 'v1.setting.SystemConfig/get_config_list')->option(['real_name' => '获取某个分类下的所有配置信息']);
     //组合数据资源路由
-    Route::resource('group', 'v1.setting.SystemGroup')->option(['real_name' => '组合数据']);
+    Route::resource('group', 'v1.setting.SystemGroup')->except(['read'])->option([
+        'real_name' => [
+            'index' => '获取组合数据列表',
+            'create' => '获取组合数据表单',
+            'save' => '保存组合数据',
+            'edit' => '获取修改组合数据表单',
+            'update' => '修改组合数据',
+            'delete' => '删除组合数据'
+        ]
+    ]);
     //组合数据全部
     Route::get('group_all', 'v1.setting.SystemGroup/getGroup')->option(['real_name' => '组合数据全部']);
     //组合数据子数据资源路由
-    Route::resource('group_data', 'v1.setting.SystemGroupData')->option(['real_name' => '组合数据子数据']);
+    Route::resource('group_data', 'v1.setting.SystemGroupData')->except(['read'])->option([
+        'real_name' => [
+            'index' => '获取组合数据子数据列表',
+            'create' => '获取组合数据子数据表单',
+            'save' => '保存组合数据子数据',
+            'edit' => '获取修改组合数据子数据表单',
+            'update' => '修改组合数据子数据',
+            'delete' => '删除组合数据子数据'
+        ]
+    ]);
     //修改数据状态
     Route::get('group_data/header', 'v1.setting.SystemGroupData/header')->option(['real_name' => '组合数据头部']);
     //修改数据状态
@@ -105,34 +162,77 @@ Route::group('setting', function () {
     Route::get('get_kf_adv', 'v1.setting.SystemGroupData/getKfAdv')->option(['real_name' => '获取客服广告']);
     //设置客服广告
     Route::post('set_kf_adv', 'v1.setting.SystemGroupData/setKfAdv')->option(['real_name' => '设置客服广告']);
-
-
     //签到天数配置资源
-    Route::resource('sign_data', 'v1.setting.SystemGroupData')->option(['real_name' => '签到天数配置']);
+    Route::resource('sign_data', 'v1.setting.SystemGroupData')->except(['read'])->option([
+        'real_name' => [
+            'index' => '获取签到天数配置列表',
+            'create' => '获取签到天数配置表单',
+            'save' => '保存签到天数配置',
+            'edit' => '获取修改签到天数配置表单',
+            'update' => '修改签到天数配置',
+            'delete' => '删除签到天数配置'
+        ]
+    ]);
     //签到数据字段
     Route::get('sign_data/header', 'v1.setting.SystemGroupData/header')->option(['real_name' => '签到数据头部']);
     //修改签到数据状态
     Route::put('sign_data/set_status/:id/:status', 'v1.setting.SystemGroupData/set_status')->option(['real_name' => '修改签到数据状态']);
     //订单详情动态图配置资源
-    Route::resource('order_data', 'v1.setting.SystemGroupData')->option(['real_name' => '订单详情动态图配置资源']);
+    Route::resource('order_data', 'v1.setting.SystemGroupData')->except(['read'])->option([
+        'real_name' => [
+            'index' => '获取订单详情动态图列表',
+            'create' => '获取订单详情动态图表单',
+            'save' => '保存订单详情动态图',
+            'edit' => '获取修改订单详情动态图表单',
+            'update' => '修改订单详情动态图',
+            'delete' => '删除订单详情动态图'
+        ]
+    ]);
     //订单数据字段
     Route::get('order_data/header', 'v1.setting.SystemGroupData/header')->option(['real_name' => '订单数据字段']);
     //订单数据状态
     Route::put('order_data/set_status/:id/:status', 'v1.setting.SystemGroupData/set_status')->option(['real_name' => '订单数据状态']);
     //个人中心菜单配置资源
-    Route::resource('usermenu_data', 'v1.setting.SystemGroupData')->option(['real_name' => '个人中心菜单']);
+    Route::resource('usermenu_data', 'v1.setting.SystemGroupData')->except(['read'])->option([
+        'real_name' => [
+            'index' => '获取个人中心菜单列表',
+            'create' => '获取个人中心菜单表单',
+            'save' => '保存个人中心菜单',
+            'edit' => '获取修改个人中心菜单表单',
+            'update' => '修改个人中心菜单',
+            'delete' => '删除个人中心菜单'
+        ]
+    ]);
     //个人中心菜单数据字段
     Route::get('usermenu_data/header', 'v1.setting.SystemGroupData/header')->option(['real_name' => '个人中心菜单数据字段']);
     //个人中心菜单数据状态
     Route::put('usermenu_data/set_status/:id/:status', 'v1.setting.SystemGroupData/set_status')->option(['real_name' => '个人中心菜单数据状态']);
     //分享海报配置资源
-    Route::resource('poster_data', 'v1.setting.SystemGroupData')->option(['real_name' => '分享海报']);
+    Route::resource('poster_data', 'v1.setting.SystemGroupData')->except(['read'])->option([
+        'real_name' => [
+            'index' => '获取分享海报列表',
+            'create' => '获取分享海报表单',
+            'save' => '保存分享海报',
+            'edit' => '获取修改分享海报表单',
+            'update' => '修改分享海报',
+            'delete' => '删除分享海报'
+        ]
+    ]);
     //分享海报数据字段
     Route::get('poster_data/header', 'v1.setting.SystemGroupData/header')->option(['real_name' => '分享海报数据字段']);
     //分享海报数据状态
     Route::put('poster_data/set_status/:id/:status', 'v1.setting.SystemGroupData/set_status')->option(['real_name' => '分享海报数据状态']);
     //秒杀配置资源
-    Route::resource('seckill_data', 'v1.setting.SystemGroupData')->option(['real_name' => '秒杀配置']);
+    Route::resource('seckill_data', 'v1.setting.SystemGroupData')->except(['read'])->option([
+        'real_name' => [
+            'index' => '获取分秒杀配置列表',
+            'create' => '获取秒杀配置表单',
+            'save' => '保存秒杀配置',
+            'edit' => '获取修改秒杀配置表单',
+            'update' => '修改秒杀配置',
+            'delete' => '删除秒杀配置'
+        ]
+    ]);
     //秒杀数据字段
     Route::get('seckill_data/header', 'v1.setting.SystemGroupData/header')->option(['real_name' => '秒杀数据字段']);
     //秒杀数据状态

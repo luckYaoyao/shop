@@ -182,12 +182,14 @@ Route::group('marketing', function () {
     Route::post('lottery/record/deliver', 'v1.marketing.lottery.LuckLotteryRecord/deliver')->option(['real_name' => '抽奖中奖发货、备注处理']);
 
     //积分记录
-    Route::get('point_record', 'v1.marketing.integral.StorePointRecord/pointRecord')->option(['read_name' => '积分记录列表']);
-    Route::post('point_record/remark/:id', 'v1.marketing.integral.StorePointRecord/pointRecordRemark')->option(['read_name' => '积分记录列表备注']);
-    Route::get('point/get_basic', 'v1.marketing.integral.StorePointRecord/getBasic')->option(['read_name' => '积分统计基本信息']);
-    Route::get('point/get_trend', 'v1.marketing.integral.StorePointRecord/getTrend')->option(['read_name' => '积分统计趋势图']);
-    Route::get('point/get_channel', 'v1.marketing.integral.StorePointRecord/getChannel')->option(['read_name' => '积分来源统计']);
-    Route::get('point/get_type', 'v1.marketing.integral.StorePointRecord/getType')->option(['read_name' => '积分消耗统计']);
+    Route::get('point_record', 'v1.marketing.integral.StorePointRecord/pointRecord')->option(['real_name' => '积分记录列表']);
+    Route::post('point_record/remark/:id', 'v1.marketing.integral.StorePointRecord/pointRecordRemark')->option(['real_name' => '积分记录列表备注']);
+    Route::get('point/get_basic', 'v1.marketing.integral.StorePointRecord/getBasic')->option(['real_name' => '积分统计基本信息']);
+    Route::get('point/get_trend', 'v1.marketing.integral.StorePointRecord/getTrend')->option(['real_name' => '积分统计趋势图']);
+    //积分来源统计
+    Route::get('point/get_channel', 'v1.marketing.integral.StorePointRecord/getChannel')->option(['real_name' => '积分来源统计']);
+    //积分消耗统计
+    Route::get('point/get_type', 'v1.marketing.integral.StorePointRecord/getType')->option(['real_name' => '积分消耗统计']);
 
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,

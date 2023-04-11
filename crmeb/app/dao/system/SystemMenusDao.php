@@ -76,10 +76,10 @@ class SystemMenusDao extends BaseDao
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function getMenusList(array $where)
+    public function getMenusList(array $where, array $field = ['*'])
     {
         $where = array_merge($where, ['is_del' => 0]);
-        return $this->search($where)->order('sort DESC,id ASC')->select();
+        return $this->search($where)->field($field)->order('sort DESC,id ASC')->select();
     }
 
     /**

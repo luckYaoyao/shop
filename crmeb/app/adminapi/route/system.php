@@ -121,7 +121,7 @@ Route::group('system', function () {
     //保存路由权限
     Route::post('route/:id', 'v1.setting.SystemRoute/save')->option(['real_name' => '保存路由权限']);
     //路由分类
-    Route::resource('route_cate', 'v1.setting.SystemRouteCate')->option([
+    Route::resource('route_cate', 'v1.setting.SystemRouteCate')->except(['read'])->option([
         'real_name' => [
             'index' => '获取路由分类列表',
             'create' => '获取创建路由分类表单',
@@ -131,7 +131,18 @@ Route::group('system', function () {
             'delete' => '删除路由分类'
         ],
     ]);
-
+    //获取CRUD列表
+    Route::get('crud/column_type', 'v1.setting.SystemCrud/columnType')->option(['real_name' => '获取CRUD列表']);
+    //获取菜单TREE形数据
+    Route::get('crud/menus', 'v1.setting.SystemCrud/getMenus')->option(['real_name' => '获取菜单TREE形数据']);
+    //获取CRUD文件存放
+    Route::post('crud/file_path', 'v1.setting.SystemCrud/getFilePath')->option(['real_name' => '获取CRUD文件存放']);
+    //删除CRUD
+    Route::delete('crud/:id', 'v1.setting.SystemCrud/delete')->option(['real_name' => '删除CRUD']);
+    //获取CRUD列表
+    Route::get('crud', 'v1.setting.SystemCrud/index')->option(['real_name' => '获取CRUD列表']);
+    //保存生成CRUD
+    Route::post('crud', 'v1.setting.SystemCrud/save')->option(['real_name' => '保存生成CRUD']);
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,

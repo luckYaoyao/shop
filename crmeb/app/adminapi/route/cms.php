@@ -15,13 +15,31 @@ use think\facade\Route;
  */
 Route::group('cms', function () {
     //文章资源路由
-    Route::resource('cms', 'v1.cms.Article')->name('ArticleResource')->option(['real_name' => '文章']);
+    Route::resource('cms', 'v1.cms.Article')->except(['read'])->option([
+        'real_name' => [
+            'index' => '获取文章列表',
+            'create' => '获取文章表单',
+            'save' => '保存文章',
+            'edit' => '获取修改文章表单',
+            'update' => '修改文章',
+            'delete' => '删除文章'
+        ]
+    ]);
     //关联商品
     Route::put('cms/relation/:id', 'v1.cms.Article/relation')->name('Relation')->option(['real_name' => '文章关联商品']);
     //取消关联
     Route::put('cms/unrelation/:id', 'v1.cms.Article/unrelation')->name('UnRelation')->option(['real_name' => '取消文章关联商品']);
     //文章分类资源路由
-    Route::resource('category', 'v1.cms.ArticleCategory')->name('ArticleCategoryResource')->option(['real_name' => '文章分类']);
+    Route::resource('category', 'v1.cms.ArticleCategory')->except(['read'])->option([
+        'real_name' => [
+            'index' => '获取文章分类列表',
+            'create' => '获取文章分类表单',
+            'save' => '保存文章分类',
+            'edit' => '获取修改文章分类表单',
+            'update' => '修改文章分类',
+            'delete' => '删除文章分类'
+        ]
+    ]);
     //修改状态
     Route::put('category/set_status/:id/:status', 'v1.cms.ArticleCategory/set_status')->name('CategoryStatus')->option(['real_name' => '修改文章分类状态']);
     //分类列表

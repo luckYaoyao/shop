@@ -42,13 +42,30 @@ Route::group('agent', function () {
     Route::get('config/edit_basics', 'v1.setting.SystemConfig/edit_basics')->option(['real_name' => '积分配置编辑表单']);
     //积分配置保存数据
     Route::post('config/save_basics', 'v1.setting.SystemConfig/save_basics')->option(['real_name' => '积分配置保存数据']);
-
     //分销员等级资源路由
-    Route::resource('level', 'v1.agent.AgentLevel')->name('AgentLevelResource')->option(['real_name' => '分销员等级']);
+    Route::resource('level', 'v1.agent.AgentLevel')->except(['read'])->name('AgentLevel')->option([
+        'real_name' => [
+            'index' => '获取分销员等级列表',
+            'create' => '获取分销员等级表单',
+            'save' => '保存分销员等级',
+            'edit' => '获取修改分销员等级表单',
+            'update' => '修改分销员等级',
+            'delete' => '删除分销员等级'
+        ]
+    ]);
     //修改分销等级状态
     Route::put('level/set_status/:id/:status', 'v1.agent.AgentLevel/set_status')->name('levelSetStatus')->option(['real_name' => '修改分销等级状态']);
     //分销员等级任务资源路由
-    Route::resource('level_task', 'v1.agent.AgentLevelTask')->name('AgentLevelTaskResource')->option(['real_name' => '分销员等级任务']);
+    Route::resource('level_task', 'v1.agent.AgentLevelTask')->except(['read'])->option([
+        'real_name' => [
+            'index' => '获取分销员等级任务列表',
+            'create' => '获取分销员等级任务表单',
+            'save' => '保存分销员等级任务',
+            'edit' => '获取修改分销员等级任务表单',
+            'update' => '修改分销员等级任务',
+            'delete' => '删除分销员等级任务'
+        ]
+    ]);
     //修改分销任务状态
     Route::put('level_task/set_status/:id/:status', 'v1.agent.AgentLevelTask/set_status')->name('levelTaskSetStatus')->option(['real_name' => '修改分销等级任务状态']);
     //获取赠送分销等级表单
@@ -66,10 +83,10 @@ Route::group('agent', function () {
     Route::post('division/agent/save', 'v1.agent.Division/divisionAgentSave')->name('divisionAgentSave')->option(['real_name' => '事业部保存']);//代理商保存
     Route::put('division/set_status/:status/:uid', 'v1.agent.Division/setDivisionStatus')->name('setDivisionStatus')->option(['real_name' => '状态切换']);//状态切换
     Route::delete('division/del/:type/:uid', 'v1.agent.Division/delDivision')->name('delDivision')->option(['real_name' => '删除代理商']);//状态切换
-    Route::get('division/agent_apply/list','v1.agent.Division/AdminApplyList')->name('AdminApplyList')->option(['real_name'=>'代理商申请列表']);//代理商申请列表
-    Route::get('division/examine_apply/:id/:type','v1.agent.Division/examineApply')->name('examineApply')->option(['real_name'=>'审核表单']);//审核表单
-    Route::post('division/apply_agent/save','v1.agent.Division/applyAgentSave')->name('applyAgentSave')->option(['real_name'=>'提交审核']);//提交审核
-    Route::delete('division/del_apply/:id','v1.agent.Division/delApply')->name('delApply')->option(['real_name'=>'删除审核']);//删除审核
+    Route::get('division/agent_apply/list', 'v1.agent.Division/AdminApplyList')->name('AdminApplyList')->option(['real_name' => '代理商申请列表']);//代理商申请列表
+    Route::get('division/examine_apply/:id/:type', 'v1.agent.Division/examineApply')->name('examineApply')->option(['real_name' => '审核表单']);//审核表单
+    Route::post('division/apply_agent/save', 'v1.agent.Division/applyAgentSave')->name('applyAgentSave')->option(['real_name' => '提交审核']);//提交审核
+    Route::delete('division/del_apply/:id', 'v1.agent.Division/delApply')->name('delApply')->option(['real_name' => '删除审核']);//删除审核
 
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,

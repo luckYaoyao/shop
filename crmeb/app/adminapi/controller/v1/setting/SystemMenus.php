@@ -13,6 +13,7 @@ namespace app\adminapi\controller\v1\setting;
 
 use app\adminapi\controller\AuthController;
 use app\services\system\SystemMenusServices;
+use app\services\system\SystemRouteServices;
 use think\facade\App;
 use think\facade\Route;
 
@@ -95,6 +96,39 @@ class SystemMenus extends AuthController
         } else {
             return app('json')->fail(100022);
         }
+    }
+
+    /**
+     * 批量保存权限
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/11
+     */
+    public function batchSave()
+    {
+        $menus = $this->request->post('menus', []);
+        if (!$menus) {
+            return app('json')->fail(100026);
+        }
+        $data = [];
+
+        foreach ($menus as $menu) {
+            if (empty($menu['menu_name'])) {
+                return app('json')->fail(400198);
+            }
+            $data[] = [
+                'methods' => $menu['method'],
+                'menu_name' => $menu['menu_name'],
+                'unique_auth' => $menu['unique_auth'] ?? '',
+                'api_url' => $menu['api_url'],
+                'pid' => $menu['path'],
+            ];
+        }
+
+        $this->services->saveAll($data);
+
+        return app('json')->success(100021);
     }
 
     /**
@@ -222,25 +256,14 @@ class SystemMenus extends AuthController
     public function ruleList()
     {
         //获取所有的路由
-        $this->app = app();
-        $this->app->route->setTestMode(true);
-        $this->app->route->clear();
-        $path = $this->app->getRootPath() . 'app' . DS . 'adminapi' . DS . 'route' . DS;
-        $files = is_dir($path) ? scandir($path) : [];
-        foreach ($files as $file) {
-            if (strpos($file, '.php')) {
-                include $path . $file;
-            }
-        }
-        $ruleList = $this->app->route->getRuleList();
+        $ruleList = app()->make(SystemRouteServices::class)->selectList(['app_name' => 'adminapi'], 'name,path,method,type,id');
         $menuApiList = $this->services->getColumn(['auth_type' => 2, 'is_del' => 0], "concat(`api_url`,'_',lower(`methods`)) as rule");
         if ($menuApiList) $menuApiList = array_column($menuApiList, 'rule');
         $list = [];
         foreach ($ruleList as $item) {
-            $item['rule'] = str_replace('adminapi/', '', $item['rule']);
-            if (!in_array($item['rule'] . '_' . $item['method'], $menuApiList)) {
-                $item['real_name'] = $item['option']['real_name'] ?? '';
-                unset($item['option']);
+            $item['path'] = str_replace('adminapi/', '', $item['path']);
+            if (!in_array($item['path'] . '_' . $item['method'], $menuApiList)) {
+                $item['real_name'] = $item['name'] ?? '';
                 $item['method'] = strtoupper($item['method']);
                 $list[] = $item;
             }

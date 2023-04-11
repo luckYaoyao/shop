@@ -89,11 +89,13 @@ class StoreIntegralOrderDao extends BaseDao
     /**
      * 获取订单总数
      * @param array $where
+     * @param bool $search
      * @return int
+     * @throws \ReflectionException
      */
-    public function count(array $where = []): int
+    public function count(array $where = [], bool $search = true): int
     {
-        return $this->search($where)->count();
+        return $this->search($where, $search)->count();
     }
 
     /**

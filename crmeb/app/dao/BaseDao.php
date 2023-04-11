@@ -46,12 +46,13 @@ abstract class BaseDao
     /**
      * 读取数据条数
      * @param array $where
+     * @param bool $search
      * @return int
      * @throws \ReflectionException
      */
-    public function count(array $where = [])
+    public function count(array $where = [], bool $search = true)
     {
-        return $this->search($where)->count();
+        return $this->search($where, $search)->count();
     }
 
     /**
@@ -324,7 +325,6 @@ abstract class BaseDao
         $with = [];
         $otherWhere = [];
         $responses = new \ReflectionClass($this->setModel());
-
         foreach ($where as $key => $value) {
             $method = 'search' . Str::studly($key) . 'Attr';
             if ($responses->hasMethod($method)) {
@@ -352,8 +352,27 @@ abstract class BaseDao
     {
         [$with, $otherWhere] = $this->getSearchData($where);
         return $this->getModel()->withSearch($with, $where)->when($search, function ($query) use ($otherWhere) {
-            $query->where($otherWhere);
+            $query->where($this->filterWhere($otherWhere));
         });
+    }
+
+    /**
+     * 过滤数据表中不存在的where条件字段
+     * @param array $where
+     * @return array
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/04/11
+     */
+    protected function filterWhere(array $where = [])
+    {
+        $fields = $this->getModel()->getTableFields();
+        foreach ($where as $key => $item) {
+            if (!in_array($item[0], $fields)) {
+                unset($where[$key]);
+            }
+        }
+        return $where;
     }
 
     /**

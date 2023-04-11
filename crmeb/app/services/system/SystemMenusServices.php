@@ -89,9 +89,9 @@ class SystemMenusServices extends BaseServices
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function getList(array $where)
+    public function getList(array $where, array $field = ['*'])
     {
-        $menusList = $this->dao->getMenusList($where);
+        $menusList = $this->dao->getMenusList($where, $field);
         $menusList = $this->getMenusData($menusList);
         return get_tree_children($menusList);
     }
