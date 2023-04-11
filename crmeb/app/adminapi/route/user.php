@@ -15,7 +15,16 @@ use think\facade\Route;
  */
 Route::group('user', function () {
     //用户管理资源路由
-    Route::resource('user', 'v1.user.user')->option(['real_name' => '用户']);
+    Route::resource('user', 'v1.user.user')->option([
+        'real_name' => [
+            'index' => '获取用户列表',
+            'create' => '获取用户表单',
+            'save' => '保存用户',
+            'edit' => '获取修改用户表单',
+            'update' => '修改用户',
+            'delete' => '删除用户'
+        ]
+    ]);
     //添加用户保存
     Route::post('user/save', 'v1.user.user/save_info')->option(['real_name' => '添加用户']);
     //同步微信用户
@@ -98,7 +107,16 @@ Route::group('user', function () {
     //设置会员分组
     Route::put('save_set_label', 'v1.user.user/save_set_label')->option(['real_name' => '保存用户标签']);
     //标签分类
-    Route::resource('user_label_cate', 'v1.user.UserLabelCate')->option(['real_name' => '标签分类']);
+    Route::resource('user_label_cate', 'v1.user.UserLabelCate')->option([
+        'real_name' => [
+            'index' => '获取标签分类',
+            'create' => '获取标签分类表单',
+            'save' => '保存标签分类',
+            'edit' => '获取修改标签分类表单',
+            'update' => '修改标签分类',
+            'delete' => '删除标签分类'
+        ]
+    ]);
     Route::get('user_label_cate/all', 'v1.user.user_label_cate/getAll')->option(['real_name' => '获取用户标签分类全部']);
 
     //会员卡批次列表资源

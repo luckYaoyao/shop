@@ -15,7 +15,16 @@ use think\facade\Route;
  */
 Route::group('app', function () {
     //小程序模板资源路由
-    Route::resource('routine', 'v1.application.routine.RoutineTemplate')->name('RoutineResource')->option(['real_name' => '小程序订阅消息']);
+    Route::resource('routine', 'v1.application.routine.RoutineTemplate')->option([
+        'real_name' => [
+            'index' => '获取小程序订阅消息列表',
+            'create' => '获取小程序订阅消息表单',
+            'save' => '保存小程序订阅消息',
+            'edit' => '获取修改小程序订阅消息表单',
+            'update' => '修改小程序订阅消息',
+            'delete' => '删除小程序订阅消息'
+        ]
+    ]);
     //一键同步订阅消息
     Route::get('routine/syncSubscribe', 'v1.application.routine.RoutineTemplate/syncSubscribe')->name('syncSubscribe')->option(['real_name' => '一键同步订阅消息']);
     //一键同步微信模版消息消息
@@ -27,7 +36,16 @@ Route::group('app', function () {
     //保存菜单
     Route::post('wechat/menu', 'v1.application.wechat.menus/save')->option(['real_name' => '保存微信公众号菜单']);
     //微信模板消息资源路由
-    Route::resource('wechat/template', 'v1.application.wechat.WechatTemplate')->name('WechatTemplateResource')->option(['real_name' => '公众号模版消息']);
+    Route::resource('wechat/template', 'v1.application.wechat.WechatTemplate')->option([
+        'real_name' => [
+            'index' => '获取公众号模版消息列表',
+            'create' => '获取公众号模版消息表单',
+            'save' => '保存公众号模版消息',
+            'edit' => '获取修改公众号模版消息表单',
+            'update' => '修改公众号模版消息',
+            'delete' => '删除公众号模版消息'
+        ]
+    ]);
     //微信模板消息修改状态
     Route::put('wechat/template/set_status/:id/:status', 'v1.application.wechat.WechatTemplate/set_status')->name('WechatTemplateSetStatus')->option(['real_name' => '修改关键字回复状态']);
     //关注回复
@@ -78,11 +96,36 @@ Route::group('app', function () {
 
     /** 客服相关 */
     //客服反馈接口
-    Route::resource('feedback', 'v1.kefu.StoreServiceFeedback')->only(['index', 'delete', 'update', 'edit'])->option(['real_name' => '用户反馈']);
+    Route::resource('feedback', 'v1.kefu.StoreServiceFeedback')->only(['index', 'delete', 'update', 'edit'])->option([
+        'real_name' => [
+            'index' => '获取用户反馈列表',
+            'edit' => '获取修改用户反馈表单',
+            'update' => '修改用户反馈',
+            'delete' => '删除用户反馈'
+        ]
+    ]);
     //话术接口
-    Route::resource('wechat/speechcraft', 'v1.kefu.StoreServiceSpeechcraft')->option(['real_name' => '客服话术']);
+    Route::resource('wechat/speechcraft', 'v1.kefu.StoreServiceSpeechcraft')->option([
+        'real_name' => [
+            'index' => '获取客服话术列表',
+            'create' => '获取客服话术表单',
+            'save' => '保存客服话术',
+            'edit' => '获取修改客服话术表单',
+            'update' => '修改客服话术',
+            'delete' => '删除客服话术'
+        ]
+    ]);
     //话术分类接口
-    Route::resource('wechat/speechcraftcate', 'v1.kefu.StoreServiceSpeechcraftCate')->option(['real_name' => '客服话术分类']);
+    Route::resource('wechat/speechcraftcate', 'v1.kefu.StoreServiceSpeechcraftCate')->option([
+        'real_name' => [
+            'index' => '获取客服话术分类列表',
+            'create' => '获取客服话术分类表单',
+            'save' => '保存客服话术分类',
+            'edit' => '获取修改客服话术分类表单',
+            'update' => '修改客服话术分类',
+            'delete' => '删除客服话术分类'
+        ]
+    ]);
     //客服列表
     Route::get('wechat/kefu', 'v1.kefu.StoreService/index')->option(['real_name' => '客服列表']);
     //客服登录
