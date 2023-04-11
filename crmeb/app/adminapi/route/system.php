@@ -133,6 +133,8 @@ Route::group('system', function () {
     ]);
     //获取CRUD列表
     Route::get('crud/column_type', 'v1.setting.SystemCrud/columnType')->option(['real_name' => '获取CRUD列表']);
+    //获取菜单TREE形数据
+    Route::get('crud/menus', 'v1.setting.SystemCrud/getMenus')->option(['real_name' => '获取菜单TREE形数据']);
     //获取CRUD文件存放
     Route::post('crud/file_path', 'v1.setting.SystemCrud/getFilePath')->option(['real_name' => '获取CRUD文件存放']);
     //删除CRUD

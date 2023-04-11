@@ -16,6 +16,7 @@ namespace app\adminapi\controller\v1\setting;
 
 use app\adminapi\controller\AuthController;
 use app\services\system\SystemCrudServices;
+use app\services\system\SystemMenusServices;
 use think\facade\App;
 use think\helper\Str;
 
@@ -108,6 +109,19 @@ class SystemCrud extends AuthController
         }
 
         return app('json')->success($makePath);
+    }
+
+    /**
+     * 获取tree菜单
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/11
+     */
+    public function getMenus()
+    {
+        return app('json')->success(app()->make(SystemMenusServices::class)
+            ->getList(['auth_type' => 1], ['pid', 'id', 'menu_name as label', 'id as value']));
     }
 
     /**
