@@ -2,7 +2,6 @@
   <div class="main">
     <div class="mb20">
       <Button class="mr10" type="primary" @click="addRow">添加行</Button>
-      <Button>添加</Button>
     </div>
     <div>
       <div class="item" v-for="(item, index) in dataList" :key="index">
