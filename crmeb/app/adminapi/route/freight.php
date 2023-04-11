@@ -15,7 +15,7 @@ use think\facade\Route;
  */
 Route::group('freight', function () {
     //物流公司资源路由
-    Route::resource('express', 'v1.freight.Express')->name('ExpressResource')->option([
+    Route::resource('express', 'v1.freight.Express')->except(['read'])->name('ExpressResource')->option([
         'real_name' => [
             'index' => '获取物流公司列表',
             'create' => '获取物流公司表单',

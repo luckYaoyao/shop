@@ -15,7 +15,7 @@ use think\facade\Route;
  */
 Route::group('user', function () {
     //用户管理资源路由
-    Route::resource('user', 'v1.user.user')->option([
+    Route::resource('user', 'v1.user.user')->except(['read'])->option([
         'real_name' => [
             'index' => '获取用户列表',
             'create' => '获取用户表单',
@@ -107,7 +107,7 @@ Route::group('user', function () {
     //设置会员分组
     Route::put('save_set_label', 'v1.user.user/save_set_label')->option(['real_name' => '保存用户标签']);
     //标签分类
-    Route::resource('user_label_cate', 'v1.user.UserLabelCate')->option([
+    Route::resource('user_label_cate', 'v1.user.UserLabelCate')->except(['read'])->option([
         'real_name' => [
             'index' => '获取标签分类',
             'create' => '获取标签分类表单',

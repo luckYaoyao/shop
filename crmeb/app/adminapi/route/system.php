@@ -121,7 +121,7 @@ Route::group('system', function () {
     //保存路由权限
     Route::post('route/:id', 'v1.setting.SystemRoute/save')->option(['real_name' => '保存路由权限']);
     //路由分类
-    Route::resource('route_cate', 'v1.setting.SystemRouteCate')->option([
+    Route::resource('route_cate', 'v1.setting.SystemRouteCate')->except(['read'])->option([
         'real_name' => [
             'index' => '获取路由分类列表',
             'create' => '获取创建路由分类表单',
