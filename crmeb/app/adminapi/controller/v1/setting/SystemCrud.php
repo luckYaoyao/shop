@@ -88,9 +88,10 @@ class SystemCrud extends AuthController
      */
     public function getFilePath()
     {
-        [$menuName, $tableName, $fromField, $columnField] = $this->request->postMore([
+        [$menuName, $tableName, $isTable, $fromField, $columnField] = $this->request->postMore([
             ['menuName', ''],
             ['tableName', ''],
+            ['isTable', 0],
             ['fromField', []],
             ['columnField', []],
         ], true);
@@ -108,7 +109,15 @@ class SystemCrud extends AuthController
             $makePath[$key] = $item['path'];
         }
 
-        return app('json')->success($makePath);
+        $tableField = [];
+        if (!$isTable) {
+            $field = $this->services->getColumnNamesList($tableName);
+            foreach ($field as $item) {
+                $tableField[] = ['value' => $item['name'], 'comment' => $item['comment'], 'label' => $item['name']];
+            }
+        }
+
+        return app('json')->success(compact('makePath', 'tableField'));
     }
 
     /**
