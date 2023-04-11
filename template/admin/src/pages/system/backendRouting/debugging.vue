@@ -9,6 +9,7 @@
         </template>
       </Input>
       <Button class="ml20" type="primary" @click="requestData">请求</Button>
+      <Button v-if="codes" class="ml10 copy-btn" type="success" @click="insertCopy()">复制结果</Button>
     </div>
     <div class="params">
       <Tabs class="mt10" v-model="paramsType" @on-click="changeTab">
@@ -210,7 +211,6 @@
       </div>
     </div>
     <div class="res mt10 mb10" v-if="codes">
-      <div class="copy-btn"><Button class="mt10 copy-btn" type="primary" @click="insertCopy()">复制</Button></div>
       <MonacoEditor :codes="codes" :readOnly="true" />
     </div>
   </div>
@@ -280,7 +280,7 @@ export default {
       console.log(this.$refs.xTable.getTableData().tableData);
       console.log(this.filtersData((await this.$refs.xTable.getTableData().tableData) || []));
       let url, method, params, body, headers;
-      url = this.interfaceData.url;
+      url = this.interfaceData.app_name + '/' + this.interfaceData.path;
       method = this.interfaceData.method;
       params = this.filtersData((await this.$refs.xTable.getTableData().tableData) || []);
       body = this.filtersData((await this.$refs.yTable.getTableData().tableData) || []);
@@ -294,7 +294,7 @@ export default {
       console.log(url, method, params, body, headers);
       requestMethod(url, method, params, body, headers)
         .then((res) => {
-          this.codes = res + '';
+          this.codes = JSON.stringify(res);
         })
         .catch((err) => {
           this.codes = JSON.stringify(err);

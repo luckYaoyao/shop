@@ -62,6 +62,17 @@ export function routeDet(id) {
     method: 'get',
   });
 }
+/**
+ * 接口分类编辑
+ * @param {*} data
+ * @returns
+ */
+export function routeEdit(id, appName) {
+  return request({
+    url: `system/route_cate/${id}/edit?app_name=${appName}`,
+    method: 'get',
+  });
+}
 
 /**
  * @description 修改名称

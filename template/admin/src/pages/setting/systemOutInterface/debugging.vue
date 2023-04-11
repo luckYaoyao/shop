@@ -9,6 +9,7 @@
         </template>
       </Input>
       <Button class="ml20" type="primary" @click="requestData">请求</Button>
+      <Button class="ml10 copy-btn" type="success" @click="insertCopy()">复制</Button>
     </div>
     <div class="params">
       <Tabs class="mt10" v-model="paramsType" @on-click="changeTab">
@@ -210,7 +211,6 @@
       </div>
     </div>
     <div class="res mt10 mb10" v-if="codes">
-      <div class="copy-btn"><Button class="mt10 copy-btn" type="primary" @click="insertCopy()">复制</Button></div>
       <MonacoEditor :codes="codes" :readOnly="true" />
     </div>
   </div>
@@ -458,7 +458,7 @@ export default {
     }
   }
 }
-.copy-btn{
+.copy-btn {
   display: flex;
   justify-content: right;
 }

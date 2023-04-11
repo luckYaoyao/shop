@@ -67,13 +67,15 @@
             </i-switch>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="date" title="操作" align="center" width="200" fixed="right">
+        <vxe-table-column field="date" title="操作" align="center" width="250" fixed="right">
           <template v-slot="{ row, index }">
             <span v-auth="['setting-system_menus-add']">
+              <a @click="addRoute(row)" v-if="row.auth_type === 1">添加权限</a>
+              <Divider type="vertical" v-if="row.auth_type === 1" />
               <a @click="addE(row, '添加子菜单')" v-if="row.auth_type === 1">添加子菜单</a>
-              <a @click="addE(row, '添加规则')" v-else>添加规则</a>
+              <!-- <a @click="addE(row, '添加规则')" v-else>添加规则</a> -->
             </span>
-            <Divider type="vertical" />
+            <Divider type="vertical" v-if="row.auth_type === 1" />
             <a @click="edit(row, '编辑')">编辑</a>
             <Divider type="vertical" />
             <a @click="del(row, '删除规则')">删除</a>
@@ -85,16 +87,57 @@
       :formValidate="formValidate"
       :titleFrom="titleFrom"
       @getList="getList"
-      @selectRule="selectRule"
       ref="menusFrom"
       @clearFrom="clearFrom"
     ></menus-from>
+    <Modal
+      v-model="ruleModal"
+      scrollable
+      width="1100"
+      title="权限列表"
+      @on-ok="addRouters"
+      @on-cancel="ruleModal = false"
+      @on-visible-change="modalchange"
+    >
+      <div class="search-rule">
+        <Input
+          class="mr10"
+          v-model="searchRule"
+          placeholder="输入关键词搜索"
+          clearable
+          style="width: 300px"
+          ref="search"
+          @on-enter="searchRules"
+          @on-clear="searchRules"
+        />
+        <Button class="mr10" type="primary" @click="searchRules">搜索</Button>
+        <Button @click="init">重置</Button>
+      </div>
+      <Tabs v-model="routeType" @on-click="changTab">
+        <TabPane label="基础接口" name="1"></TabPane>
+        <TabPane label="公共接口" name="0"></TabPane>
+      </Tabs>
+      <div class="rule">
+        <div
+          class="rule-list"
+          v-show="!arrs.length || arrs.includes(item.id)"
+          :class="{ 'select-rule': seletRouteIds.includes(item.id) }"
+          v-for="(item, index) in routeType == 1 ? foundationList : openList"
+          :key="index"
+          @click="selectRule(item)"
+        >
+          <div>接口名称：{{ item.real_name }}</div>
+          <div>请求方式：{{ item.method }}</div>
+          <div>接口地址：{{ item.rule }}</div>
+        </div>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import { getTable, menusDetailsApi, isShowApi, editMenus } from '@/api/systemMenus';
+import { getTable, menusDetailsApi, isShowApi, editMenus, getRuleList, menusBatch } from '@/api/systemMenus';
 import formCreate from '@form-create/iview';
 import menusFrom from './components/menusFrom';
 export default {
@@ -103,6 +146,8 @@ export default {
     return {
       tabconfig: { children: 'children', reserve: true, accordion: true },
       spinShow: false,
+      ruleModal: false,
+      searchRule: '',
       grid: {
         xl: 7,
         lg: 7,
@@ -121,6 +166,13 @@ export default {
       formValidate: {},
       titleFrom: '',
       modalTitleSs: '',
+      routeType: '1',
+      arrs: [],
+      foundationList: [], // 基础接口列表
+      openList: [], // 公开接口列表
+      seletRoute: [], // 选中路由
+      seletRouteIds: [], // 选中id
+      menusId: 0, // 选中分类id
     };
   },
   components: { menusFrom, formCreate: formCreate.$form() },
@@ -137,6 +189,77 @@ export default {
     this.getData();
   },
   methods: {
+    init() {
+      this.searchRule = '';
+      this.arrs = [];
+      this.seletRouteIds = [];
+      this.seletRoute = [];
+    },
+    addRouters() {
+      let data = {
+        menus: this.seletRoute,
+      };
+      menusBatch(data)
+        .then((res) => {
+          console.log(res);
+          this.getData();
+        })
+        .catch((res) => {
+          this.$Message.error(res.msg);
+        });
+    },
+    selectRule(data) {
+      if (this.seletRouteIds.includes(data.id)) {
+        let i = this.seletRouteIds.findIndex((e) => e == data.id);
+        this.seletRouteIds.splice(i, 1);
+        this.seletRoute.splice(i, 1);
+      } else {
+        this.seletRouteIds.push(data.id);
+        this.seletRoute.push({
+          menu_name: data.name,
+          unique_auth: '',
+          api_url: data.path,
+          path: this.menusId,
+          method: data.method,
+        });
+      }
+    },
+    changTab(name) {
+      console.log(name);
+      this.searchRules();
+    },
+    // 搜索规则
+    searchRules() {
+      if (this.searchRule.trim()) {
+        this.arrs = [];
+        let arr = this.routeType == 1 ? this.foundationList : this.openList;
+        for (var i = 0; i < arr.length; i++) {
+          if (arr[i].real_name.indexOf(this.searchRule) !== -1) {
+            this.arrs.push(arr[i].id);
+          }
+        }
+      } else {
+        this.arrs = [];
+      }
+    },
+    addRoute(row) {
+      this.menusId = row.id;
+      this.getRuleList();
+    },
+    modalchange() {},
+    // 获取权限列表
+    getRuleList() {
+      getRuleList().then((res) => {
+        res.data.map((e) => {
+          if (e.type) {
+            this.foundationList.push(e);
+          } else {
+            this.openList.push(e);
+          }
+        });
+        this.ruleModal = true;
+      });
+    },
     // 修改规则状态
     onchangeIsShow(row) {
       let data = {
@@ -157,11 +280,7 @@ export default {
       this.formValidate = Object.assign({}, this.$options.data().formValidate);
       this.getData();
     },
-    selectRule(data) {
-      this.formValidate.menu_name = data.real_name;
-      this.formValidate.methods = data.method;
-      this.formValidate.api_url = data.rule;
-    },
+
     // 清除表单数据
     clearFrom() {
       this.formValidate = Object.assign({}, this.$options.data().formValidate);
@@ -290,5 +409,53 @@ export default {
   >>> .vxe-table--header-wrapper {
     background: #fff !important;
   }
+}
+.rule {
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 600px;
+  overflow-y: scroll;
+}
+
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+.rule::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+  background-color: #f5f5f5;
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+.rule::-webkit-scrollbar-track {
+  border-radius: 4px;
+  background-color: #f5f5f5;
+}
+
+/*定义滑块 内阴影+圆角*/
+.rule::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: #ccc;
+}
+
+.rule-list {
+  background-color: #f2f2f2;
+  width: 32%;
+  margin: 5px;
+  border-radius: 3px;
+  padding: 10px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.rule-list:hover {
+  background-color: #c5d1dd;
+}
+
+.rule-list div {
+  white-space: nowrap;
+}
+
+.select-rule {
+  background-color: #c5d1dd;
 }
 </style>
