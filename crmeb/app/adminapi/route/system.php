@@ -49,6 +49,8 @@ Route::group('system', function () {
     Route::get('backup', 'v1.system.SystemDatabackup/index')->option(['real_name' => '数据库所有表']);
     //数据备份详情
     Route::get('backup/read', 'v1.system.SystemDatabackup/read')->option(['real_name' => '数据备份详情']);
+    //更新数据表或者表字段备注
+    Route::post('database/update_mark', 'v1.system.SystemDatabackup/updateMark')->option(['real_name' => '更新数据表或者表字段备注']);
     //数据备份 优化表
     Route::put('backup/optimize', 'v1.system.SystemDatabackup/optimize')->option(['real_name' => '数据备份优化表']);
     //数据备份 修复表
