@@ -28,7 +28,7 @@
           <Radio :label="1">是</Radio>
         </RadioGroup>
       </FormItem>
-      <FormItem label="表SQL">
+      <FormItem label="表SQL" v-if="!foundation.isTable">
         <div>
           <div class="item" v-for="(item, index) in dataList" :key="index">
             <div class="row">
@@ -41,6 +41,12 @@
             </div>
             <div class="row">
               <Input v-model="item.limit" type="number" class="priceBox" placeholder="长度"></Input>
+            </div>
+            <div class="row">
+              <Select v-model="item.index" transfer placeholder="是否为索引">
+                <Option :value="0">否</Option>
+                <Option :value="1">是</Option>
+              </Select>
             </div>
             <div class="row">
               <Input v-model="item.comment" class="priceBox" placeholder="备注"></Input>

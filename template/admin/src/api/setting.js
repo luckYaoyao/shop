@@ -1115,9 +1115,9 @@ export function langCodeTranslate(data) {
 /**
  * @description 代码生成
  */
-export function codeCurd(data) {
+export function codeCrud(data) {
   return request({
-    url: `curd`,
+    url: `system/crud`,
     method: 'post',
     data,
   });

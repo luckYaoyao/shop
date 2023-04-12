@@ -6,7 +6,7 @@
     <div>
       <div class="item" v-for="(item, index) in dataList" :key="index">
         <div class="row">
-          <Select v-model="item.rowName" transfer>
+          <Select v-model="item.name" transfer>
             <Option v-for="item in rowList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -14,7 +14,7 @@
           <Input v-model="item.field" class="priceBox"></Input>
         </div>
         <div class="row">
-          <Select v-model="item.method" transfer>
+          <Select v-model="item.type" transfer>
             <Option v-for="item in reqMetList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
@@ -23,7 +23,7 @@
             <Option v-for="item in requiredList" :value="item.value" :key="item.value">{{ item.label }}</Option>
           </Select>
         </div>
-        <div class="row" v-if="item.method == 2">
+        <div class="row" v-if="item.type == 2">
           <Input v-model="item.textarea" class="priceBox"></Input>
         </div>
       </div>
@@ -41,6 +41,12 @@ export default {
         return {};
       },
     },
+    rowList: {
+      type: Array,
+      default: () => {
+        return [];
+      },
+    },
   },
   data() {
     return {
@@ -54,7 +60,6 @@ export default {
           label: '是',
         },
       ],
-      rowList: [],
       reqMetList: [
         {
           value: 0,
@@ -77,15 +82,7 @@ export default {
           label: 'number',
         },
       ],
-      dataList: [
-        {
-          rowName: 0,
-          method: 0,
-          field: '',
-          required: 0,
-          textarea: '',
-        },
-      ],
+      dataList: [],
     };
   },
   created() {},
@@ -93,8 +90,8 @@ export default {
   methods: {
     addRow() {
       this.dataList.push({
-        rowName: 0,
-        method: 0,
+        name: '',
+        type: '',
         field: '',
         required: 0,
         textarea: '',
