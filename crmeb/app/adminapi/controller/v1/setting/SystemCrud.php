@@ -72,7 +72,12 @@ class SystemCrud extends AuthController
             ['fromField', []],
             ['columnField', []],
             ['filePath', []],
+            ['isTable', 0],
         ]);
+
+        if (!$data['tableName']) {
+            return app('json')->fail('缺少表名');
+        }
 
         $this->services->createCrud($data);
 
@@ -95,6 +100,14 @@ class SystemCrud extends AuthController
             ['fromField', []],
             ['columnField', []],
         ], true);
+
+        if (!$tableName) {
+            return app('json')->fail('缺少表名');
+        }
+
+        if (in_array($tableName, SystemCrudServices::NOT_CRUD_TABANAME)) {
+            return app('json')->fail('不能生成系统自带数据表');
+        }
 
         $routeName = 'crud/' . Str::snake($tableName);
 

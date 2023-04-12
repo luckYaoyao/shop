@@ -49,8 +49,9 @@ class Controller extends Make
      * @email 136327134@qq.com
      * @date 2023/3/13
      */
-    public function handle(string $name, string $path, array $options = [])
+    public function handle(string $name, array $options = [])
     {
+        $path = $options['path'] ?? '';
         $contentPhp = '';
         $var = ["{%date%}"];
         $fieldPhp = [$this->value['date']];
@@ -98,7 +99,7 @@ class Controller extends Make
 
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
 
-        return [$this->makeFile($filePath, $contentStr), $filePath];
+        return [$this->makeFile($filePath, $contentStr), $this->filePathName ?: $filePath];
     }
 
     /**
