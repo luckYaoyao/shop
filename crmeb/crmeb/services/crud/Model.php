@@ -40,6 +40,29 @@ class Model extends Make
         return 'app' . DS . 'model' . DS . 'crud';
     }
 
+
+    /**
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/12
+     * @param string $name
+     * @param array $options
+     * @return array|mixed|void
+     */
+    public function handle(string $name, array $options = [])
+    {
+        $this->value['key'] = $options['key'] ?? 'id';
+        return parent::handle($name, $options);
+    }
+
+    /**
+     * @param string $path
+     * @param string $name
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/12
+     */
     protected function getFilePathName(string $path, string $name): string
     {
         $path = ltrim(str_replace('\\', '/', $path), '/');

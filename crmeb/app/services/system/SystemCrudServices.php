@@ -148,6 +148,28 @@ class SystemCrudServices extends BaseServices
     }
 
     /**
+     * @param array $data
+     * @return array
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/12
+     */
+    public function valueReplace(array $data)
+    {
+        $replace = ['phar://'];
+        $newData = [];
+        foreach ($data as $key => $item) {
+            if (is_array($item)) {
+                $item = $this->valueReplace($item);
+            } else {
+                $item = str_replace($replace, '', $item);
+            }
+            $newData[str_replace($replace, '', $key)] = $item;
+        }
+        return $newData;
+    }
+
+    /**
      * 创建
      * @param array $data
      * @return mixed
@@ -159,8 +181,9 @@ class SystemCrudServices extends BaseServices
     {
         $tableName = $data['tableName'];
         $tableComment = $data['tableComment'];
-        $tableField = $data['tableField'];
-        $filePath = $data['filePath'];
+        $tableField = $this->valueReplace($data['tableField']);
+        $filePath = $this->valueReplace($data['filePath']);
+
 
         //创建数据库
         if ($tableField && !$data['isTable']) {
@@ -175,6 +198,13 @@ class SystemCrudServices extends BaseServices
         $column = $this->getColumnNamesList($tableName);
         if (!$column) {
             throw new ValidateException('请先创建' . $tableName . '表');
+        }
+
+        foreach ($column as $value) {
+            if ($value['primaryKey']) {
+                $data['key'] = $value['name'];
+                break;
+            }
         }
 
         $routeName = 'crud/' . Str::snake($tableName);
@@ -353,29 +383,34 @@ class SystemCrudServices extends BaseServices
     {
         $options['fromField'] = is_array($options['fromField']) ? $options['fromField'] : [];
         $options['columnField'] = is_array($options['columnField']) ? $options['columnField'] : [];
-        //生成控制器
-        $controller = app()->make(Controller::class);
-        [$controllerContent, $controllerPath] = $controller->setFilePathName($filePath['controller'] ?? '')->isMake($isMake)->handle($tableName);
         //生成模型
         $model = app()->make(Model::class);
-        [$modelContent, $modelPath] = $model->setFilePathName($filePath['model'] ?? '')->isMake($isMake)->handle($tableName);
+        [$modelContent, $modelPath, $usePath, $nameCamel] = $model->setFilePathName($filePath['model'] ?? '')->isMake($isMake)->handle($tableName);
         //生成dao
         $dao = app()->make(Dao::class);
-        [$daoContent, $daoPath] = $dao->setFilePathName($filePath['dao'] ?? '')->isMake($isMake)->handle($tableName);
+        [$daoContent, $daoPath, $usePath, $nameCamel] = $dao->setFilePathName($filePath['dao'] ?? '')->isMake($isMake)->handle($tableName, [
+            'usePath' => $usePath . $nameCamel,
+        ]);
+        //生成service
+        $service = app()->make(Service::class);
+        [$serviceContent, $servicePath, $usePath] = $service->setFilePathName($filePath['service'] ?? '')->isMake($isMake)->handle($tableName, [
+            'field' => $options['fromField'],
+            'usePath' => $usePath,
+        ]);
+        //生成验证器
+        $validate = app()->make(Validate::class);
+        [$validateContent, $validatePath] = $validate->setFilePathName($filePath['validate'] ?? '')->isMake($isMake)->handle($tableName);
+        //生成控制器
+        $controller = app()->make(Controller::class);
+        [$controllerContent, $controllerPath] = $controller->setFilePathName($filePath['controller'] ?? '')->isMake($isMake)->handle($tableName, [
+            'usePath' => $usePath
+        ]);
         //生成路由
         $route = app()->make(Route::class);
         [$routeContent, $routePath] = $route->setFilePathName($filePath['route'] ?? '')->isMake($isMake)->handle($tableName, [
             'menus' => $options['menuName'],
             'route' => $routeName
         ]);
-        //生成service
-        $service = app()->make(Service::class);
-        [$serviceContent, $servicePath] = $service->setFilePathName($filePath['service'] ?? '')->isMake($isMake)->handle($tableName, [
-            'field' => $options['fromField'],
-        ]);
-        //生成验证器
-        $validate = app()->make(Validate::class);
-        [$validateContent, $validatePath] = $validate->setFilePathName($filePath['validate'] ?? '')->isMake($isMake)->handle($tableName);
         //生成前台路由
         $viewRouter = app()->make(ViewRouter::class);
         [$routerContent, $routerPath] = $viewRouter->setFilePathName($filePath['router'] ?? '')->isMake($isMake)->handle($tableName, [
