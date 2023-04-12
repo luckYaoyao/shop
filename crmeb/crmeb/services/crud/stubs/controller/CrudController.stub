@@ -16,7 +16,7 @@
  * @date {%time%}
  */
 
-namespace app\adminapi\controller\v1{%path%};
+namespace app\adminapi\controller\crud{%path%};
 
 use app\adminapi\controller\AuthController;
 use think\facade\App;
@@ -24,7 +24,7 @@ use think\facade\App;
 /**
  * Class {%nameCamel%}
  * @date {%date%}
- * @package app\adminapi\controller\v1{%path%}
+ * @package app\adminapi\controller\crud{%path%}
  */
 class {%nameCamel%} extends AuthController
 {

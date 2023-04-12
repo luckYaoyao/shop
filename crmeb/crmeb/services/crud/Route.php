@@ -36,12 +36,12 @@ class Route extends Make
 
     /**
      * @param string $name
-     * @param string $path
      * @param array $options
      * @return mixed|void
      */
-    public function handle(string $name, string $path, array $options = [])
+    public function handle(string $name, array $options = [])
     {
+        $path = $options['path'] ?? '';
         $action = $options['action'] ?? [];
         $route = $options['route'] ?? '';
         $controller = $options['controller'] ?? '';
@@ -67,14 +67,14 @@ class Route extends Make
 
         $routeContent = "";
         foreach ($action as $item) {
-            $routeContent .= $this->getStub($item) . "\r\n";
+            $routeContent .= file_get_contents($this->getStub($item)) . "\r\n";
         }
 
         if ($var && $value) {
             $routeContent = str_replace($var, $value, $routeContent);
         }
 
-        $content = $this->getStub();
+        $content = file_get_contents($this->getStub());
 
         $this->value['content-php'] = $routeContent;
 
@@ -82,16 +82,16 @@ class Route extends Make
 
         $filePath = $this->getFilePathName($path, strtolower($name));
 
-        return [$this->makeFile($filePath, $contentStr), $filePath];
+        return [$this->makeFile($filePath, $contentStr), $this->filePathName ?: $filePath];
     }
 
     /**
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/4/11
      * @param string $path
      * @param string $name
      * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/11
      */
     protected function getFilePathName(string $path, string $name): string
     {

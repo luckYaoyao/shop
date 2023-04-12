@@ -16,7 +16,7 @@
  * @date {%time%}
  */
 
-namespace app\services{%path%};
+namespace app\services\crub{%path%};
 
 use app\services\BaseServices;
 use think\exception\ValidateException;
@@ -25,7 +25,7 @@ use think\exception\ValidateException;
 /**
  * Class CrudService
  * @date {%date%}
- * @package app\services{%path%}
+ * @package app\services\crub{%path%}
  */
 class {%nameCamel%}Service extends BaseServices
 {

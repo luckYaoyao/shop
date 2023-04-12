@@ -72,7 +72,12 @@ class SystemCrud extends AuthController
             ['fromField', []],
             ['columnField', []],
             ['filePath', []],
+            ['isTable', 0],
         ]);
+
+        if (!$data['tableName']) {
+            return app('json')->fail('缺少表名');
+        }
 
         $this->services->createCrud($data);
 
@@ -95,6 +100,14 @@ class SystemCrud extends AuthController
             ['fromField', []],
             ['columnField', []],
         ], true);
+
+        if (!$tableName) {
+            return app('json')->fail('缺少表名');
+        }
+
+        if (in_array($tableName, SystemCrudServices::NOT_CRUD_TABANAME)) {
+            return app('json')->fail('不能生成系统自带数据表');
+        }
 
         $routeName = 'crud/' . Str::snake($tableName);
 
@@ -121,6 +134,42 @@ class SystemCrud extends AuthController
         }
 
         return app('json')->success(compact('makePath', 'tableField'));
+    }
+
+    /**
+     * @param $id
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/12
+     */
+    public function read($id)
+    {
+        if (!$id) {
+            return app('json')->fail('缺少参数');
+        }
+
+        $info = $this->services->get($id);
+        if (!$info) {
+            return app('json')->fail('查看的生成的文件不存在');
+        }
+
+        $routeName = 'crud/' . Str::snake($info->table_name);
+
+        $make = $this->services->makeFile($info->table_name, $routeName, false, [
+            'menuName' => $info->name,
+            'fromField' => $info->field['fromField'] ?? [],
+            'columnField' => $info->field['columnField'] ?? [],
+        ]);
+        
+        $data = [];
+        foreach ($make as $item) {
+            $item['name'] = pathinfo($item['path'])['basename'] ?? '';
+            $data[] = $item;
+        }
+
+        return app('json')->success($data);
+
     }
 
     /**

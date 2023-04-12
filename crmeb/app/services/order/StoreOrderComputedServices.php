@@ -480,7 +480,7 @@ class StoreOrderComputedServices extends BaseServices
                 $tempId = $item['productInfo']['temp_id'] ?? 0;
                 $tempPostage = $truePostageArr[$tempId] ?? 0;
                 $tempNumber = $temp_num[$tempId]['number'] ?? 0;
-                if (!$tempId || !$tempPostage || !$tempNumber) continue;
+                if (!$tempId || !$tempPostage) continue;
                 $type = $temp_num[$tempId]['type'];
 
 

@@ -402,7 +402,7 @@ class Common extends AuthController
                 'info' => ''
             ]);
         }
-        \crmeb\services\CacheService::clear();
+        $services->cacheDriver()->clear();
         return app('json')->success(100000);
     }
 

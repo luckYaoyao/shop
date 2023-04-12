@@ -16,7 +16,7 @@
  * @date {%time%}
  */
 
-namespace app\adminapi\validate{%path%};
+namespace app\adminapi\validate\crub{%path%};
 
 
 use think\Validate;
@@ -24,7 +24,7 @@ use think\Validate;
 /**
  * Class CrudValidate
  * @date {%date%}
- * @package app\adminapi\validate{%path%}
+ * @package app\adminapi\validate\crub{%path%}
  */
 class {%nameCamel%}Validate extends Validate
 {

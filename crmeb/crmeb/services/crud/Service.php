@@ -36,15 +36,15 @@ class Service extends Make
 
     /**
      * @param string $name
-     * @param string $path
      * @param array $options
      * @return mixed|void
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/3/23
      */
-    public function handle(string $name, string $path, array $options = [])
+    public function handle(string $name, array $options = [])
     {
+        $path = $options['path'] ?? '';
 
         $this->value['use-php'] = $this->getDaoClassName($name, $path);
 
@@ -92,7 +92,7 @@ class Service extends Make
 
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
 
-        return [$this->makeFile($filePath, $contentStr), $filePath];
+        return [$this->makeFile($filePath, $contentStr), $this->filePathName ?: $filePath];
     }
 
     /**
