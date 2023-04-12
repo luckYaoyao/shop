@@ -791,6 +791,18 @@ export function updateTimer(id, data) {
     data,
   });
 }
+/**
+ * 更新备注
+ * @param {*} data
+ * @returns
+ */
+export function updateMark(data) {
+  return request({
+    url: `system/database/update_mark`,
+    method: 'post',
+    data,
+  });
+}
 
 /**
  * 定时任务名称及标识

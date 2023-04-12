@@ -1,75 +1,80 @@
 <template>
   <div>
     <Card :bordered="false" dis-hover class="ivu-mt listbox">
-      <Tabs @on-click="onClickTab" class="mb30">
-        <TabPane label="数据库列表" >
+      <Tabs class="mb30">
+        <TabPane label="数据库列表">
           <Card :bordered="false" dis-hover class="tableBox mt10">
             <div slot="title">
-<!--              <span class="ivu-pl-8 mr10">数据库表列表</span>-->
+              <!--              <span class="ivu-pl-8 mr10">数据库表列表</span>-->
               <Button type="primary" class="mr10" @click="getBackup">备份</Button>
               <Button type="primary" class="mr10" @click="getOptimize">优化表</Button>
               <Button type="primary" class="mr10" @click="getRepair">修复表</Button>
               <Button type="primary" class="mr10" @click="exportData(1)">导出文件</Button>
             </div>
             <Table
-                ref="selection"
-                :columns="columns"
-                :data="tabList2"
-                :loading="loading"
-                highlight-row
-                no-data-text="暂无数据"
-                @on-selection-change="onSelectTab"
-                size="small"
-                no-filtered-data-text="暂无筛选结果"
+              ref="selection"
+              :columns="columns"
+              :data="tabList2"
+              :loading="loading"
+              highlight-row
+              no-data-text="暂无数据"
+              @on-selection-change="onSelectTab"
+              size="small"
+              no-filtered-data-text="暂无筛选结果"
             >
               <template slot-scope="{ row }" slot="action">
+                <a @click="editMark(row, 0)">备注</a>
+                <Divider type="vertical" />
                 <a @click="Info(row)">详情</a>
               </template>
             </Table>
           </Card>
           <!-- 详情模态框-->
           <Drawer
-              :closable="false"
-              width="740"
-              v-model="modals"
-              closable
-              :title="'[ ' + rows.name + ' ]' + rows.comment"
+            :closable="false"
+            width="740"
+            v-model="modals"
+            closable
+            :title="'[ ' + rows.name + ' ]' + rows.comment"
           >
-<!--          <Modal-->
-<!--              v-model="modals"-->
-<!--              class="tableBox"-->
-<!--              scrollable-->
-<!--              footer-hide-->
-<!--              closable-->
-<!--              :title="'[ ' + rows.name + ' ]' + rows.comment"-->
-<!--              :mask-closable="false"-->
-<!--              width="750"-->
-<!--          >-->
+            <!--          <Modal-->
+            <!--              v-model="modals"-->
+            <!--              class="tableBox"-->
+            <!--              scrollable-->
+            <!--              footer-hide-->
+            <!--              closable-->
+            <!--              :title="'[ ' + rows.name + ' ]' + rows.comment"-->
+            <!--              :mask-closable="false"-->
+            <!--              width="750"-->
+            <!--          >-->
             <Table
-                ref="selection"
-                :columns="columns2"
-                :data="tabList3"
-                :loading="loading2"
-                no-data-text="暂无数据"
-                highlight-row
-                max-height="600"
-                size="small"
-                no-filtered-data-text="暂无筛选结果"
+              ref="selection"
+              :columns="columns2"
+              :data="tabList3"
+              :loading="loading2"
+              no-data-text="暂无数据"
+              highlight-row
+              max-height="600"
+              size="small"
+              no-filtered-data-text="暂无筛选结果"
             >
+              <template slot-scope="{ row }" slot="action">
+                <a @click="editMark(row, 1)">备注</a>
+              </template>
             </Table>
           </Drawer>
         </TabPane>
         <TabPane label="备份列表">
           <Card :bordered="false" dis-hover class="">
             <Table
-                ref="selection"
-                :columns="columns4"
-                :data="tabList"
-                :loading="loading3"
-                no-data-text="暂无数据"
-                highlight-row
-                size="small"
-                no-filtered-data-text="暂无筛选结果"
+              ref="selection"
+              :columns="columns4"
+              :data="tabList"
+              :loading="loading3"
+              no-data-text="暂无数据"
+              highlight-row
+              size="small"
+              no-filtered-data-text="暂无筛选结果"
             >
               <template slot-scope="{ row, index }" slot="action">
                 <a @click="ImportFile(row)">导入</a>
@@ -83,6 +88,9 @@
         </TabPane>
       </Tabs>
     </Card>
+    <Modal v-model="markModal" title="修改备注" @on-ok="ok" @on-cancel="cancel" @on-visible-change="cancel">
+      <Input v-model="mark"></Input>
+    </Modal>
   </div>
 </template>
 
@@ -96,9 +104,11 @@ import {
   filesListApi,
   filesDownloadApi,
   filesImportApi,
+  updateMark,
 } from '@/api/system';
 import Setting from '@/setting';
 import { getCookies } from '@/libs/util';
+
 export default {
   name: 'systemDatabackup',
   data() {
@@ -216,13 +226,27 @@ export default {
           title: '备注',
           key: 'COLUMN_COMMENT',
         },
+        {
+          title: '操作',
+          slot: 'action',
+          fixed: 'right',
+          minWidth: 60,
+        },
       ],
       rows: {},
       dataList: {},
       loading2: false,
       loading3: false,
+      markModal: false,
+      mark: '',
       header: {},
       Token: '',
+      changeMarkData: {
+        table: '',
+        mark: '',
+        type: '',
+        field: '',
+      },
     };
   },
   computed: {
@@ -238,6 +262,29 @@ export default {
     this.getfileList();
   },
   methods: {
+    editMark(row, type) {
+      this.changeMarkData.table = row.name || row.TABLE_NAME;
+      this.changeMarkData.field = row.COLUMN_NAME || '';
+      this.changeMarkData.type = row.COLUMN_TYPE || '';
+      this.changeMarkData.is_field = type;
+      this.markModal = true;
+    },
+    ok() {
+      console.log('1');
+      this.changeMarkData.mark = this.mark;
+      console.log(this.changeMarkData);
+      updateMark(this.changeMarkData).then((res) => {
+        this.$Message.success(res.msg);
+        if (this.changeMarkData.is_field) {
+          this.Info({ name: this.changeMarkData.table });
+        } else {
+          this.getList();
+        }
+      });
+    },
+    cancel() {
+      this.mark = '';
+    },
     // 导入
     ImportFile(row) {
       filesImportApi({
