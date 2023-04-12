@@ -63,13 +63,14 @@ class SystemDatabackup extends AuthController
      */
     public function updateMark()
     {
-        [$table, $field, $type, $mark] = $this->request->postMore([
+        [$table, $field, $type, $mark, $is_field] = $this->request->postMore([
             ['table', ''],
             ['field', ''],
             ['type', ''],
             ['mark', ''],
+            ['is_field', 0],
         ], true);
-        if ($field == '') {
+        if ($is_field == 0) {
             $sql = "ALTER TABLE $table COMMENT '$mark'";
         } else {
             $sql = "ALTER TABLE $table MODIFY COLUMN $field $type COMMENT '$mark'";

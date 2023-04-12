@@ -48,4 +48,6 @@ return [
     'console_remind'   => true,
     // admin路由前缀
     'admin_prefix'     => 'admin',
+    //后台前端模板根路径
+    'admin_template_path' => dirname(app()->getRootPath()) . DS . 'template' . DS . 'admin' . DS . 'src' . DS,
 ];
