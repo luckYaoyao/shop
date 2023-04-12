@@ -35,4 +35,9 @@ class SystemCrud extends BaseModel
      * @var string
      */
     protected $pk = 'id';
+
+    public function getAddTimeAttr($value)
+    {
+        return date('Y-m-d H:i:s', $value);
+    }
 }
