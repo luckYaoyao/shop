@@ -12,7 +12,6 @@ namespace app\adminapi\controller\v1\setting;
 
 use app\adminapi\controller\AuthController;
 use app\Request;
-use app\services\order\StoreOrderServices;
 use app\services\system\config\SystemConfigServices;
 use app\services\system\config\SystemConfigTabServices;
 use think\facade\App;
@@ -38,8 +37,10 @@ class SystemConfig extends AuthController
 
     /**
      * 显示资源列表
-     *
      * @return \think\Response
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function index()
     {
@@ -58,8 +59,11 @@ class SystemConfig extends AuthController
 
     /**
      * 显示创建资源表单页.
-     * @param $type
      * @return \think\Response
+     * @throws \FormBuilder\Exception\FormBuilderException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function create()
     {
@@ -72,7 +76,6 @@ class SystemConfig extends AuthController
 
     /**
      * 保存新建的资源
-     *
      * @return \think\Response
      */
     public function save()
@@ -120,7 +123,7 @@ class SystemConfig extends AuthController
         } else {
             $this->services->save($data);
         }
-        \crmeb\services\CacheService::clear();
+        $this->services->cacheDriver()->clear();
         return app('json')->success(400284);
     }
 
@@ -186,13 +189,12 @@ class SystemConfig extends AuthController
         }
         $data['value'] = json_encode($data['value']);
         $this->services->update($id, $data);
-        \crmeb\services\CacheService::clear();
+        $this->services->cacheDriver()->clear();
         return app('json')->success(100001);
     }
 
     /**
      * 删除指定资源
-     *
      * @param int $id
      * @return \think\Response
      */
@@ -201,7 +203,7 @@ class SystemConfig extends AuthController
         if (!$this->services->delete($id))
             return app('json')->fail(100008);
         else {
-            \crmeb\services\CacheService::clear();
+            $this->services->cacheDriver()->clear();
             return app('json')->success(100002);
         }
     }
@@ -218,7 +220,7 @@ class SystemConfig extends AuthController
             return app('json')->fail(100100);
         }
         $this->services->update($id, ['status' => $status]);
-        \crmeb\services\CacheService::clear();
+        $this->services->cacheDriver()->clear();
         return app('json')->success(100014);
     }
 
@@ -336,7 +338,7 @@ class SystemConfig extends AuthController
                 $this->services->update($k, ['value' => json_encode($v)], 'menu_name');
             }
         }
-        \crmeb\services\CacheService::clear();
+        $this->services->cacheDriver()->clear();
         return app('json')->success(100001);
 
     }
