@@ -150,6 +150,7 @@ export default {
               return this.$Message.warning('请完善数据');
             }
           }
+          let FieldList = this.$refs.Field.dataList;
           let data = {
             ...this.formItem.foundation,
             filePath: this.formItem.storage,

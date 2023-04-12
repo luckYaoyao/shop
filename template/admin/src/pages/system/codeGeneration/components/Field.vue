@@ -12,11 +12,7 @@
     </Table> -->
     <div class="fied-table">
       <div class="fied-item" v-for="(item, index) in dataList" :key="index">
-        <div v-if="item.slot" class="set-up">
-          <div class="name">{{ item.name }}</div>
-          <div class="field">{{ item.field }}</div>
-        </div>
-        <div v-else class="fied-parameter">
+        <div class="fied-parameter">
           <Icon class="close" size="14" type="md-close-circle" @click="delItem(index)" />
           <div class="name">
             <Input class="from-width" v-model="item.name"></Input>
@@ -29,6 +25,12 @@
             </Select>
             <span v-else>{{ item.field }}</span>
           </div>
+        </div>
+      </div>
+      <div class="fied-item">
+        <div class="set-up">
+          <div class="name">操作</div>
+          <div class="field">删除</div>
         </div>
       </div>
     </div>
@@ -76,22 +78,11 @@ export default {
           align: 'center',
           width: 110,
         },
-        {
-          title: '操作',
-          slot: 'action',
-          align: 'center',
-          width: 110,
-        },
       ],
       dataList: [
         {
           name: 'id',
           field: 'id',
-        },
-        {
-          name: '操作',
-          field: '删除',
-          slot: true,
         },
       ],
       comment: '',
@@ -103,7 +94,7 @@ export default {
   methods: {
     addRow() {
       if (this.dataList.length >= 10) return this.$Message.warning('最多添加10个');
-      let i = this.dataList.length - 1;
+      let i = this.dataList.length;
       // this.modal = true;
       this.dataList.splice(i, 0, {
         name: '',
