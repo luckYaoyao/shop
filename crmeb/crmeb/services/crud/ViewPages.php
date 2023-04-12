@@ -66,20 +66,20 @@ class ViewPages extends Make
      * @email 136327134@qq.com
      * @date 2023/4/3
      */
-    public function handle(string $name, string $path, array $options = [])
+    public function handle(string $name, array $options = [])
     {
         $field = $options['field'] ?? [];
 
         $columnStr = [];
         foreach ($field as $item) {
-            $columnStr[] = "{\n\"title:\"{$item['name']},\n\"key:\"{$item['field']}\n}";
+            $columnStr[] = $this->tab() . "{\ntitle:\"{$item['name']}\",\nkey:\"{$item['field']}\"\n}";
         }
         $this->value['auth'] = Str::snake($name);
         $this->value['content-vue'] = "\n" . implode(',', $columnStr);
         $this->value['pathApiJs'] = $options['pathApiJs'] ?? '';
         $this->value['nameCamel'] = Str::snake($name, '-');
 
-        return parent::handle($name, $path, $options);
+        return parent::handle($name, $options);
     }
 
     /**

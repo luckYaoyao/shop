@@ -219,9 +219,9 @@ abstract class Make
      * @email 136327134@qq.com
      * @date 2023/3/13
      */
-    public function handle(string $name, string $path, array $options = [])
+    public function handle(string $name, array $options = [])
     {
-
+        $path = $options['path'] ?? '';
         [$nameData, $content] = $this->getStubContent($name);
 
         $this->value['name'] = $nameData;
@@ -236,7 +236,7 @@ abstract class Make
 
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
 
-        return [$this->makeFile($filePath, $contentStr), $filePath];
+        return [$this->makeFile($filePath, $contentStr), $this->filePathName ?: $filePath];
     }
 
     /**
@@ -343,14 +343,15 @@ abstract class Make
      */
     protected function getfolderPath(string $path)
     {
+        $path = $path ?: $this->filePathName;
+        $path = str_replace([$this->basePath, $this->baseDir], '', $path);
         $path = ltrim(str_replace('\\', '/', $path), '/');
         $pathArr = explode('/', $path);
-        $count = count($pathArr);
-        $res = $pathArr[$count - 1] ?? null;
-        if ($pathArr && $res && $res == $this->name) {
-            return '';
+        array_pop($pathArr);
+        if ($pathArr) {
+            return '\\' . implode('\\', $pathArr);
         } else {
-            return '\\' . $res;
+            return '';
         }
     }
 

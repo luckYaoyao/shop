@@ -66,8 +66,9 @@ class ViewRouter extends Make
      * @email 136327134@qq.com
      * @date 2023/4/4
      */
-    public function handle(string $name, string $path, array $options = [])
+    public function handle(string $name, array $options = [])
     {
+        $path = $options['path'] ?? '';
         [$nameData, $content] = $this->getStubContent($name);
 
         $menus = $options['menus'] ?? $name;

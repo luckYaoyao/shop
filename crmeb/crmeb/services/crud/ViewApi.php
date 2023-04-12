@@ -60,16 +60,15 @@ class ViewApi extends Make
 
     /**
      * @param string $name
-     * @param string $path
      * @param array $options
      * @return array
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/4/4
      */
-    public function handle(string $name, string $path, array $options = [])
+    public function handle(string $name, array $options = [])
     {
-
+        $path = $options['path'] ?? '';
         $action = $options['action'] ?? [];
         if (!$action) {
             $action = ['index', 'create', 'save', 'edit', 'update'];
@@ -103,7 +102,7 @@ class ViewApi extends Make
 
         $content = $this->makeFile($filePath, $contentStr);
 
-        return [$content, $filePath];
+        return [$content, $this->filePathName ?: $filePath];
     }
 
     /**

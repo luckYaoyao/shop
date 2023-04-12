@@ -16,7 +16,7 @@
  * @date {%time%}
  */
 
-namespace app\model{%path%};
+namespace app\model\crud{%path%};
 
 
 use crmeb\basic\BaseModel;
@@ -24,7 +24,7 @@ use crmeb\basic\BaseModel;
 /**
  * Class {%nameCamel%}
  * @date {%date%}
- * @package app\model{%path%}
+ * @package app\model\crud{%path%}
  */
 class {%nameCamel%} extends BaseModel
 {

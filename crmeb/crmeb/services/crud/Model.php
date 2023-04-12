@@ -40,6 +40,13 @@ class Model extends Make
         return 'app' . DS . 'model' . DS . 'crud';
     }
 
+    protected function getFilePathName(string $path, string $name): string
+    {
+        $path = ltrim(str_replace('\\', '/', $path), '/');
+
+        return $this->getBasePath($path) . $name . '.' . $this->fileMime;
+    }
+
     /**
      * 模板文件
      * @param string $type
