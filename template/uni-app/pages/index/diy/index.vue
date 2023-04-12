@@ -716,6 +716,13 @@
 								duration: 2000
 							})
 						}
+						setTimeout(e => {
+							this.diyData();
+							this.getIndexData();
+							getShare().then(res => {
+								this.shareInfo = res.data;
+							});
+						}, 2000)
 						this.errorNetwork = true
 						this.showSkeleton = false;
 					}
