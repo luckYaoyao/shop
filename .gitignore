@@ -3,6 +3,8 @@
 *.log
 *.DS_Store
 /crmeb/.env
+/crmeb/.constant
+/crmeb/.version
 /crmeb/runtime/cache
 /crmeb/runtime/log
 /crmeb/runtime/session
