@@ -137,6 +137,42 @@ class SystemCrud extends AuthController
     }
 
     /**
+     * @param $id
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/12
+     */
+    public function read($id)
+    {
+        if (!$id) {
+            return app('json')->fail('缺少参数');
+        }
+
+        $info = $this->services->get($id);
+        if (!$info) {
+            return app('json')->fail('查看的生成的文件不存在');
+        }
+
+        $routeName = 'crud/' . Str::snake($info->table_name);
+
+        $make = $this->services->makeFile($info->table_name, $routeName, false, [
+            'menuName' => $info->name,
+            'fromField' => $info->field['fromField'] ?? [],
+            'columnField' => $info->field['columnField'] ?? [],
+        ]);
+        
+        $data = [];
+        foreach ($make as $item) {
+            $item['name'] = pathinfo($item['path'])['basename'] ?? '';
+            $data[] = $item;
+        }
+
+        return app('json')->success($data);
+
+    }
+
+    /**
      * 获取tree菜单
      * @return \think\Response
      * @author 等风来

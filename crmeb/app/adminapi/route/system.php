@@ -141,6 +141,8 @@ Route::group('system', function () {
     Route::post('crud/file_path', 'v1.setting.SystemCrud/getFilePath')->option(['real_name' => '获取CRUD文件存放']);
     //删除CRUD
     Route::delete('crud/:id', 'v1.setting.SystemCrud/delete')->option(['real_name' => '删除CRUD']);
+    //查看CRUD
+    Route::get('crud/:id', 'v1.setting.SystemCrud/read')->option(['real_name' => '查看CRUD']);
     //获取CRUD列表
     Route::get('crud', 'v1.setting.SystemCrud/index')->option(['real_name' => '获取CRUD列表']);
     //保存生成CRUD

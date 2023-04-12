@@ -72,7 +72,7 @@ class SystemCrudServices extends BaseServices
     public function getList()
     {
         [$page, $limit] = $this->getPageValue();
-        $list = $this->dao->selectList([], '*', $page, $limit, 'id desc');
+        $list = $this->dao->selectList([], 'add_time,id,name,table_name', $page, $limit, 'id desc');
         $count = $this->dao->count();
 
         return compact('list', 'count');

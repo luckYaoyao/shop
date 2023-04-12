@@ -422,14 +422,15 @@ abstract class Make
 
         $pathname = $this->filePathName ?: $pathname;
 
-        if (is_file($pathname)) {
-            throw new CrudException($this->name . ':' . $pathname . ' already exists!');
-        }
 
         $content = str_replace('﻿', '', $content);
 
         if ($this->isMake) {
 
+            if (is_file($pathname)) {
+                throw new CrudException($this->name . ':' . $pathname . ' already exists!');
+            }
+            
             try {
                 if (!is_dir(dirname($pathname))) {
                     mkdir(dirname($pathname), 0755, true);
