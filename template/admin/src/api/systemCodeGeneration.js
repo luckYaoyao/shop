@@ -29,7 +29,7 @@ export function crudColumnType() {
   });
 }
 /**
- * @description 代码生成 - 第一步提交 获取CRUD文件存放
+ * @description 代码生成 - 第一步提交
  */
 export function crudFilePath(data) {
   return request({
@@ -40,44 +40,21 @@ export function crudFilePath(data) {
 }
 
 /**
- * @description 管理员添加表单
+ * @description 代码生成 - 列表
  */
-export function adminFromApi() {
+export function crudList(data) {
   return request({
-    url: '/setting/admin/create',
+    url: '/system/crud',
     method: 'get',
+    params: data,
   });
 }
-
 /**
- * @description 管理员编辑表单
- * @param {Number} param id {Number} 管理员id
+ * @description 代码生成 - 列表查看文件
  */
-export function adminEditFromApi(id) {
+export function crudDet(id) {
   return request({
-    url: `/setting/admin/${id}/edit`,
+    url: `/system/crud/${id}`,
     method: 'get',
-  });
-}
-
-/**
- * @description 管理员删除
- * @param {Number} param id {Number} 管理员id
- */
-export function adminDelFromApi(id) {
-  return request({
-    url: `/setting/admin/${id}`,
-    method: 'DELETE',
-  });
-}
-
-/**
- * @description 管理员 修改状态
- * @param {Object} param data {Object} 传值
- */
-export function setShowApi(data) {
-  return request({
-    url: `setting/set_status/${data.id}/${data.status}`,
-    method: 'PUT',
   });
 }

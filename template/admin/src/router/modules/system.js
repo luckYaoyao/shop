@@ -36,6 +36,15 @@ export default {
       component: () => import('@/pages/system/codeGeneration/index'),
     },
     {
+      path: 'code_generation_list',
+      name: `${pre}code_generation_list`,
+      meta: {
+        auth: ['system-config-code-generation-list'],
+        title: '代码生成列表',
+      },
+      component: () => import('@/pages/system/codeGeneration/list'),
+    },
+    {
       path: 'backend_routing',
       name: `${pre}backend_routing`,
       meta: {
