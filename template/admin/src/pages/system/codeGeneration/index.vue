@@ -99,7 +99,6 @@ export default {
         this.currentTab++;
       } else if (this.currentTab == 1) {
         try {
-          let FieldList = this.$refs.Field.dataList;
           let data = {
             ...this.formItem.foundation,
             filePath: this.formItem.storage,
