@@ -134,7 +134,7 @@ class ViewApi extends Make
             'create' => $servicePath . 'crudUpdateApi.stub',
             'save' => $servicePath . 'crudSaveApi.stub',
             'edit' => $servicePath . 'getCrudEditApi.stub',
-            'update' => $servicePath . 'CrudUpdateApi.stub',
+            'update' => $servicePath . 'crudUpdateApi.stub',
             'api' => $servicePath . 'crud.stub',
         ];
 
