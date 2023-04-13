@@ -19,57 +19,116 @@
       </FormItem>
       <FormItem label="菜单名称">
         <Input class="form-width" v-model="foundation.menuName" placeholder="请输入表名"></Input>
-        <div class="tip">生成菜单为可选项，不填写默认生成的菜单名称将为表名；生成后会把自动生成的权限默认加入该菜单下</div>
+        <div class="tip">
+          生成菜单为可选项，不填写默认生成的菜单名称将为表名；生成后会把自动生成的权限默认加入该菜单下
+        </div>
       </FormItem>
       <FormItem label="表名">
         <Input class="form-width" v-model="foundation.tableName" placeholder="请输入表名"></Input>
-        <div class="tip">用于生成CRUD指定的表名，不需要携带表前缀；对于生成过的表将不能在进行生成；或者可以删除对应的文件重新生成！对应系统中重要的数据表将不允许生成！</div>
+        <div class="tip">
+          用于生成CRUD指定的表名，不需要携带表前缀；对于生成过的表将不能在进行生成；或者可以删除对应的文件重新生成！对应系统中重要的数据表将不允许生成！
+        </div>
       </FormItem>
       <FormItem label="是否存在">
-        <RadioGroup v-model="foundation.isTable">
+        <RadioGroup v-model="foundation.isTable" @on-change="changeRadio">
           <Radio :label="1">是</Radio>
           <Radio :label="0">否</Radio>
         </RadioGroup>
-        <div class="tip">数据库表可以生成系统存在的，也可以选择【否】后手动生成，不过此生成方式不交单一；如果不满足使用需求可以先在数据库中创建表，然后选择【是】再进行操作</div>
+        <div class="tip">
+          数据库表可以生成系统存在的，也可以选择【否】后手动生成，不过此生成方式不交单一；如果不满足使用需求可以先在数据库中创建表，然后选择【是】再进行操作
+        </div>
       </FormItem>
-      <FormItem label="表SQL" v-if="!foundation.isTable">
+      <FormItem label="表SQL">
+        <Button type="primary" @click="addRow">{{ foundation.isTable ? '生成表sql' : '添加一行' }}</Button>
+
         <div>
-          <div class="item" v-for="(item, index) in dataList" :key="index">
-            <div class="row">
-              <Select v-model="item.type" transfer>
+          <Table
+            ref="selection"
+            :columns="columns"
+            :data="tableField"
+            no-data-text="暂无数据"
+            highlight-row
+            :loading="loading"
+            max-height="600"
+            size="small"
+            no-filtered-data-text="暂无筛选结果"
+          >
+            <template slot-scope="{ row, index }" slot="field">
+              <span v-if="foundation.isTable">{{ row.field }}</span>
+              <Input
+                v-else
+                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+                v-model="tableField[index].field"
+              ></Input>
+            </template>
+            <template slot-scope="{ row, index }" slot="file_type">
+              <span v-if="foundation.isTable">{{ row.file_type }}</span>
+              <Select v-else v-model="tableField[index].file_type" @on-change="changeItemField($event, index)">
                 <Option v-for="item in columnTypeList" :value="item" :key="item">{{ item }}</Option>
               </Select>
-              <div class="tip">字段类型</div>
-            </div>
-            <div class="row">
-              <Input v-model="item.field" class="priceBox" placeholder="字段名称(英文或_)"></Input>
-              <div class="tip">字段名称为英文加下划线</div>
-            </div>
-            <div class="row">
-              <Input v-model="item.limit" type="number" class="priceBox" placeholder="长度"></Input>
-              <div class="tip">字段长度</div>
-            </div>
-            <div class="row">
-              <Select v-model="item.index" transfer placeholder="是否为索引">
-                <Option :value="0">否</Option>
-                <Option :value="1">是</Option>
+            </template>
+            <template slot-scope="{ row, index }" slot="limit">
+              <span v-if="foundation.isTable">{{ row.limit }}</span>
+              <Input
+                v-else
+                v-model="tableField[index].limit"
+                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+              ></Input>
+            </template>
+            <template slot-scope="{ row, index }" slot="default">
+              <span v-if="foundation.isTable">{{ row.default }}</span>
+              <Input
+                v-else
+                v-model="tableField[index].default"
+                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+              ></Input>
+            </template>
+            <template slot-scope="{ row, index }" slot="comment">
+              <span v-if="foundation.isTable">{{ row.comment }}</span>
+              <Input
+                v-else
+                v-model="tableField[index].comment"
+                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+              ></Input>
+            </template>
+            <template slot-scope="{ row, index }" slot="required">
+              <Checkbox
+                v-model="tableField[index].required"
+                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+              ></Checkbox>
+            </template>
+            <template slot-scope="{ row, index }" slot="is_table">
+              <Checkbox
+                v-model="tableField[index].is_table"
+                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+              ></Checkbox>
+            </template>
+            <template slot-scope="{ row, index }" slot="table_name">
+              <Input
+                v-model="tableField[index].table_name"
+                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+              ></Input>
+            </template>
+            <template slot-scope="{ row, index }" slot="from_type">
+              <Select
+                v-model="tableField[index].from_type"
+                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+              >
+                <Option v-for="item in fromTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
-              <div class="tip">是否为索引</div>
-            </div>
-            <div class="row">
-              <Input v-model="item.comment" class="priceBox" placeholder="备注"></Input>
-              <div class="tip">字段备注</div>
-            </div>
-          </div>
+            </template>
+            <template slot-scope="{ row, index }" slot="action">
+              <a @click="del(row, index)">删除</a>
+            </template>
+          </Table>
         </div>
-        <Button class="mr10" type="primary" @click="addRow">添加字段</Button>
       </FormItem>
     </Form>
   </div>
 </template>
 
 <script>
-import { crudMenus, crudColumnType } from '@/api/systemCodeGeneration';
+import { crudMenus, crudColumnType, crudFilePath } from '@/api/systemCodeGeneration';
 
 export default {
   name: '',
@@ -80,17 +139,89 @@ export default {
         return {};
       },
     },
-    dataList: {
-      type: Array,
-      default: () => {
-        return [];
-      },
-    },
   },
   data() {
     return {
       menusList: [],
       columnTypeList: [],
+      columns: [
+        {
+          title: '字段名称',
+          slot: 'field',
+          minWidth: 200,
+        },
+        {
+          title: '字段类型',
+          slot: 'file_type',
+          minWidth: 100,
+        },
+        {
+          title: '长度',
+          slot: 'limit',
+          minWidth: 100,
+        },
+        {
+          title: '默认值',
+          slot: 'default',
+          minWidth: 100,
+        },
+        {
+          title: '字段描述',
+          slot: 'comment',
+          minWidth: 100,
+        },
+        {
+          title: '必填',
+          slot: 'required',
+          width: 70,
+          align: 'center',
+        },
+        {
+          title: '列表',
+          slot: 'is_table',
+          width: 70,
+          align: 'center',
+        },
+        {
+          title: '列表名',
+          slot: 'table_name',
+          width: 100,
+          align: 'center',
+        },
+        {
+          title: '表单类型',
+          slot: 'from_type',
+          minWidth: 150,
+        },
+      ],
+      fromTypeList: [
+        {
+          value: '0',
+          label: '不生成',
+        },
+        {
+          value: 'input',
+          label: 'input',
+        },
+        {
+          value: 'textarea',
+          label: 'textarea',
+        },
+        {
+          value: 'select',
+          label: 'select',
+        },
+        {
+          value: 'radio',
+          label: 'radio',
+        },
+        {
+          value: 'number',
+          label: 'number',
+        },
+      ],
+      loading: false,
+      tableField: [],
     };
   },
   created() {
@@ -98,6 +229,79 @@ export default {
   },
   mounted() {},
   methods: {
+    changeItemField(e, i) {
+      console.log(e, i);
+      if (e === 'addSoftDelete') {
+        this.$set(this.tableField[i], 'comment', '添加和修改时间');
+      }
+      if (e === 'addTimestamps') {
+        this.$set(this.tableField[i], 'comment', '伪删除');
+      }
+    },
+    changeRadio(status) {
+      this.tableField = [];
+      if (status) {
+        this.addRow();
+      }
+    },
+    addRow() {
+      if (!this.foundation.tableName) return this.$Message.warning('请先填写表名');
+      if (!this.tableField.length) {
+        let data = {
+          menuName: this.foundation.menuName,
+          tableName: this.foundation.tableName,
+          isTable: this.foundation.isTable,
+          fromField: [],
+          columnField: [],
+        };
+        this.loading = true;
+        crudFilePath(data)
+          .then((res) => {
+            this.tableField = res.data.tableField.length ? res.data.tableField : [];
+            this.$emit('storageData', res.data.makePath);
+            this.loading = false;
+            this.tableField.push({
+              field: '',
+              file_type: '',
+              default: '',
+              comment: '',
+              required: false,
+              is_table: true,
+              table_name: '',
+              limit: '',
+              from_type: '0',
+            });
+          })
+          .catch((err) => {
+            this.$Message.warning(err.msg);
+            this.loading = false;
+          });
+      }
+      if (this.foundation.isTable) {
+      } else {
+        console.log(this.tableField);
+        for (let i = 0; i < this.tableField.length; i++) {
+          const el = this.tableField[i];
+          if (!el.field || !el.file_type || !el.default || !el.comment) {
+            return this.$Message.warning('请先完善上一条数据');
+          }
+          if (el.is_table && !el.table_name) {
+            return this.$Message.warning('请输入列表名');
+          }
+        }
+        this.tableField.push({
+          field: '',
+          file_type: '',
+          default: '',
+          comment: '',
+          required: false,
+          is_table: true,
+          table_name: '',
+          limit: '',
+          from_type: '0',
+        });
+      }
+    },
     getCrudMenus() {
       crudMenus().then((res) => {
         console.log(res);
@@ -106,9 +310,6 @@ export default {
       crudColumnType().then((res) => {
         this.columnTypeList = res.data.types;
       });
-    },
-    addRow() {
-      this.$emit('addRow');
     },
   },
 };

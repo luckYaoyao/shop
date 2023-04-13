@@ -405,7 +405,7 @@ export default {
         .then(async (res) => {
           this.$Message.success(res.msg);
           this.modals = false;
-          this.$emit('getList');
+          // this.$emit('getList');
           this.getAddFrom();
           this.$store.dispatch('admin/menus/getMenusNavList');
         })
@@ -506,7 +506,7 @@ export default {
 }
 
 .rule-list {
-  background-color: #f2f2f2;
+  background-color: #f8f5f5;
   width: 32%;
   margin: 5px;
   border-radius: 3px;

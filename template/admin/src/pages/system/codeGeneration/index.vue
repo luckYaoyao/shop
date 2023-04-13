@@ -16,9 +16,14 @@
         </Steps>
       </Card>
     </div>
-    <div class="pt10" v-show="currentTab == '0'">
+    <div class="pt10  tab-1" v-show="currentTab == '0'">
       <Card :bordered="false" dis-hover class="ivu-mt">
-        <FoundationForm :foundation="formItem.foundation" :dataList="dataList" @addRow="addRow" />
+        <FoundationForm
+          ref="Foundation"
+          :foundation="formItem.foundation"
+          :tableField="tableField"
+          @storageData="storageData"
+        />
       </Card>
     </div>
     <div class="pt10" v-show="currentTab == '1'">
@@ -26,19 +31,9 @@
         <StorageLoc :storage="formItem.storage" />
       </Card>
     </div>
-    <div class="pt10" v-show="currentTab == '2'">
-      <Card :bordered="false" dis-hover class="ivu-mt">
-        <Field ref="Field" :field="formItem.field" :rowList="rowList" />
-      </Card>
-    </div>
-    <div class="pt10" v-show="currentTab == '3'">
-      <Card :bordered="false" dis-hover class="ivu-mt">
-        <FormItem ref="FormItem" :formItem="formItem.formItem" :rowList="rowList" />
-      </Card>
-    </div>
-    <Card :bordered="false" dis-hover class="mt10 btn">
-      <Button class="mr20"  @click="beforeTab">上一步</Button>
-      <Button type="primary" @click="nextTab">{{ currentTab == 3 ? '提交' : '下一步' }}</Button>
+    <Card :bordered="false" dis-hover class="btn">
+      <Button class="mr20" @click="beforeTab">上一步</Button>
+      <Button type="primary" @click="nextTab">{{ currentTab == 1 ? '提交' : '下一步' }}</Button>
     </Card>
   </div>
 </template>
@@ -47,20 +42,15 @@
 import { codeCrud } from '@/api/setting';
 import StorageLoc from './components/StorageLoc.vue';
 import FoundationForm from './components/FoundationFor.vue';
-import Field from './components/Field.vue';
-import FormItem from './components/FormItem.vue';
-import { crudFilePath } from '@/api/systemCodeGeneration';
 export default {
   name: 'system_code_generation',
-  components: { FoundationForm, StorageLoc, Field, FormItem },
+  components: { FoundationForm, StorageLoc },
   data() {
     return {
       currentTab: 0,
       headerList: [
         { label: '基础信息', value: 'foundation' },
         { label: '存放位置', value: 'storage' },
-        { label: '表格字段', value: 'field' },
-        { label: '表单项', value: 'formItem' },
       ],
       formItem: {
         foundation: {
@@ -76,29 +66,15 @@ export default {
       ruleValidate: {
         foundation: {},
       },
-      dataList: [
-        {
-          type: '',
-          limit: 0,
-          comment: '',
-          field: '',
-          index: 0,
-        },
-      ],
+      tableField: [],
       rowList: [],
     };
   },
   created() {},
   mounted: function () {},
   methods: {
-    addRow() {
-      this.dataList.push({
-        type: '',
-        limit: 0,
-        default: '',
-        field: '',
-        index: 0,
-      });
+    storageData(data) {
+      this.formItem.storage = data;
     },
     beforeTab() {
       this.currentTab--;
@@ -109,65 +85,28 @@ export default {
           return this.$Message.warning('请输入表名');
         }
         if (!this.formItem.foundation.isTable) {
-          for (let i = 0; i < this.dataList.length; i++) {
-            const e = this.dataList[i];
-            if (!e.type || !e.field || !e.comment) {
-              return this.$Message.warning('请完善sql数据');
+          if (!this.$refs.Foundation.tableField.length) return this.$Message.warning('请先添加表数据');
+          if (this.$refs.Foundation.tableField.length)
+            for (let i = 0; i < this.$refs.Foundation.tableField.length; i++) {
+              const el = this.$refs.Foundation.tableField[i];
+              if (!el.field || !el.file_type || !el.default || !el.comment) {
+                return this.$Message.warning('请完善sql表数据');
+              }
             }
-          }
-        }
-        let data = {
-          menuName: this.formItem.foundation.menuName,
-          tableName: this.formItem.foundation.tableName,
-          isTable: this.formItem.foundation.isTable,
-          fromField: [],
-          columnField: [],
-        };
-        crudFilePath(data)
-          .then((res) => {
-            console.log(res);
-            this.formItem.storage = res.data.makePath;
-            if (!this.formItem.foundation.isTable) {
-              this.rowList = [];
-              this.dataList.map((e) => {
-                this.rowList.push({
-                  label: e.field,
-                  value: e.field,
-                });
-              });
-            } else {
-              this.rowList = res.data.tableField;
-            }
-            this.currentTab++;
-          })
-          .catch((err) => {
-            this.$Message.error(err.msg);
-          });
-      } else if (this.currentTab == 2) {
-        for (let i = 0; i < this.$refs.Field.dataList.length; i++) {
-          const e = this.$refs.Field.dataList[i];
-          if (!e.name || !e.field) {
-            return this.$Message.warning('请完善表数据');
-          }
+        } else {
+          if (!this.$refs.Foundation.tableField.length) return this.$Message.warning('请先生成表数据');
         }
         this.currentTab++;
-      } else if (this.currentTab == 3) {
+      } else if (this.currentTab == 1) {
         try {
-          for (let i = 0; i < this.$refs.FormItem.dataList.length; i++) {
-            const e = this.$refs.FormItem.dataList[i];
-            if (!e.name || !e.type || !e.field || !e.required) {
-              return this.$Message.warning('请完善数据');
-            }
-          }
           let FieldList = this.$refs.Field.dataList;
           let data = {
             ...this.formItem.foundation,
             filePath: this.formItem.storage,
-            tableField: this.dataList,
-            columnField: this.$refs.Field.dataList,
-            fromField: this.$refs.FormItem.dataList,
+            tableField: this.$refs.Foundation.tableField,
+            // columnField: this.$refs.Field.dataList,
+            // fromField: this.$refs.FormItem.dataList,
           };
-          console.log(data);
           codeCrud(data)
             .then((res) => {
               this.$Message.success(res.msg);
@@ -193,9 +132,15 @@ export default {
   line-height: 26px;
 }
 .btn {
+  position: fixed;
+  bottom: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 85%;
+}
+.tab-1 {
+  padding-bottom: 100px;
 }
 /deep/ .el-input__inner {
   padding-left: 7px;
