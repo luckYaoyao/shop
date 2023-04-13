@@ -15,11 +15,11 @@
           :props="{ checkStrictly: true, multiple: false, emitPath: false }"
           clearable
         ></el-cascader>
-        <div class="tip">可选项去，选择的菜单成功后会自动写入到此菜单下</div>
+        <div class="tip">可选项，选择的菜单成功后会自动写入到此菜单下</div>
       </FormItem>
       <FormItem label="菜单名称">
         <Input class="form-width" v-model="foundation.menuName" placeholder="请输入表名"></Input>
-        <div class="tip">生成菜单为可选项，不填写默认生成的菜单名称将为表名</div>
+        <div class="tip">生成菜单为可选项，不填写默认生成的菜单名称将为表名；生成后会把自动生成的权限默认加入该菜单下</div>
       </FormItem>
       <FormItem label="表名">
         <Input class="form-width" v-model="foundation.tableName" placeholder="请输入表名"></Input>
