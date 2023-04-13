@@ -260,17 +260,19 @@ export default {
             this.tableField = res.data.tableField.length ? res.data.tableField : [];
             this.$emit('storageData', res.data.makePath);
             this.loading = false;
-            this.tableField.push({
-              field: '',
-              file_type: '',
-              default: '',
-              comment: '',
-              required: false,
-              is_table: true,
-              table_name: '',
-              limit: '',
-              from_type: '0',
-            });
+            if (!this.tableField.length) {
+              this.tableField.push({
+                field: '',
+                file_type: '',
+                default: '',
+                comment: '',
+                required: false,
+                is_table: true,
+                table_name: '',
+                limit: '',
+                from_type: '0',
+              });
+            }
           })
           .catch((err) => {
             this.$Message.warning(err.msg);
