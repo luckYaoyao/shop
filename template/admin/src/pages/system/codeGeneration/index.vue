@@ -33,7 +33,7 @@
     </div>
     <Card :bordered="false" dis-hover class="btn">
       <Button class="mr20" @click="beforeTab">上一步</Button>
-      <Button type="primary" @click="nextTab">{{ currentTab == 3 ? '提交' : '下一步' }}</Button>
+      <Button type="primary" @click="nextTab">{{ currentTab == 1 ? '提交' : '下一步' }}</Button>
     </Card>
   </div>
 </template>
