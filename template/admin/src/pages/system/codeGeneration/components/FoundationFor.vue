@@ -38,9 +38,8 @@
           数据库表可以生成系统存在的，也可以选择【否】后手动生成，不过此生成方式不交单一；如果不满足使用需求可以先在数据库中创建表，然后选择【是】再进行操作
         </div>
       </FormItem>
-      <FormItem label="表SQL">
-        <Button type="primary" @click="addRow">{{ foundation.isTable ? '生成表sql' : '添加一行' }}</Button>
-
+      <FormItem label="字段配置">
+        <Button type="primary" @click="addRow">{{ foundation.isTable ? '生成字段' : '添加一行' }}</Button>
         <div>
           <Table
             ref="selection"
@@ -148,7 +147,7 @@ export default {
         {
           title: '字段名称',
           slot: 'field',
-          minWidth: 200,
+          minWidth: 100,
         },
         {
           title: '字段类型',
@@ -185,13 +184,13 @@ export default {
         {
           title: '列表名',
           slot: 'table_name',
-          width: 100,
+          minWidth: 120,
           align: 'center',
         },
         {
           title: '表单类型',
           slot: 'from_type',
-          minWidth: 150,
+          minWidth: 100,
         },
       ],
       fromTypeList: [
@@ -284,10 +283,13 @@ export default {
         console.log(this.tableField);
         for (let i = 0; i < this.tableField.length; i++) {
           const el = this.tableField[i];
-          if (!el.field || !el.file_type || !el.default || !el.comment) {
+          if (
+            (!el.field || !el.file_type || !el.default || !el.comment) &&
+            !['addTimestamps', 'addSoftDelete'].includes(el.file_type)
+          ) {
             return this.$Message.warning('请先完善上一条数据');
           }
-          if (el.is_table && !el.table_name) {
+          if (el.is_table && !el.table_name && !['addTimestamps', 'addSoftDelete'].includes(el.file_type)) {
             return this.$Message.warning('请输入列表名');
           }
         }
