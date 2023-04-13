@@ -1,5 +1,6 @@
 <template>
   <div>
+
     <Card :bordered="false" dis-hover class="ivu-mt">
       <Button type="primary" @click="groupAdd()" class="mr20">代码生成</Button>
       <Table
@@ -74,7 +75,6 @@
                 :name="value.index.toString()"
                 :label="value.title"
                 :icon="value.icon"
-                v-if="value.tab"
               >
                 <div ref="container" :id="'container_' + value.index" style="height: 100%; min-height: 560px"></div>
               </TabPane>
@@ -234,6 +234,8 @@ export default {
       try {
         console.log(id);
         let that = this;
+        this.editorIndex = [];
+        this.editorList = [];
         crudDet(id)
           .then(async (res) => {
             let data = res.data[0];

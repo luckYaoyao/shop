@@ -36,7 +36,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { {%name%}SaveApi, {%name%}DeleteApi, {%name%}UpdateApi, get{%nameCamel%}CreateApi, get{%nameCamel%}EditApi, get{%nameCamel%}ListApi} from '@/api/{%pathApiJs%}';
+import { {%name%}SaveApi, {%name%}DeleteApi, {%name%}UpdateApi, get{%nameCamel%}CreateApi, get{%nameCamel%}EditApi, get{%nameCamel%}ListApi} from '{%pathApiJs%}';
 export default {
   name: 'user_group',
   data() {

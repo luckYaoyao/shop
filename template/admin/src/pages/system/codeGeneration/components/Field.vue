@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+    <Alert type="warning" closable>列表展示的表格字段，默认有id和操作项；字段的选择由第一步自己添加的字段生成或者是由已存在的数据表自动读取出的字段；最多选择10列进行展示；可以为空不填写，生成后由开发者自行编写</Alert>
     <div class="mb20">
       <Button class="mr10" type="primary" @click="addRow">添加列</Button>
     </div>
@@ -30,7 +31,7 @@
       <div class="fied-item">
         <div class="set-up">
           <div class="name">操作</div>
-          <div class="field">删除</div>
+          <div class="field">编辑|删除</div>
         </div>
       </div>
     </div>
@@ -169,6 +170,9 @@ export default {
     text-align: center;
     padding: 10px 10px;
     background-color: #f8f8f9;
+    /deep/ .ivu-input{
+      text-align: center;
+    }
   }
   .field {
     width: 100%;

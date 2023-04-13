@@ -179,7 +179,6 @@ class SystemCrud extends AuthController
         }
 
         return app('json')->success($data);
-
     }
 
     /**

@@ -208,7 +208,7 @@ class SystemCrudServices extends BaseServices
         }
 
         $routeName = 'crud/' . Str::snake($tableName);
-        $uniqueAuth = $routeName . '-index-list';
+        $uniqueAuth = Str::snake($tableName) . '-crud-list-index';
 
         foreach ($filePath as $k => $i) {
             if (in_array($k, ['pages', 'router', 'api'])) {
@@ -293,7 +293,7 @@ class SystemCrudServices extends BaseServices
             foreach ($ruleData as $item) {
                 $menuData[] = [
                     'pid' => $menuInfo->id,
-                    'method' => $item['method'],
+                    'methods' => $item['method'],
                     'api_url' => $item['path'],
                     'name' => $item['name'],
                     'is_del' => 0,
@@ -385,11 +385,11 @@ class SystemCrudServices extends BaseServices
         $options['columnField'] = is_array($options['columnField']) ? $options['columnField'] : [];
         //生成模型
         $model = app()->make(Model::class);
-        [$modelContent, $modelPath, $usePath, $nameCamel] = $model->setFilePathName($filePath['model'] ?? '')->isMake($isMake)->handle($tableName);
+        [$modelContent, $modelPath, $usePath] = $model->setFilePathName($filePath['model'] ?? '')->isMake($isMake)->handle($tableName);
         //生成dao
         $dao = app()->make(Dao::class);
-        [$daoContent, $daoPath, $usePath, $nameCamel] = $dao->setFilePathName($filePath['dao'] ?? '')->isMake($isMake)->handle($tableName, [
-            'usePath' => $usePath . $nameCamel,
+        [$daoContent, $daoPath, $usePath] = $dao->setFilePathName($filePath['dao'] ?? '')->isMake($isMake)->handle($tableName, [
+            'usePath' => $usePath,
         ]);
         //生成service
         $service = app()->make(Service::class);
@@ -425,7 +425,8 @@ class SystemCrudServices extends BaseServices
         //生成前台页面
         $viewPages = app()->make(ViewPages::class);
         [$pagesContent, $pagesPath] = $viewPages->setFilePathName($filePath['pages'] ?? '')->isMake($isMake)->handle($tableName, [
-            'field' => $options['columnField']
+            'field' => $options['columnField'],
+            'pathApiJs' => '@/' . str_replace('\\', '/', str_replace([Make::adminTemplatePath(), '.js'], '', $apiPath)),
         ]);
 
         return [
