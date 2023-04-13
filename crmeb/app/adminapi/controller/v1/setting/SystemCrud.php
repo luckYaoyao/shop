@@ -129,7 +129,7 @@ class SystemCrud extends AuthController
                 return app('json')->fail('表不存在');
             }
             foreach ($field as $item) {
-                $tableField[] = ['value' => $item['name'], 'comment' => $item['comment'], 'label' => $item['name']];
+                $tableField[] = ['value' => $item['name'], 'all' => $item, 'comment' => $item['comment'], 'label' => $item['name']];
             }
         }
 
@@ -156,15 +156,25 @@ class SystemCrud extends AuthController
 
         $routeName = 'crud/' . Str::snake($info->table_name);
 
+        $column = $this->services->getColumnNamesList($info->table_name);
+        $key = 'id';
+        foreach ($column as $value) {
+            if ($value['primaryKey']) {
+                $key = $value['name'];
+                break;
+            }
+        }
+
         $make = $this->services->makeFile($info->table_name, $routeName, false, [
             'menuName' => $info->name,
+            'key' => $key,
             'fromField' => $info->field['fromField'] ?? [],
             'columnField' => $info->field['columnField'] ?? [],
         ]);
-        
+
         $data = [];
         foreach ($make as $item) {
-            $item['name'] = pathinfo($item['path'])['basename'] ?? '';
+            $item['name'] = $item['path'];
             $data[] = $item;
         }
 

@@ -92,7 +92,11 @@ class Service extends Make
 
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
 
-        return [$this->makeFile($filePath, $contentStr), $this->filePathName ?: $filePath];
+        return [
+            $this->makeFile($filePath, $contentStr),
+            $this->filePathName ?: $filePath,
+            $this->baseDir . '\\' . $this->value['nameCamel']
+        ];
     }
 
     /**

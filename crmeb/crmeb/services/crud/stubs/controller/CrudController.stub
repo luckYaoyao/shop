@@ -20,7 +20,7 @@ namespace app\adminapi\controller\crud{%path%};
 
 use app\adminapi\controller\AuthController;
 use think\facade\App;
-
+{%use-php%}
 /**
  * Class {%nameCamel%}
  * @date {%date%}

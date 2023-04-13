@@ -20,7 +20,7 @@ namespace app\dao\crub{%path%};
 
 
 use app\dao\BaseDao;
-
+{%use-php%}
 /**
  * Class {%nameCamel%}Dao
  * @date {%date%}
@@ -36,6 +36,6 @@ class {%nameCamel%}Dao extends BaseDao
      */
     protected function setModel(): string
     {
-        return {%nameCamel%}Model::class;
+        return {%nameCamel%}::class;
     }
 }

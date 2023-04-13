@@ -236,7 +236,12 @@ abstract class Make
 
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
 
-        return [$this->makeFile($filePath, $contentStr), $this->filePathName ?: $filePath];
+        return [
+            $this->makeFile($filePath, $contentStr),
+            $this->filePathName ?: $filePath,
+            $this->value['path'] ?? '',
+            $this->value['nameCamel']
+        ];
     }
 
     /**
@@ -430,7 +435,7 @@ abstract class Make
             if (is_file($pathname)) {
                 throw new CrudException($this->name . ':' . $pathname . ' already exists!');
             }
-            
+
             try {
                 if (!is_dir(dirname($pathname))) {
                     mkdir(dirname($pathname), 0755, true);

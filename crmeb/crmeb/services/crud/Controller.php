@@ -94,12 +94,13 @@ class Controller extends Make
         $this->value['name'] = $className;
         $this->value['path'] = $this->getfolderPath($path);
         $this->value['content-php'] = $contentPhp;
+        $this->value['use-php'] = "use " . $options['usePath'] . ";\n";
 
         $contentStr = str_replace($this->var, $this->value, $contentController);
 
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
 
-        return [$this->makeFile($filePath, $contentStr), $this->filePathName ?: $filePath];
+        return [$this->makeFile($filePath, $contentStr), $this->filePathName ?: $filePath, $this->value['path']];
     }
 
     /**
