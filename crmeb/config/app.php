@@ -14,7 +14,7 @@
 // +----------------------------------------------------------------------
 
 use think\facade\Env;
-
+defined('DS') || define('DS', DIRECTORY_SEPARATOR);
 return [
     // 应用地址
     'app_host'         => Env::get('app.host', ''),
