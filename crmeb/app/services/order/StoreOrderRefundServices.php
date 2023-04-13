@@ -268,7 +268,7 @@ class StoreOrderRefundServices extends BaseServices
             $userInfo = $userServices->get($splitOrderInfo['uid']);
             $splitOrderInfo['nickname'] = $userInfo['nickname'];
             $splitOrderInfo['phone'] = $userInfo['phone'];
-            if ($splitOrderInfo['pay_type'] == 'alipay' || $splitOrderInfo['pay_type'] == 'weixin' || $splitOrderInfo['pay_type'] == 'offline') {
+            if (in_array($orderInfo['pay_type'], ['weixin', 'alipay', 'allinpay', 'offline'])) {
                 $capitalFlowServices->setFlow($splitOrderInfo, 'refund');
             }
 
@@ -596,7 +596,7 @@ class StoreOrderRefundServices extends BaseServices
         $userInfo = $userServices->get($order['uid']);
         $order['nickname'] = $userInfo['nickname'];
         $order['phone'] = $userInfo['phone'];
-        if ($order['pay_type'] == 'alipay' || $order['pay_type'] == 'weixin' || $order['pay_type'] == 'offline') {
+        if (in_array($orderInfo['pay_type'], ['weixin', 'alipay', 'allinpay', 'offline'])) {
             $capitalFlowServices->setFlow($order, 'refund');
         }
 
