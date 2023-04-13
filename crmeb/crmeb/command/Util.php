@@ -3,6 +3,7 @@
 namespace crmeb\command;
 
 
+use app\services\system\SystemRouteServices;
 use crmeb\exceptions\AdminException;
 use think\console\Command;
 use think\console\Input;
@@ -17,9 +18,10 @@ class Util extends Command
     protected function configure()
     {
         $this->setName('util')
-            ->addArgument('type', Argument::REQUIRED, '类型replace')
+            ->addArgument('type', Argument::REQUIRED, '类型replace/route')
             ->addOption('h', null, Option::VALUE_REQUIRED, '替换成当前域名')
             ->addOption('u', null, Option::VALUE_REQUIRED, '替换的域名')
+            ->addOption('a', null, Option::VALUE_REQUIRED, '应用名')
             ->setDescription('工具类');
     }
 
@@ -39,6 +41,13 @@ class Util extends Command
                 }
                 $this->replaceSiteUrl($url, $host);
                 break;
+            case 'route':
+                $appName = $input->getOption('a');
+                if (!$appName) {
+                    return $output->error('缺少应用名称');
+                }
+                app()->make(SystemRouteServices::class)->syncRoute($appName);
+                break;
         }
 
         $output->info('执行成功');
@@ -47,7 +56,9 @@ class Util extends Command
     protected function replaceSiteUrl(string $url, string $siteUrl)
     {
         $siteUrlJosn = str_replace('http://', 'http:\\\/\\\/', $siteUrl);
+        $siteUrlJosn = str_replace('https://', 'https:\\\/\\\/', $siteUrlJosn);
         $valueJosn = str_replace('http://', 'http:\\\/\\\/', $url);
+        $valueJosn = str_replace('https://', 'https:\\\/\\\/', $valueJosn);
         $prefix = Config::get('database.connections.' . Config::get('database.default') . '.prefix');
         $sql = [
             "UPDATE `{$prefix}system_attachment` SET `att_dir` = replace(att_dir ,'{$siteUrl}','{$url}'),`satt_dir` = replace(satt_dir ,'{$siteUrl}','{$url}')",
