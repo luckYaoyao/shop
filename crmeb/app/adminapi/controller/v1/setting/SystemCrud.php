@@ -67,14 +67,29 @@ class SystemCrud extends AuthController
             ['tableComment', ''],//表备注
             ['tableField', []],//表字段
             ['tableIndex', []],//索引
-            ['tableTime', 0],//表是否增加修改和添加时间
-            ['tableDelete', 0],//表是否增加伪删除
-            ['fromField', []],
-            ['columnField', []],
             ['filePath', []],
             ['isTable', 0],
         ]);
 
+        $fromField = $columnField = [];
+        foreach ($data['tableField'] as $item) {
+            if ($item['is_table']) {
+                $columnField[] = [
+                    'field' => $item['field'],
+                    'name' => $item['table_name'],
+                ];
+            }
+            if ($item['from_type']) {
+                $fromField[] = [
+                    'field' => $item['field'],
+                    'name' => $item['table_name'],
+                    'required' => $item['required'],
+                    'option' => $item['option'] ?? [],
+                ];
+            }
+        }
+        $data['fromField '] = $fromField;
+        $data['columnField '] = $columnField;
         if (!$data['tableName']) {
             return app('json')->fail('缺少表名');
         }
@@ -93,12 +108,9 @@ class SystemCrud extends AuthController
      */
     public function getFilePath()
     {
-        [$menuName, $tableName, $isTable, $fromField, $columnField] = $this->request->postMore([
-            ['menuName', ''],
+        [$tableName, $isTable] = $this->request->postMore([
             ['tableName', ''],
             ['isTable', 0],
-            ['fromField', []],
-            ['columnField', []],
         ], true);
 
         if (!$tableName) {
@@ -112,9 +124,9 @@ class SystemCrud extends AuthController
         $routeName = 'crud/' . Str::snake($tableName);
 
         $make = $this->services->makeFile($tableName, $routeName, false, [
-            'menuName' => $menuName,
-            'fromField' => $fromField,
-            'columnField' => $columnField,
+            'menuName' => '',
+            'fromField' => [],
+            'columnField' => [],
         ]);
 
         $makePath = [];
@@ -129,7 +141,17 @@ class SystemCrud extends AuthController
                 return app('json')->fail('表不存在');
             }
             foreach ($field as $item) {
-                $tableField[] = ['value' => $item['name'], 'all' => $item, 'comment' => $item['comment'], 'label' => $item['name']];
+                $tableField[] = [
+                    'field' => $item['name'],
+                    'file_type' => $item['type'],
+                    'default' => $item['default'],
+                    'limit' => $item['limit'],
+                    'comment' => $item['comment'],
+                    'required' => false,
+                    'is_table' => false,
+                    'table_name' => '',
+                    'from_type' => '',
+                ];
             }
         }
 
@@ -164,12 +186,28 @@ class SystemCrud extends AuthController
                 break;
             }
         }
-
+        $fromField = $columnField = [];
+        foreach ($info->tableField as $item) {
+            if ($item['is_table']) {
+                $columnField[] = [
+                    'field' => $item['field'],
+                    'name' => $item['table_name'],
+                ];
+            }
+            if ($item['from_type']) {
+                $fromField[] = [
+                    'field' => $item['field'],
+                    'name' => $item['table_name'],
+                    'required' => $item['required'],
+                    'option' => $item['option'] ?? [],
+                ];
+            }
+        }
         $make = $this->services->makeFile($info->table_name, $routeName, false, [
             'menuName' => $info->name,
             'key' => $key,
-            'fromField' => $info->field['fromField'] ?? [],
-            'columnField' => $info->field['columnField'] ?? [],
+            'fromField' => $fromField,
+            'columnField' => $columnField,
         ]);
 
         $data = [];

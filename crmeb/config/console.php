@@ -19,6 +19,7 @@ return [
     'commands' => [
         'workerman' => \crmeb\command\Workerman::class,
         'timer' => \crmeb\command\Timer::class,
-        'util' => \crmeb\command\Util::class
+        'util' => \crmeb\command\Util::class,
+        'npm' => \crmeb\command\Npm::class
     ],
 ];

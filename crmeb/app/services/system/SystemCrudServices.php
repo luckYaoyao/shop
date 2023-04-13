@@ -87,31 +87,60 @@ class SystemCrudServices extends BaseServices
      */
     public function getTabelRule()
     {
+        $rule = [
+            'varchat' => 'string',
+            'int' => 'integer',
+            'biginteger' => 'bigint',
+        ];
         return [
             'types' => [
-                'string',
+                'varchar',
                 'char',
                 'text',
-                'integer',
-                'biginteger',
-                'float',
-                'decimal',
+                'longtext',
+                'tinytext',
+                'enum',
+                'blob',
+                'binary',
+                'varbinary',
+
                 'datetime',
                 'timestamp',
                 'time',
                 'date',
-                'blob',
-                'binary',
-                'varbinary',
+                'year',
+
                 'boolean',
-                'uuid',
-                // Geospatial data types
-                'geometry',
-                'point',
-                'linestring',
-                'polygon',
-            ]
+                'tinyint',
+                'int',
+                'decimal',
+                'float',
+
+                'json',
+
+                'addTimestamps',
+                'addSoftDelete',
+            ],
+            'rule' => $rule
         ];
+    }
+
+    /**
+     * 改变数据库类型
+     * @param string $type
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/13
+     */
+    public function changeTabelRule(string $type)
+    {
+
+        if (!in_array($type, $this->getTabelRule()['type'])) {
+            throw new ValidateException('类型不在支持范围');
+        }
+
+        return $this->getTabelRule()['rule'][$type] ?? $type;
     }
 
     /**
@@ -140,6 +169,7 @@ class SystemCrudServices extends BaseServices
                 'unsigned' => (bool)stripos($item['COLUMN_TYPE'], 'unsigned'),
                 'autoIncrement' => stripos($item['EXTRA'], 'auto_increment') !== false,
                 'comment' => $item['COLUMN_COMMENT'],
+                'limit' => $item['CHARACTER_MAXIMUM_LENGTH'] ?: $item['NUMERIC_PRECISION'],
             ];
             $columns[$item['COLUMN_NAME']] = $column;
         }
@@ -199,7 +229,7 @@ class SystemCrudServices extends BaseServices
         if (!$column) {
             throw new ValidateException('请先创建' . $tableName . '表');
         }
-
+        //获取主键
         foreach ($column as $value) {
             if ($value['primaryKey']) {
                 $data['key'] = $value['name'];
@@ -209,7 +239,7 @@ class SystemCrudServices extends BaseServices
 
         $routeName = 'crud/' . Str::snake($tableName);
         $uniqueAuth = Str::snake($tableName) . '-crud-list-index';
-
+        //增加保存的绝对路径
         foreach ($filePath as $k => $i) {
             if (in_array($k, ['pages', 'router', 'api'])) {
                 $filePath[$k] = Make::adminTemplatePath() . $i;
@@ -300,13 +330,12 @@ class SystemCrudServices extends BaseServices
                 ];
             }
             app()->make(SystemMenusServices::class)->saveAll($menuData);
-
+            //生成文件
             $make = $this->makeFile($tableName, $routeName, true, $data, $filePath);
             $makePath = [];
             foreach ($make as $key => $item) {
                 $makePath[$key] = $item['path'];
             }
-
             //记录crud生成
             $res = $this->dao->save([
                 'pid' => $data['pid'],
@@ -334,7 +363,7 @@ class SystemCrudServices extends BaseServices
      */
     public function makeDatebase(string $tableName, string $tableComment, array $tableField = [])
     {
-        $migrator = app()->make(Migrator::class);
+        $migrator = app()->make(Migrator::class, [date('YmdHis')]);
         //创建表
         $table = $migrator->table($tableName, $tableComment);
         //创建字段
@@ -346,22 +375,22 @@ class SystemCrudServices extends BaseServices
             if (!isset($item['default'])) {
                 $option['default'] = $item['default'];
             }
-            $option['comment'] = $item['comment'];
-            $table->addColumn($item['field'], $item['type'], $option);
-        }
-        //创建修改和增加时间
-        if (!empty($data['tableTime'])) {
-            $table->addTimestamps();
+            //创建伪删除
+            if ($item['type'] === 'addSoftDelete') {
+                $table->addSoftDelete();
+            } else if ($item['type'] === 'addTimestamps') {
+                //创建修改和增加时间
+                $table->addTimestamps();
+            } else {
+                $option['comment'] = $item['comment'];
+                $table->addColumn($item['field'], $this->changeTabelRule($item['type']), $option);
+            }
         }
         //创建索引
         if (!empty($data['tableIndex'])) {
             foreach ($data['tableIndex'] as $item) {
                 $table->addIndex($item);
             }
-        }
-        //创建伪删除
-        if (!empty($data['tableDelete'])) {
-            $table->addSoftDelete();
         }
         //执行创建
         $table->create();
@@ -385,7 +414,7 @@ class SystemCrudServices extends BaseServices
         $options['columnField'] = is_array($options['columnField']) ? $options['columnField'] : [];
         //生成模型
         $model = app()->make(Model::class);
-        [$modelContent, $modelPath, $usePath] = $model->setFilePathName($filePath['model'] ?? '')->isMake($isMake)->handle($tableName);
+        [$modelContent, $modelPath, $usePath] = $model->setFilePathName($filePath['model'] ?? '')->isMake($isMake)->handle($tableName, $options);
         //生成dao
         $dao = app()->make(Dao::class);
         [$daoContent, $daoPath, $usePath] = $dao->setFilePathName($filePath['dao'] ?? '')->isMake($isMake)->handle($tableName, [
