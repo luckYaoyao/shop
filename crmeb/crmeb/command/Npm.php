@@ -39,7 +39,6 @@ class Npm extends Command
         $this->setName('npm')
             ->addOption('path', 'dp', Option::VALUE_OPTIONAL, '默认路径')
             ->addOption('build', 'bu', Option::VALUE_OPTIONAL, '打包存放路径')
-            ->addOption('zip', 'z', Option::VALUE_NONE, '打包成zip')
             ->setDescription('NPM打包工具');
     }
 
@@ -52,7 +51,6 @@ class Npm extends Command
     {
         $path = $this->input->getOption('path');
         $build = $this->input->getOption('build');
-        $zip = $this->input->getOption('zip');
         if (!$build) {
             $build = public_path() . 'admin';
         }
@@ -60,13 +58,23 @@ class Npm extends Command
         $terminal = new Terminal();
         $terminal->setOutput($this->output);
 
-        $adminPath = $terminal->adminTemplatePath();
+        $adminPath = $path ?: $terminal->adminTemplatePath();
 
         $adminPath = dirname($adminPath);
+
+        if (is_dir($adminPath . DS . 'dist')) {
+            $question = $this->output->confirm($this->input, '检测到已经生成打包文件是否重新打包?', false);
+            if (!$question) {
+                $this->output->info('已退出打包程序');
+                return;
+            }
+        }
+
         $dir = $adminPath . DS . 'node_modules';
         if (!is_dir($dir)) {
             $terminal->run('npm-install');
         }
+
 
         $terminal->run('npm-build');
 
@@ -75,7 +83,7 @@ class Npm extends Command
             return;
         }
 
-        FileService::copyDir($adminPath . 'dist', $build);
+        $this->app->make(FileService::class)->copyDir($adminPath . DS . 'dist', $build);
 
         $this->output->info('执行成功');
     }
