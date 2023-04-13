@@ -162,6 +162,9 @@ export default {
           codeCrud(data)
             .then((res) => {
               this.$Message.success(res.msg);
+              this.$router.push({
+                name: 'system_code_generation_list',
+              });
             })
             .catch((err) => {
               this.$Message.error(err.msg);
@@ -177,9 +180,15 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.ivu-steps .ivu-steps-title {
+  line-height: 26px;
+}
 .btn {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+/deep/ .el-input__inner{
+  padding-left: 7px;
 }
 </style>

@@ -169,6 +169,9 @@ export default {
     text-align: center;
     padding: 10px 10px;
     background-color: #f8f8f9;
+    /deep/ .ivu-input{
+      text-align: center;
+    }
   }
   .field {
     width: 100%;
