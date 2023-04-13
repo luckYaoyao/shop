@@ -15,18 +15,22 @@
           :props="{ checkStrictly: true, multiple: false, emitPath: false }"
           clearable
         ></el-cascader>
+        <div class="tip">我是一段备注</div>
       </FormItem>
       <FormItem label="菜单名称">
         <Input class="form-width" v-model="foundation.menuName" placeholder="请输入表名"></Input>
+        <div class="tip">我是一段备注</div>
       </FormItem>
       <FormItem label="表名">
         <Input class="form-width" v-model="foundation.tableName" placeholder="请输入表名"></Input>
+        <div class="tip">我是一段备注</div>
       </FormItem>
       <FormItem label="是否存在">
         <RadioGroup v-model="foundation.isTable">
           <Radio :label="0">否</Radio>
           <Radio :label="1">是</Radio>
         </RadioGroup>
+        <div class="tip">我是一段备注</div>
       </FormItem>
       <FormItem label="表SQL" v-if="!foundation.isTable">
         <div>

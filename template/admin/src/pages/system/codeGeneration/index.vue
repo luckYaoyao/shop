@@ -1,5 +1,14 @@
 <template>
   <div>
+    <div class="i-layout-page-header header-title">
+      <div class="fl_header">
+        <router-link :to="{ path: $routeProStr + '/system/code_generation_list' }"
+          ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
+        >
+        <Divider type="vertical" />
+        <span class="ivu-page-header-title mr20" style="padding: 0">代码生成</span>
+      </div>
+    </div>
     <div class="message">
       <Card :bordered="false" dis-hover class="">
         <Steps :current="currentTab">
@@ -122,7 +131,7 @@ export default {
               this.rowList = [];
               this.dataList.map((e) => {
                 this.rowList.push({
-                  label: e.comment,
+                  label: e.field,
                   value: e.field,
                 });
               });
@@ -188,7 +197,13 @@ export default {
   justify-content: center;
   align-items: center;
 }
-/deep/ .el-input__inner{
+/deep/ .el-input__inner {
   padding-left: 7px;
+}
+/deep/ .ivu-form-item {
+  margin-bottom: 10px;
+}
+/deep/ .tip {
+  color: #bbb;
 }
 </style>
