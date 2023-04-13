@@ -24,7 +24,7 @@
         </div>
       </FormItem>
       <FormItem label="表名">
-        <Input class="form-width" v-model="foundation.tableName" placeholder="请输入表名"></Input>
+        <Input class="form-width" v-model="foundation.tableName" placeholder="请输入表名" @on-blur="initfield"></Input>
         <div class="tip">
           用于生成CRUD指定的表名，不需要携带表前缀；对于生成过的表将不能在进行生成；或者可以删除对应的文件重新生成！对应系统中重要的数据表将不允许生成！
         </div>
@@ -170,12 +170,6 @@ export default {
           minWidth: 100,
         },
         {
-          title: '必填',
-          slot: 'required',
-          width: 70,
-          align: 'center',
-        },
-        {
           title: '列表',
           slot: 'is_table',
           width: 70,
@@ -191,6 +185,12 @@ export default {
           title: '表单类型',
           slot: 'from_type',
           minWidth: 100,
+        },
+        {
+          title: '必填',
+          slot: 'required',
+          width: 70,
+          align: 'center',
         },
       ],
       fromTypeList: [
@@ -228,6 +228,9 @@ export default {
   },
   mounted() {},
   methods: {
+    initfield() {
+      this.tableField = [];
+    },
     changeItemField(e, i) {
       console.log(e, i);
       if (e === 'addSoftDelete') {
