@@ -195,6 +195,10 @@ new Vue({
   watch: {
     // 监听路由 控制侧边栏显示 标记当前顶栏菜单（如需要）
     $route(to, from) {
+      console.log(to, 'newRoute');
+      const onRoutes = to.meta.activeMenu ? to.meta.activeMenu : '';
+      this.$store.commit('menu/setActivePath', onRoutes);
+
       //   const path = to.path;
       //   let menus = this.$store.state.menus.menusName;
       //   const menuSider = menus;

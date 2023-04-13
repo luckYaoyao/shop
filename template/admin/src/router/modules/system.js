@@ -32,6 +32,7 @@ export default {
       meta: {
         auth: ['system-config-code-generation'],
         title: '代码生成',
+        activeMenu: routePre + '/system/code_generation_list',
       },
       component: () => import('@/pages/system/codeGeneration/index'),
     },
@@ -122,6 +123,7 @@ export default {
       meta: {
         auth: ['system-maintain-system-file'],
         title: '文件管理入口',
+        activeMenu: routePre + '/system/maintain/system_file/opendir',
       },
       component: () => import('@/pages/system/maintain/systemFile/login'),
     },

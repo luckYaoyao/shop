@@ -234,7 +234,7 @@ export default {
   methods: {
     // 添加
     add() {
-      this.$router.push({ path: this.$routeProStr + '/marketing/store_bargain/create/0' });
+      this.$router.push({ path: this.$routeProStr + '/marketing/store_bargain/create/0/0' });
     },
     // 导出
     // 用户导出

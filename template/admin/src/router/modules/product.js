@@ -9,13 +9,13 @@
 // +---------------------------------------------------------------------
 
 import LayoutMain from '@/layout';
-import setting  from '@/setting'
+import setting from '@/setting';
 let routePre = setting.routePre;
 
 const pre = 'product_';
 
 export default {
-  path: routePre+'/product',
+  path: routePre + '/product',
   name: 'product',
   header: 'product',
   meta: {
@@ -53,6 +53,7 @@ export default {
       meta: {
         auth: ['admin-store-storeProuduct-index'],
         title: '商品添加',
+        activeMenu: routePre + '/product/product_list',
       },
       component: () => import('@/pages/product/productAdd'),
     },

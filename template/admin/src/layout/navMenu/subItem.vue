@@ -7,14 +7,14 @@
 <template>
   <div>
     <template v-for="val in chil">
-      <el-submenu :index="val.path" :key="val.path" v-if="val.children && val.children.length > 0">
+      <el-submenu :index="val.path" :key="val.path" v-if="!val.is_show_path && val.children && val.children.length > 0">
         <template slot="title">
           <i class="ivu-icon" :class="val.icon"></i>
           <span>{{ $t(val.title) }}</span>
         </template>
         <sub-item :chil="val.children" />
       </el-submenu>
-      <template v-else>
+      <template v-else-if="!val.is_show_path">
         <el-menu-item :index="val.path" :key="val.path">
           <template v-if="!val.isLink || (val.isLink && val.isIframe)">
             <i class="ivu-icon" :class="val.icon ? val.icon : ''"></i>

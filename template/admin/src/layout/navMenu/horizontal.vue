@@ -3,7 +3,7 @@
     <el-scrollbar @wheel.native.prevent="onElMenuHorizontalScroll" ref="elMenuHorizontalScrollRef">
       <el-menu
         router
-        :default-active="defaultActive"
+        :default-active="activePath || defaultActive"
         background-color="transparent"
         mode="horizontal"
         @select="onHorizontalSelect"
@@ -38,6 +38,7 @@
 
 <script>
 import SubItem from '@/layout/navMenu/subItem.vue';
+import { mapState } from 'vuex';
 export default {
   name: 'navMenuHorizontal',
   components: { SubItem },
@@ -46,6 +47,9 @@ export default {
       type: Array,
       default: () => [],
     },
+  },
+  computed: {
+    ...mapState('menu', ['activePath']),
   },
   data() {
     return {

@@ -408,6 +408,7 @@ export default {
       meta: {
         auth: ['admin-setting-pages-diy'],
         title: '页面设计',
+        activeMenu: routePre + '/setting/pages/devise',
       },
       component: () => import('@/pages/setting/devisePage/index'),
     },

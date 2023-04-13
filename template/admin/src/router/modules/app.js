@@ -9,7 +9,7 @@
 // +---------------------------------------------------------------------
 
 import LayoutMain from '@/layout';
-import setting  from '@/setting'
+import setting from '@/setting';
 let routePre = setting.routePre;
 
 const pre = 'app_';
@@ -95,6 +95,7 @@ export default {
       meta: {
         auth: ['wechat-wechat-news-category-save'],
         title: '图文添加',
+        activeMenu: routePre + '/app/wechat/news_category/index',
       },
       component: () => import('@/pages/app/wechat/newsCategory/save'),
     },

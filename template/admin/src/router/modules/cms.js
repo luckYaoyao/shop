@@ -9,7 +9,7 @@
 // +---------------------------------------------------------------------
 
 import LayoutMain from '@/layout';
-import setting  from '@/setting'
+import setting from '@/setting';
 let routePre = setting.routePre;
 
 const pre = 'cms_';
@@ -48,6 +48,7 @@ export default {
       meta: {
         auth: ['cms-article-creat'],
         title: '文章添加',
+        activeMenu: routePre + '/cms/article/index',
       },
       component: () => import('@/pages/cms/addArticle/index'),
     },

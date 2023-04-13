@@ -363,6 +363,15 @@ export default {
           themeSelect['--prev-bg-topBarColor'] = '#fff';
           themeSelect['--prev-bg-menuBarColor'] = '#fff';
           themeSelect['--prev-MenuActiveColor'] = '#fff';
+          if (val == 'theme-1') {
+            themeSelect['--prev-bg-menu-hover-ba-color'] = '#1890ff';
+          } else if (val == 'theme-3') {
+            themeSelect['--prev-bg-menu-hover-ba-color'] = '#41b584';
+          } else if (val == 'theme-5') {
+            themeSelect['--prev-bg-menu-hover-ba-color'] = '#6954f0';
+          } else if (val == 'theme-7') {
+            themeSelect['--prev-bg-menu-hover-ba-color'] = '#f34d37';
+          }
         } else if (this.getThemeConfig.layout === 'columns') {
           themeSelect['--prev-bg-topBar'] = '#fff';
           themeSelect['--prev-bg-topBarColor'] = '#515a6e';
@@ -501,7 +510,6 @@ export default {
     },
     // 设置布局切换，重置主题样式
     initSetLayoutChange() {
-
       // if (this.$store.state.themeConfig.themeConfig.layout === 'classic') {
       //   this.onBgColorPickerChange('menuBar', '#282c34');
       //   this.onBgColorPickerChange('menuBarColor', '#ffffff');
