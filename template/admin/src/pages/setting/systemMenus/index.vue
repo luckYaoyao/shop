@@ -408,7 +408,7 @@ export default {
 };
 </script>
 
-<style scoped lang="stylus">
+<style scoped lang="scss">
 .vxeTable {
   >>> .vxe-table--header-wrapper {
     background: #fff !important;
@@ -452,7 +452,7 @@ export default {
 }
 
 .rule-list:hover {
-  background-color: #c5d1dd;
+  background-color: #badbfb;
 }
 
 .rule-list div {
@@ -460,6 +460,6 @@ export default {
 }
 
 .select-rule {
-  background-color: #c5d1dd;
+  background-color: #badbfb;
 }
 </style>
