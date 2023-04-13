@@ -15,22 +15,22 @@
           :props="{ checkStrictly: true, multiple: false, emitPath: false }"
           clearable
         ></el-cascader>
-        <div class="tip">我是一段备注</div>
+        <div class="tip">可选项去，选择的菜单成功后会自动写入到此菜单下</div>
       </FormItem>
       <FormItem label="菜单名称">
         <Input class="form-width" v-model="foundation.menuName" placeholder="请输入表名"></Input>
-        <div class="tip">我是一段备注</div>
+        <div class="tip">生成菜单为可选项，不填写默认生成的菜单名称将为表名</div>
       </FormItem>
       <FormItem label="表名">
         <Input class="form-width" v-model="foundation.tableName" placeholder="请输入表名"></Input>
-        <div class="tip">我是一段备注</div>
+        <div class="tip">用于生成CRUD指定的表名，不需要携带表前缀；对于生成过的表将不能在进行生成；或者可以删除对应的文件重新生成！对应系统中重要的数据表将不允许生成！</div>
       </FormItem>
       <FormItem label="是否存在">
         <RadioGroup v-model="foundation.isTable">
-          <Radio :label="0">否</Radio>
           <Radio :label="1">是</Radio>
+          <Radio :label="0">否</Radio>
         </RadioGroup>
-        <div class="tip">我是一段备注</div>
+        <div class="tip">数据库表可以生成系统存在的，也可以选择【否】后手动生成，不过此生成方式不交单一；如果不满足使用需求可以先在数据库中创建表，然后选择【是】再进行操作</div>
       </FormItem>
       <FormItem label="表SQL" v-if="!foundation.isTable">
         <div>
@@ -39,25 +39,30 @@
               <Select v-model="item.type" transfer>
                 <Option v-for="item in columnTypeList" :value="item" :key="item">{{ item }}</Option>
               </Select>
+              <div class="tip">字段类型</div>
             </div>
             <div class="row">
               <Input v-model="item.field" class="priceBox" placeholder="字段名称(英文或_)"></Input>
+              <div class="tip">字段名称为英文加下划线</div>
             </div>
             <div class="row">
               <Input v-model="item.limit" type="number" class="priceBox" placeholder="长度"></Input>
+              <div class="tip">字段长度</div>
             </div>
             <div class="row">
               <Select v-model="item.index" transfer placeholder="是否为索引">
                 <Option :value="0">否</Option>
                 <Option :value="1">是</Option>
               </Select>
+              <div class="tip">是否为索引</div>
             </div>
             <div class="row">
               <Input v-model="item.comment" class="priceBox" placeholder="备注"></Input>
+              <div class="tip">字段备注</div>
             </div>
           </div>
         </div>
-        <Button class="mr10" type="primary" @click="addRow">添加行</Button>
+        <Button class="mr10" type="primary" @click="addRow">添加字段</Button>
       </FormItem>
     </Form>
   </div>

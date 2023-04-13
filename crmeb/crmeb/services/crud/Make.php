@@ -231,16 +231,17 @@ abstract class Make
         if (isset($this->value['path'])) {
             $this->value['path'] = $this->getfolderPath($path);
         }
+        if (isset($this->value['use-php']) && !empty($options['usePath'])) {
+            $this->value['use-php'] = "use " . $options['usePath'] . ";\n";
+        }
 
         $contentStr = str_replace($this->var, $this->value, $content);
-
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
 
         return [
             $this->makeFile($filePath, $contentStr),
             $this->filePathName ?: $filePath,
-            $this->value['path'] ?? '',
-            $this->value['nameCamel']
+            $this->baseDir . '\\' . $this->value['nameCamel']
         ];
     }
 

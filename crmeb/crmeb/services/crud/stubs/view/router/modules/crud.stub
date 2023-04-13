@@ -30,10 +30,10 @@ export default {
             path: 'list',
             name: `${pre}list`,
             meta: {
-                auth: ['{%name%}-list-index'],
+                auth: ['{%name%}-crud-list-index'],
                 title: '{%menus%}',
             },
-            component: () => import('@/pages/{%pagePath%}/index'),
+            component: () => import('@/pages/crud/{%pagePath%}/index'),
         },
     ],
 }

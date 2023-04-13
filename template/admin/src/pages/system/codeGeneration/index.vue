@@ -66,7 +66,7 @@ export default {
         foundation: {
           pid: '',
           tableName: '',
-          isTable: 0,
+          isTable: 1,
           menuName: '',
         },
         storage: {},

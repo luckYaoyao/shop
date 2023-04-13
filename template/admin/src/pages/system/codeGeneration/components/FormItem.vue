@@ -1,7 +1,9 @@
 <template>
   <div class="main">
+    <Alert type="warning" closable>表单项添加的内容将会展示在生成页面后自动生成的表单里面；
+      编辑和新增都会调用此表单；生成后会新增对应的表单规则代码；可以为空不填写，生成后由开发者自行编写</Alert>
     <div class="mb20">
-      <Button class="mr10" type="primary" @click="addRow">添加行</Button>
+      <Button class="mr10" type="primary" @click="addRow">添加表单项</Button>
     </div>
     <div>
       <div class="item" v-for="(item, index) in dataList" :key="index">

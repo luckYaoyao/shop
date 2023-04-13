@@ -72,6 +72,8 @@ class Service extends Make
             if ($from) {
                 $this->value['use-php'] .= "\n" . 'use crmeb\services\FormBuilder;';
                 $value[] = implode("\n", $from);
+            } else {
+                $value[] = '';
             }
             $value[] = $options['menus'] ?? $name;
 
