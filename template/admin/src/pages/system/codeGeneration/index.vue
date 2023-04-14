@@ -16,7 +16,7 @@
         </Steps>
       </Card>
     </div>
-    <div class="pt10  tab-1" v-show="currentTab == '0'">
+    <div class="pt10 tab-1" v-show="currentTab == '0'">
       <Card :bordered="false" dis-hover class="ivu-mt">
         <FoundationForm
           ref="Foundation"
@@ -42,6 +42,9 @@
 import { codeCrud } from '@/api/setting';
 import StorageLoc from './components/StorageLoc.vue';
 import FoundationForm from './components/FoundationFor.vue';
+import { getMenusUnique } from '@/api/systemMenus';
+import { formatFlatteningRoutes } from '@/libs/system';
+
 export default {
   name: 'system_code_generation',
   components: { FoundationForm, StorageLoc },
@@ -68,6 +71,7 @@ export default {
       },
       tableField: [],
       rowList: [],
+      reqloading: false,
     };
   },
   created() {},
@@ -98,30 +102,41 @@ export default {
         }
         this.currentTab++;
       } else if (this.currentTab == 1) {
-        try {
-          let data = {
-            ...this.formItem.foundation,
-            filePath: this.formItem.storage,
-            tableField: this.$refs.Foundation.tableField,
-            // columnField: this.$refs.Field.dataList,
-            // fromField: this.$refs.FormItem.dataList,
-          };
-          codeCrud(data)
-            .then((res) => {
-              this.$Message.success(res.msg);
-              this.$router.push({
-                name: 'system_code_generation_list',
-              });
-            })
-            .catch((err) => {
-              this.$Message.error(err.msg);
+        if (this.reqloading) return;
+        let data = {
+          ...this.formItem.foundation,
+          filePath: this.formItem.storage,
+          tableField: this.$refs.Foundation.tableField,
+          // columnField: this.$refs.Field.dataList,
+          // fromField: this.$refs.FormItem.dataList,
+        };
+        this.reqloading = true;
+        codeCrud(data)
+          .then((res) => {
+            this.$Message.success(res.msg);
+            this.getMenusUnique();
+            this.reqloading = false;
+            this.$router.push({
+              name: 'system_code_generation_list',
             });
-        } catch (error) {
-          console.log(error);
-        }
+          })
+          .catch((err) => {
+            this.reqloading = false;
+            this.$Message.error(err.msg);
+          });
       } else {
         if (this.currentTab < 3) this.currentTab++;
       }
+    },
+    getMenusUnique() {
+      getMenusUnique().then((res) => {
+        let data = res.data;
+        this.$store.commit('userInfo/uniqueAuth', data.uniqueAuth);
+        this.$store.commit('menus/getmenusNav', data.menus);
+        this.$store.dispatch('routesList/setRoutesList', data.menus);
+        let arr = formatFlatteningRoutes(this.$router.options.routes);
+        this.formatTwoStageRoutes(arr);
+      });
     },
   },
 };
