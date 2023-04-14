@@ -15,7 +15,7 @@
           :props="{ checkStrictly: true, multiple: false, emitPath: false }"
           clearable
         ></el-cascader>
-        <div class="tip">可选项，选择的菜单成功后会自动写入到此菜单下</div>
+        <div class="tip">必选项，选择的菜单成功后会自动写入到此菜单下</div>
       </FormItem>
       <FormItem label="菜单名称">
         <Input class="form-width" v-model="foundation.menuName" placeholder="请输入表名"></Input>

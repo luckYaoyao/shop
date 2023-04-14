@@ -85,9 +85,8 @@ export default {
     },
     nextTab() {
       if (this.currentTab == 0) {
-        if (!this.formItem.foundation.tableName) {
-          return this.$Message.warning('请输入表名');
-        }
+        if (!this.formItem.foundation.pid) return this.$Message.warning('请选择菜单');
+        if (!this.formItem.foundation.tableName) return this.$Message.warning('请输入表名');
         if (!this.formItem.foundation.isTable) {
           if (!this.$refs.Foundation.tableField.length) return this.$Message.warning('请先添加表数据');
           if (this.$refs.Foundation.tableField.length)
