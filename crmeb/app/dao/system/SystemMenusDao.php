@@ -32,6 +32,18 @@ class SystemMenusDao extends BaseDao
     }
 
     /**
+     * @param array $menusIds
+     * @return bool
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/13
+     */
+    public function deleteMenus(array $menusIds)
+    {
+        return $this->getModel()->whereIn('id', $menusIds)->delete();
+    }
+
+    /**
      * 获取权限菜单列表
      * @param array $where
      * @param array $field

@@ -17,6 +17,7 @@ namespace app\adminapi\controller\v1\setting;
 use app\adminapi\controller\AuthController;
 use app\services\system\SystemCrudServices;
 use app\services\system\SystemMenusServices;
+use crmeb\services\crud\Make;
 use think\facade\App;
 use think\helper\Str;
 
@@ -82,14 +83,15 @@ class SystemCrud extends AuthController
             if ($item['from_type']) {
                 $fromField[] = [
                     'field' => $item['field'],
+                    'type' => $item['from_type'],
                     'name' => $item['table_name'],
                     'required' => $item['required'],
                     'option' => $item['option'] ?? [],
                 ];
             }
         }
-        $data['fromField '] = $fromField;
-        $data['columnField '] = $columnField;
+        $data['fromField'] = $fromField;
+        $data['columnField'] = $columnField;
         if (!$data['tableName']) {
             return app('json')->fail('缺少表名');
         }
@@ -186,28 +188,12 @@ class SystemCrud extends AuthController
                 break;
             }
         }
-        $fromField = $columnField = [];
-        foreach ($info->tableField as $item) {
-            if ($item['is_table']) {
-                $columnField[] = [
-                    'field' => $item['field'],
-                    'name' => $item['table_name'],
-                ];
-            }
-            if ($item['from_type']) {
-                $fromField[] = [
-                    'field' => $item['field'],
-                    'name' => $item['table_name'],
-                    'required' => $item['required'],
-                    'option' => $item['option'] ?? [],
-                ];
-            }
-        }
+
         $make = $this->services->makeFile($info->table_name, $routeName, false, [
             'menuName' => $info->name,
             'key' => $key,
-            'fromField' => $fromField,
-            'columnField' => $columnField,
+            'fromField' => $info->field['fromField'] ?? [],
+            'columnField' => $info->field['columnField'] ?? [],
         ]);
 
         $data = [];
@@ -251,13 +237,40 @@ class SystemCrud extends AuthController
      * @email 136327134@qq.com
      * @date 2023/4/11
      */
-    public function delete($id)
+    public function delete(SystemMenusServices $services, $id)
     {
         if (!$id) {
             return app('json')->fail('缺少参数');
         }
 
-        $this->services->delete($id);
+        $info = $this->services->get($id);
+        if (!$info) {
+            return app('json')->fail('删除的数据不存在');
+        }
+
+        $services->transaction(function () use ($services, $info) {
+            if ($info->menu_ids) {
+                $services->deleteMenus($info->menu_ids);
+            }
+
+            $info->delete();
+        });
+
+        if ($info->make_path) {
+            try {
+                foreach ($info->make_path as $key => $item) {
+                    if (in_array($key, ['pages', 'router', 'api'])) {
+                        $item = Make::adminTemplatePath() . $item;
+                    } else {
+                        $item = app()->getRootPath() . $item;
+                    }
+                    unlink($item);
+                }
+            } catch (\Throwable $e) {
+                return app('json')->success('删除生成的菜单和信息成功,删除文件出错，详细错误：' . $e->getMessage());
+            }
+        }
+
 
         return app('json')->success('删除成功');
     }

@@ -69,15 +69,18 @@ class ViewPages extends Make
     public function handle(string $name, array $options = [])
     {
         $field = $options['field'] ?? [];
+        $route = $options['route'] ?? '';
 
         $columnStr = [];
-        foreach ($field as $item) {
-            $columnStr[] = $this->tab() . "{\ntitle:\"{$item['name']}\",\nkey:\"{$item['field']}\"\n}";
+        foreach ($field as $key => $item) {
+            $columnStr[] = ($key == 0 ? $this->tab(2) : '') . "{\n" . $this->tab(3) . "title:\"{$item['name']}\"," . $this->tab(2) . "\n" . $this->tab(3) . "key:\"{$item['field']}\"\n" . $this->tab(2) . "}\n";
         }
+        $this->value['route'] = $route;
         $this->value['auth'] = Str::snake($name);
-        $this->value['content-vue'] = "\n" . implode(',', $columnStr);
+        $this->value['content-vue'] = $columnStr ? "\n" . implode($this->tab(2) . ',', $columnStr) . $this->tab(2) . ',' : '';
         $this->value['pathApiJs'] = $options['pathApiJs'] ?? '';
-        $this->value['nameCamel'] = Str::snake($name, '-');
+        $this->value['nameStudly'] = Str::studly($name);
+        $this->value['nameCamel'] = Str::camel($name);
 
         return parent::handle($name, $options);
     }
@@ -93,7 +96,7 @@ class ViewPages extends Make
     protected function getFilePathName(string $path, string $name): string
     {
         $path = ltrim(str_replace('\\', '/', $path), '/');
-        return $this->getBasePath($path) . $name . '.' . $this->fileMime;
+        return $this->getBasePath($path) . $name . DS . 'index.' . $this->fileMime;
     }
 
     /**

@@ -1,1 +1,1 @@
-Route::get('{%route%}/:id/edit', 'v1.{%route%}{%controller%}/edit')->name('{%menus%}获取修改表单接口');
+Route::get('{%route%}/:id/edit', 'crud.{%routePath%}{%controller%}/edit')->name('{%menus%}获取修改表单接口');

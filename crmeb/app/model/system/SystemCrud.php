@@ -40,4 +40,20 @@ class SystemCrud extends BaseModel
     {
         return date('Y-m-d H:i:s', $value);
     }
+
+    public function getFieldAttr($value)
+    {
+        return json_decode($value, true);
+    }
+
+    public function getMenuIdsAttr($value)
+    {
+        return json_decode($value, true);
+    }
+
+    public function getMakePathAttr($value)
+    {
+        return json_decode($value, true);
+    }
+
 }

@@ -16,7 +16,7 @@
  * @date {%time%}
  */
 
-namespace app\services\crub{%path%};
+namespace app\services\crud{%path%};
 
 use app\services\BaseServices;
 use think\exception\ValidateException;
@@ -25,13 +25,13 @@ use think\exception\ValidateException;
 /**
  * Class CrudService
  * @date {%date%}
- * @package app\services\crub{%path%}
+ * @package app\services\crud{%path%}
  */
-class {%nameCamel%}Service extends BaseServices
+class {%nameCamel%}Services extends BaseServices
 {
 
     /**
-     * {%nameCamel%}Service constructor.
+     * {%nameCamel%}Services constructor.
      * @param {%nameCamel%}Dao $dao
      */
     public function __construct({%nameCamel%}Dao $dao)
@@ -39,6 +39,6 @@ class {%nameCamel%}Service extends BaseServices
         $this->dao = $dao;
     }
 
-    {%content-php%}
+{%content-php%}
 
 }

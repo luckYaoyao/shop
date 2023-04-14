@@ -71,6 +71,25 @@ abstract class BaseDao
      */
     public function selectList(array $where, string $field = '*', int $page = 0, int $limit = 0, string $order = '', array $with = [], bool $search = false)
     {
+        return $this->selectModel($where, $field, $page, $limit, $order, $with, $search)->select();
+    }
+
+    /**
+     * @param array $where
+     * @param string $field
+     * @param int $page
+     * @param int $limit
+     * @param string $order
+     * @param array $with
+     * @param bool $search
+     * @return BaseModel
+     * @throws \ReflectionException
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/14
+     */
+    public function selectModel(array $where, string $field = '*', int $page = 0, int $limit = 0, string $order = '', array $with = [], bool $search = false)
+    {
         if ($search) {
             $model = $this->search($where);
         } else {
@@ -82,7 +101,7 @@ abstract class BaseDao
             $query->order($order);
         })->when($with, function ($query) use ($with) {
             $query->with($with);
-        })->select();
+        });
     }
 
     /**
@@ -218,6 +237,7 @@ abstract class BaseDao
         return $this->getModel()->where($where)->column($field, $key);
     }
 
+
     /**
      * 删除
      * @param int|string|array $id
@@ -331,7 +351,11 @@ abstract class BaseDao
                 $with[] = $key;
             } else {
                 if (!in_array($key, ['timeKey', 'store_stock', 'integral_time'])) {
-                    $otherWhere[] = is_array($value) ? $value : [$key, '=', $value];
+                    if (!is_array($value)) {
+                        $otherWhere[] = [$key, '=', $value];
+                    } else if (count($value) === 3) {
+                        $otherWhere[] = $value;
+                    }
                 }
             }
         }

@@ -15,10 +15,11 @@ use think\facade\Route;
  */
 Route::group('cms', function () {
     //文章资源路由
-    Route::resource('cms', 'v1.cms.Article')->except(['read'])->option([
+    Route::resource('cms', 'v1.cms.Article')->option([
         'real_name' => [
             'index' => '获取文章列表',
             'create' => '获取文章表单',
+            'read' => '获取文章详细信息',
             'save' => '保存文章',
             'edit' => '获取修改文章表单',
             'update' => '修改文章',

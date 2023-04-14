@@ -11,7 +11,7 @@
         }
 
         $data = $this->request->postMore([
-            {%field-php%}
+{%field-php%}
         ]);
 
         $this->service->crudUpdate((int)$id, $data);

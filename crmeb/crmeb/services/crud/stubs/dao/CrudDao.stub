@@ -16,7 +16,7 @@
  * @date {%time%}
  */
 
-namespace app\dao\crub{%path%};
+namespace app\dao\crud{%path%};
 
 
 use app\dao\BaseDao;
@@ -24,7 +24,7 @@ use app\dao\BaseDao;
 /**
  * Class {%nameCamel%}Dao
  * @date {%date%}
- * @package app\dao\crub{%path%}
+ * @package app\dao\crud{%path%}
  */
 class {%nameCamel%}Dao extends BaseDao
 {

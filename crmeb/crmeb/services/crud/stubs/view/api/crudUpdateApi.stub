@@ -3,7 +3,7 @@
  * @param id
  * @return {*}
  */
-export function {%name%}UpdateApi(id, data) {
+export function {%nameCamel%}UpdateApi(id, data) {
     return request({
         url: `{%route%}/${id}`,
         method: 'put',

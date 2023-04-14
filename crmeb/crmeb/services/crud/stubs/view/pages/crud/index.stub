@@ -36,7 +36,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { {%name%}SaveApi, {%name%}DeleteApi, {%name%}UpdateApi, get{%nameCamel%}CreateApi, get{%nameCamel%}EditApi, get{%nameCamel%}ListApi} from '{%pathApiJs%}';
+import { {%nameCamel%}SaveApi, {%nameCamel%}DeleteApi, {%nameCamel%}UpdateApi, get{%nameStudly%}CreateApi, get{%nameStudly%}EditApi, get{%nameStudly%}ListApi} from '{%pathApiJs%}';
 export default {
   name: 'user_group',
   data() {
@@ -85,12 +85,12 @@ export default {
   methods: {
     // 添加
     add() {
-      this.$modalForm(get{%nameCamel%}CreateApi()).then(() => this.getList());
+      this.$modalForm(get{%nameStudly%}CreateApi()).then(() => this.getList());
     },
     //列表
     getList() {
       this.loading = true;
-      get{%nameCamel%}ListApi(this.from)
+      get{%nameStudly%}ListApi(this.from)
           .then(async (res) => {
             let data = res.data;
             this.dataList = data.list;
@@ -109,7 +109,7 @@ export default {
     },
     // 修改
     edit(id) {
-      this.$modalForm(get{%nameCamel%}EditApi(id)).then(() => this.getList());
+      this.$modalForm(get{%nameStudly%}EditApi(id)).then(() => this.getList());
     },
     // 删除
     del(row, tit, num) {
@@ -123,7 +123,6 @@ export default {
       this.$modalSure(delfromData)
           .then((res) => {
             this.$Message.success(res.msg);
-            this.groupLists.splice(num, 1);
             this.getList();
           })
           .catch((res) => {

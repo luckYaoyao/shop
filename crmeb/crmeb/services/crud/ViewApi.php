@@ -71,7 +71,7 @@ class ViewApi extends Make
         $path = $options['path'] ?? '';
         $action = $options['action'] ?? [];
         if (!$action) {
-            $action = ['index', 'create', 'save', 'edit', 'update'];
+            $action = ['index', 'create', 'save', 'edit', 'update', 'delete'];
         }
         $route = $options['route'] ?? '';
         if (!$route) {
@@ -87,8 +87,8 @@ class ViewApi extends Make
         $nameCamel = Str::studly($name);
 
         if ($contentJs) {
-            $var = ['{%name%}', '{%route%}', '{%nameCamel%}'];
-            $value = [$name, $route, $nameCamel];
+            $var = ['{%name%}', '{%route%}', '{%nameCamel%}', '{%nameStudly%}'];
+            $value = [$name, $route, $nameCamel, Str::studly($name)];
             $contentJs = str_replace($var, $value, $contentJs);
         }
 
@@ -131,9 +131,10 @@ class ViewApi extends Make
 
         $stubs = [
             'index' => $servicePath . 'getCrudListApi.stub',
-            'create' => $servicePath . 'crudUpdateApi.stub',
+            'create' => $servicePath . 'getCrudCreateApi.stub',
             'save' => $servicePath . 'crudSaveApi.stub',
             'edit' => $servicePath . 'getCrudEditApi.stub',
+            'delete' => $servicePath . 'crudDeleteApi.stub',
             'update' => $servicePath . 'crudUpdateApi.stub',
             'api' => $servicePath . 'crud.stub',
         ];

@@ -1,1 +1,1 @@
-Route::get('{%route%}', 'v1.{%route%}{%controller%}/index')->name('{%menus%}列表接口');
+Route::get('{%route%}', 'crud.{%routePath%}{%controller%}/index')->name('{%menus%}列表接口');

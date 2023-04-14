@@ -6,7 +6,7 @@
      */
     public function getCrudForm(int $id = 0)
     {
-        $url = '/{%route%}';
+        $url = '/crud/{%route%}';
         $info = [];
         if ($id) {
             $info = $this->dao->get($id);

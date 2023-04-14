@@ -30,22 +30,22 @@ class {%nameCamel%} extends AuthController
 {
 
     /**
-     * @var {%nameCamel%}Service
+     * @var {%nameCamel%}Services
      */
     protected $service;
 
     /**
      * {%nameCamel%}Controller constructor.
      * @param App $app
-     * @param {%nameCamel%}Service $service
+     * @param {%nameCamel%}Services $service
      */
-    public function __construct(App $app, {%nameCamel%}Service $service)
+    public function __construct(App $app, {%nameCamel%}Services $service)
     {
         parent::__construct($app);
         $this->service = $service;
     }
 
 
-    {%content-php%}
+{%content-php%}
 
 }

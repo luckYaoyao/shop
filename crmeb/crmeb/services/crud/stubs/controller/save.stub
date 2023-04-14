@@ -6,7 +6,7 @@
     public function save()
     {
         $data = $this->request->postMore([
-            {%field-php%}
+{%field-php%}
         ]);
 
         $this->service->crudSave($data);

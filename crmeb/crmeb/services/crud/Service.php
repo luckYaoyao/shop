@@ -10,6 +10,8 @@
 // +----------------------------------------------------------------------
 namespace crmeb\services\crud;
 
+use crmeb\services\FormBuilder as Form;
+use think\facade\Route as Url;
 use think\helper\Str;
 
 /**
@@ -67,7 +69,18 @@ class Service extends Make
             $value = [$this->value['date'], Str::snake($options['route'] ?? $name)];
             $from = [];
             foreach ($field as $item) {
-                $from[] = $this->tab(2) . '$rule[] = FormBuilder::' . $item['type'] . '("' . $item['field'] . '","' . $item['name'] . '",$info["' . $item['field'] . '"] ?? "")' . $this->getOptionContent($item['option'] ?? []) . (!empty($item['required']) ? '->required()' : '') . ';';
+                switch ($item['type']) {
+                    case 'frameImageOne':
+                        $from[] = $this->tab(2) . $this->getframeImageOnePhpContent($item['field'], $item['name'], $item['required'] ?? false) . ';';
+                        break;
+                    case 'frameImages':
+                        $from[] = $this->tab(2) . $this->getframeImagesPhpContent($item['field'], $item['name'], $item['required'] ?? false) . ';';
+                        break;
+                    default:
+                        $from[] = $this->tab(2) . '$rule[] = FormBuilder::' . $item['type'] . '("' . $item['field'] . '","' . $item['name'] . '",$info["' . $item['field'] . '"] ?? "")' . $this->getOptionContent($item['option'] ?? []) . (!empty($item['required']) ? '->required()' : '') . ';';
+                        break;
+                }
+
             }
             if ($from) {
                 $this->value['use-php'] .= "\n" . 'use crmeb\services\FormBuilder;';
@@ -122,6 +135,49 @@ class Service extends Make
     }
 
     /**
+     * 单图获取formphp内容
+     * @param string $field
+     * @param string $name
+     * @param string $icon
+     * @param string $width
+     * @param string $height
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/14
+     */
+    protected function getframeImageOnePhpContent(string $field, string $name, bool $required = false, string $icon = 'ios-add', string $width = '950px', string $height = '505px')
+    {
+        $requiredText = $required ? '->required()' : '';
+        $content = <<<CONTENT
+\$rule[] = FormBuilder::frameImage('$field', '$name', url(config('app.admin_prefix', 'admin') . '/widget.images/index', ['fodder' => '$field']), \$info[\'$field\'] ?? '')->icon('$icon')->width('$width')->height('$height')->modal(['footer-hide' => true])$requiredText
+CONTENT;
+        return $content;
+    }
+
+    /**
+     * 多图获取formphp内容
+     * @param string $field
+     * @param string $name
+     * @param string $icon
+     * @param int $maxLength
+     * @param string $width
+     * @param string $height
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/14
+     */
+    protected function getframeImagesPhpContent(string $field, string $name, bool $required = false, string $icon = 'ios-images', int $maxLength = 10, string $width = '950px', string $height = '505px')
+    {
+        $requiredText = $required ? '->required()' : '';
+        $content = <<<CONTENT
+\$rule[] = FormBuilder::frameImages('$field', '$name', url(config('app.admin_prefix', 'admin') . '/widget.images/index', ['fodder' => '$field', 'type' => 'many', 'maxLength' => $maxLength]), \$info[\'$field\'] ?? [])->maxLength($maxLength)->icon('$icon')->width('$width')->height('$height')->modal(['footer-hide' => true])$requiredText
+CONTENT;
+        return $content;
+    }
+
+    /**
      * @param string $name
      * @param string $path
      * @return string
@@ -133,7 +189,7 @@ class Service extends Make
     {
         $path = str_replace(['app\\services', 'app/services'], '', $path);
         $path = ltrim(str_replace('\\', '/', $path), '/');
-        return 'use app\dao\\' . ($path ? $path . '\\' : '') . Str::studly($name) . 'Dao;';
+        return 'use app\dao\crud\\' . ($path ? $path . '\\' : '') . Str::studly($name) . 'Dao;';
     }
 
 

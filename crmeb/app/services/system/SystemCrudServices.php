@@ -26,11 +26,13 @@ use crmeb\services\crud\Validate;
 use crmeb\services\crud\ViewApi;
 use crmeb\services\crud\ViewPages;
 use crmeb\services\crud\ViewRouter;
+use Phinx\Db\Adapter\AdapterFactory;
 use think\exception\ValidateException;
 use think\facade\Db;
 use think\helper\Str;
 use think\migration\Migrator;
 use Phinx\Db\Adapter\MysqlAdapter;
+use think\migration\db\Table;
 
 /**
  * Class SystemCrudServices
@@ -72,7 +74,7 @@ class SystemCrudServices extends BaseServices
     public function getList()
     {
         [$page, $limit] = $this->getPageValue();
-        $list = $this->dao->selectList([], 'add_time,id,name,table_name', $page, $limit, 'id desc');
+        $list = $this->dao->selectList([], 'add_time,id,name,table_name,table_comment,table_comment', $page, $limit, 'id desc');
         $count = $this->dao->count();
 
         return compact('list', 'count');
@@ -88,9 +90,10 @@ class SystemCrudServices extends BaseServices
     public function getTabelRule()
     {
         $rule = [
-            'varchat' => 'string',
+            'varchar' => 'string',
             'int' => 'integer',
             'biginteger' => 'bigint',
+            'tinyint' => 'boolean',
         ];
         return [
             'types' => [
@@ -136,11 +139,27 @@ class SystemCrudServices extends BaseServices
     public function changeTabelRule(string $type)
     {
 
-        if (!in_array($type, $this->getTabelRule()['type'])) {
+        if (!in_array($type, $this->getTabelRule()['types'])) {
             throw new ValidateException('类型不在支持范围');
         }
 
         return $this->getTabelRule()['rule'][$type] ?? $type;
+    }
+
+    /**
+     * @param string $tableName
+     * @return mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/14
+     */
+    public function getTableInfo(string $tableName)
+    {
+        $sql = 'SELECT * FROM `information_schema`.`TABLES` WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?';
+
+        $tableInfo = Db::query($sql, [config('database.connections.mysql.database'), $this->getTableName($tableName)]);
+
+        return $tableInfo;
     }
 
     /**
@@ -210,7 +229,7 @@ class SystemCrudServices extends BaseServices
     public function createCrud(array $data)
     {
         $tableName = $data['tableName'];
-        $tableComment = $data['tableComment'];
+        $tableComment = $data['tableComment'] ?? $data['menuName'];
         $tableField = $this->valueReplace($data['tableField']);
         $filePath = $this->valueReplace($data['filePath']);
 
@@ -229,6 +248,9 @@ class SystemCrudServices extends BaseServices
         if (!$column) {
             throw new ValidateException('请先创建' . $tableName . '表');
         }
+
+        $tableInfo = $this->getTableInfo($tableName);
+
         //获取主键
         foreach ($column as $value) {
             if ($value['primaryKey']) {
@@ -255,7 +277,7 @@ class SystemCrudServices extends BaseServices
         $dataMenu = [
             'pid' => $data['pid'],
             'menu_name' => $data['menuName'],
-            'menu_path' => '',
+            'menu_path' => '/' . $routeName . '/list',
             'auth_type' => 1,
             'is_show' => 1,
             'is_del' => 0,
@@ -263,7 +285,7 @@ class SystemCrudServices extends BaseServices
             'is_header' => $data['pid'] ? 0 : 1,
         ];
 
-        $res = $this->transaction(function () use ($filePath, $tableName, $routeName, $data, $dataMenu) {
+        $res = $this->transaction(function () use ($tableInfo, $filePath, $tableName, $routeName, $data, $dataMenu) {
             $menuInfo = app()->make(SystemMenusServices::class)->save($dataMenu);
             //写入路由权限
             $cateId = app()->make(SystemRouteServices::class)->topCateId('adminapi');
@@ -329,7 +351,9 @@ class SystemCrudServices extends BaseServices
                     'is_del' => 0,
                 ];
             }
-            app()->make(SystemMenusServices::class)->saveAll($menuData);
+            $menus = app()->make(SystemMenusServices::class)->saveAll($menuData);
+            $menuIds = array_column($menus->toArray(), 'id');
+            array_push($menuIds, $menuInfo->id);
             //生成文件
             $make = $this->makeFile($tableName, $routeName, true, $data, $filePath);
             $makePath = [];
@@ -341,7 +365,10 @@ class SystemCrudServices extends BaseServices
                 'pid' => $data['pid'],
                 'name' => $data['menuName'],
                 'table_name' => $tableName,
-                'field' => json_encode($data),
+                'table_comment' => $tableInfo['TABLE_COMMENT'] ?? '',
+                'table_collation' => $tableInfo['TABLE_COLLATION'] ?? '',
+                'field' => json_encode($data),//提交的数据
+                'menu_ids' => json_encode($menuIds),//生成的菜单id
                 'make_path' => json_encode($makePath),
                 'add_time' => time()
             ]);
@@ -350,6 +377,60 @@ class SystemCrudServices extends BaseServices
         });
 
         return $res->toArray();
+    }
+
+    /**
+     * 获取数据库配置
+     * @return array
+     */
+    protected function getDbConfig(): array
+    {
+        $default = app()->config->get('database.default');
+
+        $config = app()->config->get("database.connections.{$default}");
+
+        if (0 == $config['deploy']) {
+            $dbConfig = [
+                'adapter' => $config['type'],
+                'host' => $config['hostname'],
+                'name' => $config['database'],
+                'user' => $config['username'],
+                'pass' => $config['password'],
+                'port' => $config['hostport'],
+                'charset' => $config['charset'],
+                'table_prefix' => $config['prefix'],
+            ];
+        } else {
+            $dbConfig = [
+                'adapter' => explode(',', $config['type'])[0],
+                'host' => explode(',', $config['hostname'])[0],
+                'name' => explode(',', $config['database'])[0],
+                'user' => explode(',', $config['username'])[0],
+                'pass' => explode(',', $config['password'])[0],
+                'port' => explode(',', $config['hostport'])[0],
+                'charset' => explode(',', $config['charset'])[0],
+                'table_prefix' => explode(',', $config['prefix'])[0],
+            ];
+        }
+
+        $table = app()->config->get('database.migration_table', 'migrations');
+
+        $dbConfig['default_migration_table'] = $dbConfig['table_prefix'] . $table;
+
+        return $dbConfig;
+    }
+
+    public function getAdapter()
+    {
+        $options = $this->getDbConfig();
+
+        $adapter = AdapterFactory::instance()->getAdapter($options['adapter'], $options);
+
+        if ($adapter->hasOption('table_prefix') || $adapter->hasOption('table_suffix')) {
+            $adapter = AdapterFactory::instance()->getWrapper('prefix', $adapter);
+        }
+
+        return $adapter;
     }
 
     /**
@@ -363,27 +444,26 @@ class SystemCrudServices extends BaseServices
      */
     public function makeDatebase(string $tableName, string $tableComment, array $tableField = [])
     {
-        $migrator = app()->make(Migrator::class, [date('YmdHis')]);
         //创建表
-        $table = $migrator->table($tableName, $tableComment);
+        $table = new Table($tableName, ['comment' => $tableComment], $this->getAdapter());
         //创建字段
         foreach ($tableField as $item) {
             $option = [];
-            if (!isset($item['limit'])) {
+            if (isset($item['limit'])) {
                 $option['limit'] = (int)$item['limit'];
             }
-            if (!isset($item['default'])) {
+            if (isset($item['default'])) {
                 $option['default'] = $item['default'];
             }
             //创建伪删除
-            if ($item['type'] === 'addSoftDelete') {
+            if ($item['file_type'] === 'addSoftDelete') {
                 $table->addSoftDelete();
-            } else if ($item['type'] === 'addTimestamps') {
+            } else if ($item['file_type'] === 'addTimestamps') {
                 //创建修改和增加时间
                 $table->addTimestamps();
             } else {
                 $option['comment'] = $item['comment'];
-                $table->addColumn($item['field'], $this->changeTabelRule($item['type']), $option);
+                $table->addColumn($item['field'], $this->changeTabelRule($item['file_type']), $option);
             }
         }
         //创建索引
@@ -432,7 +512,8 @@ class SystemCrudServices extends BaseServices
         //生成控制器
         $controller = app()->make(Controller::class);
         [$controllerContent, $controllerPath] = $controller->setFilePathName($filePath['controller'] ?? '')->isMake($isMake)->handle($tableName, [
-            'usePath' => $usePath
+            'usePath' => $usePath,
+            'field' => array_column($options['fromField'], 'field'),
         ]);
         //生成路由
         $route = app()->make(Route::class);
@@ -455,6 +536,7 @@ class SystemCrudServices extends BaseServices
         $viewPages = app()->make(ViewPages::class);
         [$pagesContent, $pagesPath] = $viewPages->setFilePathName($filePath['pages'] ?? '')->isMake($isMake)->handle($tableName, [
             'field' => $options['columnField'],
+            'route' => $routeName,
             'pathApiJs' => '@/' . str_replace('\\', '/', str_replace([Make::adminTemplatePath(), '.js'], '', $apiPath)),
         ]);
 

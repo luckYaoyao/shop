@@ -50,6 +50,22 @@ class SystemMenus extends AuthController
     }
 
     /**
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/14
+     * @return \think\Response
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function unique()
+    {
+        $adminInfo = $this->request->adminInfo();
+        [$menus, $uniqueAuth] = app()->make(SystemMenusServices::class)->getMenusList($adminInfo['roles'], (int)$adminInfo['level']);
+        return app('json')->success(compact('menus', 'uniqueAuth'));
+    }
+
+    /**
      * 显示创建资源表单页.
      *
      * @return \think\Response

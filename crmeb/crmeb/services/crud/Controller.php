@@ -66,7 +66,7 @@ class Controller extends Make
         if ($field) {
             $fieldStr = '';
             foreach ($field as $k) {
-                $fieldStr .= "['$k',''],\n";
+                $fieldStr .= $this->tab(3) . "['$k', ''],\n";
             }
             $fieldPhp[] = $fieldStr;
         }
@@ -94,7 +94,7 @@ class Controller extends Make
         $this->value['name'] = $className;
         $this->value['path'] = $this->getfolderPath($path);
         $this->value['content-php'] = $contentPhp;
-        $this->value['use-php'] = "use " . $options['usePath'] . ";\n";
+        $this->value['use-php'] = "use " . $options['usePath'] . "Services;\n";
 
         $contentStr = str_replace($this->var, $this->value, $contentController);
 

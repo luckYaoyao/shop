@@ -3,7 +3,7 @@
  * @param id
  * @return {*}
  */
-export function {%name%}DeleteApi(id) {
+export function {%nameCamel%}DeleteApi(id) {
     return request({
         url: `{%route%}/${id}`,
         method: 'delete'

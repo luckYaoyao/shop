@@ -21,7 +21,7 @@ const pre = '{%name%}_'
 
 export default {
     path: `${routePre}/{%route%}`,
-    name: '{%name%}',
+    name: 'crud_{%name%}',
     header: '{%nameHeader%}',
     meta,
     component: BasicLayout,

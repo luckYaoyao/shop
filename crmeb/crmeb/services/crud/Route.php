@@ -15,6 +15,7 @@ namespace crmeb\services\crud;
 
 
 use crmeb\exceptions\CrudException;
+use think\helper\Str;
 
 class Route extends Make
 {
@@ -44,7 +45,8 @@ class Route extends Make
         $path = $options['path'] ?? '';
         $action = $options['action'] ?? [];
         $route = $options['route'] ?? '';
-        $controller = $options['controller'] ?? '';
+        $controller = $options['controller'] ?? $name;
+        $routePath = $options['routePath'] ?? '';
         $menus = $options['menus'] ?? '';
         if (!$route) {
             throw new CrudException('缺少路由名称');
@@ -56,12 +58,14 @@ class Route extends Make
         $var = [
             '{%route%}',
             '{%controller%}',
+            '{%routePath%}',
             '{%menus%}',
         ];
 
         $value = [
             $route,
-            $controller ? '.' . $controller : '',
+            $routePath,
+            $controller ? ($routePath ? '.' : '') . Str::studly($controller) : '',
             $menus
         ];
 
