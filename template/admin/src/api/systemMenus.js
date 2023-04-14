@@ -21,6 +21,17 @@ export function getTable(data) {
     params: data,
   });
 }
+/**
+ * @description 权限--刷新菜单及权限
+ * @param {Object} param data {Object} 传值参数
+ */
+export function getMenusUnique(data) {
+  return request({
+    url: '/setting/menus/unique',
+    method: 'get',
+    params: data,
+  });
+}
 
 /**
  * 权限 -- 添加

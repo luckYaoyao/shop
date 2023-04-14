@@ -74,7 +74,7 @@ import { setCookies } from '@/libs/util';
 import '@/assets/js/canvas-nest.min';
 import Verify from '@/components/verifition/Verify';
 import { PrevLoading } from '@/utils/loading.js';
-
+import { formatFlatteningRoutes, findFirstNonNullChildren } from '@/libs/system';
 export default {
   components: {
     Verify,
@@ -211,7 +211,7 @@ export default {
           this.$store.commit('menus/setopenMenus', []);
           this.$store.commit('menus/getmenusNav', data.menus);
           this.$store.dispatch('routesList/setRoutesList', data.menus);
-          let arr = this.formatFlatteningRoutes(this.$router.options.routes);
+          let arr = formatFlatteningRoutes(this.$router.options.routes);
           this.formatTwoStageRoutes(arr);
           // 记录用户信息
           this.$store.commit('userInfo/name', data.user_info.account);
@@ -243,7 +243,7 @@ export default {
           PrevLoading.start();
 
           return this.$router.replace({
-            path: this.findFirstNonNullChildren(res.data.menus).path || this.$routeProStr + '/',
+            path: findFirstNonNullChildren(res.data.menus).path || this.$routeProStr + '/',
           });
         })
         .catch((res) => {
@@ -268,36 +268,6 @@ export default {
         }
       });
       return newArr;
-    },
-    // 多级嵌套数组处理成一维数组
-    formatFlatteningRoutes(arr) {
-      if (arr.length <= 0) return false;
-      for (let i = 0; i < arr.length; i++) {
-        if (arr[i].children) {
-          arr = arr.slice(0, i + 1).concat(arr[i].children, arr.slice(i + 1));
-        }
-      }
-      return arr;
-    },
-    findFirstNonNullChildren(arr) {
-      // 如果数组为空，返回null
-      if (!arr || arr.length === 0) {
-        return null;
-      }
-      // 找到第一个对象
-      const firstObj = arr[0];
-      // 如果第一个对象没有children属性，返回该对象
-      if (!firstObj.children) {
-        return firstObj;
-      }
-
-      // 如果第一个对象的children属性是数组，
-      // 递归查找children属性中的第一个非null children属性
-      if (Array.isArray(firstObj.children)) {
-        return this.findFirstNonNullChildren(firstObj.children);
-      }
-      // 如果数组中没有非null children属性，返回null
-      return null;
     },
     checkSocket() {
       getWorkermanUrl().then((res) => {

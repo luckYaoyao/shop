@@ -87,6 +87,7 @@
       :formValidate="formValidate"
       :titleFrom="titleFrom"
       @getList="getList"
+      @changeMenu="getMenusUnique"
       ref="menusFrom"
       @clearFrom="clearFrom"
     ></menus-from>
@@ -137,9 +138,19 @@
 
 <script>
 import { mapState } from 'vuex';
-import { getTable, menusDetailsApi, isShowApi, editMenus, getRuleList, menusBatch } from '@/api/systemMenus';
+import {
+  getTable,
+  menusDetailsApi,
+  isShowApi,
+  editMenus,
+  getRuleList,
+  menusBatch,
+  getMenusUnique,
+} from '@/api/systemMenus';
 import formCreate from '@form-create/iview';
 import menusFrom from './components/menusFrom';
+import { formatFlatteningRoutes } from '@/libs/system';
+
 export default {
   name: 'systemMenus',
   data() {
@@ -399,6 +410,29 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
+    },
+    getMenusUnique() {
+      getMenusUnique().then((res) => {
+        let data = res.data;
+        this.$store.commit('userInfo/uniqueAuth', data.uniqueAuth);
+        this.$store.commit('menus/getmenusNav', data.menus);
+        this.$store.dispatch('routesList/setRoutesList', data.menus);
+        let arr = formatFlatteningRoutes(this.$router.options.routes);
+        this.formatTwoStageRoutes(arr);
+      });
+    },
+    formatTwoStageRoutes(arr) {
+      if (arr.length <= 0) return false;
+      const newArr = [];
+      const cacheList = [];
+      arr.forEach((v) => {
+        if (v && v.meta && v.meta.keepAlive) {
+          newArr.push({ ...v });
+          cacheList.push(v.name);
+          this.$store.dispatch('keepAliveNames/setCacheKeepAlive', cacheList);
+        }
+      });
+      return newArr;
     },
     // 关闭按钮
     cancel() {

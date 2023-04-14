@@ -405,7 +405,7 @@ export default {
         .then(async (res) => {
           this.$Message.success(res.msg);
           this.modals = false;
-          // this.$emit('getList');
+          this.$emit('changeMenu');
           this.getAddFrom();
           this.$store.dispatch('admin/menus/getMenusNavList');
         })
