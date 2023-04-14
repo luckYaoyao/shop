@@ -1,7 +1,7 @@
 <template>
   <div class="main">
-    <Form ref="foundation" :model="foundation" :rules="foundation" :label-width="100">
-      <FormItem label="菜单">
+    <Form ref="foundation" :model="foundation" :rules="foundationRules" :label-width="100">
+      <FormItem label="菜单" prop="pid">
         <!-- <Select class="form-width" v-model="foundation.pid">
           <Option value="beijing">New York</Option>
           <Option value="shanghai">London</Option>
@@ -23,7 +23,7 @@
           生成菜单为可选项，不填写默认生成的菜单名称将为表名；生成后会把自动生成的权限默认加入该菜单下
         </div>
       </FormItem>
-      <FormItem label="表名">
+      <FormItem label="表名" prop="tableName">
         <Input class="form-width" v-model="foundation.tableName" placeholder="请输入表名" @on-blur="initfield"></Input>
         <div class="tip">
           用于生成CRUD指定的表名，不需要携带表前缀；对于生成过的表将不能在进行生成；或者可以删除对应的文件重新生成！对应系统中重要的数据表将不允许生成！
@@ -141,6 +141,10 @@ export default {
   },
   data() {
     return {
+      foundationRules: {
+        pid: [{ required: true, message: '请输入菜单', trigger: 'blur' }],
+        tableName: [{ required: true, message: '请输入表名', trigger: 'blur' }],
+      },
       menusList: [],
       columnTypeList: [],
       columns: [
@@ -287,7 +291,7 @@ export default {
         for (let i = 0; i < this.tableField.length; i++) {
           const el = this.tableField[i];
           if (
-            (!el.field || !el.file_type || !el.default || !el.comment) &&
+            (!el.field || !el.file_type || !el.comment) &&
             !['addTimestamps', 'addSoftDelete'].includes(el.file_type)
           ) {
             return this.$Message.warning('请先完善上一条数据');

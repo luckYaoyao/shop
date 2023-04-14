@@ -159,9 +159,11 @@ export default {
   padding-left: 7px;
 }
 /deep/ .ivu-form-item {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 /deep/ .tip {
   color: #bbb;
+  line-height: 16px;
+  padding-top: 5px;
 }
 </style>
