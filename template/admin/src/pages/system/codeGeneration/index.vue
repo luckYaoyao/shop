@@ -92,7 +92,7 @@ export default {
           if (this.$refs.Foundation.tableField.length)
             for (let i = 0; i < this.$refs.Foundation.tableField.length; i++) {
               const el = this.$refs.Foundation.tableField[i];
-              if (!el.field || !el.file_type || !el.default || !el.comment) {
+              if (!el.field || !el.file_type || !el.comment) {
                 return this.$Message.warning('请完善sql表数据');
               }
             }
