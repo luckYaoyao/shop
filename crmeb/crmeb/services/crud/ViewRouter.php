@@ -71,7 +71,7 @@ class ViewRouter extends Make
         $path = $options['path'] ?? '';
         [$nameData, $content] = $this->getStubContent($name);
 
-        $menus = $options['menus'] ?? $name;
+        $menus = $options['menuName'] ?? $name;
         $route = $options['route'] ?? Str::snake($name);
         $pagePath = $options['pagePath'] ?? Str::camel($name);
         if (!$route) {

@@ -74,7 +74,7 @@ class SystemCrud extends AuthController
 
         $fromField = $columnField = [];
         foreach ($data['tableField'] as $item) {
-            if ($item['is_table']) {
+            if ($item['is_table'] && !in_array($item['field_type'], ['addSoftDelete', 'addSoftDelete'])) {
                 $columnField[] = [
                     'field' => $item['field'],
                     'name' => $item['table_name'],
@@ -146,6 +146,7 @@ class SystemCrud extends AuthController
                 $tableField[] = [
                     'field' => $item['name'],
                     'file_type' => $item['type'],
+                    'primaryKey' => (bool)$item['primaryKey'],
                     'default' => $item['default'],
                     'limit' => $item['limit'],
                     'comment' => $item['comment'],
@@ -189,9 +190,18 @@ class SystemCrud extends AuthController
             }
         }
 
+        $softDelete = false;
+        foreach ((array)$info->field['tableField'] as $item) {
+            if ($item['addSoftDelete']) {
+                $softDelete = true;
+                break;
+            }
+        }
+
         $make = $this->services->makeFile($info->table_name, $routeName, false, [
             'menuName' => $info->name,
             'key' => $key,
+            'softDelete' => $softDelete,
             'fromField' => $info->field['fromField'] ?? [],
             'columnField' => $info->field['columnField'] ?? [],
         ]);

@@ -233,10 +233,13 @@ class SystemCrudServices extends BaseServices
         $tableField = $this->valueReplace($data['tableField']);
         $filePath = $this->valueReplace($data['filePath']);
 
-
+        $data['softDelete'] = false;
         //创建数据库
         if ($tableField && !$data['isTable']) {
-            $this->makeDatebase($tableName, $tableComment, $tableField);
+            $tableCreateInfo = $this->makeDatebase($tableName, $tableComment, $tableField);
+            if ($tableCreateInfo['softDelete']) {
+                $data['softDelete'] = true;
+            }
         }
 
         if (in_array($tableName, self::NOT_CRUD_TABANAME)) {
@@ -438,12 +441,16 @@ class SystemCrudServices extends BaseServices
      * @param string $tableName
      * @param string $tableComment
      * @param array $tableField
+     * @return array
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/4/7
      */
     public function makeDatebase(string $tableName, string $tableComment, array $tableField = [])
     {
+        $softDelete = false;
+        $timestamps = false;
+        $indexField = [];
         //创建表
         $table = new Table($tableName, ['comment' => $tableComment], $this->getAdapter());
         //创建字段
@@ -458,9 +465,11 @@ class SystemCrudServices extends BaseServices
             //创建伪删除
             if ($item['file_type'] === 'addSoftDelete') {
                 $table->addSoftDelete();
+                $softDelete = true;
             } else if ($item['file_type'] === 'addTimestamps') {
                 //创建修改和增加时间
                 $table->addTimestamps();
+                $timestamps = true;
             } else {
                 $option['comment'] = $item['comment'];
                 $table->addColumn($item['field'], $this->changeTabelRule($item['file_type']), $option);
@@ -468,12 +477,15 @@ class SystemCrudServices extends BaseServices
         }
         //创建索引
         if (!empty($data['tableIndex'])) {
+            $indexField = $data['tableIndex'];
             foreach ($data['tableIndex'] as $item) {
                 $table->addIndex($item);
             }
         }
         //执行创建
         $table->create();
+
+        return compact('indexField', 'softDelete', 'timestamps');
     }
 
     /**
@@ -525,6 +537,7 @@ class SystemCrudServices extends BaseServices
         $viewRouter = app()->make(ViewRouter::class);
         [$routerContent, $routerPath] = $viewRouter->setFilePathName($filePath['router'] ?? '')->isMake($isMake)->handle($tableName, [
             'route' => $routeName,
+            'menuName' => $options['menuName'],
         ]);
         //生成前台接口
         $viewApi = app()->make(ViewApi::class);
