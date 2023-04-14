@@ -474,16 +474,16 @@ class SystemCrudServices extends BaseServices
                 $option['default'] = $item['default'];
             }
             //创建伪删除
-            if ($item['file_type'] === 'addSoftDelete') {
+            if ($item['field_type'] === 'addSoftDelete') {
                 $table->addSoftDelete();
                 $softDelete = true;
-            } else if ($item['file_type'] === 'addTimestamps') {
+            } else if ($item['field_type'] === 'addTimestamps') {
                 //创建修改和增加时间
                 $table->addTimestamps();
                 $timestamps = true;
             } else {
                 $option['comment'] = $item['comment'];
-                $table->addColumn($item['field'], $this->changeTabelRule($item['file_type']), $option);
+                $table->addColumn($item['field'], $this->changeTabelRule($item['field_type']), $option);
             }
         }
         //创建索引
