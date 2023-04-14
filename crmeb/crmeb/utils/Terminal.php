@@ -201,7 +201,7 @@ class Terminal
     private function output($data)
     {
         $data = [
-            'data' => $data,
+            'message' => $data,
         ];
         return Response::create($data, 'json')->getContent();
     }

@@ -133,6 +133,8 @@ Route::group('system', function () {
             'delete' => '删除路由分类'
         ],
     ]);
+    //执行重新打包
+    Route::get('crud/npm', 'v1.setting.SystemCrud/npm')->option(['real_name' => '执行重新打包']);
     //获取CRUD列表
     Route::get('crud/column_type', 'v1.setting.SystemCrud/columnType')->option(['real_name' => '获取CRUD列表']);
     //获取菜单TREE形数据

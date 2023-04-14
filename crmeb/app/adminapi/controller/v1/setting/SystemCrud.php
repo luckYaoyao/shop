@@ -18,8 +18,11 @@ use app\adminapi\controller\AuthController;
 use app\services\system\SystemCrudServices;
 use app\services\system\SystemMenusServices;
 use crmeb\services\crud\Make;
+use crmeb\services\FileService;
+use crmeb\utils\Terminal;
 use think\facade\App;
 use think\helper\Str;
+use think\Response;
 
 /**
  * Class SystemCrud
@@ -285,5 +288,42 @@ class SystemCrud extends AuthController
 
 
         return app('json')->success('删除成功');
+    }
+
+    /**
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/14
+     */
+    public function npm()
+    {
+        $terminal = new Terminal();
+
+        $adminPath = $terminal->adminTemplatePath();
+
+        $adminPath = dirname($adminPath);
+
+        $dir = $adminPath . DS . 'node_modules';
+        if (!is_dir($dir)) {
+            $terminal->run('npm-install');
+        }
+
+        $terminal->run('npm-build');
+
+        if (!is_dir($adminPath . DS . 'dist')) {
+            return Response::create([
+                'message' => '打包失败',
+            ], 'json')->getContent();
+        }
+
+        $build = public_path() . config('app.admin_prefix');
+
+        $this->app->make(FileService::class)->copyDir($adminPath . DS . 'dist', $build);
+
+        return Response::create([
+            'message' => '打包成功',
+            'success' => 'ok'
+        ], 'json')->getContent();
     }
 }
