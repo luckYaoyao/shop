@@ -123,6 +123,12 @@ class Service extends Make
      */
     protected function getOptionContent(array $option = [])
     {
+        if (!$option) {
+            $option = [
+                ['value' => 1, 'label' => '开启'],
+                ['value' => 0, 'label' => '关闭']
+            ];
+        }
         $php = '';
         if ($option) {
             $res = var_export($option, true);
