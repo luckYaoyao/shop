@@ -222,6 +222,14 @@ export default {
           value: 'number',
           label: 'number',
         },
+        {
+          value: 'frameImageOne',
+          label: 'frameImageOne',
+        },
+        {
+          value: 'frameImages',
+          label: 'frameImages',
+        },
       ],
       loading: false,
       tableField: [],
