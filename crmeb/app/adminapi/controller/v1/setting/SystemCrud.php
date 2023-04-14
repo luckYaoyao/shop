@@ -78,6 +78,7 @@ class SystemCrud extends AuthController
                 $columnField[] = [
                     'field' => $item['field'],
                     'name' => $item['table_name'],
+                    'type' => $item['from_type'],
                 ];
             }
             if ($item['from_type']) {
@@ -145,7 +146,7 @@ class SystemCrud extends AuthController
             foreach ($field as $item) {
                 $tableField[] = [
                     'field' => $item['name'],
-                    'file_type' => $item['type'],
+                    'field_type' => $item['type'],
                     'primaryKey' => (bool)$item['primaryKey'],
                     'default' => $item['default'],
                     'limit' => $item['limit'],
@@ -191,8 +192,9 @@ class SystemCrud extends AuthController
         }
 
         $softDelete = false;
+
         foreach ((array)$info->field['tableField'] as $item) {
-            if ($item['addSoftDelete']) {
+            if ($item['field_type'] === 'addSoftDelete') {
                 $softDelete = true;
                 break;
             }

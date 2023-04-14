@@ -159,7 +159,7 @@ class SystemCrudServices extends BaseServices
 
         $tableInfo = Db::query($sql, [config('database.connections.mysql.database'), $this->getTableName($tableName)]);
 
-        return $tableInfo;
+        return $tableInfo[0] ?? [];
     }
 
     /**
@@ -233,6 +233,10 @@ class SystemCrudServices extends BaseServices
         $tableField = $this->valueReplace($data['tableField']);
         $filePath = $this->valueReplace($data['filePath']);
 
+        if ($this->dao->value(['table_name' => $tableName])) {
+            throw new ValidateException('此表已经生成请在列表中查看');
+        }
+
         $data['softDelete'] = false;
         //创建数据库
         if ($tableField && !$data['isTable']) {
@@ -299,6 +303,7 @@ class SystemCrudServices extends BaseServices
                     'name' => $data['menuName'] . '列表接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
+                    'unique_auth' => '',
                     'add_time' => date('Y-m-d H:i:s')
                 ],
                 [
@@ -307,6 +312,7 @@ class SystemCrudServices extends BaseServices
                     'name' => $data['menuName'] . '获取创建表单接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
+                    'unique_auth' => Str::snake($tableName) . '-add',
                     'add_time' => date('Y-m-d H:i:s')
                 ],
                 [
@@ -315,6 +321,7 @@ class SystemCrudServices extends BaseServices
                     'name' => $data['menuName'] . '保存数据接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
+                    'unique_auth' => '',
                     'add_time' => date('Y-m-d H:i:s')
                 ],
                 [
@@ -323,6 +330,7 @@ class SystemCrudServices extends BaseServices
                     'name' => $data['menuName'] . '获取修改表单接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
+                    'unique_auth' => '',
                     'add_time' => date('Y-m-d H:i:s')
                 ],
                 [
@@ -331,6 +339,7 @@ class SystemCrudServices extends BaseServices
                     'name' => $data['menuName'] . '修改数据接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
+                    'unique_auth' => '',
                     'add_time' => date('Y-m-d H:i:s')
                 ],
                 [
@@ -339,6 +348,7 @@ class SystemCrudServices extends BaseServices
                     'name' => $data['menuName'] . '删除数据接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
+                    'unique_auth' => '',
                     'add_time' => date('Y-m-d H:i:s')
                 ],
             ];
@@ -350,6 +360,7 @@ class SystemCrudServices extends BaseServices
                     'pid' => $menuInfo->id,
                     'methods' => $item['method'],
                     'api_url' => $item['path'],
+                    'unique_auth' => $item['unique_auth'],
                     'name' => $item['name'],
                     'is_del' => 0,
                 ];

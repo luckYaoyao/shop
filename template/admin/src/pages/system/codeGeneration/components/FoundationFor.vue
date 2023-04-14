@@ -66,13 +66,13 @@
               <span v-if="foundation.isTable">{{ row.field }}</span>
               <Input
                 v-else
-                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+                :disabled="disabledInput(index)"
                 v-model="tableField[index].field"
               ></Input>
             </template>
-            <template slot-scope="{ row, index }" slot="file_type">
-              <span v-if="foundation.isTable">{{ row.file_type }}</span>
-              <Select v-else v-model="tableField[index].file_type" @on-change="changeItemField($event, index)">
+            <template slot-scope="{ row, index }" slot="field_type">
+              <span v-if="foundation.isTable">{{ row.disabledInput }}</span>
+              <Select v-else v-model="tableField[index].field_type" @on-change="changeItemField($event, index)">
                 <Option v-for="item in columnTypeList" :value="item" :key="item">{{ item }}</Option>
               </Select>
             </template>
@@ -166,7 +166,7 @@ export default {
         },
         {
           title: '字段类型',
-          slot: 'file_type',
+          slot: 'field_type',
           minWidth: 100,
         },
         {
@@ -259,11 +259,11 @@ export default {
   methods: {
     disabledInput(index){
       let fieldInfo = this.tableField[index];
-      let res = ['addTimestamps', 'addSoftDelete'].includes(this.tableField[index].file_type)
+      let res = ['addTimestamps', 'addSoftDelete'].includes(this.tableField[index].field_type)
       if (fieldInfo.primaryKey) {
         res = true;
       }
-      if (fieldInfo.field==='delete_time' && fieldInfo.file_type === 'timestamp') {
+      if (fieldInfo.field==='delete_time' && fieldInfo.field_type === 'timestamp') {
         res = true;
       }
       return res;
@@ -304,7 +304,7 @@ export default {
             if (!this.tableField.length) {
               this.tableField.push({
                 field: '',
-                file_type: '',
+                field_type: '',
                 default: '',
                 comment: '',
                 required: false,
@@ -326,18 +326,18 @@ export default {
         for (let i = 0; i < this.tableField.length; i++) {
           const el = this.tableField[i];
           if (
-            (!el.field || !el.file_type || !el.comment) &&
-            !['addTimestamps', 'addSoftDelete'].includes(el.file_type)
+            (!el.field || !el.field_type || !el.comment) &&
+            !['addTimestamps', 'addSoftDelete'].includes(el.field_type)
           ) {
             return this.$Message.warning('请先完善上一条数据');
           }
-          if (el.is_table && !el.table_name && !['addTimestamps', 'addSoftDelete'].includes(el.file_type)) {
+          if (el.is_table && !el.table_name && !['addTimestamps', 'addSoftDelete'].includes(el.field_type)) {
             return this.$Message.warning('请输入列表名');
           }
         }
         this.tableField.push({
           field: '',
-          file_type: '',
+          field_type: '',
           default: '',
           comment: '',
           required: false,

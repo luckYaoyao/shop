@@ -92,7 +92,7 @@ export default {
           if (this.$refs.Foundation.tableField.length)
             for (let i = 0; i < this.$refs.Foundation.tableField.length; i++) {
               const el = this.$refs.Foundation.tableField[i];
-              if (['addSoftDelete','addTimestamps'].indexOf(el.file_type)=== -1 && (!el.field || !el.file_type || !el.comment)) {
+              if (['addSoftDelete','addTimestamps'].indexOf(el.field_type)=== -1 && (!el.field || !el.field_type || !el.comment)) {
                 return this.$Message.warning('请完善sql表数据');
               }
             }

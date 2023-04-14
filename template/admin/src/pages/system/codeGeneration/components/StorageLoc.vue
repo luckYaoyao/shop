@@ -5,7 +5,7 @@
       <template #desc>
         <p>1、生成的文件位置尽量不要修改，可以在创建后自行移动</p>
         <p>2、生成的文件位置不会包含文件的绝对路径，在创建时会携带提前预设的绝对路径</p>
-        <p>3、前端模板文件默认位置在：config/app.php的admin_template_path自动中配置</p>
+        <p>3、前端模板文件默认位置在：config/app.php的admin_template_path中配置</p>
         <p>4、后端默认生成位置为：网站根目录</p>
         <p>5、确保前端/admin/src目录、后端app目录有写入创建文件权限</p>
       </template>

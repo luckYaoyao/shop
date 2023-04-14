@@ -72,7 +72,20 @@ class ViewPages extends Make
         $route = $options['route'] ?? '';
 
         $columnStr = [];
+        $contentVue = [];
         foreach ($field as $key => $item) {
+            if (isset($item['type'])) {
+                switch ($item['type']) {
+                    case 'frameImageOne':
+                        $templateContent = file_get_contents($this->getStub('image'));
+                        $contentVue[] = str_replace(['{%field%}'], [$item['field']], $templateContent);
+                        break;
+                    case 'frameImages':
+                        $templateContent = file_get_contents($this->getStub('images'));
+                        $contentVue[] = str_replace(['{%field%}'], [$item['field']], $templateContent);
+                        break;
+                }
+            }
             $columnStr[] = ($key == 0 ? $this->tab(2) : '') . "{\n" . $this->tab(3) . "title:\"{$item['name']}\"," . $this->tab(2) . "\n" . $this->tab(3) . "key:\"{$item['field']}\"\n" . $this->tab(2) . "}\n";
         }
         $this->value['route'] = $route;
@@ -81,6 +94,7 @@ class ViewPages extends Make
         $this->value['pathApiJs'] = $options['pathApiJs'] ?? '';
         $this->value['nameStudly'] = Str::studly($name);
         $this->value['nameCamel'] = Str::camel($name);
+        $this->value['content-table-vue'] = $contentVue ? implode("\n", $contentVue) : '';
 
         return parent::handle($name, $options);
     }
@@ -106,10 +120,16 @@ class ViewPages extends Make
      * @email 136327134@qq.com
      * @date 2023/4/1
      */
-    protected function getStub(string $type = '')
+    protected function getStub(string $type = 'index')
     {
-        return __DIR__ . DS . 'stubs' . DS . 'view' .
-            DS . 'pages' . DS . 'crud' .
-            DS . 'index.stub';
+        $pagesPath = __DIR__ . DS . 'stubs' . DS . 'view' . DS . 'pages' . DS . 'crud' . DS;
+
+        $stubs = [
+            'index' => $pagesPath . 'index.stub',
+            'image' => $pagesPath . 'image.stub',
+            'images' => $pagesPath . 'images.stub',
+        ];
+
+        return $type ? $stubs[$type] : $stubs['index'];
     }
 }
