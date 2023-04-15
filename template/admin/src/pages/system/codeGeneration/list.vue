@@ -2,7 +2,7 @@
   <div>
     <Card :bordered="false" dis-hover class="ivu-mt">
       <Button type="primary" @click="groupAdd()" class="mr20">代码生成</Button>
-      <Button type="success" @click="buildCode()" class="mr20">重新发布</Button>
+      <!-- <Button type="success" @click="buildCode()" class="mr20">重新发布</Button> -->
       <Table
         :columns="columns1"
         :data="tabList"
@@ -28,6 +28,8 @@
         </template>
         <template slot-scope="{ row, index }" slot="action">
           <a @click="edit(row, '编辑')">查看</a>
+          <Divider type="vertical" />
+          <a @click="downLoad(row)">下载</a>
           <Divider type="vertical" />
           <a @click="del(row, '删除', index)">删除</a>
         </template>
@@ -104,7 +106,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { crudList, crudDet } from '@/api/systemCodeGeneration';
+import { crudList, crudDet, crudDownload } from '@/api/systemCodeGeneration';
 import * as monaco from 'monaco-editor';
 import { getCookies, removeCookies } from '@/libs/util';
 import Setting from '@/setting';
@@ -203,6 +205,11 @@ export default {
     }
   },
   methods: {
+    downLoad(row) {
+      crudDownload(row.id).then((res) => {
+        window.open(res.data.download_url, '_blank');
+      });
+    },
     buildCode() {
       this.buildModals = true;
       if (typeof EventSource !== 'undefined') {
