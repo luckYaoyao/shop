@@ -117,7 +117,8 @@
               </Select>
             </template>
             <template slot-scope="{ row, index }" slot="action">
-              <a @click="del(row, index)">删除</a>
+              <a v-if="!foundation.isTable" @click="del(row, index)">删除</a>
+              <span v-else>--</span>
             </template>
           </Table>
         </div>
@@ -193,6 +194,12 @@ export default {
         {
           title: '必填',
           slot: 'required',
+          width: 70,
+          align: 'center',
+        },
+        {
+          title: '操作',
+          slot: 'action',
           width: 70,
           align: 'center',
         },
@@ -329,6 +336,9 @@ export default {
       crudColumnType().then((res) => {
         this.columnTypeList = res.data.types;
       });
+    },
+    del(index) {
+      this.tableField.splice(index, 1);
     },
   },
 };

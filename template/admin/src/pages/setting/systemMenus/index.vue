@@ -101,6 +101,7 @@
       @on-visible-change="modalchange"
     >
       <div class="search-rule">
+        <Alert>基础接口，可多选，并且添加后不会再展示出现；删除权限后才会出现；公共接口，可多选，并且添加后会继续展示；</Alert>
         <Input
           class="mr10"
           v-model="searchRule"
@@ -114,6 +115,7 @@
         <Button class="mr10" type="primary" @click="searchRules">搜索</Button>
         <Button @click="init">重置</Button>
       </div>
+
       <Tabs v-model="routeType" @on-click="changTab">
         <TabPane label="公共接口" name="1"></TabPane>
         <TabPane label="基础接口" name="0"></TabPane>

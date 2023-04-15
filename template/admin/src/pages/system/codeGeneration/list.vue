@@ -1,8 +1,8 @@
 <template>
   <div>
-
     <Card :bordered="false" dis-hover class="ivu-mt">
       <Button type="primary" @click="groupAdd()" class="mr20">代码生成</Button>
+      <Button type="success" @click="buildCode()" class="mr20">重新发布</Button>
       <Table
         :columns="columns1"
         :data="tabList"
@@ -84,6 +84,21 @@
         </div>
       </div>
     </Modal>
+    <Modal
+      v-model="buildModals"
+      scrollable
+      title="终端"
+      footer-hide
+      closable
+      :mask-closable="false"
+      width="60%"
+      :before-close="editModalChange"
+    >
+      <Alert type="warning">当前终端未运行于安装服务下，部分命令可能无法执行.</Alert>
+      <div>
+        <div v-for="(item, index) in codeBuildList" :key="index">{{ item }}</div>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -91,6 +106,8 @@
 import { mapState } from 'vuex';
 import { crudList, crudDet } from '@/api/systemCodeGeneration';
 import * as monaco from 'monaco-editor';
+import { getCookies, removeCookies } from '@/libs/util';
+import Setting from '@/setting';
 
 export default {
   data() {
@@ -108,7 +125,9 @@ export default {
         title: '',
       },
       loading: false,
+      buildModals: false,
       tabList: [],
+      codeBuildList: [],
       total: 0,
       columns1: [
         {
@@ -163,7 +182,34 @@ export default {
   mounted() {
     this.getList();
   },
+  beforeDestroy() {
+    if (this.source) {
+      this.source.close(); //关闭EventSource
+    }
+  },
   methods: {
+    buildCode() {
+      this.buildModals = true;
+      if (typeof EventSource !== 'undefined') {
+        //支持eventSource
+        var postURL = Setting.apiBaseURL + '/system/crud/npm?token=' + getCookies('token');
+        this.source = new EventSource(postURL);
+        let self = this; //因EventSource中this的指向变了，所以要提前存储一下
+        this.source.onopen = function (res) {
+          console.log('项目链接Eventsource成功', res);
+        };
+        this.source.onmessage = function (data) {
+          //代码块
+          console.log(data);
+        };
+        this.source.onerror = function (err) {
+          console.log('项目Eventsource链接失败', err);
+          //链接失败后EventSource会每隔三秒左右重新发起链接
+        };
+      } else {
+        console.log('暂不支持EventSource');
+      }
+    },
     // 跳转到组合数据列表页面
     goList(row) {
       this.$router.push({
