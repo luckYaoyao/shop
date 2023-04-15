@@ -254,6 +254,20 @@ abstract class BaseDao
     }
 
     /**
+     * 删除记录
+     * @param int $id
+     * @param bool $force
+     * @return bool
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/15
+     */
+    public function destroy(int $id, bool $force = false)
+    {
+        return $this->getModel()->destroy($id, $force);
+    }
+
+    /**
      * 更新数据
      * @param int|string|array $id
      * @param array $data

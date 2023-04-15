@@ -158,7 +158,7 @@ class SystemRoute extends AuthController
             return app('json')->fail('缺少参数');
         }
 
-        $this->services->delete($id);
+        $this->services->destroy($id);
 
         return app('json')->success('删除成功');
     }

@@ -311,6 +311,9 @@ class SystemCrud extends AuthController
         }
         $zipPath = app()->getRootPath() . 'backup' . DS . Str::camel($info->table_name);
         $zipName = app()->getRootPath() . 'backup' . DS . Str::camel($info->table_name) . '.zip';
+        if (is_file($zipName)) {
+            unlink($zipName);
+        }
         $makePath = $info->make_path ?? [];
         foreach ($makePath as $key => $item) {
             if (in_array($key, ['pages', 'router', 'api'])) {
@@ -361,7 +364,7 @@ class SystemCrud extends AuthController
             'path' => $zipName,
             'fileName' => Str::camel($info->table_name) . '.zip',
         ], 300);
-        return app()->success(['download_url' => sys_config('site_url') . '/adminapi/download/' . $key]);
+        return app('json')->success(['download_url' => sys_config('site_url') . '/adminapi/download/' . $key]);
     }
 
     /**

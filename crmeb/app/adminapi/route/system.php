@@ -134,7 +134,7 @@ Route::group('system', function () {
         ],
     ]);
     //下载生成的文件
-    Route::get('crud/download', 'v1.setting.SystemCrud/download')->option(['real_name' => '下载生成的文件']);
+    Route::get('crud/download/:id', 'v1.setting.SystemCrud/download')->option(['real_name' => '下载生成的文件']);
     //获取CRUD列表
     Route::get('crud/column_type', 'v1.setting.SystemCrud/columnType')->option(['real_name' => '获取CRUD列表']);
     //获取菜单TREE形数据
