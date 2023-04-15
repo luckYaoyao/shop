@@ -359,8 +359,8 @@ class SystemCrud extends AuthController
         $key = md5($zipName);
         CacheService::set($key, [
             'path' => $zipName,
-            'fileName' => Str::camel($info->table_name) . '.zip'
-        ]);
+            'fileName' => Str::camel($info->table_name) . '.zip',
+        ], 300);
         return app()->success(['download_url' => sys_config('site_url') . '/adminapi/download/' . $key]);
     }
 
