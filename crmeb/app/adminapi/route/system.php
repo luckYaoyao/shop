@@ -8,8 +8,8 @@
 // +----------------------------------------------------------------------
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
-use think\facade\Route;
 
+use think\facade\Route;
 
 /**
  * 维护 相关路由
@@ -133,8 +133,8 @@ Route::group('system', function () {
             'delete' => '删除路由分类'
         ],
     ]);
-    //执行重新打包
-    Route::get('crud/npm', 'v1.setting.SystemCrud/npm')->option(['real_name' => '执行重新打包']);
+    //下载生成的文件
+    Route::get('crud/download', 'v1.setting.SystemCrud/download')->option(['real_name' => '下载生成的文件']);
     //获取CRUD列表
     Route::get('crud/column_type', 'v1.setting.SystemCrud/columnType')->option(['real_name' => '获取CRUD列表']);
     //获取菜单TREE形数据

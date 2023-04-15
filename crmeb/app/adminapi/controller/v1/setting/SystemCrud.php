@@ -17,6 +17,7 @@ namespace app\adminapi\controller\v1\setting;
 use app\adminapi\controller\AuthController;
 use app\services\system\SystemCrudServices;
 use app\services\system\SystemMenusServices;
+use crmeb\services\CacheService;
 use crmeb\services\crud\Make;
 use crmeb\services\FileService;
 use crmeb\utils\Terminal;
@@ -291,6 +292,79 @@ class SystemCrud extends AuthController
     }
 
     /**
+     * 下载文件
+     * @param $id
+     * @return Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/15
+     */
+    public function download($id)
+    {
+        if (!$id) {
+            return app('json')->fail('缺少参数');
+        }
+
+        $info = $this->services->get($id);
+        if (!$info) {
+            return app('json')->fail('下载的文件不存在');
+        }
+        $zipPath = app()->getRootPath() . 'backup' . DS . Str::camel($info->table_name);
+        $zipName = app()->getRootPath() . 'backup' . DS . Str::camel($info->table_name) . '.zip';
+        $makePath = $info->make_path ?? [];
+        foreach ($makePath as $key => $item) {
+            if (in_array($key, ['pages', 'router', 'api'])) {
+                $item = $zipPath . str_replace(dirname(app()->getRootPath()), '', Make::adminTemplatePath()) . $item;
+            } else {
+                $item = $zipPath . DS . $item;
+            }
+            $makePath[$key] = $item;
+        }
+
+        $routeName = 'crud/' . Str::snake($info->table_name);
+
+        $column = $this->services->getColumnNamesList($info->table_name);
+        $key = 'id';
+        foreach ($column as $value) {
+            if ($value['primaryKey']) {
+                $key = $value['name'];
+                break;
+            }
+        }
+
+        $softDelete = false;
+
+        foreach ((array)$info->field['tableField'] as $item) {
+            if (isset($item['field_type']) && $item['field_type'] === 'addSoftDelete') {
+                $softDelete = true;
+                break;
+            }
+        }
+
+        $this->services->makeFile($info->table_name, $routeName, true, [
+            'menuName' => $info->name,
+            'key' => $key,
+            'softDelete' => $softDelete,
+            'fromField' => $info->field['fromField'] ?? [],
+            'columnField' => $info->field['columnField'] ?? [],
+        ], $makePath);
+
+        if (!extension_loaded('zip')) {
+            return app('json')->fail('请安装zip扩展后在尝试下载');
+        }
+
+        $fileService = new FileService();
+        $fileService->addZip($zipPath, $zipName, app()->getRootPath() . 'backup');
+
+        $key = md5($zipName);
+        CacheService::set($key, [
+            'path' => $zipName,
+            'fileName' => Str::camel($info->table_name) . '.zip'
+        ]);
+        return app()->success(['download_url' => sys_config('site_url') . '/adminapi/download/' . $key]);
+    }
+
+    /**
      * @return string
      * @author 等风来
      * @email 136327134@qq.com
@@ -304,26 +378,27 @@ class SystemCrud extends AuthController
 
         $adminPath = dirname($adminPath);
 
-        $dir = $adminPath . DS . 'node_modules';
-        if (!is_dir($dir)) {
-            $terminal->run('npm-install');
+        try {
+            $dir = $adminPath . DS . 'node_modules';
+            if (!is_dir($dir)) {
+//                $terminal->run('npm-install');
+            }
+
+//            $res = $terminal->run('npm-build');
+        } catch (\Throwable $e) {
+            $terminal->echoOutputFlag($e->getMessage());
         }
 
-        $terminal->run('npm-build');
-
         if (!is_dir($adminPath . DS . 'dist')) {
-            return Response::create([
+            echo Response::create([
                 'message' => '打包失败',
             ], 'json')->getContent();
         }
 
         $build = public_path() . config('app.admin_prefix');
 
-        $this->app->make(FileService::class)->copyDir($adminPath . DS . 'dist', $build);
+//        $this->app->make(FileService::class)->copyDir($adminPath . DS . 'dist', $build);
 
-        return Response::create([
-            'message' => '打包成功',
-            'success' => 'ok'
-        ], 'json')->getContent();
+//        echo $res;
     }
 }
