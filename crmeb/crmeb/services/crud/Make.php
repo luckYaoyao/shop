@@ -52,6 +52,18 @@ abstract class Make
     protected $fileBasePath;
 
     /**
+     * 文件内容
+     * @var string
+     */
+    protected $content = '';
+
+    /**
+     * 文件存放
+     * @var null
+     */
+    protected $filePath = null;
+
+    /**
      * 变量名称
      * @var array
      */
@@ -67,6 +79,12 @@ abstract class Make
      * @var bool
      */
     protected $isMake = true;
+
+    /**
+     * 文件存在是否生成
+     * @var bool
+     */
+    protected $isExistsMake = true;
 
     /**
      * 后台前端模板根路径
@@ -416,25 +434,19 @@ abstract class Make
         return 'app' . ($app ? '\\' . $app : '');
     }
 
-    /**
-     * 执行创建文件
-     * @return string
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/3/13
-     */
-    protected function makeFile(string $pathname, string $content)
+
+    public function make(string $pathname)
     {
-
-        $pathname = $this->filePathName ?: $pathname;
-
-
-        $content = str_replace('﻿', '', $content);
+        $pathname = $this->filePathName ?: ($this->filePath ?: $pathname);
 
         if ($this->isMake) {
 
             if (is_file($pathname)) {
-                throw new CrudException($this->name . ':' . $pathname . ' already exists!');
+                if ($this->isExistsMake) {
+                    unlink($pathname);
+                } else {
+                    throw new CrudException($this->name . ':' . $pathname . ' already exists!');
+                }
             }
 
             try {
@@ -446,12 +458,44 @@ abstract class Make
             }
 
             try {
-                file_put_contents($pathname, $content);
+                file_put_contents($pathname, $this->content);
             } catch (\Throwable $e) {
                 throw new CrudException('CRUD生成文件报错,无法写入:' . $pathname);
             }
         }
+    }
 
-        return $content;
+    /**
+     * 设置内容
+     * @param string $content
+     * @return array|string|string[]
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/14
+     */
+    protected function setContent(string $content)
+    {
+        $this->content = str_replace('﻿', '', $content);
+
+        return $this->content;
+    }
+
+    /**
+     * 执行创建文件
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/3/13
+     */
+    protected function makeFile(string $pathname, string $content)
+    {
+        $this->content = str_replace('﻿', '', $content);
+        $this->make($pathname);
+        return $this->content;
+    }
+
+    public function __destruct()
+    {
+        $this->content = '';
     }
 }

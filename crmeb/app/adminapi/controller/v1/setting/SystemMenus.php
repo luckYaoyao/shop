@@ -50,13 +50,13 @@ class SystemMenus extends AuthController
     }
 
     /**
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/4/14
      * @return \think\Response
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/14
      */
     public function unique()
     {
@@ -139,6 +139,8 @@ class SystemMenus extends AuthController
                 'unique_auth' => $menu['unique_auth'] ?? '',
                 'api_url' => $menu['api_url'],
                 'pid' => $menu['path'],
+                'auth_type' => 2,
+                'is_show' => 0,
             ];
         }
 
@@ -277,7 +279,7 @@ class SystemMenus extends AuthController
         if ($menuApiList) $menuApiList = array_column($menuApiList, 'rule');
         $list = [];
         foreach ($ruleList as $item) {
-            if (!in_array($item['path'] . '_' . strtolower($item['method']), $menuApiList)) {
+            if ($item['type'] || !in_array($item['path'] . '_' . strtolower($item['method']), $menuApiList)) {
                 $item['real_name'] = $item['name'] ?? '';
                 $item['method'] = strtoupper($item['method']);
                 $list[] = $item;

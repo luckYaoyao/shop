@@ -1018,9 +1018,11 @@ class FileService
                 $file = str_replace('\\', '/', $file);
                 if (in_array(substr($file, strrpos($file, '/') + 1), array('.', '..'))) continue;
                 if (is_dir($file) === true) {
-                    $zip->addEmptyDir(str_replace($folder . '/', '', $file . '/'));
+                    $fileName = $folder ? str_replace($folder . '/', '', $file . '/') : $file . '/';
+                    $zip->addEmptyDir($fileName);
                 } else if (is_file($file) === true) {
-                    $zip->addFromString(str_replace($folder . '/', '', $file), file_get_contents($file));
+                    $fileName = $folder ? str_replace($folder . '/', '', $file) : $file;
+                    $zip->addFromString($fileName, file_get_contents($file));
                 }
             }
         } else if (is_file($source) === true) {

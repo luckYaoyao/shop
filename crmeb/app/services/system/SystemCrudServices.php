@@ -369,7 +369,7 @@ class SystemCrudServices extends BaseServices
             $menuIds = array_column($menus->toArray(), 'id');
             array_push($menuIds, $menuInfo->id);
             //生成文件
-            $make = $this->makeFile($tableName, $routeName, true, $data, $filePath);
+            $make = $this->makeFile($tableName, $routeName, config('app.crud_make', false), $data, $filePath);
             $makePath = [];
             foreach ($make as $key => $item) {
                 $makePath[$key] = $item['path'];
@@ -555,7 +555,6 @@ class SystemCrudServices extends BaseServices
         [$apiContent, $apiPath] = $viewApi->setFilePathName($filePath['api'] ?? '')->isMake($isMake)->handle($tableName, [
             'route' => $routeName,
         ]);
-
         //生成前台页面
         $viewPages = app()->make(ViewPages::class);
         [$pagesContent, $pagesPath] = $viewPages->setFilePathName($filePath['pages'] ?? '')->isMake($isMake)->handle($tableName, [
