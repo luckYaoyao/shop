@@ -146,6 +146,21 @@ export default {
           minWidth: 130,
         },
         {
+          title: '字符集',
+          key: 'table_collation',
+          minWidth: 130,
+        },
+        {
+          title: '表备注',
+          key: 'table_comment',
+          minWidth: 130,
+        },
+        {
+          title: '添加时间',
+          key: 'add_time',
+          minWidth: 130,
+        },
+        {
           title: '操作',
           slot: 'action',
           fixed: 'right',

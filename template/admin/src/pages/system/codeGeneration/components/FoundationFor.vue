@@ -1,7 +1,17 @@
 <template>
   <div class="main">
+    <Alert closable>
+      crud生成说明
+      <template #desc>
+        <p>1、字段配置中表存在生成的字段为表内列的信息,并且主键、伪删除字段不允许设置为列，主键默认展示在列表中，伪删除字段不允许展示</p>
+        <p>2、在字段配置中新建表时，字段类型为addTimestamps会自动创建create_time、update_time字段，字段类型为：timestamp</p>
+        <p>3、在字段配置中新建表时，字段类型为addSoftDelete会字段创建delete_time字段，字段类型为：timestamp，作用是伪删除</p>
+        <p>4、在字段配置中，表单类型为frameImageOne时属于图片单选，frameImages时为图片多选</p>
+        <p>5、在字段配置中，表单类型为不生成时创建后不会生成对应的表单项</p>
+      </template>
+    </Alert>
     <Form ref="foundation" :model="foundation" :rules="foundationRules" :label-width="100">
-      <FormItem label="菜单" prop="pid">
+      <FormItem label="菜单">
         <!-- <Select class="form-width" v-model="foundation.pid">
           <Option value="beijing">New York</Option>
           <Option value="shanghai">London</Option>
@@ -15,7 +25,7 @@
           :props="{ checkStrictly: true, multiple: false, emitPath: false }"
           clearable
         ></el-cascader>
-        <div class="tip">必选项，选择的菜单成功后会自动写入到此菜单下</div>
+        <div class="tip">选项，选择的菜单成功后会自动写入到此菜单下</div>
       </FormItem>
       <FormItem label="菜单名称">
         <Input class="form-width" v-model="foundation.menuName" placeholder="请输入表名"></Input>
@@ -35,7 +45,7 @@
           <Radio :label="0">否</Radio>
         </RadioGroup>
         <div class="tip">
-          数据库表可以生成系统存在的，也可以选择【否】后手动生成，不过此生成方式不交单一；如果不满足使用需求可以先在数据库中创建表，然后选择【是】再进行操作
+          数据库表可以生成系统存在的，也可以选择【否】后手动生成；如果不满足使用需求可以先在数据库中创建表，然后选择【是】再进行操作
         </div>
       </FormItem>
       <FormItem label="字段配置">
@@ -56,13 +66,13 @@
               <span v-if="foundation.isTable">{{ row.field }}</span>
               <Input
                 v-else
-                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+                :disabled="disabledInput(index)"
                 v-model="tableField[index].field"
               ></Input>
             </template>
-            <template slot-scope="{ row, index }" slot="file_type">
-              <span v-if="foundation.isTable">{{ row.file_type }}</span>
-              <Select v-else v-model="tableField[index].file_type" @on-change="changeItemField($event, index)">
+            <template slot-scope="{ row, index }" slot="field_type">
+              <span v-if="foundation.isTable">{{ row.disabledInput }}</span>
+              <Select v-else v-model="tableField[index].field_type" @on-change="changeItemField($event, index)">
                 <Option v-for="item in columnTypeList" :value="item" :key="item">{{ item }}</Option>
               </Select>
             </template>
@@ -71,7 +81,7 @@
               <Input
                 v-else
                 v-model="tableField[index].limit"
-                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+                :disabled="disabledInput(index)"
               ></Input>
             </template>
             <template slot-scope="{ row, index }" slot="default">
@@ -79,7 +89,7 @@
               <Input
                 v-else
                 v-model="tableField[index].default"
-                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+                :disabled="disabledInput(index)"
               ></Input>
             </template>
             <template slot-scope="{ row, index }" slot="comment">
@@ -87,31 +97,31 @@
               <Input
                 v-else
                 v-model="tableField[index].comment"
-                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+                :disabled="disabledInput(index)"
               ></Input>
             </template>
             <template slot-scope="{ row, index }" slot="required">
               <Checkbox
                 v-model="tableField[index].required"
-                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+                :disabled="disabledInput(index)"
               ></Checkbox>
             </template>
             <template slot-scope="{ row, index }" slot="is_table">
               <Checkbox
                 v-model="tableField[index].is_table"
-                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+                :disabled="disabledInput(index)"
               ></Checkbox>
             </template>
             <template slot-scope="{ row, index }" slot="table_name">
               <Input
                 v-model="tableField[index].table_name"
-                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+                :disabled="disabledInput(index)"
               ></Input>
             </template>
             <template slot-scope="{ row, index }" slot="from_type">
               <Select
                 v-model="tableField[index].from_type"
-                :disabled="['addTimestamps', 'addSoftDelete'].includes(tableField[index].file_type)"
+                :disabled="disabledInput(index)"
               >
                 <Option v-for="item in fromTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
@@ -143,7 +153,7 @@ export default {
   data() {
     return {
       foundationRules: {
-        pid: [{ required: true, message: '请输入菜单', trigger: 'blur' }],
+        // pid: [{ required: true, message: '请输入菜单', trigger: 'blur' }],
         tableName: [{ required: true, message: '请输入表名', trigger: 'blur' }],
       },
       menusList: [],
@@ -156,7 +166,7 @@ export default {
         },
         {
           title: '字段类型',
-          slot: 'file_type',
+          slot: 'field_type',
           minWidth: 100,
         },
         {
@@ -247,16 +257,26 @@ export default {
   },
   mounted() {},
   methods: {
+    disabledInput(index){
+      let fieldInfo = this.tableField[index];
+      let res = ['addTimestamps', 'addSoftDelete'].includes(this.tableField[index].field_type)
+      if (fieldInfo.primaryKey) {
+        res = true;
+      }
+      if (fieldInfo.field==='delete_time' && fieldInfo.field_type === 'timestamp') {
+        res = true;
+      }
+      return res;
+    },
     initfield() {
       this.tableField = [];
     },
     changeItemField(e, i) {
-      console.log(e, i);
       if (e === 'addSoftDelete') {
-        this.$set(this.tableField[i], 'comment', '添加和修改时间');
+        this.$set(this.tableField[i], 'comment', '伪删除');
       }
       if (e === 'addTimestamps') {
-        this.$set(this.tableField[i], 'comment', '伪删除');
+        this.$set(this.tableField[i], 'comment', '添加和修改时间');
       }
     },
     changeRadio(status) {
@@ -284,7 +304,7 @@ export default {
             if (!this.tableField.length) {
               this.tableField.push({
                 field: '',
-                file_type: '',
+                field_type: '',
                 default: '',
                 comment: '',
                 required: false,
@@ -306,18 +326,18 @@ export default {
         for (let i = 0; i < this.tableField.length; i++) {
           const el = this.tableField[i];
           if (
-            (!el.field || !el.file_type || !el.comment) &&
-            !['addTimestamps', 'addSoftDelete'].includes(el.file_type)
+            (!el.field || !el.field_type || !el.comment) &&
+            !['addTimestamps', 'addSoftDelete'].includes(el.field_type)
           ) {
             return this.$Message.warning('请先完善上一条数据');
           }
-          if (el.is_table && !el.table_name && !['addTimestamps', 'addSoftDelete'].includes(el.file_type)) {
+          if (el.is_table && !el.table_name && !['addTimestamps', 'addSoftDelete'].includes(el.field_type)) {
             return this.$Message.warning('请输入列表名');
           }
         }
         this.tableField.push({
           field: '',
-          file_type: '',
+          field_type: '',
           default: '',
           comment: '',
           required: false,

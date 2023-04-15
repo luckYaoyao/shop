@@ -20,7 +20,7 @@ namespace app\model\crud{%path%};
 
 
 use crmeb\basic\BaseModel;
-
+{%use-php%}
 /**
  * Class {%nameCamel%}
  * @date {%date%}
@@ -28,7 +28,7 @@ use crmeb\basic\BaseModel;
  */
 class {%nameCamel%} extends BaseModel
 {
-
+{%content-php%}
     /**
      * 表名
      * @var string

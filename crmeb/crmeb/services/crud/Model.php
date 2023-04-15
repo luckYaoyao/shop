@@ -42,16 +42,20 @@ class Model extends Make
 
 
     /**
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/4/12
      * @param string $name
      * @param array $options
      * @return array|mixed|void
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/12
      */
     public function handle(string $name, array $options = [])
     {
         $this->value['key'] = $options['key'] ?? 'id';
+        if (isset($options['softDelete']) && $options['softDelete']) {
+            $this->value['use-php'] = "use think\model\concern\SoftDelete;\n";
+            $this->value['content-php'] = $this->tab() . "use SoftDelete;\n";
+        }
         return parent::handle($name, $options);
     }
 

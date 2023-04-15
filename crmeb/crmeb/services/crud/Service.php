@@ -123,6 +123,12 @@ class Service extends Make
      */
     protected function getOptionContent(array $option = [])
     {
+        if (!$option) {
+            $option = [
+                ['value' => 1, 'label' => '开启'],
+                ['value' => 0, 'label' => '关闭']
+            ];
+        }
         $php = '';
         if ($option) {
             $res = var_export($option, true);
@@ -150,7 +156,7 @@ class Service extends Make
     {
         $requiredText = $required ? '->required()' : '';
         $content = <<<CONTENT
-\$rule[] = FormBuilder::frameImage('$field', '$name', url(config('app.admin_prefix', 'admin') . '/widget.images/index', ['fodder' => '$field']), \$info[\'$field\'] ?? '')->icon('$icon')->width('$width')->height('$height')->modal(['footer-hide' => true])$requiredText
+\$rule[] = FormBuilder::frameImage('$field', '$name', url(config('app.admin_prefix', 'admin') . '/widget.images/index', ['fodder' => '$field']), \$info['$field'] ?? '')->icon('$icon')->width('$width')->height('$height')->modal(['footer-hide' => true])$requiredText
 CONTENT;
         return $content;
     }
@@ -172,7 +178,7 @@ CONTENT;
     {
         $requiredText = $required ? '->required()' : '';
         $content = <<<CONTENT
-\$rule[] = FormBuilder::frameImages('$field', '$name', url(config('app.admin_prefix', 'admin') . '/widget.images/index', ['fodder' => '$field', 'type' => 'many', 'maxLength' => $maxLength]), \$info[\'$field\'] ?? [])->maxLength($maxLength)->icon('$icon')->width('$width')->height('$height')->modal(['footer-hide' => true])$requiredText
+\$rule[] = FormBuilder::frameImages('$field', '$name', url(config('app.admin_prefix', 'admin') . '/widget.images/index', ['fodder' => '$field', 'type' => 'many', 'maxLength' => $maxLength]), \$info['$field'] ?? [])->maxLength($maxLength)->icon('$icon')->width('$width')->height('$height')->modal(['footer-hide' => true])$requiredText
 CONTENT;
         return $content;
     }

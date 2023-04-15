@@ -18,8 +18,11 @@ use app\adminapi\controller\AuthController;
 use app\services\system\SystemCrudServices;
 use app\services\system\SystemMenusServices;
 use crmeb\services\crud\Make;
+use crmeb\services\FileService;
+use crmeb\utils\Terminal;
 use think\facade\App;
 use think\helper\Str;
+use think\Response;
 
 /**
  * Class SystemCrud
@@ -74,10 +77,11 @@ class SystemCrud extends AuthController
 
         $fromField = $columnField = [];
         foreach ($data['tableField'] as $item) {
-            if ($item['is_table']) {
+            if ($item['is_table'] && !in_array($item['field_type'], ['addSoftDelete', 'addSoftDelete'])) {
                 $columnField[] = [
                     'field' => $item['field'],
                     'name' => $item['table_name'],
+                    'type' => $item['from_type'],
                 ];
             }
             if ($item['from_type']) {
@@ -145,7 +149,8 @@ class SystemCrud extends AuthController
             foreach ($field as $item) {
                 $tableField[] = [
                     'field' => $item['name'],
-                    'file_type' => $item['type'],
+                    'field_type' => $item['type'],
+                    'primaryKey' => (bool)$item['primaryKey'],
                     'default' => $item['default'],
                     'limit' => $item['limit'],
                     'comment' => $item['comment'],
@@ -189,9 +194,19 @@ class SystemCrud extends AuthController
             }
         }
 
+        $softDelete = false;
+
+        foreach ((array)$info->field['tableField'] as $item) {
+            if ($item['field_type'] === 'addSoftDelete') {
+                $softDelete = true;
+                break;
+            }
+        }
+
         $make = $this->services->makeFile($info->table_name, $routeName, false, [
             'menuName' => $info->name,
             'key' => $key,
+            'softDelete' => $softDelete,
             'fromField' => $info->field['fromField'] ?? [],
             'columnField' => $info->field['columnField'] ?? [],
         ]);
@@ -273,5 +288,42 @@ class SystemCrud extends AuthController
 
 
         return app('json')->success('删除成功');
+    }
+
+    /**
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/14
+     */
+    public function npm()
+    {
+        $terminal = new Terminal();
+
+        $adminPath = $terminal->adminTemplatePath();
+
+        $adminPath = dirname($adminPath);
+
+        $dir = $adminPath . DS . 'node_modules';
+        if (!is_dir($dir)) {
+            $terminal->run('npm-install');
+        }
+
+        $terminal->run('npm-build');
+
+        if (!is_dir($adminPath . DS . 'dist')) {
+            return Response::create([
+                'message' => '打包失败',
+            ], 'json')->getContent();
+        }
+
+        $build = public_path() . config('app.admin_prefix');
+
+        $this->app->make(FileService::class)->copyDir($adminPath . DS . 'dist', $build);
+
+        return Response::create([
+            'message' => '打包成功',
+            'success' => 'ok'
+        ], 'json')->getContent();
     }
 }
