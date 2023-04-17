@@ -339,6 +339,7 @@
 
 				],
 				virtual_type: 0,
+				allPrice: 0,
 				formContent: '',
 				payType: '', //支付方式
 				openType: 1, //优惠券打开方式 1=使用
