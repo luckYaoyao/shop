@@ -30,23 +30,7 @@
             </Table>
           </Card>
           <!-- 详情模态框-->
-          <Drawer
-            :closable="false"
-            width="740"
-            v-model="modals"
-            closable
-            :title="'[ ' + rows.name + ' ]' + rows.comment"
-          >
-            <!--          <Modal-->
-            <!--              v-model="modals"-->
-            <!--              class="tableBox"-->
-            <!--              scrollable-->
-            <!--              footer-hide-->
-            <!--              closable-->
-            <!--              :title="'[ ' + rows.name + ' ]' + rows.comment"-->
-            <!--              :mask-closable="false"-->
-            <!--              width="750"-->
-            <!--          >-->
+          <Drawer :closable="false" width="740" v-model="modals" :title="'[ ' + rows.name + ' ]' + rows.comment">
             <Table
               ref="selection"
               :columns="columns2"
@@ -270,13 +254,12 @@ export default {
       this.markModal = true;
     },
     ok() {
-      console.log('1');
       this.changeMarkData.mark = this.mark;
-      console.log(this.changeMarkData);
       updateMark(this.changeMarkData).then((res) => {
         this.$Message.success(res.msg);
+        console.log(this.rows);
         if (this.changeMarkData.is_field) {
-          this.Info({ name: this.changeMarkData.table });
+          this.Info({ name: this.changeMarkData.table, comment: this.rows.comment });
         } else {
           this.getList();
         }
