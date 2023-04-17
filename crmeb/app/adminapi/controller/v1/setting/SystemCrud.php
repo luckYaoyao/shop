@@ -98,12 +98,12 @@ class SystemCrud extends AuthController
         $data['fromField'] = $fromField;
         $data['columnField'] = $columnField;
         if (!$data['tableName']) {
-            return app('json')->fail('缺少表名');
+            return app('json')->fail(500045);
         }
 
         $this->services->createCrud($data);
 
-        return app('json')->success('创建成功');
+        return app('json')->success(500046);
     }
 
     /**
@@ -121,11 +121,11 @@ class SystemCrud extends AuthController
         ], true);
 
         if (!$tableName) {
-            return app('json')->fail('缺少表名');
+            return app('json')->fail(500045);
         }
 
         if (in_array($tableName, SystemCrudServices::NOT_CRUD_TABANAME)) {
-            return app('json')->fail('不能生成系统自带数据表');
+            return app('json')->fail(500044);
         }
 
         $routeName = 'crud/' . Str::snake($tableName);
@@ -176,12 +176,12 @@ class SystemCrud extends AuthController
     public function read($id)
     {
         if (!$id) {
-            return app('json')->fail('缺少参数');
+            return app('json')->fail(500035);
         }
 
         $info = $this->services->get($id);
         if (!$info) {
-            return app('json')->fail('查看的生成的文件不存在');
+            return app('json')->fail(500043);
         }
 
         $routeName = 'crud/' . Str::snake($info->table_name);
@@ -256,12 +256,12 @@ class SystemCrud extends AuthController
     public function delete(SystemMenusServices $services, $id)
     {
         if (!$id) {
-            return app('json')->fail('缺少参数');
+            return app('json')->fail(500035);
         }
 
         $info = $this->services->get($id);
         if (!$info) {
-            return app('json')->fail('删除的数据不存在');
+            return app('json')->fail(500042);
         }
 
         $services->transaction(function () use ($services, $info) {
@@ -283,12 +283,12 @@ class SystemCrud extends AuthController
                     unlink($item);
                 }
             } catch (\Throwable $e) {
-                return app('json')->success('删除生成的菜单和信息成功,删除文件出错，详细错误：' . $e->getMessage());
+                return app('json')->success(500041, [], ['message' => $e->getMessage()]);
             }
         }
 
 
-        return app('json')->success('删除成功');
+        return app('json')->success(100002);
     }
 
     /**
@@ -302,12 +302,12 @@ class SystemCrud extends AuthController
     public function download($id)
     {
         if (!$id) {
-            return app('json')->fail('缺少参数');
+            return app('json')->fail(500035);
         }
 
         $info = $this->services->get($id);
         if (!$info) {
-            return app('json')->fail('下载的文件不存在');
+            return app('json')->fail(500039);
         }
         $zipPath = app()->getRootPath() . 'backup' . DS . Str::camel($info->table_name);
         $zipName = app()->getRootPath() . 'backup' . DS . Str::camel($info->table_name) . '.zip';
@@ -353,7 +353,7 @@ class SystemCrud extends AuthController
         ], $makePath);
 
         if (!extension_loaded('zip')) {
-            return app('json')->fail('请安装zip扩展后在尝试下载');
+            return app('json')->fail(500040);
         }
 
         $fileService = new FileService();

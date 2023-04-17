@@ -112,16 +112,16 @@ class SystemRoute extends AuthController
         ]);
 
         if (!$data['name']) {
-            return app('json')->fail('请输入路由名称');
+            return app('json')->fail(500031);
         }
         if (!$data['path']) {
-            return app('json')->fail('请输入路由路径');
+            return app('json')->fail(500032);
         }
         if (!$data['method']) {
-            return app('json')->fail('请选择路由请求方式');
+            return app('json')->fail(500033);
         }
         if (!$data['app_name']) {
-            return app('json')->fail('缺少应用名参数');
+            return app('json')->fail(500034);
         }
         if ($id) {
             $this->services->update($id, $data);
@@ -130,7 +130,7 @@ class SystemRoute extends AuthController
             $this->services->save($data);
         }
 
-        return app('json')->success($id ? '修改成功' : '添加成功');
+        return app('json')->success($id ? 100001 : 100021);
     }
 
     /**
@@ -155,12 +155,12 @@ class SystemRoute extends AuthController
     public function delete($id)
     {
         if (!$id) {
-            return app('json')->fail('缺少参数');
+            return app('json')->fail(500035);
         }
 
         $this->services->destroy($id);
 
-        return app('json')->success('删除成功');
+        return app('json')->success(100002);
     }
 
 

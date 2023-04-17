@@ -80,7 +80,7 @@ class SystemRouteCate extends AuthController
         ]);
 
         if (!$data['name']) {
-            return app('json')->fail('缺少分类名称');
+            return app('json')->fail(500037);
         }
 
         $data['add_time'] = time();
@@ -88,7 +88,7 @@ class SystemRouteCate extends AuthController
         $this->services->save($data);
 
 
-        return app('json')->success('保存成功');
+        return app('json')->success(100000);
 
     }
 
@@ -122,13 +122,13 @@ class SystemRouteCate extends AuthController
         ]);
 
         if (!$data['name']) {
-            return app('json')->fail('缺少分类名称');
+            return app('json')->fail(500037);
         }
 
         $data['pid'] = $data['path'][count($data['path']) - 1] ?? 0;
         $this->services->update($id, $data);
 
-        return app('json')->success('修改成功');
+        return app('json')->success(100001);
     }
 
     /**
@@ -142,15 +142,15 @@ class SystemRouteCate extends AuthController
     public function delete(SystemRouteServices $service, $id)
     {
         if (!$id) {
-            return app('json')->fail('缺少参数');
+            return app('json')->fail(500035);
         }
 
         if ($service->count(['cate_id' => $id])) {
-            return app('json')->fail('请先删除分类下的接口');
+            return app('json')->fail(500038);
         }
 
         $this->services->delete($id);
 
-        return app('json')->success('删除成功');
+        return app('json')->success(100002);
     }
 }

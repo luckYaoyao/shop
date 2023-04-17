@@ -75,7 +75,7 @@ class ViewApi extends Make
         }
         $route = $options['route'] ?? '';
         if (!$route) {
-            throw new CrudException('缺少路由名称');
+            throw new CrudException(500053);
         }
 
         $contentJs = '';

@@ -49,7 +49,7 @@ class Route extends Make
         $routePath = $options['routePath'] ?? '';
         $menus = $options['menus'] ?? '';
         if (!$route) {
-            throw new CrudException('缺少路由名称');
+            throw new CrudException(500053);
         }
         if (!$action) {
             $action = ['index', 'create', 'save', 'edit', 'update', 'delete'];
