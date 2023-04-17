@@ -58,3 +58,13 @@ export function crudDet(id) {
     method: 'get',
   });
 }
+
+/**
+ * @description 代码生成 - 下载
+ */
+export function crudDownload(id) {
+  return request({
+    url: `/system/crud/download/${id}`,
+    method: 'get',
+  });
+}
