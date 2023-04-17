@@ -50,17 +50,19 @@ class StoreOrderDao extends BaseDao
         $realName = $where['real_name'] ?? '';
         $fieldKey = $where['field_key'] ?? '';
         $fieldKey = $fieldKey == 'all' ? '' : $fieldKey;
+        $status = $where['status'] ?? '';
+        unset($where['status']);
         return parent::search($where, $search)->when($isDel, function ($query) use ($where) {
             $query->where('is_del', $where['is_del']);
         })->when(isset($where['is_system_del']), function ($query) {
             $query->where('is_system_del', 0);
-        })->when(isset($where['status']) && $where['status'] !== '', function ($query) use ($where) {
-            switch ((int)$where['status']) {
+        })->when($status !== '', function ($query) use ($where, $status) {
+            switch ((int)$status) {
                 case 0://未支付
                     $query->where('paid', 0)->where('status', 0)->where('refund_status', 0)->where('is_del', 0);
                     break;
                 case 1://已支付 未发货
-                    $query->where('paid', 1)->whereIn('status', [0, 4])->whereIn('refund_status', [0, 3])->when(isset($where['shipping_type']), function ($query) {
+                    $query->where('paid', 1)->where('status', 0)->whereIn('refund_status', [0, 3])->when(isset($where['shipping_type']), function ($query) {
                         $query->where('shipping_type', 1);
                     })->where('is_del', 0);
                     break;
@@ -95,7 +97,7 @@ class StoreOrderDao extends BaseDao
                     $query->where('is_del', 1);
                     break;
                 case 9://全部用户未删除的订单
-                    $query->where('is_del', 0);
+                    $query->whereIn('refund_status', [0, 3])->where('is_del', 0);
                     break;
             }
         })->when(isset($where['paid']) && $where['paid'] !== '', function ($query) use ($where) {

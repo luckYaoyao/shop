@@ -15,11 +15,12 @@ use think\facade\Route;
  */
 Route::group('user', function () {
     //用户管理资源路由
-    Route::resource('user', 'v1.user.user')->except(['read'])->option([
+    Route::resource('user', 'v1.user.user')->option([
         'real_name' => [
             'index' => '获取用户列表',
             'create' => '获取用户表单',
             'save' => '保存用户',
+            'read' => '获取用户详情',
             'edit' => '获取修改用户表单',
             'update' => '修改用户',
             'delete' => '删除用户'
