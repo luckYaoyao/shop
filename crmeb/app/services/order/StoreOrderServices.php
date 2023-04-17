@@ -93,7 +93,7 @@ class StoreOrderServices extends BaseServices
     {
         [$page, $limit] = $this->getPageValue();
         $data = $this->dao->getOrderList($where, $field, $page, $limit, $with);
-        $count = $this->dao->count($where);
+        $count = $this->dao->count($where, false);
         $data = $this->tidyOrderList($data);
         foreach ($data as &$item) {
             $refund_num = array_sum(array_column($item['refund'], 'refund_num'));

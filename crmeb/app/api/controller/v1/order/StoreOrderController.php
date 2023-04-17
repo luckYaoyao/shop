@@ -605,6 +605,7 @@ class StoreOrderController
      * 订单统计数据
      * @param Request $request
      * @return mixed
+     * @throws \ReflectionException
      */
     public function data(Request $request)
     {
