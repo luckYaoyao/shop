@@ -18,7 +18,7 @@
           <Col span="12" class="fontColor1"
             >订单状态：{{ orderDatalist.orderInfo._status._title }}
             {{
-              orderDatalist.orderInfo.refund && orderDatalist.orderInfo.refund.length
+              orderDatalist.orderInfo.refund && orderDatalist.orderInfo.refund.length && orderDatalist.orderInfo.refund_status < 2
                 ? orderDatalist.orderInfo.is_all_refund
                   ? '退款中'
                   : '部分退款中'
