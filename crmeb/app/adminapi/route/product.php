@@ -43,8 +43,6 @@ Route::group('product', function () {
     Route::get('product/attrs/:id/:type', 'v1.product.StoreProduct/get_attrs')->option(['real_name' => '获取商品规格']);
     //商品列表头
     Route::get('product/type_header', 'v1.product.StoreProduct/type_header')->option(['real_name' => '商品列表头部数据']);
-    //商品详情
-    Route::get('product/:id', 'v1.product.StoreProduct/get_product_info')->option(['real_name' => '商品详情']);
     //加入回收站
     Route::delete('product/:id', 'v1.product.StoreProduct/delete')->option(['real_name' => '商品放入回收站']);
     //保存新建或保存
@@ -65,6 +63,8 @@ Route::group('product', function () {
     Route::get('product/rule/:id', 'v1.product.StoreProductRule/read')->option(['real_name' => '商品规则详情']);
     //删除属性规则
     Route::delete('product/rule/delete', 'v1.product.StoreProductRule/delete')->option(['real_name' => '删除商品规则']);
+    //商品详情
+    Route::get('product/:id', 'v1.product.StoreProduct/get_product_info')->option(['real_name' => '商品详情']);
     //生成属性
     Route::post('generate_attr/:id/:type', 'v1.product.StoreProduct/is_format_attr')->option(['real_name' => '生成商品规格列表']);
     //评论列表
