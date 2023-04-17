@@ -65,7 +65,7 @@ class SystemRouteServices extends BaseServices
     {
         $routeInfo = $this->dao->get($id);
         if (!$routeInfo) {
-            throw new ValidateException('修改的路由不存在');
+            throw new ValidateException(500036);
         }
 
         $routeInfo = $routeInfo->toArray();

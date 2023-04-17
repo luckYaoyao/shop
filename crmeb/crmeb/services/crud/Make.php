@@ -445,7 +445,7 @@ abstract class Make
                 if ($this->isExistsMake) {
                     unlink($pathname);
                 } else {
-                    throw new CrudException($this->name . ':' . $pathname . ' already exists!');
+                    throw new CrudException(500052, ['filename' => $this->name . ':' . $pathname]);
                 }
             }
 
@@ -454,13 +454,13 @@ abstract class Make
                     mkdir(dirname($pathname), 0755, true);
                 }
             } catch (\Throwable $e) {
-                throw new CrudException('CRUD创建目录报错,无法创建:' . dirname($pathname));
+                throw new CrudException(500050, ['pathname' => dirname($pathname)]);
             }
 
             try {
                 file_put_contents($pathname, $this->content);
             } catch (\Throwable $e) {
-                throw new CrudException('CRUD生成文件报错,无法写入:' . $pathname);
+                throw new CrudException(500051, ['pathname' => $pathname]);
             }
         }
     }

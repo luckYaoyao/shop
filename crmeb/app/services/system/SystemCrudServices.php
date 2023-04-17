@@ -16,6 +16,7 @@ namespace app\services\system;
 
 use app\dao\system\SystemCrudDao;
 use app\services\BaseServices;
+use crmeb\exceptions\AdminException;
 use crmeb\services\crud\Controller;
 use crmeb\services\crud\Dao;
 use crmeb\services\crud\Make;
@@ -27,11 +28,8 @@ use crmeb\services\crud\ViewApi;
 use crmeb\services\crud\ViewPages;
 use crmeb\services\crud\ViewRouter;
 use Phinx\Db\Adapter\AdapterFactory;
-use think\exception\ValidateException;
 use think\facade\Db;
 use think\helper\Str;
-use think\migration\Migrator;
-use Phinx\Db\Adapter\MysqlAdapter;
 use think\migration\db\Table;
 
 /**
@@ -140,7 +138,7 @@ class SystemCrudServices extends BaseServices
     {
 
         if (!in_array($type, $this->getTabelRule()['types'])) {
-            throw new ValidateException('类型不在支持范围');
+            throw new AdminException(500047);
         }
 
         return $this->getTabelRule()['rule'][$type] ?? $type;
@@ -234,7 +232,7 @@ class SystemCrudServices extends BaseServices
         $filePath = $this->valueReplace($data['filePath']);
 
         if ($this->dao->value(['table_name' => $tableName])) {
-            throw new ValidateException('此表已经生成请在列表中查看');
+            throw new AdminException(500048);
         }
 
         $data['softDelete'] = false;
@@ -247,13 +245,13 @@ class SystemCrudServices extends BaseServices
         }
 
         if (in_array($tableName, self::NOT_CRUD_TABANAME)) {
-            throw new ValidateException('不能生成系统自带数据表');
+            throw new AdminException(500044);
         }
 
         //读取表结构
         $column = $this->getColumnNamesList($tableName);
         if (!$column) {
-            throw new ValidateException('请先创建' . $tableName . '表');
+            throw new AdminException(500049, ['_name' => $tableName]);
         }
 
         $tableInfo = $this->getTableInfo($tableName);
