@@ -10,8 +10,6 @@
 // +----------------------------------------------------------------------
 namespace crmeb\services\crud;
 
-use crmeb\services\FormBuilder as Form;
-use think\facade\Route as Url;
 use think\helper\Str;
 
 /**
@@ -39,7 +37,7 @@ class Service extends Make
     /**
      * @param string $name
      * @param array $options
-     * @return mixed|void
+     * @return Service
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/3/23
@@ -106,12 +104,10 @@ class Service extends Make
         $contentStr = str_replace($this->var, $this->value, $content);
 
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
-
-        return [
-            $this->makeFile($filePath, $contentStr),
-            $this->filePathName ?: $filePath,
-            $this->baseDir . '\\' . $this->value['nameCamel']
-        ];
+        $this->usePath = $this->baseDir . '\\' . $this->value['nameCamel'];
+        $this->setContent($contentStr);
+        $this->setPathname($filePath);
+        return $this;
     }
 
     /**

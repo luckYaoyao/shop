@@ -44,7 +44,7 @@ class Controller extends Make
     }
 
     /**
-     * @return mixed|void
+     * @return Controller
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/3/13
@@ -99,8 +99,10 @@ class Controller extends Make
         $contentStr = str_replace($this->var, $this->value, $contentController);
 
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
-
-        return [$this->makeFile($filePath, $contentStr), $this->filePathName ?: $filePath, $this->value['path']];
+        $this->usePath = $this->value['path'];
+        $this->setPathname($filePath);
+        $this->setContent($contentStr);
+        return $this;
     }
 
     /**

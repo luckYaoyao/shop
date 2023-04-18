@@ -61,7 +61,7 @@ class ViewApi extends Make
     /**
      * @param string $name
      * @param array $options
-     * @return array
+     * @return ViewApi
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/4/4
@@ -100,9 +100,9 @@ class ViewApi extends Make
         $contentStr = str_replace($this->var, $this->value, $content);
         $filePath = $this->getFilePathName($path, Str::camel($name));
 
-        $content = $this->makeFile($filePath, $contentStr);
-
-        return [$content, $this->filePathName ?: $filePath];
+        $this->setPathname($filePath);
+        $this->setContent($contentStr);
+        return $this;
     }
 
     /**

@@ -198,7 +198,7 @@ class SystemCrud extends AuthController
         $softDelete = false;
 
         foreach ((array)$info->field['tableField'] as $item) {
-            if ($item['field_type'] === 'addSoftDelete') {
+            if (isset($item['field_type']) && $item['field_type'] === 'addSoftDelete') {
                 $softDelete = true;
                 break;
             }
@@ -350,7 +350,7 @@ class SystemCrud extends AuthController
             'softDelete' => $softDelete,
             'fromField' => $info->field['fromField'] ?? [],
             'columnField' => $info->field['columnField'] ?? [],
-        ], $makePath);
+        ], $makePath, $zipPath);
 
         if (!extension_loaded('zip')) {
             return app('json')->fail(500040);

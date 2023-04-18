@@ -58,10 +58,16 @@ abstract class Make
     protected $content = '';
 
     /**
-     * 文件存放
-     * @var null
+     * 实际文件存放
+     * @var string
      */
-    protected $filePath = null;
+    protected $pathname = '';
+
+    /**
+     * 命名空间路径
+     * @var string
+     */
+    protected $usePath = '';
 
     /**
      * 变量名称
@@ -74,17 +80,6 @@ abstract class Make
      * @var array
      */
     protected $value = [];
-
-    /**
-     * @var bool
-     */
-    protected $isMake = true;
-
-    /**
-     * 文件存在是否生成
-     * @var bool
-     */
-    protected $isExistsMake = true;
 
     /**
      * 后台前端模板根路径
@@ -123,6 +118,22 @@ abstract class Make
         $this->var = $this->authDrawVar();
         $this->value = $this->drawValueKeys();
         $this->setDefaultValue();
+    }
+
+    /**
+     * 设置默认路径
+     * @param string $basePath
+     * @return $this
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/18
+     */
+    public function setbasePath(string $basePath)
+    {
+        if ($basePath) {
+            $this->basePath = $basePath;
+        }
+        return $this;
     }
 
     /**
@@ -177,17 +188,6 @@ abstract class Make
     }
 
     /**
-     * @return string
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/4/7
-     */
-    public function getFileBasePath()
-    {
-        return $this->fileBasePath;
-    }
-
-    /**
      * 设置文件保存就路径名称
      * @param string $filePathName
      * @return $this
@@ -217,22 +217,8 @@ abstract class Make
     }
 
     /**
-     * 是否生成文件
-     * @param bool $isMake
-     * @return $this
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/4/3
-     */
-    public function isMake(bool $isMake = true)
-    {
-        $this->isMake = $isMake;
-        return $this;
-    }
-
-    /**
      * 执行创建
-     * @return mixed|void
+     * @return Make
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/3/13
@@ -256,11 +242,11 @@ abstract class Make
         $contentStr = str_replace($this->var, $this->value, $content);
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
 
-        return [
-            $this->makeFile($filePath, $contentStr),
-            $this->filePathName ?: $filePath,
-            $this->baseDir . '\\' . $this->value['nameCamel']
-        ];
+        $this->usePath = $this->baseDir . '\\' . $this->value['nameCamel'];
+        $this->setPathname($filePath);
+        $this->setContent($contentStr);
+
+        return $this;
     }
 
     /**
@@ -434,37 +420,6 @@ abstract class Make
         return 'app' . ($app ? '\\' . $app : '');
     }
 
-
-    public function make(string $pathname)
-    {
-        $pathname = $this->filePathName ?: ($this->filePath ?: $pathname);
-
-        if ($this->isMake) {
-
-            if (is_file($pathname)) {
-                if ($this->isExistsMake) {
-                    unlink($pathname);
-                } else {
-                    throw new CrudException(500052, ['filename' => $this->name . ':' . $pathname]);
-                }
-            }
-
-            try {
-                if (!is_dir(dirname($pathname))) {
-                    mkdir(dirname($pathname), 0755, true);
-                }
-            } catch (\Throwable $e) {
-                throw new CrudException(500050, ['pathname' => dirname($pathname)]);
-            }
-
-            try {
-                file_put_contents($pathname, $this->content);
-            } catch (\Throwable $e) {
-                throw new CrudException(500051, ['pathname' => $pathname]);
-            }
-        }
-    }
-
     /**
      * 设置内容
      * @param string $content
@@ -476,26 +431,90 @@ abstract class Make
     protected function setContent(string $content)
     {
         $this->content = str_replace('﻿', '', $content);
-
         return $this->content;
     }
 
     /**
-     * 执行创建文件
+     * @param string $pathname
+     * @return $this
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/18
+     */
+    protected function setPathname(string $pathname)
+    {
+        $this->pathname = $this->filePathName ?: $pathname;
+        return $this;
+    }
+
+    /**
+     * @param string $key
+     * @return mixed|null
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/18
+     */
+    public function getValue(string $key)
+    {
+        return $this->value[$key] ?? null;
+    }
+
+    /**
+     * 获取命名空间路径
      * @return string
      * @author 等风来
      * @email 136327134@qq.com
-     * @date 2023/3/13
+     * @date 2023/4/18
      */
-    protected function makeFile(string $pathname, string $content)
+    public function getUsePath()
     {
-        $this->content = str_replace('﻿', '', $content);
-        $this->make($pathname);
+        return $this->usePath;
+    }
+
+    /**
+     * 获取内容
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/18
+     */
+    public function getContent()
+    {
         return $this->content;
+    }
+
+    /**
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/18
+     */
+    public function getPath()
+    {
+        return $this->pathname;
+    }
+
+    /**
+     * @return array
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/18
+     */
+    public function toArray()
+    {
+        return [
+            'path' => $this->pathname,
+            'content' => $this->content,
+            'value' => $this->value,
+            'var' => $this->var,
+            'usePath' => $this->usePath,
+        ];
     }
 
     public function __destruct()
     {
         $this->content = '';
+        $this->pathname = '';
+        $this->usePath = '';
     }
 }

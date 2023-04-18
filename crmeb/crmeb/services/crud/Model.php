@@ -44,7 +44,7 @@ class Model extends Make
     /**
      * @param string $name
      * @param array $options
-     * @return array|mixed|void
+     * @return Model
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/4/12
