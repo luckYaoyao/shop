@@ -541,6 +541,6 @@ export default {
 
 // 选项卡头部
 >>> .ivu-tabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-nav-container {
-  background-color: #333;
+  background-color: #fff;
 }
 </style>

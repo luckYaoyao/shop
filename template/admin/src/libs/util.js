@@ -163,7 +163,7 @@ export const getHomeRoute = (routers, homeName = 'home') => {
 export const getNewTagList = (list, newRoute) => {
   const { name, path, meta } = newRoute;
   let newList = [...list];
-  if (newList.findIndex((item) => item.name === name) >= 0) return newList;
+  if (newList.findIndex((item) => item.path === path) >= 0) return newList;
   else newList.push({ name, path, meta });
   return newList;
 };

@@ -63,13 +63,14 @@
         </div>
       </template>
       <template slot-scope="{ row, index }" slot="action">
-        <a @click="edit(row)" v-if="row._status === 1">编辑</a>
+        <a @click="edit(row)" v-if="row._status === 1 && row.is_del !== 1">编辑</a>
         <a
           @click="sendOrder(row)"
           v-if="
             (row.status === 4 || row._status === 2 || row._status === 8) &&
             row.shipping_type === 1 &&
-            (row.pinkStatus === null || row.pinkStatus === 2)
+            (row.pinkStatus === null || row.pinkStatus === 2) &&
+            row.is_del !== 1
           "
           >发送货</a
         >
@@ -81,12 +82,15 @@
         >
         <Divider
           type="vertical"
-          v-if="(row._status === 8 || row.status === 0 || row.status === 4) && row.split.length"
+          v-if="(row._status === 8 || row.status === 0 || row.status === 4) && row.split.length && row.is_del !== 1"
         />
-        <a @click="splitOrderDetail(row)" v-if="row.split.length">查看子订单</a>
+        <a @click="splitOrderDetail(row)" v-if="row.split.length && row.is_del !== 1">查看子订单</a>
         <Divider
           type="vertical"
-          v-if="(row._status === 2 && row.shipping_type === 1 && row.pinkStatus === 2) || row.split.length"
+          v-if="
+            (row._status === 2 && row.shipping_type === 1 && row.pinkStatus === 2) ||
+            (row.split.length && row.is_del !== 1)
+          "
         />
         <Divider
           type="vertical"
@@ -97,7 +101,8 @@
               row._status === 3 ||
               (row._status === 2 && !row.pinkStatus) ||
               row._status === 4 ||
-              (row.shipping_type == 2 && row.status == 0 && row.paid == 1 && row.refund_status === 0))
+              (row.shipping_type == 2 && row.status == 0 && row.paid == 1 && row.refund_status === 0)) &&
+            row.is_del !== 1
           "
         />
         <template>
@@ -110,7 +115,7 @@
               <DropdownItem
                 name="1"
                 ref="ones"
-                v-show="row._status === 1 && row.paid === 0 && row.pay_type === 'offline'"
+                v-show="row._status === 1 && row.paid === 0 && row.pay_type === 'offline' && row.is_del !== 1"
                 >确认付款</DropdownItem
               >
               <DropdownItem name="2">订单详情</DropdownItem>
