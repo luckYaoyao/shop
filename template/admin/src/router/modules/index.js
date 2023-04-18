@@ -9,7 +9,7 @@
 // +---------------------------------------------------------------------
 
 import LayoutMain from '@/layout';
-import setting  from '@/setting'
+import setting from '@/setting';
 let routePre = setting.routePre;
 
 // export default {
@@ -52,7 +52,7 @@ export default {
   component: LayoutMain,
   children: [
     {
-      path: routePre+'/home',
+      path: routePre + '/home/',
       name: `${pre}index`,
       header: 'home',
       meta: {
