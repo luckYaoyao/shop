@@ -1085,7 +1085,6 @@ class FileService
         }
         $res = true;
         foreach ($files as $item) {
-            var_dump($item['value']);
             $res = $res && file_put_contents($item['path'], $item['content'], LOCK_EX);
         }
 
