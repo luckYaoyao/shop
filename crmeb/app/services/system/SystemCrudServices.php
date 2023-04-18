@@ -27,6 +27,7 @@ use crmeb\services\crud\Validate;
 use crmeb\services\crud\ViewApi;
 use crmeb\services\crud\ViewPages;
 use crmeb\services\crud\ViewRouter;
+use crmeb\services\FileService;
 use Phinx\Db\Adapter\AdapterFactory;
 use think\facade\Db;
 use think\helper\Str;
@@ -504,99 +505,105 @@ class SystemCrudServices extends BaseServices
      * @param bool $isMake
      * @param array $options
      * @param array $filePath
+     * @param string $basePath
      * @return array[]
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/4/7
      */
-    public function makeFile(string $tableName, string $routeName, bool $isMake = false, array $options = [], array $filePath = [])
+    public function makeFile(string $tableName, string $routeName, bool $isMake = false, array $options = [], array $filePath = [], string $basePath = '')
     {
         $options['fromField'] = is_array($options['fromField']) ? $options['fromField'] : [];
         $options['columnField'] = is_array($options['columnField']) ? $options['columnField'] : [];
         //生成模型
         $model = app()->make(Model::class);
-        [$modelContent, $modelPath, $usePath] = $model->setFilePathName($filePath['model'] ?? '')->isMake($isMake)->handle($tableName, $options);
+        $model->setFilePathName($filePath['model'] ?? '')->setbasePath($basePath)->handle($tableName, $options);
         //生成dao
         $dao = app()->make(Dao::class);
-        [$daoContent, $daoPath, $usePath] = $dao->setFilePathName($filePath['dao'] ?? '')->isMake($isMake)->handle($tableName, [
-            'usePath' => $usePath,
+        $dao->setFilePathName($filePath['dao'] ?? '')->setbasePath($basePath)->handle($tableName, [
+            'usePath' => $model->getUsePath(),
         ]);
         //生成service
         $service = app()->make(Service::class);
-        [$serviceContent, $servicePath, $usePath] = $service->setFilePathName($filePath['service'] ?? '')->isMake($isMake)->handle($tableName, [
+        $service->setFilePathName($filePath['service'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'field' => $options['fromField'],
-            'usePath' => $usePath,
+            'usePath' => $dao->getUsePath(),
         ]);
         //生成验证器
         $validate = app()->make(Validate::class);
-        [$validateContent, $validatePath] = $validate->setFilePathName($filePath['validate'] ?? '')->isMake($isMake)->handle($tableName);
+        $validate->setFilePathName($filePath['validate'] ?? '')->setbasePath($basePath)->handle($tableName);
         //生成控制器
         $controller = app()->make(Controller::class);
-        [$controllerContent, $controllerPath] = $controller->setFilePathName($filePath['controller'] ?? '')->isMake($isMake)->handle($tableName, [
-            'usePath' => $usePath,
+        $controller->setFilePathName($filePath['controller'] ?? '')->setbasePath($basePath)->handle($tableName, [
+            'usePath' => $service->getUsePath(),
             'field' => array_column($options['fromField'], 'field'),
         ]);
         //生成路由
         $route = app()->make(Route::class);
-        [$routeContent, $routePath] = $route->setFilePathName($filePath['route'] ?? '')->isMake($isMake)->handle($tableName, [
+        $route->setFilePathName($filePath['route'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'menus' => $options['menuName'],
             'route' => $routeName
         ]);
         //生成前台路由
         $viewRouter = app()->make(ViewRouter::class);
-        [$routerContent, $routerPath] = $viewRouter->setFilePathName($filePath['router'] ?? '')->isMake($isMake)->handle($tableName, [
+        $viewRouter->setFilePathName($filePath['router'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'route' => $routeName,
             'menuName' => $options['menuName'],
         ]);
         //生成前台接口
         $viewApi = app()->make(ViewApi::class);
-        [$apiContent, $apiPath] = $viewApi->setFilePathName($filePath['api'] ?? '')->isMake($isMake)->handle($tableName, [
+        $viewApi->setFilePathName($filePath['api'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'route' => $routeName,
         ]);
         //生成前台页面
         $viewPages = app()->make(ViewPages::class);
-        [$pagesContent, $pagesPath] = $viewPages->setFilePathName($filePath['pages'] ?? '')->isMake($isMake)->handle($tableName, [
+        $viewPages->setFilePathName($filePath['pages'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'field' => $options['columnField'],
             'route' => $routeName,
-            'pathApiJs' => '@/' . str_replace('\\', '/', str_replace([Make::adminTemplatePath(), '.js'], '', $apiPath)),
+            'pathApiJs' => '@/' . str_replace('\\', '/', str_replace([Make::adminTemplatePath(), '.js'], '', $viewApi->getPath())),
         ]);
+
+        //创建文件
+        if ($isMake) {
+            FileService::batchMakeFiles([$model, $dao, $service, $controller, $route, $viewApi, $viewPages, $viewRouter]);
+        }
 
         return [
             'controller' => [
-                'path' => $this->replace($controllerPath),
-                'content' => $controllerContent
+                'path' => $this->replace($controller->getPath()),
+                'content' => $controller->getContent()
             ],
             'model' => [
-                'path' => $this->replace($modelPath),
-                'content' => $modelContent
+                'path' => $this->replace($model->getPath()),
+                'content' => $model->getContent()
             ],
             'dao' => [
-                'path' => $this->replace($daoPath),
-                'content' => $daoContent
+                'path' => $this->replace($dao->getPath()),
+                'content' => $dao->getContent()
             ],
             'route' => [
-                'path' => $this->replace($routePath),
-                'content' => $routeContent
+                'path' => $this->replace($route->getPath()),
+                'content' => $route->getContent()
             ],
             'service' => [
-                'path' => $this->replace($servicePath),
-                'content' => $serviceContent
+                'path' => $this->replace($service->getPath()),
+                'content' => $service->getContent()
             ],
             'validate' => [
-                'path' => $this->replace($validatePath),
-                'content' => $validateContent
+                'path' => $this->replace($validate->getPath()),
+                'content' => $validate->getContent()
             ],
             'router' => [
-                'path' => $this->replace($routerPath),
-                'content' => $routerContent
+                'path' => $this->replace($viewRouter->getPath()),
+                'content' => $viewRouter->getContent()
             ],
             'api' => [
-                'path' => $this->replace($apiPath),
-                'content' => $apiContent
+                'path' => $this->replace($viewApi->getPath()),
+                'content' => $viewApi->getContent()
             ],
             'pages' => [
-                'path' => $this->replace($pagesPath),
-                'content' => $pagesContent
+                'path' => $this->replace($viewPages->getPath()),
+                'content' => $viewPages->getContent()
             ],
         ];
     }

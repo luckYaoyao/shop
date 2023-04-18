@@ -61,7 +61,7 @@ class ViewRouter extends Make
      * @param string $name
      * @param string $path
      * @param array $options
-     * @return false|mixed|void
+     * @return ViewRouter
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/4/4
@@ -90,9 +90,9 @@ class ViewRouter extends Make
 
         $filePath = $this->getFilePathName($path, Str::camel($name));
 
-        $makeContent = $this->makeFile($filePath, $contentStr);
-
-        return [$makeContent, $filePath];
+        $this->setContent($contentStr);
+        $this->setPathname($filePath);
+        return $this;
     }
 
     /**

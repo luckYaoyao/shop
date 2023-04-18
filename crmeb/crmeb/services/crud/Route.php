@@ -38,7 +38,7 @@ class Route extends Make
     /**
      * @param string $name
      * @param array $options
-     * @return mixed|void
+     * @return Route
      */
     public function handle(string $name, array $options = [])
     {
@@ -86,7 +86,10 @@ class Route extends Make
 
         $filePath = $this->getFilePathName($path, strtolower($name));
 
-        return [$this->makeFile($filePath, $contentStr), $this->filePathName ?: $filePath];
+        $this->setPathname($filePath);
+        $this->setContent($contentStr);
+
+        return $this;
     }
 
     /**
