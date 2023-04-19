@@ -59,6 +59,8 @@ class StoreCombinationDao extends BaseDao
                     $query->name('store_category')->where('pid', $where['cid'])->field('id')->select();
                 })->field('product_id')->select();
             });
+        })->when(isset($where['id']) && $where['id'], function ($query) use ($where) {
+            $query->where('id', $where['id']);
         });
     }
 
