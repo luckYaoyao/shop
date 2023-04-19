@@ -235,7 +235,7 @@ export default {
         {
           col: 8,
           count: 0,
-          name: '推广人数（人）',
+          name: '砍价人数（人）',
           className: 'ios-speedometer-outline',
         },
         {

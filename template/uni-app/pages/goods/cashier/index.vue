@@ -178,7 +178,7 @@
 			getBasicConfig() {
 				basicConfig().then(res => {
 					//微信支付是否开启
-					this.cartArr[0].payStatus = res.data.wechat_pay_status || 0
+					this.cartArr[0].payStatus = res.data.pay_weixin_open || 0
 					//支付宝是否开启
 					this.cartArr[1].payStatus = res.data.ali_pay_status || 0;
 					//#ifdef MP
