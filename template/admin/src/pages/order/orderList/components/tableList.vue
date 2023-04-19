@@ -23,6 +23,9 @@
         <span class="nickname">{{ row.nickname }}</span> |
         <span class="uid">{{ row.uid }}</span>
       </template>
+      <template slot-scope="{ row, index }" slot="pay_price">
+        <span>{{ row.paid ? row.pay_price : '未支付' }}</span>
+      </template>
       <template slot-scope="{ row, index }" slot="info">
         <div class="tabBox" v-for="(val, i) in row._info" :key="i">
           <div class="tabBox_img" v-viewer>
@@ -262,7 +265,7 @@ export default {
         },
         {
           title: '实际支付',
-          key: 'pay_price',
+          slot: 'pay_price',
           align: 'center',
           width: 100,
         },
