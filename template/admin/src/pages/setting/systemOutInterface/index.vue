@@ -90,7 +90,7 @@
               {{ formValidate.name }}
             </div>
             <div>
-              <Button type="primary" class="submission mr20" @click="debugging()">调试</Button>
+              <!-- <Button type="primary" class="submission mr20" @click="debugging()">调试</Button> -->
               <Button v-if="formValidate.id" type="primary" class="submission mr20" @click="isEdit = !isEdit">{{
                 isEdit ? '返回' : '编辑'
               }}</Button>
