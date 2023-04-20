@@ -31,6 +31,9 @@ export default {
     getThemeConfig() {
       return this.$store.state.themeConfig.themeConfig;
     },
+    tagNavList() {
+      return this.$store.state.app.tagNavList;
+    },
   },
   watch: {
     $route(newRoute) {

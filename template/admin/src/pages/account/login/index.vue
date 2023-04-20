@@ -213,6 +213,8 @@ export default {
           this.$store.dispatch('routesList/setRoutesList', data.menus);
           let arr = formatFlatteningRoutes(this.$router.options.routes);
           this.formatTwoStageRoutes(arr);
+          this.$store.commit('menus/setOneLvMenus', arr);
+
           // 记录用户信息
           this.$store.commit('userInfo/name', data.user_info.account);
           this.$store.commit('userInfo/avatar', data.user_info.head_pic);
@@ -241,8 +243,7 @@ export default {
             this.checkSocket();
           } catch (e) {}
           PrevLoading.start();
-
-          return this.$router.replace({
+          return this.$router.push({
             path: findFirstNonNullChildren(res.data.menus).path || this.$routeProStr + '/',
           });
         })

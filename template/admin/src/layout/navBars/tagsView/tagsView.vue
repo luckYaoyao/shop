@@ -40,6 +40,8 @@
 import Contextmenu from '@/layout/navBars/tagsView/contextmenu';
 import { Session } from '@/utils/storage.js';
 import { mapMutations } from 'vuex';
+import setting from '@/setting';
+
 export default {
   name: 'tagsView',
   components: { Contextmenu },
@@ -77,7 +79,9 @@ export default {
     this.tagsViewRoutesList = this.$store.state.app.tagNavList;
   },
   mounted() {
-    // this.getTagsViewRoutes();
+    if (!this.$store.state.app.tagNavList.length) {
+      this.getTagsViewRoutes();
+    }
   },
   methods: {
     ...mapMutations(['setBreadCrumb', 'setTagNavList', 'addTag', 'setLocal', 'setHomeRoute', 'closeTag']),
@@ -90,7 +94,15 @@ export default {
     onTagsClick(v, k) {
       this.tagsRoutePath = v.path;
       this.tagsRefsIndex = k;
-      this.$router.push(v);
+      try {
+        if (v.name == 'home_index') {
+          this.$router.replace(`${setting.routePre}/home/`);
+        } else {
+          this.$router.push(v);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     // 获取 tagsView 的下标：用于处理 tagsView 点击时的横向滚动
     getTagsRefsIndex(path) {
@@ -184,9 +196,8 @@ export default {
     // 获取 vuex 中的 tagsViewRoutes 列表
     getTagsViewRoutes() {
       this.tagsRoutePath = this.$route.path;
-      this.tagsViewList = [];
-      if (!this.$store.state.themeConfig.themeConfig.isCacheTagsView) Session.remove('tagsViewList');
-      this.tagsViewRoutesList = this.$store.state.tagsViewRoutes.tagsViewRoutes;
+      // if (!this.$store.state.themeConfig.themeConfig.isCacheTagsView) Session.remove('tagsViewList');
+      this.tagsViewRoutesList = this.$store.state.menus.oneLvMenus;
       this.initTagsViewList();
     },
     // 存储 tagsViewList 到浏览器临时缓存中，页面刷新时，保留记录
@@ -195,14 +206,17 @@ export default {
     },
     // 初始化设置了 tagsView 数据
     initTagsViewList() {
-      if (Session.get('tagsViewList') && this.$store.state.themeConfig.themeConfig.isCacheTagsView) {
-        this.tagsViewList = Session.get('tagsViewList');
-      } else {
-        this.tagsViewRoutesList.map((v) => {
-          if (v.isAffix && !v.isHide) this.tagsViewList.push({ ...v });
-        });
-        this.addTagsView(this.$route.path);
-      }
+      // if (Session.get('tagsViewList') && this.$store.state.themeConfig.themeConfig.isCacheTagsView) {
+      //   this.tagsViewList = Session.get('tagsViewList');
+      // } else {
+      let arr = [];
+      console.log(this.tagsViewRoutesList);
+      this.tagsViewRoutesList.map((v) => {
+        if (v.meta && v.meta.isAffix) arr.push({ ...v });
+      });
+      // }
+      console.log(arr);
+      this.setTagNavList(arr);
       // 初始化当前元素(li)的下标
       this.getTagsRefsIndex(this.$route.path);
       // 添加初始化横向滚动条移动到对应位置
@@ -224,8 +238,7 @@ export default {
       this.tagsDropdown.y = clientY;
       this.$refs.tagsContextmenu.openContextmenu(v);
     },
-    onContextmenuIcon(e) {
-    },
+    onContextmenuIcon(e) {},
     // 当前项右键菜单点击
     onCurrentContextmenuClick(data) {
       let { id, path } = data;
@@ -417,6 +430,13 @@ export default {
   // .tags-style-three {
   // }
   // // 风格4
+  // 风格1
+  .tags-style-one {
+    .is-active {
+      background: none !important;
+      color: #fff !important;
+    }
+  }
   // 风格4
   .tags-style-four {
     .layout-navbars-tagsview-ul-li {
@@ -436,7 +456,7 @@ export default {
     }
     .is-active {
       background: none !important;
-      color: var(--prev-bg-menu-hover-ba-color) !important;
+      color: #fff !important;
     }
   }
   // 风格5

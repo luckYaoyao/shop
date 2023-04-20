@@ -681,7 +681,7 @@ class PublicController
         $data['member_card_status'] = sys_config('member_card_status');//是否开启付费会员
         $data['member_price_status'] = sys_config('member_price_status');//商品会员折扣价展示启用
         $data['ali_pay_status'] = sys_config('ali_pay_status') != '0';//支付宝是否启用
-        $data['wechat_pay_status'] = sys_config('pay_weixin_open') != '0';//微信是否启用
+        $data['pay_weixin_open'] = sys_config('pay_weixin_open') != '0';//微信是否启用
         $data['yue_pay_status'] = sys_config('yue_pay_status') == 1 && sys_config('balance_func_status') != 0;//余额是否启用
         $data['offline_pay_status'] = sys_config('offline_pay_status') == 1;//线下是否启用
         $data['friend_pay_status'] = sys_config('friend_pay_status') == 1;//好友是否启用

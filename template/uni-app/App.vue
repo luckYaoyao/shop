@@ -123,6 +123,13 @@
 		async onLaunch(option) {
 			uni.hideTabBar()
 			let that = this;
+			// #ifdef H5
+			if (option.query.hasOwnProperty('type') && option.query.type == "iframeWindow") {
+				this.globalData.isIframe = true;
+			} else {
+				this.globalData.isIframe = false;
+			}
+			// #endif
 			colorChange('color_change').then(res => {
 				uni.setStorageSync('is_diy', res.data.is_diy)
 				uni.$emit('is_diy', res.data.is_diy)
@@ -245,13 +252,7 @@
 			}
 			// #endif
 
-			// #ifdef H5
-			if (option.query.hasOwnProperty('type') && option.query.type == "iframeWindow") {
-				this.globalData.isIframe = true;
-			} else {
-				this.globalData.isIframe = false;
-			}
-			// #endif
+
 			// #ifdef MP
 			// 小程序静默授权
 			// if (!this.$store.getters.isLogin) {

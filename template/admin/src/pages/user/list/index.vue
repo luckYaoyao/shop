@@ -919,7 +919,7 @@ export default {
           this.giveLevelTime(row.uid);
           break;
         case '4':
-          this.del(row, '清除 【 ' + row.nickname + ' 】的会员等级', index, 'user');
+          this.del(row, '清除 【 ' + this.tenText(row.nickname) + ' 】的会员等级', index, 'user');
           break;
         case '5':
           this.$modalForm(userSetGroup(uids)).then(() => this.getList());
@@ -931,8 +931,16 @@ export default {
           this.editS(row);
           break;
         default:
-          this.del(row, '解除【 ' + row.nickname + ' 】的上级推广人', index, 'tuiguang');
+          this.del(row, '解除【 ' + this.tenText(row.nickname) + ' 】的上级推广人', index, 'tuiguang');
       }
+    },
+    tenText(str) {
+      if (str.length > 10) {
+        //如果字符长度超过10，后面的字符就变成...可自行调整长度和代替字符
+        str = str.substr(0, 10) + '...'; //截取从第一个字符开始，往后取10个字符，剩余的用...代替
+        //console.log(str);  // 'js字符超出指定个数...'
+      }
+      return str;
     },
     openLabel(row) {
       this.labelShow = true;
@@ -998,6 +1006,7 @@ export default {
         url: name === 'user' ? `user/del_level/${row.uid}` : `agent/stair/delete_spread/${row.uid}`,
         method: name === 'user' ? 'DELETE' : 'PUT',
         ids: '',
+        width: 600,
       };
       this.$modalSure(delfromData)
         .then((res) => {
