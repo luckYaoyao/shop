@@ -390,9 +390,9 @@ class SystemCrud extends AuthController
         $newRoute = [];
         foreach ($routeList as $item) {
             if ($item['methods'] == 'GET') {
-                if (strstr('create', $item['api_url'])) {
+                if (strstr($item['api_url'], 'create')) {
                     $key = 'create';
-                } else if (strstr('edit', $item['api_url'])) {
+                } else if (strstr($item['api_url'], 'edit')) {
                     $key = 'edit';
                 } else {
                     $key = 'index';
