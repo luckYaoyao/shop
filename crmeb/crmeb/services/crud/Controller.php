@@ -53,8 +53,8 @@ class Controller extends Make
     {
         $path = $options['path'] ?? '';
         $contentPhp = '';
-        $var = ["{%date%}"];
-        $fieldPhp = [$this->value['date']];
+        $var = ["{%date%}", '{%validateName%}'];
+        $fieldPhp = [$this->value['date'], $options['validateName'] ?? ''];
 
         $action = $options['action'] ?? [];
         $field = $options['field'] ?? [];
