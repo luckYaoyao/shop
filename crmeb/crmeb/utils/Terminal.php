@@ -180,7 +180,7 @@ class Terminal
      * @email 136327134@qq.com
      * @date 2023/4/13
      */
-    protected function echoOutputFlag(string $message)
+    public function echoOutputFlag(string $message)
     {
         if ($this->output && $this->output instanceof Output) {
             $this->output->info($message);
