@@ -75,7 +75,7 @@ class Service extends Make
                         $from[] = $this->tab(2) . $this->getframeImagesPhpContent($item['field'], $item['name'], $item['required'] ?? false) . ';';
                         break;
                     default:
-                        $from[] = $this->tab(2) . '$rule[] = FormBuilder::' . $item['type'] . '("' . $item['field'] . '","' . $item['name'] . '",$info["' . $item['field'] . '"] ?? "")' . $this->getOptionContent($item['option'] ?? []) . (!empty($item['required']) ? '->required()' : '') . ';';
+                        $from[] = $this->tab(2) . '$rule[] = FormBuilder::' . $item['type'] . '("' . $item['field'] . '","' . $item['name'] . '",$info["' . $item['field'] . '"] ?? "")' . $this->getOptionContent(in_array($item['type'], ['radio']), $item['option'] ?? []) . (!empty($item['required']) ? '->required()' : '') . ';';
                         break;
                 }
 
@@ -117,9 +117,9 @@ class Service extends Make
      * @email 136327134@qq.com
      * @date 2023/3/23
      */
-    protected function getOptionContent(array $option = [])
+    protected function getOptionContent(bool $isOption, array $option = [])
     {
-        if (!$option) {
+        if (!$option && $isOption) {
             $option = [
                 ['value' => 1, 'label' => '开启'],
                 ['value' => 0, 'label' => '关闭']
