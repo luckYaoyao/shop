@@ -53,8 +53,8 @@ class Controller extends Make
     {
         $path = $options['path'] ?? '';
         $contentPhp = '';
-        $var = ["{%date%}"];
-        $fieldPhp = [$this->value['date']];
+        $var = ["{%date%}", '{%validateName%}'];
+        $fieldPhp = [$this->value['date'], $options['validateName'] ?? ''];
 
         $action = $options['action'] ?? [];
         $field = $options['field'] ?? [];
@@ -94,7 +94,7 @@ class Controller extends Make
         $this->value['name'] = $className;
         $this->value['path'] = $this->getfolderPath($path);
         $this->value['content-php'] = $contentPhp;
-        $this->value['use-php'] = "use " . $options['usePath'] . "Services;\n";
+        $this->value['use-php'] = "use " . str_replace('/', '\\', $options['usePath']) . "Services;\n";
 
         $contentStr = str_replace($this->var, $this->value, $contentController);
 
