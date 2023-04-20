@@ -13,6 +13,7 @@ namespace app\adminapi\controller\v1\setting;
 
 use app\adminapi\controller\AuthController;
 use app\services\system\SystemMenusServices;
+use app\services\system\SystemRouteCateServices;
 use app\services\system\SystemRouteServices;
 use think\facade\App;
 use think\facade\Route;
@@ -273,15 +274,23 @@ class SystemMenus extends AuthController
      */
     public function ruleList()
     {
+        $ruleList = app()->make(SystemRouteCateServices::class)->selectList(['app_name' => 'adminapi'], 'id,name', 0, 0, 'id asc,sort desc', ['children']);
         //获取所有的路由
-        $ruleList = app()->make(SystemRouteServices::class)->selectList(['app_name' => 'adminapi'], 'name,path,method,type,id')->toArray();
+//        $ruleList = app()->make(SystemRouteServices::class)->selectList(['app_name' => 'adminapi'], 'name,path,method,type,id')->toArray();
         $menuApiList = $this->services->getColumn(['auth_type' => 2, 'is_del' => 0], "concat(`api_url`,'_',lower(`methods`)) as rule");
         if ($menuApiList) $menuApiList = array_column($menuApiList, 'rule');
         $list = [];
         foreach ($ruleList as $item) {
-            if ($item['type'] || !in_array($item['path'] . '_' . strtolower($item['method']), $menuApiList)) {
-                $item['real_name'] = $item['name'] ?? '';
-                $item['method'] = strtoupper($item['method']);
+            $children = [];
+            foreach ($item['children'] as $value) {
+                if ($value['type'] || !in_array($value['path'] . '_' . strtolower($value['method']), $menuApiList)) {
+                    $value['real_name'] = $value['name'] ?? '';
+                    $value['method'] = strtoupper($value['method']);
+                    $children[] = $value;
+                }
+            }
+            if ($children) {
+                $item['children'] = $children;
                 $list[] = $item;
             }
         }
