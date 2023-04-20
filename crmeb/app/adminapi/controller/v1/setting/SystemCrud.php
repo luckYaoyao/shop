@@ -231,7 +231,7 @@ class SystemCrud extends AuthController
     public function getMenus()
     {
         return app('json')->success(app()->make(SystemMenusServices::class)
-            ->getList(['auth_type' => 1], ['pid', 'id', 'menu_name as label', 'id as value']));
+            ->getList(['auth_type' => 1, 'is_show' => 1], ['auth_type', 'pid', 'id', 'menu_name as label', 'id as value']));
     }
 
     /**
