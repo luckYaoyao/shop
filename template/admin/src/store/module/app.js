@@ -77,7 +77,7 @@ export default {
     },
     addTag(state, { route, type = 'unshift' }) {
       let router = getRouteTitleHandled(route);
-      console.log(router,'routerrouterrouter')
+      console.log(router, 'routerrouterrouter');
       if (!routeHasExist(state.tagNavList, router)) {
         if (type === 'push') state.tagNavList.push(router);
         else {
@@ -96,6 +96,9 @@ export default {
     },
     setHasReadErrorLoggerStatus(state, status = true) {
       state.hasReadErrorPage = status;
+    },
+    clearAll(state) {
+      state.tagNavList = [];
     },
   },
   actions: {

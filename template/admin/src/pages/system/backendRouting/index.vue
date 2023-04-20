@@ -471,6 +471,10 @@ export default {
           label: 'Array',
         },
         {
+          value: 'object',
+          label: 'Object',
+        },
+        {
           value: 'number',
           label: 'Number',
         },
@@ -530,7 +534,7 @@ export default {
           this.methodColor = '#49cc90';
         } else if (method == 'PUT') {
           this.methodColor = '#fca130';
-        } else if (method == 'DELETE') {
+        } else if (method == 'DEL' || method == 'DELETE') {
           this.methodColor = '#f93e3e';
         }
       },
@@ -567,7 +571,7 @@ export default {
         return '#49cc90';
       } else if (method == 'PUT') {
         return '#fca130';
-      } else if (method == 'DELETE') {
+      } else if (method == 'DEL' || method == 'DELETE') {
         return '#f93e3e';
       }
     },
@@ -1070,6 +1074,7 @@ export default {
 
     .text-area {
       white-space: pre-wrap;
+      word-break: break-word;
     }
   }
 
