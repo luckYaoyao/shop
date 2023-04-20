@@ -283,7 +283,7 @@ class SystemCrudServices extends BaseServices
         $dataMenu = [
             'pid' => $data['pid'],
             'menu_name' => $data['menuName'],
-            'menu_path' => '/' . $routeName . '/list',
+            'menu_path' => '/' . $routeName ,
             'auth_type' => 1,
             'is_show' => 1,
             'is_del' => 0,

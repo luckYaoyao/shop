@@ -72,7 +72,7 @@
               ></Input>
             </template>
             <template slot-scope="{ row, index }" slot="field_type">
-              <span v-if="foundation.isTable">{{ row.disabledInput }}</span>
+              <span v-if="foundation.isTable">{{ row.field_type }}</span>
               <Select v-else v-model="tableField[index].field_type" @on-change="changeItemField($event, index)">
                 <Option v-for="item in columnTypeList" :value="item" :key="item">{{ item }}</Option>
               </Select>

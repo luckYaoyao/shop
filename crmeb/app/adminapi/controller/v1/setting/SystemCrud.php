@@ -368,6 +368,49 @@ class SystemCrud extends AuthController
     }
 
     /**
+     * 获取权限路由
+     * @param $tableName
+     * @return Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/20
+     */
+    public function getRouteList($tableName)
+    {
+        $info = $this->services->get(['table_name' => $tableName]);
+        if (!$info) {
+            return app('json')->fail('crud详情查询失败');
+        }
+
+        $routeList = app()->make(SystemMenusServices::class)->getColumn([
+            ['id', 'in', $info->menu_ids],
+            ['auth_type', '=', 2]
+        ], 'methods,api_url');
+
+        $column = $this->services->getColumnNamesList($info->table_name);
+        $key = 'id';
+        foreach ($column as $value) {
+            if ($value['primaryKey']) {
+                $key = $value['name'];
+                break;
+            }
+        }
+
+        $columns = [];
+        foreach ((array)$info->field['tableField'] as $item) {
+            if (isset($item['from_type']) && $item['from_type']) {
+                $columns[] = [
+                    'title' => $item['table_name'],
+                    'key' => $item['field'],
+                    'from_type' => $item['from_type'],
+                ];
+            }
+        }
+
+        return app('json')->success(compact('key', 'routeList', 'columns'));
+    }
+
+    /**
      * @return string
      * @author 等风来
      * @email 136327134@qq.com
