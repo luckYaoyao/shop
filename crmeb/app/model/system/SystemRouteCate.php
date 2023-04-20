@@ -39,6 +39,6 @@ class SystemRouteCate extends BaseModel
      */
     public function children()
     {
-        return $this->hasMany(SystemRoute::class, 'cate_id', 'id')->field(['id', 'cate_id', 'name', 'name as real_name', 'path', 'method'])->order('add_time desc');
+        return $this->hasMany(SystemRoute::class, 'cate_id', 'id')->field(['id', 'type', 'cate_id', 'name', 'name as real_name', 'path', 'method'])->order('add_time desc');
     }
 }

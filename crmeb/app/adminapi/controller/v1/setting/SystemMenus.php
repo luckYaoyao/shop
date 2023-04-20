@@ -274,9 +274,8 @@ class SystemMenus extends AuthController
      */
     public function ruleList()
     {
-        $ruleList = app()->make(SystemRouteCateServices::class)->selectList(['app_name' => 'adminapi'], 'id,name', 0, 0, 'id asc,sort desc', ['children']);
         //获取所有的路由
-//        $ruleList = app()->make(SystemRouteServices::class)->selectList(['app_name' => 'adminapi'], 'name,path,method,type,id')->toArray();
+        $ruleList = app()->make(SystemRouteCateServices::class)->selectList(['app_name' => 'adminapi'], 'id,name', 0, 0, 'id asc,sort desc', ['children'])->toArray();
         $menuApiList = $this->services->getColumn(['auth_type' => 2, 'is_del' => 0], "concat(`api_url`,'_',lower(`methods`)) as rule");
         if ($menuApiList) $menuApiList = array_column($menuApiList, 'rule');
         $list = [];
