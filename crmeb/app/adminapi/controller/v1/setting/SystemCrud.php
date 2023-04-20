@@ -387,6 +387,25 @@ class SystemCrud extends AuthController
             ['auth_type', '=', 2]
         ], 'methods,api_url');
 
+        $newRoute = [];
+        foreach ($routeList as $item) {
+            if ($item['methods'] == 'GET') {
+                if (strstr('create', $item['api_url'])) {
+                    $key = 'create';
+                } else if (strstr('edit', $item['api_url'])) {
+                    $key = 'edit';
+                } else {
+                    $key = 'index';
+                }
+            } else if ($item['methods'] == 'DELETE') {
+                $key = 'delete';
+            }
+
+            if (isset($key)) {
+                $newRoute[$key] = $item['api_url'];
+            }
+        }
+
         $column = $this->services->getColumnNamesList($info->table_name);
         $key = 'id';
         foreach ($column as $value) {
@@ -406,7 +425,7 @@ class SystemCrud extends AuthController
                 ];
             }
         }
-
+        $routeList = $newRoute;
         return app('json')->success(compact('key', 'routeList', 'columns'));
     }
 
