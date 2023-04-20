@@ -20,14 +20,14 @@ const meta = {
 const pre = '{%name%}_'
 
 export default {
-    path: `${routePre}/{%route%}`,
+    path: `${routePre}`,
     name: 'crud_{%name%}',
     header: '{%nameHeader%}',
     meta,
     component: LayoutMain,
     children: [
         {
-            path: 'list',
+            path: '{%route%}',
             name: `${pre}list`,
             meta: {
                 auth: ['{%name%}-crud-list-index'],

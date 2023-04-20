@@ -53,5 +53,5 @@ return [
     //后台前端模板根路径
     'admin_template_path' => dirname(app()->getRootPath()) . DS . 'template' . DS . 'admin' . DS . 'src' . DS,
     //在保存crud的是否是否直接生成文件
-    'crud_make'        => false
+    'crud_make'        => true
 ];

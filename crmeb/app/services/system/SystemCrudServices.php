@@ -283,7 +283,7 @@ class SystemCrudServices extends BaseServices
         $dataMenu = [
             'pid' => $data['pid'],
             'menu_name' => $data['menuName'],
-            'menu_path' => '/' . $routeName . '/list',
+            'menu_path' => '/' . $routeName,
             'auth_type' => 1,
             'is_show' => 1,
             'is_del' => 0,
@@ -360,8 +360,9 @@ class SystemCrudServices extends BaseServices
                     'methods' => $item['method'],
                     'api_url' => $item['path'],
                     'unique_auth' => $item['unique_auth'],
-                    'name' => $item['name'],
+                    'menu_name' => $item['name'],
                     'is_del' => 0,
+                    'auth_type' => 2,
                 ];
             }
             $menus = app()->make(SystemMenusServices::class)->saveAll($menuData);

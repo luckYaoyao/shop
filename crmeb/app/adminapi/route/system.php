@@ -133,6 +133,7 @@ Route::group('system', function () {
             'delete' => '删除路由分类'
         ],
     ]);
+    Route::get('crud/config/:tableName', 'v1.setting.SystemCrud/getRouteList')->option(['real_name' => '获取CRUD配置']);
     //下载生成的文件
     Route::get('crud/download/:id', 'v1.setting.SystemCrud/download')->option(['real_name' => '下载生成的文件']);
     //获取CRUD列表
