@@ -42,7 +42,15 @@
           </vxe-column>
           <vxe-column field="type" title="类型" width="120" :edit-render="{}">
             <template #default="{ row }">
-              <vxe-select v-model="row.type" transfer>
+              <vxe-select
+                v-model="row.type"
+                transfer
+                @change="
+                  (val) => {
+                    handleChange(val, row, 'xTable');
+                  }
+                "
+              >
                 <vxe-option
                   v-for="item in typeList"
                   :key="item.value"
@@ -64,7 +72,11 @@
           </vxe-column>
           <vxe-column title="操作" width="120">
             <template #default="{ row }">
-              <vxe-button type="text" v-if="row.type === 'array'" status="primary" @click="insertRow(row, 'xTable')"
+              <vxe-button
+                type="text"
+                v-if="['array', 'object'].includes(row.type)"
+                status="primary"
+                @click="insertRow(row, 'xTable')"
                 >插入</vxe-button
               >
               <vxe-button type="text" status="primary" @click="removeRow(row, 'xTable')">删除</vxe-button>
@@ -98,7 +110,15 @@
           </vxe-column>
           <vxe-column field="type" title="类型" width="120" :edit-render="{}">
             <template #default="{ row }">
-              <vxe-select v-model="row.type" transfer>
+              <vxe-select
+                v-model="row.type"
+                transfer
+                @change="
+                  (val) => {
+                    handleChange(val, row, 'yTable');
+                  }
+                "
+              >
                 <vxe-option
                   v-for="item in typeList"
                   :key="item.value"
@@ -120,7 +140,11 @@
           </vxe-column>
           <vxe-column title="操作" width="120">
             <template #default="{ row }">
-              <vxe-button type="text" v-if="row.type === 'array'" status="primary" @click="insertRow(row, 'yTable')"
+              <vxe-button
+                type="text"
+                v-if="['array', 'object'].includes(row.type)"
+                status="primary"
+                @click="insertRow(row, 'yTable')"
                 >插入</vxe-button
               >
               <vxe-button type="text" status="primary" @click="removeRow(row, 'yTable')">删除</vxe-button>
@@ -154,7 +178,15 @@
           </vxe-column>
           <vxe-column field="type" title="类型" width="200" :edit-render="{}">
             <template #default="{ row }">
-              <vxe-select v-model="row.type" transfer>
+              <vxe-select
+                v-model="row.type"
+                transfer
+                @change="
+                  (val) => {
+                    handleChange(val, row, 'zTable');
+                  }
+                "
+              >
                 <vxe-option
                   v-for="item in typeList"
                   :key="item.value"
@@ -166,7 +198,11 @@
           </vxe-column>
           <vxe-column title="操作" width="100">
             <template #default="{ row }">
-              <vxe-button type="text" v-if="row.type === 'array'" status="primary" @click="insertRow(row, 'zTable')"
+              <vxe-button
+                type="text"
+                v-if="['array', 'object'].includes(row.type)"
+                status="primary"
+                @click="insertRow(row, 'zTable')"
                 >插入</vxe-button
               >
               <vxe-button type="text" status="primary" @click="removeRow(row, 'zTable')">删除</vxe-button>
@@ -267,6 +303,21 @@ export default {
   },
   mounted() {},
   methods: {
+    async handleChange(e, row, type) {
+      console.log(type, row);
+      if (e.value !== 'array' && e.value !== 'object') {
+        if (row.children.length) {
+          let arr = this.$refs[type].getTableData().tableData;
+          let id = row.children[0].parentId;
+          const $table = this.$refs[type];
+          for (let i = 0; i < arr.length; i++) {
+            if (arr[i].parentId == id) {
+              await $table.remove(arr[i]);
+            }
+          }
+        }
+      }
+    },
     insertCopy() {
       this.$copyText(this.codes)
         .then((message) => {
@@ -277,8 +328,6 @@ export default {
         });
     },
     async requestData() {
-      console.log(this.$refs.xTable.getTableData().tableData);
-      console.log(this.filtersData((await this.$refs.xTable.getTableData().tableData) || []));
       let url, method, params, body, headers;
       url = this.interfaceData.app_name + '/' + this.interfaceData.path;
       method = this.interfaceData.method;
@@ -286,7 +335,6 @@ export default {
       body = this.filtersData((await this.$refs.yTable.getTableData().tableData) || []);
       let h = this.filtersData((await this.$refs.zTable.getTableData().tableData) || []);
       let h1 = this.filtersData((await this.$refs.zaTable.getTableData().tableData) || []);
-      console.log(this.interfaceData, h, h1);
       headers = {
         ...h,
         ...h1,
@@ -308,8 +356,16 @@ export default {
           if (!e.parentId) {
             for (let i in e) {
               if (i == 'attribute') {
-                console.log(e);
-                if (e.type !== 'array') {
+                console.log(e.type);
+                if (e.type === 'object') {
+                  let obj = {};
+
+                  e.children.map((item, index) => {
+                    obj = this.filtersObj(item, 1);
+                  });
+                  console.log(obj, 'objobjobj');
+                  x[e[i]] = obj;
+                } else if (e.type !== 'array') {
                   x[e[i]] = e.value || '';
                 } else {
                   let arr = [];
@@ -327,12 +383,25 @@ export default {
         console.log(error);
       }
     },
-    filtersObj(obj) {
+    // type 1 为obj属性
+    filtersObj(obj, type) {
       let x = {};
       for (let i in obj) {
         if (i == 'attribute') {
-          if (obj.type !== 'array') {
-            x[obj[i]] = obj.value || '';
+          console.log(obj, 'obj111');
+          if (obj.type === 'object') {
+            let oj = {};
+            obj.children.map((item, index) => {
+              oj[obj.attribute] = this.filtersObj(item);
+            });
+            console.log(oj, 'oj');
+            x = oj;
+          } else if (obj.type !== 'array') {
+            if (type) {
+              x[obj.attribute] = obj.value || '';
+            } else {
+              x[obj[i]] = obj.value || '';
+            }
           } else {
             let arr = [];
             obj.children.map((item, index) => {
@@ -346,8 +415,7 @@ export default {
     },
     changeTab(name) {
       if (name === 'Header') {
-        console.log(this.interfaceData.headerData);
-        if (!this.interfaceData.headerData) {
+        if (!this.$refs.zTable.getTableData().tableData.length) {
           this.insertEvent('zTable', {
             attribute: 'Content-Type',
             value: 'application/x-www-form-urlencoded',

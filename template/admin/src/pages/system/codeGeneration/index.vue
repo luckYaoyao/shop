@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="code-wapper">
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <router-link :to="{ path: $routeProStr + '/system/code_generation_list' }"
@@ -31,7 +31,7 @@
         <StorageLoc :storage="formItem.storage" />
       </Card>
     </div>
-    <Card :bordered="false" dis-hover class="btn">
+    <Card :bordered="false" class="btn">
       <Button class="mr20" @click="beforeTab">上一步</Button>
       <Button type="primary" @click="nextTab">{{ currentTab == 1 ? '提交' : '下一步' }}</Button>
     </Card>
@@ -92,7 +92,10 @@ export default {
           if (this.$refs.Foundation.tableField.length)
             for (let i = 0; i < this.$refs.Foundation.tableField.length; i++) {
               const el = this.$refs.Foundation.tableField[i];
-              if (['addSoftDelete','addTimestamps'].indexOf(el.field_type)=== -1 && (!el.field || !el.field_type || !el.comment)) {
+              if (
+                ['addSoftDelete', 'addTimestamps'].indexOf(el.field_type) === -1 &&
+                (!el.field || !el.field_type || !el.comment)
+              ) {
                 return this.$Message.warning('请完善sql表数据');
               }
             }
@@ -144,13 +147,19 @@ export default {
 .ivu-steps .ivu-steps-title {
   line-height: 26px;
 }
+.code-wapper {
+  padding-bottom: 90px;
+}
 .btn {
   position: fixed;
   bottom: 10px;
+  height: 80px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 85%;
+  width: 88.7%;
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(4px);
 }
 .tab-1 {
   padding-bottom: 100px;

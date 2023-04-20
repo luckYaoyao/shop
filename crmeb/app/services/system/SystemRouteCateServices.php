@@ -103,7 +103,7 @@ class SystemRouteCateServices extends BaseServices
         }
         $options = $this->dao->selectList(['app_name' => $appName], 'name as label,id as value,id,pid')->toArray();
         $rule = [
-            FormBuilder::cascader('path', '上级分类', $path)->data(get_tree_children($options)),
+//            FormBuilder::cascader('path', '上级分类', $path)->data(get_tree_children($options)),
             FormBuilder::input('name', '分类名称', $cateInfo['name'] ?? '')->required(),
             FormBuilder::number('sort', '排序', (int)($cateInfo['sort'] ?? 0)),
             FormBuilder::hidden('app_name', $appName)
