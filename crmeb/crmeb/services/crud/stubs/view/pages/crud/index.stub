@@ -34,7 +34,7 @@
 import { mapState } from 'vuex';
 import { {%nameCamel%}SaveApi, {%nameCamel%}DeleteApi, {%nameCamel%}UpdateApi, get{%nameStudly%}CreateApi, get{%nameStudly%}EditApi, get{%nameStudly%}ListApi} from '{%pathApiJs%}';
 export default {
-  name: 'user_group',
+  name: '{%componentName%}',
   data() {
     return {
       grid: {

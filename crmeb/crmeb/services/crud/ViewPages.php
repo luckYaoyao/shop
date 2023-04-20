@@ -88,8 +88,9 @@ class ViewPages extends Make
             }
             $columnStr[] = ($key == 0 ? $this->tab(2) : '') . "{\n" . $this->tab(3) . "title:\"{$item['name']}\"," . $this->tab(2) . "\n" . $this->tab(3) . "key:\"{$item['field']}\"\n" . $this->tab(2) . "}\n";
         }
-        $this->value['route'] = $route;
         $this->value['auth'] = Str::snake($name);
+        $this->value['componentName'] = $this->value['auth'];
+        $this->value['route'] = $route;
         $this->value['content-vue'] = $columnStr ? "\n" . implode($this->tab(2) . ',', $columnStr) . $this->tab(2) . ',' : '';
         $this->value['pathApiJs'] = $options['pathApiJs'] ?? '';
         $this->value['nameStudly'] = Str::studly($name);
