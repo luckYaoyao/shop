@@ -86,7 +86,12 @@
         <Button class="mt10" type="primary" @click="insertEvent('xTable')">添加参数</Button>
       </div>
       <div v-show="paramsType === 'Body'">
+        <RadioGroup v-model="bodyType" class="mt10">
+          <Radio label="form-data"></Radio>
+          <Radio label="json"></Radio>
+        </RadioGroup>
         <vxe-table
+          v-if="bodyType == 'form-data'"
           class="mt10"
           resizable
           show-overflow
@@ -151,8 +156,14 @@
             </template>
           </vxe-column>
         </vxe-table>
-        <Button class="mt10" type="primary" @click="insertEvent('yTable')">添加参数</Button>
+        <div v-else>
+          <Input v-model="jsonBody" type="textarea" :rows="8" placeholder="请求数据" />
+        </div>
+        <Button v-if="bodyType == 'form-data'" class="mt10" type="primary" @click="insertEvent('yTable')"
+          >添加参数</Button
+        >
       </div>
+
       <div v-show="paramsType === 'Header'">
         <vxe-table
           class="mt10"
@@ -290,10 +301,12 @@ export default {
   },
   data() {
     return {
+      bodyType: 'form-data',
       interfaceData: undefined,
       paramsType: 'Params',
       editor: '', //当前编辑器对象
       codes: '',
+      jsonBody: '',
     };
   },
   created() {
@@ -332,7 +345,10 @@ export default {
       url = this.interfaceData.app_name + '/' + this.interfaceData.path;
       method = this.interfaceData.method;
       params = this.filtersData((await this.$refs.xTable.getTableData().tableData) || []);
-      body = this.filtersData((await this.$refs.yTable.getTableData().tableData) || []);
+      body =
+        this.bodyType === 'json'
+          ? this.jsonBody
+          : this.filtersData((await this.$refs.yTable.getTableData().tableData) || []);
       let h = this.filtersData((await this.$refs.zTable.getTableData().tableData) || []);
       let h1 = this.filtersData((await this.$refs.zaTable.getTableData().tableData) || []);
       headers = {
@@ -340,11 +356,14 @@ export default {
         ...h1,
       };
       console.log(url, method, params, body, headers);
+      this.codes = '';
       requestMethod(url, method, params, body, headers)
         .then((res) => {
+          console.log(res, 'res');
           this.codes = JSON.stringify(res);
         })
         .catch((err) => {
+          console.log(err, 'err');
           this.codes = JSON.stringify(err);
         });
     },

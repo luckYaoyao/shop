@@ -13,7 +13,8 @@
         <div class="tree">
           <div class="main-btn">
             <Button class="mb5 mr10" style="flex: 1" type="primary" @click="clickMenu(4)" long>新增分类</Button>
-            <Button type="success" @click="syncRoute()">同步</Button>
+            <Button type="success mr10" @click="syncRoute()">同步</Button>
+            <Button type="info" @click="debugging()">调试</Button>
           </div>
 
           <vue-tree-list
@@ -91,7 +92,7 @@
               {{ formValidate.name }}
             </div>
             <div>
-              <Button type="primary" class="submission mr20" @click="debugging()">调试</Button>
+              <!-- <Button type="primary" class="submission mr20" @click="debugging()">调试</Button> -->
               <Button v-if="formValidate.id" type="primary" class="submission mr20" @click="isEdit = !isEdit">{{
                 isEdit ? '返回' : '编辑'
               }}</Button>
@@ -521,6 +522,7 @@ export default {
       },
       methodColor: '#fff',
       app_name: 'adminapi',
+      paramsId: 0,
     };
   },
   watch: {
@@ -605,18 +607,22 @@ export default {
       try {
         if (params.method) {
           this.isEdit = false;
-          routeDet(params.id)
-            .then((res) => {
-              this.formValidate = res.data;
-            })
-            .catch((err) => {
-              console.log(err);
-              this.$Message.error(err);
-            });
+          this.paramsId = params.id;
+          this.getRoteData(params.id);
         }
       } catch (error) {
         console.log(error);
       }
+    },
+    getRoteData(id) {
+      routeDet(id)
+        .then((res) => {
+          this.formValidate = res.data;
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$Message.error(err);
+        });
     },
     async handleSubmit() {
       if (!this.formValidate.name) {
@@ -634,7 +640,7 @@ export default {
         .then((res) => {
           this.isEdit = false;
           this.$Message.success(res.msg);
-          this.getInterfaceList();
+          this.getRoteData(this.paramsId);
         })
         .catch((err) => {
           this.$Message.error(err);

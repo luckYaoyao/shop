@@ -646,7 +646,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 1200px;
-  height: 808px;
+  height: 810px;
   margin: 0 auto;
   background: #fff;
 
