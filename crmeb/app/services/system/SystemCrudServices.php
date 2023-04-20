@@ -360,7 +360,7 @@ class SystemCrudServices extends BaseServices
                     'methods' => $item['method'],
                     'api_url' => $item['path'],
                     'unique_auth' => $item['unique_auth'],
-                    'name' => $item['name'],
+                    'menu_name' => $item['name'],
                     'is_del' => 0,
                     'auth_type' => 2,
                 ];
