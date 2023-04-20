@@ -14,6 +14,8 @@
 {%field-php%}
         ]);
 
+        validate({%validateName%})->check($data);
+
         $this->service->crudUpdate((int)$id, $data);
 
         return app('json')->success(100001);

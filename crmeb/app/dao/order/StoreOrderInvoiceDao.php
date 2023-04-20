@@ -53,7 +53,7 @@ class StoreOrderInvoiceDao extends BaseDao
         return parent::search($where, $search)->when($type, function ($query) use ($type) {
             switch ($type) {
                 case 1://待开
-                    $query->where('is_invoice', 0)->where('invoice_time', 0)->where('is_refund', 0);
+                    $query->where('is_invoice', 0)->where('is_refund', 0);
                     break;
                 case 2://已开
                     $query->where('is_invoice', 1);
