@@ -283,7 +283,7 @@ class SystemCrudServices extends BaseServices
         $dataMenu = [
             'pid' => $data['pid'],
             'menu_name' => $data['menuName'],
-            'menu_path' => '/' . $routeName ,
+            'menu_path' => '/' . $routeName,
             'auth_type' => 1,
             'is_show' => 1,
             'is_del' => 0,
@@ -303,6 +303,7 @@ class SystemCrudServices extends BaseServices
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
+                    'auth_type' => 2,
                     'add_time' => date('Y-m-d H:i:s')
                 ],
                 [
@@ -312,6 +313,7 @@ class SystemCrudServices extends BaseServices
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => Str::snake($tableName) . '-add',
+                    'auth_type' => 2,
                     'add_time' => date('Y-m-d H:i:s')
                 ],
                 [
@@ -321,6 +323,7 @@ class SystemCrudServices extends BaseServices
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
+                    'auth_type' => 2,
                     'add_time' => date('Y-m-d H:i:s')
                 ],
                 [
@@ -330,6 +333,7 @@ class SystemCrudServices extends BaseServices
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
+                    'auth_type' => 2,
                     'add_time' => date('Y-m-d H:i:s')
                 ],
                 [
@@ -339,6 +343,7 @@ class SystemCrudServices extends BaseServices
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
+                    'auth_type' => 2,
                     'add_time' => date('Y-m-d H:i:s')
                 ],
                 [
@@ -348,6 +353,7 @@ class SystemCrudServices extends BaseServices
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
+                    'auth_type' => 2,
                     'add_time' => date('Y-m-d H:i:s')
                 ],
             ];
