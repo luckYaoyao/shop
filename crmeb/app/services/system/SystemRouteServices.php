@@ -170,13 +170,13 @@ class SystemRouteServices extends BaseServices
      * @email 136327134@qq.com
      * @date 2023/4/11
      */
-    public function topCateId(string $app)
+    public function topCateId(string $app, string $name = '全部权限')
     {
-        $id = app()->make(SystemRouteCateServices::class)->value(['app_name' => $app, 'name' => '全部权限', 'pid' => 0], 'id');
+        $id = app()->make(SystemRouteCateServices::class)->value(['app_name' => $app, 'name' => $name, 'pid' => 0], 'id');
         if (!$id) {
             $res = app()->make(SystemRouteCateServices::class)->save([
                 'app_name' => $app,
-                'name' => '全部权限',
+                'name' => $name,
                 'pid' => 0,
                 'add_time' => time(),
             ]);
@@ -195,21 +195,38 @@ class SystemRouteServices extends BaseServices
     public function syncRoute(string $app = 'adminapi')
     {
         $id = $this->topCateId($app);
+        $commmonId = $this->topCateId($app, '公共权限');
         $listAll = $this->getRouteListAll($app);
+
+        $list = [];
+        foreach ($listAll as $item) {
+            if (isset($item['option']['is_common']) && $item['option']['is_common']) {
+                $cateId = $commmonId;
+            } else {
+                if (!isset($item['option']['cate_name'])) {
+                    $cateId = $id;
+                } else {
+                    $cateId = $this->topCateId($app, $item['option']['cate_name']);
+                }
+            }
+            $list[$cateId][] = $item;
+        }
         //保持新增的权限路由
         $data = $this->dao->selectList(['app_name' => $app], 'path,method')->toArray();
         $save = [];
-        foreach ($listAll as $item) {
-            if (!$this->diffRoute($data, $item['rule'], $item['method']) && strstr($item['rule'], '<MISS>') === false) {
-                $save[] = [
-                    'name' => $item['option']['real_name'] ?? $item['name'],
-                    'path' => $item['rule'],
-                    'cate_id' => $id,
-                    'app_name' => $app,
-                    'type' => isset($item['option']['is_common']) && $item['option']['is_common'] ? 1 : 0,
-                    'method' => $item['method'],
-                    'add_time' => date('Y-m-d H:i:s'),
-                ];
+        foreach ($list as $key => $value) {
+            foreach ($value as $item) {
+                if (!$this->diffRoute($data, $item['rule'], $item['method']) && strstr($item['rule'], '<MISS>') === false) {
+                    $save[] = [
+                        'name' => $item['option']['real_name'] ?? $item['name'],
+                        'path' => $item['rule'],
+                        'cate_id' => $key,
+                        'app_name' => $app,
+                        'type' => isset($item['option']['is_common']) && $item['option']['is_common'] ? 1 : 0,
+                        'method' => $item['method'],
+                        'add_time' => date('Y-m-d H:i:s'),
+                    ];
+                }
             }
         }
 
@@ -219,13 +236,25 @@ class SystemRouteServices extends BaseServices
         //删除不存在的权限路由
         $data = $this->dao->selectList(['app_name' => $app], 'path,method,id')->toArray();
         $delete = [];
+        $deleteData = [];
         foreach ($data as $item) {
             if (!$this->diffRoute($listAll, $item['path'], $item['method'], 'rule') && $item['path'] !== '<MISS>') {
                 $delete[] = $item['id'];
+                $deleteData[] = [
+                    'path' => $item['path'],
+                    'methods' => $item['method']
+                ];
             }
         }
+        //删除不存在的路由
         if ($delete) {
             $this->dao->delete([['id', 'in', $delete]]);
+        }
+        //删除不存在的权限
+        if ($deleteData) {
+            foreach ($deleteData as $item) {
+                app()->make(SystemMenusServices::class)->deleteMenu($item['path'], $item['method']);
+            }
         }
     }
 

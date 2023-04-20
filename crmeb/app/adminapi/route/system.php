@@ -154,7 +154,7 @@ Route::group('system', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-]);
+])->option(['cate_name' => '维护']);
 
 Route::group('system', function () {
 
@@ -182,5 +182,5 @@ Route::group('system', function () {
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminEditorTokenMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-]);
+])->option(['cate_name' => '文件']);
 

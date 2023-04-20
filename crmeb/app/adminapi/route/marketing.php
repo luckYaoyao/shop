@@ -97,9 +97,9 @@ Route::group('marketing', function () {
     //秒杀统计
     Route::get('seckill/statistics/head/:id', 'v1.marketing.StoreSeckill/seckillStatistics')->option(['real_name' => '秒杀统计']);
     //参与活动人员
-    Route::get('seckill/statistics/people/:id','v1.marketing.StoreSeckill/seckillPeople')->option(['real_name' => '秒杀参与人']);
+    Route::get('seckill/statistics/people/:id', 'v1.marketing.StoreSeckill/seckillPeople')->option(['real_name' => '秒杀参与人']);
     //秒杀订单
-    Route::get('seckill/statistics/order/:id','v1.marketing.StoreSeckill/seckillOrder')->option(['real_name' => '秒杀参与人']);
+    Route::get('seckill/statistics/order/:id', 'v1.marketing.StoreSeckill/seckillOrder')->option(['real_name' => '秒杀参与人']);
 
     //积分日志列表
     Route::get('integral', 'v1.marketing.UserPoint/index')->option(['real_name' => '积分日志列表']);
@@ -196,4 +196,4 @@ Route::group('marketing', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-]);
+])->option(['cate_name' => '营销']);

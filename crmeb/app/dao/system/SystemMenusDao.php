@@ -145,4 +145,17 @@ class SystemMenusDao extends BaseDao
         return $this->search(['is_show' => 1, 'auth_type' => 1, 'is_del' => 0, 'is_show_path' => 0])
             ->field('id,pid,menu_name,menu_path,unique_auth,sort')->order('sort DESC')->select();
     }
+
+    /**
+     * @param string $path
+     * @param string $method
+     * @return bool
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/20
+     */
+    public function deleteMenu(string $path, string $method)
+    {
+        return $this->getModel()->where('api_url', $path)->where('methods', $method)->delete();
+    }
 }
