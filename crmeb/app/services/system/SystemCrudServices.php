@@ -530,7 +530,7 @@ class SystemCrudServices extends BaseServices
         $service->setFilePathName($filePath['service'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'field' => $options['fromField'],
             'usePath' => $dao->getUsePath(),
-            'modelName' => $options['modelName'],
+            'modelName' => $options['modelName'] ?? '',
         ]);
         //生成验证器
         $validate = app()->make(Validate::class);

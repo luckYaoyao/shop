@@ -207,6 +207,7 @@ class SystemCrud extends AuthController
 
         $make = $this->services->makeFile($info->table_name, $routeName, false, [
             'menuName' => $info->name,
+            'modelName' => $info->model_name,
             'key' => $key,
             'softDelete' => $softDelete,
             'fromField' => $info->field['fromField'] ?? [],
