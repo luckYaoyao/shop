@@ -19,5 +19,5 @@
 
 {%form-php%}
 
-        return create_form('{%menus%}', $rule, $url, $id ? 'PUT' : 'POST');
+        return create_form('{%modelName%}', $rule, $url, $id ? 'PUT' : 'POST');
     }

@@ -47,6 +47,7 @@ class Service extends Make
         $path = $options['path'] ?? '';
 
         $this->value['use-php'] = $this->getDaoClassName($name, $path);
+        $this->value['modelName'] = $options['modelName'] ?? $name;
 
         $action = $options['action'] ?? [];
         $field = $options['field'] ?? [];
@@ -63,7 +64,7 @@ class Service extends Make
 
         //生成form表单
         if (in_array('save', $action) || in_array('update', $action)) {
-            $var = ['{%date%}', '{%route%}', '{%form-php%}', '{%menus%}'];
+            $var = ['{%date%}', '{%route%}', '{%form-php%}', '{%modelName%}'];
             $value = [$this->value['date'], Str::snake($options['route'] ?? $name)];
             $from = [];
             foreach ($field as $item) {
@@ -86,7 +87,7 @@ class Service extends Make
             } else {
                 $value[] = '';
             }
-            $value[] = $options['menus'] ?? $name;
+            $value[] = $options['modelName'] ?? $options['menus'] ?? $name;
 
             if ($value && $var) {
                 $contentAction = str_replace($var, $value, $contentAction);

@@ -69,6 +69,7 @@ class SystemCrud extends AuthController
             ['pid', 0],
             ['menuName', ''],
             ['tableName', ''],
+            ['modelName', ''],
             ['tableComment', ''],//表备注
             ['tableField', []],//表字段
             ['tableIndex', []],//索引
@@ -411,18 +412,24 @@ class SystemCrud extends AuthController
             }
         }
 
-        $columns = [];
+        $columns = [
+            [
+                'title' => 'ID',
+                'key' => $key,
+                'from_type' => '',
+            ]
+        ];
         foreach ((array)$info->field['tableField'] as $item) {
-            if (isset($item['from_type']) && $item['from_type']) {
+            if (isset($item['is_table']) && $item['is_table']) {
                 $columns[] = [
-                    'title' => $item['table_name'],
+                    'title' => $item['table_name'] ?: $item['comment'],
                     'key' => $item['field'],
                     'from_type' => $item['from_type'],
                 ];
             }
         }
-        $routeList = $newRoute;
-        return app('json')->success(compact('key', 'routeList', 'columns'));
+        $route = $newRoute;
+        return app('json')->success(compact('key', 'route', 'columns'));
     }
 
     /**

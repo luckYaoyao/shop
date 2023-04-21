@@ -378,6 +378,7 @@ class SystemCrudServices extends BaseServices
             $res = $this->dao->save([
                 'pid' => $data['pid'],
                 'name' => $data['menuName'],
+                'model_name' => $data['modelName'],
                 'table_name' => $tableName,
                 'table_comment' => $tableInfo['TABLE_COMMENT'] ?? '',
                 'table_collation' => $tableInfo['TABLE_COLLATION'] ?? '',
@@ -529,6 +530,7 @@ class SystemCrudServices extends BaseServices
         $service->setFilePathName($filePath['service'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'field' => $options['fromField'],
             'usePath' => $dao->getUsePath(),
+            'modelName' => $options['modelName'],
         ]);
         //生成验证器
         $validate = app()->make(Validate::class);
