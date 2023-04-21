@@ -124,7 +124,7 @@
 			uni.hideTabBar()
 			let that = this;
 			// #ifdef H5
-			if (option.query.hasOwnProperty('type') && option.query.type == "iframeWindow") {
+			if (option.query.hasOwnProperty('mdType') && option.query.mdType == "iframeWindow") {
 				this.globalData.isIframe = true;
 			} else {
 				this.globalData.isIframe = false;

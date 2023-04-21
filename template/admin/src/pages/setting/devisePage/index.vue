@@ -53,11 +53,11 @@ export default {
     this.pageId = parseInt(pageId);
     let moveLink = getCookies('moveLink');
     if (Number(this.$route.query.type) === 1) {
-      this.iframeUrl = `${moveLink}/pages/index/index?type=iframeWindow`;
+      this.iframeUrl = `${moveLink}/pages/index/index?mdType=iframeWindow`;
     } else {
       // this.iframeUrl = `https://v4.wuht.net/pages/index/index?type=iframeWindow`;
 
-      this.iframeUrl = `${location.origin}/pages/index/index?type=iframeWindow`;
+      this.iframeUrl = `${location.origin}/pages/index/index?mdType=iframeWindow`;
     }
     diyGetInfo(parseInt(pageId)).then((datas) => {
       let data = datas.data.info.value;
