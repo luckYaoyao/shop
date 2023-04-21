@@ -25,15 +25,16 @@ import statistic from './modules/statistic';
 import frameOut from './modules/frameOut';
 import division from './modules/division';
 import settings from '@/setting';
+import crud from './modules/crud';
 
-const modulesFiles = require.context('./modules/crud', true, /\.js$/)
+const modulesFiles = require.context('./modules/crud', true, /\.js$/);
 
-const routers  = []
+const routers = [];
 // 将扫描到的路由信息加入路由数组中
-modulesFiles.keys().forEach(modulePath => {
-  const value = modulesFiles(modulePath)
-  routers.push(value.default)
-})
+modulesFiles.keys().forEach((modulePath) => {
+  const value = modulesFiles(modulePath);
+  routers.push(value.default);
+});
 
 let routePre = settings.routePre;
 /**
@@ -169,7 +170,8 @@ const frameIn = [
   app,
   statistic,
   division,
-    ...routers
+  ...routers,
+  crud,
 ];
 
 /**
