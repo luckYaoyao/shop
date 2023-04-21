@@ -86,7 +86,7 @@ export default {
         sm: 24,
         xs: 24,
       },
-      iframeUrl: `${location.origin}/pages/index/index?type=iframeWindow`,
+      iframeUrl: `${location.origin}/pages/index/index?mdType=iframeWindow`,
       is_live: 1,
       pageData: {
         code: '',

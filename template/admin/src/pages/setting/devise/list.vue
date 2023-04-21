@@ -284,7 +284,7 @@ export default {
   },
   created() {
     this.getList();
-    this.imgUrl = `${location.origin}/pages/index/index?type=iframeWindow`;
+    this.imgUrl = `${location.origin}/pages/index/index?mdType=iframeWindow`;
   },
   mounted: function () {},
   methods: {
@@ -294,7 +294,7 @@ export default {
     refreshFrame() {
       this.imgUrl = '';
       setTimeout((e) => {
-        this.imgUrl = `${location.origin}/pages/index/index?type=iframeWindow`;
+        this.imgUrl = `${location.origin}/pages/index/index?mdType=iframeWindow`;
       }, 200);
     },
     getChildData(e) {
