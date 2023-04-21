@@ -3,10 +3,16 @@
     <Alert closable>
       crud生成说明
       <template #desc>
-        <p>1、字段配置中表存在生成的字段为表内列的信息,并且主键、伪删除字段不允许设置为列，主键默认展示在列表中，伪删除字段不允许展示</p>
+        <p>
+          1、字段配置中表存在生成的字段为表内列的信息,并且主键、伪删除字段不允许设置为列，主键默认展示在列表中，伪删除字段不允许展示
+        </p>
         <p>2、在字段配置中新建表时，主键不需要增加列，会在生成的时候默认自带主键id</p>
-        <p>3、在字段配置中新建表时，字段类型为addTimestamps会自动创建create_time、update_time字段，字段类型为：timestamp</p>
-        <p>4、在字段配置中新建表时，字段类型为addSoftDelete会字段创建delete_time字段，字段类型为：timestamp，作用是伪删除</p>
+        <p>
+          3、在字段配置中新建表时，字段类型为addTimestamps会自动创建create_time、update_time字段，字段类型为：timestamp
+        </p>
+        <p>
+          4、在字段配置中新建表时，字段类型为addSoftDelete会字段创建delete_time字段，字段类型为：timestamp，作用是伪删除
+        </p>
         <p>5、在字段配置中，表单类型为frameImageOne时属于图片单选，frameImages时为图片多选</p>
         <p>6、在字段配置中，表单类型为不生成时创建后不会生成对应的表单项</p>
       </template>
@@ -29,10 +35,14 @@
         <div class="tip">选项，选择的菜单成功后会自动写入到此菜单下</div>
       </FormItem>
       <FormItem label="菜单名称">
-        <Input class="form-width" v-model="foundation.menuName" placeholder="请输入表名"></Input>
+        <Input class="form-width" v-model="foundation.menuName" placeholder="请输入菜单名称"></Input>
         <div class="tip">
           生成菜单为可选项，不填写默认生成的菜单名称将为表名；生成后会把自动生成的权限默认加入该菜单下
         </div>
+      </FormItem>
+      <FormItem label="模块名" prop="modelName">
+        <Input class="form-width" v-model="foundation.modelName" placeholder="请输入模块名"></Input>
+        <div class="tip">用于生成模块名称</div>
       </FormItem>
       <FormItem label="表名" prop="tableName">
         <Input class="form-width" v-model="foundation.tableName" placeholder="请输入表名" @on-blur="initfield"></Input>
@@ -65,11 +75,7 @@
           >
             <template slot-scope="{ row, index }" slot="field">
               <span v-if="foundation.isTable">{{ row.field }}</span>
-              <Input
-                v-else
-                :disabled="disabledInput(index)"
-                v-model="tableField[index].field"
-              ></Input>
+              <Input v-else :disabled="disabledInput(index)" v-model="tableField[index].field"></Input>
             </template>
             <template slot-scope="{ row, index }" slot="field_type">
               <span v-if="foundation.isTable">{{ row.field_type }}</span>
@@ -79,51 +85,27 @@
             </template>
             <template slot-scope="{ row, index }" slot="limit">
               <span v-if="foundation.isTable">{{ row.limit }}</span>
-              <Input
-                v-else
-                v-model="tableField[index].limit"
-                :disabled="disabledInput(index)"
-              ></Input>
+              <Input v-else v-model="tableField[index].limit" :disabled="disabledInput(index)"></Input>
             </template>
             <template slot-scope="{ row, index }" slot="default">
               <span v-if="foundation.isTable">{{ row.default }}</span>
-              <Input
-                v-else
-                v-model="tableField[index].default"
-                :disabled="disabledInput(index)"
-              ></Input>
+              <Input v-else v-model="tableField[index].default" :disabled="disabledInput(index)"></Input>
             </template>
             <template slot-scope="{ row, index }" slot="comment">
               <span v-if="foundation.isTable">{{ row.comment }}</span>
-              <Input
-                v-else
-                v-model="tableField[index].comment"
-                :disabled="disabledInput(index)"
-              ></Input>
+              <Input v-else v-model="tableField[index].comment" :disabled="disabledInput(index)"></Input>
             </template>
             <template slot-scope="{ row, index }" slot="required">
-              <Checkbox
-                v-model="tableField[index].required"
-                :disabled="disabledInput(index)"
-              ></Checkbox>
+              <Checkbox v-model="tableField[index].required" :disabled="disabledInput(index)"></Checkbox>
             </template>
             <template slot-scope="{ row, index }" slot="is_table">
-              <Checkbox
-                v-model="tableField[index].is_table"
-                :disabled="disabledInput(index)"
-              ></Checkbox>
+              <Checkbox v-model="tableField[index].is_table" :disabled="disabledInput(index)"></Checkbox>
             </template>
             <template slot-scope="{ row, index }" slot="table_name">
-              <Input
-                v-model="tableField[index].table_name"
-                :disabled="disabledInput(index)"
-              ></Input>
+              <Input v-model="tableField[index].table_name" :disabled="disabledInput(index)"></Input>
             </template>
             <template slot-scope="{ row, index }" slot="from_type">
-              <Select
-                v-model="tableField[index].from_type"
-                :disabled="disabledInput(index)"
-              >
+              <Select v-model="tableField[index].from_type" :disabled="disabledInput(index)">
                 <Option v-for="item in fromTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
               </Select>
             </template>
@@ -156,6 +138,7 @@ export default {
       foundationRules: {
         // pid: [{ required: true, message: '请输入菜单', trigger: 'blur' }],
         tableName: [{ required: true, message: '请输入表名', trigger: 'blur' }],
+        modelName: [{ required: true, message: '请输入模块名', trigger: 'blur' }],
       },
       menusList: [],
       columnTypeList: [],
@@ -258,13 +241,13 @@ export default {
   },
   mounted() {},
   methods: {
-    disabledInput(index){
+    disabledInput(index) {
       let fieldInfo = this.tableField[index];
-      let res = ['addTimestamps', 'addSoftDelete'].includes(this.tableField[index].field_type)
+      let res = ['addTimestamps', 'addSoftDelete'].includes(this.tableField[index].field_type);
       if (fieldInfo.primaryKey) {
         res = true;
       }
-      if (fieldInfo.field==='delete_time' && fieldInfo.field_type === 'timestamp') {
+      if (fieldInfo.field === 'delete_time' && fieldInfo.field_type === 'timestamp') {
         res = true;
       }
       return res;

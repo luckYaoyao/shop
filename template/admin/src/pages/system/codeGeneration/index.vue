@@ -59,6 +59,7 @@ export default {
         foundation: {
           pid: '',
           tableName: '',
+          modelName: '',
           isTable: 1,
           menuName: '',
         },
@@ -87,6 +88,7 @@ export default {
       if (this.currentTab == 0) {
         // if (!this.formItem.foundation.pid) return this.$Message.warning('请选择菜单');
         if (!this.formItem.foundation.tableName) return this.$Message.warning('请输入表名');
+        if (!this.formItem.foundation.modelName) return this.$Message.warning('请输入模块名');
         if (!this.formItem.foundation.isTable) {
           if (!this.$refs.Foundation.tableField.length) return this.$Message.warning('请先添加表数据');
           if (this.$refs.Foundation.tableField.length)
@@ -109,8 +111,6 @@ export default {
           ...this.formItem.foundation,
           filePath: this.formItem.storage,
           tableField: this.$refs.Foundation.tableField,
-          // columnField: this.$refs.Field.dataList,
-          // fromField: this.$refs.FormItem.dataList,
         };
         this.reqloading = true;
         codeCrud(data)
@@ -168,7 +168,10 @@ export default {
   padding-left: 7px;
 }
 /deep/ .ivu-form-item {
-  margin-bottom: 15px;
+  margin-bottom: 17px;
+}
+/deep/ .ivu-form-item-error-tip {
+  padding-top: 2px;
 }
 /deep/ .tip {
   color: #bbb;
