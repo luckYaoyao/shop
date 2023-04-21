@@ -434,13 +434,13 @@ export default {
     },
     changeTab(name) {
       if (name === 'Header') {
-        if (!this.$refs.zTable.getTableData().tableData.length) {
-          this.insertEvent('zTable', {
-            attribute: 'Content-Type',
-            value: 'application/x-www-form-urlencoded',
-          });
-          this.insertEvent('zaTable');
-        }
+        // if (!this.$refs.zTable.getTableData().tableData.length) {
+        //   this.insertEvent('zTable', {
+        //     attribute: 'Content-Type',
+        //     value: 'application/x-www-form-urlencoded',
+        //   });
+        //   this.insertEvent('zaTable');
+        // }
       }
       console.log(this.interfaceData);
     },

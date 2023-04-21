@@ -20,6 +20,8 @@ service.interceptors.request.use(
     // }
     if (config.file) {
       config.headers['Content-Type'] = 'multipart/form-data';
+    } else {
+      config.headers['Content-Type'] = 'application/json;charset=UTF-8';
     }
     try {
       if (config.headerItem) {

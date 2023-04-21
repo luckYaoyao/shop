@@ -508,11 +508,7 @@ export default {
         {
           value: 'PUT',
           label: 'PUT',
-        },
-        {
-          value: '*',
-          label: '*',
-        },
+        }
       ],
       contextData: null, //左侧导航右键点击是产生的数据对象
       treeData: undefined,
