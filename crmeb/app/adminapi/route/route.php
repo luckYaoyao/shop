@@ -39,7 +39,7 @@ Route::group(function () {
     ]);
     //测试
     Route::get('index', 'Test/index')->option(['real_name' => '测试地址']);
-})->middleware(AllowOriginMiddleware::class);
+})->middleware(AllowOriginMiddleware::class)->option(['is_common' => true]);
 
 /**
  * miss 路由
