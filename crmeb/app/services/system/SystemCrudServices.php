@@ -52,7 +52,9 @@ class SystemCrudServices extends BaseServices
         'system_crud', 'wechat_key', 'user_label_relation', 'user_brokerage_frozen',
         'user_brokerage', 'store_product_cate', 'store_bargain_user_help', 'shipping_templates_region',
         'shipping_templates_no_delivery', 'shipping_templates_free', 'other_order_status', 'lang_code',
-        'lang_country', 'app_version',
+        'lang_country', 'app_version', 'user', 'wechat_user', 'template_message', 'store_order', 'other_order',
+        'store_order_cart_info', 'store_order_economize', 'store_order_invoice', 'store_order_refund',
+        'store_order_status', 'store_pink'
     ];
 
     /**
@@ -73,7 +75,7 @@ class SystemCrudServices extends BaseServices
     public function getList()
     {
         [$page, $limit] = $this->getPageValue();
-        $list = $this->dao->selectList([], 'add_time,id,name,table_name,table_comment,table_comment', $page, $limit, 'id desc');
+        $list = $this->dao->selectList([], 'add_time,id,name,table_name,table_comment,table_collation', $page, $limit, 'id desc');
         $count = $this->dao->count();
 
         return compact('list', 'count');
@@ -378,6 +380,7 @@ class SystemCrudServices extends BaseServices
             $res = $this->dao->save([
                 'pid' => $data['pid'],
                 'name' => $data['menuName'],
+                'model_name' => $data['modelName'],
                 'table_name' => $tableName,
                 'table_comment' => $tableInfo['TABLE_COMMENT'] ?? '',
                 'table_collation' => $tableInfo['TABLE_COLLATION'] ?? '',
@@ -529,6 +532,7 @@ class SystemCrudServices extends BaseServices
         $service->setFilePathName($filePath['service'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'field' => $options['fromField'],
             'usePath' => $dao->getUsePath(),
+            'modelName' => $options['modelName'] ?? '',
         ]);
         //生成验证器
         $validate = app()->make(Validate::class);

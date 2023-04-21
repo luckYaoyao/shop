@@ -23,6 +23,7 @@ use think\exception\ValidateException;
 {%use-php%}
 
 /**
+ * {%modelName%}
  * Class CrudService
  * @date {%date%}
  * @package app\services\crud{%path%}

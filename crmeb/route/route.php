@@ -25,7 +25,7 @@ Route::miss(function () {
             return view(app()->getRootPath() . 'public' . DS . 'index.html');
         default:
             if (!request()->isMobile()) {
-                if (is_dir(app()->getRootPath() . 'public' . DS . 'home') && !request()->get('type')) {
+                if (is_dir(app()->getRootPath() . 'public' . DS . 'home') && !request()->get('mdType')) {
                     return view(app()->getRootPath() . 'public' . DS . 'home' . DS . 'index.html');
                 } else {
                     if (request()->get('type')) {
