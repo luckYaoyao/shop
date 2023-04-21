@@ -195,55 +195,15 @@ new Vue({
   watch: {
     // 监听路由 控制侧边栏显示 标记当前顶栏菜单（如需要）
     $route(to, from) {
-      console.log(to, 'newRoute');
       const onRoutes = to.meta.activeMenu ? to.meta.activeMenu : '';
       this.$store.commit('menu/setActivePath', onRoutes);
-
-      //   const path = to.path;
-      //   let menus = this.$store.state.menus.menusName;
-      //   const menuSider = menus;
-      //   const headerName = getHeaderName(to, menuSider);
-      //   if (headerName !== null) {
-      //     this.$store.commit('menu/setActivePath', path);
-      // let openNameList = getMenuopen(to, menuSider);
-      // this.$store.commit('menus/setopenMenus', openNameList);
-      //     const openNames = getSiderSubmenu(to, menuSider);
-      //     this.$store.commit('menu/setOpenNames', openNames);
-      //     // 设置顶栏菜单 后台添加一个接口，设置顶部菜单
-      //     const headerSider = getHeaderSider(menuSider);
-      //     this.$store.commit('menu/setHeader', headerSider);
-      //     // 指定当前侧边栏隶属顶部菜单名称。如果你没有使用顶部菜单，则设置为默认的（一般为 home）名称即可
-      //     this.$store.commit('menu/setHeaderName', headerName);
-      //     // 获取侧边栏菜单
-      //     const filterMenuSider = getMenuSider(menuSider, headerName);
-      //     // 指定当前显示的侧边菜单
-      //     this.$store.commit('menu/setOpenMenuName', filterMenuSider[0].title);
-      //     this.$store.commit('menu/setSider', filterMenuSider[0]?.children || []);
-      //   } else {
-      //     //子路由给默认 如果你没有使用顶部菜单，则设置为默认的（一般为 home）名称即可
-      //     if (to.name == 'home_index') {
-      //       this.$store.commit('menu/setHeaderName', settings.routePre + '/home/');
-      //       this.$store.commit('menu/setSider', []);
-      //     }
-      //     // 指定当前显示的侧边菜单
-      //   }
-      //   if (to.meta.kefu) {
-      //     document.getElementsByTagName('body')[0].className = 'kf_mobile';
-      //   } else {
-      //     document.getElementsByTagName('body')[0].className = '';
-      //   }
-      //   // var storage = window.localStorage;
-      //   // let menus = JSON.parse(storage.getItem('menuList'));
-      //   // this.getMenus().then(menus => {
-      //   // 处理手动清除db 跳转403问题
-      //   if (!menus.length) {
-      //     if (path !== '/admin/login') {
-      //       this.$router.replace('/admin/login');
-      //     }
-      //     return;
-      //   }
-      //   // 在 404 时，是没有 headerName 的
-      //   // });
+      if (to.name == 'crud_crud') {
+        this.$store.state.menus.oneLvRoutes.map((e) => {
+          if (e.path === to.path) {
+            to.meta.title = e.title;
+          }
+        });
+      }
     },
   },
 });

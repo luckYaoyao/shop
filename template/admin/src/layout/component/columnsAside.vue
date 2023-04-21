@@ -29,7 +29,7 @@
                   $t(v.title) && $t(v.title).length >= 4
                     ? $t(v.title).substr(0, setColumnsAsidelayout === 'columns-vertical' ? 4 : 3)
                     : $t(v.title)
-                }}
+                }}1
               </div>
             </a>
           </div>
@@ -63,13 +63,27 @@ export default {
     },
     // 设置分栏布局风格
     setColumnsAsidelayout() {
+      console.log('111');
       return this.$store.state.themeConfig.themeConfig.columnsAsideLayout;
     },
     Layout() {
       return this.$store.state.themeConfig.themeConfig.Layout;
     },
+    routesList() {
+      console.log('大哥');
+
+      this.$store.state.routesList.routesList;
+    },
+  },
+  beforeDestroy() {
+    console.log('zoule');
+    this.bus.$off('routesListChange');
   },
   mounted() {
+    this.bus.$on('routesListChange', () => {
+      console.log('变了大哥');
+      this.setFilterRoutes();
+    });
     this.setFilterRoutes();
   },
   methods: {

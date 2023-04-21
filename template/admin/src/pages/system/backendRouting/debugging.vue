@@ -60,7 +60,7 @@
               </vxe-select>
             </template>
           </vxe-column>
-          <vxe-column field="must" title="必填" width="50" :edit-render="{}">
+          <!-- <vxe-column field="must" title="必填" width="50" :edit-render="{}">
             <template #default="{ row }">
               <span>{{ row.must == '1' ? '是' : '否' }}</span>
             </template>
@@ -69,7 +69,7 @@
             <template #default="{ row }">
               <vxe-input v-model="row.trip" type="text"></vxe-input>
             </template>
-          </vxe-column>
+          </vxe-column> -->
           <vxe-column title="操作" width="120">
             <template #default="{ row }">
               <vxe-button
@@ -133,7 +133,7 @@
               </vxe-select>
             </template>
           </vxe-column>
-          <vxe-column field="must" title="必填" width="50" :edit-render="{}">
+          <!-- <vxe-column field="must" title="必填" width="50" :edit-render="{}">
             <template #default="{ row }">
               <span>{{ row.must == '1' ? '是' : '否' }}</span>
             </template>
@@ -142,7 +142,7 @@
             <template #default="{ row }">
               <vxe-input v-model="row.trip" type="text"></vxe-input>
             </template>
-          </vxe-column>
+          </vxe-column> -->
           <vxe-column title="操作" width="120">
             <template #default="{ row }">
               <vxe-button
@@ -187,26 +187,6 @@
               <vxe-input v-model="row.value" type="text"></vxe-input>
             </template>
           </vxe-column>
-          <vxe-column field="type" title="类型" width="200" :edit-render="{}">
-            <template #default="{ row }">
-              <vxe-select
-                v-model="row.type"
-                transfer
-                @change="
-                  (val) => {
-                    handleChange(val, row, 'zTable');
-                  }
-                "
-              >
-                <vxe-option
-                  v-for="item in typeList"
-                  :key="item.value"
-                  :value="item.value"
-                  :label="item.label"
-                ></vxe-option>
-              </vxe-select>
-            </template>
-          </vxe-column>
           <vxe-column title="操作" width="100">
             <template #default="{ row }">
               <vxe-button
@@ -221,7 +201,7 @@
           </vxe-column>
         </vxe-table>
         <Button class="mt10" type="primary" @click="insertEvent('zTable')">添加参数</Button>
-        <h4 class="mt10 title">全局Header参数</h4>
+        <!-- <h4 class="mt10 title">全局Header参数</h4>
         <vxe-table
           class="mt10"
           resizable
@@ -254,7 +234,7 @@
               <span>{{ row.trip || '' }}</span>
             </template>
           </vxe-column>
-        </vxe-table>
+        </vxe-table> -->
       </div>
     </div>
     <div class="res mt10 mb10" v-if="codes">
@@ -360,10 +340,12 @@ export default {
       requestMethod(url, method, params, body, headers)
         .then((res) => {
           console.log(res, 'res');
+          if (!res) return this.$Message.error('接口异常');
           this.codes = JSON.stringify(res);
         })
         .catch((err) => {
           console.log(err, 'err');
+          if (!err) return this.$Message.error('接口异常');
           this.codes = JSON.stringify(err);
         });
     },

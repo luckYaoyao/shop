@@ -138,6 +138,9 @@ export default {
         this.$store.dispatch('routesList/setRoutesList', data.menus);
         let arr = formatFlatteningRoutes(this.$router.options.routes);
         this.formatTwoStageRoutes(arr);
+        let routes = formatFlatteningRoutes(data.menus);
+        this.$store.commit('menus/setOneLvRoute', routes);
+        this.bus.$emit('routesListChange');
       });
     },
   },

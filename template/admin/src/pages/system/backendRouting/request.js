@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Setting from '@/setting';
 import { getCookies, removeCookies } from '@/libs/util';
+import { Message } from 'iview';
 
 const service = axios.create({
   baseURL: 'https://v5.wuht.net',
@@ -68,57 +69,9 @@ service.interceptors.response.use(
     }
   },
   (error) => {
+    Message.error('接口异常');
+
     // return Promise.reject(error);
   },
 );
 export default service;
-
-// function sendRequest(url, method, params, header) {
-//   const instance = axios.create({
-//     baseURL: Setting.apiBaseURL, // 请求的根域名
-//     timeout: 1000, // 请求超时时间
-//     headers: {
-//       'X-Custom-Header': header, // 自定义头信息
-//     },
-//   });
-
-//   if (method === 'GET') {
-//     instance
-//       .get(url, { params: params })
-//       .then((response) => {
-//         // 处理响应数据
-//       })
-//       .catch((error) => {
-//         // 处理错误
-//       });
-//   } else if (method === 'POST') {
-//     instance
-//       .post(url, params, { headers: header })
-//       .then((response) => {
-//         // 处理响应数据
-//       })
-//       .catch((error) => {
-//         // 处理错误
-//       });
-//   } else if (method === 'PUT') {
-//     instance
-//       .put(url, params, { headers: header })
-//       .then((response) => {
-//         // 处理响应数据
-//       })
-//       .catch((error) => {
-//         // 处理错误
-//       });
-//   } else if (method === 'DELETE') {
-//     instance
-//       .delete(url, { headers: header })
-//       .then((response) => {
-//         // 处理响应数据
-//       })
-//       .catch((error) => {
-//         // 处理错误
-//       });
-//   }
-
-//   return instance;
-// }
