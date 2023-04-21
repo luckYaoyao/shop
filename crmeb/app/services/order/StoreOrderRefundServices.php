@@ -145,7 +145,7 @@ class StoreOrderRefundServices extends BaseServices
                 throw new AdminException(400489);
             }
             //退拼团
-            if ($splitOrderInfo['pid'] == 0 && !$splitOrderInfo['pink_id']) {
+            if ($splitOrderInfo['pid'] == 0 && $splitOrderInfo['pink_id'] > 0) {
                 /** @var StorePinkServices $pinkServices */
                 $pinkServices = app()->make(StorePinkServices::class);
                 if (!$pinkServices->setRefundPink($splitOrderInfo)) {
