@@ -204,7 +204,8 @@ class SystemRouteServices extends BaseServices
                 $cateId = $commmonId;
             } else {
                 if (!isset($item['option']['cate_name'])) {
-                    $cateId = $id;
+                    $rule = explode('/', $item['rule']);
+                    $cateId = $this->topCateId($app, $rule[0]);
                 } else {
                     $cateId = $this->topCateId($app, $item['option']['cate_name']);
                 }

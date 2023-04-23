@@ -354,6 +354,12 @@ class SystemCrudServices extends BaseServices
                     'add_time' => date('Y-m-d H:i:s')
                 ],
             ];
+            $routeService = app()->make(SystemRouteServices::class);
+            foreach ($ruleData as $key => $item) {
+                if ($routeService->count(['method' => $item['method'], 'path' => $item['path']])) {
+                    unset($ruleData[$key]);
+                }
+            }
             app()->make(SystemRouteServices::class)->saveAll($ruleData);
             //记录权限加入菜单表
             $menuData = [];
