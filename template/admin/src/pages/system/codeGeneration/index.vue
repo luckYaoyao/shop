@@ -6,7 +6,7 @@
           ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         >
         <Divider type="vertical" />
-        <span class="ivu-page-header-title mr20" style="padding: 0">代码生成</span>
+        <span class="ivu-page-header-title mr20" style="padding: 0">添加功能</span>
       </div>
     </div>
     <div class="message">

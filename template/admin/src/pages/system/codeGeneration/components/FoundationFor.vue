@@ -42,7 +42,7 @@
       </FormItem>
       <FormItem label="模块名" prop="modelName">
         <Input class="form-width" v-model="foundation.modelName" placeholder="请输入模块名"></Input>
-        <div class="tip">用于生成模块名称</div>
+        <div class="tip">模块名称为中文或者英文，用在接口名称前缀、表单头部标题</div>
       </FormItem>
       <FormItem label="表名" prop="tableName">
         <Input
@@ -65,7 +65,7 @@
         </div>
       </FormItem>
       <FormItem label="字段配置">
-        <Button type="primary" @click="addRow">{{ foundation.isTable ? '生成字段' : '添加一行' }}</Button>
+        <Button type="primary" @click="addRow">{{ foundation.isTable ? '获取字段' : '添加一行' }}</Button>
         <div>
           <Table
             ref="selection"
