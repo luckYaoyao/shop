@@ -320,7 +320,7 @@ class SystemCrudServices extends BaseServices
                 [
                     'path' => $routeName,
                     'method' => 'POST',
-                    'name' => $modelName . '保存数据接口',
+                    'name' => $modelName . '保存接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
@@ -338,7 +338,7 @@ class SystemCrudServices extends BaseServices
                 [
                     'path' => $routeName . '/<id>',
                     'method' => 'PUT',
-                    'name' => $modelName . '修改数据接口',
+                    'name' => $modelName . '修改接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
@@ -347,13 +347,19 @@ class SystemCrudServices extends BaseServices
                 [
                     'path' => $routeName . '/<id>',
                     'method' => 'DELETE',
-                    'name' => $modelName . '删除数据接口',
+                    'name' => $modelName . '删除接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
                     'add_time' => date('Y-m-d H:i:s')
                 ],
             ];
+            $routeService = app()->make(SystemRouteServices::class);
+            foreach ($ruleData as $key => $item) {
+                if ($routeService->count(['method' => $item['method'], 'path' => $item['path']])) {
+                    unset($ruleData[$key]);
+                }
+            }
             app()->make(SystemRouteServices::class)->saveAll($ruleData);
             //记录权限加入菜单表
             $menuData = [];
@@ -538,7 +544,9 @@ class SystemCrudServices extends BaseServices
         ]);
         //生成验证器
         $validate = app()->make(Validate::class);
-        $validate->setFilePathName($filePath['validate'] ?? '')->setbasePath($basePath)->handle($tableName);
+        $validate->setFilePathName($filePath['validate'] ?? '')->setbasePath($basePath)->handle($tableName, [
+            'field' => $options['fromField'],
+        ]);
         //生成控制器
         $controller = app()->make(Controller::class);
         $controller->setFilePathName($filePath['controller'] ?? '')->setbasePath($basePath)->handle($tableName, [
