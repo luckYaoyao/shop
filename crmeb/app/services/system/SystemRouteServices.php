@@ -204,8 +204,13 @@ class SystemRouteServices extends BaseServices
                 $cateId = $commmonId;
             } else {
                 if (!isset($item['option']['cate_name'])) {
-                    $rule = explode('/', $item['rule']);
-                    $cateId = $this->topCateId($app, $rule[0]);
+                    if (strstr($item['rule'], '<MISS>') === false) {
+                        $rule = explode('/', $item['rule']);
+                        $cateId = $this->topCateId($app, $rule[0]);
+                    } else {
+                        //miss路由不写入
+                        continue;
+                    }
                 } else {
                     $cateId = $this->topCateId($app, $item['option']['cate_name']);
                 }
