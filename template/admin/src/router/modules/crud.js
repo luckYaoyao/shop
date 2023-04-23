@@ -22,7 +22,7 @@ export default {
     name: `${pre}crud`,
   },
   meta: {
-    auth: ['admin-crud'],
+    auth: true,
   },
   component: LayoutMain,
   children: [
@@ -30,7 +30,7 @@ export default {
       path: ':table_name',
       name: `${pre}crud`,
       meta: {
-        auth: ['admin-crund-index'],
+        auth: true,
         title: '增删改查',
       },
       component: () => import('@/pages/crud/index'),
