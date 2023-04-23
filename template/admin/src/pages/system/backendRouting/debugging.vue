@@ -330,11 +330,7 @@ export default {
           ? this.jsonBody
           : this.filtersData((await this.$refs.yTable.getTableData().tableData) || []);
       let h = this.filtersData((await this.$refs.zTable.getTableData().tableData) || []);
-      let h1 = this.filtersData((await this.$refs.zaTable.getTableData().tableData) || []);
-      headers = {
-        ...h,
-        ...h1,
-      };
+      headers = h;
       console.log(url, method, params, body, headers);
       this.codes = '';
       requestMethod(url, method, params, body, headers)

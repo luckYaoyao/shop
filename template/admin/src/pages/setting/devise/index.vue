@@ -207,7 +207,7 @@ export default {
   components: {
     footPage,
     html2canvas,
-    draggable: vuedraggable
+    draggable: vuedraggable,
   },
   filters: {
     filterTxt(val) {
@@ -402,7 +402,7 @@ export default {
     log(evt) {
       // 中间拖拽排序
       if (evt.moved) {
-        if (evt.moved.element.name == 'search_box') {
+        if (evt.moved.element.name == 'search_box' || evt.moved.element.name == 'nav_bar') {
           return this.$Message.warning('该组件禁止拖拽');
         }
         // if (evt.moved.element.name == "nav_bar") {
@@ -467,9 +467,10 @@ export default {
           return;
         }
       }
-      if (item.name == 'search_box') {
+      if (item.name == 'search_box' || item.name == 'nav_bar') {
         return this.$Message.warning('该组件禁止移动');
       }
+      console.log(item);
       // if (item.name == "nav_bar") {
       //     return this.$Message.warning("该组件禁止移动");
       // }

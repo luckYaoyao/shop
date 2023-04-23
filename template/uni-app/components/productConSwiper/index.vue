@@ -6,14 +6,14 @@
 			<swiper-item v-if="videoline">
 				<view class="item">
 					<view v-show="!controls" style="width:100%;height:100% ">
-						<video id="myVideo" :src='videoline' objectFit="contain" controls style="width:100%;height:100%"
+						<video id="myVideo" :src='encodeURI(videoline)' objectFit="contain" controls style="width:100%;height:100%"
 							show-center-play-btn show-mute-btn="true" auto-pause-if-navigate :custom-cache="false"
 							:enable-progress-gesture="false" :poster="imgUrls[0]" @pause="videoPause"></video>
 					</view>
 					<view class="poster" v-show="controls">
 						<image class="image" :src="imgUrls[0]"></image>
 					</view>
-					<view class="stop" v-show="controls" @tap="bindPause">
+					<view class="stop" v-show="controls" @click.stop="bindPause">
 						<image class="image" src="../../static/images/stop.png"></image>
 					</view>
 				</view>
@@ -33,7 +33,7 @@
 			<!-- #endif -->
 			<block v-for="(item,index) in imgUrls" :key='index'>
 				<swiper-item v-if="videoline?index>=1:index>=0">
-					<image :src="item" class="slide-image" @click="openImage(index)" />
+					<image :src="item" class="slide-image" @click.stop="openImage(index)" />
 				</swiper-item>
 			</block>
 		</swiper>
@@ -95,8 +95,8 @@
 			},
 			bindPause: function() {
 				// #ifndef APP-PLUS
-				this.videoContext.play();
 				this.$set(this, 'controls', false)
+				this.videoContext.play();
 				this.autoplay = false
 				// #endif
 				// #ifdef APP-PLUS

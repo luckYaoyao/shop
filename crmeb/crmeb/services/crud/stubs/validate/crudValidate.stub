@@ -33,14 +33,14 @@ class {%nameCamel%}Validate extends Validate
      * @var array
      */
     protected $rule = [
-
+{%rule-php%}
     ];
 
     /**
      * @var array
      */
     protected $message = [
-
+{%message-php%}
     ];
 
     /**
