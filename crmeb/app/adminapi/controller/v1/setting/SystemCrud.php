@@ -99,6 +99,12 @@ class SystemCrud extends AuthController
                 ];
             }
         }
+        if (!$fromField) {
+            return app('json')->fail('至少选择一个字段作为表单项');
+        }
+        if (!$columnField) {
+            return app('json')->fail('至少选择一个字段作为列展示在列表中');
+        }
         $data['fromField'] = $fromField;
         $data['columnField'] = $columnField;
         if (!$data['tableName']) {
