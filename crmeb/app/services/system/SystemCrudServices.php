@@ -320,7 +320,7 @@ class SystemCrudServices extends BaseServices
                 [
                     'path' => $routeName,
                     'method' => 'POST',
-                    'name' => $modelName . '保存数据接口',
+                    'name' => $modelName . '保存接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
@@ -338,7 +338,7 @@ class SystemCrudServices extends BaseServices
                 [
                     'path' => $routeName . '/<id>',
                     'method' => 'PUT',
-                    'name' => $modelName . '修改数据接口',
+                    'name' => $modelName . '修改接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
@@ -347,7 +347,7 @@ class SystemCrudServices extends BaseServices
                 [
                     'path' => $routeName . '/<id>',
                     'method' => 'DELETE',
-                    'name' => $modelName . '删除数据接口',
+                    'name' => $modelName . '删除接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
