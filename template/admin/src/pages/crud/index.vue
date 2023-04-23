@@ -65,6 +65,10 @@ export default {
       return this.isMobile ? 'top' : 'left';
     },
   },
+  beforeRouteUpdate(to, from, next) {
+    this.getCrudApi(to.params.table_name);
+    next();
+  },
   created() {
     this.getCrudApi(this.$route.params.table_name);
   },
