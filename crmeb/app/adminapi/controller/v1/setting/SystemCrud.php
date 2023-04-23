@@ -87,6 +87,9 @@ class SystemCrud extends AuthController
                 ];
             }
             if ($item['from_type']) {
+                if (!$item['table_name']) {
+                    return app('json')->fail('表单标题必须填写');
+                }
                 $fromField[] = [
                     'field' => $item['field'],
                     'type' => $item['from_type'],

@@ -48,7 +48,7 @@ export default {
       columns: [
         {
           title: 'ID',
-          key: 'id',
+          key: '{%key%}',
           width: 80,
         },{%content-vue%}
         {

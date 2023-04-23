@@ -90,6 +90,7 @@ class ViewPages extends Make
         }
         $this->value['auth'] = Str::snake($name);
         $this->value['componentName'] = $this->value['auth'];
+        $this->value['key'] = $options['key'] ?? 'id';
         $this->value['route'] = $route;
         $this->value['content-vue'] = $columnStr ? "\n" . implode($this->tab(2) . ',', $columnStr) . $this->tab(2) . ',' : '';
         $this->value['pathApiJs'] = $options['pathApiJs'] ?? '';
