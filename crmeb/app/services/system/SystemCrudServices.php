@@ -233,6 +233,7 @@ class SystemCrudServices extends BaseServices
         $tableComment = $data['tableComment'] ?? $data['menuName'];
         $tableField = $this->valueReplace($data['tableField']);
         $filePath = $this->valueReplace($data['filePath']);
+        $modelName = $data['modelName'] ?? $data['menuName'] ?? $tableName;
 
         if ($this->dao->value(['table_name' => $tableName])) {
             throw new AdminException(500048);
@@ -293,7 +294,7 @@ class SystemCrudServices extends BaseServices
             'is_header' => $data['pid'] ? 0 : 1,
         ];
 
-        $res = $this->transaction(function () use ($tableInfo, $filePath, $tableName, $routeName, $data, $dataMenu) {
+        $res = $this->transaction(function () use ($tableInfo, $modelName, $filePath, $tableName, $routeName, $data, $dataMenu) {
             $menuInfo = app()->make(SystemMenusServices::class)->save($dataMenu);
             //写入路由权限
             $cateId = app()->make(SystemRouteServices::class)->topCateId('adminapi');
@@ -301,7 +302,7 @@ class SystemCrudServices extends BaseServices
                 [
                     'path' => $routeName,
                     'method' => 'GET',
-                    'name' => $data['menuName'] . '列表接口',
+                    'name' => $modelName . '列表接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
@@ -310,7 +311,7 @@ class SystemCrudServices extends BaseServices
                 [
                     'path' => $routeName . '/create',
                     'method' => 'GET',
-                    'name' => $data['menuName'] . '获取创建表单接口',
+                    'name' => $modelName . '获取创建表单接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => Str::snake($tableName) . '-add',
@@ -319,7 +320,7 @@ class SystemCrudServices extends BaseServices
                 [
                     'path' => $routeName,
                     'method' => 'POST',
-                    'name' => $data['menuName'] . '保存数据接口',
+                    'name' => $modelName . '保存数据接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
@@ -328,7 +329,7 @@ class SystemCrudServices extends BaseServices
                 [
                     'path' => $routeName . '/<id>/edit',
                     'method' => 'GET',
-                    'name' => $data['menuName'] . '获取修改表单接口',
+                    'name' => $modelName . '获取修改表单接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
@@ -337,7 +338,7 @@ class SystemCrudServices extends BaseServices
                 [
                     'path' => $routeName . '/<id>',
                     'method' => 'PUT',
-                    'name' => $data['menuName'] . '修改数据接口',
+                    'name' => $modelName . '修改数据接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
@@ -346,7 +347,7 @@ class SystemCrudServices extends BaseServices
                 [
                     'path' => $routeName . '/<id>',
                     'method' => 'DELETE',
-                    'name' => $data['menuName'] . '删除数据接口',
+                    'name' => $modelName . '删除数据接口',
                     'app_name' => 'adminapi',
                     'cate_id' => $cateId,
                     'unique_auth' => '',
@@ -548,7 +549,7 @@ class SystemCrudServices extends BaseServices
         //生成路由
         $route = app()->make(Route::class);
         $route->setFilePathName($filePath['route'] ?? '')->setbasePath($basePath)->handle($tableName, [
-            'menus' => $options['menuName'],
+            'menus' => $options['modelName'] ?? $options['menuName'],
             'route' => $routeName
         ]);
         //生成前台路由
