@@ -49,12 +49,9 @@ class Service extends Make
         $this->value['use-php'] = $this->getDaoClassName($name, $path);
         $this->value['modelName'] = $options['modelName'] ?? $name;
 
-        $action = $options['action'] ?? [];
-        $field = $options['field'] ?? [];
 
-        if (!$action) {
-            $action = ['index', 'form', 'save', 'update'];
-        }
+        $field = $options['field'] ?? [];
+        $action = ['index', 'form', 'save', 'update'];
 
         $contentAction = '';
         foreach ($action as $item) {
@@ -64,8 +61,8 @@ class Service extends Make
 
         //生成form表单
         if (in_array('save', $action) || in_array('update', $action)) {
-            $var = ['{%date%}', '{%route%}', '{%form-php%}', '{%modelName%}'];
-            $value = [$this->value['date'], Str::snake($options['route'] ?? $name)];
+            $var = ['{%key%}', '{%date%}', '{%route%}', '{%form-php%}', '{%modelName%}'];
+            $value = [$options['key'] ?? 'id', $this->value['date'], Str::snake($options['route'] ?? $name)];
             $from = [];
             foreach ($field as $item) {
                 switch ($item['type']) {

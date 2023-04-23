@@ -7,7 +7,7 @@
     public function getCrudListIndex(array $where = [])
     {
         [$page, $limit] = $this->getPageValue();
-        $model = $this->dao->selectModel($where, '*', $page, $limit);
+        $model = $this->dao->selectModel($where, '*', $page ?: 1, $limit ?: 10, '{%key%} desc');
 
         return ['count' => $model->count(), 'list' => $model->select()->toArray()];
     }

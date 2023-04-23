@@ -531,6 +531,7 @@ class SystemCrudServices extends BaseServices
         $service = app()->make(Service::class);
         $service->setFilePathName($filePath['service'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'field' => $options['fromField'],
+            'key' => $options['key'],
             'usePath' => $dao->getUsePath(),
             'modelName' => $options['modelName'] ?? '',
         ]);
@@ -566,6 +567,7 @@ class SystemCrudServices extends BaseServices
         $viewPages->setFilePathName($filePath['pages'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'field' => $options['columnField'],
             'route' => $routeName,
+            'key' => $options['key'],
             'pathApiJs' => '@/' . str_replace('\\', '/', str_replace([Make::adminTemplatePath(), '.js'], '', $viewApi->getPath())),
         ]);
 
