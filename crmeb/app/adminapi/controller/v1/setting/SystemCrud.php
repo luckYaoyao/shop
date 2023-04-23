@@ -87,17 +87,24 @@ class SystemCrud extends AuthController
                 ];
             }
             if ($item['from_type']) {
-                if (!$item['table_name']) {
-                    return app('json')->fail('表单标题必须填写');
+                $name = $item['table_name'] ?: $item['comment'];
+                if (!$name) {
+                    return app('json')->fail($item['field'] . '字段的表单标题必须填写');
                 }
                 $fromField[] = [
                     'field' => $item['field'],
                     'type' => $item['from_type'],
-                    'name' => $item['table_name'],
+                    'name' => $name,
                     'required' => $item['required'],
                     'option' => $item['option'] ?? [],
                 ];
             }
+        }
+        if (!$fromField) {
+            return app('json')->fail('至少选择一个字段作为表单项');
+        }
+        if (!$columnField) {
+            return app('json')->fail('至少选择一个字段作为列展示在列表中');
         }
         $data['fromField'] = $fromField;
         $data['columnField'] = $columnField;
@@ -134,17 +141,7 @@ class SystemCrud extends AuthController
 
         $routeName = 'crud/' . Str::snake($tableName);
 
-        $make = $this->services->makeFile($tableName, $routeName, false, [
-            'menuName' => '',
-            'fromField' => [],
-            'columnField' => [],
-        ]);
-
-        $makePath = [];
-        foreach ($make as $key => $item) {
-            $makePath[$key] = $item['path'];
-        }
-
+        $key = 'id';
         $tableField = [];
         if ($isTable) {
             $field = $this->services->getColumnNamesList($tableName);
@@ -152,6 +149,9 @@ class SystemCrud extends AuthController
                 return app('json')->fail('表不存在');
             }
             foreach ($field as $item) {
+                if ($item['primaryKey']) {
+                    $key = $item['name'];
+                }
                 $tableField[] = [
                     'field' => $item['name'],
                     'field_type' => $item['type'],
@@ -165,6 +165,18 @@ class SystemCrud extends AuthController
                     'from_type' => '',
                 ];
             }
+        }
+
+        $make = $this->services->makeFile($tableName, $routeName, false, [
+            'menuName' => '',
+            'key' => $key,
+            'fromField' => [],
+            'columnField' => [],
+        ]);
+
+        $makePath = [];
+        foreach ($make as $k => $item) {
+            $makePath[$k] = $item['path'];
         }
 
         return app('json')->success(compact('makePath', 'tableField'));
