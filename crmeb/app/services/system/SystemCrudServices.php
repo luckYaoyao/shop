@@ -571,7 +571,7 @@ class SystemCrudServices extends BaseServices
 
         //创建文件
         if ($isMake) {
-            FileService::batchMakeFiles([$model, $dao, $service, $controller, $route, $viewApi, $viewPages, $viewRouter]);
+            FileService::batchMakeFiles([$model, $validate, $dao, $service, $controller, $route, $viewApi, $viewPages, $viewRouter]);
         }
 
         return [
