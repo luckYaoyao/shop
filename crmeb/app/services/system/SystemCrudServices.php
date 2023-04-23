@@ -538,7 +538,9 @@ class SystemCrudServices extends BaseServices
         ]);
         //生成验证器
         $validate = app()->make(Validate::class);
-        $validate->setFilePathName($filePath['validate'] ?? '')->setbasePath($basePath)->handle($tableName);
+        $validate->setFilePathName($filePath['validate'] ?? '')->setbasePath($basePath)->handle($tableName, [
+            'field' => $options['fromField'],
+        ]);
         //生成控制器
         $controller = app()->make(Controller::class);
         $controller->setFilePathName($filePath['controller'] ?? '')->setbasePath($basePath)->handle($tableName, [
