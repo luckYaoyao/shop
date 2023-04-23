@@ -414,7 +414,7 @@
       <debugging
         v-if="debuggingModal"
         :formValidate="formValidate"
-        :typeList="typeList"
+        :typeList="intTypeList"
         :requestTypeList="requestTypeList"
       />
     </Modal>
@@ -461,7 +461,36 @@ export default {
         title: [{ message: '请输入正确的描述 (不能多于200位数)', trigger: 'blur', max: 200 }],
       },
       loading: false,
-
+      intTypeList: [
+        {
+          value: 'string',
+          label: 'String',
+        },
+        // {
+        //   value: 'array',
+        //   label: 'Array',
+        // },
+        // {
+        //   value: 'object',
+        //   label: 'Object',
+        // },
+        {
+          value: 'number',
+          label: 'Number',
+        },
+        {
+          value: 'boolean',
+          label: 'Boolean',
+        },
+        {
+          value: 'null',
+          label: 'Null',
+        },
+        {
+          value: 'any',
+          label: 'Any',
+        },
+      ],
       typeList: [
         {
           value: 'string',
@@ -508,7 +537,7 @@ export default {
         {
           value: 'PUT',
           label: 'PUT',
-        }
+        },
       ],
       contextData: null, //左侧导航右键点击是产生的数据对象
       treeData: undefined,

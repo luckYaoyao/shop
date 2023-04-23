@@ -214,6 +214,8 @@ export default {
           let arr = formatFlatteningRoutes(this.$router.options.routes);
           this.formatTwoStageRoutes(arr);
           this.$store.commit('menus/setOneLvMenus', arr);
+          let routes = formatFlatteningRoutes(data.menus);
+          this.$store.commit('menus/setOneLvRoute', routes);
 
           // 记录用户信息
           this.$store.commit('userInfo/name', data.user_info.account);

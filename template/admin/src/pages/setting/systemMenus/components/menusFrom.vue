@@ -407,7 +407,7 @@ export default {
           this.modals = false;
           this.$emit('changeMenu');
           this.getAddFrom();
-          this.$store.dispatch('admin/menus/getMenusNavList');
+          // this.$store.dispatch('menus/getMenusNavList');
         })
         .catch((res) => {
           this.valids = false;

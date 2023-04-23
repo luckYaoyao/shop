@@ -94,6 +94,15 @@ export default {
         this.$refs.layoutAsideRef.update();
       }, 300);
     });
+    if (this.$store.state.themeConfig.themeConfig.layout !== 'columns') {
+      this.bus.$on('routesListChange', () => {
+        console.log('变了大哥');
+        this.setFilterRoutes();
+      });
+    }
+  },
+  beforeDestroy() {
+    this.bus.$off('routesListChange');
   },
   methods: {
     // 设置/过滤路由（非静态路由/是否显示在菜单中）

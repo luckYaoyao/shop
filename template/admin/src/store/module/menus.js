@@ -27,6 +27,7 @@ export default {
     openMenus: [],
     childMenuList: [],
     oneLvMenus: [],
+    oneLvRoutes: [],
   },
   mutations: {
     getmenusNav(state, menuList) {
@@ -40,6 +41,9 @@ export default {
     },
     setOneLvMenus(state, oneLvMenus) {
       state.oneLvMenus = oneLvMenus;
+    },
+    setOneLvRoute(state, oneLvMenus) {
+      state.oneLvRoutes = oneLvMenus;
     },
     childMenuList(state, list) {
       state.childMenuList = list;

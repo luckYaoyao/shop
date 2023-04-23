@@ -2,11 +2,11 @@
   <div>
     <Card :bordered="false" dis-hover class="ivu-mt">
       <Form
-          ref="roleData"
-          :model="roleData"
-          :label-width="labelWidth"
-          :label-position="labelPosition"
-          @submit.native.prevent
+        ref="roleData"
+        :model="roleData"
+        :label-width="labelWidth"
+        :label-position="labelPosition"
+        @submit.native.prevent
       >
         <Row type="flex" :gutter="24">
           <Col v-bind="grid">
@@ -19,30 +19,29 @@
           </Col>
           <Col v-bind="grid">
             <FormItem label="按钮名称：" prop="status2" label-for="status2">
-              <Input v-model="roleData.keyword" search enter-button placeholder="请输入按钮名称" @on-search="getData"/>
+              <Input v-model="roleData.keyword" search enter-button placeholder="请输入按钮名称" @on-search="getData" />
             </FormItem>
           </Col>
         </Row>
         <Row type="flex">
           <Col v-bind="grid">
             <Button v-auth="['setting-system_menus-add']" type="primary" @click="menusAdd('添加规则')" icon="md-add"
-            >添加规则
-            </Button
-            >
+              >添加规则
+            </Button>
           </Col>
         </Row>
       </Form>
       <vxe-table
-          :border="false"
-          class="vxeTable mt25"
-          highlight-hover-row
-          highlight-current-row
-          :loading="loading"
-          ref="xTable"
-          header-row-class-name="false"
-          :tree-config="tabconfig"
-          :data="tableData"
-          row-id="id"
+        :border="false"
+        class="vxeTable mt25"
+        highlight-hover-row
+        highlight-current-row
+        :loading="loading"
+        ref="xTable"
+        header-row-class-name="false"
+        :tree-config="tabconfig"
+        :data="tableData"
+        row-id="id"
       >
         <vxe-table-column field="id" title="ID" tooltip min-width="70"></vxe-table-column>
         <vxe-table-column field="menu_name" tree-node title="按钮名称" min-width="200"></vxe-table-column>
@@ -56,12 +55,12 @@
         <vxe-table-column field="flag" title="规则状态" min-width="120">
           <template v-slot="{ row }">
             <i-switch
-                v-model="row.is_show"
-                :value="row.is_show"
-                :true-value="1"
-                :false-value="0"
-                @on-change="onchangeIsShow(row)"
-                size="large"
+              v-model="row.is_show"
+              :value="row.is_show"
+              :true-value="1"
+              :false-value="0"
+              @on-change="onchangeIsShow(row)"
+              size="large"
             >
               <span slot="open">显示</span>
               <span slot="close">隐藏</span>
@@ -72,62 +71,64 @@
           <template v-slot="{ row, index }">
             <span v-auth="['setting-system_menus-add']">
               <a @click="addRoute(row)" v-if="row.auth_type === 1">添加权限</a>
-              <Divider type="vertical" v-if="row.auth_type === 1"/>
+              <Divider type="vertical" v-if="row.auth_type === 1" />
               <a @click="addE(row, '添加子菜单')" v-if="row.auth_type === 1">添加子菜单</a>
               <!-- <a @click="addE(row, '添加规则')" v-else>添加规则</a> -->
             </span>
-            <Divider type="vertical" v-if="row.auth_type === 1"/>
+            <Divider type="vertical" v-if="row.auth_type === 1" />
             <a @click="edit(row, '编辑')">编辑</a>
-            <Divider type="vertical"/>
+            <Divider type="vertical" />
             <a @click="del(row, '删除规则')">删除</a>
           </template>
         </vxe-table-column>
       </vxe-table>
     </Card>
     <menus-from
-        :formValidate="formValidate"
-        :titleFrom="titleFrom"
-        @getList="getList"
-        @changeMenu="getMenusUnique"
-        ref="menusFrom"
-        @clearFrom="clearFrom"
+      :formValidate="formValidate"
+      :titleFrom="titleFrom"
+      @getList="getList"
+      @changeMenu="getMenusUnique"
+      ref="menusFrom"
+      @clearFrom="clearFrom"
     ></menus-from>
     <Modal
-        v-model="ruleModal"
-        scrollable
-        width="1100"
-        title="权限列表"
-        @on-ok="addRouters"
-        @on-cancel="ruleModal = false"
-        @on-visible-change="modalchange"
+      v-model="ruleModal"
+      scrollable
+      width="1100"
+      title="权限列表"
+      @on-ok="addRouters"
+      @on-cancel="ruleModal = false"
+      @on-visible-change="modalchange"
     >
       <div class="search-rule">
-        <Alert>基础接口，可多选，并且添加后不会再展示出现；删除权限后才会出现；公共接口，可多选，并且添加后会继续展示；</Alert>
+        <Alert
+          >基础接口，可多选，并且添加后不会再展示出现；删除权限后才会出现；公共接口，可多选，并且添加后会继续展示；</Alert
+        >
         <Input
-            class="mr10"
-            v-model="searchRule"
-            placeholder="输入关键词搜索"
-            clearable
-            style="width: 300px"
-            ref="search"
-            @on-enter="searchRules"
-            @on-clear="searchRules"
+          class="mr10"
+          v-model="searchRule"
+          placeholder="输入关键词搜索"
+          clearable
+          style="width: 300px"
+          ref="search"
+          @on-enter="searchRules"
+          @on-clear="searchRules"
         />
         <Button class="mr10" type="primary" @click="searchRules">搜索</Button>
         <Button @click="init">重置</Button>
       </div>
 
       <Tabs v-model="routeType" @on-click="changTab">
-        <TabPane :label="item.name" :name="''+index" v-for="(item,index) in foundationList"></TabPane>
+        <TabPane :label="item.name" :name="'' + index" v-for="(item, index) in foundationList"></TabPane>
       </Tabs>
       <div class="rule">
         <div
-            class="rule-list"
-            v-show="!arrs.length || arrs.includes(item.id)"
-            :class="{ 'select-rule': seletRouteIds.includes(item.id) }"
-            v-for="(item, index) in children"
-            :key="index"
-            @click="selectRule(item)"
+          class="rule-list"
+          v-show="!arrs.length || arrs.includes(item.id)"
+          :class="{ 'select-rule': seletRouteIds.includes(item.id) }"
+          v-for="(item, index) in children"
+          :key="index"
+          @click="selectRule(item)"
         >
           <div>接口名称：{{ item.real_name }}</div>
           <div>请求方式：{{ item.method }}</div>
@@ -139,7 +140,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex';
+import { mapState } from 'vuex';
 import {
   getTable,
   menusDetailsApi,
@@ -151,14 +152,14 @@ import {
 } from '@/api/systemMenus';
 import formCreate from '@form-create/iview';
 import menusFrom from './components/menusFrom';
-import {formatFlatteningRoutes} from '@/libs/system';
+import { formatFlatteningRoutes } from '@/libs/system';
 
 export default {
   name: 'systemMenus',
   data() {
     return {
       children: [],
-      tabconfig: {children: 'children', reserve: true, accordion: true},
+      tabconfig: { children: 'children', reserve: true, accordion: true },
       spinShow: false,
       ruleModal: false,
       searchRule: '',
@@ -189,7 +190,7 @@ export default {
       menusId: 0, // 选中分类id
     };
   },
-  components: {menusFrom, formCreate: formCreate.$form()},
+  components: { menusFrom, formCreate: formCreate.$form() },
   computed: {
     ...mapState('admin/layout', ['isMobile']),
     labelWidth() {
@@ -214,13 +215,13 @@ export default {
         menus: this.seletRoute,
       };
       menusBatch(data)
-          .then((res) => {
-            console.log(res);
-            this.getData();
-          })
-          .catch((res) => {
-            this.$Message.error(res.msg);
-          });
+        .then((res) => {
+          console.log(res);
+          this.getData();
+        })
+        .catch((res) => {
+          this.$Message.error(res.msg);
+        });
     },
     selectRule(data) {
       if (this.seletRouteIds.includes(data.id)) {
@@ -240,8 +241,8 @@ export default {
     },
     changTab(name) {
       this.routeType = name;
-      let index = parseInt(name)
-      this.children = this.foundationList[index] ? this.foundationList[index].children : []
+      let index = parseInt(name);
+      this.children = this.foundationList[index] ? this.foundationList[index].children : [];
       this.searchRules();
     },
     // 搜索规则
@@ -263,13 +264,12 @@ export default {
       this.routeType = '0';
       this.getRuleList();
     },
-    modalchange() {
-    },
+    modalchange() {},
     // 获取权限列表
     getRuleList() {
       getRuleList().then((res) => {
         this.foundationList = res.data;
-        this.children = this.foundationList[0] ? this.foundationList[0].children : []
+        this.children = this.foundationList[0] ? this.foundationList[0].children : [];
         this.openList = [];
         this.seletRouteIds = [];
         this.seletRoute = [];
@@ -283,13 +283,13 @@ export default {
         is_show: row.is_show,
       };
       isShowApi(data)
-          .then(async (res) => {
-            this.$Message.success(res.msg);
-            this.$store.dispatch('menus/getMenusNavList');
-          })
-          .catch((res) => {
-            this.$Message.error(res.msg);
-          });
+        .then(async (res) => {
+          this.$Message.success(res.msg);
+          this.$store.dispatch('menus/getMenusNavList');
+        })
+        .catch((res) => {
+          this.$Message.error(res.msg);
+        });
     },
     // 请求列表
     getList() {
@@ -307,20 +307,20 @@ export default {
       let pid = row.id.toString();
       if (pid) {
         menusDetailsApi(row.id)
-            .then(async (res) => {
-              this.formValidate.path = res.data.path;
-              this.formValidate.path.push(row.id);
-              this.formValidate.pid = pid;
-              this.$refs.menusFrom.modals = true;
-              this.$refs.menusFrom.valids = false;
-              this.titleFrom = title;
-              this.formValidate.auth_type = 1;
-              this.formValidate.is_show = 0;
-              this.formValidate.is_show_path = 0;
-            })
-            .catch((res) => {
-              this.$Message.error(res.msg);
-            });
+          .then(async (res) => {
+            this.formValidate.path = res.data.path;
+            this.formValidate.path.push(row.id);
+            this.formValidate.pid = pid;
+            this.$refs.menusFrom.modals = true;
+            this.$refs.menusFrom.valids = false;
+            this.titleFrom = title;
+            this.formValidate.auth_type = 1;
+            this.formValidate.is_show = 0;
+            this.formValidate.is_show_path = 0;
+          })
+          .catch((res) => {
+            this.$Message.error(res.msg);
+          });
       } else {
         this.formValidate.pid = pid;
         this.$refs.menusFrom.modals = true;
@@ -347,25 +347,26 @@ export default {
       };
 
       this.$modalSure(delfromData)
-          .then((res) => {
-            this.$Message.success(res.msg);
-            this.getData();
-            this.$store.dispatch('menus/getMenusNavList');
-          })
-          .catch((res) => {
-            this.$Message.error(res.msg);
-          });
+        .then((res) => {
+          this.$Message.success(res.msg);
+          this.getData();
+          this.getMenusUnique();
+          // this.$store.dispatch('menus/getMenusNavList');
+        })
+        .catch((res) => {
+          this.$Message.error(res.msg);
+        });
     },
     // 规则详情
     menusDetails(id) {
       menusDetailsApi(id)
-          .then(async (res) => {
-            this.formValidate = res.data;
-            this.$refs.menusFrom.modals = true;
-          })
-          .catch((res) => {
-            this.$Message.error(res.msg);
-          });
+        .then(async (res) => {
+          this.formValidate = res.data;
+          this.$refs.menusFrom.modals = true;
+        })
+        .catch((res) => {
+          this.$Message.error(res.msg);
+        });
     },
     // 编辑
     edit(row, title, index) {
@@ -403,14 +404,14 @@ export default {
       this.loading = true;
       this.roleData.is_show = this.roleData.is_show || '';
       getTable(this.roleData)
-          .then(async (res) => {
-            this.tableData = res.data;
-            this.loading = false;
-          })
-          .catch((res) => {
-            this.loading = false;
-            this.$Message.error(res.msg);
-          });
+        .then(async (res) => {
+          this.tableData = res.data;
+          this.loading = false;
+        })
+        .catch((res) => {
+          this.loading = false;
+          this.$Message.error(res.msg);
+        });
     },
     getMenusUnique() {
       getMenusUnique().then((res) => {
@@ -420,6 +421,9 @@ export default {
         this.$store.dispatch('routesList/setRoutesList', data.menus);
         let arr = formatFlatteningRoutes(this.$router.options.routes);
         this.formatTwoStageRoutes(arr);
+        let routes = formatFlatteningRoutes(data.menus);
+        this.$store.commit('menus/setOneLvRoute', routes);
+        this.bus.$emit('routesListChange');
       });
     },
     formatTwoStageRoutes(arr) {
@@ -428,7 +432,7 @@ export default {
       const cacheList = [];
       arr.forEach((v) => {
         if (v && v.meta && v.meta.keepAlive) {
-          newArr.push({...v});
+          newArr.push({ ...v });
           cacheList.push(v.name);
           this.$store.dispatch('keepAliveNames/setCacheKeepAlive', cacheList);
         }
@@ -445,7 +449,7 @@ export default {
 
 <style scoped lang="scss">
 .vxeTable {
-  > > > .vxe-table--header-wrapper {
+  > .vxe-table--header-wrapper {
     background: #fff !important;
   }
 }

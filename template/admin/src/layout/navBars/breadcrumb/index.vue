@@ -34,6 +34,13 @@ export default {
   },
   mounted() {
     this.setFilterRoutes();
+    this.bus.$on('routesListChange', () => {
+      console.log('变了大哥');
+      this.setFilterRoutes();
+    });
+  },
+  beforeDestroy() {
+    this.bus.$off('routesListChange');
   },
   methods: {
     // 设置路由的过滤
@@ -72,6 +79,6 @@ export default {
   padding-right: 15px;
   overflow: hidden;
   background: var(--prev-bg-topBar);
-//   border-bottom: 1px solid var(--prev-border-color-lighter);
+  //   border-bottom: 1px solid var(--prev-border-color-lighter);
 }
 </style>

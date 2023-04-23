@@ -365,12 +365,16 @@ export default {
           themeSelect['--prev-MenuActiveColor'] = '#fff';
           if (val == 'theme-1') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#1890ff';
+            themeSelect['--prev-bg-menuBar'] = '#282c34';
           } else if (val == 'theme-3') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#41b584';
+            themeSelect['--prev-bg-menuBar'] = '#282c34';
           } else if (val == 'theme-5') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#6954f0';
+            themeSelect['--prev-bg-menuBar'] = '#282c34';
           } else if (val == 'theme-7') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#f34d37';
+            themeSelect['--prev-bg-menuBar'] = '#282c34';
           }
         } else if (this.getThemeConfig.layout === 'columns') {
           themeSelect['--prev-bg-topBar'] = '#fff';
