@@ -36,8 +36,9 @@ class {%nameCamel%} extends BaseModel
     protected $name = '{%name%}';
 
     /**
+     * 主键
      * @var string
      */
-    protected $key = '{%key%}';
+    protected $pk = '{%key%}';
 
 }
