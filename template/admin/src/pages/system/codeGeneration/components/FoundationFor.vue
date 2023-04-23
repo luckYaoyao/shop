@@ -211,10 +211,10 @@ export default {
           value: 'textarea',
           label: 'textarea',
         },
-        {
-          value: 'select',
-          label: 'select',
-        },
+        // {
+        //   value: 'select',
+        //   label: 'select',
+        // },
         {
           value: 'radio',
           label: 'radio',
