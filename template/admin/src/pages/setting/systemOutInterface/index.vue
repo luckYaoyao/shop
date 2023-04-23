@@ -1010,6 +1010,8 @@ export default {
 
     .text-area {
       white-space: pre-wrap;
+      word-break: break-word;
+
     }
   }
 

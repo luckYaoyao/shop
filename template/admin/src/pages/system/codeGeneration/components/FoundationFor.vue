@@ -45,7 +45,12 @@
         <div class="tip">用于生成模块名称</div>
       </FormItem>
       <FormItem label="表名" prop="tableName">
-        <Input class="form-width" v-model="foundation.tableName" placeholder="请输入表名" @on-blur="initfield"></Input>
+        <Input
+          class="form-width"
+          v-model="foundation.tableName"
+          placeholder="请输入表名"
+          @on-blur="initTableName"
+        ></Input>
         <div class="tip">
           用于生成CRUD指定的表名，不需要携带表前缀；对于生成过的表将不能在进行生成；或者可以删除对应的文件重新生成！对应系统中重要的数据表将不允许生成！
         </div>
@@ -268,6 +273,9 @@ export default {
       if (status) {
         this.addRow();
       }
+    },
+    initTableName() {
+      this.tableField = [];
     },
     addRow() {
       if (!this.foundation.tableName) return this.$Message.warning('请先填写表名');

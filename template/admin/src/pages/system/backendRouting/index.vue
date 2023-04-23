@@ -9,11 +9,11 @@
           </template>
         </Tree> -->
       <!-- <Tree :data="treeData" :render="renderContent" class="demo-tree-render"></Tree> -->
-      <Card :bordered="false" dis-hover class="ivu-mt mr20 card-tree">
+      <div class="ivu-mt mr20 card-tree">
         <div class="tree">
           <div class="main-btn">
             <Button class="mb5 mr10" style="flex: 1" type="primary" @click="clickMenu(4)" long>新增分类</Button>
-            <Button type="success mr10" @click="syncRoute()">同步</Button>
+            <Button class="mr10" type="success" @click="syncRoute()">同步</Button>
             <Button type="info" @click="debugging()">调试</Button>
           </div>
 
@@ -24,7 +24,8 @@
             :model="treeData"
             default-tree-node-name="默认文件夹"
             default-leaf-node-name="默认接口名"
-            v-bind:default-expanded="true"
+            v-bind:default-expanded="false"
+            :expand-only-one="true"
           >
             <template v-slot:leafNameDisplay="slotProps">
               <div></div>
@@ -84,7 +85,7 @@
             </template>
           </vue-tree-list>
         </div>
-      </Card>
+      </div>
       <Card :bordered="false" dis-hover class="ivu-mt right-card">
         <div class="data">
           <div class="eidt-sub">
@@ -581,9 +582,15 @@ export default {
   },
   methods: {
     syncRoute() {
-      syncRoute(this.app_name).then((res) => {
-        this.getInterfaceList('one');
-        this.$Message.success(res.msg);
+      this.$Modal.warning({
+        title: '立即同步',
+        content: '您确认立即同步路由权限？',
+        onOk: () => {
+          syncRoute(this.app_name).then((res) => {
+            this.getInterfaceList('one');
+            this.$Message.success(res.msg);
+          });
+        },
       });
     },
     debugging() {
@@ -616,6 +623,9 @@ export default {
             if (res.data.length) {
               res.data[0].expand = false;
               this.treeData = new Tree(res.data);
+              this.$nextTick((e) => {
+                if (disk_type) document.querySelectorAll('.vtl-icon-caret-right')[0].click();
+              });
               if (res.data[0].children && res.data[0].children.length) {
                 this.onClick(res.data[0].children[0]);
               }
@@ -960,12 +970,14 @@ export default {
   margin-left: 10px;
 }
 .card-tree {
+   background: #fff;
    height: 72px;
    box-sizing: border-box;
    overflow-x: scroll; /* 设置溢出滚动 */
    white-space: nowrap;
    overflow-y: hidden;
    /* 隐藏滚动条 */
+   border-radius: 4px;
    scrollbar-width: none; /* firefox */
    -ms-overflow-style: none; /* IE 10+ */
 }
@@ -977,15 +989,23 @@ export default {
   display: flex;
   .main-btn {
     display:flex;
+    position: sticky;
+    padding: 15px 15px 0 15px;
+    width: 100%;
+    background: #fff;
+    top: 0px;
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(4px);
   }
   .card-tree{
-    width: 270px;
+    width: 290px;
     height: calc(100vh - 115px);
     overflow-y: scroll;
   }
   >>> .tree {
     .tree-list{
       margin-left:10px;
+      padding: 0 15px;
 
     }
     .vtl-caret{
