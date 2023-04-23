@@ -66,6 +66,7 @@ export default {
     },
   },
   beforeRouteUpdate(to, from, next) {
+    this.from.page = 1;
     this.getCrudApi(to.params.table_name);
     next();
   },
