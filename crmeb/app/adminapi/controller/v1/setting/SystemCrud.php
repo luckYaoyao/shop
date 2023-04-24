@@ -254,6 +254,7 @@ class SystemCrud extends AuthController
             $item['default_field_type'] = $item['field_type'];
             $item['default_comment'] = $item['comment'];
             $item['default_default'] = $item['default'];
+            $item['is_table'] = !!$item['is_table'];
             $item['primaryKey'] = isset($item['primaryKey']) ? (int)$item['primaryKey'] : 0;
             $info['field']['tableField'][$key] = $item;
         }
@@ -303,6 +304,7 @@ class SystemCrud extends AuthController
         if ($deleteInfo) {
             array_push($info['field']['tableField'], $deleteInfo);
         }
+        $info['field']['pid'] = (int)$info['field']['pid'];
         return app('json')->success(['file' => $data, 'crudInfo' => $info]);
     }
 

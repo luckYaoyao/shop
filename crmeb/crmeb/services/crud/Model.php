@@ -84,6 +84,6 @@ class Model extends Make
      */
     protected function getStub(string $type = '')
     {
-        return __DIR__ . DS . 'stubs' . DS . 'model' . DS . 'CrudModel.stub';
+        return __DIR__ . DS . 'stubs' . DS . 'model' . DS . 'crudModel.stub';
     }
 }

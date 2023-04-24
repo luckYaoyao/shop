@@ -124,7 +124,7 @@ class Controller extends Make
             'edit' => $controllerPath . 'edit.stub',
             'update' => $controllerPath . 'update.stub',
             'delete' => $controllerPath . 'delete.stub',
-            'controller' => $controllerPath . 'CrudController.stub',
+            'controller' => $controllerPath . 'crudController.stub',
         ];
 
         return $type ? $stubs[$type] : $stubs;
