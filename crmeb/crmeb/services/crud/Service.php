@@ -74,10 +74,14 @@ class Service extends Make
                         break;
                     default:
                         $valueContent = "''";
+                        $input = '$info["' . $item['field'] . '"] ?? ';
                         if (in_array($item['type'], ['checkbox'])) {
                             $valueContent = '[]';
+                            $input = '(array)(' . $input . $valueContent . ')';
+                        } else {
+                            $input = $input . $valueContent;
                         }
-                        $from[] = $this->tab(2) . '$rule[] = FormBuilder::' . $item['type'] . '("' . $item['field'] . '", "' . $item['name'] . '", $info["' . $item['field'] . '"] ?? ' . $valueContent . ')' . $this->getOptionContent(in_array($item['type'], ['radio', 'select']), $item['option'] ?? []) . ';';
+                        $from[] = $this->tab(2) . '$rule[] = FormBuilder::' . $item['type'] . '("' . $item['field'] . '", "' . $item['name'] . '",  ' . $input . ')' . $this->getOptionContent(in_array($item['type'], ['radio', 'select', 'checkbox']), $item['option'] ?? []) . ';';
                         break;
                 }
             }
