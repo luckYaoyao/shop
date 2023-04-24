@@ -103,6 +103,7 @@ class Service extends Make
 
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
         $this->usePath = $this->baseDir . '\\' . $this->value['nameCamel'];
+
         $this->setContent($contentStr);
         $this->setPathname($filePath);
         return $this;
@@ -117,7 +118,10 @@ class Service extends Make
      */
     protected function getOptionContent(bool $isOption, array $option = [])
     {
-        if (!$option && $isOption) {
+        if (!$isOption) {
+            return '';
+        }
+        if (!$option) {
             $option = [
                 ['value' => 1, 'label' => '开启'],
                 ['value' => 0, 'label' => '关闭']
@@ -127,11 +131,11 @@ class Service extends Make
         if ($option) {
             $attOption = [];
             foreach ($option as $item) {
-                $attOption[] = $this->tab(2) . "['value'=>'{$item['value']}', 'label'=>'{$item['label']}'],";
+                $attOption[] = $this->tab(3) . "['value'=>'{$item['value']}', 'label'=>'{$item['label']}'],";
             }
 
             $strOption = implode("\n", $attOption);
-            $php = '->options([' . $strOption . '])';
+            $php = "->options([\n" . $strOption . "\n" . $this->tab(2) . "])";
         }
 
         return $php;

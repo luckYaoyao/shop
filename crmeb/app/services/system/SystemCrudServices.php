@@ -303,7 +303,47 @@ class SystemCrudServices extends BaseServices
         $changeFiled = addslashes($changeFiled);
         $type = addslashes($type);
         $default = addslashes($default);
-        $sql = "ALTER TABLE `$tableName` CHANGE `$field` `$changeFiled` $type($limit) NOT NULL DEFAULT '$default' COMMENT '$comment';";
+        if (in_array(strtolower($type), ['text', 'longtext', 'tinytext'])) {
+            $sql = "ALTER TABLE `$tableName` CHANGE `$field` `$changeFiled` $type CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '$comment';";
+        } else {
+            $sql = "ALTER TABLE `$tableName` CHANGE `$field` `$changeFiled` $type($limit) NOT NULL DEFAULT '$default' COMMENT '$comment';";
+        }
+        return Db::execute($sql);
+    }
+
+    /**
+     * 添加字段
+     * @param string $tableName
+     * @param string $field
+     * @param string $prevFiled
+     * @param string $type
+     * @param string $limit
+     * @param string $default
+     * @param string $comment
+     * @param array $options
+     * @return mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/24
+     */
+    public function addAlter(string $tableName, string $field, string $prevFiled, string $type, $limit = '', string $default = '', string $comment = '', array $options = [])
+    {
+        $tableName = $this->getTableName($tableName);
+        $comment = addslashes($comment);
+        $field = addslashes($field);
+        $prevFiled = addslashes($prevFiled);
+        $type = addslashes($type);
+        $default = addslashes($default);
+        if ($prevFiled) {
+            $after = "AFTER `$prevFiled`";
+        } else {
+            $after = "";
+        }
+        if (in_array(strtolower($type), ['text', 'longtext', 'tinytext'])) {
+            $sql = "ALTER TABLE `$tableName` ADD `$field` $type NULL COMMENT '$comment' $after;";
+        } else {
+            $sql = "ALTER TABLE `$tableName` ADD `$field` $type($limit) NOT NULL DEFAULT '$default' COMMENT '$comment' $after;";
+        }
         return Db::execute($sql);
     }
 
@@ -336,28 +376,57 @@ class SystemCrudServices extends BaseServices
     protected function diffAlter(string $tableName, array $deleteField, array $tableField)
     {
         $updateAlter = [];
+        $addAlter = [];
+
+        $columns = $this->getColumnNamesList($tableName);
+        $fieldAll = array_column($columns, 'name');
+        $prevFiled = $columns[count($columns) - 1]['name'] ?? '';
         //对比数据库字段
         foreach ($tableField as $item) {
             if ($item['primaryKey']) {
                 continue;
             }
 
+            //前台新增的字段进行添加
             if (!(isset($item['default_field']) &&
                 isset($item['default_field_type']) &&
                 isset($item['default_limit']) &&
                 isset($item['default_comment']) &&
                 isset($item['default_default']))
             ) {
+                if (!in_array($item['field'], $fieldAll)) {
+                    $addAlter[] = [
+                        'prev_filed' => $prevFiled,
+                        'field' => $item['field'],
+                        'limit' => $item['limit'],
+                        'type' => $item['field_type'],
+                        'comment' => $item['comment'],
+                        'default' => $item['default'],
+                    ];
+                }
                 continue;
+            } else {
+                //默认字段没有在数据库中,需要添加字段
+                if (!in_array($item['default_field'], $fieldAll)) {
+                    $addAlter[] = [
+                        'prev_filed' => $prevFiled,
+                        'field' => $item['field'],
+                        'limit' => $item['limit'],
+                        'type' => $item['field_type'],
+                        'comment' => $item['comment'],
+                        'default' => $item['default'],
+                    ];
+                    continue;
+                }
             }
 
             if ($item['default_field'] != $item['field'] && in_array($item['field_type'], ['addTimestamps', 'addSoftDelete'])) {
-                throw new AdminException('伪删除字段不允许被更改');
+                throw new AdminException($item['field'] . '字段不允许被更改');
             }
 
-
+            //数据库表存在的,字段,并且被修改
             if ($item['default_field'] != $item['field'] ||
-                $item['default_field_type'] != $item['type'] ||
+                $item['default_field_type'] != $item['field_type'] ||
                 $item['default_limit'] != $item['limit'] ||
                 $item['default_comment'] != $item['comment'] ||
                 $item['default_default'] != $item['default']) {
@@ -374,6 +443,10 @@ class SystemCrudServices extends BaseServices
         //更新数据库字段
         foreach ($updateAlter as $item) {
             $this->updateAlter($tableName, $item['default_field'], $item['field'], $item['type'], $item['limit'], $item['default'], $item['comment']);
+        }
+        //添加字段
+        foreach ($addAlter as $item) {
+            $this->addAlter($tableName, $item['field'], $item['prev_filed'], $item['type'], $item['limit'], $item['default'], $item['comment']);
         }
         //删除多余字段
         foreach ($deleteField as $item) {
@@ -397,10 +470,6 @@ class SystemCrudServices extends BaseServices
         $tableField = $this->valueReplace($data['tableField']);
         $filePath = $this->valueReplace($data['filePath']);
         $modelName = $data['modelName'] ?? $data['menuName'] ?? $tableName;
-
-        if ($this->dao->value(['table_name' => $tableName])) {
-            throw new AdminException(500048);
-        }
 
         //检测是否为系统表
         if (in_array($tableName, self::NOT_CRUD_TABANAME)) {
@@ -478,7 +547,7 @@ class SystemCrudServices extends BaseServices
             $routeService = app()->make(SystemRouteServices::class);
             //修改菜单名称
             if ($crudInfo) {
-                $menuInfo = app()->make(SystemMenusServices::class)->update($crudInfo->menu_id, $dataMenu);
+                app()->make(SystemMenusServices::class)->update($crudInfo->menu_id, $dataMenu);
                 //删除掉添加的路由权限
                 if ($crudInfo->routes_id) {
                     $routeService->deleteRoutes($crudInfo->routes_id);
@@ -487,6 +556,7 @@ class SystemCrudServices extends BaseServices
                 if ($crudInfo->menu_ids) {
                     app()->make(SystemMenusServices::class)->deleteMenus($crudInfo->menu_ids);
                 }
+                $menuInfo = (object)['id' => $crudInfo->menu_id];
             } else {
                 $menuInfo = app()->make(SystemMenusServices::class)->save($dataMenu);
             }
@@ -557,7 +627,7 @@ class SystemCrudServices extends BaseServices
             $menuData = [];
             foreach ($ruleData as $item) {
                 $menuData[] = [
-                    'pid' => $menuInfo->id,
+                    'pid' => $menuInfo->id ?: 0,
                     'methods' => $item['method'],
                     'api_url' => $item['path'],
                     'unique_auth' => $item['unique_auth'],
@@ -566,6 +636,7 @@ class SystemCrudServices extends BaseServices
                     'auth_type' => 2,
                 ];
             }
+
             $menus = app()->make(SystemMenusServices::class)->saveAll($menuData);
             $menuIds = array_column($menus->toArray(), 'id');
             //生成文件
@@ -692,6 +763,10 @@ class SystemCrudServices extends BaseServices
                 $timestamps = true;
             } else {
                 $option['comment'] = $item['comment'];
+                $fieldType = $this->changeTabelRule($item['field_type']);
+                if (in_array($fieldType, ['text', 'longtext', 'tinytext'])) {
+                    unset($option['limit']);
+                }
                 $table->addColumn($item['field'], $this->changeTabelRule($item['field_type']), $option);
             }
         }
