@@ -1,7 +1,7 @@
 <template>
   <div>
     <Card :bordered="false" dis-hover class="ivu-mt">
-      <Button type="primary" @click="groupAdd()" class="mr20">代码生成</Button>
+      <Button type="primary" @click="groupAdd()" class="mr20">添加功能</Button>
       <!-- <Button type="success" @click="buildCode()" class="mr20">重新发布</Button> -->
       <Table
         :columns="columns1"
