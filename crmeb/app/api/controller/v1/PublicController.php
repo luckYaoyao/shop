@@ -117,6 +117,9 @@ class PublicController
     public function getSiteConfig()
     {
         $data['record_No'] = sys_config('record_No');
+        $data['icp_url'] = sys_config('icp_url');
+        $data['network_security'] = sys_config('network_security');
+        $data['network_security_url'] = sys_config('network_security_url');
         return app('json')->success($data);
     }
 

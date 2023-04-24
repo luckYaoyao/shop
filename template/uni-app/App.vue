@@ -163,7 +163,6 @@
 			getLangVersion().then(res => {
 				let version = res.data.version
 				if (version != uni.getStorageSync('LANG_VERSION')) {
-					console.log('我变了')
 					getLangJson().then(res => {
 						let value = Object.keys(res.data)[0]
 						Cache.set('locale', Object.keys(res.data)[0])

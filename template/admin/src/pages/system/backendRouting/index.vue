@@ -589,6 +589,7 @@ export default {
           syncRoute(this.app_name).then((res) => {
             this.getInterfaceList('one');
             this.$Message.success(res.msg);
+            this.$Modal.remove();
           });
         },
       });

@@ -365,8 +365,6 @@ Route::group(function () {
     Route::post('user/set_visit', 'v1.user.UserController/set_visit')->name('setVisit');// 添加用户访问记录
     //复制口令接口
     Route::get('copy_words', 'v1.PublicController/copy_words')->name('copyWords');// 复制口令接口
-    //获取网站配置
-    Route::get('site_config', 'v1.PublicController/getSiteConfig')->name('getSiteConfig');//获取网站配置
 
     //活动---积分商城
     Route::get('store_integral/index', 'v1.activity.StoreIntegralController/index')->name('storeIntegralIndex');//积分商城首页数据

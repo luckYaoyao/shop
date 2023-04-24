@@ -89,7 +89,8 @@
 		<tabBar :dataConfig="tabBar.default" :pagePath="'/pages/index/index'"
 			@click.native="bindEdit('tabBar', 'default')"></tabBar>
 		<!-- #ifdef H5 -->
-		<view v-if="site_config && !isIframe" class="site-config" @click="goICP">{{site_config}}</view>
+		<view v-if="site_config.record_No && !isIframe" class="site-config" @click="goICP">{{site_config.record_No}}</view>
+		<view v-if="site_config.network_security && !isIframe" class="site-config" @click="goNetwork">{{site_config.network_security}}</view>
 		<!-- #endif -->
 		<view class="uni-p-b-98"></view>
 		<couponWindow style="position: relative; z-index: 10000" :window="isCouponShow" @onColse="couponClose"
@@ -251,7 +252,7 @@
 				couponObj: {},
 				isCouponShow: false,
 				shareInfo: {},
-				site_config: "",
+				site_config: {},
 				isIframe: app.globalData.isIframe,
 				headerSerch: {}, //头部搜索
 				swiperBg: {}, //轮播
@@ -326,7 +327,7 @@
 			// #endif
 			siteConfig()
 				.then((res) => {
-					this.site_config = res.data.record_No;
+					this.site_config = res.data;
 				})
 				.catch((err) => {
 					return this.$util.Tips({
@@ -486,11 +487,21 @@
 			// #endif
 			goICP() {
 				// #ifdef H5
-				window.open("http://beian.miit.gov.cn/");
+				window.open(this.site_config.icp_url);
 				// #endif
 				// #ifdef MP
 				uni.navigateTo({
-					url: `/pages/annex/web_view/index?url=https://beian.miit.gov.cn/`,
+					url: `/pages/annex/web_view/index?url=` + this.site_config.icp_url,
+				});
+				// #endif
+			},
+			goNetwork() {
+				// #ifdef H5
+				window.open(this.site_config.network_security_url);
+				// #endif
+				// #ifdef MP
+				uni.navigateTo({
+					url: `/pages/annex/web_view/index?url=` + this.site_config.network_security_url,
 				});
 				// #endif
 			},

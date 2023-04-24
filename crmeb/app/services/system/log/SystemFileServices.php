@@ -288,6 +288,7 @@ class SystemFileServices extends BaseServices
             $navList[$key]['pathname'] = $value['pathname'];
             $navList[$key]['contextmenu'] = true;
             $list[$key]['mark'] = $markList[str_replace(root_path(), '/', $value['pathname'])] ?? '';
+            $list[$key]['is_edit'] = false;
         }
         return compact('dir', 'list', 'navList');
     }
