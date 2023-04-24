@@ -283,9 +283,26 @@ class SystemCrud extends AuthController
         }
 
         if ($newColumn) {
-            $info['field']['tableField'] = array_merge($info['field']['tableField'], $newColumn);
+            $info['field']['tableField'] = array_merge($newColumn, $info['field']['tableField']);
         }
-
+        $keyInfo = [];
+        $deleteInfo = [];
+        foreach ($info['field']['tableField'] as $key => $item) {
+            if ($item['primaryKey']) {
+                $keyInfo = $item;
+                unset($info['field']['tableField'][$key]);
+            }
+            if ($item['field_type'] == 'addSoftDelete') {
+                $deleteInfo = $info;
+                unset($info['field']['tableField'][$key]);
+            }
+        }
+        if ($keyInfo) {
+            array_unshift($info['field']['tableField'][$key], $keyInfo);
+        }
+        if ($deleteInfo) {
+            array_push($info['field']['tableField'][$key], $deleteInfo);
+        }
         return app('json')->success(['file' => $data, 'crudInfo' => $info]);
     }
 
