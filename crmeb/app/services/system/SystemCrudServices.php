@@ -369,6 +369,23 @@ class SystemCrudServices extends BaseServices
     }
 
     /**
+     * 修改表备注
+     * @param string $tableName
+     * @param string $common
+     * @return mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/24
+     */
+    protected function updateFromCommon(string $tableName, string $common)
+    {
+        $tableName = $this->getTableName($tableName);
+        $common = addslashes($common);
+        $sql = "ALTER TABLE `$tableName` COMMENT = '$common';";
+        return Db::execute($sql);
+    }
+
+    /**
      * 对比字段变动了更改
      * @param string $tableName
      * @param array $deleteField
@@ -470,10 +487,10 @@ class SystemCrudServices extends BaseServices
     public function createCrud(int $id, array $data)
     {
         $tableName = $data['tableName'];
-        $tableComment = $data['tableComment'] ?? $data['menuName'];
         $tableField = $this->valueReplace($data['tableField']);
         $filePath = $this->valueReplace($data['filePath']);
-        $modelName = $data['modelName'] ?? $data['menuName'] ?? $tableName;
+        $modelName = !empty($data['modelName']) ? $data['modelName'] : $tableName;
+        $tableComment = !empty($data['tableComment']) ? $data['tableComment'] : $modelName;
 
         //检测是否为系统表
         if (in_array($tableName, self::NOT_CRUD_TABANAME)) {
@@ -484,6 +501,7 @@ class SystemCrudServices extends BaseServices
 
         $tableInfo = null;
         if ($id) {
+            $this->updateFromCommon($tableName, $tableComment);
             //删除数据库表
             $tableInfo = $this->getTableInfo($tableName);
             if ($tableInfo) {
