@@ -29,6 +29,7 @@ use crmeb\services\crud\ViewPages;
 use crmeb\services\crud\ViewRouter;
 use crmeb\services\FileService;
 use Phinx\Db\Adapter\AdapterFactory;
+use think\exception\ValidateException;
 use think\facade\Db;
 use think\helper\Str;
 use think\migration\db\Table;
@@ -54,7 +55,29 @@ class SystemCrudServices extends BaseServices
         'shipping_templates_no_delivery', 'shipping_templates_free', 'other_order_status', 'lang_code',
         'lang_country', 'app_version', 'user', 'wechat_user', 'template_message', 'store_order', 'other_order',
         'store_order_cart_info', 'store_order_economize', 'store_order_invoice', 'store_order_refund',
-        'store_order_status', 'store_pink'
+        'store_order_status', 'store_pink', 'agent_level', 'agent_level_task', 'agent_level_task_record',
+        'agreement', 'app_version', 'article', 'article_category', 'article_content', 'auxiliary', 'cache',
+        'capital_flow', 'category', 'diy', 'express', 'lang_type', 'live_anchor', 'live_goods', 'live_room',
+        'live_room_goods', 'luck_lottery', 'luck_lottery_record', 'luck_prize', 'member_card', 'member_card_batch',
+        'member_right', 'member_ship', 'message_system', 'other_order', 'other_order_status', 'out_account', 'out_interface',
+        'page_categroy', 'page_link', 'qrcode', 'shipping_templates', 'shipping_templates_free', 'shipping_templates_no_delivery',
+        'shipping_templates_region', 'sms_record', 'store_advance', 'store_bargain', 'store_bargain_user', 'store_bargain_user_help',
+        'store_cart', 'store_category', 'store_combination', 'store_coupon_issue', 'store_coupon_issue_user', 'store_coupon_product',
+        'store_coupon_user', 'store_integral', 'store_integral_order', 'store_integral_order_status', 'store_order', 'store_order_cart_info',
+        'store_order_economize', 'store_order_invoice', 'store_order_refund', 'store_order_status', 'store_pink', 'store_product',
+        'store_product_attr', 'store_product_attr_result', 'store_product_attr_value', 'store_product_cate', 'store_product_coupon',
+        'store_product_description', 'store_product_log', 'store_product_relation', 'store_service', 'store_service_feedback',
+        'store_product_reply', 'store_product_rule', 'store_product_virtual', 'store_seckill', 'store_seckill_time',
+        'store_service_log', 'store_service_record', 'store_service_speechcraft', 'store_visit', 'system_attachment',
+        'system_attachment_category', 'system_city', 'system_config', 'system_config_tab', 'system_file', 'system_file_info',
+        'system_group', 'system_group_data', 'system_log', 'system_notice', 'system_notice_admin', 'system_notification',
+        'system_role', 'system_route', 'system_route_cate', 'system_storage', 'system_store', 'system_store_staff',
+        'system_timer', 'system_user_level', 'template_message', 'upgrade_log', 'user', 'user_address',
+        'user_bill', 'user_brokerage', 'user_brokerage_frozen', 'user_cancel', 'user_enter', 'user_extract',
+        'user_friends', 'user_group', 'user_invoice', 'user_label', 'user_label_relation', 'user_level', 'user_money',
+        'user_notice', 'user_notice_see', 'user_recharge', 'user_search', 'user_sign', 'user_spread',
+        'user_visit', 'wechat_key', 'wechat_media', 'wechat_message', 'wechat_news_category', 'wechat_qrcode',
+        'wechat_qrcode_cate', 'wechat_qrcode_record', 'wechat_reply', 'wechat_user'
     ];
 
     /**
@@ -124,6 +147,44 @@ class SystemCrudServices extends BaseServices
 
                 'addTimestamps',
                 'addSoftDelete',
+            ],
+            'form' => [
+                [
+                    'value' => 'input',
+                    'label' => '输入框',
+                ],
+                [
+                    'value' => 'number',
+                    'label' => '数字输入框',
+                ],
+                [
+                    'value' => 'textarea',
+                    'label' => '多行文本框',
+                ],
+                [
+                    'value' => 'dateTime',
+                    'label' => '单选日期时间',
+                ],
+                [
+                    'value' => 'dateTimeRange',
+                    'label' => '日期时间区间选择',
+                ],
+                [
+                    'value' => 'radio',
+                    'label' => '单选框',
+                ],
+                [
+                    'value' => 'select',
+                    'label' => '下拉框',
+                ],
+                [
+                    'value' => 'frameImageOne',
+                    'label' => '单图选择'
+                ],
+                [
+                    'value' => 'frameImages',
+                    'label' => '多图选择'
+                ],
             ],
             'rule' => $rule
         ];
@@ -220,6 +281,98 @@ class SystemCrudServices extends BaseServices
     }
 
     /**
+     * 更新表字段
+     * @param string $tableName
+     * @param string $field
+     * @param string $changeFiled
+     * @param string $type
+     * @param string $limit
+     * @param string $default
+     * @param string $comment
+     * @param array $options
+     * @return mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/24
+     */
+    protected function updateAlter(string $tableName, string $field, string $changeFiled, string $type, $limit = '', string $default = '', string $comment = '', array $options = [])
+    {
+        $tableName = $this->getTableName($tableName);
+        $comment = addslashes($comment);
+        $field = addslashes($field);
+        $changeFiled = addslashes($changeFiled);
+        $type = addslashes($type);
+        $default = addslashes($default);
+        $sql = "ALTER TABLE `$tableName` CHANGE `$field` `$changeFiled` $type($limit) NOT NULL DEFAULT '$default' COMMENT '$comment';";
+        return Db::execute($sql);
+    }
+
+    /**
+     * 删除表字段
+     * @param string $tableName
+     * @param string $field
+     * @return mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/24
+     */
+    protected function deleteAlter(string $tableName, string $field)
+    {
+        $tableName = $this->getTableName($tableName);
+        $field = addslashes($field);
+        $sql = "ALTER TABLE `$tableName` DROP `$field`";
+        return Db::execute($sql);
+    }
+
+    /**
+     * 对比字段变动了更改
+     * @param string $tableName
+     * @param array $deleteField
+     * @param array $tableField
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/24
+     */
+    protected function diffAlter(string $tableName, array $deleteField, array $tableField)
+    {
+        $updateAlter = [];
+        //对比数据库字段
+        foreach ($tableField as $item) {
+            if ($item['primaryKey']) {
+                continue;
+            }
+
+            if ($item['default_field'] != $item['field'] && $item['field_type'] == 'addSoftDelete') {
+                throw new AdminException('伪删除字段不允许被更改');
+            }
+
+            if ($item['default_field'] != $item['field'] ||
+                $item['default_field_type'] != $item['type'] ||
+                $item['default_limit'] != $item['limit'] ||
+                $item['default_comment'] != $item['comment'] ||
+                $item['default_default'] != $item['default']) {
+                $updateAlter[] = [
+                    'default_field' => $item['default_field'],
+                    'field' => $item['field'],
+                    'limit' => $item['limit'],
+                    'type' => $item['field_type'],
+                    'comment' => $item['comment'],
+                    'default' => $item['default'],
+                ];
+            }
+        }
+        //更新数据库字段
+        foreach ($updateAlter as $item) {
+            $this->updateAlter($tableName, $item['default_field'], $item['field'], $item['type'], $item['limit'], $item['default'], $item['comment']);
+        }
+        //删除多余字段
+        foreach ($deleteField as $item) {
+            $this->deleteAlter($tableName, $item);
+        }
+
+    }
+
+    /**
      * 创建
      * @param array $data
      * @return mixed
@@ -227,7 +380,7 @@ class SystemCrudServices extends BaseServices
      * @email 136327134@qq.com
      * @date 2023/4/11
      */
-    public function createCrud(array $data)
+    public function createCrud(int $id, array $data)
     {
         $tableName = $data['tableName'];
         $tableComment = $data['tableComment'] ?? $data['menuName'];
@@ -239,17 +392,28 @@ class SystemCrudServices extends BaseServices
             throw new AdminException(500048);
         }
 
+        //检测是否为系统表
+        if (in_array($tableName, self::NOT_CRUD_TABANAME)) {
+            throw new AdminException(500044);
+        }
+
         $data['softDelete'] = false;
+
+        $tableInfo = null;
+        if ($id) {
+            //删除数据库表
+            $tableInfo = $this->getTableInfo($tableName);
+            if ($tableInfo) {
+                //对比字段进行更新/删除字段
+                $this->diffAlter($tableName, $data['deleteField'], $tableField);
+            }
+        }
         //创建数据库
-        if ($tableField && !$data['isTable']) {
+        if ($tableField && (!$data['isTable'] || !$tableInfo)) {
             $tableCreateInfo = $this->makeDatebase($tableName, $tableComment, $tableField);
             if ($tableCreateInfo['softDelete']) {
                 $data['softDelete'] = true;
             }
-        }
-
-        if (in_array($tableName, self::NOT_CRUD_TABANAME)) {
-            throw new AdminException(500044);
         }
 
         //读取表结构
@@ -258,6 +422,7 @@ class SystemCrudServices extends BaseServices
             throw new AdminException(500049, ['_name' => $tableName]);
         }
 
+        //读取数据库字段信息
         $tableInfo = $this->getTableInfo($tableName);
 
         //获取主键
@@ -294,10 +459,29 @@ class SystemCrudServices extends BaseServices
             'is_header' => $data['pid'] ? 0 : 1,
         ];
 
-        $res = $this->transaction(function () use ($tableInfo, $modelName, $filePath, $tableName, $routeName, $data, $dataMenu) {
-            $menuInfo = app()->make(SystemMenusServices::class)->save($dataMenu);
+        $crudInfo = null;
+        if ($id) {
+            $crudInfo = $this->dao->get($id);
+        }
+
+        $res = $this->transaction(function () use ($crudInfo, $tableInfo, $modelName, $filePath, $tableName, $routeName, $data, $dataMenu) {
+            $routeService = app()->make(SystemRouteServices::class);
+            //修改菜单名称
+            if ($crudInfo) {
+                $menuInfo = app()->make(SystemMenusServices::class)->update($crudInfo->menu_id, $dataMenu);
+                //删除掉添加的路由权限
+                if ($crudInfo->routes_id) {
+                    $routeService->deleteRoutes($crudInfo->routes_id);
+                }
+                //删除掉权限路由
+                if ($crudInfo->menu_ids) {
+                    app()->make(SystemMenusServices::class)->deleteMenus($crudInfo->menu_ids);
+                }
+            } else {
+                $menuInfo = app()->make(SystemMenusServices::class)->save($dataMenu);
+            }
             //写入路由权限
-            $cateId = app()->make(SystemRouteServices::class)->topCateId('adminapi');
+            $cateId = app()->make(SystemRouteServices::class)->topCateId('adminapi', 'CRUD');
             $ruleData = [
                 [
                     'path' => $routeName,
@@ -354,13 +538,11 @@ class SystemCrudServices extends BaseServices
                     'add_time' => date('Y-m-d H:i:s')
                 ],
             ];
-            $routeService = app()->make(SystemRouteServices::class);
-            foreach ($ruleData as $key => $item) {
-                if ($routeService->count(['method' => $item['method'], 'path' => $item['path']])) {
-                    unset($ruleData[$key]);
-                }
-            }
-            app()->make(SystemRouteServices::class)->saveAll($ruleData);
+
+
+            $routeList = $routeService->saveAll($ruleData);
+            $routeIds = array_column($routeList->toArray(), 'id');
+
             //记录权限加入菜单表
             $menuData = [];
             foreach ($ruleData as $item) {
@@ -376,15 +558,14 @@ class SystemCrudServices extends BaseServices
             }
             $menus = app()->make(SystemMenusServices::class)->saveAll($menuData);
             $menuIds = array_column($menus->toArray(), 'id');
-            array_push($menuIds, $menuInfo->id);
             //生成文件
-            $make = $this->makeFile($tableName, $routeName, config('app.crud_make', false), $data, $filePath);
+            $make = $this->makeFile($tableName, $routeName, true, $data, $filePath);
             $makePath = [];
             foreach ($make as $key => $item) {
                 $makePath[$key] = $item['path'];
             }
-            //记录crud生成
-            $res = $this->dao->save([
+
+            $crudDate = [
                 'pid' => $data['pid'],
                 'name' => $data['menuName'],
                 'model_name' => $data['modelName'],
@@ -394,8 +575,16 @@ class SystemCrudServices extends BaseServices
                 'field' => json_encode($data),//提交的数据
                 'menu_ids' => json_encode($menuIds),//生成的菜单id
                 'make_path' => json_encode($makePath),
-                'add_time' => time()
-            ]);
+                'routes_id' => json_encode($routeIds),
+            ];
+
+            if ($crudInfo) {
+                $res = $this->dao->update($crudInfo->id, $crudDate);
+            } else {
+                $crudDate['add_time'] = time();
+                //记录crud生成
+                $res = $this->dao->save($crudDate);
+            }
 
             return $res;
         });

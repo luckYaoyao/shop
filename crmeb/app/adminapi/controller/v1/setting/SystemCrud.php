@@ -63,23 +63,24 @@ class SystemCrud extends AuthController
      * @email 136327134@qq.com
      * @date 2023/4/11
      */
-    public function save()
+    public function save($id = 0)
     {
         $data = $this->request->postMore([
-            ['pid', 0],
-            ['menuName', ''],
-            ['tableName', ''],
-            ['modelName', ''],
+            ['pid', 0],//上级菜单id
+            ['menuName', ''],//菜单名
+            ['tableName', ''],//表名
+            ['modelName', ''],//模块名称
             ['tableComment', ''],//表备注
             ['tableField', []],//表字段
             ['tableIndex', []],//索引
-            ['filePath', []],
-            ['isTable', 0],
+            ['filePath', []],//生成文件位置
+            ['isTable', 0],//是否生成表
+            ['deleteField', []],//删除的表字段
         ]);
 
         $fromField = $columnField = [];
         foreach ($data['tableField'] as $item) {
-            if ($item['is_table'] && !in_array($item['field_type'], ['addSoftDelete', 'addSoftDelete'])) {
+            if ($item['is_table'] && !in_array($item['field_type'], ['primaryKey', 'addSoftDelete', 'addSoftDelete'])) {
                 $columnField[] = [
                     'field' => $item['field'],
                     'name' => $item['table_name'],
@@ -88,23 +89,27 @@ class SystemCrud extends AuthController
             }
             if ($item['from_type']) {
                 $name = $item['table_name'] ?: $item['comment'];
+                $option = $item['options'] ?? [];
                 if (!$name) {
-                    return app('json')->fail($item['field'] . '字段的表单标题必须填写');
+                    return app('json')->fail(500056, [], ['field' => $item['field']]);
+                }
+                if (!$option && in_array($item['from_type'], ['radio', 'select'])) {
+                    return app('json')->fail('表单类型为radio或select时,option字段不能为空');
                 }
                 $fromField[] = [
                     'field' => $item['field'],
                     'type' => $item['from_type'],
                     'name' => $name,
                     'required' => $item['required'],
-                    'option' => $item['option'] ?? [],
+                    'option' => $option,
                 ];
             }
         }
         if (!$fromField) {
-            return app('json')->fail('至少选择一个字段作为表单项');
+            return app('json')->fail(500054);
         }
         if (!$columnField) {
-            return app('json')->fail('至少选择一个字段作为列展示在列表中');
+            return app('json')->fail(500055);
         }
         $data['fromField'] = $fromField;
         $data['columnField'] = $columnField;
@@ -112,7 +117,7 @@ class SystemCrud extends AuthController
             return app('json')->fail(500045);
         }
 
-        $this->services->createCrud($data);
+        $this->services->createCrud($id, $data);
 
         return app('json')->success(500046);
     }
@@ -126,9 +131,8 @@ class SystemCrud extends AuthController
      */
     public function getFilePath()
     {
-        [$tableName, $isTable] = $this->request->postMore([
+        [$tableName] = $this->request->postMore([
             ['tableName', ''],
-            ['isTable', 0],
         ], true);
 
         if (!$tableName) {
@@ -143,28 +147,24 @@ class SystemCrud extends AuthController
 
         $key = 'id';
         $tableField = [];
-        if ($isTable) {
-            $field = $this->services->getColumnNamesList($tableName);
-            if (!$field) {
-                return app('json')->fail('表不存在');
+
+        $field = $this->services->getColumnNamesList($tableName);
+        foreach ($field as $item) {
+            if ($item['primaryKey']) {
+                $key = $item['name'];
             }
-            foreach ($field as $item) {
-                if ($item['primaryKey']) {
-                    $key = $item['name'];
-                }
-                $tableField[] = [
-                    'field' => $item['name'],
-                    'field_type' => $item['type'],
-                    'primaryKey' => (bool)$item['primaryKey'],
-                    'default' => $item['default'],
-                    'limit' => $item['limit'],
-                    'comment' => $item['comment'],
-                    'required' => false,
-                    'is_table' => false,
-                    'table_name' => '',
-                    'from_type' => '',
-                ];
-            }
+            $tableField[] = [
+                'field' => $item['name'],
+                'field_type' => $item['type'],
+                'primaryKey' => (bool)$item['primaryKey'],
+                'default' => $item['default'],
+                'limit' => $item['limit'],
+                'comment' => $item['comment'],
+                'required' => false,
+                'is_table' => false,
+                'table_name' => '',
+                'from_type' => '',
+            ];
         }
 
         $make = $this->services->makeFile($tableName, $routeName, false, [
@@ -234,8 +234,17 @@ class SystemCrud extends AuthController
             $item['name'] = $item['path'];
             $data[] = $item;
         }
+        $info = $info->toArray();
+        foreach ((array)$info['field']['tableField'] as $key => $item) {
+            $item['default_field'] = $item['field'];
+            $item['default_limit'] = $item['limit'];
+            $item['default_field_type'] = $item['field_type'];
+            $item['default_comment'] = $item['comment'];
+            $item['default_default'] = $item['default'];
+            $info['field']['tableField'][$key] = $item;
+        }
 
-        return app('json')->success($data);
+        return app('json')->success(['file' => $data, 'crudInfo' => $info]);
     }
 
     /**

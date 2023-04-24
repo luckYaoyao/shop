@@ -68,8 +68,8 @@ class Validate extends Make
         foreach ($field as $item) {
             $item['name'] = addslashes($item['name']);
             if ($item['required']) {
-                $content[] = $this->tab(2) . '\'' . $item['field'] . '\'=>\'require\'';
-                $message[] = $this->tab(2) . '\'' . $item['field'] . '.require\'=>\'' . $item['name'] . '必须填写\'';
+                $content[] = $this->tab(2) . '\'' . $item['field'] . '\'=>\'require\',';
+                $message[] = $this->tab(2) . '\'' . $item['field'] . '.require\'=>\'' . $item['name'] . '必须填写\',';
             }
         }
         return [implode("\n", $content), implode("\n", $message)];

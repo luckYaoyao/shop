@@ -51,7 +51,7 @@ class SystemRoute extends AuthController
     {
         $this->services->syncRoute($appName);
 
-        return app('json')->success();
+        return app('json')->success(100038);
     }
 
     /**

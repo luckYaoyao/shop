@@ -73,7 +73,7 @@ class Service extends Make
                         $from[] = $this->tab(2) . $this->getframeImagesPhpContent($item['field'], $item['name'], $item['required'] ?? false) . ';';
                         break;
                     default:
-                        $from[] = $this->tab(2) . '$rule[] = FormBuilder::' . $item['type'] . '("' . $item['field'] . '","' . $item['name'] . '",$info["' . $item['field'] . '"] ?? "")' . $this->getOptionContent(in_array($item['type'], ['radio']), $item['option'] ?? []) . (!empty($item['required']) ? '->required()' : '') . ';';
+                        $from[] = $this->tab(2) . '$rule[] = FormBuilder::' . $item['type'] . '("' . $item['field'] . '","' . $item['name'] . '",$info["' . $item['field'] . '"] ?? "")' . $this->getOptionContent(in_array($item['type'], ['radio', 'select']), $item['option'] ?? []) . ';';
                         break;
                 }
 
@@ -125,10 +125,13 @@ class Service extends Make
         }
         $php = '';
         if ($option) {
-            $res = var_export($option, true);
+            $attOption = [];
+            foreach ($option as $item) {
+                $attOption[] = $this->tab(2) . "['value'=>'{$item['value']}', 'label'=>'{$item['label']}'],";
+            }
 
-            $strOption = str_replace(['array', '(', ')'], ['', '[', ']'], $res);
-            $php = '->options(' . $strOption . ')';
+            $strOption = implode("\n", $attOption);
+            $php = '->options([' . $strOption . '])';
         }
 
         return $php;
