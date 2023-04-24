@@ -254,7 +254,7 @@ class SystemCrud extends AuthController
             $item['default_field_type'] = $item['field_type'];
             $item['default_comment'] = $item['comment'];
             $item['default_default'] = $item['default'];
-            $item['primaryKey'] = (int)$item['primaryKey'];
+            $item['primaryKey'] = isset($item['primaryKey']) ? (int)$item['primaryKey'] : 0;
             $info['field']['tableField'][$key] = $item;
         }
         //对比数据库,是否有新增字段
