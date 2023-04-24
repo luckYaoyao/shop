@@ -28,31 +28,46 @@
     </div>
     <div class="pt10" v-show="currentTab == '1'">
       <Card :bordered="false" dis-hover class="ivu-mt">
+        <TableForm
+          ref="TableForm"
+          :foundation="formItem.foundation"
+          :tableField="tableField"
+          :id="id"
+          @storageData="storageData"
+        />
+      </Card>
+    </div>
+    <div class="pt10" v-show="currentTab == '2'">
+      <Card :bordered="false" dis-hover class="ivu-mt">
         <StorageLoc :storage="formItem.storage" />
       </Card>
     </div>
     <Card :bordered="false" class="btn">
       <Button class="mr20" @click="beforeTab">上一步</Button>
-      <Button type="primary" @click="nextTab">{{ currentTab == 1 ? '提交' : '下一步' }}</Button>
+      <Button type="primary" @click="nextTab">{{ currentTab == 2 ? '提交' : '下一步' }}</Button>
     </Card>
   </div>
 </template>
 
 <script>
 import { codeCrud } from '@/api/setting';
-import StorageLoc from './components/StorageLoc.vue';
 import FoundationForm from './components/FoundationFor.vue';
+import TableForm from './components/TableForm.vue';
+import StorageLoc from './components/StorageLoc.vue';
 import { getMenusUnique } from '@/api/systemMenus';
 import { formatFlatteningRoutes } from '@/libs/system';
+import { crudFilePath } from '@/api/systemCodeGeneration';
+import { crudDet } from '@/api/systemCodeGeneration';
 
 export default {
   name: 'system_code_generation',
-  components: { FoundationForm, StorageLoc },
+  components: { FoundationForm, StorageLoc, TableForm },
   data() {
     return {
       currentTab: 0,
       headerList: [
         { label: '基础信息', value: 'foundation' },
+        { label: '字段配置', value: 'table' },
         { label: '存放位置', value: 'storage' },
       ],
       formItem: {
@@ -63,6 +78,7 @@ export default {
           isTable: 1,
           menuName: '',
         },
+        tableForm: {},
         storage: {},
         field: {},
         formItem: {},
@@ -73,16 +89,69 @@ export default {
       tableField: [],
       rowList: [],
       reqloading: false,
+      id: "",
     };
   },
-  created() {},
+  created() {
+    if (this.$route.query.id) {
+      this.id = this.$route.query.id;
+      this.getDetail(this.$route.query.id);
+    }
+  },
   mounted: function () {},
   methods: {
+    getDetail(id) {
+      crudDet(id).then((res) => {
+        console.log(res);
+        let data = res.data.crudInfo.field;
+        this.formItem.foundation.pid = data.pid;
+        this.formItem.foundation.tableName = data.tableName;
+        this.formItem.foundation.modelName = data.modelName;
+        this.formItem.foundation.menuName = data.menuName;
+        this.$refs.TableForm.tableField = data.tableField;
+        this.formItem.storage = data.filePath;
+      });
+    },
     storageData(data) {
       this.formItem.storage = data;
     },
     beforeTab() {
       this.currentTab--;
+    },
+    addRow() {
+      console.log(this.formItem);
+      let foundation = this.formItem.foundation;
+      if (!foundation.tableName) return this.$Message.warning('请先填写表名');
+      let data = {
+        menuName: foundation.menuName,
+        tableName: foundation.tableName,
+        // isTable: foundation.isTable,
+        fromField: [],
+        columnField: [],
+      };
+      crudFilePath(data)
+        .then((res) => {
+          this.$refs.TableForm.tableField = res.data.tableField.length ? res.data.tableField : [];
+          this.formItem.storage = res.data.makePath;
+          if (!res.data.tableField.length) {
+            this.$refs.TableForm.tableField.push({
+              field: 'id',
+              field_type: 'int',
+              default: '',
+              comment: '自增ID',
+              required: false,
+              is_table: true,
+              table_name: '',
+              limit: '10',
+              primaryKey: 1,
+              from_type: '0',
+            });
+          }
+          this.currentTab++;
+        })
+        .catch((err) => {
+          this.$Message.warning(err.msg);
+        });
     },
     nextTab() {
       if (this.currentTab == 0) {
@@ -90,10 +159,10 @@ export default {
         if (!this.formItem.foundation.tableName) return this.$Message.warning('请输入表名');
         if (!this.formItem.foundation.modelName) return this.$Message.warning('请输入模块名');
         if (!this.formItem.foundation.isTable) {
-          if (!this.$refs.Foundation.tableField.length) return this.$Message.warning('请先添加表数据');
-          if (this.$refs.Foundation.tableField.length)
-            for (let i = 0; i < this.$refs.Foundation.tableField.length; i++) {
-              const el = this.$refs.Foundation.tableField[i];
+          if (!this.$refs.TableForm.tableField.length) return this.$Message.warning('请先添加表数据');
+          if (this.$refs.TableForm.tableField.length)
+            for (let i = 0; i < this.$refs.TableForm.tableField.length; i++) {
+              const el = this.$refs.TableForm.tableField[i];
               if (
                 ['addSoftDelete', 'addTimestamps'].indexOf(el.field_type) === -1 &&
                 (!el.field || !el.field_type || !el.comment)
@@ -101,17 +170,20 @@ export default {
                 return this.$Message.warning('请完善sql表数据');
               }
             }
-        } else {
-          if (!this.$refs.Foundation.tableField.length) return this.$Message.warning('请先生成表数据');
         }
-        this.currentTab++;
-      } else if (this.currentTab == 1) {
+        if (this.id) {
+          return this.currentTab++;
+        }
+        this.addRow();
+      } else if (this.currentTab == 2) {
         if (this.reqloading) return;
         let data = {
           ...this.formItem.foundation,
           filePath: this.formItem.storage,
-          tableField: this.$refs.Foundation.tableField,
+          tableField: this.$refs.TableForm.tableField,
+          deleteField: this.id ? this.$refs.TableForm.deleteField : [],
         };
+        if (this.id) data.id = this.id;
         this.reqloading = true;
         codeCrud(data)
           .then((res) => {
@@ -164,6 +236,7 @@ export default {
   line-height: 26px;
 }
 .code-wapper {
+  min-height: 800px;
   padding-bottom: 90px;
 }
 .btn {

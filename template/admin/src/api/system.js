@@ -406,11 +406,11 @@ export function delFolder(params) {
 
 /**
  * 文件备注
- * @param {*} id 
- * @param {*} params 
- * @returns 
+ * @param {*} id
+ * @param {*} params
+ * @returns
  */
- export function fileMark(params) {
+export function fileMark(params) {
   return request({
     url: `system/file/mark`,
     method: 'get',
@@ -799,6 +799,18 @@ export function updateTimer(id, data) {
 export function updateMark(data) {
   return request({
     url: `system/database/update_mark`,
+    method: 'post',
+    data,
+  });
+}
+/**
+ * 文件管理 更新备注
+ * @param {*} data
+ * @returns
+ */
+export function markSave(fileToken, data) {
+  return request({
+    url: `system/file/mark/save?fileToken=${fileToken}`,
     method: 'post',
     data,
   });

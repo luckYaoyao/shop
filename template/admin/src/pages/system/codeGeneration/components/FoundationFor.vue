@@ -45,17 +45,12 @@
         <div class="tip">模块名称为中文或者英文，用在接口名称前缀、表单头部标题</div>
       </FormItem>
       <FormItem label="表名" prop="tableName">
-        <Input
-          class="form-width"
-          v-model="foundation.tableName"
-          placeholder="请输入表名"
-          @on-blur="initTableName"
-        ></Input>
+        <Input class="form-width" v-model="foundation.tableName" placeholder="请输入表名"></Input>
         <div class="tip">
           用于生成CRUD指定的表名，不需要携带表前缀；对于生成过的表将不能在进行生成；或者可以删除对应的文件重新生成！对应系统中重要的数据表将不允许生成！
         </div>
       </FormItem>
-      <FormItem label="是否存在">
+      <!-- <FormItem label="是否存在">
         <RadioGroup v-model="foundation.isTable" @on-change="changeRadio">
           <Radio :label="1">是</Radio>
           <Radio :label="0">否</Radio>
@@ -63,8 +58,8 @@
         <div class="tip">
           数据库表可以生成系统存在的，也可以选择【否】后手动生成；如果不满足使用需求可以先在数据库中创建表，然后选择【是】再进行操作
         </div>
-      </FormItem>
-      <FormItem label="字段配置">
+      </FormItem> -->
+      <!-- <FormItem label="字段配置">
         <Button type="primary" @click="addRow">{{ foundation.isTable ? '获取字段' : '添加一行' }}</Button>
         <div>
           <Table
@@ -120,7 +115,7 @@
             </template>
           </Table>
         </div>
-      </FormItem>
+      </FormItem> -->
     </Form>
   </div>
 </template>
@@ -266,78 +261,6 @@ export default {
       }
       if (e === 'addTimestamps') {
         this.$set(this.tableField[i], 'comment', '添加和修改时间');
-      }
-    },
-    changeRadio(status) {
-      this.tableField = [];
-      if (status) {
-        this.addRow();
-      }
-    },
-    initTableName() {
-      this.tableField = [];
-    },
-    addRow() {
-      if (!this.foundation.tableName) return this.$Message.warning('请先填写表名');
-      if (!this.tableField.length) {
-        let data = {
-          menuName: this.foundation.menuName,
-          tableName: this.foundation.tableName,
-          isTable: this.foundation.isTable,
-          fromField: [],
-          columnField: [],
-        };
-        this.loading = true;
-        crudFilePath(data)
-          .then((res) => {
-            this.tableField = res.data.tableField.length ? res.data.tableField : [];
-            this.$emit('storageData', res.data.makePath);
-            this.loading = false;
-            if (!this.tableField.length) {
-              this.tableField.push({
-                field: '',
-                field_type: '',
-                default: '',
-                comment: '',
-                required: false,
-                is_table: true,
-                table_name: '',
-                limit: '',
-                from_type: '0',
-              });
-            }
-          })
-          .catch((err) => {
-            this.$Message.warning(err.msg);
-            this.loading = false;
-          });
-      }
-      if (this.foundation.isTable) {
-      } else {
-        console.log(this.tableField);
-        for (let i = 0; i < this.tableField.length; i++) {
-          const el = this.tableField[i];
-          if (
-            (!el.field || !el.field_type || !el.comment) &&
-            !['addTimestamps', 'addSoftDelete'].includes(el.field_type)
-          ) {
-            return this.$Message.warning('请先完善上一条数据');
-          }
-          if (el.is_table && !el.table_name && !['addTimestamps', 'addSoftDelete'].includes(el.field_type)) {
-            return this.$Message.warning('请输入列表名');
-          }
-        }
-        this.tableField.push({
-          field: '',
-          field_type: '',
-          default: '',
-          comment: '',
-          required: false,
-          is_table: true,
-          table_name: '',
-          limit: '',
-          from_type: '0',
-        });
       }
     },
     getCrudMenus() {

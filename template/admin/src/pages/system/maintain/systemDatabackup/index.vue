@@ -16,15 +16,18 @@
               :columns="columns"
               :data="tabList2"
               :loading="loading"
-              highlight-row
               no-data-text="暂无数据"
               @on-selection-change="onSelectTab"
               size="small"
               no-filtered-data-text="暂无筛选结果"
             >
+              <template slot-scope="{ row, index }" slot="comment">
+                <div class="mark">
+                  <div v-if="row.is_edit" class="table-mark" @click="isEditMark(row)">{{ row.comment }}</div>
+                  <Input ref="mark" v-else v-model="row.comment" @on-blur="isEditBlur(row, 0)"></Input>
+                </div>
+              </template>
               <template slot-scope="{ row }" slot="action">
-                <a @click="editMark(row, 0)">备注</a>
-                <Divider type="vertical" />
                 <a @click="Info(row)">详情</a>
               </template>
             </Table>
@@ -37,13 +40,15 @@
               :data="tabList3"
               :loading="loading2"
               no-data-text="暂无数据"
-              highlight-row
               max-height="600"
               size="small"
               no-filtered-data-text="暂无筛选结果"
             >
-              <template slot-scope="{ row }" slot="action">
-                <a @click="editMark(row, 1)">备注</a>
+              <template slot-scope="{ row, index }" slot="COLUMN_COMMENT">
+                <div class="mark">
+                  <div v-if="row.is_edit" class="table-mark" @click="isEditMark(row)">{{ row.COLUMN_COMMENT }}</div>
+                  <Input ref="mark" v-else v-model="row.COLUMN_COMMENT" @on-blur="isEditBlur(row, 1)"></Input>
+                </div>
               </template>
             </Table>
           </Drawer>
@@ -131,7 +136,7 @@ export default {
           title: '操作',
           slot: 'action',
           fixed: 'right',
-          minWidth: 150,
+          minWidth: 80,
         },
       ],
       tabList2: [],
@@ -149,7 +154,7 @@ export default {
         },
         {
           title: '备注',
-          key: 'comment',
+          slot: 'comment',
           minWidth: 200,
         },
         {
@@ -180,7 +185,7 @@ export default {
           title: '操作',
           slot: 'action',
           fixed: 'right',
-          minWidth: 150,
+          minWidth: 80,
         },
       ],
       selectionList: [],
@@ -208,13 +213,7 @@ export default {
         },
         {
           title: '备注',
-          key: 'COLUMN_COMMENT',
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 60,
+          slot: 'COLUMN_COMMENT',
         },
       ],
       rows: {},
@@ -429,6 +428,28 @@ export default {
           this.$Message.error(res.msg);
         });
     },
+    isEditMark(row) {
+      row.is_edit = true;
+      this.$nextTick((e) => {
+        this.$refs.mark.focus();
+      });
+    },
+    isEditBlur(row, type) {
+      row.is_edit = false;
+      this.changeMarkData.table = row.name || row.TABLE_NAME;
+      this.changeMarkData.field = row.COLUMN_NAME || '';
+      this.changeMarkData.type = row.COLUMN_TYPE || '';
+      this.changeMarkData.is_field = type;
+      this.changeMarkData.mark = type ? row.COLUMN_COMMENT : row.comment;
+
+      updateMark(this.changeMarkData)
+        .then((res) => {
+          // this.$Message.success(res.msg);
+        })
+        .catch((err) => {
+          this.$Message.error(err.msg);
+        });
+    },
   },
 };
 </script>
@@ -436,4 +457,20 @@ export default {
 <style scoped lang="stylus">
 .tableBox >>> .ivu-table-header table
    border none !important
+
+.table-mark{
+  cursor: text;
+}
+.table-mark:hover{
+  border:1px solid #c2c2c2;
+  padding: 3px 5px
+}
+.mark /deep/ .ivu-input{
+    background: #fff;
+    border-radius: .39rem;
+}
+.mark /deep/ .ivu-input, .ivu-input:hover, .ivu-input:focus {
+    border: transparent;
+    box-shadow: none;
+}
 </style>

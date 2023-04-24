@@ -11,24 +11,30 @@
         :data="tabList"
         :loading="loading"
         no-data-text="暂无数据"
-        highlight-row
         class="mt20"
-        @on-current-change="currentChange"
         no-filtered-data-text="暂无筛选结果"
       >
         <template slot-scope="{ row }" slot="filename">
-          <Icon type="ios-folder-outline" v-if="row.isDir" class="mr5" />
-          <Icon type="ios-document-outline" v-else class="mr5" />
-          <span>{{ row.filename }}</span>
+          <div @click="currentChange(row)">
+            <Icon type="ios-folder-outline" v-if="row.isDir" class="mr5" />
+            <Icon type="ios-document-outline" v-else class="mr5" />
+            <span>{{ row.filename }}</span>
+          </div>
         </template>
         <template slot-scope="{ row }" slot="isWritable">
           <span v-text="row.isWritable ? '是' : '否'"></span>
         </template>
+        <template slot-scope="{ row, index }" slot="mark">
+          <div class="mark">
+            <div v-if="row.is_edit" class="table-mark" @click="isEditMark(row)">{{ row.mark }}</div>
+            <Input ref="mark" v-else v-model="row.mark" @on-blur="isEditBlur(row)"></Input>
+          </div>
+        </template>
         <template slot-scope="{ row, index }" slot="action">
           <a @click="open(row)" v-if="row.isDir">打开</a>
           <a @click="edit(row)" v-else>编辑</a>
-          <Divider type="vertical" />
-          <a @click.stop="mark(row)">备注</a>
+          <!-- <Divider type="vertical" />
+          <a @click.stop="mark(row)">备注</a> -->
         </template>
       </Table>
     </Card>
@@ -147,6 +153,7 @@ import {
   delFolder,
   rename,
   fileMark,
+  markSave,
 } from '@/api/system';
 import CodeMirror from 'codemirror/lib/codemirror';
 import loginFrom from './components/loginFrom';
@@ -210,7 +217,7 @@ export default {
         },
         {
           title: '备注',
-          key: 'mark',
+          slot: 'mark',
           minWidth: 150,
         },
         {
@@ -781,6 +788,30 @@ export default {
       this.code = this.editorList[index].oldCode; //设置文件打开时的代码
       this.editor = this.editorList[index].editor; //设置编辑器实例
     },
+    isEditMark(row) {
+      try {
+        row.is_edit = true;
+        this.$nextTick((e) => {
+          this.$refs.mark.focus();
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    isEditBlur(row) {
+      row.is_edit = false;
+      let data = {
+        full_path: '/app',
+        mark: row.mark,
+      };
+      markSave(this.fileToken, data)
+        .then((res) => {
+          // this.$Message.success(res.msg);
+        })
+        .catch((err) => {
+          this.$Message.error(err.msg);
+        });
+    },
     handleTabRemove(index) {
       let that = this;
 
@@ -977,7 +1008,21 @@ export default {
   margin: auto;
   background: rgba(0, 0, 0, 0.3);
 }
-
+.table-mark{
+  cursor: text;
+}
+.table-mark:hover{
+  border:1px solid #c2c2c2;
+  padding: 3px 5px
+}
+.mark /deep/ .ivu-input{
+    background: #fff;
+    border-radius: .39rem;
+}
+.mark /deep/ .ivu-input, .ivu-input:hover, .ivu-input:focus {
+    border: transparent;
+    box-shadow: none;
+}
 .diy-from-header {
   height: 30px;
   line-height: 30px;

@@ -29,6 +29,8 @@
         <template slot-scope="{ row, index }" slot="action">
           <a @click="edit(row, '编辑')">查看</a>
           <Divider type="vertical" />
+          <a @click="editItem(row)">编辑</a>
+          <Divider type="vertical" />
           <a @click="downLoad(row)">下载</a>
           <Divider type="vertical" />
           <a @click="del(row, '删除', index)">删除</a>
@@ -45,8 +47,16 @@
         />
       </div>
     </Card>
-    <Modal
+    <Drawer
       :class-name="className"
+      title="Create"
+      v-model="modals"
+      width="80%"
+      :mask-closable="false"
+      :styles="styles"
+      :before-close="editModalChange"
+    >
+      <!-- <Modal
       v-model="modals"
       scrollable
       footer-hide
@@ -54,11 +64,14 @@
       :mask-closable="false"
       width="80%"
       :before-close="editModalChange"
-    >
+    > -->
+
       <p slot="header" class="diy-header" ref="diyHeader">
         <span>{{ title }}</span>
       </p>
-      <div style="height: 100%">
+      <div class="file" style="height: 100%">
+        <Button class="save" type="primary" @click="crudSaveFile">保存</Button>
+
         <div class="file-box">
           <div class="file-fix"></div>
           <div class="file-content">
@@ -78,14 +91,23 @@
                 :label="value.title"
                 :icon="value.icon"
               >
-                <div ref="container" :id="'container_' + value.index" style="height: 100%; min-height: 560px"></div>
+                <div
+                  :ref="'container_' + value.index"
+                  :id="'container_' + value.index"
+                  style="height: 100%; min-height: 560px"
+                ></div>
               </TabPane>
             </Tabs>
           </div>
           <Spin size="large" fix v-if="spinShow"></Spin>
         </div>
       </div>
-    </Modal>
+      <!-- </Modal> -->
+      <!-- <div class="demo-drawer-footer">
+        <Button style="margin-right: 8px" @click="modals = false">关闭</Button>
+        <Button type="primary" @click="modals = false">保存</Button>
+      </div> -->
+    </Drawer>
     <Modal
       v-model="buildModals"
       scrollable
@@ -106,7 +128,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { crudList, crudDet, crudDownload } from '@/api/systemCodeGeneration';
+import { crudList, crudDet, crudDownload, crudSaveFile } from '@/api/systemCodeGeneration';
 import * as monaco from 'monaco-editor';
 import { getCookies, removeCookies } from '@/libs/util';
 import Setting from '@/setting';
@@ -125,6 +147,12 @@ export default {
         page: 1,
         limit: 20,
         title: '',
+      },
+      styles: {
+        height: 'calc(100% - 55px)',
+        overflow: 'auto',
+        paddingBottom: '53px',
+        position: 'static',
       },
       loading: false,
       buildModals: false,
@@ -185,6 +213,7 @@ export default {
       editor: '', //当前编辑器对象
       editorIndex: [],
       title: '',
+      editId: 0,
     };
   },
   computed: {
@@ -205,6 +234,19 @@ export default {
     }
   },
   methods: {
+    crudSaveFile() {
+      let data = {
+        filepath: this.editorIndex[this.indexEditor].pathname,
+        comment: this.editorList[this.indexEditor].editor.getValue(),
+      };
+      crudSaveFile(this.editId, data)
+        .then((res) => {
+          this.$Message.success(res.msg);
+        })
+        .catch((err) => {
+          this.$Message.error(err.msg);
+        });
+    },
     downLoad(row) {
       crudDownload(row.id).then((res) => {
         window.open(res.data.download_url, '_blank');
@@ -297,17 +339,26 @@ export default {
         this.openfile(row.id, false);
       });
     },
+    editItem(row) {
+      this.$router.push({
+        name: 'system_code_generation',
+        query: {
+          id: row.id,
+        },
+      });
+    },
     //打开文件
     openfile(id) {
       try {
         console.log(id);
+        this.editId = id;
         let that = this;
         this.editorIndex = [];
         this.editorList = [];
         crudDet(id)
           .then(async (res) => {
-            let data = res.data[0];
-            res.data.map((i, index) => {
+            let data = res.data.file[0];
+            res.data.file.map((i, index) => {
               let data = i;
               this.editorIndex.push({
                 tab: true,
@@ -322,7 +373,6 @@ export default {
                 that.editorList[index].path = data.path;
                 that.editorList[index].oldCode = that.content;
                 that.editorIndex[index].title = data.name;
-                console.log('111');
               });
             });
             that.modals = true;
@@ -369,7 +419,7 @@ export default {
             autoIndent: true, // 自动布局
             tabSize: 4, // tab缩进长度
             autoClosingOvertype: 'always',
-            readOnly: true,
+            readOnly: false,
           });
           that.editorList.push({
             editor: that.editor,
@@ -542,5 +592,24 @@ export default {
 // 选项卡头部
 >>> .ivu-tabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-nav-container {
   background-color: #fff;
+}
+.demo-drawer-footer {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  border-top: 1px solid #e8e8e8;
+  padding: 10px 16px;
+  text-align: right;
+  background: #fff;
+}
+.file {
+  position: relative;
+  .save {
+    position: absolute;
+    right: 140px;
+    top: 60px;
+    z-index: 99;
+  }
 }
 </style>
