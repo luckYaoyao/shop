@@ -77,13 +77,15 @@ export default {
     },
     addTag(state, { route, type = 'unshift' }) {
       let router = getRouteTitleHandled(route);
-      console.log(router, 'routerrouterrouter');
+      let i = state.tagNavList.findIndex((item) => item.path === route.path);
+
       if (!routeHasExist(state.tagNavList, router)) {
-        if (type === 'push') state.tagNavList.push(router);
-        else {
-          if (router.name === homeName) state.tagNavList.unshift(router);
-          else state.tagNavList.splice(1, 0, router);
-        }
+        if (type === 'push')
+          if (i < 1) state.tagNavList.push(router);
+          else {
+            if (router.name === homeName) state.tagNavList.unshift(router);
+            else state.tagNavList.splice(1, 0, router);
+          }
         setTagNavListInLocalstorage([...state.tagNavList]);
       }
     },
