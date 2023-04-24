@@ -92,9 +92,9 @@
                 :icon="value.icon"
               >
                 <div
-                  :ref="'container_' + value.index"
+                  ref="container"
                   :id="'container_' + value.index"
-                  style="height: 100%; min-height: 560px"
+                  style="height: 100%; min-height: calc(100vh - 110px)"
                 ></div>
               </TabPane>
             </Tabs>
@@ -571,7 +571,6 @@ export default {
 
   .ivu-tabs-tabpane {
     min-height: 560px;
-    height: 73vh;
     margin-top: -1px;
   }
 }
@@ -611,5 +610,8 @@ export default {
     top: 60px;
     z-index: 99;
   }
+}
+.file-box {
+  height: 100%;
 }
 </style>
