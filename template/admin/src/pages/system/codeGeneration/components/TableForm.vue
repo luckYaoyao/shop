@@ -17,7 +17,11 @@
           <Input :disabled="disabledInput(index)" v-model="tableField[index].field"></Input>
         </template>
         <template slot-scope="{ row, index }" slot="field_type">
-          <Select v-model="tableField[index].field_type" @on-change="changeItemField($event, index)">
+          <Select
+            v-model="tableField[index].field_type"
+            :disabled="disabledInput(index)"
+            @on-change="changeItemField($event, index)"
+          >
             <Option v-for="item in columnTypeList" :value="item" :key="item">{{ item }}</Option>
           </Select>
         </template>
