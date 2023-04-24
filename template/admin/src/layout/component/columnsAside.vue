@@ -209,6 +209,8 @@ export default {
   height: 100%;
   background: var(--prev-bg-columnsMenuBar);
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  border-right: 1px solid var(--prev-border-color-lighter);
+
   ul {
     position: relative;
     li {

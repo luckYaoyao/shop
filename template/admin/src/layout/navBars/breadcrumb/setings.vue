@@ -196,7 +196,7 @@
             <el-switch v-model="getThemeConfig.isTagsview" :width="35" @change="setLocalThemeConfig"></el-switch>
           </div>
         </div>
-        <div class="layout-breadcrumb-seting-bar-flex mt15">
+        <div class="layout-breadcrumb-seting-bar-flex mt15" v-if="getThemeConfig.isTagsview">
           <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fourIsTagsviewIcon') }}</div>
           <div class="layout-breadcrumb-seting-bar-flex-value">
             <el-switch v-model="getThemeConfig.isTagsviewIcon" :width="35" @change="setLocalThemeConfig"></el-switch>
@@ -233,10 +233,10 @@
 
         <!-- 其它设置 -->
         <el-divider :content-position="contentPosotion">{{ $t('message.layout.fiveTitle') }}</el-divider>
-        <div class="layout-breadcrumb-seting-bar-flex mt15">
+        <div class="layout-breadcrumb-seting-bar-flex mt15" v-if="getThemeConfig.isTagsview">
           <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fiveTagsStyle') }}</div>
           <div class="layout-breadcrumb-seting-bar-flex-value">
-            <el-select
+            <!-- <el-select
               v-model="getThemeConfig.tagsStyle"
               placeholder="请选择"
               size="mini"
@@ -246,16 +246,21 @@
               <el-option label="风格1" value="tags-style-one"></el-option>
               <el-option label="风格2" value="tags-style-four"></el-option>
               <el-option label="风格3" value="tags-style-five"></el-option>
-            </el-select>
+            </el-select> -->
+            <el-radio-group v-model="getThemeConfig.tagsStyle" size="mini" @change="setLocalThemeConfig">
+              <el-radio-button label="tags-style-one">卡片</el-radio-button>
+              <el-radio-button label="tags-style-four">灵动</el-radio-button>
+              <el-radio-button label="tags-style-five">圆滑</el-radio-button>
+            </el-radio-group>
           </div>
         </div>
         <div class="layout-breadcrumb-seting-bar-flex mt15">
           <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fiveAnimation') }}</div>
           <div class="layout-breadcrumb-seting-bar-flex-value">
             <el-radio-group v-model="getThemeConfig.animation" size="mini" @change="setLocalThemeConfig">
-              <el-radio-button label="slide-right">右滑</el-radio-button>
               <el-radio-button label="slide-left">左滑</el-radio-button>
               <el-radio-button label="opacitys">透明</el-radio-button>
+              <el-radio-button label="slide-right">右滑</el-radio-button>
             </el-radio-group>
           </div>
         </div>
