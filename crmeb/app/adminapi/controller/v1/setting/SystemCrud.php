@@ -329,12 +329,13 @@ class SystemCrud extends AuthController
 
         $makeFilepath = '';
         foreach ($crudInfo->make_path as $key => $item) {
+            $path = $item;
             if (in_array($key, ['pages', 'router', 'api'])) {
                 $item = Make::adminTemplatePath() . $item;
             } else {
                 $item = app()->getRootPath() . $item;
             }
-            if ($filepath == $item) {
+            if ($filepath == $path) {
                 $makeFilepath = $item;
                 break;
             }
