@@ -62,7 +62,7 @@ export default {
     // 获取布局配置信息
     getThemeConfig() {
       return this.$store.state.themeConfig.themeConfig;
-    },
+    }, 
     // 动态设置 tagsView 风格样式
     setTagsStyle() {
       return this.$store.state.themeConfig.themeConfig.tagsStyle;
