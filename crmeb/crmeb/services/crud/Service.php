@@ -78,6 +78,9 @@ class Service extends Make
                         if (in_array($item['type'], ['checkbox'])) {
                             $valueContent = '[]';
                             $input = '(array)(' . $input . $valueContent . ')';
+                        } else if ($item['type'] == 'radio') {
+                            $valueContent = '-1';
+                            $input = '(int)(' . $input . $valueContent . ')';
                         } else {
                             $input = $input . $valueContent;
                         }
