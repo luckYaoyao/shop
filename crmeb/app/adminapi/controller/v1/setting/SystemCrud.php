@@ -335,7 +335,7 @@ class SystemCrud extends AuthController
             }
             $makePath[$key] = $item;
         }
-        if (!in_array($filepath, $makePath)) {
+        if (!in_array($filepath, $crudInfo->make_path)) {
             return app('json')->fail('您没有权限修改此文件');
         }
         $res = $service->savefile($filepath, $comment);
