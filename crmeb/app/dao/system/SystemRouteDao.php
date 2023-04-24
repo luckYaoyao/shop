@@ -37,4 +37,16 @@ class SystemRouteDao extends BaseDao
     {
         return SystemRoute::class;
     }
+
+    /**
+     * @param array $ids
+     * @return bool
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/23
+     */
+    public function deleteRoutes(array $ids)
+    {
+        return $this->getModel()->where('id', 'in', $ids)->delete();
+    }
 }

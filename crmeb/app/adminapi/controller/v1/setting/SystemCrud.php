@@ -15,6 +15,8 @@ namespace app\adminapi\controller\v1\setting;
 
 
 use app\adminapi\controller\AuthController;
+use app\Request;
+use app\services\system\log\SystemFileServices;
 use app\services\system\SystemCrudServices;
 use app\services\system\SystemMenusServices;
 use crmeb\services\CacheService;
@@ -63,23 +65,24 @@ class SystemCrud extends AuthController
      * @email 136327134@qq.com
      * @date 2023/4/11
      */
-    public function save()
+    public function save($id = 0)
     {
         $data = $this->request->postMore([
-            ['pid', 0],
-            ['menuName', ''],
-            ['tableName', ''],
-            ['modelName', ''],
+            ['pid', 0],//上级菜单id
+            ['menuName', ''],//菜单名
+            ['tableName', ''],//表名
+            ['modelName', ''],//模块名称
             ['tableComment', ''],//表备注
             ['tableField', []],//表字段
             ['tableIndex', []],//索引
-            ['filePath', []],
-            ['isTable', 0],
+            ['filePath', []],//生成文件位置
+            ['isTable', 0],//是否生成表
+            ['deleteField', []],//删除的表字段
         ]);
 
         $fromField = $columnField = [];
         foreach ($data['tableField'] as $item) {
-            if ($item['is_table'] && !in_array($item['field_type'], ['addSoftDelete', 'addSoftDelete'])) {
+            if ($item['is_table'] && !in_array($item['field_type'], ['primaryKey', 'addSoftDelete', 'addSoftDelete'])) {
                 $columnField[] = [
                     'field' => $item['field'],
                     'name' => $item['table_name'],
@@ -88,23 +91,27 @@ class SystemCrud extends AuthController
             }
             if ($item['from_type']) {
                 $name = $item['table_name'] ?: $item['comment'];
+                $option = $item['options'] ?? [];
                 if (!$name) {
-                    return app('json')->fail($item['field'] . '字段的表单标题必须填写');
+                    return app('json')->fail(500056, [], ['field' => $item['field']]);
+                }
+                if (!$option && in_array($item['from_type'], ['radio', 'select'])) {
+                    return app('json')->fail('表单类型为radio或select时,option字段不能为空');
                 }
                 $fromField[] = [
                     'field' => $item['field'],
                     'type' => $item['from_type'],
                     'name' => $name,
                     'required' => $item['required'],
-                    'option' => $item['option'] ?? [],
+                    'option' => $option,
                 ];
             }
         }
         if (!$fromField) {
-            return app('json')->fail('至少选择一个字段作为表单项');
+            return app('json')->fail(500054);
         }
         if (!$columnField) {
-            return app('json')->fail('至少选择一个字段作为列展示在列表中');
+            return app('json')->fail(500055);
         }
         $data['fromField'] = $fromField;
         $data['columnField'] = $columnField;
@@ -112,7 +119,7 @@ class SystemCrud extends AuthController
             return app('json')->fail(500045);
         }
 
-        $this->services->createCrud($data);
+        $this->services->createCrud($id, $data);
 
         return app('json')->success(500046);
     }
@@ -126,9 +133,8 @@ class SystemCrud extends AuthController
      */
     public function getFilePath()
     {
-        [$tableName, $isTable] = $this->request->postMore([
+        [$tableName] = $this->request->postMore([
             ['tableName', ''],
-            ['isTable', 0],
         ], true);
 
         if (!$tableName) {
@@ -143,28 +149,24 @@ class SystemCrud extends AuthController
 
         $key = 'id';
         $tableField = [];
-        if ($isTable) {
-            $field = $this->services->getColumnNamesList($tableName);
-            if (!$field) {
-                return app('json')->fail('表不存在');
+
+        $field = $this->services->getColumnNamesList($tableName);
+        foreach ($field as $item) {
+            if ($item['primaryKey']) {
+                $key = $item['name'];
             }
-            foreach ($field as $item) {
-                if ($item['primaryKey']) {
-                    $key = $item['name'];
-                }
-                $tableField[] = [
-                    'field' => $item['name'],
-                    'field_type' => $item['type'],
-                    'primaryKey' => (bool)$item['primaryKey'],
-                    'default' => $item['default'],
-                    'limit' => $item['limit'],
-                    'comment' => $item['comment'],
-                    'required' => false,
-                    'is_table' => false,
-                    'table_name' => '',
-                    'from_type' => '',
-                ];
-            }
+            $tableField[] = [
+                'field' => $item['name'],
+                'field_type' => $item['type'],
+                'primaryKey' => (bool)$item['primaryKey'],
+                'default' => $item['default'],
+                'limit' => $item['limit'],
+                'comment' => $item['comment'],
+                'required' => false,
+                'is_table' => false,
+                'table_name' => '',
+                'from_type' => '',
+            ];
         }
 
         $make = $this->services->makeFile($tableName, $routeName, false, [
@@ -231,11 +233,99 @@ class SystemCrud extends AuthController
 
         $data = [];
         foreach ($make as $item) {
+            if (in_array($item['path'], ['pages', 'router', 'api'])) {
+                $path = Make::adminTemplatePath() . $item['path'];
+            } else {
+                $path = app()->getRootPath() . $item['path'];
+            }
             $item['name'] = $item['path'];
-            $data[] = $item;
+            try {
+                $item['content'] = file_get_contents($path, LOCK_EX);
+                $data[] = $item;
+            } catch (\Throwable $e) {
+
+            }
+        }
+        $info = $info->toArray();
+        //记录没有修改之前的数据
+        foreach ((array)$info['field']['tableField'] as $key => $item) {
+            $item['default_field'] = $item['field'];
+            $item['default_limit'] = $item['limit'];
+            $item['default_field_type'] = $item['field_type'];
+            $item['default_comment'] = $item['comment'];
+            $item['default_default'] = $item['default'];
+            $info['field']['tableField'][$key] = $item;
+        }
+        //对比数据库,是否有新增字段
+        $newColumn = [];
+        $fieldAll = array_column($info['field']['tableField'], 'field');
+        foreach ($column as $value) {
+            if (!in_array($value['name'], $fieldAll)) {
+                $newColumn[] = [
+                    'field' => $value['name'],
+                    'field_type' => $value['type'],
+                    'primaryKey' => $value['primaryKey'] ? 1 : 0,
+                    'default' => $value['default'],
+                    'limit' => $value['limit'],
+                    'comment' => $value['comment'],
+                    'required' => '',
+                    'is_table' => '',
+                    'table_name' => '',
+                    'from_type' => '',
+                    'default_field' => $value['name'],
+                    'default_limit' => $value['limit'],
+                    'default_field_type' => $value['type'],
+                    'default_comment' => $value['comment'],
+                    'default_default' => $value['default'],
+                ];
+            }
         }
 
-        return app('json')->success($data);
+        if ($newColumn) {
+            $info['field']['tableField'] = array_merge($info['field']['tableField'], $newColumn);
+        }
+
+        return app('json')->success(['file' => $data, 'crudInfo' => $info]);
+    }
+
+    /**
+     * @param Request $request
+     * @param SystemFileServices $service
+     * @param $id
+     * @return Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/24
+     */
+    public function savefile(Request $request, SystemFileServices $service, $id)
+    {
+        $comment = $request->param('comment');
+        $filepath = $request->param('filepath');
+        if (empty($filepath) || !$id) {
+            return app('json')->fail(410087);
+        }
+        $crudInfo = $this->services->get($id, ['make_path']);
+        if (!$crudInfo) {
+            return app('json')->fail('修改的CRUD文件不存在');
+        }
+        $makePath = [];
+        foreach ($crudInfo->make_path as $key => $item) {
+            if (in_array($key, ['pages', 'router', 'api'])) {
+                $item = Make::adminTemplatePath() . $item;
+            } else {
+                $item = app()->getRootPath() . $item;
+            }
+            $makePath[$key] = $item;
+        }
+        if (!in_array($filepath, $makePath)) {
+            return app('json')->fail('您没有权限修改此文件');
+        }
+        $res = $service->savefile($filepath, $comment);
+        if ($res) {
+            return app('json')->success(100000);
+        } else {
+            return app('json')->fail(100006);
+        }
     }
 
     /**
