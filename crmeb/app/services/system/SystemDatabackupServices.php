@@ -53,6 +53,9 @@ class SystemDatabackupServices extends BaseServices
     public function getDataList()
     {
         $list = $this->dbBackup->dataList();
+        foreach ($list as &$item) {
+            $item['is_edit'] = false;
+        }
         $count = count($list);
         return compact('list', 'count');
     }
@@ -69,6 +72,7 @@ class SystemDatabackupServices extends BaseServices
         $count = count($list);
         foreach ($list as $key => $f) {
             $list[$key]['EXTRA'] = ($f['EXTRA'] == 'auto_increment' ? '是' : ' ');
+            $list[$key]['is_edit'] = false;
         }
         return compact('list', 'count');
     }
@@ -91,7 +95,7 @@ class SystemDatabackupServices extends BaseServices
     {
         $tables = explode(',', $tables);
         $data = '';
-        ini_set ("memory_limit","-1");
+        ini_set("memory_limit", "-1");
         foreach ($tables as $t) {
             $res = $this->dbBackup->backup($t, 0);
             if ($res == false && $res != 0) {
