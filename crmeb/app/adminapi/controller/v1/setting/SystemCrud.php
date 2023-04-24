@@ -15,6 +15,8 @@ namespace app\adminapi\controller\v1\setting;
 
 
 use app\adminapi\controller\AuthController;
+use app\Request;
+use app\services\system\log\SystemFileServices;
 use app\services\system\SystemCrudServices;
 use app\services\system\SystemMenusServices;
 use crmeb\services\CacheService;
@@ -231,10 +233,21 @@ class SystemCrud extends AuthController
 
         $data = [];
         foreach ($make as $item) {
+            if (in_array($item['path'], ['pages', 'router', 'api'])) {
+                $path = Make::adminTemplatePath() . $item['path'];
+            } else {
+                $path = app()->getRootPath() . $item['path'];
+            }
             $item['name'] = $item['path'];
-            $data[] = $item;
+            try {
+                $item['content'] = file_get_contents($path, LOCK_EX);
+                $data[] = $item;
+            } catch (\Throwable $e) {
+
+            }
         }
         $info = $info->toArray();
+        //记录没有修改之前的数据
         foreach ((array)$info['field']['tableField'] as $key => $item) {
             $item['default_field'] = $item['field'];
             $item['default_limit'] = $item['limit'];
@@ -243,8 +256,76 @@ class SystemCrud extends AuthController
             $item['default_default'] = $item['default'];
             $info['field']['tableField'][$key] = $item;
         }
+        //对比数据库,是否有新增字段
+        $newColumn = [];
+        $fieldAll = array_column($info['field']['tableField'], 'field');
+        foreach ($column as $value) {
+            if (!in_array($value['name'], $fieldAll)) {
+                $newColumn[] = [
+                    'field' => $value['name'],
+                    'field_type' => $value['type'],
+                    'primaryKey' => $value['primaryKey'] ? 1 : 0,
+                    'default' => $value['default'],
+                    'limit' => $value['limit'],
+                    'comment' => $value['comment'],
+                    'required' => '',
+                    'is_table' => '',
+                    'table_name' => '',
+                    'from_type' => '',
+                    'default_field' => $value['name'],
+                    'default_limit' => $value['limit'],
+                    'default_field_type' => $value['type'],
+                    'default_comment' => $value['comment'],
+                    'default_default' => $value['default'],
+                ];
+            }
+        }
+
+        if ($newColumn) {
+            $info['field']['tableField'] = array_merge($info['field']['tableField'], $newColumn);
+        }
 
         return app('json')->success(['file' => $data, 'crudInfo' => $info]);
+    }
+
+    /**
+     * @param Request $request
+     * @param SystemFileServices $service
+     * @param $id
+     * @return Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/24
+     */
+    public function savefile(Request $request, SystemFileServices $service, $id)
+    {
+        $comment = $request->param('comment');
+        $filepath = $request->param('filepath');
+        if (empty($filepath) || !$id) {
+            return app('json')->fail(410087);
+        }
+        $crudInfo = $this->services->get($id, ['make_path']);
+        if (!$crudInfo) {
+            return app('json')->fail('修改的CRUD文件不存在');
+        }
+        $makePath = [];
+        foreach ($crudInfo->make_path as $key => $item) {
+            if (in_array($key, ['pages', 'router', 'api'])) {
+                $item = Make::adminTemplatePath() . $item;
+            } else {
+                $item = app()->getRootPath() . $item;
+            }
+            $makePath[$key] = $item;
+        }
+        if (!in_array($filepath, $makePath)) {
+            return app('json')->fail('您没有权限修改此文件');
+        }
+        $res = $service->savefile($filepath, $comment);
+        if ($res) {
+            return app('json')->success(100000);
+        } else {
+            return app('json')->fail(100006);
+        }
     }
 
     /**

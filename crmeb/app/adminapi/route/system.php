@@ -133,6 +133,9 @@ Route::group('system', function () {
             'delete' => '删除路由分类'
         ],
     ]);
+    //保存CRUD修改的文件
+    Route::post('crud/save_file/:id', 'v1.setting.SystemCrud/savefile')->option(['real_name' => '保存CRUD修改的文件']);
+    //获取CRUD配置
     Route::get('crud/config/:tableName', 'v1.setting.SystemCrud/getRouteList')->option(['real_name' => '获取CRUD配置', 'is_common' => true]);
     //下载生成的文件
     Route::get('crud/download/:id', 'v1.setting.SystemCrud/download')->option(['real_name' => '下载生成的文件']);

@@ -342,9 +342,19 @@ class SystemCrudServices extends BaseServices
                 continue;
             }
 
-            if ($item['default_field'] != $item['field'] && $item['field_type'] == 'addSoftDelete') {
+            if (!(isset($item['default_field']) &&
+                isset($item['default_field_type']) &&
+                isset($item['default_limit']) &&
+                isset($item['default_comment']) &&
+                isset($item['default_default']))
+            ) {
+                continue;
+            }
+
+            if ($item['default_field'] != $item['field'] && in_array($item['field_type'], ['addTimestamps', 'addSoftDelete'])) {
                 throw new AdminException('伪删除字段不允许被更改');
             }
+
 
             if ($item['default_field'] != $item['field'] ||
                 $item['default_field_type'] != $item['type'] ||
