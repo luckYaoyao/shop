@@ -326,19 +326,23 @@ class SystemCrud extends AuthController
         if (!$crudInfo) {
             return app('json')->fail('修改的CRUD文件不存在');
         }
-        $makePath = [];
+
+        $makeFilepath = '';
         foreach ($crudInfo->make_path as $key => $item) {
             if (in_array($key, ['pages', 'router', 'api'])) {
                 $item = Make::adminTemplatePath() . $item;
             } else {
                 $item = app()->getRootPath() . $item;
             }
-            $makePath[$key] = $item;
+            if ($filepath == $item) {
+                $makeFilepath = $item;
+                break;
+            }
         }
-        if (!in_array($filepath, $crudInfo->make_path)) {
+        if (!$makeFilepath || !in_array($filepath, $crudInfo->make_path)) {
             return app('json')->fail('您没有权限修改此文件');
         }
-        $res = $service->savefile($filepath, $comment);
+        $res = $service->savefile($makeFilepath, $comment);
         if ($res) {
             return app('json')->success(100000);
         } else {
