@@ -233,29 +233,25 @@ class SystemFileServices extends BaseServices
     }
 
     //打开目录
-    public function opendir()
+    public function opendir($dir, $fileDir, $superior)
     {
         $markList = app()->make(SystemFileInfoServices::class)->getColumn([], 'mark', 'full_path');
         $fileAll = array('dir' => [], 'file' => []);
         //根目录
-        $rootdir = $this->formatPath(app()->getRootPath());
-        //当前目录
-        $request_dir = app('request')->param('dir');
+        $rootDir = $this->formatPath(app()->getRootPath());
         //防止查看站点以外的目录
-        if (strpos($request_dir, $rootdir) === false) {
-            $request_dir = $rootdir;
+        if (strpos($dir, $rootDir) === false || $dir == '') {
+            $dir = $rootDir;
         }
         //判断是否是返回上级
-        if (app('request')->param('superior') && !empty($request_dir)) {
-            if (strpos(dirname($request_dir), $rootdir) !== false) {
-                $dir = dirname($request_dir);
+        if ($superior) {
+            if (strpos(dirname($dir), $rootDir) !== false) {
+                $dir = dirname($dir);
             } else {
-                $dir = $rootdir;
+                $dir = $rootDir;
             }
-
         } else {
-            $dir = !empty($request_dir) ? $request_dir : $rootdir;
-            $dir = rtrim($dir, DS) . DS . app('request')->param('filedir');
+            $dir = $dir . '/' . $fileDir;
         }
         $list = scandir($dir);
         foreach ($list as $key => $v) {
@@ -272,12 +268,12 @@ class SystemFileServices extends BaseServices
         $uname = php_uname('s');
         if (strstr($uname, 'Windows') !== false) {
             $dir = ltrim($dir, '\\');
-            $rootdir = str_replace('\\', '\\\\', $rootdir);
+            $rootDir = str_replace('\\', '\\\\', $rootDir);
         }
         $list = array_merge($fileAll['dir'], $fileAll['file']);
         $navList = [];
         foreach ($list as $key => $value) {
-            $list[$key]['real_path'] = str_replace($rootdir, '', $value['pathname']);
+            $list[$key]['real_path'] = str_replace($rootDir, '', $value['pathname']);
             $list[$key]['mtime'] = date('Y-m-d H:i:s', $value['mtime']);
 
             $navList[$key]['title'] = $value['filename'];
@@ -288,8 +284,26 @@ class SystemFileServices extends BaseServices
             $navList[$key]['pathname'] = $value['pathname'];
             $navList[$key]['contextmenu'] = true;
             $list[$key]['mark'] = $markList[str_replace(root_path(), '/', $value['pathname'])] ?? '';
+            $count = app()->make(SystemFileInfoServices::class)->count(['full_path' => $list[$key]['real_path']]);
+            if (!$count) app()->make(SystemFileInfoServices::class)->save([
+                'name' => $value['filename'],
+                'path' => str_replace('/' . $value['filename'], '', $list[$key]['real_path']),
+                'full_path' => $list[$key]['real_path'],
+                'type' => $value['type'],
+                'create_time' => date('Y-m-d H:i:s', $value['ctime']),
+                'update_time' => date('Y-m-d H:i:s', time()),
+            ]);
         }
-        return compact('dir', 'list', 'navList');
+        $routeList = [['key' => '根目录', 'route' => '']];
+        $pathArray = explode('/', str_replace($rootDir, '', $dir));
+        $str = '';
+        foreach ($pathArray as $item) {
+            if ($item) {
+                $str = $str . '/' . $item;
+                $routeList[] = ['key' => $item, 'route' => $rootDir . $str];
+            }
+        }
+        return compact('dir', 'list', 'navList', 'routeList');
     }
 
     //读取文件

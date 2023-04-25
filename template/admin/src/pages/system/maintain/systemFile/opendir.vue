@@ -346,7 +346,7 @@ export default {
     open(row) {
       // this.rows = row;
       this.formItem = {
-        dir: row.path ? row.path + '/' : row.path,
+        dir: row.path,
         superior: 0,
         filedir: row.filename,
         fileToken: this.fileToken,
@@ -356,8 +356,8 @@ export default {
     jumpRoute(item) {
       console.log
       let data = {
-        path: item.route ? item.route : '',
-        filename: item.route ? item.key : '',
+        path: item.route,
+        filename: '',
       };
       this.open(data);
     },
