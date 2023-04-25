@@ -59,7 +59,9 @@ Route::group('setting', function () {
             ],
         ]);
         //未添加的权限规则列表
-        Route::get('ruleList', 'v1.setting.SystemMenus/ruleList')->option(['real_name' => '未添加的权限规则列表']);
+        Route::get('ruleList', 'v1.setting.SystemMenus/ruleList')->option(['real_name' => '权限规则列表']);
+        //权限规则分类
+        Route::get('rule_cate', 'v1.setting.SystemMenus/ruleCate')->option(['real_name' => '权限规则分类']);
         //修改显示
         Route::put('menus/show/:id', 'v1.setting.SystemMenus/show')->name('SystemMenusShow')->option(['real_name' => '修改权限规格显示状态']);
     })->option(['parent' => 'setting', 'cate_name' => '权限菜单']);
