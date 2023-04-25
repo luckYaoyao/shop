@@ -401,7 +401,7 @@ export default {
 .layout-navbars-tagsview {
   flex: 1;
   background-color: var(--prev-bg-white);
-  border-bottom: 1px solid var(--prev-border-color-lighter);
+  // border-bottom: 1px solid var(--prev-border-color-lighter);
   display: flex;
   align-items: center;
   & ::v-deep .is-vertical {

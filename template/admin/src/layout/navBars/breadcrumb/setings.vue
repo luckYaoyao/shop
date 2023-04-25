@@ -373,6 +373,8 @@ export default {
       let themeSelect = themeList[val];
       if (['theme-1', 'theme-3', 'theme-5', 'theme-7'].includes(val)) {
         // 这几个为黑色背景主题
+        themeSelect['--prev-border-color-lighter'] = '#ebeef5';
+
         if (['classic', 'transverse'].includes(this.getThemeConfig.layout)) {
           themeSelect['--prev-bg-topBar'] = '#282c34';
           themeSelect['--prev-bg-topBarColor'] = '#fff';
@@ -381,21 +383,27 @@ export default {
           if (val == 'theme-1') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#1890ff';
             themeSelect['--prev-bg-menuBar'] = '#282c34';
+            themeSelect['--prev-border-color-lighter'] = '#282c34';
           } else if (val == 'theme-3') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#41b584';
             themeSelect['--prev-bg-menuBar'] = '#282c34';
+            themeSelect['--prev-border-color-lighter'] = '#282c34';
           } else if (val == 'theme-5') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#6954f0';
             themeSelect['--prev-bg-menuBar'] = '#282c34';
+            themeSelect['--prev-border-color-lighter'] = '#282c34';
           } else if (val == 'theme-7') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#f34d37';
             themeSelect['--prev-bg-menuBar'] = '#282c34';
+            themeSelect['--prev-border-color-lighter'] = '#282c34';
           }
         } else if (this.getThemeConfig.layout === 'columns') {
           themeSelect['--prev-bg-topBar'] = '#fff';
           themeSelect['--prev-bg-topBarColor'] = '#515a6e';
           themeSelect['--prev-bg-menuBar'] = '#fff';
           themeSelect['--prev-bg-menuBarColor'] = '#303133';
+          themeSelect['--prev-border-color-lighter'] = '#ebeef5';
+
           if (val == 'theme-1') {
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#e8f4ff';
             themeSelect['--prev-color-primary'] = '#1890ff';
@@ -449,6 +457,8 @@ export default {
             themeSelect['--prev-MenuActiveColor'] = '#fff';
           }
         }
+      } else {
+        themeSelect['--prev-border-color-lighter'] = '#ebeef5';
       }
       for (let key in themeSelect) {
         document.documentElement.style.setProperty(key, themeSelect[key]);
