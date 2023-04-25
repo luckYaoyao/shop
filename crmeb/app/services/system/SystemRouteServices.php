@@ -170,32 +170,17 @@ class SystemRouteServices extends BaseServices
      * @email 136327134@qq.com
      * @date 2023/4/11
      */
-    public function topCateId(string $app, string $mark, string $markName, string $parent, string $cateName)
+    public function topCateId(string $app, string $cateName, int $pid)
     {
-        $oneId = app()->make(SystemRouteCateServices::class)->value(['app_name' => $app, 'name' => $markName, 'mark' => $mark, 'pid' => 0], 'id');
+        $oneId = app()->make(SystemRouteCateServices::class)->value(['app_name' => $app, 'name' => $cateName, 'pid' => 0], 'id');
         if (!$oneId) {
             $res = app()->make(SystemRouteCateServices::class)->save([
                 'app_name' => $app,
-                'name' => $markName,
-                'mark' => $mark,
-                'pid' => 0,
+                'name' => $cateName,
+                'pid' => $pid,
                 'add_time' => time(),
             ]);
             return $res->id;
-        }
-        if ($parent != '') {
-            $twoId = app()->make(SystemRouteCateServices::class)->value(['app_name' => $app, 'name' => $cateName, 'mark' => $parent, ['pid', '>', 0]], 'id');
-            if (!$twoId) {
-                $res = app()->make(SystemRouteCateServices::class)->save([
-                    'app_name' => $app,
-                    'name' => $cateName,
-                    'mark' => $parent,
-                    'pid' => $oneId,
-                    'add_time' => time(),
-                ]);
-                return $res->id;
-            }
-            return $twoId;
         }
         return $oneId;
     }
@@ -212,13 +197,43 @@ class SystemRouteServices extends BaseServices
 
         $list = [];
         foreach ($listAll as $item) {
-            if (!isset($item['option']['mark']) && strstr($item['rule'], '<MISS>') !== false) {
+            if (!isset($item['option']['mark_name']) || strstr($item['rule'], '<MISS>') !== false) {
                 continue;
             } else {
-                $cateId = $this->topCateId($app, $item['option']['mark'], $item['option']['mark_name'], $item['option']['parent'] ?? '', $item['option']['cate_name'] ?? '');
+                $list[$item['option']['mark_name']][] = $item;
             }
-            $list[$cateId][] = $item;
         }
+        $newsList = [];;
+        foreach ($list as $key => $item) {
+            $newItem = [];
+            foreach ($item as $value) {
+                if (isset($value['option']['cate_name'])) {
+                    $newItem[$value['option']['cate_name']][] = $value;
+                } else {
+                    $newItem[$key][] = $value;
+                }
+            }
+            $newsList[$key] = $newItem;
+        }
+
+        $list = [];
+        foreach ($newsList as $key => $item) {
+            $keys = array_keys($item);
+            $pid = $this->topCateId($app, $key, 0);
+            if ($keys == 1 && $key == $keys[0]) {
+                foreach ($item[$key] as $value) {
+                    $list[$pid][] = $value;
+                }
+            } else {
+                foreach ($item as $i => $k) {
+                    $cateId = $this->topCateId($app, $i, $pid);
+                    foreach ($k as $value) {
+                        $list[$cateId][] = $value;
+                    }
+                }
+            }
+        }
+
         //保持新增的权限路由
         $data = $this->dao->selectList(['app_name' => $app], 'path,method')->toArray();
         $save = [];

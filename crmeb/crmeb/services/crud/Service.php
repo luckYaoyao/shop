@@ -141,7 +141,8 @@ class Service extends Make
         if ($option) {
             $attOption = [];
             foreach ($option as $item) {
-                $attOption[] = $this->tab(3) . "['value'=>'{$item['value']}', 'label'=>'{$item['label']}'],";
+                $value = (int)$item['value'];
+                $attOption[] = $this->tab(3) . "['value'=>{$value}, 'label'=>'{$item['label']}'],";
             }
 
             $strOption = implode("\n", $attOption);

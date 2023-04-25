@@ -126,7 +126,7 @@ class SystemCrudServices extends BaseServices
                 'text',
                 'longtext',
                 'tinytext',
-                'enum',
+//                'enum',
                 'blob',
                 'binary',
                 'varbinary',
