@@ -252,7 +252,7 @@ class SystemCrud extends AuthController
 
             }
         }
-        
+
         //调整排序
         $makeData = [];
         $names = ['model', 'dao', 'service', 'controller', 'validate', 'router', 'api', 'pages'];
