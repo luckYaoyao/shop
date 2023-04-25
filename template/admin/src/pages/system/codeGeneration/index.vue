@@ -193,7 +193,14 @@ export default {
             },
           })
         }else{
-          this.saveCodeCrud(data);
+          this.$Modal.confirm({
+            title: '生成提醒',
+            content: '生成后本地开发调试会直接加载生成的vue页面；如果是上线后进行生成,可以进行浏览，代码生成列表中的修改文件将不生效。需要重新打包上线！',
+            loading: true,
+            onOk:() => {
+              this.saveCodeCrud(data,true);
+            },
+          })
         }
       } else {
         if (this.currentTab < 3) this.currentTab++;
