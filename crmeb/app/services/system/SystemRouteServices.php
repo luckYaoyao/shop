@@ -170,7 +170,7 @@ class SystemRouteServices extends BaseServices
      * @email 136327134@qq.com
      * @date 2023/4/11
      */
-    public function topCateId(string $app, string $cateName, int $pid)
+    public function topCateId(string $app, string $cateName, int $pid = 0)
     {
         $oneId = app()->make(SystemRouteCateServices::class)->value(['app_name' => $app, 'name' => $cateName, 'pid' => 0], 'id');
         if (!$oneId) {
