@@ -44,18 +44,8 @@
         row-id="id"
       >
         <vxe-table-column field="id" title="ID" tooltip min-width="70"></vxe-table-column>
-        <vxe-table-column field="menu_name" tree-node title="按钮名称" min-width="200"></vxe-table-column>
-        <vxe-table-column field="icon" title="图标" min-width="200" align="center">
-          <template v-slot="{ row }">
-            <Icon class="icon" :type="row.icon" />
-          </template>
-        </vxe-table-column>
-        <vxe-table-column field="api_url" title="接口路径" min-width="150">
-          <template v-slot="{ row }">
-            <span>{{ row.methods ? '[' + row.methods + ']  ' + row.api_url : row.api_url }}</span>
-          </template>
-        </vxe-table-column>
-        <vxe-table-column field="unique_auth" title="前端权限" min-width="300"></vxe-table-column>
+        <vxe-table-column field="menu_name" tree-node title="按钮名称" min-width="100"></vxe-table-column>
+        <vxe-table-column field="unique_auth" title="前端权限" min-width="200"></vxe-table-column>
         <vxe-table-column field="menu_path" title="页面路由" min-width="240" tooltip="true"></vxe-table-column>
         <vxe-table-column field="flag" title="规则状态" min-width="120">
           <template v-slot="{ row }">
