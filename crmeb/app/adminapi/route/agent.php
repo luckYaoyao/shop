@@ -102,4 +102,4 @@ Route::group('agent', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['cate_name' => '分销']);
+])->option(['name' => 'agent', 'cate_name' => '分销']);

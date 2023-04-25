@@ -217,5 +217,5 @@ Route::group('system', function () {
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminEditorTokenMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['cate_name' => '文件']);
+])->option(['name' => 'system', 'cate_name' => '文件']);
 

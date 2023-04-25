@@ -48,4 +48,4 @@ Route::group('notify', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['cate_name' => '消息']);
+])->option(['name' => 'notify', 'cate_name' => '消息']);
