@@ -23,6 +23,9 @@
 				<el-dropdown-item command="zh-tw" :disabled="disabledI18n === 'zh-tw'">繁體中文</el-dropdown-item>
 			</el-dropdown-menu>
 		</el-dropdown> -->
+    <div class="layout-navbars-breadcrumb-user-icon" @click="refresh">
+      <i class="el-icon-refresh-right" :title="$t('message.user.title7')"></i>
+    </div>
     <div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
       <i class="el-icon-search" :title="$t('message.user.title2')"></i>
     </div>
@@ -120,6 +123,9 @@ export default {
     // 布局配置点击
     onLayoutSetingClick() {
       this.bus.$emit('openSetingsDrawer');
+    },
+    refresh() {
+      this.bus.$emit('onTagsViewRefreshRouterView', this.$route.path);
     },
     // 全屏点击
     onScreenfullClick() {

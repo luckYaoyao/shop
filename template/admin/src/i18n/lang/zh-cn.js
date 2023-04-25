@@ -64,6 +64,7 @@ export default {
     title4: '消息',
     title5: '开全屏',
     title6: '关全屏',
+    title7: '刷新',
     dropdownDefault: '默认',
     dropdownMedium: '中等',
     dropdownSmall: '小型',

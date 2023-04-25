@@ -1,5 +1,6 @@
 <template>
-  <div class="layout-navbars-tagsview">
+  <div ref="tagsView" class="layout-navbars-tagsview">
+    <i v-if="scrollTagIcon" class="direction el-icon-arrow-left" @click="scrollTag('left')"></i>
     <el-scrollbar ref="scrollbarRef" @wheel.native.prevent="onHandleScroll">
       <ul class="layout-navbars-tagsview-ul" :class="setTagsStyle" ref="tagsUlRef">
         <li
@@ -31,7 +32,16 @@
         </li>
       </ul>
     </el-scrollbar>
-    <!-- <i class="el-icon-menu" @click="onContextmenuIcon($event)"></i> -->
+    <i v-if="scrollTagIcon" class="direction el-icon-arrow-right" @click="scrollTag('right')"></i>
+    <el-dropdown @command="clickDropdown" v-if="tagsViewList.length > 2">
+      <span class="setting-tag el-dropdown-link"><i class="el-icon-menu"></i></span>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item v-for="item in dropdownList" :command="item.id" :key="item.id">
+          <i :class="item.icon"></i>
+          {{ $t(item.txt) }}</el-dropdown-item
+        >
+      </el-dropdown-menu>
+    </el-dropdown>
     <Contextmenu :dropdown="tagsDropdown" ref="tagsContextmenu" @currentContextmenuClick="onCurrentContextmenuClick" />
   </div>
 </template>
@@ -56,13 +66,20 @@ export default {
       tagsRefsIndex: 0,
       tagsRoutePath: this.$route.path,
       tagsViewRoutesList: [],
+      dropdownList: [
+        { id: 0, txt: 'message.tagsView.refresh', affix: false, icon: 'el-icon-refresh-right' },
+        { id: 1, txt: 'message.tagsView.close', affix: false, icon: 'el-icon-close' },
+        { id: 2, txt: 'message.tagsView.closeOther', affix: false, icon: 'el-icon-circle-close' },
+        { id: 3, txt: 'message.tagsView.closeAll', affix: false, icon: 'el-icon-folder-delete' },
+      ],
+      scrollTagIcon: false,
     };
   },
   computed: {
     // 获取布局配置信息
     getThemeConfig() {
       return this.$store.state.themeConfig.themeConfig;
-    }, 
+    },
     // 动态设置 tagsView 风格样式
     setTagsStyle() {
       return this.$store.state.themeConfig.themeConfig.tagsStyle;
@@ -82,10 +99,28 @@ export default {
     if (!this.$store.state.app.tagNavList.length) {
       this.getTagsViewRoutes();
     }
+    // this.$nextTick((e) => {
+    //   console.log(this.$refs.tagsView.offsetWidth);
+    //   console.log(this.$refs.tagsUlRef.offsetWidth);
+    // });
+    if (this.$refs.tagsView.offsetWidth < this.$refs.scrollbarRef.$refs.wrap.scrollWidth) {
+      this.scrollTagIcon = true;
+    }
+    window.addEventListener('resize', () => {
+      console.log(this.$refs.tagsView.offsetWidth);
+      console.log(this.$refs.scrollbarRef.$refs.wrap.scrollWidth);
+      if (this.$refs.tagsView.offsetWidth < this.$refs.scrollbarRef.$refs.wrap.scrollWidth) {
+        this.scrollTagIcon = true;
+      }
+    });
   },
   methods: {
     ...mapMutations(['setBreadCrumb', 'setTagNavList', 'addTag', 'setLocal', 'setHomeRoute', 'closeTag']),
-
+    clickDropdown(e) {
+      // console.log(e, this.$route.path);
+      let data = { id: e, path: this.$route.path };
+      this.onCurrentContextmenuClick(data);
+    },
     // 获取路由信息
     getRoutesList() {
       return this.$store.state.routesList.routesList;
@@ -113,6 +148,17 @@ export default {
     // 鼠标滚轮滚动
     onHandleScroll(e) {
       this.$refs.scrollbarRef.$refs.wrap.scrollLeft += e.wheelDelta / 4;
+    },
+    scrollTag(production) {
+      let scrollRefs = this.$refs.scrollbarRef.$refs.wrap.scrollWidth;
+      let scrollLeft = this.$refs.scrollbarRef.$refs.wrap.scrollLeft;
+      console.log(production, this.$refs.scrollbarRef.$refs.wrap.scrollLeft);
+
+      if (production === 'left') {
+        this.$refs.scrollbarRef.$refs.wrap.scrollLeft = scrollLeft - 300 <= 0 ? 0 : scrollLeft - 300;
+      } else {
+        this.$refs.scrollbarRef.$refs.wrap.scrollLeft = scrollLeft + 300 >= scrollRefs ? scrollRefs : scrollLeft + 300;
+      }
     },
     // tagsView 横向滚动
     tagsViewmoveToCurrentTag() {
@@ -330,11 +376,28 @@ export default {
 /deep/ .el-scrollbar__bar.is-horizontal {
   height: 0;
 }
+.el-dropdown-menu {
+  width: 130px;
+}
+.setting-tag {
+  padding: 0 10px;
+  cursor: pointer;
+}
+.direction {
+  padding: 0 3px;
+}
+.direction:hover {
+  line-height: 34px;
+  background-color: #f7f2f2;
+  cursor: pointer;
+  transition: all 0.3s;
+}
 .layout-navbars-tagsview {
   flex: 1;
   background-color: var(--prev-bg-white);
   border-bottom: 1px solid var(--prev-border-color-lighter);
   display: flex;
+  align-items: center;
   & ::v-deep .is-vertical {
     display: none !important;
   }
@@ -342,7 +405,7 @@ export default {
     list-style: none;
     margin: 0;
     padding: 0;
-    width: 100%;
+    // width: 100%;
     height: 34px;
     display: flex;
     align-items: center;
