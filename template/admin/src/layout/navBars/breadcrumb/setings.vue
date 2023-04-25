@@ -425,7 +425,7 @@ export default {
           } else if (val == 'theme-3') {
             themeSelect['--prev-bg-menuBar'] = '#282c34';
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#41b584';
-            themeSelect['--prev-color-primary'] = '#fff';
+            themeSelect['--prev-color-primary'] = '#41b584';
             themeSelect['--prev-bg-topBar'] = '#fff';
             themeSelect['--prev-bg-topBarColor'] = '#282c34';
             themeSelect['--prev-bg-menuBarColor'] = '#fff';
@@ -434,7 +434,7 @@ export default {
             themeSelect['--prev-bg-menuBar'] = '#282c34';
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#6954f0';
             themeSelect['--prev-bg-topBarColor'] = '#282c34';
-            themeSelect['--prev-color-primary'] = '#fff';
+            themeSelect['--prev-color-primary'] = '#6954f0';
             themeSelect['--prev-bg-topBar'] = '#fff';
 
             themeSelect['--prev-bg-menuBarColor'] = '#fff';
@@ -444,7 +444,7 @@ export default {
             themeSelect['--prev-bg-topBar'] = '#fff';
             themeSelect['--prev-bg-topBarColor'] = '#282c34';
             themeSelect['--prev-bg-menu-hover-ba-color'] = '#f34d37';
-            themeSelect['--prev-color-primary'] = '#fff';
+            themeSelect['--prev-color-primary'] = '#f34d37';
             themeSelect['--prev-bg-menuBarColor'] = '#fff';
             themeSelect['--prev-MenuActiveColor'] = '#fff';
           }
