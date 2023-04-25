@@ -70,8 +70,6 @@ export default {
       return this.$store.state.themeConfig.themeConfig.Layout;
     },
     routesList() {
-      console.log('大哥');
-
       this.$store.state.routesList.routesList;
     },
   },
@@ -81,7 +79,6 @@ export default {
   },
   mounted() {
     this.bus.$on('routesListChange', () => {
-      console.log('变了大哥');
       this.setFilterRoutes();
     });
     this.setFilterRoutes();

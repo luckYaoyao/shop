@@ -1,8 +1,16 @@
 <template>
   <div>
     <Card :bordered="false" dis-hover class="ivu-mt">
-      <div v-if="isShowList" class="backs" @click="goBack(false)">
-        <Icon type="ios-folder-outline" class="mr5 icon" /><span>返回上级</span>
+      <div v-if="isShowList" class="backs-box">
+        <div class="backs">
+          <span class="back" @click="goBack(false)"><Icon type="md-arrow-round-back" class="icon" /></span>
+          <span class="item" v-for="(item, index) in routeList" :key="index" @click="jumpRoute(item)"
+            >
+            <span class="key">{{ item.key }}</span>
+            <Icon class="forward" v-if="index < routeList.length - 1" type="ios-arrow-forward" />
+          </span>
+        </div>
+        <span class="refresh" @click="refreshRoute"><Icon type="md-refresh" class="icon" /></span>
       </div>
       <Table
         v-if="isShowList"
@@ -248,6 +256,7 @@ export default {
       formShow: false, //表单开关
       formTitle: '', //表单标题
       fileToken: getCookies('file_token'),
+      routeList: [], //  打开文件路径
     };
   },
 
@@ -295,6 +304,8 @@ export default {
       opendirListApi(params)
         .then(async (res) => {
           let data = res.data;
+          this.routeList = data.routeList;
+
           if (is_edit) {
             this.navList = data.navList;
           } else {
@@ -335,12 +346,27 @@ export default {
     open(row) {
       // this.rows = row;
       this.formItem = {
-        dir: row.path,
+        dir: row.path ? row.path + '/' : row.path,
         superior: 0,
         filedir: row.filename,
         fileToken: this.fileToken,
       };
       this.getList(false, false);
+    },
+    jumpRoute(item) {
+      console.log
+      let data = {
+        path: item.route ? item.route : '',
+        filename: item.route ? item.key : '',
+      };
+      this.open(data);
+    },
+    refreshRoute() {
+      let data = {
+        dir: this.routeList[this.routeList.length - 1].route,
+        filename: this.routeList[this.routeList.length - 1].key,
+      };
+      this.open(data);
     },
     // 编辑
     edit(row) {
@@ -911,14 +937,70 @@ export default {
 .mr5 {
   margin-right: 5px;
 }
-
+.backs-box{
+  display: flex;
+  justify-content space-between
+  min-width: 800px;
+  max-width: max-content;
+  border: 1px solid #cfcfcf;
+  background: #f3f3f3;
+  .refresh{
+    background: #fff;
+    border-left: 1px solid #cfcfcf;
+    padding: 0 8px 0 10px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .refresh{
+    display flex
+    align-items center
+    justify-content center
+    cursor: pointer;
+  }
+  .refresh:hover,.back:hover{
+    background: #20a53a;
+    border-color: #38983b;
+    color: #fff;
+  }
+   .icon {
+    // height: 32px;
+  }
+}
 .backs {
   cursor: pointer;
   display: inline-block;
+  display flex
+  align-items center
+  width: 100%;
 
-  .icon {
-    margin-bottom: 3px;
+  .back{
+    height: 100%;
+    background: #fff;
+    border-right: 1px solid #cfcfcf;
+    padding: 2px 8px 0 10px;
+    font-size: 16px;
+    font-weight: bold;
   }
+
+  .item:last-child{
+    padding-right: 5px !important;
+  }
+  .item{
+    padding: 0 0 0 8px
+    font-size: 12px;
+    line-height: 33px;
+    color: #555;
+    display flex
+    align-items center
+    .key{
+      margin-right: 3px;
+    }
+  }
+
+  .item:hover{
+    background: #fff;
+  }
+
 }
 
 >>>.CodeMirror {
