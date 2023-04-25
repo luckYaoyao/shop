@@ -107,7 +107,8 @@ export default {
     // 设置/过滤路由（非静态路由/是否显示在菜单中）
     setFilterRoutes() {
       if (this.$store.state.themeConfig.themeConfig.layout === 'columns') return false;
-      this.menuList = this.filterRoutesFun(this.$store.state.routesList.routesList);
+      this.$store.commit('menus/childMenuList', this.filterRoutesFun(this.$store.state.routesList.routesList));
+      // this.menuList = this.filterRoutesFun(this.$store.state.routesList.routesList);
     },
     // 设置/过滤路由 递归函数
     filterRoutesFun(arr) {
