@@ -508,6 +508,10 @@ class SystemCrudServices extends BaseServices
                 //对比字段进行更新/删除字段
                 $this->diffAlter($tableName, $data['deleteField'], $tableField);
             }
+        } else {
+            if ($this->dao->count(['table_name' => $tableName])) {
+                throw new AdminException('表已经被生成过，请在列表中进行修改');
+            }
         }
         //创建数据库
         if ($tableField && (!$data['isTable'] || !$tableInfo)) {
