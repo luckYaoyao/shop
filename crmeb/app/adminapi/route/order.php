@@ -72,7 +72,6 @@ Route::group('order', function () {
     Route::post('dels', 'v1.order.StoreOrder/del_orders')->name('StoreOrderorDels')->option(['real_name' => '批量删除订单']);
     //面单默认配置信息
     Route::get('sheet_info', 'v1.order.StoreOrder/getDeliveryInfo')->option(['real_name' => '面单默认配置信息']);
-
     //获取线下付款二维码
     Route::get('offline_scan', 'v1.order.OtherOrder/offline_scan')->name('OfflineScan')->option(['real_name' => '获取线下付款二维码']);
     //线下收银列表
@@ -111,7 +110,7 @@ Route::group('order', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['cate_name' => '订单']);
+])->option(['mark' => 'order', 'cate_name' => '订单']);
 
 /**
  * 售后 相关路由
@@ -138,4 +137,4 @@ Route::group('refund', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['cate_name' => '退款']);
+])->option(['mark' => 'refund', 'cate_name' => '退款']);
