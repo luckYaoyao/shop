@@ -170,20 +170,19 @@ class SystemRouteServices extends BaseServices
      * @email 136327134@qq.com
      * @date 2023/4/11
      */
-    public function topCateId(string $app, string $name = '全部权限')
+    public function topCateId(string $app, string $cateName, int $pid = 0)
     {
-        $id = app()->make(SystemRouteCateServices::class)->value(['app_name' => $app, 'name' => $name, 'pid' => 0], 'id');
-        if (!$id) {
+        $oneId = app()->make(SystemRouteCateServices::class)->value(['app_name' => $app, 'name' => $cateName, 'pid' => 0], 'id');
+        if (!$oneId) {
             $res = app()->make(SystemRouteCateServices::class)->save([
                 'app_name' => $app,
-                'name' => $name,
-                'pid' => 0,
+                'name' => $cateName,
+                'pid' => $pid,
                 'add_time' => time(),
             ]);
-            $id = $res->id;
+            return $res->id;
         }
-
-        return $id;
+        return $oneId;
     }
 
     /**
@@ -194,29 +193,47 @@ class SystemRouteServices extends BaseServices
      */
     public function syncRoute(string $app = 'adminapi')
     {
-        $id = $this->topCateId($app);
-        $commmonId = $this->topCateId($app, '公共权限');
         $listAll = $this->getRouteListAll($app);
 
         $list = [];
         foreach ($listAll as $item) {
-            if (isset($item['option']['is_common']) && $item['option']['is_common']) {
-                $cateId = $commmonId;
+            if (!isset($item['option']['mark_name']) || strstr($item['rule'], '<MISS>') !== false) {
+                continue;
             } else {
-                if (!isset($item['option']['cate_name'])) {
-                    if (strstr($item['rule'], '<MISS>') === false) {
-                        $rule = explode('/', $item['rule']);
-                        $cateId = $this->topCateId($app, $rule[0]);
-                    } else {
-                        //miss路由不写入
-                        continue;
-                    }
+                $list[$item['option']['mark_name']][] = $item;
+            }
+        }
+        $newsList = [];;
+        foreach ($list as $key => $item) {
+            $newItem = [];
+            foreach ($item as $value) {
+                if (isset($value['option']['cate_name'])) {
+                    $newItem[$value['option']['cate_name']][] = $value;
                 } else {
-                    $cateId = $this->topCateId($app, $item['option']['cate_name']);
+                    $newItem[$key][] = $value;
                 }
             }
-            $list[$cateId][] = $item;
+            $newsList[$key] = $newItem;
         }
+
+        $list = [];
+        foreach ($newsList as $key => $item) {
+            $keys = array_keys($item);
+            $pid = $this->topCateId($app, $key, 0);
+            if ($keys == 1 && $key == $keys[0]) {
+                foreach ($item[$key] as $value) {
+                    $list[$pid][] = $value;
+                }
+            } else {
+                foreach ($item as $i => $k) {
+                    $cateId = $this->topCateId($app, $i, $pid);
+                    foreach ($k as $value) {
+                        $list[$cateId][] = $value;
+                    }
+                }
+            }
+        }
+
         //保持新增的权限路由
         $data = $this->dao->selectList(['app_name' => $app], 'path,method')->toArray();
         $save = [];

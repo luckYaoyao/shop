@@ -182,13 +182,34 @@ export default {
           tableField: this.$refs.TableForm.tableField,
           deleteField: this.id ? this.$refs.TableForm.deleteField : [],
         };
-        if (this.id) data.id = this.id;
-        this.reqloading = true;
-        codeCrud(data)
+        if (this.id) {
+          data.id = this.id;
+          this.$Modal.confirm({
+            title: '生成提醒',
+            content: '重新提交会重新生成文件,<span style="color: red">删除、新增、修改</span>的字段将直接从改表中进行修改,请慎重操作！！',
+            loading: true,
+            onOk:() => {
+              this.saveCodeCrud(data,true);
+            },
+          })
+        }else{
+          this.saveCodeCrud(data);
+        }
+      } else {
+        if (this.currentTab < 3) this.currentTab++;
+      }
+    },
+    saveCodeCrud(data,loading){
+      this.reqloading = true;
+      codeCrud(data)
           .then((res) => {
             this.$Message.success(res.msg);
             this.getMenusUnique();
             this.reqloading = false;
+
+            if(loading){
+              this.$Modal.remove()
+            }
             this.$router.push({
               name: 'system_code_generation_list',
             });
@@ -197,9 +218,6 @@ export default {
             this.reqloading = false;
             this.$Message.error(err.msg);
           });
-      } else {
-        if (this.currentTab < 3) this.currentTab++;
-      }
     },
     getMenusUnique() {
       getMenusUnique().then((res) => {

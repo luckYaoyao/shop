@@ -1,5 +1,22 @@
 <template>
   <div class="main">
+    <Alert closable>
+      crud生成说明
+      <template #desc>
+        <p>
+          1、字段配置中表存在生成的字段为表内列的信息,并且主键、伪删除字段不允许设置为列，主键默认展示在列表中，伪删除字段不允许展示
+        </p>
+        <p>2、在字段配置中新建表时，主键不需要增加列，会自动增加一行主键id</p>
+        <p>
+          3、在字段配置中新建表时，字段类型为addTimestamps会自动创建create_time、update_time字段，字段类型为：timestamp
+        </p>
+        <p>
+          4、在字段配置中新建表时，字段类型为addSoftDelete会字段创建delete_time字段，字段类型为：timestamp，作用是伪删除
+        </p>
+        <p>5、在字段配置中，表单类型为frameImageOne时属于图片单选，frameImages时为图片多选</p>
+        <p>6、在字段配置中，表单类型为不生成时创建后不会生成对应的表单项</p>
+      </template>
+    </Alert>
     <Button type="primary" @click="addRow">添加一行</Button>
     <div>
       <Table

@@ -126,7 +126,7 @@ class SystemCrudServices extends BaseServices
                 'text',
                 'longtext',
                 'tinytext',
-                'enum',
+//                'enum',
                 'blob',
                 'binary',
                 'varbinary',
@@ -507,6 +507,10 @@ class SystemCrudServices extends BaseServices
             if ($tableInfo) {
                 //对比字段进行更新/删除字段
                 $this->diffAlter($tableName, $data['deleteField'], $tableField);
+            }
+        } else {
+            if ($this->dao->count(['table_name' => $tableName])) {
+                throw new AdminException('表已经被生成过，请在列表中进行修改');
             }
         }
         //创建数据库

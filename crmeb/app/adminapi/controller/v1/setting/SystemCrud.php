@@ -82,6 +82,11 @@ class SystemCrud extends AuthController
 
         $fromField = $columnField = [];
         foreach ($data['tableField'] as $item) {
+            //判断字段长度
+            if (in_array($item['field_type'], ['datetime', 'timestamp', 'time', 'date', 'year']) && $item['limit'] > 6) {
+                return app('json')->fail('字段' . $item['field'] . '长度不能大于6');
+            }
+            //收集列表展示数据
             if ($item['is_table'] && !in_array($item['field_type'], ['primaryKey', 'addSoftDelete', 'addSoftDelete'])) {
                 $columnField[] = [
                     'field' => $item['field'],
@@ -89,6 +94,7 @@ class SystemCrud extends AuthController
                     'type' => $item['from_type'],
                 ];
             }
+            //收集表单展示数据
             if ($item['from_type']) {
                 $name = $item['table_name'] ?: $item['comment'];
                 $option = $item['options'] ?? [];
@@ -96,7 +102,7 @@ class SystemCrud extends AuthController
                     return app('json')->fail(500056, [], ['field' => $item['field']]);
                 }
                 if (!$option && in_array($item['from_type'], ['radio', 'select'])) {
-                    return app('json')->fail('表单类型为radio或select时,option字段不能为空');
+                    return app('json')->fail('表单类型为radio或select时,options字段不能为空');
                 }
                 $fromField[] = [
                     'field' => $item['field'],
