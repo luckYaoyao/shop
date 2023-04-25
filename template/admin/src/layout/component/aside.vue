@@ -28,20 +28,19 @@ export default {
   components: { Vertical, Logo },
   data() {
     return {
-      menuList: [],
+      // menuList: [],
       clientWidth: '',
       catName: '',
     };
   },
   computed: {
     // 设置左侧菜单的具体宽度
-    // menuList() {
-    //   this.$store.state.menus.childMenuList.length > 0
-    //     ? (this.$store.state.themeConfig.themeConfig.isCollapse = false)
-    //     : (this.$store.state.themeConfig.themeConfig.isCollapse = true);
-    //   console.log(this.$store.state.menus.childMenuList, 'this.$store.state.menus.childMenuList');
-    //   return this.$store.state.menus.childMenuList;
-    // },
+    menuList() {
+      this.$store.state.menus.childMenuList.length > 0
+        ? (this.$store.state.themeConfig.themeConfig.isCollapse = false)
+        : (this.$store.state.themeConfig.themeConfig.isCollapse = true);
+      return this.$store.state.menus.childMenuList;
+    },
     setCollapseWidth() {
       let { layout, isCollapse } = this.$store.state.themeConfig.themeConfig;
       let asideBrColor = '';
@@ -76,12 +75,12 @@ export default {
   created() {
     this.initMenuFixed(document.body.clientWidth);
     this.setFilterRoutes();
-    this.bus.$on('setSendColumnsChildren', (res) => {
-      this.menuList = res || [];
-      this.menuList.length > 0
-        ? (this.$store.state.themeConfig.themeConfig.isCollapse = false)
-        : (this.$store.state.themeConfig.themeConfig.isCollapse = true);
-    });
+    // this.bus.$on('setSendColumnsChildren', (res) => {
+    //   this.menuList = res || [];
+    //   this.menuList.length > 0
+    //     ? (this.$store.state.themeConfig.themeConfig.isCollapse = false)
+    //     : (this.$store.state.themeConfig.themeConfig.isCollapse = true);
+    // });
     this.bus.$on('layoutMobileResize', (res) => {
       this.initMenuFixed(res.clientWidth);
     });

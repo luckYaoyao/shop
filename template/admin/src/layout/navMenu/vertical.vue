@@ -2,6 +2,7 @@
   <div>
     <el-menu
       router
+      :class="setColumnsAsideStyle"
       background-color="transparent"
       :default-active="activePath || defaultActive"
       :collapse="setIsCollapse"
@@ -69,6 +70,10 @@ export default {
   },
   computed: {
     ...mapState('menu', ['activePath']),
+    // 设置分栏高亮风格
+    setColumnsAsideStyle() {
+      return this.$store.state.themeConfig.themeConfig.columnsAsideStyle;
+    },
     // 获取布局配置信息
     getThemeConfig() {
       return this.$store.state.themeConfig.themeConfig;
