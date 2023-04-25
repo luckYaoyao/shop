@@ -73,4 +73,4 @@ Route::group('diy', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'diy', 'mark_name' => 'DIY']);
+])->option(['mark' => 'diy', 'mark_name' => '页面装修']);

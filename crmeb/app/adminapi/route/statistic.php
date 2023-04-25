@@ -89,4 +89,4 @@ Route::group('statistic', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'statistic', 'mark_name' => '统计']);
+])->option(['mark' => 'statistic', 'mark_name' => '程序统计']);

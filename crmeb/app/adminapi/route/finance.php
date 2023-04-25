@@ -66,4 +66,4 @@ Route::group('finance', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'finance', 'mark_name' => '财务']);
+])->option(['mark' => 'finance', 'mark_name' => '财务管理']);

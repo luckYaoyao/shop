@@ -39,4 +39,4 @@ Route::group('freight', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'freight', 'mark_name' => '物流']);
+])->option(['mark' => 'freight', 'mark_name' => '物流管理']);

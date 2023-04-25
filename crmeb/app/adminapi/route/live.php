@@ -68,11 +68,11 @@ Route::group('live', function () {
         Route::get('room/set_show/:id/:is_show', 'v1.marketing.live.LiveRoom/setShow')->option(['real_name' => '设置直播间是否显示']);
         //同步直播间状态
         Route::get('room/syncRoom', 'v1.marketing.live.LiveRoom/syncRoom')->option(['real_name' => '同步直播间状态']);
-    })->option(['parent' => 'live', 'cate_name' => '主播间']);
+    })->option(['parent' => 'live', 'cate_name' => '直播间']);
 
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'live', 'mark_name' => '直播']);
+])->option(['mark' => 'live', 'mark_name' => '直播管理']);
