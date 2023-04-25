@@ -32,4 +32,4 @@ Route::group(function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'crud', 'cate_name' => 'CRUD']);
+])->option(['mark' => 'crud', 'mark_name' => 'CRUD']);

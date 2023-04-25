@@ -47,5 +47,5 @@ Route::group(function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'common', 'cate_name' => '系统数据']);
+])->option(['mark' => 'common', 'mark_name' => '系统数据']);
 

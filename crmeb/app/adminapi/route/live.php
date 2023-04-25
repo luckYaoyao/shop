@@ -75,4 +75,4 @@ Route::group('live', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'live', 'cate_name' => '直播']);
+])->option(['mark' => 'live', 'mark_name' => '直播']);

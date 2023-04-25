@@ -66,4 +66,4 @@ Route::group('merchant', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'merchant', 'cate_name' => '物流']);
+])->option(['mark' => 'merchant', 'mark_name' => '物流']);

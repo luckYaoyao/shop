@@ -110,7 +110,7 @@ Route::group('order', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'order', 'cate_name' => '订单']);
+])->option(['mark' => 'order', 'mark_name' => '订单']);
 
 /**
  * 售后 相关路由
@@ -137,4 +137,4 @@ Route::group('refund', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'refund', 'cate_name' => '退款']);
+])->option(['mark' => 'refund', 'mark_name' => '退款']);

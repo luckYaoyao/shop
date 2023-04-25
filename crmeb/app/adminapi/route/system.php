@@ -189,7 +189,7 @@ Route::group('system', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'system', 'cate_name' => '维护']);
+])->option(['mark' => 'system', 'mark_name' => '维护']);
 
 Route::group('system', function () {
 
@@ -217,5 +217,5 @@ Route::group('system', function () {
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminEditorTokenMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'system_file', 'cate_name' => '文件']);
+])->option(['mark' => 'system_file', 'mark_name' => '文件']);
 
