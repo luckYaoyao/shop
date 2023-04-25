@@ -175,6 +175,7 @@ export default {
       tableField: [],
       optionsList: [],
       index: 0,
+      deleteField: [],
     };
   },
   created() {
