@@ -74,19 +74,23 @@ class ViewPages extends Make
         $columnStr = [];
         $contentVue = [];
         foreach ($field as $key => $item) {
+            $keyName = 'key';
             if (isset($item['type'])) {
                 switch ($item['type']) {
                     case 'frameImageOne':
+                        $keyName = 'slot';
                         $templateContent = file_get_contents($this->getStub('image'));
                         $contentVue[] = str_replace(['{%field%}'], [$item['field']], $templateContent);
                         break;
                     case 'frameImages':
+                        $keyName = 'slot';
                         $templateContent = file_get_contents($this->getStub('images'));
                         $contentVue[] = str_replace(['{%field%}'], [$item['field']], $templateContent);
                         break;
                 }
             }
-            $columnStr[] = ($key == 0 ? $this->tab(2) : '') . "{\n" . $this->tab(3) . "title:\"{$item['name']}\"," . $this->tab(2) . "\n" . $this->tab(3) . "key:\"{$item['field']}\"\n" . $this->tab(2) . "}\n";
+
+            $columnStr[] = ($key == 0 ? $this->tab(2) : '') . "{\n" . $this->tab(3) . "title:\"{$item['name']}\"," . $this->tab(2) . "\n" . $this->tab(3) . "$keyName:\"{$item['field']}\"\n" . $this->tab(2) . "}\n";
         }
         $this->value['auth'] = Str::snake($name);
         $this->value['componentName'] = $this->value['auth'];

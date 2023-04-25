@@ -254,6 +254,8 @@ class SystemCrud extends AuthController
             $item['default_field_type'] = $item['field_type'];
             $item['default_comment'] = $item['comment'];
             $item['default_default'] = $item['default'];
+            $item['is_table'] = !!$item['is_table'];
+            $item['primaryKey'] = isset($item['primaryKey']) ? (int)$item['primaryKey'] : 0;
             $info['field']['tableField'][$key] = $item;
         }
         //对比数据库,是否有新增字段
@@ -282,9 +284,27 @@ class SystemCrud extends AuthController
         }
 
         if ($newColumn) {
-            $info['field']['tableField'] = array_merge($info['field']['tableField'], $newColumn);
+            $info['field']['tableField'] = array_merge($newColumn, $info['field']['tableField']);
         }
-
+        $keyInfo = [];
+        $deleteInfo = [];
+        foreach ($info['field']['tableField'] as $key => $item) {
+            if ($item['primaryKey']) {
+                $keyInfo = $item;
+                unset($info['field']['tableField'][$key]);
+            }
+            if ($item['field_type'] == 'addSoftDelete') {
+                $deleteInfo = $item;
+                unset($info['field']['tableField'][$key]);
+            }
+        }
+        if ($keyInfo) {
+            array_unshift($info['field']['tableField'], $keyInfo);
+        }
+        if ($deleteInfo) {
+            array_push($info['field']['tableField'], $deleteInfo);
+        }
+        $info['field']['pid'] = (int)$info['field']['pid'];
         return app('json')->success(['file' => $data, 'crudInfo' => $info]);
     }
 
@@ -308,19 +328,24 @@ class SystemCrud extends AuthController
         if (!$crudInfo) {
             return app('json')->fail('修改的CRUD文件不存在');
         }
-        $makePath = [];
+
+        $makeFilepath = '';
         foreach ($crudInfo->make_path as $key => $item) {
+            $path = $item;
             if (in_array($key, ['pages', 'router', 'api'])) {
                 $item = Make::adminTemplatePath() . $item;
             } else {
                 $item = app()->getRootPath() . $item;
             }
-            $makePath[$key] = $item;
+            if ($filepath == $path) {
+                $makeFilepath = $item;
+                break;
+            }
         }
-        if (!in_array($filepath, $makePath)) {
+        if (!$makeFilepath || !in_array($filepath, $crudInfo->make_path)) {
             return app('json')->fail('您没有权限修改此文件');
         }
-        $res = $service->savefile($filepath, $comment);
+        $res = $service->savefile($makeFilepath, $comment);
         if ($res) {
             return app('json')->success(100000);
         } else {

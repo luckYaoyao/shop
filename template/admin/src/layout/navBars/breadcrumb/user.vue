@@ -26,9 +26,7 @@
     <div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
       <i class="el-icon-search" :title="$t('message.user.title2')"></i>
     </div>
-    <div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
-      <i class="el-icon-star-off" :title="$t('message.user.title3')"></i>
-    </div>
+
     <div class="layout-navbars-breadcrumb-user-icon">
       <el-popover
         placement="bottom"
@@ -58,14 +56,18 @@
         <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item :command="homePath">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
-        <!-- <el-dropdown-item command="wareHouse">{{ $t('message.user.dropdown6') }}</el-dropdown-item>
-        <el-dropdown-item command="/personal">{{ $t('message.user.dropdown2') }}</el-dropdown-item>
-        <el-dropdown-item command="/404">{{ $t('message.user.dropdown3') }}</el-dropdown-item>
-        <el-dropdown-item command="/401">{{ $t('message.user.dropdown4') }}</el-dropdown-item> -->
+        <!-- <el-dropdown-item :command="homePath">{{ $t('message.user.dropdown1') }}</el-dropdown-item> -->
+        <el-dropdown-item command="user">{{ $t('message.user.dropdown6') }}</el-dropdown-item>
+        <!-- <el-dropdown-item command="wareHouse">{{ $t('message.user.dropdown6') }}</el-dropdown-item> -->
+        <!-- <el-dropdown-item command="/personal">{{ $t('message.user.dropdown2') }}</el-dropdown-item> -->
+        <!-- <el-dropdown-item command="/404">{{ $t('message.user.dropdown3') }}</el-dropdown-item> -->
+        <!-- <el-dropdown-item command="/401">{{ $t('message.user.dropdown4') }}</el-dropdown-item> -->
         <el-dropdown-item divided command="logOut">{{ $t('message.user.dropdown5') }}</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
+    <div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
+      <i class="el-icon-setting" :title="$t('message.user.title3')"></i>
+    </div>
     <Search ref="searchRef" />
   </div>
 </template>
@@ -225,7 +227,8 @@ export default {
             })
             .catch(() => {});
         }, 150);
-      } else if (path === 'wareHouse') {
+      } else if (path === 'user') {
+        this.$router.push({ name: 'systemUser' });
       } else {
         this.$router.push(path);
       }
@@ -268,6 +271,7 @@ export default {
   }
   & ::v-deep .el-dropdown {
     color: var(--prev-bg-topBarColor);
+    cursor: pointer;
   }
   & ::v-deep .el-badge {
     height: 40px;

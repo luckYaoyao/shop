@@ -801,7 +801,7 @@ export default {
     isEditBlur(row) {
       row.is_edit = false;
       let data = {
-        full_path: '/app',
+        full_path: row.real_path,
         mark: row.mark,
       };
       markSave(this.fileToken, data)

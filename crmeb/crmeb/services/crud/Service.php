@@ -73,10 +73,20 @@ class Service extends Make
                         $from[] = $this->tab(2) . $this->getframeImagesPhpContent($item['field'], $item['name'], $item['required'] ?? false) . ';';
                         break;
                     default:
-                        $from[] = $this->tab(2) . '$rule[] = FormBuilder::' . $item['type'] . '("' . $item['field'] . '","' . $item['name'] . '",$info["' . $item['field'] . '"] ?? "")' . $this->getOptionContent(in_array($item['type'], ['radio', 'select']), $item['option'] ?? []) . ';';
+                        $valueContent = "''";
+                        $input = '$info["' . $item['field'] . '"] ?? ';
+                        if (in_array($item['type'], ['checkbox'])) {
+                            $valueContent = '[]';
+                            $input = '(array)(' . $input . $valueContent . ')';
+                        } else if ($item['type'] == 'radio') {
+                            $valueContent = '-1';
+                            $input = '(int)(' . $input . $valueContent . ')';
+                        } else {
+                            $input = $input . $valueContent;
+                        }
+                        $from[] = $this->tab(2) . '$rule[] = FormBuilder::' . $item['type'] . '("' . $item['field'] . '", "' . $item['name'] . '",  ' . $input . ')' . $this->getOptionContent(in_array($item['type'], ['radio', 'select', 'checkbox']), $item['option'] ?? []) . ';';
                         break;
                 }
-
             }
             if ($from) {
                 $this->value['use-php'] .= "\n" . 'use crmeb\services\FormBuilder;';
@@ -103,6 +113,7 @@ class Service extends Make
 
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);
         $this->usePath = $this->baseDir . '\\' . $this->value['nameCamel'];
+
         $this->setContent($contentStr);
         $this->setPathname($filePath);
         return $this;
@@ -117,7 +128,10 @@ class Service extends Make
      */
     protected function getOptionContent(bool $isOption, array $option = [])
     {
-        if (!$option && $isOption) {
+        if (!$isOption) {
+            return '';
+        }
+        if (!$option) {
             $option = [
                 ['value' => 1, 'label' => '开启'],
                 ['value' => 0, 'label' => '关闭']
@@ -127,11 +141,11 @@ class Service extends Make
         if ($option) {
             $attOption = [];
             foreach ($option as $item) {
-                $attOption[] = $this->tab(2) . "['value'=>'{$item['value']}', 'label'=>'{$item['label']}'],";
+                $attOption[] = $this->tab(3) . "['value'=>'{$item['value']}', 'label'=>'{$item['label']}'],";
             }
 
             $strOption = implode("\n", $attOption);
-            $php = '->options([' . $strOption . '])';
+            $php = "->options([\n" . $strOption . "\n" . $this->tab(2) . "])";
         }
 
         return $php;
@@ -210,11 +224,11 @@ CONTENT;
         $servicePath = __DIR__ . DS . 'stubs' . DS . 'service' . DS;
 
         $stubs = [
-            'index' => $servicePath . 'CrudListIndex.stub',
-            'form' => $servicePath . 'GetCrudForm.stub',
-            'save' => $servicePath . 'CrudSave.stub',
-            'update' => $servicePath . 'CrudUpdate.stub',
-            'services' => $servicePath . 'CrudService.stub',
+            'index' => $servicePath . 'crudListIndex.stub',
+            'form' => $servicePath . 'getCrudForm.stub',
+            'save' => $servicePath . 'crudSave.stub',
+            'update' => $servicePath . 'crudUpdate.stub',
+            'services' => $servicePath . 'crudService.stub',
         ];
 
         return $type ? $stubs[$type] : $stubs;

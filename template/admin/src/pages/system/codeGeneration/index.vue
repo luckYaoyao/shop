@@ -89,7 +89,7 @@ export default {
       tableField: [],
       rowList: [],
       reqloading: false,
-      id: "",
+      id: '',
     };
   },
   created() {
@@ -102,9 +102,8 @@ export default {
   methods: {
     getDetail(id) {
       crudDet(id).then((res) => {
-        console.log(res);
         let data = res.data.crudInfo.field;
-        this.formItem.foundation.pid = data.pid;
+        this.formItem.foundation.pid = Number(data.pid);
         this.formItem.foundation.tableName = data.tableName;
         this.formItem.foundation.modelName = data.modelName;
         this.formItem.foundation.menuName = data.menuName;

@@ -17,7 +17,11 @@
           <Input :disabled="disabledInput(index)" v-model="tableField[index].field"></Input>
         </template>
         <template slot-scope="{ row, index }" slot="field_type">
-          <Select v-model="tableField[index].field_type" @on-change="changeItemField($event, index)">
+          <Select
+            v-model="tableField[index].field_type"
+            :disabled="disabledInput(index)"
+            @on-change="changeItemField($event, index)"
+          >
             <Option v-for="item in columnTypeList" :value="item" :key="item">{{ item }}</Option>
           </Select>
         </template>
@@ -45,7 +49,7 @@
           </Select>
         </template>
         <template slot-scope="{ row, index }" slot="options">
-          <div class="table-options" v-if="['select', 'radio'].includes(tableField[index].from_type)">
+          <div class="table-options" v-if="['select', 'radio', 'checkbox'].includes(tableField[index].from_type)">
             <Select>
               <Option v-for="item in tableField[index].options" :value="item.value" :key="item.value">{{
                 item.label
@@ -56,7 +60,7 @@
           <div v-else>--</div>
         </template>
         <template slot-scope="{ row, index }" slot="action">
-          <a v-if="!foundation.isTable" @click="del(row, index)">删除</a>
+          <a v-if="!foundation.primaryKey" @click="del(row, index)">删除</a>
           <span v-else>--</span>
         </template>
       </Table>
@@ -96,8 +100,7 @@ export default {
       },
     },
     id: {
-      type: String,
-      default: '',
+      type: String | Number,
     },
   },
   data() {
@@ -172,6 +175,7 @@ export default {
       tableField: [],
       optionsList: [],
       index: 0,
+      deleteField: [],
     };
   },
   created() {
@@ -227,7 +231,12 @@ export default {
         if ((!el.field || !el.field_type) && !['addTimestamps', 'addSoftDelete'].includes(el.field_type)) {
           return this.$Message.warning('请先完善上一条数据');
         }
-        if (el.is_table && !el.table_name && !['addTimestamps', 'addSoftDelete'].includes(el.field_type)) {
+        if (
+          el.is_table &&
+          !el.table_name &&
+          !Number(el.primaryKey) &&
+          !['addTimestamps', 'addSoftDelete'].includes(el.field_type)
+        ) {
           return this.$Message.warning('请输入列表名');
         }
       }

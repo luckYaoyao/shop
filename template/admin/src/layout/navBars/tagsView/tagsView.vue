@@ -62,7 +62,7 @@ export default {
     // 获取布局配置信息
     getThemeConfig() {
       return this.$store.state.themeConfig.themeConfig;
-    },
+    }, 
     // 动态设置 tagsView 风格样式
     setTagsStyle() {
       return this.$store.state.themeConfig.themeConfig.tagsStyle;
@@ -252,8 +252,7 @@ export default {
           this.closeCurrentTagsView(path);
           break;
         case 2:
-          this.$router.push({ path, query: currentTag.query });
-          this.closeOtherTagsView(path);
+          this.closeOtherTagsView(path, currentTag.query);
           break;
         case 3:
           this.closeAllTagsView(path);
@@ -284,20 +283,22 @@ export default {
       //   this.addBrowserSetSession(this.tagNavList);
     },
     // 3、关闭其它 tagsView：如果是设置了固定的（isAffix），不进行关闭
-    closeOtherTagsView(path) {
+    closeOtherTagsView(path, query) {
       let tagsViewList = [];
       this.tagsViewRoutesList.map((v) => {
-        if (v.meta.isAffix && !v.meta.isHide) tagsViewList.push({ ...v });
-        if ((v.path = path)) tagsViewList.push({ ...v });
+        if ((v.meta && v.meta.isAffix) || v.path === path) tagsViewList.push({ ...v });
       });
+      console.log(tagsViewList, this.tagsViewRoutesList, path);
       this.addBrowserSetSession(tagsViewList);
+      this.$router.push({ path, query });
+
       // this.addTagsView(path);
     },
     // 4、关闭全部 tagsView：如果是设置了固定的（isAffix），不进行关闭
     closeAllTagsView(path) {
       let tagsViewList = [];
       this.tagsViewRoutesList.map((v) => {
-        if (v.meta.isAffix && !v.meta.isHide) {
+        if (v.meta.isAffix) {
           tagsViewList.push({ ...v });
           if (tagsViewList.some((v) => v.path === path)) this.$router.push({ path, query: this.$route.query });
           else this.$router.push({ path: v.path, query: this.$route.query });
@@ -326,6 +327,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+/deep/ .el-scrollbar__bar.is-horizontal {
+  height: 0;
+}
 .layout-navbars-tagsview {
   flex: 1;
   background-color: var(--prev-bg-white);
@@ -370,9 +374,9 @@ export default {
         background: var(--prev-tag-active-color);
         z-index: -1;
         opacity: 0;
-        transform: scale3d(0.7, 1, 1);
-        transition: transform 0.3s, opacity 0.3s;
-        transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+        // transform: scale3d(0.7, 1, 1);
+        // transition: transform 0.3s, opacity 0.3s;
+        // transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
       }
       &:hover {
         color: var(--prev-color-primary-light-9);
@@ -444,6 +448,7 @@ export default {
       border: none !important;
       position: relative;
       border-radius: 3px !important;
+
       .layout-icon-active {
         display: none;
       }
