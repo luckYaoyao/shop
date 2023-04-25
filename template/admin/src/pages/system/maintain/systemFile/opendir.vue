@@ -207,12 +207,13 @@ export default {
           slot: 'filename',
           minWidth: 150,
           back: '返回上级',
+          sortable: true
         },
-        {
-          title: '文件/文件夹路径',
-          key: 'real_path',
-          minWidth: 150,
-        },
+        // {
+        //   title: '文件/文件夹路径',
+        //   key: 'real_path',
+        //   minWidth: 150,
+        // },
         {
           title: '文件/文件夹大小',
           key: 'size',
@@ -222,6 +223,7 @@ export default {
           title: '更新时间',
           key: 'mtime',
           minWidth: 150,
+          sortable: true,
         },
         {
           title: '备注',
@@ -231,7 +233,7 @@ export default {
         {
           title: '操作',
           slot: 'action',
-          minWidth: 150,
+          width: 100,
         },
       ],
       formItem: {
@@ -363,12 +365,12 @@ export default {
     },
     refreshRoute() {
       let data = {
-        dir: this.routeList[this.routeList.length - 1].route,
-        filename: this.routeList[this.routeList.length - 1].key,
+        path: this.routeList[this.routeList.length - 1].route,
+        filename: '',
       };
       this.open(data);
     },
-    // 编辑
+    // 编辑ß
     edit(row) {
       this.navItem = row;
       this.spinShow = true;
@@ -943,7 +945,7 @@ export default {
   min-width: 800px;
   max-width: max-content;
   border: 1px solid #cfcfcf;
-  background: #f3f3f3;
+  background: #f6f6f6;
   .refresh{
     background: #fff;
     border-left: 1px solid #cfcfcf;
@@ -958,7 +960,7 @@ export default {
     cursor: pointer;
   }
   .refresh:hover,.back:hover{
-    background: #20a53a;
+    background: #2D8cF0;
     border-color: #38983b;
     color: #fff;
   }
