@@ -271,6 +271,7 @@ export default {
   }
   & ::v-deep .el-dropdown {
     color: var(--prev-bg-topBarColor);
+    cursor: pointer;
   }
   & ::v-deep .el-badge {
     height: 40px;
