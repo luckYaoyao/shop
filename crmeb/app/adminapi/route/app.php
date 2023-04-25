@@ -136,4 +136,4 @@ Route::group('app', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'app', 'cate_name' => '应用']);
+])->option(['mark' => 'app', 'mark_name' => '应用']);

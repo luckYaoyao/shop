@@ -43,4 +43,4 @@ Route::group('export', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'export', 'cate_name' => '导出']);
+])->option(['mark' => 'export', 'mark_name' => '导出']);

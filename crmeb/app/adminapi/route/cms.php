@@ -61,4 +61,4 @@ Route::group('cms', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'cms', 'cate_name' => '文章']);
+])->option(['mark' => 'cms', 'mark_name' => '文章']);
