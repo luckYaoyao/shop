@@ -25,19 +25,19 @@ Route::group(function () {
     //首页交易额排行
     Route::get('home/rank', 'Common/purchaseRanking')->option(['real_name' => '首页交易额排行']);
     //消息提醒
-    Route::get('jnotice', 'Common/jnotice')->option(['real_name' => '消息提醒', 'is_common' => true]);
+    Route::get('jnotice', 'Common/jnotice')->option(['real_name' => '消息提醒']);
     //验证授权
     Route::get('check_auth', 'Common/auth')->option(['real_name' => '验证授权']);
     //申请授权
     Route::post('auth_apply', 'Common/auth_apply')->option(['real_name' => '申请授权']);
     //授权
-    Route::get('auth', 'Common/auth')->option(['real_name' => '授权信息', 'is_common' => true]);
+    Route::get('auth', 'Common/auth')->option(['real_name' => '授权信息']);
     //获取左侧菜单
-    Route::get('menus', 'v1.setting.SystemMenus/menus')->option(['real_name' => '左侧菜单', 'is_common' => true]);
+    Route::get('menus', 'v1.setting.SystemMenus/menus')->option(['real_name' => '左侧菜单']);
     //获取搜索菜单列表
-    Route::get('menusList', 'Common/menusList')->option(['real_name' => '搜索菜单列表', 'is_common' => true]);
+    Route::get('menusList', 'Common/menusList')->option(['real_name' => '搜索菜单列表']);
     //获取logo
-    Route::get('logo', 'Common/getLogo')->option(['real_name' => '获取logo', 'is_common' => true]);
+    Route::get('logo', 'Common/getLogo')->option(['real_name' => '获取logo']);
     //查询版权
     Route::get('copyright', 'Common/copyright')->option(['real_name' => '申请版权']);
     //保存版权

@@ -16,9 +16,9 @@ Route::group('product', function () {
     Route::group(function () {
         Route::get('category', 'v1.product.StoreCategory/index')->option(['real_name' => '商品分类列表']);
         //商品树形列表
-        Route::get('category/tree/:type', 'v1.product.StoreCategory/tree_list')->option(['real_name' => '商品分类树形列表', 'is_common' => true]);
+        Route::get('category/tree/:type', 'v1.product.StoreCategory/tree_list')->option(['real_name' => '商品分类树形列表']);
         //商品分类树形列表
-        Route::get('category/cascader/:type', 'v1.product.StoreCategory/cascader_list')->option(['real_name' => '商品分类树形列表', 'is_common' => true]);
+        Route::get('category/cascader/:type', 'v1.product.StoreCategory/cascader_list')->option(['real_name' => '商品分类树形列表']);
         //商品分类新增表单
         Route::get('category/create', 'v1.product.StoreCategory/create')->option(['real_name' => '商品分类新增表单']);
         //商品分类新增
@@ -44,7 +44,7 @@ Route::group('product', function () {
         //1分钟保存一次数据
         Route::post('cache', 'v1.product.StoreProduct/saveCacheData')->option(['real_name' => '保存还未提交数据']);
         //获取所有商品列表
-        Route::get('product/list', 'v1.product.StoreProduct/search_list')->option(['real_name' => '获取所有商品列表', 'is_common' => true]);
+        Route::get('product/list', 'v1.product.StoreProduct/search_list')->option(['real_name' => '获取所有商品列表']);
         //获取商品规格
         Route::get('product/attrs/:id/:type', 'v1.product.StoreProduct/get_attrs')->option(['real_name' => '获取商品规格']);
         //商品列表头
