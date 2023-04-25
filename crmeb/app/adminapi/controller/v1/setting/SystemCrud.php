@@ -247,11 +247,22 @@ class SystemCrud extends AuthController
             $item['name'] = $item['path'];
             try {
                 $item['content'] = file_get_contents($path, LOCK_EX);
-                $data[] = $item;
+                $data[$key] = $item;
             } catch (\Throwable $e) {
 
             }
         }
+        
+        //调整排序
+        $makeData = [];
+        $names = ['model', 'dao', 'service', 'controller', 'validate', 'router', 'api', 'pages'];
+        foreach ($names as $name) {
+            if (isset($data[$name])) {
+                $makeData[] = $data[$name];
+            }
+        }
+        $data = $makeData;
+
         $info = $info->toArray();
         //记录没有修改之前的数据
         foreach ((array)$info['field']['tableField'] as $key => $item) {
