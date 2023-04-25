@@ -99,18 +99,14 @@ export default {
     if (!this.$store.state.app.tagNavList.length) {
       this.getTagsViewRoutes();
     }
-    // this.$nextTick((e) => {
-    //   console.log(this.$refs.tagsView.offsetWidth);
-    //   console.log(this.$refs.tagsUlRef.offsetWidth);
-    // });
     if (this.$refs.tagsView.offsetWidth < this.$refs.scrollbarRef.$refs.wrap.scrollWidth) {
       this.scrollTagIcon = true;
     }
     window.addEventListener('resize', () => {
-      console.log(this.$refs.tagsView.offsetWidth);
-      console.log(this.$refs.scrollbarRef.$refs.wrap.scrollWidth);
       if (this.$refs.tagsView.offsetWidth < this.$refs.scrollbarRef.$refs.wrap.scrollWidth) {
         this.scrollTagIcon = true;
+      } else {
+        this.scrollTagIcon = false;
       }
     });
   },
@@ -305,6 +301,15 @@ export default {
           break;
       }
     },
+    refreshIcon() {
+      this.$nextTick((e) => {
+        if (this.$refs.tagsView.offsetWidth < this.$refs.scrollbarRef.$refs.wrap.scrollWidth) {
+          this.scrollTagIcon = true;
+        } else {
+          this.scrollTagIcon = false;
+        }
+      });
+    },
     // 1、刷新当前 tagsView：
     refreshCurrentTagsView(path) {
       this.bus.$emit('onTagsViewRefreshRouterView', path);
@@ -361,6 +366,7 @@ export default {
         this.addTagsView(to.path, to);
         this.getTagsRefsIndex(to.path);
         this.tagsViewmoveToCurrentTag();
+        this.refreshIcon();
       },
       deep: true,
     },
