@@ -63,7 +63,7 @@
           </template>
         </vxe-table-column>
         <vxe-table-column field="date" title="操作" align="center" width="250" fixed="right">
-          <template v-slot="{ row, index }">
+          <template v-slot="{ row }">
             <span v-auth="['setting-system_menus-add']">
               <a @click="addRoute(row)" v-if="row.auth_type === 1">添加权限</a>
               <Divider type="vertical" v-if="row.auth_type === 1" />
@@ -112,24 +112,37 @@
         <Button class="mr10" type="primary" @click="searchRules">搜索</Button>
         <Button @click="init">重置</Button>
       </div>
-
-      <Tabs v-model="routeType" @on-click="changTab">
-        <TabPane :label="item.name" :name="'' + index" v-for="(item, index) in foundationList"></TabPane>
-      </Tabs>
-      <div class="rule">
-        <div
-          class="rule-list"
-          v-show="!arrs.length || arrs.includes(item.id)"
-          :class="{ 'select-rule': seletRouteIds.includes(item.id) }"
-          v-for="(item, index) in children"
-          :key="index"
-          @click="selectRule(item)"
-        >
-          <div>接口名称：{{ item.real_name }}</div>
-          <div>请求方式：{{ item.method }}</div>
-          <div>接口地址：{{ item.path }}</div>
+      <div class="route-list">
+        <div class="tree">
+          <el-tree
+            ref="treeBox"
+            :data="ruleCateList"
+            :highlight-current="true"
+            :props="defaultProps"
+            node-key="id"
+            :default-expanded-keys="expandedKeys"
+            :current-node-key="nodeKey"
+            @node-click="handleNodeClick"
+          ></el-tree>
+        </div>
+        <div class="rule">
+          <div
+            class="rule-list"
+            v-show="!arrs.length || arrs.includes(item.id)"
+            :class="{ 'select-rule': seletRouteIds.includes(item.id) }"
+            v-for="(item, index) in children"
+            :key="index"
+            @click="selectRule(item)"
+          >
+            <div>接口名称：{{ item.name }}</div>
+            <div>请求方式：{{ item.method }}</div>
+            <div>接口地址：{{ item.path }}</div>
+          </div>
         </div>
       </div>
+      <!-- <Tabs v-model="routeType" @on-click="changTab">
+        <TabPane :label="item.name" :name="'' + index" v-for="(item, index) in foundationList" :key="item"></TabPane>
+      </Tabs> -->
     </Modal>
   </div>
 </template>
@@ -144,16 +157,18 @@ import {
   getRuleList,
   menusBatch,
   getMenusUnique,
+  menusRuleCate,
 } from '@/api/systemMenus';
 import formCreate from '@form-create/iview';
 import menusFrom from './components/menusFrom';
-import { formatFlatteningRoutes } from '@/libs/system';
+import { formatFlatteningRoutes, findFirstNonNullChildren, findFirstNonNullChildrenKeys } from '@/libs/system';
 
 export default {
   name: 'systemMenus',
   data() {
     return {
       children: [],
+      expandedKeys: [],
       tabconfig: { children: 'children', reserve: true, accordion: true },
       spinShow: false,
       ruleModal: false,
@@ -169,6 +184,11 @@ export default {
         is_show: '',
         keyword: '',
       },
+      defaultProps: {
+        children: 'children',
+        label: 'name',
+      },
+      ruleCateList: [], //权限树
       loading: false,
       tableData: [],
       FromData: null,
@@ -183,6 +203,7 @@ export default {
       seletRoute: [], // 选中路由
       seletRouteIds: [], // 选中id
       menusId: 0, // 选中分类id
+      nodeKey: 0, // 选中节点
     };
   },
   components: { menusFrom, formCreate: formCreate.$form() },
@@ -201,9 +222,7 @@ export default {
   methods: {
     init() {
       this.searchRule = '';
-      this.arrs = [];
-      this.seletRouteIds = [];
-      this.seletRoute = [];
+      this.searchRules();
     },
     addRouters() {
       let data = {
@@ -246,7 +265,7 @@ export default {
         this.arrs = [];
         let arr = this.foundationList;
         for (var i = 0; i < arr.length; i++) {
-          if (arr[i].real_name.indexOf(this.searchRule) !== -1) {
+          if (arr[i].name.indexOf(this.searchRule) !== -1) {
             this.arrs.push(arr[i].id);
           }
         }
@@ -257,18 +276,39 @@ export default {
     addRoute(row) {
       this.menusId = row.id;
       this.routeType = '0';
-      this.getRuleList();
-    },
-    modalchange() {},
-    // 获取权限列表
-    getRuleList() {
-      getRuleList().then((res) => {
-        this.foundationList = res.data;
-        this.children = this.foundationList[0] ? this.foundationList[0].children : [];
-        this.openList = [];
-        this.seletRouteIds = [];
-        this.seletRoute = [];
+      // this.getRuleList();
+      menusRuleCate().then((res) => {
+        console.log(res);
+        this.ruleCateList = res.data;
         this.ruleModal = true;
+        if (res.data.length) {
+          this.$nextTick((e) => {
+            this.expandedKeys = findFirstNonNullChildrenKeys(res.data[0], []);
+            this.nodeKey = findFirstNonNullChildren(res.data).id;
+            this.$refs.treeBox.setCurrentKey(this.nodeKey);
+            this.getRuleList(this.nodeKey);
+          });
+        }
+      });
+    },
+    handleNodeClick(data) {
+      console.log(data);
+      this.getRuleList(data.id);
+    },
+    modalchange() {
+      this.seletRouteIds = [];
+      this.seletRoute = [];
+    },
+    // 获取权限列表
+    getRuleList(cate_id) {
+      getRuleList(cate_id).then((res) => {
+        this.foundationList = res.data;
+        this.children = res.data;
+        this.searchRules();
+
+        // this.openList = [];
+        // this.seletRouteIds = [];
+        // this.seletRoute = [];
       });
     },
     // 修改规则状态
@@ -455,10 +495,15 @@ export default {
 .rule {
   display: flex;
   flex-wrap: wrap;
-  max-height: 600px;
   overflow-y: scroll;
+  height: max-content;
+  max-height: 600px;
+  flex: 1;
 }
-
+.tree::-webkit-scrollbar {
+  width: 2px;
+  background-color: #f5f5f5;
+}
 /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
 .rule::-webkit-scrollbar {
   width: 10px;
@@ -480,7 +525,8 @@ export default {
 
 .rule-list {
   background-color: #f2f2f2;
-  width: 32%;
+  width: 48.5%;
+  height: max-content;
   margin: 5px;
   border-radius: 3px;
   padding: 10px;
@@ -499,5 +545,15 @@ export default {
 
 .select-rule {
   background-color: #badbfb;
+}
+.route-list {
+  display: flex;
+  margin-top: 10px;
+
+  .tree {
+    width: 200px;
+    overflow-y: scroll;
+    max-height: 600px;
+  }
 }
 </style>

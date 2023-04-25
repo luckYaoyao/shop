@@ -224,6 +224,24 @@ export const findFirstNonNullChildren = (arr) => {
   return null;
 };
 
+export const findFirstNonNullChildrenKeys = (obj, lastArr) => {
+  let ids = lastArr;
+  console.log(ids);
+  // 如果第一个对象没有children属性，返回该对象
+  if (!obj.children) {
+    ids.push(obj.id);
+    console.log(ids);
+    return ids;
+  }
+  // 如果第一个对象的children属性是数组，
+  // 递归查找children属性中的第一个非null children属性
+  if (Array.isArray(obj.children)) {
+    ids.push(obj.id);
+    return findFirstNonNullChildrenKeys(obj.children[0], ids);
+  }
+  return ids;
+};
+
 // 多级嵌套数组处理成一维数组
 export const formatFlatteningRoutes = (arr) => {
   if (arr.length <= 0) return false;

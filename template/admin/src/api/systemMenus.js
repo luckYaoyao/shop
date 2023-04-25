@@ -99,9 +99,9 @@ export function isShowApi(data) {
 /**
  * @description 权限列表
  */
-export function getRuleList() {
+export function getRuleList(cate_id) {
   return request({
-    url: `/setting/ruleList`,
+    url: `/setting/ruleList?cate_id=${cate_id}`,
     method: 'get',
   });
 }
@@ -113,5 +113,15 @@ export function menusBatch(data) {
     url: `setting/menus/batch`,
     method: 'post',
     data,
+  });
+}
+
+/**
+ * @description 权限分类树列表
+ */
+export function menusRuleCate(data) {
+  return request({
+    url: `setting/rule_cate`,
+    method: 'get',
   });
 }
