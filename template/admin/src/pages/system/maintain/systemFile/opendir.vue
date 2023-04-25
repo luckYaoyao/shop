@@ -207,12 +207,13 @@ export default {
           slot: 'filename',
           minWidth: 150,
           back: '返回上级',
+          sortable: true
         },
-        {
-          title: '文件/文件夹路径',
-          key: 'real_path',
-          minWidth: 150,
-        },
+        // {
+        //   title: '文件/文件夹路径',
+        //   key: 'real_path',
+        //   minWidth: 150,
+        // },
         {
           title: '文件/文件夹大小',
           key: 'size',
@@ -222,6 +223,7 @@ export default {
           title: '更新时间',
           key: 'mtime',
           minWidth: 150,
+          sortable: true,
         },
         {
           title: '备注',
@@ -231,7 +233,7 @@ export default {
         {
           title: '操作',
           slot: 'action',
-          minWidth: 150,
+          width: 100,
         },
       ],
       formItem: {
@@ -346,7 +348,7 @@ export default {
     open(row) {
       // this.rows = row;
       this.formItem = {
-        dir: row.path ? row.path + '/' : row.path,
+        dir: row.path,
         superior: 0,
         filedir: row.filename,
         fileToken: this.fileToken,
@@ -356,19 +358,19 @@ export default {
     jumpRoute(item) {
       console.log
       let data = {
-        path: item.route ? item.route : '',
-        filename: item.route ? item.key : '',
+        path: item.route,
+        filename: '',
       };
       this.open(data);
     },
     refreshRoute() {
       let data = {
-        dir: this.routeList[this.routeList.length - 1].route,
-        filename: this.routeList[this.routeList.length - 1].key,
+        path: this.routeList[this.routeList.length - 1].route,
+        filename: '',
       };
       this.open(data);
     },
-    // 编辑
+    // 编辑ß
     edit(row) {
       this.navItem = row;
       this.spinShow = true;
@@ -943,7 +945,7 @@ export default {
   min-width: 800px;
   max-width: max-content;
   border: 1px solid #cfcfcf;
-  background: #f3f3f3;
+  background: #f6f6f6;
   .refresh{
     background: #fff;
     border-left: 1px solid #cfcfcf;
@@ -958,7 +960,7 @@ export default {
     cursor: pointer;
   }
   .refresh:hover,.back:hover{
-    background: #20a53a;
+    background: #2D8cF0;
     border-color: #38983b;
     color: #fff;
   }

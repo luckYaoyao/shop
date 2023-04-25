@@ -238,8 +238,8 @@ class SystemCrud extends AuthController
         ]);
 
         $data = [];
-        foreach ($make as $item) {
-            if (in_array($item['path'], ['pages', 'router', 'api'])) {
+        foreach ($make as $key => $item) {
+            if (in_array($key, ['pages', 'router', 'api'])) {
                 $path = Make::adminTemplatePath() . $item['path'];
             } else {
                 $path = app()->getRootPath() . $item['path'];
@@ -559,9 +559,14 @@ class SystemCrud extends AuthController
         ];
         foreach ((array)$info->field['tableField'] as $item) {
             if (isset($item['is_table']) && $item['is_table']) {
+                if (in_array($item['from_type'], ['frameImageOne', 'frameImages'])) {
+                    $keyName = 'slot';
+                } else {
+                    $keyName = 'key';
+                }
                 $columns[] = [
                     'title' => $item['table_name'] ?: $item['comment'],
-                    'key' => $item['field'],
+                    $keyName => $item['field'],
                     'from_type' => $item['from_type'],
                 ];
             }

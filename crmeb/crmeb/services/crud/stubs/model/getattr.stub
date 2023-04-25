@@ -1,0 +1,4 @@
+    public function get{%field%}Attr($value)
+    {
+{%content-php%}
+    }

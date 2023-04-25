@@ -56,6 +56,7 @@ class Model extends Make
             $this->value['use-php'] = "use think\model\concern\SoftDelete;\n";
             $this->value['content-php'] = $this->tab() . "use SoftDelete;\n";
         }
+        $this->value['modelName'] = $options['modelName'] ?? $name;
         return parent::handle($name, $options);
     }
 

@@ -855,11 +855,13 @@ class SystemCrudServices extends BaseServices
         $validate = app()->make(Validate::class);
         $validate->setFilePathName($filePath['validate'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'field' => $options['fromField'],
+            'modelName' => $options['modelName'] ?? '',
         ]);
         //生成控制器
         $controller = app()->make(Controller::class);
         $controller->setFilePathName($filePath['controller'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'usePath' => $service->getUsePath(),
+            'modelName' => $options['modelName'] ?? '',
             'validateName' => '\\' . str_replace('/', '\\', $validate->getUsePath()) . 'Validate::class',
             'field' => array_column($options['fromField'], 'field'),
         ]);

@@ -67,10 +67,10 @@ class Service extends Make
             foreach ($field as $item) {
                 switch ($item['type']) {
                     case 'frameImageOne':
-                        $from[] = $this->tab(2) . $this->getframeImageOnePhpContent($item['field'], $item['name'], $item['required'] ?? false) . ';';
+                        $from[] = $this->tab(2) . $this->getframeImageOnePhpContent($item['field'], $item['name']) . ';';
                         break;
                     case 'frameImages':
-                        $from[] = $this->tab(2) . $this->getframeImagesPhpContent($item['field'], $item['name'], $item['required'] ?? false) . ';';
+                        $from[] = $this->tab(2) . $this->getframeImagesPhpContent($item['field'], $item['name']) . ';';
                         break;
                     default:
                         $valueContent = "''";
