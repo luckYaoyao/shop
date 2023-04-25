@@ -90,6 +90,7 @@ class Controller extends Make
 
         [$className, $contentController] = $this->getStubContent($name, 'controller');
 
+        $this->value['modelName'] = $options['modelName'] ?? $name;
         $this->value['nameCamel'] = Str::studly($name);
         $this->value['name'] = $className;
         $this->value['path'] = $this->getfolderPath($path);

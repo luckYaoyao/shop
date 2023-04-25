@@ -12,6 +12,7 @@
  */
 
 /**
+ * {%modelName%}
  * @author crud自动生成代码
  * @date {%time%}
  */
@@ -23,7 +24,6 @@ use think\exception\ValidateException;
 {%use-php%}
 
 /**
- * {%modelName%}
  * Class CrudService
  * @date {%date%}
  * @package app\services\crud{%path%}
