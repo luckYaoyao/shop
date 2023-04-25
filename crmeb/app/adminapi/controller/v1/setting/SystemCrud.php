@@ -560,9 +560,9 @@ class SystemCrud extends AuthController
         foreach ((array)$info->field['tableField'] as $item) {
             if (isset($item['is_table']) && $item['is_table']) {
                 if (in_array($item['from_type'], ['frameImageOne', 'frameImages'])) {
-                    $keyName = 'key';
-                } else {
                     $keyName = 'slot';
+                } else {
+                    $keyName = 'key';
                 }
                 $columns[] = [
                     'title' => $item['table_name'] ?: $item['comment'],
