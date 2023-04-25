@@ -269,30 +269,27 @@ class SystemMenus extends AuthController
     }
 
     /**
+     * 获取路由分类
+     * @param SystemRouteCateServices $service
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/25
+     */
+    public function ruleCate(SystemRouteCateServices $service)
+    {
+        return app('json')->success($service->getAllList('adminapi'));
+    }
+
+    /**
      * 获取接口列表
      * @return array
      */
-    public function ruleList()
+    public function ruleList(SystemRouteServices $services)
     {
+        $cateId = request()->get('cate_id', 0);
         //获取所有的路由
-        $ruleList = app()->make(SystemRouteCateServices::class)->selectList(['app_name' => 'adminapi'], 'id,name', 0, 0, 'id asc,sort desc', ['children'])->toArray();
-        $menuApiList = $this->services->getColumn(['auth_type' => 2, 'is_del' => 0], "concat(`api_url`,'_',lower(`methods`)) as rule");
-        if ($menuApiList) $menuApiList = array_column($menuApiList, 'rule');
-        $list = [];
-        foreach ($ruleList as $item) {
-            $children = [];
-            foreach ($item['children'] as $value) {
-                if ($value['type'] || !in_array($value['path'] . '_' . strtolower($value['method']), $menuApiList)) {
-                    $value['real_name'] = $value['name'] ?? '';
-                    $value['method'] = strtoupper($value['method']);
-                    $children[] = $value;
-                }
-            }
-            if ($children) {
-                $item['children'] = $children;
-                $list[] = $item;
-            }
-        }
-        return app('json')->success($list);
+        $ruleList = $services->selectList(['cate_id' => $cateId, 'app_name' => 'adminapi'])->toArray();
+        return app('json')->success($ruleList);
     }
 }
