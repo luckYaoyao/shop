@@ -165,9 +165,13 @@ class SystemCrudServices extends BaseServices
                     'value' => 'dateTime',
                     'label' => '单选日期时间',
                 ],
+//                [
+//                    'value' => 'dateTimeRange',
+//                    'label' => '日期时间区间选择',
+//                ],
                 [
-                    'value' => 'dateTimeRange',
-                    'label' => '日期时间区间选择',
+                    'value' => 'checkbox',
+                    'label' => '多选框',
                 ],
                 [
                     'value' => 'radio',
@@ -365,6 +369,23 @@ class SystemCrudServices extends BaseServices
     }
 
     /**
+     * 修改表备注
+     * @param string $tableName
+     * @param string $common
+     * @return mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/24
+     */
+    protected function updateFromCommon(string $tableName, string $common)
+    {
+        $tableName = $this->getTableName($tableName);
+        $common = addslashes($common);
+        $sql = "ALTER TABLE `$tableName` COMMENT = '$common';";
+        return Db::execute($sql);
+    }
+
+    /**
      * 对比字段变动了更改
      * @param string $tableName
      * @param array $deleteField
@@ -466,10 +487,10 @@ class SystemCrudServices extends BaseServices
     public function createCrud(int $id, array $data)
     {
         $tableName = $data['tableName'];
-        $tableComment = $data['tableComment'] ?? $data['menuName'];
         $tableField = $this->valueReplace($data['tableField']);
         $filePath = $this->valueReplace($data['filePath']);
-        $modelName = $data['modelName'] ?? $data['menuName'] ?? $tableName;
+        $modelName = !empty($data['modelName']) ? $data['modelName'] : $tableName;
+        $tableComment = !empty($data['tableComment']) ? $data['tableComment'] : $modelName;
 
         //检测是否为系统表
         if (in_array($tableName, self::NOT_CRUD_TABANAME)) {
@@ -480,6 +501,7 @@ class SystemCrudServices extends BaseServices
 
         $tableInfo = null;
         if ($id) {
+            $this->updateFromCommon($tableName, $tableComment);
             //删除数据库表
             $tableInfo = $this->getTableInfo($tableName);
             if ($tableInfo) {
@@ -545,9 +567,16 @@ class SystemCrudServices extends BaseServices
 
         $res = $this->transaction(function () use ($crudInfo, $tableInfo, $modelName, $filePath, $tableName, $routeName, $data, $dataMenu) {
             $routeService = app()->make(SystemRouteServices::class);
+            $meunService = app()->make(SystemMenusServices::class);
             //修改菜单名称
             if ($crudInfo) {
-                app()->make(SystemMenusServices::class)->update($crudInfo->menu_id, $dataMenu);
+                //菜单存在的时候进行修改
+                if ($crudInfo->menu_id && $meunService->value(['id' => [$crudInfo->menu_id]], 'id')) {
+                    $meunService->update($crudInfo->menu_id, $dataMenu);
+                    $menuInfo = (object)['id' => $crudInfo->menu_id];
+                } else {
+                    $menuInfo = $meunService->save($dataMenu);
+                }
                 //删除掉添加的路由权限
                 if ($crudInfo->routes_id) {
                     $routeService->deleteRoutes($crudInfo->routes_id);
@@ -556,9 +585,8 @@ class SystemCrudServices extends BaseServices
                 if ($crudInfo->menu_ids) {
                     app()->make(SystemMenusServices::class)->deleteMenus($crudInfo->menu_ids);
                 }
-                $menuInfo = (object)['id' => $crudInfo->menu_id];
             } else {
-                $menuInfo = app()->make(SystemMenusServices::class)->save($dataMenu);
+                $menuInfo = $meunService->save($dataMenu);
             }
             //写入路由权限
             $cateId = app()->make(SystemRouteServices::class)->topCateId('adminapi', 'CRUD');
@@ -655,6 +683,7 @@ class SystemCrudServices extends BaseServices
                 'table_collation' => $tableInfo['TABLE_COLLATION'] ?? '',
                 'field' => json_encode($data),//提交的数据
                 'menu_ids' => json_encode($menuIds),//生成的菜单id
+                'menu_id' => $menuInfo->id,//生成的菜单id
                 'make_path' => json_encode($makePath),
                 'routes_id' => json_encode($routeIds),
             ];
@@ -666,6 +695,8 @@ class SystemCrudServices extends BaseServices
                 //记录crud生成
                 $res = $this->dao->save($crudDate);
             }
+
+//            throw new ValidateException('测试中');
 
             return $res;
         });

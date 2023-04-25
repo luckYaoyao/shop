@@ -44,6 +44,6 @@ class Dao extends Make
      */
     protected function getStub(string $type = '')
     {
-        return __DIR__ . DS . 'stubs' . DS . 'dao' . DS . 'CrudDao.stub';
+        return __DIR__ . DS . 'stubs' . DS . 'dao' . DS . 'crudDao.stub';
     }
 }
