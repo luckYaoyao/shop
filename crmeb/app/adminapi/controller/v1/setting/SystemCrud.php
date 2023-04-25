@@ -566,7 +566,7 @@ class SystemCrud extends AuthController
                 }
                 $columns[] = [
                     'title' => $item['table_name'] ?: $item['comment'],
-                    'key' => $item['field'],
+                    $keyName => $item['field'],
                     'from_type' => $item['from_type'],
                 ];
             }
