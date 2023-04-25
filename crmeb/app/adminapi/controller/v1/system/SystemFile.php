@@ -69,7 +69,12 @@ class SystemFile extends AuthController
     //打开目录
     public function opendir()
     {
-        return app('json')->success($this->services->opendir());
+        [$dir, $fileDir, $superior] = $this->request->getMore([
+            ['dir', ''],
+            ['filedir', ''],
+            ['superior', ''],
+        ], true);
+        return app('json')->success($this->services->opendir($dir, $fileDir, $superior));
     }
 
     //文件备注
