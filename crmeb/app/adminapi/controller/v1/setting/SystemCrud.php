@@ -238,8 +238,8 @@ class SystemCrud extends AuthController
         ]);
 
         $data = [];
-        foreach ($make as $item) {
-            if (in_array($item['path'], ['pages', 'router', 'api'])) {
+        foreach ($make as $key => $item) {
+            if (in_array($key, ['pages', 'router', 'api'])) {
                 $path = Make::adminTemplatePath() . $item['path'];
             } else {
                 $path = app()->getRootPath() . $item['path'];
