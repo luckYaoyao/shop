@@ -581,8 +581,8 @@ class SystemCrudServices extends BaseServices
                     $menuInfo = $meunService->save($dataMenu);
                 }
                 //删除掉添加的路由权限
-                if ($crudInfo->routes_id) {
-                    $routeService->deleteRoutes($crudInfo->routes_id);
+                if ($crudInfo->route_ids) {
+                    $routeService->deleteRoutes($crudInfo->route_ids);
                 }
                 //删除掉权限路由
                 if ($crudInfo->menu_ids) {
