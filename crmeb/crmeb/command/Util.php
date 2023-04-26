@@ -196,7 +196,7 @@ class Util extends Command
         foreach ($options as $option) {
             $request[] = [
                 'attribute' => $option['name'],
-                'type' => $option['type'],
+                'type' => $option['type'] === 'text' ? 'string' : $option['type'],
                 'must' => 0,
                 'trip' => $option['description'],
                 'id' => $option['id'],
