@@ -700,8 +700,6 @@ class SystemCrudServices extends BaseServices
                 $res = $this->dao->save($crudDate);
             }
 
-//            throw new ValidateException('测试中');
-
             return $res;
         });
 

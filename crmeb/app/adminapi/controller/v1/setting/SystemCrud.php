@@ -88,11 +88,13 @@ class SystemCrud extends AuthController
             }
             //收集列表展示数据
             if ($item['is_table'] && !in_array($item['field_type'], ['primaryKey', 'addSoftDelete', 'addSoftDelete'])) {
-                $columnField[] = [
-                    'field' => $item['field'],
-                    'name' => $item['table_name'],
-                    'type' => $item['from_type'],
-                ];
+                if (isset($item['primaryKey']) && !$item['primaryKey']) {
+                    $columnField[] = [
+                        'field' => $item['field'],
+                        'name' => $item['table_name'],
+                        'type' => $item['from_type'],
+                    ];
+                }
             }
             //收集表单展示数据
             if ($item['from_type']) {
