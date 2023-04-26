@@ -781,6 +781,9 @@ class SystemCrudServices extends BaseServices
         $table = new Table($tableName, ['comment' => $tableComment], $this->getAdapter());
         //创建字段
         foreach ($tableField as $item) {
+            if (isset($item['primaryKey']) && $item['primaryKey']) {
+                continue;
+            }
             $option = [];
             if (isset($item['limit'])) {
                 $option['limit'] = (int)$item['limit'];
