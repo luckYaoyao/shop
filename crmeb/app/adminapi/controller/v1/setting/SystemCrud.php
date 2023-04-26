@@ -257,7 +257,7 @@ class SystemCrud extends AuthController
 
         //调整排序
         $makeData = [];
-        $names = ['controller', 'service', 'dao', 'model', 'validate', 'router', 'api', 'pages'];
+        $names = ['controller', 'validate', 'service', 'dao', 'model', 'router', 'api', 'pages'];
         foreach ($names as $name) {
             if (isset($data[$name])) {
                 $makeData[] = $data[$name];
