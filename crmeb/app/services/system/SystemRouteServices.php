@@ -128,8 +128,8 @@ class SystemRouteServices extends BaseServices
                 $id = $this->dao->value(['method' => $item['method'], 'path' => $item['path']], 'id');
                 if ($id) {
                     $this->dao->update($id, [
-                        'request' => json_encode($item['request']),
-                        'response' => json_encode($item['response']),
+                        'request' => $item['request'],
+                        'response' => $item['response'],
                         'request_type' => $item['request_type'],
                     ]);
                 }
