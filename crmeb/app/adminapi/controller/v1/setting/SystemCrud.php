@@ -257,7 +257,7 @@ class SystemCrud extends AuthController
 
         //调整排序
         $makeData = [];
-        $names = ['model', 'dao', 'service', 'controller', 'validate', 'router', 'api', 'pages'];
+        $names = ['controller', 'service', 'dao', 'model', 'validate', 'router', 'api', 'pages'];
         foreach ($names as $name) {
             if (isset($data[$name])) {
                 $makeData[] = $data[$name];
@@ -571,6 +571,9 @@ class SystemCrud extends AuthController
             ]
         ];
         foreach ((array)$info->field['tableField'] as $item) {
+            if (isset($item['primaryKey']) && $item['primaryKey']) {
+                continue;
+            }
             if (isset($item['is_table']) && $item['is_table']) {
                 if (in_array($item['from_type'], ['frameImageOne', 'frameImages'])) {
                     $keyName = 'slot';
