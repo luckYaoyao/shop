@@ -120,21 +120,15 @@ class SystemRouteServices extends BaseServices
      */
     public function importData(array $importData)
     {
-        $sumNum = count($importData);
-        $sumPage = ceil($sumNum / 300);
-        for ($i = 1; $i <= $sumPage; $i++) {
-            $data = array_slice($importData, $i * 300, 300);
-            foreach ($data as $item) {
-                $id = $this->dao->value(['method' => $item['method'], 'path' => $item['path']], 'id');
-                if ($id) {
-                    $this->dao->update($id, [
-                        'request' => $item['request'],
-                        'response' => $item['response'],
-                        'request_type' => $item['request_type'],
-                    ]);
-                }
+        foreach ($importData as $item) {
+            $id = $this->dao->value(['method' => $item['method'], 'path' => $item['path']], 'id');
+            if ($id) {
+                $this->dao->update($id, [
+                    'request' => $item['request'],
+                    'response' => $item['response'],
+                    'request_type' => $item['request_type'],
+                ]);
             }
-            sleep(1);
         }
         return true;
     }
