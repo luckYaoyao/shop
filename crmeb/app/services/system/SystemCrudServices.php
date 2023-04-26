@@ -843,6 +843,7 @@ class SystemCrudServices extends BaseServices
         $dao = app()->make(Dao::class);
         $dao->setFilePathName($filePath['dao'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'usePath' => $model->getUsePath(),
+            'modelName' => $options['modelName'] ?? '',
         ]);
         //生成service
         $service = app()->make(Service::class);
