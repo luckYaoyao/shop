@@ -29,7 +29,6 @@ use crmeb\services\crud\ViewPages;
 use crmeb\services\crud\ViewRouter;
 use crmeb\services\FileService;
 use Phinx\Db\Adapter\AdapterFactory;
-use think\exception\ValidateException;
 use think\facade\Db;
 use think\helper\Str;
 use think\migration\db\Table;
