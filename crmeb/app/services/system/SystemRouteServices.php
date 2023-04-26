@@ -97,8 +97,11 @@ class SystemRouteServices extends BaseServices
         foreach ($list as $key => $item) {
             if (!empty($item['children'])) {
                 foreach ($item['children'] as $k => $v) {
-                    if (isset($v['cate_id']) && isset($v['method']) && $v['method'] === 'DELETE') {
-                        $v['method'] = 'DEL';
+                    if (isset($v['cate_id']) && isset($v['method'])) {
+                        if ($v['method'] === 'DELETE') {
+                            $v['method'] = 'DEL';
+                        }
+                        $v['pid'] = $v['cate_id'];
                         $list[$key]['children'][$k] = $v;
                     }
                 }
