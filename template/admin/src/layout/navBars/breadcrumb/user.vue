@@ -38,11 +38,11 @@
         :width="300"
         popper-class="el-popover-pupop-user-news"
       >
-        <el-badge :is-dot="true" @click.stop="isShowUserNewsPopover = !isShowUserNewsPopover" slot="reference">
+        <el-badge :is-dot="isDot" @click.stop="openNews" slot="reference">
           <i class="el-icon-bell" :title="$t('message.user.title4')"></i>
         </el-badge>
         <transition name="el-zoom-in-top">
-          <UserNews v-show="isShowUserNewsPopover" />
+          <UserNews v-show="isShowUserNewsPopover" @haveNews="initIsDot" />
         </transition>
       </el-popover>
     </div>
@@ -93,6 +93,7 @@ export default {
       disabledI18n: 'zh-cn',
       disabledSize: '',
       homePath: `${settings.routePre}/home`,
+      isDot: false,
     };
   },
   computed: {
@@ -116,6 +117,13 @@ export default {
     }
   },
   methods: {
+    initIsDot(status) {
+      this.isDot = status;
+    },
+    openNews() {
+      this.isShowUserNewsPopover = !this.isShowUserNewsPopover;
+      this.isDot = false;
+    },
     // 搜索点击
     onSearchClick() {
       this.$refs.searchRef.openSearch();

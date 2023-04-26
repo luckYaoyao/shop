@@ -1,11 +1,9 @@
 <template>
   <el-aside class="layout-aside" :class="setCollapseWidth" v-if="clientWidth > 1000">
     <Logo v-if="setShowLogo && menuList.length && getThemeConfig.layout !== 'columns'" />
-    <el-divider
-      v-if="menuList.length && !getThemeConfig.isCollapse && getThemeConfig.layout == 'columns'"
-      content-position="center"
-      >{{ catName }}</el-divider
-    >
+    <div v-if="menuList.length && !getThemeConfig.isCollapse && getThemeConfig.layout == 'columns'" class="cat-name">
+      {{ catName }}
+    </div>
     <el-scrollbar class="flex-auto" ref="layoutAsideRef">
       <Vertical :menuList="menuList" :class="setCollapseWidth" />
     </el-scrollbar>
@@ -132,3 +130,14 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+.cat-name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  border-bottom: 1px solid var(--prev-border-color-lighter);
+  font-weight: 500;
+  font-size: 15px;
+}
+</style>
