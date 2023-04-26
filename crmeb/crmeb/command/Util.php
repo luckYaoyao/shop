@@ -136,6 +136,9 @@ class Util extends Command
                             $paramePath = implode('/', $paramePathMatche);
                         }
                     }
+                    if ($path[0] === '/') {
+                        $path = substr($path, 1);
+                    }
                     $route[] = [
                         'method' => strtoupper($value['api']['method']),
                         'path' => $path . $paramePath,
