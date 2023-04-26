@@ -47,6 +47,8 @@ class SystemRouteDao extends BaseDao
      */
     public function deleteRoutes(array $ids)
     {
-        return $this->getModel()->where('id', 'in', $ids)->delete();
+        return $this->getModel()::destroy(function ($q) use ($ids) {
+            $q->whereIn('id', $ids);
+        }, true);
     }
 }
