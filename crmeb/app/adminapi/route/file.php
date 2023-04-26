@@ -47,4 +47,4 @@ Route::group('file', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'file', 'mark_name' => '附件']);
+])->option(['mark' => 'file', 'mark_name' => '素材管理']);

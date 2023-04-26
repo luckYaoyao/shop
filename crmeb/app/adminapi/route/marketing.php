@@ -203,4 +203,4 @@ Route::group('marketing', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'marketing', 'mark_name' => '营销']);
+])->option(['mark' => 'marketing', 'mark_name' => '营销活动']);

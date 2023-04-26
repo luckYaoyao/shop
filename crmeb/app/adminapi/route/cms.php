@@ -33,7 +33,7 @@ Route::group('cms', function () {
         Route::put('cms/relation/:id', 'v1.cms.Article/relation')->name('Relation')->option(['real_name' => '文章关联商品']);
         //取消关联
         Route::put('cms/unrelation/:id', 'v1.cms.Article/unrelation')->name('UnRelation')->option(['real_name' => '取消文章关联商品']);
-    })->option(['parent' => 'cms', 'cate_name' => '文章']);
+    })->option(['parent' => 'cms', 'cate_name' => '文章管理']);
 
     /** 文章分类 */
     Route::group(function () {
@@ -61,4 +61,4 @@ Route::group('cms', function () {
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
     \app\adminapi\middleware\AdminCheckRoleMiddleware::class,
     \app\adminapi\middleware\AdminLogMiddleware::class
-])->option(['mark' => 'cms', 'mark_name' => '文章']);
+])->option(['mark' => 'cms', 'mark_name' => '文章模块']);
