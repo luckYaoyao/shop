@@ -3,6 +3,7 @@
 namespace crmeb\command;
 
 
+use app\services\system\log\SystemFileInfoServices;
 use app\services\system\SystemRouteServices;
 use crmeb\exceptions\AdminException;
 use think\console\Command;
@@ -18,7 +19,7 @@ class Util extends Command
     protected function configure()
     {
         $this->setName('util')
-            ->addArgument('type', Argument::REQUIRED, '类型replace/route')
+            ->addArgument('type', Argument::REQUIRED, '类型replace/route/file')
             ->addOption('h', null, Option::VALUE_REQUIRED, '替换成当前域名')
             ->addOption('u', null, Option::VALUE_REQUIRED, '替换的域名')
             ->addOption('a', null, Option::VALUE_REQUIRED, '应用名')
@@ -47,6 +48,9 @@ class Util extends Command
                     return $output->error('缺少应用名称');
                 }
                 app()->make(SystemRouteServices::class)->syncRoute($appName);
+                break;
+            case 'file':
+                app()->make(SystemFileInfoServices::class)->syncfile();
                 break;
         }
 
