@@ -112,6 +112,34 @@ class SystemRouteServices extends BaseServices
     }
 
     /**
+     * @param array $importData
+     * @return bool
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/26
+     */
+    public function importData(array $importData)
+    {
+        $sumNum = count($importData);
+        $sumPage = ceil($sumNum / 300);
+        for ($i = 1; $i <= $sumPage; $i++) {
+            $data = array_slice($importData, $i * 300, 300);
+            foreach ($data as $item) {
+                $id = $this->dao->value(['method' => $item['method'], 'path' => $item['path']], 'id');
+                if ($id) {
+                    $this->dao->update($id, [
+                        'request' => json_encode($item['request']),
+                        'response' => json_encode($item['response']),
+                        'request_type' => $item['request_type'],
+                    ]);
+                }
+            }
+            sleep(1);
+        }
+        return true;
+    }
+
+    /**
      * 获取某个应用下的所有路由权限
      * @param string $app
      * @return array
