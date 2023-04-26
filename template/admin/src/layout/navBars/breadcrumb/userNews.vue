@@ -34,18 +34,7 @@ export default {
   name: 'layoutBreadcrumbUserNews',
   data() {
     return {
-      newsList: [
-        {
-          label: '关于版本发布的通知',
-          value: '基于 vue2.x + element ui，正式发布时间：2020年11月15日！',
-          time: '2020-11-15',
-        },
-        {
-          label: '关于学习交流的通知',
-          value: 'QQ群号码 665452019，欢迎小伙伴入群学习交流探讨！',
-          time: '2020-11-15',
-        },
-      ],
+      newsList: [],
       newOrderAudioLink: null,
     };
   },
@@ -165,12 +154,12 @@ export default {
       this.newsList = [];
     },
     // 前往通知中心点击
-    onGoToGiteeClick() {
-    },
+    onGoToGiteeClick() {},
     getNotict() {
       jnoticeRequest()
         .then((res) => {
           this.newsList = res.data || [];
+          this.$emit('haveNews', !!this.newsList.length);
         })
         .catch(() => {});
     },

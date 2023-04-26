@@ -19,7 +19,7 @@
             @click="onSetLayout('defaults')"
           >
             <section class="el-container el-circular">
-              <aside class="el-aside w10 mr5"></aside>
+              <aside class="el-aside w10 mr5" style="width: 17px"></aside>
               <section class="el-container is-vertical">
                 <header class="el-header mb5" style="height: 10px"></header>
                 <main class="el-main"></main>
@@ -31,6 +31,26 @@
               </div>
             </div> -->
           </div>
+          <!-- columns 布局 -->
+          <div
+            class="layout-drawer-content-item"
+            :class="{ 'drawer-layout-active': getThemeConfig.layout === 'columns' }"
+            @click="onSetLayout('columns')"
+          >
+            <section class="el-container el-circular">
+              <aside class="el-aside mr5" style="width: 10px"></aside>
+              <aside class="el-aside-dark mr5" style="width: 17px"></aside>
+              <section class="el-container is-vertical">
+                <!-- <header class="el-header" style="height: 10px"></header> -->
+                <main class="el-main"></main>
+              </section>
+            </section>
+            <!-- <div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'columns' }">
+              <div class="layout-tips-box">
+                <p class="layout-tips-txt">{{ $t('message.layout.sixColumns') }}</p>
+              </div>
+            </div> -->
+          </div>
           <!-- classic 布局 -->
           <div
             class="layout-drawer-content-item"
@@ -38,7 +58,7 @@
             @click="onSetLayout('classic')"
           >
             <section class="el-container is-vertical el-circular">
-              <header class="el-header mb5" style="height: 10px"></header>
+              <header class="el-aside mb5" style="height: 10px"></header>
               <section class="el-container">
                 <aside class="el-aside mr5" style="width: 20px"></aside>
                 <section class="el-container is-vertical">
@@ -52,6 +72,8 @@
               </div>
             </div> -->
           </div>
+          
+          
           <!-- transverse 布局 -->
           <div
             class="layout-drawer-content-item"
@@ -59,7 +81,7 @@
             @click="onSetLayout('transverse')"
           >
             <section class="el-container is-vertical el-circular">
-              <header class="el-header mb5" style="height: 10px"></header>
+              <header class="el-aside mb5" style="height: 10px"></header>
               <section class="el-container">
                 <section class="el-container is-vertical">
                   <main class="el-main"></main>
@@ -72,26 +94,6 @@
             >
               <div class="layout-tips-box">
                 <p class="layout-tips-txt">{{ $t('message.layout.sixTransverse') }}</p>
-              </div>
-            </div> -->
-          </div>
-          <!-- columns 布局 -->
-          <div
-            class="layout-drawer-content-item"
-            :class="{ 'drawer-layout-active': getThemeConfig.layout === 'columns' }"
-            @click="onSetLayout('columns')"
-          >
-            <section class="el-container el-circular">
-              <aside class="el-aside-dark mr5" style="width: 10px"></aside>
-              <aside class="el-aside mr5" style="width: 17px"></aside>
-              <section class="el-container is-vertical">
-                <!-- <header class="el-header" style="height: 10px"></header> -->
-                <main class="el-main"></main>
-              </section>
-            </section>
-            <!-- <div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'columns' }">
-              <div class="layout-tips-box">
-                <p class="layout-tips-txt">{{ $t('message.layout.sixColumns') }}</p>
               </div>
             </div> -->
           </div>

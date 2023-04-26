@@ -31,10 +31,10 @@
               <div></div>
               <div
                 class="tree-node"
-                :class="{ node: slotProps.model.method, open: formValidate.path == slotProps.model.path }"
+                :class="{ node: slotProps.model.method, open: formValidate.path == slotProps.model.path && formValidate.method == slotProps.model.method }"
                 @click.stop="onClick(slotProps.model)"
               >
-                <span class="" :class="{ open: formValidate.path == slotProps.model.path }">{{
+                <span class="" :class="{ open: formValidate.path == slotProps.model.path && formValidate.method == slotProps.model.method }">{{
                   slotProps.model.name
                 }}</span>
                 <Dropdown
@@ -172,15 +172,13 @@
               <Col span="24">
                 <div class="title">调用方式</div>
                 <FormItem label="路由地址：" prop="path">
-                  <Input
-                    v-if="isEdit"
-                    class="perW20"
-                    type="text"
-                    :rows="4"
-                    v-model.trim="formValidate.path"
-                    placeholder="请输入"
-                  />
-                  <span v-else>{{ formValidate.path || '' }}</span>
+                  <span>{{ formValidate.path || '' }}</span>
+                </FormItem>
+                <FormItem label="文件地址：" prop="path">
+                  <span>{{ formValidate.file_path || '' }}</span>
+                </FormItem>
+                <FormItem label="方法名：" prop="path">
+                  <span>{{ formValidate.action || '' }}</span>
                 </FormItem>
                 <FormItem label="请求参数：">
                   <vxe-table
@@ -1016,7 +1014,7 @@ export default {
     .tree-list{
       margin-left:10px;
       padding: 0 15px;
-
+      margin-top: 10px;
     }
     .vtl-caret{
       padding-right: 2px;
@@ -1041,7 +1039,7 @@ export default {
       padding: 3px 7px 3px 0;
     }
     .node{
-      padding:4px 2px 4px 0px;
+      padding:3px 2px 3px 0px;
     }
     .open {
       // background-color: #fff1ef;

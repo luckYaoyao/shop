@@ -19,11 +19,11 @@
             v-if="v.path !== tagsRoutePath && getThemeConfig.isTagsviewIcon"
           ></i>
           <span>{{ $t(v.meta.title) }}</span>
-          <i
+          <!-- <i
             class="el-icon-refresh-right layout-navbars-tagsview-ul-li-icon ml5"
             v-if="v.path === tagsRoutePath"
             @click.stop="refreshCurrentTagsView(v.path)"
-          ></i>
+          ></i> -->
           <i
             class="el-icon-close layout-navbars-tagsview-ul-li-icon ml5"
             v-if="!v.isAffix"
