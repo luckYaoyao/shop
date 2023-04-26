@@ -689,7 +689,7 @@ class SystemCrudServices extends BaseServices
                 'menu_ids' => json_encode($menuIds),//生成的菜单id
                 'menu_id' => $menuInfo->id,//生成的菜单id
                 'make_path' => json_encode($makePath),
-                'routes_id' => json_encode($routeIds),
+                'route_ids' => json_encode($routeIds),
             ];
 
             if ($crudInfo) {
