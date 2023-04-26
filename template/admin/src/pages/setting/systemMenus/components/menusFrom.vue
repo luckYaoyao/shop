@@ -39,7 +39,7 @@
               <Cascader :data="menuList" change-on-select v-model="formValidate.path" filterable></Cascader>
             </FormItem>
           </Col>
-          <Col v-bind="grid" v-if="!authType">
+          <!-- <Col v-bind="grid" v-if="!authType">
             <FormItem label="请求方式：" prop="methods">
               <Select v-model="formValidate.methods">
                 <Option value="">请求</Option>
@@ -49,15 +49,15 @@
                 <Option value="DELETE">DELETE</Option>
               </Select>
             </FormItem>
-          </Col>
-          <Col v-bind="grid" v-if="!authType">
+          </Col> -->
+          <!-- <Col v-bind="grid" v-if="!authType">
             <FormItem label="接口地址：">
               <Input v-model="formValidate.api_url" placeholder="请输入接口地址" prop="api_url"></Input>
             </FormItem>
-          </Col>
+          </Col> -->
           <Col v-bind="grid" v-show="authType">
             <FormItem label="路由地址：" prop="menu_path">
-              <Input v-model="formValidate.menu_path" placeholder="请输入路由地址">
+              <Input v-model="formValidate.menu_path" placeholder="请输入路由地址" @on-change="changeUnique">
                 <template #prepend>
                   <span>{{ $routeProStr }}</span>
                 </template>
@@ -80,7 +80,7 @@
             </FormItem>
           </Col>
 
-          <Col v-bind="grid">
+          <Col v-bind="grid" v-if="authType">
             <FormItem label="排序：">
               <Input type="number" v-model="formValidate.sort" placeholder="请输入排序" number></Input>
             </FormItem>
@@ -305,6 +305,12 @@ export default {
         this.ruleModal = '';
         this.ruleModal = false;
       }
+    },
+    changeUnique(val) {
+      console.log(val.target.value);
+      let value = this.$routeProStr + val.target.value;
+      if (value.slice(0, 1) === '/') value = value.replace('/', '');
+      this.formValidate.unique_auth = value.replaceAll('/', '-');
     },
     visible(type) {
       if (!type) {

@@ -1832,6 +1832,10 @@ export default {
       return this.isMobile ? undefined : 15;
     },
   },
+  beforeRouteUpdate(to, from, next) {
+    this.bus.$emit('onTagsViewRefreshRouterView', this.$route.path);
+    next();
+  },
   created() {
     this.columns = this.columns2.slice(0, 8);
     this.getToken();

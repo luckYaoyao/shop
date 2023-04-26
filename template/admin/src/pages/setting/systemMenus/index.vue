@@ -57,8 +57,8 @@
               @on-change="onchangeIsShow(row)"
               size="large"
             >
-              <span slot="open">显示</span>
-              <span slot="close">隐藏</span>
+              <span slot="open">开启</span>
+              <span slot="close">关闭</span>
             </i-switch>
           </template>
         </vxe-table-column>
@@ -554,6 +554,9 @@ export default {
     width: 200px;
     overflow-y: scroll;
     max-height: 600px;
+    /deep/ .el-tree-node__children .el-tree-node .el-tree-node__content {
+      padding-left: 14px !important;
+    }
   }
 }
 </style>

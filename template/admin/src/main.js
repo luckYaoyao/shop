@@ -204,6 +204,15 @@ new Vue({
           }
         });
       }
+
+      if (to.name == 'product_productAdd') {
+        let route = to.matched[1].path.split(':')[0];
+        this.$store.state.menus.oneLvRoutes.map((e) => {
+          if (route.indexOf(e.path) != -1) {
+            to.meta.title = `${e.title} ${to.params.id ? 'ID:' + to.params.id : ''}`;
+          }
+        });
+      }
     },
   },
 });
