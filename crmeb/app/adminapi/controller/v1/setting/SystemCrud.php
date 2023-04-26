@@ -274,6 +274,7 @@ class SystemCrud extends AuthController
             $item['default_comment'] = $item['comment'];
             $item['default_default'] = $item['default'];
             $item['is_table'] = !!$item['is_table'];
+            $item['required'] = !!$item['required'];
             $item['primaryKey'] = isset($item['primaryKey']) ? (int)$item['primaryKey'] : 0;
             $info['field']['tableField'][$key] = $item;
         }
