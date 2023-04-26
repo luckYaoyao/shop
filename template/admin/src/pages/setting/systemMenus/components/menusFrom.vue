@@ -69,7 +69,7 @@
               <Input v-model="formValidate.unique_auth" placeholder="请输入权限标识"></Input>
             </FormItem>
           </Col>
-          <Col v-bind="grid" v-show="authType">
+          <Col v-bind="grid" v-if="authType">
             <FormItem label="图标：">
               <Input
                 v-model="formValidate.icon"
@@ -85,7 +85,7 @@
               <Input type="number" v-model="formValidate.sort" placeholder="请输入排序" number></Input>
             </FormItem>
           </Col>
-          <Col v-bind="grid" v-show="authType">
+          <!-- <Col v-bind="grid" v-show="authType">
             <FormItem label="隐藏菜单：">
               <RadioGroup v-model="formValidate.is_show_path">
                 <Radio :label="item.value" v-for="(item, i) in isShowPathRadio" :key="i">
@@ -94,7 +94,7 @@
                 </Radio>
               </RadioGroup>
             </FormItem>
-          </Col>
+          </Col> -->
           <Col v-bind="grid">
             <FormItem label="状态：">
               <RadioGroup v-model="formValidate.is_show">
