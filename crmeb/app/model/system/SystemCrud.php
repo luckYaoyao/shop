@@ -56,8 +56,7 @@ class SystemCrud extends BaseModel
         return json_decode($value, true);
     }
 
-
-    public function getRoutesIdAttr($value)
+    public function getRouteIdsAttr($value)
     {
         return json_decode($value, true);
     }

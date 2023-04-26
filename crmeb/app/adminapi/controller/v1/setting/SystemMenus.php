@@ -130,14 +130,45 @@ class SystemMenus extends AuthController
         }
         $data = [];
 
+        $uniqueAuthAll = $this->services->getColumn(['is_del' => 0, 'is_show' => 1], 'unique_auth');
+        $uniqueAuthAll = array_filter($uniqueAuthAll, function ($item) {
+            return !!$item;
+        });
+        $uniqueAuthAll = array_unique($uniqueAuthAll);
+
+        $uniqueFn = function ($path) use ($uniqueAuthAll) {
+            $attPath = explode('/', $path);
+            $uniqueAuth = '';
+            if ($attPath) {
+                $pathData = [];
+                foreach ($attPath as $vv) {
+                    if (strstr($vv, '<') === false || strstr($vv, '?>') === false) {
+                        $pathData[] = $vv;
+                    }
+                }
+                $uniqueAuth = implode('-', $pathData);
+            }
+
+            if (in_array($uniqueAuth, $uniqueAuthAll)) {
+                $uniqueAuth .= '-' . uniqid();
+            }
+
+            array_push($uniqueAuthAll, $uniqueAuth);
+
+            return $uniqueAuth;
+        };
+
         foreach ($menus as $menu) {
             if (empty($menu['menu_name'])) {
                 return app('json')->fail(400198);
             }
+            if (isset($menu['unique_auth']) && $menu['unique_auth']) {
+                $menu['unique_auth'] = explode('/', $menu['api_url']);
+            }
             $data[] = [
                 'methods' => $menu['method'],
                 'menu_name' => $menu['menu_name'],
-                'unique_auth' => $menu['unique_auth'] ?? '',
+                'unique_auth' => !empty($menu['unique_auth']) ? $menu['unique_auth'] : $uniqueFn($menu['api_url']),
                 'api_url' => $menu['api_url'],
                 'pid' => $menu['path'],
                 'auth_type' => 2,

@@ -88,11 +88,13 @@ class SystemCrud extends AuthController
             }
             //收集列表展示数据
             if ($item['is_table'] && !in_array($item['field_type'], ['primaryKey', 'addSoftDelete', 'addSoftDelete'])) {
-                $columnField[] = [
-                    'field' => $item['field'],
-                    'name' => $item['table_name'],
-                    'type' => $item['from_type'],
-                ];
+                if (isset($item['primaryKey']) && !$item['primaryKey']) {
+                    $columnField[] = [
+                        'field' => $item['field'],
+                        'name' => $item['table_name'],
+                        'type' => $item['from_type'],
+                    ];
+                }
             }
             //收集表单展示数据
             if ($item['from_type']) {
@@ -252,10 +254,10 @@ class SystemCrud extends AuthController
 
             }
         }
-        
+
         //调整排序
         $makeData = [];
-        $names = ['model', 'dao', 'service', 'controller', 'validate', 'router', 'api', 'pages'];
+        $names = ['controller', 'validate', 'service', 'dao', 'model', 'route', 'router', 'api', 'pages'];
         foreach ($names as $name) {
             if (isset($data[$name])) {
                 $makeData[] = $data[$name];
@@ -272,6 +274,7 @@ class SystemCrud extends AuthController
             $item['default_comment'] = $item['comment'];
             $item['default_default'] = $item['default'];
             $item['is_table'] = !!$item['is_table'];
+            $item['required'] = !!$item['required'];
             $item['primaryKey'] = isset($item['primaryKey']) ? (int)$item['primaryKey'] : 0;
             $info['field']['tableField'][$key] = $item;
         }
@@ -569,6 +572,9 @@ class SystemCrud extends AuthController
             ]
         ];
         foreach ((array)$info->field['tableField'] as $item) {
+            if (isset($item['primaryKey']) && $item['primaryKey']) {
+                continue;
+            }
             if (isset($item['is_table']) && $item['is_table']) {
                 if (in_array($item['from_type'], ['frameImageOne', 'frameImages'])) {
                     $keyName = 'slot';

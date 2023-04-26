@@ -36,7 +36,7 @@ Route::group(function () {
     Route::get('get_workerman_url', 'PublicController/getWorkerManUrl')->option(['real_name' => '获取客服数据']);
     //测试
     Route::get('index', 'Test/index')->option(['real_name' => '测试地址']);
-})->middleware(AllowOriginMiddleware::class)->option(['mark' => 'login', 'mark_name' => '登录']);
+})->middleware(AllowOriginMiddleware::class)->option(['mark' => 'login', 'mark_name' => '登录相关']);
 
 /**
  * miss 路由

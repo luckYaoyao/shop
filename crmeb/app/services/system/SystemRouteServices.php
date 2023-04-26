@@ -97,8 +97,11 @@ class SystemRouteServices extends BaseServices
         foreach ($list as $key => $item) {
             if (!empty($item['children'])) {
                 foreach ($item['children'] as $k => $v) {
-                    if (isset($v['cate_id']) && isset($v['method']) && $v['method'] === 'DELETE') {
-                        $v['method'] = 'DEL';
+                    if (isset($v['cate_id']) && isset($v['method'])) {
+                        if ($v['method'] === 'DELETE') {
+                            $v['method'] = 'DEL';
+                        }
+                        $v['pid'] = $v['cate_id'];
                         $list[$key]['children'][$k] = $v;
                     }
                 }
@@ -106,6 +109,28 @@ class SystemRouteServices extends BaseServices
         }
 
         return get_tree_children($list);
+    }
+
+    /**
+     * @param array $importData
+     * @return bool
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/4/26
+     */
+    public function importData(array $importData)
+    {
+        foreach ($importData as $item) {
+            $id = $this->dao->value(['method' => $item['method'], 'path' => $item['path']], 'id');
+            if ($id) {
+                $this->dao->update($id, [
+                    'request' => $item['request'],
+                    'response' => $item['response'],
+                    'request_type' => $item['request_type'],
+                ]);
+            }
+        }
+        return true;
     }
 
     /**

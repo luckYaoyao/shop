@@ -238,6 +238,9 @@ abstract class Make
         if (isset($this->value['use-php']) && !empty($options['usePath'])) {
             $this->value['use-php'] = "use " . str_replace('/', '\\', $options['usePath']) . ";\n";
         }
+        if (isset($this->value['modelName']) && !$this->value['modelName'] && !empty($options['modelName'])) {
+            $this->value['modelName'] = $options['modelName'];
+        }
 
         $contentStr = str_replace($this->var, $this->value, $content);
         $filePath = $this->getFilePathName($path, $this->value['nameCamel']);

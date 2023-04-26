@@ -29,7 +29,6 @@ use crmeb\services\crud\ViewPages;
 use crmeb\services\crud\ViewRouter;
 use crmeb\services\FileService;
 use Phinx\Db\Adapter\AdapterFactory;
-use think\exception\ValidateException;
 use think\facade\Db;
 use think\helper\Str;
 use think\migration\db\Table;
@@ -582,8 +581,8 @@ class SystemCrudServices extends BaseServices
                     $menuInfo = $meunService->save($dataMenu);
                 }
                 //删除掉添加的路由权限
-                if ($crudInfo->routes_id) {
-                    $routeService->deleteRoutes($crudInfo->routes_id);
+                if ($crudInfo->route_ids) {
+                    $routeService->deleteRoutes($crudInfo->route_ids);
                 }
                 //删除掉权限路由
                 if ($crudInfo->menu_ids) {
@@ -689,7 +688,7 @@ class SystemCrudServices extends BaseServices
                 'menu_ids' => json_encode($menuIds),//生成的菜单id
                 'menu_id' => $menuInfo->id,//生成的菜单id
                 'make_path' => json_encode($makePath),
-                'routes_id' => json_encode($routeIds),
+                'route_ids' => json_encode($routeIds),
             ];
 
             if ($crudInfo) {
@@ -699,8 +698,6 @@ class SystemCrudServices extends BaseServices
                 //记录crud生成
                 $res = $this->dao->save($crudDate);
             }
-
-//            throw new ValidateException('测试中');
 
             return $res;
         });
@@ -781,6 +778,9 @@ class SystemCrudServices extends BaseServices
         $table = new Table($tableName, ['comment' => $tableComment], $this->getAdapter());
         //创建字段
         foreach ($tableField as $item) {
+            if (isset($item['primaryKey']) && $item['primaryKey']) {
+                continue;
+            }
             $option = [];
             if (isset($item['limit'])) {
                 $option['limit'] = (int)$item['limit'];
@@ -842,6 +842,7 @@ class SystemCrudServices extends BaseServices
         $dao = app()->make(Dao::class);
         $dao->setFilePathName($filePath['dao'] ?? '')->setbasePath($basePath)->handle($tableName, [
             'usePath' => $model->getUsePath(),
+            'modelName' => $options['modelName'] ?? '',
         ]);
         //生成service
         $service = app()->make(Service::class);
