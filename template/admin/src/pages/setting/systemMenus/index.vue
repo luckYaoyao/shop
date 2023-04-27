@@ -388,7 +388,7 @@ export default {
       this.$modalSure(delfromData)
         .then((res) => {
           this.$Message.success(res.msg);
-          // this.getData();
+          this.getData();
           this.getMenusUnique();
           // this.$store.dispatch('menus/getMenusNavList');
         })
