@@ -31,10 +31,10 @@
               <div></div>
               <div
                 class="tree-node"
-                :class="{ node: slotProps.model.method, open: formValidate.id == slotProps.model.id }"
+                :class="{ node: slotProps.model.method, open: formValidate.path == slotProps.model.path && formValidate.method == slotProps.model.method }"
                 @click.stop="onClick(slotProps.model)"
               >
-                <span class="" :class="{ open: formValidate.id == slotProps.model.id }">{{
+                <span class="" :class="{ open: formValidate.path == slotProps.model.path && formValidate.method == slotProps.model.method }">{{
                   slotProps.model.name
                 }}</span>
                 <Dropdown
@@ -76,9 +76,9 @@
                 class="req-method"
                 :style="{
                   color: methodsColor(slotProps.model.method),
-                  'font-weight': slotProps.model.id == formValidate.id ? '500' : '500',
+                  'font-weight': slotProps.model.pid == formValidate.pid ? '500' : '500',
                 }"
-                >{{ slotProps.model.method == 'delete' ? 'DEL' : slotProps.model.method || '' }}</span
+                >{{ slotProps.model.method }}</span
               >
 
               <!-- <span v-if="slotProps.model.method"></span> -->
@@ -172,15 +172,13 @@
               <Col span="24">
                 <div class="title">调用方式</div>
                 <FormItem label="路由地址：" prop="path">
-                  <Input
-                    v-if="isEdit"
-                    class="perW20"
-                    type="text"
-                    :rows="4"
-                    v-model.trim="formValidate.path"
-                    placeholder="请输入"
-                  />
-                  <span v-else>{{ formValidate.path || '' }}</span>
+                  <span>{{ formValidate.path || '' }}</span>
+                </FormItem>
+                <FormItem label="文件地址：" prop="path">
+                  <span>{{ formValidate.file_path || '' }}</span>
+                </FormItem>
+                <FormItem label="方法名：" prop="path">
+                  <span>{{ formValidate.action || '' }}</span>
                 </FormItem>
                 <FormItem label="请求参数：">
                   <vxe-table
@@ -241,7 +239,7 @@
                       <template #default="{ row }">
                         <vxe-button
                           type="text"
-                          v-if="row.type === 'array'"
+                          v-if="row.type === 'array' || row.type === 'object'"
                           status="primary"
                           @click="insertRow(row, 'xTable')"
                           >插入</vxe-button
@@ -302,7 +300,7 @@
                       <template #default="{ row }">
                         <vxe-button
                           type="text"
-                          v-if="row.type === 'array'"
+                          v-if="row.type === 'array' || row.type === 'object'"
                           status="primary"
                           @click="insertRow(row, 'resTable')"
                           >插入</vxe-button
@@ -347,10 +345,11 @@
                     keep-source
                     ref="codeTable"
                     row-id="id"
+                    is-tree-view
                     :print-config="{}"
                     :export-config="{}"
                     :loading="loading"
-                    :tree-config="{ transform: true, rowField: 'id', parentField: 'parentId' }"
+                    :tree-config="{ rowField: 'id', parentField: 'parentId' }"
                     :data="formValidate.error_code"
                   >
                     <!-- <vxe-column type="checkbox" width="60"></vxe-column> -->
@@ -625,10 +624,17 @@ export default {
               res.data[0].expand = false;
               this.treeData = new Tree(res.data);
               this.$nextTick((e) => {
-                if (disk_type) document.querySelectorAll('.vtl-icon-caret-right')[0].click();
+                if (disk_type) {
+                  if (res.data[0].children[0].children.length) {
+                    document.querySelectorAll('.vtl-icon-caret-right')[0].click();
+                    document.querySelectorAll('.vtl-icon-caret-right')[1].click();
+                  } else {
+                    document.querySelectorAll('.vtl-icon-caret-right')[0].click();
+                  }
+                }
               });
               if (res.data[0].children && res.data[0].children.length) {
-                this.onClick(res.data[0].children[0]);
+                this.onClick(res.data[0]?.children[0]?.children[0]);
               }
             }
           })
@@ -668,6 +674,7 @@ export default {
       } else if (!this.formValidate.path) {
         return this.$Message.warning('请输入路由地址');
       }
+      console.log(await this.$refs.xTable.getTableData());
       this.formValidate.request = await this.$refs.xTable.getTableData().tableData;
       this.formValidate.response = await this.$refs.resTable.getTableData().tableData;
       this.formValidate.error_code = await this.$refs.codeTable.getTableData().tableData;
@@ -1007,7 +1014,7 @@ export default {
     .tree-list{
       margin-left:10px;
       padding: 0 15px;
-
+      margin-top: 10px;
     }
     .vtl-caret{
       padding-right: 2px;
@@ -1015,7 +1022,8 @@ export default {
     .req-method {
       display:block;
       padding: 0px 2px;
-      font-size: 12px;
+      font-size: 13px;
+      line-height: 13px;
       margin-right: 5px;
       border-radius: 4px;
 
@@ -1031,7 +1039,7 @@ export default {
       padding: 3px 7px 3px 0;
     }
     .node{
-      padding:7px 2px 7px 0px;
+      padding:3px 2px 3px 0px;
     }
     .open {
       // background-color: #fff1ef;
@@ -1064,8 +1072,8 @@ export default {
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
   }
 
   >>> .vtl-node-content:hover .add:hover {
@@ -1134,12 +1142,17 @@ export default {
     width: 100% !important;
   }
   >>> .vtl-tree-margin{
-    margin-left: 5px;
+    margin-left: 15px;
   }
   >>> .ivu-btn-icon-only.ivu-btn-small {
     width: 28px;
   }
-
+  >>> .tree-node > span{
+    font-size: 14px
+  }
+  >>> .tree-node.node > span{
+    font-size: 13px
+  }
   .nothing {
     display: flex;
     align-items: center;

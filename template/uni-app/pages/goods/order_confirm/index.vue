@@ -946,6 +946,7 @@
 			onAddress: function() {
 				let that = this;
 				if (this.addressInfo.real_name) {
+					this.$refs.addressWindow.getAddressList();
 					that.textareaStatus = false;
 					that.address.address = true;
 					that.pagesUrl = '/pages/users/user_address_list/index?news=' + this.news + '&cartId=' + this
@@ -954,6 +955,7 @@
 						this.pinkId +
 						'&couponId=' +
 						this.couponId;
+
 				} else {
 					uni.navigateTo({
 						url: '/pages/users/user_address/index?cartId=' + this.cartId + '&pinkId=' + this

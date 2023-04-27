@@ -112,7 +112,7 @@ class SystemMenusDao extends BaseDao
      * @param string $key
      * @return array
      */
-    public function column(array $where, string $field, string $key)
+    public function column(array $where, string $field, string $key = '')
     {
         return $this->search($where)->column($field, $key);
     }

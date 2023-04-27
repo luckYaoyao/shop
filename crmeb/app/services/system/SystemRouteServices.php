@@ -83,32 +83,33 @@ class SystemRouteServices extends BaseServices
      */
     public function getTreeList(array $where, string $appName = 'adminapi')
     {
-        $list = app()->make(SystemRouteCateServices::class)
-            ->selectList(['app_name' => $appName], '*', 0, 0, 'id asc,sort desc', [
-                'children' => function ($query) use ($where) {
-                    $query->where('app_name', $where['app_name'])
-                        ->when('' !== $where['name_like'], function ($q) use ($where) {
-                            $q->where('name|path', 'LIKE', '%' . $where['name_like'] . '%');
-                        });
-                }
-            ])
-            ->toArray();
+        return $this->cacheDriver()->remember('ROUTE_LIST', function () use ($where, $appName) {
+            $list = app()->make(SystemRouteCateServices::class)
+                ->selectList(['app_name' => $appName], '*', 0, 0, 'id asc,sort desc', [
+                    'children' => function ($query) use ($where) {
+                        $query->where('app_name', $where['app_name'])
+                            ->when('' !== $where['name_like'], function ($q) use ($where) {
+                                $q->where('name|path', 'LIKE', '%' . $where['name_like'] . '%');
+                            });
+                    }
+                ])
+                ->toArray();
 
-        foreach ($list as $key => $item) {
-            if (!empty($item['children'])) {
-                foreach ($item['children'] as $k => $v) {
-                    if (isset($v['cate_id']) && isset($v['method'])) {
-                        if ($v['method'] === 'DELETE') {
-                            $v['method'] = 'DEL';
+            foreach ($list as $key => $item) {
+                if (!empty($item['children'])) {
+                    foreach ($item['children'] as $k => $v) {
+                        if (isset($v['cate_id']) && isset($v['method'])) {
+                            if ($v['method'] === 'DELETE') {
+                                $v['method'] = 'DEL';
+                            }
+                            $v['pid'] = $v['cate_id'];
+                            $list[$key]['children'][$k] = $v;
                         }
-                        $v['pid'] = $v['cate_id'];
-                        $list[$key]['children'][$k] = $v;
                     }
                 }
             }
-        }
-
-        return get_tree_children($list);
+            return get_tree_children($list);
+        }, 600);
     }
 
     /**
@@ -265,11 +266,14 @@ class SystemRouteServices extends BaseServices
         foreach ($list as $key => $value) {
             foreach ($value as $item) {
                 if (!$this->diffRoute($data, $item['rule'], $item['method']) && strstr($item['rule'], '<MISS>') === false) {
+                    $pathAndAction = explode('/', $item['route']);
                     $save[] = [
                         'name' => $item['option']['real_name'] ?? $item['name'],
                         'path' => $item['rule'],
                         'cate_id' => $key,
                         'app_name' => $app,
+                        'file_path' => 'app/' . $app . '/controller/' . str_replace('.', '/', $pathAndAction[0]) . '.php',
+                        'action' => $pathAndAction[1],
                         'type' => isset($item['option']['is_common']) && $item['option']['is_common'] ? 1 : 0,
                         'method' => $item['method'],
                         'add_time' => date('Y-m-d H:i:s'),
@@ -304,6 +308,7 @@ class SystemRouteServices extends BaseServices
                 app()->make(SystemMenusServices::class)->deleteMenu($item['path'], $item['method']);
             }
         }
+        $this->cacheDriver()->clear();
     }
 
     /**

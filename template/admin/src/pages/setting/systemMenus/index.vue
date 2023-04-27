@@ -25,7 +25,7 @@
         </Row>
         <Row type="flex">
           <Col v-bind="grid">
-            <Button v-auth="['setting-system_menus-add']" type="primary" @click="menusAdd('添加规则')" icon="md-add"
+            <Button type="primary" @click="menusAdd('添加规则')" icon="md-add"
               >添加规则
             </Button>
           </Col>
@@ -43,10 +43,14 @@
         :data="tableData"
         row-id="id"
       >
-        <vxe-table-column field="id" title="ID" tooltip min-width="70"></vxe-table-column>
         <vxe-table-column field="menu_name" tree-node title="按钮名称" min-width="100"></vxe-table-column>
         <vxe-table-column field="unique_auth" title="前端权限" min-width="200"></vxe-table-column>
-        <vxe-table-column field="menu_path" title="页面路由" min-width="240" tooltip="true"></vxe-table-column>
+        <vxe-table-column field="menu_path" title="路由" min-width="240" tooltip="true">
+          <template v-slot="{ row }">
+            <span v-if="row.auth_type == 1">页面：{{row.menu_path}}</span>
+            <span v-if="row.auth_type == 2">接口：[{{row.methods}}]{{row.api_url}}</span>
+          </template>
+        </vxe-table-column>
         <vxe-table-column field="flag" title="规则状态" min-width="120">
           <template v-slot="{ row }">
             <i-switch
@@ -57,14 +61,14 @@
               @on-change="onchangeIsShow(row)"
               size="large"
             >
-              <span slot="open">显示</span>
-              <span slot="close">隐藏</span>
+              <span slot="open">开启</span>
+              <span slot="close">关闭</span>
             </i-switch>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="date" title="操作" align="center" width="250" fixed="right">
+        <vxe-table-column field="date" title="操作" align="right" width="250" fixed="right">
           <template v-slot="{ row }">
-            <span v-auth="['setting-system_menus-add']">
+            <span>
               <a @click="addRoute(row)" v-if="row.auth_type === 1">添加权限</a>
               <Divider type="vertical" v-if="row.auth_type === 1" />
               <a @click="addE(row, '添加子菜单')" v-if="row.auth_type === 1">添加子菜单</a>
@@ -554,6 +558,9 @@ export default {
     width: 200px;
     overflow-y: scroll;
     max-height: 600px;
+    /deep/ .el-tree-node__children .el-tree-node .el-tree-node__content {
+      padding-left: 14px !important;
+    }
   }
 }
 </style>
