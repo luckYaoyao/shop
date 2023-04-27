@@ -149,6 +149,10 @@ class SystemCrudServices extends BaseServices
             ],
             'form' => [
                 [
+                    'value' => '',
+                    'label' => '请选择',
+                ],
+                [
                     'value' => 'input',
                     'label' => '输入框',
                 ],
