@@ -228,8 +228,11 @@ class SystemMenusServices extends BaseServices
      */
     public function delete(int $id)
     {
-        if ($this->dao->count(['pid' => $id])) {
-            throw new AdminException(400613);
+        $ids = $this->dao->column(['pid' => $id], 'id');
+        if (count($ids)) {
+            foreach ($ids as $value) {
+                $this->delete($value);
+            }
         }
         return $this->dao->delete($id);
     }
