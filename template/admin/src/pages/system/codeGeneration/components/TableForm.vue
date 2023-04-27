@@ -77,7 +77,7 @@
           <div v-else>--</div>
         </template>
         <template slot-scope="{ row, index }" slot="action">
-          <a v-if="!foundation.primaryKey" @click="del(row, index)">删除</a>
+          <a v-if="!tableField[index].primaryKey" @click="del(row, index)">删除</a>
           <span v-else>--</span>
         </template>
       </Table>
