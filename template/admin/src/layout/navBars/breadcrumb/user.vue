@@ -54,7 +54,7 @@
     </div>
     <el-dropdown :show-timeout="70" :hide-timeout="50" @command="onDropdownCommand">
       <span class="layout-navbars-breadcrumb-user-link">
-        <!-- <img :src="getUserInfos.photo" class="layout-navbars-breadcrumb-user-link-photo mr5" /> -->
+        <img :src="getUserInfos.head_pic" class="layout-navbars-breadcrumb-user-link-photo mr5" />
         {{ getUserInfos.account === '' ? 'test' : getUserInfos.account }}
         <i class="el-icon-arrow-down el-icon--right"></i>
       </span>
@@ -262,8 +262,8 @@ export default {
     align-items: center;
     white-space: nowrap;
     &-photo {
-      width: 25px;
-      height: 25px;
+      width: 30px;
+      height: 30px;
       border-radius: 100%;
     }
   }
