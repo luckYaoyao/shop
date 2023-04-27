@@ -100,15 +100,15 @@
 .el-checkbox {
   color: var(--prev-color-text-regular);
 }
-.el-radio__input.is-checked + .el-radio__label,
-.el-radio-button__inner:hover {
+.el-radio-button .el-radio__input.is-checked + .el-radio__label,
+.el-radio-button .el-radio-button__inner:hover {
   color: var(--prev-color-primary);
 }
 .el-radio__input.is-checked .el-radio__inner {
   background-color: var(--prev-color-primary);
   border-color: var(--prev-color-primary);
 }
-.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+.el-radio-button .el-radio-button__orig-radio:checked + .el-radio-button__inner {
   color: var(--prev-color-text-white);
   background-color: var(--prev-color-primary);
   border-color: var(--prev-color-primary);
