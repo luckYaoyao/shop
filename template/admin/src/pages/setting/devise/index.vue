@@ -470,7 +470,6 @@ export default {
       if (item.name == 'search_box' || item.name == 'nav_bar') {
         return this.$Message.warning('该组件禁止移动');
       }
-      console.log(item);
       // if (item.name == "nav_bar") {
       //     return this.$Message.warning("该组件禁止移动");
       // }

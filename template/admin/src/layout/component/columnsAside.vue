@@ -63,7 +63,6 @@ export default {
     },
     // 设置分栏布局风格
     setColumnsAsidelayout() {
-      console.log('111');
       return this.$store.state.themeConfig.themeConfig.columnsAsideLayout;
     },
     Layout() {
@@ -74,7 +73,6 @@ export default {
     },
   },
   beforeDestroy() {
-    console.log('zoule');
     this.bus.$off('routesListChange');
   },
   mounted() {

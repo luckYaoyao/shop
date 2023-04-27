@@ -69,14 +69,13 @@ export default {
   components: {
     VueCropper,
   },
-  props: ['Name'],
   data() {
     return {
-      name: this.Name,
+      name: '',
       resImg: '',
       previews: {},
       option: {
-        img: this.Name, //裁剪图片的地址
+        img: '', //裁剪图片的地址
         outputSize: 1, //裁剪生成图片的质量(可选0.1 - 1)
         outputType: 'png', //裁剪生成图片的格式（jpeg || png || webp）
         info: true, //图片大小信息
@@ -84,8 +83,8 @@ export default {
         autoCrop: true, //是否默认生成截图框
         autoCropWidth: 200, //默认生成截图框宽度
         autoCropHeight: 200, //默认生成截图框高度
-        fixed: false, //是否开启截图框宽高固定比例
-        fixedNumber: [1.53, 1], //截图框的宽高比例
+        fixed: true, //是否开启截图框宽高固定比例
+        fixedNumber: [1, 1], //截图框的宽高比例
         full: false, //false按原比例裁切图片，不失真
         fixedBox: false, //固定截图框大小，不允许改变
         canMove: true, //上传图片是否可以移动
@@ -183,7 +182,6 @@ export default {
       const formData = new FormData();
       formData.append('file', file);
       fileUpload(formData).then((res) => {
-        console.log(res);
         if (res.status == 200) {
           this.$emit('uploadImgSuccess', res.data);
         } else {

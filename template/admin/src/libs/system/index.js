@@ -226,11 +226,9 @@ export const findFirstNonNullChildren = (arr) => {
 
 export const findFirstNonNullChildrenKeys = (obj, lastArr) => {
   let ids = lastArr;
-  console.log(ids);
   // 如果第一个对象没有children属性，返回该对象
   if (!obj.children) {
     ids.push(obj.id);
-    console.log(ids);
     return ids;
   }
   // 如果第一个对象的children属性是数组，

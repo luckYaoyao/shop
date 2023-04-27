@@ -356,7 +356,6 @@ export default {
       this.getList(false, false);
     },
     jumpRoute(item) {
-      console.log
       let data = {
         path: item.route,
         filename: '',

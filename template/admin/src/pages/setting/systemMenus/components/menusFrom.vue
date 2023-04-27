@@ -307,7 +307,6 @@ export default {
       }
     },
     changeUnique(val) {
-      console.log(val.target.value);
       let value = this.$routeProStr + val.target.value;
       if (value.slice(0, 1) === '/') value = value.replace('/', '');
       this.formValidate.unique_auth = value.replaceAll('/', '-');

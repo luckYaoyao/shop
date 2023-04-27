@@ -35,7 +35,6 @@ export default {
   mounted() {
     this.setFilterRoutes();
     this.bus.$on('routesListChange', () => {
-      console.log('变了大哥');
       this.setFilterRoutes();
     });
   },

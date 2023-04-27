@@ -118,7 +118,6 @@ export default {
       this.currentTab--;
     },
     addRow() {
-      console.log(this.formItem);
       let foundation = this.formItem.foundation;
       if (!foundation.tableName) return this.$Message.warning('请先填写表名');
       let data = {

@@ -234,7 +234,6 @@ export default {
       };
       menusBatch(data)
         .then((res) => {
-          console.log(res);
           this.getData();
         })
         .catch((res) => {
@@ -282,7 +281,6 @@ export default {
       this.routeType = '0';
       // this.getRuleList();
       menusRuleCate().then((res) => {
-        console.log(res);
         this.ruleCateList = res.data;
         this.ruleModal = true;
         if (res.data.length) {
@@ -296,7 +294,6 @@ export default {
       });
     },
     handleNodeClick(data) {
-      console.log(data);
       this.getRuleList(data.id);
     },
     modalchange() {

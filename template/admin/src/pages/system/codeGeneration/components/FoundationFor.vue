@@ -251,7 +251,6 @@ export default {
     },
     getCrudMenus() {
       crudMenus().then((res) => {
-        console.log(res);
         this.menusList = res.data;
       });
       crudColumnType().then((res) => {

@@ -39,8 +39,6 @@ service.interceptors.request.use(
     if (token || kefuToken) {
       config.headers['Authori-zation'] = config.kefu ? 'Bearer ' + kefuToken : 'Bearer ' + token;
     }
-    console.log('请求了', config);
-
     return config;
   },
   (error) => {

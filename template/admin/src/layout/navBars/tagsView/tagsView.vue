@@ -113,7 +113,6 @@ export default {
   methods: {
     ...mapMutations(['setBreadCrumb', 'setTagNavList', 'addTag', 'setLocal', 'setHomeRoute', 'closeTag']),
     clickDropdown(e) {
-      // console.log(e, this.$route.path);
       let data = { id: e, path: this.$route.path };
       this.onCurrentContextmenuClick(data);
     },
@@ -148,8 +147,6 @@ export default {
     scrollTag(production) {
       let scrollRefs = this.$refs.scrollbarRef.$refs.wrap.scrollWidth;
       let scrollLeft = this.$refs.scrollbarRef.$refs.wrap.scrollLeft;
-      console.log(production, this.$refs.scrollbarRef.$refs.wrap.scrollLeft);
-
       if (production === 'left') {
         this.$refs.scrollbarRef.$refs.wrap.scrollLeft = scrollLeft - 300 <= 0 ? 0 : scrollLeft - 300;
       } else {
@@ -252,12 +249,10 @@ export default {
       //   this.tagsViewList = Session.get('tagsViewList');
       // } else {
       let arr = [];
-      console.log(this.tagsViewRoutesList);
       this.tagsViewRoutesList.map((v) => {
         if (v.meta && v.meta.isAffix) arr.push({ ...v });
       });
       // }
-      console.log(arr);
       this.setTagNavList(arr);
       // 初始化当前元素(li)的下标
       this.getTagsRefsIndex(this.$route.path);
@@ -339,7 +334,6 @@ export default {
       this.tagsViewRoutesList.map((v) => {
         if ((v.meta && v.meta.isAffix) || v.path === path) tagsViewList.push({ ...v });
       });
-      console.log(tagsViewList, this.tagsViewRoutesList, path);
       this.addBrowserSetSession(tagsViewList);
       this.$router.push({ path, query });
 

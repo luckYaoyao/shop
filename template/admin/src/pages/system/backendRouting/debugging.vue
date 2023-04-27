@@ -292,12 +292,10 @@ export default {
   created() {
     this.interfaceData = this.formValidate;
     this.interfaceData.request_body = JSON.parse(JSON.stringify(this.interfaceData.request));
-    console.log(this.interfaceData);
   },
   mounted() {},
   methods: {
     async handleChange(e, row, type) {
-      console.log(type, row);
       if (e.value !== 'array' && e.value !== 'object') {
         if (row.children.length) {
           let arr = this.$refs[type].getTableData().tableData;
@@ -331,36 +329,30 @@ export default {
           : this.filtersData((await this.$refs.yTable.getTableData().tableData) || []);
       let h = this.filtersData((await this.$refs.zTable.getTableData().tableData) || []);
       headers = h;
-      console.log(url, method, params, body, headers);
       this.codes = '';
       requestMethod(url, method, params, body, headers)
         .then((res) => {
-          console.log(res, 'res');
           if (!res) return this.$Message.error('接口异常');
           this.codes = JSON.stringify(res);
         })
         .catch((err) => {
-          console.log(err, 'err');
           if (!err) return this.$Message.error('接口异常');
           this.codes = JSON.stringify(err);
         });
     },
     filtersData(arr) {
-      console.log(arr);
       try {
         let x = {};
         arr.map((e) => {
           if (!e.parentId) {
             for (let i in e) {
               if (i == 'attribute') {
-                console.log(e.type);
                 if (e.type === 'object') {
                   let obj = {};
 
                   e.children.map((item, index) => {
                     obj = this.filtersObj(item, 1);
                   });
-                  console.log(obj, 'objobjobj');
                   x[e[i]] = obj;
                 } else if (e.type !== 'array') {
                   x[e[i]] = e.value || '';
@@ -385,13 +377,11 @@ export default {
       let x = {};
       for (let i in obj) {
         if (i == 'attribute') {
-          console.log(obj, 'obj111');
           if (obj.type === 'object') {
             let oj = {};
             obj.children.map((item, index) => {
               oj[obj.attribute] = this.filtersObj(item);
             });
-            console.log(oj, 'oj');
             x = oj;
           } else if (obj.type !== 'array') {
             if (type) {
@@ -420,7 +410,6 @@ export default {
         //   this.insertEvent('zaTable');
         // }
       }
-      console.log(this.interfaceData);
     },
     async insertEvent(type, d) {
       const $table = this.$refs[type];

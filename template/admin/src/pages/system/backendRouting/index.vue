@@ -31,12 +31,19 @@
               <div></div>
               <div
                 class="tree-node"
-                :class="{ node: slotProps.model.method, open: formValidate.path == slotProps.model.path && formValidate.method == slotProps.model.method }"
+                :class="{
+                  node: slotProps.model.method,
+                  open: formValidate.path == slotProps.model.path && formValidate.method == slotProps.model.method,
+                }"
                 @click.stop="onClick(slotProps.model)"
               >
-                <span class="" :class="{ open: formValidate.path == slotProps.model.path && formValidate.method == slotProps.model.method }">{{
-                  slotProps.model.name
-                }}</span>
+                <span
+                  class=""
+                  :class="{
+                    open: formValidate.path == slotProps.model.path && formValidate.method == slotProps.model.method,
+                  }"
+                  >{{ slotProps.model.name }}</span
+                >
                 <Dropdown
                   transfer
                   @on-click="
@@ -652,9 +659,7 @@ export default {
           this.paramsId = params.id;
           this.getRoteData(params.id);
         }
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     },
     getRoteData(id) {
       routeDet(id)
@@ -662,7 +667,6 @@ export default {
           this.formValidate = res.data;
         })
         .catch((err) => {
-          console.log(err);
           this.$Message.error(err);
         });
     },
@@ -674,7 +678,6 @@ export default {
       } else if (!this.formValidate.path) {
         return this.$Message.warning('请输入路由地址');
       }
-      console.log(await this.$refs.xTable.getTableData());
       this.formValidate.request = await this.$refs.xTable.getTableData().tableData;
       this.formValidate.response = await this.$refs.resTable.getTableData().tableData;
       this.formValidate.error_code = await this.$refs.codeTable.getTableData().tableData;
@@ -895,7 +898,6 @@ export default {
     },
     //
     onDel(node) {
-      console.log(node);
       let method = node.cate_id ? routeDel : routeCateDel;
       this.$Modal.confirm({
         title: '警告',
@@ -915,7 +917,6 @@ export default {
     },
 
     onChangeName(params) {
-      console.log(params);
       if (params.eventType == 'blur') {
         let data = {
           name: params.newName,
@@ -932,7 +933,6 @@ export default {
     },
 
     onAddNode(params) {
-      console.log(params);
       // this.$router.push({
       //   path: '/admin/setting/system_out_interface/add',
       //   query: {

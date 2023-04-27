@@ -804,7 +804,6 @@ export default {
     },
 
     onChangeName(params) {
-      console.log(params);
       if (params.eventType == 'blur') {
         let data = {
           name: params.newName,
@@ -821,7 +820,6 @@ export default {
     },
 
     onAddNode(params) {
-      console.log(params);
       // this.$router.push({
       //   path: '/admin/setting/system_out_interface/add',
       //   query: {

@@ -256,7 +256,6 @@ export default {
       this.changeMarkData.mark = this.mark;
       updateMark(this.changeMarkData).then((res) => {
         this.$Message.success(res.msg);
-        console.log(this.rows);
         if (this.changeMarkData.is_field) {
           this.Info({ name: this.changeMarkData.table, comment: this.rows.comment });
         } else {

@@ -259,15 +259,9 @@ export default {
         var postURL = Setting.apiBaseURL + '/system/crud/npm?token=' + getCookies('token');
         this.source = new EventSource(postURL);
         let self = this; //因EventSource中this的指向变了，所以要提前存储一下
-        this.source.onopen = function (res) {
-          console.log('项目链接Eventsource成功', res);
-        };
-        this.source.onmessage = function (data) {
-          //代码块
-          console.log(data);
-        };
+        this.source.onopen = function (res) {};
+        this.source.onmessage = function (data) {};
         this.source.onerror = function (err) {
-          console.log('项目Eventsource链接失败', err);
           //链接失败后EventSource会每隔三秒左右重新发起链接
         };
       } else {
@@ -331,7 +325,6 @@ export default {
     },
     // 编辑
     edit(row) {
-      console.log(row);
       this.spinShow = true;
       // 创建代码容器
       this.title = row.name;
@@ -350,7 +343,6 @@ export default {
     //打开文件
     openfile(id) {
       try {
-        console.log(id);
         this.editId = id;
         let that = this;
         this.editorIndex = [];
@@ -401,7 +393,6 @@ export default {
     initEditor(index, conetnt) {
       try {
         let that = this;
-        console.log('111');
         that.$nextTick(() => {
           // 初始化编辑器，确保dom已经渲染
           that.editor = monaco.editor.create(document.getElementById('container_' + index), {

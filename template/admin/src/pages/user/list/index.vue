@@ -938,7 +938,6 @@ export default {
       if (str.length > 10) {
         //如果字符长度超过10，后面的字符就变成...可自行调整长度和代替字符
         str = str.substr(0, 10) + '...'; //截取从第一个字符开始，往后取10个字符，剩余的用...代替
-        //console.log(str);  // 'js字符超出指定个数...'
       }
       return str;
     },
