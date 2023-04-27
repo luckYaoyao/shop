@@ -389,7 +389,12 @@
       <Input v-model="value" placeholder="请输入分组名称" style="width: 85%" />
     </Modal>
     <Modal v-model="debuggingModal" :title="formValidate.name" width="70%" footer-hide :loading="loading">
-      <debugging v-if="debuggingModal" :formValidate="formValidate" :typeList="typeList" :requestTypeList="requestTypeList" />
+      <debugging
+        v-if="debuggingModal"
+        :formValidate="formValidate"
+        :typeList="typeList"
+        :requestTypeList="requestTypeList"
+      />
     </Modal>
   </div>
 </template>

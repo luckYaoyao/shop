@@ -97,6 +97,6 @@ export default new Vuex.Store({
     routesList,
     tagsViewRoutes,
     userInfos,
-    keepAliveNames
+    keepAliveNames,
   },
 });

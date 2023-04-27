@@ -9,7 +9,7 @@
 // +---------------------------------------------------------------------
 
 import LayoutMain from '@/layout';
-import setting  from '@/setting'
+import setting from '@/setting';
 let routePre = setting.routePre;
 
 const meta = {
@@ -19,7 +19,7 @@ const meta = {
 const pre = 'statistic_';
 
 export default {
-  path: routePre+'/statistic',
+  path: routePre + '/statistic',
   name: 'statistic',
   header: 'statistic',
   redirect: {

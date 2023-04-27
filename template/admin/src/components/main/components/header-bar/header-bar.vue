@@ -5,11 +5,7 @@
       <!-- <span class="i-layout-header-trigger" @click="handleReload">
       <Icon type="ios-refresh" color='#fff' />
     </span> -->
-      <custom-bread-crumb
-        show-icon
-        :list="breadCrumbList"
-        :listLast="crumbPast"
-      ></custom-bread-crumb>
+      <custom-bread-crumb show-icon :list="breadCrumbList" :listLast="crumbPast"></custom-bread-crumb>
     </div>
 
     <div class="custom-content-con">

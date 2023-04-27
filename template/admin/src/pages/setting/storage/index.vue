@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <div class="message">
       <Card :bordered="false" dis-hover class="">
         <div class="mb20">

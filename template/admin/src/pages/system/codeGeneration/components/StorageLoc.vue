@@ -67,10 +67,8 @@ export default {
       storageRules: {},
     };
   },
-  created() {
-  },
-  mounted() {
-  },
+  created() {},
+  mounted() {},
   methods: {},
 };
 </script>
