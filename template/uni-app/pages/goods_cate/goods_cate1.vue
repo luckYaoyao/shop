@@ -124,11 +124,10 @@
 			let routes = getCurrentPages();
 			let curRoute = routes[routes.length - 1].route
 			this.activeRouter = '/' + curRoute
-			this.getAllCategory();
+			this.getAllCategory(1);
 		},
 		watch: {
 			isNew(newVal) {
-
 				this.getAllCategory(1);
 			}
 		},
