@@ -593,7 +593,7 @@ export default {
 };
 </script>
 <style>
-.v-modal {
+body .v-modal {
   opacity: 0.5;
   background-color: rgba(0, 0, 0, 0.3);
   -webkit-backdrop-filter: blur(3px);
