@@ -8,6 +8,7 @@
           :key="k"
           @click="onColumnsAsideMenuClick(v)"
           ref="columnsAsideOffsetTopRefs"
+          class="layout-columns"
           :class="{ 'layout-columns-active': v.k === liIndex }"
           :title="$t(v.title)"
         >
@@ -244,6 +245,9 @@ export default {
         text-decoration: none;
         color: var(--prev-bg-columnsMenuBarColor);
       }
+    }
+    .layout-columns {
+      transition: 0.3s ease-in-out;
     }
     .layout-columns-active,
     .layout-columns-active a {
