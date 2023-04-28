@@ -291,10 +291,12 @@ class StoreOrderController
                         return app('json')->status('pay_error', $pay);
                 }
             case PayServices::OFFLINE_PAY:
-                if ($this->services->setOrderTypePayOffline($order['order_id']))
+                if ($this->services->setOrderTypePayOffline($order['order_id'])) {
+                    event('NoticeListener', [$order, 'admin_pay_success_code']);
                     return app('json')->status('success', 410203);
-                else
+                } else {
                     return app('json')->status('success', 410216);
+                }
             default:
                 $payInfo = $payServices->beforePay($order->toArray(), $paytype, ['quitUrl' => $quitUrl]);
                 return app('json')->status($payInfo['status'], $payInfo['payInfo']);
