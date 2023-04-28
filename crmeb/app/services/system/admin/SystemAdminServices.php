@@ -263,6 +263,7 @@ class SystemAdminServices extends BaseServices
         $data['pwd'] = $this->passwordHash($data['pwd']);
         $data['add_time'] = time();
         $data['roles'] = implode(',', $data['roles']);
+        $data['head_pic'] = '/statics/system_images/admin_head_pic.png';
 
         return $this->transaction(function () use ($data) {
             if ($this->dao->save($data)) {
