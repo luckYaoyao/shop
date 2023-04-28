@@ -95,6 +95,7 @@ class SystemFile extends AuthController
             ['full_path', ''],
             ['mark', ''],
         ], true);
+        $full_path = $this->request->param('full_path');
         if ($full_path == '') return app('json')->fail(100100);
         $this->services->fileMarkSave($full_path, $mark);
         return app('json')->success(100000);
