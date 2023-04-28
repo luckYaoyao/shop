@@ -136,7 +136,7 @@ export default {
     fiveTagsStyle: '历史菜单风格',
     themeStyle: '主题',
     fiveAnimation: '主页面切换动画',
-    fiveColumnsAsideStyle: '分栏高亮风格',
+    fiveColumnsAsideStyle: '菜单高亮风格',
     fiveColumnsAsideLayout: '分栏布局风格',
     sixTitle: '布局切换',
     sixDefaults: '默认',
