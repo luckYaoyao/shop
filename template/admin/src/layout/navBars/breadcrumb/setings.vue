@@ -592,7 +592,14 @@ export default {
   },
 };
 </script>
-
+<style>
+.v-modal {
+  opacity: 0.5;
+  background-color: rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(5px);
+}
+</style>
 <style scoped lang="scss">
 .w10 {
   width: 10px;
