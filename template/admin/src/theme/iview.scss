@@ -17,7 +17,12 @@
 .ivu-tabs.ivu-tabs-card > .ivu-tabs-bar .ivu-tabs-tab-active {
   color: var(--prev-color-primary);
 }
-
+.ivu-menu-light.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu) {
+  color: var(--prev-color-primary);
+}
+.ivu-menu-light.ivu-menu-vertical .ivu-menu-item-active:not(.ivu-menu-submenu):after {
+  background-color: var(--prev-color-primary);
+}
 // 单选卡
 .ivu-radio-group-button .ivu-radio-wrapper-checked:first-child {
   border-color: var(--prev-color-primary);
