@@ -120,6 +120,7 @@ export default {
     // 设置菜单导航是否固定（移动端）
     initMenuFixed(clientWidth) {
       this.clientWidth = clientWidth;
+      this.$emit('routesListChange');
     },
   },
   // 页面销毁时

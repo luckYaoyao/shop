@@ -9,14 +9,18 @@
         @select="onHorizontalSelect"
       >
         <template v-for="val in menuList">
-          <el-submenu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
+          <el-submenu
+            :index="val.path"
+            v-if="val.is_show && val.children && val.children.length > 0"
+            :key="val.path"
+          >
             <template slot="title">
               <Icon :type="val.icon ? val.icon : ''" />
               <span>{{ $t(val.title) }}</span>
             </template>
             <SubItem :chil="val.children" />
           </el-submenu>
-          <template v-else>
+          <template v-else-if="val.is_show">
             <el-menu-item :index="val.path" :key="val.path">
               <template slot="title" v-if="!val.isLink || (val.isLink && val.isIframe)">
                 <Icon :type="val.icon ? val.icon : ''" />

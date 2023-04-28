@@ -12,7 +12,7 @@
       <template v-for="val in menuList">
         <el-submenu
           :index="val.path"
-          v-if="!val.is_show_path && val.children && val.children.length > 0"
+          v-if="val.is_show && val.children && val.children.length > 0"
           :key="val.path"
         >
           <template slot="title">
@@ -26,7 +26,7 @@
           </template>
           <SubItem :chil="val.children" />
         </el-submenu>
-        <template v-else-if="!val.is_show_path">
+        <template v-else-if="val.is_show">
           <el-menu-item :index="val.path" :key="val.path">
             <Icon
               :class="

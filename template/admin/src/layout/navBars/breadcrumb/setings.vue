@@ -275,7 +275,7 @@
             </el-radio-group>
           </div>
         </div>
-        <div class="layout-breadcrumb-seting-bar-flex mt15">
+        <div class="layout-breadcrumb-seting-bar-flex mt15" v-if="getThemeConfig.layout === 'columns'">
           <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fiveColumnsAsideStyle') }}</div>
           <div class="layout-breadcrumb-seting-bar-flex-value">
             <el-radio-group v-model="getThemeConfig.columnsAsideStyle" size="mini" @change="setLocalThemeConfig">
@@ -535,6 +535,7 @@ export default {
       if (this.$store.state.themeConfig.themeConfig.layout === layout) return false;
       this.$store.state.themeConfig.themeConfig.layout = layout;
       this.$store.state.themeConfig.themeConfig.isDrawer = false;
+      this.$store.state.themeConfig.themeConfig.columnsAsideStyle = 'columns-card';
       // this.initSetLayoutChange();
       this.setLocalTheme(this.$store.state.themeConfig.themeConfig.themeStyle);
     },
