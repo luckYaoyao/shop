@@ -401,8 +401,8 @@ switch ($step) {
             $ip = empty($ip) ? "0.0.0.0" : $ip;
             $password = password_hash($_POST['manager_pwd'], PASSWORD_BCRYPT);
             mysqli_query($conn, "truncate table {$dbPrefix}system_admin");
-            $addadminsql = "INSERT INTO `{$dbPrefix}system_admin` (`id`, `account`, `pwd`, `real_name`, `roles`, `last_ip`, `last_time`, `add_time`, `login_count`, `level`, `status`, `is_del`) VALUES
-(1, '" . $username . "', '" . $password . "', 'admin', '1', '" . $ip . "',$time , $time, 0, 0, 1, 0)";
+            $addadminsql = "INSERT INTO `{$dbPrefix}system_admin` (`id`, `account`, `head_pic`, `pwd`, `real_name`, `roles`, `last_ip`, `last_time`, `add_time`, `login_count`, `level`, `status`, `is_del`) VALUES
+(1, '" . $username . "', '/statics/system_images/admin_head_pic.png', '" . $password . "', 'admin', '1', '" . $ip . "',$time , $time, 0, 0, 1, 0)";
             $res = mysqli_query($conn, $addadminsql);
             $res2 = true;
             if (isset($_SERVER['SERVER_NAME'])) {
