@@ -25,7 +25,7 @@ class SystemFileInfoServices extends BaseServices
     public function syncfile()
     {
         $list = $this->flattenArray($this->scanDirectory());
-//        $this->dao->saveAll($list);
+        $this->dao->saveAll($list);
     }
 
     public function scanDirectory($dir = '')

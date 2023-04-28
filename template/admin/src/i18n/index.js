@@ -2,7 +2,7 @@
  * @Author: From-wh from-wh@hotmail.com
  * @Date: 2023-03-09 18:02:23
  * @FilePath: /admin/src/i18n/index.js
- * @Description: 
+ * @Description:
  */
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';

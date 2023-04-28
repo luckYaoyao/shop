@@ -118,7 +118,6 @@ export default {
       this.currentTab--;
     },
     addRow() {
-      console.log(this.formItem);
       let foundation = this.formItem.foundation;
       if (!foundation.tableName) return this.$Message.warning('请先填写表名');
       let data = {
@@ -186,45 +185,47 @@ export default {
           data.id = this.id;
           this.$Modal.confirm({
             title: '生成提醒',
-            content: '重新提交会重新生成文件,<span style="color: red">删除、新增、修改</span>的字段将直接从改表中进行修改,请慎重操作！！',
+            content:
+              '重新提交会重新生成文件,<span style="color: red">删除、新增、修改</span>的字段将直接从改表中进行修改,请慎重操作！！',
             loading: true,
-            onOk:() => {
-              this.saveCodeCrud(data,true);
+            onOk: () => {
+              this.saveCodeCrud(data, true);
             },
-          })
-        }else{
+          });
+        } else {
           this.$Modal.confirm({
             title: '生成提醒',
-            content: '生成后本地开发调试会直接加载生成的vue页面；如果是上线后进行生成,可以进行浏览，代码生成列表中的修改文件将不生效。需要重新打包上线！',
+            content:
+              '生成后本地开发调试会直接加载生成的vue页面；如果是上线后进行生成,可以进行浏览，代码生成列表中的修改文件将不生效。需要重新打包上线！',
             loading: true,
-            onOk:() => {
-              this.saveCodeCrud(data,true);
+            onOk: () => {
+              this.saveCodeCrud(data, true);
             },
-          })
+          });
         }
       } else {
         if (this.currentTab < 3) this.currentTab++;
       }
     },
-    saveCodeCrud(data,loading){
+    saveCodeCrud(data, loading) {
       this.reqloading = true;
       codeCrud(data)
-          .then((res) => {
-            this.$Message.success(res.msg);
-            this.getMenusUnique();
-            this.reqloading = false;
+        .then((res) => {
+          this.$Message.success(res.msg);
+          this.getMenusUnique();
+          this.reqloading = false;
 
-            if(loading){
-              this.$Modal.remove()
-            }
-            this.$router.push({
-              name: 'system_code_generation_list',
-            });
-          })
-          .catch((err) => {
-            this.reqloading = false;
-            this.$Message.error(err.msg);
+          if (loading) {
+            this.$Modal.remove();
+          }
+          this.$router.push({
+            name: 'system_code_generation_list',
           });
+        })
+        .catch((err) => {
+          this.reqloading = false;
+          this.$Message.error(err.msg);
+        });
     },
     getMenusUnique() {
       getMenusUnique().then((res) => {

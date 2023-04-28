@@ -25,9 +25,7 @@
         </Row>
         <Row type="flex">
           <Col v-bind="grid">
-            <Button type="primary" @click="menusAdd('添加规则')" icon="md-add"
-              >添加规则
-            </Button>
+            <Button type="primary" @click="menusAdd('添加规则')" icon="md-add">添加规则 </Button>
           </Col>
         </Row>
       </Form>
@@ -47,8 +45,8 @@
         <vxe-table-column field="unique_auth" title="前端权限" min-width="200"></vxe-table-column>
         <vxe-table-column field="menu_path" title="路由" min-width="240" tooltip="true">
           <template v-slot="{ row }">
-            <span v-if="row.auth_type == 1">页面：{{row.menu_path}}</span>
-            <span v-if="row.auth_type == 2">接口：[{{row.methods}}]{{row.api_url}}</span>
+            <span v-if="row.auth_type == 1">页面：{{ row.menu_path }}</span>
+            <span v-if="row.auth_type == 2">接口：[{{ row.methods }}]{{ row.api_url }}</span>
           </template>
         </vxe-table-column>
         <vxe-table-column field="flag" title="规则状态" min-width="120">
@@ -234,7 +232,6 @@ export default {
       };
       menusBatch(data)
         .then((res) => {
-          console.log(res);
           this.getData();
         })
         .catch((res) => {
@@ -282,7 +279,6 @@ export default {
       this.routeType = '0';
       // this.getRuleList();
       menusRuleCate().then((res) => {
-        console.log(res);
         this.ruleCateList = res.data;
         this.ruleModal = true;
         if (res.data.length) {
@@ -296,7 +292,6 @@ export default {
       });
     },
     handleNodeClick(data) {
-      console.log(data);
       this.getRuleList(data.id);
     },
     modalchange() {

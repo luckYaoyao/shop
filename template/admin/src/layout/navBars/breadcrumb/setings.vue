@@ -72,8 +72,7 @@
               </div>
             </div> -->
           </div>
-          
-          
+
           <!-- transverse 布局 -->
           <div
             class="layout-drawer-content-item"
@@ -276,7 +275,7 @@
             </el-radio-group>
           </div>
         </div>
-        <div class="layout-breadcrumb-seting-bar-flex mt15" v-if="getThemeConfig.layout === 'columns'">
+        <div class="layout-breadcrumb-seting-bar-flex mt15">
           <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fiveColumnsAsideStyle') }}</div>
           <div class="layout-breadcrumb-seting-bar-flex-value">
             <el-radio-group v-model="getThemeConfig.columnsAsideStyle" size="mini" @change="setLocalThemeConfig">
@@ -593,7 +592,14 @@ export default {
   },
 };
 </script>
-
+<style>
+body .v-modal {
+  opacity: 0.5;
+  background-color: rgba(0, 0, 0, 0.3);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(5px);
+}
+</style>
 <style scoped lang="scss">
 .w10 {
   width: 10px;

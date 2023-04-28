@@ -86,7 +86,6 @@ export default {
 .full-screen-btn-con .ivu-tooltip-rel i {
   font-size: 20px !important;
   color: rgba(0, 0, 0, 0.65);
-
 }
 .full-screen-btn-con .ivu-tooltip-rel {
   height: 50px;

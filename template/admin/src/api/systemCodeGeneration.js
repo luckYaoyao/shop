@@ -71,10 +71,10 @@ export function crudDownload(id) {
 /**
  * @description 代码生成 - 文件编辑
  */
-export function crudSaveFile(id,data) {
+export function crudSaveFile(id, data) {
   return request({
     url: `/system/crud/save_file/${id}`,
     method: 'post',
-    data
+    data,
   });
 }

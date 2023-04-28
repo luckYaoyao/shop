@@ -85,44 +85,62 @@ export default {
           width: 100,
           align: 'center',
         });
-        res.data.columns.map(item=>{
-          if(item.from_type === 'frameImageOne'){
-            item.render = (h,params)=>{
-                return h('div',{
-                  class:'tabBox_img',
-                  directives:[{
-                    name:'viewer'
-                  }]
-                },[
-                  h('img',{
-                    directives:[{
-                      name:'lazy',
-                      value: params.row[item.slot]
-                    }],
-                  })
-                ])
-            }
-          } else if(item.from_type === 'frameImages'){
-            item.render = (h,params)=>{
-              let image = params.row[item.slot] || []
+        res.data.columns.map((item) => {
+          if (item.from_type === 'frameImageOne') {
+            item.render = (h, params) => {
+              return h(
+                'div',
+                {
+                  class: 'tabBox_img',
+                  directives: [
+                    {
+                      name: 'viewer',
+                    },
+                  ],
+                },
+                [
+                  h('img', {
+                    directives: [
+                      {
+                        name: 'lazy',
+                        value: params.row[item.slot],
+                      },
+                    ],
+                  }),
+                ],
+              );
+            };
+          } else if (item.from_type === 'frameImages') {
+            item.render = (h, params) => {
+              let image = params.row[item.slot] || [];
               let imageH = [];
-              image.map(item=>{
-                imageH.push(h('img',{
-                  directives:[{
-                    name:'lazy',
-                    value: item
-                  }],
-                }));
-              })
-              return h('div',{
-                class:'tabBox_img',
-                directives:[{
-                  name:'viewer'
-                }]
-              },imageH)
-            }
+              image.map((item) => {
+                imageH.push(
+                  h('img', {
+                    directives: [
+                      {
+                        name: 'lazy',
+                        value: item,
+                      },
+                    ],
+                  }),
+                );
+              });
+              return h(
+                'div',
+                {
+                  class: 'tabBox_img',
+                  directives: [
+                    {
+                      name: 'viewer',
+                    },
+                  ],
+                },
+                imageH,
+              );
+            };
           }
-        })
+        });
         this.columns = res.data.columns;
         this.getList();
       });

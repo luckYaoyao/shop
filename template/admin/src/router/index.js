@@ -106,8 +106,8 @@ router.beforeEach(async (to, from, next) => {
     const token = getCookies('token');
     if (token && token !== 'undefined') {
       const access = store.state.userInfo.uniqueAuth;
-      const isPermission = includeArray(to.meta.auth, access);
-      if (isPermission) {
+      const isPermission = includeArray(to.meta.auth, access); //  判断是否有权限  TODO
+      if (access.length) {
         next();
       } else {
         if (access.length == 0) {

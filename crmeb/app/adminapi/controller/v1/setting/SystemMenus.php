@@ -142,7 +142,7 @@ class SystemMenus extends AuthController
             if ($attPath) {
                 $pathData = [];
                 foreach ($attPath as $vv) {
-                    if (strstr($vv, '<') === false || strstr($vv, '?>') === false) {
+                    if (strstr($vv, '<') === false) {
                         $pathData[] = $vv;
                     }
                 }

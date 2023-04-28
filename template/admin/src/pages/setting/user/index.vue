@@ -28,7 +28,7 @@
         </FormItem>
       </Form>
     </Card>
-    <Modal v-model="avatarMoadl" title="头像上传" width="700">
+    <Modal v-model="avatarMoadl" footer-hide title="头像上传" width="700">
       <CropperImg v-if="avatarMoadl" @uploadImgSuccess="uploadImgSuccess"></CropperImg>
     </Modal>
   </div>

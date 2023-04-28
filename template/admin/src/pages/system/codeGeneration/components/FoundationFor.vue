@@ -1,8 +1,6 @@
 <template>
   <div class="main">
-    <Alert closable>
-      crud生成说明 不能生成系统自带的表；已经生成过的表还能继续生成
-    </Alert>
+    <Alert closable> crud生成说明 不能生成系统自带的表；已经生成过的表还能继续生成 </Alert>
     <Form ref="foundation" :model="foundation" :rules="foundationRules" :label-width="100">
       <FormItem label="菜单">
         <!-- <Select class="form-width" v-model="foundation.pid">
@@ -251,7 +249,6 @@ export default {
     },
     getCrudMenus() {
       crudMenus().then((res) => {
-        console.log(res);
         this.menusList = res.data;
       });
       crudColumnType().then((res) => {

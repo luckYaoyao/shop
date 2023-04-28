@@ -9,7 +9,7 @@
 // +---------------------------------------------------------------------
 
 import LayoutMain from '@/layout';
-import setting  from '@/setting'
+import setting from '@/setting';
 let routePre = setting.routePre;
 
 const meta = {
@@ -19,7 +19,7 @@ const meta = {
 const pre = 'user_';
 
 export default {
-  path: routePre+'/user',
+  path: routePre + '/user',
   name: 'user',
   header: 'user',
   redirect: {

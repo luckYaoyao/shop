@@ -66,7 +66,9 @@
                       v-if="row.is_diy === 1"
                       class="target"
                       ref="target"
-                      :href="`${url}${$routeProStr}/setting/pages/diy_index?id=${row.id}&name=${row.template_name || 'moren'}`"
+                      :href="`${url}${$routeProStr}/setting/pages/diy_index?id=${row.id}&name=${
+                        row.template_name || 'moren'
+                      }`"
                       target="_blank"
                     >
                       编辑</a

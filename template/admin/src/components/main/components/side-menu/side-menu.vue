@@ -23,7 +23,7 @@
           </template>
         </Menu>
       </div>
-      <div class="child-menu"  v-if="sider.length">
+      <div class="child-menu" v-if="sider.length">
         <div class="cat-name">{{ oneMenuName }}</div>
         <Menu
           ref="childMenu"
@@ -353,7 +353,7 @@ export default {
   .child-menu {
     z-index: 9;
     box-shadow: 2px 0px 4px 0px rgba(0, 0, 0, 0.06);
-    transition: width .2s ease .2s;
+    transition: width 0.2s ease 0.2s;
     overflow: hidden;
     .child-menus {
       width: @side-child-width !important;

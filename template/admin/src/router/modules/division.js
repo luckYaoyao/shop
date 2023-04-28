@@ -9,7 +9,7 @@
 // +---------------------------------------------------------------------
 
 import LayoutMain from '@/layout';
-import setting  from '@/setting'
+import setting from '@/setting';
 let routePre = setting.routePre;
 
 const pre = 'division_';

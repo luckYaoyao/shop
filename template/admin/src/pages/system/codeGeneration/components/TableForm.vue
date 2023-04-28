@@ -228,10 +228,7 @@ export default {
       this.optionsModal = true;
     },
     addOptions() {
-      console.log(this.optionsList);
       this.$set(this.tableField[this.index], 'options', this.optionsList);
-      // this.tableField[this.index].options = this.optionsList;
-      console.log(this.tableField[this.index].options);
     },
     changeRadio(status) {
       this.tableField = [];

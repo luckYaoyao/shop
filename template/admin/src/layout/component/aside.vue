@@ -93,7 +93,6 @@ export default {
     });
     if (this.$store.state.themeConfig.themeConfig.layout !== 'columns') {
       this.bus.$on('routesListChange', () => {
-        console.log('变了大哥');
         this.setFilterRoutes();
       });
     }

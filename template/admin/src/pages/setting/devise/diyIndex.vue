@@ -33,7 +33,7 @@
               {{ item.title }}
             </div>
           </div>
-          <div class="wrapper"  v-if="tabCur == 0">
+          <div class="wrapper" v-if="tabCur == 0">
             <div v-for="(item, index) in leftMenu" :key="index">
               <div class="tips" @click="item.isOpen = !item.isOpen">
                 {{ item.title }}
@@ -480,7 +480,7 @@ export default {
         if (evt.moved.element.name == 'search_box' || evt.moved.element.name == 'nav_bar') {
           return this.$Message.warning('该组件禁止拖拽');
         }
-        
+
         // if (evt.moved.element.name == "nav_bar") {
         //     return this.$Message.warning("该组件禁止拖拽");
         // }

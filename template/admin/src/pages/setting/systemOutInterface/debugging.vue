@@ -261,7 +261,6 @@ export default {
   created() {
     this.interfaceData = this.formValidate;
     this.interfaceData.request_body = JSON.parse(JSON.stringify(this.interfaceData.request_params));
-    console.log(this.interfaceData);
   },
   mounted() {},
   methods: {
@@ -275,8 +274,6 @@ export default {
         });
     },
     async requestData() {
-      console.log(this.$refs.xTable.getTableData().tableData);
-      console.log(this.filtersData((await this.$refs.xTable.getTableData().tableData) || []));
       let url, method, params, body, headers;
       url = this.interfaceData.url;
       method = this.interfaceData.method;
@@ -284,12 +281,10 @@ export default {
       body = this.filtersData((await this.$refs.yTable.getTableData().tableData) || []);
       let h = this.filtersData((await this.$refs.zTable.getTableData().tableData) || []);
       let h1 = this.filtersData((await this.$refs.zaTable.getTableData().tableData) || []);
-      console.log(this.interfaceData, h, h1);
       headers = {
         ...h,
         ...h1,
       };
-      console.log(url, method, params, body, headers);
       requestMethod(url, method, params, body, headers)
         .then((res) => {
           this.codes = res + '';
@@ -299,14 +294,12 @@ export default {
         });
     },
     filtersData(arr) {
-      console.log(arr);
       try {
         let x = {};
         arr.map((e) => {
           if (!e.parentId) {
             for (let i in e) {
               if (i == 'attribute') {
-                console.log(e);
                 if (e.type !== 'array') {
                   x[e[i]] = e.value || '';
                 } else {
@@ -344,7 +337,6 @@ export default {
     },
     changeTab(name) {
       if (name === 'Header') {
-        console.log(this.interfaceData.headerData);
         if (!this.interfaceData.headerData) {
           this.insertEvent('zTable', {
             attribute: 'Content-Type',
@@ -353,7 +345,6 @@ export default {
           this.insertEvent('zaTable');
         }
       }
-      console.log(this.interfaceData);
     },
     async insertEvent(type, d) {
       const $table = this.$refs[type];

@@ -4,8 +4,7 @@
       <div v-if="isShowList" class="backs-box">
         <div class="backs">
           <span class="back" @click="goBack(false)"><Icon type="md-arrow-round-back" class="icon" /></span>
-          <span class="item" v-for="(item, index) in routeList" :key="index" @click="jumpRoute(item)"
-            >
+          <span class="item" v-for="(item, index) in routeList" :key="index" @click="jumpRoute(item)">
             <span class="key">{{ item.key }}</span>
             <Icon class="forward" v-if="index < routeList.length - 1" type="ios-arrow-forward" />
           </span>
@@ -207,7 +206,7 @@ export default {
           slot: 'filename',
           minWidth: 150,
           back: '返回上级',
-          sortable: true
+          sortable: true,
         },
         // {
         //   title: '文件/文件夹路径',
@@ -356,7 +355,6 @@ export default {
       this.getList(false, false);
     },
     jumpRoute(item) {
-      console.log
       let data = {
         path: item.route,
         filename: '',
