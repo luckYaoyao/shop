@@ -55,7 +55,7 @@ class SystemMenusDao extends BaseDao
     public function getMenusRoule(array $where, ?array $field = [])
     {
         if (!$field) {
-            $field = ['id', 'menu_name', 'icon', 'pid', 'sort', 'menu_path', 'is_show', 'header', 'is_header', 'is_show_path'];
+            $field = ['id', 'menu_name', 'icon', 'pid', 'sort', 'menu_path', 'is_show', 'header', 'is_header', 'is_show_path', 'is_show'];
         }
         return $this->search($where)->field($field)->order('sort DESC,id DESC')->failException(false)->select();
     }

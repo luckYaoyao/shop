@@ -172,7 +172,7 @@ class SystemMenus extends AuthController
                 'api_url' => $menu['api_url'],
                 'pid' => $menu['path'],
                 'auth_type' => 2,
-                'is_show' => 0,
+                'is_show' => 1,
             ];
         }
 
