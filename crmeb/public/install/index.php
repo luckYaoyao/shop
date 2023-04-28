@@ -406,7 +406,16 @@ switch ($step) {
             $res = mysqli_query($conn, $addadminsql);
             $res2 = true;
             if (isset($_SERVER['SERVER_NAME'])) {
-                $site_url = '\'"http://' . $_SERVER['SERVER_NAME'] . '"\'';
+                if (isset($_SERVER['REQUEST_SCHEME'])) {
+                    $request_scheme = $_SERVER['REQUEST_SCHEME'];
+                } else {
+                    if ($_SERVER['HTTPS'] == 'on') {
+                        $request_scheme = 'https';
+                    } else {
+                        $request_scheme = 'http';
+                    }
+                }
+                $site_url = '\'"' . $request_scheme . '://' . $_SERVER['SERVER_NAME'] . '"\'';
                 $res2 = mysqli_query($conn, 'UPDATE `' . $dbPrefix . 'system_config` SET `value`=' . $site_url . ' WHERE `menu_name`="site_url"');
             }
             $arr = array('n' => 999999, 'count' => $counts, 'msg' => '安装完成', 'time' => date('Y-m-d H:i:s'));
