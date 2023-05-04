@@ -502,7 +502,7 @@ class SystemCrudServices extends BaseServices
 
         $data['softDelete'] = false;
 
-        $tableInfo = null;
+        //先检查表存在则
         if ($id) {
             $this->updateFromCommon($tableName, $tableComment);
             //删除数据库表
@@ -516,7 +516,9 @@ class SystemCrudServices extends BaseServices
                 throw new AdminException('表已经被生成过，请在列表中进行修改');
             }
         }
+
         //创建数据库
+        $tableCreateInfo = null;
         if ($tableField && (!$data['isTable'] || !$tableInfo)) {
             $tableCreateInfo = $this->makeDatebase($tableName, $tableComment, $tableField);
             if ($tableCreateInfo['softDelete']) {
@@ -530,6 +532,7 @@ class SystemCrudServices extends BaseServices
             throw new AdminException(500049, ['_name' => $tableName]);
         }
 
+        //读取字段
         //读取数据库字段信息
         $tableInfo = $this->getTableInfo($tableName);
 
@@ -572,7 +575,7 @@ class SystemCrudServices extends BaseServices
             $crudInfo = $this->dao->get($id);
         }
 
-        $res = $this->transaction(function () use ($crudInfo, $tableInfo, $modelName, $filePath, $tableName, $routeName, $data, $dataMenu) {
+        $res = $this->transaction(function () use ($tableCreateInfo, $crudInfo, $tableInfo, $modelName, $filePath, $tableName, $routeName, $data, $dataMenu) {
             $routeService = app()->make(SystemRouteServices::class);
             $meunService = app()->make(SystemMenusServices::class);
             //修改菜单名称
@@ -679,6 +682,12 @@ class SystemCrudServices extends BaseServices
             $makePath = [];
             foreach ($make as $key => $item) {
                 $makePath[$key] = $item['path'];
+            }
+
+            if ($tableCreateInfo && isset($tableCreateInfo['table']) && $tableCreateInfo['table'] instanceof Table) {
+                //创建数据库
+                $tableCreateInfo['table']->create();
+                $tableInfo = $this->getTableInfo($tableName);
             }
 
             $crudDate = [
@@ -816,10 +825,8 @@ class SystemCrudServices extends BaseServices
                 $table->addIndex($item);
             }
         }
-        //执行创建
-        $table->create();
 
-        return compact('indexField', 'softDelete', 'timestamps');
+        return compact('indexField', 'softDelete', 'timestamps', 'table');
     }
 
     /**
