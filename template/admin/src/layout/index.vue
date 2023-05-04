@@ -10,7 +10,6 @@
 import { Local } from '@/utils/storage.js';
 import { mapMutations } from 'vuex';
 import { getNewTagList } from '@/libs/util';
-import Mains from '@/layout/component/main.vue';
 
 export default {
   name: 'layout',

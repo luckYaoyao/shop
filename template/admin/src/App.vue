@@ -84,7 +84,7 @@ export default {
     this.openSetingsDrawer();
     this.getLayoutThemeConfig();
     this.$nextTick((e) => {
-      this.getVersion();
+      // this.getVersion();
     });
   },
 

@@ -12,7 +12,7 @@
         <div class="layout-link-msg">页面 "{{ $t(meta.title) }}" 已在新窗口中打开</div>
         <el-button class="mt30" round size="small" @click="onGotoFullPage">
           <i class="iconfont icon-lianjie"></i>
-          <span>立即前往体验</span>
+          <span>立即前往</span>
         </el-button>
       </div>
     </div>

@@ -1,9 +1,3 @@
-<!--
- * @Author: From-wh from-wh@hotmail.com
- * @Date: 2023-03-09 15:45:51
- * @FilePath: /admin/src/layout/footer/index.vue
- * @Description: 
--->
 <template>
   <div class="layout-footer mt15">
     <div class="layout-footer-warp">

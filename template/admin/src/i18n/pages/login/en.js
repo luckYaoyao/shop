@@ -1,18 +1,18 @@
 // 定义内容
 export default {
   login: {
-    placeholder1: 'The user name admin or not is test',
-    placeholder2: 'Password: 123456',
-    placeholder3: 'Please enter the verification code',
+    placeholder1: '',
+    placeholder2: '',
+    placeholder3: '',
     btnText: 'Sign in',
     link: {
-      one1: 'Third party login',
-      one2: 'Links',
+      one1: '',
+      one2: '',
     },
     signInText: 'welcome back!',
     copyright: {
-      one5: 'Copyright: Shenzhen XXX Software Technology Co., Ltd',
-      two6: 'Copyright: Shenzhen XXX software technology Guangdong ICP preparation no.05010000',
+      one5: '',
+      two6: '',
     },
   },
 };

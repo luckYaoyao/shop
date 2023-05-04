@@ -7,15 +7,15 @@
 // 定义内容
 export default {
   login: {
-    placeholder1: '用户名 admin 或不输均为 test',
-    placeholder2: '密码：123456',
-    placeholder3: '请输入验证码',
+    placeholder1: '',
+    placeholder2: '',
+    placeholder3: '',
     btnText: '登 录',
     link: {
-      one1: '第三方登录',
-      one2: '友情链接',
+      one1: '',
+      one2: '',
     },
-    signInText: '欢迎回来！',
+    signInText: '',
     copyright: {
       one5: '',
       two6: '',

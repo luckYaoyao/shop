@@ -97,7 +97,7 @@ export default {
   created() {},
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
 /deep/ .center {
   text-align: center;
   margin-right: 0 !important;
