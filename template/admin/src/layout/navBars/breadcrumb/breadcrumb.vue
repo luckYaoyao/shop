@@ -82,7 +82,7 @@ export default {
     // 动态设置经典、横向布局不显示
     isShowBreadcrumb() {
       const { layout, isBreadcrumb } = this.$store.state.themeConfig.themeConfig;
-      if (layout === 'transverse') {
+      if (layout === 'transverse' || layout === 'classic') {
         return 'none';
       } else {
         return isBreadcrumb ? '' : 'none';

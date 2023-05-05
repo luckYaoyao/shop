@@ -418,7 +418,7 @@ export default {
       line-height: 26px;
       display: flex;
       align-items: center;
-      border: 1px solid var(--prev-border-color-lighter);
+      border: 1px solid #ebeef5;
       padding: 0 12px 0 15px;
       margin-right: 5px;
       border-radius: 2px;

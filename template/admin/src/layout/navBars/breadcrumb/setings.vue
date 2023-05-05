@@ -275,7 +275,10 @@
             </el-radio-group>
           </div>
         </div>
-        <div class="layout-breadcrumb-seting-bar-flex mt15" :class="{ mb28: getThemeConfig.layout !== 'columns' }">
+        <div
+          class="layout-breadcrumb-seting-bar-flex mt15"
+          :class="{ mb28: getThemeConfig.layout !== 'columns' && getThemeConfig.layout !== 'classic' }"
+        >
           <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fiveColumnsAsideStyle') }}</div>
           <div class="layout-breadcrumb-seting-bar-flex-value">
             <el-radio-group v-model="getThemeConfig.columnsAsideStyle" size="mini" @change="setLocalThemeConfig">
@@ -284,7 +287,10 @@
             </el-radio-group>
           </div>
         </div>
-        <div class="layout-breadcrumb-seting-bar-flex mt15 mb28" v-if="getThemeConfig.layout === 'columns'">
+        <div
+          class="layout-breadcrumb-seting-bar-flex mt15 mb28"
+          v-if="getThemeConfig.layout === 'columns' || getThemeConfig.layout === 'classic'"
+        >
           <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fiveColumnsAsideLayout') }}</div>
           <div class="layout-breadcrumb-seting-bar-flex-value">
             <el-radio-group v-model="getThemeConfig.columnsAsideLayout" size="mini" @change="setLocalThemeConfig">

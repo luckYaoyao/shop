@@ -3,6 +3,7 @@
     <Logo v-if="setIsShowLogo" />
     <Breadcrumb />
     <Horizontal :menuList="menuList" v-if="isLayoutTransverse" />
+    <transverseAside v-if="isLayoutClassic" />
     <User />
   </div>
 </template>
@@ -12,9 +13,10 @@ import Breadcrumb from '@/layout/navBars/breadcrumb/breadcrumb.vue';
 import User from '@/layout/navBars/breadcrumb/user.vue';
 import Logo from '@/layout/logo/index.vue';
 import Horizontal from '@/layout/navMenu/horizontal.vue';
+import transverseAside from '@/layout/component/transverseAside.vue';
 export default {
   name: 'layoutNavBars',
-  components: { Breadcrumb, User, Logo, Horizontal },
+  components: { Breadcrumb, User, Logo, Horizontal, transverseAside },
   data() {
     return {
       menuList: [],
@@ -30,6 +32,10 @@ export default {
     isLayoutTransverse() {
       let { layout, isClassicSplitMenu } = this.$store.state.themeConfig.themeConfig;
       return layout === 'transverse' || (isClassicSplitMenu && layout === 'classic');
+    },
+    isLayoutClassic() {
+      let { layout } = this.$store.state.themeConfig.themeConfig;
+      return layout === 'classic';
     },
   },
   mounted() {
