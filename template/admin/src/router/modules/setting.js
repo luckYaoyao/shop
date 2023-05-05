@@ -138,7 +138,7 @@ export default {
       name: `${pre}config`,
       meta: {
         auth: ['setting-sms-sms-config'],
-        title: '短信账户',
+        title: '一号通账户',
       },
       component: () => import('@/pages/notify/smsConfig/index'),
     },
