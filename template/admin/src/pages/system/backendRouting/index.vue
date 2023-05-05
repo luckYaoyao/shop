@@ -588,9 +588,9 @@ export default {
   },
   methods: {
     syncRoute() {
-      this.$Modal.warning({
+      this.$Modal.confirm({
         title: '立即同步',
-        content: '您确认立即同步路由权限？',
+        content: '同步之后，路由文件中新增的接口添加到接口列表中，路由文件中删除的路由会同步的在接口列表中删除',
         onOk: () => {
           syncRoute(this.app_name).then((res) => {
             this.getInterfaceList('one');

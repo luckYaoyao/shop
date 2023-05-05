@@ -352,6 +352,15 @@ class SystemCrud extends AuthController
     {
         $comment = $request->param('comment');
         $filepath = $request->param('filepath');
+        $pwd = $request->param('pwd');
+
+        if ($pwd == '') {
+            return app('json')->fail('请输入文件管理密码');
+        }
+        if (config('filesystem.password') != $pwd) {
+            return app('json')->fail('文件管理密码错误');
+        }
+        
         if (empty($filepath) || !$id) {
             return app('json')->fail(410087);
         }
