@@ -36,9 +36,9 @@ service.interceptors.request.use(
 
     const token = getCookies('token');
     const kefuToken = getCookies('kefu_token');
-    if (token || kefuToken) {
-      config.headers['Authori-zation'] = config.kefu ? 'Bearer ' + kefuToken : 'Bearer ' + token;
-    }
+    // if (token || kefuToken) {
+    //   config.headers['Authori-zation'] = config.kefu ? 'Bearer ' + kefuToken : 'Bearer ' + token;
+    // }
     return config;
   },
   (error) => {

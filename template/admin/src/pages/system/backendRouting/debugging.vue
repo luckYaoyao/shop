@@ -247,6 +247,7 @@
 import request from './request';
 import MonacoEditor from './components/MonacoEditor.vue';
 import vuedraggable from 'vuedraggable';
+import { getCookies } from '@/libs/util';
 
 function requestMethod(url, method, params, data, headerItem) {
   return request({
@@ -402,13 +403,13 @@ export default {
     },
     changeTab(name) {
       if (name === 'Header') {
-        // if (!this.$refs.zTable.getTableData().tableData.length) {
-        //   this.insertEvent('zTable', {
-        //     attribute: 'Content-Type',
-        //     value: 'application/x-www-form-urlencoded',
-        //   });
-        //   this.insertEvent('zaTable');
-        // }
+        if (!this.$refs.zTable.getTableData().tableData.length) {
+          this.insertEvent('zTable', {
+            attribute: 'Authori-Zation',
+            value: 'Bearer ' + getCookies('token'),
+          });
+          this.insertEvent('zaTable');
+        }
       }
     },
     async insertEvent(type, d) {
@@ -517,5 +518,8 @@ export default {
 .copy-btn {
   display: flex;
   justify-content: right;
+}
+/deep/ .monaco-editor{
+    min-height: 700px
 }
 </style>

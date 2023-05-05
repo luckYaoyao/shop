@@ -70,12 +70,12 @@
         <span>{{ title }}</span>
       </p>
       <div class="file" style="height: 100%">
-        <Button class="save" type="primary" @click="crudSaveFile">保存</Button>
+        <Button class="save" type="primary" @click="pwdModal = true">保存</Button>
 
         <div class="file-box">
           <div class="file-fix"></div>
           <div class="file-content">
-            <Tabs
+            <!-- <Tabs
               type="card"
               v-model="indexEditor"
               style="height: 100%"
@@ -97,11 +97,30 @@
                   style="height: 100%; min-height: calc(100vh - 110px)"
                 ></div>
               </TabPane>
-            </Tabs>
+            </Tabs> -->
+            <el-tabs v-model="indexEditor" type="card" @tab-click="toggleEditor">
+              <el-tab-pane v-for="value in editorIndex" :key="value.index">
+                <span slot="label">
+                  <el-tooltip class="item" effect="dark" :content="value.title" placement="top">
+                    <span>{{ value.file_name }}</span>
+                  </el-tooltip>
+                </span>
+                <div
+                  ref="container"
+                  :id="'container_' + value.index"
+                  style="height: 100%; min-height: calc(100vh - 110px)"
+                ></div>
+              </el-tab-pane>
+              <!-- <el-tab-pane label="用户管理" name="first">用户管理</el-tab-pane>
+              <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
+              <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
+              <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane> -->
+            </el-tabs>
           </div>
           <Spin size="large" fix v-if="spinShow"></Spin>
         </div>
       </div>
+
       <!-- </Modal> -->
       <!-- <div class="demo-drawer-footer">
         <Button style="margin-right: 8px" @click="modals = false">关闭</Button>
@@ -123,6 +142,15 @@
         <div v-for="(item, index) in codeBuildList" :key="index">{{ item }}</div>
       </div>
     </Modal>
+    <Modal
+      v-model="pwdModal"
+      title="文件管理密码"
+      :closable="false"
+      @on-ok="crudSaveFile"
+      @on-cancel="pwdModal = false"
+    >
+      <Input v-model="pwd" type="password" placeholder="请输入文件管理密码"></Input>
+    </Modal>
   </div>
 </template>
 
@@ -132,7 +160,7 @@ import { crudList, crudDet, crudDownload, crudSaveFile } from '@/api/systemCodeG
 import * as monaco from 'monaco-editor';
 import { getCookies, removeCookies } from '@/libs/util';
 import Setting from '@/setting';
-
+import { Input } from 'view-design';
 export default {
   data() {
     return {
@@ -155,7 +183,9 @@ export default {
         position: 'static',
       },
       loading: false,
+      pwdModal: false,
       buildModals: false,
+      pwd: '',
       tabList: [],
       codeBuildList: [],
       total: 0,
@@ -238,9 +268,11 @@ export default {
       let data = {
         filepath: this.editorIndex[this.indexEditor].pathname,
         comment: this.editorList[this.indexEditor].editor.getValue(),
+        pwd: this.pwd,
       };
       crudSaveFile(this.editId, data)
         .then((res) => {
+          this.pwd = '';
           this.$Message.success(res.msg);
         })
         .catch((err) => {
@@ -356,6 +388,7 @@ export default {
                 tab: true,
                 index: index + '',
                 title: data.name,
+                file_name: data.file_name,
                 pathname: data.path,
               });
               that.code = data.content;
@@ -365,6 +398,7 @@ export default {
                 that.editorList[index].path = data.path;
                 that.editorList[index].oldCode = that.content;
                 that.editorIndex[index].title = data.name;
+                that.editorIndex[index].file_name = data.file_name;
               });
             });
             that.modals = true;

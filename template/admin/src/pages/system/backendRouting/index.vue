@@ -417,14 +417,14 @@
       <label>分组名称：</label>
       <Input v-model="value" placeholder="请输入分组名称" style="width: 85%" />
     </Modal>
-    <Modal v-model="debuggingModal" :title="formValidate.name" width="70%" footer-hide :loading="loading">
+    <Drawer v-model="debuggingModal" :title="formValidate.name" width="70%" footer-hide :loading="loading">
       <debugging
         v-if="debuggingModal"
         :formValidate="formValidate"
         :typeList="intTypeList"
         :requestTypeList="requestTypeList"
       />
-    </Modal>
+    </Drawer>
   </div>
 </template>
 

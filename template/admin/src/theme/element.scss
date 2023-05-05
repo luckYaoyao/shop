@@ -190,13 +190,13 @@
 }
 .columns-round {
   .el-menu-item {
-    margin: 0 5px;
+    margin: 0 5px 5px 5px;
     border-radius: 5px;
   }
   .el-submenu {
     border-radius: 5px;
     .el-submenu__title {
-      margin: 0 5px;
+      margin: 5px 5px;
     }
     .el-submenu__title:hover {
       border-radius: 5px;
