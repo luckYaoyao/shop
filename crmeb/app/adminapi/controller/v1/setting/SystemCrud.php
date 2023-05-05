@@ -257,9 +257,20 @@ class SystemCrud extends AuthController
 
         //调整排序
         $makeData = [];
-        $names = ['controller', 'validate', 'service', 'dao', 'model', 'route', 'router', 'api', 'pages'];
-        foreach ($names as $name) {
+        $names = [
+            'controller' => '控制器',
+            'validate' => '验证器',
+            'service' => '逻辑层',
+            'dao' => '数据库操作',
+            'model' => '模型层',
+            'route' => '后端路由',
+            'router' => '前端路由',
+            'api' => '前端接口',
+            'pages' => '前端页面'
+        ];
+        foreach ($names as $name => $value) {
             if (isset($data[$name])) {
+                $data[$name]['file_name'] = $value;
                 $makeData[] = $data[$name];
             }
         }
