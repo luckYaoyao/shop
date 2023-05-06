@@ -19,7 +19,9 @@ Route::group('pc', function () {
         Route::get('scan/:key', 'pc.LoginController/scanLogin')->name('scanLogin');//检测扫码情况
         Route::get('get_appid', 'pc.LoginController/getAppid')->name('getAppid');//检测扫码情况
         Route::get('wechat_auth', 'pc.LoginController/wechatAuth')->name('wechatAuth');//检测扫码情况
-    })->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class);
+    })->middleware(\app\http\middleware\AllowOriginMiddleware::class)
+        ->middleware(\app\api\middleware\StationOpenMiddleware::class)
+        ->option(['parent' => 'PC', 'cate_name' => '授权登录']);
 
     //未授权接口
     Route::group(function () {
@@ -35,7 +37,10 @@ Route::group('pc', function () {
         Route::get('get_recommend/:type', 'pc.ProductController/getRecommendList')->name('getRecommendList');//获取推荐商品
         Route::get('get_wechat_qrcode', 'pc.PublicController/getWechatQrcode')->name('getWechatQrcode');//获取关注二维码
         Route::get('get_good_product', 'pc.ProductController/getGoodProduct')->name('getGoodProduct');//获取优品推荐
-    })->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class)->middleware(\app\api\middleware\AuthTokenMiddleware::class, false);
+    })->middleware(\app\http\middleware\AllowOriginMiddleware::class)
+        ->middleware(\app\api\middleware\StationOpenMiddleware::class)
+        ->middleware(\app\api\middleware\AuthTokenMiddleware::class, false)
+        ->option(['parent' => 'PC', 'cate_name' => '用户未授权接口']);
 
     //会员授权接口
     Route::group(function () {
@@ -44,7 +49,10 @@ Route::group('pc', function () {
         Route::get('get_order_list', 'pc.OrderController/getOrderList')->name('getOrderList');//订单列表
         Route::get('get_refund_order_list', 'pc.OrderController/getRefundOrderList')->name('getRefundOrderList');//退款订单列表
         Route::get('get_collect_list', 'pc.UserController/getCollectList')->name('getCollectList');//收藏列表
-    })->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class)->middleware(\app\api\middleware\AuthTokenMiddleware::class, true);
+    })->middleware(\app\http\middleware\AllowOriginMiddleware::class)
+        ->middleware(\app\api\middleware\StationOpenMiddleware::class)
+        ->middleware(\app\api\middleware\AuthTokenMiddleware::class, true)
+        ->option(['parent' => 'PC', 'cate_name' => '用户授权接口']);
 
     Route::miss(function () {
         if (app()->request->isOptions()) {
@@ -54,4 +62,6 @@ Route::group('pc', function () {
         } else
             return Response::create()->code(404);
     });
-})->middleware(\app\http\middleware\AllowOriginMiddleware::class)->middleware(\app\api\middleware\StationOpenMiddleware::class);
+})->middleware(\app\http\middleware\AllowOriginMiddleware::class)
+    ->middleware(\app\api\middleware\StationOpenMiddleware::class)
+    ->option(['mark' => 'PC', 'mark_name' => 'PC']);

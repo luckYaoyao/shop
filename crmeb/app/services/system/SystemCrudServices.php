@@ -526,7 +526,7 @@ class SystemCrudServices extends BaseServices
                 $data['softDelete'] = true;
             }
         }
-        
+
         //读取字段
         //读取数据库字段信息
         $tableInfo = $this->getTableInfo($tableName);
