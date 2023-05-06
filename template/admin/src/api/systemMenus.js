@@ -86,13 +86,10 @@ export function menusDetailsApi(id) {
  * @param {Number} param data.is_show {Number} 状态值
  */
 export function isShowApi(data) {
-  let datas = {
-    is_show: data.is_show,
-  };
   return request({
     url: `/setting/menus/show/${data.id}`,
     method: 'put',
-    data: datas,
+    data,
   });
 }
 
