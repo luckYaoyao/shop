@@ -2,10 +2,10 @@
   <div class="diy-page">
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
-        <router-link :to="{ path: $routeProStr + '/setting/pages/devise' }"
+        <!-- <router-link :to="{ path: $routeProStr + '/setting/pages/devise' }"
           ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
-        >
-        <Divider type="vertical" />
+        > -->
+        <!-- <Divider type="vertical" /> -->
         <span class="ivu-page-header-title mr20" style="padding: 0" v-text="$route.meta.title"></span>
         <div class="rbtn">
           <Button v-if="pageId !== 0" class="bnt" @click="setmoren" :loading="loading">保存默认</Button>
@@ -13,6 +13,7 @@
           <!-- <div class="data" @click="setmoren">设置默认</div>
             <div class="data" @click="getmoren">恢复默认</div> -->
           <Button class="bnt ml20" type="primary" @click="saveConfig" :loading="loading">保存</Button>
+          <Button class="ml20" type="info" @click="closeWindow" :loading="loading">保存并关闭</Button>
           <Button class="bnt ml20" @click="reast">重置</Button>
         </div>
       </div>
@@ -291,27 +292,6 @@ export default {
   },
   beforeRouteLeave(to, from, next) {
     // 导航离开该组件的对应路由时调用
-    // 可以访问组件实例 `this`
-    if (to.name === 'setting_devise') {
-      this.$Modal.confirm({
-        title: '确定要离开当前页吗？',
-        content: '离开前请确认保存您的设计',
-        okText: '保存并离开',
-        cancelText: '离开',
-        loading: true,
-        onOk: () => {
-          setTimeout(() => {
-            this.saveConfig();
-            this.$Modal.remove();
-            next();
-          }, 1500);
-        },
-        onCancel: () => {
-          next();
-        },
-      });
-    }
-    // 执行路由跳转
   },
   beforeCreate() {
     this.$store.commit('mobildConfig/titleUpdata', '');
@@ -361,6 +341,26 @@ export default {
     });
   },
   methods: {
+    closeWindow() {
+      this.$Modal.confirm({
+        title: '确定保存并关闭当前页吗？',
+        content: '离开前请确认保存您的设计',
+        okText: '保存并关闭',
+        cancelText: '关闭',
+        loading: true,
+        onOk: () => {
+          setTimeout(() => {
+            this.saveConfig();
+            this.$Modal.remove();
+            window.close();
+          }, 1500);
+        },
+        onCancel: () => {
+          window.close();
+          next();
+        },
+      });
+    },
     leftRemove({ to, from, item, clone, oldIndex, newIndex }) {
       if (this.isSearch && newIndex == 0) {
         if (item._underlying_vm_.name == 'z_wechat_attention') {
