@@ -40,12 +40,19 @@ class SystemMenus extends AuthController
     /**
      * 菜单展示列表
      * @return \think\Response
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/05/06
      */
     public function index()
     {
         $where = $this->request->getMore([
             ['is_show', ''],
             ['keyword', ''],
+            ['auth_type', ''],
         ]);
         return app('json')->success($this->services->getList($where));
     }
