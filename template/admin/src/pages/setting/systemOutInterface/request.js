@@ -15,7 +15,7 @@ service.interceptors.request.use(
       let baseUrl = Setting.apiBaseURL.replace(/adminapi/, 'kefuapi');
       config.baseURL = baseUrl;
     } else {
-      config.baseURL = 'https://v5.wuht.net/outapi' || Setting.apiBaseURL;
+      config.baseURL = Setting.apiBaseURL;
     }
     if (config.file) {
       config.headers['Content-Type'] = 'multipart/form-data';
