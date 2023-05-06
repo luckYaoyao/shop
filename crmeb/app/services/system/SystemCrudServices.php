@@ -526,21 +526,15 @@ class SystemCrudServices extends BaseServices
                 $data['softDelete'] = true;
             }
         }
-
-        //读取表结构
-        $column = $this->getColumnNamesList($tableName);
-        if (!$column) {
-            throw new AdminException(500049, ['_name' => $tableName]);
-        }
-
+        
         //读取字段
         //读取数据库字段信息
         $tableInfo = $this->getTableInfo($tableName);
 
         //获取主键
-        foreach ($column as $value) {
+        foreach ($tableField as $value) {
             if ($value['primaryKey']) {
-                $data['key'] = $value['name'];
+                $data['key'] = $value['field'];
                 break;
             }
         }
