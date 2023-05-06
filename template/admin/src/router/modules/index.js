@@ -29,7 +29,7 @@ export default {
   component: LayoutMain,
   children: [
     {
-      path: routePre + '/home_page',
+      path: routePre + '/index',
       name: `${pre}index`,
       header: 'home',
       meta: {
