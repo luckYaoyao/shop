@@ -41,7 +41,7 @@
               <aside class="el-aside mr5" style="width: 10px"></aside>
               <aside class="el-aside-dark mr5" style="width: 17px"></aside>
               <section class="el-container is-vertical">
-                <!-- <header class="el-header" style="height: 10px"></header> -->
+                <header class="el-header mb5" style="height: 10px"></header>
                 <main class="el-main"></main>
               </section>
             </section>
@@ -60,7 +60,7 @@
             <section class="el-container is-vertical el-circular">
               <header class="el-aside mb5" style="height: 10px"></header>
               <section class="el-container">
-                <aside class="el-aside mr5" style="width: 20px"></aside>
+                <aside class="el-aside-dark mr5" style="width: 17px"></aside>
                 <section class="el-container is-vertical">
                   <main class="el-main"></main>
                 </section>
@@ -140,7 +140,7 @@
               <el-option label="紫白" value="theme-6"></el-option>
               <el-option label="红黑" value="theme-7"></el-option>
               <el-option label="红白" value="theme-8"></el-option>
-              <el-option label="渐变" value="theme-9"></el-option>
+              <el-option label="渐变" value="theme-9" v-if="getThemeConfig.layout === 'columns'"></el-option>
             </el-select>
           </div>
         </div>
@@ -197,7 +197,7 @@
             <el-switch v-model="getThemeConfig.isTagsview" :width="35" @change="setLocalThemeConfig"></el-switch>
           </div>
         </div>
-        <div class="layout-breadcrumb-seting-bar-flex mt15">
+        <!-- <div class="layout-breadcrumb-seting-bar-flex mt15">
           <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fourIsTagsviewIcon') }}</div>
           <div class="layout-breadcrumb-seting-bar-flex-value">
             <el-switch
@@ -207,7 +207,7 @@
               @change="setLocalThemeConfig"
             ></el-switch>
           </div>
-        </div>
+        </div> -->
         <!-- <div class="layout-breadcrumb-seting-bar-flex mt15">
           <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('message.layout.fourIsCacheTagsView') }}</div>
           <div class="layout-breadcrumb-seting-bar-flex-value">
@@ -601,10 +601,7 @@ export default {
 </script>
 <style>
 body .v-modal {
-  opacity: 0.5;
-  background-color: rgba(0, 0, 0, 0.3);
-  -webkit-backdrop-filter: blur(3px);
-  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 </style>
 <style scoped lang="scss">
@@ -640,12 +637,12 @@ body .v-modal {
     margin: 0 -5px;
     .layout-drawer-content-item.drawer-layout-active {
       border: 1px solid;
-      border-color: #2d8cf0;
+      border-color: var(--prev-color-primary);
     }
     .layout-drawer-content-item:hover {
       transition: all 0.3s ease-in-out;
       border: 1px solid;
-      border-color: #2d8cf0;
+      border-color: var(--prev-color-primary);
     }
     .layout-drawer-content-item {
       width: 107px;
@@ -663,7 +660,8 @@ body .v-modal {
       .el-container {
         height: 100%;
         .el-aside-dark {
-          background-color: var(--prev-color-seting-header);
+          opacity: .5;
+          background-color: var(--prev-tag-active-color);
           border-radius: 2px;
         }
         .el-aside {
@@ -676,7 +674,7 @@ body .v-modal {
         }
         .el-main {
           border-radius: 2px;
-          border: 1px dashed #2d8cf0;
+          border: 1px dashed var(--prev-color-primary);
           padding: 0;
           background-color: var(--prev-color-seting-main);
         }
