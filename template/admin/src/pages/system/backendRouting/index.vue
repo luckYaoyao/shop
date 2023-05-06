@@ -15,7 +15,6 @@
             <div class="main-btn">
               <Button class="mb5 mr10" style="flex: 1" type="primary" @click="clickMenu(4)" long>新增分类</Button>
               <Button class="mr10" type="success" @click="syncRoute()">同步</Button>
-              <Button type="info" @click="debugging()">调试</Button>
             </div>
 
             <vue-tree-list
@@ -102,7 +101,7 @@
                 {{ formValidate.name }}
               </div>
               <div>
-                <!-- <Button type="primary" class="submission mr20" @click="debugging()">调试</Button> -->
+                <Button type="info" class="submission mr20" @click="debugging()">调试</Button>
                 <Button v-if="formValidate.id" type="primary" class="submission mr20" @click="isEdit = !isEdit">{{
                   isEdit ? '返回' : '编辑'
                 }}</Button>
@@ -646,19 +645,24 @@ export default {
             if (res.data.length) {
               res.data[0].expand = false;
               this.treeData = new Tree(res.data);
+              let i;
               this.$nextTick((e) => {
                 if (disk_type) {
-                  if (res.data[0].children[0].children.length) {
+                  if (
+                    res.data[0].children &&
+                    res.data[0].children[0].children &&
+                    res.data[0].children[0].children.length
+                  ) {
                     document.querySelectorAll('.vtl-icon-caret-right')[0].click();
                     document.querySelectorAll('.vtl-icon-caret-right')[1].click();
+                    i = res.data[0].children[0].children[0];
                   } else {
                     document.querySelectorAll('.vtl-icon-caret-right')[0].click();
+                    i = res.data[0].children[0];
                   }
+                  this.onClick(i);
                 }
               });
-              if (res.data[0].children && res.data[0].children.length) {
-                this.onClick(res.data[0]?.children[0]?.children[0]);
-              }
             } else {
               // this.$refs.treeList.clear();
               this.treeData = new Tree({});
