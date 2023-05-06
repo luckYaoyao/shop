@@ -190,5 +190,14 @@ export default {
       },
       component: () => import('@/pages/system/crontab/index'),
     },
+    {
+      path: 'system_menus/index',
+      name: `${pre}systemMenus`,
+      meta: {
+        auth: ['system-system-menus'],
+        title: '权限规则',
+      },
+      component: () => import('@/pages/system/systemMenus/index'),
+    },
   ],
 };

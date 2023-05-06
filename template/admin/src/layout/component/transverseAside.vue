@@ -255,10 +255,8 @@ export default {
     }
     .columns-round {
       background: var(--prev-color-primary);
-      // color: var(--prev-color-text-white);
       position: absolute;
       left: 0;
-      //   top: 2px;
       height: 50px;
       width: 80px;
       transform: translatey(0%);

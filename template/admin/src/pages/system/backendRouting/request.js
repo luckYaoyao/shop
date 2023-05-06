@@ -4,8 +4,7 @@ import { getCookies, removeCookies } from '@/libs/util';
 import { Message } from 'iview';
 
 const service = axios.create({
-  baseURL: 'https://v5.wuht.net',
-  // baseURL: location.protocol + '//'+ location.hostname,
+  baseURL: location.protocol + '//' + location.hostname,
   timeout: 10000, // 请求超时时间
 });
 axios.defaults.withCredentials = true; // 携带cookie
@@ -13,12 +12,6 @@ axios.defaults.withCredentials = true; // 携带cookie
 // 请求拦截器
 service.interceptors.request.use(
   (config) => {
-    // if (config.kefu) {
-    //   let baseUrl = Setting.apiBaseURL.replace(/adminapi/, 'kefuapi');
-    //   config.baseURL = baseUrl;
-    // } else {
-    //   config.baseURL = 'https://v5.wuht.net/outapi' || Setting.apiBaseURL;
-    // }
     if (config.file) {
       config.headers['Content-Type'] = 'multipart/form-data';
     } else {

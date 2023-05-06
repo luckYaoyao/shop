@@ -9,25 +9,25 @@
         @submit.native.prevent
       >
         <Row type="flex" :gutter="24">
-          <!-- <Col v-bind="grid">
+          <Col v-bind="grid">
             <FormItem label="规则状态：">
               <Select v-model="roleData.is_show" placeholder="请选择" clearable @on-change="getData">
                 <Option value="1">显示</Option>
                 <Option value="0">不显示</Option>
               </Select>
             </FormItem>
-          </Col> -->
+          </Col>
           <Col v-bind="grid">
             <FormItem label="按钮名称：" prop="status2" label-for="status2">
               <Input v-model="roleData.keyword" search enter-button placeholder="请输入按钮名称" @on-search="getData" />
             </FormItem>
           </Col>
         </Row>
-        <!-- <Row type="flex">
+        <Row type="flex">
           <Col v-bind="grid">
             <Button type="primary" @click="menusAdd('添加规则')" icon="md-add">添加规则 </Button>
           </Col>
-        </Row> -->
+        </Row>
       </Form>
       <vxe-table
         :border="false"
@@ -42,31 +42,40 @@
         row-id="id"
       >
         <vxe-table-column field="menu_name" tree-node title="按钮名称" min-width="100"></vxe-table-column>
-        <vxe-table-column field="menu_path" title="路径" min-width="240" tooltip="true">
+        <vxe-table-column field="unique_auth" title="前端权限" min-width="200"></vxe-table-column>
+        <vxe-table-column field="menu_path" title="路由" min-width="240" tooltip="true">
           <template v-slot="{ row }">
             <span v-if="row.auth_type == 1">页面：{{ row.menu_path }}</span>
-            <span v-if="row.auth_type == 2">按钮：[{{ row.methods }}]{{ row.api_url }}</span>
+            <span v-if="row.auth_type == 2">接口：[{{ row.methods }}]{{ row.api_url }}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="sort" title="排序" width="150"></vxe-table-column>
-        <vxe-table-column field="flag" title="是否显示" width="150">
+        <vxe-table-column field="flag" title="规则状态" min-width="120">
           <template v-slot="{ row }">
             <i-switch
-              v-model="row.is_show_path"
-              :value="row.is_show_path"
+              v-model="row.is_show"
+              :value="row.is_show"
               :true-value="1"
               :false-value="0"
               @on-change="onchangeIsShow(row)"
               size="large"
             >
-              <span slot="open">显示</span>
-              <span slot="close">隐藏</span>
+              <span slot="open">开启</span>
+              <span slot="close">关闭</span>
             </i-switch>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="date" title="操作" align="center" width="150" fixed="right">
+        <vxe-table-column field="date" title="操作" align="right" width="250" fixed="right">
           <template v-slot="{ row }">
+            <span>
+              <a @click="addRoute(row)" v-if="row.auth_type === 1">添加权限</a>
+              <Divider type="vertical" v-if="row.auth_type === 1" />
+              <a @click="addE(row, '添加子菜单')" v-if="row.auth_type === 1">添加子菜单</a>
+              <!-- <a @click="addE(row, '添加规则')" v-else>添加规则</a> -->
+            </span>
+            <Divider type="vertical" v-if="row.auth_type === 1" />
             <a @click="edit(row, '编辑')">编辑</a>
+            <Divider type="vertical" />
+            <a @click="del(row, '删除规则')">删除</a>
           </template>
         </vxe-table-column>
       </vxe-table>
@@ -174,9 +183,8 @@ export default {
         xs: 24,
       },
       roleData: {
-        is_show: 1,
+        is_show: '',
         keyword: '',
-        auth_type: 1,
       },
       defaultProps: {
         children: 'children',
@@ -306,8 +314,7 @@ export default {
     onchangeIsShow(row) {
       let data = {
         id: row.id,
-        is_show_path: row.is_show_path,
-        is_show: -1,
+        is_show: row.is_show,
       };
       isShowApi(data)
         .then(async (res) => {
@@ -429,6 +436,7 @@ export default {
     // 列表
     getData() {
       this.loading = true;
+      this.roleData.is_show = this.roleData.is_show || '';
       getTable(this.roleData)
         .then(async (res) => {
           this.tableData = res.data;

@@ -40,12 +40,19 @@ class SystemMenus extends AuthController
     /**
      * 菜单展示列表
      * @return \think\Response
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/05/06
      */
     public function index()
     {
         $where = $this->request->getMore([
             ['is_show', ''],
             ['keyword', ''],
+            ['auth_type', ''],
         ]);
         return app('json')->success($this->services->getList($where));
     }
@@ -267,7 +274,7 @@ class SystemMenus extends AuthController
     }
 
     /**
-     * 显示和隐藏
+     * 权限的开启和关闭，显示和隐藏
      * @param $id
      * @return mixed
      */
@@ -277,9 +284,14 @@ class SystemMenus extends AuthController
             return app('json')->fail(100100);
         }
 
-        [$show] = $this->request->postMore([['is_show', 0]], true);
+        [$isShow, $isShowPath] = $this->request->postMore([['is_show', 0], ['is_show_path', 0]], true);
+        if ($isShow == -1) {
+            $res = $this->services->update($id, ['is_show_path' => $isShowPath]);
+        } else {
+            $res = $this->services->update($id, ['is_show' => $isShow, 'is_show_path' => $isShow]);
+        }
 
-        if ($this->services->update($id, ['is_show' => $show])) {
+        if ($res) {
             return app('json')->success(100001);
         } else {
             return app('json')->fail(100007);

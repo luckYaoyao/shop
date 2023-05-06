@@ -130,6 +130,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+/deep/ .el-scrollbar__bar.is-horizontal {
+  height: 0;
+}
 .el-menu-horizontal-warp {
   flex: 1;
   overflow: hidden;

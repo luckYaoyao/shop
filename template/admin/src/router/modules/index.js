@@ -12,29 +12,6 @@ import LayoutMain from '@/layout';
 import setting from '@/setting';
 let routePre = setting.routePre;
 
-// export default {
-//   path: '/',
-//   name: 'home',
-//   redirect: '/admin/home',
-//   component: LayoutMain,
-//   meta: {
-//     hideInMenu: true,
-//     notCache: true,
-//     auth: true
-//   },
-//   children: [
-//     {
-//       path: 'admin/home',
-//       name: 'home',
-//       meta: {
-//         title: '首页',
-//         auth: ['admin-index-index']
-//       },
-//       component: () => import('@/pages/index/index')
-//     }
-//   ]
-// }
-
 const meta = {
   auth: true,
 };
@@ -52,7 +29,7 @@ export default {
   component: LayoutMain,
   children: [
     {
-      path: routePre + '/home_page',
+      path: routePre + '/index',
       name: `${pre}index`,
       header: 'home',
       meta: {

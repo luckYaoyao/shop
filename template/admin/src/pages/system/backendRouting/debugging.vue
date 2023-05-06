@@ -279,6 +279,10 @@ export default {
         return [];
       },
     },
+    apiType: {
+      type: String,
+      default: 'adminapi',
+    },
   },
   data() {
     return {
@@ -321,7 +325,7 @@ export default {
     },
     async requestData() {
       let url, method, params, body, headers;
-      url = this.interfaceData.app_name + '/' + this.interfaceData.path;
+      url = this.apiType + '/' + this.interfaceData.path;
       method = this.interfaceData.method;
       params = this.filtersData((await this.$refs.xTable.getTableData().tableData) || []);
       body =
@@ -331,6 +335,7 @@ export default {
       let h = this.filtersData((await this.$refs.zTable.getTableData().tableData) || []);
       headers = h;
       this.codes = '';
+      console.log(url);
       requestMethod(url, method, params, body, headers)
         .then((res) => {
           if (!res) return this.$Message.error('接口异常');
@@ -519,7 +524,7 @@ export default {
   display: flex;
   justify-content: right;
 }
-/deep/ .monaco-editor{
-    min-height: 700px
+/deep/ .monaco-editor {
+  min-height: 700px;
 }
 </style>

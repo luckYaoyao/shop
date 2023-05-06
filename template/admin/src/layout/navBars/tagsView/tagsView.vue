@@ -124,15 +124,7 @@ export default {
     onTagsClick(v, k) {
       this.tagsRoutePath = v.path;
       this.tagsRefsIndex = k;
-      try {
-        if (v.name == 'home_index') {
-          this.$router.replace(`${setting.routePre}/home_page`);
-        } else {
-          this.$router.push(v);
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      this.$router.push(v);
     },
     // 获取 tagsView 的下标：用于处理 tagsView 点击时的横向滚动
     getTagsRefsIndex(path) {
