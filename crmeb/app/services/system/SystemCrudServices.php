@@ -502,6 +502,7 @@ class SystemCrudServices extends BaseServices
 
         $data['softDelete'] = false;
 
+        $tableInfo = null;
         //先检查表存在则
         if ($id) {
             $this->updateFromCommon($tableName, $tableComment);
