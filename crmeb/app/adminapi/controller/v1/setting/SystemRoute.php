@@ -80,12 +80,12 @@ class SystemRoute extends AuthController
      */
     public function tree()
     {
-        $where = $this->request->getMore([
+        [$name, $appName] = $this->request->getMore([
             ['name_like', ''],
             ['app_name', 'adminapi']
-        ]);
+        ], true);
 
-        return app('json')->success($this->services->getTreeList($where));
+        return app('json')->success($this->services->getTreeList($appName, $name));
     }
 
 
