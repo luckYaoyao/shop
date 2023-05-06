@@ -76,20 +76,21 @@ class SystemRouteServices extends BaseServices
     /**
      * 获取tree数据
      * @param string $appName
-     * @return array
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/4/7
+     * @param string $name
+     * @return mixed
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/05/06
      */
-    public function getTreeList(array $where, string $appName = 'adminapi')
+    public function getTreeList(string $appName = 'adminapi', string $name = '')
     {
-        return $this->cacheDriver()->remember('ROUTE_LIST', function () use ($where, $appName) {
+        return $this->cacheDriver()->remember('ROUTE_LIST' . strtoupper($appName), function () use ($name, $appName) {
             $list = app()->make(SystemRouteCateServices::class)
                 ->selectList(['app_name' => $appName], '*', 0, 0, 'id asc,sort desc', [
-                    'children' => function ($query) use ($where) {
-                        $query->where('app_name', $where['app_name'])
-                            ->when('' !== $where['name_like'], function ($q) use ($where) {
-                                $q->where('name|path', 'LIKE', '%' . $where['name_like'] . '%');
+                    'children' => function ($query) use ($name, $appName) {
+                        $query->where('app_name', $appName)
+                            ->when('' !== $name, function ($q) use ($name) {
+                                $q->where('name|path', 'LIKE', '%' . $name . '%');
                             });
                     }
                 ])
