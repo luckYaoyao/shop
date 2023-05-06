@@ -267,7 +267,7 @@ class SystemMenus extends AuthController
     }
 
     /**
-     * 显示和隐藏
+     * 权限的开启和关闭，显示和隐藏
      * @param $id
      * @return mixed
      */
@@ -277,9 +277,14 @@ class SystemMenus extends AuthController
             return app('json')->fail(100100);
         }
 
-        [$show] = $this->request->postMore([['is_show', 0]], true);
+        [$isShow, $isShowPath] = $this->request->postMore([['is_show', 0], ['is_show_path', 0]], true);
+        if ($isShow == -1) {
+            $res = $this->services->update($id, ['is_show_path' => $isShowPath]);
+        } else {
+            $res = $this->services->update($id, ['is_show' => $isShow, 'is_show_path' => $isShow]);
+        }
 
-        if ($this->services->update($id, ['is_show' => $show])) {
+        if ($res) {
             return app('json')->success(100001);
         } else {
             return app('json')->fail(100007);
