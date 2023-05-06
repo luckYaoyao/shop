@@ -6,7 +6,7 @@
       :class="getThemeConfig.isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"
       @click="onThemeConfigChange"
     ></i>
-    <el-breadcrumb class="layout-navbars-breadcrumb-hide" :style="{ display: isShowBreadcrumb }">
+    <el-breadcrumb class="layout-navbars-breadcrumb-hide" v-if="isShowcrumb" :style="{ display: isShowBreadcrumb }">
       <transition-group name="breadcrumb" mode="out-in">
         <el-breadcrumb-item v-for="(v, k) in [...breadCrumbList, ...crumbPast]" :key="v.path">
           <span v-if="k == 1" class="layout-navbars-breadcrumb-span">
@@ -86,6 +86,14 @@ export default {
         return 'none';
       } else {
         return isBreadcrumb ? '' : 'none';
+      }
+    },
+    isShowcrumb() {
+      const { layout } = this.$store.state.themeConfig.themeConfig;
+      if (layout === 'transverse' || layout === 'classic') {
+        return false;
+      } else {
+        return true;
       }
     },
   },

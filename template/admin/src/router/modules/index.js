@@ -52,7 +52,7 @@ export default {
   component: LayoutMain,
   children: [
     {
-      path: routePre + '/home/',
+      path: routePre + '/home_page',
       name: `${pre}index`,
       header: 'home',
       meta: {

@@ -126,7 +126,7 @@ export default {
       this.tagsRefsIndex = k;
       try {
         if (v.name == 'home_index') {
-          this.$router.replace(`${setting.routePre}/home/`);
+          this.$router.replace(`${setting.routePre}/home_page`);
         } else {
           this.$router.push(v);
         }
