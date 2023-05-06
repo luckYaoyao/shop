@@ -1,403 +1,409 @@
 <template>
   <div>
-    <div class="main">
-      <!-- <Tree class="tree" :data="treeData"  @on-contextmenu="handleContextMenu">
-          <template #contextMenu>
-            <DropdownItem @click.native="handleContextCreateFolder()">新建文件夹</DropdownItem>
-            <DropdownItem @click.native="handleContextCreateFile()">新建文件</DropdownItem>
-            <DropdownItem @click.native="handleContextDelFolder()" style="color: #ed4014">删除</DropdownItem>
-          </template>
-        </Tree> -->
-      <!-- <Tree :data="treeData" :render="renderContent" class="demo-tree-render"></Tree> -->
-      <div class="ivu-mt mr20 card-tree">
-        <div class="tree">
-          <div class="main-btn">
-            <Button class="mb5 mr10" style="flex: 1" type="primary" @click="clickMenu(4)" long>新增分类</Button>
-            <Button class="mr10" type="success" @click="syncRoute()">同步</Button>
-            <Button type="info" @click="debugging()">调试</Button>
-          </div>
+    <div>
+      <Card :bordered="false" dis-hover class="mb10">
+        <Tabs v-model="apiType">
+          <TabPane label="后台接口" name="adminapi"></TabPane>
+          <TabPane label="前台接口" name="api"></TabPane>
+          <TabPane label="对外接口" name="outapi"></TabPane>
+          <TabPane label="客服接口" name="kefuapi"></TabPane>
+        </Tabs>
+      </Card>
+      <div class="main">
+        <div class="ivu-mt mr20 card-tree">
+          <div class="tree">
+            <div class="main-btn">
+              <Button class="mb5 mr10" style="flex: 1" type="primary" @click="clickMenu(4)" long>新增分类</Button>
+              <Button class="mr10" type="success" @click="syncRoute()">同步</Button>
+              <Button type="info" @click="debugging()">调试</Button>
+            </div>
 
-          <vue-tree-list
-            class="tree-list"
-            @change-name="onChangeName"
-            @delete-node="onDel"
-            :model="treeData"
-            default-tree-node-name="默认文件夹"
-            default-leaf-node-name="默认接口名"
-            v-bind:default-expanded="false"
-            :expand-only-one="true"
-          >
-            <template v-slot:leafNameDisplay="slotProps">
-              <div></div>
-              <div
-                class="tree-node"
-                :class="{
-                  node: slotProps.model.method,
-                  open: formValidate.path == slotProps.model.path && formValidate.method == slotProps.model.method,
-                }"
-                @click.stop="onClick(slotProps.model)"
-              >
-                <span
-                  class=""
+            <vue-tree-list
+              class="tree-list"
+              ref="treeList"
+              @change-name="onChangeName"
+              @delete-node="onDel"
+              :model="treeData"
+              default-tree-node-name="默认文件夹"
+              default-leaf-node-name="默认接口名"
+              v-bind:default-expanded="false"
+              :expand-only-one="true"
+            >
+              <template v-slot:leafNameDisplay="slotProps">
+                <div></div>
+                <div
+                  class="tree-node"
                   :class="{
+                    node: slotProps.model.method,
                     open: formValidate.path == slotProps.model.path && formValidate.method == slotProps.model.method,
                   }"
-                  >{{ slotProps.model.name }}</span
+                  @click.stop="onClick(slotProps.model)"
                 >
-                <Dropdown
-                  transfer
-                  @on-click="
-                    (name) => {
-                      clickMenu(name, slotProps.model);
-                    }
-                  "
-                >
-                  <a href="javascript:void(0)">
-                    <Icon class="add" type="ios-more" />
-                  </a>
-                  <template #list>
-                    <DropdownMenu>
-                      <DropdownItem name="1" v-if="!slotProps.model.method">新增接口</DropdownItem>
-                      <DropdownItem name="2" v-if="!slotProps.model.method">编辑分类名</DropdownItem>
-                      <DropdownItem name="3">删除</DropdownItem>
-                    </DropdownMenu>
-                  </template>
-                </Dropdown>
-              </div>
-            </template>
-            <!-- 新建文件夹 -->
-
-            <span class="icon" slot="addTreeNodeIcon"></span>
-            <span class="icon" slot="addLeafNodeIcon">
-              <!-- <Icon type="md-create" /> -->
-            </span>
-            <span class="icon" slot="editNodeIcon">
-              <!-- <Icon type="md-create" /> -->
-            </span>
-            <span class="icon" slot="delNodeIcon">
-              <!-- <Icon type="ios-cut" /> -->
-            </span>
-            <template v-slot:treeNodeIcon="slotProps">
-              <span
-                v-if="slotProps.model.method"
-                class="req-method"
-                :style="{
-                  color: methodsColor(slotProps.model.method),
-                  'font-weight': slotProps.model.pid == formValidate.pid ? '500' : '500',
-                }"
-                >{{ slotProps.model.method }}</span
-              >
-
-              <!-- <span v-if="slotProps.model.method"></span> -->
-            </template>
-          </vue-tree-list>
-        </div>
-      </div>
-      <Card :bordered="false" dis-hover class="ivu-mt right-card">
-        <div class="data">
-          <div class="eidt-sub">
-            <div class="name">
-              {{ formValidate.name }}
-            </div>
-            <div>
-              <!-- <Button type="primary" class="submission mr20" @click="debugging()">调试</Button> -->
-              <Button v-if="formValidate.id" type="primary" class="submission mr20" @click="isEdit = !isEdit">{{
-                isEdit ? '返回' : '编辑'
-              }}</Button>
-              <Button v-if="isEdit" type="primary" class="submission" @click="handleSubmit('formValidate')"
-                >保存</Button
-              >
-            </div>
-          </div>
-          <Form
-            class="formValidate mt20"
-            ref="formValidate"
-            :rules="ruleValidate"
-            :model="formValidate"
-            :label-width="100"
-            :label-position="labelPosition"
-            @submit.native.prevent
-          >
-            <Row :gutter="24" type="flex">
-              <Col span="24">
-                <div class="title">接口信息</div>
-                <FormItem label="接口名称：" prop="name">
-                  <Input
-                    v-if="isEdit"
-                    class="perW20"
-                    type="text"
-                    :rows="4"
-                    v-model.trim="formValidate.name"
-                    placeholder="请输入"
-                  />
-                  <span v-else>{{ formValidate.name || '' }}</span>
-                </FormItem>
-                <FormItem label="请求类型：" prop="name">
-                  <Select v-if="isEdit" v-model="formValidate.method" style="width: 120px">
-                    <Option v-for="(item, index) in requestTypeList" :key="index" :value="item.value">{{
-                      item.label
-                    }}</Option>
-                  </Select>
-                  <span v-else class="req-method" :style="'background-color:' + methodColor">{{
-                    formValidate.method || ''
-                  }}</span>
-                </FormItem>
-                <FormItem label="功能描述：" prop="name">
-                  <Input
-                    v-if="isEdit"
-                    class="perW20"
-                    type="textarea"
-                    :rows="4"
-                    v-model.trim="formValidate.describe"
-                    placeholder="请输入"
-                  />
-                  <span v-else class="text-area">{{ formValidate.describe || '--' }}</span>
-                </FormItem>
-                <FormItem label="所属分类：" prop="name" v-if="isEdit">
-                  <el-cascader
-                    v-model="formValidate.cate_id"
-                    size="small"
-                    :options="formValidate.cate_tree"
-                    :props="{ checkStrictly: true, multiple: false, emitPath: false, value: 'id', label: 'name' }"
-                    clearable
-                  ></el-cascader>
-                </FormItem>
-                <FormItem label="是否公共：" prop="name">
-                  <Switch v-if="isEdit" v-model="formValidate.type" :true-value="1" :false-value="0">
-                    <template #open>
-                      <span>是</span>
-                    </template>
-                    <template #close>
-                      <span>否</span>
-                    </template>
-                  </Switch>
-                  <span v-else class="text-area">{{ formValidate.type ? '是' : '否' }}</span>
-                </FormItem>
-              </Col>
-            </Row>
-            <Row :gutter="24" type="flex">
-              <Col span="24">
-                <div class="title">调用方式</div>
-                <FormItem label="路由地址：" prop="path">
-                  <span>{{ formValidate.path || '' }}</span>
-                </FormItem>
-                <FormItem label="文件地址：" prop="path">
-                  <span>{{ formValidate.file_path || '' }}</span>
-                </FormItem>
-                <FormItem label="方法名：" prop="path">
-                  <span>{{ formValidate.action || '' }}</span>
-                </FormItem>
-                <FormItem label="请求参数：">
-                  <vxe-table
-                    resizable
-                    show-overflow
-                    keep-source
-                    ref="xTable"
-                    row-id="id"
-                    :print-config="{}"
-                    :export-config="{}"
-                    :loading="loading"
-                    :tree-config="{ transform: true, rowField: 'id', parentField: 'parentId' }"
-                    :data="formValidate.request"
+                  <span
+                    class=""
+                    :class="{
+                      open: formValidate.path == slotProps.model.path && formValidate.method == slotProps.model.method,
+                    }"
+                    >{{ slotProps.model.name }}</span
                   >
-                    <!-- <vxe-column type="checkbox" width="60"></vxe-column> -->
-                    <vxe-column field="attribute" width="300" title="属性" tree-node :edit-render="{}">
-                      <template #default="{ row }">
-                        <vxe-input v-if="isEdit" v-model="row.attribute" type="text"></vxe-input>
-                        <span v-else>{{ row.attribute || '' }}</span>
-                      </template>
-                    </vxe-column>
-                    <vxe-column field="type" title="类型" width="200" :edit-render="{}">
-                      <template #default="{ row }">
-                        <!-- <vxe-select v-if="isEdit" v-model="row.type" type="text" :optionGroups="typeList"></vxe-select> -->
-                        <vxe-select v-if="isEdit" v-model="row.type" transfer>
-                          <vxe-option
-                            v-for="item in typeList"
-                            :key="item.value"
-                            :value="item.value"
-                            :label="item.label"
-                          ></vxe-option>
-                        </vxe-select>
-                        <span v-else>{{ row.type || '' }}</span>
+                  <Dropdown
+                    transfer
+                    @on-click="
+                      (name) => {
+                        clickMenu(name, slotProps.model);
+                      }
+                    "
+                  >
+                    <a href="javascript:void(0)">
+                      <Icon class="add" type="ios-more" />
+                    </a>
+                    <template #list>
+                      <DropdownMenu>
+                        <DropdownItem name="1" v-if="!slotProps.model.method">新增接口</DropdownItem>
+                        <DropdownItem name="2" v-if="!slotProps.model.method">编辑分类名</DropdownItem>
+                        <DropdownItem name="3">删除</DropdownItem>
+                      </DropdownMenu>
+                    </template>
+                  </Dropdown>
+                </div>
+              </template>
+              <!-- 新建文件夹 -->
 
-                        <!-- <vxe-select v-model="row.type">
+              <span class="icon" slot="addTreeNodeIcon"></span>
+              <span class="icon" slot="addLeafNodeIcon">
+                <!-- <Icon type="md-create" /> -->
+              </span>
+              <span class="icon" slot="editNodeIcon">
+                <!-- <Icon type="md-create" /> -->
+              </span>
+              <span class="icon" slot="delNodeIcon">
+                <!-- <Icon type="ios-cut" /> -->
+              </span>
+              <template v-slot:treeNodeIcon="slotProps">
+                <span
+                  v-if="slotProps.model.method"
+                  class="req-method"
+                  :style="{
+                    color: methodsColor(slotProps.model.method),
+                    'font-weight': slotProps.model.pid == formValidate.pid ? '500' : '500',
+                  }"
+                  >{{ slotProps.model.method }}</span
+                >
+
+                <!-- <span v-if="slotProps.model.method"></span> -->
+              </template>
+            </vue-tree-list>
+          </div>
+        </div>
+        <Card :bordered="false" dis-hover class="ivu-mt right-card">
+          <div class="data">
+            <div class="eidt-sub">
+              <div class="name">
+                {{ formValidate.name }}
+              </div>
+              <div>
+                <!-- <Button type="primary" class="submission mr20" @click="debugging()">调试</Button> -->
+                <Button v-if="formValidate.id" type="primary" class="submission mr20" @click="isEdit = !isEdit">{{
+                  isEdit ? '返回' : '编辑'
+                }}</Button>
+                <Button v-if="isEdit" type="primary" class="submission" @click="handleSubmit('formValidate')"
+                  >保存</Button
+                >
+              </div>
+            </div>
+            <Form
+              class="formValidate mt20"
+              ref="formValidate"
+              :rules="ruleValidate"
+              :model="formValidate"
+              :label-width="100"
+              :label-position="labelPosition"
+              @submit.native.prevent
+            >
+              <Row :gutter="24" type="flex">
+                <Col span="24">
+                  <div class="title">接口信息</div>
+                  <FormItem label="接口名称：" prop="name">
+                    <Input
+                      v-if="isEdit"
+                      class="perW20"
+                      type="text"
+                      :rows="4"
+                      v-model.trim="formValidate.name"
+                      placeholder="请输入"
+                    />
+                    <span v-else>{{ formValidate.name || '' }}</span>
+                  </FormItem>
+                  <FormItem label="请求类型：" prop="name">
+                    <Select v-if="isEdit" v-model="formValidate.method" style="width: 120px">
+                      <Option v-for="(item, index) in requestTypeList" :key="index" :value="item.value">{{
+                        item.label
+                      }}</Option>
+                    </Select>
+                    <span v-else class="req-method" :style="'background-color:' + methodColor">{{
+                      formValidate.method || ''
+                    }}</span>
+                  </FormItem>
+                  <FormItem label="功能描述：" prop="name">
+                    <Input
+                      v-if="isEdit"
+                      class="perW20"
+                      type="textarea"
+                      :rows="4"
+                      v-model.trim="formValidate.describe"
+                      placeholder="请输入"
+                    />
+                    <span v-else class="text-area">{{ formValidate.describe || '--' }}</span>
+                  </FormItem>
+                  <FormItem label="所属分类：" prop="name" v-if="isEdit">
+                    <el-cascader
+                      v-model="formValidate.cate_id"
+                      size="small"
+                      :options="formValidate.cate_tree"
+                      :props="{ checkStrictly: true, multiple: false, emitPath: false, value: 'id', label: 'name' }"
+                      clearable
+                    ></el-cascader>
+                  </FormItem>
+                  <FormItem label="是否公共：" prop="name">
+                    <Switch v-if="isEdit" v-model="formValidate.type" :true-value="1" :false-value="0">
+                      <template #open>
+                        <span>是</span>
+                      </template>
+                      <template #close>
+                        <span>否</span>
+                      </template>
+                    </Switch>
+                    <span v-else class="text-area">{{ formValidate.type ? '是' : '否' }}</span>
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row :gutter="24" type="flex">
+                <Col span="24">
+                  <div class="title">调用方式</div>
+                  <FormItem label="路由地址：" prop="path">
+                    <span>{{ formValidate.path || '' }}</span>
+                  </FormItem>
+                  <FormItem label="文件地址：" prop="path">
+                    <span>{{ formValidate.file_path || '' }}</span>
+                  </FormItem>
+                  <FormItem label="方法名：" prop="path">
+                    <span>{{ formValidate.action || '' }}</span>
+                  </FormItem>
+                  <FormItem label="请求参数：">
+                    <vxe-table
+                      resizable
+                      show-overflow
+                      keep-source
+                      ref="xTable"
+                      row-id="id"
+                      :print-config="{}"
+                      :export-config="{}"
+                      :loading="loading"
+                      :tree-config="{ transform: true, rowField: 'id', parentField: 'parentId' }"
+                      :data="formValidate.request"
+                    >
+                      <!-- <vxe-column type="checkbox" width="60"></vxe-column> -->
+                      <vxe-column field="attribute" width="300" title="属性" tree-node :edit-render="{}">
+                        <template #default="{ row }">
+                          <vxe-input v-if="isEdit" v-model="row.attribute" type="text"></vxe-input>
+                          <span v-else>{{ row.attribute || '' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="type" title="类型" width="200" :edit-render="{}">
+                        <template #default="{ row }">
+                          <!-- <vxe-select v-if="isEdit" v-model="row.type" type="text" :optionGroups="typeList"></vxe-select> -->
+                          <vxe-select v-if="isEdit" v-model="row.type" transfer>
+                            <vxe-option
+                              v-for="item in typeList"
+                              :key="item.value"
+                              :value="item.value"
+                              :label="item.label"
+                            ></vxe-option>
+                          </vxe-select>
+                          <span v-else>{{ row.type || '' }}</span>
+
+                          <!-- <vxe-select v-model="row.type">
                       <vxe-option v-for="num in 12" :key="num" :value="num" :label="num"></vxe-option>
                     </vxe-select> -->
-                      </template>
-                    </vxe-column>
-                    <vxe-column field="must" title="必填" width="100" :edit-render="{}">
-                      <template #default="{ row }">
-                        <vxe-checkbox
-                          v-if="isEdit"
-                          v-model="row.must"
-                          :unchecked-value="'0'"
-                          :checked-value="'1'"
-                        ></vxe-checkbox>
-                        <span v-else>{{ row.must == '1' ? '是' : '否' }}</span>
-                      </template>
-                    </vxe-column>
-                    <vxe-column field="trip" title="说明" :edit-render="{}">
-                      <template #default="{ row }">
-                        <vxe-input v-if="isEdit" v-model="row.trip" type="text"></vxe-input>
-                        <span v-else>{{ row.trip || '' }}</span>
-                      </template>
-                    </vxe-column>
-                    <vxe-column title="操作" width="200" v-if="isEdit">
-                      <template #default="{ row }">
-                        <vxe-button
-                          type="text"
-                          v-if="row.type === 'array' || row.type === 'object'"
-                          status="primary"
-                          @click="insertRow(row, 'xTable')"
-                          >插入</vxe-button
-                        >
-                        <vxe-button type="text" status="primary" @click="removeRow(row, 'xTable')">删除</vxe-button>
-                      </template>
-                    </vxe-column>
-                  </vxe-table>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="must" title="必填" width="100" :edit-render="{}">
+                        <template #default="{ row }">
+                          <vxe-checkbox
+                            v-if="isEdit"
+                            v-model="row.must"
+                            :unchecked-value="'0'"
+                            :checked-value="'1'"
+                          ></vxe-checkbox>
+                          <span v-else>{{ row.must == '1' ? '是' : '否' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="trip" title="说明" :edit-render="{}">
+                        <template #default="{ row }">
+                          <vxe-input v-if="isEdit" v-model="row.trip" type="text"></vxe-input>
+                          <span v-else>{{ row.trip || '' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column title="操作" width="200" v-if="isEdit">
+                        <template #default="{ row }">
+                          <vxe-button
+                            type="text"
+                            v-if="row.type === 'array' || row.type === 'object'"
+                            status="primary"
+                            @click="insertRow(row, 'xTable')"
+                            >插入</vxe-button
+                          >
+                          <vxe-button type="text" status="primary" @click="removeRow(row, 'xTable')">删除</vxe-button>
+                        </template>
+                      </vxe-column>
+                    </vxe-table>
 
-                  <Button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('xTable')">添加参数</Button>
-                </FormItem>
-                <FormItem label="返回参数：">
-                  <vxe-table
-                    resizable
-                    show-overflow
-                    keep-source
-                    ref="resTable"
-                    row-id="id"
-                    :print-config="{}"
-                    :export-config="{}"
-                    :loading="loading"
-                    :tree-config="{ transform: true, rowField: 'id', parentField: 'parentId' }"
-                    :data="formValidate.response"
-                  >
-                    <!-- <vxe-column type="checkbox" width="60"></vxe-column> -->
-                    <vxe-column field="attribute" title="属性" width="300" tree-node :edit-render="{}">
-                      <template #default="{ row }">
-                        <vxe-input v-if="isEdit" v-model="row.attribute" type="text"></vxe-input>
-                        <span v-else>{{ row.attribute || '' }}</span>
-                      </template>
-                    </vxe-column>
-                    <vxe-column field="type" title="类型" width="200" :edit-render="{}">
-                      <template #default="{ row }">
-                        <vxe-select v-if="isEdit" v-model="row.type" transfer>
-                          <vxe-option
-                            v-for="item in typeList"
-                            :key="item.value"
-                            :value="item.value"
-                            :label="item.label"
-                          ></vxe-option>
-                        </vxe-select>
-                        <span v-else>{{ row.type || '' }}</span>
-                      </template>
-                    </vxe-column>
-                    <!-- <vxe-column field="type" title="必填" :edit-render="{}">
+                    <Button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('xTable')">添加参数</Button>
+                  </FormItem>
+                  <FormItem label="返回参数：">
+                    <vxe-table
+                      resizable
+                      show-overflow
+                      keep-source
+                      ref="resTable"
+                      row-id="id"
+                      :print-config="{}"
+                      :export-config="{}"
+                      :loading="loading"
+                      :tree-config="{ transform: true, rowField: 'id', parentField: 'parentId' }"
+                      :data="formValidate.response"
+                    >
+                      <!-- <vxe-column type="checkbox" width="60"></vxe-column> -->
+                      <vxe-column field="attribute" title="属性" width="300" tree-node :edit-render="{}">
+                        <template #default="{ row }">
+                          <vxe-input v-if="isEdit" v-model="row.attribute" type="text"></vxe-input>
+                          <span v-else>{{ row.attribute || '' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="type" title="类型" width="200" :edit-render="{}">
+                        <template #default="{ row }">
+                          <vxe-select v-if="isEdit" v-model="row.type" transfer>
+                            <vxe-option
+                              v-for="item in typeList"
+                              :key="item.value"
+                              :value="item.value"
+                              :label="item.label"
+                            ></vxe-option>
+                          </vxe-select>
+                          <span v-else>{{ row.type || '' }}</span>
+                        </template>
+                      </vxe-column>
+                      <!-- <vxe-column field="type" title="必填" :edit-render="{}">
                   <template #default="{ row }">
                     <vxe-checkbox v-model="row.must" :unchecked-value="0" :checked-value="1"></vxe-checkbox
                     >{{ row.must }}
                   </template>
                 </vxe-column> -->
-                    <vxe-column field="trip" title="说明" :edit-render="{}">
-                      <template #default="{ row }">
-                        <vxe-input v-if="isEdit" v-model="row.trip" type="text"></vxe-input>
-                        <span v-else>{{ row.trip || '' }}</span>
-                      </template>
-                    </vxe-column>
-                    <vxe-column title="操作" width="200" v-if="isEdit">
-                      <template #default="{ row }">
-                        <vxe-button
-                          type="text"
-                          v-if="row.type === 'array' || row.type === 'object'"
-                          status="primary"
-                          @click="insertRow(row, 'resTable')"
-                          >插入</vxe-button
-                        >
-                        <vxe-button type="text" status="primary" @click="removeRow(row, 'resTable')">删除</vxe-button>
-                      </template>
-                    </vxe-column>
-                  </vxe-table>
-                  <Button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('resTable')">添加参数</Button>
-                </FormItem>
-              </Col>
-            </Row>
-            <Row :gutter="24" type="flex">
-              <Col span="24">
-                <div class="title">调用示例</div>
-                <FormItem label="请求数据示例：" prop="request_example">
-                  <Input
-                    v-if="isEdit"
-                    class="perW20"
-                    type="textarea"
-                    :rows="4"
-                    v-model.trim="formValidate.request_example"
-                    placeholder="请输入"
-                  />
-                  <span v-else class="text-area">{{ formValidate.request_example || '' }}</span>
-                </FormItem>
-                <FormItem label="返回数据示例：" prop="response_example">
-                  <Input
-                    v-if="isEdit"
-                    class="perW20"
-                    type="textarea"
-                    :rows="4"
-                    v-model.trim="formValidate.response_example"
-                    placeholder="请输入"
-                  />
-                  <span v-else class="text-area">{{ formValidate.response_example || '' }}</span>
-                </FormItem>
-                <FormItem label="错误码：">
-                  <vxe-table
-                    resizable
-                    show-overflow
-                    keep-source
-                    ref="codeTable"
-                    row-id="id"
-                    is-tree-view
-                    :print-config="{}"
-                    :export-config="{}"
-                    :loading="loading"
-                    :tree-config="{ rowField: 'id', parentField: 'parentId' }"
-                    :data="formValidate.error_code"
-                  >
-                    <!-- <vxe-column type="checkbox" width="60"></vxe-column> -->
-                    <vxe-column field="code" title="错误码" tree-node :edit-render="{}">
-                      <template #default="{ row }">
-                        <vxe-input v-if="isEdit" v-model="row.code" type="text"></vxe-input>
-                        <span v-else>{{ row.code || '' }}</span>
-                      </template>
-                    </vxe-column>
-                    <vxe-column field="value" title="错误码取值" :edit-render="{}">
-                      <template #default="{ row }">
-                        <vxe-input v-if="isEdit" v-model="row.value" type="text"></vxe-input>
-                        <span v-else>{{ row.value || '' }}</span>
-                      </template>
-                    </vxe-column>
-                    <vxe-column field="solution" title="解决方案" :edit-render="{}">
-                      <template #default="{ row }">
-                        <vxe-input v-if="isEdit" v-model="row.solution" type="text"></vxe-input>
-                        <span v-else>{{ row.solution || '' }}</span>
-                      </template>
-                    </vxe-column>
-                    <vxe-column title="操作" v-if="isEdit">
-                      <template #default="{ row }">
-                        <vxe-button type="text" status="primary" @click="removeRow(row, 'codeTable')">删除</vxe-button>
-                      </template>
-                    </vxe-column>
-                  </vxe-table>
-                  <Button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('codeTable')">添加参数</Button>
-                </FormItem>
-              </Col>
-            </Row>
-            <!-- <Row :gutter="24" type="flex">
+                      <vxe-column field="trip" title="说明" :edit-render="{}">
+                        <template #default="{ row }">
+                          <vxe-input v-if="isEdit" v-model="row.trip" type="text"></vxe-input>
+                          <span v-else>{{ row.trip || '' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column title="操作" width="200" v-if="isEdit">
+                        <template #default="{ row }">
+                          <vxe-button
+                            type="text"
+                            v-if="row.type === 'array' || row.type === 'object'"
+                            status="primary"
+                            @click="insertRow(row, 'resTable')"
+                            >插入</vxe-button
+                          >
+                          <vxe-button type="text" status="primary" @click="removeRow(row, 'resTable')">删除</vxe-button>
+                        </template>
+                      </vxe-column>
+                    </vxe-table>
+                    <Button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('resTable')">添加参数</Button>
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row :gutter="24" type="flex">
+                <Col span="24">
+                  <div class="title">调用示例</div>
+                  <FormItem label="请求数据示例：" prop="request_example">
+                    <Input
+                      v-if="isEdit"
+                      class="perW20"
+                      type="textarea"
+                      :rows="4"
+                      v-model.trim="formValidate.request_example"
+                      placeholder="请输入"
+                    />
+                    <span v-else class="text-area">{{ formValidate.request_example || '' }}</span>
+                  </FormItem>
+                  <FormItem label="返回数据示例：" prop="response_example">
+                    <Input
+                      v-if="isEdit"
+                      class="perW20"
+                      type="textarea"
+                      :rows="4"
+                      v-model.trim="formValidate.response_example"
+                      placeholder="请输入"
+                    />
+                    <span v-else class="text-area">{{ formValidate.response_example || '' }}</span>
+                  </FormItem>
+                  <FormItem label="错误码：">
+                    <vxe-table
+                      resizable
+                      show-overflow
+                      keep-source
+                      ref="codeTable"
+                      row-id="id"
+                      is-tree-view
+                      :print-config="{}"
+                      :export-config="{}"
+                      :loading="loading"
+                      :tree-config="{ rowField: 'id', parentField: 'parentId' }"
+                      :data="formValidate.error_code"
+                    >
+                      <!-- <vxe-column type="checkbox" width="60"></vxe-column> -->
+                      <vxe-column field="code" title="错误码" tree-node :edit-render="{}">
+                        <template #default="{ row }">
+                          <vxe-input v-if="isEdit" v-model="row.code" type="text"></vxe-input>
+                          <span v-else>{{ row.code || '' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="value" title="错误码取值" :edit-render="{}">
+                        <template #default="{ row }">
+                          <vxe-input v-if="isEdit" v-model="row.value" type="text"></vxe-input>
+                          <span v-else>{{ row.value || '' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column field="solution" title="解决方案" :edit-render="{}">
+                        <template #default="{ row }">
+                          <vxe-input v-if="isEdit" v-model="row.solution" type="text"></vxe-input>
+                          <span v-else>{{ row.solution || '' }}</span>
+                        </template>
+                      </vxe-column>
+                      <vxe-column title="操作" v-if="isEdit">
+                        <template #default="{ row }">
+                          <vxe-button type="text" status="primary" @click="removeRow(row, 'codeTable')"
+                            >删除</vxe-button
+                          >
+                        </template>
+                      </vxe-column>
+                    </vxe-table>
+                    <Button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('codeTable')"
+                      >添加参数</Button
+                    >
+                  </FormItem>
+                </Col>
+              </Row>
+              <!-- <Row :gutter="24" type="flex">
               <Col span="24">
                 <FormItem>
                   <Button type="primary" class="submission" @click="handleSubmit('formValidate')">保存</Button>
                 </FormItem>
               </Col>
             </Row> -->
-          </Form>
-        </div>
-        <!-- <div v-else class="nothing">
+            </Form>
+          </div>
+          <!-- <div v-else class="nothing">
           <div class="box" @click="clickMenu(4)">
             <div class="icon">
               <Icon type="ios-folder" />
@@ -411,7 +417,8 @@
             <div class="text">新建接口</div>
           </div>
         </div> -->
-      </Card>
+        </Card>
+      </div>
     </div>
     <Modal v-model="nameModal" title="分组名称" :loading="loading" @on-ok="asyncOK">
       <label>分组名称：</label>
@@ -423,6 +430,7 @@
         :formValidate="formValidate"
         :typeList="intTypeList"
         :requestTypeList="requestTypeList"
+        :apiType="apiType"
       />
     </Drawer>
   </div>
@@ -553,7 +561,7 @@ export default {
         size: 'small',
       },
       methodColor: '#fff',
-      app_name: 'adminapi',
+      apiType: 'adminapi',
       paramsId: 0,
     };
   },
@@ -561,17 +569,25 @@ export default {
     ['formValidate.method']: {
       deep: true,
       handler(newVal, oldVal) {
-        let method = newVal.toUpperCase();
-        if (method == 'GET') {
-          this.methodColor = '#61affe';
-        } else if (method == 'POST') {
-          this.methodColor = '#49cc90';
-        } else if (method == 'PUT') {
-          this.methodColor = '#fca130';
-        } else if (method == 'DEL' || method == 'DELETE') {
-          this.methodColor = '#f93e3e';
+        console.log(newVal);
+        if (newVal) {
+          let method = newVal.toUpperCase();
+          if (method == 'GET') {
+            this.methodColor = '#61affe';
+          } else if (method == 'POST') {
+            this.methodColor = '#49cc90';
+          } else if (method == 'PUT') {
+            this.methodColor = '#fca130';
+          } else if (method == 'DEL' || method == 'DELETE') {
+            this.methodColor = '#f93e3e';
+          }
         }
       },
+    },
+    apiType(newVal) {
+      if (newVal) {
+        this.getInterfaceList('one');
+      }
     },
   },
   computed: {
@@ -592,7 +608,7 @@ export default {
         title: '立即同步',
         content: '同步之后，路由文件中新增的接口添加到接口列表中，路由文件中删除的路由会同步的在接口列表中删除',
         onOk: () => {
-          syncRoute(this.app_name).then((res) => {
+          syncRoute(this.apiType).then((res) => {
             this.getInterfaceList('one');
             this.$Message.success(res.msg);
             this.$Modal.remove();
@@ -625,7 +641,7 @@ export default {
     },
     getInterfaceList(disk_type) {
       try {
-        routeList()
+        routeList(this.apiType)
           .then((res) => {
             if (res.data.length) {
               res.data[0].expand = false;
@@ -643,9 +659,14 @@ export default {
               if (res.data[0].children && res.data[0].children.length) {
                 this.onClick(res.data[0]?.children[0]?.children[0]);
               }
+            } else {
+              // this.$refs.treeList.clear();
+              this.treeData = new Tree({});
+              this.formValidate = {};
             }
           })
           .catch((err) => {
+            console.log(err);
             this.$Message.error(err);
           });
       } catch (error) {
@@ -681,7 +702,7 @@ export default {
       this.formValidate.request = await this.$refs.xTable.getTableData().tableData;
       this.formValidate.response = await this.$refs.resTable.getTableData().tableData;
       this.formValidate.error_code = await this.$refs.codeTable.getTableData().tableData;
-      this.formValidate.app_name = this.app_name;
+      this.formValidate.apiType = this.apiType;
       await routeSave(this.formValidate)
         .then((res) => {
           this.isEdit = false;
@@ -777,12 +798,12 @@ export default {
         // this.formValidate.cate_id = params ? params.id : 0;
         // this.nameModal = true;
         // this.onEdit(params);
-        this.$modalForm(routeEdit(params.id, this.app_name)).then(() => this.getInterfaceList());
+        this.$modalForm(routeEdit(params.id, this.apiType)).then(() => this.getInterfaceList());
       } else if (name == 3) {
         this.onDel(params);
       } else if (name == 4) {
         // this.add();
-        this.$modalForm(routeCate(this.app_name)).then(() => this.getInterfaceList());
+        this.$modalForm(routeCate(this.apiType)).then(() => this.getInterfaceList());
       }
     },
 

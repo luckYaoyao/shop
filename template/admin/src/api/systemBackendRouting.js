@@ -31,9 +31,9 @@ export function routeCate(appName) {
 /**
  * 路由树
  */
-export function routeList() {
+export function routeList(apiType) {
   return request({
-    url: `system/route/tree`,
+    url: `system/route/tree?app_name=${apiType}`,
     method: 'get',
   });
 }
