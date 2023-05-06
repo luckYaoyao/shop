@@ -39,36 +39,6 @@
               <Cascader :data="menuList" change-on-select v-model="formValidate.path" filterable></Cascader>
             </FormItem>
           </Col>
-          <!-- <Col v-bind="grid" v-if="!authType">
-            <FormItem label="请求方式：" prop="methods">
-              <Select v-model="formValidate.methods">
-                <Option value="">请求</Option>
-                <Option value="GET">GET</Option>
-                <Option value="POST">POST</Option>
-                <Option value="PUT">PUT</Option>
-                <Option value="DELETE">DELETE</Option>
-              </Select>
-            </FormItem>
-          </Col> -->
-          <!-- <Col v-bind="grid" v-if="!authType">
-            <FormItem label="接口地址：">
-              <Input v-model="formValidate.api_url" placeholder="请输入接口地址" prop="api_url"></Input>
-            </FormItem>
-          </Col> -->
-          <Col v-bind="grid" v-show="authType">
-            <FormItem label="路由地址：" prop="menu_path">
-              <Input v-model="formValidate.menu_path" placeholder="请输入路由地址" @on-change="changeUnique">
-                <template #prepend>
-                  <span>{{ $routeProStr }}</span>
-                </template>
-              </Input>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="权限标识：" prop="unique_auth">
-              <Input v-model="formValidate.unique_auth" placeholder="请输入权限标识"></Input>
-            </FormItem>
-          </Col>
           <Col v-bind="grid" v-if="authType">
             <FormItem label="图标：">
               <Input
@@ -85,20 +55,10 @@
               <Input type="number" v-model="formValidate.sort" placeholder="请输入排序" number></Input>
             </FormItem>
           </Col>
-          <!-- <Col v-bind="grid" v-show="authType">
-            <FormItem label="隐藏菜单：">
+          <Col v-bind="grid">
+            <FormItem label="是否显示：">
               <RadioGroup v-model="formValidate.is_show_path">
                 <Radio :label="item.value" v-for="(item, i) in isShowPathRadio" :key="i">
-                  <Icon type="social-apple"></Icon>
-                  <span>{{ item.label }}</span>
-                </Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col> -->
-          <Col v-bind="grid">
-            <FormItem label="状态：">
-              <RadioGroup v-model="formValidate.is_show">
-                <Radio :label="item.value" v-for="(item, i) in isShowRadio" :key="i">
                   <Icon type="social-apple"></Icon>
                   <span>{{ item.label }}</span>
                 </Radio>

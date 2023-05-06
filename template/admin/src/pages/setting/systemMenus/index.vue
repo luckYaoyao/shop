@@ -42,14 +42,14 @@
         row-id="id"
       >
         <vxe-table-column field="menu_name" tree-node title="按钮名称" min-width="100"></vxe-table-column>
-        <vxe-table-column field="unique_auth" title="前端权限" min-width="200"></vxe-table-column>
-        <vxe-table-column field="menu_path" title="路由" min-width="240" tooltip="true">
+        <vxe-table-column field="menu_path" title="路径" min-width="240" tooltip="true">
           <template v-slot="{ row }">
             <span v-if="row.auth_type == 1">页面：{{ row.menu_path }}</span>
             <span v-if="row.auth_type == 2">按钮：[{{ row.methods }}]{{ row.api_url }}</span>
           </template>
         </vxe-table-column>
-        <vxe-table-column field="flag" title="是否显示" min-width="120">
+        <vxe-table-column field="sort" title="排序" width="150"></vxe-table-column>
+        <vxe-table-column field="flag" title="是否显示" width="150">
           <template v-slot="{ row }">
             <i-switch
               v-model="row.is_show_path"
@@ -62,6 +62,11 @@
               <span slot="open">显示</span>
               <span slot="close">隐藏</span>
             </i-switch>
+          </template>
+        </vxe-table-column>
+        <vxe-table-column field="date" title="操作" align="center" width="150" fixed="right">
+          <template v-slot="{ row }">
+            <a @click="edit(row, '编辑')">编辑</a>
           </template>
         </vxe-table-column>
       </vxe-table>
@@ -171,6 +176,7 @@ export default {
       roleData: {
         is_show: 1,
         keyword: '',
+        auth_type: 1,
       },
       defaultProps: {
         children: 'children',
@@ -423,7 +429,6 @@ export default {
     // 列表
     getData() {
       this.loading = true;
-      this.roleData.is_show = this.roleData.is_show || '';
       getTable(this.roleData)
         .then(async (res) => {
           this.tableData = res.data;
