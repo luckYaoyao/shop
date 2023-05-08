@@ -3,10 +3,10 @@
     <div>
       <Card :bordered="false" dis-hover class="mb10">
         <Tabs v-model="apiType">
-          <TabPane label="后台接口" name="adminapi"></TabPane>
-          <TabPane label="前台接口" name="api"></TabPane>
-          <TabPane label="对外接口" name="outapi"></TabPane>
+          <TabPane label="管理端接口" name="adminapi"></TabPane>
+          <TabPane label="用户端接口" name="api"></TabPane>
           <TabPane label="客服接口" name="kefuapi"></TabPane>
+          <TabPane label="对外接口" name="outapi"></TabPane>
         </Tabs>
       </Card>
       <div class="main">

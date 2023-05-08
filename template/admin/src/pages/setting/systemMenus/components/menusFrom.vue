@@ -146,7 +146,7 @@ export default {
       searchRule: '',
       iconVal: '',
       grid: {
-        xl: 12,
+        xl: 23,
         lg: 12,
         md: 12,
         sm: 24,

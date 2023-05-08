@@ -8,13 +8,13 @@
         <!-- <Divider type="vertical" /> -->
         <span class="ivu-page-header-title mr20" style="padding: 0" v-text="$route.meta.title"></span>
         <div class="rbtn">
-          <Button v-if="pageId !== 0" class="bnt" @click="setmoren" :loading="loading">保存默认</Button>
-          <Button v-if="pageId !== 0" class="bnt ml20" @click="getmoren" :loading="loading">恢复默认</Button>
+          <!-- <Button v-if="pageId !== 0" class="bnt" @click="setmoren" :loading="loading">保存默认</Button>
+          <Button v-if="pageId !== 0" class="bnt ml20" @click="getmoren" :loading="loading">恢复默认</Button> -->
           <!-- <div class="data" @click="setmoren">设置默认</div>
             <div class="data" @click="getmoren">恢复默认</div> -->
+          <Button class="bnt ml20" type="info" @click="preview" :loading="loading">预览</Button>
           <Button class="bnt ml20" type="primary" @click="saveConfig" :loading="loading">保存</Button>
-          <Button class="ml20" type="info" @click="closeWindow" :loading="loading">保存并关闭</Button>
-          <Button class="bnt ml20" @click="reast">重置</Button>
+          <Button class="ml20" type="error" @click="closeWindow" :loading="loading">关闭</Button>
         </div>
       </div>
     </div>
@@ -93,6 +93,11 @@
           class="wrapper-con"
           style="flex: 1; background: #f0f2f5; display: flex; justify-content: center; padding-top: 20px; height: 100%"
         >
+          <div class="acticon">
+            <Button class="bnt mb10" @click="showTitle">页面设置</Button>
+            <Button class="bnt mb10" @click="nameModal = true">另存模板</Button>
+            <Button class="bnt" @click="reast">重置</Button>
+          </div>
           <div class="content">
             <div class="contxt" style="display: flex; flex-direction: column; overflow: hidden; height: 100%">
               <div class="overflowy">
@@ -213,17 +218,37 @@
     <!--</Button-->
     <!--&gt;-->
     <!--</div>-->
+    <Modal v-model="modal" title="预览" footer-hide>
+      <div>
+        <div v-viewer class="acea-row row-around code">
+          <div class="acea-row row-column-around row-between-wrapper">
+            <div class="QRpic" ref="qrCodeUrl"></div>
+            <span class="mt10">公众号二维码</span>
+          </div>
+          <div class="acea-row row-column-around row-between-wrapper">
+            <div class="QRpic">
+              <img v-lazy="qrcodeImg" />
+            </div>
+            <span class="mt10">小程序二维码</span>
+          </div>
+        </div>
+      </div>
+    </Modal>
+    <Modal v-model="nameModal" title="设置模版名称" :closable="false" @on-ok="saveModal" @on-cancel="nameModal = false">
+      <Input v-model="saveName" placeholder="请输入模版名称"></Input>
+    </Modal>
   </div>
 </template>
 
 <script crossorigin="anonymous">
-import { categoryList, getDiyInfo, saveDiy, getUrl, setDefault, recovery } from '@/api/diy';
+import { categoryList, getDiyInfo, saveDiy, getUrl, setDefault, recovery, getRoutineCode } from '@/api/diy';
 import vuedraggable from 'vuedraggable';
 import mPage from '@/components/mobilePageDiy/index.js';
 import mConfig from '@/components/mobileConfigDiy/index.js';
 import footPage from '@/components/pagesFoot';
 import { mapState } from 'vuex';
 import html2canvas from 'html2canvas';
+import QRCode from 'qrcodejs2';
 
 let idGlobal = 0;
 export default {
@@ -288,6 +313,10 @@ export default {
       isSearch: false,
       isTab: false,
       isFllow: false,
+      qrcodeImg: '',
+      modal: false,
+      nameModal: false,
+      saveName: '',
     };
   },
   beforeRouteLeave(to, from, next) {
@@ -313,6 +342,7 @@ export default {
     this.lConfig = this.objToArr(mPage);
   },
   mounted() {
+    // window.addEventListener('onbeforeunload', this.beforeUnload);
     let imgList = {
       imgList: [require('@/assets/images/foot-005.png'), require('@/assets/images/foot-006.png')],
       name: '购物车',
@@ -341,23 +371,57 @@ export default {
     });
   },
   methods: {
+    beforeUnload() {
+      return '确认是否保存?';
+    },
+    saveModal() {
+      if (!this.saveName) return this.$Message.warning('请先输入模板名称');
+      this.saveConfig(1, this.saveName);
+    },
+    //小程序二维码
+    routineCode(id) {
+      getRoutineCode(id)
+        .then((res) => {
+          this.qrcodeImg = res.data.image;
+        })
+        .catch((err) => {
+          this.$Message.error(err);
+        });
+    },
+    preview(row) {
+      this.modal = true;
+      this.creatQrCode(row.id);
+      this.routineCode(this.$route.query.id);
+    },
+    //生成二维码
+    creatQrCode(id) {
+      this.$refs.qrCodeUrl.innerHTML = '';
+      let url = `${this.BaseURL}pages/annex/special/index?id=${id}`;
+      var qrcode = new QRCode(this.$refs.qrCodeUrl, {
+        text: url, // 需要转换为二维码的内容
+        width: 160,
+        height: 160,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+    },
     closeWindow() {
       this.$Modal.confirm({
-        title: '确定保存并关闭当前页吗？',
+        title: '确定关闭当前页吗？',
         content: '离开前请确认保存您的设计',
-        okText: '保存并关闭',
-        cancelText: '关闭',
+        okText: '确定',
+        cancelText: '取消',
         loading: true,
         onOk: () => {
           setTimeout(() => {
-            this.saveConfig();
+            // this.saveConfig();
             this.$Modal.remove();
             window.close();
           }, 1500);
         },
         onCancel: () => {
-          window.close();
-          next();
+          this.$Modal.remove();
         },
       });
     },
@@ -651,6 +715,7 @@ export default {
     },
     // 点击显示相应的配置
     bindconfig(item, index) {
+      console.log(item, index);
       this.rConfig = [];
       let tempItem = JSON.parse(JSON.stringify(item));
       this.rConfig.push(tempItem);
@@ -733,12 +798,12 @@ export default {
     //         this.diySaveDate(val,imgUrl)
     //     });
     // },
-    diySaveDate(val) {
-      saveDiy(this.pageId, {
+    diySaveDate(val, init, name) {
+      saveDiy(init ? 0 : this.pageId, {
         type: this.pageType,
         value: val,
         title: this.titleTxt,
-        name: this.nameTxt,
+        name: name || this.nameTxt,
         is_show: this.showTxt ? 1 : 0,
         is_bg_color: this.colorTxt ? 1 : 0,
         color_picker: this.colorPickerTxt,
@@ -757,7 +822,7 @@ export default {
         });
     },
     // 保存配置
-    saveConfig() {
+    saveConfig(init, name) {
       if (this.mConfig.length == 0) {
         return this.$Message.error('暂未添加任何组件，保存失败！');
       }
@@ -768,8 +833,8 @@ export default {
         val[timestamp] = this.$store.state.mobildConfig.pageFooter;
         this.footActive = true;
       }
-      this.$nextTick(function () {
-        this.diySaveDate(val);
+      this.$nextTick(() => {
+        this.diySaveDate(val, init, name);
       });
     },
     // 获取默认配置
@@ -900,6 +965,15 @@ export default {
 }
 
 .wrapper-con {
+  position relative
+  .acticon{
+    position absolute
+    right: 20px
+    top 20px
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+  }
   /* min-width 700px; */
 }
 .main .content-wrapper{
@@ -995,7 +1069,7 @@ export default {
 
 .iconfont-diy {
   font-size: 24px;
-  color: #1890ff;
+  color: var(--prev-color-primary);
 }
 
 .diy-wrapper {
@@ -1026,9 +1100,9 @@ export default {
         height: 45px;
 
         &.on {
-          color: #1890FF;
+          color: var(--prev-color-primary);
           font-size: 14px;
-          border-bottom: 1px solid #1890FF;
+          border-bottom: 1px solid var(--prev-color-primary);
         }
       }
     }
@@ -1152,7 +1226,7 @@ export default {
         top: 0;
         width: 383px;
         height: 100%;
-        border: 2px dashed #1890ff;
+        border: 2px dashed var(--prev-color-primary);
         padding: 10px 0;
       }
 
@@ -1168,7 +1242,7 @@ export default {
 
         .delete-box {
           display: block;
-          border: 2px solid #1890ff;
+          border: 2px solid var(--prev-color-primary);
           box-shadow: 0 0 10px 0 rgba(24, 144, 255, 0.3);
         }
       }
@@ -1192,7 +1266,7 @@ export default {
         top: 0;
         width: 383px;
         height: 100%;
-        border: 2px dashed #1890ff;
+        border: 2px dashed var(--prev-color-primary);
         padding: 10px 0;
 
         span {
@@ -1225,7 +1299,7 @@ export default {
 
         .delete-box {
           display: block;
-          border: 2px solid #1890ff;
+          border: 2px solid var(--prev-color-primary);
           box-shadow: 0 0 10px 0 rgba(24, 144, 255, 0.3);
         }
       }
@@ -1254,7 +1328,7 @@ export default {
           top: 0;
           width: 383px;
           height: 100%;
-          border: 2px dashed #1890ff;
+          border: 2px dashed var(--prev-color-primary);
 
           /* padding: 10px 0; */
           .handleType {
@@ -1286,7 +1360,7 @@ export default {
 
           .delete-box {
             display: block;
-            border: 2px solid #1890ff;
+            border: 2px solid var(--prev-color-primary);
             box-shadow: 0 0 10px 0 rgba(24, 144, 255, 0.3);
           }
         }
@@ -1372,5 +1446,18 @@ export default {
 .rbtn {
   position: absolute;
   right: 20px;
+}
+.code {
+  position: relative;
+}
+
+.QRpic {
+  width: 160px;
+  height: 160px;
+
+  img {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>

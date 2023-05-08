@@ -631,8 +631,8 @@ export default {
   position: relative;
   .save {
     position: absolute;
-    right: 140px;
-    top: 60px;
+    left: 50%;
+    bottom: -30px;
     z-index: 99;
   }
 }
