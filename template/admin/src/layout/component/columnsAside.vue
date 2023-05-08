@@ -246,6 +246,10 @@ export default {
         color: var(--prev-bg-columnsMenuBarColor);
       }
     }
+    // li:hover {
+    //   background: var(--prev-color-primary);
+    //   color: var(--prev-bg-columnsMenuBarColor);
+    // }
     .layout-columns {
       transition: 0.3s ease-in-out;
     }
@@ -254,6 +258,7 @@ export default {
       color: var(--prev-bg-columnsMenuActiveColor);
       transition: 0.3s ease-in-out;
     }
+
     .columns-round {
       background: var(--prev-color-primary);
       // color: var(--prev-color-text-white);

@@ -284,6 +284,10 @@ export default {
         color: var(--prev-bg-columnsMenuBarColor);
       }
     }
+    // li:hover {
+    //   background: var(--prev-bg-menu-hover-ba-color);
+    //   color: var(--prev-bg-columnsMenuBarColor);
+    // }
     .layout-columns {
       transition: 0.3s ease-in-out;
     }

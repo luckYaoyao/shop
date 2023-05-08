@@ -770,7 +770,7 @@ export default {
       } else {
         this.$Modal.confirm({
           title: '提示',
-          content: '<p>是否重置当前页面数据</p>',
+          content: '<p>重置会恢复到上次保存的数据，确定不保存当前操作吗？</p>',
           onOk: () => {
             this.mConfig = [];
             this.rConfig = [];
