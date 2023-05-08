@@ -241,7 +241,7 @@ export default {
 .layout-columns-tra-aside {
   height: 100%;
   background: var(--prev-bg-columnsMenuBar);
-  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+  // box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   overflow-y: hidden;
   // flex: 1;
   ul {
@@ -302,7 +302,7 @@ export default {
       transform: translatey(0%);
       z-index: 0;
       transition: 0.3s ease-in-out;
-      border-radius: 5px;
+      border-radius: 3px;
     }
     .columns-card {
       @extend .columns-round;

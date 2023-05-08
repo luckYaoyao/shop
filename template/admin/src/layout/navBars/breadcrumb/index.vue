@@ -81,7 +81,7 @@ export default {
   height: 50px;
   display: flex;
   align-items: center;
-  padding-right: 15px;
+  // padding-right: 15px;
   overflow: hidden;
   background: var(--prev-bg-topBar);
   border-bottom: 1px solid var(--prev-border-color-lighter);

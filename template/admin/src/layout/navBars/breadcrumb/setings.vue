@@ -539,6 +539,11 @@ export default {
     onSetLayout(layout) {
       Local.set('oldLayout', layout);
       if (this.$store.state.themeConfig.themeConfig.layout === layout) return false;
+      if (['classic', 'transverse'].includes(layout)) {
+        this.$store.state.themeConfig.themeConfig.isTagsview = false;
+      } else {
+        this.$store.state.themeConfig.themeConfig.isTagsview = true;
+      }
       this.$store.state.themeConfig.themeConfig.layout = layout;
       this.$store.state.themeConfig.themeConfig.isDrawer = false;
       this.$store.state.themeConfig.themeConfig.columnsAsideStyle = 'columns-card';
@@ -660,7 +665,7 @@ body .v-modal {
       .el-container {
         height: 100%;
         .el-aside-dark {
-          opacity: .5;
+          opacity: 0.5;
           background-color: var(--prev-tag-active-color);
           border-radius: 2px;
         }

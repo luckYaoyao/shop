@@ -461,7 +461,7 @@ export default {
         width: 14px;
         text-align: center;
         line-height: 14px;
-        top: 1px;
+        top: 0px;
       }
       .is-tagsview-icon {
         color: var(--prev-color-text-regular);
