@@ -1,6 +1,6 @@
 <template>
-  <div class="layout-columns-tra-aside">
-    <el-scrollbar>
+  <div class="layout-columns-tra-aside el-menu-horizontal-warp">
+    <el-scrollbar ref="elMenuHorizontalScrollRef" @wheel.native.prevent="onElMenuHorizontalScroll">
       <ul>
         <li
           v-for="(v, k) in columnsAsideList"
@@ -80,8 +80,25 @@ export default {
       this.setFilterRoutes();
     });
     this.setFilterRoutes();
+    this.$nextTick((e) => {
+      this.initElMenuOffsetLeft();
+    });
   },
   methods: {
+    // 设置横向滚动条可以鼠标滚轮滚动
+    onElMenuHorizontalScroll(e) {
+      const eventDelta = e.wheelDelta || -e.deltaY * 40;
+      this.$refs.elMenuHorizontalScrollRef.$refs.wrap.scrollLeft =
+        this.$refs.elMenuHorizontalScrollRef.$refs.wrap.scrollLeft + eventDelta / 4;
+    },
+    // 初始化数据，页面刷新时，滚动条滚动到对应位置
+    initElMenuOffsetLeft() {
+      this.$nextTick(() => {
+        let els = document.querySelector('.layout-columns.layout-columns-active');
+        if (!els) return false;
+        this.$refs.elMenuHorizontalScrollRef.$refs.wrap.scrollLeft = els.offsetLeft;
+      });
+    },
     // 设置菜单高亮位置移动
     setColumnsAsideMove(k) {
       if (k === undefined) return false;
@@ -199,12 +216,34 @@ export default {
 </script>
 
 <style scoped lang="scss">
+/deep/ .el-scrollbar__bar.is-horizontal {
+  height: 0;
+}
+.el-menu-horizontal-warp {
+  ::v-deep .el-scrollbar__bar.is-vertical {
+    display: none;
+  }
+  ::v-deep .el-scrollbar__wrap {
+    overflow-y: hidden !important;
+    overflow-x: scroll !important;
+  }
+  ::v-deep a {
+    width: 100%;
+  }
+  .el-menu.el-menu--horizontal {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
 .layout-columns-tra-aside {
-  //   width: 70px;
   height: 100%;
   background: var(--prev-bg-columnsMenuBar);
   box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
   overflow-y: hidden;
+  // flex: 1;
   ul {
     position: relative;
     display: flex;
@@ -226,7 +265,7 @@ export default {
       .columns-horizontal {
         display: flex;
         height: 50px;
-        width: 100%;
+        width: 80px;
         align-items: center;
         justify-content: center;
         padding: 0 5px;
@@ -257,8 +296,9 @@ export default {
       background: var(--prev-color-primary);
       position: absolute;
       left: 0;
-      height: 50px;
+      height: 40px;
       width: 80px;
+      margin-top: 5px;
       transform: translatey(0%);
       z-index: 0;
       transition: 0.3s ease-in-out;
@@ -270,6 +310,7 @@ export default {
       height: 50px;
       width: 80px;
       border-radius: 0;
+      margin-top: 0px;
     }
   }
 }
