@@ -298,7 +298,15 @@ export default {
     this.interfaceData = this.formValidate;
     this.interfaceData.request_body = JSON.parse(JSON.stringify(this.interfaceData.request));
   },
-  mounted() {},
+  mounted() {
+    if (!this.$refs.zTable.getTableData().tableData.length && this.apiType == 'adminapi') {
+      this.insertEvent('zTable', {
+        attribute: 'Authori-Zation',
+        value: 'Bearer ' + getCookies('token'),
+      });
+      // this.insertEvent('zaTable');
+    }
+  },
   methods: {
     async handleChange(e, row, type) {
       if (e.value !== 'array' && e.value !== 'object') {
@@ -407,15 +415,15 @@ export default {
       return x;
     },
     changeTab(name) {
-      if (name === 'Header') {
-        if (!this.$refs.zTable.getTableData().tableData.length) {
-          this.insertEvent('zTable', {
-            attribute: 'Authori-Zation',
-            value: 'Bearer ' + getCookies('token'),
-          });
-          this.insertEvent('zaTable');
-        }
-      }
+      // if (name === 'Header') {
+      //   if (!this.$refs.zTable.getTableData().tableData.length) {
+      //     this.insertEvent('zTable', {
+      //       attribute: 'Authori-Zation',
+      //       value: 'Bearer ' + getCookies('token'),
+      //     });
+      //     this.insertEvent('zaTable');
+      //   }
+      // }
     },
     async insertEvent(type, d) {
       const $table = this.$refs[type];
