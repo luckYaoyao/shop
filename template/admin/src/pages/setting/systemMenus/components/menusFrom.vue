@@ -12,25 +12,12 @@
       @on-visible-change="visible"
     >
       <Form ref="formValidate" :model="formValidate" :label-width="110" @submit.native.prevent>
-        <!-- <Row type="flex" :gutter="24">
-          <Col span="24">
-            <FormItem label="类型：">
-              <RadioGroup v-model="formValidate.auth_type" @on-change="changeRadio">
-                <Radio :label="item.value" v-for="(item, i) in optionsRadio" :key="i">
-                  <Icon type="social-apple"></Icon>
-                  <span>{{ item.label }}</span>
-                </Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col>
-        </Row> -->
         <Row type="flex" :gutter="24">
           <Col v-bind="grid">
             <FormItem :label="!authType ? '接口名称：' : '按钮名称：'" prop="menu_name">
               <div class="add">
                 <Input v-model="formValidate.menu_name" :placeholder="!authType ? '请输入接口名称' : '请输入按钮名称'">
                 </Input>
-                <!-- <Button class="ml10 df" v-show="!authType" @click="getRuleList()" icon="ios-apps"></Button> -->
               </div>
             </FormItem>
           </Col>
@@ -49,7 +36,6 @@
               ></Input>
             </FormItem>
           </Col>
-
           <Col v-bind="grid" v-if="authType">
             <FormItem label="排序：">
               <Input type="number" v-model="formValidate.sort" placeholder="请输入排序" number></Input>

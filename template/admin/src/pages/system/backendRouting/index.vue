@@ -5,7 +5,7 @@
         <Tabs v-model="apiType">
           <TabPane label="管理端接口" name="adminapi"></TabPane>
           <TabPane label="用户端接口" name="api"></TabPane>
-          <TabPane label="客服接口" name="kefuapi"></TabPane>
+          <TabPane label="客服端接口" name="kefuapi"></TabPane>
           <TabPane label="对外接口" name="outapi"></TabPane>
         </Tabs>
       </Card>

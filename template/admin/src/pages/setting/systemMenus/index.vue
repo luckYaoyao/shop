@@ -44,7 +44,7 @@
         <vxe-table-column field="menu_name" tree-node title="按钮名称" min-width="100"></vxe-table-column>
         <vxe-table-column field="menu_path" title="路径" min-width="240" tooltip="true">
           <template v-slot="{ row }">
-            <span v-if="row.auth_type == 1">页面：{{ row.menu_path }}</span>
+            <span v-if="row.auth_type == 1">页面路径：{{ row.menu_path }}</span>
             <span v-if="row.auth_type == 2">按钮：[{{ row.methods }}]{{ row.api_url }}</span>
           </template>
         </vxe-table-column>
