@@ -195,17 +195,6 @@
 		 */
 		onLoad: function(options) {
 			if (options.status) this.orderStatus = options.status;
-			console.log('1')
-			if (this.isLogin) {
-				this.page = 1;
-				this.orderList = []
-				this.loadend = false;
-				this.pay_close = false;
-				this.onLoadFun();
-				this.getOrderList();
-			} else {
-				toLogin();
-			}
 			let EnOptions = wx.getEnterOptionsSync();
 			if (EnOptions.scene == '1038' && EnOptions.referrerInfo.appId == 'wxef277996acc166c3' && this.initIn) {
 				// 代表从收银台小程序返回
@@ -221,6 +210,18 @@
 						// "支付失败：" + extraData.errmsg;
 					}
 				}
+			}
+		},
+		onShow() {
+			if (this.isLogin) {
+				this.page = 1;
+				this.orderList = []
+				this.loadend = false;
+				this.pay_close = false;
+				this.onLoadFun();
+				this.getOrderList();
+			} else {
+				toLogin();
 			}
 		},
 		methods: {
@@ -248,7 +249,7 @@
 			payClose: function() {
 				this.pay_close = false;
 			},
-		
+
 			/**
 			 * 获取订单统计数据
 			 *
