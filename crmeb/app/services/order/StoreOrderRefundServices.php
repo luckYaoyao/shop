@@ -956,7 +956,7 @@ class StoreOrderRefundServices extends BaseServices
                 //订单实际支付金额
                 $order_pay_price = bcsub((string)bcadd((string)$order['total_price'], (string)$order['pay_postage'], 2), (string)bcadd((string)$order['deduction_price'], (string)$order['coupon_price'], 2), 2);
                 if ($order_pay_price != $order['pay_price'] && $refund_pay_price != $order_pay_price) {//有改价
-                    $refund_price = bcmul((string)bcdiv((string)$order['pay_price'], (string)$order_pay_price, 4), (string)$refund_pay_price, 2);
+                    $refund_price = bcmul((string)bcdiv((string)$refund_pay_price, (string)$order_pay_price, 4), (string)$order['pay_price'], 2);
                 } else {
                     $refund_price = $refund_pay_price;
                 }
