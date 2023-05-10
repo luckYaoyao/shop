@@ -13,7 +13,7 @@
           <!-- <div class="data" @click="setmoren">设置默认</div>
             <div class="data" @click="getmoren">恢复默认</div> -->
           <Button class="bnt ml20" type="info" @click="preview" :loading="loading">预览</Button>
-          <Button class="bnt ml20" type="primary" @click="saveConfig" :loading="loading">保存</Button>
+          <Button class="bnt ml20" type="primary" @click="saveConfig(0)" :loading="loading">保存</Button>
           <Button class="ml20" type="error" @click="closeWindow" :loading="loading">关闭</Button>
         </div>
       </div>
@@ -799,6 +799,7 @@ export default {
     //     });
     // },
     diySaveDate(val, init, name) {
+      console.log(init, name);
       saveDiy(init ? 0 : this.pageId, {
         type: this.pageType,
         value: val,
@@ -813,7 +814,9 @@ export default {
       })
         .then((res) => {
           this.loading = false;
-          this.pageId = res.data.id;
+          if (!init) {
+            this.pageId = res.data.id;
+          }
           this.$Message.success(res.msg);
         })
         .catch((res) => {
