@@ -57,7 +57,7 @@
           <Col span="12" class="fontColor3 mb10" v-if="parseFloat(orderDatalist.orderInfo.back_integral)"
             >退回积分：{{ parseFloat(orderDatalist.orderInfo.back_integral) }}</Col
           >
-          <Col span="12" class="fontColor3 mb10" v-if="parseFloat(orderDatalist.orderInfo.gain_integral)"
+          <Col span="12" class="fontColor3 mb10" v-if="parseFloat(orderDatalist.orderInfo.gain_integral) && orderDatalist.orderInfo.paid == 1"
             >赠送积分：{{ parseFloat(orderDatalist.orderInfo.gain_integral) }}</Col
           >
           <Col span="12" class="mb10">创建时间：{{ orderDatalist.orderInfo._add_time }}</Col>
