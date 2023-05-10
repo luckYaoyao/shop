@@ -33,6 +33,27 @@ class OrderClient extends BaseOrder
     }
 
     /**
+     * 处理联系人
+     * @param array $contact
+     * @return array
+     *
+     * @date 2023/05/10
+     * @author yyw
+     */
+    protected function handleContact(array $contact = []): array
+    {
+        if (isset($contact)) {
+            if (isset($contact['consignor_contact']) && $contact['consignor_contact']) {
+                $contact['consignor_contact'] = Utility::encryptTel($contact['consignor_contact']);
+            }
+            if (isset($contact['receiver_contact']) && $contact['receiver_contact']) {
+                $contact['receiver_contact'] = Utility::encryptTel($contact['receiver_contact']);
+            }
+        }
+        return $contact;
+    }
+
+    /**
      * 发货
      * @param string $out_trade_no
      * @param int $logistics_type
@@ -71,11 +92,12 @@ class OrderClient extends BaseOrder
         }
 
         foreach ($shipping_list as $shipping) {
+            $contact = $this->handleContact($shipping['contact'] ?? []);
             $params['shipping_list'][] = [
-                'tracking_no' => $shipping['tracking_no'],
-                'express_company' => $this->getDelivery($shipping['express_company']),
+                'tracking_no' => $shipping['tracking_no'] ?? '',
+                'express_company' => isset($shipping['express_company']) ? $this->getDelivery($shipping['express_company']) : '',
                 'item_desc' => $shipping['item_desc'],
-                'contact' => $shipping['contact'] ?? []
+                'contact' => $contact
             ];
         }
         return $this->shipping($params);
@@ -107,16 +129,6 @@ class OrderClient extends BaseOrder
                 'mchid' => $this->config['order_shipping']['merchant_id'],
                 'out_trade_no' => $out_trade_no,
             ],
-            'sub_orders' => [
-                'order_key' => [
-                    'order_number_type' => 1,
-                    'mchid' => $this->config['order_shipping']['merchant_id'],
-                    'out_trade_no' => '',
-                    'logistics_type' => '',
-                ],
-                'delivery_mode' => $delivery_mode,
-                'is_all_delivered' => $is_all_delivered
-            ],
             'upload_time' => date(DATE_RFC3339),
             'payer' => [
                 'openid' => $payer_openid
@@ -135,11 +147,12 @@ class OrderClient extends BaseOrder
                 'is_all_delivered' => $is_all_delivered
             ];
             foreach ($sub_orders['shipping_list'] as $shipping) {
+                $contact = $this->handleContact($shipping['contact'] ?? []);
                 $sub_order['shipping_list'][] = [
-                    'tracking_no' => $shipping['tracking_no'],
-                    'express_company' => $this->getDelivery($shipping['express_company']),
+                    'tracking_no' => $shipping['tracking_no'] ?? '',
+                    'express_company' => isset($shipping['express_company']) ? $this->getDelivery($shipping['express_company']) : '',
                     'item_desc' => $shipping['item_desc'],
-                    'contact' => $shipping['contact'] ?? []
+                    'contact' => $contact
                 ];
             }
             $params['sub_orders'][] = $sub_order;
