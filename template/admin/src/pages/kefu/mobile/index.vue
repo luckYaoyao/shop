@@ -217,6 +217,7 @@ export default {
       }
     },
     records() {
+      if (!this.chatList.length) return;
       return this.chatList.map((item, index) => {
         item.time = this.$moment(item.add_time * 1000).format('MMMDo h:mm');
         if (index) {
@@ -264,7 +265,7 @@ export default {
         if (data.msn_type == 1 || data.msn_type == 2) {
           data.msn = this.replace_em(data.msn);
         }
-        if (data.msn_type == 5) return;
+        // if (data.msn_type == 5)
         this.chatList.push(data);
 
         this.$refs['scrollBox'].refresh();
@@ -565,7 +566,12 @@ export default {
   },
 };
 </script>
-
+<style>
+html,
+body {
+  font-size: 50px;
+}
+</style>
 <style lang="stylus" scoped>
 .head-box{
     position relative
