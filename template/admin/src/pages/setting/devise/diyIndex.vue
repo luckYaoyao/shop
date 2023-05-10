@@ -817,6 +817,7 @@ export default {
           if (!init) {
             this.pageId = res.data.id;
           }
+          this.saveName = '';
           this.$Message.success(res.msg);
         })
         .catch((res) => {
