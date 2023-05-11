@@ -68,7 +68,7 @@ class Model extends Make
             }
         }
         if ($attrFnContent) {
-            $this->value['attr-php'] = implode("\n", $attrFnContent);
+            $this->value['attr-php'] = "\n" . implode("\n", $attrFnContent);
         }
 
         return parent::handle($name, $options);
