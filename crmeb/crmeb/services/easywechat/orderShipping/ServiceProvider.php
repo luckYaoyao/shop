@@ -29,6 +29,14 @@ class ServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $pimple)
     {
+        $pimple['mini_program.access_token'] = function ($pimple) {
+            return new AccessToken(
+                $pimple['config']['order_shipping']['app_id'],
+                $pimple['config']['order_shipping']['secret'],
+                $pimple['cache']
+            );
+        };
+
         $pimple['order_ship'] = function ($pimple) {
             return new OrderClient($pimple['access_token'], $pimple);
         };

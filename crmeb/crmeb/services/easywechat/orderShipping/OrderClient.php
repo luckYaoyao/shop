@@ -4,6 +4,7 @@ namespace crmeb\services\easywechat\orderShipping;
 
 use crmeb\exceptions\AdminException;
 use crmeb\services\CacheService;
+use EasyWeChat\Core\AccessToken;
 use EasyWeChat\Core\Exceptions\HttpException;
 use think\facade\Cache;
 
@@ -12,6 +13,11 @@ class OrderClient extends BaseOrder
 {
     const redis_prefix = 'mimi_order';
 
+
+    public function __construct(AccessToken $accessToken, $config)
+    {
+        parent::__construct($accessToken, $config);
+    }
 
     /**
      * @var \Redis
@@ -77,7 +83,7 @@ class OrderClient extends BaseOrder
         $params = [
             'order_key' => [
                 'order_number_type' => 1,
-                'mchid' => $this->config['order_shipping']['merchant_id'],
+                'mchid' => $this->config['config']['order_shipping']['merchant_id'],
                 'out_trade_no' => $out_trade_no,
             ],
             'logistics_type' => $logistics_type,
