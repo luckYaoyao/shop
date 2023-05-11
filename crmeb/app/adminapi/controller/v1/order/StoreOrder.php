@@ -254,8 +254,7 @@ class StoreOrder extends AuthController
 
             ['fictitious_content', '']//虚拟发货内容
         ]);
-        $services->delivery((int)$id, $data);
-        return app('json')->success(100010);
+        return app('json')->success(100010, $services->delivery((int)$id, $data));
     }
 
     /**

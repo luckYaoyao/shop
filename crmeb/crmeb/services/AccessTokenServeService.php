@@ -54,7 +54,7 @@ class AccessTokenServeService extends HttpService
     /**
      * @var string
      */
-    protected $sandBoxApi = 'https://api_v2.crmeb.net/';
+    protected $sandBoxApi = 'https://api_v2.crmeb.net/api/';
 
     /**
      * @var bool

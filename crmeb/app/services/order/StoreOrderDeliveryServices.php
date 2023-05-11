@@ -45,7 +45,7 @@ class StoreOrderDeliveryServices extends BaseServices
      * 订单发货
      * @param int $id
      * @param array $data
-     * @return bool
+     * @return array
      */
     public function delivery(int $id, array $data)
     {
@@ -80,8 +80,7 @@ class StoreOrderDeliveryServices extends BaseServices
         if ($storeOrderRefundServices->count(['store_order_id' => $id, 'refund_type' => [1, 2, 4, 5], 'is_cancel' => 0, 'is_del' => 0])) {
             throw new AdminException(400475);
         }
-        $this->doDelivery($id, $orderInfo, $data);
-        return true;
+        return $this->doDelivery($id, $orderInfo, $data);
     }
 
     /**
@@ -431,7 +430,7 @@ class StoreOrderDeliveryServices extends BaseServices
      * @param int $id
      * @param $orderInfo
      * @param array $data
-     * @return bool
+     * @return array
      */
     public function doDelivery(int $id, $orderInfo, array $data)
     {
@@ -441,9 +440,10 @@ class StoreOrderDeliveryServices extends BaseServices
         /** @var StoreOrderCartInfoServices $orderInfoServices */
         $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);
         $storeName = $orderInfoServices->getCarIdByProductTitle((int)$orderInfo->id);
+        $res = [];
         switch ($type) {
             case 1://快递发货
-                $this->orderDeliverGoods($id, $data, $orderInfo, $storeName);
+                $res = $this->orderDeliverGoods($id, $data, $orderInfo, $storeName);
                 event('NoticeListener', [['orderInfo' => $orderInfo, 'storeName' => $storeName, 'data' => $data], 'order_postage_success']);
                 break;
             case 2://配送
@@ -458,7 +458,7 @@ class StoreOrderDeliveryServices extends BaseServices
         }
         //到期自动收货
         event('OrderDeliveryListener', [$orderInfo, $storeName, $data, $type]);
-        return true;
+        return $res;
     }
 
     /**
@@ -519,6 +519,9 @@ class StoreOrderDeliveryServices extends BaseServices
                 'cargo' => $expData['cargo'],
             ]);
             $data['delivery_id'] = $dump['kuaidinum'];
+            if (!empty($dump['label'])) {
+                $data['kuaidi_label'] = $dump['label'];
+            }
         } else {
             if (!$data['delivery_id']) {
                 throw new AdminException(400531);
@@ -543,7 +546,7 @@ class StoreOrderDeliveryServices extends BaseServices
                 throw new AdminException(400529);
             }
         });
-        return true;
+        return $dump;
     }
 
     /**
