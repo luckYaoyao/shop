@@ -103,6 +103,9 @@ class Service extends Make
                 $value[] = '';
             }
             $value[] = $options['modelName'] ?? $options['menus'] ?? $name;
+            if (!empty($options['key'])) {
+                array_push($select, $options['key']);
+            }
             $value[] = implode(',', $select);
             if ($value && $var) {
                 $contentAction = str_replace($var, $value, $contentAction);
