@@ -165,6 +165,9 @@ class Express extends BaseExpress
         if ($expressData['check_man'] == 1) $param['checkMan'] = $expressData['courier_name'];
         if ($expressData['partner_name'] == 1) $param['partnerName'] = $expressData['customer_name'];
         if ($expressData['is_code'] == 1) $param['code'] = $expressData['code_name'];
+        if (!$data['siid']) {
+            $param['print_type'] = 'IMAGE';
+        }
         return $this->accessToken->httpRequest(self::EXPRESS_DUMP, $param, 'POST');
     }
 

@@ -52,6 +52,16 @@ class AccessTokenServeService extends HttpService
     protected $apiHost = 'http://sms.crmeb.net/api/';
 
     /**
+     * @var string
+     */
+    protected $sandBoxApi = 'https://api_v2.crmeb.net/';
+
+    /**
+     * @var bool
+     */
+    protected $sandBox = true;
+
+    /**
      * 登录接口
      */
     const USER_LOGIN = "user/login";
@@ -166,6 +176,9 @@ class AccessTokenServeService extends HttpService
      */
     public function get(string $apiUrl = '')
     {
+        if ($this->sandBox) {
+            return $this->sandBoxApi . $apiUrl;
+        }
         return $this->apiHost . $apiUrl;
     }
 }
