@@ -616,8 +616,8 @@
 			 * 获取门店列表数据
 			 */
 			getList: function() {
-				let longitude = uni.getStorageSync("user_longitude"); //经度
-				let latitude = uni.getStorageSync("user_latitude"); //纬度
+				let longitude = uni.getStorageSync("user_longitude") || ''; //经度
+				let latitude = uni.getStorageSync("user_latitude") || ''; //纬度
 				let data = {
 					latitude: latitude, //纬度
 					longitude: longitude, //经度
@@ -692,12 +692,11 @@
 							success: (res) => {
 								uni.setStorageSync('user_latitude', res.latitude);
 								uni.setStorageSync('user_longitude', res.longitude);
-								this.getList()
 							},
 							complete: () => {
 								this.getList()
 							}
-						});
+						})
 						// #ifdef H5	
 					}
 					// #endif
