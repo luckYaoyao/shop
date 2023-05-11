@@ -2,7 +2,7 @@
   <el-aside class="layout-aside" :class="setCollapseWidth" v-if="clientWidth > 1000">
     <Logo v-if="setShowLogo && menuList.length && getThemeConfig.layout !== 'columns'" />
     <div v-if="menuList.length && !getThemeConfig.isCollapse && getThemeConfig.layout == 'columns'" class="cat-name">
-      {{ catName }}
+      {{ adminTitle || catName }}
     </div>
     <el-scrollbar class="flex-auto" ref="layoutAsideRef">
       <Vertical :menuList="menuList" :class="setCollapseWidth" />
@@ -32,6 +32,9 @@ export default {
     };
   },
   computed: {
+    adminTitle() {
+      return this.$store.state.app.adminTitle || '';
+    },
     // 设置左侧菜单的具体宽度
     menuList() {
       this.$store.state.menus.childMenuList.length > 0
