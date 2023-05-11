@@ -762,8 +762,8 @@ class StoreOrder extends AuthController
      */
     public function order_dump($order_id, StoreOrderDeliveryServices $storeOrderDeliveryServices)
     {
-        return app('json')->success($storeOrderDeliveryServices->orderDump($order_id));
-
+        $storeOrderDeliveryServices->orderDump($order_id);
+        return app('json')->success(400121);
     }
 
 }
