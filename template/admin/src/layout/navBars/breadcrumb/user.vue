@@ -194,8 +194,8 @@ export default {
                   done();
                   this.$Message.success('您已成功退出');
                   this.$store.commit('clearAll');
-                  localStorage.clear();
-                  sessionStorage.clear();
+                  // localStorage.clear();
+                  // sessionStorage.clear();
                   removeCookies('token');
                   removeCookies('expires_time');
                   removeCookies('uuid');
