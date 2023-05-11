@@ -3,6 +3,7 @@
 namespace crmeb\services\easywechat\orderShipping;
 
 use crmeb\services\easywechat\Application;
+use crmeb\services\SystemConfigService;
 
 class MiniOrderService
 {
@@ -21,10 +22,12 @@ class MiniOrderService
      */
     protected static function options(array $config = [])
     {
+        $payment = SystemConfigService::more(['routine_appId', 'routine_appsecret', 'pay_weixin_mchid', 'pay_new_weixin_open', 'pay_new_weixin_mchid']);
         return [
             'order_shipping' => [
-                'appid' => sys_config('routine_appId'),
-                'merchant_id' => sys_config('pay_new_weixin_open') ? sys_config('pay_weixin_mchid') : sys_config('pay_new_weixin_mchid'),
+                'appid' => $payment['routine_appId'] ?? '',
+                'secret' => $payment['routine_appsecret'] ?? '',
+                'merchant_id' => empty($payment['pay_new_weixin_open']) ? trim($payment['pay_weixin_mchid']) : trim($payment['pay_new_weixin_mchid']),
             ]
         ];
     }
