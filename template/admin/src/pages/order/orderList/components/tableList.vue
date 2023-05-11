@@ -147,6 +147,7 @@
               <!--                            <DropdownItem name="7"  v-show='row._status === 3'>不退款</DropdownItem>-->
               <DropdownItem name="8" v-show="row._status === 4">已收货</DropdownItem>
               <DropdownItem name="9">删除订单</DropdownItem>
+              <DropdownItem name="12" v-show="row.kuaidi_label">快递面单打印</DropdownItem>
             </DropdownMenu>
           </Dropdown>
         </template>
@@ -190,6 +191,7 @@
 
 <script>
 import expandRow from './tableExpand.vue';
+import printJS from 'print-js';
 import {
   orderList,
   getOrdeDatas,
@@ -417,6 +419,9 @@ export default {
               this.$Message.error(res.msg);
             });
           break;
+        case '12':
+          this.printImg(row.kuaidi_label);
+          break;
         default:
           this.delfromData = {
             title: '删除订单',
@@ -427,6 +432,17 @@ export default {
           // this.modalTitleSs = '删除订单';
           this.delOrder(row, this.delfromData);
       }
+    },
+    printImg(url) {
+      printJS({
+        printable: url,
+        type: 'image',
+        documentTitle: '快递信息',
+        style: `img{
+          width: 100%;
+          height: 476px;
+        }`,
+      });
     },
     // 立即支付 /确认收货//删除单条订单
     submitModel() {
