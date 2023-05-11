@@ -32,7 +32,7 @@
 		</view>
 		<view class="btn">
 			<view class="button acea-row row-center-wrapper" @click='goPay(number, paytype)'>{{$t(`确认支付`)}}</view>
-			<view class="wait-pay" @click="waitPay">暂不支付</view>
+			<view class="wait-pay" @click="waitPay">{{$t('暂不支付')}}</view>
 		</view>
 		<view v-show="false" v-html="formContent"></view>
 	</view>

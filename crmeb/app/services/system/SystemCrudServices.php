@@ -209,7 +209,7 @@ class SystemCrudServices extends BaseServices
     {
 
         if (!in_array($type, $this->getTabelRule()['types'])) {
-            throw new AdminException(500047);
+            throw new AdminException(500044);
         }
 
         return $this->getTabelRule()['rule'][$type] ?? $type;
@@ -497,7 +497,7 @@ class SystemCrudServices extends BaseServices
 
         //检测是否为系统表
         if (in_array($tableName, self::NOT_CRUD_TABANAME)) {
-            throw new AdminException(500044);
+            throw new AdminException(500041);
         }
 
         $data['softDelete'] = false;
