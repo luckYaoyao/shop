@@ -14,6 +14,8 @@
 namespace crmeb\services\crud;
 
 
+use think\helper\Str;
+
 /**
  * Class Model
  * @author 等风来
@@ -57,7 +59,71 @@ class Model extends Make
             $this->value['content-php'] = $this->tab() . "use SoftDelete;\n";
         }
         $this->value['modelName'] = $options['modelName'] ?? $name;
+        $field = $options['fromField'] ?? [];
+
+        $attrFnContent = [];
+        foreach ($field as $item) {
+            if (in_array($item['type'], ['radio', 'select']) && !empty($item['option'])) {
+                $attrFnContent[] = $this->getAttrFnContent($item['field'], $item['name'], $item['option']);
+            }
+        }
+        if ($attrFnContent) {
+            $this->value['attr-php'] = "\n" . implode("\n", $attrFnContent);
+        }
+
         return parent::handle($name, $options);
+    }
+
+    /**
+     *
+     * @param string $key
+     * @param array $options
+     * @return array|false|string|string[]
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/11
+     */
+    protected function getAttrFnContent(string $key, string $comment, array $options)
+    {
+        $attrFnStub = file_get_contents($this->getStub('attr'));
+        $var = ['{%field%}', '{%date%}', '{%name%}', '{%content-php%}'];
+        $value = [
+            Str::studly($key . $this->attrPrefix),
+            date('Y-m-d'),
+            $comment,
+            $this->getSwithAndSelectPhpContent($options)
+        ];
+
+        return str_replace($var, $value, $attrFnStub);
+    }
+
+    /**
+     * 获取开关和下拉框获取器内容
+     * @param array $options
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/11
+     */
+    protected function getSwithAndSelectPhpContent(array $options)
+    {
+        if (!$options) {
+            return '';
+        }
+        $case = [];
+        foreach ($options as $option) {
+            $case[] = $this->tab(3) . "case " . $option['value'] . ":\n" . $this->tab(4) . "\$attr = '$option[label]';\n" . $this->tab(4) . "break;";
+        }
+        $caseContent = implode("\n", $case);
+        $tab2 = $this->tab(2);
+        $content = <<<CONTENT
+{$tab2}\$attr = '';
+{$tab2}switch ((int)\$value){
+{$caseContent}
+{$tab2}}
+{$tab2}return \$attr;
+CONTENT;
+        return $content;
     }
 
     /**
@@ -83,8 +149,15 @@ class Model extends Make
      * @email 136327134@qq.com
      * @date 2023/3/13
      */
-    protected function getStub(string $type = '')
+    protected function getStub(string $type = 'model')
     {
-        return __DIR__ . DS . 'stubs' . DS . 'model' . DS . 'crudModel.stub';
+        $routePath = __DIR__ . DS . 'stubs' . DS . 'model' . DS;
+
+        $stubs = [
+            'model' => $routePath . 'crudModel.stub',
+            'attr' => $routePath . 'getattr.stub',
+        ];
+
+        return $type ? $stubs[$type] : $stubs['model'];
     }
 }

@@ -82,6 +82,12 @@ abstract class Make
     protected $value = [];
 
     /**
+     * 数据库获取器后缀
+     * @var string
+     */
+    protected $attrPrefix = '_label';
+
+    /**
      * 后台前端模板根路径
      * @var string
      */

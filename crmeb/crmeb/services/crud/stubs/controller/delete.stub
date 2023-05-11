@@ -10,7 +10,7 @@
             return app('json')->fail(100100);
         }
 
-        if ($this->service->destroy($id)) {
+        if ($this->service->destroy((int)$id)) {
             return app('json')->success(100002);
         } else {
             return app('json')->success(100008);
