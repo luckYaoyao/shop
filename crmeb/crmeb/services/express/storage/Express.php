@@ -147,9 +147,9 @@ class Express extends BaseExpress
             throw new AdminException(400712);
         }
         $param['siid'] = sys_config('config_export_siid');
-        if (!$param['siid']) {
-            throw new AdminException(400716);
-        }
+//        if (!$param['siid']) {
+//            throw new AdminException(400716);
+//        }
         $param['count'] = $data['count'] ?? '';
         $param['cargo'] = $data['cargo'] ?? '';
         if (!$param['count']) {
