@@ -94,7 +94,7 @@ class BaseOrder extends AbstractAPI
     public function isManaged()
     {
         $params = [
-            'appid' => $this->config['order_shipping']['appid']
+            'appid' => $this->config['config']['order_shipping']['appid']
         ];
         return $this->resultHandle($this->parseJSON('POST', [self::BASE_API . self::ORDER . 'notify_confirm_receive', json_encode($params)]));
     }
