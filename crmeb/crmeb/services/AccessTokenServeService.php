@@ -146,15 +146,14 @@ class AccessTokenServeService extends HttpService
      * @param bool $isHeader
      * @return array|mixed
      */
-    public function httpRequest(string $url, array $data = [], string $method = 'POST', bool $isHeader = true)
+    public function httpRequest(string $url, array $data = [], string $method = 'POST', bool $isHeader = true, array $header = [])
     {
-        $header = [];
         if ($isHeader) {
             $this->getToken();
             if (!$this->accessToken) {
                 throw new ApiException(410086);
             }
-            $header = ['Authorization:Bearer-' . $this->accessToken];
+            $header = array_merge($header, ['Authorization:Bearer-' . $this->accessToken]);
         }
 
         $res = $this->request($this->get($url), $method, $data, $header);
