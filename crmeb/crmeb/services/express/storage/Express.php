@@ -168,7 +168,7 @@ class Express extends BaseExpress
         if (!$data['siid']) {
             $param['print_type'] = 'IMAGE';
         }
-        return $this->accessToken->httpRequest(self::EXPRESS_DUMP, $param, 'POST');
+        return $this->accessToken->httpRequest(self::EXPRESS_DUMP, $param, 'POST', true, ['version:v1.1']);
     }
 
 }
