@@ -519,6 +519,9 @@ class StoreOrderDeliveryServices extends BaseServices
                 'cargo' => $expData['cargo'],
             ]);
             $data['delivery_id'] = $dump['kuaidinum'];
+            if (!empty($dump['label'])) {
+                $data['kuaidi_label'] = $dump['label'];
+            }
         } else {
             if (!$data['delivery_id']) {
                 throw new AdminException(400531);
