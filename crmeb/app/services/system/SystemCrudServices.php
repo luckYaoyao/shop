@@ -172,10 +172,10 @@ class SystemCrudServices extends BaseServices
 //                    'value' => 'dateTimeRange',
 //                    'label' => '日期时间区间选择',
 //                ],
-                [
-                    'value' => 'checkbox',
-                    'label' => '多选框',
-                ],
+//                [
+//                    'value' => 'checkbox',
+//                    'label' => '多选框',
+//                ],
                 [
                     'value' => 'radio',
                     'label' => '单选框',

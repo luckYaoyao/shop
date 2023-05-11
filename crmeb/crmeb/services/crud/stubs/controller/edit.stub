@@ -6,5 +6,5 @@
      */
     public function edit($id)
     {
-        return app('json')->success($this->service->getCrudForm($id));
+        return app('json')->success($this->service->getCrudForm((int)$id));
     }

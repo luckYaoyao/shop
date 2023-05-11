@@ -59,12 +59,20 @@ class Service extends Make
             $contentAction .= $stub . "\n";
         }
 
-        //生成form表单
-        if (in_array('save', $action) || in_array('update', $action)) {
-            $var = ['{%key%}', '{%date%}', '{%route%}', '{%form-php%}', '{%modelName%}'];
+        if ($field) {
+            //生成form表单
+            $var = ['{%key%}', '{%date%}', '{%route%}', '{%form-php%}', '{%modelName%}', '{%field%}'];
             $value = [$options['key'] ?? 'id', $this->value['date'], Str::snake($options['route'] ?? $name)];
             $from = [];
+            $select = [];
             foreach ($field as $item) {
+                //处理查询字段
+                if (in_array($item['type'], ['radio', 'select', 'checkbox'])) {
+                    $select[] = $item['field'] . ' as ' . $item['field'] . $this->attrPrefix;
+                } else {
+                    $select[] = $item['field'];
+                }
+                //处理表单信息
                 switch ($item['type']) {
                     case 'frameImageOne':
                         $from[] = $this->tab(2) . $this->getframeImageOnePhpContent($item['field'], $item['name']) . ';';
@@ -95,7 +103,7 @@ class Service extends Make
                 $value[] = '';
             }
             $value[] = $options['modelName'] ?? $options['menus'] ?? $name;
-
+            $value[] = implode(',', $select);
             if ($value && $var) {
                 $contentAction = str_replace($var, $value, $contentAction);
             }
