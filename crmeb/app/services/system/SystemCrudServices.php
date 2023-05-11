@@ -560,6 +560,7 @@ class SystemCrudServices extends BaseServices
             'menu_path' => '/' . $routeName,
             'auth_type' => 1,
             'is_show' => 1,
+            'is_show_path' => 1,
             'is_del' => 0,
             'unique_auth' => $uniqueAuth,
             'is_header' => $data['pid'] ? 0 : 1,
