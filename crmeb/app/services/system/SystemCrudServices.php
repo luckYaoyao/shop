@@ -811,6 +811,10 @@ class SystemCrudServices extends BaseServices
                 if (in_array($fieldType, ['text', 'longtext', 'tinytext'])) {
                     unset($option['limit']);
                 }
+                //判断字段类型
+                if ($fieldType == 'boolean' && isset($option['default']) && $option['default'] === '') {
+                    unset($option['default']);
+                }
                 $table->addColumn($item['field'], $this->changeTabelRule($item['field_type']), $option);
             }
         }
