@@ -145,7 +145,8 @@ class SystemAdminServices extends BaseServices
             'version' => get_crmeb_version(),
             'newOrderAudioLink' => get_file_link(sys_config('new_order_audio_link', '')),
             'queue' => $queue ?? true,
-            'timer' => $timer ?? true
+            'timer' => $timer ?? true,
+            'site_name' => sys_config('site_name'),
         ];
     }
 
