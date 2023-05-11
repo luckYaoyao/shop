@@ -418,7 +418,6 @@ export default {
         upperId: this.upperId,
         is_tourist: this.$route.query.is_tourist,
       }).then((res) => {
-        var sH = 0;
         res.data.forEach((el) => {
           if (el.msn_type == 1 || el.msn_type == 2) {
             el.msn = this.replace_em(el.msn);

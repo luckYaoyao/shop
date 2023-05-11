@@ -42,6 +42,7 @@ export default {
     homeRoute: {},
     local: localRead('local'),
     errorList: [],
+    adminTitle: '',
     hasReadErrorPage: false,
   },
   getters: {
@@ -51,6 +52,9 @@ export default {
   mutations: {
     setBreadCrumb(state, route) {
       state.breadCrumbList = getBreadCrumbList(route, state.homeRoute);
+    },
+    setAdminTitle(state, title) {
+      state.adminTitle = title;
     },
     setHomeRoute(state, routes) {
       state.homeRoute = getHomeRoute(routes, homeName);
