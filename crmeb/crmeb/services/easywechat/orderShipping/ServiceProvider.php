@@ -31,14 +31,13 @@ class ServiceProvider implements ServiceProviderInterface
     {
         $pimple['mini_program.access_token'] = function ($pimple) {
             return new AccessToken(
-                $pimple['config']['order_shipping']['app_id'],
-                $pimple['config']['order_shipping']['secret'],
+                $pimple['config']['mini_program']['app_id'],
+                $pimple['config']['mini_program']['secret'],
                 $pimple['cache']
             );
         };
-
         $pimple['order_ship'] = function ($pimple) {
-            return new OrderClient($pimple['access_token'], $pimple);
+            return new OrderClient($pimple['mini_program.access_token'], $pimple);
         };
     }
 }
