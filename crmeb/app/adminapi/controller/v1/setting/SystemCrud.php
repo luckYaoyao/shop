@@ -317,24 +317,41 @@ class SystemCrud extends AuthController
         if ($newColumn) {
             $info['field']['tableField'] = array_merge($newColumn, $info['field']['tableField']);
         }
-        $keyInfo = [];
-        $deleteInfo = [];
-        foreach ($info['field']['tableField'] as $key => $item) {
+
+        $keyInfo = $deleteInfo = $createInfo = $updateInfo = [];
+        $tableField = [];
+        foreach ($info['field']['tableField'] as $item) {
             if ($item['primaryKey']) {
                 $keyInfo = $item;
-                unset($info['field']['tableField'][$key]);
+                continue;
             }
-            if ($item['field_type'] == 'addSoftDelete') {
+            if ($item['field_type'] == 'timestamp' && $item['field'] === 'delete_time') {
                 $deleteInfo = $item;
-                unset($info['field']['tableField'][$key]);
+                continue;
             }
+            if ($item['field_type'] == 'timestamp' && $item['field'] === 'create_time') {
+                $createInfo = $item;
+                continue;
+            }
+            if ($item['field_type'] == 'timestamp' && $item['field'] === 'update_time') {
+                $updateInfo = $item;
+                continue;
+            }
+            $tableField[] = $item;
         }
         if ($keyInfo) {
-            array_unshift($info['field']['tableField'], $keyInfo);
+            array_unshift($tableField, $keyInfo);
+        }
+        if ($createInfo) {
+            array_push($tableField, $createInfo);
+        }
+        if ($updateInfo) {
+            array_push($tableField, $updateInfo);
         }
         if ($deleteInfo) {
-            array_push($info['field']['tableField'], $deleteInfo);
+            array_push($tableField, $deleteInfo);
         }
+        $info['field']['tableField'] = $tableField;
         $info['field']['pid'] = (int)$info['field']['pid'];
         return app('json')->success(['file' => $data, 'crudInfo' => $info]);
     }
