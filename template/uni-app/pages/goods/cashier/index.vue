@@ -20,11 +20,11 @@
 				<view class="left acea-row row-between-wrapper">
 					<view class="iconfont" :class="item.icon"></view>
 					<view class="text">
-						<view class="name">{{item.name}}</view>
+						<view class="name">{{$t(item.name)}}</view>
 						<view class="info" v-if="item.value == 'yue'">
-							{{item.title}} <span class="money">{{$t(`￥`)}}{{ item.number }}</span>
+							{{$t(item.title)}} <span class="money">{{$t(`￥`)}}{{ item.number }}</span>
 						</view>
-						<view class="info" v-else>{{item.title}}</view>
+						<view class="info" v-else>{{$t(item.title)}}</view>
 					</view>
 				</view>
 				<view class="iconfont" :class="active==index?'icon-xuanzhong11 font-num':'icon-weixuan'"></view>
@@ -32,7 +32,7 @@
 		</view>
 		<view class="btn">
 			<view class="button acea-row row-center-wrapper" @click='goPay(number, paytype)'>{{$t(`确认支付`)}}</view>
-			<view class="wait-pay" @click="waitPay">暂不支付</view>
+			<view class="wait-pay" @click="waitPay">{{$t(`暂不支付`)}}</view>
 		</view>
 		<view v-show="false" v-html="formContent"></view>
 	</view>
