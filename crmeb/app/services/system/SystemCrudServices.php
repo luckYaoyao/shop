@@ -314,7 +314,7 @@ class SystemCrudServices extends BaseServices
         $type = addslashes($type);
         $default = addslashes($default);
         if (in_array(strtolower($type), ['text', 'longtext', 'tinytext'])) {
-            $sql = "ALTER TABLE `$tableName` CHANGE `$field` `$changeFiled` $type CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '$comment';";
+            $sql = "ALTER TABLE `$tableName` CHANGE `$field` `$changeFiled` $type CHARACTER SET utf8mb4 COLLATE " . self::TABLR_COLLATION . " NULL COMMENT '$comment';";
         } else {
             $sql = "ALTER TABLE `$tableName` CHANGE `$field` `$changeFiled` $type($limit) NOT NULL DEFAULT '$default' COMMENT '$comment';";
         }
@@ -510,7 +510,7 @@ class SystemCrudServices extends BaseServices
         //先检查表存在则
         if ($id) {
             $this->updateFromCommon($tableName, $tableComment);
-            //删除数据库表
+            //读取数据库表
             $tableInfo = $this->getTableInfo($tableName);
             if ($tableInfo) {
                 //对比字段进行更新/删除字段
