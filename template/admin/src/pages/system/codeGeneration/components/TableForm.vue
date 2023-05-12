@@ -212,14 +212,6 @@ export default {
   created() {
     this.getCrudMenus();
   },
-  watch:{
-    tableField:{
-      handler(newArr){
-
-      },
-      deep:true
-    }
-  },
   mounted() {},
   methods: {
     disabledInput(index) {
@@ -281,15 +273,16 @@ export default {
         }
       }
       let i = this.tableField.length;
-      if (this.isCreate) {
-        i = this.tableField.length - 2;
-      }
-      if (this.isDelete) {
-        i = this.tableField.length - 1;
-      }
-      if (this.isCreate && this.isDelete) {
-        i = this.tableField.length - 3;
-      }
+      let spliceIndex = 0;
+      this.tableField.map((e) => {
+        if (e.field === 'create_time' || e.field === 'update_time') {
+          spliceIndex++;
+        }
+        if (e.field === 'delete_time') {
+          spliceIndex++;
+        }
+      });
+      i = this.tableField.length - spliceIndex;
       this.tableField.splice(i, 0, {
         field: '',
         field_type: '',
@@ -374,10 +367,11 @@ export default {
       }
     },
     changeField(index) {
+      console.log(this.tableField[index].field)
       if (this.tableField[index].field) {
         for (let i = 0; i < this.tableField.length; i++) {
           const e = this.tableField[i];
-          if (['id', 'create_time', 'update_time', 'delete_time'].includes(e.field)) {
+          if (['id', 'create_time', 'update_time', 'delete_time'].includes(this.tableField[index].field)) {
             this.$Message.warning('列表中已存在该字段名称');
             this.tableField[index].field = '';
             return;
