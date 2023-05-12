@@ -463,17 +463,23 @@ class SystemCrud extends AuthController
         });
 
         if ($info->make_path) {
-            try {
-                foreach ($info->make_path as $key => $item) {
-                    if (in_array($key, ['pages', 'router', 'api'])) {
-                        $item = Make::adminTemplatePath() . $item;
-                    } else {
-                        $item = app()->getRootPath() . $item;
-                    }
-                    unlink($item);
+            $errorFile = [];
+            foreach ($info->make_path as $key => $item) {
+                if (in_array($key, ['pages', 'router', 'api'])) {
+                    $item = Make::adminTemplatePath() . $item;
+                } else {
+                    $item = app()->getRootPath() . $item;
                 }
-            } catch (\Throwable $e) {
-                return app('json')->success(500040, [], ['message' => $e->getMessage()]);
+                try {
+                    unlink($item);
+                } catch (\Throwable $e) {
+                    $errorFile[] = $item;
+                }
+            }
+            if ($errorFile) {
+                return app('json')->success(500040, [], [
+                    'message' => '文件：' . implode("\n", $errorFile) . ';无法被删除!'
+                ]);
             }
         }
 
