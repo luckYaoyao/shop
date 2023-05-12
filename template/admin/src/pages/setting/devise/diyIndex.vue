@@ -418,7 +418,7 @@ export default {
             // this.saveConfig();
             this.$Modal.remove();
             window.close();
-          }, 1500);
+          }, 1000);
         },
         onCancel: () => {
           this.$Modal.remove();

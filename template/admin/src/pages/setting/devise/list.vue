@@ -37,7 +37,15 @@
                 <Row type="flex">
                   <Col v-bind="grid">
                     <div class="button acea-row row-middle">
-                      <Button type="primary" icon="md-add" @click="add">添加专题页</Button>
+                      <Button type="primary" icon="md-add"
+                        ><a
+                          class="target-add"
+                          ref="target"
+                          :href="`${url}${$routeProStr}/setting/pages/diy_index?id=0&name=首页&type=0`"
+                          target="_blank"
+                          >添加专题页
+                        </a></Button
+                      >
                     </div>
                   </Col>
                 </Row>
@@ -428,10 +436,10 @@ export default {
     // },
     // 添加
     add() {
-      this.$router.push({
-        path: this.$routeProStr + '/setting/pages/diy_index',
-        query: { id: 0, name: '首页', type: 1 },
-      });
+      // this.$router.push({
+      //   path: this.$routeProStr + '/setting/pages/diy_index',
+      //   query: { id: 0, name: '首页', type: 1 },
+      // });
     },
     // 删除
     del(row) {
@@ -500,7 +508,10 @@ export default {
   border-radius: 10px;
   border: 1px solid #eee;
 }
-
+.target-add{
+  text-decoration: none;
+  color #fff
+}
 .mask {
   position: absolute;
   left: 0;
