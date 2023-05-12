@@ -172,10 +172,10 @@ class SystemCrudServices extends BaseServices
 //                    'value' => 'dateTimeRange',
 //                    'label' => '日期时间区间选择',
 //                ],
-                [
-                    'value' => 'checkbox',
-                    'label' => '多选框',
-                ],
+//                [
+//                    'value' => 'checkbox',
+//                    'label' => '多选框',
+//                ],
                 [
                     'value' => 'radio',
                     'label' => '单选框',
@@ -209,7 +209,7 @@ class SystemCrudServices extends BaseServices
     {
 
         if (!in_array($type, $this->getTabelRule()['types'])) {
-            throw new AdminException(500047);
+            throw new AdminException(500044);
         }
 
         return $this->getTabelRule()['rule'][$type] ?? $type;
@@ -497,7 +497,7 @@ class SystemCrudServices extends BaseServices
 
         //检测是否为系统表
         if (in_array($tableName, self::NOT_CRUD_TABANAME)) {
-            throw new AdminException(500044);
+            throw new AdminException(500041);
         }
 
         $data['softDelete'] = false;
@@ -810,6 +810,10 @@ class SystemCrudServices extends BaseServices
                 $fieldType = $this->changeTabelRule($item['field_type']);
                 if (in_array($fieldType, ['text', 'longtext', 'tinytext'])) {
                     unset($option['limit']);
+                }
+                //判断字段类型
+                if ($fieldType == 'boolean' && isset($option['default']) && $option['default'] === '') {
+                    unset($option['default']);
                 }
                 $table->addColumn($item['field'], $this->changeTabelRule($item['field_type']), $option);
             }

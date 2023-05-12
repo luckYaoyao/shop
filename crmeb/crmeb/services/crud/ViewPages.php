@@ -75,6 +75,7 @@ class ViewPages extends Make
         $contentVue = [];
         foreach ($field as $key => $item) {
             $keyName = 'key';
+            $fieldValue = $item['field'];
             if (isset($item['type'])) {
                 switch ($item['type']) {
                     case 'frameImageOne':
@@ -88,9 +89,11 @@ class ViewPages extends Make
                         $contentVue[] = str_replace(['{%field%}'], [$item['field']], $templateContent);
                         break;
                 }
+                if (in_array($item['type'], ['radio', 'select', 'checkbox'])) {
+                    $fieldValue = $fieldValue . $this->attrPrefix;
+                }
             }
-
-            $columnStr[] = ($key == 0 ? $this->tab(2) : '') . "{\n" . $this->tab(3) . "title:\"{$item['name']}\"," . $this->tab(2) . "\n" . $this->tab(3) . "$keyName:\"{$item['field']}\"\n" . $this->tab(2) . "}\n";
+            $columnStr[] = ($key == 0 ? $this->tab(2) : '') . "{\n" . $this->tab(3) . "title:\"{$item['name']}\"," . $this->tab(2) . "\n" . $this->tab(3) . "$keyName:\"{$fieldValue}\"\n" . $this->tab(2) . "}\n";
         }
         $this->value['auth'] = Str::snake($name);
         $this->value['componentName'] = $this->value['auth'];

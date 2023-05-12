@@ -101,7 +101,7 @@ class SystemCrud extends AuthController
                 $name = $item['table_name'] ?: $item['comment'];
                 $option = $item['options'] ?? [];
                 if (!$name) {
-                    return app('json')->fail(500056, [], ['field' => $item['field']]);
+                    return app('json')->fail(500048, [], ['field' => $item['field']]);
                 }
                 if (!$option && in_array($item['from_type'], ['radio', 'select'])) {
                     return app('json')->fail('表单类型为radio或select时,options字段不能为空');
@@ -116,20 +116,20 @@ class SystemCrud extends AuthController
             }
         }
         if (!$fromField) {
-            return app('json')->fail(500054);
+            return app('json')->fail(500046);
         }
         if (!$columnField) {
-            return app('json')->fail(500055);
+            return app('json')->fail(500047);
         }
         $data['fromField'] = $fromField;
         $data['columnField'] = $columnField;
         if (!$data['tableName']) {
-            return app('json')->fail(500045);
+            return app('json')->fail(500042);
         }
 
         $this->services->createCrud($id, $data);
 
-        return app('json')->success(500046);
+        return app('json')->success(500043);
     }
 
     /**
@@ -146,11 +146,11 @@ class SystemCrud extends AuthController
         ], true);
 
         if (!$tableName) {
-            return app('json')->fail(500045);
+            return app('json')->fail(500042);
         }
 
         if (in_array($tableName, SystemCrudServices::NOT_CRUD_TABANAME)) {
-            return app('json')->fail(500044);
+            return app('json')->fail(500041);
         }
 
         $routeName = 'crud/' . Str::snake($tableName);
@@ -207,7 +207,7 @@ class SystemCrud extends AuthController
 
         $info = $this->services->get($id);
         if (!$info) {
-            return app('json')->fail(500043);
+            return app('json')->fail(100026);
         }
 
         $routeName = 'crud/' . Str::snake($info->table_name);
@@ -360,7 +360,7 @@ class SystemCrud extends AuthController
         if (config('filesystem.password') != $pwd) {
             return app('json')->fail('文件管理密码错误');
         }
-        
+
         if (empty($filepath) || !$id) {
             return app('json')->fail(410087);
         }
@@ -434,7 +434,7 @@ class SystemCrud extends AuthController
 
         $info = $this->services->get($id);
         if (!$info) {
-            return app('json')->fail(500042);
+            return app('json')->fail(100026);
         }
 
         $services->transaction(function () use ($services, $info) {
@@ -456,7 +456,7 @@ class SystemCrud extends AuthController
                     unlink($item);
                 }
             } catch (\Throwable $e) {
-                return app('json')->success(500041, [], ['message' => $e->getMessage()]);
+                return app('json')->success(500040, [], ['message' => $e->getMessage()]);
             }
         }
 
@@ -480,7 +480,7 @@ class SystemCrud extends AuthController
 
         $info = $this->services->get($id);
         if (!$info) {
-            return app('json')->fail(500039);
+            return app('json')->fail(100026);
         }
         $zipPath = app()->getRootPath() . 'backup' . DS . Str::camel($info->table_name);
         $zipName = app()->getRootPath() . 'backup' . DS . Str::camel($info->table_name) . '.zip';
@@ -526,7 +526,7 @@ class SystemCrud extends AuthController
         ], $makePath, $zipPath);
 
         if (!extension_loaded('zip')) {
-            return app('json')->fail(500040);
+            return app('json')->fail(500039);
         }
 
         $fileService = new FileService();

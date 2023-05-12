@@ -41,5 +41,5 @@ class {%nameCamel%} extends BaseModel
      * @var string
      */
     protected $pk = '{%key%}';
-
+{%attr-php%}
 }

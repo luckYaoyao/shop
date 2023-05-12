@@ -75,7 +75,7 @@ class ViewApi extends Make
         }
         $route = $options['route'] ?? '';
         if (!$route) {
-            throw new CrudException(500053);
+            throw new CrudException(500045);
         }
 
         $contentJs = '';
