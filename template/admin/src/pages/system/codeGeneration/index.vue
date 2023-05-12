@@ -42,7 +42,7 @@
         <StorageLoc :storage="formItem.storage" />
       </Card>
     </div>
-    <Card :bordered="false" class="btn">
+    <Card :bordered="false" class="btn" dis-hover>
       <Button class="mr20" @click="beforeTab">上一步</Button>
       <Button type="primary" @click="nextTab">{{ currentTab == 2 ? '提交' : '下一步' }}</Button>
     </Card>
@@ -109,6 +109,14 @@ export default {
         this.formItem.foundation.menuName = data.menuName;
         this.$refs.TableForm.tableField = data.tableField;
         this.formItem.storage = data.filePath;
+        data.tableField.map((e) => {
+          if (e.field === 'create_time') {
+            this.$refs.TableForm.isCreate = true;
+          }
+          if (e.field === 'delete_time') {
+            this.$refs.TableForm.isDelete = true;
+          }
+        });
       });
     },
     storageData(data) {

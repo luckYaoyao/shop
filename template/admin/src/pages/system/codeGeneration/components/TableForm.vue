@@ -13,8 +13,8 @@
         <p>
           4、在字段配置中新建表时，字段类型为addSoftDelete会字段创建delete_time字段，字段类型为：timestamp，作用是伪删除
         </p>
-        <p>5、在字段配置中，表单类型为frameImageOne时属于图片单选，frameImages时为图片多选</p>
-        <p>6、在字段配置中，表单类型为不生成时创建后不会生成对应的表单项</p>
+        <p>5、在字段配置中，表单类型为不生成时创建后不会生成对应的表单项</p>
+        <p>6、添加字段id、create_time、update_time、delete_time为不可用字段</p>
       </template>
     </Alert>
     <div class="df">
@@ -35,7 +35,11 @@
         no-filtered-data-text="暂无筛选结果"
       >
         <template slot-scope="{ row, index }" slot="field">
-          <Input :disabled="disabledInput(index)" v-model="tableField[index].field"></Input>
+          <Input
+            :disabled="disabledInput(index)"
+            v-model="tableField[index].field"
+            @on-blur="changeField(index)"
+          ></Input>
         </template>
         <template slot-scope="{ row, index }" slot="field_type">
           <Select
@@ -53,7 +57,11 @@
           <Input v-model="tableField[index].default" :disabled="disabledInput(index)"></Input>
         </template>
         <template slot-scope="{ row, index }" slot="comment">
-          <Input v-model="tableField[index].comment" :disabled="disabledInput(index)"></Input>
+          <Input
+            v-model="tableField[index].comment"
+            :disabled="disabledInput(index)"
+            @on-change="(e) => changeComment(e, index)"
+          ></Input>
         </template>
         <template slot-scope="{ row, index }" slot="required">
           <Checkbox v-model="tableField[index].required" :disabled="disabledInput(index)"></Checkbox>
@@ -81,7 +89,7 @@
           <div v-else>--</div>
         </template>
         <template slot-scope="{ row, index }" slot="action">
-          <a v-if="!tableField[index].primaryKey" @click="del(row, index)">删除</a>
+          <a v-if="!tableField[index].primaryKey && !disabledInput(index)" @click="del(row, index)">删除</a>
           <span v-else>--</span>
         </template>
       </Table>
@@ -204,6 +212,14 @@ export default {
   created() {
     this.getCrudMenus();
   },
+  watch:{
+    tableField:{
+      handler(newArr){
+
+      },
+      deep:true
+    }
+  },
   mounted() {},
   methods: {
     disabledInput(index) {
@@ -264,7 +280,17 @@ export default {
           return this.$Message.warning('请输入列表名');
         }
       }
-      this.tableField.push({
+      let i = this.tableField.length;
+      if (this.isCreate) {
+        i = this.tableField.length - 2;
+      }
+      if (this.isDelete) {
+        i = this.tableField.length - 1;
+      }
+      if (this.isCreate && this.isDelete) {
+        i = this.tableField.length - 3;
+      }
+      this.tableField.splice(i, 0, {
         field: '',
         field_type: '',
         default: '',
@@ -276,9 +302,18 @@ export default {
         primaryKey: 0,
         from_type: '0',
       });
+      // this.tableField.push();
     },
     addCreate(status) {
       if (status) {
+        let haveCre = this.tableField.findIndex((e) => e.field === 'create_time');
+        let haveUp = this.tableField.findIndex((e) => e.field === 'update_time');
+        if (haveCre > 0 || haveUp > 0) {
+          this.$nextTick((e) => {
+            this.isCreate = false;
+          });
+          return this.$Message.warning('已存在 create_time或update_time');
+        }
         let data = [
           {
             field: 'create_time',
@@ -289,7 +324,7 @@ export default {
             is_table: true,
             table_name: '添加时间',
             limit: '',
-            primaryKey: 1,
+            primaryKey: 0,
             from_type: '0',
           },
           {
@@ -301,7 +336,7 @@ export default {
             is_table: true,
             table_name: '修改时间',
             limit: '',
-            primaryKey: 1,
+            primaryKey: 0,
             from_type: '0',
           },
         ];
@@ -313,6 +348,11 @@ export default {
     },
     addDelete(status) {
       if (status) {
+        let haveDel = this.tableField.findIndex((e) => e.field === 'delete_time');
+        if (haveDel > 0) {
+          this.isDelete = false;
+          return this.$Message.warning('已存在 delete_time');
+        }
         let data = [
           {
             field: 'delete_time',
@@ -323,7 +363,7 @@ export default {
             is_table: false,
             table_name: '伪删除',
             limit: '',
-            primaryKey: 1,
+            primaryKey: 0,
             from_type: '0',
           },
         ];
@@ -332,6 +372,21 @@ export default {
         let i = this.tableField.findIndex((e) => e.field === 'delete_time');
         this.tableField.splice(i, 1);
       }
+    },
+    changeField(index) {
+      if (this.tableField[index].field) {
+        for (let i = 0; i < this.tableField.length; i++) {
+          const e = this.tableField[i];
+          if (['id', 'create_time', 'update_time', 'delete_time'].includes(e.field)) {
+            this.$Message.warning('列表中已存在该字段名称');
+            this.tableField[index].field = '';
+            return;
+          }
+        }
+      }
+    },
+    changeComment(e, index) {
+      this.tableField[index].table_name = e.target.value;
     },
     getCrudMenus() {
       crudMenus().then((res) => {
