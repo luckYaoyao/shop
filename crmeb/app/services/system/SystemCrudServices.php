@@ -352,7 +352,21 @@ class SystemCrudServices extends BaseServices
         if (in_array(strtolower($type), ['text', 'longtext', 'tinytext'])) {
             $sql = "ALTER TABLE `$tableName` ADD `$field` $type NULL COMMENT '$comment' $after;";
         } else {
-            $sql = "ALTER TABLE `$tableName` ADD `$field` $type($limit) NOT NULL DEFAULT '$default' COMMENT '$comment' $after;";
+            $defaultSql = "NOT NULL DEFAULT '$default'";
+            //处理时间字段默认值
+            if (in_array(strtolower($type), ['datetime', 'timestamp', 'time', 'date', 'year'])) {
+                switch ($field) {
+                    case 'delete_time':
+                        $defaultSql = 'NULL DEFAULT NULL';
+                        break;
+                    case 'create_time':
+                    case 'update_time':
+                        $defaultSql = 'NOT NULL DEFAULT CURRENT_TIMESTAMP';
+                        break;
+                }
+            }
+            $limitSql = $limit ? '(' . $limit . ')' : '';
+            $sql = "ALTER TABLE `$tableName` ADD `$field` $type$limitSql $defaultSql COMMENT '$comment' $after;";
         }
         return Db::execute($sql);
     }

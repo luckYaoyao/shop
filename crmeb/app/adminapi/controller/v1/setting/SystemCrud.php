@@ -317,24 +317,41 @@ class SystemCrud extends AuthController
         if ($newColumn) {
             $info['field']['tableField'] = array_merge($newColumn, $info['field']['tableField']);
         }
-        $keyInfo = [];
-        $deleteInfo = [];
-        foreach ($info['field']['tableField'] as $key => $item) {
+
+        $keyInfo = $deleteInfo = $createInfo = $updateInfo = [];
+        $tableField = [];
+        foreach ($info['field']['tableField'] as $item) {
             if ($item['primaryKey']) {
                 $keyInfo = $item;
-                unset($info['field']['tableField'][$key]);
+                continue;
             }
-            if ($item['field_type'] == 'addSoftDelete') {
+            if ($item['field_type'] == 'timestamp' && $item['field'] === 'delete_time') {
                 $deleteInfo = $item;
-                unset($info['field']['tableField'][$key]);
+                continue;
             }
+            if ($item['field_type'] == 'timestamp' && $item['field'] === 'create_time') {
+                $createInfo = $item;
+                continue;
+            }
+            if ($item['field_type'] == 'timestamp' && $item['field'] === 'update_time') {
+                $updateInfo = $item;
+                continue;
+            }
+            $tableField[] = $item;
         }
         if ($keyInfo) {
-            array_unshift($info['field']['tableField'], $keyInfo);
+            array_unshift($tableField, $keyInfo);
+        }
+        if ($createInfo) {
+            array_push($tableField, $createInfo);
+        }
+        if ($updateInfo) {
+            array_push($tableField, $updateInfo);
         }
         if ($deleteInfo) {
-            array_push($info['field']['tableField'], $deleteInfo);
+            array_push($tableField, $deleteInfo);
         }
+        $info['field']['tableField'] = $tableField;
         $info['field']['pid'] = (int)$info['field']['pid'];
         return app('json')->success(['file' => $data, 'crudInfo' => $info]);
     }
@@ -446,17 +463,23 @@ class SystemCrud extends AuthController
         });
 
         if ($info->make_path) {
-            try {
-                foreach ($info->make_path as $key => $item) {
-                    if (in_array($key, ['pages', 'router', 'api'])) {
-                        $item = Make::adminTemplatePath() . $item;
-                    } else {
-                        $item = app()->getRootPath() . $item;
-                    }
-                    unlink($item);
+            $errorFile = [];
+            foreach ($info->make_path as $key => $item) {
+                if (in_array($key, ['pages', 'router', 'api'])) {
+                    $item = Make::adminTemplatePath() . $item;
+                } else {
+                    $item = app()->getRootPath() . $item;
                 }
-            } catch (\Throwable $e) {
-                return app('json')->success(500040, [], ['message' => $e->getMessage()]);
+                try {
+                    unlink($item);
+                } catch (\Throwable $e) {
+                    $errorFile[] = $item;
+                }
+            }
+            if ($errorFile) {
+                return app('json')->success(500040, [], [
+                    'message' => '文件：' . implode("\n", $errorFile) . ';无法被删除!'
+                ]);
             }
         }
 

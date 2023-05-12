@@ -52,14 +52,16 @@ class AccessTokenServeService extends HttpService
     protected $apiHost = 'http://sms.crmeb.net/api/';
 
     /**
+     * 沙盒地址
      * @var string
      */
     protected $sandBoxApi = 'https://api_v2.crmeb.net/api/';
 
     /**
+     * 沙盒模式
      * @var bool
      */
-    protected $sandBox = true;
+    protected $sandBox = false;
 
     /**
      * 登录接口
