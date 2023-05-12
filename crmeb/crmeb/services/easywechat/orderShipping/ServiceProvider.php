@@ -36,9 +36,8 @@ class ServiceProvider implements ServiceProviderInterface
                 $pimple['cache']
             );
         };
-
         $pimple['order_ship'] = function ($pimple) {
-            return new OrderClient($pimple['access_token'], $pimple);
+            return new OrderClient($pimple['mini_program.access_token'], $pimple);
         };
     }
 }
