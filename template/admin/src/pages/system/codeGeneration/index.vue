@@ -109,9 +109,11 @@ export default {
         this.formItem.foundation.menuName = data.menuName;
         this.$refs.TableForm.tableField = data.tableField;
         this.formItem.storage = data.filePath;
+        let i = 0;
         data.tableField.map((e) => {
-          if (e.field === 'create_time') {
-            this.$refs.TableForm.isCreate = true;
+          if (e.field === 'create_time' || e.field === 'update_time') {
+            i++;
+            if (i == 2) this.$refs.TableForm.isCreate = true;
           }
           if (e.field === 'delete_time') {
             this.$refs.TableForm.isDelete = true;
