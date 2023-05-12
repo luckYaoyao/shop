@@ -79,6 +79,9 @@ class SystemCrudServices extends BaseServices
         'wechat_qrcode_cate', 'wechat_qrcode_record', 'wechat_reply', 'wechat_user'
     ];
 
+    //表字符集
+    const TABLR_COLLATION = 'utf8mb4_general_ci';
+
     /**
      * SystemCrudServices constructor.
      * @param SystemCrudDao $dao
@@ -144,8 +147,8 @@ class SystemCrudServices extends BaseServices
 
                 'json',
 
-                'addTimestamps',
-                'addSoftDelete',
+//                'addTimestamps',
+//                'addSoftDelete',
             ],
             'form' => [
                 [
@@ -311,7 +314,7 @@ class SystemCrudServices extends BaseServices
         $type = addslashes($type);
         $default = addslashes($default);
         if (in_array(strtolower($type), ['text', 'longtext', 'tinytext'])) {
-            $sql = "ALTER TABLE `$tableName` CHANGE `$field` `$changeFiled` $type CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '$comment';";
+            $sql = "ALTER TABLE `$tableName` CHANGE `$field` `$changeFiled` $type CHARACTER SET utf8mb4 COLLATE " . self::TABLR_COLLATION . " NULL COMMENT '$comment';";
         } else {
             $sql = "ALTER TABLE `$tableName` CHANGE `$field` `$changeFiled` $type($limit) NOT NULL DEFAULT '$default' COMMENT '$comment';";
         }
@@ -430,7 +433,8 @@ class SystemCrudServices extends BaseServices
                 }
                 continue;
             } else {
-                //默认字段没有在数据库中,需要添加字段
+                //从数据库中新增的字段，并没有记录在表中做兼容处理；
+                //默认字段没有在数据库中,需要添加字段；
                 if (!in_array($item['default_field'], $fieldAll)) {
                     $addAlter[] = [
                         'prev_filed' => $prevFiled,
@@ -506,7 +510,7 @@ class SystemCrudServices extends BaseServices
         //先检查表存在则
         if ($id) {
             $this->updateFromCommon($tableName, $tableComment);
-            //删除数据库表
+            //读取数据库表
             $tableInfo = $this->getTableInfo($tableName);
             if ($tableInfo) {
                 //对比字段进行更新/删除字段
@@ -571,7 +575,7 @@ class SystemCrudServices extends BaseServices
             $crudInfo = $this->dao->get($id);
         }
 
-        $res = $this->transaction(function () use ($tableCreateInfo, $crudInfo, $tableInfo, $modelName, $filePath, $tableName, $routeName, $data, $dataMenu) {
+        $res = $this->transaction(function () use ($tableComment, $tableCreateInfo, $crudInfo, $modelName, $filePath, $tableName, $routeName, $data, $dataMenu) {
             $routeService = app()->make(SystemRouteServices::class);
             $meunService = app()->make(SystemMenusServices::class);
             //修改菜单名称
@@ -683,7 +687,6 @@ class SystemCrudServices extends BaseServices
             if ($tableCreateInfo && isset($tableCreateInfo['table']) && $tableCreateInfo['table'] instanceof Table) {
                 //创建数据库
                 $tableCreateInfo['table']->create();
-                $tableInfo = $this->getTableInfo($tableName);
             }
 
             $crudDate = [
@@ -691,8 +694,8 @@ class SystemCrudServices extends BaseServices
                 'name' => $data['menuName'],
                 'model_name' => $data['modelName'],
                 'table_name' => $tableName,
-                'table_comment' => $tableInfo['TABLE_COMMENT'] ?? '',
-                'table_collation' => $tableInfo['TABLE_COLLATION'] ?? '',
+                'table_comment' => $tableComment,
+                'table_collation' => self::TABLR_COLLATION,
                 'field' => json_encode($data),//提交的数据
                 'menu_ids' => json_encode($menuIds),//生成的菜单id
                 'menu_id' => $menuInfo->id,//生成的菜单id
@@ -778,13 +781,14 @@ class SystemCrudServices extends BaseServices
      * @email 136327134@qq.com
      * @date 2023/4/7
      */
-    public function makeDatebase(string $tableName, string $tableComment, array $tableField = [])
+    public function makeDatebase(string $tableName, string $tableComment, array $tableField = [], string $collation = self::TABLR_COLLATION)
     {
+        $timestampsField = [];
         $softDelete = false;
         $timestamps = false;
         $indexField = [];
         //创建表
-        $table = new Table($tableName, ['comment' => $tableComment], $this->getAdapter());
+        $table = new Table($tableName, ['comment' => $tableComment, 'collation' => $collation], $this->getAdapter());
         //创建字段
         foreach ($tableField as $item) {
             if (isset($item['primaryKey']) && $item['primaryKey']) {
@@ -801,10 +805,9 @@ class SystemCrudServices extends BaseServices
             if ($item['field_type'] === 'addSoftDelete') {
                 $table->addSoftDelete();
                 $softDelete = true;
-            } else if ($item['field_type'] === 'addTimestamps') {
-                //创建修改和增加时间
-                $table->addTimestamps();
-                $timestamps = true;
+            } else if ($item['field_type'] == 'timestamp' &&
+                ($item['field'] === 'create_time' || $item['field'] === 'update_time')) {
+                $timestampsField[] = $item;
             } else {
                 $option['comment'] = $item['comment'];
                 $fieldType = $this->changeTabelRule($item['field_type']);
@@ -823,6 +826,19 @@ class SystemCrudServices extends BaseServices
             $indexField = $data['tableIndex'];
             foreach ($data['tableIndex'] as $item) {
                 $table->addIndex($item);
+            }
+        }
+
+        //如果是成对出现的create_time和update_time就直接增加修改和添加时间
+        if (count($timestampsField) == 2) {
+            //创建修改和增加时间
+            $table->addTimestamps();
+            $timestamps = true;
+        } else {
+            //如果是一个数组，增加一列
+            foreach ($timestampsField as $item) {
+                $option['comment'] = $item['comment'];
+                $table->addColumn($item['field'], $this->changeTabelRule($item['field_type']), $option);
             }
         }
 
