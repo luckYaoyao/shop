@@ -17,7 +17,11 @@
         <p>6、在字段配置中，表单类型为不生成时创建后不会生成对应的表单项</p>
       </template>
     </Alert>
-    <Button type="primary" @click="addRow">添加一行</Button>
+    <div class="df">
+      <Button class="mr20" type="primary" @click="addRow">添加一行</Button>
+      <Checkbox class="mr10" v-model="isCreate" @on-change="addCreate">添加与修改时间</Checkbox>
+      <Checkbox class="mr10" v-model="isDelete" @on-change="addDelete">伪删除</Checkbox>
+    </div>
     <div>
       <Table
         ref="selection"
@@ -126,6 +130,8 @@ export default {
       menusList: [],
       columnTypeList: [],
       optionsModal: false,
+      isCreate: false,
+      isDelete: false,
       columns: [
         {
           title: '字段名称',
@@ -205,8 +211,12 @@ export default {
       let res = ['addTimestamps', 'addSoftDelete'].includes(this.tableField[index].field_type);
       if (fieldInfo.primaryKey) {
         res = true;
-      }
-      if (fieldInfo.field === 'delete_time' && fieldInfo.field_type === 'timestamp') {
+      } else if (fieldInfo.field === 'delete_time' && fieldInfo.field_type === 'timestamp') {
+        res = true;
+      } else if (
+        (fieldInfo.field === 'create_time' || fieldInfo.field === 'update_time') &&
+        fieldInfo.field_type === 'timestamp'
+      ) {
         res = true;
       }
       return res;
@@ -266,6 +276,62 @@ export default {
         primaryKey: 0,
         from_type: '0',
       });
+    },
+    addCreate(status) {
+      if (status) {
+        let data = [
+          {
+            field: 'create_time',
+            field_type: 'timestamp',
+            default: '',
+            comment: '添加时间',
+            required: false,
+            is_table: true,
+            table_name: '添加时间',
+            limit: '',
+            primaryKey: 1,
+            from_type: '0',
+          },
+          {
+            field: 'update_time',
+            field_type: 'timestamp',
+            default: '',
+            comment: '修改时间',
+            required: false,
+            is_table: true,
+            table_name: '修改时间',
+            limit: '',
+            primaryKey: 1,
+            from_type: '0',
+          },
+        ];
+        this.tableField = [...this.tableField, ...data];
+      } else {
+        let i = this.tableField.findIndex((e) => e.field === 'create_time');
+        this.tableField.splice(i, 2);
+      }
+    },
+    addDelete(status) {
+      if (status) {
+        let data = [
+          {
+            field: 'delete_time',
+            field_type: 'timestamp',
+            default: '',
+            comment: '伪删除',
+            required: false,
+            is_table: false,
+            table_name: '伪删除',
+            limit: '',
+            primaryKey: 1,
+            from_type: '0',
+          },
+        ];
+        this.tableField = [...this.tableField, ...data];
+      } else {
+        let i = this.tableField.findIndex((e) => e.field === 'delete_time');
+        this.tableField.splice(i, 1);
+      }
     },
     getCrudMenus() {
       crudMenus().then((res) => {
