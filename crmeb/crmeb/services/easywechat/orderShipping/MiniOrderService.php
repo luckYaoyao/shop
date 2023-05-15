@@ -4,6 +4,7 @@ namespace crmeb\services\easywechat\orderShipping;
 
 use crmeb\services\easywechat\Application;
 use crmeb\services\SystemConfigService;
+use EasyWeChat\Core\Exceptions\HttpException;
 
 class MiniOrderService
 {
@@ -24,8 +25,8 @@ class MiniOrderService
     {
         $payment = SystemConfigService::more(['routine_appId', 'routine_appsecret', 'pay_weixin_mchid', 'pay_new_weixin_open', 'pay_new_weixin_mchid']);
         return [
-            'order_shipping' => [
-                'appid' => $payment['routine_appId'] ?? '',
+            'mini_program' => [
+                'app_id' => $payment['routine_appId'] ?? '',
                 'secret' => $payment['routine_appsecret'] ?? '',
                 'merchant_id' => empty($payment['pay_new_weixin_open']) ? trim($payment['pay_weixin_mchid']) : trim($payment['pay_new_weixin_mchid']),
             ]
@@ -51,14 +52,15 @@ class MiniOrderService
 
     /**
      * 上传订单
-     * @param string $out_trade_no
-     * @param int $logistics_type
-     * @param array $shipping_list
-     * @param string $payer_openid
-     * @param int $delivery_mode
-     * @param bool $is_all_delivered
+     * @param string $out_trade_no 订单号(商城订单好)
+     * @param int $logistics_type 物流模式，发货方式枚举值：1、实体物流配送采用快递公司进行实体物流配送形式 2、同城配送 3、虚拟商品，虚拟商品，例如话费充值，点卡等，无实体配送形式 4、用户自提
+     * @param array $shipping_list 物流信息列表，发货物流单列表，支持统一发货（单个物流单）和分拆发货（多个物流单）两种模式，多重性: [1, 10]
+     * @param string $payer_openid 支付者，支付者信息
+     * @param int $delivery_mode 发货模式，发货模式枚举值：1、UNIFIED_DELIVERY（统一发货）2、SPLIT_DELIVERY（分拆发货） 示例值: UNIFIED_DELIVERY
+     * @param bool $is_all_delivered 分拆发货模式时必填，用于标识分拆发货模式下是否已全部发货完成，只有全部发货完成的情况下才会向用户推送发货完成通知。示例值: true/false
      * @return array
      *
+     * @throws HttpException
      * @date 2023/05/09
      * @author yyw
      */
@@ -76,7 +78,7 @@ class MiniOrderService
      * @param int $delivery_mode
      * @param bool $is_all_delivered
      * @return array
-     * @throws \EasyWeChat\Core\Exceptions\HttpException
+     * @throws HttpException
      *
      * @date 2023/05/10
      * @author yyw
@@ -103,7 +105,7 @@ class MiniOrderService
     /**
      * 判断是否开通
      * @return bool
-     * @throws \EasyWeChat\Core\Exceptions\HttpException
+     * @throws HttpException
      * @throws \Psr\SimpleCache\InvalidArgumentException
      *
      * @date 2023/05/09
@@ -119,7 +121,7 @@ class MiniOrderService
      * 设置小修跳转路径
      * @param $path
      * @return array
-     * @throws \EasyWeChat\Core\Exceptions\HttpException
+     * @throws HttpException
      *
      * @date 2023/05/10
      * @author yyw
