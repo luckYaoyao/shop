@@ -14,11 +14,6 @@ class OrderClient extends BaseOrder
     const redis_prefix = 'mimi_order';
 
 
-    public function __construct(AccessToken $accessToken, $config)
-    {
-        parent::__construct($accessToken, $config);
-    }
-
     /**
      * @var \Redis
      */
@@ -264,11 +259,14 @@ class OrderClient extends BaseOrder
         if (!$this->getRedis()->exists($key)) {
             $date = $this->setDeliveryList();
             if (!isset($date[$company_name])) {
-                throw new AdminException('物流公司异常');
+                throw new AdminException('物流公司异常1');
             }
             $express_company = $date[$company_name];
         } else {
             $express_company = $this->getRedis()->hMGet($key, $company_name);
+        }
+        if (empty($express_company)) {
+            throw new AdminException('物流公司异常2');
         }
 
         return $express_company;
