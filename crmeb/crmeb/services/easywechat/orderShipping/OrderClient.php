@@ -78,7 +78,7 @@ class OrderClient extends BaseOrder
         $params = [
             'order_key' => [
                 'order_number_type' => 1,
-                'mchid' => $this->config['config']['order_shipping']['merchant_id'],
+                'mchid' => $this->config['config']['mini_program']['merchant_id'],
                 'out_trade_no' => $out_trade_no,
             ],
             'logistics_type' => $logistics_type,
@@ -127,7 +127,7 @@ class OrderClient extends BaseOrder
         $params = [
             'order_key' => [
                 'order_number_type' => 1,
-                'mchid' => $this->config['order_shipping']['merchant_id'],
+                'mchid' => $this->config['mini_program']['merchant_id'],
                 'out_trade_no' => $out_trade_no,
             ],
             'upload_time' => date(DATE_RFC3339),
@@ -140,7 +140,7 @@ class OrderClient extends BaseOrder
             $sub_order = [
                 'order_key' => [
                     'order_number_type' => 1,
-                    'mchid' => $this->config['order_shipping']['merchant_id'],
+                    'mchid' => $this->config['mini_program']['merchant_id'],
                     'out_trade_no' => $order['out_trade_no'],
                     'logistics_type' => $logistics_type,
                 ],
