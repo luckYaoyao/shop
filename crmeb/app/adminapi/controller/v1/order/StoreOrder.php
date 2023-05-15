@@ -766,4 +766,41 @@ class StoreOrder extends AuthController
         return app('json')->success(400121);
     }
 
+    /**
+     * 获取快递信息
+     * @param ServeServices $services
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/15
+     */
+    public function getKuaidiComs(ServeServices $services)
+    {
+        return app('json')->success($services->express()->getKuaidiComs());
+    }
+
+    /**
+     * 取消商家寄件
+     * @param $id
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/15
+     */
+    public function shipmentCancelOrder($id)
+    {
+        if (!$id) {
+            return app('json')->fail('缺少参数');
+        }
+
+        $msg = $this->request->post('msg', '');
+        if (!$msg) {
+            return app('json')->fail('请填写取消寄件原因');
+        }
+        if ($this->services->shipmentCancelOrder((int)$id, $msg)) {
+            return app('json')->success('取消成功');
+        } else {
+            return app('json')->fail('取消失败');
+        }
+    }
 }

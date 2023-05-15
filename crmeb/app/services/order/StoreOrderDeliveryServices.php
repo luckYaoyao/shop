@@ -473,6 +473,7 @@ class StoreOrderDeliveryServices extends BaseServices
         if (!$data['delivery_name']) {
             throw new AdminException(400007);
         }
+        $dump = [];
         $data['delivery_type'] = 'express';
         if ($data['express_record_type'] == 2) {//电子面单
             if (!$data['delivery_code']) {
@@ -522,6 +523,52 @@ class StoreOrderDeliveryServices extends BaseServices
             if (!empty($dump['label'])) {
                 $data['kuaidi_label'] = $dump['label'];
             }
+        } else if ($data['express_record_type'] == 3) {
+            //商家寄件
+            if (!$data['delivery_code']) {
+                throw new AdminException(400476);
+            }
+            if (!$data['express_temp_id']) {
+                throw new AdminException(400527);
+            }
+            if (!$data['to_name']) {
+                throw new AdminException(400008);
+            }
+            if (!$data['to_tel']) {
+                throw new AdminException(400477);
+            }
+            if (!$data['to_addr']) {
+                throw new AdminException(400478);
+            }
+            /** @var ServeServices $expressService */
+            $expressService = app()->make(ServeServices::class);
+            $expData['kuaidicom'] = $data['delivery_code'];
+            $expData['man_name'] = $orderInfo->real_name;
+            $expData['phone'] = $orderInfo->user_phone;
+            $expData['address'] = $orderInfo->user_address;
+            $expData['send_real_name'] = $data['to_name'];
+            $expData['send_phone'] = $data['to_tel'];
+            $expData['send_address'] = $data['to_addr'];
+            $expData['temp_id'] = $data['express_temp_id'];
+            $expData['weight'] = $this->getOrderSumWeight($id);
+            $expData['cargo'] = $orderInfoServices->getCarIdByProductTitle((int)$orderInfo->id, true);
+            if (!sys_config('config_shippment_open', 0)) {
+                throw new AdminException('商家寄件未开启无法寄件');
+            }
+            $dump = $expressService->express()->shippmentCreateOrder($expData);
+            $orderInfo->delivery_id = $dump['kuaidinum'] ?? '';
+            $data['express_dump'] = json_encode([
+                'com' => $expData['com'],
+                'from_name' => $expData['from_name'],
+                'from_tel' => $expData['from_tel'],
+                'from_addr' => $expData['from_addr'],
+                'temp_id' => $expData['temp_id'],
+                'cargo' => $expData['cargo'],
+            ]);
+            $data['delivery_id'] = $dump['kuaidinum'] ?? '';
+            $data['kuaidi_label'] = $dump['label'] ?? '';
+            $data['kuaidi_task_id'] = $dump['taskId'] ?? '';
+            $data['kuaidi_order_id'] = $dump['orderId'] ?? '';
         } else {
             if (!$data['delivery_id']) {
                 throw new AdminException(400531);

@@ -20,6 +20,7 @@ use app\services\other\PosterServices;
 use app\services\pay\OrderPayServices;
 use app\services\pay\PayServices;
 use app\services\product\product\StoreProductLogServices;
+use app\services\serve\ServeServices;
 use app\services\system\attachment\SystemAttachmentServices;
 use app\services\system\store\SystemStoreServices;
 use app\services\user\UserInvoiceServices;
@@ -38,6 +39,7 @@ use crmeb\services\FormBuilder as Form;
 use crmeb\services\printer\Printer;
 use crmeb\services\SystemConfigService;
 use crmeb\utils\Arr;
+use think\exception\ValidateException;
 use think\facade\Log;
 
 /**
@@ -2642,5 +2644,57 @@ HTML;
         }
 
         return $data;
+    }
+
+    /**
+     * 取消商家寄件
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/15
+     * @param int $id
+     * @param string $msg
+     * @return array|mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function shipmentCancelOrder(int $id, string $msg)
+    {
+        $orderInfo = $this->dao->get($id);
+        if (!$orderInfo) {
+            throw new ValidateException('取消的订单不存在');
+        }
+        if (!$orderInfo->kuaidi_task_id || !$orderInfo->kuaidi_order_id) {
+            throw new ValidateException('商家寄件订单信息不存在，无法取消');
+        }
+        if ($orderInfo->status != 1) {
+            throw new ValidateException('订单状态不正确，无法取消寄件');
+        }
+
+        //发起取消商家寄件
+        $res = app()->make(ServeServices::class)->express()->shipmentCancelOrder([
+            'task_id' => $orderInfo->kuaidi_task_id,
+            'order_id' => $orderInfo->kuaidi_order_id,
+            'cancel_msg' => $msg,
+        ]);
+
+        if ($res['status'] != 200) {
+            throw new ValidateException($res['msg'] ?? '一号通：取消失败');
+        }
+
+        //订单返回原状态
+        $this->transaction(function () use ($id, $msg, $orderInfo) {
+            app()->make(StoreOrderStatusServices::class)->save([
+                'oid' => $id,
+                'change_time' => time(),
+                'change_type' => 'delivery_goods_cancel',
+                'change_message' => '已取消发货，取消原因：' . $msg
+            ]);
+
+            $orderInfo->status = 0;
+            $orderInfo->save();
+        });
+
+        return $res;
     }
 }

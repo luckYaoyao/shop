@@ -14,6 +14,10 @@ use think\facade\Route;
  * 订单路由
  */
 Route::group('order', function () {
+    //获取快递信息
+    Route::get('kuaidi_coms', 'v1.order.StoreOrder/getKuaidiComs')->option(['real_name' => '获取快递信息']);
+    //取消商家寄件
+    Route::post('shipment_cancel_order/:id', 'v1.order.StoreOrder/shipmentCancelOrder')->option(['real_name' => '取消商家寄件']);
     //打印订单
     Route::get('print/:id', 'v1.order.StoreOrder/order_print')->name('StoreOrderPrint')->option(['real_name' => '打印订单']);
     //订单列表
