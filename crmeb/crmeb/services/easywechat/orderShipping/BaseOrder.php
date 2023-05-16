@@ -19,6 +19,8 @@ class BaseOrder extends AbstractAPI
     const ORDER = 'wxa/sec/order/';
     const EXPRESS = 'cgi-bin/express/delivery/open_msg/';
 
+    const PATH = '/pages/goods/order_details/index';
+
 
     public function __construct(AccessToken $accessToken, $config)
     {

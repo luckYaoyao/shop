@@ -103,6 +103,9 @@ class OrderClient extends BaseOrder
                 'contact' => $contact
             ];
         }
+
+        // 跳转路径
+        $this->setMesJumpPath(self::PATH . '?order_id=' . $out_trade_no);
         return $this->shipping($params);
     }
 
