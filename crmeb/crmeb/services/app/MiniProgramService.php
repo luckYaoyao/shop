@@ -19,6 +19,7 @@ use EasyWeChat\Payment\Order;
 use think\facade\Log;
 use crmeb\utils\Hook;
 use think\facade\Cache;
+use think\Response;
 
 /**
  * 微信小程序接口
@@ -847,5 +848,49 @@ class MiniProgramService
             }
         }
         return $message ?: self::MSG_CODE[$e->getCode()] ?? $e->getMessage();
+    }
+
+
+    /**
+     * @return Response
+     * @throws \EasyWeChat\Server\BadRequestException
+     */
+    public static function serve(): Response
+    {
+        $wechat = self::application(true);
+        $server = $wechat->server;
+        self::hook($server);
+        $response = $server->serve();
+        return response($response->getContent());
+    }
+
+    private static function hook($server)
+    {
+        $server->setMessageHandler(function ($message) {
+            switch ($message->MsgType) {
+                case 'event':
+                    switch (strtolower($message->Event)) {
+                        case 'trade_manage_remind_access_api':
+                            Log::error('event1');
+                            break;
+                        case 'trade_manage_remind_shipping':
+                            Log::error('event2');
+                            break;
+                        case 'trade_manage_order_settlement':
+                            Log::error('event3');
+                            break;
+                    };
+                    break;
+                case 'trade_manage_remind_access_api':
+                    Log::error('notevent1');
+                    break;
+                case 'trade_manage_remind_shipping':
+                    Log::error('notevent2');
+                    break;
+                case 'trade_manage_order_settlement':
+                    Log::error('notevent3');
+                    break;
+            };
+        });
     }
 }
