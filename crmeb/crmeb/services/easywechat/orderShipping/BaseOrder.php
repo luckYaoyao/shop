@@ -166,7 +166,7 @@ class BaseOrder extends AbstractAPI
         $params = [
             'appid' => $this->config['config']['mini_program']['app_id']
         ];
-        return $this->resultHandle($this->parseJSON('POST', [self::BASE_API . self::ORDER . 'notify_confirm_receive', json_encode($params)]));
+        return $this->resultHandle($this->parseJSON('POST', [self::BASE_API . self::ORDER . 'is_trade_managed', json_encode($params)]));
     }
 
     /**
