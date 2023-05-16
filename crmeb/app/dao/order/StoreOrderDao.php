@@ -977,4 +977,9 @@ class StoreOrderDao extends BaseDao
                 $query->page($page, $limit);
             })->field(['uid', 'order_id', 'real_name', 'status', 'pay_price', 'total_num', 'add_time', 'pay_time', 'paid'])->order('add_time desc')->select()->toArray();
     }
+
+    public function getSubOrderNotSend(int $pid, int $order_id)
+    {
+        return $this->getModel()->where('id', $pid)->where('status', '0')->where('id', '<>', $order_id)->count();
+    }
 }

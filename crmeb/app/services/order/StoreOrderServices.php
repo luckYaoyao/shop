@@ -2697,4 +2697,14 @@ HTML;
 
         return $res;
     }
+
+    public function checkSubOrderNotSend(int $pid, int $order_id)
+    {
+        $order_count = $this->dao->getSubOrderNotSend($pid, $order_id);
+        if ($order_count > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
