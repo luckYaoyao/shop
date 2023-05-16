@@ -93,7 +93,7 @@ class Login extends AuthController
             ['captchaType', '']
         ], true);
 
-        if (count($password) > 32 || count($password) < 6) {
+        if (strlen(trim($password)) < 6 || strlen(trim($password)) > 32) {
             return app('json')->fail(400762);
         }
 
