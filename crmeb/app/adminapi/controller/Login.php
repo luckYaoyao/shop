@@ -11,9 +11,11 @@
 namespace app\adminapi\controller;
 
 use crmeb\services\CacheService;
+use crmeb\utils\Rsa;
 use think\facade\App;
 use crmeb\utils\Captcha;
 use app\services\system\admin\SystemAdminServices;
+use think\facade\Cache;
 
 /**
  * 后台登陆
@@ -83,7 +85,7 @@ class Login extends AuthController
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function login()
+    public function login(Rsa $rsa)
     {
         [$account, $password, $key, $captchaVerification, $captchaType] = $this->request->postMore([
             'account',
@@ -102,9 +104,10 @@ class Login extends AuthController
         }
 
         $this->validate(['account' => $account, 'pwd' => $password], \app\adminapi\validate\setting\SystemAdminValidata::class, 'get');
+        $password = $rsa->privateDecrypt($password);
         $result = $this->services->login($account, $password, 'admin', $key);
         if (!$result) {
-            $num = CacheService::get('login_captcha',1);
+            $num = CacheService::get('login_captcha', 1);
             if ($num > 1) {
                 return app('json')->fail(400140, ['login_captcha' => 1]);
             }
@@ -122,5 +125,17 @@ class Login extends AuthController
     public function info()
     {
         return app('json')->success($this->services->getLoginInfo());
+    }
+
+    /**
+     * 获取
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/16
+     */
+    public function key(Rsa $rsa)
+    {
+        return app('json')->success(['publicKey' => $rsa->getPublicKey()]);
     }
 }
