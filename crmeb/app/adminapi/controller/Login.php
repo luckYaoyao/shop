@@ -93,6 +93,10 @@ class Login extends AuthController
             ['captchaType', '']
         ], true);
 
+        if (count($password) > 32 || count($password) < 6) {
+            return app('json')->fail(400762);
+        }
+
         if ($captchaVerification != '') {
             try {
                 aj_captcha_check_two($captchaType, $captchaVerification);
