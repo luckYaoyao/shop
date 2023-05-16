@@ -72,14 +72,6 @@ export default {
       component: () => import('@/pages/setting/setSystem/index'),
     },
     {
-      path: 'system_config/payment/:type?/:tab_id?',
-      name: `${pre}payment`,
-      meta: {
-        title: '支付配置',
-      },
-      component: () => import('@/pages/setting/setSystem/index'),
-    },
-    {
       path: 'system_config_retail/:type?/:tab_id?',
       name: `${pre}distributionSet`,
       meta: {
@@ -430,15 +422,6 @@ export default {
         title: '页面链接',
       },
       component: () => import('@/pages/setting/devise/links'),
-    },
-    {
-      path: 'system_group_data',
-      name: `${pre}systemGroupData`,
-      meta: {
-        auth: ['admin-setting-pages-links'],
-        title: '数据配置',
-      },
-      component: () => import('@/pages/system/group/list'),
     },
     {
       path: 'store_service/speechcraft',
