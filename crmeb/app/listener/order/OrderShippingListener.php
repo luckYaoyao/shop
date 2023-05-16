@@ -37,17 +37,19 @@ class OrderShippingListener implements ListenerInterface
                 $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);
                 $item_desc = $orderInfoServices->getCarIdByProductTitle((int)$order['id'], true);
                 $shipping_list = [
-                    'item_desc' => $item_desc
+                    ['item_desc' => $item_desc]
                 ];
                 //判断订单物流模式
                 if ($order['shipping_type'] == 1) {
                     if ($delivery_type == 1) {
                         $shipping_list = [
-                            'tracking_no' => $delivery_id ?? '',
-                            'express_company' => $delivery_name ?? '',
-                            'item_desc' => $item_desc,
-                            'contact' => [
-                                'receiver_contact' => $order['user_phone']
+                            [
+                                'tracking_no' => $delivery_id ?? '',
+                                'express_company' => $delivery_name ?? '',
+                                'item_desc' => $item_desc,
+                                'contact' => [
+                                    'receiver_contact' => $order['user_phone']
+                                ]
                             ]
                         ];
                     }
