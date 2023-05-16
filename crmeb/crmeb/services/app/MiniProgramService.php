@@ -101,6 +101,16 @@ class MiniProgramService
             $appId = isset($wechat['routine_appId']) ? trim($wechat['routine_appId']) : '';
             $appsecret = isset($wechat['routine_appsecret']) ? trim($wechat['routine_appsecret']) : '';
         }
+        $config = [
+            'token' => isset($wechat['wechat_token']) ? trim($wechat['wechat_token']) : '',
+            'aes_key' => isset($wechat['wechat_encodingaeskey']) ? trim($wechat['wechat_encodingaeskey']) : '',
+            'debug' => true,
+            'log' => [
+                'level' => 'debug',
+                'permission' => 0777,
+                'file' => '/www/wwwroot/bz.wuht.net/crmeb/crmeb/runtime/log',
+            ],
+        ];
         $config['mini_program'] = [
             'app_id' => $appId,
             'secret' => $appsecret,
