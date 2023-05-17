@@ -380,7 +380,7 @@ class Cos extends BaseUpload
     {
         try {
             $res = $this->app()->listBuckets();
-            return $res->toArray()['Buckets'] ?? [];
+            return $res['Buckets']['Bucket'] ?? [];
         } catch (\Throwable $e) {
             return [];
         }
