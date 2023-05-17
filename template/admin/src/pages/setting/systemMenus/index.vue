@@ -482,11 +482,14 @@ export default {
   > .vxe-table--header-wrapper {
     background: #fff !important;
   }
+
   .icon {
     font-size: 20px;
   }
 }
-
+/deep/ .vxe-table--render-default .vxe-table--border-line {
+  z-index: 2 !important;
+}
 .rule {
   display: flex;
   flex-wrap: wrap;
