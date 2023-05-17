@@ -217,7 +217,7 @@ class SystemStorageServices extends BaseServices
                     $make->update('tengxun_appid', ['value' => json_encode($appid)], 'menu_name');
                     break;
             }
-            \crmeb\services\CacheService::clear();
+            $make->cacheDriver()->clear();
         }
     }
 
