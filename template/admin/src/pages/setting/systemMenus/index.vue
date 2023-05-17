@@ -75,7 +75,7 @@
       :formValidate="formValidate"
       :titleFrom="titleFrom"
       @getList="getList"
-      @changeMenu="getMenusUnique"
+      @changeMenu="changeMenu"
       ref="menusFrom"
       @clearFrom="clearFrom"
     ></menus-from>
@@ -198,6 +198,7 @@ export default {
       seletRouteIds: [], // 选中id
       menusId: 0, // 选中分类id
       nodeKey: 0, // 选中节点
+      openId: '',
     };
   },
   components: { menusFrom, formCreate: formCreate.$form() },
@@ -397,6 +398,7 @@ export default {
     },
     // 编辑
     edit(row, title, index) {
+      this.openId = row.id;
       this.formValidate = {};
       this.menusDetails(row.id);
       this.titleFrom = title;
@@ -438,6 +440,19 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
+    },
+
+    openMenuList(arr, id) {
+      arr.map((e) => {
+        if (e.id === id) {
+          e._expanded = true;
+        } else if (e.children) {
+        }
+      });
+    },
+    changeMenu() {
+      this.getData(1);
+      this.getMenusUnique();
     },
     getMenusUnique() {
       getMenusUnique().then((res) => {
