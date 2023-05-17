@@ -105,6 +105,9 @@ class Login extends AuthController
         }
 
         try {
+            if (strlen(trim($password)) > 500) {
+                return app('json')->fail(400762);
+            }
             $password = $rsa->privateDecrypt($password);
         } catch (\Throwable $e) {
             return app('json')->fail($e->getMessage());
