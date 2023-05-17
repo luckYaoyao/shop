@@ -70,9 +70,11 @@ class OrderClient extends BaseOrder
      */
     public function shippingByTradeNo(string $out_trade_no, int $logistics_type, array $shipping_list, string $payer_openid, int $delivery_mode = 1, bool $is_all_delivered = true)
     {
-        if (!$this->checkManaged()) {
-            throw new AdminException('开通小程序订单管理服务后重试');
-        }
+//        $this->setMesJumpPath('demo');
+
+//        if (!$this->checkManaged()) {
+//            throw new AdminException('开通小程序订单管理服务后重试');
+//        }
 
 
         $params = [
@@ -101,6 +103,9 @@ class OrderClient extends BaseOrder
                 'contact' => $contact
             ];
         }
+
+        // 跳转路径
+        $this->setMesJumpPath(self::PATH . '?order_id=' . $out_trade_no);
         return $this->shipping($params);
     }
 
@@ -234,7 +239,7 @@ class OrderClient extends BaseOrder
         $list = $this->getDeliveryList();
         if ($list) {
             $key = self::redis_prefix . '_delivery_list';
-            $date = array_column($list, 'delivery_id', 'delivery_name');
+            $date = array_column($list['delivery_list'], 'delivery_id', 'delivery_name');
             // 创建缓存
             $this->getRedis()->hMSet($key, $date);
 
@@ -263,7 +268,7 @@ class OrderClient extends BaseOrder
             }
             $express_company = $date[$company_name];
         } else {
-            $express_company = $this->getRedis()->hMGet($key, $company_name);
+            $express_company = $this->getRedis()->hMGet($key, [$company_name])[$company_name] ?? '';
         }
         if (empty($express_company)) {
             throw new AdminException('物流公司异常2');

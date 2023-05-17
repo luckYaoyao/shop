@@ -35,6 +35,7 @@ use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\exceptions\PayException;
 use crmeb\services\CacheService;
+use crmeb\services\easywechat\orderShipping\MiniOrderService;
 use crmeb\services\FormBuilder as Form;
 use crmeb\services\printer\Printer;
 use crmeb\services\SystemConfigService;
@@ -2494,6 +2495,11 @@ HTML;
                 'pay_avatar' => $payUser['avatar'],
                 'help_status' => 1
             ];
+        }
+        // 判断是否开启小程序订单管理
+        $orderData['order_shipping_open'] = false;
+        if (sys_config('order_shipping_open', 0) && MiniOrderService::isManaged()) {
+            $orderData['order_shipping_open'] = true;
         }
         return $orderData;
     }

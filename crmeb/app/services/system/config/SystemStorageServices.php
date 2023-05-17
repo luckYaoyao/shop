@@ -314,12 +314,7 @@ class SystemStorageServices extends BaseServices
                 break;
             case 4:// cos 腾讯云
                 $upload = UploadService::init($type);
-                $cosList = $upload->listbuckets();
-                if (isset($cosList['Name'])) {
-                    $list[] = $cosList;
-                } else {
-                    $list = $cosList;
-                }
+                $list = $upload->listbuckets();
                 $config = $this->getStorageConfig($type);
                 foreach ($list as $item) {
                     if (!$this->dao->count(['name' => $item['Name'], 'access_key' => $config['accessKey']])) {

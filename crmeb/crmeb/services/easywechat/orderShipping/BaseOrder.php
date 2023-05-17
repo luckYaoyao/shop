@@ -12,17 +12,21 @@ class BaseOrder extends AbstractAPI
 {
 
     public $config;
+    public $accessToken;
 
     const BASE_API = 'https://api.weixin.qq.com/';
 
     const ORDER = 'wxa/sec/order/';
     const EXPRESS = 'cgi-bin/express/delivery/open_msg/';
 
+    const PATH = '/pages/goods/order_details/index';
+
 
     public function __construct(AccessToken $accessToken, $config)
     {
         parent::__construct($accessToken);
         $this->config = $config;
+        $this->accessToken = $accessToken;
     }
 
     private function resultHandle(Collection $result)
@@ -38,6 +42,73 @@ class BaseOrder extends AbstractAPI
         }
     }
 
+
+    /**
+     * request.
+     *
+     * @param string $endpoint
+     * @param string $method
+     * @param array $options
+     * @param bool $returnResponse
+     */
+    public function request(string $method, string $endpoint, array $options = [])
+    {
+
+        if (isset($options['json'])) {
+            $body = json_encode($options['json']);
+            $options['body'] = $body;
+            unset($options['json']);
+        }
+
+        $headers = [
+            'Content-Type' => 'text/plain',
+            'User-Agent' => 'curl',
+            'Accept' => 'text/plain',
+        ];
+
+        $options['headers'] = array_merge($headers, ($options['headers'] ?? []));
+
+
+        return $this->_doRequestCurl($method, self::BASE_API . $endpoint, $options);
+    }
+
+    /**
+     * @param $method
+     * @param $location
+     * @param array $options
+     * @return mixed
+     */
+    private function _doRequestCurl($method, $location, $options = [])
+    {
+        //拼接$accessToken
+        $location .= $this->accessToken->getToken();
+        var_dump($location);
+        $curl = curl_init();
+        // POST数据设置
+        if (strtolower($method) === 'post') {
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $options['data'] ?? $options['body'] ?? '');
+        }
+        // CURL头信息设置
+        if (!empty($options['headers'])) {
+            $headers = [];
+            foreach ($options['headers'] as $k => $v) {
+                $headers[] = "$k: $v";
+            }
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        }
+        curl_setopt($curl, CURLOPT_URL, $location);
+        curl_setopt($curl, CURLOPT_HEADER, true);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 60);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        $content = curl_exec($curl);
+        $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        curl_close($curl);
+        return json_decode(substr($content, $headerSize), true);
+    }
+
     /**
      * 发货
      * @param $params
@@ -49,8 +120,7 @@ class BaseOrder extends AbstractAPI
      */
     public function shipping($params)
     {
-        return $this->resultHandle($this->parseJSON('POST', [self::BASE_API . self::ORDER . 'upload_shipping_info', json_encode($params)]));
-
+        return $this->resultHandle($this->parseJSON('POST', [self::BASE_API . self::ORDER . 'upload_shipping_info', json_encode($params, JSON_UNESCAPED_UNICODE)]));
     }
 
     /**
@@ -96,7 +166,7 @@ class BaseOrder extends AbstractAPI
         $params = [
             'appid' => $this->config['config']['mini_program']['app_id']
         ];
-        return $this->resultHandle($this->parseJSON('POST', [self::BASE_API . self::ORDER . 'notify_confirm_receive', json_encode($params)]));
+        return $this->resultHandle($this->parseJSON('POST', [self::BASE_API . self::ORDER . 'is_trade_managed', json_encode($params)]));
     }
 
     /**
@@ -126,6 +196,6 @@ class BaseOrder extends AbstractAPI
      */
     public function getDeliveryList()
     {
-        return $this->resultHandle($this->parseJSON('POST', [self::BASE_API . self::EXPRESS . 'get_delivery_list']));
+        return $this->resultHandle($this->parseJSON('POST', [self::BASE_API . self::EXPRESS . 'get_delivery_list', "{}"]));
     }
 }

@@ -8,7 +8,6 @@ use EasyWeChat\Core\Exceptions\HttpException;
 
 class MiniOrderService
 {
-
     /**
      * @var Application
      */
@@ -25,6 +24,12 @@ class MiniOrderService
     {
         $payment = SystemConfigService::more(['routine_appId', 'routine_appsecret', 'pay_weixin_mchid', 'pay_new_weixin_open', 'pay_new_weixin_mchid']);
         return [
+            'debug' => true,
+            'log' => [
+                'level' => 'debug',
+                'permission' => 0777,
+                'file' => '/www/wwwroot/bz.wuht.net/crmeb/crmeb/runtime/log/easywechat.log',
+            ],
             'mini_program' => [
                 'app_id' => $payment['routine_appId'] ?? '',
                 'secret' => $payment['routine_appsecret'] ?? '',
