@@ -95,9 +95,6 @@ class Login extends AuthController
             ['captchaType', '']
         ], true);
 
-        if (strlen(trim($password)) < 6 || strlen(trim($password)) > 32) {
-            return app('json')->fail(400762);
-        }
 
         if ($captchaVerification != '') {
             try {
@@ -112,7 +109,11 @@ class Login extends AuthController
         } catch (\Throwable $e) {
             return app('json')->fail($e->getMessage());
         }
-        
+
+        if (strlen(trim($password)) < 6 || strlen(trim($password)) > 32) {
+            return app('json')->fail(400762);
+        }
+
         $this->validate(['account' => $account, 'pwd' => $password], \app\adminapi\validate\setting\SystemAdminValidata::class, 'get');
 
 
