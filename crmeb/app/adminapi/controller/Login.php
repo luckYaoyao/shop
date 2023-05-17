@@ -107,13 +107,14 @@ class Login extends AuthController
             }
         }
 
-        $this->validate(['account' => $account, 'pwd' => $password], \app\adminapi\validate\setting\SystemAdminValidata::class, 'get');
-
         try {
             $password = $rsa->privateDecrypt($password);
         } catch (\Throwable $e) {
             return app('json')->fail($e->getMessage());
         }
+        
+        $this->validate(['account' => $account, 'pwd' => $password], \app\adminapi\validate\setting\SystemAdminValidata::class, 'get');
+
 
         $result = $this->services->login($account, $password, 'admin', $key);
         if (!$result) {
