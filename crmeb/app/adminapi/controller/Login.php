@@ -110,7 +110,7 @@ class Login extends AuthController
         } catch (\Throwable $e) {
             return app('json')->fail($e->getMessage());
         }
-        
+
         $result = $this->services->login($account, $password, 'admin', $key);
         if (!$result) {
             $num = CacheService::get('login_captcha', 1);
@@ -131,17 +131,5 @@ class Login extends AuthController
     public function info()
     {
         return app('json')->success($this->services->getLoginInfo());
-    }
-
-    /**
-     * 获取
-     * @return \think\Response
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/5/16
-     */
-    public function key(Rsa $rsa)
-    {
-        return app('json')->success(['publicKey' => $rsa->getPublicKey()]);
     }
 }
