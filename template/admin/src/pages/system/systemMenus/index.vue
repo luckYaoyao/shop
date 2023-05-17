@@ -64,6 +64,7 @@
             </i-switch>
           </template>
         </vxe-table-column>
+        <vxe-table-column field="mark" title="备注" min-width="120"></vxe-table-column>
         <vxe-table-column field="date" title="操作" align="right" width="250" fixed="right">
           <template v-slot="{ row }">
             <span>

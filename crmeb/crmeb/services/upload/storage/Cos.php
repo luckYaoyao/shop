@@ -478,7 +478,9 @@ class Cos extends BaseUpload
                 'Type' => 'REST',
                 'ForcedReplacement' => 'CNAME'
             ]);
-            $res = $res->toArray();
+            if (method_exists($res, 'toArray')) {
+                $res = $res->toArray();
+            }
             if ($res['RequestId'] ?? null) {
                 return true;
             }

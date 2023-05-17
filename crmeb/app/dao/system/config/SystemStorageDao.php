@@ -74,6 +74,8 @@ class SystemStorageDao extends BaseDao
             $query->where('type', $where['type']);
         })->where('is_delete', 0)->when(isset($where['access_key']), function ($query) use ($where) {
             $query->where('access_key', $where['access_key']);
+        })->when(!empty($where['id']), function ($query) use ($where) {
+            $query->where('id', $where['id']);
         });
     }
 }
