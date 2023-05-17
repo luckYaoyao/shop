@@ -75,6 +75,8 @@ import '@/assets/js/canvas-nest.min';
 import Verify from '@/components/verifition/Verify';
 import { PrevLoading } from '@/utils/loading.js';
 import { formatFlatteningRoutes, findFirstNonNullChildren } from '@/libs/system';
+import { encryptWithKey } from '@/utils/ase.js';
+
 export default {
   components: {
     Verify,
@@ -106,6 +108,7 @@ export default {
       key: '',
       copyright: '',
       version: '',
+      publicKey: '',
     };
   },
   created() {
@@ -169,6 +172,7 @@ export default {
           this.swiperList = data.slide.length ? data.slide : [{ slide: this.defaultSwiperList }];
           this.key = data.key;
           this.copyright = data.copyright;
+          this.publicKey = data.publicKey;
           this.version = data.version;
           this.login_captcha = data.login_captcha;
         })
@@ -192,7 +196,7 @@ export default {
       this.loading = true;
       AccountLogin({
         account: this.formInline.username,
-        pwd: this.formInline.password,
+        pwd: encryptWithKey(this.formInline.password, this.publicKey),
         key: this.key,
         captchaType: 'blockPuzzle',
         captchaVerification: params ? params.captchaVerification : '',
