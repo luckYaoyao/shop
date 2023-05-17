@@ -334,6 +334,9 @@ export default {
     this.$store.commit('mobildConfig/SETEMPTY');
   },
   created() {
+    window.onbeforeunload = () => {
+      return '刷新页面将丢失内容,是否继续?';
+    };
     this.categoryList();
     this.getUrlList();
     this.pageId = this.$route.query.id;
@@ -371,9 +374,6 @@ export default {
     });
   },
   methods: {
-    beforeUnload() {
-      return '确认是否保存?';
-    },
     saveModal() {
       if (!this.saveName) return this.$Message.warning('请先输入模板名称');
       this.saveConfig(1, this.saveName);
@@ -409,7 +409,7 @@ export default {
     closeWindow() {
       this.$Modal.confirm({
         title: '确定关闭当前页吗？',
-        content: '离开前请确认保存您的设计',
+        content: '关闭页面前请先保存数据，未保存的话数据会丢失',
         okText: '确定',
         cancelText: '取消',
         loading: true,

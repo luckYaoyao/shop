@@ -359,8 +359,8 @@
 						hover-class='none' :url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id">
 						{{$t(`查看物流`)}}
 					</navigator>
-					<view class='bnt bg-color' v-if="orderInfo.type == 3 && orderInfo.refund_type == 0 && orderInfo.paid"
-						@tap='goJoinPink'>
+					<view class='bnt bg-color'
+						v-if="orderInfo.type == 3 && orderInfo.refund_type == 0 && orderInfo.paid" @tap='goJoinPink'>
 						{{$t(`查看拼团`)}}
 					</view>
 					<view class='bnt bg-color' v-if="status.class_status==3 && !split.length" @click='confirmOrder()'>
@@ -585,10 +585,11 @@
 				this.getOrderInfo();
 				this.getUserInfo();
 				this.getCustomerType();
-				let options = wx.getEnterOptionsSync();
-				if (options.scene == '1038' && options.referrerInfo.appId == 'wxef277996acc166c3') {
+				let opt = wx.getEnterOptionsSync();
+				console.log(opt)
+				if (opt.scene == '1038' && opt.referrerInfo.appId == 'wxef277996acc166c3') {
 					// 代表从收银台小程序返回
-					let extraData = options.referrerInfo.extraData;
+					let extraData = opt.referrerInfo.extraData;
 					if (!extraData) {
 						// "当前通过物理按键返回，未接收到返参，建议自行查询交易结果";
 						this.getOrderInfo();
@@ -1035,11 +1036,44 @@
 			},
 			confirmOrder(orderId) {
 				let that = this;
+				// #ifdef MP
+				if (wx.openBusinessView && this.orderInfo.order_shipping_open && this.orderInfo
+					.trade_no) {
+					uni.showLoading({
+						title: this.$t(`加载中`)
+					});
+					wx.openBusinessView({
+						businessType: 'weappOrderConfirm',
+						extraData: {
+							transaction_id: this.orderInfo.trade_no
+						},
+						success() {},
+						fail(err) {
+							uni.hideLoading();
+							return that.$util.Tips({
+								title: err.errMsg
+							});
+						},
+						complete() {
+							uni.hideLoading();
+						}
+					});
+				} else {
+					this.defaultTake(orderId)
+				}
+				// #endif
+				// #ifndef MP
+				this.defaultTake(orderId)
+				// #endif
+			},
+			defaultTake(orderId) {
+				let that = this;
 				uni.showModal({
 					title: that.$t(`确认收货`),
 					content: that.$t(`为保障权益，请收到货确认无误后，再确认收货`),
-					success: function(res) {
+					success: (res) => {
 						if (res.confirm) {
+							console.log('1')
 							orderTake(orderId ? orderId : that.order_id).then(res => {
 								return that.$util.Tips({
 									title: that.$t(`操作成功`),
@@ -1490,11 +1524,11 @@
 			-moz-box-shadow: 0px 0px 3px 0px rgba(200, 200, 200, 0.75);
 			box-shadow: 0px 0px 3px 0px rgba(200, 200, 200, 0.75);
 			bottom: 110rpx;
-			/* #ifdef APP-PLUS */ 
+			/* #ifdef APP-PLUS */
 			bottom: calc(110rpx + constant(safe-area-inset-bottom)); ///兼容 IOS<11.2/
 			bottom: calc(110rpx + env(safe-area-inset-bottom)); ///兼容 IOS>11.2/
 
-			/* #endif */ 
+			/* #endif */
 			.more-btn {
 				color: #333;
 				padding: 4rpx;
