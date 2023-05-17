@@ -11,6 +11,7 @@
 
 namespace crmeb\services\app;
 
+use app\services\order\StoreOrderTakeServices;
 use crmeb\exceptions\AdminException;
 use crmeb\services\SystemConfigService;
 use app\services\pay\PayNotifyServices;
@@ -108,7 +109,7 @@ class MiniProgramService
             'log' => [
                 'level' => 'debug',
                 'permission' => 0777,
-                'file' => '/www/wwwroot/bz.wuht.net/crmeb/crmeb/runtime/log',
+                'file' => '/www/wwwroot/bz.wuht.net/crmeb/crmeb/runtime/log/easywechat.log',
             ],
         ];
         $config['mini_program'] = [
@@ -880,25 +881,21 @@ class MiniProgramService
             switch ($message->MsgType) {
                 case 'event':
                     switch (strtolower($message->Event)) {
-                        case 'trade_manage_remind_access_api':
-                            Log::error('event1');
+                        case 'trade_manage_remind_access_api':  // 小程序完成账期授权时  小程序产生第一笔交易时 已产生交易但从未发货的小程序，每天一次
                             break;
-                        case 'trade_manage_remind_shipping':
-                            Log::error('event2');
+                        case 'trade_manage_remind_shipping':   // 曾经发过货的小程序，订单超过48小时未发货时
                             break;
-                        case 'trade_manage_order_settlement':
-                            Log::error('event3');
+                        case 'trade_manage_order_settlement':     // 订单完成发货时  订单结算时
+                            if (isset($message['estimated_settlement_time'])) { //订单完成发货时
+
+                            }
+                            if (isset($message['confirm_receive_method'])) {  // 订单结算时
+                                /** @var StoreOrderTakeServices $StoreOrderTakeServices */
+                                $storeOrderTakeServices = app()->make(StoreOrderTakeServices::class);
+                                $storeOrderTakeServices->takeOrder($message['merchant_trade_no'], 0);
+                            }
                             break;
                     };
-                    break;
-                case 'trade_manage_remind_access_api':
-                    Log::error('notevent1');
-                    break;
-                case 'trade_manage_remind_shipping':
-                    Log::error('notevent2');
-                    break;
-                case 'trade_manage_order_settlement':
-                    Log::error('notevent3');
                     break;
             };
         });
