@@ -44,7 +44,7 @@ class Rsa
      */
     public function __construct(string $publicKey = 'cert_public_password.key', string $privateKey = 'cert_private_password.key')
     {
-        $this->basePath = runtime_path();
+        $this->basePath = app()->getRootPath();
         if ($publicKey) {
             $this->publicKey = $this->basePath . $publicKey;
         }
