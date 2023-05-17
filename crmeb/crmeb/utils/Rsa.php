@@ -13,6 +13,8 @@
 
 namespace crmeb\utils;
 
+use think\exception\ValidateException;
+
 /**
  * Class Rsa
  * @author 等风来
@@ -186,7 +188,11 @@ class Rsa
             $this->exportOpenSSLFile();
         }
 
-        openssl_private_decrypt(base64_decode($data), $decryptedData, file_get_contents($this->privateKey));
+        $res = openssl_private_decrypt(base64_decode($data), $decryptedData, file_get_contents($this->privateKey));
+
+        if (false === $res) {
+            throw new ValidateException('RSA:解密失败');
+        }
 
         return $decryptedData;
     }
