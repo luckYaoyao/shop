@@ -16,13 +16,11 @@ import router from './router';
 import store from './store';
 
 import ViewUI from 'view-design';
-// import ViewUI from 'view-design'
 Vue.prototype.bus = new Vue();
 import Router from 'vue-router';
 import Auth from '@/libs/wechat';
 import 'view-design/dist/styles/iview.css';
 import { i18n } from '@/i18n/index.js';
-// import i18n from '@/locale';
 
 import config from '@/config';
 import importDirective from '@/directive';
@@ -31,7 +29,6 @@ import installPlugin from '@/plugin';
 import './index.less';
 import '@/assets/icons/iconfont.css';
 import '@/assets/iconfont/iconfont.css';
-import './assets/iconfont/iconfont.css';
 import '@/theme/index.scss';
 import Element from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -73,8 +70,6 @@ import timeOptions from '@/libs/timeOptions';
 import scroll from '@/libs/loading';
 import * as tools from '@/libs/tools';
 import VueTreeList from 'vue-tree-list';
-import { getHeaderName, getHeaderSider, getMenuSider, getSiderSubmenu } from '@/libs/system';
-import { getMenuopen } from '@/libs/util';
 
 // 复制到粘贴板插件
 import VueClipboard from 'vue-clipboard2';
@@ -101,9 +96,6 @@ import settings from '@/setting';
 
 Vue.prototype.$routeProStr = settings.routePre;
 
-// 实际打包时应该不引入mock
-/* eslint-disable */
-if (process.env.NODE_ENV !== 'production') require('@/mock');
 window.Promise = Promise;
 Vue.prototype.$modalForm = modalForm;
 Vue.prototype.$modalSure = modalSure;
@@ -168,7 +160,7 @@ import vuescroll from 'vuescroll';
 
 Vue.use(vuescroll);
 
-// register global utility filters
+// 注册全局 过滤器
 Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key]);
 });
@@ -204,8 +196,15 @@ new Vue({
           }
         });
       }
-
-      if (to.name == 'product_productAdd') {
+      console.log(to.name);
+      if (
+        [
+          'product_productAdd',
+          'marketing_bargainCreate',
+          'marketing_storeSeckillCreate',
+          'marketing_storeIntegralCreate',
+        ].includes(to.name)
+      ) {
         let route = to.matched[1].path.split(':')[0];
         this.$store.state.menus.oneLvRoutes.map((e) => {
           if (route.indexOf(e.path) != -1) {
