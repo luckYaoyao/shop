@@ -441,7 +441,6 @@ class StoreOrderDeliveryServices extends BaseServices
         $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);
         $storeName = $orderInfoServices->getCarIdByProductTitle((int)$orderInfo->id);
         // 发货信息录入
-        event('OrderShipping', [$orderInfo, $type, $data['delivery_id'], $data['delivery_name']]);
         $res = [];
         switch ($type) {
             case 1://快递发货
@@ -458,6 +457,13 @@ class StoreOrderDeliveryServices extends BaseServices
             default:
                 throw new AdminException(400522);
         }
+        if (!$data['delivery_id'] && !empty($res['kuaidinum'])) {
+            $data['delivery_id'] = $res['kuaidinum'];
+        }
+        if (!$data['delivery_id']) {
+            $data['delivery_id'] = uniqid();
+        }
+        event('OrderShipping', [$orderInfo, $type, $data['delivery_id'], $data['delivery_name']]);
         //到期自动收货
         event('OrderDeliveryListener', [$orderInfo, $storeName, $data, $type]);
         return $res;

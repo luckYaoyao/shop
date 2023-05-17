@@ -1039,6 +1039,9 @@
 				// #ifdef MP
 				if (wx.openBusinessView && this.orderInfo.order_shipping_open && this.orderInfo
 					.trade_no) {
+					uni.showLoading({
+						title: this.$t(`加载中`)
+					});
 					wx.openBusinessView({
 						businessType: 'weappOrderConfirm',
 						extraData: {
@@ -1046,12 +1049,13 @@
 						},
 						success() {},
 						fail(err) {
+							uni.hideLoading();
 							return that.$util.Tips({
 								title: err.errMsg
 							});
 						},
 						complete() {
-							//dosomething
+							uni.hideLoading();
 						}
 					});
 				} else {
