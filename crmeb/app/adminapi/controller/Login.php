@@ -104,7 +104,13 @@ class Login extends AuthController
         }
 
         $this->validate(['account' => $account, 'pwd' => $password], \app\adminapi\validate\setting\SystemAdminValidata::class, 'get');
-        $password = $rsa->privateDecrypt($password);
+
+        try {
+            $password = $rsa->privateDecrypt($password);
+        } catch (\Throwable $e) {
+            return app('json')->fail($e->getMessage());
+        }
+        
         $result = $this->services->login($account, $password, 'admin', $key);
         if (!$result) {
             $num = CacheService::get('login_captcha', 1);

@@ -24,6 +24,8 @@ Route::group(function () {
     Route::post('login', 'Login/login')->name('AdminLogin')->option(['real_name' => '下载表备份记录']);
     //后台登录页面数据
     Route::get('login/info', 'Login/info')->option(['real_name' => '登录信息']);
+    //获取公钥证书信息
+    Route::get('login/key', 'Login/key')->option(['real_name' => '获取公钥证书信息']);
     //下载文件
     Route::get('download/:key', 'PublicController/download')->option(['real_name' => '下载文件']);
     //验证码
