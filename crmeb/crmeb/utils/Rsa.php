@@ -79,7 +79,7 @@ class Rsa
     {
 
         $publicKey = $privateKey = '';
-        $dir = runtime_path() . 'conf';
+        $dir = app()->getRootPath() . 'runtime/conf';
         $conf = 'openssl.cnf';
         if (!is_dir($dir)) {
             mkdir($dir, 0700);
