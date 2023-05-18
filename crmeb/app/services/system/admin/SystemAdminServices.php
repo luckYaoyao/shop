@@ -23,7 +23,6 @@ use app\services\system\SystemMenusServices;
 use crmeb\services\CacheService;
 use crmeb\services\FormBuilder;
 use crmeb\services\workerman\ChannelService;
-use crmeb\utils\Rsa;
 use think\facade\Config;
 use think\facade\Event;
 use think\Model;
@@ -168,8 +167,7 @@ class SystemAdminServices extends BaseServices
             'copyright' => sys_config('nncnL_crmeb_copyright', ''),
             'version' => get_crmeb_version(),
             'key' => $key,
-            'login_captcha' => 0,
-            'publicKey' => app()->make(Rsa::class)->getPublicKey()
+            'login_captcha' => 0
         ];
         if (CacheService::get('login_captcha', 1) > 1) {
             $data['login_captcha'] = 1;
