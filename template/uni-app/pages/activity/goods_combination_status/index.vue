@@ -634,7 +634,9 @@
 					title: that.$t(`您的好友`) + that.userInfo.nickname + that.$t(`邀请您参团`) + that.storeCombination.title,
 					desc: that.storeCombination.title,
 					link: window.location.protocol + '//' + window.location.host +
-						'/pages/activity/goods_combination_status/index?id=' + that.pinkId,
+						'/pages/activity/goods_combination_status/index?id=' + that.pinkId + '&bargain=' + that.userInfo.uid +
+						'&spid=' +
+						that.userInfo.uid,
 					imgUrl: that.storeCombination.image
 				};
 				if (this.$wechat.isWeixin()) {
