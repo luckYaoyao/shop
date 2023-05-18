@@ -93,7 +93,6 @@ class Login extends AuthController
             ['captchaType', '']
         ], true);
 
-
         if ($captchaVerification != '') {
             try {
                 aj_captcha_check_two($captchaType, $captchaVerification);
@@ -107,8 +106,6 @@ class Login extends AuthController
         }
 
         $this->validate(['account' => $account, 'pwd' => $password], \app\adminapi\validate\setting\SystemAdminValidata::class, 'get');
-
-
         $result = $this->services->login($account, $password, 'admin', $key);
         if (!$result) {
             $num = CacheService::get('login_captcha', 1);

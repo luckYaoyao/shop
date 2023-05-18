@@ -14295,7 +14295,41 @@ SQL
                 'code' => 500,
                 'type' => -1,
                 'table' => "system_menus",
-                'sql' => "truncate table `@table`"
+                'sql' => "DROP TABLE `@table`"
+            ],
+            [
+                'code' => 500,
+                'type' => 1,
+                'table' => "system_menus",
+                'findSql' => "select * from information_schema.tables where table_name ='@table'",
+                'sql' => "CREATE TABLE `@table` (
+  `id` smallint(5) unsigned NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
+  `pid` smallint(5) unsigned NOT NULL DEFAULT '0' COMMENT '父级id',
+  `icon` varchar(16) NOT NULL DEFAULT '' COMMENT '图标',
+  `menu_name` varchar(32) NOT NULL DEFAULT '' COMMENT '按钮名',
+  `module` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '模块名',
+  `controller` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '控制器',
+  `action` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '' COMMENT '方法名',
+  `api_url` varchar(100) NOT NULL DEFAULT '' COMMENT 'api接口地址',
+  `methods` varchar(10) NOT NULL DEFAULT '' COMMENT '提交方式POST GET PUT DELETE',
+  `params` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '[]' COMMENT '参数',
+  `sort` tinyint(3) NOT NULL DEFAULT '1' COMMENT '排序',
+  `is_show` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '是否为隐藏菜单0=隐藏菜单,1=显示菜单',
+  `is_show_path` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为隐藏菜单供前台使用',
+  `access` tinyint(1) unsigned NOT NULL DEFAULT '1' COMMENT '子管理员是否可用',
+  `menu_path` varchar(128) NOT NULL DEFAULT '' COMMENT '路由名称 前端使用',
+  `path` varchar(255) NOT NULL DEFAULT '' COMMENT '路径',
+  `auth_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否为菜单 1菜单 2功能',
+  `header` varchar(50) NOT NULL DEFAULT '' COMMENT '顶部菜单标示',
+  `is_header` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否顶部菜单1是0否',
+  `unique_auth` varchar(150) NOT NULL DEFAULT '' COMMENT '前台唯一标识',
+  `is_del` tinyint(1) NOT NULL DEFAULT '0' COMMENT '是否删除',
+  `mark` varchar(500) NOT NULL DEFAULT '' COMMENT '备注',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `pid` (`pid`) USING BTREE,
+  KEY `is_show` (`is_show`) USING BTREE,
+  KEY `access` (`access`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2473 DEFAULT CHARSET=utf8 COMMENT='菜单表'"
             ],
             [
                 'code' => 500,
