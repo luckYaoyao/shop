@@ -60,9 +60,9 @@ class StoreOrderTakeServices extends BaseServices
         if (!$order) {
             throw new ApiException(410173);
         }
-        if ($order == -1) {  // 有子订单
+        if ($order['pid'] == -1) {  // 有子订单
             // 查找待收货的子订单
-            $son_order_list = $this->dao->getList(['pid' => $order['id'], 'pay_type' => 'weixin', 'is_channel' => 1, 'status' => 1, 'refund_status' => 0], ['*']);
+            $son_order_list = $this->dao->getSubOrderNotSendList((int)$order['id']);
             foreach ($son_order_list as $son_order) {
                 $this->takeOrder($son_order['order_id'], $son_order['uid']);
             }
