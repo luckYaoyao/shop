@@ -12,7 +12,7 @@
       @on-visible-change="visible"
     >
       <Form ref="formValidate" :model="formValidate" :label-width="110" @submit.native.prevent>
-        <!-- <Row type="flex" :gutter="24">
+        <Row type="flex" :gutter="24">
           <Col span="24">
             <FormItem label="类型：">
               <RadioGroup v-model="formValidate.auth_type" @on-change="changeRadio">
@@ -23,7 +23,7 @@
               </RadioGroup>
             </FormItem>
           </Col>
-        </Row> -->
+        </Row>
         <Row type="flex" :gutter="24">
           <Col v-bind="grid">
             <FormItem :label="!authType ? '接口名称：' : '按钮名称：'" prop="menu_name">
