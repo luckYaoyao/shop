@@ -196,7 +196,6 @@ new Vue({
           }
         });
       }
-      console.log(to.name);
       if (
         [
           'product_productAdd',
