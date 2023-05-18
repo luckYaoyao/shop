@@ -1,6 +1,6 @@
 <?php
 
-namespace crmeb\services\upload\extend\cos;
+namespace crmeb\services\upload;
 
 class XML
 {

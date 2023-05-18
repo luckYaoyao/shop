@@ -14,9 +14,19 @@
 namespace crmeb\services\upload\extend\obs;
 
 
+use crmeb\exceptions\UploadException;
+use crmeb\services\upload\BaseClient;
 use crmeb\services\upload\extend\cos\XML;
 
-class Client
+/**
+ * 华为云上传
+ * Class Client
+ * @author 等风来
+ * @email 136327134@qq.com
+ * @date 2023/5/18
+ * @package crmeb\services\upload\extend\obs
+ */
+class Client extends BaseClient
 {
     const HEADER_PREFIX = 'x-obs-';
 
@@ -64,6 +74,7 @@ class Client
         'x-oss-process'
     ];
 
+    //桶acl
     const OBS_ACL = [
         [
             'value' => 'public-read',
@@ -74,7 +85,7 @@ class Client
             'label' => '公共读写',
         ],
     ];
-
+    //默认acl
     const DEFAULT_OBS_ACL = 'public-read';
 
     protected $isCname = false;
@@ -84,32 +95,118 @@ class Client
     /**
      * @var
      */
-    protected $accessKeyId = 'AUL8K0BMYLSZTJDT9FCM';
+    protected $accessKeyId;
 
     /**
      * @var
      */
-    protected $secretKey = 'SwjS5huuunY6Bzjrhr7RGvOIA3kHkfNZuzIp8t2z';
+    protected $secretKey;
 
     /**
      * 桶名
      * @var string
      */
-    protected $bucketName = '';
+    protected $bucketName;
+
+    /**
+     * 地区
+     * @var string
+     */
+    protected $region;
+
+    /**
+     * @var mixed|string
+     */
+    protected $uploadUrl;
 
     /**
      * @var string
      */
     protected $baseUrl = 'obs.cn-north-1.myhuaweicloud.com';
 
-    public function __construct()
+    /**
+     * Client constructor.
+     * @param array $config
+     */
+    public function __construct(array $config = [])
     {
-
+        $this->accessKeyId = $config['accessKey'] ?? '';
+        $this->secretKey = $config['secretKey'] ?? '';
+        $this->bucketName = $config['bucket'] ?? '';
+        $this->region = $config['region'] ?? 'ap-chengdu';
+        $this->uploadUrl = $config['uploadUrl'] ?? '';
     }
 
-    public function putObject()
+    /**
+     * 检测
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/18
+     */
+    protected function checkOptions()
     {
+        if (!$this->bucketName) {
+            throw new UploadException('请传入桶名');
+        }
+        if (!$this->region) {
+            throw new UploadException('请传入所属地域');
+        }
+        if (!$this->accessKeyId) {
+            throw new UploadException('请传入SecretId');
+        }
+        if (!$this->secretKey) {
+            throw new UploadException('请传入SecretKey');
+        }
 
+        return $this;
+    }
+
+    /**
+     * 上传图片
+     * @param string $key
+     * @param $body
+     * @return mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/18
+     */
+    public function putObject(string $key, $body, string $contentType = 'image/jpeg')
+    {
+        $url = $this->uploadUrl ?: $this->getRequestUrl($this->bucketName, $this->region);
+
+        $header = [
+            'Host' => $url,
+            'Content-Type' => $contentType,
+            'Content-Length' => strlen($body),
+        ];
+
+        $res = $this->checkOptions()->request('https://' . $header['Host'] . '/' . $key, 'PUT', [
+            'bucket' => $this->bucketName,
+            'body' => $body
+        ], $header);
+
+        return $this->response($res);
+    }
+
+    /**
+     * 删除上传对象
+     * @param string $key
+     * @return mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/18
+     */
+    public function deleteObject(string $key)
+    {
+        $header = [
+            'Host' => $this->getRequestUrl($this->bucketName, $this->region),
+        ];
+
+        $res = $this->request('https://' . $header['Host'] . '/' . $key, 'DELETE', [
+            'bucket' => $this->bucketName
+        ], $header);
+
+        return $this->response($res);
     }
 
     /**
@@ -119,11 +216,22 @@ class Client
      * @email 136327134@qq.com
      * @date 2023/5/16
      */
-    public function getListBuckets()
+    public function listBuckets()
     {
-        return $this->request('https://' . $this->baseUrl . '/', 'GET', [], []);
+        $res = $this->request('https://' . $this->baseUrl . '/', 'GET', [], []);
+        return $this->response($res);
     }
 
+    /**
+     * 创建桶
+     * @param string $bucket
+     * @param string $region
+     * @param string $acl
+     * @return mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/18
+     */
     public function createBucket(string $bucket, string $region, string $acl = self::DEFAULT_OBS_ACL)
     {
         $header = [
@@ -131,9 +239,112 @@ class Client
             'Host' => $this->getRequestUrl($bucket, $region),
         ];
 
-        return $this->request('https://' . $header['Host'] . '/', 'PUT', [], $header);
+        $res = $this->request('https://' . $header['Host'] . '/', 'PUT', [
+            'bucket' => $bucket
+        ], $header);
+
+        return $this->response($res);
     }
 
+    /**
+     * 删除桶
+     * @param string $bucket
+     * @param string $region
+     * @return mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/18
+     */
+    public function deleteBucket(string $bucket, string $region)
+    {
+        $header = [
+            'Host' => $this->getRequestUrl($bucket, $region),
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/', 'DELETE', [
+            'bucket' => $bucket
+        ], $header);
+
+        return $this->response($res);
+    }
+
+    /**
+     * 获取桶的自定义域名
+     * @param string $bucket
+     * @param string $region
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/18
+     */
+    public function getBucketDomain(string $bucket, string $region)
+    {
+        $header = [
+            'Host' => $this->getRequestUrl($bucket, $region),
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/?customdomain', 'GET', [
+            'bucket' => $bucket
+        ], $header);
+
+        return $this->response($res);
+    }
+
+    /**
+     * 设置桶的自定义域名
+     * @param string $bucket
+     * @param string $region
+     * @param array $data
+     * @return mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/18
+     */
+    public function putBucketDomain(string $bucket, string $region, array $data = [])
+    {
+        $header = [
+            'Host' => $this->getRequestUrl($bucket, $region),
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/?customdomain=' . $data['domainname'], 'PUT', [
+            'bucket' => $bucket
+        ], $header);
+
+        return $this->response($res);
+    }
+
+    /**
+     * 设置跨域
+     * @return bool
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/18
+     */
+    public function putBucketCors()
+    {
+        return true;
+    }
+
+    /**
+     * @param $res
+     * @return mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/18
+     */
+    protected function response($res)
+    {
+        if (!empty($res['Code']) && !empty($res['Message'])) {
+            throw new UploadException($res['Message']);
+        }
+        return $res;
+    }
+
+    /**
+     * 获取请求域名
+     * @param string $bucket
+     * @param string $region
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/18
+     */
     protected function getRequestUrl(string $bucket, string $region)
     {
         return $bucket . '.obs.' . $region . '.myhuaweicloud.com';
@@ -153,10 +364,10 @@ class Client
                 'value' => 'cn-north-1',
                 'label' => '华北-北京一',
             ],
-            [
-                'value' => 'cn-north-4',
-                'label' => '华北-北京四',
-            ],
+//            [
+//                'value' => 'cn-north-4',
+//                'label' => '华北-北京四',
+//            ],
             [
                 'value' => 'cn-north-9',
                 'label' => '华北-乌兰察布一',
@@ -367,53 +578,28 @@ class Client
     public function request(string $url, string $method, array $data = [], array $clientHeader = [], int $timeout = 10)
     {
         $method = strtoupper($method);
+        $urlAttr = pathinfo($url);
+        $urlParse = parse_url($urlAttr['dirname'] ?? '');
+
+        $uriParam = '';
+        if ($urlAttr['dirname'] !== 'https:') {
+            if (isset($urlParse['path'])) {
+                $uriParam .= substr($urlParse['path'], 1) . '/';
+            }
+            if (isset($urlAttr['basename'])) {
+                $uriParam .= $urlAttr['basename'];
+            }
+        }
 
         $result = $this->getSign([
             'method' => $method,
             'headers' => $clientHeader,
             'pathArgs' => '',
-            'dnsParam' => '',
-            'uriParam' => '',
+            'dnsParam' => $data['bucket'] ?? '',
+            'uriParam' => $uriParam,
         ]);
-        $clientHeader = $result['headers'];
-        $headers = [];
-        foreach ($clientHeader as $key => $item) {
-            $headers[] = $key . ':' . $item;
-        }
-        $curl = curl_init($url);
-        //请求方式
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
-        //post请求
-        if (!empty($data['body'])) {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, $data['body']);
-        } else if (!empty($data['json'])) {
-            curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data['json']));
-        }
-        //超时时间
-        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
-        //设置header头
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
-        curl_setopt($curl, CURLOPT_FAILONERROR, false);
-        //返回抓取数据
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        //输出header头信息
-        curl_setopt($curl, CURLOPT_HEADER, true);
-        //TRUE 时追踪句柄的请求字符串，从 PHP 5.1.3 开始可用。这个很关键，就是允许你查看请求header
-        curl_setopt($curl, CURLINFO_HEADER_OUT, true);
-        //https请求
-        if (1 == strpos("$" . $url, "https://")) {
-            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-        }
-        [$content, $status] = [curl_exec($curl), curl_getinfo($curl)];
-//        dump($status);
-        $content = trim(substr($content, $status['header_size']));
-        $res = XML::parse($content);
-        if ($res) {
-            return $res;
-        }
-        return (intval($status["http_code"]) === 200) ? $content : false;
+        return $this->requestClient($url, $method, $data, $result['headers'], $timeout);
     }
 
 }
