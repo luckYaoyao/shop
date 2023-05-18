@@ -43,6 +43,37 @@ class StoreOrderTakeServices extends BaseServices
     }
 
     /**
+     * 小程序订单服务收货
+     * @param $merchant_trade_no
+     * @return bool
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     *
+     * @date 2023/05/18
+     * @author yyw
+     */
+    public function miniOrderTakeOrder($merchant_trade_no)
+    {
+        //查找订单信息
+        $order = $this->dao->getOne(['order_id' => $merchant_trade_no]);
+        if (!$order) {
+            throw new ApiException(410173);
+        }
+        if ($order == -1) {  // 有子订单
+            // 查找待收货的子订单
+            $son_order_list = $this->dao->getList(['pid' => $order['id'], 'pay_type' => 'weixin', 'is_channel' => 1, 'status' => 1, 'refund_status' => 0], ['*']);
+            foreach ($son_order_list as $son_order) {
+                $this->takeOrder($son_order['order_id'], $son_order['uid']);
+            }
+        } else {
+            $this->takeOrder($merchant_trade_no, $order['uid']);
+        }
+
+        return true;
+    }
+
+    /**
      * 用户订单收货
      * @param $uni
      * @param $uid

@@ -892,7 +892,7 @@ class MiniProgramService
                             if (isset($message['confirm_receive_method'])) {  // 订单结算时
                                 /** @var StoreOrderTakeServices $StoreOrderTakeServices */
                                 $storeOrderTakeServices = app()->make(StoreOrderTakeServices::class);
-                                $storeOrderTakeServices->takeOrder($message['merchant_trade_no'], 0);
+                                $storeOrderTakeServices->miniOrderTakeOrder($message['merchant_trade_no']);
                             }
                             break;
                     };

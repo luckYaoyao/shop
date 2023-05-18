@@ -2498,8 +2498,16 @@ HTML;
         }
         // 判断是否开启小程序订单管理
         $orderData['order_shipping_open'] = false;
-        if (sys_config('order_shipping_open', 0) && MiniOrderService::isManaged() && $order['channel_type'] == 'routine') {
-            $orderData['order_shipping_open'] = true;
+        if (sys_config('order_shipping_open', 0) && MiniOrderService::isManaged() && $order['is_channel'] == 1 && $order['pay_type'] == 'weixin') {
+            // 判断是否存在子未收货子订单
+            if ($order['pid'] > 0) {
+                if ($this->checkSubOrderNotTake((int)$order['pid'], (int)$order['id'])) {
+                    $orderData['order_shipping_open'] = true;
+                }
+            } else {
+                $orderData['order_shipping_open'] = true;
+            }
+
         }
         return $orderData;
     }
@@ -2707,6 +2715,16 @@ HTML;
     public function checkSubOrderNotSend(int $pid, int $order_id)
     {
         $order_count = $this->dao->getSubOrderNotSend($pid, $order_id);
+        if ($order_count > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function checkSubOrderNotTake(int $pid, int $order_id)
+    {
+        $order_count = $this->dao->getSubOrderNotTake($pid, $order_id);
         if ($order_count > 0) {
             return false;
         } else {

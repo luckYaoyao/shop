@@ -18,7 +18,7 @@ class OrderShippingListener implements ListenerInterface
         [$order, $delivery_type, $delivery_id, $delivery_name] = $event;
         $order_shipping_open = sys_config('order_shipping_open', 0);  // 小程序发货信息管理服务开关
         if ($order && $order_shipping_open) {
-            if ($order['channel_type'] = 'routine') {
+            if ($order['is_channel'] == 1 && $order['pay_type'] == 'weixin') {
                 $out_trade_no = $order['order_id'];
                 //判断订单是否拆单
                 $delivery_mode = 1;
