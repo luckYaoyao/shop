@@ -75,7 +75,7 @@
       :formValidate="formValidate"
       :titleFrom="titleFrom"
       @getList="getList"
-      @changeMenu="getMenusUnique"
+      @changeMenu="changeMenu"
       ref="menusFrom"
       @clearFrom="clearFrom"
     ></menus-from>
@@ -439,6 +439,10 @@ export default {
           this.$Message.error(res.msg);
         });
     },
+    changeMenu() {
+      // this.getData(1);
+      this.getMenusUnique();
+    },
     getMenusUnique() {
       getMenusUnique().then((res) => {
         let data = res.data;
@@ -478,11 +482,14 @@ export default {
   > .vxe-table--header-wrapper {
     background: #fff !important;
   }
+
   .icon {
     font-size: 20px;
   }
 }
-
+/deep/ .vxe-table--render-default .vxe-table--border-line {
+  z-index: 2 !important;
+}
 .rule {
   display: flex;
   flex-wrap: wrap;

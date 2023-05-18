@@ -11,11 +11,9 @@
 namespace app\adminapi\controller;
 
 use crmeb\services\CacheService;
-use crmeb\utils\Rsa;
 use think\facade\App;
 use crmeb\utils\Captcha;
 use app\services\system\admin\SystemAdminServices;
-use think\facade\Cache;
 
 /**
  * 后台登陆
@@ -85,7 +83,7 @@ class Login extends AuthController
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function login(Rsa $rsa)
+    public function login()
     {
         [$account, $password, $key, $captchaVerification, $captchaType] = $this->request->postMore([
             'account',
@@ -95,7 +93,6 @@ class Login extends AuthController
             ['captchaType', '']
         ], true);
 
-
         if ($captchaVerification != '') {
             try {
                 aj_captcha_check_two($captchaType, $captchaVerification);
@@ -104,22 +101,11 @@ class Login extends AuthController
             }
         }
 
-        try {
-            if (strlen(trim($password)) > 500) {
-                return app('json')->fail(400762);
-            }
-            $password = $rsa->privateDecrypt($password);
-        } catch (\Throwable $e) {
-            return app('json')->fail($e->getMessage());
-        }
-
         if (strlen(trim($password)) < 6 || strlen(trim($password)) > 32) {
             return app('json')->fail(400762);
         }
 
         $this->validate(['account' => $account, 'pwd' => $password], \app\adminapi\validate\setting\SystemAdminValidata::class, 'get');
-
-
         $result = $this->services->login($account, $password, 'admin', $key);
         if (!$result) {
             $num = CacheService::get('login_captcha', 1);
