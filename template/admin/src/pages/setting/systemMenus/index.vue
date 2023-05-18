@@ -198,6 +198,7 @@ export default {
       seletRouteIds: [], // 选中id
       menusId: 0, // 选中分类id
       nodeKey: 0, // 选中节点
+      openId: '',
     };
   },
   components: { menusFrom, formCreate: formCreate.$form() },
@@ -397,6 +398,7 @@ export default {
     },
     // 编辑
     edit(row, title, index) {
+      this.openId = row.id;
       this.formValidate = {};
       this.menusDetails(row.id);
       this.titleFrom = title;
@@ -439,9 +441,23 @@ export default {
           this.$Message.error(res.msg);
         });
     },
-    changeMenu() {
-      // this.getData(1);
+    changeMenu(data) {
+      console.log(data)
+      this.changeData(this.tableData, data);
       this.getMenusUnique();
+    },
+    changeData(arr, data) {
+      let arrKey = Object.keys(data);
+      arr.map((e) => {
+        if (e.id == this.openId) {
+          arrKey.map((el) => {
+            e[el] = data[el];
+          });
+          console.log(e);
+        } else if (e.children) {
+          this.changeData(e.children, data);
+        }
+      });
     },
     getMenusUnique() {
       getMenusUnique().then((res) => {
