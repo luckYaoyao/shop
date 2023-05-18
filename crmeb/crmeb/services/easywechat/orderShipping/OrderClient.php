@@ -13,6 +13,8 @@ class OrderClient extends BaseOrder
 {
     const redis_prefix = 'mimi_order';
 
+    const express_company = 'ZTO';   // 默认发货快递公司为（中通快递）
+
 
     /**
      * @var \Redis
@@ -70,13 +72,9 @@ class OrderClient extends BaseOrder
      */
     public function shippingByTradeNo(string $out_trade_no, int $logistics_type, array $shipping_list, string $payer_openid, int $delivery_mode = 1, bool $is_all_delivered = true)
     {
-//        $this->setMesJumpPath('demo');
-
-//        if (!$this->checkManaged()) {
-//            throw new AdminException('开通小程序订单管理服务后重试');
-//        }
-
-
+        if (!$this->checkManaged()) {
+            throw new AdminException('开通小程序订单管理服务后重试');
+        }
         $params = [
             'order_key' => [
                 'order_number_type' => 1,
@@ -264,14 +262,15 @@ class OrderClient extends BaseOrder
         if (!$this->getRedis()->exists($key)) {
             $date = $this->setDeliveryList();
             if (!isset($date[$company_name])) {
-                throw new AdminException('物流公司异常1');
+//                throw new AdminException('物流公司异常1');
             }
             $express_company = $date[$company_name];
         } else {
             $express_company = $this->getRedis()->hMGet($key, [$company_name])[$company_name] ?? '';
         }
         if (empty($express_company)) {
-            throw new AdminException('物流公司异常2');
+//            throw new AdminException('物流公司异常2');
+            $express_company = self::express_company;
         }
 
         return $express_company;

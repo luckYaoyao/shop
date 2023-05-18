@@ -111,9 +111,8 @@ class MiniOrderService
      * 判断是否开通
      * @return bool
      * @throws HttpException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      *
-     * @date 2023/05/09
+     * @date 2023/05/17
      * @author yyw
      */
     public static function isManaged()

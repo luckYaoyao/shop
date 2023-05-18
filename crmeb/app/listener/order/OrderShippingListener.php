@@ -24,12 +24,16 @@ class OrderShippingListener implements ListenerInterface
                 $delivery_mode = 1;
                 $is_all_delivered = true;
                 if ($order['pid'] > 0) {
-                    $order = '';
                     $delivery_mode = 2;
                     // 判断订单是否全部发货
                     /** @var StoreOrderServices $orderServices */
                     $orderServices = app()->make(StoreOrderServices::class);
                     $is_all_delivered = $orderServices->checkSubOrderNotSend((int)$order['pid'], (int)$order['id']);
+                    $p_order = $orderServices->get((int)$order['pid']);
+                    if (!$p_order) {
+                        throw new AdminException('拆单异常');
+                    }
+                    $out_trade_no = $p_order['order_id'];
                 }
 
                 // 整理商品信息

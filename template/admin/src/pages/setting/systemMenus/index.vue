@@ -44,7 +44,7 @@
         <vxe-table-column field="menu_name" tree-node title="按钮名称" min-width="100"></vxe-table-column>
         <vxe-table-column field="menu_path" title="路径" min-width="240" tooltip="true">
           <template v-slot="{ row }">
-            <span v-if="row.auth_type == 1">页面路径：{{ row.menu_path }}</span>
+            <span v-if="row.auth_type == 1">页面：{{ row.menu_path }}</span>
             <span v-if="row.auth_type == 2">按钮：[{{ row.methods }}]{{ row.api_url }}</span>
           </template>
         </vxe-table-column>
@@ -58,6 +58,7 @@
               :false-value="0"
               @on-change="onchangeIsShow(row)"
               size="large"
+              v-if="row.auth_type == 1"
             >
               <span slot="open">显示</span>
               <span slot="close">隐藏</span>
@@ -176,7 +177,7 @@ export default {
       roleData: {
         is_show: 1,
         keyword: '',
-        auth_type: 1,
+        // auth_type: 1,
       },
       defaultProps: {
         children: 'children',
