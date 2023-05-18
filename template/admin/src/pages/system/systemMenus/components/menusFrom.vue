@@ -13,18 +13,6 @@
     >
       <Form ref="formValidate" :model="formValidate" :label-width="110" @submit.native.prevent>
         <Row type="flex" :gutter="24">
-          <Col span="24">
-            <FormItem label="类型：">
-              <RadioGroup v-model="formValidate.auth_type" @on-change="changeRadio">
-                <Radio :label="item.value" v-for="(item, i) in optionsRadio" :key="i">
-                  <Icon type="social-apple"></Icon>
-                  <span>{{ item.label }}</span>
-                </Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex" :gutter="24">
           <Col v-bind="grid">
             <FormItem :label="!authType ? '接口名称：' : '按钮名称：'" prop="menu_name">
               <div class="add">
@@ -95,6 +83,16 @@
               </RadioGroup>
             </FormItem>
           </Col> -->
+          <Col v-bind="grid">
+            <FormItem label="类型：">
+              <RadioGroup v-model="formValidate.auth_type" @on-change="changeRadio">
+                <Radio :label="item.value" v-for="(item, i) in optionsRadio" :key="i">
+                  <Icon type="social-apple"></Icon>
+                  <span>{{ item.label }}</span>
+                </Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
           <Col v-bind="grid">
             <FormItem label="状态：">
               <RadioGroup v-model="formValidate.is_show">
