@@ -2498,7 +2498,7 @@ HTML;
         }
         // 判断是否开启小程序订单管理
         $orderData['order_shipping_open'] = false;
-        if (sys_config('order_shipping_open', 0) && MiniOrderService::isManaged()) {
+        if (sys_config('order_shipping_open', 0) && MiniOrderService::isManaged() && $order['channel_type'] == 'routine') {
             $orderData['order_shipping_open'] = true;
         }
         return $orderData;
@@ -2654,15 +2654,15 @@ HTML;
 
     /**
      * 取消商家寄件
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/5/15
      * @param int $id
      * @param string $msg
      * @return array|mixed
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/15
      */
     public function shipmentCancelOrder(int $id, string $msg)
     {

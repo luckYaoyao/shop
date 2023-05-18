@@ -980,6 +980,6 @@ class StoreOrderDao extends BaseDao
 
     public function getSubOrderNotSend(int $pid, int $order_id)
     {
-        return $this->getModel()->where('id', $pid)->where('status', '0')->where('id', '<>', $order_id)->count();
+        return $this->getModel()->where('pid', $pid)->where('status', '0')->where('id', '<>', $order_id)->count();
     }
 }
