@@ -356,7 +356,7 @@ export default {
         .then(async (res) => {
           this.$Message.success(res.msg);
           this.modals = false;
-          this.$emit('changeMenu');
+          this.$emit('changeMenu', this.formValidate);
           this.getAddFrom();
           // this.$store.dispatch('menus/getMenusNavList');
         })
