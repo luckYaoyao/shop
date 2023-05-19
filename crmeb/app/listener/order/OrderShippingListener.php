@@ -43,6 +43,7 @@ class OrderShippingListener implements ListenerInterface
                         $out_trade_no = $p_order['order_id'];
                     }
                     $pay_uid = $order['pay_uid'];
+                    $path = 'pages/goods/order_details/index?order_id=' . $out_trade_no;
                 } else {
                     return;
                 }
@@ -52,7 +53,8 @@ class OrderShippingListener implements ListenerInterface
                     $item_desc = '用户充值' . $order['price'];
                     $out_trade_no = $order['order_id'];
                     $pay_uid = $order['uid'];
-                    $secs = 60;
+                    $secs = 10;
+                    $path = '/pages/users/user_bill/index?type=2';
                 } else {
                     return;
                 }
@@ -62,7 +64,8 @@ class OrderShippingListener implements ListenerInterface
                     $item_desc = '用户购买' . $order['member_type'] . '会员卡';
                     $out_trade_no = $order['order_id'];
                     $pay_uid = $order['uid'];
-                    $secs = 60;
+                    $secs = 10;
+                    $path = '/pages/annex/vip_paid/index';
                 } else {
                     return;
                 }
@@ -98,7 +101,10 @@ class OrderShippingListener implements ListenerInterface
             if (empty($payer_openid)) {
                 throw new AdminException('订单支付人异常');
             }
-            MiniOrderJob::dispatchSecs($secs,[$out_trade_no, $logistics_type, $shipping_list, $payer_openid, $delivery_mode, $is_all_delivered]);
+            if ($secs) {
+                sleep($secs);
+            }
+            MiniOrderJob::dispatch('doJob', [$out_trade_no, $logistics_type, $shipping_list, $payer_openid, $path, $delivery_mode, $is_all_delivered]);
         }
     }
 }
