@@ -15,10 +15,10 @@ class MiniOrderJob extends BaseJobs
     /**
      * @throws HttpException
      */
-    public function doJob($shippingOrder)
+    public function doJob(string $out_trade_no, int $logistics_type, array $shipping_list, string $payer_openid, int $delivery_mode = 1, bool $is_all_delivered = true)
     {
         try {
-            MiniOrderService::shippingByTradeNo($shippingOrder['out_trade_no'], $shippingOrder['logistics_type'], $shippingOrder['shipping_list'], $shippingOrder['payer_openid'], $shippingOrder['delivery_mode'] ?? 1, $shippingOrder['is_all_delivered'] ?? true);
+            MiniOrderService::shippingByTradeNo($out_trade_no, $logistics_type, $shipping_list, $payer_openid, $delivery_mode, $is_all_delivered);
         } catch (HttpException $e) {
             // 订单异常处理
             throw new HttpException($e);

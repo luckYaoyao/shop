@@ -39,11 +39,6 @@ class PayNotifyServices
             $orderInfo = $services->getOne(['order_id' => $order_id]);
             if (!$orderInfo) return true;
             if ($orderInfo->paid) return true;
-
-            // 小程序订单管理 (自提商品)
-            if ($orderInfo['shipping_type'] == 2) {
-                event('OrderShipping', ['product', $orderInfo]);
-            }
             return $services->paySuccess($orderInfo->toArray(), $payType, ['trade_no' => $trade_no]);
         } catch (\Exception $e) {
             return false;
@@ -80,8 +75,6 @@ class PayNotifyServices
             $orderInfo = $services->getOne(['order_id' => $order_id]);
             if (!$orderInfo) return true;
             if ($orderInfo->paid) return true;
-            // 小程序订单服务
-            event('OrderShipping', ['member', $orderInfo]);
             return $services->paySuccess($orderInfo->toArray(), $payType, ['trade_no' => $trade_no]);
         } catch (\Exception $e) {
             return false;

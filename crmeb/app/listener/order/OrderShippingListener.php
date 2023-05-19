@@ -95,7 +95,7 @@ class OrderShippingListener implements ListenerInterface
             if (empty($payer_openid)) {
                 throw new AdminException('订单支付人异常');
             }
-            MiniOrderJob::dispatch(compact($out_trade_no, $logistics_type, $shipping_list, $payer_openid, $delivery_mode, $is_all_delivered));
+            MiniOrderJob::dispatch(compact('out_trade_no', 'logistics_type', 'shipping_list', 'payer_openid', 'delivery_mode', 'is_all_delivered'));
         }
     }
 }
