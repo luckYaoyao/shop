@@ -18,6 +18,7 @@ class OrderShippingListener implements ListenerInterface
         /** @var StoreOrder $order */
         [$order_type, $order, $delivery_type, $delivery_id, $delivery_name] = $event;
         $order_shipping_open = sys_config('order_shipping_open', 0);  // 小程序发货信息管理服务开关
+        $secs = 0;
         if ($order && $order_shipping_open) {
             //判断订单是否拆单
             $delivery_mode = 1;
@@ -51,6 +52,7 @@ class OrderShippingListener implements ListenerInterface
                     $item_desc = '用户充值' . $order['price'];
                     $out_trade_no = $order['order_id'];
                     $pay_uid = $order['uid'];
+                    $secs = 60;
                 } else {
                     return;
                 }
@@ -60,6 +62,7 @@ class OrderShippingListener implements ListenerInterface
                     $item_desc = '用户购买' . $order['member_type'] . '会员卡';
                     $out_trade_no = $order['order_id'];
                     $pay_uid = $order['uid'];
+                    $secs = 60;
                 } else {
                     return;
                 }
@@ -71,7 +74,7 @@ class OrderShippingListener implements ListenerInterface
                 ['item_desc' => $item_desc]
             ];
             //判断订单物流模式
-            if ($order['shipping_type'] == 1) {
+            if (!isset($order['shipping_type']) || $order['shipping_type'] == 1) {
                 if ($delivery_type == 1) {
                     $shipping_list = [
                         [
@@ -95,7 +98,7 @@ class OrderShippingListener implements ListenerInterface
             if (empty($payer_openid)) {
                 throw new AdminException('订单支付人异常');
             }
-            MiniOrderJob::dispatch([$out_trade_no, $logistics_type, $shipping_list, $payer_openid, $delivery_mode, $is_all_delivered]);
+            MiniOrderJob::dispatchSecs($secs,[$out_trade_no, $logistics_type, $shipping_list, $payer_openid, $delivery_mode, $is_all_delivered]);
         }
     }
 }
