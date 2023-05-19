@@ -463,7 +463,8 @@ class StoreOrderDeliveryServices extends BaseServices
         if (!$data['delivery_id']) {
             $data['delivery_id'] = uniqid();
         }
-        event('OrderShipping', [$orderInfo, $type, $data['delivery_id'], $data['delivery_name']]);
+        // 小程序订单管理
+        event('OrderShipping', ['product', $orderInfo, $type, $data['delivery_id'], $data['delivery_name']]);
         //到期自动收货
         event('OrderDeliveryListener', [$orderInfo, $storeName, $data, $type]);
         return $res;

@@ -13,6 +13,7 @@ namespace crmeb\services\app;
 
 use app\services\order\StoreOrderTakeServices;
 use crmeb\exceptions\AdminException;
+use crmeb\services\easywechat\orderShipping\MiniOrderService;
 use crmeb\services\SystemConfigService;
 use app\services\pay\PayNotifyServices;
 use crmeb\services\easywechat\Application;
@@ -887,7 +888,7 @@ class MiniProgramService
                             break;
                         case 'trade_manage_order_settlement':     // 订单完成发货时  订单结算时
                             if (isset($message['estimated_settlement_time'])) { //订单完成发货时
-
+                                MiniOrderService::notifyConfirmByTradeNo($message['merchant_trade_no'], time());
                             }
                             if (isset($message['confirm_receive_method'])) {  // 订单结算时
                                 /** @var StoreOrderTakeServices $StoreOrderTakeServices */

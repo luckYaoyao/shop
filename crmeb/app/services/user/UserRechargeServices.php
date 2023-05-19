@@ -490,6 +490,8 @@ class UserRechargeServices extends BaseServices
         $order['phone'] = $user['phone'];
         $capitalFlowServices->setFlow($order, 'recharge');
 
+        // 小程序订单服务
+        event('OrderShipping', ['recharge', $order]);
         //提醒推送
         event('NoticeListener', [['order' => $order, 'now_money' => $now_money], 'recharge_success']);
         return true;
