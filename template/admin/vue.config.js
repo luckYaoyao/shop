@@ -98,6 +98,7 @@ module.exports = {
     config.resolve.alias.set('@api', resolve('src/api'));
     // node
     config.node.set('__dirname', true).set('__filename', true);
+    config.plugin('monaco').use(new MonacoWebpackPlugin());
   },
 
   // 设为false打包时不生成.map文件
