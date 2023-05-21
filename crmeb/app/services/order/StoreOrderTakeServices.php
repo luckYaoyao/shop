@@ -58,7 +58,7 @@ class StoreOrderTakeServices extends BaseServices
         //查找订单信息
         $order = $this->dao->getOne(['order_id' => $merchant_trade_no]);
         if (!$order) {
-            throw new ApiException(410173);
+            return true;
         }
         if ($order['pid'] == -1) {  // 有子订单
             // 查找待收货的子订单
