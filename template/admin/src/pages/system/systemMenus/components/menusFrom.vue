@@ -14,11 +14,10 @@
       <Form ref="formValidate" :model="formValidate" :label-width="110" @submit.native.prevent>
         <Row type="flex" :gutter="24">
           <Col v-bind="grid">
-            <FormItem :label="!authType ? '接口名称：' : '按钮名称：'" prop="menu_name">
+            <FormItem label="按钮名称：" prop="menu_name">
               <div class="add">
-                <Input v-model="formValidate.menu_name" :placeholder="!authType ? '请输入接口名称' : '请输入按钮名称'">
+                <Input v-model="formValidate.menu_name" placeholder="请输入按钮名称">
                 </Input>
-                <!-- <Button class="ml10 df" v-show="!authType" @click="getRuleList()" icon="ios-apps"></Button> -->
               </div>
             </FormItem>
           </Col>
@@ -27,23 +26,7 @@
               <Cascader :data="menuList" change-on-select v-model="formValidate.path" filterable></Cascader>
             </FormItem>
           </Col>
-          <!-- <Col v-bind="grid" v-if="!authType">
-            <FormItem label="请求方式：" prop="methods">
-              <Select v-model="formValidate.methods">
-                <Option value="">请求</Option>
-                <Option value="GET">GET</Option>
-                <Option value="POST">POST</Option>
-                <Option value="PUT">PUT</Option>
-                <Option value="DELETE">DELETE</Option>
-              </Select>
-            </FormItem>
-          </Col> -->
-          <!-- <Col v-bind="grid" v-if="!authType">
-            <FormItem label="接口地址：">
-              <Input v-model="formValidate.api_url" placeholder="请输入接口地址" prop="api_url"></Input>
-            </FormItem>
-          </Col> -->
-          <Col v-bind="grid" v-show="authType">
+          <Col v-bind="grid">
             <FormItem label="路由地址：" prop="menu_path">
               <Input v-model="formValidate.menu_path" placeholder="请输入路由地址" @on-change="changeUnique">
                 <template #prepend>
@@ -57,7 +40,7 @@
               <Input v-model="formValidate.unique_auth" placeholder="请输入权限标识"></Input>
             </FormItem>
           </Col>
-          <Col v-bind="grid" v-if="authType">
+          <Col v-bind="grid">
             <FormItem label="图标：">
               <Input
                 v-model="formValidate.icon"
@@ -68,24 +51,14 @@
             </FormItem>
           </Col>
 
-          <Col v-bind="grid" v-if="authType">
+          <Col v-bind="grid">
             <FormItem label="排序：">
               <Input type="number" v-model="formValidate.sort" placeholder="请输入排序" number></Input>
             </FormItem>
           </Col>
-          <!-- <Col v-bind="grid" v-show="authType">
-            <FormItem label="隐藏菜单：">
-              <RadioGroup v-model="formValidate.is_show_path">
-                <Radio :label="item.value" v-for="(item, i) in isShowPathRadio" :key="i">
-                  <Icon type="social-apple"></Icon>
-                  <span>{{ item.label }}</span>
-                </Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col> -->
           <Col v-bind="grid">
             <FormItem label="类型：">
-              <RadioGroup v-model="formValidate.auth_type" @on-change="changeRadio">
+              <RadioGroup v-model="formValidate.auth_type">
                 <Radio :label="item.value" v-for="(item, i) in optionsRadio" :key="i">
                   <Icon type="social-apple"></Icon>
                   <span>{{ item.label }}</span>
@@ -196,7 +169,6 @@ export default {
       valids: false,
       list2: [],
       list: icon,
-      authType: true,
       search: icon,
       ruleModal: false,
       ruleList: [],
@@ -205,12 +177,6 @@ export default {
   watch: {
     'formValidate.header': function (n) {
       this.formValidate.is_header = n ? 1 : 0;
-    },
-    'formValidate.auth_type': function (n) {
-      if (n === undefined) {
-        n = 1;
-      }
-      this.authType = n === 1;
     },
     'formValidate.data': function (n) {},
   },
@@ -309,19 +275,11 @@ export default {
       if (value.slice(0, 1) === '/') value = value.replace('/', '');
       this.formValidate.unique_auth = value.replaceAll('/', '-');
     },
-    visible(type) {
-      if (!type) {
-        this.authType = true;
-      }
-    },
     selectRule(data) {
       this.$emit('selectRule', data);
       this.$nextTick((e) => {
         this.ruleModal = false;
       });
-    },
-    changeRadio(n) {
-      this.authType = n === 1 ? true : false;
     },
     // 搜索
     upIcon(n) {
@@ -385,23 +343,11 @@ export default {
         method: this.formValidate.id ? 'put' : 'post',
         datas: this.formValidate,
       };
-      if (this.authType) {
-        if (!this.formValidate.menu_name) {
-          return this.$Message.warning('请填写按钮名称');
-        }
-        if (!this.formValidate.menu_path) {
-          return this.$Message.warning('请填写路由地址');
-        }
-      } else {
-        if (!this.formValidate.menu_name) {
-          return this.$Message.warning('请填写接口名称');
-        }
-        if (!this.formValidate.methods) {
-          return this.$Message.warning('请选择请求方式');
-        }
-        if (!this.formValidate.api_url) {
-          return this.$Message.warning('请选择接口地址');
-        }
+      if (!this.formValidate.menu_name) {
+        return this.$Message.warning('请填写按钮名称');
+      }
+      if (!this.formValidate.menu_path) {
+        return this.$Message.warning('请填写路由地址');
       }
       this.valids = true;
       addMenusApi(data)
@@ -419,7 +365,6 @@ export default {
     },
     handleReset() {
       this.modals = false;
-      this.authType = true;
       this.$refs['formValidate'].resetFields();
       this.$emit('clearFrom');
     },

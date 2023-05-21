@@ -120,9 +120,13 @@ class SystemMenusServices extends BaseServices
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    protected function getFormCascaderMenus(int $value = 0)
+    protected function getFormCascaderMenus(int $value = 0, $auth_type = 0)
     {
-        $menuList = $this->dao->getMenusRoule(['is_del' => 0], ['id as value', 'pid', 'menu_name as label']);
+        $where = ['is_del' => 0];
+        if ($auth_type == 3) {
+            $where = ['is_del' => 0, 'auth_type' => 3];
+        }
+        $menuList = $this->dao->getMenusRoule($where, ['id as value', 'pid', 'menu_name as label']);
         $menuList = $this->getMenusData($menuList);
         if ($value) {
             $data = get_tree_value($menuList, $value);
@@ -151,7 +155,7 @@ class SystemMenusServices extends BaseServices
         $field[] = Form::radio('auth_type', '类型', $formData['auth_type'] ?? 1)->options([['value' => 1, 'label' => '菜单'], ['value' => 3, 'label' => '按钮']]);
         $field[] = Form::radio('is_show', '权限状态', $formData['is_show'] ?? 1)->options([['value' => 1, 'label' => '开启'], ['value' => 0, 'label' => '关闭']]);
         $field[] = Form::radio('is_show_path', '是否显示', $formData['is_show_path'] ?? 0)->options([['value' => 1, 'label' => '显示'], ['value' => 0, 'label' => '隐藏']]);
-        [$menuList, $data] = $this->getFormCascaderMenus((int)($formData['pid'] ?? 0));
+        [$menuList, $data] = $this->getFormCascaderMenus((int)($formData['pid'] ?? 0), 3);
         $field[] = Form::cascader('menu_list', '父级id', $data)->data($menuList)->filterable(true);
         return $field;
     }
@@ -245,7 +249,7 @@ class SystemMenusServices extends BaseServices
     public function getMenus($roles): array
     {
         $field = ['menu_name', 'pid', 'id'];
-        $where = ['is_del' => 0];
+        $where = ['is_del' => 0, 'auth_type' => 3];
         if (!$roles) {
             $menus = $this->dao->getMenusRoule($where, $field);
         } else {

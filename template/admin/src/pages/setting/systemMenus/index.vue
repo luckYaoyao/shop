@@ -177,7 +177,7 @@ export default {
       roleData: {
         is_show: 1,
         keyword: '',
-        // auth_type: 1,
+        auth_type: 3,
       },
       defaultProps: {
         children: 'children',
