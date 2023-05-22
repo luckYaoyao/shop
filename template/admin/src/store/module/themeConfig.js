@@ -76,9 +76,9 @@ const themeConfigModule = {
       // 2、需修改 @/layout/navBars/tagsView/tagsView.vue 代码最底部注释部分 css 样式
       tagsStyle: 'tags-style-one',
       // 主页面切换动画：可选值"<slide-right|slide-left|opacitys>"，默认 slide-right
-      animation: 'slide-right',
+      animation: 'opacitys',
       // 分栏高亮风格：可选值"<columns-round|columns-card>"，默认 columns-round
-      columnsAsideStyle: 'columns-round',
+      columnsAsideStyle: 'columns-card',
       // 分栏布局风格：可ƒ选值"<columns-horizontal|columns-vertical>"，默认 columns-horizontal
       columnsAsideLayout: 'columns-vertical',
 
@@ -88,7 +88,7 @@ const themeConfigModule = {
        * 中的 `initSetLayoutChange(设置布局切换，重置主题样式)` 方法
        */
       // 布局切换：可选值"<defaults|classic|transverse|columns>"，默认 defaults
-      layout: 'defaults',
+      layout: 'columns',
 
       /**
        * 全局网站标题 / 副标题
