@@ -74,7 +74,7 @@ const themeConfigModule = {
       // 默认 Tagsview 风格，可选 1、 tags-style-one，自行扩展：
       // 1、需修改 @/layout/navBars/breadcrumb/setings.vue `getThemeConfig.tagsStyle` el-option
       // 2、需修改 @/layout/navBars/tagsView/tagsView.vue 代码最底部注释部分 css 样式
-      tagsStyle: 'tags-style-one',
+      tagsStyle: 'tags-style-five',
       // 主页面切换动画：可选值"<slide-right|slide-left|opacitys>"，默认 slide-right
       animation: 'opacitys',
       // 分栏高亮风格：可选值"<columns-round|columns-card>"，默认 columns-round
