@@ -129,7 +129,7 @@ class OrderClient extends BaseOrder
         $params = [
             'order_key' => [
                 'order_number_type' => 1,
-                'mchid' => $this->config['mini_program']['merchant_id'],
+                'mchid' => $this->config['config']['mini_program']['merchant_id'],
                 'out_trade_no' => $out_trade_no,
             ],
             'upload_time' => date(DATE_RFC3339),
@@ -142,7 +142,7 @@ class OrderClient extends BaseOrder
             $sub_order = [
                 'order_key' => [
                     'order_number_type' => 1,
-                    'mchid' => $this->config['mini_program']['merchant_id'],
+                    'mchid' => $this->config['config']['mini_program']['merchant_id'],
                     'out_trade_no' => $order['out_trade_no'],
                     'logistics_type' => $logistics_type,
                 ],
@@ -178,7 +178,7 @@ class OrderClient extends BaseOrder
     public function notifyConfirmByTradeNo(string $merchant_trade_no, string $received_time)
     {
         $params = [
-            'merchant_id' => $this->config['payment']['merchant_id'],
+            'merchant_id' => $this->config['config']['mini_program']['merchant_id'],
             'merchant_trade_no' => $merchant_trade_no,
             'received_time' => $received_time
         ];
