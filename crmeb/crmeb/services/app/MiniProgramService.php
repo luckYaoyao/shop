@@ -106,12 +106,6 @@ class MiniProgramService
         $config = [
             'token' => isset($wechat['wechat_token']) ? trim($wechat['wechat_token']) : '',
             'aes_key' => isset($wechat['wechat_encodingaeskey']) ? trim($wechat['wechat_encodingaeskey']) : '',
-            'debug' => true,
-            'log' => [
-                'level' => 'debug',
-                'permission' => 0777,
-                'file' => '/www/wwwroot/bz.wuht.net/crmeb/crmeb/runtime/log/easywechat.log',
-            ],
         ];
         $config['mini_program'] = [
             'app_id' => $appId,
