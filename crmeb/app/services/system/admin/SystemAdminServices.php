@@ -258,7 +258,7 @@ class SystemAdminServices extends BaseServices
         unset($data['conf_pwd']);
 
         if (strlen(trim($data['pwd'])) < 6 || strlen(trim($data['pwd'])) > 32) {
-            return app('json')->fail(400762);
+            throw new AdminException(400762);
         }
 
         if ($this->dao->count(['account' => $data['account'], 'is_del' => 0])) {
@@ -325,7 +325,7 @@ class SystemAdminServices extends BaseServices
             }
 
             if (strlen(trim($data['pwd'])) < 6 || strlen(trim($data['pwd'])) > 32) {
-                return app('json')->fail(400762);
+                throw new AdminException(400762);
             }
 
             $adminInfo->pwd = $this->passwordHash($data['pwd']);
