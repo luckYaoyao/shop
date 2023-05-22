@@ -127,7 +127,7 @@ Route::group('setting', function () {
     /** 组合数据 */
     Route::group(function () {
         //组合数据资源路由
-        Route::resource('group', 'v1.setting.SystemGroup')->except(['read'])->option([
+        Route::resource('group', 'v1.setting.SystemGroup')->option([
             'real_name' => [
                 'index' => '获取组合数据列表',
                 'create' => '获取组合数据表单',
