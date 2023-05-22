@@ -102,9 +102,10 @@ class OrderShippingListener implements ListenerInterface
                 throw new AdminException('订单支付人异常');
             }
             if ($secs) {
-                sleep($secs);
+                MiniOrderJob::dispatchSecs($secs, 'doJob', [$out_trade_no, $logistics_type, $shipping_list, $payer_openid, $path, $delivery_mode, $is_all_delivered]);
+            } else {
+                MiniOrderJob::dispatch('doJob', [$out_trade_no, $logistics_type, $shipping_list, $payer_openid, $path, $delivery_mode, $is_all_delivered]);
             }
-            MiniOrderJob::dispatch('doJob', [$out_trade_no, $logistics_type, $shipping_list, $payer_openid, $path, $delivery_mode, $is_all_delivered]);
         }
     }
 }
