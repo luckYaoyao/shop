@@ -166,7 +166,11 @@ class Express extends BaseExpress
             'com' => $com
         ];
 
-        return $this->accessToken->httpRequest(self::EXPRESS_TEMP, $param);
+        $header = [];
+        if (!sys_config('config_export_siid')) {
+            $header = ['version:v1.1'];
+        }
+        return $this->accessToken->httpRequest(self::EXPRESS_TEMP, $param, 'POST', true, $header);
     }
 
     /**
