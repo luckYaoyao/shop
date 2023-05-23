@@ -102,7 +102,7 @@ class OrderClient extends BaseOrder
             ];
         }
         // 跳转路径
-        $this->setMesJumpPath($path);
+//        $this->setMesJumpPath($path);
         return $this->shipping($params);
     }
 
@@ -183,6 +183,23 @@ class OrderClient extends BaseOrder
             'received_time' => $received_time
         ];
         return $this->notifyConfirm($params);
+    }
+
+    /**
+     * 设置跳转连接
+     * @param $path
+     * @return array
+     * @throws \EasyWeChat\Core\Exceptions\HttpException
+     *
+     * @date 2023/05/10
+     * @author yyw
+     */
+    public function setMesJumpPathAndCheck($path)
+    {
+        if (!$this->checkManaged()) {
+            throw new AdminException('开通小程序订单管理服务后重试');
+        }
+        return $this->setMesJumpPath($path);
     }
 
     /**

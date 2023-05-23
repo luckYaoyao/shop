@@ -124,9 +124,9 @@ class MiniOrderService
      * @date 2023/05/10
      * @author yyw
      */
-    public static function setMesJumpPath($path)
+    public static function setMesJumpPathAndCheck($path)
     {
-        return self::order()->setMesJumpPath($path);
+        return self::order()->setMesJumpPathAndCheck($path);
     }
 
 
