@@ -22,8 +22,10 @@ class MiniOrderService
      */
     protected static function options(array $config = [])
     {
-        $payment = SystemConfigService::more(['routine_appId', 'routine_appsecret', 'pay_weixin_mchid', 'pay_new_weixin_open', 'pay_new_weixin_mchid']);
+        $payment = SystemConfigService::more(['routine_appId', 'routine_appsecret', 'pay_weixin_mchid', 'pay_new_weixin_open', 'pay_new_weixin_mchid', 'wechat_token', 'wechat_encodingaeskey']);
         return [
+            'token' => isset($payment['wechat_token']) ? trim($payment['wechat_token']) : '',
+            'aes_key' => isset($payment['wechat_encodingaeskey']) ? trim($payment['wechat_encodingaeskey']) : '',
             'mini_program' => [
                 'app_id' => $payment['routine_appId'] ?? '',
                 'secret' => $payment['routine_appsecret'] ?? '',
