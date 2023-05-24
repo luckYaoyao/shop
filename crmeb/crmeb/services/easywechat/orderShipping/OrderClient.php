@@ -11,7 +11,7 @@ use think\facade\Cache;
 
 class OrderClient extends BaseOrder
 {
-    const redis_prefix = 'mimi_order';
+    const redis_prefix = 'mini_order';
 
     const express_company = 'ZTO';   // 默认发货快递公司为（中通快递）
 
