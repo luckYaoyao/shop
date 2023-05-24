@@ -332,9 +332,9 @@ class SystemConfig extends AuthController
             if ($post['reward_integral'] < 0 || $post['reward_money'] < 0) return app('json')->fail(400558);
         }
 
-        if (isset($post['order_shipping_open']) && $post['order_shipping_open'] == 1 && isset($post['order_shipping_url'])) {
-            MiniOrderService::setMesJumpPathAndCheck($post['order_shipping_url']);
-        }
+//        if (isset($post['order_shipping_open']) && $post['order_shipping_open'] == 1 && isset($post['order_shipping_url'])) {
+//            MiniOrderService::setMesJumpPathAndCheck($post['order_shipping_url']);
+//        }
         foreach ($post as $k => $v) {
             $config_one = $this->services->getOne(['menu_name' => $k]);
             if ($config_one) {
