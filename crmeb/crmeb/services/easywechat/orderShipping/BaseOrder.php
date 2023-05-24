@@ -181,7 +181,7 @@ class BaseOrder extends AbstractAPI
     public function setMesJumpPath($path)
     {
         $params = [
-            'path' => '/pages/user/index'
+            'path' => $path
         ];
         return $this->resultHandle($this->parseJSON('POST', [self::BASE_API . self::ORDER . 'set_msg_jump_path', json_encode($params)]));
     }
