@@ -77,6 +77,10 @@ class SystemRole extends AuthController
         if (!$data['role_name']) return app('json')->fail(400220);
         if (!is_array($data['rules']) || !count($data['rules']))
             return app('json')->fail(400221);
+
+        $res = app()->make(SystemMenusServices::class)->getColumn([['pid', 'in', $data['rules']]], 'id');
+        $data['rules'] = array_merge($data['rules'], $res);
+
         $data['rules'] = implode(',', $data['rules']);
         if ($id) {
             if (!$this->services->update($id, $data)) return app('json')->fail(100007);

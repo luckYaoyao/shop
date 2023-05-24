@@ -47,6 +47,7 @@
           <template v-slot="{ row }">
             <span v-if="row.auth_type == 1">页面：{{ row.menu_path }}</span>
             <span v-if="row.auth_type == 2">接口：[{{ row.methods }}]{{ row.api_url }}</span>
+            <span v-if="row.auth_type == 3">按钮</span>
           </template>
         </vxe-table-column>
         <vxe-table-column field="flag" title="规则状态" min-width="120">
@@ -68,8 +69,8 @@
         <vxe-table-column field="date" title="操作" align="right" width="250" fixed="right">
           <template v-slot="{ row }">
             <span>
-              <a @click="addRoute(row)" v-if="row.auth_type === 1">添加权限</a>
-              <Divider type="vertical" v-if="row.auth_type === 1" />
+              <a @click="addRoute(row)" v-if="row.auth_type === 1 || row.auth_type === 3">添加权限</a>
+              <Divider type="vertical" v-if="row.auth_type === 1 || row.auth_type === 3"/>
               <a @click="addE(row, '添加子菜单')" v-if="row.auth_type === 1">添加子菜单</a>
               <!-- <a @click="addE(row, '添加规则')" v-else>添加规则</a> -->
             </span>

@@ -13,6 +13,7 @@ namespace crmeb\services\app;
 
 use app\services\order\StoreOrderTakeServices;
 use crmeb\exceptions\AdminException;
+use crmeb\services\easywechat\orderShipping\MiniOrderService;
 use crmeb\services\SystemConfigService;
 use app\services\pay\PayNotifyServices;
 use crmeb\services\easywechat\Application;
@@ -92,7 +93,7 @@ class MiniProgramService
      */
     public static function options()
     {
-        $wechat = SystemConfigService::more(['wechat_app_appsecret', 'wechat_app_appid', 'site_url', 'routine_appId', 'routine_appsecret']);
+        $wechat = SystemConfigService::more(['wechat_app_appsecret', 'wechat_app_appid', 'site_url', 'routine_appId', 'routine_appsecret', 'wechat_token', 'wechat_encodingaeskey']);
         $payment = SystemConfigService::more(['pay_weixin_mchid', 'pay_weixin_key', 'pay_weixin_client_cert', 'pay_weixin_client_key', 'pay_weixin_open', 'pay_new_weixin_open', 'pay_new_weixin_mchid']);
         $config = [];
         if (request()->isApp()) {
@@ -881,12 +882,12 @@ class MiniProgramService
                             break;
                         case 'trade_manage_order_settlement':     // 订单完成发货时  订单结算时
                             if (isset($message['estimated_settlement_time'])) { //订单完成发货时
-
+                                MiniOrderService::notifyConfirmByTradeNo($message['merchant_trade_no'], time());
                             }
                             if (isset($message['confirm_receive_method'])) {  // 订单结算时
                                 /** @var StoreOrderTakeServices $StoreOrderTakeServices */
                                 $storeOrderTakeServices = app()->make(StoreOrderTakeServices::class);
-                                $storeOrderTakeServices->takeOrder($message['merchant_trade_no'], 0);
+                                $storeOrderTakeServices->miniOrderTakeOrder($message['merchant_trade_no']);
                             }
                             break;
                     };

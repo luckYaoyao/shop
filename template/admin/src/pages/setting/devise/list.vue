@@ -29,7 +29,7 @@
         <Card :bordered="false" dis-hover v-if="cardShow == 0">
           <Row v-if="cardShow == 0">
             <Col style="width: 310px; height: 550px; margin-right: 30px; position: relative" v-if="isDiy">
-              <iframe class="iframe-box" :src="imgUrl" frameborder="0" ref="iframe"></iframe>
+              <iframe class="iframe-box" :src="iframeUrl" frameborder="0" ref="iframe"></iframe>
               <div class="mask"></div>
             </Col>
             <Col :span="isDiy ? '' : 24" v-bind="isDiy ? grid : ''" :class="isDiy ? 'table' : ''">
@@ -268,7 +268,7 @@ export default {
         },
       ],
       list: [],
-      imgUrl: '',
+      iframeUrl: '',
       modal: false,
       BaseURL: Setting.apiBaseURL.replace(/adminapi/, ''),
       cardShow: 0,
@@ -294,7 +294,7 @@ export default {
   },
   created() {
     this.getList();
-    this.imgUrl = `${location.origin}/pages/index/index?mdType=iframeWindow`;
+    this.iframeUrl = `${location.origin}/pages/index/index?mdType=iframeWindow`;
   },
   mounted: function () {},
   methods: {
@@ -302,9 +302,9 @@ export default {
       this.$refs['formItem'].resetFields();
     },
     refreshFrame() {
-      this.imgUrl = '';
+      this.iframeUrl = '';
       setTimeout((e) => {
-        this.imgUrl = `${location.origin}/pages/index/index?mdType=iframeWindow`;
+        this.iframeUrl = `${location.origin}/pages/index/index?mdType=iframeWindow`;
       }, 200);
     },
     getChildData(e) {
@@ -402,7 +402,7 @@ export default {
     // 获取列表
     getList() {
       // let storage = window.localStorage;
-      // this.imgUrl = storage.getItem("imgUrl");
+      // this.iframeUrl = storage.getItem("iframeUrl");
       let that = this;
       this.loading = true;
       diyList(this.diyFrom).then((res) => {
