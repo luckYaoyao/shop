@@ -45,9 +45,9 @@
         <vxe-table-column field="unique_auth" title="前端权限" min-width="200"></vxe-table-column>
         <vxe-table-column field="menu_path" title="路由" min-width="240" tooltip="true">
           <template v-slot="{ row }">
-            <span v-if="row.auth_type == 1">页面：{{ row.menu_path }}</span>
-            <span v-if="row.auth_type == 2">接口：[{{ row.methods }}]{{ row.api_url }}</span>
+            <span v-if="row.auth_type == 1">菜单：{{ row.menu_path }}</span>
             <span v-if="row.auth_type == 3">按钮</span>
+            <span v-if="row.auth_type == 2">接口：[{{ row.methods }}]{{ row.api_url }}</span>
           </template>
         </vxe-table-column>
         <vxe-table-column field="flag" title="规则状态" min-width="120">
