@@ -180,6 +180,7 @@ class SystemMenus extends AuthController
                 'pid' => $menu['path'],
                 'auth_type' => 2,
                 'is_show' => 1,
+                'is_show_path' => 1,
             ];
         }
 
