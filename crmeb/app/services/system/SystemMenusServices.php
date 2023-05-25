@@ -76,7 +76,7 @@ class SystemMenusServices extends BaseServices
         $systemRoleServices = app()->make(SystemRoleServices::class);
         $rules = $systemRoleServices->getRoleArray(['status' => 1, 'id' => $rouleId], 'rules');
         $rulesStr = Arr::unique($rules);
-        $menusList = $this->dao->getMenusRoule(['route' => $level ? $rulesStr : '']);
+        $menusList = $this->dao->getMenusRoule(['route' => $level ? $rulesStr : '', 'is_show_path' => 1]);
         $unique = $this->dao->getMenusUnique(['unique' => $level ? $rulesStr : '']);
         return [Arr::getMenuIviewList($this->getMenusData($menusList)), $unique];
     }
@@ -123,9 +123,6 @@ class SystemMenusServices extends BaseServices
     protected function getFormCascaderMenus(int $value = 0, $auth_type = 0)
     {
         $where = ['is_del' => 0];
-        if ($auth_type == 3) {
-            $where = ['is_del' => 0, 'auth_type' => 3];
-        }
         $menuList = $this->dao->getMenusRoule($where, ['id as value', 'pid', 'menu_name as label']);
         $menuList = $this->getMenusData($menuList);
         if ($value) {
@@ -152,7 +149,7 @@ class SystemMenusServices extends BaseServices
         $field[] = Form::input('unique_auth', '权限标识', $formData['unique_auth'] ?? '')->placeholder('不填写则后台自动生成');
         $field[] = Form::frameInput('icon', '图标', $this->url(config('app.admin_prefix', 'admin') . '/widget.widgets/icon', ['fodder' => 'icon']), $formData['icon'] ?? '')->icon('md-add')->height('505px')->modal(['footer-hide' => true]);
         $field[] = Form::number('sort', '排序', (int)($formData['sort'] ?? 0))->precision(0);
-        $field[] = Form::radio('auth_type', '类型', $formData['auth_type'] ?? 1)->options([['value' => 1, 'label' => '菜单'], ['value' => 3, 'label' => '按钮']]);
+        $field[] = Form::radio('auth_type', '类型', $formData['auth_type'] ?? 1)->options([['value' => 1, 'label' => '菜单'], ['value' => 3, 'label' => '按钮'], ['value' => 2, 'label' => '接口']]);
         $field[] = Form::radio('is_show', '权限状态', $formData['is_show'] ?? 1)->options([['value' => 1, 'label' => '开启'], ['value' => 0, 'label' => '关闭']]);
         $field[] = Form::radio('is_show_path', '是否显示', $formData['is_show_path'] ?? 0)->options([['value' => 1, 'label' => '显示'], ['value' => 0, 'label' => '隐藏']]);
         [$menuList, $data] = $this->getFormCascaderMenus((int)($formData['pid'] ?? 0), 3);
@@ -249,7 +246,7 @@ class SystemMenusServices extends BaseServices
     public function getMenus($roles): array
     {
         $field = ['menu_name', 'pid', 'id'];
-        $where = ['is_del' => 0, 'auth_type' => 3];
+        $where = ['is_del' => 0, 'is_show_path' => 1];
         if (!$roles) {
             $menus = $this->dao->getMenusRoule($where, $field);
         } else {

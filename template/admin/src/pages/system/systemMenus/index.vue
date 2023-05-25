@@ -69,9 +69,9 @@
         <vxe-table-column field="date" title="操作" align="right" width="250" fixed="right">
           <template v-slot="{ row }">
             <span>
-              <a @click="addRoute(row)" v-if="row.auth_type === 1 || row.auth_type === 3">添加权限</a>
+              <a @click="addRoute(row)" v-if="row.auth_type === 1 || row.auth_type === 3">选择权限</a>
               <Divider type="vertical" v-if="row.auth_type === 1 || row.auth_type === 3"/>
-              <a @click="addE(row, '添加子菜单')" v-if="row.auth_type === 1">添加子菜单</a>
+              <a @click="addE(row, '添加子菜单')" v-if="row.auth_type === 1">添加下级</a>
               <!-- <a @click="addE(row, '添加规则')" v-else>添加规则</a> -->
             </span>
             <Divider type="vertical" v-if="row.auth_type === 1" />
@@ -101,7 +101,7 @@
     >
       <div class="search-rule">
         <Alert
-          >基础接口，可多选，并且添加后不会再展示出现；删除权限后才会出现；公共接口，可多选，并且添加后会继续展示；</Alert
+          >1.接口可多选，可重复添加；<br>2.添加路由按照路由规则进行添加，即可在开发工具->接口管理里面点击同步；<br>3.同步完成即可在此选择对应的接口；</Alert
         >
         <Input
           class="mr10"
