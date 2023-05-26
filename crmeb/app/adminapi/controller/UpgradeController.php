@@ -15451,7 +15451,7 @@ SQL
                 'table' => "system_route",
                 'findSql' => "select * from information_schema.tables where table_name ='@table'",
                 'sql' => "CREATE TABLE IF NOT EXISTS `@table` (
-  `id` int(11) NOT NULL DEFAULT '0' AUTO_INCREMENT,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `cate_id` int(11) NOT NULL DEFAULT '0' COMMENT '分类',
   `app_name` varchar(20) NOT NULL DEFAULT 'api' COMMENT '应用名',
   `name` varchar(50) NOT NULL DEFAULT '' COMMENT '路由名称',
