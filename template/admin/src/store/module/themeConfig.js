@@ -44,7 +44,7 @@ const themeConfigModule = {
       // 是否开启菜单手风琴效果
       isUniqueOpened: false,
       // 是否开启固定 Header
-      isFixedHeader: false,
+      isFixedHeader: true,
 
       /**
        * 界面显示
@@ -62,7 +62,7 @@ const themeConfigModule = {
       // 是否开启 TagsView 缓存
       isCacheTagsView: false,
       // 是否开启 Footer 底部版权信息
-      isFooter: false,
+      isFooter: true,
       // 是否开启灰色模式
       isGrayscale: false,
       // 是否开启色弱模式

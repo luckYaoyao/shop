@@ -2,7 +2,7 @@
   <div>
     <Modal
       v-model="modals"
-      width="700"
+      width="500"
       scrollable
       closable
       :title="titleFrom"
@@ -132,11 +132,11 @@ export default {
       searchRule: '',
       iconVal: '',
       grid: {
-        xl: 23,
-        lg: 12,
-        md: 12,
-        sm: 24,
-        xs: 24,
+        xl: 22,
+        lg: 22,
+        md: 22,
+        sm: 22,
+        xs: 22,
       },
       modals: false,
       modal12: false,

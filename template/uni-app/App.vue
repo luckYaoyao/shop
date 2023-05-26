@@ -98,23 +98,32 @@
 			}
 			// #ifdef MP
 			if (queryData.query.scene) {
-				switch (queryData.scene) {
-					//扫描小程序码
-					case 1047:
-						this.globalData.code = queryData.query.scene;
-						break;
-						//长按图片识别小程序码
-					case 1048:
-						this.globalData.code = queryData.query.scene;
-						break;
-						//手机相册选取小程序码
-					case 1049:
-						this.globalData.code = queryData.query.scene;
-						break;
-						//直接进入小程序
-					case 1001:
-						this.globalData.spid = queryData.query.scene;
-						break;
+				let param = this.$util.getUrlParams(decodeURIComponent(queryData.query.scene))
+				console.log(queryData.query.scene)
+				console.log(param)
+				if(param.pid){
+					this.$Cache.set('spread', param.pid);
+					this.globalData.spid = param.pid;
+					this.globalData.pid = param.pid;
+				}else{
+					switch (queryData.scene) {
+						//扫描小程序码
+						case 1047:
+							this.globalData.code = queryData.query.scene;
+							break;
+							//长按图片识别小程序码
+						case 1048:
+							this.globalData.code = queryData.query.scene;
+							break;
+							//手机相册选取小程序码
+						case 1049:
+							this.globalData.code = queryData.query.scene;
+							break;
+							//直接进入小程序
+						case 1001:
+							this.globalData.spid = queryData.query.scene;
+							break;
+					}
 				}
 				silenceBindingSpread(this.globalData)
 			}

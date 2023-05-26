@@ -2,21 +2,33 @@
   <div>
     <Modal
       v-model="modals"
-      width="700"
+      width="500"
       scrollable
       closable
       :title="titleFrom"
       :mask-closable="false"
       :z-index="1"
       @on-cancel="handleReset"
-      @on-visible-change="visible"
     >
       <Form ref="formValidate" :model="formValidate" :label-width="110" @submit.native.prevent>
         <Row type="flex" :gutter="24">
           <Col v-bind="grid">
-            <FormItem label="按钮名称：" prop="menu_name">
+            <FormItem label="类型：">
+              <RadioGroup v-model="formValidate.auth_type" @on-change="changeAuthType">
+                <Radio :label="item.value" v-for="(item, i) in optionsRadio" :key="i">
+                  <Icon type="social-apple"></Icon>
+                  <span>{{ item.label }}</span>
+                </Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <FormItem :label="authType == 2 ? '接口名称：' : authType == 1 ? '菜单名称：' : '按钮名称：'" prop="menu_name">
               <div class="add">
-                <Input v-model="formValidate.menu_name" placeholder="请输入按钮名称">
+                <Input
+                  v-model="formValidate.menu_name"
+                  :placeholder="authType == 2 ? '请输入接口名称' : authType == 1 ? '请输入菜单名称' : '请输入按钮名称'"
+                >
                 </Input>
               </div>
             </FormItem>
@@ -26,11 +38,20 @@
               <Cascader :data="menuList" change-on-select v-model="formValidate.path" filterable></Cascader>
             </FormItem>
           </Col>
-          <Col v-bind="grid">
-            <FormItem label="路由地址：" prop="menu_path">
-              <Input v-model="formValidate.menu_path" placeholder="请输入路由地址" @on-change="changeUnique">
+          <Col v-bind="grid" v-if="authType != 2">
+            <FormItem label="页面地址：" prop="menu_path">
+              <Input v-model="formValidate.menu_path" placeholder="请输入页面地址" @on-change="changeUnique">
                 <template #prepend>
                   <span>{{ $routeProStr }}</span>
+                </template>
+              </Input>
+            </FormItem>
+          </Col>
+          <Col v-bind="grid" v-if="authType == 2">
+            <FormItem label="接口地址：" prop="api_url">
+              <Input v-model="formValidate.api_url" placeholder="请输入接口地址" @on-change="changeUnique">
+                <template #prepend>
+                  <span>adminapi/</span>
                 </template>
               </Input>
             </FormItem>
@@ -40,7 +61,7 @@
               <Input v-model="formValidate.unique_auth" placeholder="请输入权限标识"></Input>
             </FormItem>
           </Col>
-          <Col v-bind="grid">
+          <Col v-bind="grid" v-if="authType != 2">
             <FormItem label="图标：">
               <Input
                 v-model="formValidate.icon"
@@ -50,20 +71,14 @@
               ></Input>
             </FormItem>
           </Col>
-
           <Col v-bind="grid">
-            <FormItem label="排序：">
-              <Input type="number" v-model="formValidate.sort" placeholder="请输入排序" number></Input>
+            <FormItem label="备注：">
+              <Input v-model="formValidate.mark" placeholder="请输入备注" number></Input>
             </FormItem>
           </Col>
           <Col v-bind="grid">
-            <FormItem label="类型：">
-              <RadioGroup v-model="formValidate.auth_type">
-                <Radio :label="item.value" v-for="(item, i) in optionsRadio" :key="i">
-                  <Icon type="social-apple"></Icon>
-                  <span>{{ item.label }}</span>
-                </Radio>
-              </RadioGroup>
+            <FormItem label="排序：">
+              <Input type="number" v-model="formValidate.sort" placeholder="请输入排序" number></Input>
             </FormItem>
           </Col>
           <Col v-bind="grid">
@@ -157,11 +172,11 @@ export default {
       searchRule: '',
       iconVal: '',
       grid: {
-        xl: 12,
-        lg: 12,
-        md: 12,
-        sm: 24,
-        xs: 24,
+        xl: 22,
+        lg: 22,
+        md: 22,
+        sm: 22,
+        xs: 22,
       },
       modals: false,
       modal12: false,
@@ -172,11 +187,18 @@ export default {
       search: icon,
       ruleModal: false,
       ruleList: [],
+      authType: 1
     };
   },
   watch: {
     'formValidate.header': function (n) {
       this.formValidate.is_header = n ? 1 : 0;
+    },
+    'formValidate.auth_type': function (n) {
+      if (n === undefined) {
+        n = 1;
+      }
+      this.authType = n;
     },
     'formValidate.data': function (n) {},
   },
@@ -274,6 +296,9 @@ export default {
       let value = this.$routeProStr + val.target.value;
       if (value.slice(0, 1) === '/') value = value.replace('/', '');
       this.formValidate.unique_auth = value.replaceAll('/', '-');
+    },
+    changeAuthType(val) {
+      this.authType = val;
     },
     selectRule(data) {
       this.$emit('selectRule', data);
