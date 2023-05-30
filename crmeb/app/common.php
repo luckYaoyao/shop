@@ -682,10 +682,10 @@ if (!function_exists('get_file_link')) {
         if (!$link) {
             return '';
         }
-        if (strstr('http', $link) === false) {
-            return app()->request->domain() . $link;
-        } else {
+        if (substr($link, 0, 4) === "http" || substr($link, 0, 2) === "//") {
             return $link;
+        } else {
+            return app()->request->domain() . $link;
         }
     }
 }
