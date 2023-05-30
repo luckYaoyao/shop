@@ -48,8 +48,8 @@
           <Col
             span="12"
             class="fontColor3 mb10"
-            v-if="parseFloat(orderDatalist.orderInfo.refund_price) && orderDatalist.orderInfo.refund_type != 3"
-            >退款金额：{{ parseFloat(orderDatalist.orderInfo.refund_price) }}</Col
+            v-if="parseFloat(orderDatalist.orderInfo.refunded_price) && orderDatalist.orderInfo.refund_type != 3"
+            >退款金额：{{ parseFloat(orderDatalist.orderInfo.refunded_price) }}</Col
           >
           <Col span="12" class="fontColor3 mb10" v-if="parseFloat(orderDatalist.orderInfo.use_integral)"
             >使用积分：{{ parseFloat(orderDatalist.orderInfo.use_integral) }}</Col
