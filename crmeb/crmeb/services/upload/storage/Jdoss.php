@@ -2,9 +2,15 @@
 
 namespace crmeb\services\upload\storage;
 
+use Aws\S3\S3Client;
+use crmeb\exceptions\UploadException;
 use crmeb\services\upload\BaseUpload;
-use crmeb\services\upload\extend\jdoss\Client as CrmebClient;
 
+/**
+ * 京东云COS文件上传
+ * Class Jdoss
+ * @package crmeb\services\upload\storage
+ */
 class Jdoss extends BaseUpload
 {
 
@@ -29,7 +35,7 @@ class Jdoss extends BaseUpload
 
     /**
      * 句柄
-     * @var CrmebClient
+     * @var S3Client
      */
     protected $handle;
 
@@ -90,17 +96,25 @@ class Jdoss extends BaseUpload
     }
 
     /**
-     * 实例化cos
-     * @return CrmebClient
+     * @return S3Client
+     *
+     * @date 2023/06/05
+     * @author yyw
      */
     protected function app()
     {
-        $this->handle = new CrmebClient([
-            'accessKey' => $this->accessKey,
-            'secretKey' => $this->secretKey,
+        if (!$this->accessKey || !$this->secretKey) {
+            throw new UploadException(400721);
+        }
+        $this->handle = new S3Client([
+            'version' => 'latest',
             'region' => $this->storageRegion,
-            'bucket' => $this->storageName,
-            'uploadUrl' => $this->uploadUrl
+            'endpoint' => "http://s3.{$this->storageRegion}.jdcloud-oss.com",
+            'signature_version' => 'v4',
+            'credentials' => [
+                'key' => $this->accessKey,
+                'secret' => $this->secretKey,
+            ],
         ]);
         return $this->handle;
     }
@@ -131,9 +145,41 @@ class Jdoss extends BaseUpload
         }
     }
 
-    public function createBucket(string $name, string $region)
+    public function createBucket(string $name, string $region = '', string $acl = 'public-read')
     {
-        // TODO: Implement createBucket() method.
+        $regionData = $this->getRegion();
+        $regionData = array_column($regionData, 'value');
+        if (!in_array($region, $regionData)) {
+            return $this->setError('COS:无效的区域!');
+        }
+        $this->storageRegion = $region;
+        $app = $this->app();
+        //检测桶
+        try {
+            $app->headBucket([
+                'Bucket' => $name
+            ]);
+        } catch (\Throwable $e) {
+            //桶不存在返回404
+            if (strstr('404', $e->getMessage())) {
+                return $this->setError('COS:' . $e->getMessage());
+            }
+        }
+        //创建桶
+        try {
+            $res = $app->createBucket([
+                'Bucket' => $name,
+                'ACL' => $acl,
+            ]);
+        } catch (\Throwable $e) {
+            if (strstr('[curl] 6', $e->getMessage())) {
+                return $this->setError('COS:无效的区域!!');
+            } else if (strstr('Access Denied.', $e->getMessage())) {
+                return $this->setError('COS:无权访问');
+            }
+            return $this->setError('COS:' . $e->getMessage());
+        }
+        return $res;
     }
 
     public function getRegion()
