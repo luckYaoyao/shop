@@ -68,16 +68,19 @@ class UploadService
                     'accessKey' => sys_config('jd_accessKey'),
                     'secretKey' => sys_config('jd_secretKey'),
                 ];
+                break;
             case 6://华为云
                 $config = [
                     'accessKey' => sys_config('hw_accessKey'),
                     'secretKey' => sys_config('hw_secretKey'),
                 ];
+                break;
             case 7://天翼云
                 $config = [
                     'accessKey' => sys_config('ty_accessKey'),
                     'secretKey' => sys_config('ty_secretKey'),
                 ];
+                break;
             case 1:
                 break;
             default:

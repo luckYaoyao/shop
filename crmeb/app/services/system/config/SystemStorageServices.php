@@ -124,16 +124,19 @@ class SystemStorageServices extends BaseServices
                     'secretKey' => sys_config('tengxun_secretKey', ''),
                     'appid' => sys_config('tengxun_appid', ''),
                 ];
+                break;
             case 5:// cos 京东云
                 $config = [
                     'accessKey' => sys_config('jd_accessKey', ''),
                     'secretKey' => sys_config('jd_secretKey', ''),
                 ];
+                break;
             case 6:// cos 华为云
                 $config = [
                     'accessKey' => sys_config('hw_accessKey', ''),
                     'secretKey' => sys_config('hw_secretKey', ''),
                 ];
+                break;
             case 7:// cos 天翼云
                 $config = [
                     'accessKey' => sys_config('ty_accessKey', ''),
