@@ -63,6 +63,21 @@ class UploadService
                     'appid' => sys_config('tengxun_appid'),
                 ];
                 break;
+            case 5://京东云
+                $config = [
+                    'accessKey' => sys_config('jd_accessKey'),
+                    'secretKey' => sys_config('jd_secretKey'),
+                ];
+            case 6://华为云
+                $config = [
+                    'accessKey' => sys_config('hw_accessKey'),
+                    'secretKey' => sys_config('hw_secretKey'),
+                ];
+            case 7://天翼云
+                $config = [
+                    'accessKey' => sys_config('ty_accessKey'),
+                    'secretKey' => sys_config('ty_secretKey'),
+                ];
             case 1:
                 break;
             default:
