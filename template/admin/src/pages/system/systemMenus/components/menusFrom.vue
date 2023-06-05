@@ -379,7 +379,7 @@ export default {
         return this.$Message.warning('请填写菜单/按钮/接口名称');
       }
       if (!this.formValidate.menu_path && this.authType != 2) {
-        return this.$Message.warning('请填写页面地址');
+        return this.$Message.warning('请填写页面/按钮地址');
       }
       if (!this.formValidate.api_url && this.authType == 2) {
         return this.$Message.warning('请填写接口地址');
