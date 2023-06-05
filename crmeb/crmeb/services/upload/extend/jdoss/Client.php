@@ -14,6 +14,7 @@
 namespace crmeb\services\upload\extend\jdoss;
 
 
+use crmeb\exceptions\UploadException;
 use crmeb\services\upload\BaseClient;
 
 /**
@@ -30,7 +31,7 @@ class Client extends BaseClient
      * AK
      * @var
      */
-    protected $accessKeyId = 'FHZVOVXFEMUGWOVARS8H';
+    protected $accessKeyId;
 
     /**
      * SK
@@ -77,6 +78,27 @@ class Client extends BaseClient
     }
 
     /**
+     * 检测桶，不存在返回true
+     * @param string $bucket
+     * @param string $region
+     * @return array|bool|\crmeb\services\upload\extend\cos\SimpleXMLElement
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2022/10/17
+     */
+    public function headBucket(string $bucket, string $region = '')
+    {
+        $url = $this->getRequestUrl($bucket, $region);
+
+        $header = [
+            'Host' => $url
+        ];
+
+        return $this->request('https://' . $url, 'head', [], $header);
+    }
+
+
+    /**
      * 获取桶列表
      * @return array|\crmeb\services\upload\extend\cos\SimpleXMLElement
      * @author 等风来
@@ -96,6 +118,22 @@ class Client extends BaseClient
         return $res;
     }
 
+    public function createBucket($name, $region, $acl)
+    {
+        $url = $this->getRequestUrl($name, $region);
+        $header = [
+            'Host' => $url,
+            'Date' => gmdate('D, d M Y H:i:s \G\M\T'),
+            'name' => $name,
+            'x-amz-acl' => $acl
+        ];
+
+
+        $res = $this->request('https://' . $url . '/', 'PUT', [], $header);
+
+        return $res;
+    }
+
     /**
      * 获取请求域名
      * @param string $bucket
@@ -107,6 +145,13 @@ class Client extends BaseClient
      */
     protected function getRequestUrl(string $bucket = '', string $region = self::DEFAULT_REGION)
     {
+        if (!$this->accessKeyId) {
+            throw new UploadException('请传入SecretId');
+        }
+        if (!$this->secretKey) {
+            throw new UploadException('请传入SecretKey');
+        }
+
         return ($bucket ? $bucket . '.' : '') . 's3.' . $region . '.jdcloud-oss.com';
     }
 

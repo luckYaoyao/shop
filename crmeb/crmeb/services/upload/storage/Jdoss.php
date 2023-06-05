@@ -5,6 +5,11 @@ namespace crmeb\services\upload\storage;
 use crmeb\services\upload\BaseUpload;
 use crmeb\services\upload\extend\jdoss\Client as CrmebClient;
 
+/**
+ * 京东云COS文件上传
+ * Class Jdoss
+ * @package crmeb\services\upload\storage
+ */
 class Jdoss extends BaseUpload
 {
 
@@ -131,9 +136,36 @@ class Jdoss extends BaseUpload
         }
     }
 
-    public function createBucket(string $name, string $region)
+    public function createBucket(string $name, string $region = '', string $acl = 'public-read')
     {
-        // TODO: Implement createBucket() method.
+        $regionData = $this->getRegion();
+        $regionData = array_column($regionData, 'value');
+        if (!in_array($region, $regionData)) {
+            return $this->setError('COS:无效的区域!');
+        }
+        $this->storageRegion = $region;
+        $app = $this->app();
+        //检测桶
+        try {
+            $app->headBucket($name);
+        } catch (\Throwable $e) {
+            //桶不存在返回404
+            if (strstr('404', $e->getMessage())) {
+                return $this->setError('COS:' . $e->getMessage());
+            }
+        }
+        //创建桶
+        try {
+            $res = $app->createBucket($name, $region, $acl);
+        } catch (\Throwable $e) {
+            if (strstr('[curl] 6', $e->getMessage())) {
+                return $this->setError('COS:无效的区域!!');
+            } else if (strstr('Access Denied.', $e->getMessage())) {
+                return $this->setError('COS:无权访问');
+            }
+            return $this->setError('COS:' . $e->getMessage());
+        }
+        return $res;
     }
 
     public function getRegion()
