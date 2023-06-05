@@ -80,7 +80,6 @@ class StoreProductAttrServices extends BaseServices
                 if ($item['is_virtual'] && (count($item['virtual_list']) || $item['disk_info'] != '') && !$item['coupon_id']) {
                     $productVirtual->delete(['product_id' => $id, 'attr_unique' => $item['unique'], 'uid' => 0]);
                     $sales = $productVirtual->count(['product_id' => $id, 'attr_unique' => $item['unique']]);
-                    $storeProductAttrValueServices->update(['id' => $res['id']], ['stock' => $item['stock'] - $sales, 'sales' => $sales]);
                     foreach ($item['virtual_list'] as &$items) {
                         $data = [
                             'product_id' => $id,
@@ -93,6 +92,8 @@ class StoreProductAttrServices extends BaseServices
                             $productVirtual->save($data);
                         }
                     }
+                    $allStock = $productVirtual->count(['product_id' => $id, 'attr_unique' => $item['unique']]);
+                    $storeProductAttrValueServices->update(['id' => $res['id']], ['stock' => $allStock - $sales, 'sales' => $sales]);
                 }
             }
             return true;
