@@ -24,36 +24,36 @@ class Express extends BaseExpress
     /**
      * 注册服务
      */
-    const EXPRESS_OPEN = 'expr/open';
+    const EXPRESS_OPEN = 'v2/expr/open';
 
     /**
      * 电子面单模版
      */
-    const EXPRESS_TEMP = 'expr/temp';
+    const EXPRESS_TEMP = 'v2/expr/temp';
 
     /**
      * 快递公司
      */
-    const EXPRESS_LIST = 'expr/express';
+    const EXPRESS_LIST = 'v2/expr/express';
 
     /**
      * 快递查询
      */
-    const EXPRESS_QUERY = 'expr/query';
+    const EXPRESS_QUERY = 'v2/expr/query';
 
     /**
      * 面单打印
      */
-    const EXPRESS_DUMP = 'expr/dump';
+    const EXPRESS_DUMP = 'v2/expr/dump';
 
     //获取物流公司信息
-    const SHIPMENT_KUAIDI_NUMS = 'shipment/get_kuaidi_coms';
+    const SHIPMENT_KUAIDI_NUMS = 'v2/shipment/get_kuaidi_coms';
     //创建商家寄件订单
-    const SHIPMENT_CREATE_ORDER = 'shipment/create_order';
+    const SHIPMENT_CREATE_ORDER = 'v2/v2/shipment/create_order';
     //取消商家寄件
-    const SHIPMENT_CANCEL_ORDER = 'shipment/cancel_order';
+    const SHIPMENT_CANCEL_ORDER = 'v2/shipment/cancel_order';
     //获取商家寄件订单列表
-    const SHIPMENT_INDEX = 'shipment/index';
+    const SHIPMENT_INDEX = 'v2/shipment/index';
 
     /** 初始化
      * @param array $config
@@ -260,7 +260,11 @@ class Express extends BaseExpress
         if (!$data['siid']) {
             $param['print_type'] = 'IMAGE';
         }
-        return $this->accessToken->httpRequest(self::EXPRESS_DUMP, $param, 'POST', true, ['version:v1.1']);
+        $header = [];
+        if (!sys_config('config_export_siid')) {
+            $header = ['version:v1.1'];
+        }
+        return $this->accessToken->httpRequest(self::EXPRESS_DUMP, $param, 'POST', true, $header);
     }
 
 }
