@@ -188,6 +188,11 @@
 				@click="offlinePay">
 				{{$t(`确认付款`)}}
 			</view>
+			<navigator class='bnt cancel'
+				v-if="orderInfo.delivery_type == 'express' && orderInfo.status==1"
+				hover-class='none' :url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id">
+				{{$t(`查看物流`)}}
+			</navigator>
 			<navigator class="bnt delivery"
 				v-if="types == 1 && orderInfo.shipping_type === 1 && (orderInfo.pinkStatus === null || orderInfo.pinkStatus === 2)"
 				:url="'/pages/admin/delivery/index?id='+orderInfo.order_id">{{$t(`去发货`)}}</navigator>
