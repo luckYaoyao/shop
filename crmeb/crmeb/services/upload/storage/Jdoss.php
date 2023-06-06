@@ -287,7 +287,14 @@ class Jdoss extends BaseUpload
 
     public function getDomian(string $name, string $region = null)
     {
-
+        try {
+            $res = $this->app()->getBucketWebsite([
+                'Bucket' => $name
+            ]);
+            return $res['DomainName'] ?? [];
+        } catch (\Throwable $e) {
+            return $this->setError($e->getMessage());
+        }
     }
 
     public function bindDomian(string $name, string $domain, string $region = null)
