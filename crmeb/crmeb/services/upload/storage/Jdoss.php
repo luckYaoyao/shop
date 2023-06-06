@@ -272,9 +272,10 @@ class Jdoss extends BaseUpload
         ];
     }
 
-    public function deleteBucket(string $name)
+    public function deleteBucket(string $name, string $region = '')
     {
         try {
+            $this->storageRegion = $region;
             $this->app()->deleteBucket([
                 'bucketName' => $name, // REQUIRED
                 'forceDelete' => false
@@ -288,6 +289,7 @@ class Jdoss extends BaseUpload
     public function getDomian(string $name, string $region = null)
     {
         try {
+            $this->storageRegion = $region;
             $res = $this->app()->getBucketWebsite([
                 'Bucket' => $name
             ]);
@@ -300,6 +302,7 @@ class Jdoss extends BaseUpload
     public function bindDomian(string $name, string $domain, string $region = null)
     {
         try {
+            $this->storageRegion = $region;
             $this->app()->putBucketWebsite([
                 'Bucket' => $name,
                 'WebsiteConfiguration' => [
@@ -425,5 +428,34 @@ class Jdoss extends BaseUpload
             }
         }
         return $waterPath;
+    }
+
+    public function setError(?string $error = null)
+    {
+        $this->error = $error ?: '未知错误';
+        if (env('APP_DEBUG')) {
+            throw new UploadException($this->xmlToArr($this->error));
+        } else {
+            return false;
+        }
+    }
+
+    function xmlToArr($errorXml)
+    {
+
+        $pattern = '/<statusCode>(\d+)<\/statusCode><Code>(.*?)<\/Code><Message>(.*?)<\/Message><Resource>(.*?)<\/Resource><RequestId>(.*?)<\/RequestId>/';
+
+        preg_match($pattern, $errorXml, $matches);
+
+        $error = [
+            'statusCode' => $matches[1],
+            'Code' => $matches[2],
+            'Message' => $matches[3],
+            'Resource' => $matches[4],
+            'RequestId' => $matches[5]
+        ];
+
+        return $error;
+
     }
 }
