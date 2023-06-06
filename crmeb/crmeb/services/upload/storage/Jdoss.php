@@ -292,7 +292,20 @@ class Jdoss extends BaseUpload
 
     public function bindDomian(string $name, string $domain, string $region = null)
     {
-        // TODO: Implement bindDomian() method.
+        try {
+            $this->app()->putBucketWebsite([
+                'Bucket' => $name,
+                'WebsiteConfiguration' => [
+                    'RedirectAllRequestsTo' => [
+                        'HostName' => $domain,
+                        'Protocol' => 'http'
+                    ]
+                ]
+            ]);
+            return true;
+        } catch (\Throwable $e) {
+            return $this->setError($e->getMessage());
+        }
     }
 
     public function setBucketCors(string $name, string $region)
@@ -314,7 +327,7 @@ class Jdoss extends BaseUpload
                 ]
             ]);
             return true;
-        } catch (AcmException $e) {
+        } catch (\Throwable $e) {
             return $this->setError($e->getMessage());
         }
     }
@@ -336,7 +349,7 @@ class Jdoss extends BaseUpload
             ]);
             $request = $app->createPresignedRequest($cmd, $expires);
             return (string)$request->getUri();
-        } catch (AcmException $e) {
+        } catch (\Throwable $e) {
             return $this->setError($e->getMessage());
         }
     }
