@@ -865,6 +865,15 @@ class StoreProductServices extends BaseServices
             $item['cost'] = floatval($item['cost']);
             $item['is_product_type'] = 1;
             $item['logistics'] = explode(',', $item['logistics']);
+            $attrs = $this->getProductRules($item['id'], 0)['attrs'];
+            foreach ($attrs as $items) {
+                $item['attrs'][] = [
+                    'image' => $items['pic'],
+                    'price' => $items['price'],
+                    'ot_price' => $items['ot_price'],
+                    'sku' => implode(',', $items['detail'])
+                ];
+            }
         }
         return $data;
     }
