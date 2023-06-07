@@ -368,7 +368,8 @@ class Client extends BaseClient
      */
     protected function getRequestUrl(string $bucket, string $region)
     {
-        return $bucket . '.obs.' . $region . '.myhuaweicloud.com';
+//        return $bucket . '.obs.' . $region . '.myhuaweicloud.com';  // 华为
+        return $bucket . '.obs.' . $region . '.ctyun.cn';  // 天翼
     }
 
     /**
