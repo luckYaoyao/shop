@@ -135,7 +135,8 @@ class Tyoss extends BaseUpload
             'secretKey' => $this->secretKey,
             'region' => $this->storageRegion ?: 'oos-hazz',
             'bucket' => $this->storageName,
-            'uploadUrl' => $this->uploadUrl
+            'uploadUrl' => $this->uploadUrl,
+            'type' => 'ty'
         ]);
         return $this->handle;
     }
@@ -160,24 +161,10 @@ class Tyoss extends BaseUpload
         }
         $this->storageRegion = $region;
         $app = $this->app();
-        //检测桶
-        try {
-            $app->headBucket($name, $region);
-        } catch (\Throwable $e) {
-            //桶不存在返回404
-            if (strstr('404', $e->getMessage())) {
-                return $this->setError('COS:' . $e->getMessage());
-            }
-        }
         //创建桶
         try {
             $res = $app->createBucket($name, $region, $acl);
         } catch (\Throwable $e) {
-            if (strstr('[curl] 6', $e->getMessage())) {
-                return $this->setError('COS:无效的区域!!');
-            } else if (strstr('Access Denied.', $e->getMessage())) {
-                return $this->setError('COS:无权访问');
-            }
             return $this->setError('COS:' . $e->getMessage());
         }
         return $res;
@@ -245,6 +232,10 @@ class Tyoss extends BaseUpload
             [
                 'value' => 'oos-sh2',
                 'label' => '上海2'
+            ],
+            [
+                'value' => 'cn-snxy1',
+                'label' => '西安2'
             ]
         ];
     }

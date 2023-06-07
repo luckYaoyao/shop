@@ -124,6 +124,8 @@ class Client extends BaseClient
      */
     protected $baseUrl = 'obs.cn-north-1.myhuaweicloud.com';
 
+    protected $type = 'hw';
+
     /**
      * Client constructor.
      * @param array $config
@@ -135,6 +137,7 @@ class Client extends BaseClient
         $this->bucketName = $config['bucket'] ?? '';
         $this->region = $config['region'] ?? 'ap-chengdu';
         $this->uploadUrl = $config['uploadUrl'] ?? '';
+        $this->type = $config['type'] ?? 'hw';
     }
 
     /**
@@ -368,7 +371,13 @@ class Client extends BaseClient
      */
     protected function getRequestUrl(string $bucket, string $region)
     {
-        return $bucket . '.obs.' . $region . '.myhuaweicloud.com';
+        if ($this->type == 'hw') {
+            return $bucket . '.obs.' . $region . '.myhuaweicloud.com';  // 华为
+        } else {
+            return $bucket . '.obs.' . $region . '.ctyun.cn';  // 天翼
+        }
+
+
     }
 
     /**

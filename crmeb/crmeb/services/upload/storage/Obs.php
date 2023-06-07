@@ -160,97 +160,18 @@ class Obs extends BaseUpload
         }
         $this->storageRegion = $region;
         $app = $this->app();
-        //检测桶
-        try {
-            $app->headBucket($name, $region);
-        } catch (\Throwable $e) {
-            //桶不存在返回404
-            if (strstr('404', $e->getMessage())) {
-                return $this->setError('COS:' . $e->getMessage());
-            }
-        }
         //创建桶
         try {
-            $res = $app->createBucket($name, $region, $acl);
+            $app->createBucket($name, $region, $acl);
         } catch (\Throwable $e) {
-            if (strstr('[curl] 6', $e->getMessage())) {
-                return $this->setError('COS:无效的区域!!');
-            } else if (strstr('Access Denied.', $e->getMessage())) {
-                return $this->setError('COS:无权访问');
-            }
             return $this->setError('COS:' . $e->getMessage());
         }
-        return $res;
+        return true;
     }
 
     public function getRegion()
     {
-        return [
-            [
-                'value' => 'oos-hazz',
-                'label' => '郑州'
-            ],
-            [
-                'value' => 'oos-lnsy',
-                'label' => '沈阳'
-            ],
-            [
-                'value' => 'oos-sccd',
-                'label' => '四川成都'
-            ],
-            [
-                'value' => 'oos-xjwlmq',
-                'label' => '乌鲁木齐'
-            ],
-            [
-                'value' => 'oos-xjwlmq',
-                'label' => '乌鲁木齐'
-            ],
-            [
-                'value' => 'oos-gslz',
-                'label' => '甘肃兰州'
-            ],
-            [
-                'value' => 'oos-sdqd',
-                'label' => '山东青岛'
-            ],
-            [
-                'value' => 'oos-gzgy',
-                'label' => '贵州贵阳'
-            ],
-            [
-                'value' => 'oos-hbwh',
-                'label' => '湖北武汉'
-            ],
-            [
-                'value' => 'oos-xzls',
-                'label' => '西藏拉萨'
-            ],
-            [
-                'value' => 'oos-hbwh',
-                'label' => '湖北武汉'
-            ],
-            [
-                'value' => 'oos-ahwh',
-                'label' => '安徽芜湖'
-            ],
-            [
-                'value' => 'oos-gdsz',
-                'label' => '广东深圳'
-            ],
-            [
-                'value' => 'oos-jssz',
-                'label' => '江苏苏州'
-            ],
-            [
-                'value' => 'oos-sh2',
-                'label' => '上海2'
-            ],
-            [
-                'value' => 'cn-snxy1',
-                'label' => '西安2'
-            ]
-        ];
+        return $this->app()->getRegion();
     }
 
     public function deleteBucket(string $name, string $region = '')
@@ -263,9 +184,37 @@ class Obs extends BaseUpload
         }
     }
 
+    public function getDomian($name, $region)
+    {
+        try {
+            $res = $this->app()->GetBucketDomain($name, $region);
+            if ($res) {
+                $domainRules = $res->toArray()['ListBucketCustomDomainsResult '];
+                return array_column($domainRules, 'DomainName');
+            } else {
+                return [];
+            }
+
+        } catch (\Throwable $e) {
+        }
+        return [];
+    }
+
     public function bindDomian(string $name, string $domain, string $region = null)
     {
-        // TODO: Implement bindDomian() method.
+        $parseDomin = parse_url($domain);
+        try {
+            $this->app()->putBucketDomain($name, '', [
+                'domainname' => $parseDomin['host'],
+            ]);
+            return true;
+        } catch (\Throwable $e) {
+            if ($message = $this->setMessage($e->getMessage())) {
+                return $this->setError($message);
+            }
+            return $this->setError($e->getMessage());
+        }
+        return false;
     }
 
     public function setBucketCors(string $name, string $region)

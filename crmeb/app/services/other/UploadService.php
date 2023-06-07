@@ -134,7 +134,7 @@ class UploadService
         /** @var SystemStorageServices $storageServices */
         $storageServices = app()->make(SystemStorageServices::class);
         $storageArr = $storageServices->cacheDriver()->remember('storage_list', function () use ($storageServices) {
-            return $storageServices->selectList([], 'domain')->toArray();
+            return $storageServices->selectList([], 'domain,type')->toArray();
         });
         foreach ($storageArr as $item) {
             if ($fileHost == $item['domain']) {
