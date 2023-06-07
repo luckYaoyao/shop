@@ -218,7 +218,19 @@ class Client extends BaseClient
      */
     public function listBuckets()
     {
-        $res = $this->request('https://' . $this->baseUrl . '/', 'GET', [], []);
+        $header = [
+            'Host' => $this->getRequestUrl($this->bucketName, $this->region),
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/', 'GET', [], []);
+        return $this->response($res);
+    }
+
+    public function headBucket(string $bucket, string $region)
+    {
+        $header = [
+            'Host' => $this->getRequestUrl($bucket, $region),
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/', 'HEAD', [], []);
         return $this->response($res);
     }
 
@@ -316,9 +328,18 @@ class Client extends BaseClient
      * @email 136327134@qq.com
      * @date 2023/5/18
      */
-    public function putBucketCors()
+    public function putBucketCors(string $bucket, string $region, array $data = [])
     {
-        return true;
+        $header = [
+            'Host' => $this->getRequestUrl($bucket, $region),
+        ];
+        $xml = $this->xmlBuild($data, 'CORSConfiguration', '');
+        $res = $this->request('https://' . $header['Host'] . '/', 'PUT', [
+            'bucket' => $bucket,
+            'body' => $xml
+        ], $header);
+
+        return $this->response($res);
     }
 
     /**
@@ -600,6 +621,37 @@ class Client extends BaseClient
         ]);
 
         return $this->requestClient($url, $method, $data, $result['headers'], $timeout);
+    }
+
+
+    /**
+     * 组合成xml
+     * @param array $data
+     * @param string $root
+     * @param string $itemKey
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2022/10/17
+     */
+    protected function xmlBuild(array $xmlAttr, string $root = 'xml', string $itemKey = 'item')
+    {
+        $xml = '<' . $root . '>';
+        $xml .= '<' . $itemKey . '>';
+
+        foreach ($xmlAttr as $kk => $vv) {
+            if (is_array($vv)) {
+                foreach ($vv as $v) {
+                    $xml .= '<' . $kk . '>' . $v . '</' . $kk . '>';
+                }
+            } else {
+                $xml .= '<' . $kk . '>' . $vv . '</' . $kk . '>';
+            }
+        }
+        $xml .= '</' . $itemKey . '>';
+        $xml .= '</' . $root . '>';
+
+        return $xml;
     }
 
 }
