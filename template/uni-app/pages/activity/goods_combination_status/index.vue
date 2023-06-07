@@ -829,7 +829,6 @@
 
 	.group-con .wrapper .list.result {
 		max-height: 240rpx;
-		overflow: hidden;
 	}
 
 	.group-con .wrapper .list.result.on {
