@@ -465,7 +465,7 @@ class StoreOrder extends AuthController
      */
     public function order_info($id)
     {
-        if (!$id || !($orderInfo = $this->services->get($id, [], ['refund']))) {
+        if (!$id || !($orderInfo = $this->services->get($id, [], ['refund','invoice']))) {
             return app('json')->fail(400118);
         }
         /** @var UserServices $services */
