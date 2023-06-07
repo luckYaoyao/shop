@@ -93,8 +93,8 @@ class AccessTokenServeService extends HttpService
     public function getConfig()
     {
         return [
-            'account' => $this->account,
-            'secret' => $this->secret
+            'access_key' => $this->account,
+            'secret_key' => $this->secret
         ];
     }
 
