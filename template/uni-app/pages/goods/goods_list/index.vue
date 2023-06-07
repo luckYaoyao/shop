@@ -40,7 +40,7 @@
 							v-if="item.activity && item.activity.type === '3'">{{$t(`拼团`)}}</span>
 					</view>
 					<view class='text' :class='is_switch==true?"":"on"'>
-						<view class='name line1'>{{item.store_name}}</view>
+						<view class='name line2'>{{item.store_name}}</view>
 						<view class='money font-color' :class='is_switch==true?"":"on"'>{{$t(`￥`)}}<text
 								class='num'>{{item.price}}</text></view>
 						<view class='vip acea-row row-between-wrapper' :class='is_switch==true?"":"on"'>

@@ -17,7 +17,7 @@
 					<span class="pictrue_log_big pictrue_log_class"
 						v-if="item.activity && item.activity.type === '3'">{{$t(`拼团`)}}</span>
 				</view>
-				<view class='name line1'>{{item.store_name}}</view>
+				<view class='name line2'>{{item.store_name}}</view>
 				<view class='money font-color'>{{$t(`￥`)}}<text class='num'>{{item.price}}</text></view>
 				<view class='vip-money' v-if="item.vip_price && item.vip_price > 0 && item.base">
 					{{$t(`￥`)}}{{item.vip_price}}
