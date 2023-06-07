@@ -85,6 +85,19 @@ export function productShowApi(data) {
 }
 
 /**
+ * 添加虚拟评论
+ * @param {*} data
+ * @returns
+ */
+export function saveFictitiousReply(data) {
+  return request({
+    url: 'product/reply/save_fictitious_reply',
+    method: 'post',
+    data,
+  });
+}
+
+/**
  * @description 商品属性 -- 批量下架
  * @param {Object} param data {Object} 传值对象
  */
