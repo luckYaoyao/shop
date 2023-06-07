@@ -1166,32 +1166,24 @@
 			},
 			cancelOrder() {
 				let self = this
-				uni.showModal({
-					title: this.$t(`提示`),
-					content: this.$t(`确认取消该订单`),
-					success: function(res) {
-						if (res.confirm) {
-							orderCancel(self.orderInfo.order_id)
-								.then((data) => {
-									// #ifndef MP
-									self.$util.Tips({
-										title: data.msg
-									}, {
-										tab: 3
-									})
-									// #endif
-									// #ifdef MP
-									self.$util.Tips({
-										title: data.msg
-									}, '/pages/goods/order_list/index');
-									// #endif
-								})
-								.catch(() => {
-									self.getOrderInfo();
-								});
-						} else if (res.cancel) {}
-					}
-				});
+				orderCancel(self.orderInfo.order_id)
+					.then((data) => {
+						// #ifndef MP
+						self.$util.Tips({
+							title: data.msg
+						}, {
+							tab: 3
+						})
+						// #endif
+						// #ifdef MP
+						self.$util.Tips({
+							title: data.msg
+						}, '/pages/goods/order_list/index');
+						// #endif
+					})
+					.catch(() => {
+						self.getOrderInfo();
+					});
 			},
 		}
 	}
