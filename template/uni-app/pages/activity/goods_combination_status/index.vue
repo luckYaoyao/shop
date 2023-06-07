@@ -29,7 +29,10 @@
 			<div class="tips font-num" v-else-if="pinkBool === 0">{{$t(`拼团中，还差`)}}{{ count }}{{$t(`人拼团成功`)}}</div>
 			<div class="list acea-row row-middle"
 				:class="[pinkBool === 1 || pinkBool === -1 ? 'result' : '', iShidden ? 'on' : '']">
-				<div class="pictrue"><img :src="pinkT.avatar" /></div>
+				<div class="pictrue"><img :src="pinkT.avatar" />
+					<view class="dumpling">{{$t(`团长`)}}</view>
+				</div>
+
 				<div class="acea-row row-middle" v-if="pinkAll.length > 0">
 					<div class="pictrue" v-for="(item, index) in pinkAll" :key="index"><img :src="item.avatar" /></div>
 				</div>
@@ -634,7 +637,8 @@
 					title: that.$t(`您的好友`) + that.userInfo.nickname + that.$t(`邀请您参团`) + that.storeCombination.title,
 					desc: that.storeCombination.title,
 					link: window.location.protocol + '//' + window.location.host +
-						'/pages/activity/goods_combination_status/index?id=' + that.pinkId + '&bargain=' + that.userInfo.uid +
+						'/pages/activity/goods_combination_status/index?id=' + that.pinkId + '&bargain=' + that
+						.userInfo.uid +
 						'&spid=' +
 						that.userInfo.uid,
 					imgUrl: that.storeCombination.image
@@ -838,6 +842,23 @@
 		margin: 0 0 29rpx 35rpx;
 	}
 
+	.group-con .wrapper .list .pictrue {
+		position: relative;
+	}
+
+	.group-con .wrapper .list .pictrue .dumpling {
+		width: 72rpx;
+		height: 32rpx;
+		font-size: 18rpx;
+		text-align: center;
+		color: #fff;
+		top: -12rpx;
+		right: -20rpx;
+		border-radius: 18rpx;
+		position: absolute;
+		background-color: var(--view-theme);
+	}
+
 	.group-con .wrapper .list .pictrue img,
 	.group-con .wrapper .list .pictrue image {
 		width: 100%;
@@ -930,6 +951,7 @@
 		height: 210rpx;
 		position: relative;
 	}
+
 
 	.group-con .group-recommend .list .item .pictrue img {
 		width: 100%;
