@@ -162,16 +162,11 @@ class Obs extends BaseUpload
         $app = $this->app();
         //创建桶
         try {
-            $res = $app->createBucket($name, $region, $acl);
+            $app->createBucket($name, $region, $acl);
         } catch (\Throwable $e) {
-            if (strstr('[curl] 6', $e->getMessage())) {
-                return $this->setError('COS:无效的区域!!');
-            } else if (strstr('Access Denied.', $e->getMessage())) {
-                return $this->setError('COS:无权访问');
-            }
             return $this->setError('COS:' . $e->getMessage());
         }
-        return $res;
+        return true;
     }
 
     public function getRegion()
@@ -193,8 +188,13 @@ class Obs extends BaseUpload
     {
         try {
             $res = $this->app()->GetBucketDomain($name, $region);
-            $domainRules = $res->toArray()['ListBucketCustomDomainsResult '];
-            return array_column($domainRules, 'Name');
+            if ($res) {
+                $domainRules = $res->toArray()['ListBucketCustomDomainsResult '];
+                return array_column($domainRules, 'DomainName');
+            } else {
+                return [];
+            }
+
         } catch (\Throwable $e) {
         }
         return [];
@@ -204,15 +204,10 @@ class Obs extends BaseUpload
     {
         $parseDomin = parse_url($domain);
         try {
-            $res = $this->app()->putBucketDomain($name, '', [
+            $this->app()->putBucketDomain($name, '', [
                 'domainname' => $parseDomin['host'],
             ]);
-            if (method_exists($res, 'toArray')) {
-                $res = $res->toArray();
-            }
-            if ($res['RequestId'] ?? null) {
-                return true;
-            }
+            return true;
         } catch (\Throwable $e) {
             if ($message = $this->setMessage($e->getMessage())) {
                 return $this->setError($message);

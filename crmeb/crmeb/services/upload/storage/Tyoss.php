@@ -135,7 +135,8 @@ class Tyoss extends BaseUpload
             'secretKey' => $this->secretKey,
             'region' => $this->storageRegion ?: 'oos-hazz',
             'bucket' => $this->storageName,
-            'uploadUrl' => $this->uploadUrl
+            'uploadUrl' => $this->uploadUrl,
+            'type' => 'ty'
         ]);
         return $this->handle;
     }
