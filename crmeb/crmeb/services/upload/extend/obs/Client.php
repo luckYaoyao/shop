@@ -252,10 +252,12 @@ class Client extends BaseClient
         $header = [
             'x-obs-acl' => $acl,
             'Host' => $this->getRequestUrl($bucket, $region),
+            "Content-Type" => "application/xml"
         ];
-
+        $xml = "<CreateBucketConfiguration><Location>{$region}</Location></CreateBucketConfiguration>";
         $res = $this->request('https://' . $header['Host'] . '/', 'PUT', [
-            'Location' => $region
+            'bucket' => $bucket,
+            'body' => $xml
         ], $header);
 
         return $this->response($res);
@@ -333,12 +335,14 @@ class Client extends BaseClient
      */
     public function putBucketCors(string $bucket, string $region, array $data = [])
     {
+        $xml = $this->xmlBuild($data, 'CORSConfiguration', 'CORSRule');
         $header = [
             'Host' => $this->getRequestUrl($bucket, $region),
-            'content-md5' => base64_encode(md5(json_encode($data), true))
+            'Content-Type' => 'application/xml',
+            'Content-Length' => strlen($xml),
+            'Content-MD5' => base64_encode(md5($xml, true))
         ];
-        $xml = $this->xmlBuild($data, 'CORSConfiguration', 'CORSRule');
-        $res = $this->request('https://' . $header['Host'] . '/cors ', 'PUT', [
+        $res = $this->request('https://' . $header['Host'] . '/cors', 'PUT', [
             'bucket' => $bucket,
             'body' => $xml
         ], $header);

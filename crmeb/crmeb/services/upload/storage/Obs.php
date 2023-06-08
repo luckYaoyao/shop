@@ -6,6 +6,7 @@ use crmeb\exceptions\AdminException;
 use crmeb\exceptions\UploadException;
 use crmeb\services\upload\extend\obs\Client as TyClient;
 use crmeb\services\upload\BaseUpload;
+use GuzzleHttp\Psr7\Utils;
 
 class Obs extends BaseUpload
 {
@@ -70,7 +71,8 @@ class Obs extends BaseUpload
             }
             $key = $this->saveFileName($fileHandle->getRealPath(), $fileHandle->getOriginalExtension());
 
-            $body = $fileHandle->getRealPath();
+            $body = fopen($fileHandle->getRealPath(), 'rb');
+            $body = (string)Utils::streamFor($body);
         } else {
             $key = $file;
             $body = $fileContent;
@@ -78,7 +80,7 @@ class Obs extends BaseUpload
         $key = $this->getUploadPath($key);
 
         try {
-            $uploadInfo = $this->app()->putObject($key, $body);
+            $uploadInfo = $this->app()->putObject($key, $body, 'application/octet-stream');
             $this->fileInfo->uploadInfo = $uploadInfo;
             $this->fileInfo->realName = $fileHandle->getOriginalName();
             $this->fileInfo->filePath = ($this->cdn ?: $this->uploadUrl) . '/' . $key;
@@ -205,17 +207,13 @@ class Obs extends BaseUpload
     {
         $parseDomin = parse_url($domain);
         try {
-            $this->app()->putBucketDomain($name, '', [
+            $this->app()->putBucketDomain($name, $region, [
                 'domainname' => $parseDomin['host'],
             ]);
             return true;
         } catch (\Throwable $e) {
-            if ($message = $this->setMessage($e->getMessage())) {
-                return $this->setError($message);
-            }
             return $this->setError($e->getMessage());
         }
-        return false;
     }
 
     public function setBucketCors(string $name, string $region)

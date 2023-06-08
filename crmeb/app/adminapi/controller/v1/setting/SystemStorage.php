@@ -166,7 +166,10 @@ class SystemStorage extends AuthController
         //设置跨域规则
         try {
             $upload = UploadService::init($info->type);
-            $upload->setBucketCors($info->name, $info->region);
+            $res = $upload->setBucketCors($info->name, $info->region);
+            if (false === $res) {
+                return app('json')->fail($upload->getError());
+            }
         } catch (\Throwable $e) {
         }
 
