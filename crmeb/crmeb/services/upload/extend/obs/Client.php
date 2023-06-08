@@ -220,7 +220,7 @@ class Client extends BaseClient
     public function listBuckets()
     {
         $header = [
-            'Host' => $this->getRequestUrl($this->bucketName, $this->region),
+            'Host' => $this->getRequestUrl('', $this->region),
         ];
         $res = $this->request('https://' . $header['Host'] . '/', 'GET', [], []);
         return $this->response($res);
@@ -413,19 +413,22 @@ class Client extends BaseClient
      * @param string $bucket
      * @param string $region
      * @return string
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/5/18
+     *
+     * @date 2023/06/08
+     * @author yyw
      */
-    protected function getRequestUrl(string $bucket, string $region)
+    protected function getRequestUrl(string $bucket = '', string $region = '')
     {
         if ($this->type == 'hw') {
-            return $bucket . '.obs.' . $region . '.myhuaweicloud.com';  // 华为
+            $url = '.myhuaweicloud.com';  // 华为
         } else {
-            return $bucket . '.obs.' . $region . '.ctyun.cn';  // 天翼
+            $url = $region . '.ctyun.cn';  // 天翼
         }
-
-
+        if ($bucket) {
+            return $bucket . '.obs.' . $region . $url;
+        } else {
+            return 'obs.' . $region . $url;
+        }
     }
 
     /**

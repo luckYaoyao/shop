@@ -148,7 +148,7 @@ class Obs extends BaseUpload
         try {
             $this->storageRegion = $region;
             $res = $this->app()->listBuckets();
-            return $res['Buckets'] ?? [];
+            return $res['Buckets']['Bucket'] ?? [];
         } catch (\Throwable $e) {
             return [];
         }

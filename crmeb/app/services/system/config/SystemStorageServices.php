@@ -373,11 +373,6 @@ class SystemStorageServices extends BaseServices
             case 7:// cos 天翼云
                 $upload = UploadService::init($type);
                 $list = $upload->listbuckets();
-                if (!empty($list['Name'])) {
-                    $newList = $list;
-                    $list = [];
-                    $list[] = $newList;
-                }
                 $config = $this->getStorageConfig($type);
                 foreach ($list as $item) {
                     if (!$this->dao->count(['name' => $item['Name'], 'access_key' => $config['accessKey']])) {
@@ -388,7 +383,7 @@ class SystemStorageServices extends BaseServices
                             'region' => $item['Location'],
                             'acl' => 'public-read',
                             'status' => 0,
-                            'domain' => sys_config('tengxun_appid') ? $this->getDomain($type, $item['Name'], $item['Location']) : '',
+                            'domain' => $this->getDomain($type, $item['Name'], $item['Location']),
                             'is_delete' => 0,
                             'add_time' => strtotime($item['CreationDate']),
                             'update_time' => time()
