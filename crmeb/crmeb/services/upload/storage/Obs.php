@@ -3,6 +3,7 @@
 namespace crmeb\services\upload\storage;
 
 use crmeb\exceptions\AdminException;
+use crmeb\exceptions\UploadException;
 use crmeb\services\upload\extend\obs\Client as TyClient;
 use crmeb\services\upload\BaseUpload;
 
@@ -220,12 +221,12 @@ class Obs extends BaseUpload
     public function setBucketCors(string $name, string $region)
     {
         try {
-            $res = $this->app()->PutBucketCors($name, $region, [
-                'AllowedHeaders' => ['*'],
-                'AllowedMethods' => ['PUT', 'GET', 'POST', 'DELETE', 'HEAD'],
-                'AllowedOrigins' => ['*'],
-                'ExposeHeaders' => ['ETag', 'Content-Length', 'x-cos-request-id'],
-                'MaxAgeSeconds' => 12
+            $this->app()->PutBucketCors($name, $region, [
+                'AllowedHeader' => ['*'],
+                'AllowedMethod' => ['PUT', 'GET', 'POST', 'DELETE', 'HEAD'],
+                'AllowedOrigin' => ['*'],
+                'ExposeHeader' => ['ETag', 'Content-Length', 'x-cos-request-id'],
+                'MaxAgeSeconds' => 100
             ]);
             return true;
         } catch (\Throwable $e) {

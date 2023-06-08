@@ -255,7 +255,7 @@ class Client extends BaseClient
         ];
 
         $res = $this->request('https://' . $header['Host'] . '/', 'PUT', [
-            'bucket' => $bucket
+            'Location' => $region
         ], $header);
 
         return $this->response($res);
@@ -335,9 +335,10 @@ class Client extends BaseClient
     {
         $header = [
             'Host' => $this->getRequestUrl($bucket, $region),
+            'content-md5' => base64_encode(md5(json_encode($data), true))
         ];
-        $xml = $this->xmlBuild($data, 'CORSConfiguration', '');
-        $res = $this->request('https://' . $header['Host'] . '/', 'PUT', [
+        $xml = $this->xmlBuild($data, 'CORSConfiguration', 'CORSRule');
+        $res = $this->request('https://' . $header['Host'] . '/cors ', 'PUT', [
             'bucket' => $bucket,
             'body' => $xml
         ], $header);
