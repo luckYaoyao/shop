@@ -368,6 +368,34 @@ class SystemStorageServices extends BaseServices
                     }
                 }
                 break;
+            case 5:// cos 京东云
+            case 6:// cos 华为云
+            case 7:// cos 天翼云
+                $upload = UploadService::init($type);
+                $list = $upload->listbuckets();
+                if (!empty($list['Name'])) {
+                    $newList = $list;
+                    $list = [];
+                    $list[] = $newList;
+                }
+                $config = $this->getStorageConfig($type);
+                foreach ($list as $item) {
+                    if (!$this->dao->count(['name' => $item['Name'], 'access_key' => $config['accessKey']])) {
+                        $data[] = [
+                            'type' => $type,
+                            'access_key' => $config['accessKey'],
+                            'name' => $item['Name'],
+                            'region' => $item['Location'],
+                            'acl' => 'public-read',
+                            'status' => 0,
+                            'domain' => sys_config('tengxun_appid') ? $this->getDomain($type, $item['Name'], $item['Location']) : '',
+                            'is_delete' => 0,
+                            'add_time' => strtotime($item['CreationDate']),
+                            'update_time' => time()
+                        ];
+                    }
+                }
+                break;
         }
         if ($data) {
             $this->dao->saveAll($data);
@@ -412,6 +440,15 @@ class SystemStorageServices extends BaseServices
                 break;
             case 4:// cos 腾讯云
                 $domainName = 'https://' . $name . ($appid ? '-' . $appid : '') . '.cos.' . $reagion . '.myqcloud.com';
+                break;
+            case 5:// cos 京东云
+                $domainName = 'https://' . $name . '.cos.' . $reagion . '.jdcloud-oss.com';
+                break;
+            case 6:// cos 华为云
+                $domainName = 'https://' . $name . '.cos.' . $reagion . '.myhuaweicloud.com';
+                break;
+            case 7:// cos 天翼云
+                $domainName = 'https://' . $name . '.cos.' . $reagion . '.ctyun.cn';
                 break;
         }
         return $domainName;

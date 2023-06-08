@@ -147,7 +147,7 @@ class Jdoss extends BaseUpload
                 'Key' => $key,
                 'SourceFile' => $fileHandle->getRealPath()
             ]);
-            if (!isset($uploadInfo['info']['url'])) {
+            if (!isset($uploadInfo['ObjectURL'])) {
                 return $this->setError('Upload failure');
             }
             $this->fileInfo->uploadInfo = $uploadInfo;
@@ -157,7 +157,7 @@ class Jdoss extends BaseUpload
             $this->fileInfo->filePathWater = $this->water($this->fileInfo->filePath);
             $this->authThumb && $this->thumb($this->fileInfo->filePath);
             return $this->fileInfo;
-        } catch (UploadException $e) {
+        } catch (\Throwable $e) {
             return $this->setError($e->getMessage());
         }
     }
@@ -185,7 +185,7 @@ class Jdoss extends BaseUpload
             $this->fileInfo->filePathWater = $this->water($this->fileInfo->filePath);
             $this->thumb($this->fileInfo->filePath);
             return $this->fileInfo;
-        } catch (UploadException $e) {
+        } catch (\Throwable $e) {
             return $this->setError($e->getMessage());
         }
     }
@@ -207,7 +207,7 @@ class Jdoss extends BaseUpload
     {
         try {
             $res = $this->app()->listBuckets();
-            return $res['Buckets']['Bucket'] ?? [];
+            return $res['ListAllMyBucketsResult']['Buckets'] ?? [];
         } catch (\Throwable $e) {
             return [];
         }
@@ -290,7 +290,7 @@ class Jdoss extends BaseUpload
     {
         try {
             $this->storageRegion = $region;
-            $res = $this->app()->getBucketWebsite([
+            $res = $this->app()->getBucketPolicy([
                 'Bucket' => $name
             ]);
             return $res['DomainName'] ?? [];
@@ -428,34 +428,5 @@ class Jdoss extends BaseUpload
             }
         }
         return $waterPath;
-    }
-
-    public function setError(?string $error = null)
-    {
-        $this->error = $error ?: '未知错误';
-        if (env('APP_DEBUG')) {
-            throw new UploadException($this->xmlToArr($this->error));
-        } else {
-            return false;
-        }
-    }
-
-    function xmlToArr($errorXml)
-    {
-
-        $pattern = '/<statusCode>(\d+)<\/statusCode><Code>(.*?)<\/Code><Message>(.*?)<\/Message><Resource>(.*?)<\/Resource><RequestId>(.*?)<\/RequestId>/';
-
-        preg_match($pattern, $errorXml, $matches);
-
-        $error = [
-            'statusCode' => $matches[1],
-            'Code' => $matches[2],
-            'Message' => $matches[3],
-            'Resource' => $matches[4],
-            'RequestId' => $matches[5]
-        ];
-
-        return $error;
-
     }
 }

@@ -148,7 +148,7 @@ class Obs extends BaseUpload
         try {
             $this->storageRegion = $region;
             $res = $this->app()->listBuckets();
-            return $res['Buckets']['Bucket'] ?? [];
+            return $res['Buckets'] ?? [];
         } catch (\Throwable $e) {
             return [];
         }
@@ -169,7 +169,7 @@ class Obs extends BaseUpload
             $data = [
                 'Statement' => [
                     'Sid' => '公共读' . $name,
-                    'Effect' => 'Allow1',
+                    'Effect' => 'Allow',
                     'Principal' => [
                         'ID' => ['*']
                     ],
