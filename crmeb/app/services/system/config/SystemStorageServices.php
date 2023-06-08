@@ -189,7 +189,10 @@ class SystemStorageServices extends BaseServices
 
         try {
             $upload = UploadService::init($storageInfo->type);
-            $upload->deleteBucket($storageInfo->name, $storageInfo->region);
+            $res = $upload->deleteBucket($storageInfo->name, $storageInfo->region);
+            if (false === $res) {
+                throw new AdminException($upload->getError());
+            }
         } catch (\Throwable $e) {
             throw new AdminException($e->getMessage());
         }
