@@ -372,10 +372,37 @@ class SystemStorageServices extends BaseServices
                 }
                 break;
             case 5:// cos 京东云
+                $upload = UploadService::init($type);
+                $res = $upload->listbuckets();
+                $list = $res['Buckets'];
+                $location = explode('.', $res['@metadata']['effectiveUri'])[1] ?? 'cn-north-1';
+                $config = $this->getStorageConfig($type);
+                foreach ($list as $item) {
+                    if (!$this->dao->count(['name' => $item['Name'], 'access_key' => $config['accessKey']])) {
+                        $data[] = [
+                            'type' => $type,
+                            'access_key' => $config['accessKey'],
+                            'name' => $item['Name'],
+                            'region' => $location,
+                            'acl' => 'public-read',
+                            'status' => 0,
+                            'domain' => $this->getDomain($type, $item['Name'], $location),
+                            'is_delete' => 0,
+                            'add_time' => time(),
+                            'update_time' => time()
+                        ];
+                    }
+                }
+                break;
             case 6:// cos 华为云
             case 7:// cos 天翼云
                 $upload = UploadService::init($type);
                 $list = $upload->listbuckets();
+                if (!empty($list['Name'])) {
+                    $newList = $list;
+                    $list = [];
+                    $list[] = $newList;
+                }
                 $config = $this->getStorageConfig($type);
                 foreach ($list as $item) {
                     if (!$this->dao->count(['name' => $item['Name'], 'access_key' => $config['accessKey']])) {

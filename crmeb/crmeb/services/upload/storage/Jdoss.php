@@ -207,7 +207,7 @@ class Jdoss extends BaseUpload
     {
         try {
             $res = $this->app()->listBuckets();
-            return $res['ListAllMyBucketsResult']['Buckets'] ?? [];
+            return $res ?? [];
         } catch (\Throwable $e) {
             return [];
         }
