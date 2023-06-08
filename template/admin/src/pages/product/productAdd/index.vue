@@ -2081,7 +2081,7 @@ export default {
       });
     },
     // 初始化数据展示
-    infoData(data) {
+    infoData(data, isCopy) {
       let cate_id = data.cate_id.map(Number);
       let label_id = data.label_id.map(Number);
       this.attrs = data.items || [];
@@ -2108,7 +2108,7 @@ export default {
         this.oneFormValidate = [data.attr];
       }
       this.formValidate.header = [];
-      this.generate(0);
+      if (!isCopy) this.generate(0);
       // this.manyFormValidate = data.attrs;
       this.$set(this, 'manyFormValidate', data.attrs);
       this.spec_type = data.spec_type;
@@ -2139,7 +2139,7 @@ export default {
     //关闭淘宝弹窗并生成数据；
     onClose(data) {
       this.modals = false;
-      this.infoData(data);
+      this.infoData(data, 1);
     },
 
     checkMove(evt) {
