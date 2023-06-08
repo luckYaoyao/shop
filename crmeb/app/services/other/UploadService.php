@@ -95,6 +95,7 @@ class UploadService
             $config['uploadUrl'] = $res['domain'];
             $config['storageName'] = $res['name'];
             $config['storageRegion'] = $res['region'];
+            $config['cdn'] = $res['cdn'];
         }
 
         $thumb = SystemConfigService::more(['thumb_big_height', 'thumb_big_width', 'thumb_mid_height', 'thumb_mid_width', 'thumb_small_height', 'thumb_small_width',]);

@@ -425,11 +425,11 @@ class SystemStorageServices extends BaseServices
      */
     public function getConfig(int $type)
     {
-        $res = ['name' => '', 'region' => '', 'domain' => ''];
+        $res = ['name' => '', 'region' => '', 'domain' => '', 'cdn' => ''];
         try {
             $config = $this->dao->get(['type' => $type, 'status' => 1, 'is_delete' => 0]);
             if ($config) {
-                return ['name' => $config->name, 'region' => $config->region, 'domain' => $config->domain];
+                return ['name' => $config->name, 'region' => $config->region, 'domain' => $config->domain, 'cdn' => $config->cdn];
             }
         } catch (\Throwable $e) {
         }
@@ -448,6 +448,7 @@ class SystemStorageServices extends BaseServices
         $domain = $this->dao->value(['id' => $id], 'domain');
         $rule = [
             FormBuilder::input('domain', '空间域名', $domain),
+            FormBuilder::input('cdn', 'cdn域名', $domain),
         ];
         return create_form('修改空间域名', $rule, '/system/config/storage/domain/' . $id);
     }
@@ -488,7 +489,11 @@ class SystemStorageServices extends BaseServices
                 $resDomain = $upload->getDomianInfo($domain);
                 $info->cname = $resDomain['cname'] ?? '';
             }
-            return $info->save();
+            $info->save();
+        }
+        if ($info->cdn != $data['cdn']) {
+            $info->cdn = $data['cdn'];
+            $info->save();
         }
 
         $this->cacheDriver()->clear();

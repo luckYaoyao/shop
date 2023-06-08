@@ -175,10 +175,8 @@ class Client extends BaseClient
      */
     public function putObject(string $key, $body, string $contentType = 'image/jpeg')
     {
-        $url = $this->uploadUrl ?: $this->getRequestUrl($this->bucketName, $this->region);
-
         $header = [
-            'Host' => $url,
+            'Host' => $this->getRequestUrl($this->bucketName, $this->region),
             'Content-Type' => $contentType,
             'Content-Length' => strlen($body),
         ];
