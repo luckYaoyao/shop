@@ -277,8 +277,7 @@ class Jdoss extends BaseUpload
         try {
             $this->storageRegion = $region;
             $this->app()->deleteBucket([
-                'bucketName' => $name, // REQUIRED
-                'forceDelete' => false
+                'Bucket' => $name, // REQUIRED
             ]);
             return true;
         } catch (AcmException $e) {
