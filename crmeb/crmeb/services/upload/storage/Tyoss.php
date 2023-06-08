@@ -5,6 +5,7 @@ namespace crmeb\services\upload\storage;
 use crmeb\exceptions\AdminException;
 use crmeb\services\upload\extend\obs\Client as TyClient;
 use crmeb\services\upload\BaseUpload;
+use GuzzleHttp\Psr7\Utils;
 
 class Tyoss extends BaseUpload
 {
@@ -69,7 +70,8 @@ class Tyoss extends BaseUpload
             }
             $key = $this->saveFileName($fileHandle->getRealPath(), $fileHandle->getOriginalExtension());
 
-            $body = $fileHandle->getRealPath();
+            $body = fopen($fileHandle->getRealPath(), 'rb');
+            $body = (string)Utils::streamFor($body);
         } else {
             $key = $file;
             $body = $fileContent;
@@ -77,7 +79,7 @@ class Tyoss extends BaseUpload
         $key = $this->getUploadPath($key);
 
         try {
-            $uploadInfo = $this->app()->putObject($key, $body);
+            $uploadInfo = $this->app()->putObject($key, $body, 'application/octet-stream');
             $this->fileInfo->uploadInfo = $uploadInfo;
             $this->fileInfo->realName = $fileHandle->getOriginalName();
             $this->fileInfo->filePath = ($this->cdn ?: $this->uploadUrl) . '/' . $key;
@@ -133,7 +135,7 @@ class Tyoss extends BaseUpload
         $this->handle = new TyClient([
             'accessKey' => $this->accessKey,
             'secretKey' => $this->secretKey,
-            'region' => $this->storageRegion ?: 'oos-hazz',
+            'region' => $this->storageRegion ?: 'cn-qhxn1',
             'bucket' => $this->storageName,
             'uploadUrl' => $this->uploadUrl,
             'type' => 'ty'
@@ -141,10 +143,9 @@ class Tyoss extends BaseUpload
         return $this->handle;
     }
 
-    public function listbuckets(string $region, bool $line = false, bool $shared = false)
+    public function listbuckets(string $region = null, bool $line = false, bool $shared = false)
     {
         try {
-            $this->storageRegion = $region;
             $res = $this->app()->listBuckets();
             return $res['Buckets']['Bucket'] ?? [];
         } catch (\Throwable $e) {
@@ -163,79 +164,156 @@ class Tyoss extends BaseUpload
         $app = $this->app();
         //创建桶
         try {
-            $res = $app->createBucket($name, $region, $acl);
+            $app->createBucket($name, $region, $acl);
+            $data = [
+                'Statement' => [
+                    'Sid' => '公共读' . $name,
+                    'Effect' => 'Allow',
+                    'Principal' => [
+                        'ID' => ['*']
+                    ],
+                    'Action' => ['HeadBucket', 'GetBucketLocation', 'ListBucketVersions', 'GetObject', 'RestoreObject', 'GetObjectVersion'],
+                    'Resource' => [$name, $name . '/*']
+                ]
+            ];
+
+            $app->putPolicy($name, $region, $data);
         } catch (\Throwable $e) {
             return $this->setError('COS:' . $e->getMessage());
         }
-        return $res;
+        return true;
     }
 
     public function getRegion()
     {
         return [
             [
-                'value' => 'oos-hazz',
+                'value' => 'cn-gz1',
+                'label' => '贵州'
+            ],
+            [
+                'value' => 'cn-fz1',
+                'label' => '福州'
+            ],
+            [
+                'value' => 'cn-hz1',
+                'label' => '杭州'
+            ],
+            [
+                'value' => 'cn-sz1',
+                'label' => '深圳'
+            ],
+            [
+                'value' => 'cn-gdgz1',
+                'label' => '广州'
+            ],
+            [
+                'value' => 'cn-jssz1',
+                'label' => '苏州'
+            ],
+            [
+                'value' => 'cn-sh1',
+                'label' => '上海'
+            ],
+            [
+                'value' => 'cn-ahwh1',
+                'label' => '芜湖'
+            ],
+            [
+                'value' => 'cn-bj1',
+                'label' => '北京'
+            ],
+            [
+                'value' => 'cn-sccd1',
+                'label' => '成都'
+            ],
+            [
+                'value' => 'cn-hazz1',
                 'label' => '郑州'
             ],
             [
-                'value' => 'oos-lnsy',
-                'label' => '沈阳'
+                'value' => 'cn-hncs1',
+                'label' => '长沙'
             ],
             [
-                'value' => 'oos-sccd',
-                'label' => '四川成都'
+                'value' => 'cn-gxnn1',
+                'label' => '南宁'
             ],
             [
-                'value' => 'oos-xjwlmq',
-                'label' => '乌鲁木齐'
+                'value' => 'cn-jxnc1',
+                'label' => '南昌'
             ],
             [
-                'value' => 'oos-xjwlmq',
-                'label' => '乌鲁木齐'
-            ],
-            [
-                'value' => 'oos-gslz',
-                'label' => '甘肃兰州'
-            ],
-            [
-                'value' => 'oos-sdqd',
-                'label' => '山东青岛'
-            ],
-            [
-                'value' => 'oos-gzgy',
-                'label' => '贵州贵阳'
-            ],
-            [
-                'value' => 'oos-hbwh',
-                'label' => '湖北武汉'
-            ],
-            [
-                'value' => 'oos-xzls',
-                'label' => '西藏拉萨'
-            ],
-            [
-                'value' => 'oos-hbwh',
-                'label' => '湖北武汉'
-            ],
-            [
-                'value' => 'oos-ahwh',
-                'label' => '安徽芜湖'
-            ],
-            [
-                'value' => 'oos-gdsz',
-                'label' => '广东深圳'
-            ],
-            [
-                'value' => 'oos-jssz',
-                'label' => '江苏苏州'
-            ],
-            [
-                'value' => 'oos-sh2',
-                'label' => '上海2'
+                'value' => 'cn-sdqd1',
+                'label' => '青岛'
             ],
             [
                 'value' => 'cn-snxy1',
-                'label' => '西安2'
+                'label' => '咸阳'
+            ],
+            [
+                'value' => 'cn-xjcj1',
+                'label' => '新疆'
+            ],
+            [
+                'value' => 'cn-ynkm1',
+                'label' => '昆明'
+            ],
+            [
+                'value' => 'cn-hihk1',
+                'label' => '海口'
+            ],
+            [
+                'value' => 'cn-hbwh1',
+                'label' => '武汉'
+            ],
+            [
+                'value' => 'cn-cq1',
+                'label' => '重庆'
+            ],
+            [
+                'value' => 'cn-qhxn1',
+                'label' => '西宁'
+            ],
+            [
+                'value' => 'cn-gslz1',
+                'label' => '兰州'
+            ],
+            [
+                'value' => 'cn-nxyc1',
+                'label' => '银川'
+            ],
+            [
+                'value' => 'cn-sxty1',
+                'label' => '太原'
+            ],
+            [
+                'value' => 'cn-hesjz1',
+                'label' => '石家庄'
+            ],
+            [
+                'value' => 'cn-tj1',
+                'label' => '天津'
+            ],
+            [
+                'value' => 'cn-jlcc1',
+                'label' => '长春'
+            ],
+            [
+                'value' => 'cn-hlhrb1',
+                'label' => '哈尔滨'
+            ],
+            [
+                'value' => 'cn-nmhh1',
+                'label' => '内蒙古'
+            ],
+            [
+                'value' => 'cn-lnsy1',
+                'label' => '沈阳'
+            ],
+            [
+                'value' => 'cn-north1',
+                'label' => '华北'
             ]
         ];
     }
@@ -250,20 +328,44 @@ class Tyoss extends BaseUpload
         }
     }
 
+    public function getDomian($name, $region)
+    {
+        try {
+            $res = $this->app()->GetBucketDomain($name, $region);
+            if ($res) {
+                $domainRules = $res->toArray()['ListBucketCustomDomainsResult'];
+                return array_column($domainRules, 'DomainName');
+            } else {
+                return [];
+            }
+
+        } catch (\Throwable $e) {
+        }
+        return [];
+    }
+
     public function bindDomian(string $name, string $domain, string $region = null)
     {
-        // TODO: Implement bindDomian() method.
+        $parseDomin = parse_url($domain);
+        try {
+            $this->app()->putBucketDomain($name, $region, [
+                'domainname' => $parseDomin['host'],
+            ]);
+            return true;
+        } catch (\Throwable $e) {
+            return $this->setError($e->getMessage());
+        }
     }
 
     public function setBucketCors(string $name, string $region)
     {
         try {
-            $res = $this->app()->PutBucketCors($name, $region, [
+            $this->app()->PutBucketCors($name, $region, [
                 'AllowedHeaders' => ['*'],
                 'AllowedMethods' => ['PUT', 'GET', 'POST', 'DELETE', 'HEAD'],
                 'AllowedOrigins' => ['*'],
                 'ExposeHeaders' => ['ETag', 'Content-Length', 'x-cos-request-id'],
-                'MaxAgeSeconds' => 12
+                'MaxAgeSeconds' => 100
             ]);
             return true;
         } catch (\Throwable $e) {

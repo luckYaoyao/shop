@@ -136,17 +136,16 @@ class Obs extends BaseUpload
         $this->handle = new TyClient([
             'accessKey' => $this->accessKey,
             'secretKey' => $this->secretKey,
-            'region' => $this->storageRegion ?: 'oos-hazz',
+            'region' => $this->storageRegion ?: 'cn-north-1',
             'bucket' => $this->storageName,
             'uploadUrl' => $this->uploadUrl
         ]);
         return $this->handle;
     }
 
-    public function listbuckets(string $region, bool $line = false, bool $shared = false)
+    public function listbuckets(string $region = null, bool $line = false, bool $shared = false)
     {
         try {
-            $this->storageRegion = $region;
             $res = $this->app()->listBuckets();
             return $res['Buckets']['Bucket'] ?? [];
         } catch (\Throwable $e) {
@@ -205,7 +204,7 @@ class Obs extends BaseUpload
         try {
             $res = $this->app()->GetBucketDomain($name, $region);
             if ($res) {
-                $domainRules = $res->toArray()['ListBucketCustomDomainsResult '];
+                $domainRules = $res->toArray()['ListBucketCustomDomainsResult'];
                 return array_column($domainRules, 'DomainName');
             } else {
                 return [];
