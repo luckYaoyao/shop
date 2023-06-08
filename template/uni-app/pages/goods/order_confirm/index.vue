@@ -10,7 +10,18 @@
 					<view class="item font-num" :class="shippingType == 1 ? 'on' : 'on2'" @tap="addressType(1)"
 						v-if='store_self_mention && is_shipping'></view>
 				</view>
+				<view class="add-title acea-row row-between-wrapper" v-if="!store_self_mention || !is_shipping">
+					<view class="acea-row row-middle">
+						<view class="icon" :class="shippingType==1?'orange':'red'">
+							{{shippingType==0?'商城配送':'门店自提'}}
+						</view>
+						<view class="text add-text line1" v-if="shippingType==0">{{$t(`由平台为您提供配送服务`)}}</view>
+						<view class="text add-text line1" v-if="shippingType==1">{{$t(`线上下单，到店自提`)}}</view>
+					</view>
+					<view class="text"></view>
+				</view>
 				<view class='address acea-row row-between-wrapper' @tap='onAddress' v-if='shippingType == 0'>
+
 					<view class='addressCon' v-if="addressInfo.real_name || ''">
 						<view class='name'>{{addressInfo.real_name || ''}}
 							<text class='phone'>{{addressInfo.phone || ''}}</text>
@@ -1517,6 +1528,53 @@
 		background: linear-gradient(to bottom, var(--view-theme) 0%, #f5f5f5 100%);
 		padding-top: 100rpx;
 		margin-bottom: 12rpx;
+
+		.add-title {
+			height: 72rpx;
+			margin: 0 26rpx;
+			border-bottom: 1px solid #eee;
+			background-color: #fff;
+			width: 710rpx;
+			margin: 0 auto;
+			padding: 0 26rpx;
+			border-radius: 12rpx 12rpx 0 0;
+
+			.icon {
+				height: 32rpx;
+				background: #1890FF;
+				border-radius: 4rpx;
+				font-size: 20rpx;
+				font-weight: 400;
+				color: #FFFFFF;
+				text-align: center;
+				line-height: 32rpx;
+				padding: 0 6rpx;
+
+				&.orange {
+					background: #FE960F;
+				}
+
+				&.red {
+					background: #E93323;
+				}
+			}
+
+			.add-text {
+				margin-left: 14rpx;
+				width: 360rpx;
+			}
+
+			.text {
+				font-size: 24rpx;
+				font-weight: 400;
+				color: #999999;
+
+				.icon-jiantou {
+					display: inline-block;
+					font-size: 20rpx;
+				}
+			}
+		}
 	}
 
 	.order-submission .allAddress .nav {
