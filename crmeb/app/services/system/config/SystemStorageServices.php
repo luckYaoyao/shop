@@ -437,13 +437,13 @@ class SystemStorageServices extends BaseServices
                 $domainName = 'https://' . $name . ($appid ? '-' . $appid : '') . '.cos.' . $reagion . '.myqcloud.com';
                 break;
             case 5:// cos 京东云
-                $domainName = 'https://' . $name . '.cos.' . $reagion . '.jdcloud-oss.com';
+                $domainName = 'https://' . $name . '.s3.' . $reagion . '.jdcloud-oss.com';
                 break;
             case 6:// cos 华为云
-                $domainName = 'https://' . $name . '.cos.' . $reagion . '.myhuaweicloud.com';
+                $domainName = 'https://' . $name . '.obs.' . $reagion . '.myhuaweicloud.com';
                 break;
             case 7:// cos 天翼云
-                $domainName = 'https://' . $name . '.cos.' . $reagion . '.ctyun.cn';
+                $domainName = 'https://' . $name . '.obs.' . $reagion . '.ctyun.cn';
                 break;
         }
         return $domainName;

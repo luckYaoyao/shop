@@ -361,10 +361,10 @@ class Tyoss extends BaseUpload
     {
         try {
             $this->app()->PutBucketCors($name, $region, [
-                'AllowedHeaders' => ['*'],
-                'AllowedMethods' => ['PUT', 'GET', 'POST', 'DELETE', 'HEAD'],
-                'AllowedOrigins' => ['*'],
-                'ExposeHeaders' => ['ETag', 'Content-Length', 'x-cos-request-id'],
+                'AllowedHeader' => ['*'],
+                'AllowedMethod' => ['PUT', 'GET', 'POST', 'DELETE', 'HEAD'],
+                'AllowedOrigin' => ['*'],
+                'ExposeHeader' => ['ETag', 'Content-Length', 'x-cos-request-id'],
                 'MaxAgeSeconds' => 100
             ]);
             return true;
@@ -372,7 +372,6 @@ class Tyoss extends BaseUpload
             return $this->setError($e->getMessage());
         }
     }
-
     public function getTempKeys()
     {
         // TODO: Implement getTempKeys() method.

@@ -422,7 +422,7 @@ class Client extends BaseClient
         if ($this->type == 'hw') {
             $url = '.myhuaweicloud.com';  // 华为
         } else {
-            $url = $region . '.ctyun.cn';  // 天翼
+            $url = '.ctyun.cn';  // 天翼
         }
         if ($bucket) {
             return $bucket . '.obs.' . $region . $url;
