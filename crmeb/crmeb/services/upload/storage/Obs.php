@@ -6,6 +6,7 @@ use crmeb\exceptions\AdminException;
 use crmeb\exceptions\UploadException;
 use crmeb\services\upload\extend\obs\Client as TyClient;
 use crmeb\services\upload\BaseUpload;
+use GuzzleHttp\Psr7\Utils;
 
 class Obs extends BaseUpload
 {
@@ -70,7 +71,8 @@ class Obs extends BaseUpload
             }
             $key = $this->saveFileName($fileHandle->getRealPath(), $fileHandle->getOriginalExtension());
 
-            $body = $fileHandle->getRealPath();
+            $body = fopen($fileHandle->getRealPath(), 'rb');
+            $body = (string)Utils::streamFor($body);
         } else {
             $key = $file;
             $body = $fileContent;
@@ -78,7 +80,7 @@ class Obs extends BaseUpload
         $key = $this->getUploadPath($key);
 
         try {
-            $uploadInfo = $this->app()->putObject($key, $body);
+            $uploadInfo = $this->app()->putObject($key, $body, 'application/octet-stream');
             $this->fileInfo->uploadInfo = $uploadInfo;
             $this->fileInfo->realName = $fileHandle->getOriginalName();
             $this->fileInfo->filePath = ($this->cdn ?: $this->uploadUrl) . '/' . $key;
@@ -134,17 +136,16 @@ class Obs extends BaseUpload
         $this->handle = new TyClient([
             'accessKey' => $this->accessKey,
             'secretKey' => $this->secretKey,
-            'region' => $this->storageRegion ?: 'oos-hazz',
+            'region' => $this->storageRegion ?: 'cn-north-1',
             'bucket' => $this->storageName,
             'uploadUrl' => $this->uploadUrl
         ]);
         return $this->handle;
     }
 
-    public function listbuckets(string $region, bool $line = false, bool $shared = false)
+    public function listbuckets(string $region = null, bool $line = false, bool $shared = false)
     {
         try {
-            $this->storageRegion = $region;
             $res = $this->app()->listBuckets();
             return $res['Buckets']['Bucket'] ?? [];
         } catch (\Throwable $e) {
@@ -164,6 +165,19 @@ class Obs extends BaseUpload
         //创建桶
         try {
             $app->createBucket($name, $region, $acl);
+            $data = [
+                'Statement' => [
+                    'Sid' => '公共读' . $name,
+                    'Effect' => 'Allow',
+                    'Principal' => [
+                        'ID' => ['*']
+                    ],
+                    'Action' => ['HeadBucket', 'GetBucketLocation', 'ListBucketVersions', 'GetObject', 'RestoreObject', 'GetObjectVersion'],
+                    'Resource' => [$name, $name . '/*']
+                ]
+            ];
+
+            $app->putPolicy($name, $region, $data);
         } catch (\Throwable $e) {
             return $this->setError('COS:' . $e->getMessage());
         }
@@ -190,7 +204,7 @@ class Obs extends BaseUpload
         try {
             $res = $this->app()->GetBucketDomain($name, $region);
             if ($res) {
-                $domainRules = $res->toArray()['ListBucketCustomDomainsResult '];
+                $domainRules = $res->toArray()['ListBucketCustomDomainsResult'];
                 return array_column($domainRules, 'DomainName');
             } else {
                 return [];
@@ -205,17 +219,13 @@ class Obs extends BaseUpload
     {
         $parseDomin = parse_url($domain);
         try {
-            $this->app()->putBucketDomain($name, '', [
+            $this->app()->putBucketDomain($name, $region, [
                 'domainname' => $parseDomin['host'],
             ]);
             return true;
         } catch (\Throwable $e) {
-            if ($message = $this->setMessage($e->getMessage())) {
-                return $this->setError($message);
-            }
             return $this->setError($e->getMessage());
         }
-        return false;
     }
 
     public function setBucketCors(string $name, string $region)

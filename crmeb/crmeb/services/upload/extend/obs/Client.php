@@ -175,10 +175,8 @@ class Client extends BaseClient
      */
     public function putObject(string $key, $body, string $contentType = 'image/jpeg')
     {
-        $url = $this->uploadUrl ?: $this->getRequestUrl($this->bucketName, $this->region);
-
         $header = [
-            'Host' => $url,
+            'Host' => $this->getRequestUrl($this->bucketName, $this->region),
             'Content-Type' => $contentType,
             'Content-Length' => strlen($body),
         ];
@@ -222,7 +220,7 @@ class Client extends BaseClient
     public function listBuckets()
     {
         $header = [
-            'Host' => $this->getRequestUrl($this->bucketName, $this->region),
+            'Host' => $this->getRequestUrl('', $this->region),
         ];
         $res = $this->request('https://' . $header['Host'] . '/', 'GET', [], []);
         return $this->response($res);
@@ -234,6 +232,30 @@ class Client extends BaseClient
             'Host' => $this->getRequestUrl($bucket, $region),
         ];
         $res = $this->request('https://' . $header['Host'] . '/', 'HEAD', [], []);
+        return $this->response($res);
+    }
+
+    /**
+     * 设置桶的策略
+     * @param string $bucket
+     * @param string $region
+     * @param array $data
+     * @return mixed
+     *
+     * @date 2023/06/08
+     * @author yyw
+     */
+    public function putPolicy(string $bucket, string $region, array $data)
+    {
+        $header = [
+            'Host' => $this->getRequestUrl($bucket, $region),
+            "Content-Type" => "application/json"
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/?policy', 'PUT', [
+            'bucket' => $bucket,
+            'json' => $data
+        ], $header);
+
         return $this->response($res);
     }
 
@@ -252,10 +274,12 @@ class Client extends BaseClient
         $header = [
             'x-obs-acl' => $acl,
             'Host' => $this->getRequestUrl($bucket, $region),
+            "Content-Type" => "application/xml"
         ];
-
+        $xml = "<CreateBucketConfiguration><Location>{$region}</Location></CreateBucketConfiguration>";
         $res = $this->request('https://' . $header['Host'] . '/', 'PUT', [
-            'Location' => $region
+            'bucket' => $bucket,
+            'body' => $xml
         ], $header);
 
         return $this->response($res);
@@ -333,14 +357,37 @@ class Client extends BaseClient
      */
     public function putBucketCors(string $bucket, string $region, array $data = [])
     {
+        $xml = $this->xmlBuild($data, 'CORSConfiguration', 'CORSRule');
         $header = [
             'Host' => $this->getRequestUrl($bucket, $region),
-            'content-md5' => base64_encode(md5(json_encode($data), true))
+            'Content-Type' => 'application/xml',
+            'Content-Length' => strlen($xml),
+            'Content-MD5' => base64_encode(md5($xml, true))
         ];
-        $xml = $this->xmlBuild($data, 'CORSConfiguration', 'CORSRule');
-        $res = $this->request('https://' . $header['Host'] . '/cors ', 'PUT', [
+        $res = $this->request('https://' . $header['Host'] . '/?cors', 'PUT', [
             'bucket' => $bucket,
             'body' => $xml
+        ], $header);
+
+        return $this->response($res);
+    }
+
+    /**
+     * 删除跨域
+     * @param string $bucket
+     * @param string $region
+     * @return mixed
+     *
+     * @date 2023/06/08
+     * @author yyw
+     */
+    public function deleteBucketCors(string $bucket, string $region)
+    {
+        $header = [
+            'Host' => $this->getRequestUrl($bucket, $region),
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/?cors', 'DELETE', [
+            'bucket' => $bucket,
         ], $header);
 
         return $this->response($res);
@@ -366,19 +413,22 @@ class Client extends BaseClient
      * @param string $bucket
      * @param string $region
      * @return string
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/5/18
+     *
+     * @date 2023/06/08
+     * @author yyw
      */
-    protected function getRequestUrl(string $bucket, string $region)
+    protected function getRequestUrl(string $bucket = '', string $region = '')
     {
         if ($this->type == 'hw') {
-            return $bucket . '.obs.' . $region . '.myhuaweicloud.com';  // 华为
+            $url = '.myhuaweicloud.com';  // 华为
         } else {
-            return $bucket . '.obs.' . $region . '.ctyun.cn';  // 天翼
+            $url = $region . '.ctyun.cn';  // 天翼
         }
-
-
+        if ($bucket) {
+            return $bucket . '.obs.' . $region . $url;
+        } else {
+            return 'obs.' . $region . $url;
+        }
     }
 
     /**
