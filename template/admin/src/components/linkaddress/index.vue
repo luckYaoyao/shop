@@ -250,31 +250,38 @@
           <!--<div v-if="!tableList.length || customNum==2">-->
           <!--<Button type="primary" @click="customList" v-if="tableList.length">自定义列表</Button>-->
           <div style="width: 340px; margin: 150px 100px 0 120px">
-            <Form ref="customdate" :model="customdate" :rules="ruleValidate" :label-width="88">
+            <Form ref="customdate" :model="customdate" :rules="ruleValidate" :label-width="100">
               <!--<FormItem label="链接名称：" prop="name">-->
               <!--<Input v-model="customdate.name" placeholder="会员中心"></Input>-->
               <!--</FormItem>-->
-              <FormItem label="跳转路径：" prop="url">
+              <!-- <FormItem label="跳转路径：" prop="url">
                 <Input v-model="customdate.url" placeholder="请输入跳转路径"></Input>
+              </FormItem> -->
+              <div class="mb30 radioGroup">
+                <RadioGroup v-model="customdate.status" @on-change="radioTap('customdate')">
+                  <Radio :label="1">
+                    <Icon></Icon>
+                    <span>普通链接</span>
+                  </Radio>
+                  <Radio :label="2">
+                    <Icon></Icon>
+                    <span>跳转其他小程序</span>
+                  </Radio>
+                </RadioGroup>
+              </div>
+              <FormItem label="跳转路径：" prop="url" v-if="customdate.status == 1">
+                <Input v-model="customdate.url" placeholder="请输入正确跳转路径"></Input>
+              </FormItem>
+              <FormItem label="APPID：" prop="appid" v-if="customdate.status == 2">
+                <Input v-model="customdate.appid" placeholder="请输入正确APPID"></Input>
+              </FormItem>
+              <FormItem label="小程序路径：" prop="mpUrl" v-if="customdate.status == 2">
+                <Input v-model="customdate.mpUrl" placeholder="请输入正确小程序路径"></Input>
               </FormItem>
             </Form>
           </div>
-          <!--</div>-->
-          <!--<div v-else>-->
-          <!--<Button type="primary" @click="customLink">自定义链接</Button>-->
-          <!--<div class="Box">-->
-          <!--<div v-for="(item,index) in tableList" :key="index" class="item">-->
-          <!--<div class="cont_box" :class="currenId==item.id?'on':''" @click="getUrl(item)">{{item.name}}</div>-->
-          <!--<span class="iconfont iconcha" @click="delLink(item, '删除链接', index)"></span>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--</div>-->
         </div>
       </div>
-      <!--<div slot="footer" v-if="categoryId==9&&customNum==2">-->
-      <!--<Button @click="handleReset('customdate')">重置</Button>-->
-      <!--<Button type="primary" @click="handleSubmit('customdate')">确定</Button>-->
-      <!--</div>-->
       <div slot="footer">
         <Button @click="cancel">取消</Button>
         <Button type="primary" @click="handleSubmit('customdate')" v-if="currenType == 'custom'">确定</Button>
@@ -403,8 +410,10 @@ export default {
       categoryId: '', //左侧分类id
       treeSelect: [],
       customdate: {
-        // name:'',
         url: '',
+        appid: '',
+        mpUrl: '',
+        status: 1,
       },
       customNum: 1,
       ruleValidate: {
@@ -493,7 +502,13 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$emit('linkUrl', this.customdate.url);
+          let url = this.customdate.url;
+          if (this.customdate.status == 1) {
+            url = this.customdate.url;
+          } else {
+            url = this.customdate.mpUrl + '@APPID=' + this.customdate.appid;
+          }
+          this.$emit('linkUrl', url);
           this.modals = false;
           this.reset();
           // saveLink(this.customdate,this.categoryId).then(res=>{
@@ -838,7 +853,11 @@ export default {
     min-width: 121px;
   }
 }
-
+.radioGroup{
+  /deep/.ivu-radio-wrapper{
+    margin-right 30px;
+  }
+}
 .table_box {
   margin-top: 14px;
   display: flex;
