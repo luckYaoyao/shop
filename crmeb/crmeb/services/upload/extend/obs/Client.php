@@ -236,6 +236,30 @@ class Client extends BaseClient
     }
 
     /**
+     * 设置桶的策略
+     * @param string $bucket
+     * @param string $region
+     * @param array $data
+     * @return mixed
+     *
+     * @date 2023/06/08
+     * @author yyw
+     */
+    public function putPolicy(string $bucket, string $region, array $data)
+    {
+        $header = [
+            'Host' => $this->getRequestUrl($bucket, $region),
+            "Content-Type" => "application/json"
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/?policy', 'PUT', [
+            'bucket' => $bucket,
+            'json' => $data
+        ], $header);
+
+        return $this->response($res);
+    }
+
+    /**
      * 创建桶
      * @param string $bucket
      * @param string $region
@@ -340,9 +364,30 @@ class Client extends BaseClient
             'Content-Length' => strlen($xml),
             'Content-MD5' => base64_encode(md5($xml, true))
         ];
-        $res = $this->request('https://' . $header['Host'] . '/cors', 'PUT', [
+        $res = $this->request('https://' . $header['Host'] . '/?cors', 'PUT', [
             'bucket' => $bucket,
             'body' => $xml
+        ], $header);
+
+        return $this->response($res);
+    }
+
+    /**
+     * 删除跨域
+     * @param string $bucket
+     * @param string $region
+     * @return mixed
+     *
+     * @date 2023/06/08
+     * @author yyw
+     */
+    public function deleteBucketCors(string $bucket, string $region)
+    {
+        $header = [
+            'Host' => $this->getRequestUrl($bucket, $region),
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/?cors', 'DELETE', [
+            'bucket' => $bucket,
         ], $header);
 
         return $this->response($res);

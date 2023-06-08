@@ -448,7 +448,7 @@ class SystemStorageServices extends BaseServices
         $storage = $this->dao->get(['id' => $id], ['domain', 'cdn']);
         $rule = [
             FormBuilder::input('domain', '空间域名', $storage['domain']),
-            FormBuilder::input('cdn', 'cdn域名', $storage['cnd']),
+            FormBuilder::input('cdn', 'cdn域名', $storage['cdn']),
         ];
         return create_form('修改空间域名', $rule, '/system/config/storage/domain/' . $id);
     }

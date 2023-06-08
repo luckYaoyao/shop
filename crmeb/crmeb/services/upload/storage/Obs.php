@@ -166,6 +166,19 @@ class Obs extends BaseUpload
         //创建桶
         try {
             $app->createBucket($name, $region, $acl);
+            $data = [
+                'Statement' => [
+                    'Sid' => '公共读' . $name,
+                    'Effect' => 'Allow1',
+                    'Principal' => [
+                        'ID' => ['*']
+                    ],
+                    'Action' => ['HeadBucket', 'GetBucketLocation', 'ListBucketVersions', 'GetObject', 'RestoreObject', 'GetObjectVersion'],
+                    'Resource' => [$name, $name . '/*']
+                ]
+            ];
+
+            $app->putPolicy($name, $region, $data);
         } catch (\Throwable $e) {
             return $this->setError('COS:' . $e->getMessage());
         }
