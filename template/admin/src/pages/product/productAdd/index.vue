@@ -2108,7 +2108,8 @@ export default {
         this.oneFormValidate = [data.attr];
       }
       this.formValidate.header = [];
-      if (!isCopy) this.generate(0);
+      this.generate(0, isCopy);
+      if (isCopy) this.manyFormValidate = data.attrs;
       // this.manyFormValidate = data.attrs;
       this.$set(this, 'manyFormValidate', data.attrs);
       this.spec_type = data.spec_type;
@@ -2506,7 +2507,7 @@ export default {
       this.showIput = true;
     },
     // 立即生成
-    generate(type) {
+    generate(type, isCopy) {
       generateAttrApi(
         {
           attrs: this.attrs,
@@ -2519,7 +2520,7 @@ export default {
         .then((res) => {
           let info = res.data.info,
             header1 = JSON.parse(JSON.stringify(info.header));
-          if (this.$route.params.id !== '0' && (this.$route.query.type != -1 || type)) {
+          if (this.$route.params.id !== '0' && (this.$route.query.type != -1 || type) && !isCopy) {
             this.manyFormValidate = info.value;
           }
           let header = info.header;
