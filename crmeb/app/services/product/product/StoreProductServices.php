@@ -620,7 +620,7 @@ class StoreProductServices extends BaseServices
                 $cateGory = $storeCategoryServices->getColumn([['id', 'IN', $cate_id]], 'id,pid', 'id');
                 foreach ($cate_id as $cid) {
                     if ($cid && isset($cateGory[$cid]['pid'])) {
-                        $cateData[] = ['product_id' => $id, 'cate_id' => $cid, 'cate_pid' => $cateGory[$cid]['pid'], 'status' => $data['is_show'], 'add_time' => $time];
+                        $cateData[] = ['product_id' => $id, 'cate_id' => $cid, 'cate_pid' => $cateGory[$cid]['pid'] ?: $cid, 'status' => $data['is_show'], 'add_time' => $time];
                     }
                 }
                 $storeProductCateServices->change($id, $cateData);

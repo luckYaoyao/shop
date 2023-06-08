@@ -97,11 +97,11 @@ class StoreCategoryServices extends BaseServices
         if ($show !== '') $where['is_show'] = $show;
         if (!$type) $where['pid'] = 0;
         $data = get_tree_children($this->dao->getTierList($where, ['id', 'id as value', 'cate_name as label', 'cate_name as title', 'pid']), 'children', 'id');
-        foreach ($data as &$item) {
-            if (!isset($item['children'])) {
-                $item['disabled'] = true;
-            }
-        }
+//        foreach ($data as &$item) {
+//            if (!isset($item['children'])) {
+//                $item['disabled'] = true;
+//            }
+//        }
         return $data;
     }
 
