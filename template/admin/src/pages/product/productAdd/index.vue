@@ -2108,10 +2108,9 @@ export default {
         this.oneFormValidate = [data.attr];
       }
       this.formValidate.header = [];
-      this.generate(0, isCopy);
-      if (isCopy) this.manyFormValidate = data.attrs;
+      this.generate(0, isCopy, data.attrs);
       // this.manyFormValidate = data.attrs;
-      this.$set(this, 'manyFormValidate', data.attrs);
+      // this.$set(this, 'manyFormValidate', data.attrs);
       this.spec_type = data.spec_type;
       this.formValidate.is_virtual = data.is_virtual;
       if (data.spec_type === 0) {
@@ -2507,7 +2506,7 @@ export default {
       this.showIput = true;
     },
     // 立即生成
-    generate(type, isCopy) {
+    generate(type, isCopy, arr) {
       generateAttrApi(
         {
           attrs: this.attrs,
@@ -2523,6 +2522,9 @@ export default {
           if (this.$route.params.id !== '0' && (this.$route.query.type != -1 || type) && !isCopy) {
             this.manyFormValidate = info.value;
           }
+          if (isCopy) {
+            this.manyFormValidate = arr;
+          }
           let header = info.header;
           if ([1, 2].includes(this.formValidate.virtual_type)) {
             this.columnsInstalM = header;
@@ -2532,7 +2534,7 @@ export default {
             this.columnsInstalM = info.header;
           }
           this.checkAllGroup(this.formValidate.is_sub);
-          if (!this.$route.params.id && this.formValidate.spec_type === 1) {
+          if (!this.$route.params.id && this.formValidate.spec_type === 1 && !isCopy) {
             this.manyFormValidate.map((item) => {
               item.pic = this.formValidate.image;
             });
