@@ -68,7 +68,7 @@
 					this.$util.Tips({
 						title: err
 					});
-					// #endiff
+					// #endif
 				})
 			},
 			// 微信分享；

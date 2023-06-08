@@ -315,7 +315,7 @@
 					}, {
 						tab: 3
 					});
-					// #endiff
+					// #endif
 				}
 			},
 			// #ifdef MP
