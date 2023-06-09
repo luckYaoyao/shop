@@ -189,7 +189,10 @@ class SystemStorageServices extends BaseServices
 
         try {
             $upload = UploadService::init($storageInfo->type);
-            $upload->deleteBucket($storageInfo->name, $storageInfo->region);
+            $res = $upload->deleteBucket($storageInfo->name, $storageInfo->region);
+            if (false === $res) {
+                throw new AdminException($upload->getError());
+            }
         } catch (\Throwable $e) {
             throw new AdminException($e->getMessage());
         }
@@ -369,10 +372,37 @@ class SystemStorageServices extends BaseServices
                 }
                 break;
             case 5:// cos 京东云
+                $upload = UploadService::init($type);
+                $res = $upload->listbuckets();
+                $list = $res['Buckets'];
+                $location = explode('.', $res['@metadata']['effectiveUri'])[1] ?? 'cn-north-1';
+                $config = $this->getStorageConfig($type);
+                foreach ($list as $item) {
+                    if (!$this->dao->count(['name' => $item['Name'], 'access_key' => $config['accessKey']])) {
+                        $data[] = [
+                            'type' => $type,
+                            'access_key' => $config['accessKey'],
+                            'name' => $item['Name'],
+                            'region' => $location,
+                            'acl' => 'public-read',
+                            'status' => 0,
+                            'domain' => $this->getDomain($type, $item['Name'], $location),
+                            'is_delete' => 0,
+                            'add_time' => time(),
+                            'update_time' => time()
+                        ];
+                    }
+                }
+                break;
             case 6:// cos 华为云
             case 7:// cos 天翼云
                 $upload = UploadService::init($type);
                 $list = $upload->listbuckets();
+                if (!empty($list['Name'])) {
+                    $newList = $list;
+                    $list = [];
+                    $list[] = $newList;
+                }
                 $config = $this->getStorageConfig($type);
                 foreach ($list as $item) {
                     if (!$this->dao->count(['name' => $item['Name'], 'access_key' => $config['accessKey']])) {
@@ -437,13 +467,13 @@ class SystemStorageServices extends BaseServices
                 $domainName = 'https://' . $name . ($appid ? '-' . $appid : '') . '.cos.' . $reagion . '.myqcloud.com';
                 break;
             case 5:// cos 京东云
-                $domainName = 'https://' . $name . '.cos.' . $reagion . '.jdcloud-oss.com';
+                $domainName = 'https://' . $name . '.s3.' . $reagion . '.jdcloud-oss.com';
                 break;
             case 6:// cos 华为云
-                $domainName = 'https://' . $name . '.cos.' . $reagion . '.myhuaweicloud.com';
+                $domainName = 'https://' . $name . '.obs.' . $reagion . '.myhuaweicloud.com';
                 break;
             case 7:// cos 天翼云
-                $domainName = 'https://' . $name . '.cos.' . $reagion . '.ctyun.cn';
+                $domainName = 'https://' . $name . '.obs.' . $reagion . '.ctyun.cn';
                 break;
         }
         return $domainName;

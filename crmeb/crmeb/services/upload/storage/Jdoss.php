@@ -207,7 +207,7 @@ class Jdoss extends BaseUpload
     {
         try {
             $res = $this->app()->listBuckets();
-            return $res['ListAllMyBucketsResult']['Buckets'] ?? [];
+            return $res ?? [];
         } catch (\Throwable $e) {
             return [];
         }
@@ -277,8 +277,7 @@ class Jdoss extends BaseUpload
         try {
             $this->storageRegion = $region;
             $this->app()->deleteBucket([
-                'bucketName' => $name, // REQUIRED
-                'forceDelete' => false
+                'Bucket' => $name, // REQUIRED
             ]);
             return true;
         } catch (AcmException $e) {
