@@ -95,6 +95,7 @@ class UploadService
             $config['uploadUrl'] = $res['domain'];
             $config['storageName'] = $res['name'];
             $config['storageRegion'] = $res['region'];
+            $config['cdn'] = $res['cdn'];
         }
 
         $thumb = SystemConfigService::more(['thumb_big_height', 'thumb_big_width', 'thumb_mid_height', 'thumb_mid_width', 'thumb_small_height', 'thumb_small_width',]);
@@ -134,7 +135,7 @@ class UploadService
         /** @var SystemStorageServices $storageServices */
         $storageServices = app()->make(SystemStorageServices::class);
         $storageArr = $storageServices->cacheDriver()->remember('storage_list', function () use ($storageServices) {
-            return $storageServices->selectList([], 'domain')->toArray();
+            return $storageServices->selectList([], 'domain,type')->toArray();
         });
         foreach ($storageArr as $item) {
             if ($fileHost == $item['domain']) {

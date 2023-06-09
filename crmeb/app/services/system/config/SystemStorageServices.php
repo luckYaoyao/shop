@@ -189,7 +189,10 @@ class SystemStorageServices extends BaseServices
 
         try {
             $upload = UploadService::init($storageInfo->type);
-            $upload->deleteBucket($storageInfo->name, $storageInfo->region);
+            $res = $upload->deleteBucket($storageInfo->name, $storageInfo->region);
+            if (false === $res) {
+                throw new AdminException($upload->getError());
+            }
         } catch (\Throwable $e) {
             throw new AdminException($e->getMessage());
         }
@@ -368,6 +371,56 @@ class SystemStorageServices extends BaseServices
                     }
                 }
                 break;
+            case 5:// cos 京东云
+                $upload = UploadService::init($type);
+                $res = $upload->listbuckets();
+                $list = $res['Buckets'];
+                $location = explode('.', $res['@metadata']['effectiveUri'])[1] ?? 'cn-north-1';
+                $config = $this->getStorageConfig($type);
+                foreach ($list as $item) {
+                    if (!$this->dao->count(['name' => $item['Name'], 'access_key' => $config['accessKey']])) {
+                        $data[] = [
+                            'type' => $type,
+                            'access_key' => $config['accessKey'],
+                            'name' => $item['Name'],
+                            'region' => $location,
+                            'acl' => 'public-read',
+                            'status' => 0,
+                            'domain' => $this->getDomain($type, $item['Name'], $location),
+                            'is_delete' => 0,
+                            'add_time' => time(),
+                            'update_time' => time()
+                        ];
+                    }
+                }
+                break;
+            case 6:// cos 华为云
+            case 7:// cos 天翼云
+                $upload = UploadService::init($type);
+                $list = $upload->listbuckets();
+                if (!empty($list['Name'])) {
+                    $newList = $list;
+                    $list = [];
+                    $list[] = $newList;
+                }
+                $config = $this->getStorageConfig($type);
+                foreach ($list as $item) {
+                    if (!$this->dao->count(['name' => $item['Name'], 'access_key' => $config['accessKey']])) {
+                        $data[] = [
+                            'type' => $type,
+                            'access_key' => $config['accessKey'],
+                            'name' => $item['Name'],
+                            'region' => $item['Location'],
+                            'acl' => 'public-read',
+                            'status' => 0,
+                            'domain' => $this->getDomain($type, $item['Name'], $item['Location']),
+                            'is_delete' => 0,
+                            'add_time' => strtotime($item['CreationDate']),
+                            'update_time' => time()
+                        ];
+                    }
+                }
+                break;
         }
         if ($data) {
             $this->dao->saveAll($data);
@@ -413,6 +466,15 @@ class SystemStorageServices extends BaseServices
             case 4:// cos 腾讯云
                 $domainName = 'https://' . $name . ($appid ? '-' . $appid : '') . '.cos.' . $reagion . '.myqcloud.com';
                 break;
+            case 5:// cos 京东云
+                $domainName = 'https://' . $name . '.s3.' . $reagion . '.jdcloud-oss.com';
+                break;
+            case 6:// cos 华为云
+                $domainName = 'https://' . $name . '.obs.' . $reagion . '.myhuaweicloud.com';
+                break;
+            case 7:// cos 天翼云
+                $domainName = 'https://' . $name . '.obs.' . $reagion . '.ctyun.cn';
+                break;
         }
         return $domainName;
     }
@@ -425,11 +487,11 @@ class SystemStorageServices extends BaseServices
      */
     public function getConfig(int $type)
     {
-        $res = ['name' => '', 'region' => '', 'domain' => ''];
+        $res = ['name' => '', 'region' => '', 'domain' => '', 'cdn' => ''];
         try {
             $config = $this->dao->get(['type' => $type, 'status' => 1, 'is_delete' => 0]);
             if ($config) {
-                return ['name' => $config->name, 'region' => $config->region, 'domain' => $config->domain];
+                return ['name' => $config->name, 'region' => $config->region, 'domain' => $config->domain, 'cdn' => $config->cdn];
             }
         } catch (\Throwable $e) {
         }
@@ -445,9 +507,10 @@ class SystemStorageServices extends BaseServices
      */
     public function getUpdateDomainForm(int $id)
     {
-        $domain = $this->dao->value(['id' => $id], 'domain');
+        $storage = $this->dao->get(['id' => $id], ['domain', 'cdn']);
         $rule = [
-            FormBuilder::input('domain', '空间域名', $domain),
+            FormBuilder::input('domain', '空间域名', $storage['domain']),
+            FormBuilder::input('cdn', 'cdn域名', $storage['cdn']),
         ];
         return create_form('修改空间域名', $rule, '/system/config/storage/domain/' . $id);
     }
@@ -488,7 +551,11 @@ class SystemStorageServices extends BaseServices
                 $resDomain = $upload->getDomianInfo($domain);
                 $info->cname = $resDomain['cname'] ?? '';
             }
-            return $info->save();
+            $info->save();
+        }
+        if ($info->cdn != $data['cdn']) {
+            $info->cdn = $data['cdn'];
+            $info->save();
         }
 
         $this->cacheDriver()->clear();

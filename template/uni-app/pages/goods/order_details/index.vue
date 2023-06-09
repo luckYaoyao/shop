@@ -87,8 +87,8 @@
 						<view class="pictrue">
 							<image :src="codeSrc" mode=""></image>
 							<zb-code ref="qrcode" :show="codeShow" :cid="cid" :val="val" :size="size" :unit="unit"
-								:background="background" :foreground="foreground" :pdground="pdground" :icon="icon" :iconSize="iconsize"
-								:onval="onval" :loadMake="loadMake" @result="qrR" />
+								:background="background" :foreground="foreground" :pdground="pdground" :icon="icon"
+								:iconSize="iconsize" :onval="onval" :loadMake="loadMake" @result="qrR" />
 						</view>
 					</view>
 					<view class="gear">
@@ -155,8 +155,8 @@
 				:delivery_type="item.delivery_type" @confirmOrder="confirmOrder" @openSubcribe="openSubcribe">
 			</orderGoods>
 			<orderGoods :evaluate='evaluate' :deliveryType="orderInfo.shipping_type" :statusType="status.type"
-				:sendType="orderInfo.delivery_type" :orderId="order_id" :oid="orderInfo.id" :cartInfo="cartInfo" :pid="pid"
-				:jump="true" :refund_status="orderInfo.refund_status" :paid="orderInfo.paid"
+				:sendType="orderInfo.delivery_type" :orderId="order_id" :oid="orderInfo.id" :cartInfo="cartInfo"
+				:pid="pid" :jump="true" :refund_status="orderInfo.refund_status" :paid="orderInfo.paid"
 				:virtualType="orderInfo.virtual_type" @openSubcribe="openSubcribe">
 			</orderGoods>
 			<!-- #ifdef H5 || APP-PLUS -->
@@ -231,7 +231,8 @@
 						</view>
 						<!-- #endif -->
 						<!-- #ifdef H5 -->
-						<view v-if="orderInfo.virtual_type == 1" class='copy copy-data' :data-clipboard-text="orderInfo.remark">
+						<view v-if="orderInfo.virtual_type == 1" class='copy copy-data'
+							:data-clipboard-text="orderInfo.remark">
 							{{$t(`复制`)}}
 						</view>
 						<!-- #endif -->
@@ -250,6 +251,7 @@
 					<view v-if="item.label !== 'img'">{{item.title}}：</view>
 					<view v-if="item.label !== 'img'" class='conter'>{{item.value}}</view>
 				</view>
+				<view class="copy-text" @click="copyText()">{{$t(`复制`)}}</view>
 			</view>
 			<!-- 退款订单详情 -->
 			<view class='wrapper' v-if="isGoodsReturn && orderInfo.cartInfo[0].productInfo.virtual_type != 3">
@@ -292,8 +294,8 @@
 					</view>
 					<view class='item acea-row row-between'>
 						<view>{{$t(`送货人电话`)}}：</view>
-						<view class='conter acea-row row-middle row-right'>{{orderInfo.delivery_id || ''}}<text class='copy'
-								@tap='goTel'>{{$t(`拨打`)}}</text></view>
+						<view class='conter acea-row row-middle row-right'>{{orderInfo.delivery_id || ''}}<text
+								class='copy' @tap='goTel'>{{$t(`拨打`)}}</text></view>
 					</view>
 				</view>
 				<view class='wrapper' v-else-if='orderInfo.delivery_type=="fictitious"'>
@@ -343,7 +345,8 @@
 							{{orderInfo.help_info.pay_nickname || ''}}
 						</view>
 					</view>
-					{{$t(`总代付`)}}：<text class='money font-color'>{{$t(`￥`)}}{{parseFloat(orderInfo.pay_price).toFixed(2)}}</text>
+					{{$t(`总代付`)}}：<text
+						class='money font-color'>{{$t(`￥`)}}{{parseFloat(orderInfo.pay_price).toFixed(2)}}</text>
 				</view>
 			</view>
 			<view style='height:120rpx;'></view>
@@ -375,8 +378,8 @@
 						hover-class='none' :url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id">
 						{{$t(`查看物流`)}}
 					</navigator>
-					<view class='bnt bg-color' v-if="orderInfo.type == 3 && orderInfo.refund_type == 0 && orderInfo.paid"
-						@tap='goJoinPink'>
+					<view class='bnt bg-color'
+						v-if="orderInfo.type == 3 && orderInfo.refund_type == 0 && orderInfo.paid" @tap='goJoinPink'>
 						{{$t(`查看拼团`)}}
 					</view>
 					<view class='bnt bg-color' v-if="status.class_status==3 && !split.length" @click='confirmOrder()'>
@@ -396,7 +399,8 @@
 						:url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id + '&type=refund'">
 						{{$t(`查看退货物流`)}}
 					</navigator>
-					<view class='bnt cancel' v-if="status.type==4 &&  !split.length || status.type == -2" @tap='delOrder'>
+					<view class='bnt cancel' v-if="status.type==4 &&  !split.length || status.type == -2"
+						@tap='delOrder'>
 						{{$t(`删除订单`)}}
 					</view>
 				</view>
@@ -425,9 +429,9 @@
 		</invoiceModal>
 		<view class="mask invoice-mask" v-if="aleartStatus" @click="aleartStatus = false"></view>
 		<view class="mask more-mask" v-if="moreBtn" @click="moreBtn = false"></view>
-		<invoice-picker :inv-show="invShow" :is-special="special_invoice" :url-query="urlQuery" :inv-checked="invChecked"
-			:order-id='order_id' :inv-list="invList" :is-order="1" @inv-close="invClose" @inv-change="invSub"
-			@inv-cancel="invCancel">
+		<invoice-picker :inv-show="invShow" :is-special="special_invoice" :url-query="urlQuery"
+			:inv-checked="invChecked" :order-id='order_id' :inv-list="invList" :is-order="1" @inv-close="invClose"
+			@inv-change="invSub" @inv-cancel="invCancel">
 		</invoice-picker>
 	</view>
 </template>
@@ -978,6 +982,17 @@
 				});
 			},
 			// #endif
+			copyText(text) {
+				let str = ''
+				this.customForm.map(e => {
+					if (e.label !== 'img') {
+						str += e.title + e.value
+					}
+				})
+				uni.setClipboardData({
+					data: str,
+				});
+			},
 			// #ifdef H5
 			copyAddress() {
 				// console.log('1111111111111')
@@ -2172,6 +2187,15 @@
 		.refund-address {
 			color: #868686;
 		}
+	}
+
+	.copy-text {
+		width: max-content;
+		font-size: 10px;
+		border-radius: 1px;
+		border: 0.5px solid #666;
+		padding: 1px 7px;
+		margin-left: auto;
 	}
 
 	.upload .pictrue {

@@ -131,10 +131,12 @@ class StoreProductReplyServices extends BaseServices
     public function getRecProductReply(int $productId)
     {
         $res = $this->dao->getProductReply($productId);
+
         if ($res) {
             $res = $res->toArray();
-//            $res['cart_info'] = isset($res['cart_info']) ? json_decode($res['cart_info'], true) : [];
-            $res['suk'] = isset($res['cart_info']['productInfo']['attrInfo']) ? $res['cart_info']['productInfo']['attrInfo']['suk'] : '';
+            if ($res['suk'] == '') {
+                $res['suk'] = isset($res['cart_info']['productInfo']['attrInfo']) ? $res['cart_info']['productInfo']['attrInfo']['suk'] : '';
+            }
             $res['nickname'] = anonymity($res['nickname']);
             $res['merchant_reply_time'] = date('Y-m-d H:i', $res['merchant_reply_time']);
             $res['add_time'] = time_tran($res['add_time']);

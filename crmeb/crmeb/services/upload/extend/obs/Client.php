@@ -124,6 +124,8 @@ class Client extends BaseClient
      */
     protected $baseUrl = 'obs.cn-north-1.myhuaweicloud.com';
 
+    protected $type = 'hw';
+
     /**
      * Client constructor.
      * @param array $config
@@ -135,6 +137,7 @@ class Client extends BaseClient
         $this->bucketName = $config['bucket'] ?? '';
         $this->region = $config['region'] ?? 'ap-chengdu';
         $this->uploadUrl = $config['uploadUrl'] ?? '';
+        $this->type = $config['type'] ?? 'hw';
     }
 
     /**
@@ -172,10 +175,8 @@ class Client extends BaseClient
      */
     public function putObject(string $key, $body, string $contentType = 'image/jpeg')
     {
-        $url = $this->uploadUrl ?: $this->getRequestUrl($this->bucketName, $this->region);
-
         $header = [
-            'Host' => $url,
+            'Host' => $this->getRequestUrl($this->bucketName, $this->region),
             'Content-Type' => $contentType,
             'Content-Length' => strlen($body),
         ];
@@ -218,7 +219,43 @@ class Client extends BaseClient
      */
     public function listBuckets()
     {
-        $res = $this->request('https://' . $this->baseUrl . '/', 'GET', [], []);
+        $header = [
+            'Host' => $this->getRequestUrl('', $this->region),
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/', 'GET', [], []);
+        return $this->response($res);
+    }
+
+    public function headBucket(string $bucket, string $region)
+    {
+        $header = [
+            'Host' => $this->getRequestUrl($bucket, $region),
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/', 'HEAD', [], []);
+        return $this->response($res);
+    }
+
+    /**
+     * 设置桶的策略
+     * @param string $bucket
+     * @param string $region
+     * @param array $data
+     * @return mixed
+     *
+     * @date 2023/06/08
+     * @author yyw
+     */
+    public function putPolicy(string $bucket, string $region, array $data)
+    {
+        $header = [
+            'Host' => $this->getRequestUrl($bucket, $region),
+            "Content-Type" => "application/json"
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/?policy', 'PUT', [
+            'bucket' => $bucket,
+            'json' => $data
+        ], $header);
+
         return $this->response($res);
     }
 
@@ -237,10 +274,12 @@ class Client extends BaseClient
         $header = [
             'x-obs-acl' => $acl,
             'Host' => $this->getRequestUrl($bucket, $region),
+            "Content-Type" => "application/xml"
         ];
-
+        $xml = "<CreateBucketConfiguration><Location>{$region}</Location></CreateBucketConfiguration>";
         $res = $this->request('https://' . $header['Host'] . '/', 'PUT', [
-            'bucket' => $bucket
+            'bucket' => $bucket,
+            'body' => $xml
         ], $header);
 
         return $this->response($res);
@@ -316,9 +355,42 @@ class Client extends BaseClient
      * @email 136327134@qq.com
      * @date 2023/5/18
      */
-    public function putBucketCors()
+    public function putBucketCors(string $bucket, string $region, array $data = [])
     {
-        return true;
+        $xml = $this->xmlBuild($data, 'CORSConfiguration', 'CORSRule');
+        $header = [
+            'Host' => $this->getRequestUrl($bucket, $region),
+            'Content-Type' => 'application/xml',
+            'Content-Length' => strlen($xml),
+            'Content-MD5' => base64_encode(md5($xml, true))
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/?cors', 'PUT', [
+            'bucket' => $bucket,
+            'body' => $xml
+        ], $header);
+
+        return $this->response($res);
+    }
+
+    /**
+     * 删除跨域
+     * @param string $bucket
+     * @param string $region
+     * @return mixed
+     *
+     * @date 2023/06/08
+     * @author yyw
+     */
+    public function deleteBucketCors(string $bucket, string $region)
+    {
+        $header = [
+            'Host' => $this->getRequestUrl($bucket, $region),
+        ];
+        $res = $this->request('https://' . $header['Host'] . '/?cors', 'DELETE', [
+            'bucket' => $bucket,
+        ], $header);
+
+        return $this->response($res);
     }
 
     /**
@@ -341,13 +413,22 @@ class Client extends BaseClient
      * @param string $bucket
      * @param string $region
      * @return string
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/5/18
+     *
+     * @date 2023/06/08
+     * @author yyw
      */
-    protected function getRequestUrl(string $bucket, string $region)
+    protected function getRequestUrl(string $bucket = '', string $region = '')
     {
-        return $bucket . '.obs.' . $region . '.myhuaweicloud.com';
+        if ($this->type == 'hw') {
+            $url = '.myhuaweicloud.com';  // 华为
+        } else {
+            $url = '.ctyun.cn';  // 天翼
+        }
+        if ($bucket) {
+            return $bucket . '.obs.' . $region . $url;
+        } else {
+            return 'obs.' . $region . $url;
+        }
     }
 
     /**
@@ -600,6 +681,37 @@ class Client extends BaseClient
         ]);
 
         return $this->requestClient($url, $method, $data, $result['headers'], $timeout);
+    }
+
+
+    /**
+     * 组合成xml
+     * @param array $data
+     * @param string $root
+     * @param string $itemKey
+     * @return string
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2022/10/17
+     */
+    protected function xmlBuild(array $xmlAttr, string $root = 'xml', string $itemKey = 'item')
+    {
+        $xml = '<' . $root . '>';
+        $xml .= '<' . $itemKey . '>';
+
+        foreach ($xmlAttr as $kk => $vv) {
+            if (is_array($vv)) {
+                foreach ($vv as $v) {
+                    $xml .= '<' . $kk . '>' . $v . '</' . $kk . '>';
+                }
+            } else {
+                $xml .= '<' . $kk . '>' . $vv . '</' . $kk . '>';
+            }
+        }
+        $xml .= '</' . $itemKey . '>';
+        $xml .= '</' . $root . '>';
+
+        return $xml;
     }
 
 }

@@ -620,7 +620,7 @@ class StoreProductServices extends BaseServices
                 $cateGory = $storeCategoryServices->getColumn([['id', 'IN', $cate_id]], 'id,pid', 'id');
                 foreach ($cate_id as $cid) {
                     if ($cid && isset($cateGory[$cid]['pid'])) {
-                        $cateData[] = ['product_id' => $id, 'cate_id' => $cid, 'cate_pid' => $cateGory[$cid]['pid'], 'status' => $data['is_show'], 'add_time' => $time];
+                        $cateData[] = ['product_id' => $id, 'cate_id' => $cid, 'cate_pid' => $cateGory[$cid]['pid'] ?: $cid, 'status' => $data['is_show'], 'add_time' => $time];
                     }
                 }
                 $storeProductCateServices->change($id, $cateData);
@@ -865,6 +865,15 @@ class StoreProductServices extends BaseServices
             $item['cost'] = floatval($item['cost']);
             $item['is_product_type'] = 1;
             $item['logistics'] = explode(',', $item['logistics']);
+            $attrs = $this->getProductRules($item['id'], 0)['attrs'];
+            foreach ($attrs as $items) {
+                $item['attrs'][] = [
+                    'image' => $items['pic'],
+                    'price' => $items['price'],
+                    'ot_price' => $items['ot_price'],
+                    'suk' => implode(',', $items['detail'])
+                ];
+            }
         }
         return $data;
     }

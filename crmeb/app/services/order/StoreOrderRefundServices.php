@@ -434,18 +434,22 @@ class StoreOrderRefundServices extends BaseServices
         /** @var StoreOrderStatusServices $statusService */
         $statusService = app()->make(StoreOrderStatusServices::class);
         $res = true;
-        //取消的订单退回优惠券
-        if ($type == 'cancel' && $order['coupon_id'] && $order['coupon_price']) {
+        //取消或者退款的订单退回优惠券
+        if ($order['coupon_id'] && $order['coupon_price']) {
             /** @var StoreCouponUserServices $couponUserServices */
             $couponUserServices = app()->make(StoreCouponUserServices::class);
-            $res = $couponUserServices->recoverCoupon((int)$order['coupon_id']);
-            $statusService->save([
-                'oid' => $order['id'],
-                'change_type' => 'coupon_back',
-                'change_message' => '商品退优惠券',
-                'change_time' => time()
-            ]);
+            //未支付取消订单，或者退优惠券开关打开之后的主订单以及最后一个子订单退还优惠券
+            if ($type == 'cancel' || (sys_config('coupon_return_open', 1) && ($order['pid'] == 0 || $this->storeOrderServices->count(['pid' => $order['pid'], 'refund_status' => 0]) == 1))) {
+                $res = $couponUserServices->recoverCoupon((int)$order['coupon_id']);
+                $statusService->save([
+                    'oid' => $order['id'],
+                    'change_type' => 'coupon_back',
+                    'change_message' => '商品退优惠券',
+                    'change_time' => time()
+                ]);
+            }
         }
+
         //回退积分
         $order = $this->regressionIntegral($order);
         $statusService->save([

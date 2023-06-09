@@ -166,7 +166,10 @@ class SystemStorage extends AuthController
         //设置跨域规则
         try {
             $upload = UploadService::init($info->type);
-            $upload->setBucketCors($info->name, $info->region);
+            $res = $upload->setBucketCors($info->name, $info->region);
+            if (false === $res) {
+                return app('json')->fail($upload->getError());
+            }
         } catch (\Throwable $e) {
         }
 
@@ -199,6 +202,7 @@ class SystemStorage extends AuthController
     public function updateDomain($id)
     {
         $domain = $this->request->post('domain', '');
+        $cdn = $this->request->post('cdn', '');
         $data = $this->request->postMore([
             ['pri', ''],
             ['ca', '']
@@ -214,7 +218,7 @@ class SystemStorage extends AuthController
 //            return app('json')->fail('域名为HTTPS访问时，必须填写证书');
 //        }
 
-        $this->services->updateDomain($id, $domain);
+        $this->services->updateDomain($id, $domain, ['cdn' => $cdn]);
 
         return app('json')->success(100001);
     }
