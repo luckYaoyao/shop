@@ -18,7 +18,8 @@
 						<view class="text add-text line1" v-if="shippingType==0">{{$t(`由平台为您提供配送服务`)}}</view>
 						<view class="text add-text line1" v-if="shippingType==1">{{$t(`线上下单，到店自提`)}}</view>
 					</view>
-					<view class="text"></view>
+					<view class="text">{{shippingType == 0 ? $t('切换地址') : $t('切换门店')}}</view>
+					<view class='iconfont icon-jiantou'></view>
 				</view>
 				<view class='address acea-row row-between-wrapper' @tap='onAddress' v-if='shippingType == 0'>
 
@@ -45,7 +46,7 @@
 							</view>
 							<view class="line1"> {{system_store.address}}{{", " + system_store.detailed_address}}</view>
 						</view>
-						<view class='iconfont icon-jiantou'></view>
+						<!-- <view class='iconfont icon-jiantou'></view> -->
 					</block>
 					<block v-else>
 						<view>{{$t(`暂无门店信息`)}}</view>
