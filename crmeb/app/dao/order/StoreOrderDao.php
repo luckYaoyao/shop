@@ -702,7 +702,7 @@ class StoreOrderDao extends BaseDao
                 $query->field("sum($sumField) as number,FROM_UNIXTIME($group, '$timeUinx') as time");
                 $query->group("FROM_UNIXTIME($group, '$timeUinx')");
             })
-            ->order('pay_time ASC')->select()->toArray();
+            ->order('pay_time ASC,id DESC')->select()->toArray();
     }
 
     /**时间分组订单数统计
@@ -730,7 +730,7 @@ class StoreOrderDao extends BaseDao
                 $query->field("count($sumField) as number,FROM_UNIXTIME(pay_time, '$timeUinx') as time");
                 $query->group("FROM_UNIXTIME(pay_time, '$timeUinx')");
             })
-            ->order('pay_time ASC')->select()->toArray();
+            ->order('pay_time ASC,id DESC')->select()->toArray();
     }
 
     /**时间段支付订单人数
@@ -773,7 +773,7 @@ class StoreOrderDao extends BaseDao
                 $query->field("count(distinct uid) as number,FROM_UNIXTIME(pay_time, '$timeUinx') as time");
                 $query->group("FROM_UNIXTIME(pay_time, '$timeUinx')");
             })
-            ->order('pay_time ASC')->select()->toArray();
+            ->order('pay_time ASC,id DESC')->select()->toArray();
     }
 
 
