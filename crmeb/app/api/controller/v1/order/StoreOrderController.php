@@ -255,10 +255,11 @@ class StoreOrderController
         $orderInfo = $this->services->get(['order_id' => $uni]);
         $uid = $type == 1 ? (int)$request->uid() : $orderInfo->uid;
         $orderInfo->is_channel = $this->getChennel[$request->getFromType()] ?? ($request->isApp() ? 0 : 1);
+        $orderInfo->order_id = $uid != $orderInfo->pay_uid ? app()->make(StoreOrderCreateServices::class)->getNewOrderId('cp') : $uni;
         $orderInfo->pay_uid = $uid;
         $orderInfo->save();
         $orderInfo = $orderInfo->toArray();
-        $order = $this->services->get(['order_id' => $uni]);
+        $order = $this->services->get(['order_id' => $orderInfo['order_id']]);
         if (!$order)
             return app('json')->fail(410173);
         if ($order['paid'])
