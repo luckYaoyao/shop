@@ -137,7 +137,7 @@ export default {
     };
   },
   created() {
-    this.onIsLogin();
+    // this.onIsLogin();
   },
   methods: {
     onChangePhone() {
