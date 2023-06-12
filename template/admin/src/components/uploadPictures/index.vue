@@ -34,7 +34,21 @@
                 v-if="isShow !== 0"
                 >使用选中图片</Button
               >
-              <Upload
+              <!-- <Upload
+                :show-upload-list="false"
+                :action="fileUrl"
+                class="mr10 mb10"
+                :before-upload="beforeUpload"
+                :data="uploadData"
+                :headers="header"
+                :multiple="true"
+                :format="['jpg', 'jpeg', 'png', 'gif']"
+                :on-success="handleSuccess"
+                style="margin-top: 1px; display: inline-block"
+              > -->
+              <Button type="primary" @click="uploadModal">上传图片</Button>
+              <!-- </Upload> -->
+              <!-- <Upload
                 :show-upload-list="false"
                 :action="fileUrl"
                 class="mr10 mb10"
@@ -47,7 +61,7 @@
                 style="margin-top: 1px; display: inline-block"
               >
                 <Button type="primary">上传图片</Button>
-              </Upload>
+              </Upload> -->
               <!--<Button type="success" @click.stop="add" class="mr10">添加分类</Button>-->
               <Button type="error" class="mr10" :disabled="checkPicList.length === 0" @click.stop="editPicList('图片')"
                 >删除图片</Button
@@ -132,6 +146,7 @@
         </div>
       </Col>
     </Row>
+    <uploadImg ref="upload"></uploadImg>
   </div>
 </template>
 
@@ -146,9 +161,10 @@ import {
 } from '@/api/uploadPictures';
 import Setting from '@/setting';
 import { getCookies } from '@/libs/util';
+import uploadImg from '@/components/uploadImg';
 export default {
   name: 'uploadPictures',
-  // components: { editFrom },
+  components: { uploadImg },
   props: {
     isChoice: {
       type: String,
@@ -211,6 +227,9 @@ export default {
     this.getFileList();
   },
   methods: {
+    uploadModal() {
+      this.$refs.upload.uploadModal = true;
+    },
     enterMouse(item) {
       item.realName = !item.realName;
     },
