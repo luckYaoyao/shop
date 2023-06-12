@@ -242,7 +242,7 @@ class StoreOrder extends AuthController
             ['delivery_id', ''],//快递单号
             ['delivery_code', ''],//快递公司编码
 
-            ['express_record_type', 2],//发货记录类型
+            ['express_record_type', 2],//发货记录类型:2=电子面单；3=商家寄件
             ['express_temp_id', ""],//电子面单模板
             ['to_name', ''],//寄件人姓名
             ['to_tel', ''],//寄件人电话
@@ -465,7 +465,7 @@ class StoreOrder extends AuthController
      */
     public function order_info($id)
     {
-        if (!$id || !($orderInfo = $this->services->get($id, [], ['refund','invoice']))) {
+        if (!$id || !($orderInfo = $this->services->get($id, [], ['refund', 'invoice']))) {
             return app('json')->fail(400118);
         }
         /** @var UserServices $services */

@@ -129,7 +129,7 @@ class Jdoss extends BaseUpload
             return $this->setError('上传的文件不存在');
         }
         if ($this->validate) {
-            if (!in_array(pathinfo($fileHandle->getOriginalName(), PATHINFO_EXTENSION), $this->validate['fileExt'])) {
+            if (!in_array(strtolower(pathinfo($fileHandle->getOriginalName(), PATHINFO_EXTENSION)), $this->validate['fileExt'])) {
                 return $this->setError('不合法的文件后缀');
             }
             if (filesize($fileHandle) > $this->validate['filesize']) {
