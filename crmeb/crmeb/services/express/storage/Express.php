@@ -96,7 +96,7 @@ class Express extends BaseExpress
             'send_real_name' => $data['send_real_name'],
             'send_phone' => $data['send_phone'],
             'send_address' => $data['send_address'],
-            'call_back_url' => sys_config(''),
+            'call_back_url' => sys_config('site_url') . '/api/order_call_back',
             'return_type' => $siid ? '10' : '20',
             'siid' => $siid,
             'tempid' => $data['tempid'],

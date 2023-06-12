@@ -18,6 +18,7 @@ Route::group(function () {
     Route::any('wechat/serve', 'v1.wechat.WechatController/serve')->option(['real_name' => '公众号服务']);//公众号服务
     Route::any('wechat/miniServe', 'v1.wechat.WechatController/miniServe')->option(['real_name' => '小程序服务']);//公众号服务
     Route::any('pay/notify/:type', 'v1.PayController/notify')->option(['real_name' => '支付回调']);//支付回调
+    Route::any('order_call_back', 'v1.order.StoreOrderController/callBack')->option(['real_name' => '商家寄件回调']);//商家寄件回调
     Route::get('get_script', 'v1.PublicController/getScript')->option(['real_name' => '获取统计代码']);//获取统计代码
     Route::get('version', 'v1.PublicController/getVersion')->option(['real_name' => '获取代码版本号']);
 })->option(['mark' => 'serve', 'mark_name' => '服务接口']);
