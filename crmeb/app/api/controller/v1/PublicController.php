@@ -217,8 +217,8 @@ class PublicController
     /**
      * 图片上传
      * @param Request $request
+     * @param SystemAttachmentServices $services
      * @return mixed
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function upload_image(Request $request, SystemAttachmentServices $services)
     {
