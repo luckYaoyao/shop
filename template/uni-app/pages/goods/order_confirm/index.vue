@@ -18,8 +18,9 @@
 						<view class="text add-text line1" v-if="shippingType==0">{{$t(`由平台为您提供配送服务`)}}</view>
 						<view class="text add-text line1" v-if="shippingType==1">{{$t(`线上下单，到店自提`)}}</view>
 					</view>
-					<view class="text">{{shippingType == 0 ? $t('切换地址') : $t('切换门店')}}</view>
-					<view class='iconfont icon-jiantou'></view>
+
+					<view class="text">{{shippingType == 0 ? $t('切换地址') : $t('切换门店')}} <text
+							class='iconfont icon-jiantou'></text></view>
 				</view>
 				<view class='address acea-row row-between-wrapper' @tap='onAddress' v-if='shippingType == 0'>
 
@@ -51,6 +52,10 @@
 					<block v-else>
 						<view>{{$t(`暂无门店信息`)}}</view>
 					</block>
+					<view class="icon acea-row row-middle" v-if="storeList.length>0">
+						<view class="iconfont icon-dianhua" @click.stop="call(system_store.phone)"></view>
+						<view class="iconfont icon-dingwei2" @click.stop="showMaoLocation(system_store)"></view>
+					</view>
 				</view>
 				<view class='line'>
 					<image src='/static/images/line.jpg'></image>
@@ -998,294 +1003,6 @@
 					uni.reLaunch({
 						url: `/pages/goods/cashier/index?order_id=${res.data.result.orderId}&from_type=order`
 					})
-					// let status = res.data.status,
-					// 	orderId = res.data.result.orderId,
-					// 	jsConfig = res.data.result.jsConfig,
-					// 	goPages = '/pages/goods/order_pay_status/index?order_id=' + orderId + '&msg=' + res.msg +
-					// 	'&type=3' + '&totalPrice=' + this.totalPrice,
-					// 	friendPay = '/pages/users/payment_on_behalf/index?order_id=' + orderId + '&spread=' +
-					// 	this
-					// 	.$store.state.app.uid
-					// switch (status) {
-					// 	case 'ORDER_EXIST':
-					// 	case 'EXTEND_ORDER':
-					// 		uni.hideLoading();
-					// 		return that.$util.Tips({
-					// 			title: res.msg
-					// 		}, {
-					// 			tab: 5,
-					// 			url: goPages
-					// 		});
-					// 	case 'ALLINPAY_PAY':
-					// 		uni.hideLoading();
-					// 		// #ifdef MP
-					// 		this.initIn = true
-					// 		wx.openEmbeddedMiniProgram({
-					// 			appId: 'wxef277996acc166c3',
-					// 			extraData: {
-					// 				cusid: jsConfig.cusid,
-					// 				appid: jsConfig.appid,
-					// 				version: jsConfig.version,
-					// 				trxamt: jsConfig.trxamt,
-					// 				reqsn: jsConfig.reqsn,
-					// 				notify_url: jsConfig.notify_url,
-					// 				body: jsConfig.body,
-					// 				remark: jsConfig.remark,
-					// 				validtime: jsConfig.validtime,
-					// 				randomstr: jsConfig.randomstr,
-					// 				paytype: jsConfig.paytype,
-					// 				sign: jsConfig.sign,
-					// 				signtype: jsConfig.signtype
-					// 			}
-					// 		})
-					// 		this.jumpData = {
-					// 			orderId: res.data.result.orderId,
-					// 			msg: res.msg,
-					// 		}
-					// 		// #endif
-					// 		// #ifdef APP-PLUS
-					// 		plus.runtime.openURL(jsConfig.payinfo);
-					// 		setTimeout(e => {
-					// 			uni.reLaunch({
-					// 				url: goPages
-					// 			})
-					// 		}, 1000)
-					// 		// #endif
-					// 		// #ifdef H5
-					// 		this.formpost(res.data.result.pay_url, jsConfig)
-					// 		// #endif
-					// 		break;
-					// 	case 'PAY_ERROR':
-					// 		uni.hideLoading();
-					// 		return that.$util.Tips({
-					// 			title: res.msg
-					// 		}, {
-					// 			tab: 5,
-					// 			url: goPages
-					// 		});
-					// 		break;
-					// 	case 'SUCCESS':
-					// 		uni.hideLoading();
-					// 		if ((that.BargainId || that.combinationId || that.pinkId || that.seckillId || that
-					// 				.discountId) && data.payType != 'friend')
-					// 			return that.$util.Tips({
-					// 				title: res.msg,
-					// 				icon: 'success'
-					// 			}, {
-					// 				tab: 4,
-					// 				url: goPages
-					// 			});
-					// 		return that.$util.Tips({
-					// 			title: res.msg,
-					// 			icon: 'success'
-					// 		}, {
-					// 			tab: 4,
-					// 			url: data.payType == 'friend' ? friendPay : goPages
-					// 		});
-					// 		break;
-					// 	case 'WECHAT_PAY':
-					// 		that.toPay = true;
-					// 		// #ifdef MP
-					// 		/* that.toPay = true; */
-					// 		let mp_pay_name = ''
-					// 		if (uni.requestOrderPayment) {
-					// 			mp_pay_name = 'requestOrderPayment'
-					// 		} else {
-					// 			mp_pay_name = 'requestPayment'
-					// 		}
-					// 		uni[mp_pay_name]({
-					// 			timeStamp: jsConfig.timestamp,
-					// 			nonceStr: jsConfig.nonceStr,
-					// 			package: jsConfig.package,
-					// 			signType: jsConfig.signType,
-					// 			paySign: jsConfig.paySign,
-					// 			success: function(res) {
-					// 				uni.hideLoading();
-					// 				if (that.BargainId || that.combinationId || that.pinkId || that
-					// 					.seckillId || that.discountId)
-					// 					return that.$util.Tips({
-					// 						title: that.$t(`支付成功`),
-					// 						icon: 'success'
-					// 					}, {
-					// 						tab: 4,
-					// 						url: goPages
-					// 					});
-					// 				return that.$util.Tips({
-					// 					title: that.$t(`支付成功`),
-					// 					icon: 'success'
-					// 				}, {
-					// 					tab: 5,
-					// 					url: goPages
-					// 				});
-					// 			},
-					// 			fail: function(e) {
-					// 				uni.hideLoading();
-					// 				return that.$util.Tips({
-					// 					title: that.$t(`取消支付`)
-					// 				}, {
-					// 					tab: 5,
-					// 					url: goPages + '&status=2'
-					// 				});
-					// 			},
-					// 			complete: function(e) {
-					// 				uni.hideLoading();
-					// 				//关闭当前页面跳转至订单状态
-					// 				if (res.errMsg == 'requestPayment:cancel' || e.errMsg ==
-					// 					'requestOrderPayment:cancel') return that.$util
-					// 					.Tips({
-					// 						title: that.$t(`取消支付`)
-					// 					}, {
-					// 						tab: 5,
-					// 						url: goPages + '&status=2'
-					// 					});
-					// 			},
-					// 		})
-					// 		// #endif
-					// 		// #ifdef H5
-					// 		this.$wechat.pay(res.data.result.jsConfig).then(res => {
-					// 			return that.$util.Tips({
-					// 				title: that.$t(`支付成功`),
-					// 				icon: 'success'
-					// 			}, {
-					// 				tab: 5,
-					// 				url: goPages
-					// 			});
-					// 		}).catch(res => {
-					// 			if (!this.$wechat.isWeixin()) {
-					// 				uni.redirectTo({
-					// 					url: goPages + '&msg=' + that.$t(`支付失败`) + '&status=2'
-					// 					// '&msg=支付失败&status=2'
-					// 				})
-					// 			}
-					// 			if (res.errMsg == 'chooseWXPay:cancel') return that.$util.Tips({
-					// 				title: that.$t(`取消支付`)
-					// 			}, {
-					// 				tab: 5,
-					// 				url: goPages + '&status=2'
-					// 			});
-					// 		})
-					// 		// #endif
-					// 		// #ifdef APP-PLUS
-					// 		uni.requestPayment({
-					// 			provider: 'wxpay',
-					// 			orderInfo: jsConfig,
-					// 			success: (e) => {
-					// 				let url = goPages;
-					// 				uni.showToast({
-					// 					title: that.$t(`支付成功`)
-					// 				})
-					// 				setTimeout(res => {
-					// 					uni.redirectTo({
-					// 						url: url
-					// 					})
-					// 				}, 2000)
-					// 			},
-					// 			fail: (e) => {
-					// 				let url = '/pages/goods/order_pay_status/index?order_id=' +
-					// 					orderId +
-					// 					'&msg=' + that.$t(`支付失败`);
-					// 				uni.showModal({
-					// 					content: that.$t(`支付失败`),
-					// 					showCancel: false,
-					// 					success: function(res) {
-					// 						if (res.confirm) {
-					// 							uni.redirectTo({
-					// 								url: url
-					// 							})
-					// 						} else if (res.cancel) {}
-					// 					}
-					// 				})
-					// 			},
-					// 			complete: () => {
-					// 				uni.hideLoading();
-					// 			},
-					// 		});
-					// 		// #endif
-					// 		break;
-					// 	case 'PAY_DEFICIENCY':
-					// 		uni.hideLoading();
-					// 		//余额不足
-					// 		return that.$util.Tips({
-					// 			title: res.msg
-					// 		}, {
-					// 			tab: 5,
-					// 			url: goPages + '&status=1'
-					// 		});
-					// 		break;
-
-					// 	case "WECHAT_H5_PAY":
-					// 		uni.hideLoading();
-					// 		that.$util.Tips({
-					// 			title: that.$t(`订单创建成功`)
-					// 		}, {
-					// 			tab: 4,
-					// 			url: goPages + '&status=0'
-					// 		});
-					// 		setTimeout(() => {
-					// 			location.href = res.data.result.jsConfig.h5_url;
-					// 		}, 2000);
-					// 		break;
-
-					// 	case 'ALIPAY_PAY':
-					// 		//#ifdef H5
-					// 		if (this.from === 'weixin') {
-					// 			uni.redirectTo({
-					// 				url: `/pages/users/alipay_invoke/index?id=${orderId}&pay_key=${res.data.result.pay_key}`
-					// 			});
-					// 		} else {
-					// 			uni.hideLoading();
-					// 			that.formContent = res.data.result.jsConfig;
-					// 			that.$nextTick(() => {
-					// 				document.getElementById('alipaysubmit').submit();
-					// 			})
-					// 		}
-					// 		//#endif
-					// 		// #ifdef MP
-					// 		uni.navigateTo({
-					// 			url: `/pages/users/alipay_invoke/index?id=${orderId}&link=${jsConfig.qrCode}`
-					// 		});
-					// 		// #endif
-					// 		// #ifdef APP-PLUS
-					// 		uni.requestPayment({
-					// 			provider: 'alipay',
-					// 			orderInfo: jsConfig,
-					// 			success: (e) => {
-					// 				uni.showToast({
-					// 					title: that.$t(`支付成功`)
-					// 				})
-					// 				let url = '/pages/goods/order_pay_status/index?order_id=' +
-					// 					orderId +
-					// 					'&msg=' + that.$t(`支付成功`);
-					// 				setTimeout(res => {
-					// 					uni.redirectTo({
-					// 						url: url
-					// 					})
-					// 				}, 2000)
-
-					// 			},
-					// 			fail: (e) => {
-					// 				let url = '/pages/goods/order_pay_status/index?order_id=' +
-					// 					orderId +
-					// 					'&msg=' + that.$t(`支付失败`);
-					// 				uni.showModal({
-					// 					content: that.$t(`支付失败`),
-					// 					showCancel: false,
-					// 					success: function(res) {
-					// 						if (res.confirm) {
-					// 							uni.redirectTo({
-					// 								url: url
-					// 							})
-					// 						} else if (res.cancel) {}
-					// 					}
-					// 				})
-					// 			},
-					// 			complete: () => {
-					// 				uni.hideLoading();
-					// 			},
-					// 		});
-					// 		// #endif
-					// 		break;
-					// }
 				}).catch(err => {
 					uni.hideLoading();
 					return that.$util.Tips({
@@ -1457,6 +1174,37 @@
 				this.inputTrip = true
 				// this.$refs.trip.foucs()
 			},
+			showMaoLocation(e) {
+				let self = this;
+				// #ifdef H5
+				if (self.$wechat.isWeixin()) {
+					self.$wechat.seeLocation({
+						latitude: Number(e.latitude),
+						longitude: Number(e.longitude),
+						name: e.name,
+						scale: 13,
+						address: `${e.address}-${e.detailed_address}`,
+					}).then(res => {})
+				} else {
+					// #endif	
+					uni.openLocation({
+						latitude: Number(e.latitude),
+						longitude: Number(e.longitude),
+						name: e.name,
+						address: `${e.address}-${e.detailed_address}`,
+						success: function() {
+							Number
+						}
+					});
+					// #ifdef H5	
+				}
+				// #endif
+			},
+			call(phone) {
+				uni.makePhoneCall({
+					phoneNumber: phone,
+				});
+			},
 		}
 	}
 </script>
@@ -1491,10 +1239,24 @@
 		padding: 28rpx 30rpx;
 		background-color: #fff;
 		box-sizing: border-box;
+		flex-wrap: nowrap;
+		.icon {
+			.iconfont {
+				width: 44rpx;
+				height: 44rpx;
+				background: var(--view-minorColorT);
+				font-size: 20rpx;
+				border-radius: 50%;
+				text-align: center;
+				line-height: 44rpx;
+				color: var(--view-theme);
+				margin-left: 26rpx;
+			}
+		}
 	}
 
 	.order-submission .address .addressCon {
-		width: 610rpx;
+		max-width: 510rpx;
 		font-size: 26rpx;
 		color: #666;
 	}
