@@ -25,6 +25,7 @@ use app\services\other\UploadService;
  * @package app\services\attachment
  * @method getYesterday() 获取昨日生成数据
  * @method delYesterday() 删除昨日生成数据
+ * @method scanUploadImage($scan_token) 获取扫码上传的图片数据
  */
 class SystemAttachmentServices extends BaseServices
 {
@@ -109,7 +110,7 @@ class SystemAttachmentServices extends BaseServices
      * @param int $type
      * @return mixed
      */
-    public function upload(int $pid, string $file, int $upload_type, int $type, $menuName)
+    public function upload(int $pid, string $file, int $upload_type, int $type, $menuName, $uploadToken = '')
     {
         $realName = false;
         if ($upload_type == 0) {
@@ -139,6 +140,7 @@ class SystemAttachmentServices extends BaseServices
                     $data['module_type'] = 1;
                     $data['time'] = $fileInfo['time'] ?? time();
                     $data['pid'] = $pid;
+                    $data['scan_token'] = $uploadToken;
                     $this->dao->save($data);
                 }
                 return $res->filePath;
