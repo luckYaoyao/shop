@@ -518,7 +518,7 @@ class StoreOrderDeliveryServices extends BaseServices
             if (!sys_config('config_export_open', 0)) {
                 throw new AdminException(400528);
             }
-            $dump = $expressService->express()->dump($expData);
+            $dump = $expressService->express()->dump($expData, sys_config('yihaotong_face_appid', ''));
             $orderInfo->delivery_id = $dump['kuaidinum'];
             $data['express_dump'] = json_encode([
                 'com' => $expData['com'],
@@ -561,10 +561,13 @@ class StoreOrderDeliveryServices extends BaseServices
             $expData['temp_id'] = $data['express_temp_id'];
             $expData['weight'] = $this->getOrderSumWeight($id);
             $expData['cargo'] = $orderInfoServices->getCarIdByProductTitle((int)$orderInfo->id, true);
+            $expData['day_type'] = $data['day_type'];
+            $expData['pickup_start_time'] = $data['pickup_start_time'];
+            $expData['pickup_end_time'] = $data['pickup_end_time'];
             if (!sys_config('config_shippment_open', 0)) {
                 throw new AdminException('商家寄件未开启无法寄件');
             }
-            $dump = $expressService->express()->shippmentCreateOrder($expData);
+            $dump = $expressService->express()->shippmentCreateOrder($expData, sys_config('yihaotong_send_appid', ''));
             $orderInfo->delivery_id = $dump['kuaidinum'] ?? '';
             $data['express_dump'] = json_encode([
                 'com' => $expData['com'],

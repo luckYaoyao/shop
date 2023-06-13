@@ -55,7 +55,7 @@ class CopyTaobaoServices extends BaseServices
             case 1://平台
                 /** @var ServeServices $services */
                 $services = app()->make(ServeServices::class);
-                $resultData = $services->copy('copy')->goods($url);
+                $resultData = $services->copy('copy')->goods($url, sys_config('yihaotong_copy_appid', ''));
                 if (isset($resultData['description_image']) && is_string($resultData['description_image'])) {
                     $resultData['description_image'] = json_decode($resultData['description_image'], true);
                 }
