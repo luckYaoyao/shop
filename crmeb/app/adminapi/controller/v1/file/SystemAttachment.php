@@ -167,6 +167,7 @@ class SystemAttachment extends AuthController
     /**
      * 网络图片上传
      * @return \think\Response
+     * @throws \Exception
      * @author 吴汐
      * @email 442384644@qq.com
      * @date 2023/06/13
