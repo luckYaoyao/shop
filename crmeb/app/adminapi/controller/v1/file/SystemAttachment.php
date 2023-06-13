@@ -163,4 +163,21 @@ class SystemAttachment extends AuthController
     {
         return app('json')->success($this->service->scanUploadImage($scan_token));
     }
+
+    /**
+     * 网络图片上传
+     * @return \think\Response
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/06/13
+     */
+    public function onlineUpload()
+    {
+        $data = $this->request->postMore([
+            ['pid', 0],
+            ['images', []]
+        ]);
+        $this->service->onlineUpload($data);
+        return app('json')->success(100032);
+    }
 }

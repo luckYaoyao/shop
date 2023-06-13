@@ -47,6 +47,8 @@ Route::group('file', function () {
     Route::get('scan_upload/qrcode', 'v1.file.SystemAttachment/scanUploadQrcode')->option(['real_name' => '扫码上传页面链接']);
     //获取扫码上传的图片数据
     Route::get('scan_upload/image/:scan_token', 'v1.file.SystemAttachment/scanUploadImage')->option(['real_name' => '获取扫码上传的图片数据']);
+    //网络图片上传
+    Route::post('online_upload', 'v1.file.SystemAttachment/onlineUpload')->option(['real_name' => '网络图片上传']);
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,

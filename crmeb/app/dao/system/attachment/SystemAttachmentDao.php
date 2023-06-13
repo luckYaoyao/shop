@@ -106,6 +106,6 @@ class SystemAttachmentDao extends BaseDao
      */
     public function scanUploadImage($scan_token)
     {
-        return $this->getModel()->where('scan_token', $scan_token)->select()->toArray();
+        return $this->getModel()->where('scan_token', $scan_token)->field('att_dir,att_id')->select()->toArray();
     }
 }

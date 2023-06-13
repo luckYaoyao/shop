@@ -14,6 +14,7 @@ namespace app\services\system\attachment;
 
 use app\services\BaseServices;
 use app\dao\system\attachment\SystemAttachmentDao;
+use app\services\product\product\CopyTaobaoServices;
 use crmeb\exceptions\AdminException;
 use crmeb\exceptions\ApiException;
 use crmeb\exceptions\UploadException;
@@ -283,5 +284,55 @@ class SystemAttachmentServices extends BaseServices
             }
         }
         return $res;
+    }
+
+    /**
+     * 网络图片上传
+     * @param $data
+     * @return bool
+     * @throws \Exception
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/06/13
+     */
+    public function onlineUpload($data)
+    {
+        //生成附件目录
+        if (make_path('attach', 3, true) === '') {
+            throw new AdminException(400555);
+        }
+
+        //上传图片
+        /** @var SystemAttachmentServices $systemAttachmentService */
+        $systemAttachmentService = app()->make(SystemAttachmentServices::class);
+        $siteUrl = sys_config('site_url');
+
+        foreach ($data['images'] as $image) {
+            $uploadValue = app()->make(CopyTaobaoServices::class)->downloadImage($image);
+            if (is_array($uploadValue)) {
+                //TODO 拼接图片地址
+                if ($uploadValue['image_type'] == 1) {
+                    $imagePath = $siteUrl . $uploadValue['path'];
+                } else {
+                    $imagePath = $uploadValue['path'];
+                }
+                //写入数据库
+                if (!$uploadValue['is_exists']) {
+                    $systemAttachmentService->save([
+                        'name' => $uploadValue['name'],
+                        'real_name' => $uploadValue['name'],
+                        'att_dir' => $imagePath,
+                        'satt_dir' => $imagePath,
+                        'att_size' => $uploadValue['size'],
+                        'att_type' => $uploadValue['mime'],
+                        'image_type' => $uploadValue['image_type'],
+                        'module_type' => 1,
+                        'time' => time(),
+                        'pid' => $data['pid']
+                    ]);
+                }
+            }
+        }
+        return true;
     }
 }
