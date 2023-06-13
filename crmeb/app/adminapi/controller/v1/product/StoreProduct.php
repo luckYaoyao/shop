@@ -351,7 +351,8 @@ class StoreProduct extends AuthController
             if (!$key || !$contentType) {
                 return app('json')->fail('缺少参数');
             }
-            $re = $upload->getTempKeys($key, $path, $contentType);
+            $url = $upload->getTempKeys($key, $path, $contentType);
+            $re = ['url' => $url];
         } else {
             $re = $upload->getTempKeys();
         }
