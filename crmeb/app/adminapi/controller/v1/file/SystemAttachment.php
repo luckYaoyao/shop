@@ -150,4 +150,17 @@ class SystemAttachment extends AuthController
         $url = sys_config('site_url') . '/app/upload?token=' . $uploadToken;
         return app('json')->success(['url' => $url]);
     }
+
+    /**
+     * 获取扫码上传的图片数据
+     * @param $scan_token
+     * @return \think\Response
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/06/13
+     */
+    public function scanUploadImage($scan_token)
+    {
+        return app('json')->success($this->service->scanUploadImage($scan_token));
+    }
 }

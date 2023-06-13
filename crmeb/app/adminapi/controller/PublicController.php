@@ -69,7 +69,7 @@ class PublicController
         if ($service->cacheDriver()->get('scan_upload') != $uploadToken) {
             return app('json')->fail(410086);
         }
-        $service->upload((int)$pid, $file, $upload_type, $type, $menuName);
+        $service->upload((int)$pid, $file, $upload_type, $type, $menuName, $uploadToken);
         return app('json')->success(100032);
     }
 }

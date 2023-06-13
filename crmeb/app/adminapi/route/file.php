@@ -45,6 +45,8 @@ Route::group('file', function () {
 
     //获取扫码上传页面链接以及参数
     Route::get('scan_upload/qrcode', 'v1.file.SystemAttachment/scanUploadQrcode')->option(['real_name' => '扫码上传页面链接']);
+    //获取扫码上传的图片数据
+    Route::get('scan_upload/image/:scan_token', 'v1.file.SystemAttachment/scanUploadImage')->option(['real_name' => '获取扫码上传的图片数据']);
 })->middleware([
     \app\http\middleware\AllowOriginMiddleware::class,
     \app\adminapi\middleware\AdminAuthTokenMiddleware::class,
