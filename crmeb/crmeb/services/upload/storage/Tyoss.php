@@ -331,7 +331,7 @@ class Tyoss extends BaseUpload
     public function getDomian($name, $region)
     {
         try {
-            $res = $this->app()->GetBucketDomain($name, $region);
+            $res = $this->app()->getBucketDomain($name, $region);
             if ($res) {
                 $domainRules = $res->toArray()['ListBucketCustomDomainsResult'];
                 return array_column($domainRules, 'DomainName');
@@ -360,7 +360,7 @@ class Tyoss extends BaseUpload
     public function setBucketCors(string $name, string $region)
     {
         try {
-            $this->app()->PutBucketCors($name, $region, [
+            $this->app()->putBucketCors($name, $region, [
                 'AllowedHeader' => ['*'],
                 'AllowedMethod' => ['PUT', 'GET', 'POST', 'DELETE', 'HEAD'],
                 'AllowedOrigin' => ['*'],
@@ -372,9 +372,18 @@ class Tyoss extends BaseUpload
             return $this->setError($e->getMessage());
         }
     }
+
+    /**
+     * @return array
+     * @date 2023/6/13
+     */
     public function getTempKeys()
     {
-        // TODO: Implement getTempKeys() method.
+        return [
+            'access_key' => $this->accessKey,
+            'secret_key' => $this->secretKey,
+            'type' => 'TYOSS'
+        ];
     }
 
     /**
