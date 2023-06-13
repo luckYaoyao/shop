@@ -358,7 +358,10 @@ class Jdoss extends BaseUpload
                 ]
             );
             $request = $app->createPresignedRequest($cmd, $expires);
-            return (string)$request->getUri();
+            return [
+                'url' => (string)$request->getUri(),
+                'type' => 'JDOSS'
+            ];
         } catch (\Throwable $e) {
             return $this->setError($e->getMessage());
         }
