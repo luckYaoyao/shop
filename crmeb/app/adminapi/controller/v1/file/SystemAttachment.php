@@ -135,4 +135,19 @@ class SystemAttachment extends AuthController
         $res = $this->service->videoUpload($data, $_FILES['file']);
         return app('json')->success($res);
     }
+
+    /**
+     * 获取扫码上传页面链接以及参数
+     * @return \think\Response
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/06/13
+     */
+    public function scanUploadQrcode()
+    {
+        $uploadToken = md5(time());
+        $this->service->cacheDriver()->set('scan_upload', $uploadToken, 600);
+        $url = sys_config('site_url') . '/app/upload?token=' . $uploadToken;
+        return app('json')->success(['url' => $url]);
+    }
 }
