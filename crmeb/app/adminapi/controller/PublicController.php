@@ -59,17 +59,15 @@ class PublicController
      */
     public function scanUpload(Request $request, $upload_type = 0, $type = 0)
     {
-        [$pid, $file, $menuName, $uploadToken] = $request->postMore([
-            ['pid', 0],
+        [$file, $uploadToken] = $request->postMore([
             ['file', 'file'],
-            ['menu_name', ''],
             ['uploadToken', '']
         ], true);
         $service = app()->make(SystemAttachmentServices::class);
         if ($service->cacheDriver()->get('scan_upload') != $uploadToken) {
             return app('json')->fail(410086);
         }
-        $service->upload((int)$pid, $file, $upload_type, $type, $menuName, $uploadToken);
+        $service->upload(0, $file, $upload_type, $type, '', $uploadToken);
         return app('json')->success(100032);
     }
 }

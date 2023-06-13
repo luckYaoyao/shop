@@ -38,7 +38,7 @@ Route::group(function () {
     Route::get('index', 'Test/index')->option(['real_name' => '测试地址']);
 
     //扫码上传图片
-    Route::post('image/scan_upload', 'PublicController/scanUpload')->name('ajcheck')->option(['real_name' => '一次验证']);
+    Route::post('image/scan_upload', 'PublicController/scanUpload')->option(['real_name' => '扫码上传图片']);
 
 })->middleware(AllowOriginMiddleware::class)->option(['mark' => 'login', 'mark_name' => '登录相关']);
 
