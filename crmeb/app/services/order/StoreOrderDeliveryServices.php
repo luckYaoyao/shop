@@ -440,6 +440,12 @@ class StoreOrderDeliveryServices extends BaseServices
         /** @var StoreOrderCartInfoServices $orderInfoServices */
         $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);
         $storeName = $orderInfoServices->getCarIdByProductTitle((int)$orderInfo->id);
+
+        if (count($data['pickup_time']) == 2) {
+            $data['pickup_start_time'] = $data['pickup_time'][0];
+            $data['pickup_end_time'] = $data['pickup_time'][1];
+        }
+
         // 发货信息录入
         $res = [];
         switch ($type) {

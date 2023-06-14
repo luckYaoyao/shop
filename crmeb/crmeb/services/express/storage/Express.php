@@ -74,7 +74,12 @@ class Express extends BaseExpress
      */
     public function getKuaidiComs()
     {
-        return $this->accessToken->httpRequest(self::SHIPMENT_KUAIDI_NUMS, [], 'GET');
+        $list = $this->accessToken->httpRequest(self::SHIPMENT_KUAIDI_NUMS, [], 'GET');
+        foreach ($list as &$item) {
+            $item['code'] = $item['value'];
+            $item['value'] = $item['label'];
+        }
+        return $list;
     }
 
     /**
