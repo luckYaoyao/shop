@@ -577,9 +577,9 @@ class StoreOrderDeliveryServices extends BaseServices
             $orderInfo->delivery_id = $dump['kuaidinum'] ?? '';
             $data['express_dump'] = json_encode([
                 'com' => $expData['kuaidicom'],
-                'from_name' => $expData['from_name'],
-                'from_tel' => $expData['from_tel'],
-                'from_addr' => $expData['from_addr'],
+                'from_name' => $expData['send_real_name'],
+                'from_tel' => $expData['send_phone'],
+                'from_addr' => $expData['send_address'],
                 'temp_id' => $expData['temp_id'],
                 'cargo' => $expData['cargo'],
             ]);
