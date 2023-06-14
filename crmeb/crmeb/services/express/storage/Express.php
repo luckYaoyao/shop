@@ -49,7 +49,7 @@ class Express extends BaseExpress
     //获取物流公司信息
     const SHIPMENT_KUAIDI_NUMS = 'v2/shipment/get_kuaidi_coms';
     //创建商家寄件订单
-    const SHIPMENT_CREATE_ORDER = 'v2/v2/shipment/create_order';
+    const SHIPMENT_CREATE_ORDER = 'v2/shipment/create_order';
     //取消商家寄件
     const SHIPMENT_CANCEL_ORDER = 'v2/shipment/cancel_order';
     //获取商家寄件订单列表
@@ -109,7 +109,7 @@ class Express extends BaseExpress
             'call_back_url' => sys_config('site_url') . '/api/order_call_back',
             'return_type' => $siid ? '10' : '20',
             'siid' => $siid,
-            'tempid' => $data['tempid'],
+            'tempid' => $data['temp_id'],
             'cargo' => $data['cargo'],
             'weight' => $data['weight'],
             'day_type' => $data['day_type'],
