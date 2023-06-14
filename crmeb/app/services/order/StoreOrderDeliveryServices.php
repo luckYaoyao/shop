@@ -570,9 +570,9 @@ class StoreOrderDeliveryServices extends BaseServices
             $expData['day_type'] = $data['day_type'];
             $expData['pickup_start_time'] = $data['pickup_start_time'];
             $expData['pickup_end_time'] = $data['pickup_end_time'];
-            if (!sys_config('config_shippment_open', 0)) {
-                throw new AdminException('商家寄件未开启无法寄件');
-            }
+//            if (!sys_config('config_shippment_open', 0)) {
+//                throw new AdminException('商家寄件未开启无法寄件');
+//            }
             $dump = $expressService->express()->shippmentCreateOrder($expData, sys_config('yihaotong_send_appid', ''));
             $orderInfo->delivery_id = $dump['kuaidinum'] ?? '';
             $data['express_dump'] = json_encode([
