@@ -78,6 +78,11 @@ class Express extends BaseExpress
         foreach ($list as &$item) {
             $item['code'] = $item['value'];
             $item['value'] = $item['label'];
+            $num = 1;
+            foreach ($item['list'] as &$value) {
+                $value['title'] = $item['label'] . '模版' . $num;
+                $num++;
+            }
         }
         return $list;
     }
