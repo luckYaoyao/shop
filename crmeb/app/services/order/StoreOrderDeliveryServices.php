@@ -576,7 +576,7 @@ class StoreOrderDeliveryServices extends BaseServices
             $dump = $expressService->express()->shippmentCreateOrder($expData, sys_config('yihaotong_send_appid', ''));
             $orderInfo->delivery_id = $dump['kuaidinum'] ?? '';
             $data['express_dump'] = json_encode([
-                'com' => $expData['com'],
+                'com' => $expData['kuaidicom'],
                 'from_name' => $expData['from_name'],
                 'from_tel' => $expData['from_tel'],
                 'from_addr' => $expData['from_addr'],
