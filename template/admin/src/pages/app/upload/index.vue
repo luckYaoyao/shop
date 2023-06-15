@@ -69,22 +69,38 @@ export default {
         }
       }
     },
+    handleRemove(file) {
+      console.log(file);
+      let index = this.imgList.findIndex((e) => {
+        e.url == file.url;
+      });
+      this.imgList.splice(index, 1);
+      this.$nextTick((e) => {
+        this.imgList.map((e) => {
+          this.allSize += e.size;
+        });
+      });
+    },
     uploadItem(file) {
       return new Promise((resolve, reject) => {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('uploadToken', this.token);
-        scanUpload(formData).then((res) => {
-          if (res.status == 200) {
-            resolve();
-          } else {
-            this.$message({
-              message: '上传失败',
-              type: 'error',
-              duration: 1000,
-            });
-          }
-        });
+        scanUpload(formData)
+          .then((res) => {
+            if (res.status == 200) {
+              resolve();
+            } else {
+              this.$message({
+                message: '上传失败',
+                type: 'error',
+                duration: 1000,
+              });
+            }
+          })
+          .catch((err) => {
+            this.$Message.error(err.msg);
+          });
       });
     },
     fileChange(file, fileList) {
@@ -121,6 +137,11 @@ export default {
   height: 113px;
   line-height: 113px;
   overflow: inherit;
+}
+/deep/ .el-upload-list--picture-card .el-upload-list__item img {
+  width: 111px;
+  height: 111px;
+  border-radius: 6px;
 }
 .btndel {
   position: absolute;
