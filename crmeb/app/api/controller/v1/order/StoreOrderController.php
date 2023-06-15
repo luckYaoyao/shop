@@ -716,6 +716,7 @@ class StoreOrderController
         if (!$order || $uid != $order['uid']) {
             return app('json')->fail(410173);
         }
+        if ($order['pid'] == -1) return app('json')->fail('主订单已拆单，请刷新页面');
         $refundData = [
             'refund_reason' => $data['text'],
             'refund_explain' => $data['refund_reason_wap_explain'],
