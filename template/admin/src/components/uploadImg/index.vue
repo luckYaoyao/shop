@@ -6,6 +6,7 @@
       :modal-append-to-body="false"
       :visible.sync="uploadModal"
       width="1024px"
+      @closed="closed"
     >
       <div class="main">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -16,7 +17,7 @@
               <el-radio :label="2">扫码上传</el-radio>
             </el-radio-group>
           </el-form-item>
-          <el-form-item label="上传至分组：" prop="region" v-if="ruleForm.type == 0 || ruleForm.type == 1">
+          <el-form-item label="上传至分组：" prop="region" v-show="ruleForm.type == 0 || ruleForm.type == 1">
             <el-cascader
               class="form-width"
               v-model="ruleForm.region"
@@ -44,27 +45,25 @@
                   :before-upload="beforeUpload"
                 >
                   <i slot="default" class="el-icon-plus"></i>
-                  <!-- <div
-                  slot="file"
-                  slot-scope="{ file }"
-                  draggable="false"
-                  @dragstart="handleDragStart($event, file)"
-                  @dragover="handleDragOver($event, file)"
-                  @dragenter="handleDragEnter($event, file)"
-                  @dragend="handleDragEnd($event, file)"
-                >
-                  <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-                  <i class="el-icon-error btndel" @click="handleRemove(file)" />
-
-             
-                </div> -->
+                  <div
+                    slot="file"
+                    slot-scope="{ file }"
+                    draggable="false"
+                    @dragstart="handleDragStart($event, file)"
+                    @dragover="handleDragOver($event, file)"
+                    @dragenter="handleDragEnter($event, file)"
+                    @dragend="handleDragEnd($event, file)"
+                  >
+                    <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
+                    <i class="el-icon-error btndel" @click="handleRemove(file)" />
+                  </div>
                 </el-upload>
                 <div class="tips">建议上传图片最大宽度750px，不超过3MB；仅支持jpeg、png格式</div>
               </div>
             </div>
           </el-form-item>
           <template v-if="ruleForm.type == 1">
-            <div class="img-box">
+            <div class="img-box pl100">
               <div
                 v-for="(item, index) in ruleForm.imgList"
                 :key="index"
@@ -81,9 +80,9 @@
             </div>
           </template>
         </el-form>
-        <div class="code-image" v-if="ruleForm.type == 2">
+        <div class="code-image" v-show="ruleForm.type == 2">
           <div class="left">
-            <div class="code"></div>
+            <div class="code" ref="qrCodeUrl"></div>
             <el-cascader
               class="form-width"
               v-model="ruleForm.region"
@@ -94,7 +93,7 @@
             <div>扫描二维码，快速上传手机图片</div>
           </div>
           <div class="right">
-            <el-button size="small">刷新图库</el-button>
+            <el-button size="small" @click="scanUploadGet">刷新图库</el-button>
             <div class="tip">刷新图库按钮，可显示移动端上传成功的图片</div>
             <div class="img-box">
               <div
@@ -107,7 +106,7 @@
                 @dragenter="handleDragEnter($event, item)"
                 @dragend="handleDragEnd($event, item)"
               >
-                <img :src="item.url" />
+                <img :src="item.att_dir" />
                 <i class="el-icon-error btndel" @click="handleRemove(index)" />
               </div>
             </div>
@@ -124,10 +123,11 @@
 </template>
 
 <script>
-import { getCategoryListApi } from '@/api/uploadPictures';
+import { getCategoryListApi, moveApi, onlineUpload } from '@/api/uploadPictures';
 import Setting from '@/setting';
 import { getCookies } from '@/libs/util';
-import { fileUpload } from '@/api/setting';
+import { fileUpload, scanUploadQrcode, scanUploadGet } from '@/api/setting';
+import QRCode from 'qrcodejs2';
 
 export default {
   name: '',
@@ -155,28 +155,75 @@ export default {
       },
       rules: { type: [{ required: true, message: '请选择活动资源', trigger: 'change' }] },
       treeId: '',
+      qrcode: '',
+      scanToken: '',
     };
   },
   created() {},
   mounted() {},
   methods: {
+    closed() {
+      this.ruleForm.type = 0;
+      this.ruleForm.imgList = [];
+    },
     radioChange(type) {
       this.ruleForm.type = type;
       this.ruleForm.imgList = [];
+      if (type == 2) {
+        this.scanUploadQrcode();
+      }
     },
+    scanUploadQrcode() {
+      scanUploadQrcode().then((res) => {
+        this.creatQrCode(res.data.url);
+        this.scanToken = res.data.url;
+      });
+    },
+    scanUploadGet() {
+      let token = this.scanToken.split('token=')[1];
+      scanUploadGet(token).then((res) => {
+        this.ruleForm.imgList = res.data;
+        console.log(res);
+      });
+    },
+
     getImg() {
       this.ruleForm.imgList.push({
         url: this.webImgUrl,
       });
     },
     async submitUpload() {
-      this.uploadData = {
-        pid: this.treeId,
-      };
-      console.log(this.uploadData);
-      for (let i = 0; i < this.ruleForm.imgList.length; i++) {
-        const file = this.ruleForm.imgList[i].raw;
-        await this.uploadItem(file);
+      if (this.ruleForm.type == 0) {
+        this.uploadData = {
+          pid: this.treeId,
+        };
+        for (let i = 0; i < this.ruleForm.imgList.length; i++) {
+          const file = this.ruleForm.imgList[i].raw;
+          await this.uploadItem(file);
+          if (i == this.ruleForm.imgList.length - 1) {
+            this.$Message.success('上传成功');
+            this.$emit('uploadSuccess');
+            this.uploadModal = false;
+          }
+        }
+      } else if (this.ruleForm.type == 1) {
+        let urls = this.ruleForm.imgList.map((e) => {
+          return e.url;
+        });
+        onlineUpload({ pid: this.treeId, images: urls }).then((res) => {
+          this.$Message.success('上传成功');
+          this.$emit('uploadSuccess');
+          this.uploadModal = false;
+        });
+      } else if (this.ruleForm.type == 2) {
+        let attId = this.ruleForm.imgList.map((e) => {
+          return e.att_id;
+        });
+        moveApi({ pid: this.treeId, images: attId }).then((res) => {
+          this.$Message.success('上传成功');
+          this.$emit('uploadSuccess');
+          this.uploadModal = false;
+        });
       }
     },
     uploadItem(file) {
@@ -210,6 +257,17 @@ export default {
       //     });
       //   });
       //   return promise;
+    },
+    creatQrCode(url) {
+      this.$refs.qrCodeUrl.innerHTML = '';
+      var qrcode = new QRCode(this.$refs.qrCodeUrl, {
+        text: url, // 需要转换为二维码的内容
+        width: 160,
+        height: 160,
+        colorDark: '#000000',
+        colorLight: '#ffffff',
+        correctLevel: QRCode.CorrectLevel.H,
+      });
     },
     handleRemove(file) {
       console.log(file);
@@ -309,9 +367,11 @@ export default {
     line-height: 72px;
     overflow inherit
 }
+.pl100{
+    padding-left 100px
+}
 .img-box{
     display flex
-    padding-left 100px
     flex-wrap: wrap
 }
 .tips{
@@ -353,6 +413,7 @@ export default {
             font-size: 12px;
             font-weight: 400;
             color: #BBBBBB;
+            margin 10px 0
         }
     }
 }

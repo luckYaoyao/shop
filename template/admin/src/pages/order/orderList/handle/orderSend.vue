@@ -20,6 +20,7 @@
         <RadioGroup v-model="formItem.express_record_type" @on-change="changeExpress">
           <Radio label="1">手动填写</Radio>
           <Radio label="2">电子面单打印</Radio>
+          <Radio label="3">商家寄件</Radio>
         </RadioGroup>
       </FormItem>
       <div>
@@ -31,7 +32,12 @@
             style="width: 80%"
             @on-change="expressChange"
           >
-            <Option v-for="(item, i) in express" :value="item.value" :key="item.value">{{ item.value }}</Option>
+            <Option
+              v-for="item in formItem.express_record_type == 3 ? kuaidiExpress : express"
+              :value="item.value"
+              :key="item.value"
+              >{{ item.value }}</Option
+            >
           </Select>
         </FormItem>
         <FormItem v-if="formItem.express_record_type === '1' && formItem.type == 1" label="快递单号：">
@@ -41,7 +47,7 @@
             <p>例如：SF000000000000:3941</p>
           </div>
         </FormItem>
-        <template v-if="formItem.express_record_type === '2' && formItem.type == 1">
+        <template v-if="['2', '3'].includes(formItem.express_record_type) && formItem.type == 1">
           <FormItem label="电子面单：" class="express_temp_id">
             <Select
               v-model="formItem.express_temp_id"
@@ -61,6 +67,23 @@
           </FormItem>
           <FormItem label="寄件人地址：">
             <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></Input>
+          </FormItem>
+          <FormItem label="取件日期：" v-if="formItem.express_record_type == 3">
+            <RadioGroup v-model="formItem.day_type" type="button">
+              <Radio :label="0">今天</Radio>
+              <Radio :label="1">明天</Radio>
+              <Radio :label="2">后台</Radio>
+            </RadioGroup>
+          </FormItem>
+          <FormItem label="取件时间：" v-if="formItem.express_record_type == 3">
+            <TimePicker
+              v-model="formItem.pickup_time"
+              format="HH:mm"
+              type="timerange"
+              placement="bottom-end"
+              placeholder="选择取件时间范围"
+              style="width: 168px"
+            />
           </FormItem>
         </template>
       </div>
@@ -153,6 +176,7 @@ import {
   orderDeliveryList,
   orderSheetInfo,
   splitCartInfo,
+  kuaidiComsList,
 } from '@/api/order';
 import printJS from 'print-js';
 export default {
@@ -185,9 +209,11 @@ export default {
         to_addr: '',
         sh_delivery: '',
         fictitious_content: '',
+        day_type: 0,
       },
       modals: false,
       express: [],
+      kuaidiExpress: [],
       expressTemp: [],
       deliveryList: [],
       temp: {},
@@ -321,9 +347,20 @@ export default {
           this.formItem.delivery_id = '';
           this.getList(1);
           break;
+        case '3':
+          this.formItem.delivery_name = '';
+          this.formItem.delivery_id = '';
+          this.kuaidiComsList();
+          break;
         default:
           break;
       }
+    },
+    kuaidiComsList() {
+      kuaidiComsList().then((res) => {
+        console.log(res);
+        this.kuaidiExpress = res.data;
+      });
     },
     reset() {
       this.formItem = {
@@ -446,9 +483,10 @@ export default {
     },
     // 电子面单列表
     expressChange(value) {
-      let expressItem = this.express.find((item) => {
+      let expressItem = (this.formItem.express_record_type == '3' ? this.kuaidiExpress : this.express).find((item) => {
         return item.value === value;
       });
+      console.log(value, expressItem);
       if (expressItem === undefined) {
         return;
       }
@@ -468,6 +506,9 @@ export default {
           .catch((err) => {
             this.$Message.error(err.msg);
           });
+      } else if (this.formItem.express_record_type == '3') {
+        this.expressTemp = expressItem.list;
+        console.log(this.expressTemp);
       }
     },
     getCartInfo(data, orderid) {

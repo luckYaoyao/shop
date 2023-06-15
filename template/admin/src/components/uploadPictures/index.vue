@@ -46,7 +46,7 @@
                 :on-success="handleSuccess"
                 style="margin-top: 1px; display: inline-block"
               > -->
-              <Button type="primary" @click="uploadModal">上传图片</Button>
+              <Button class="mr10" type="primary" @click="uploadModal">上传图片</Button>
               <!-- </Upload> -->
               <!-- <Upload
                 :show-upload-list="false"
@@ -146,7 +146,7 @@
         </div>
       </Col>
     </Row>
-    <uploadImg ref="upload"></uploadImg>
+    <uploadImg ref="upload" @uploadSuccess="uploadSuccess"></uploadImg>
   </div>
 </template>
 
@@ -227,6 +227,10 @@ export default {
     this.getFileList();
   },
   methods: {
+    uploadSuccess() {
+      this.fileData.page = 1;
+      this.getFileList();
+    },
     uploadModal() {
       this.$refs.upload.uploadModal = true;
     },

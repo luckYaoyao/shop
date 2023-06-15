@@ -102,3 +102,14 @@ export function fileDelApi(ids) {
     data: ids,
   });
 }
+/**
+ * @description 网络图片上传
+ * @param {String} param ids {String} 图片id拼接成的字符串
+ */
+export function onlineUpload(data) {
+  return request({
+    url: 'file/online_upload',
+    method: 'post',
+    data,
+  });
+}

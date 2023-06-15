@@ -535,6 +535,17 @@ export function stopWrongQueue(id) {
 }
 
 /**
+ * @description 上架寄件快递列表
+ * @param {Object} param data {Object} 传值参数
+ */
+export function kuaidiComsList() {
+  return request({
+    url: `order/kuaidi_coms`,
+    method: 'get',
+  });
+}
+
+/**
  * @description 修改退款订单备注信息
  * @param {Number} param data.id {Number} 订单id
  * @param {String} param data.remark {String} 备注信息
