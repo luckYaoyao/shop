@@ -159,6 +159,7 @@ export default {
   width: 111px;
   height: 111px;
   border-radius: 6px;
+  object-fit: cover;
 }
 .btndel {
   position: absolute;

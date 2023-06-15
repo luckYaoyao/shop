@@ -364,6 +364,12 @@ export default {
     line-height: 72px;
     overflow inherit
 }
+/deep/ .el-upload--picture-card, /deep/ .el-upload-list--picture-card .el-upload-list__item img{
+    width 64px
+    height 64px
+    border-radius: 6px;
+    object-fit: cover;
+}
 .pl100{
     padding-left 100px
 }
