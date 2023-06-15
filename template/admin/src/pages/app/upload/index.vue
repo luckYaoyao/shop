@@ -39,6 +39,7 @@
 <script>
 import Setting from '@/setting';
 import { scanUpload } from '@/api/setting';
+import compressImg from '@/utils/compressImg.js';
 export default {
   name: 'app_upload_file',
   data() {
@@ -52,8 +53,8 @@ export default {
   },
   created() {
     this.token = this.$route.query.token;
+    document.title = '手机端扫码上传';
   },
-  mounted() {},
   methods: {
     again() {
       this.uploading = true;
@@ -77,10 +78,11 @@ export default {
       this.imgList.splice(index, 1);
       this.$nextTick((e) => {
         this.imgList.map((e) => {
-          this.allSize += e.size;
+          this.allSize += e.raw.size;
         });
       });
     },
+
     uploadItem(file) {
       return new Promise((resolve, reject) => {
         const formData = new FormData();
@@ -103,11 +105,26 @@ export default {
           });
       });
     },
+
+    dataURLtoBlob(dataurl) {
+      const arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    },
     fileChange(file, fileList) {
-      this.imgList = fileList;
-      console.log(this.imgList);
-      this.imgList.map((e) => {
-        this.allSize += e.size;
+      compressImg(file.raw).then((res) => {
+        if (fileList.length) fileList[fileList.length - 1].raw = res;
+        this.imgList = fileList;
+        this.imgList.map((e) => {
+          console.log(e);
+          this.allSize += e.raw.size;
+        });
       });
     },
     loadData(item, callback) {

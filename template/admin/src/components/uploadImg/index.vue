@@ -128,6 +128,7 @@ import Setting from '@/setting';
 import { getCookies } from '@/libs/util';
 import { fileUpload, scanUploadQrcode, scanUploadGet } from '@/api/setting';
 import QRCode from 'qrcodejs2';
+import compressImg from '@/utils/compressImg.js';
 
 export default {
   name: '',
@@ -231,33 +232,25 @@ export default {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('pid', this.treeId);
-        fileUpload(formData).then((res) => {
-          if (res.status == 200) {
-            resolve();
-            // this.$emit('uploadImgSuccess', res.data);
-          } else {
-            this.$message({
-              message: '上传失败',
-              type: 'error',
-              duration: 1000,
-            });
-          }
-        });
+        fileUpload(formData)
+          .then((res) => {
+            if (res.status == 200) {
+              resolve();
+              // this.$emit('uploadImgSuccess', res.data);
+            } else {
+              this.$message({
+                message: '上传失败',
+                type: 'error',
+                duration: 1000,
+              });
+            }
+          })
+          .catch((err) => {
+            this.$Message.error(err.msg);
+          });
       });
     },
-    beforeUpload(file) {
-      //   console.log('1s ');
-      //   if (!/image\/\w+/.test(file.type)) {
-      //     this.$Message.error('请上传以jpg、jpeg、png等结尾的图片文件'); //FileExt.toLowerCase()
-      //     return false;
-      //   }
-      //   let promise = new Promise((resolve) => {
-      //     this.$nextTick(function () {
-      //       resolve(true);
-      //     });
-      //   });
-      //   return promise;
-    },
+    beforeUpload(file) {},
     creatQrCode(url) {
       this.$refs.qrCodeUrl.innerHTML = '';
       var qrcode = new QRCode(this.$refs.qrCodeUrl, {
@@ -286,6 +279,10 @@ export default {
     fileChange(file, fileList) {
       console.log(file, fileList);
       this.ruleForm.imgList = fileList;
+      compressImg(file.raw).then((res) => {
+        if (fileList.length) fileList[fileList.length - 1].raw = res;
+        this.ruleForm.imgList = fileList;
+      });
     },
     loadData(item, callback) {
       getCategoryListApi({
