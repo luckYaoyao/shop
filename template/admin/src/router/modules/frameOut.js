@@ -169,7 +169,7 @@ export default [
   },
   {
     path: '/app/upload',
-    name: `${pre}app-mobile_upload`,
+    name: `mobile_upload`,
     meta: {
       auth: true,
       title: '手机端扫码上传',
