@@ -49,7 +49,7 @@ class Express extends BaseExpress
     //获取物流公司信息
     const SHIPMENT_KUAIDI_NUMS = 'v2/shipment/get_kuaidi_coms';
     //创建商家寄件订单
-    const SHIPMENT_CREATE_ORDER = 'v2/v2/shipment/create_order';
+    const SHIPMENT_CREATE_ORDER = 'v2/shipment/create_order';
     //取消商家寄件
     const SHIPMENT_CANCEL_ORDER = 'v2/shipment/cancel_order';
     //获取商家寄件订单列表
@@ -74,7 +74,17 @@ class Express extends BaseExpress
      */
     public function getKuaidiComs()
     {
-        return $this->accessToken->httpRequest(self::SHIPMENT_KUAIDI_NUMS, [], 'GET');
+        $list = $this->accessToken->httpRequest(self::SHIPMENT_KUAIDI_NUMS, [], 'GET');
+        foreach ($list as &$item) {
+            $item['code'] = $item['value'];
+            $item['value'] = $item['label'];
+            $num = 1;
+            foreach ($item['list'] as &$value) {
+                $value['title'] = $item['label'] . '模版' . $num;
+                $num++;
+            }
+        }
+        return $list;
     }
 
     /**
@@ -85,7 +95,7 @@ class Express extends BaseExpress
      * @email 136327134@qq.com
      * @date 2023/5/15
      */
-    public function shippmentCreateOrder(array $data)
+    public function shippmentCreateOrder(array $data, string $yihaotongSendAppid = '')
     {
         $siid = sys_config('config_export_siid');
         $param = [
@@ -99,11 +109,15 @@ class Express extends BaseExpress
             'call_back_url' => sys_config('site_url') . '/api/order_call_back',
             'return_type' => $siid ? '10' : '20',
             'siid' => $siid,
-            'tempid' => $data['tempid'],
+            'tempid' => $data['temp_id'],
             'cargo' => $data['cargo'],
             'weight' => $data['weight'],
+            'day_type' => $data['day_type'],
+            'pickup_start_time' => $data['pickup_start_time'],
+            'pickup_end_time' => $data['pickup_end_time'],
         ];
-        return $this->accessToken->httpRequest(self::SHIPMENT_CREATE_ORDER, $param);
+        $header = $yihaotongSendAppid != '' ? ['AppId:' . $yihaotongSendAppid] : [];
+        return $this->accessToken->httpRequest(self::SHIPMENT_CREATE_ORDER, $param, 'post', true, $header);
     }
 
     /**
@@ -202,7 +216,7 @@ class Express extends BaseExpress
      * @return 物流状态：status 0在途，1揽收，2疑难，3签收，4退签，5派件，6退回，7转单，10待清关，11清关中，12已清关，13清关异常，14收件人拒签
      * @return 物流详情 content
      */
-    public function query(string $num, string $com = '', $phone = '')
+    public function query(string $num, string $com = '', $phone = '', $yihaotongExpressAppid = '')
     {
         $param = [
             'com' => $com,
@@ -212,15 +226,20 @@ class Express extends BaseExpress
         if ($com === null) {
             unset($param['com']);
         }
-        return $this->accessToken->httpRequest(self::EXPRESS_QUERY, $param);
+        $header = $yihaotongExpressAppid != '' ? ['AppId:' . $yihaotongExpressAppid] : [];
+        return $this->accessToken->httpRequest(self::EXPRESS_QUERY, $param, 'post', true, $header);
     }
 
     /**
      * 电子面单打印
      * @param array $data 必需参数: com(快递公司编码)、to_name(寄件人)、to_tel（寄件人电话）、to_addr（寄件人详细地址）、from_name（收件人）、from_tel（收件人电话)、from_addr（收件人地址）、temp_id（电子面单模板ID）、siid（云打印机编号）、count（商品数量）
+     * @param string $yihaotongFaceAppid
      * @return bool|mixed
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
-    public function dump($data)
+    public function dump($data, $yihaotongFaceAppid = '')
     {
         $param = $data;
         $param['com'] = $data['com'] ?? '';
@@ -264,6 +283,7 @@ class Express extends BaseExpress
         if (!sys_config('config_export_siid')) {
             $header = ['version:v1.1'];
         }
+        $header = array_merge($header, $yihaotongFaceAppid != '' ? ['AppId:' . $yihaotongFaceAppid] : []);
         return $this->accessToken->httpRequest(self::EXPRESS_DUMP, $param, 'POST', true, $header);
     }
 

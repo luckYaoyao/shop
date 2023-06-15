@@ -293,7 +293,7 @@
 					// #endif
 				}).then(res => {
 					let status = res.data.status,
-						orderId = res.data.result.orderId,
+						orderId = res.data.result.order_id,
 						jsConfig = res.data.result.jsConfig,
 						goPages = '/pages/goods/order_pay_status/index?order_id=' + this.orderId + '&msg=' +
 						res
@@ -336,7 +336,7 @@
 								}
 							})
 							this.jumpData = {
-								orderId: res.data.result.orderId,
+								orderId: res.data.result.order_id,
 								msg: res.msg,
 							}
 							// #endif

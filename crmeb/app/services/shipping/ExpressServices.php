@@ -203,7 +203,7 @@ class ExpressServices extends BaseServices
                 case 1:
                     /** @var ServeServices $services */
                     $services = app()->make(ServeServices::class);
-                    $result = $services->express()->query($expressNum, $com, $phone);
+                    $result = $services->express()->query($expressNum, $com, $phone, sys_config('yihaotong_express_appid', ''));
                     if (isset($result['ischeck']) && $result['ischeck'] == 1) {
                         $cacheTime = 0;
                     } else {

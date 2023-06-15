@@ -196,26 +196,28 @@ class Yihaotong extends BaseSms
 
     /**
      * 发送短信
-     * @param $phone
-     * @param $template
-     * @param $param
+     * @param string $phone
+     * @param string $templateId
+     * @param array $data
+     * @param string $yihaotongSmsAppid
      * @return bool|string
      */
-    public function send(string $phone, string $templateId, array $data = [])
+    public function send(string $phone, string $templateId, array $data = [], string $yihaotongSmsAppid = '')
     {
         if (!$phone) {
             throw new AdminException(400719);
         }
         $param = [
             'phone' => $phone,
-            'host' =>  request()->host()
+            'host' => request()->host()
         ];
         $param['temp_id'] = $templateId;
         if (is_null($param['temp_id'])) {
             throw new AdminException(400720);
         }
         $param['param'] = json_encode($data);
-        return $this->accessToken->httpRequest(self::SMS_SEND, $param);
+        $header = $yihaotongSmsAppid != '' ? ['AppId:' . $yihaotongSmsAppid] : [];
+        return $this->accessToken->httpRequest(self::SMS_SEND, $param, 'post', true, $header);
     }
 
     /**

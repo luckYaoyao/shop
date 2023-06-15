@@ -252,7 +252,10 @@ class StoreOrder extends AuthController
             ['sh_delivery_id', ''],//送货人电话
             ['sh_delivery_uid', ''],//送货人ID
 
-            ['fictitious_content', '']//虚拟发货内容
+            ['fictitious_content', ''],//虚拟发货内容
+
+            ['day_type', 0], //顺丰传 0今天，1明天，2后台
+            ['pickup_time', []],//开始时间 9:00，结束时间 10:00  开始时间和结束时间之间不能小于一个小时
         ]);
         return app('json')->success(100010, $services->delivery((int)$id, $data));
     }
@@ -286,7 +289,10 @@ class StoreOrder extends AuthController
 
             ['fictitious_content', ''],//虚拟发货内容
 
-            ['cart_ids', []]
+            ['cart_ids', []],
+
+            ['day_type', 0], //顺丰传 0今天，1明天，2后台
+            ['pickup_time', []],//开始时间 9:00，结束时间 10:00  开始时间和结束时间之间不能小于一个小时
         ]);
         if (!$id) {
             return app('json')->fail(100100);

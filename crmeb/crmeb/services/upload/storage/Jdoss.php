@@ -345,19 +345,23 @@ class Jdoss extends BaseUpload
      * 获取OSS上传密钥
      * @return mixed|void
      */
-    public function getTempKeys($key = '', $path = '', $expires = '+10 minutes')
+    public function getTempKeys($key = '', $path = '', $contentType = '', $expires = '+10 minutes')
     {
         try {
             $app = $this->app();
-            $cmd = $app->getCommand([
+            $cmd = $app->getCommand(
                 'PutObject', [
                     'Bucket' => $this->storageName,
                     'Key' => $key,
-                    'SourceFile' => $path
+                    'SourceFile' => $path,
+                    'ContentType' => $contentType
                 ]
-            ]);
+            );
             $request = $app->createPresignedRequest($cmd, $expires);
-            return (string)$request->getUri();
+            return [
+                'url' => (string)$request->getUri(),
+                'type' => 'JDOSS'
+            ];
         } catch (\Throwable $e) {
             return $this->setError($e->getMessage());
         }
