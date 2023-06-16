@@ -175,7 +175,7 @@
             </Row>
             <Row class="mb10">
               <Col span="12">企业地址: {{ orderDatalist.orderInfo.invoice.address }}</Col>
-              <Col span="12">企业电话: {{ orderDatalist.orderInfo.invoice.drawer_phone }}</Col>
+              <Col span="12">企业电话: {{ orderDatalist.orderInfo.invoice.tell }}</Col>
             </Row>
           </div>
           <Row class="mb10" v-if="orderDatalist.orderInfo.invoice.is_invoice">
