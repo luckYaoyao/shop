@@ -52,10 +52,7 @@
                               {{ item.productInfo.store_name }}
                             </div>
                             <div class="sku">
-                              库存：{{ item.productInfo.stock }} 销量：{{
-                                parseInt(item.productInfo.sales) +
-                                parseInt(item.productInfo.ficti ? item.productInfo.ficti : 0)
-                              }}
+                              库存：{{ item.productInfo.stock }} 销量：{{ item.productInfo.sales }}
                             </div>
                             <div class="price-box">
                               <div class="num">¥ {{ item.productInfo.price }}</div>

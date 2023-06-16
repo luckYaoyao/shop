@@ -6,7 +6,7 @@
     </div>
     <div class="content-box">
       <template v-if="newsList.length > 0">
-        <div class="content-box-item" v-for="(v, k) in newsList" :key="k">
+        <div class="content-box-item" v-for="(v, k) in newsList" :key="k" @click="jumpUrl(v.url)">
           <div>{{ v.type | msgType }}</div>
           <div class="content-box-msg">
             {{ v.title }}
@@ -137,10 +137,10 @@ export default {
           typeName = '库存报警';
           break;
         case 3:
-          typeName = '库存报警';
+          typeName = '评论回复';
           break;
         case 4:
-          typeName = '库存报警';
+          typeName = '提现申请';
           break;
         default:
           typeName = '其它';
@@ -194,6 +194,7 @@ export default {
     font-size: 13px;
     .content-box-item {
       padding-top: 12px;
+      cursor: pointer;
       &:last-of-type {
         padding-bottom: 12px;
       }
