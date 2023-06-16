@@ -12,6 +12,7 @@
           <img v-if="attr.image" :src="attr.image" class="image" />
           <Icon v-else type="ios-add" />
         </div>
+        <div>{{ attr.suk }}</div>
       </FormItem>
       <FormItem label="用户头像">
         <div class="upload-box" @click="callPicture('单选')">
