@@ -871,7 +871,8 @@ class StoreProductServices extends BaseServices
                     'image' => $items['pic'],
                     'price' => $items['price'],
                     'ot_price' => $items['ot_price'],
-                    'suk' => implode(',', $items['detail'])
+                    'suk' => implode(',', $items['detail']),
+                    'unique' => $items['unique'],
                 ];
             }
         }
