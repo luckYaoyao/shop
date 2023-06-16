@@ -610,6 +610,7 @@
 						this.getCouponList();
 						this.getCartCount();
 						this.downloadFilePromotionCode();
+						// this.ShareInfo();
 					}
 				},
 				deep: true,
@@ -1122,18 +1123,19 @@
 						that.$set(that, "navList", navList);
 						that.$set(that, "storeImage", that.storeInfo.image);
 						that.$set(that, "svip_price_open", res.data.svip_price_open);
-						// #ifdef H5
-						if (that.isLogin) {
-							that.ShareInfo();
-						}
-						// #endif
 						if (that.isLogin) {
 							that.getUserInfo();
 						}
 						// #ifdef H5 || APP-PLUS
 						this.getImageBase64();
 						// #endif
+						// #ifdef H5
+						if (that.isLogin) {
+							that.ShareInfo();
+						}
+						// #endif
 						this.$nextTick(() => {
+
 							if (good_list.length) {
 								// #ifndef APP-PLUS
 								that.setClientHeight();
@@ -1563,7 +1565,8 @@
 						return
 					}
 					// #ifdef H5
-					if (this.$wechat.isWeixin() === true) {
+					if (this.$wechat.isWeixin()) {
+						// this.ShareInfo()
 						this.weixinStatus = true;
 					}
 					this.downloadFilePromotionCode();

@@ -129,6 +129,8 @@
 		color: #282828;
 		margin-top: 20rpx;
 		padding: 0 10rpx;
+		line-height: 34rpx;
+		height: 68rpx;
 	}
 
 	.recommend .recommendList .item .money {

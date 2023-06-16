@@ -848,6 +848,7 @@
 	.group-con .wrapper .list .pictrue .dumpling {
 		width: 72rpx;
 		height: 32rpx;
+		line-height: 32rpx;
 		font-size: 18rpx;
 		text-align: center;
 		color: #fff;
