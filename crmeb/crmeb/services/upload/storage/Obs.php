@@ -215,6 +215,7 @@ class Obs extends BaseUpload
         return [];
     }
 
+
     public function bindDomian(string $name, string $domain, string $region = null)
     {
         $parseDomin = parse_url($domain);

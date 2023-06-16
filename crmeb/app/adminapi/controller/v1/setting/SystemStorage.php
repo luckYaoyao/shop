@@ -79,19 +79,11 @@ class SystemStorage extends AuthController
     }
 
     /**
-     * @param SystemConfigServices $services
      * @return mixed
      */
-    public function saveConfig(SystemConfigServices $services)
+    public function saveConfig( )
     {
         $type = (int)$this->request->post('type', 0);
-//        $services->update('upload_type', ['value' => json_encode($type)], 'menu_name');
-//        if (1 === $type) {
-//            $this->services->transaction(function () {
-//                $this->services->update(['status' => 1, 'is_delete' => 0], ['status' => 0]);
-//            });
-//        }
-//        \crmeb\services\CacheService::clear();
 
         $data = $this->request->postMore([
             ['accessKey', ''],
