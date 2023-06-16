@@ -310,6 +310,27 @@ class StoreOrder extends AuthController
     }
 
     /**
+     * 获取寄件预扣金额
+     * @param ServeServices $services
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/6/16
+     */
+    public function getPrice(ServeServices $services)
+    {
+        $data = $this->request->postMore([
+            ['kuaidicom', ''],
+            ['send_address', ''],
+            ['address', ''],
+            ['weight', ''],
+            ['service_type', ''],
+        ]);
+
+        return app('json')->success($services->express()->getPrice($data));
+    }
+
+    /**
      * 获取订单可拆分发货商品列表
      * @param $id
      * @param StoreOrderCartInfoServices $services

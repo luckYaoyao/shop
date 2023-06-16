@@ -12,6 +12,7 @@
 namespace crmeb\services\express\storage;
 
 use app\services\shipping\ExpressServices;
+use crmeb\exceptions\ApiException;
 use crmeb\services\express\BaseExpress;
 use crmeb\exceptions\AdminException;
 
@@ -54,6 +55,8 @@ class Express extends BaseExpress
     const SHIPMENT_CANCEL_ORDER = 'v2/shipment/cancel_order';
     //获取商家寄件订单列表
     const SHIPMENT_INDEX = 'v2/shipment/index';
+    //获取商家寄件订单预扣金额
+    const SHIPMENT_PRICE = 'v2/shipment/price';
 
     /** 初始化
      * @param array $config
@@ -159,6 +162,35 @@ class Express extends BaseExpress
     }
 
     /**
+     * @param array $data
+     * @return array|mixed
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/6/16
+     */
+    public function getPrice(array $data)
+    {
+        if (!empty($data['kuaidicom'])) {
+            throw new ApiException('快递编码必须填写');
+        }
+        if (!empty($data['send_address'])) {
+            throw new ApiException('寄件地址必须填写');
+        }
+        if (!empty($data['address'])) {
+            throw new ApiException('收件地址必须填写');
+        }
+        $param = [
+            'kuaidi_num' => $data['kuaidicom'],
+            'send_address' => $data['send_address'],
+            'address' => $data['address'] ?? '',
+            'weight' => $data['weight'] ?? '',
+            'service_type' => $data['service_type'] ?? '',
+        ];
+
+        return $this->accessToken->httpRequest(self::SHIPMENT_PRICE, $param);
+    }
+
+    /**
      * 开通物流服务
      * @return bool|mixed
      */
@@ -184,7 +216,7 @@ class Express extends BaseExpress
         if (!sys_config('config_export_siid')) {
             $header = ['version:v1.1'];
         }
-        return $this->accessToken->httpRequest(self::EXPRESS_TEMP, $param, 'POST', true, $header);
+        return $this->accessToken->httpRequest(self::EXPRESS_TEMP, $param, 'GET', true, $header);
     }
 
     /**
