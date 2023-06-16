@@ -102,7 +102,7 @@ class OrderClient extends BaseOrder
             ];
         }
         // 跳转路径
-//        $this->setMesJumpPath($path);
+        $this->setMesJumpPath($path);
         return $this->shipping($params);
     }
 
@@ -277,10 +277,7 @@ class OrderClient extends BaseOrder
         $key = self::redis_prefix . '_delivery_list';
         if (!$this->getRedis()->exists($key)) {
             $date = $this->setDeliveryList();
-            if (!isset($date[$company_name])) {
-//                throw new AdminException('物流公司异常1');
-            }
-            $express_company = $date[$company_name];
+            $express_company = $date[$company_name] ?? '';
         } else {
             $express_company = $this->getRedis()->hMGet($key, [$company_name])[$company_name] ?? '';
         }
