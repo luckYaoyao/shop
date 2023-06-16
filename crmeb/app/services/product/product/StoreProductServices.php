@@ -952,6 +952,7 @@ class StoreProductServices extends BaseServices
             $valueNew[$count]['stock'] = intval($sukValue[$suk]['stock']);
             $valueNew[$count]['quota'] = intval($sukValue[$suk]['quota']);
             $valueNew[$count]['bar_code'] = $sukValue[$suk]['bar_code'];
+            $valueNew[$count]['unique'] = $sukValue[$suk]['unique'];
             $valueNew[$count]['weight'] = $sukValue[$suk]['weight'] ? floatval($sukValue[$suk]['weight']) : 0;
             $valueNew[$count]['volume'] = $sukValue[$suk]['volume'] ? floatval($sukValue[$suk]['volume']) : 0;
             $valueNew[$count]['brokerage'] = $sukValue[$suk]['brokerage'] ? floatval($sukValue[$suk]['brokerage']) : 0;
