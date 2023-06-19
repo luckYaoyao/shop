@@ -622,6 +622,7 @@ class StoreOrderDeliveryServices extends BaseServices
                 'is_stock_up' => 1,
                 'delivery_type' => $data['delivery_type'],
                 'delivery_name' => $data['delivery_name'],
+                'delivery_code' => $data['delivery_code'],
                 'delivery_id' => $data['delivery_id'],
                 'kuaidi_label' => $data['kuaidi_label'],
                 'kuaidi_task_id' => $data['kuaidi_task_id'],
