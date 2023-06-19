@@ -444,6 +444,9 @@ class StoreOrderDeliveryServices extends BaseServices
         if (count($data['pickup_time']) == 2) {
             $data['pickup_start_time'] = $data['pickup_time'][0];
             $data['pickup_end_time'] = $data['pickup_time'][1];
+        } else {
+            $data['pickup_start_time'] = '';
+            $data['pickup_end_time'] = '';
         }
 
         // 发货信息录入
