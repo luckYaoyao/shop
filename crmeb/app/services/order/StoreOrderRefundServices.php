@@ -35,6 +35,7 @@ use crmeb\services\CacheService;
 use crmeb\services\FormBuilder as Form;
 use crmeb\services\pay\Pay;
 use crmeb\services\workerman\ChannelService;
+use think\facade\Db;
 
 
 /**
@@ -600,7 +601,7 @@ class StoreOrderRefundServices extends BaseServices
         $userInfo = $userServices->get($order['uid']);
         $order['nickname'] = $userInfo['nickname'];
         $order['phone'] = $userInfo['phone'];
-        if (in_array($orderInfo['pay_type'], ['weixin', 'alipay', 'allinpay', 'offline'])) {
+        if (in_array($order['pay_type'], ['weixin', 'alipay', 'allinpay', 'offline'])) {
             $capitalFlowServices->setFlow($order, 'refund');
         }
 

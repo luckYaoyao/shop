@@ -274,7 +274,7 @@ class UserExtractServices extends BaseServices
         /** @var UserBrokerageServices $userBrokerageServices */
         $userBrokerageServices = app()->make(UserBrokerageServices::class);
         $where['pm'] = 1;
-        $extract_statistics['brokerage_count'] = $userBrokerageServices->getUsersBokerageSum($where);
+        $extract_statistics['brokerage_count'] = bcadd((string)$userBrokerageServices->getUsersBokerageSum($where), (string)$extract_statistics['price'], 2);
         //未提现金额
         $extract_statistics['brokerage_not'] = $extract_statistics['brokerage_count'] > $extract_statistics['priced'] ? bcsub((string)$extract_statistics['brokerage_count'], (string)$extract_statistics['priced'], 2) : 0.00;
         return compact('extract_statistics', 'list');
