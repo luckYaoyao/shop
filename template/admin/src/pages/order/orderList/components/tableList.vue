@@ -653,11 +653,11 @@ export default {
     // 发送货
     sendOrder(row) {
       this.$refs.send.total_num = row.total_num;
+      this.virtual_type = row.virtual_type;
       this.$refs.send.modals = true;
       this.orderId = row.id;
       this.status = row._status;
       this.pay_type = row.pay_type;
-      this.virtual_type = row.virtual_type;
       this.$refs.send.getList();
       this.$refs.send.getDeliveryList();
       this.$nextTick((e) => {

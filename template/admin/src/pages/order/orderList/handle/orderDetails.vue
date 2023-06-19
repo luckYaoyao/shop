@@ -235,6 +235,21 @@
             <Col span="12" class="fontColor2">{{ orderDatalist.orderInfo.mark }}</Col>
           </Row>
         </div>
+        <div v-if="orderDatalist.orderInfo.refund_type > 0">
+          <Divider style="margin: 20px 0 !important" />
+          <div class="ivu-description-list-title">售后信息</div>
+          <Row class="mb10">
+            <Col span="12">备注：{{ orderDatalist.orderInfo.refund_reason }}</Col>
+          </Row>
+          <Row class="mb10">
+            <Col span="12">
+              <div class="pic">
+                <div v-for="(img, i) in orderDatalist.orderInfo.refund_img" :key="i" class="img">
+                  <img v-viewer :src="img" alt="" />
+                </div></div
+            ></Col>
+          </Row>
+        </div>
       </Card>
     </Drawer>
     <Modal v-model="modal2" scrollable title="物流查询" width="350" class="order_box2">
