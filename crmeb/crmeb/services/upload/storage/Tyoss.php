@@ -5,6 +5,7 @@ namespace crmeb\services\upload\storage;
 use crmeb\exceptions\AdminException;
 use crmeb\services\upload\extend\obs\Client as TyClient;
 use crmeb\services\upload\BaseUpload;
+use DateTimeInterface;
 use GuzzleHttp\Psr7\Utils;
 
 class Tyoss extends BaseUpload
@@ -364,8 +365,8 @@ class Tyoss extends BaseUpload
                 'AllowedHeader' => ['*'],
                 'AllowedMethod' => ['PUT', 'GET', 'POST', 'DELETE', 'HEAD'],
                 'AllowedOrigin' => ['*'],
-                'ExposeHeader' => ['ETag', 'Content-Length', 'x-cos-request-id'],
-                'MaxAgeSeconds' => 100
+                'ExposeHeader' => ['ETag'],
+                'MaxAgeSeconds' => 0
             ]);
             return true;
         } catch (\Throwable $e) {
@@ -374,16 +375,60 @@ class Tyoss extends BaseUpload
     }
 
     /**
+     * @param string $callbackUrl
+     * @param string $dir
      * @return array
-     * @date 2023/6/13
+     * @throws \Exception
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/06/19
      */
-    public function getTempKeys()
+    public function getTempKeys($callbackUrl = '', $dir = '')
     {
+        // TODO: Implement getTempKeys() method.
+        $base64CallbackBody = base64_encode(json_encode([
+            'callbackUrl' => $callbackUrl,
+            'callbackBody' => 'filename=${object}&size=${size}&mimeType=${mimeType}&height=${imageInfo.height}&width=${imageInfo.width}',
+            'callbackBodyType' => "application/x-www-form-urlencoded"
+        ]));
+
+        $policy = json_encode([
+            'expiration' => $this->gmtIso8601(time() + 300),
+            'conditions' =>
+                [
+                    [0 => 'content-length-range', 1 => 0, 2 => 1048576000],
+                    ['bucket' => $this->storageName],
+                    [0 => 'starts-with', 1 => '$key', 2 => $dir],
+                ]
+        ]);
+        $base64Policy = base64_encode($policy);
+        $signature = base64_encode(hash_hmac('sha1', $base64Policy, $this->secretKey, true));
         return [
-            'access_key' => $this->accessKey,
-            'secret_key' => $this->secretKey,
-            'type' => 'TYOSS'
+            'accessid' => $this->accessKey,
+            'host' => $this->uploadUrl,
+            'policy' => $base64Policy,
+            'signature' => $signature,
+            'expire' => time() + 30,
+            'callback' => $base64CallbackBody,
+            'cdn' => $this->cdn,
+            'type' => 'OBS'
         ];
+    }
+
+    /**
+     * 获取ISO时间格式
+     * @param $time
+     * @return string
+     * @throws \Exception
+     */
+    protected function gmtIso8601($time): string
+    {
+        $dtStr = date("c", $time);
+        $myDateTime = new \DateTime($dtStr);
+        $expiration = $myDateTime->format(DateTimeInterface::ISO8601);
+        $pos = strpos($expiration, '+');
+        $expiration = substr($expiration, 0, $pos);
+        return $expiration . "Z";
     }
 
     /**
