@@ -77,7 +77,7 @@
             <RadioGroup v-model="formItem.day_type" type="button">
               <Radio :label="0">今天</Radio>
               <Radio :label="1">明天</Radio>
-              <Radio :label="2">后台</Radio>
+              <Radio :label="2">后天</Radio>
             </RadioGroup>
           </FormItem>
           <FormItem label="取件时间：" v-if="formItem.express_record_type == 3">
@@ -525,6 +525,7 @@ export default {
     cancel(name) {
       this.modals = false;
       this.orderStatus = 0;
+      this.sendPrice = 0;
       this.splitSwitch = false;
       this.selectData = [];
       this.formItem.type = '1';

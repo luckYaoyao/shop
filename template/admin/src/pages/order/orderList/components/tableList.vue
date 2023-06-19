@@ -73,10 +73,12 @@
             (row.status === 4 || row._status === 2 || row._status === 8) &&
             row.shipping_type === 1 &&
             (row.pinkStatus === null || row.pinkStatus === 2) &&
-            row.is_del !== 1
+            row.is_del !== 1 &&
+            !row.is_stock_up
           "
           >发送货</a
         >
+        <a v-else-if="row.is_stock_up" @click="changeMenu(row, '13')">取消商家寄件</a>
         <a @click="delivery(row)" v-if="row._status === 4 && !row.split.length">配送信息</a>
         <a
           @click="bindWrite(row)"
@@ -201,6 +203,7 @@ import {
   refundIntegral,
   getDistribution,
   writeUpdate,
+  shipmentCancelOrder,
 } from '@/api/order';
 import { mapState, mapMutations } from 'vuex';
 import editFrom from '../../../../components/from/from';
@@ -327,6 +330,7 @@ export default {
     ...mapMutations('order', ['getIsDel', 'getisDelIdListl']),
     // 操作
     changeMenu(row, name) {
+      console.log(row, name);
       this.orderId = row.id;
       switch (name) {
         case '1':
@@ -421,6 +425,22 @@ export default {
           break;
         case '12':
           this.printImg(row.kuaidi_label);
+          break;
+        case '13':
+          this.delfromData = {
+            title: '取消寄件',
+            info: '您确认取消商家寄件吗?',
+            url: `/order/shipment_cancel_order/${row.id}`,
+            method: 'post',
+          };
+          this.$modalSure(this.delfromData)
+            .then((res) => {
+              this.$Message.success(res.msg);
+              this.getList();
+            })
+            .catch((res) => {
+              this.$Message.error(res.msg);
+            });
           break;
         default:
           this.delfromData = {
