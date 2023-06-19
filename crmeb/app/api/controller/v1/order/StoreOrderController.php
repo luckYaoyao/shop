@@ -815,7 +815,7 @@ class StoreOrderController
         ]);
 
         \think\facade\Log::error('回调:' . json_encode($data));
-        
+
         $data['data']['id'] = (int)$data['data']['id'];
         if (md5(json_encode($data['data']) . $data['t']) != $data['sign']) {
             return app('json')->fail('验签失败');
