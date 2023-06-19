@@ -157,7 +157,7 @@
             </template>
           </i-table>
         </FormItem>
-        <FormItem label="寄件金额计算：" v-if="selectData.length">
+        <FormItem label="寄件金额计算：">
           <Button @click="watchPrice">立即计算</Button>
         </FormItem>
       </div>
@@ -200,6 +200,10 @@ export default {
   watch: {
     orderId(val) {
       if (this.virtual_type == 3) this.formItem.type = '3';
+    },
+    modals(newVal) {
+      if (newVal) {
+      }
     },
   },
   data() {
@@ -293,12 +297,6 @@ export default {
       serviceTypeList: [],
     };
   },
-  watch: {
-    modals(newVal) {
-      if (newVal) {
-      }
-    },
-  },
   mounted() {
     this.kuaidiComsList(1);
     let delData;
@@ -310,9 +308,11 @@ export default {
   },
   methods: {
     watchPrice() {
+      console.log(1111);
       let data = {
         kuaidicom: this.formItem.delivery_code,
         send_address: this.formItem.to_addr,
+        orderId: this.orderId,
         service_type: this.formItem.service_type,
         cart_ids: [],
       };
