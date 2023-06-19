@@ -503,6 +503,17 @@ export function otherBatchDelivery(data) {
   });
 }
 /**
+ * @description 商家寄件金额计算
+ * @param {Object} param data {Object} 传值参数
+ */
+export function orderPrice(data) {
+  return request({
+    url: 'order/price',
+    method: 'post',
+    data,
+  });
+}
+/**
  * @description 重新执行
  * @param {Object} param data {Object} 传值参数
  */

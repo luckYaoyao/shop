@@ -18,9 +18,9 @@
       </FormItem>
       <FormItem v-if="formItem.type == 1" v-show="export_open" label="发货类型：">
         <RadioGroup v-model="formItem.express_record_type" @on-change="changeExpress">
-          <Radio label="1">手动填写</Radio>
-          <Radio label="2">电子面单打印</Radio>
           <Radio label="3">商家寄件</Radio>
+          <Radio label="1">录入单号</Radio>
+          <Radio label="2">电子面单打印</Radio>
         </RadioGroup>
       </FormItem>
       <div>
@@ -38,6 +38,11 @@
               :key="item.value"
               >{{ item.value }}</Option
             >
+          </Select>
+        </FormItem>
+        <FormItem label="快递业务类型：" v-if="formItem.type == 1 && formItem.express_record_type == 3">
+          <Select v-model="formItem.service_type" filterable placeholder="请选择业务类型" style="width: 80%">
+            <Option v-for="item in serviceTypeList" :value="item" :key="item">{{ item }}</Option>
           </Select>
         </FormItem>
         <FormItem v-if="formItem.express_record_type === '1' && formItem.type == 1" label="快递单号：">
@@ -152,6 +157,9 @@
             </template>
           </i-table>
         </FormItem>
+        <FormItem label="寄件金额计算：">
+          <Button @click="watchPrice">立即计算</Button>
+        </FormItem>
       </div>
     </Form>
     <div slot="footer">
@@ -177,6 +185,7 @@ import {
   orderSheetInfo,
   splitCartInfo,
   kuaidiComsList,
+  orderPrice,
 } from '@/api/order';
 import printJS from 'print-js';
 export default {
@@ -192,6 +201,10 @@ export default {
     orderId(val) {
       if (this.virtual_type == 3) this.formItem.type = '3';
     },
+    modals(newVal) {
+      if (newVal) {
+      }
+    },
   },
   data() {
     return {
@@ -200,7 +213,7 @@ export default {
       splitSwitch: true,
       formItem: {
         type: '1',
-        express_record_type: '1',
+        express_record_type: '3',
         delivery_name: '',
         delivery_id: '',
         express_temp_id: '',
@@ -209,6 +222,7 @@ export default {
         to_addr: '',
         sh_delivery: '',
         fictitious_content: '',
+        service_type: '',
         day_type: 0,
       },
       modals: false,
@@ -280,9 +294,38 @@ export default {
         },
       ],
       selectData: [],
+      serviceTypeList: [],
     };
   },
+  mounted() {
+    this.kuaidiComsList(1);
+    let delData;
+    if (localStorage.getItem('DELIVERY_DATA')) delData = JSON.parse(localStorage.getItem('DELIVERY_DATA'));
+    if (delData) {
+      this.formItem.delivery_name = delData.delivery_name;
+      this.formItem.delivery_code = delData.delivery_code;
+    }
+  },
   methods: {
+    watchPrice() {
+      console.log(1111);
+      let data = {
+        kuaidicom: this.formItem.delivery_code,
+        send_address: this.formItem.to_addr,
+        orderId: this.orderId,
+        service_type: this.formItem.service_type,
+        cart_ids: [],
+      };
+      this.selectData.forEach((v) => {
+        data.cart_ids.push({
+          cart_id: v.cart_id,
+          cart_num: v.num || v.surplus_num,
+        });
+      });
+      orderPrice(data).then((res) => {
+        console.log(res);
+      });
+    },
     selectOne(data) {
       this.selectData = data;
     },
@@ -350,22 +393,22 @@ export default {
         case '3':
           this.formItem.delivery_name = '';
           this.formItem.delivery_id = '';
-          this.kuaidiComsList();
           break;
         default:
           break;
       }
     },
-    kuaidiComsList() {
+    kuaidiComsList(status) {
       kuaidiComsList().then((res) => {
         console.log(res);
         this.kuaidiExpress = res.data;
+        if (this.formItem.delivery_name) this.expressChange(this.formItem.delivery_name);
       });
     },
     reset() {
       this.formItem = {
         type: '1',
-        express_record_type: '1',
+        express_record_type: '3',
         delivery_name: '',
         delivery_id: '',
         express_temp_id: '',
@@ -375,6 +418,7 @@ export default {
         to_addr: '',
         sh_delivery: '',
         fictitious_content: '',
+        service_type: '',
       };
     },
     // 物流公司列表
@@ -447,6 +491,7 @@ export default {
           .then((res) => {
             this.modals = false;
             this.$Message.success(res.msg);
+            localStorage.setItem('DELIVERY_DATA', JSON.stringify(this.formItem));
             this.$emit('submitFail');
             this.reset();
             this.splitSwitch = false;
@@ -460,6 +505,7 @@ export default {
           .then(async (res) => {
             this.modals = false;
             this.$Message.success(res.msg);
+            localStorage.setItem('DELIVERY_DATA', JSON.stringify(this.formItem));
             this.splitSwitch = false;
             this.$emit('submitFail');
             this.reset();
@@ -483,6 +529,7 @@ export default {
     },
     // 电子面单列表
     expressChange(value) {
+      this.formItem.service_type = '';
       let expressItem = (this.formItem.express_record_type == '3' ? this.kuaidiExpress : this.express).find((item) => {
         return item.value === value;
       });
@@ -490,6 +537,7 @@ export default {
       if (expressItem === undefined) {
         return;
       }
+      this.serviceTypeList = expressItem.types;
       this.formItem.delivery_code = expressItem.code;
       if (this.formItem.express_record_type === '2') {
         this.expressTemp = [];
@@ -543,7 +591,7 @@ export default {
           if (!this.export_open) {
             this.formItem.express_record_type = '1';
           }
-          this.formItem.to_addr = data.to_add;
+          // this.formItem.to_addr = data.to_add;
         })
         .catch((err) => {
           this.$Message.error(err.msg);
