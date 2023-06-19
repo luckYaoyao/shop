@@ -51,9 +51,7 @@
                             <div class="name line1">
                               {{ item.productInfo.store_name }}
                             </div>
-                            <div class="sku">
-                              库存：{{ item.productInfo.stock }} 销量：{{ item.productInfo.sales }}
-                            </div>
+                            <div class="sku">库存：{{ item.productInfo.stock }} 销量：{{ item.productInfo.sales }}</div>
                             <div class="price-box">
                               <div class="num">¥ {{ item.productInfo.price }}</div>
                               <a herf="javascript:;" class="more" @click.stop="lookGoods(item)">查看商品 ></a>
@@ -127,6 +125,7 @@
             </div>
             <div class="textarea-box" style="position: relative">
               <Input
+                ref="chatInput"
                 v-paste="handleParse"
                 v-model="chatCon"
                 type="textarea"
@@ -443,6 +442,7 @@ export default {
         }
         this.sendMsg(e.target.value, 1);
         this.chatCon = '';
+        this.$nextTick(() => this.$refs.chatInput.focus());
       }
     },
     // 输入框选择表情
@@ -497,6 +497,7 @@ export default {
     sendText() {
       this.sendMsg(this.chatCon, 1);
       this.chatCon = '';
+      this.$nextTick(() => this.$refs.chatInput.focus());
     },
 
     // 统一发送处理
@@ -940,5 +941,8 @@ export default {
 }
 .emoji-box::-webkit-scrollbar {
   width: 0;
+}
+.textarea-box /deep/ .ivu-input:focus{
+  box-shadow: none;
 }
 </style>
