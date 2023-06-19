@@ -2681,7 +2681,7 @@ HTML;
         if (!$orderInfo->kuaidi_task_id || !$orderInfo->kuaidi_order_id) {
             throw new ValidateException('商家寄件订单信息不存在，无法取消');
         }
-        if ($orderInfo->status != 1) {
+        if ($orderInfo->is_stock_up != 1) {
             throw new ValidateException('订单状态不正确，无法取消寄件');
         }
 

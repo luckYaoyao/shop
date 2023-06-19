@@ -216,7 +216,7 @@ class StoreProductReplyServices extends BaseServices
         [$page, $limit] = $this->getPageValue();
         $list = $this->dao->replyList($id, $type, $page, $limit);
         foreach ($list as &$item) {
-            $item['suk'] = isset($item['cart_info']['productInfo']['attrInfo']) ? $item['cart_info']['productInfo']['attrInfo']['suk'] : '';
+            $item['suk'] = $item['suk'] != '' ? $item['suk'] : (isset($item['cart_info']['productInfo']['attrInfo']) ? $item['cart_info']['productInfo']['attrInfo']['suk'] : '');
             $item['nickname'] = anonymity($item['nickname']);
             $item['merchant_reply_time'] = date('Y-m-d H:i', $item['merchant_reply_time']);
             $item['add_time'] = time_tran($item['add_time']);

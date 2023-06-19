@@ -814,6 +814,9 @@ class StoreOrderController
             ['data', ''],
         ]);
 
+        \think\facade\Log::error('回调:' . json_encode($data));
+        
+        $data['data']['id'] = (int)$data['data']['id'];
         if (md5(json_encode($data['data']) . $data['t']) != $data['sign']) {
             return app('json')->fail('验签失败');
         }
@@ -831,13 +834,13 @@ class StoreOrderController
                 }
                 break;
             case 'order_take'://取件
-                if (isset($data['task_id'])) {
-                    $orderInfo = $this->services->get(['task_id' => $data['task_id']]);
+                if (isset($data['data']['task_id'])) {
+                    $orderInfo = $this->services->get(['kuaidi_task_id' => $data['data']['task_id']]);
                     if (!$orderInfo) {
                         return app('json')->fail('订单不存在');
                     }
                     $this->services->transaction(function () use ($data, $orderInfo) {
-                        $this->services->update(['task_id' => $data['task_id']], [
+                        $this->services->update(['kuaidi_task_id' => $data['data']['task_id']], [
                             'status' => 1,
                             'is_stock_up' => 0
                         ]);
