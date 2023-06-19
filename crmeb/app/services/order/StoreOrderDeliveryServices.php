@@ -589,8 +589,8 @@ class StoreOrderDeliveryServices extends BaseServices
             ]);
             $data['delivery_id'] = $dump['kuaidinum'] ?? '';
             $data['kuaidi_label'] = $dump['label'] ?? '';
-            $data['kuaidi_task_id'] = $dump['taskId'] ?? '';
-            $data['kuaidi_order_id'] = $dump['orderId'] ?? '';
+            $data['kuaidi_task_id'] = $dump['task_id'] ?? '';
+            $data['kuaidi_order_id'] = $dump['order_id'] ?? '';
         } else {
             if (!$data['delivery_id']) {
                 throw new AdminException(400531);
