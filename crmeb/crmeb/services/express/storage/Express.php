@@ -30,7 +30,7 @@ class Express extends BaseExpress
     /**
      * 电子面单模版
      */
-    const EXPRESS_TEMP = 'v2/expr/temp';
+    const EXPRESS_TEMP = 'v2/expr_dump/temp';
 
     /**
      * 快递公司

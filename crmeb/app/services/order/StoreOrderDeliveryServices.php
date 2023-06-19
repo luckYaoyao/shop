@@ -577,6 +577,7 @@ class StoreOrderDeliveryServices extends BaseServices
 //                throw new AdminException('商家寄件未开启无法寄件');
 //            }
             $dump = $expressService->express()->shippmentCreateOrder($expData, sys_config('yihaotong_send_appid', ''));
+            Log::error('商家寄件返回数据：' . json_encode($dump));
             $orderInfo->delivery_id = $dump['kuaidinum'] ?? '';
             $data['express_dump'] = json_encode([
                 'com' => $expData['kuaidicom'],
@@ -624,6 +625,7 @@ class StoreOrderDeliveryServices extends BaseServices
                 'kuaidi_label' => $data['kuaidi_label'],
                 'kuaidi_task_id' => $data['kuaidi_task_id'],
                 'kuaidi_order_id' => $data['kuaidi_order_id'],
+                'express_dump' => $data['express_dump']
             ];
 
             /** @var StoreOrderStatusServices $services */
