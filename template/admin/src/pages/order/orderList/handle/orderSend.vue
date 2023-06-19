@@ -157,10 +157,11 @@
             </template>
           </i-table>
         </FormItem>
-        <FormItem label="寄件金额计算：" v-if="selectData.length">
-          <Button @click="watchPrice">立即计算</Button>
-        </FormItem>
       </div>
+      <FormItem label="寄件金额计算：">
+        <span class="red">{{ sendPrice }}</span>
+        <a class="ml10" @click="watchPrice">立即计算</a>
+      </FormItem>
     </Form>
     <div slot="footer">
       <Button @click="cancel">取消</Button>
@@ -196,11 +197,6 @@ export default {
     // total_num: Number,
     pay_type: String,
     virtual_type: Number,
-  },
-  watch: {
-    orderId(val) {
-      if (this.virtual_type == 3) this.formItem.type = '3';
-    },
   },
   data() {
     return {
@@ -291,12 +287,16 @@ export default {
       ],
       selectData: [],
       serviceTypeList: [],
+      sendPrice: 0,
     };
   },
   watch: {
     modals(newVal) {
       if (newVal) {
       }
+    },
+    virtual_type(val) {
+      if (this.virtual_type == 3) this.formItem.type = '3';
     },
   },
   mounted() {
@@ -322,9 +322,14 @@ export default {
           cart_num: v.num || v.surplus_num,
         });
       });
-      orderPrice(data).then((res) => {
-        console.log(res);
-      });
+      orderPrice(data)
+        .then((res) => {
+          console.log(res);
+          this.sendPrice = res.data.price;
+        })
+        .catch((err) => {
+          this.$Message.error(err.msg);
+        });
     },
     selectOne(data) {
       this.selectData = data;
@@ -343,6 +348,9 @@ export default {
             this.manyFormValidate.push(res.data[key]);
           });
         });
+      } else {
+        this.formItem.cart_ids = [];
+        this.selectData = [];
       }
     },
     changeRadio(o) {
