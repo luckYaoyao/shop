@@ -34,6 +34,7 @@ use app\services\order\{OtherOrderServices,
     StoreOrderInvoiceServices,
     StoreOrderRefundServices,
     StoreOrderServices,
+    StoreOrderStatusServices,
     StoreOrderSuccessServices,
     StoreOrderTakeServices
 };
@@ -814,11 +815,11 @@ class StoreOrderController
         ]);
 
         if (md5(json_encode($data['data']) . $data['t']) != $data['sign']) {
-            return app('json')->fail();
+            return app('json')->fail('验签失败');
         }
 
         switch ($data['type']) {
-            case 'order_success':
+            case 'order_success'://下单成功
                 $update = [
                     'label' => $data['data']['label'] ?? '',
                 ];
@@ -827,6 +828,28 @@ class StoreOrderController
                 }
                 if (isset($data['task_id'])) {
                     $this->services->update(['task_id' => $data['task_id']], $update);
+                }
+                break;
+            case 'order_take'://取件
+                if (isset($data['task_id'])) {
+                    $orderInfo = $this->services->get(['task_id' => $data['task_id']]);
+                    if (!$orderInfo) {
+                        return app('json')->fail('订单不存在');
+                    }
+                    $this->services->transaction(function () use ($data, $orderInfo) {
+                        $this->services->update(['task_id' => $data['task_id']], [
+                            'status' => 1,
+                            'is_stock_up' => 0
+                        ]);
+                        /** @var StoreOrderStatusServices $services */
+                        $services = app()->make(StoreOrderStatusServices::class);
+                        $services->save([
+                            'oid' => $orderInfo->id,
+                            'change_time' => time(),
+                            'change_type' => 'delivery_goods',
+                            'change_message' => '已发货 快递公司：' . $orderInfo->delivery_name . ' 快递单号：' . $orderInfo->delivery_id
+                        ]);
+                    });
                 }
                 break;
         }

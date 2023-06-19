@@ -593,24 +593,48 @@ class StoreOrderDeliveryServices extends BaseServices
             }
             $orderInfo->delivery_id = $data['delivery_id'];
         }
-        $data['status'] = 1;
-        $orderInfo->delivery_type = $data['delivery_type'];
-        $orderInfo->delivery_name = $data['delivery_name'];
-        $orderInfo->status = $data['status'];
-        /** @var StoreOrderStatusServices $services */
-        $services = app()->make(StoreOrderStatusServices::class);
-        $this->transaction(function () use ($id, $data, $services) {
-            $res = $this->dao->update($id, $data);
-            $res = $res && $services->save([
-                    'oid' => $id,
-                    'change_time' => time(),
-                    'change_type' => 'delivery_goods',
-                    'change_message' => '已发货 快递公司：' . $data['delivery_name'] . ' 快递单号：' . $data['delivery_id']
-                ]);
-            if (!$res) {
-                throw new AdminException(400529);
-            }
-        });
+        if ($data['express_record_type'] != 3) {
+            $data['status'] = 1;
+            $orderInfo->delivery_type = $data['delivery_type'];
+            $orderInfo->delivery_name = $data['delivery_name'];
+            $orderInfo->status = $data['status'];
+            /** @var StoreOrderStatusServices $services */
+            $services = app()->make(StoreOrderStatusServices::class);
+            $this->transaction(function () use ($id, $data, $services) {
+                $res = $this->dao->update($id, $data);
+                $res = $res && $services->save([
+                        'oid' => $id,
+                        'change_time' => time(),
+                        'change_type' => 'delivery_goods',
+                        'change_message' => '已发货 快递公司：' . $data['delivery_name'] . ' 快递单号：' . $data['delivery_id']
+                    ]);
+                if (!$res) {
+                    throw new AdminException(400529);
+                }
+            });
+        } else {
+
+            $update = [
+                'is_stock_up' => 1,
+                'delivery_type' => $data['delivery_type'],
+                'delivery_name' => $data['delivery_name'],
+            ];
+
+            /** @var StoreOrderStatusServices $services */
+            $services = app()->make(StoreOrderStatusServices::class);
+            $this->transaction(function () use ($id, $data, $services, $update) {
+                $res = $this->dao->update($id, $update);
+                $res = $res && $services->save([
+                        'oid' => $id,
+                        'change_time' => time(),
+                        'change_type' => 'stock_up_goods',
+                        'change_message' => '备货中 快递公司：' . $data['delivery_name'] . ' 快递单号：' . $data['delivery_id']
+                    ]);
+                if (!$res) {
+                    throw new AdminException(400529);
+                }
+            });
+        }
         return $dump;
     }
 
