@@ -158,7 +158,7 @@
           </i-table>
         </FormItem>
       </div>
-      <FormItem label="寄件金额计算：">
+      <FormItem label="寄件金额计算：" v-if="formItem.express_record_type == 3">
         <span class="red">{{ sendPrice }}</span>
         <a class="ml10" @click="watchPrice">立即计算</a>
       </FormItem>
