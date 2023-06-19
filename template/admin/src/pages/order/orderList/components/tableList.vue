@@ -78,7 +78,7 @@
           "
           >发送货</a
         >
-        <a v-else-if="row.is_stock_up" @click="changeMenu(row, '13')">取消商家寄件</a>
+        <a v-else-if="row.is_stock_up" @click="shipmentClear(row)">取消商家寄件</a>
         <a @click="delivery(row)" v-if="row._status === 4 && !row.split.length">配送信息</a>
         <a
           @click="bindWrite(row)"
@@ -172,6 +172,8 @@
     <details-from ref="details" :orderDatalist="orderDatalist" :orderId="orderId"></details-from>
     <!-- 备注 -->
     <order-remark ref="remarks" :orderId="orderId" @submitFail="submitFail"></order-remark>
+    <!-- 取消寄件 -->
+    <order-shipment ref="shipment" :orderId="orderId" @submitFail="submitFail"></order-shipment>
     <!-- 记录 -->
     <order-record ref="record"></order-record>
     <!-- 发送货 -->
@@ -211,6 +213,7 @@ import detailsFrom from '../handle/orderDetails';
 import orderRemark from '../handle/orderRemark';
 import orderRecord from '../handle/orderRecord';
 import orderSend from '../handle/orderSend';
+import orderShipment from '../handle/orderShipment';
 
 export default {
   name: 'table_list',
@@ -221,6 +224,7 @@ export default {
     orderRemark,
     orderRecord,
     orderSend,
+    orderShipment,
   },
   data() {
     return {
@@ -426,22 +430,6 @@ export default {
         case '12':
           this.printImg(row.kuaidi_label);
           break;
-        case '13':
-          this.delfromData = {
-            title: '取消寄件',
-            info: '您确认取消商家寄件吗?',
-            url: `/order/shipment_cancel_order/${row.id}`,
-            method: 'post',
-          };
-          this.$modalSure(this.delfromData)
-            .then((res) => {
-              this.$Message.success(res.msg);
-              this.getList();
-            })
-            .catch((res) => {
-              this.$Message.error(res.msg);
-            });
-          break;
         default:
           this.delfromData = {
             title: '删除订单',
@@ -452,6 +440,11 @@ export default {
           // this.modalTitleSs = '删除订单';
           this.delOrder(row, this.delfromData);
       }
+    },
+    shipmentClear(row) {
+      console.log(this.$refs.shipment);
+      this.orderId = row.id;
+      this.$refs.shipment.modals = true;
     },
     printImg(url) {
       printJS({

@@ -514,6 +514,17 @@ export function orderPrice(data) {
   });
 }
 /**
+ * @description 取消商家寄件
+ * @param {Object} param data {Object} 传值参数
+ */
+export function shipmentCancelOrder(id, data) {
+  return request({
+    url: `order/shipment_cancel_order/${id}`,
+    method: 'post',
+    data: data,
+  });
+}
+/**
  * @description 重新执行
  * @param {Object} param data {Object} 传值参数
  */
