@@ -157,6 +157,7 @@ class StorePinkServices extends BaseServices
         $where['cid'] = $id;
         $where['k_id'] = 0;
         $where['is_refund'] = 0;
+        $where['status'] = 1;
         $pinkList = $this->dao->pinkList($where);
         $ids = array_column($pinkList, 'id');
         $orderIdKey = array_column($pinkList, 'order_id_key');

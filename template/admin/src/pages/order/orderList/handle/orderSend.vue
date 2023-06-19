@@ -291,10 +291,6 @@ export default {
     };
   },
   watch: {
-    modals(newVal) {
-      if (newVal) {
-      }
-    },
     virtual_type(val) {
       if (this.virtual_type == 3) this.formItem.type = '3';
     },
@@ -310,9 +306,11 @@ export default {
   },
   methods: {
     watchPrice() {
+      console.log(1111);
       let data = {
         kuaidicom: this.formItem.delivery_code,
         send_address: this.formItem.to_addr,
+        orderId: this.orderId,
         service_type: this.formItem.service_type,
         cart_ids: [],
       };

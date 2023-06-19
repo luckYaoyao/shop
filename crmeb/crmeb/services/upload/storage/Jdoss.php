@@ -114,6 +114,7 @@ class Jdoss extends BaseUpload
             'region' => $this->storageRegion,
             'endpoint' => "http://s3.{$this->storageRegion}.jdcloud-oss.com",
             'signature_version' => 'v4',
+            'use_path_style_endpoint' => true,
             'credentials' => [
                 'key' => $this->accessKey,
                 'secret' => $this->secretKey,
@@ -326,11 +327,11 @@ class Jdoss extends BaseUpload
                 'CORSConfiguration' => [ // REQUIRED
                     'CORSRules' => [ // REQUIRED
                         [
-                            'AllowedHeaders' => ['Authorization'],
-                            'AllowedMethods' => ['POST', 'GET', 'PUT'], // REQUIRED
+                            'AllowedHeaders' => ['*'],
+                            'AllowedMethods' => ['POST', 'GET', 'PUT', 'DELETE', 'HEAD'], // REQUIRED
                             'AllowedOrigins' => ['*'], // REQUIRED
-                            'ExposeHeaders' => [],
-                            'MaxAgeSeconds' => 3000
+                            'ExposeHeaders' => ['Etag'],
+                            'MaxAgeSeconds' => 0
                         ],
                     ],
                 ]
@@ -353,14 +354,15 @@ class Jdoss extends BaseUpload
                 'PutObject', [
                     'Bucket' => $this->storageName,
                     'Key' => $key,
-                    'SourceFile' => $path,
+//                    'SourceFile' => $path,
                     'ContentType' => $contentType
                 ]
             );
-            $request = $app->createPresignedRequest($cmd, $expires);
+            $request = $app->createPresignedRequest($cmd, $expires, ['Scheme' => 'https']);
             return [
-                'url' => (string)$request->getUri(),
-                'type' => 'JDOSS'
+                'upload_url' => (string)$request->getUri(),
+                'type' => 'JDOSS',
+                'url' => $this->uploadUrl . '/' . $key
             ];
         } catch (\Throwable $e) {
             return $this->setError($e->getMessage());

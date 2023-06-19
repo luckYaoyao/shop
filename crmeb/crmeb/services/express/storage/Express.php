@@ -180,7 +180,7 @@ class Express extends BaseExpress
             throw new ApiException('收件地址必须填写');
         }
         $param = [
-            'kuaidi_num' => $data['kuaidicom'],
+            'kuaidicom' => $data['kuaidicom'],
             'send_address' => $data['send_address'],
             'address' => $data['address'] ?? '',
             'weight' => $data['weight'] ?? '',
