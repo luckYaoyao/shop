@@ -323,18 +323,42 @@ class StoreOrder extends AuthController
         $data = $this->request->postMore([
             ['kuaidicom', ''],
             ['send_address', ''],
-            ['address', ''],
-            ['weight', ''],
+            ['orderId', ''],
             ['service_type', ''],
             ['cart_ids', []],
         ]);
 
-        foreach ($data['cart_ids'] as $cart) {
-            if (!isset($cart['cart_id']) || !$cart['cart_id'] || !isset($cart['cart_num']) || !$cart['cart_num']) {
-                return app('json')->fail(400159);
+        $orderInfo = $this->services->get($data['orderId'], ['user_address', 'cart_id']);
+        if (!$orderInfo) {
+            return app('json')->fail('订单没有查询到');
+        }
+        $weight = '0';
+        if ($data['cart_ids']) {
+            $cartIds = array_column($data['cart_ids'], 'cart_id');
+            $cartList = app()->make(StoreOrderCartInfoServices::class)->getColumn([
+                ['cart_id', 'in', $cartIds]
+            ], 'cart_info', 'cart_id');
+            foreach ($data['cart_ids'] as $cart) {
+                if (!isset($cart['cart_id']) || !$cart['cart_id'] || !isset($cart['cart_num']) || !$cart['cart_num']) {
+                    return app('json')->fail(400159);
+                }
+                if (isset($cartList[$cart['cart_id']])) {
+                    $value = is_string($cartList[$cart['cart_id']]) ? json_decode($cartList[$cart['cart_id']], true) : $cartList[$cart['cart_id']];
+                    $weightnew = bcmul($value['attrInfo']['weight'], (string)$cart['cart_num'], 2);
+                    $weight = bcadd($weightnew, $weight, 2);
+                }
+            }
+        } else {
+            $orderCartInfoList = app()->make(StoreOrderCartInfoServices::class)->getCartInfoPrintProduct($data['orderId']);
+            foreach ($orderCartInfoList as $item) {
+                $weightnew = bcmul($item['attrInfo']['weight'], (string)$item['cart_num'], 2);
+                $weight = bcadd($weightnew, $weight, 2);
             }
         }
-
+        $data['address'] = $orderInfo['user_address'];
+        if ($weight > 0) {
+            $data['weight'] = $weight;
+        }
         return app('json')->success($services->express()->getPrice($data));
     }
 
