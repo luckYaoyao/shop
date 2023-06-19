@@ -170,13 +170,13 @@ class Express extends BaseExpress
      */
     public function getPrice(array $data)
     {
-        if (!empty($data['kuaidicom'])) {
+        if (empty($data['kuaidicom'])) {
             throw new ApiException('快递编码必须填写');
         }
-        if (!empty($data['send_address'])) {
+        if (empty($data['send_address'])) {
             throw new ApiException('寄件地址必须填写');
         }
-        if (!empty($data['address'])) {
+        if (empty($data['address'])) {
             throw new ApiException('收件地址必须填写');
         }
         $param = [

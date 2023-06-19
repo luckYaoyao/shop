@@ -293,6 +293,7 @@ class StoreOrder extends AuthController
 
             ['day_type', 0], //顺丰传 0今天，1明天，2后台
             ['pickup_time', []],//开始时间 9:00，结束时间 10:00  开始时间和结束时间之间不能小于一个小时
+            ['service_type', ''],//快递业务类型
         ]);
         if (!$id) {
             return app('json')->fail(100100);
@@ -325,7 +326,14 @@ class StoreOrder extends AuthController
             ['address', ''],
             ['weight', ''],
             ['service_type', ''],
+            ['cart_ids', []],
         ]);
+
+        foreach ($data['cart_ids'] as $cart) {
+            if (!isset($cart['cart_id']) || !$cart['cart_id'] || !isset($cart['cart_num']) || !$cart['cart_num']) {
+                return app('json')->fail(400159);
+            }
+        }
 
         return app('json')->success($services->express()->getPrice($data));
     }

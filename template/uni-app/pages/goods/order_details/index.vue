@@ -176,10 +176,10 @@
 				</button>
 			</div>
 			<!-- #endif -->
-			<view class='wrapper'>
+			<view class='wrapper' v-if="isReturen == 1">
 				<view class='item acea-row row-between'>
 					<view>{{$t(`申请理由`)}}：</view>
-					<view class='conter'>{{(orderInfo.add_time_y || '') +' '+(orderInfo.add_time_h || 0)}}</view>
+					<view class='conter'>{{orderInfo.refund_explain}}</view>
 				</view>
 				<view class='item acea-row row-between'>
 					<view>{{$t(`申请图片`)}}：</view>
