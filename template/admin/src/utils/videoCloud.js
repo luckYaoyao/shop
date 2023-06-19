@@ -11,7 +11,7 @@
 import * as qiniu from 'qiniu-js';
 import Cos from 'cos-js-sdk-v5';
 import axios from 'axios';
-import { upload } from '@/api/upload';
+import { upload, ossUpload } from '@/api/upload';
 
 const sign = (method, publicKey, privateKey, md5, contentType, date, bucketName, fileName) => {
   const CryptoJS = require('crypto-js'); // 这里使用了crypto-js加密算法库，安装方法会在后面说明
@@ -38,7 +38,7 @@ export default {
         result = this.us3Http(config.evfile, config.res, config.uploading);
         break;
       case 'JDOSS':
-        result = this.uploadMp4ToLocal(config.evfile, config.res, config.uploading);
+        result = this.jdHttp(config.evfile, config.res, config.uploading);
         break;
       case 'CTOSS':
         result = this.obsHttp(config.evfile, config.res, config.uploading);
@@ -323,6 +323,22 @@ export default {
           resolve({ url: res.data.cdn ? res.data.cdn + '/' + filename : fileUrl });
         },
       });
+    });
+  },
+  // 京东云上传
+  jdHttp(evfile, r, videoIng) {
+    const fileObject = evfile.target.files[0]; // 获取的文件对象
+    const formData = new FormData();
+    formData.append('file', fileObject);
+    return new Promise((resolve, reject) => {
+      ossUpload(r.data.upload_url, formData)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          videoIng(true, 100);
+          resolve(r.data);
+        });
     });
   },
   // 本地上传

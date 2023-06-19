@@ -344,12 +344,13 @@ export function productGetTemplateApi() {
 }
 
 /**
- * @description 商品 -- 获取运费模板
+ * @description 获取上传参数
  */
-export function productGetTempKeysApi() {
+export function productGetTempKeysApi(data) {
   return request({
     url: `product/product/get_temp_keys`,
     method: 'get',
+    params: data,
   });
 }
 
@@ -393,7 +394,7 @@ export function productUserLabel() {
   });
 }
 /**
- * @description 商品添加编辑-- 用户标签
+ * @description 上传类型
  */
 export function uploadType() {
   return request({

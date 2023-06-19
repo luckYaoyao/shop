@@ -824,14 +824,14 @@
                   placeholder="请输入一级返佣"
                   :min="0"
                   :max="9999999"
-                  class="columnsBox perW30"
+                  class="columnsBox perW20"
                   v-model="manyBrokerage"
                 ></InputNumber>
                 二级返佣：<InputNumber
                   placeholder="请输入二级返佣"
                   :min="0"
                   :max="99999999"
-                  class="columnsBox perW30"
+                  class="columnsBox perW20"
                   v-model="manyBrokerageTwo"
                 ></InputNumber>
               </span>
@@ -840,7 +840,7 @@
                   placeholder="请输入会员价"
                   :min="0"
                   :max="99999999"
-                  class="columnsBox perW30"
+                  class="columnsBox perW20"
                   v-model="manyVipPrice"
                 ></InputNumber>
               </span>
@@ -2317,7 +2317,12 @@ export default {
       if (suffix.indexOf('.mp4') === -1) {
         return that.$Message.error('只能上传MP4文件');
       }
-      productGetTempKeysApi()
+      console.log(evfile.target.files[0]);
+      let types = {
+        key: evfile.target.files[0].name,
+        contentType: evfile.target.files[0].type,
+      };
+      productGetTempKeysApi(types)
         .then((res) => {
           that.$videoCloud
             .videoUpload({
