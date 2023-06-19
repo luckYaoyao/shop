@@ -826,6 +826,7 @@ class StoreOrderController
                 $update = [
                     'label' => $data['data']['label'] ?? '',
                 ];
+                //韵达会异步推送单号
                 if (isset($data['kuaidinum'])) {
                     $update['delivery_id'] = $data['kuaidinum'];
                 }
