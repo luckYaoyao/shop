@@ -44,6 +44,7 @@ use app\services\product\product\StoreProductReplyServices;
 use app\services\shipping\ShippingTemplatesServices;
 use crmeb\services\CacheService;
 use think\facade\Cache;
+use think\facade\Log;
 
 /**
  * 订单控制器
@@ -855,6 +856,39 @@ class StoreOrderController
                         ]);
                     });
                 }
+                break;
+            case 'order_cancel'://取消寄件
+                if (isset($data['data']['task_id'])) {
+                    $orderInfo = $this->services->get(['kuaidi_task_id' => $data['data']['task_id']]);
+                    if (!$orderInfo) {
+                        return app('json')->fail('订单不存在');
+                    }
+                    if ($orderInfo->is_stock_up && $orderInfo->status == 0) {
+                        app()->make(StoreOrderStatusServices::class)->save([
+                            'oid' => $orderInfo->id,
+                            'change_time' => time(),
+                            'change_type' => 'delivery_goods_cancel',
+                            'change_message' => '已取消发货，取消原因：用户手动取消'
+                        ]);
+
+                        $orderInfo->status = 0;
+                        $orderInfo->is_stock_up = 0;
+                        $orderInfo->kuaidi_task_id = '';
+                        $orderInfo->kuaidi_order_id = '';
+                        $orderInfo->express_dump = '';
+                        $orderInfo->kuaidi_label = '';
+                        $orderInfo->delivery_id = '';
+                        $orderInfo->delivery_code = '';
+                        $orderInfo->delivery_name = '';
+                        $orderInfo->delivery_type = '';
+                        $orderInfo->save();
+                    } else {
+                        Log::error('商家寄件自动回调，订单状态不正确：', [
+                            'kuaidi_task_id' => $data['data']['task_id']
+                        ]);
+                    }
+                }
+
                 break;
         }
 
