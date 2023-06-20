@@ -111,7 +111,7 @@ class SmsService extends NoticeService
             }
             $smsMake = $services->sms($type);
             //发送短信
-            $res = $smsMake->send($phone, $templateId, $data, sys_config('yihaotong_sms_appid', ''));
+            $res = $smsMake->send($phone, $templateId, $data);
             if ($res === false) {
                 throw new ApiException($smsMake->getError());
             }
