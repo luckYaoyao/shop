@@ -2706,6 +2706,15 @@ HTML;
             ]);
 
             $orderInfo->status = 0;
+            $orderInfo->is_stock_up = 0;
+            $orderInfo->kuaidi_task_id = '';
+            $orderInfo->kuaidi_order_id = '';
+            $orderInfo->express_dump = '';
+            $orderInfo->kuaidi_label = '';
+            $orderInfo->delivery_id = '';
+            $orderInfo->delivery_code = '';
+            $orderInfo->delivery_name = '';
+            $orderInfo->delivery_type = '';
             $orderInfo->save();
         });
 
