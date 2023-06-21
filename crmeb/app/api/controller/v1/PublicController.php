@@ -643,7 +643,8 @@ class PublicController
      */
     public function getVersion()
     {
-        return app('json')->success(['version' => get_crmeb_version()]);
+        $version = parse_ini_file(app()->getRootPath() . '.version');
+        return app('json')->success(['version' => $version['version'], 'version_code' => $version['version_code']]);
     }
 
     /**
