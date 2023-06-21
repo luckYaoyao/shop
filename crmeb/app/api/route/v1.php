@@ -21,7 +21,7 @@ Route::group(function () {
     Route::any('order_call_back', 'v1.order.StoreOrderController/callBack')->option(['real_name' => '商家寄件回调']);//商家寄件回调
     Route::get('get_script', 'v1.PublicController/getScript')->option(['real_name' => '获取统计代码']);//获取统计代码
     Route::get('version', 'v1.PublicController/getVersion')->option(['real_name' => '获取代码版本号']);
-})->option(['mark' => 'serve', 'mark_name' => '服务接口']);
+})->middleware(\app\http\middleware\AllowOriginMiddleware::class)->option(['mark' => 'serve', 'mark_name' => '服务接口']);
 
 Route::group(function () {
     //apple快捷登陆

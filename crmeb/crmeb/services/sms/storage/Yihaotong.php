@@ -199,10 +199,9 @@ class Yihaotong extends BaseSms
      * @param string $phone
      * @param string $templateId
      * @param array $data
-     * @param string $yihaotongSmsAppid
      * @return bool|string
      */
-    public function send(string $phone, string $templateId, array $data = [], string $yihaotongSmsAppid = '')
+    public function send(string $phone, string $templateId, array $data = [])
     {
         if (!$phone) {
             throw new AdminException(400719);
@@ -216,8 +215,7 @@ class Yihaotong extends BaseSms
             throw new AdminException(400720);
         }
         $param['param'] = json_encode($data);
-        $header = $yihaotongSmsAppid != '' ? ['AppId:' . $yihaotongSmsAppid] : [];
-        return $this->accessToken->httpRequest(self::SMS_SEND, $param, 'post', true, $header);
+        return $this->accessToken->httpRequest(self::SMS_SEND, $param, 'post');
     }
 
     /**

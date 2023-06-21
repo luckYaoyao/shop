@@ -83,10 +83,28 @@ class OutUserServices extends BaseServices
     }
 
     /**
+     * 获取用户详情
+     * @param $uid
+     * @return mixed
+     * @author 吴汐
+     * @email 442384644@qq.com
+     * @date 2023/06/20
+     */
+    public function userInfo($uid)
+    {
+        $fields = ['uid', 'real_name', 'mark', 'nickname', 'avatar', 'phone', 'now_money', 'brokerage_price', 'integral', 'exp', 'sign_num', 'user_type', 'status', 'level',
+            'agent_level', 'spread_open', 'spread_uid', 'spread_time', 'user_type', 'is_promoter', 'pay_count', 'is_ever_level', 'is_money_level', 'overdue_time', 'add_time'];
+        return app()->make(UserServices::class)->get($uid, $fields);
+    }
+
+    /**
      * 添加/修改用户
      * @param int $uid
      * @param array $data
      * @return int
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function saveUser(int $uid, array $data): int
     {
@@ -151,6 +169,10 @@ class OutUserServices extends BaseServices
      * @param int $id
      * @param array $data
      * @return bool
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function otherGive(int $id, array $data): bool
     {

@@ -98,7 +98,7 @@ class Express extends BaseExpress
      * @email 136327134@qq.com
      * @date 2023/5/15
      */
-    public function shippmentCreateOrder(array $data, string $yihaotongSendAppid = '')
+    public function shippmentCreateOrder(array $data)
     {
         $siid = sys_config('config_export_siid');
         $param = [
@@ -119,8 +119,7 @@ class Express extends BaseExpress
             'pickup_start_time' => $data['pickup_start_time'],
             'pickup_end_time' => $data['pickup_end_time'],
         ];
-        $header = $yihaotongSendAppid != '' ? ['AppId:' . $yihaotongSendAppid] : [];
-        return $this->accessToken->httpRequest(self::SHIPMENT_CREATE_ORDER, $param, 'post', true, $header);
+        return $this->accessToken->httpRequest(self::SHIPMENT_CREATE_ORDER, $param, 'post');
     }
 
     /**
@@ -248,7 +247,7 @@ class Express extends BaseExpress
      * @return 物流状态：status 0在途，1揽收，2疑难，3签收，4退签，5派件，6退回，7转单，10待清关，11清关中，12已清关，13清关异常，14收件人拒签
      * @return 物流详情 content
      */
-    public function query(string $num, string $com = '', $phone = '', $yihaotongExpressAppid = '')
+    public function query(string $num, string $com = '', $phone = '')
     {
         $param = [
             'com' => $com,
@@ -258,20 +257,18 @@ class Express extends BaseExpress
         if ($com === null) {
             unset($param['com']);
         }
-        $header = $yihaotongExpressAppid != '' ? ['AppId:' . $yihaotongExpressAppid] : [];
-        return $this->accessToken->httpRequest(self::EXPRESS_QUERY, $param, 'post', true, $header);
+        return $this->accessToken->httpRequest(self::EXPRESS_QUERY, $param, 'post');
     }
 
     /**
      * 电子面单打印
      * @param array $data 必需参数: com(快递公司编码)、to_name(寄件人)、to_tel（寄件人电话）、to_addr（寄件人详细地址）、from_name（收件人）、from_tel（收件人电话)、from_addr（收件人地址）、temp_id（电子面单模板ID）、siid（云打印机编号）、count（商品数量）
-     * @param string $yihaotongFaceAppid
      * @return bool|mixed
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function dump($data, $yihaotongFaceAppid = '')
+    public function dump($data)
     {
         $param = $data;
         $param['com'] = $data['com'] ?? '';
@@ -315,7 +312,6 @@ class Express extends BaseExpress
         if (!sys_config('config_export_siid')) {
             $header = ['version:v1.1'];
         }
-        $header = array_merge($header, $yihaotongFaceAppid != '' ? ['AppId:' . $yihaotongFaceAppid] : []);
         return $this->accessToken->httpRequest(self::EXPRESS_DUMP, $param, 'POST', true, $header);
     }
 

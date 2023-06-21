@@ -72,7 +72,7 @@ class Express extends BaseModel
 
     public function searchCodeAttr($query, $value)
     {
-        if ($value === '') {
+        if ($value !== '') {
             $query->where('code', $value);
         }
     }

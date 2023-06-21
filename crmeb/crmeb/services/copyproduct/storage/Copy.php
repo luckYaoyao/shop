@@ -52,11 +52,10 @@ class Copy extends BaseCopyProduct
      * @param string $yihaotongCopyAppid
      * @return mixed
      */
-    public function goods(string $url, array $options = [], string $yihaotongCopyAppid = '')
+    public function goods(string $url, array $options = [])
     {
         $param['url'] = $url;
-        $header = $yihaotongCopyAppid != '' ? ['AppId:' . $yihaotongCopyAppid] : [];
-        return $this->accessToken->httpRequest(self::PRODUCT_GOODS, $param, 'post', true, $header);
+        return $this->accessToken->httpRequest(self::PRODUCT_GOODS, $param, 'post');
     }
 
 

@@ -527,7 +527,7 @@ class StoreOrderDeliveryServices extends BaseServices
             if (!sys_config('config_export_open', 0)) {
                 throw new AdminException(400528);
             }
-            $dump = $expressService->express()->dump($expData, sys_config('yihaotong_face_appid', ''));
+            $dump = $expressService->express()->dump($expData);
             $orderInfo->delivery_id = $dump['kuaidinum'];
             $data['express_dump'] = json_encode([
                 'com' => $expData['com'],
@@ -576,7 +576,7 @@ class StoreOrderDeliveryServices extends BaseServices
 //            if (!sys_config('config_shippment_open', 0)) {
 //                throw new AdminException('商家寄件未开启无法寄件');
 //            }
-            $dump = $expressService->express()->shippmentCreateOrder($expData, sys_config('yihaotong_send_appid', ''));
+            $dump = $expressService->express()->shippmentCreateOrder($expData);
             Log::error('商家寄件返回数据：' . json_encode($dump));
             $orderInfo->delivery_id = $dump['kuaidinum'] ?? '';
             $data['express_dump'] = json_encode([
@@ -589,8 +589,8 @@ class StoreOrderDeliveryServices extends BaseServices
             ]);
             $data['delivery_id'] = $dump['kuaidinum'] ?? '';
             $data['kuaidi_label'] = $dump['label'] ?? '';
-            $data['kuaidi_task_id'] = $dump['taskId'] ?? '';
-            $data['kuaidi_order_id'] = $dump['orderId'] ?? '';
+            $data['kuaidi_task_id'] = $dump['task_id'] ?? '';
+            $data['kuaidi_order_id'] = $dump['order_id'] ?? '';
         } else {
             if (!$data['delivery_id']) {
                 throw new AdminException(400531);
@@ -622,6 +622,8 @@ class StoreOrderDeliveryServices extends BaseServices
                 'is_stock_up' => 1,
                 'delivery_type' => $data['delivery_type'],
                 'delivery_name' => $data['delivery_name'],
+                'delivery_code' => $data['delivery_code'],
+                'delivery_id' => $data['delivery_id'],
                 'kuaidi_label' => $data['kuaidi_label'],
                 'kuaidi_task_id' => $data['kuaidi_task_id'],
                 'kuaidi_order_id' => $data['kuaidi_order_id'],
