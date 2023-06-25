@@ -1011,9 +1011,7 @@ export default {
 				success: res => {
 					console.log("打开成功", res);
 				},
-				fail: err => {
-					console.log('sgdhgf', err);
-				}
+				fail: err => {}
 			})
 			//#endif
 			//#ifndef MP

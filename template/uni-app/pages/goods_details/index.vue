@@ -955,7 +955,6 @@
 			 */
 			ChangeAttr: function(res) {
 				let productSelect = this.productValue[res];
-				// console.log(productSelect)
 				if (!productSelect) {
 					this.$util.Tips({
 						title: this.$t(`重新选择`),
@@ -1479,7 +1478,6 @@
 						that.attr.productSelect.unique : "",
 					virtual_type: that.storeInfo.virtual_type,
 				};
-				// console.log(q)
 				postCartAdd(q)
 					.then(function(res) {
 						that.isOpen = false;
@@ -1557,6 +1555,7 @@
 			 */
 			listenerActionSheet() {
 				this.currentPage = false
+				this.downloadFilePromotionCode();
 				if (this.isLogin === false) {
 					toLogin();
 				} else {
@@ -1569,7 +1568,6 @@
 						// this.ShareInfo()
 						this.weixinStatus = true;
 					}
-					this.downloadFilePromotionCode();
 					// #endif
 					// #ifdef MP
 					// this.downloadFilePromotionCode();

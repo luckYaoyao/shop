@@ -81,7 +81,6 @@
 			}
 		},
 		onShow() {
-			console.log(this.globalData.cccc)
 			const queryData = uni.getEnterOptionsSync() // uni-app版本 3.5.1+ 支持
 			if (queryData.query.spread) {
 				this.$Cache.set('spread', queryData.query.spread);
@@ -98,8 +97,6 @@
 			// #ifdef MP
 			if (queryData.query.scene) {
 				let param = this.$util.getUrlParams(decodeURIComponent(queryData.query.scene))
-				console.log(queryData.query.scene)
-				console.log(param)
 				if (param.pid) {
 					this.$Cache.set('spread', param.pid);
 					this.globalData.spid = param.pid;

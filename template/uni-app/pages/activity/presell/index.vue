@@ -188,7 +188,6 @@
 				if (that.pageloading) return;
 				this.pageloading = true
 				getPresellList(data).then(res => {
-					console.log(res);
 					var presellList = res.data.list;
 					var loadend = presellList.length < that.limit;
 					that.page++;
