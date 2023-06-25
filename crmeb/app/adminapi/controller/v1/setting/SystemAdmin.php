@@ -175,7 +175,7 @@ class SystemAdmin extends AuthController
                 return app('json')->fail(400183);
             }
         }
-        
+
         if ($this->services->updateAdmin($this->adminId, $data))
             return app('json')->success(100001);
         else
