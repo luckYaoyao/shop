@@ -23,6 +23,15 @@
           <Radio label="2">电子面单打印</Radio>
         </RadioGroup>
       </FormItem>
+      <FormItem label="寄件人姓名：">
+        <Input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 80%"></Input>
+      </FormItem>
+      <FormItem label="寄件人电话：">
+        <Input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 80%"></Input>
+      </FormItem>
+      <FormItem label="寄件人地址：">
+        <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></Input>
+      </FormItem>
       <div>
         <FormItem label="快递公司：" v-if="formItem.type == 1">
           <Select
@@ -64,14 +73,9 @@
             </Select>
             <Button v-if="formItem.express_temp_id" type="text" @click="preview">预览</Button>
           </FormItem>
-          <FormItem label="寄件人姓名：">
-            <Input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 80%"></Input>
-          </FormItem>
-          <FormItem label="寄件人电话：">
-            <Input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 80%"></Input>
-          </FormItem>
-          <FormItem label="寄件人地址：">
-            <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></Input>
+          <FormItem label="寄件金额计算：" v-if="formItem.express_record_type == 3">
+            <span class="red">{{ sendPrice }}</span>
+            <a class="ml10" @click="watchPrice">立即计算</a>
           </FormItem>
           <FormItem label="取件日期：" v-if="formItem.express_record_type == 3">
             <RadioGroup v-model="formItem.day_type" type="button">
@@ -158,10 +162,6 @@
           </i-table>
         </FormItem>
       </div>
-      <FormItem label="寄件金额计算：" v-if="formItem.express_record_type == 3">
-        <span class="red">{{ sendPrice }}</span>
-        <a class="ml10" @click="watchPrice">立即计算</a>
-      </FormItem>
     </Form>
     <div slot="footer">
       <Button @click="cancel">取消</Button>
@@ -306,7 +306,6 @@ export default {
   },
   methods: {
     watchPrice() {
-      console.log(1111);
       let data = {
         kuaidicom: this.formItem.delivery_code,
         send_address: this.formItem.to_addr,
@@ -549,6 +548,7 @@ export default {
         this.formItem.service_type = expressItem.types.length ? expressItem.types[0] : '';
       }
       this.formItem.delivery_code = expressItem.code;
+      if (this.formItem.to_name && this.formItem.to_addr) this.watchPrice();
       if (this.formItem.express_record_type === '2') {
         this.expressTemp = [];
         this.formItem.express_temp_id = '';
