@@ -65,7 +65,7 @@ class StoreCouponIssueServices extends BaseServices
         foreach ($list as &$item) {
             $item['use_time'] = date('Y-m-d', $item['start_use_time']) . ' ~ ' . date('Y-m-d', $item['end_use_time']);
         }
-        unset($where['type'], $where['receive_type']);
+//        unset($where['type'], $where['receive_type']);
         $count = $this->dao->count($where);
         return compact('list', 'count');
     }
