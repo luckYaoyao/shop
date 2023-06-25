@@ -269,15 +269,19 @@
                   </Radio>
                 </RadioGroup>
               </div>
-              <FormItem label="跳转路径：" prop="url" v-if="customdate.status == 1">
-                <Input v-model="customdate.url" placeholder="请输入正确跳转路径"></Input>
-              </FormItem>
-              <FormItem label="APPID：" prop="appid" v-if="customdate.status == 2">
-                <Input v-model="customdate.appid" placeholder="请输入正确APPID"></Input>
-              </FormItem>
-              <FormItem label="小程序路径：" prop="mpUrl" v-if="customdate.status == 2">
-                <Input v-model="customdate.mpUrl" placeholder="请输入正确小程序路径"></Input>
-              </FormItem>
+              <template v-if="customdate.status == 1">
+                <FormItem label="跳转路径：" prop="url">
+                  <Input v-model="customdate.url" placeholder="请输入正确跳转路径"></Input>
+                </FormItem>
+              </template>
+              <template v-if="customdate.status == 2">
+                <FormItem label="APPID：" prop="appid">
+                  <Input v-model="customdate.appid" placeholder="请输入正确APPID"></Input>
+                </FormItem>
+                <FormItem label="小程序路径：" prop="mpUrl">
+                  <Input v-model="customdate.mpUrl" placeholder="请输入正确小程序路径"></Input>
+                </FormItem>
+              </template>
             </Form>
           </div>
         </div>
@@ -419,6 +423,7 @@ export default {
       ruleValidate: {
         name: [{ required: true, message: '请输入链接名称', trigger: 'blur' }],
         url: [{ required: true, message: '请输入跳转路径', trigger: 'blur' }],
+        appid: [{ required: true, message: '请输入APPID', trigger: 'blur' }],
       },
     };
   },
