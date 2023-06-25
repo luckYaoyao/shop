@@ -37,7 +37,7 @@
 					<view class='addressCon' v-else>
 						<view class='setaddress'>{{$t(`设置收货地址`)}}</view>
 					</view>
-					<view class='iconfont icon-jiantou'></view>
+					<view v-if="store_self_mention && is_shipping" class='iconfont icon-jiantou'></view>
 				</view>
 				<view class='address acea-row row-between-wrapper' v-else @tap="showStoreList">
 					<block v-if="storeList.length>0">
