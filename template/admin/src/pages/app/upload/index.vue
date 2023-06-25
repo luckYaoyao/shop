@@ -77,9 +77,13 @@ export default {
       });
       this.imgList.splice(index, 1);
       this.$nextTick((e) => {
-        this.imgList.map((e) => {
-          this.allSize += e.raw.size;
-        });
+        if (this.imgList.length) {
+          this.imgList.map((e) => {
+            this.allSize += e.raw.size;
+          });
+        } else {
+          this.allSize = 0;
+        }
       });
     },
 
@@ -118,14 +122,20 @@ export default {
       return new Blob([u8arr], { type: mime });
     },
     fileChange(file, fileList) {
-      compressImg(file.raw).then((res) => {
-        if (fileList.length) fileList[fileList.length - 1].raw = res;
+      if (file.size >= 2097152) {
+        compressImg(file.raw).then((res) => {
+          if (fileList.length) fileList[fileList.length - 1].raw = res;
+          this.imgList = fileList;
+          this.imgList.map((e) => {
+            this.allSize += e.raw.size;
+          });
+        });
+      } else {
         this.imgList = fileList;
         this.imgList.map((e) => {
-          console.log(e);
           this.allSize += e.raw.size;
         });
-      });
+      }
     },
     loadData(item, callback) {
       getCategoryListApi({
@@ -167,7 +177,7 @@ export default {
   font-size: 18px;
   right: 1px;
   top: 1px;
-  color: red;
+  color: #999;
 }
 .img-box {
   display: flex;
