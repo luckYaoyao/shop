@@ -241,7 +241,8 @@ class StoreOrderController
             ['sh_delivery_id', ''],//送货人电话
             ['sh_delivery_uid', ''],//送货人ID
 
-            ['fictitious_content', '']//虚拟发货内容
+            ['fictitious_content', ''],//虚拟发货内容
+            ['pickup_time', []]
         ]);
         if ($data['delivery_type']) {
             $data['delivery_name'] = $data['delivery_type'];
