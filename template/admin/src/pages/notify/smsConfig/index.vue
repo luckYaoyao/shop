@@ -79,10 +79,12 @@
     <!--          </div>-->
     <!--        </div>-->
     <!--      </div>-->
-    <Card :bordered="false" dis-hover class="ivu-mt" style="min-height: 600px;">
-
-      <iframe src="https://api_v2.crmeb.net?token=AF37D4579721672220B08CA872586943" style="width: 100%;height: 800px"
-              frameborder="0"></iframe>
+    <Card :bordered="false" dis-hover class="ivu-mt" style="height: 800px">
+      <iframe
+        src="https://api_v2.crmeb.net?token=AF37D4579721672220B08CA872586943"
+        style="width: 100%; height: 800px"
+        frameborder="0"
+      ></iframe>
       <!--        <login-from-->
       <!--          @on-change="onChangePasssword"-->
       <!--          v-if="isShowLogn"-->
@@ -114,11 +116,11 @@ import registerFrom from './components/register';
 import tableList from './tableList';
 import forgetPhone from './components/forgetPhone';
 import request from '@/libs/request';
-import {isLoginApi, logoutApi, smsNumberApi, serveInfoApi} from '@/api/setting';
+import { isLoginApi, logoutApi, smsNumberApi, serveInfoApi } from '@/api/setting';
 
 export default {
   name: 'smsConfig',
-  components: {loginFrom, forgetPassword, registerFrom, tableList, forgetPhone},
+  components: { loginFrom, forgetPassword, registerFrom, tableList, forgetPhone },
   data() {
     return {
       imgUrl: require('@/assets/images/ren.png'),
@@ -131,10 +133,10 @@ export default {
       accountInfo: {},
       isForgetPhone: false, // 修改手机号
       isIndex: false, // 判断忘记密码返回的路径
-      sms: {open: 0}, // 短信信息
-      query: {open: 0}, // 物流查询
-      dump: {open: 0}, // 电子面单打印
-      copy: {open: 0}, // 商品采集
+      sms: { open: 0 }, // 短信信息
+      query: { open: 0 }, // 物流查询
+      dump: { open: 0 }, // 电子面单打印
+      copy: { open: 0 }, // 商品采集
     };
   },
   created() {
@@ -143,7 +145,7 @@ export default {
   },
   beforeDestroy() {
     // 移除事件监听器
-    window.removeEventListener('message', this.handleConfig)
+    window.removeEventListener('message', this.handleConfig);
   },
   methods: {
     handleConfig(data) {
@@ -157,8 +159,7 @@ export default {
             sms_account: data.accessKey,
             sms_token: data.secretKey,
           },
-        }).then(res => {
-        });
+        }).then((res) => {});
       }
     },
     onChangePhone() {
@@ -170,7 +171,7 @@ export default {
       this.$refs.tableLists.onOpenIndex(val);
     },
     mealPay(val) {
-      this.$router.push({path: this.$routeProStr + '/setting/sms/sms_pay/index', query: {type: val}});
+      this.$router.push({ path: this.$routeProStr + '/setting/sms/sms_pay/index', query: { type: val } });
     },
     // 开通服务
     openService(val) {
@@ -193,67 +194,67 @@ export default {
     getServeInfo() {
       this.spinShow = true;
       serveInfoApi()
-          .then(async (res) => {
-            let data = res.data;
-            this.sms = {
-              num: data.sms.num,
-              open: data.sms.open,
-              surp: data.sms.open,
-            };
-            this.query = {
-              num: data.query.num,
-              open: data.query.open,
-              surp: data.query.open,
-            };
-            this.dump = {
-              num: data.dump.num,
-              open: data.dump.open,
-              surp: data.dump.open,
-            };
-            this.copy = {
-              num: data.copy.num,
-              open: data.copy.open,
-              surp: data.copy.open,
-            };
-            this.spinShow = false;
-            this.smsAccount = data.account;
-            this.accountInfo = data;
-          })
-          .catch((res) => {
-            this.$Message.error(res.msg);
-            this.isShowLogn = true;
-            this.isShowList = false;
-            this.spinShow = false;
-          });
+        .then(async (res) => {
+          let data = res.data;
+          this.sms = {
+            num: data.sms.num,
+            open: data.sms.open,
+            surp: data.sms.open,
+          };
+          this.query = {
+            num: data.query.num,
+            open: data.query.open,
+            surp: data.query.open,
+          };
+          this.dump = {
+            num: data.dump.num,
+            open: data.dump.open,
+            surp: data.dump.open,
+          };
+          this.copy = {
+            num: data.copy.num,
+            open: data.copy.open,
+            surp: data.copy.open,
+          };
+          this.spinShow = false;
+          this.smsAccount = data.account;
+          this.accountInfo = data;
+        })
+        .catch((res) => {
+          this.$Message.error(res.msg);
+          this.isShowLogn = true;
+          this.isShowList = false;
+          this.spinShow = false;
+        });
     },
     // 查看是否登录
     onIsLogin() {
       this.spinShow = true;
       isLoginApi()
-          .then(async (res) => {
-            let data = res.data;
-            this.isShowLogn = !data.status;
-            this.isShowList = data.status;
-            this.spinShow = false;
-            if (data.status) {
-              this.getServeInfo();
-            }
-          })
-          .catch((res) => {
-            this.spinShow = false;
-            this.$Message.error(res.msg);
-          });
+        .then(async (res) => {
+          let data = res.data;
+          this.isShowLogn = !data.status;
+          this.isShowList = data.status;
+          this.spinShow = false;
+          if (data.status) {
+            this.getServeInfo();
+          }
+        })
+        .catch((res) => {
+          this.spinShow = false;
+          this.$Message.error(res.msg);
+        });
     },
     // 退出登录
     signOut() {
       logoutApi()
-          .then(async (res) => {
-            this.isShowLogn = true;
-            this.isShowList = false;
-          })
-          .catch((res) => {
-            this.$Message.error(res.msg);
-          });
+        .then(async (res) => {
+          this.isShowLogn = true;
+          this.isShowList = false;
+        })
+        .catch((res) => {
+          this.$Message.error(res.msg);
+        });
     },
     // 修改密码
     onChangePassswordIndex() {
@@ -320,6 +321,12 @@ export default {
 </script>
 
 <style lang="less" scoped>
+/deep/ .layout-container .layout-scrollbar {
+  padding: 0;
+}
+/deep/ .ivu-card-body {
+  padding: 0;
+}
 .picTxt {
   padding: 8px 0 12px;
 }

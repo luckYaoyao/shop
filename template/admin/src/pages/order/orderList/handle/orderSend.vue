@@ -545,6 +545,9 @@ export default {
         return;
       }
       this.serviceTypeList = expressItem.types;
+      if (this.formItem.type == 1 && this.formItem.express_record_type == 3) {
+        this.formItem.service_type = expressItem.types.length ? expressItem.types[0] : '';
+      }
       this.formItem.delivery_code = expressItem.code;
       if (this.formItem.express_record_type === '2') {
         this.expressTemp = [];
@@ -554,6 +557,7 @@ export default {
         })
           .then((res) => {
             this.expressTemp = res.data;
+            this.formItem.express_temp_id = res.data.length ? res.data[0].temp_id : '';
             if (!res.data.length) {
               this.$Message.error('请配置你所选快递公司的电子面单');
             }
@@ -563,7 +567,7 @@ export default {
           });
       } else if (this.formItem.express_record_type == '3') {
         this.expressTemp = expressItem.list;
-        console.log(this.expressTemp);
+        this.formItem.express_temp_id = expressItem.list.length ? expressItem.list[0].temp_id : '';
       }
     },
     getCartInfo(data, orderid) {

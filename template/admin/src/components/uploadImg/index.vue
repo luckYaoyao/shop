@@ -342,11 +342,10 @@ export default {
 .btndel {
   position: absolute;
   z-index: 1;
-  width: 20px !important;
-  height: 20px !important;
-  left: 52px;
-  top: -4px;
-  color red
+  font-size: 18px;
+  left: 50px;
+  top: -5px;
+  color #999
 }
 .form-width{
     width 280px
