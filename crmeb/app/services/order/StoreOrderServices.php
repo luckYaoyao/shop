@@ -2692,10 +2692,6 @@ HTML;
             'cancel_msg' => $msg,
         ]);
 
-        if ($res['status'] != 200) {
-            throw new ValidateException($res['msg'] ?? '一号通：取消失败');
-        }
-
         //订单返回原状态
         $this->transaction(function () use ($id, $msg, $orderInfo) {
             app()->make(StoreOrderStatusServices::class)->save([
