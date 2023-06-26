@@ -74,7 +74,7 @@ export default {
   },
   methods: {
     mealPay() {
-      this.$router.push({ path: this.$routeProStr + '/setting/sms/sms_config/index');
+      this.$router.push({ path: this.$routeProStr + '/setting/sms/sms_config/index'});
     },
     getCopyConfig() {
       copyConfigApi().then((res) => {
