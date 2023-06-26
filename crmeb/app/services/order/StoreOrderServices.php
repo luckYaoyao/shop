@@ -104,7 +104,7 @@ class StoreOrderServices extends BaseServices
             $vipTruePrice = 0;
             foreach ($item['_info'] as $items) {
                 $cart_num += $items['cart_info']['cart_num'];
-                $vipTruePrice = bcadd((string)$vipTruePrice, (string)$items['cart_info']['vip_sum_truePrice'], 2);
+                $vipTruePrice = bcadd((string)$vipTruePrice, (string)$items['cart_info']['vip_truePrice'], 2);
             }
             $item['total_price'] = bcadd($item['total_price'], $vipTruePrice, 2);
             $item['is_all_refund'] = $refund_num == $cart_num;
