@@ -49,7 +49,7 @@ class Crmeb extends BaseStorage
      */
     public function getUser()
     {
-        return $this->accessToken->httpRequest('user/info');
+        return $this->accessToken->httpRequest('v2/user/info');
     }
 
     /**

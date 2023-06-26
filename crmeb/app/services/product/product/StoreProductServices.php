@@ -127,6 +127,9 @@ class StoreProductServices extends BaseServices
         /** @var StoreCategoryServices $categoryService */
         $categoryService = app()->make(StoreCategoryServices::class);
         $cateList = $categoryService->getCateParentAndChildName($cateIds);
+        $preantCateList = $categoryService->getColumn([
+            ['id', 'in', $cateIds]
+        ], 'cate_name', 'id');
         foreach ($list as &$item) {
             $cateName = array_filter($cateList, function ($val) use ($item) {
                 if (in_array($val['id'], explode(',', $item['cate_id']))) {
@@ -136,6 +139,9 @@ class StoreProductServices extends BaseServices
             $item['cate_name'] = [];
             foreach ($cateName as $k => $v) {
                 $item['cate_name'][] = $v['one'] . '/' . $v['two'];
+            }
+            if (!count($item['cate_name']) && isset($preantCateList[$item['cate_id']])) {
+                $item['cate_name'][] = $preantCateList[$item['cate_id']];
             }
             $item['cate_name'] = is_array($item['cate_name']) ? implode(',', $item['cate_name']) : '';
             $item['stock_attr'] = $item['stock'] > 0;//库存
