@@ -152,6 +152,19 @@ class SystemAttachment extends AuthController
     }
 
     /**
+     * 删除二维码
+     * @return \think\Response
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/6/26
+     */
+    public function removeUploadQrcode()
+    {
+        $this->service->cacheDriver()->delete('scan_upload');
+        return app('json')->success();
+    }
+
+    /**
      * 获取扫码上传的图片数据
      * @param $scan_token
      * @return \think\Response
