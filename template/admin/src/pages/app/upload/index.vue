@@ -62,6 +62,7 @@ export default {
   },
   methods: {
     selectImgs() {
+      if (this.loading) return;
       this.$refs['upload'].$refs['upload-inner'].handleClick();
     },
     again() {
@@ -70,14 +71,19 @@ export default {
       this.allSize = 0;
     },
     async submitUpload() {
-      this.loading = true;
-      for (let i = 0; i < this.imgList.length; i++) {
-        const file = this.imgList[i].raw;
-        await this.uploadItem(file);
-        if (i == this.imgList.length - 1) {
-          this.uploading = false;
-          this.loading = false;
+      if (this.imgList.length) {
+        if (this.loading) return;
+        this.loading = true;
+        for (let i = 0; i < this.imgList.length; i++) {
+          const file = this.imgList[i].raw;
+          await this.uploadItem(file);
+          if (i == this.imgList.length - 1) {
+            this.uploading = false;
+            this.loading = false;
+          }
         }
+      } else {
+        this.$Message.warning('请先选择图片');
       }
     },
     handleRemove(file) {
