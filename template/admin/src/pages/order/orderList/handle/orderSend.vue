@@ -23,15 +23,17 @@
           <Radio label="2">电子面单打印</Radio>
         </RadioGroup>
       </FormItem>
-      <FormItem label="寄件人姓名：">
-        <Input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 80%"></Input>
-      </FormItem>
-      <FormItem label="寄件人电话：">
-        <Input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 80%"></Input>
-      </FormItem>
-      <FormItem label="寄件人地址：">
-        <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></Input>
-      </FormItem>
+      <template v-if="['2', '3'].includes(formItem.express_record_type) && formItem.type == 1">
+        <FormItem label="寄件人姓名：">
+          <Input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 80%"></Input>
+        </FormItem>
+        <FormItem label="寄件人电话：">
+          <Input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 80%"></Input>
+        </FormItem>
+        <FormItem label="寄件人地址：">
+          <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></Input>
+        </FormItem>
+      </template>
       <div>
         <FormItem label="快递公司：" v-if="formItem.type == 1">
           <Select
@@ -170,7 +172,7 @@
     <!-- <viewer @inited="inited">
             <img :src="temp.pic" style="display:none" />
         </viewer> -->
-    <div ref="viewer" v-viewer v-show="temp">
+    <div ref="viewer" v-viewer>
       <img :src="temp.pic" style="display: none" />
     </div>
   </Modal>
@@ -384,16 +386,16 @@ export default {
     },
     changeExpress(j) {
       switch (j) {
+        case '1':
+          this.formItem.delivery_name = '';
+          this.formItem.delivery_id = '';
+          this.getList(1);
+          break;
         case '2':
           this.formItem.delivery_name = '';
           this.formItem.express_temp_id = '';
           this.expressTemp = [];
           this.getList(2);
-          break;
-        case '1':
-          this.formItem.delivery_name = '';
-          this.formItem.delivery_id = '';
-          this.getList(1);
           break;
         case '3':
           this.formItem.delivery_name = '';
@@ -567,7 +569,11 @@ export default {
           });
       } else if (this.formItem.express_record_type == '3') {
         this.expressTemp = expressItem.list;
-        this.formItem.express_temp_id = expressItem.list.length ? expressItem.list[0].temp_id : '';
+        if (expressItem.list.length) {
+          this.formItem.express_temp_id = expressItem.list[0].temp_id;
+          this.temp = expressItem.list[0];
+          console.log(expressItem.list[0], 'expressItem.list[0]');
+        }
       }
     },
     getCartInfo(data, orderid) {
@@ -624,6 +630,7 @@ export default {
       if (this.temp === undefined) {
         this.temp = {};
       }
+      console.log(this.temp);
     },
     // inited (viewer) {
     //     this.$viewer = viewer;
