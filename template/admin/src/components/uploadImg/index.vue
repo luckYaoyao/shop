@@ -344,7 +344,7 @@ export default {
   position: absolute;
   z-index: 1;
   font-size: 18px;
-  left: 50px;
+  right: -5px;
   top: -5px;
   color #999
 }
