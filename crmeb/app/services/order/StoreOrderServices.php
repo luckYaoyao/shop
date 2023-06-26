@@ -105,6 +105,7 @@ class StoreOrderServices extends BaseServices
                 $cart_num += $items['cart_info']['cart_num'];
             }
             $item['is_all_refund'] = $refund_num == $cart_num ? true : false;
+            $item['total_price'] = bcadd($item['total_price'], $item['vip_true_price'], 2);
         }
         return compact('data', 'count');
     }
