@@ -358,7 +358,7 @@ class ExportServices extends BaseServices
                 $one_data = [
                     'card_number' => $item['card_number'],
                     'card_password' => $item['card_password'],
-                    'user_name' => $userList[$item['use_uid']]['real_name'] ?: $userList[$item['use_uid']]['nickname'],
+                    'user_name' => $userList[$item['use_uid']]['real_name'] ?? $userList[$item['use_uid']]['nickname'] ?? '',
                     'user_phone' => $userList[$item['use_uid']] ? $userList[$item['use_uid']]['phone'] : "",
                     'use_time' => $item['use_time'],
                     'use_uid' => $item['use_uid'] ? '已领取' : '未领取'
