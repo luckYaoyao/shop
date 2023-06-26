@@ -123,7 +123,7 @@
 </template>
 
 <script>
-import { getCategoryListApi, moveApi, onlineUpload } from '@/api/uploadPictures';
+import { getCategoryListApi, moveApi, onlineUpload, scanUploadCode } from '@/api/uploadPictures';
 import Setting from '@/setting';
 import { getCookies } from '@/libs/util';
 import { fileUpload, scanUploadQrcode, scanUploadGet } from '@/api/setting';
@@ -148,7 +148,7 @@ export default {
         'Authori-zation': 'Bearer ' + getCookies('token'),
       },
       uploadData: {},
-      props: { label: 'title', value: 'id', multiple: false, lazy: true, lazyLoad: this.loadData },
+      props: { label: 'title', value: 'id', multiple: false, checkStrictly: true, lazy: true, lazyLoad: this.loadData },
       disabled: false,
       ruleForm: {
         type: 0,
@@ -166,6 +166,7 @@ export default {
     closed() {
       this.ruleForm.type = 0;
       this.ruleForm.imgList = [];
+      scanUploadCode().then((res) => {});
     },
     radioChange(type) {
       this.ruleForm.type = type;

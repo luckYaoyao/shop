@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main" v-loading="loading">
     <div v-if="uploading">
       <div class="img-list">
         <el-upload
@@ -7,8 +7,11 @@
           :action="fileUrl"
           list-type="picture-card"
           :on-change="fileChange"
+          :on-error="fileError"
           :file-list="imgList"
           :auto-upload="false"
+          :multiple="true"
+          :limit="limit"
         >
           <i slot="default" class="el-icon-plus"></i>
           <div slot="file" slot-scope="{ file }">
@@ -19,9 +22,9 @@
       </div>
 
       <div class="footer">
-        <div>共{{ imgList.length }}张，{{ (allSize / 1000000).toFixed(2) }} M</div>
+        <div>共{{ imgList.length }}/{{ limit }}张，{{ (allSize / 1000000).toFixed(2) }} M</div>
         <div class="upload-btn">
-          <!-- <div class="btn">选择图片</div> -->
+          <div v-if="imgList.length < limit" class="btn" @click="selectImgs">选择图片</div>
           <div class="btn upload" @click="submitUpload">确认上传</div>
         </div>
       </div>
@@ -49,6 +52,8 @@ export default {
       allSize: 0,
       token: '',
       uploading: true,
+      limit: 20,
+      loading: false,
     };
   },
   created() {
@@ -56,31 +61,37 @@ export default {
     document.title = '手机端扫码上传';
   },
   methods: {
+    selectImgs() {
+      this.$refs['upload'].$refs['upload-inner'].handleClick();
+    },
     again() {
       this.uploading = true;
       this.imgList = [];
       this.allSize = 0;
     },
     async submitUpload() {
+      this.loading = true;
       for (let i = 0; i < this.imgList.length; i++) {
         const file = this.imgList[i].raw;
         await this.uploadItem(file);
         if (i == this.imgList.length - 1) {
           this.uploading = false;
+          this.loading = false;
         }
       }
     },
     handleRemove(file) {
-      console.log(file);
       let index = this.imgList.findIndex((e) => {
-        e.url == file.url;
+        return e.url == file.url;
       });
       this.imgList.splice(index, 1);
       this.$nextTick((e) => {
+        let s = 0;
         if (this.imgList.length) {
           this.imgList.map((e) => {
-            this.allSize += e.raw.size;
+            s += e.raw.size;
           });
+          this.allSize = s;
         } else {
           this.allSize = 0;
         }
@@ -97,6 +108,7 @@ export default {
             if (res.status == 200) {
               resolve();
             } else {
+              this.loading = false;
               this.$message({
                 message: '上传失败',
                 type: 'error',
@@ -105,37 +117,44 @@ export default {
             }
           })
           .catch((err) => {
+            this.loading = false;
             this.$Message.error(err.msg);
           });
       });
     },
-
-    dataURLtoBlob(dataurl) {
-      const arr = dataurl.split(','),
-        mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]);
-      let n = bstr.length;
-      const u8arr = new Uint8Array(n);
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-      }
-      return new Blob([u8arr], { type: mime });
+    fileError(err, file, fileList) {
+      console.log(err, file, fileList);
     },
-    fileChange(file, fileList) {
+    async fileChange(file, fileList) {
       if (file.size >= 2097152) {
-        compressImg(file.raw).then((res) => {
-          if (fileList.length) fileList[fileList.length - 1].raw = res;
-          this.imgList = fileList;
-          this.imgList.map((e) => {
-            this.allSize += e.raw.size;
+        await this.comImg(file.raw).then((res) => {
+          fileList.map((e) => {
+            if (e.uid === file.uid) {
+              this.allSize += res.size;
+              e.raw = res;
+            }
           });
+          this.imgList = fileList;
         });
       } else {
         this.imgList = fileList;
-        this.imgList.map((e) => {
-          this.allSize += e.raw.size;
-        });
+        let s = 0;
+        if (this.imgList.length) {
+          this.imgList.map((e) => {
+            s += e.raw.size;
+          });
+          this.allSize = s;
+        } else {
+          this.allSize = 0;
+        }
       }
+    },
+    comImg(file) {
+      return new Promise((resolve, reject) => {
+        compressImg(file).then((res) => {
+          resolve(res);
+        });
+      });
     },
     loadData(item, callback) {
       getCategoryListApi({
@@ -157,6 +176,8 @@ export default {
 }
 .img-list {
   padding: 10px;
+  overflow: scroll;
+  height: calc(100vh - 50px);
 }
 /deep/ .el-upload--picture-card,
 /deep/ .el-upload-list--picture-card .el-upload-list__item {
@@ -175,9 +196,14 @@ export default {
   position: absolute;
   z-index: 1;
   font-size: 18px;
-  right: 1px;
-  top: 1px;
-  color: #999;
+  right: 0px;
+  top: 0px;
+  color: #282828;
+  opacity: 0.5;
+}
+/deep/ .el-upload--picture-card:hover,
+.el-upload:focus {
+  border-color: #c0ccda;
 }
 .img-box {
   display: flex;
