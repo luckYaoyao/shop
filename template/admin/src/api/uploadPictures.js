@@ -104,7 +104,6 @@ export function fileDelApi(ids) {
 }
 /**
  * @description 网络图片上传
- * @param {String} param ids {String} 图片id拼接成的字符串
  */
 export function onlineUpload(data) {
   return request({
@@ -113,3 +112,14 @@ export function onlineUpload(data) {
     data,
   });
 }
+
+/**
+ * @description 清除扫码上传 code
+ */
+export function scanUploadCode() {
+  return request({
+    url: 'scan_upload/qrcode ',
+    method: 'delete'
+  });
+}
+
