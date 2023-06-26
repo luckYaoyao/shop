@@ -101,11 +101,13 @@ class StoreOrderServices extends BaseServices
         foreach ($data as &$item) {
             $refund_num = array_sum(array_column($item['refund'], 'refund_num'));
             $cart_num = 0;
+            $vipTruePrice = 0;
             foreach ($item['_info'] as $items) {
                 $cart_num += $items['cart_info']['cart_num'];
+                $vipTruePrice = bcadd((string)$vipTruePrice, (string)$items['cart_info']['vip_sum_truePrice'], 2);
             }
-            $item['is_all_refund'] = $refund_num == $cart_num ? true : false;
-            $item['total_price'] = bcadd($item['total_price'], $item['vip_true_price'], 2);
+            $item['total_price'] = bcadd($item['total_price'], $vipTruePrice, 2);
+            $item['is_all_refund'] = $refund_num == $cart_num;
         }
         return compact('data', 'count');
     }
