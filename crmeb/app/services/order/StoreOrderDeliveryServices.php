@@ -441,7 +441,7 @@ class StoreOrderDeliveryServices extends BaseServices
         $orderInfoServices = app()->make(StoreOrderCartInfoServices::class);
         $storeName = $orderInfoServices->getCarIdByProductTitle((int)$orderInfo->id);
 
-        if (count($data['pickup_time']) == 2) {
+        if (isset($data['pickup_time']) && count($data['pickup_time']) == 2) {
             $data['pickup_start_time'] = $data['pickup_time'][0];
             $data['pickup_end_time'] = $data['pickup_time'][1];
         } else {
