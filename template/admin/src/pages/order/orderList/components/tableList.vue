@@ -187,6 +187,7 @@
       @clearId="
         () => {
           orderId = 0;
+          virtual_type = null;
         }
       "
     ></order-send>

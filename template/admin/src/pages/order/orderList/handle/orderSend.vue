@@ -198,7 +198,10 @@ export default {
     status: Number,
     // total_num: Number,
     pay_type: String,
-    virtual_type: Number,
+    virtual_type: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {

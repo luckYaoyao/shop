@@ -1810,8 +1810,6 @@ export default {
       ],
       columnsInstalM: [],
       moveIndex: '',
-      // aa: [],
-      // openSubimit: false
     };
   },
   computed: {
@@ -2759,6 +2757,7 @@ export default {
             activeIds.push(item.id);
           });
           this.formValidate.label_id = activeIds;
+          if (this.openSubimit) return;
           this.openSubimit = true;
           this.formValidate.description = this.formatRichText(this.content);
           productAddApi(this.formValidate)
