@@ -190,6 +190,10 @@ export default {
     },
 
     getImg() {
+      if (!this.webImgUrl) {
+        this.$message.error('请先输入图片地址');
+        return;
+      }
       this.ruleForm.imgList.push({
         url: this.webImgUrl,
       });
