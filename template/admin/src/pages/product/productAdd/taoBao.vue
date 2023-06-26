@@ -7,7 +7,7 @@
           >如何配置密钥</a
         >
         <span v-else
-          >您当前剩余{{ copyConfig.copy_num }}条采集次数，<span class="add" @click="mealPay('copy')"
+          >您当前剩余{{ copyConfig.copy_num }}条采集次数，<span class="add" @click="mealPay()"
             >增加采集次数</span
           ></span
         >
@@ -73,8 +73,8 @@ export default {
     this.getCopyConfig();
   },
   methods: {
-    mealPay(val) {
-      this.$router.push({ path: this.$routeProStr + '/setting/sms/sms_pay/index', query: { type: val } });
+    mealPay() {
+      this.$router.push({ path: this.$routeProStr + '/setting/sms/sms_config/index');
     },
     getCopyConfig() {
       copyConfigApi().then((res) => {
