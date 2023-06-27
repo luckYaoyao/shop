@@ -8,7 +8,14 @@
     width="1000"
     @on-visible-change="changeModal"
   >
-    <Form v-if="modals" ref="formItem" :model="formItem" :label-width="100" @submit.native.prevent>
+    <Form
+      v-if="modals"
+      ref="formItem"
+      :rules="ruleValidate"
+      :model="formItem"
+      :label-width="100"
+      @submit.native.prevent
+    >
       <FormItem label="选择类型：">
         <RadioGroup v-model="formItem.type" @on-change="changeRadio">
           <Radio label="1" v-if="virtual_type !== 3">发货</Radio>
@@ -98,8 +105,8 @@
           </FormItem>
         </template>
       </div>
-      <div v-show="formItem.type === '2'">
-        <FormItem label="送货人：">
+      <div v-if="formItem.type === '2'">
+        <FormItem label="送货人：" :prop="formItem.type == '2' ? 'sh_delivery' : ''">
           <Select
             v-model="formItem.sh_delivery"
             placeholder="请选择送货人"
@@ -293,6 +300,7 @@ export default {
       selectData: [],
       serviceTypeList: [],
       sendPrice: 0,
+      ruleValidate: { sh_delivery: [{ required: true, message: '请输入送货人', trigger: 'change' }] },
     };
   },
   watch: {

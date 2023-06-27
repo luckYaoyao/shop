@@ -191,6 +191,7 @@ export default {
   height: 113px;
   line-height: 113px;
   overflow: inherit;
+  margin: 5px;
 }
 /deep/ .el-upload-list--picture-card .el-upload-list__item img {
   width: 111px;
