@@ -32,39 +32,42 @@
       </FormItem>
       <template v-if="['2', '3'].includes(formItem.express_record_type) && formItem.type == 1">
         <FormItem label="寄件人姓名：">
-          <Input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 80%"></Input>
+          <Input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 60%"></Input>
         </FormItem>
         <FormItem label="寄件人电话：">
-          <Input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 80%"></Input>
+          <Input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 60%"></Input>
         </FormItem>
         <FormItem label="寄件人地址：">
-          <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></Input>
+          <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 60%"></Input>
         </FormItem>
       </template>
       <div>
         <FormItem label="快递公司：" v-if="formItem.type == 1">
-          <Select
-            v-model="formItem.delivery_name"
-            filterable
-            placeholder="请选择快递公司"
-            style="width: 80%"
-            @on-change="expressChange"
-          >
-            <Option
-              v-for="item in formItem.express_record_type == 3 ? kuaidiExpress : express"
-              :value="item.value"
-              :key="item.value"
-              >{{ item.value }}</Option
+          <div class="from-box">
+            <Select
+              v-model="formItem.delivery_name"
+              filterable
+              placeholder="请选择快递公司"
+              style="width: 60%"
+              @on-change="expressChange"
             >
-          </Select>
+              <Option
+                v-for="item in formItem.express_record_type == 3 ? kuaidiExpress : express"
+                :value="item.value"
+                :key="item.value"
+                >{{ item.value }}</Option
+              >
+            </Select>
+            <div class="trip">{{ deliveryErrorMsg }}</div>
+          </div>
         </FormItem>
         <FormItem label="快递业务类型：" v-if="formItem.type == 1 && formItem.express_record_type == 3">
-          <Select v-model="formItem.service_type" filterable placeholder="请选择业务类型" style="width: 80%">
+          <Select v-model="formItem.service_type" filterable placeholder="请选择业务类型" style="width: 60%">
             <Option v-for="item in serviceTypeList" :value="item" :key="item">{{ item }}</Option>
           </Select>
         </FormItem>
         <FormItem v-if="formItem.express_record_type === '1' && formItem.type == 1" label="快递单号：">
-          <Input v-model="formItem.delivery_id" placeholder="请输入快递单号" style="width: 80%"></Input>
+          <Input v-model="formItem.delivery_id" placeholder="请输入快递单号" style="width: 60%"></Input>
           <div class="trips" v-if="formItem.delivery_name == '顺丰速运'">
             <p>顺丰请输入单号 :收件人或寄件人手机号后四位，</p>
             <p>例如：SF000000000000:3941</p>
@@ -75,7 +78,7 @@
             <Select
               v-model="formItem.express_temp_id"
               placeholder="请选择电子面单"
-              style="width: 80%"
+              style="width: 60%"
               @on-change="expressTempChange"
             >
               <Option v-for="(item, i) in expressTemp" :value="item.temp_id" :key="i">{{ item.title }}</Option>
@@ -110,7 +113,7 @@
           <Select
             v-model="formItem.sh_delivery"
             placeholder="请选择送货人"
-            style="width: 80%"
+            style="width: 60%"
             @on-change="shDeliveryChange"
           >
             <Option v-for="(item, i) in deliveryList" :value="item.id" :key="i"
@@ -126,7 +129,7 @@
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 5 }"
             placeholder="备注"
-            style="width: 80%"
+            style="width: 60%"
           ></Input>
         </FormItem>
       </div>
@@ -301,6 +304,7 @@ export default {
       serviceTypeList: [],
       sendPrice: 0,
       ruleValidate: { sh_delivery: [{ required: true, message: '请输入送货人', trigger: 'change' }] },
+      deliveryErrorMsg: '',
     };
   },
   watch: {
@@ -336,8 +340,12 @@ export default {
         .then((res) => {
           console.log(res);
           this.sendPrice = res.data.price;
+          this.deliveryErrorMsg = '';
         })
         .catch((err) => {
+          if (this.formItem.type == 1) {
+            this.deliveryErrorMsg = err.msg;
+          }
           this.$Message.error(err.msg);
         });
     },
@@ -365,6 +373,7 @@ export default {
     },
     changeRadio(o) {
       this.$refs.formItem.resetFields();
+      this.deliveryErrorMsg = '';
       switch (o) {
         case '1':
           this.formItem.delivery_name = '';
@@ -538,6 +547,7 @@ export default {
       this.modals = false;
       this.orderStatus = 0;
       this.sendPrice = 0;
+      this.deliveryErrorMsg = '';
       this.splitSwitch = false;
       this.selectData = [];
       this.formItem.type = '1';
@@ -662,7 +672,7 @@ export default {
 .express_temp_id button {
   position: absolute;
   top: 50%;
-  right: 110px;
+  left: 61%;
   padding: 0;
   border: none;
   background: none;
@@ -690,5 +700,15 @@ export default {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+.from-box {
+  position: relative;
+}
+.trip {
+  position: absolute;
+  bottom: -26px;
+  left: 0;
+  color: red;
+  font-size: 12px;
 }
 </style>
