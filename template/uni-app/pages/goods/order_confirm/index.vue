@@ -126,15 +126,15 @@
 					</view>
 					<!-- text -->
 					<view v-if="item.label=='text'" class="confirm">
-						<input type="text" :placeholder="$t(`请填写`)+' '+item.title" v-model="item.value" />
+						<input type="text" :placeholder="$t(`请填写${item.title}`)" v-model="item.value" />
 					</view>
 					<!-- number -->
 					<view v-if="item.label=='number'" class="confirm">
-						<input type="number" :placeholder="$t(`请填写`)+item.title" v-model="item.value" />
+						<input type="number" :placeholder="$t(`请填写${item.title}`)" v-model="item.value" />
 					</view>
 					<!-- email -->
 					<view v-if="item.label=='email'" class="confirm">
-						<input type="text" :placeholder="$t(`请填写`)+item.title" v-model="item.value" />
+						<input type="text" :placeholder="$t(`请填写${item.title}`)" v-model="item.value" />
 					</view>
 					<!-- data -->
 					<view v-if="item.label=='data'" class="uni-list">

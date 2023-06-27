@@ -243,12 +243,12 @@
 			<view class='wrapper' v-if="customForm && customForm.length">
 				<view class='item acea-row row-between' v-for="(item,index) in customForm" :key="index">
 					<view class='upload' v-if="item.label == 'img'">
-						<view>{{item.title}}：</view>
+						<view class="diy-from-title">{{item.title}}：</view>
 						<view class='pictrue' v-for="(img,index) in item.value" :key="index">
 							<image :src='img'></image>
 						</view>
 					</view>
-					<view v-if="item.label !== 'img'">{{item.title}}：</view>
+					<view v-if="item.label !== 'img'" class="diy-from-title">{{item.title}}：</view>
 					<view v-if="item.label !== 'img'" class='conter'>{{item.value}}</view>
 				</view>
 				<view class="copy-text" @click="copyText()">{{$t(`复制`)}}</view>
@@ -269,7 +269,7 @@
 				</view>
 			</view>
 			<view v-if="orderInfo.status!=0">
-				<view class='wrapper' v-if='orderInfo.delivery_type=="express"'>
+				<view class='`' v-if='orderInfo.delivery_type=="express"'>
 					<view class='item acea-row row-between'>
 						<view>{{$t(`配送方式`)}}：</view>
 						<view class='conter'>{{$t(`发货`)}}</view>
@@ -1944,10 +1944,16 @@
 		color: #868686;
 		// width: 380rpx;
 		text-align: justify;
+		flex: 1;
 	}
 
 	.order-details .wrapper .item .conter .upload {
 		padding-bottom: 36rpx;
+	}
+
+	.order-details .wrapper .diy-from-title {
+		white-space: nowrap;
+		width: 5em;
 	}
 
 	.order-details .wrapper .item .conter .upload .pictrue {
