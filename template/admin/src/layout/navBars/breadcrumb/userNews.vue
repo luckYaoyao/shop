@@ -152,6 +152,7 @@ export default {
     // 全部已读点击
     onAllReadClick() {
       this.newsList = [];
+      this.$emit('haveNews', !!this.newsList.length);
     },
     // 前往通知中心点击
     onGoToGiteeClick() {},

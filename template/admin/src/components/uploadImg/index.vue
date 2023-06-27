@@ -8,7 +8,7 @@
       width="1024px"
       @closed="closed"
     >
-      <div class="main">
+      <div class="main" v-loading="loading">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item label="上传方式：" prop="type">
             <el-radio-group v-model="ruleForm.type" @change="radioChange(ruleForm.type)">
@@ -43,6 +43,8 @@
                   :data="uploadData"
                   :headers="header"
                   :before-upload="beforeUpload"
+                  :multiple="true"
+                  :limit="limit"
                 >
                   <i slot="default" class="el-icon-plus"></i>
                   <div
@@ -123,7 +125,7 @@
 </template>
 
 <script>
-import { getCategoryListApi, moveApi, onlineUpload } from '@/api/uploadPictures';
+import { getCategoryListApi, moveApi, onlineUpload, scanUploadCode } from '@/api/uploadPictures';
 import Setting from '@/setting';
 import { getCookies } from '@/libs/util';
 import { fileUpload, scanUploadQrcode, scanUploadGet } from '@/api/setting';
@@ -148,7 +150,7 @@ export default {
         'Authori-zation': 'Bearer ' + getCookies('token'),
       },
       uploadData: {},
-      props: { label: 'title', value: 'id', multiple: false, lazy: true, lazyLoad: this.loadData },
+      props: { label: 'title', value: 'id', multiple: false, checkStrictly: true, lazy: true, lazyLoad: this.loadData },
       disabled: false,
       ruleForm: {
         type: 0,
@@ -158,6 +160,8 @@ export default {
       treeId: '',
       qrcode: '',
       scanToken: '',
+      limit: 20,
+      loading: false,
     };
   },
   created() {},
@@ -166,6 +170,7 @@ export default {
     closed() {
       this.ruleForm.type = 0;
       this.ruleForm.imgList = [];
+      scanUploadCode().then((res) => {});
     },
     radioChange(type) {
       this.ruleForm.type = type;
@@ -189,6 +194,10 @@ export default {
     },
 
     getImg() {
+      if (!this.webImgUrl) {
+        this.$message.error('请先输入图片地址');
+        return;
+      }
       this.ruleForm.imgList.push({
         url: this.webImgUrl,
       });
@@ -198,24 +207,39 @@ export default {
         this.uploadData = {
           pid: this.treeId,
         };
-        for (let i = 0; i < this.ruleForm.imgList.length; i++) {
-          const file = this.ruleForm.imgList[i].raw;
-          await this.uploadItem(file);
-          if (i == this.ruleForm.imgList.length - 1) {
-            this.$Message.success('上传成功');
-            this.$emit('uploadSuccess');
-            this.uploadModal = false;
+        if (this.ruleForm.imgList.length) {
+          if (this.loading) return;
+          this.loading = true;
+          for (let i = 0; i < this.ruleForm.imgList.length; i++) {
+            const file = this.ruleForm.imgList[i].raw;
+            await this.uploadItem(file);
+            if (i == this.ruleForm.imgList.length - 1) {
+              this.$Message.success('上传成功');
+              this.$emit('uploadSuccess');
+              this.uploadModal = false;
+              this.loading = false;
+            }
           }
         }
       } else if (this.ruleForm.type == 1) {
         let urls = this.ruleForm.imgList.map((e) => {
           return e.url;
         });
-        onlineUpload({ pid: this.treeId, images: urls }).then((res) => {
-          this.$Message.success('上传成功');
-          this.$emit('uploadSuccess');
-          this.uploadModal = false;
-        });
+        if (urls.length) {
+          if (this.loading) return;
+          this.loading = true;
+          onlineUpload({ pid: this.treeId, images: urls })
+            .then((res) => {
+              this.$Message.success('上传成功');
+              this.$emit('uploadSuccess');
+              this.uploadModal = false;
+              this.loading = false;
+            })
+            .catch((err) => {
+              this.loading = false;
+              this.$Message.error(err.msg);
+            });
+        }
       } else if (this.ruleForm.type == 2) {
         let attId = this.ruleForm.imgList.map((e) => {
           return e.att_id;
@@ -238,6 +262,7 @@ export default {
               resolve();
               // this.$emit('uploadImgSuccess', res.data);
             } else {
+              this.loading = false;
               this.$message({
                 message: '上传失败',
                 type: 'error',
@@ -246,6 +271,7 @@ export default {
             }
           })
           .catch((err) => {
+            this.loading = false;
             this.$Message.error(err.msg);
           });
       });
@@ -276,12 +302,25 @@ export default {
     handleDownload(file) {
       console.log(file);
     },
-    fileChange(file, fileList) {
-      console.log(file, fileList);
-      this.ruleForm.imgList = fileList;
-      compressImg(file.raw).then((res) => {
-        if (fileList.length) fileList[fileList.length - 1].raw = res;
+    async fileChange(file, fileList) {
+      if (file.size >= 2097152) {
+        await this.comImg(file.raw).then((res) => {
+          fileList.map((e) => {
+            if (e.uid === file.uid) {
+              e.raw = res;
+            }
+          });
+          this.ruleForm.imgList = fileList;
+        });
+      } else {
         this.ruleForm.imgList = fileList;
+      }
+    },
+    comImg(file) {
+      return new Promise((resolve, reject) => {
+        compressImg(file).then((res) => {
+          resolve(res);
+        });
       });
     },
     loadData(item, callback) {
@@ -342,11 +381,10 @@ export default {
 .btndel {
   position: absolute;
   z-index: 1;
-  width: 20px !important;
-  height: 20px !important;
-  left: 52px;
-  top: -4px;
-  color red
+  font-size: 18px;
+  right: -5px;
+  top: -5px;
+  color #999
 }
 .form-width{
     width 280px

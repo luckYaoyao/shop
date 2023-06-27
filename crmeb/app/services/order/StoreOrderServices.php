@@ -101,10 +101,13 @@ class StoreOrderServices extends BaseServices
         foreach ($data as &$item) {
             $refund_num = array_sum(array_column($item['refund'], 'refund_num'));
             $cart_num = 0;
+            $vipTruePrice = 0;
             foreach ($item['_info'] as $items) {
                 $cart_num += $items['cart_info']['cart_num'];
+                $vipTruePrice = bcadd((string)$vipTruePrice, (string)$items['cart_info']['vip_truePrice'], 2);
             }
-            $item['is_all_refund'] = $refund_num == $cart_num ? true : false;
+            $item['total_price'] = bcadd($item['total_price'], $vipTruePrice, 2);
+            $item['is_all_refund'] = $refund_num == $cart_num;
         }
         return compact('data', 'count');
     }
@@ -2691,10 +2694,6 @@ HTML;
             'order_id' => $orderInfo->kuaidi_order_id,
             'cancel_msg' => $msg,
         ]);
-
-        if ($res['status'] != 200) {
-            throw new ValidateException($res['msg'] ?? '一号通：取消失败');
-        }
 
         //订单返回原状态
         $this->transaction(function () use ($id, $msg, $orderInfo) {

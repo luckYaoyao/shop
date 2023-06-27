@@ -81,6 +81,7 @@ Route::group(function () {
     Route::get('admin/order/delivery_info', 'v1.admin.StoreOrderController/getDeliveryInfo')->name('getDeliveryInfo')->option(['real_name' => '获取电子面单默认信息']);//获取电子面单默认信息
     Route::get('admin/order/export_temp', 'v1.admin.StoreOrderController/getExportTemp')->name('getExportTemp')->option(['real_name' => '获取电子面单模板获取']);//获取电子面单模板获取
     Route::get('admin/order/export_all', 'v1.admin.StoreOrderController/getExportAll')->name('getExportAll')->option(['real_name' => '获取物流公司']);//获取物流公司
+    Route::get('admin/order/express/:uni/[:type]', 'v1.admin.StoreOrderController/express')->name('orderExpress')->option(['real_name' => '订单查看物流']); //订单查看物流
 })->middleware(\app\http\middleware\AllowOriginMiddleware::class)
     ->middleware(\app\api\middleware\StationOpenMiddleware::class)
     ->middleware(\app\api\middleware\AuthTokenMiddleware::class, true)

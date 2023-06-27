@@ -190,7 +190,7 @@
 			</view>
 			<navigator class='bnt cancel'
 				v-if="orderInfo.delivery_type == 'express' && orderInfo.status==1"
-				hover-class='none' :url="'/pages/goods/goods_logistics/index?orderId='+ orderInfo.order_id">
+				hover-class='none' :url="'/pages/goods/goods_logistics/index?is_admin=1&orderId='+ orderInfo.order_id">
 				{{$t(`查看物流`)}}
 			</navigator>
 			<navigator class="bnt delivery"

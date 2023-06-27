@@ -671,7 +671,6 @@
 					}, 500);
 
 				}).catch(function(err) {
-					console.log(err)
 					that.$util.Tips({
 						title: err
 					}, {

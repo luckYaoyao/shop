@@ -176,7 +176,8 @@ class Jdoss extends BaseUpload
                 'Key' => $key,
                 'Body' => $fileContent
             ]);
-            if (!isset($uploadInfo['info']['url'])) {
+            $uploadInfo = $uploadInfo->toArray();
+            if (isset($uploadInfo['@metadata']['statusCode']) && $uploadInfo['@metadata']['statusCode'] !== 200) {
                 return $this->setError('Upload failure');
             }
             $this->fileInfo->uploadInfo = $uploadInfo;

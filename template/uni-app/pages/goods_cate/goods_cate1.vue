@@ -96,7 +96,7 @@
 		},
 		data() {
 			return {
-				defimg: require('@/static/images/2-002.png'),
+				defimg: require('@/static/images/all_cat.png'),
 				navlist: [],
 				productList: [],
 				navActive: 0,

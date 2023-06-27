@@ -23,6 +23,17 @@
           <Radio label="2">电子面单打印</Radio>
         </RadioGroup>
       </FormItem>
+      <template v-if="['2', '3'].includes(formItem.express_record_type) && formItem.type == 1">
+        <FormItem label="寄件人姓名：">
+          <Input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 80%"></Input>
+        </FormItem>
+        <FormItem label="寄件人电话：">
+          <Input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 80%"></Input>
+        </FormItem>
+        <FormItem label="寄件人地址：">
+          <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></Input>
+        </FormItem>
+      </template>
       <div>
         <FormItem label="快递公司：" v-if="formItem.type == 1">
           <Select
@@ -64,14 +75,9 @@
             </Select>
             <Button v-if="formItem.express_temp_id" type="text" @click="preview">预览</Button>
           </FormItem>
-          <FormItem label="寄件人姓名：">
-            <Input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 80%"></Input>
-          </FormItem>
-          <FormItem label="寄件人电话：">
-            <Input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 80%"></Input>
-          </FormItem>
-          <FormItem label="寄件人地址：">
-            <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></Input>
+          <FormItem label="寄件金额计算：" v-if="formItem.express_record_type == 3">
+            <span class="red">{{ sendPrice }}</span>
+            <a class="ml10" @click="watchPrice">立即计算</a>
           </FormItem>
           <FormItem label="取件日期：" v-if="formItem.express_record_type == 3">
             <RadioGroup v-model="formItem.day_type" type="button">
@@ -158,10 +164,6 @@
           </i-table>
         </FormItem>
       </div>
-      <FormItem label="寄件金额计算：" v-if="formItem.express_record_type == 3">
-        <span class="red">{{ sendPrice }}</span>
-        <a class="ml10" @click="watchPrice">立即计算</a>
-      </FormItem>
     </Form>
     <div slot="footer">
       <Button @click="cancel">取消</Button>
@@ -170,7 +172,7 @@
     <!-- <viewer @inited="inited">
             <img :src="temp.pic" style="display:none" />
         </viewer> -->
-    <div ref="viewer" v-viewer v-show="temp">
+    <div ref="viewer" v-viewer>
       <img :src="temp.pic" style="display: none" />
     </div>
   </Modal>
@@ -196,7 +198,10 @@ export default {
     status: Number,
     // total_num: Number,
     pay_type: String,
-    virtual_type: Number,
+    virtual_type: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -306,7 +311,6 @@ export default {
   },
   methods: {
     watchPrice() {
-      console.log(1111);
       let data = {
         kuaidicom: this.formItem.delivery_code,
         send_address: this.formItem.to_addr,
@@ -385,16 +389,16 @@ export default {
     },
     changeExpress(j) {
       switch (j) {
+        case '1':
+          this.formItem.delivery_name = '';
+          this.formItem.delivery_id = '';
+          this.getList(1);
+          break;
         case '2':
           this.formItem.delivery_name = '';
           this.formItem.express_temp_id = '';
           this.expressTemp = [];
           this.getList(2);
-          break;
-        case '1':
-          this.formItem.delivery_name = '';
-          this.formItem.delivery_id = '';
-          this.getList(1);
           break;
         case '3':
           this.formItem.delivery_name = '';
@@ -545,7 +549,11 @@ export default {
         return;
       }
       this.serviceTypeList = expressItem.types;
+      if (this.formItem.type == 1 && this.formItem.express_record_type == 3) {
+        this.formItem.service_type = expressItem.types.length ? expressItem.types[0] : '';
+      }
       this.formItem.delivery_code = expressItem.code;
+      if (this.formItem.to_name && this.formItem.to_addr) this.watchPrice();
       if (this.formItem.express_record_type === '2') {
         this.expressTemp = [];
         this.formItem.express_temp_id = '';
@@ -554,6 +562,7 @@ export default {
         })
           .then((res) => {
             this.expressTemp = res.data;
+            this.formItem.express_temp_id = res.data.length ? res.data[0].temp_id : '';
             if (!res.data.length) {
               this.$Message.error('请配置你所选快递公司的电子面单');
             }
@@ -563,7 +572,11 @@ export default {
           });
       } else if (this.formItem.express_record_type == '3') {
         this.expressTemp = expressItem.list;
-        console.log(this.expressTemp);
+        if (expressItem.list.length) {
+          this.formItem.express_temp_id = expressItem.list[0].temp_id;
+          this.temp = expressItem.list[0];
+          console.log(expressItem.list[0], 'expressItem.list[0]');
+        }
       }
     },
     getCartInfo(data, orderid) {
@@ -620,6 +633,7 @@ export default {
       if (this.temp === undefined) {
         this.temp = {};
       }
+      console.log(this.temp);
     },
     // inited (viewer) {
     //     this.$viewer = viewer;

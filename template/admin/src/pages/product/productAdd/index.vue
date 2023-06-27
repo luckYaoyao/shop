@@ -46,19 +46,12 @@
           </Col>
           <Col span="24">
             <FormItem label="商品分类：" prop="cate_id">
-              <!-- {{ formValidate.cate_id }}
-              <Select v-model="formValidate.cate_id" placeholder="请选择商品分类" multiple class="perW30">
-                <Option v-for="item in treeSelect" :disabled="item.pid === 0" :value="item.id" :key="item.id">{{
-                  item.html + item.cate_name
-                }}</Option>
-              </Select>
-              {{ formValidate.cate_id }} -->
               <el-cascader
                 class="perW30"
                 v-model="formValidate.cate_id"
                 size="small"
                 :options="treeSelect"
-                :props="{ multiple: true, emitPath: false }"
+                :props="{ multiple: true, checkStrictly: true, emitPath: false }"
                 clearable
               ></el-cascader>
               <span class="addfont" @click="addCate">新增分类</span>
@@ -1817,8 +1810,6 @@ export default {
       ],
       columnsInstalM: [],
       moveIndex: '',
-      // aa: [],
-      // openSubimit: false
     };
   },
   computed: {
@@ -2766,6 +2757,7 @@ export default {
             activeIds.push(item.id);
           });
           this.formValidate.label_id = activeIds;
+          if (this.openSubimit) return;
           this.openSubimit = true;
           this.formValidate.description = this.formatRichText(this.content);
           productAddApi(this.formValidate)

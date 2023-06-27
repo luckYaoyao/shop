@@ -300,6 +300,7 @@ class UserExtractServices extends BaseServices
             $f[] = Form::input('alipay_code', '支付宝账号', $UserExtract['alipay_code']);
         } else if ($UserExtract['extract_type'] == 'weixin') {
             $f[] = Form::input('wechat', '微信号', $UserExtract['wechat']);
+        } else if ($UserExtract['extract_type'] == 'balance') {
         } else {
             $f[] = Form::input('bank_code', '银行卡号', $UserExtract['bank_code']);
             $f[] = Form::input('bank_address', '开户行', $UserExtract['bank_address']);

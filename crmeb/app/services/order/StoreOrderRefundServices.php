@@ -688,7 +688,7 @@ class StoreOrderRefundServices extends BaseServices
 
             $storeOrderServices->update($oid, ['refund_status' => 0, 'refund_type' => 3]);
             //处理订单商品cart_info
-            $this->cancelOrderRefundCartInfo($id, $oid, $orderRefundInfo);
+            $this->cancelOrderRefundCartInfo($id, $oid, $orderRefundInfo, '不退款原因:' . ($data['refund_reason'] ?? ''));
             //记录
             /** @var StoreOrderStatusServices $statusService */
             $statusService = app()->make(StoreOrderStatusServices::class);
@@ -1277,7 +1277,7 @@ class StoreOrderRefundServices extends BaseServices
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
      */
-    public function cancelOrderRefundCartInfo(int $id, int $oid, $orderRefundInfo = [])
+    public function cancelOrderRefundCartInfo(int $id, int $oid, $orderRefundInfo = [], string $title = '')
     {
         if (!$orderRefundInfo) {
             $orderRefundInfo = $this->dao->get(['id' => $id, 'is_cancel' => 0]);
@@ -1306,7 +1306,7 @@ class StoreOrderRefundServices extends BaseServices
         $statusService->save([
             'oid' => $oid,
             'change_type' => 'cancel_refund_order',
-            'change_message' => '取消退款',
+            'change_message' => $title ?: '取消退款',
             'change_time' => time()
         ]);
 
