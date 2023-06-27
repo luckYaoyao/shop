@@ -1,19 +1,24 @@
 <template>
   <div class="main" v-loading="loading">
     <div v-if="uploading">
-      <div class="img-list">
+      <div class="img-list" :class="{ 'none-card': imgList.length }">
         <el-upload
           ref="upload"
           :action="fileUrl"
           list-type="picture-card"
           :on-change="fileChange"
           :on-error="fileError"
+          :before-upload="beforeUpload"
           :file-list="imgList"
           :auto-upload="false"
           :multiple="true"
           :limit="limit"
+          accept="image/*"
         >
-          <i slot="default" class="el-icon-plus"></i>
+          <div slot="default" class="upload-card" v-if="!imgList.length">
+            <i class="el-icon-plus"></i>
+            <p class="text">点击选择图片</p>
+          </div>
           <div slot="file" slot-scope="{ file }">
             <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
             <i class="el-icon-error btndel" @click="handleRemove(file)" />
@@ -22,10 +27,13 @@
       </div>
 
       <div class="footer">
-        <div>共{{ imgList.length }}/{{ limit }}张，{{ (allSize / 1000000).toFixed(2) }} M</div>
+        <div v-if="imgList.length">共{{ imgList.length }}/{{ limit }}张，{{ (allSize / 1000000).toFixed(2) }} M</div>
+        <div v-else></div>
         <div class="upload-btn">
-          <div v-if="imgList.length < limit" class="btn" @click="selectImgs">选择图片</div>
-          <div class="btn upload" @click="submitUpload">确认上传</div>
+          <div v-if="imgList.length < limit" class="btn" @click="selectImgs">
+            {{ imgList.length ? '继续选择' : '选择图片' }}
+          </div>
+          <div class="btn upload" :class="{ 'no-pic': !imgList.length }" @click="submitUpload">确认上传</div>
         </div>
       </div>
     </div>
@@ -131,7 +139,11 @@ export default {
     fileError(err, file, fileList) {
       console.log(err, file, fileList);
     },
+    beforeUpload(file) {
+      console.log(file);
+    },
     async fileChange(file, fileList) {
+      console.log(file);
       if (file.size >= 2097152) {
         await this.comImg(file.raw).then((res) => {
           fileList.map((e) => {
@@ -184,27 +196,49 @@ export default {
   padding: 10px;
   overflow: scroll;
   height: calc(100vh - 50px);
+  background-color: #fff;
 }
-/deep/ .el-upload--picture-card,
+
 /deep/ .el-upload-list--picture-card .el-upload-list__item {
-  width: 113px;
-  height: 113px;
-  line-height: 113px;
-  overflow: inherit;
-  margin: 5px;
+  // width: 113px;
+  // height: 113px;
+  // line-height: 113px;
+  // overflow: inherit;
+  margin: 1% 1% 0px 1%;
+  width: 31.3%;
+  height: 31.3%;
+  padding-top: 31.3%;
+  aspect-ratio: 1 / 1;
+}
+/deep/ .el-upload-list--picture-card .el-upload-list__item > div {
+  // position: relative;
+  width: 100%;
+  height: 100%;
+}
+/deep/ .el-upload--picture-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  height: 146px;
+  justify-content: center;
+  align-items: center;
+  background: #f9f9f9;
 }
 /deep/ .el-upload-list--picture-card .el-upload-list__item img {
-  width: 111px;
-  height: 111px;
+  width: 100%;
+  height: 100%;
   border-radius: 6px;
   object-fit: cover;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 .btndel {
   position: absolute;
   z-index: 1;
   font-size: 18px;
-  right: 0px;
-  top: 0px;
+  right: -1px;
+  top: -1px;
   color: #282828;
   opacity: 0.5;
 }
@@ -216,6 +250,9 @@ export default {
   display: flex;
   padding-left: 100px;
   flex-wrap: wrap;
+}
+.none-card /deep/ .el-upload--picture-card {
+  display: none !important;
 }
 .footer {
   padding: 0 10px 0 15px;
@@ -249,6 +286,26 @@ export default {
     background-color: #e93323;
     color: #fff;
     margin-left: 10px;
+  }
+  .upload.no-pic {
+    background: #e93323;
+    opacity: 0.3;
+  }
+}
+.upload-card {
+  display: flex;
+  flex-direction: column;
+  line-height: 16px;
+  .el-icon-plus {
+    font-size: 28px;
+    font-weight: bold;
+    color: #bbbbbb;
+  }
+  .text {
+    font-size: 13px;
+    font-weight: 400;
+    color: #999999;
+    margin-top: 18px;
   }
 }
 .upload-success {
