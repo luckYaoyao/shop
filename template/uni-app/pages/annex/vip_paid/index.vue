@@ -776,6 +776,9 @@
 					uni.showToast({
 						title: res.msg,
 						success() {
+							that.memberCard();
+							that.groomList();
+							that.getOrderPayType();
 							that.popupShow = false;
 						}
 					});

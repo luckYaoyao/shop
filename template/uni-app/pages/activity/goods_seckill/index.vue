@@ -308,7 +308,7 @@
 		width: 460rpx;
 		font-size: 30rpx;
 		color: #333;
-		height: 166rpx;
+		height: 200rpx;
 	}
 
 	.flash-sale .list .item .text .name {
