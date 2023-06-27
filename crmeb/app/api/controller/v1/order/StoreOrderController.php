@@ -63,9 +63,9 @@ class StoreOrderController
      * @var int[]
      */
     protected $getChennel = [
-        'weixin' => 0,
+        'wechat' => 0,
         'routine' => 1,
-        'weixinh5' => 2,
+        'h5' => 2,
         'pc' => 3,
         'app' => 4
     ];
