@@ -77,7 +77,11 @@ class SystemAttachmentCategoryServices extends BaseServices
             if ($menu['pid'] == $pid) {
                 unset($menusList[$k]);
                 $menu['children'] = $this->tidyMenuTier($menusList, $menu['id']);
-                if ($menu['children']) $menu['expand'] = true;
+                if (count($menu['children'])) {
+                    $menu['expand'] = true;
+                } else {
+                    unset($menu['children']);
+                }
                 $navList[] = $menu;
             }
         }
