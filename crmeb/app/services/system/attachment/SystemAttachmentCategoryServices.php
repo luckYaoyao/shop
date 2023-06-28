@@ -54,8 +54,10 @@ class SystemAttachmentCategoryServices extends BaseServices
         } else {
             foreach ($list as &$item) {
                 $item['title'] = $item['name'];
-                $item['children'] = [];
-                if ($where['name'] == '' && $this->dao->count(['pid' => $item['id']])) $item['loading'] = false;
+                if ($where['name'] == '' && $this->dao->count(['pid' => $item['id']])) {
+                    $item['loading'] = false;
+                    $item['children'] = [];
+                }
             }
         }
         return compact('list');
