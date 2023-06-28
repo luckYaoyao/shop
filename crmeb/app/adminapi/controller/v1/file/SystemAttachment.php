@@ -43,7 +43,8 @@ class SystemAttachment extends AuthController
     public function index()
     {
         $where = $this->request->getMore([
-            ['pid', 0]
+            ['pid', 0],
+            ['real_name', '']
         ]);
         return app('json')->success($this->service->getImageList($where));
     }
