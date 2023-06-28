@@ -145,7 +145,7 @@ class SystemAttachment extends AuthController
      */
     public function scanUploadQrcode()
     {
-        $pid = $this->request->getMore([
+        [$pid] = $this->request->getMore([
             ['pid', 0]
         ], true);
         $uploadToken = md5(time());
