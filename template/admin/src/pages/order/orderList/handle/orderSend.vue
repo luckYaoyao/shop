@@ -85,7 +85,7 @@
             </Select>
             <Button v-if="formItem.express_temp_id" type="text" @click="preview">预览</Button>
           </FormItem>
-          <FormItem label="寄件金额计算：" v-if="formItem.express_record_type == 3">
+          <FormItem label="预计寄件金额：" v-if="formItem.express_record_type == 3">
             <span class="red">{{ sendPrice }}</span>
             <a class="ml10" @click="watchPrice">立即计算</a>
           </FormItem>
