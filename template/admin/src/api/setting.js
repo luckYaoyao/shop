@@ -1126,9 +1126,9 @@ export function codeCrud(data) {
 /**
  * @description 扫码上传链接获取
  */
-export function scanUploadQrcode() {
+export function scanUploadQrcode(pid) {
   return request({
-    url: `file/scan_upload/qrcode`,
+    url: `file/scan_upload/qrcode?pid=${pid}`,
     method: 'get',
   });
 }

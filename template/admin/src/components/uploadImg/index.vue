@@ -1,11 +1,12 @@
 <template>
-  <div>
+  <div v-if="uploadModal">
     <el-dialog
       title="上传图片"
       append-to-body
       :modal-append-to-body="false"
       :visible.sync="uploadModal"
       width="1024px"
+      :fullscreen="!isPage"
       @closed="closed"
     >
       <div class="main" v-loading="loading">
@@ -57,7 +58,7 @@
                     @dragend="handleDragEnd($event, file)"
                   >
                     <img class="el-upload-list__item-thumbnail" :src="file.url" alt="" />
-                    <i class="el-icon-error btndel" @click="handleRemove(file)" />
+                    <i class="el-icon-error btndel" @click="handleWebRemove(file)" />
                   </div>
                 </el-upload>
                 <div class="tips">建议上传图片最大宽度750px，不超过3MB；仅支持jpeg、png格式</div>
@@ -82,7 +83,7 @@
             </div>
           </template>
         </el-form>
-        <div class="code-image" v-show="ruleForm.type == 2">
+        <div class="code-image" v-if="ruleForm.type == 2">
           <div class="left">
             <div class="code" ref="qrCodeUrl"></div>
             <el-cascader
@@ -109,7 +110,7 @@
                 @dragend="handleDragEnd($event, item)"
               >
                 <img :src="item.att_dir" />
-                <i class="el-icon-error btndel" @click="handleRemove(index)" />
+                <i class="el-icon-error btndel" @click="handleWebRemove(item)" />
               </div>
             </div>
           </div>
@@ -140,6 +141,21 @@ export default {
         return [];
       },
     },
+    categoryId: {
+      default: '',
+    },
+    isPage: {
+      default: false,
+    },
+  },
+  watch: {
+    categoryId: {
+      handler(newVal) {
+        this.ruleForm.region = newVal;
+        console.log('diaole ');
+      },
+      immediate: true,
+    },
   },
   data() {
     return {
@@ -150,14 +166,14 @@ export default {
         'Authori-zation': 'Bearer ' + getCookies('token'),
       },
       uploadData: {},
-      props: { label: 'title', value: 'id', multiple: false, checkStrictly: true, lazy: true, lazyLoad: this.loadData },
+      props: { checkStrictly: true, emitPath: false, label: 'title', value: 'id' },
       disabled: false,
       ruleForm: {
         type: 0,
+        region: '',
         imgList: [],
       },
       rules: { type: [{ required: true, message: '请选择活动资源', trigger: 'change' }] },
-      treeId: '',
       qrcode: '',
       scanToken: '',
       limit: 20,
@@ -169,6 +185,9 @@ export default {
   methods: {
     closed() {
       this.ruleForm.type = 0;
+      this.ruleForm.region = 0;
+      this.scanToken = '';
+      this.webImgUrl = '';
       this.ruleForm.imgList = [];
       scanUploadCode().then((res) => {});
     },
@@ -180,7 +199,7 @@ export default {
       }
     },
     scanUploadQrcode() {
-      scanUploadQrcode().then((res) => {
+      scanUploadQrcode(this.ruleForm.region).then((res) => {
         this.creatQrCode(res.data.url);
         this.scanToken = res.data.url;
       });
@@ -205,7 +224,7 @@ export default {
     async submitUpload() {
       if (this.ruleForm.type == 0) {
         this.uploadData = {
-          pid: this.treeId,
+          pid: this.ruleForm.region,
         };
         if (this.ruleForm.imgList.length) {
           if (this.loading) return;
@@ -228,7 +247,7 @@ export default {
         if (urls.length) {
           if (this.loading) return;
           this.loading = true;
-          onlineUpload({ pid: this.treeId, images: urls })
+          onlineUpload({ pid: this.ruleForm.region, images: urls })
             .then((res) => {
               this.$Message.success('上传成功');
               this.$emit('uploadSuccess');
@@ -244,7 +263,7 @@ export default {
         let attId = this.ruleForm.imgList.map((e) => {
           return e.att_id;
         });
-        moveApi({ pid: this.treeId, images: attId }).then((res) => {
+        moveApi({ pid: this.ruleForm.region, images: attId }).then((res) => {
           this.$Message.success('上传成功');
           this.$emit('uploadSuccess');
           this.uploadModal = false;
@@ -255,7 +274,7 @@ export default {
       return new Promise((resolve, reject) => {
         const formData = new FormData();
         formData.append('file', file);
-        formData.append('pid', this.treeId);
+        formData.append('pid', this.ruleForm.region);
         fileUpload(formData)
           .then((res) => {
             if (res.status == 200) {
@@ -288,11 +307,14 @@ export default {
         correctLevel: QRCode.CorrectLevel.H,
       });
     },
-    handleRemove(file) {
+    handleWebRemove(file) {
       console.log(file);
       let index = this.ruleForm.imgList.findIndex((e) => {
-        e.url == file.url;
+        return e.url == file.url;
       });
+      this.ruleForm.imgList.splice(index, 1);
+    },
+    handleRemove(index) {
       this.ruleForm.imgList.splice(index, 1);
     },
     handlePictureCardPreview(file) {
@@ -334,8 +356,7 @@ export default {
         .catch((res) => {});
     },
     handleChange(e) {
-      console.log(e, e.length == 1 ? e[0] : e[e.length - 1]);
-      this.treeId = e[e.length - 1];
+      if (this.ruleForm.type == 2) this.scanUploadQrcode();
     },
     // 移动
     handleDragStart(e, item) {

@@ -1,5 +1,5 @@
 <template>
-  <div class="Modal">
+  <div class="Modal" :class="{ 'fill-window': !isPage }">
     <div class="colLeft">
       <div class="Nav">
         <!-- <div class="input">
@@ -70,7 +70,7 @@
             <el-cascader
               v-model="pids"
               placeholder="图片移动至"
-              style="width: 50%"
+              style="width: 150px"
               class="treeSel"
               :options="treeData2"
               :props="{ checkStrictly: true, emitPath: false, label: 'title', value: 'id' }"
@@ -85,7 +85,7 @@
               v-model="fileData.real_name"
               placeholder="请输入图片名"
               size="small"
-              style="width: 50%"
+              style="width: 150px"
             >
               <i slot="suffix" class="el-icon-search el-input__icon" @click="getFileList"></i>
             </el-input>
@@ -203,7 +203,7 @@
         </div>
       </div>
     </div>
-    <uploadImg ref="upload" @uploadSuccess="uploadSuccess"></uploadImg>
+    <uploadImg ref="upload" :isPage="isPage" :categoryId="treeId" :categoryList="treeData" @uploadSuccess="uploadSuccess"></uploadImg>
     <div class="images" v-show="false" v-viewer="{ movable: false }">
       <img v-for="src in pictrueList" :src="src.att_dir" :key="src.att_id" />
     </div>
@@ -386,10 +386,6 @@ export default {
     searchImg() {},
     // 移动分类
     getMove() {
-      if (!this.ids.toString()) {
-        this.$Message.warning('请先选择图片');
-        return;
-      }
       let data = {
         pid: this.pids,
         images: this.ids.toString(),
@@ -903,7 +899,9 @@ export default {
   height: 100%;
   background: #fff !important;
 }
-
+.fill-window {
+  height: 100vh;
+}
 .colLeft {
   padding-right: 0 !important;
   height: 100%;
