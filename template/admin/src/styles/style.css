@@ -727,3 +727,7 @@ body {
 .pl10 {
   padding-left: 10px;
 }
+.df-jcsb {
+  display: flex;
+  justify-content: space-between;
+}
