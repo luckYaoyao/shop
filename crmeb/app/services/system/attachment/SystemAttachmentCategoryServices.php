@@ -41,14 +41,20 @@ class SystemAttachmentCategoryServices extends BaseServices
      * 获取分类列表
      * @param array $where
      * @return array
+     * @throws \ReflectionException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
      */
     public function getAll(array $where)
     {
         $list = $this->dao->getList($where);
         foreach ($list as &$item) {
             $item['title'] = $item['name'];
-            $item['children'] = [];
-            if ($where['name'] == '' && $this->dao->count(['pid' => $item['id']])) $item['loading'] = false;
+            if ($where['name'] == '' && $this->dao->count(['pid' => $item['id']])) {
+                $item['loading'] = false;
+                $item['children'] = [];
+            }
         }
         return compact('list');
     }
