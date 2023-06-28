@@ -2689,7 +2689,7 @@ HTML;
         }
 
         //发起取消商家寄件
-        $res = app()->make(ServeServices::class)->express()->shipmentCancelOrder([
+        app()->make(ServeServices::class)->express()->shipmentCancelOrder([
             'task_id' => $orderInfo->kuaidi_task_id,
             'order_id' => $orderInfo->kuaidi_order_id,
             'cancel_msg' => $msg,
@@ -2717,7 +2717,7 @@ HTML;
             $orderInfo->save();
         });
 
-        return $res;
+        return true;
     }
 
     public function checkSubOrderNotSend(int $pid, int $order_id)

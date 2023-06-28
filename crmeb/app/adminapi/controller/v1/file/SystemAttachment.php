@@ -43,7 +43,8 @@ class SystemAttachment extends AuthController
     public function index()
     {
         $where = $this->request->getMore([
-            ['pid', 0]
+            ['pid', 0],
+            ['real_name', '']
         ]);
         return app('json')->success($this->service->getImageList($where));
     }
@@ -145,9 +146,12 @@ class SystemAttachment extends AuthController
      */
     public function scanUploadQrcode()
     {
+        [$pid] = $this->request->getMore([
+            ['pid', 0]
+        ], true);
         $uploadToken = md5(time());
         $this->service->cacheDriver()->set('scan_upload', $uploadToken, 600);
-        $url = sys_config('site_url') . '/app/upload?token=' . $uploadToken;
+        $url = sys_config('site_url') . '/app/upload?token=' . $uploadToken . '&pid=' . $pid;
         return app('json')->success(['url' => $url]);
     }
 

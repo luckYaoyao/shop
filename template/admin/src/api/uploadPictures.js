@@ -118,7 +118,7 @@ export function onlineUpload(data) {
  */
 export function scanUploadCode() {
   return request({
-    url: 'scan_upload/qrcode ',
+    url: 'file/scan_upload/qrcode ',
     method: 'delete'
   });
 }

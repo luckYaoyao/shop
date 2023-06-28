@@ -157,8 +157,7 @@ class SystemAttachmentServices extends BaseServices
      */
     public function move(array $data)
     {
-        $res = $this->dao->move($data);
-        if (!$res) throw new AdminException(400600);
+        $this->dao->move($data);
     }
 
     /**

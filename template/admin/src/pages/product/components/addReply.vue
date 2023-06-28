@@ -104,8 +104,8 @@ export default {
         nickname: '',
         comment: '',
       },
-      product_score: 0,
-      service_score: 0,
+      product_score: 5,
+      service_score: 5,
       pics: [],
       add_time: '',
     };

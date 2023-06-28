@@ -179,6 +179,10 @@
 			<view class='wrapper' v-if="isReturen == 1">
 				<view class='item acea-row row-between'>
 					<view>{{$t(`申请理由`)}}：</view>
+					<view class='conter'>{{orderInfo.refund_reason}}</view>
+				</view>
+				<view class='item acea-row row-between'>
+					<view>{{$t(`用户备注`)}}：</view>
 					<view class='conter'>{{orderInfo.refund_explain}}</view>
 				</view>
 				<view class='item acea-row row-between'>

@@ -414,7 +414,7 @@ class UserBrokerageServices extends BaseServices
                     } elseif ($extract_type == 'bank') {
                         $item['extract_type'] = '银行卡';
                     } else {
-                        $item['extract_type'] = '其他';
+                        $item['extract_type'] = '余额';
                     }
                 } else {
                     $item['extract_type'] = '';
