@@ -151,7 +151,7 @@ class SystemAttachment extends AuthController
         ], true);
         $uploadToken = md5(time());
         $this->service->cacheDriver()->set('scan_upload', $uploadToken, 600);
-        $url = sys_config('site_url') . '/app/upload?token=' . $uploadToken . '&pid=' . $pid;
+        $url = sys_config('site_url') . '/app/upload?pid' . $pid . '&token=' . $uploadToken;
         return app('json')->success(['url' => $url]);
     }
 
