@@ -62,10 +62,12 @@ export default {
       uploading: true,
       limit: 20,
       loading: false,
+      pid: 0
     };
   },
   created() {
     this.token = this.$route.query.token;
+    this.pid = this.$route.query.pid;
     document.title = '手机端扫码上传';
   },
   methods: {
@@ -117,6 +119,7 @@ export default {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('uploadToken', this.token);
+        formData.append('pid', this.pid);
         scanUpload(formData)
           .then((res) => {
             if (res.status == 200) {
