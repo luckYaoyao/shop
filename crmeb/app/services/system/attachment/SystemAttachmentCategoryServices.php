@@ -49,11 +49,13 @@ class SystemAttachmentCategoryServices extends BaseServices
     public function getAll(array $where)
     {
         $list = $this->dao->getList($where);
-        foreach ($list as &$item) {
-            $item['title'] = $item['name'];
-            if ($where['name'] == '' && $this->dao->count(['pid' => $item['id']])) {
-                $item['loading'] = false;
+        if ($where['all'] == 1) {
+            $list = $this->tidyMenuTier($list);
+        } else {
+            foreach ($list as &$item) {
+                $item['title'] = $item['name'];
                 $item['children'] = [];
+                if ($where['name'] == '' && $this->dao->count(['pid' => $item['id']])) $item['loading'] = false;
             }
         }
         return compact('list');
