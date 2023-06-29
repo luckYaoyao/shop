@@ -177,11 +177,6 @@
                 </div>
               </template>
             </el-table-column>
-            <el-table-column label="大小" min-width="80">
-              <template slot-scope="scope">
-                <span>{{ scope.row.size }}</span>
-              </template>
-            </el-table-column>
             <el-table-column label="上传时间" min-width="100">
               <template slot-scope="scope">
                 <span>{{ scope.row.time }}</span>
