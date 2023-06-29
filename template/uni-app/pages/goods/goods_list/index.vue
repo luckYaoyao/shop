@@ -361,6 +361,7 @@
 	}
 
 	.productList .list .item .name {
+		line-height: 42rpx;
 		height: 84rpx;
 	}
 
