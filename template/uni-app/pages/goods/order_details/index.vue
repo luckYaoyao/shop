@@ -267,7 +267,7 @@
 					<view>{{$t(`联系电话`)}}：</view>
 					<view class='conter'>{{orderInfo.user_phone}}</view>
 				</view>
-				<view class='item acea-row row-between'>
+				<view class='item acea-row row-between'  v-if="orderInfo.shipping_type && orderInfo.shipping_type == 1">
 					<view>{{$t(`收货地址`)}}：</view>
 					<view class='conter'>{{orderInfo.user_address}}</view>
 				</view>

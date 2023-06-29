@@ -61,7 +61,7 @@
                     <i class="el-icon-error btndel" @click="handleWebRemove(file)" />
                   </div>
                 </el-upload>
-                <div class="tips">建议上传图片最大宽度750px，不超过3MB；仅支持jpeg、png格式，拖拽调整上传顺序</div>
+                <div class="tips">建议上传图片最大宽度750px，不超过3MB；仅支持jpeg、png格式，可拖拽调整上传顺序</div>
               </div>
             </div>
           </el-form-item>
