@@ -192,6 +192,7 @@
 				this.toView = id;
 				this.navActive = index;
 				this.$set(this, 'lock', true);
+				uni.$emit('scroll');
 			},
 			getAllCategory: function(type) {
 				let that = this;
