@@ -603,10 +603,6 @@ export default {
     getOrderData(id) {
       getOrdeDatas(id)
         .then(async (res) => {
-          if (res.data.status === false) {
-            return this.$authLapse(res.data);
-          }
-          this.$authLapse(res.data);
           this.FromData = res.data;
           this.$refs.edits.modals = true;
         })
