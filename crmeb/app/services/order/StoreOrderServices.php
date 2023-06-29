@@ -757,7 +757,7 @@ HTML;
         $f[] = Form::number('total_price', '商品总价', (float)$product->getData('total_price'))->min(0)->disabled(true);
         $f[] = Form::number('pay_postage', '支付邮费', (float)$product->getData('pay_postage') ?: 0)->disabled(true);
         $f[] = Form::number('pay_price', '实际支付金额', (float)$product->getData('pay_price'))->min(0);
-        $f[] = Form::number('gain_integral', '赠送积分', (float)$product->getData('gain_integral') ?: 0);
+        $f[] = Form::number('gain_integral', '赠送积分', (float)$product->getData('gain_integral') ?: 0)->min(0);
         return create_form('修改订单', $f, $this->url('/order/update/' . $id), 'PUT');
     }
 
@@ -795,6 +795,12 @@ HTML;
                     'change_type' => 'order_edit',
                     'change_time' => time(),
                     'change_message' => '修改商品总价为：' . $data['total_price'] . ' 实际支付金额' . $data['pay_price']
+                ]);
+            $res = $res && $services->save([
+                    'oid' => $id,
+                    'change_type' => 'order_edit',
+                    'change_time' => time(),
+                    'change_message' => '修改订单赠送积分为：' . $data['gain_integral']
                 ]);
             if ($res) {
                 $order = $this->dao->getOne(['id' => $id, 'is_del' => 0]);
