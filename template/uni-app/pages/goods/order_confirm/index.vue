@@ -10,7 +10,8 @@
 					<view class="item font-num" :class="shippingType == 1 ? 'on' : 'on2'" @tap="addressType(1)"
 						v-if='store_self_mention && is_shipping'></view>
 				</view>
-				<view class="add-title acea-row row-between-wrapper" v-if="!store_self_mention || !is_shipping">
+				<view class="add-title acea-row row-between-wrapper" v-if="!store_self_mention || !is_shipping"
+					@click.prevent="openList">
 					<view class="acea-row row-middle">
 						<view class="icon" :class="shippingType==1?'orange':'red'">
 							{{shippingType==0?'商城配送':'门店自提'}}
@@ -23,7 +24,6 @@
 							class='iconfont icon-jiantou'></text></view>
 				</view>
 				<view class='address acea-row row-between-wrapper' @tap='onAddress' v-if='shippingType == 0'>
-
 					<view class='addressCon' v-if="addressInfo.real_name || ''">
 						<view class='name'>{{addressInfo.real_name || ''}}
 							<text class='phone'>{{addressInfo.phone || ''}}</text>
@@ -559,6 +559,13 @@
 				name += result.type === 1 ? this.$t(`普通`) : this.$t(`专用`);
 				name += this.$t(`发票`);
 				this.invTitle = name;
+			},
+			openList() {
+				if (this.shippingType == 0) {
+					this.onAddress()
+				} else {
+					this.showStoreList()
+				}
 			},
 			// 关闭发票
 			invClose() {
@@ -1240,6 +1247,7 @@
 		background-color: #fff;
 		box-sizing: border-box;
 		flex-wrap: nowrap;
+
 		.icon {
 			.iconfont {
 				width: 44rpx;
