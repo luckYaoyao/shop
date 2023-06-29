@@ -269,19 +269,19 @@
                   </Radio>
                 </RadioGroup>
               </div>
-              <template v-if="customdate.status == 1">
-                <FormItem label="跳转路径：" prop="url">
+              <div v-if="customdate.status == 1">
+                <FormItem label="跳转路径：" prop="url" key="url">
                   <Input v-model="customdate.url" placeholder="请输入正确跳转路径"></Input>
                 </FormItem>
-              </template>
-              <template v-if="customdate.status == 2">
-                <FormItem label="APPID：" prop="appid">
+              </div>
+              <div v-if="customdate.status == 2">
+                <FormItem label="APPID：" prop="appid" key="appid">
                   <Input v-model="customdate.appid" placeholder="请输入正确APPID"></Input>
                 </FormItem>
-                <FormItem label="小程序路径：" prop="mpUrl">
+                <FormItem label="小程序路径：" prop="mpUrl" key="mpUrl">
                   <Input v-model="customdate.mpUrl" placeholder="请输入正确小程序路径"></Input>
                 </FormItem>
-              </template>
+              </div>
             </Form>
           </div>
         </div>

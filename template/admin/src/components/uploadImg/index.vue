@@ -7,7 +7,7 @@
       :visible.sync="uploadModal"
       width="1024px"
       :fullscreen="!isPage"
-      @closed="closed"
+      @close="closed"
     >
       <div class="main" v-loading="loading">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -61,7 +61,7 @@
                     <i class="el-icon-error btndel" @click="handleWebRemove(file)" />
                   </div>
                 </el-upload>
-                <div class="tips">建议上传图片最大宽度750px，不超过3MB；仅支持jpeg、png格式</div>
+                <div class="tips">建议上传图片最大宽度750px，不超过3MB；仅支持jpeg、png格式，拖拽调整上传顺序</div>
               </div>
             </div>
           </el-form-item>
@@ -82,39 +82,44 @@
               </div>
             </div>
           </template>
-        </el-form>
-        <div class="code-image" v-if="ruleForm.type == 2">
-          <div class="left">
-            <div class="code" ref="qrCodeUrl"></div>
-            <el-cascader
-              class="form-width"
-              v-model="ruleForm.region"
-              :props="props"
-              :options="categoryList"
-              @change="handleChange"
-            ></el-cascader>
-            <div>扫描二维码，快速上传手机图片</div>
-          </div>
-          <div class="right">
-            <el-button size="small" @click="scanUploadGet">刷新图库</el-button>
-            <div class="tip">刷新图库按钮，可显示移动端上传成功的图片</div>
-            <div class="img-box">
-              <div
-                v-for="(item, index) in ruleForm.imgList"
-                :key="index"
-                class="pictrue"
-                draggable="false"
-                @dragstart="handleDragStart($event, item)"
-                @dragover.prevent="handleDragOver($event, item)"
-                @dragenter="handleDragEnter($event, item)"
-                @dragend="handleDragEnd($event, item)"
-              >
-                <img :src="item.att_dir" />
-                <i class="el-icon-error btndel" @click="handleWebRemove(item)" />
+          <div class="code-image" v-if="ruleForm.type == 2">
+            <div class="left">
+              <el-form-item label="上传至分组：" prop="region">
+                <el-cascader
+                  class="form-width"
+                  v-model="ruleForm.region"
+                  :props="props"
+                  :options="categoryList"
+                  @change="handleChange"
+                ></el-cascader>
+              </el-form-item>
+              <el-form-item label="二维码：" prop="region">
+                <div class="code" ref="qrCodeUrl"></div>
+                <div class="trip">扫描二维码，快速上传手机图片</div>
+                <div class="trip-small">建议使用手机浏览器</div>
+              </el-form-item>
+            </div>
+            <div class="right">
+              <el-button size="small" @click="scanUploadGet">刷新图库</el-button>
+              <div class="tip">刷新图库按钮，可显示移动端上传成功的图片</div>
+              <div class="img-box">
+                <div
+                  v-for="(item, index) in ruleForm.imgList"
+                  :key="index"
+                  class="pictrue"
+                  draggable="false"
+                  @dragstart="handleDragStart($event, item)"
+                  @dragover.prevent="handleDragOver($event, item)"
+                  @dragenter="handleDragEnter($event, item)"
+                  @dragend="handleDragEnd($event, item)"
+                >
+                  <img :src="item.att_dir" />
+                  <i class="el-icon-error btndel" @click="handleWebRemove(item)" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </el-form>
       </div>
 
       <span slot="footer" class="dialog-footer">
@@ -178,24 +183,37 @@ export default {
       scanToken: '',
       limit: 20,
       loading: false,
+      time: undefined,
     };
   },
   created() {},
   mounted() {},
+  beforeDestroy() {
+    clearInterval(this.time);
+    this.time = undefined;
+  },
   methods: {
     closed() {
+      console.log('1');
       this.ruleForm.type = 0;
       this.ruleForm.region = 0;
       this.scanToken = '';
       this.webImgUrl = '';
       this.ruleForm.imgList = [];
+      clearInterval(this.time);
+      this.time = undefined;
       scanUploadCode().then((res) => {});
     },
     radioChange(type) {
       this.ruleForm.type = type;
       this.ruleForm.imgList = [];
+      clearInterval(this.time);
+      this.time = undefined;
       if (type == 2) {
         this.scanUploadQrcode();
+        this.time = setInterval((e) => {
+          this.scanUploadGet();
+        }, 2000);
       }
     },
     scanUploadQrcode() {
@@ -442,7 +460,6 @@ export default {
 }
 .code-image{
     display flex
-    padding-left 100px
     margin-top 12px
     .left{
         display flex
@@ -464,19 +481,32 @@ export default {
         }
         .form-width{
             width 200px
-            margin-bottom 18px
         }
         .code{
             margin-bottom 14px
         }
+         .trip{
+          color #333333
+          text-align: center
+          line-height: 18px;
+        }
+        .trip-small{
+            font-size: 12px;
+            font-weight: 400;
+            color: #BBBBBB;
+            text-align: center
+            line-height: 16px;
+        }
     }
     .right{
+      margin-top: 62px;
         .tip{
             font-size: 12px;
             font-weight: 400;
             color: #BBBBBB;
             margin 10px 0
         }
+
     }
 }
 </style>

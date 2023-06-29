@@ -38,7 +38,7 @@
           <Input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 60%"></Input>
         </FormItem>
         <FormItem label="寄件人地址：">
-          <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 60%"></Input>
+          <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 60%" @on-blur="watchPrice"></Input>
         </FormItem>
       </template>
       <div>
@@ -62,7 +62,7 @@
           </div>
         </FormItem>
         <FormItem label="快递业务类型：" v-if="formItem.type == 1 && formItem.express_record_type == 3">
-          <Select v-model="formItem.service_type" filterable placeholder="请选择业务类型" style="width: 60%">
+          <Select v-model="formItem.service_type" filterable placeholder="请选择业务类型" style="width: 60%" @on-change="watchPrice">
             <Option v-for="item in serviceTypeList" :value="item" :key="item">{{ item }}</Option>
           </Select>
         </FormItem>

@@ -68,7 +68,6 @@ export default {
   created() {
     this.token = this.$route.query.token;
     this.pid = this.$route.query.pid;
-    this.pid = this.$route.query.pid;
     document.title = '手机端扫码上传';
   },
   methods: {
