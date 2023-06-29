@@ -185,7 +185,7 @@
 					<view>{{$t(`用户备注`)}}：</view>
 					<view class='conter'>{{orderInfo.refund_explain}}</view>
 				</view>
-				<view class='item acea-row row-between'>
+				<view class='item acea-row row-between' v-if="orderInfo.refund_img.length">
 					<view>{{$t(`申请图片`)}}：</view>
 					<view class='upload acea-row row-middle'>
 						<view class='conter'>
@@ -222,7 +222,7 @@
 					<view>{{$t(`支付方式`)}}：</view>
 					<view class='conter'>{{$t(orderInfo._status._payType)}}</view>
 				</view>
-				<view class='item acea-row row-between' v-if="orderInfo.mark">
+				<view class='item acea-row row-between' v-if="orderInfo.mark && isReturen != 1">
 					<view v-if="orderInfo.pid">{{$t(`买家备注`)}}：</view>
 					<view v-else>{{$t(`买家留言`)}}：</view>
 					<view class='conter'>{{orderInfo.mark}}</view>

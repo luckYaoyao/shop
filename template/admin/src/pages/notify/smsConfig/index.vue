@@ -81,7 +81,7 @@
     <!--      </div>-->
     <Card :bordered="false" dis-hover class="ivu-mt" style="height: 800px">
       <iframe
-        src="https://api_v2.crmeb.net?token=AF37D4579721672220B08CA872586943"
+        src="https://sms.crmeb.net?token=AF37D4579721672220B08CA872586943"
         style="width: 100%; height: 800px"
         frameborder="0"
       ></iframe>
