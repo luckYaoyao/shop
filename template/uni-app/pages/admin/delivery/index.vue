@@ -298,7 +298,7 @@
 				save.delivery_type = delivery_name;
 				save.delivery_code = that.logistics[that.seIndex].code
 				save.delivery_name = that.logistics[that.seIndex].id
-				save.type = that.active + 1
+				save.type = that.active
 				if (delivery_type == 1 && this.curExpress == 1) {
 					if (!delivery_id) {
 						return this.$util.Tips({
