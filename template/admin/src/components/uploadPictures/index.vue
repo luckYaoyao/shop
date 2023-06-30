@@ -15,11 +15,11 @@
         <div class="trees-coadd">
           <div class="scollhide">
             <div class="tree">
-              <!-- <Tree :data="treeData" :render="renderContent" :load-data="loadData" class="treeBox" ref="tree"></Tree> -->
               <el-tree
                 :data="treeData"
                 node-key="id"
                 default-expand-all
+                highlight-current
                 :expand-on-click-node="false"
                 @node-click="appendBtn"
                 :current-node-key="treeId"
@@ -198,7 +198,14 @@
         </div>
       </div>
     </div>
-    <uploadImg ref="upload" :isPage="isPage" :isIframe='isIframe' :categoryId="treeId" :categoryList="treeData" @uploadSuccess="uploadSuccess"></uploadImg>
+    <uploadImg
+      ref="upload"
+      :isPage="isPage"
+      :isIframe="isIframe"
+      :categoryId="treeId"
+      :categoryList="treeData"
+      @uploadSuccess="uploadSuccess"
+    ></uploadImg>
     <div class="images" v-show="false" v-viewer="{ movable: false }">
       <img v-for="src in pictrueList" :src="src.att_dir" :key="src.att_id" />
     </div>
@@ -267,7 +274,7 @@ export default {
       },
       formValidate: { id: 0 },
       FromData: null,
-      treeId: 0,
+      treeId: '',
       isJudge: false,
       buttonProps: {
         type: 'default',
