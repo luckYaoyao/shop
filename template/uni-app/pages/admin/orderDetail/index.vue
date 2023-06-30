@@ -37,7 +37,7 @@
 			<image src="/static/images/line.jpg" />
 		</view>
 		<view class="pos-order-goods">
-			<navigator :url="`/pages/goods_details/index?id=${item.productInfo.id}`" hover-class="none"
+			<navigator :url="`/pages/goods_details/index?id=${item.productInfo.product_id}`" hover-class="none"
 				class="goods acea-row row-between-wrapper" v-for="(item, index) in orderInfo.cartInfo" :key="index">
 				<view class="picTxt acea-row row-between-wrapper">
 					<view class="pictrue">
