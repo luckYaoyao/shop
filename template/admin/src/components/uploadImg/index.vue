@@ -1,5 +1,5 @@
 <template>
-  <div v-if="uploadModal">
+  <div>
     <el-dialog
       title="上传图片"
       append-to-body
@@ -154,10 +154,9 @@ export default {
     },
   },
   watch: {
-    categoryId: {
+    uploadModal: {
       handler(newVal) {
-        this.ruleForm.region = newVal;
-        console.log('diaole ');
+        if (newVal) this.ruleForm.region = this.categoryId;
       },
       immediate: true,
     },
