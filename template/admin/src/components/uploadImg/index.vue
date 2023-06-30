@@ -123,7 +123,7 @@
       </div>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="uploadModal = false">取 消</el-button>
+        <el-button @click="clear">取 消</el-button>
         <el-button type="primary" @click="submitUpload">确 定</el-button>
       </span>
     </el-dialog>
@@ -193,17 +193,6 @@ export default {
     this.time = undefined;
   },
   methods: {
-    closed() {
-      console.log('1');
-      this.ruleForm.type = 0;
-      this.ruleForm.region = 0;
-      this.scanToken = '';
-      this.webImgUrl = '';
-      this.ruleForm.imgList = [];
-      clearInterval(this.time);
-      this.time = undefined;
-      scanUploadCode().then((res) => {});
-    },
     radioChange(type) {
       this.ruleForm.type = type;
       this.ruleForm.imgList = [];
@@ -255,6 +244,7 @@ export default {
               this.$emit('uploadSuccess');
               this.uploadModal = false;
               this.loading = false;
+              this.initData();
             }
           }
         }
@@ -271,6 +261,7 @@ export default {
               this.$emit('uploadSuccess');
               this.uploadModal = false;
               this.loading = false;
+              this.initData();
             })
             .catch((err) => {
               this.loading = false;
@@ -285,6 +276,7 @@ export default {
           this.$Message.success('上传成功');
           this.$emit('uploadSuccess');
           this.uploadModal = false;
+          this.initData();
         });
       }
     },
@@ -396,6 +388,23 @@ export default {
       const dst = newItems.indexOf(item);
       newItems.splice(dst, 0, ...newItems.splice(src, 1));
       this.ruleForm.imgList = newItems;
+    },
+    closed() {
+      this.initData();
+      scanUploadCode().then((res) => {});
+    },
+    clear() {
+      this.uploadModal = false;
+      this.initData();
+    },
+    initData() {
+      this.ruleForm.type = 0;
+      this.ruleForm.region = 0;
+      this.scanToken = '';
+      this.webImgUrl = '';
+      this.ruleForm.imgList = [];
+      clearInterval(this.time);
+      this.time = undefined;
     },
   },
 };
