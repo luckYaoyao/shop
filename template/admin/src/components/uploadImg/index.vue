@@ -5,8 +5,8 @@
       append-to-body
       :modal-append-to-body="false"
       :visible.sync="uploadModal"
-      width="1024px"
-      :fullscreen="!isPage"
+      :width="isIframe ? '100%' : '1024px'"
+      :fullscreen="isIframe"
       @close="closed"
     >
       <div class="main" v-loading="loading">
@@ -150,6 +150,9 @@ export default {
       default: '',
     },
     isPage: {
+      default: false,
+    },
+    isIframe: {
       default: false,
     },
   },
@@ -409,6 +412,9 @@ export default {
 };
 </script>
 <style lang="stylus" scoped>
+/deep/ .el-dialog__title{
+  font-size: 16px;
+}
 .main{
     min-height: 600px
 }

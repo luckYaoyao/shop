@@ -1,5 +1,5 @@
 <template>
-  <div class="Modal" :class="{ 'fill-window': !isPage }">
+  <div class="Modal">
     <div class="colLeft">
       <div class="Nav">
         <!-- <div class="input">
@@ -198,7 +198,7 @@
         </div>
       </div>
     </div>
-    <uploadImg ref="upload" :isPage="isPage" :categoryId="treeId" :categoryList="treeData" @uploadSuccess="uploadSuccess"></uploadImg>
+    <uploadImg ref="upload" :isPage="isPage" :isIframe='isIframe' :categoryId="treeId" :categoryList="treeData" @uploadSuccess="uploadSuccess"></uploadImg>
     <div class="images" v-show="false" v-viewer="{ movable: false }">
       <img v-for="src in pictrueList" :src="src.att_dir" :key="src.att_id" />
     </div>
@@ -227,6 +227,10 @@ export default {
       default: '',
     },
     isPage: {
+      type: Boolean,
+      default: false,
+    },
+    isIframe: {
       type: Boolean,
       default: false,
     },
