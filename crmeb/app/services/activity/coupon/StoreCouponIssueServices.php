@@ -118,7 +118,7 @@ class StoreCouponIssueServices extends BaseServices
 
         if ($data['end_time'] && $data['end_use_time']) {
             if ($data['end_use_time'] < $data['end_time']) {
-                throw new AdminException(400514);
+                throw new AdminException('用户领取数量不能大于优惠券发布数量');
             }
         }
 
