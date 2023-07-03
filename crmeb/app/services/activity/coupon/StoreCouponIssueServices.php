@@ -91,6 +91,14 @@ class StoreCouponIssueServices extends BaseServices
     public function saveCoupon($data)
     {
         if ($data['start_time'] && $data['start_use_time']) {
+
+            if ($data['start_time'] < date('Y-m-d 00:00:00')) {
+                throw new AdminException('开始领取时间不能小于当前时间');
+            }
+            if ($data['start_use_time'] < date('Y-m-d 00:00:00')) {
+                throw new AdminException('开始使用时间不能小于当前时间');
+            }
+
             if ($data['start_use_time'] < $data['start_time']) {
                 throw new AdminException(400513);
             }
