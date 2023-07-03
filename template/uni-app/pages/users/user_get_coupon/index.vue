@@ -4,7 +4,8 @@
 			<template v-for="item in navList">
 				<view v-if="item.count" :key="item.type"
 					:class="['acea-row', 'row-middle', type === item.type ? 'on' : '']" @click="setType(item.type)">
-					{{ item.name }}</view>
+					{{ item.name }}
+				</view>
 			</template>
 		</view>
 		<view v-if="count > 1" style="height: 106rpx;"></view>
@@ -15,7 +16,8 @@
 					<view class='money' :class='item.is_use >= item.receive_limit ? "moneyGray" : "" '>
 						<view>{{$t(`￥`)}}<text class='num'>{{item.coupon_price}}</text></view>
 						<view class="pic-num" v-if="item.use_min_price > 0">{{$t(`满`)}} {{item.use_min_price}}
-							{{$t(`元可用`)}}</view>
+							{{$t(`元可用`)}}
+						</view>
 						<view class="pic-num" v-else>{{$t(`无门槛券`)}}</view>
 					</view>
 				</view>
@@ -35,12 +37,14 @@
 					<view class="data acea-row row-between-wrapper">
 						<view v-if="item.coupon_time">{{$t(`领取后`)}} {{item.coupon_time}} {{$t(`天内可用`)}}</view>
 						<view v-else-if="item.start_use_time || item.end_use_time">
-							{{ item.start_use_time ? item.start_use_time + '-' : '' }}{{ item.end_use_time }}</view>
+							{{ item.start_use_time ? item.start_use_time + '-' : '' }}{{ item.end_use_time }}
+						</view>
 						<view v-else></view>
 						<view class="bnt gray" v-if="item.is_use >= item.receive_limit">{{$t(`已领取`)}}</view>
 						<view class="bnt gray" v-else-if="item.is_permanent == 0 && item.remain_count == 0">
-							{{$t(`已领完`)}}</view>
-						<view class="bnt bg-color" v-else @click="getCoupon(item.id, index)">{{$t(`立即领取`)}}</view>
+							{{$t(`已领完`)}}
+						</view>
+						<view class="bnt bg-color" v-else @click="getCoupon(item.id, item)">{{$t(`立即领取`)}}</view>
 					</view>
 				</view>
 			</view>
@@ -117,7 +121,8 @@
 						count: 0
 					},
 				],
-				count: 0
+				count: 0,
+				receiveLoading: false
 			};
 		},
 		computed: mapGetters(['isLogin']),
@@ -154,17 +159,21 @@
 			authColse: function(e) {
 				this.isShowAuth = e;
 			},
-			getCoupon: function(id, index) {
+			getCoupon: function(id, item) {
+				if (this.receiveLoading) return
 				let that = this;
-				let list = that.couponsList;
+				this.receiveLoading = true
 				//领取优惠券
-				setCouponReceive(id).then(function(res) {
-					list[index].is_use = list[index].is_use + 1;
-					that.$set(that, 'couponsList', list);
+				setCouponReceive(id).then((res) => {
+					item.is_use += 1;
 					that.$util.Tips({
 						title: that.$t(`领取成功`)
 					});
+					setTimeout(e => {
+						that.receiveLoading = false
+					}, 500)
 				}).catch(error => {
+					that.receiveLoading = false
 					return that.$util.Tips({
 						title: error
 					});
@@ -228,15 +237,19 @@
 		color: #999999;
 		z-index: 9;
 	}
-	.coupon-list .item .money .num{
+
+	.coupon-list .item .money .num {
 		font-size: 48rpx;
 	}
-	.coupon-list .item .text .data{
+
+	.coupon-list .item .text .data {
 		margin-top: 10rpx;
 	}
-	.coupon-list .item .text{
+
+	.coupon-list .item .text {
 		padding-bottom: 12rpx;
 	}
+
 	.nav .acea-row {
 		border-top: 5rpx solid transparent;
 		border-bottom: 5rpx solid transparent;
