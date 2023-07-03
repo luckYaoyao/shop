@@ -667,7 +667,7 @@ class StoreProductServices extends BaseServices
                             ProductCopyJob::dispatch('copySliderImage', [$res->id, $s_image, count($slider_image)]);
                         } else {
                             //下载图片
-                            $s_image_down[] = app()->make(CopyTaobaoServices::class)->downloadCopyImage($s_image);
+                            $s_image_down[] = app()->make(CopyTaobaoServices::class)->downloadCopyImage(!is_int(strpos($s_image, 'http')) ? 'http://' . ltrim($s_image, '\//') : $s_image);
                         }
                     }
 
@@ -682,9 +682,20 @@ class StoreProductServices extends BaseServices
                         }
                     }
 
+                    //下载商品规格图
+                    $productAttrValue = app()->make(StoreProductAttrValueServices::class);
+                    $attrValueList = $productAttrValue->getColumn(['product_id' => $res->id, 'type' => 0], 'image', 'id');
+                    foreach ($attrValueList as $value_id => $value_image) {
+                        if (sys_config('queue_open', 0) == 1) {
+                            ProductCopyJob::dispatch('copyAttrImage', [$value_id, $value_image]);
+                        } else {
+                            $v_img = app()->make(CopyTaobaoServices::class)->downloadCopyImage(!is_int(strpos($value_image, 'http')) ? 'http://' . ltrim($value_image, '\//') : $value_image);
+                            $productAttrValue->update($value_id, ['image' => $v_img]);
+                        }
+                    }
+
                     if (sys_config('queue_open', 0) == 0) {
                         $this->update($res->id, ['slider_image' => $s_image_down ? json_encode($s_image_down) : '', 'image' => $s_image_down[0]]);
-                        app()->make(StoreProductAttrValueServices::class)->update(['product_id' => $res->id], ['image' => $s_image_down[0]]);
                         $storeDescriptionServices->saveDescription((int)$res->id, $description);
                     }
                 }
