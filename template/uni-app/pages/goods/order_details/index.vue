@@ -273,7 +273,7 @@
 				</view>
 			</view>
 			<view v-if="orderInfo.status!=0">
-				<view class='`' v-if='orderInfo.delivery_type=="express"'>
+				<view class='wrapper' v-if='orderInfo.delivery_type=="express"'>
 					<view class='item acea-row row-between'>
 						<view>{{$t(`配送方式`)}}：</view>
 						<view class='conter'>{{$t(`发货`)}}</view>
