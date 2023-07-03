@@ -3,11 +3,12 @@
     <el-dialog
       title="上传图片"
       append-to-body
-      :modal-append-to-body="false"
+      :modal-append-to-body="true"
       :visible.sync="uploadModal"
       :width="isIframe ? '100%' : '1024px'"
       :fullscreen="isIframe"
       @close="closed"
+      top="5vh"
     >
       <div class="main" v-loading="loading">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
@@ -416,7 +417,7 @@ export default {
   font-size: 16px;
 }
 .main{
-    min-height: 600px
+    min-height: 500px
 }
 .pictrue {
   width: 60px;

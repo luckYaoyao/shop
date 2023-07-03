@@ -1192,15 +1192,12 @@
         </FormItem>
         <Spin size="large" fix v-if="spinShow"></Spin>
       </Form>
-      <Modal
-        v-model="modalPic"
+      <el-dialog
+        :visible.sync="modalPic"
         width="1024px"
         scrollable
-        footer-hide
-        closable
         title="上传商品图"
-        :mask-closable="false"
-        :z-index="1"
+        :close-on-click-modal="false"
       >
         <uploadPictures
           :isChoice="isChoice"
@@ -1210,7 +1207,7 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </Modal>
+      </el-dialog>
       <Modal
         v-model="addVirtualModel"
         width="700px"
