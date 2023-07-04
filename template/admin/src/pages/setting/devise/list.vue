@@ -245,7 +245,7 @@ export default {
         },
       ],
       list: [],
-      imgUrl: '',
+      iframeUrl: '',
       modal: false,
       BaseURL: Setting.apiBaseURL.replace(/adminapi/, ''),
       cardShow: 0,
@@ -271,7 +271,7 @@ export default {
   },
   created() {
     this.getList();
-    this.imgUrl = `${location.origin}/pages/index/index?mdType=iframeWindow`;
+    this.iframeUrl = `${location.origin}/pages/index/index?mdType=iframeWindow`;
   },
   mounted: function () {},
   methods: {
@@ -279,9 +279,9 @@ export default {
       this.$refs['formItem'].resetFields();
     },
     refreshFrame() {
-      this.imgUrl = '';
+      this.iframeUrl = '';
       setTimeout((e) => {
-        this.imgUrl = `${location.origin}/pages/index/index?mdType=iframeWindow`;
+        this.iframeUrl = `${location.origin}/pages/index/index?mdType=iframeWindow`;
       }, 200);
     },
     getChildData(e) {
@@ -379,7 +379,7 @@ export default {
     // 获取列表
     getList() {
       // let storage = window.localStorage;
-      // this.imgUrl = storage.getItem("imgUrl");
+      // this.iframeUrl = storage.getItem("iframeUrl");
       let that = this;
       this.loading = true;
       diyList(this.diyFrom).then((res) => {

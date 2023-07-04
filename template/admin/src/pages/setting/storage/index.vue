@@ -21,13 +21,22 @@
         </template>
         <template v-else>
           <p v-if="currentTab == 2">
-            七牛云开通方法：<a href="https://doc.crmeb.com/web/single/crmeb_v4/987" target="_blank">点击查看</a>
+            七牛云开通方法：<a href="https://doc.crmeb.com/single/v5/7792" target="_blank">点击查看</a>
           </p>
           <p v-if="currentTab == 3">
-            阿里云oss开通方法：<a href="https://doc.crmeb.com/web/single/crmeb_v4/985" target="_blank">点击查看</a>
+            阿里云oss开通方法：<a href="https://doc.crmeb.com/single/v5/7790" target="_blank">点击查看</a>
           </p>
           <p v-if="currentTab == 4">
-            腾讯云cos开通方法：<a href="https://doc.crmeb.com/web/single/crmeb_v4/986" target="_blank">点击查看</a>
+            腾讯云cos开通方法：<a href="https://doc.crmeb.com/single/v5/7791" target="_blank">点击查看</a>
+          </p>
+          <p v-if="currentTab == 5">
+            京东云cos开通方法：<a href="https://doc.crmeb.com/single/v5/8522" target="_blank">点击查看</a>
+          </p>
+          <p v-if="currentTab == 6">
+            华为云cos开通方法：<a href="https://doc.crmeb.com/single/v5/8523" target="_blank">点击查看</a>
+          </p>
+          <p v-if="currentTab == 7">
+            天翼云cos开通方法：<a href="https://doc.crmeb.com/single/v5/8524" target="_blank">点击查看</a>
           </p>
           <p>第一步： 添加【存储空间】（空间名称不能重复）</p>
           <p>第二步： 开启【使用状态】</p>
@@ -52,6 +61,9 @@
               <el-radio label="2">七牛云存储</el-radio>
               <el-radio label="3">阿里云存储</el-radio>
               <el-radio label="4">腾讯云存储</el-radio>
+              <el-radio label="5">京东云存储</el-radio>
+              <el-radio label="6">华为云存储</el-radio>
+              <el-radio label="7">天翼云存储</el-radio>
             </el-radio-group>
             <!-- <el-switch :active-value="1"  :inactive-value="0"
               v-model="localStorage"
@@ -327,7 +339,7 @@
       </el-card>
     </div>
     <!-- 缩略图配置 -->
-    <div class="pt10" v-else-if="currentTab == 5"></div>
+    <div class="pt10" v-else-if="currentTab == 10">我去恶趣味我去</div>
     <div class="pt10" v-else>
       <el-card :bordered="false" shadow="never" class="ivu-mt">
         <el-row class="mb20">
@@ -514,7 +526,10 @@ export default {
         { label: '七牛云储存', value: '2' },
         { label: '阿里云储存', value: '3' },
         { label: '腾讯云储存', value: '4' },
-        // { label: "缩略图配置", value: "5" },
+        { label: '京东云储存', value: '5' },
+        { label: '华为云储存', value: '6' },
+        { label: '天翼云储存', value: '7' },
+        // { label: "缩略图配置", value: "10" },
       ],
 
       total: 0,

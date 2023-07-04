@@ -270,31 +270,40 @@
           <!--<div v-if="!tableList.length || customNum==2">-->
           <!--<el-button type="primary" @click="customList" v-if="tableList.length">自定义列表</el-button>-->
           <div style="width: 340px; margin: 150px 100px 0 120px">
-            <el-form ref="customdate" :model="customdate" :rules="ruleValidate" :label-width="88">
+            <el-form ref="customdate" :model="customdate" :rules="ruleValidate" :label-width="100">
               <!--<el-form-item label="链接名称：" prop="name">-->
               <!--<el-input v-model="customdate.name" placeholder="会员中心"></el-input>-->
               <!--</el-form-item>-->
-              <el-form-item label="跳转路径：" prop="url">
+              <!-- <el-form-item label="跳转路径：" prop="url">
                 <el-input v-model="customdate.url" placeholder="请输入跳转路径"></el-input>
-              </el-form-item>
+              </el-form-item> -->
+              <div class="mb30 radioGroup">
+                <el-radio-group v-model="customdate.status" @on-change="radioTap('customdate')">
+                  <el-radio :label="1">
+                    <span>普通链接</span>
+                  </el-radio>
+                  <el-radio :label="2">
+                    <span>跳转其他小程序</span>
+                  </el-radio>
+                </el-radio-group>
+              </div>
+              <div v-if="customdate.status == 1">
+                <el-form-item label="跳转路径：" prop="url" key="url">
+                  <el-input v-model="customdate.url" placeholder="请输入正确跳转路径"></el-input>
+                </el-form-item>
+              </div>
+              <div v-if="customdate.status == 2">
+                <el-form-item label="APPID：" prop="appid" key="appid">
+                  <el-input v-model="customdate.appid" placeholder="请输入正确APPID"></el-input>
+                </el-form-item>
+                <el-form-item label="小程序路径：" prop="mpUrl" key="mpUrl">
+                  <el-input v-model="customdate.mpUrl" placeholder="请输入正确小程序路径"></el-input>
+                </el-form-item>
+              </div>
             </el-form>
           </div>
-          <!--</div>-->
-          <!--<div v-else>-->
-          <!--<el-button type="primary" @click="customLink">自定义链接</el-button>-->
-          <!--<div class="Box">-->
-          <!--<div v-for="(item,index) in tableList" :key="index" class="item">-->
-          <!--<div class="cont_box" :class="currenId==item.id?'on':''" @click="getUrl(item)">{{item.name}}</div>-->
-          <!--<span class="iconfont iconcha" @click="delLink(item, '删除链接', index)"></span>-->
-          <!--</div>-->
-          <!--</div>-->
-          <!--</div>-->
         </div>
       </div>
-      <!--<div slot="footer" v-if="categoryId==9&&customNum==2">-->
-      <!--<el-button @click="handleReset('customdate')">重置</el-button>-->
-      <!--<el-button type="primary" @click="handleSubmit('customdate')">确定</el-button>-->
-      <!--</div>-->
       <div slot="footer">
         <el-button @click="cancel">取消</el-button>
         <el-button type="primary" @click="handleSubmit('customdate')" v-if="currenType == 'custom'">确定</el-button>
@@ -423,13 +432,16 @@ export default {
       categoryId: '', //左侧分类id
       treeSelect: [],
       customdate: {
-        // name:'',
         url: '',
+        appid: '',
+        mpUrl: '',
+        status: 1,
       },
       customNum: 1,
       ruleValidate: {
         name: [{ required: true, message: '请输入链接名称', trigger: 'blur' }],
         url: [{ required: true, message: '请输入跳转路径', trigger: 'blur' }],
+        appid: [{ required: true, message: '请输入APPID', trigger: 'blur' }],
       },
     };
   },
@@ -513,7 +525,13 @@ export default {
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$emit('linkUrl', this.customdate.url);
+          let url = this.customdate.url;
+          if (this.customdate.status == 1) {
+            url = this.customdate.url;
+          } else {
+            url = this.customdate.mpUrl + '@APPID=' + this.customdate.appid;
+          }
+          this.$emit('linkUrl', url);
           this.modals = false;
           this.reset();
           // saveLink(this.customdate,this.categoryId).then(res=>{
@@ -854,7 +872,11 @@ export default {
     min-width: 121px;
   }
 }
-
+.radioGroup{
+  /deep/.ivu-radio-wrapper{
+    margin-right 30px;
+  }
+}
 .table_box {
   margin-top: 14px;
   display: flex;

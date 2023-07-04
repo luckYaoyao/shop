@@ -12,11 +12,14 @@
 namespace crmeb\services\app;
 
 use app\services\order\StoreOrderTakeServices;
+use app\services\pay\PayServices;
 use crmeb\exceptions\AdminException;
+use crmeb\services\easywechat\orderShipping\MiniOrderService;
 use crmeb\services\SystemConfigService;
 use app\services\pay\PayNotifyServices;
 use crmeb\services\easywechat\Application;
 use EasyWeChat\Payment\Order;
+use think\facade\Event;
 use think\facade\Log;
 use crmeb\utils\Hook;
 use think\facade\Cache;
@@ -92,7 +95,7 @@ class MiniProgramService
      */
     public static function options()
     {
-        $wechat = SystemConfigService::more(['wechat_app_appsecret', 'wechat_app_appid', 'site_url', 'routine_appId', 'routine_appsecret']);
+        $wechat = SystemConfigService::more(['wechat_app_appsecret', 'wechat_app_appid', 'site_url', 'routine_appId', 'routine_appsecret', 'wechat_token', 'wechat_encodingaeskey']);
         $payment = SystemConfigService::more(['pay_weixin_mchid', 'pay_weixin_key', 'pay_weixin_client_cert', 'pay_weixin_client_key', 'pay_weixin_open', 'pay_new_weixin_open', 'pay_new_weixin_mchid']);
         $config = [];
         if (request()->isApp()) {
@@ -105,12 +108,6 @@ class MiniProgramService
         $config = [
             'token' => isset($wechat['wechat_token']) ? trim($wechat['wechat_token']) : '',
             'aes_key' => isset($wechat['wechat_encodingaeskey']) ? trim($wechat['wechat_encodingaeskey']) : '',
-            'debug' => true,
-            'log' => [
-                'level' => 'debug',
-                'permission' => 0777,
-                'file' => '/www/wwwroot/bz.wuht.net/crmeb/crmeb/runtime/log/easywechat.log',
-            ],
         ];
         $config['mini_program'] = [
             'app_id' => $appId,
@@ -881,18 +878,47 @@ class MiniProgramService
             switch ($message->MsgType) {
                 case 'event':
                     switch (strtolower($message->Event)) {
+                        case 'funds_order_pay':  // 小程序支付管理的
+                            if (($count = strpos($message['order_info']['trade_no'], '_')) !== false) {
+                                $trade_no = substr($message['order_info']['trade_no'], $count + 1);
+                            } else {
+                                $trade_no = $message['order_info']['trade_no'];
+                            }
+                            $prefix = substr($trade_no, 0, 2);
+                            //处理一下参数
+                            switch ($prefix) {
+                                case 'cp':
+                                    $data['attach'] = 'Product';
+                                    break;
+                                case 'hy':
+                                    $data['attach'] = 'Member';
+                                    break;
+                                case 'cz':
+                                    $data['attach'] = 'UserRecharge';
+                                    break;
+                            }
+                            $data['out_trade_no'] = $message['order_info']['trade_no'];
+                            $data['transaction_id'] = $message['order_info']['transaction_id'];
+                            $data['opneid'] = $message['FromUserName'];
+                            if (Event::until('NotifyListener', [$data, PayServices::WEIXIN_PAY])) {
+                                $response = 'success';
+                            } else {
+                                $response = 'faild';
+                            }
+                            Log::error(['data' => $data, 'res' => $response, 'message' => $message]);
+                            break;
                         case 'trade_manage_remind_access_api':  // 小程序完成账期授权时  小程序产生第一笔交易时 已产生交易但从未发货的小程序，每天一次
                             break;
                         case 'trade_manage_remind_shipping':   // 曾经发过货的小程序，订单超过48小时未发货时
                             break;
                         case 'trade_manage_order_settlement':     // 订单完成发货时  订单结算时
                             if (isset($message['estimated_settlement_time'])) { //订单完成发货时
-
+                                MiniOrderService::notifyConfirmByTradeNo($message['merchant_trade_no'], time());
                             }
                             if (isset($message['confirm_receive_method'])) {  // 订单结算时
                                 /** @var StoreOrderTakeServices $StoreOrderTakeServices */
                                 $storeOrderTakeServices = app()->make(StoreOrderTakeServices::class);
-                                $storeOrderTakeServices->takeOrder($message['merchant_trade_no'], 0);
+                                $storeOrderTakeServices->miniOrderTakeOrder($message['merchant_trade_no']);
                             }
                             break;
                     };

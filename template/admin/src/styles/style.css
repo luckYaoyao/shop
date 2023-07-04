@@ -217,7 +217,7 @@ body {
 .ivu-form .ivu-form-item-label,
 .ivu-radio-group-button .ivu-radio-wrapper,
 .ivu-table {
-  font-size: 12px !important;
+  font-size: 13px !important;
 }
 
 .ivu-table-cell {
@@ -753,4 +753,8 @@ body {
 .defineSwitch.el-switch .el-switch__core,
 .defineSwitch.el-switch .el-switch__label {
   width: 55px !important; /*开关按钮的宽度大小*/
+}
+.df-jcsb {
+  display: flex;
+  justify-content: space-between;
 }

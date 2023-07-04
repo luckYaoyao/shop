@@ -111,7 +111,7 @@ class SystemMenus extends AuthController
             ['is_show', 0],
             ['is_show_path', 0],
         ]);
-
+        $data['is_show_path'] = $data['is_show'];
         if (!$data['menu_name'])
             return app('json')->fail(400198);
         $data['path'] = implode('/', $data['path']);
@@ -180,6 +180,7 @@ class SystemMenus extends AuthController
                 'pid' => $menu['path'],
                 'auth_type' => 2,
                 'is_show' => 1,
+                'is_show_path' => 1,
             ];
         }
 

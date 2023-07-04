@@ -295,7 +295,7 @@ class SystemRouteServices extends BaseServices
                 $delete[] = $item['id'];
                 $deleteData[] = [
                     'path' => $item['path'],
-                    'methods' => $item['method']
+                    'method' => $item['method']
                 ];
             }
         }

@@ -269,7 +269,7 @@ class StoreOrderDao extends BaseDao
      * @return int
      * @throws \ReflectionException
      */
-    public function count(array $where = [], bool $search = true): int
+    public function count(array $where = [], bool $search = true)
     {
         return $this->search($where, $search)->count();
     }
@@ -702,7 +702,7 @@ class StoreOrderDao extends BaseDao
                 $query->field("sum($sumField) as number,FROM_UNIXTIME($group, '$timeUinx') as time");
                 $query->group("FROM_UNIXTIME($group, '$timeUinx')");
             })
-            ->order('pay_time ASC')->select()->toArray();
+            ->order('pay_time ASC,id DESC')->select()->toArray();
     }
 
     /**时间分组订单数统计
@@ -730,7 +730,7 @@ class StoreOrderDao extends BaseDao
                 $query->field("count($sumField) as number,FROM_UNIXTIME(pay_time, '$timeUinx') as time");
                 $query->group("FROM_UNIXTIME(pay_time, '$timeUinx')");
             })
-            ->order('pay_time ASC')->select()->toArray();
+            ->order('pay_time ASC,id DESC')->select()->toArray();
     }
 
     /**时间段支付订单人数
@@ -773,7 +773,7 @@ class StoreOrderDao extends BaseDao
                 $query->field("count(distinct uid) as number,FROM_UNIXTIME(pay_time, '$timeUinx') as time");
                 $query->group("FROM_UNIXTIME(pay_time, '$timeUinx')");
             })
-            ->order('pay_time ASC')->select()->toArray();
+            ->order('pay_time ASC,id DESC')->select()->toArray();
     }
 
 
@@ -978,8 +978,18 @@ class StoreOrderDao extends BaseDao
             })->field(['uid', 'order_id', 'real_name', 'status', 'pay_price', 'total_num', 'add_time', 'pay_time', 'paid'])->order('add_time desc')->select()->toArray();
     }
 
+    public function getSubOrderNotSendList(int $pid)
+    {
+        return $this->getModel()->where('pid', $pid)->where('status', 1)->select()->toArray();
+    }
+
     public function getSubOrderNotSend(int $pid, int $order_id)
     {
-        return $this->getModel()->where('id', $pid)->where('status', '0')->where('id', '<>', $order_id)->count();
+        return $this->getModel()->where('pid', $pid)->where('status', 0)->where('id', '<>', $order_id)->count();
+    }
+
+    public function getSubOrderNotTake(int $pid, int $order_id)
+    {
+        return $this->getModel()->where('pid', $pid)->where('status', 1)->where('id', '<>', $order_id)->count();
     }
 }

@@ -22,7 +22,7 @@
                 v-model="artFrom.cate_id"
                 size="small"
                 :options="treeSelect"
-                :props="{ emitPath: false }"
+                :props="{multiple: false, emitPath: false,checkStrictly: true, }"
                 clearable
               ></el-cascader>
             </el-form-item>
@@ -223,7 +223,7 @@
                 v-model="batchFormData.cate_id"
                 size="small"
                 :options="treeSelect"
-                :props="{ emitPath: false }"
+                :props="{ multiple: true, emitPath: false,checkStrictly: true, }"
                 clearable
               ></el-cascader>
             </el-form-item>

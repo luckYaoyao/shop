@@ -10,6 +10,15 @@
       >
         <el-row :gutter="24">
           <el-col v-bind="grid">
+            <el-form-item label="是否显示：" label-for="keyword">
+              <el-radio-group v-model="levelFrom.is_show" type="button" @on-change="userSearchs">
+                <el-radio label="">全部</el-radio>
+                <el-radio label="1">显示</el-radio>
+                <el-radio label="0">隐藏</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
             <el-form-item label="搜索：" label-for="keyword">
               <el-input
                 search
@@ -144,6 +153,7 @@ export default {
       ],
       levelFrom: {
         keyword: '',
+        is_show: '',
         page: 1,
         limit: 20,
       },

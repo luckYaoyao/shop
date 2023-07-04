@@ -22,14 +22,8 @@ class MiniOrderService
      */
     protected static function options(array $config = [])
     {
-        $payment = SystemConfigService::more(['routine_appId', 'routine_appsecret', 'pay_weixin_mchid', 'pay_new_weixin_open', 'pay_new_weixin_mchid']);
+        $payment = SystemConfigService::more(['routine_appId', 'routine_appsecret', 'pay_weixin_mchid', 'pay_new_weixin_open', 'pay_new_weixin_mchid', 'wechat_token', 'wechat_encodingaeskey']);
         return [
-            'debug' => true,
-            'log' => [
-                'level' => 'debug',
-                'permission' => 0777,
-                'file' => '/www/wwwroot/bz.wuht.net/crmeb/crmeb/runtime/log/easywechat.log',
-            ],
             'mini_program' => [
                 'app_id' => $payment['routine_appId'] ?? '',
                 'secret' => $payment['routine_appsecret'] ?? '',
@@ -69,9 +63,9 @@ class MiniOrderService
      * @date 2023/05/09
      * @author yyw
      */
-    public static function shippingByTradeNo(string $out_trade_no, int $logistics_type, array $shipping_list, string $payer_openid, int $delivery_mode = 1, bool $is_all_delivered = true)
+    public static function shippingByTradeNo(string $out_trade_no, int $logistics_type, array $shipping_list, string $payer_openid, string $path, int $delivery_mode = 1, bool $is_all_delivered = true)
     {
-        return self::order()->shippingByTradeNo($out_trade_no, $logistics_type, $shipping_list, $payer_openid, $delivery_mode, $is_all_delivered);
+        return self::order()->shippingByTradeNo($out_trade_no, $logistics_type, $shipping_list, $payer_openid, $path, $delivery_mode, $is_all_delivered);
     }
 
     /**
@@ -111,9 +105,8 @@ class MiniOrderService
      * 判断是否开通
      * @return bool
      * @throws HttpException
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      *
-     * @date 2023/05/09
+     * @date 2023/05/17
      * @author yyw
      */
     public static function isManaged()
@@ -131,9 +124,9 @@ class MiniOrderService
      * @date 2023/05/10
      * @author yyw
      */
-    public static function setMesJumpPath($path)
+    public static function setMesJumpPathAndCheck($path)
     {
-        return self::order()->setMesJumpPath($path);
+        return self::order()->setMesJumpPathAndCheck($path);
     }
 
 

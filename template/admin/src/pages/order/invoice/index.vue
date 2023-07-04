@@ -232,7 +232,7 @@
             </el-row>
             <el-row class="row">
               <el-col :span="12">企业地址: {{ invoiceDetails.address }}</el-col>
-              <el-col :span="12">企业电话: {{ invoiceDetails.drawer_phone }}</el-col>
+              <el-col :span="12">企业电话: {{ invoiceDetails.tell }}</el-col>
             </el-row>
           </div>
           <div class="list">

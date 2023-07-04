@@ -14,6 +14,7 @@ use app\adminapi\controller\AuthController;
 use app\Request;
 use app\services\system\config\SystemConfigServices;
 use app\services\system\config\SystemConfigTabServices;
+use crmeb\services\easywechat\orderShipping\MiniOrderService;
 use think\facade\App;
 
 /**
@@ -327,9 +328,13 @@ class SystemConfig extends AuthController
             @copy($from, $toHome);
             @copy($from, $toPublic);
         }
-        if(isset($post['reward_integral']) || isset($post['reward_money'])) {
-            if($post['reward_integral'] < 0 || $post['reward_money'] < 0) return app('json')->fail(400558);
+        if (isset($post['reward_integral']) || isset($post['reward_money'])) {
+            if ($post['reward_integral'] < 0 || $post['reward_money'] < 0) return app('json')->fail(400558);
         }
+
+//        if (isset($post['order_shipping_open']) && $post['order_shipping_open'] == 1 && isset($post['order_shipping_url'])) {
+//            MiniOrderService::setMesJumpPathAndCheck($post['order_shipping_url']);
+//        }
         foreach ($post as $k => $v) {
             $config_one = $this->services->getOne(['menu_name' => $k]);
             if ($config_one) {

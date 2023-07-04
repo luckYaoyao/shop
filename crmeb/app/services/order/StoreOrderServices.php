@@ -101,10 +101,13 @@ class StoreOrderServices extends BaseServices
         foreach ($data as &$item) {
             $refund_num = array_sum(array_column($item['refund'], 'refund_num'));
             $cart_num = 0;
+            $vipTruePrice = 0;
             foreach ($item['_info'] as $items) {
                 $cart_num += $items['cart_info']['cart_num'];
+                $vipTruePrice = bcadd((string)$vipTruePrice, (string)$items['cart_info']['vip_truePrice'], 2);
             }
-            $item['is_all_refund'] = $refund_num == $cart_num ? true : false;
+            $item['total_price'] = bcadd($item['total_price'], $vipTruePrice, 2);
+            $item['is_all_refund'] = $refund_num == $cart_num;
         }
         return compact('data', 'count');
     }
@@ -754,7 +757,7 @@ HTML;
         $f[] = Form::number('total_price', '商品总价', (float)$product->getData('total_price'))->min(0)->disabled(true);
         $f[] = Form::number('pay_postage', '支付邮费', (float)$product->getData('pay_postage') ?: 0)->disabled(true);
         $f[] = Form::number('pay_price', '实际支付金额', (float)$product->getData('pay_price'))->min(0);
-        $f[] = Form::number('gain_integral', '赠送积分', (float)$product->getData('gain_integral') ?: 0);
+        $f[] = Form::number('gain_integral', '赠送积分', (float)$product->getData('gain_integral') ?: 0)->min(0);
         return create_form('修改订单', $f, $this->url('/order/update/' . $id), 'PUT');
     }
 
@@ -792,6 +795,12 @@ HTML;
                     'change_type' => 'order_edit',
                     'change_time' => time(),
                     'change_message' => '修改商品总价为：' . $data['total_price'] . ' 实际支付金额' . $data['pay_price']
+                ]);
+            $res = $res && $services->save([
+                    'oid' => $id,
+                    'change_type' => 'order_edit',
+                    'change_time' => time(),
+                    'change_message' => '修改订单赠送积分为：' . $data['gain_integral']
                 ]);
             if ($res) {
                 $order = $this->dao->getOne(['id' => $id, 'is_del' => 0]);
@@ -2498,8 +2507,16 @@ HTML;
         }
         // 判断是否开启小程序订单管理
         $orderData['order_shipping_open'] = false;
-        if (sys_config('order_shipping_open', 0) && MiniOrderService::isManaged()) {
-            $orderData['order_shipping_open'] = true;
+        if (sys_config('order_shipping_open', 0) && MiniOrderService::isManaged() && $order['is_channel'] == 1 && $order['pay_type'] == 'weixin') {
+            // 判断是否存在子未收货子订单
+            if ($order['pid'] > 0) {
+                if ($this->checkSubOrderNotTake((int)$order['pid'], (int)$order['id'])) {
+                    $orderData['order_shipping_open'] = true;
+                }
+            } else {
+                $orderData['order_shipping_open'] = true;
+            }
+
         }
         return $orderData;
     }
@@ -2654,15 +2671,15 @@ HTML;
 
     /**
      * 取消商家寄件
-     * @author 等风来
-     * @email 136327134@qq.com
-     * @date 2023/5/15
      * @param int $id
      * @param string $msg
      * @return array|mixed
      * @throws \think\db\exception\DataNotFoundException
      * @throws \think\db\exception\DbException
      * @throws \think\db\exception\ModelNotFoundException
+     * @author 等风来
+     * @email 136327134@qq.com
+     * @date 2023/5/15
      */
     public function shipmentCancelOrder(int $id, string $msg)
     {
@@ -2673,20 +2690,16 @@ HTML;
         if (!$orderInfo->kuaidi_task_id || !$orderInfo->kuaidi_order_id) {
             throw new ValidateException('商家寄件订单信息不存在，无法取消');
         }
-        if ($orderInfo->status != 1) {
+        if ($orderInfo->is_stock_up != 1) {
             throw new ValidateException('订单状态不正确，无法取消寄件');
         }
 
         //发起取消商家寄件
-        $res = app()->make(ServeServices::class)->express()->shipmentCancelOrder([
+        app()->make(ServeServices::class)->express()->shipmentCancelOrder([
             'task_id' => $orderInfo->kuaidi_task_id,
             'order_id' => $orderInfo->kuaidi_order_id,
             'cancel_msg' => $msg,
         ]);
-
-        if ($res['status'] != 200) {
-            throw new ValidateException($res['msg'] ?? '一号通：取消失败');
-        }
 
         //订单返回原状态
         $this->transaction(function () use ($id, $msg, $orderInfo) {
@@ -2698,15 +2711,34 @@ HTML;
             ]);
 
             $orderInfo->status = 0;
+            $orderInfo->is_stock_up = 0;
+            $orderInfo->kuaidi_task_id = '';
+            $orderInfo->kuaidi_order_id = '';
+            $orderInfo->express_dump = '';
+            $orderInfo->kuaidi_label = '';
+            $orderInfo->delivery_id = '';
+            $orderInfo->delivery_code = '';
+            $orderInfo->delivery_name = '';
+            $orderInfo->delivery_type = '';
             $orderInfo->save();
         });
 
-        return $res;
+        return true;
     }
 
     public function checkSubOrderNotSend(int $pid, int $order_id)
     {
         $order_count = $this->dao->getSubOrderNotSend($pid, $order_id);
+        if ($order_count > 0) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function checkSubOrderNotTake(int $pid, int $order_id)
+    {
+        $order_count = $this->dao->getSubOrderNotTake($pid, $order_id);
         if ($order_count > 0) {
             return false;
         } else {

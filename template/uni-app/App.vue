@@ -3,11 +3,13 @@
 		checkLogin
 	} from './libs/login';
 	import {
-		HTTP_REQUEST_URL
+		HTTP_REQUEST_URL,
+		SYSTEM_VERSION
 	} from './config/app';
 	import {
 		getShopConfig,
-		silenceAuth
+		silenceAuth,
+		getSystemVersion
 	} from '@/api/public';
 	import Auth from '@/libs/wechat.js';
 	import Routine from './libs/routine.js';
@@ -15,12 +17,8 @@
 		silenceBindingSpread
 	} from "@/utils";
 	import {
-		getCartCounts,
-	} from '@/api/order.js';
-	import {
 		colorChange,
 		getCrmebCopyRight,
-
 	} from '@/api/api.js';
 	import {
 		getLangJson,
@@ -98,23 +96,30 @@
 			}
 			// #ifdef MP
 			if (queryData.query.scene) {
-				switch (queryData.scene) {
-					//扫描小程序码
-					case 1047:
-						this.globalData.code = queryData.query.scene;
-						break;
-						//长按图片识别小程序码
-					case 1048:
-						this.globalData.code = queryData.query.scene;
-						break;
-						//手机相册选取小程序码
-					case 1049:
-						this.globalData.code = queryData.query.scene;
-						break;
-						//直接进入小程序
-					case 1001:
-						this.globalData.spid = queryData.query.scene;
-						break;
+				let param = this.$util.getUrlParams(decodeURIComponent(queryData.query.scene))
+				if (param.pid) {
+					this.$Cache.set('spread', param.pid);
+					this.globalData.spid = param.pid;
+					this.globalData.pid = param.pid;
+				} else {
+					switch (queryData.scene) {
+						//扫描小程序码
+						case 1047:
+							this.globalData.code = queryData.query.scene;
+							break;
+							//长按图片识别小程序码
+						case 1048:
+							this.globalData.code = queryData.query.scene;
+							break;
+							//手机相册选取小程序码
+						case 1049:
+							this.globalData.code = queryData.query.scene;
+							break;
+							//直接进入小程序
+						case 1001:
+							this.globalData.spid = queryData.query.scene;
+							break;
+					}
 				}
 				silenceBindingSpread(this.globalData)
 			}
@@ -273,6 +278,19 @@
 			getCrmebCopyRight().then(res => {
 				uni.setStorageSync('copyRight', res.data)
 			})
+			// #ifdef MP
+			getSystemVersion().then(res => {
+				if (res.data.version_code < SYSTEM_VERSION) {
+					uni.showModal({
+						title: '提示',
+						content: '请重新打包并上传小程序',
+						success: function(res) {
+							if (res.confirm) {}
+						}
+					});
+				}
+			})
+			// #endif
 		},
 		// #ifdef H5
 		onHide() {

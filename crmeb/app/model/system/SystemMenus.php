@@ -232,7 +232,11 @@ class SystemMenus extends BaseModel
     public function searchAuthTypeAttr($query, $value)
     {
         if ($value !== '') {
-            $query->where('auth_type', $value);
+            if ($value == 3) {
+                $query->whereIn('auth_type', [1, 3]);
+            } else {
+                $query->where('auth_type', $value);
+            }
         }
     }
 }

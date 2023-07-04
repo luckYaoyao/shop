@@ -2,6 +2,7 @@
   <div class="layout-navbars-breadcrumb">
     <!-- {{[...breadCrumbList,...crumbPast]}} -->
     <i
+      v-if="collapseShow"
       class="layout-navbars-breadcrumb-icon"
       :class="getThemeConfig.isCollapse ? 'el-icon-s-unfold' : 'el-icon-s-fold'"
       @click="onThemeConfigChange"
@@ -95,6 +96,9 @@ export default {
       } else {
         return true;
       }
+    },
+    collapseShow() {
+      return  ['defaults','columns'].includes(this.$store.state.themeConfig.themeConfig.layout);
     },
   },
   mounted() {

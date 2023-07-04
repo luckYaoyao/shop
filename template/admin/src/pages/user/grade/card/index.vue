@@ -18,7 +18,7 @@
         <el-row>
           <el-col v-bind="grid">
             <el-button type="primary" icon="md-add" @click="addBatch" class="mr20">添加批次</el-button>
-            <el-button @click="getMemberScan">下载二维码</el-button>
+            <el-button @click="getMemberScan">卡密使用页面二维码</el-button>
           </el-col>
         </el-row>
       </el-form>

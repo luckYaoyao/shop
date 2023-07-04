@@ -1,7 +1,13 @@
 <template>
   <div>
     <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-width="160px" label-position="right">
+      <el-form
+        ref="formValidate"
+        :model="formValidate"
+        :rules="ruleValidate"
+        label-width="160px"
+        label-position="right"
+      >
         <el-form-item label="头像">
           <div class="avatar" @click="avatarMoadl = true">
             <img v-if="formValidate.head_pic" :src="formValidate.head_pic" alt="" />
@@ -14,13 +20,13 @@
         <el-form-item label="姓名" prop="real_name">
           <el-input type="text" v-model="formValidate.real_name" class="input"></el-input>
         </el-form-item>
-        <el-form-item label="原始密码" prop="pwd">
+        <el-form-item label="原始密码">
           <el-input type="password" v-model="formValidate.pwd" class="input"></el-input>
         </el-form-item>
-        <el-form-item label="新密码" prop="new_pwd">
+        <el-form-item label="新密码">
           <el-input type="password" v-model="formValidate.new_pwd" class="input"></el-input>
         </el-form-item>
-        <el-form-item label="确认新密码" prop="conf_pwd">
+        <el-form-item label="确认新密码">
           <el-input type="password" v-model="formValidate.conf_pwd" class="input"></el-input>
         </el-form-item>
         <el-form-item>
@@ -64,9 +70,6 @@ export default {
       },
       ruleValidate: {
         real_name: [{ required: true, message: '您的姓名不能为空', trigger: 'blur' }],
-        pwd: [{ required: true, message: '请输入您的原始密码', trigger: 'blur' }],
-        new_pwd: [{ required: true, message: '请输入您的新密码', trigger: 'blur' }],
-        conf_pwd: [{ required: true, message: '请确认您的新密码', trigger: 'blur' }],
       },
     };
   },

@@ -198,6 +198,8 @@
     <details-from ref="details" :orderDatalist="orderDatalist" :orderId="orderId"></details-from>
     <!-- 备注 -->
     <order-remark ref="remarks" :orderId="orderId" @submitFail="submitFail"></order-remark>
+    <!-- 取消寄件 -->
+    <order-shipment ref="shipment" :orderId="orderId" @submitFail="submitFail"></order-shipment>
     <!-- 记录 -->
     <order-record ref="record"></order-record>
     <!-- 发送货 -->
@@ -211,6 +213,7 @@
       @clearId="
         () => {
           orderId = 0;
+          virtual_type = null;
         }
       "
     ></order-send>
@@ -229,6 +232,7 @@ import {
   refundIntegral,
   getDistribution,
   writeUpdate,
+  shipmentCancelOrder,
 } from '@/api/order';
 import { mapState, mapMutations } from 'vuex';
 import editFrom from '../../../../components/from/from';
@@ -236,6 +240,7 @@ import detailsFrom from '../handle/orderDetails';
 import orderRemark from '../handle/orderRemark';
 import orderRecord from '../handle/orderRecord';
 import orderSend from '../handle/orderSend';
+import orderShipment from '../handle/orderShipment';
 
 export default {
   name: 'table_list',
@@ -246,6 +251,7 @@ export default {
     orderRemark,
     orderRecord,
     orderSend,
+    orderShipment,
   },
   data() {
     return {
@@ -396,6 +402,11 @@ export default {
           this.delOrder(row, this.delfromData);
       }
     },
+    shipmentClear(row) {
+      console.log(this.$refs.shipment);
+      this.orderId = row.id;
+      this.$refs.shipment.modals = true;
+    },
     printImg(url) {
       printJS({
         printable: url,
@@ -540,10 +551,6 @@ export default {
     getOrderData(id) {
       getOrdeDatas(id)
         .then(async (res) => {
-          if (res.data.status === false) {
-            return this.$authLapse(res.data);
-          }
-          this.$authLapse(res.data);
           this.FromData = res.data;
           this.$refs.edits.modals = true;
         })
@@ -604,11 +611,11 @@ export default {
     // 发送货
     sendOrder(row) {
       this.$refs.send.total_num = row.total_num;
+      this.virtual_type = row.virtual_type;
       this.$refs.send.modals = true;
       this.orderId = row.id;
       this.status = row._status;
       this.pay_type = row.pay_type;
-      this.virtual_type = row.virtual_type;
       this.$refs.send.getList();
       this.$refs.send.getDeliveryList();
       this.$nextTick((e) => {

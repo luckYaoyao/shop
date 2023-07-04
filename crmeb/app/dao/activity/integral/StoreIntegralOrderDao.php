@@ -93,7 +93,7 @@ class StoreIntegralOrderDao extends BaseDao
      * @return int
      * @throws \ReflectionException
      */
-    public function count(array $where = [], bool $search = true): int
+    public function count(array $where = [], bool $search = true)
     {
         return $this->search($where, $search)->count();
     }

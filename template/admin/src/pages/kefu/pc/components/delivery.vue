@@ -151,6 +151,10 @@ export default {
       type: String | Number,
       default: '',
     },
+    virtualType: {
+      type: Number,
+      default: 0,
+    },
   },
   watch: {
     'formValidate.shipStatus': {
@@ -171,6 +175,13 @@ export default {
         this.$refs['formValidate'].resetFields();
       },
       deep: true,
+    },
+    virtualType: {
+      handler(nVal, oVal) {
+        console.log(nVal);
+        if (nVal == 3) this.formValidate.gender = 3;
+      },
+      immediate: true,
     },
   },
   data() {

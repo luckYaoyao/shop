@@ -58,7 +58,7 @@
                 v-model="formValidate.cate_id"
                 size="small"
                 :options="treeSelect"
-                :props="{ multiple: true, emitPath: false }"
+                :props="{ multiple: true, checkStrictly: true, emitPath: false }"
                 clearable
               ></el-cascader>
               <span class="addfont" @click="addCate">新增分类</span>
@@ -937,7 +937,7 @@
                   placeholder="请输入一级返佣"
                   :min="0"
                   :max="9999999"
-                  class="columnsBox perW30"
+                  class="columnsBox perW20"
                   v-model="manyBrokerage"
                 ></el-input-number>
                 二级返佣：<el-input-number
@@ -945,7 +945,7 @@
                   placeholder="请输入二级返佣"
                   :min="0"
                   :max="99999999"
-                  class="columnsBox perW30"
+                  class="columnsBox perW20"
                   v-model="manyBrokerageTwo"
                 ></el-input-number>
               </span>
@@ -955,7 +955,7 @@
                   placeholder="请输入会员价"
                   :min="0"
                   :max="99999999"
-                  class="columnsBox perW30"
+                  class="columnsBox perW20"
                   v-model="manyVipPrice"
                 ></el-input-number>
               </span>
@@ -1345,15 +1345,12 @@
         </el-form-item>
         <Spin size="large" fix v-if="spinShow"></Spin>
       </el-form>
-      <Modal
-        v-model="modalPic"
+      <el-dialog
+        :visible.sync="modalPic"
         width="1024px"
         scrollable
-        footer-hide
-        closable
         title="上传商品图"
-        :mask-closable="false"
-        :z-index="1"
+        :close-on-click-modal="false"
       >
         <uploadPictures
           :isChoice="isChoice"
@@ -1363,7 +1360,7 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </Modal>
+      </el-dialog>
       <Modal
         v-model="addVirtualModel"
         width="700px"
@@ -1970,8 +1967,6 @@ export default {
       ],
       columnsInstalM: [],
       moveIndex: '',
-      // aa: [],
-      // openSubimit: false
     };
   },
   computed: {
@@ -2234,7 +2229,7 @@ export default {
       });
     },
     // 初始化数据展示
-    infoData(data) {
+    infoData(data, isCopy) {
       let cate_id = data.cate_id.map(Number);
       let label_id = data.label_id.map(Number);
       this.attrs = data.items || [];
@@ -2261,9 +2256,9 @@ export default {
         this.oneFormValidate = [data.attr];
       }
       this.formValidate.header = [];
-      this.generate(0);
+      this.generate(0, isCopy, data.attrs);
       // this.manyFormValidate = data.attrs;
-      this.$set(this, 'manyFormValidate', data.attrs);
+      // this.$set(this, 'manyFormValidate', data.attrs);
       this.spec_type = data.spec_type;
       this.formValidate.is_virtual = data.is_virtual;
       if (data.spec_type === 0) {
@@ -2292,7 +2287,7 @@ export default {
     //关闭淘宝弹窗并生成数据；
     onClose(data) {
       this.modals = false;
-      this.infoData(data);
+      this.infoData(data, 1);
     },
 
     checkMove(evt) {
@@ -2470,7 +2465,12 @@ export default {
       if (suffix.indexOf('.mp4') === -1) {
         return that.$Message.error('只能上传MP4文件');
       }
-      productGetTempKeysApi()
+      console.log(evfile.target.files[0]);
+      let types = {
+        key: evfile.target.files[0].name,
+        contentType: evfile.target.files[0].type,
+      };
+      productGetTempKeysApi(types)
         .then((res) => {
           that.$videoCloud
             .videoUpload({
@@ -2659,7 +2659,7 @@ export default {
       this.showIput = true;
     },
     // 立即生成
-    generate(type) {
+    generate(type, isCopy, arr) {
       generateAttrApi(
         {
           attrs: this.attrs,
@@ -2672,8 +2672,11 @@ export default {
         .then((res) => {
           let info = res.data.info,
             header1 = JSON.parse(JSON.stringify(info.header));
-          if (this.$route.params.id !== '0' && (this.$route.query.type != -1 || type)) {
+          if (this.$route.params.id !== '0' && (this.$route.query.type != -1 || type) && !isCopy) {
             this.manyFormValidate = info.value;
+          }
+          if (isCopy) {
+            this.manyFormValidate = arr;
           }
           let header = info.header;
           if ([1, 2].includes(this.formValidate.virtual_type)) {
@@ -2684,7 +2687,7 @@ export default {
             this.columnsInstalM = info.header;
           }
           this.checkAllGroup(this.formValidate.is_sub);
-          if (!this.$route.params.id && this.formValidate.spec_type === 1) {
+          if (!this.$route.params.id && this.formValidate.spec_type === 1 && !isCopy) {
             this.manyFormValidate.map((item) => {
               item.pic = this.formValidate.image;
             });
@@ -2907,6 +2910,7 @@ export default {
             activeIds.push(item.id);
           });
           this.formValidate.label_id = activeIds;
+          if (this.openSubimit) return;
           this.openSubimit = true;
           this.formValidate.description = this.formatRichText(this.content);
           productAddApi(this.formValidate)
