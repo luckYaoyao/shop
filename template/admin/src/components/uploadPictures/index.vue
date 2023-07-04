@@ -396,6 +396,7 @@ export default {
         pid: this.pids,
         images: this.ids.toString(),
       };
+      if (!data.images) return;
       moveApi(data)
         .then(async (res) => {
           this.$Message.success(res.msg);
