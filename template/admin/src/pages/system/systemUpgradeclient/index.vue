@@ -5,51 +5,20 @@
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
       </div>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
       <div class="header">
         <div>当前版本<span class="v">V</span><span class="num">1.5</span></div>
         <div class="info">更新说明：已升级至最新版本，无需更新</div>
       </div>
       <div class="contentTime">
         <div class="acea-row row-top on">
-          <div class="time">2020-07-15</div>
-          <Timeline class="list">
-            <TimelineItem>
-              <Icon type="md-radio-button-on" slot="dot"></Icon>
-              <Collapse simple v-model="Panel" class="collapse">
-                <Panel name="1" hide-arrow>
-                  正式版 v1.4<Icon type="ios-arrow-down" />
-                  <Button type="primary" class="primary">下载更新</Button>
-                  <p slot="content" class="info">
-                    史蒂夫·乔布斯（Steve
-                    Jobs），1955年2月24日生于美国加利福尼亚州旧金山，美国发明家、企业家、美国苹果公司联合创办人。史蒂夫·乔布斯（Steve
-                    Jobs），1955年2月24日生于美国加利福尼亚州旧金山，美国发明家、企业家、美国苹果公司联合创办人。史蒂夫·乔布斯（Steve
-                    Jobs），1955年2月24日生于美国加利福尼亚州旧金山，美国发明家、企业家、美国苹果公司联合创办人。
-                  </p>
-                </Panel>
-              </Collapse>
-            </TimelineItem>
-          </Timeline>
         </div>
         <div class="acea-row row-top">
-          <div class="time">2020-07-15</div>
           <Timeline class="list">
-            <TimelineItem>
-              <Icon type="md-radio-button-off" slot="dot" />
-              <Collapse simple>
-                <Panel hide-arrow>
-                  正式版 v1.4<Icon type="ios-arrow-down" />
-                  <p slot="content" class="info">
-                    史蒂夫·乔布斯（Steve
-                    Jobs），1955年2月24日生于美国加利福尼亚州旧金山，美国发明家、企业家、美国苹果公司联合创办人。
-                  </p>
-                </Panel>
-              </Collapse>
-            </TimelineItem>
           </Timeline>
         </div>
       </div>
-    </Card>
+    </el-card>
   </div>
 </template>
 

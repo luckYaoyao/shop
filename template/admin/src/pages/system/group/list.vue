@@ -3,15 +3,15 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <router-link v-if="$route.params.id != 49" :to="{ path: $routeProStr + '/system/config/system_group/index' }"
-          ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
+          ><el-button icon="ios-arrow-back" size="small" type="text">返回</el-button></router-link
         >
-        <Divider v-if="$route.params.id != 49" type="vertical" />
+        <el-divider direction="vertical" v-if="$route.params.id != 49" />
         <span class="ivu-page-header-title mr20" style="padding: 0" v-text="$route.meta.title"></span>
       </div>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Row class="ivu-mt box-wrapper">
-        <Col :xs="24" :sm="24" :md="6" :lg="4" class="left-wrapper" v-if="!$route.params.id && groupAll.length">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-row class="ivu-mt box-wrapper">
+        <el-col :xs="24" :sm="24" :md="6" :lg="4" class="left-wrapper" v-if="!$route.params.id && groupAll.length">
           <Menu :theme="theme3" :active-name="sortName" width="auto">
             <MenuGroup>
               <MenuItem
@@ -25,73 +25,89 @@
               </MenuItem>
             </MenuGroup>
           </Menu>
-        </Col>
-        <Col :xs="24" :sm="24" :md="$route.params.id ? 24 : 17" :lg="$route.params.id ? 24 : 20" ref="rightBox">
-          <Form
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="$route.params.id ? 24 : 17" :lg="$route.params.id ? 24 : 20" ref="rightBox">
+          <el-form
             ref="formValidate"
             :model="formValidate"
             :label-width="labelWidth"
             :label-position="labelPosition"
             @submit.native.prevent
           >
-            <Row type="flex" :gutter="24">
-              <Col v-bind="grid">
-                <FormItem label="是否显示：">
-                  <Select v-model="formValidate.status" placeholder="请选择" clearable @on-change="userSearchs">
-                    <Option value="1">显示</Option>
-                    <Option value="0">不显示</Option>
-                  </Select>
-                </FormItem>
-              </Col>
-            </Row>
-            <Row type="flex">
-              <Col v-bind="grid">
-                <Button type="primary" icon="md-add" @click="groupAdd('添加数据')" class="mr20">添加数据</Button>
-              </Col>
-            </Row>
-          </Form>
-          <Table
+            <el-row :gutter="24">
+              <el-col v-bind="grid">
+                <el-form-item label="是否显示：">
+                  <el-select v-model="formValidate.status" placeholder="请选择" clearable @change="userSearchs">
+                    <el-option value="1" label="显示"></el-option>
+                    <el-option value="0" label="不显示"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col v-bind="grid">
+                <el-button type="primary" icon="md-add" @click="groupAdd('添加数据')" class="mr20">添加数据</el-button>
+              </el-col>
+            </el-row>
+          </el-form>
+          <el-table
             :columns="columns1"
             :data="tabList"
             ref="table"
             class="mt25"
             :loading="loading"
-            highlight-row
+            highlight-current-row
             no-userFrom-text="暂无数据"
             no-filtered-userFrom-text="暂无筛选结果"
           >
-            <template slot-scope="{ row, index }" slot="status">
-              <i-switch
-                v-model="row.status"
-                :value="row.status"
-                :true-value="1"
-                :false-value="0"
-                @on-change="onchangeIsShow(row)"
-                size="large"
-              >
-                <span slot="open">显示</span>
-                <span slot="close">隐藏</span>
-              </i-switch>
-            </template>
-            <template slot-scope="{ row, index }" slot="action">
-              <a @click="edit(row, '编辑')">编辑</a>
-              <Divider type="vertical" />
-              <a @click="del(row, '删除这条信息', index)">删除</a>
-            </template>
-          </Table>
+            <el-table-column
+              :label="item.title"
+              :min-width="item.minWidth"
+              v-for="(item, index) in columns1"
+              :key="index"
+            >
+              <template slot-scope="scope">
+                <template v-if="item.key">
+                  <div v-if="item.key !== 'slide'">
+                    <span>{{ scope.row[item.key] }}</span>
+                  </div>
+                  <div v-else>
+                    <div class="tabBox_img" v-viewer>
+                      <img v-lazy="scope.row[item.key][0]" />
+                    </div>
+                  </div>
+                </template>
+                <template v-else-if="item.slot === 'status'">
+                  <el-switch
+                    :active-value="1"
+                    :inactive-value="0"
+                    v-model="scope.row.status"
+                    :value="scope.row.status"
+                    @change="onchangeIsShow(scope.row)"
+                    size="large"
+                  >
+                  </el-switch>
+                </template>
+                <template v-else-if="item.slot === 'action'">
+                  <a @click="edit(scope.row, '编辑')">编辑</a>
+                  <el-divider direction="vertical"></el-divider>
+                  <a @click="del(scope.row, '删除这条信息', index)">删除</a>
+                </template>
+              </template>
+            </el-table-column>
+          </el-table>
           <div class="acea-row row-right page">
-            <Page
+            <pagination
+              v-if="total"
               :total="total"
-              :current="formValidate.page"
-              show-elevator
-              show-total
-              @on-change="pageChange"
-              :page-size="formValidate.limit"
+              :page.sync="formValidate.page"
+              :limit.sync="formValidate.limit"
+              @pagination="getList"
             />
           </div>
-        </Col>
-      </Row>
-    </Card>
+        </el-col>
+      </el-row>
+    </el-card>
   </div>
 </template>
 
@@ -140,7 +156,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -280,10 +296,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.formValidate.page = index;
-      this.getList();
     },
     // 表格搜索
     userSearchs() {

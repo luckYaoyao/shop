@@ -4,14 +4,14 @@
       <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div>
         <div style="float: right" v-if="cardShow == 1 || cardShow == 2">
-          <Button class="bnt" type="primary" @click="submit" :loading="loadingExist">保存</Button>
-          <Button class="bnt ml20" @click="reast">重置</Button>
+          <el-button class="bnt" type="primary" @click="submit" :loading="loadingExist">保存</el-button>
+          <el-button class="bnt ml20" @click="reast">重置</el-button>
         </div>
       </div>
     </div>
 
-    <Row class="ivu-mt box-wrapper">
-      <Col span="3" class="left-wrapper">
+    <el-row class="ivu-mt" type="flex">
+      <el-col :span="3" class="left-wrapper">
         <Menu :theme="theme3" :active-name="1" width="auto">
           <MenuGroup>
             <MenuItem
@@ -24,118 +24,126 @@
             </MenuItem>
           </MenuGroup>
         </Menu>
-      </Col>
-      <Col span="21" class="right-wrapper">
-        <Card :bordered="false" dis-hover v-if="cardShow == 0">
-          <Row v-if="cardShow == 0">
-            <Col style="width: 310px; height: 550px; margin-right: 30px; position: relative" v-if="isDiy">
+      </el-col>
+      <el-col :span="21">
+        <el-card :bordered="false" shadow="never" v-if="cardShow == 0">
+          <el-row v-if="cardShow == 0" type="flex">
+            <el-col style="width: 310px; height: 550px; margin-right: 30px" v-if="isDiy">
               <iframe class="iframe-box" :src="imgUrl" frameborder="0" ref="iframe"></iframe>
               <div class="mask"></div>
-            </Col>
-            <Col :span="isDiy ? '' : 24" v-bind="isDiy ? grid : ''" :class="isDiy ? 'table' : ''">
+            </el-col>
+            <el-col :span="isDiy ? '' : 24" v-bind="isDiy ? grid : ''" :class="isDiy ? 'table' : ''">
               <div class="acea-row row-between-wrapper">
-                <Row type="flex">
-                  <Col v-bind="grid">
+                <el-row>
+                  <el-col v-bind="grid">
                     <div class="button acea-row row-middle">
-                      <Button type="primary" icon="md-add"
+                      <el-button type="primary" icon="md-add"
                         ><a
                           class="target-add"
                           ref="target"
                           :href="`${url}${$routeProStr}/setting/pages/diy_index?id=0&name=首页&type=0`"
                           target="_blank"
                           >添加专题页
-                        </a></Button
+                        </a></el-button
                       >
                     </div>
-                  </Col>
-                </Row>
+                  </el-col>
+                </el-row>
               </div>
-              <Table
-                :columns="columns1"
+              <el-table
                 :data="list"
                 ref="table"
                 class="mt25"
-                :loading="loading"
-                highlight-row
+                v-loading="loading"
+                highlight-current-row
                 no-userFrom-text="暂无数据"
                 no-filtered-userFrom-text="暂无筛选结果"
               >
-                <template slot-scope="{ row, index }" slot="region">
-                  <div class="font-blue">首页</div>
-                </template>
-                <template slot-scope="{ row, index }" slot="type_name">
-                  <Tag color="primary" v-if="row.is_diy">{{ row.type_name }}{{ row.id }}</Tag>
-                  <Tag color="warning" v-else>{{ row.type_name }}</Tag>
-                  <Tag color="success" v-if="row.status == 1">首页</Tag>
-                </template>
-                <template slot-scope="{ row, index }" slot="action">
-                  <div style="display: inline-block" v-if="row.status || row.is_diy" @click="edit(row)">
-                    <a
-                      v-if="row.is_diy === 1"
-                      class="target"
-                      ref="target"
-                      :href="`${url}${$routeProStr}/setting/pages/diy_index?id=${row.id}&name=${
-                        row.template_name || 'moren'
-                      }`"
-                      target="_blank"
+                <el-table-column label="页面ID" width="80">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.id }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="模板名称" min-width="130">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.name }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="模板类型" min-width="130">
+                  <template slot-scope="scope">
+                    <Tag color="primary" v-if="scope.row.is_diy">{{ scope.row.type_name }}{{ scope.row.id }}</Tag>
+                    <Tag color="warning" v-else>{{ scope.row.type_name }}</Tag>
+                    <Tag color="success" v-if="scope.row.status == 1">首页</Tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="添加时间" min-width="130">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.add_time }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="更新时间" min-width="130">
+                  <template slot-scope="scope">
+                    <span>{{ scope.row.update_time }}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" fixed="right" width="170">
+                  <template slot-scope="scope">
+                    <div
+                      style="display: inline-block"
+                      v-if="scope.row.status || scope.row.is_diy"
+                      @click="edit(scope.row)"
                     >
-                      编辑</a
-                    >
-                    <a v-else class="target">编辑</a>
-                  </div>
-                  <Divider type="vertical" v-if="(row.status || row.is_diy) && row.id != 1 && row.status != 1" />
+                      <a
+                        v-if="scope.row.is_diy === 1"
+                        class="target"
+                        ref="target"
+                        :href="`${url}${$routeProStr}/setting/pages/diy_index?id=${scope.row.id}&name=${
+                          scope.row.template_name || 'moren'
+                        }`"
+                        target="_blank"
+                      >
+                        编辑</a
+                      >
+                      <a v-else class="target">编辑</a>
+                    </div>
+                    <el-divider
+                      direction="vertical"
+                      v-if="(scope.row.status || scope.row.is_diy) && scope.row.id != 1 && scope.row.status != 1"
+                    />
 
-                  <div style="display: inline-block" v-if="row.id != 1 && row.status != 1">
-                    <a @click="del(row, '删除此模板', index)">删除</a>
-                  </div>
-                  <Divider type="vertical" v-if="(row.id != 1 && row.status != 1) || row.is_diy" />
-                  <div style="display: inline-block" v-if="row.is_diy">
-                    <a @click="preview(row, index)">预览</a>
-                  </div>
-                  <Divider type="vertical" v-if="row.is_diy && row.status != 1" />
-                  <div style="display: inline-block" v-if="row.status != 1">
-                    <a @click="setStatus(row, index)">设为首页</a>
-                  </div>
-
-                  <!-- <Divider type="vertical" v-if="row.status != 1" />
-                  <template>
-                    <Dropdown @on-click="changeMenu(row, index, $event)">
-                      <a href="javascript:void(0)"
-                        >更多
-                        <Icon type="ios-arrow-down"></Icon>
-                      </a>
-                      <DropdownMenu slot="list">
-                        <DropdownItem name="1" v-show="!row.type"
-                          >设置默认数据</DropdownItem
-                        >
-                        <DropdownItem name="2" v-show="!row.type"
-                          >恢复默认数据</DropdownItem
-                        >
-                        <DropdownItem name="3" v-show="row.id != 1"
-                          >删除模板</DropdownItem
-                        >
-                      </DropdownMenu>
-                    </Dropdown>
-                  </template> -->
-                </template>
-              </Table>
+                    <div style="display: inline-block" v-if="scope.row.id != 1 && scope.row.status != 1">
+                      <a @click="del(scope.row, '删除此模板', index)">删除</a>
+                    </div>
+                    <el-divider
+                      direction="vertical"
+                      v-if="(scope.row.id != 1 && scope.row.status != 1) || scope.row.is_diy"
+                    />
+                    <div style="display: inline-block" v-if="scope.row.is_diy">
+                      <a @click="preview(scope.row, index)">预览</a>
+                    </div>
+                    <el-divider direction="vertical" v-if="scope.row.is_diy && scope.row.status != 1" />
+                    <div style="display: inline-block" v-if="scope.row.status != 1">
+                      <a @click="setStatus(scope.row, index)">设为首页</a>
+                    </div>
+                  </template>
+                </el-table-column>
+              </el-table>
               <div class="acea-row row-right page">
-                <Page
+                <pagination
+                  v-if="total"
                   :total="total"
-                  :current="diyFrom.page"
-                  show-elevator
-                  show-total
-                  @on-change="pageChange"
-                  :page-size="diyFrom.limit"
+                  :page.sync="diyFrom.page"
+                  :limit.sync="diyFrom.limit"
+                  @pagination="getList"
                 />
               </div>
-            </Col>
-          </Row>
-        </Card>
+            </el-col>
+          </el-row>
+        </el-card>
         <goodClass v-else-if="cardShow == 1" ref="category" @parentFun="getChildData"></goodClass>
         <users v-else ref="users" @parentFun="getChildData"></users>
-      </Col>
-    </Row>
+      </el-col>
+    </el-row>
     <Modal
       v-model="isTemplate"
       scrollable
@@ -147,31 +155,33 @@
       @on-cancel="cancel"
     >
       <div class="article-manager">
-        <Card :bordered="false" dis-hover class="ivu-mt">
-          <Form
+        <el-card :bordered="false" shadow="never" class="ivu-mt">
+          <el-form
             ref="formItem"
             :model="formItem"
-            :label-width="120"
+            label-width="120px"
             label-position="right"
             :rules="ruleValidate"
             @submit.native.prevent
           >
-            <Row type="flex" :gutter="24">
-              <Col span="24">
-                <Col v-bind="grid">
-                  <FormItem label="开发移动端链接：" prop="link" label-for="link">
-                    <Input v-model="formItem.link" placeholder="http://localhost:8080" />
-                  </FormItem>
-                </Col>
-              </Col>
-            </Row>
-            <Row type="flex">
-              <Col v-bind="grid">
-                <Button type="primary" class="ml20" @click="handleSubmit('formItem')" style="width: 100%">提交</Button>
-              </Col>
-            </Row>
-          </Form>
-        </Card>
+            <el-row :gutter="24">
+              <el-col :span="24">
+                <el-col v-bind="grid">
+                  <el-form-item label="开发移动端链接：" prop="link" label-for="link">
+                    <el-input v-model="formItem.link" placeholder="http://localhost:8080" />
+                  </el-form-item>
+                </el-col>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col v-bind="grid">
+                <el-button type="primary" class="ml20" @click="handleSubmit('formItem')" style="width: 100%"
+                  >提交</el-button
+                >
+              </el-col>
+            </el-row>
+          </el-form>
+        </el-card>
       </div>
     </Modal>
     <Modal v-model="modal" title="预览" footer-hide>
@@ -232,39 +242,6 @@ export default {
         {
           name: '个人中心',
           id: 3,
-        },
-      ],
-      columns1: [
-        {
-          title: '页面ID',
-          key: 'id',
-          width: 80,
-        },
-        {
-          title: '模板名称',
-          key: 'name',
-          minWidth: 100,
-        },
-        {
-          title: '模板类型',
-          slot: 'type_name',
-          minWidth: 100,
-        },
-        {
-          title: '添加时间',
-          key: 'add_time',
-          minWidth: 100,
-        },
-        {
-          title: '更新时间',
-          key: 'update_time',
-          minWidth: 100,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          // fixed: "right",
-          minWidth: 180,
         },
       ],
       list: [],
@@ -411,10 +388,6 @@ export default {
         this.list = data.list;
         this.total = data.count;
       });
-    },
-    pageChange(status) {
-      this.diyFrom.page = status;
-      this.getList();
     },
     // 编辑
     edit(row) {

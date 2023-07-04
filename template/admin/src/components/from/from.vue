@@ -13,11 +13,11 @@
       <template>
         <div class="radio acea-row row-middle" v-if="FromData.action === '/marketing/coupon/save.html'">
           <div class="name ivu-form-item-content">优惠券类型</div>
-          <Radio-group v-model="type" @on-change="couponsType">
-            <Radio :label="0">通用券</Radio>
-            <Radio :label="1">品类券</Radio>
-            <Radio :label="2">商品券</Radio>
-          </Radio-group>
+          <el-radio-group v-model="type" @change="couponsType">
+            <el-radio :label="0">通用券</el-radio>
+            <el-radio :label="1">品类券</el-radio>
+            <el-radio :label="2">商品券</el-radio>
+          </el-radio-group>
         </div>
       </template>
       <form-create

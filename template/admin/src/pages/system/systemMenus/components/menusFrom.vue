@@ -11,114 +11,114 @@
       @on-cancel="handleReset"
       @on-visible-change="visible"
     >
-      <Form ref="formValidate" :model="formValidate" :label-width="110" @submit.native.prevent>
-        <!-- <Row type="flex" :gutter="24">
-          <Col span="24">
-            <FormItem label="类型：">
-              <RadioGroup v-model="formValidate.auth_type" @on-change="changeRadio">
-                <Radio :label="item.value" v-for="(item, i) in optionsRadio" :key="i">
+      <el-form ref="formValidate" :model="formValidate" label-width="110px" @submit.native.prevent>
+        <!-- <el-row  :gutter="24">
+          <el-col :span="24">
+            <el-form-item label="类型：">
+              <el-radio-group v-model="formValidate.auth_type" @change="changeRadio">
+                <el-radio :label="item.value" v-for="(item, i) in optionsRadio" :key="i">
                   <Icon type="social-apple"></Icon>
                   <span>{{ item.label }}</span>
-                </Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col>
-        </Row> -->
-        <Row type="flex" :gutter="24">
-          <Col v-bind="grid">
-            <FormItem :label="!authType ? '接口名称：' : '按钮名称：'" prop="menu_name">
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row> -->
+        <el-row  :gutter="24">
+          <el-col v-bind="grid">
+            <el-form-item :label="!authType ? '接口名称：' : '按钮名称：'" prop="menu_name">
               <div class="add">
-                <Input v-model="formValidate.menu_name" :placeholder="!authType ? '请输入接口名称' : '请输入按钮名称'">
-                </Input>
-                <!-- <Button class="ml10 df" v-show="!authType" @click="getRuleList()" icon="ios-apps"></Button> -->
+                <el-input v-model="formValidate.menu_name" :placeholder="!authType ? '请输入接口名称' : '请输入按钮名称'">
+                </el-input>
+                <!-- <el-button class="ml10 df" v-show="!authType" @click="getRuleList()" icon="ios-apps"></el-button> -->
               </div>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="父级分类：">
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="父级分类：">
               <Cascader :data="menuList" change-on-select v-model="formValidate.path" filterable></Cascader>
-            </FormItem>
-          </Col>
-          <!-- <Col v-bind="grid" v-if="!authType">
-            <FormItem label="请求方式：" prop="methods">
-              <Select v-model="formValidate.methods">
-                <Option value="">请求</Option>
-                <Option value="GET">GET</Option>
-                <Option value="POST">POST</Option>
-                <Option value="PUT">PUT</Option>
-                <Option value="DELETE">DELETE</Option>
-              </Select>
-            </FormItem>
-          </Col> -->
-          <!-- <Col v-bind="grid" v-if="!authType">
-            <FormItem label="接口地址：">
-              <Input v-model="formValidate.api_url" placeholder="请输入接口地址" prop="api_url"></Input>
-            </FormItem>
-          </Col> -->
-          <Col v-bind="grid" v-show="authType">
-            <FormItem label="路由地址：" prop="menu_path">
-              <Input v-model="formValidate.menu_path" placeholder="请输入路由地址" @on-change="changeUnique">
+            </el-form-item>
+          </el-col>
+          <!-- <el-col v-bind="grid" v-if="!authType">
+            <el-form-item label="请求方式：" prop="methods">
+              <el-select v-model="formValidate.methods">
+                <el-option value="">请求</el-option>
+                <el-option value="GET">GET</el-option>
+                <el-option value="POST">POST</el-option>
+                <el-option value="PUT">PUT</el-option>
+                <el-option value="DELETE">DELETE</el-option>
+              </el-select>
+            </el-form-item>
+          </el-col> -->
+          <!-- <el-col v-bind="grid" v-if="!authType">
+            <el-form-item label="接口地址：">
+              <el-input v-model="formValidate.api_url" placeholder="请输入接口地址" prop="api_url"></el-input>
+            </el-form-item>
+          </el-col> -->
+          <el-col v-bind="grid" v-show="authType">
+            <el-form-item label="路由地址：" prop="menu_path">
+              <el-input v-model="formValidate.menu_path" placeholder="请输入路由地址" @change="changeUnique">
                 <template #prepend>
                   <span>{{ $routeProStr }}</span>
                 </template>
-              </Input>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="权限标识：" prop="unique_auth">
-              <Input v-model="formValidate.unique_auth" placeholder="请输入权限标识"></Input>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid" v-if="authType">
-            <FormItem label="图标：">
-              <Input
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="权限标识：" prop="unique_auth">
+              <el-input v-model="formValidate.unique_auth" placeholder="请输入权限标识"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid" v-if="authType">
+            <el-form-item label="图标：">
+              <el-input
                 v-model="formValidate.icon"
                 placeholder="请选择图标，点击右面图标"
                 icon="ios-appstore"
                 @on-click="iconClick"
-              ></Input>
-            </FormItem>
-          </Col>
+              ></el-input>
+            </el-form-item>
+          </el-col>
 
-          <Col v-bind="grid" v-if="authType">
-            <FormItem label="排序：">
-              <Input type="number" v-model="formValidate.sort" placeholder="请输入排序" number></Input>
-            </FormItem>
-          </Col>
-          <!-- <Col v-bind="grid" v-show="authType">
-            <FormItem label="隐藏菜单：">
-              <RadioGroup v-model="formValidate.is_show_path">
-                <Radio :label="item.value" v-for="(item, i) in isShowPathRadio" :key="i">
+          <el-col v-bind="grid" v-if="authType">
+            <el-form-item label="排序：">
+              <el-input type="number" v-model="formValidate.sort" placeholder="请输入排序" number></el-input>
+            </el-form-item>
+          </el-col>
+          <!-- <el-col v-bind="grid" v-show="authType">
+            <el-form-item label="隐藏菜单：">
+              <el-radio-group v-model="formValidate.is_show_path">
+                <el-radio :label="item.value" v-for="(item, i) in isShowPathRadio" :key="i">
                   <Icon type="social-apple"></Icon>
                   <span>{{ item.label }}</span>
-                </Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col> -->
-          <Col v-bind="grid">
-            <FormItem label="状态：">
-              <RadioGroup v-model="formValidate.is_show">
-                <Radio :label="item.value" v-for="(item, i) in isShowRadio" :key="i">
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col> -->
+          <el-col v-bind="grid">
+            <el-form-item label="状态：">
+              <el-radio-group v-model="formValidate.is_show">
+                <el-radio :label="item.value" v-for="(item, i) in isShowRadio" :key="i">
                   <Icon type="social-apple"></Icon>
                   <span>{{ item.label }}</span>
-                </Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
+                </el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
       <template #footer>
-        <Button @click="modals = false">取消</Button>
-        <Button type="primary" @click="handleSubmit('formValidate')" :disabled="valids">提交</Button>
+        <el-button @click="modals = false">取消</el-button>
+        <el-button type="primary" @click="handleSubmit('formValidate')" :disabled="valids">提交</el-button>
       </template>
     </Modal>
     <Modal v-model="modal12" scrollable width="600" title="图标选择" footer-hide>
-      <Input
+      <el-input
         v-model="iconVal"
         placeholder="输入关键词搜索,注意全是英文"
         clearable
         style="width: 300px"
-        @on-change="upIcon(iconVal)"
+        @change="upIcon(iconVal)"
         ref="search"
       />
       <div class="trees-coadd">
@@ -135,7 +135,7 @@
     </Modal>
     <Modal v-model="ruleModal" scrollable width="1100" title="权限列表" footer-hide @on-visible-change="modalchange">
       <div class="search-rule">
-        <Input
+        <el-input
           class="mr10"
           v-model="searchRule"
           placeholder="输入关键词搜索"
@@ -143,8 +143,8 @@
           style="width: 300px"
           ref="search"
         />
-        <Button class="mr10" type="primary" @click="searchRules">搜索</Button>
-        <Button @click="init">重置</Button>
+        <el-button class="mr10" type="primary" @click="searchRules">搜索</el-button>
+        <el-button @click="init">重置</el-button>
       </div>
       <div class="rule">
         <div

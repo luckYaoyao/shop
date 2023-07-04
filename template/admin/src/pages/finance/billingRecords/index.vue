@@ -1,24 +1,24 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
       <div class="ivu-mt tabbox">
-        <Tabs @on-click="onClickTab" class="mb20">
-          <TabPane label="日账单" name="day" />
-          <TabPane label="周账单" name="week" />
-          <TabPane label="月账单" name="month" />
-        </Tabs>
-        <Form
+        <el-tabs v-model="tab" @tab-click="onClickTab" class="mb20">
+          <el-tab-pane label="日账单" name="day" />
+          <el-tab-pane label="周账单" name="week" />
+          <el-tab-pane label="月账单" name="month" />
+        </el-tabs>
+        <el-form
           ref="formValidate"
           :model="formValidate"
           :label-width="labelWidth"
           :label-position="labelPosition"
           @submit.native.prevent
         >
-          <FormItem label="创建时间：">
+          <el-form-item label="创建时间：">
             <DatePicker
               :editable="false"
               :clearable="false"
-              @on-change="onchangeTime"
+              @change="onchangeTime"
               :value="timeVal"
               format="yyyy/MM/dd"
               type="daterange"
@@ -28,47 +28,69 @@
               :options="options"
               class="mr20"
             ></DatePicker>
-          </FormItem>
-        </Form>
+          </el-form-item>
+        </el-form>
       </div>
       <div class="table">
-        <Table
+        <el-table
           :columns="columns"
           :data="orderList"
           ref="table"
           class="mt25"
-          :loading="loading"
-          highlight-row
+          v-loading="loading"
+          highlight-current-row
           no-userFrom-text="暂无数据"
           no-filtered-userFrom-text="暂无筛选结果"
         >
-          <template slot-scope="{ row }" slot="income_price">
-            <span style="color: #f5222d">￥{{ row.income_price }}</span>
-          </template>
-          <template slot-scope="{ row }" slot="exp_price">
-            <span style="color: #00c050">￥{{ row.exp_price }}</span>
-          </template>
-          <template slot-scope="{ row }" slot="entry_price">
-            <span>￥{{ row.entry_price }}</span>
-          </template>
-          <template slot-scope="{ row }" slot="action">
-            <a @click="Info(row)">账单详情</a>
-            <Divider type="vertical" />
-            <a @click="download(row)">下载</a>
-          </template>
-        </Table>
+          <el-table-column label="ID" width="80">
+            <template slot-scope="scope">
+              <span>{{ scope.row.id }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="标题" min-width="130">
+            <template slot-scope="scope">
+              <span>{{ scope.row.title }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="日期" min-width="130">
+            <template slot-scope="scope">
+              <span>{{ scope.row.add_time }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="收入金额" min-width="130">
+            <template slot-scope="scope">
+              <span style="color: #f5222d">￥{{ scope.row.income_price }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="支出金额" min-width="130">
+            <template slot-scope="scope">
+              <span style="color: #00c050">￥{{ scope.row.exp_price }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="入账金额" min-width="130">
+            <template slot-scope="scope">
+              <span>￥{{ scope.row.entry_price }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" fixed="right" width="170">
+            <template slot-scope="scope">
+              <a @click="Info(scope.row)">账单详情</a>
+              <el-divider direction="vertical"></el-divider>
+              <a @click="download(scope.row)">下载</a>
+            </template>
+          </el-table-column>
+        </el-table>
         <div class="acea-row row-right page">
-          <Page
+          <pagination
+            v-if="total"
             :total="total"
-            :current="formValidate.page"
-            show-elevator
-            show-total
-            @on-change="pageChange"
-            :page-size="formValidate.limit"
+            :page.sync="formValidate.page"
+            :limit.sync="formValidate.limit"
+            @pagination="getList"
           />
         </div>
       </div>
-    </Card>
+    </el-card>
     <Modal
       v-model="modals"
       scrollable
@@ -110,7 +132,6 @@ export default {
       total: 0,
       loading: false,
       tab: 'day',
-      staff: [],
       columns: [
         {
           title: 'ID',
@@ -184,7 +205,7 @@ export default {
   },
   computed: {
     labelWidth() {
-      return this.isMobile ? undefined : 80;
+      return this.isMobile ? undefined : '85px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -192,16 +213,9 @@ export default {
   },
   mounted() {
     this.onClickTab(this.tab);
-    this.staffApi();
   },
   methods: {
-    staffApi() {
-      staffListInfo().then((res) => {
-        this.staff = res.data;
-      });
-    },
-    onClickTab(e) {
-      this.tab = e;
+    onClickTab() {
       this.getList();
     },
     search() {
@@ -234,11 +248,6 @@ export default {
       this.timeVal = e;
       this.formValidate.time = this.timeVal[0] ? this.timeVal.join('-') : '';
       this.formValidate.page = 1;
-      this.getList();
-    },
-    //分页
-    pageChange(status) {
-      this.formValidate.page = status;
       this.getList();
     },
     // 账单详情

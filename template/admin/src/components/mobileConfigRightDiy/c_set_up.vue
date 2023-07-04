@@ -1,10 +1,10 @@
 <template>
   <div class="setUp">
     <template>
-      <Tabs v-model="configData.tabVal">
-        <TabPane label="内容设置" />
-        <TabPane label="样式设置" />
-      </Tabs>
+      <el-tabs v-model="configData.tabVal">
+        <el-tab-pane label="内容设置" />
+        <el-tab-pane label="样式设置" />
+      </el-tabs>
     </template>
   </div>
 </template>

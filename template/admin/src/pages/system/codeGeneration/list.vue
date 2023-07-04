@@ -1,52 +1,65 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Button type="primary" @click="groupAdd()" class="mr20">添加功能</Button>
-      <!-- <Button type="success" @click="buildCode()" class="mr20">重新发布</Button> -->
-      <Table
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-button type="primary" @click="groupAdd()" class="mr20">添加功能</el-button>
+      <!-- <el-button type="success" @click="buildCode()" class="mr20">重新发布</el-button> -->
+      <el-table
         :columns="columns1"
         :data="tabList"
         ref="table"
         class="mt25"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row, index }" slot="statuss">
-          <i-switch
-            v-model="row.status"
-            :value="row.status"
-            :true-value="1"
-            :false-value="0"
-            @on-change="onchangeIsShow(row)"
-            size="large"
-          >
-            <span slot="open">显示</span>
-            <span slot="close">隐藏</span>
-          </i-switch>
-        </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="edit(row, '编辑')">查看</a>
-          <Divider type="vertical" />
-          <a @click="editItem(row)">编辑</a>
-          <Divider type="vertical" />
-          <a @click="downLoad(row)">下载</a>
-          <Divider type="vertical" />
-          <a @click="del(row, '删除', index)">删除</a>
-        </template>
-      </Table>
+        <el-table-column label="ID" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="菜单名" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="表名" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.table_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="表备注" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.table_comment }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="添加时间" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.add_time }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="170">
+          <template slot-scope="scope">
+            <a @click="edit(scope.row, '编辑')">查看</a>
+            <el-divider direction="vertical"></el-divider>
+            <a @click="editItem(scope.row)">编辑</a>
+            <el-divider direction="vertical"></el-divider>
+            <a @click="downLoad(scope.row)">下载</a>
+            <el-divider direction="vertical"></el-divider>
+            <a @click="del(scope.row, '删除', index)">删除</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="formValidate.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="formValidate.limit"
+          :page.sync="formValidate.page"
+          :limit.sync="formValidate.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
     <Drawer
       :class-name="className"
       title="Create"
@@ -70,12 +83,12 @@
         <span>{{ title }}</span>
       </p>
       <div class="file" style="height: 100%">
-        <Button class="save" type="primary" @click="pwdModal = true">保存</Button>
+        <el-button class="save" type="primary" @click="pwdModal = true">保存</el-button>
 
         <div class="file-box">
           <div class="file-fix"></div>
           <div class="file-content">
-            <!-- <Tabs
+            <!-- <el-tabs
               type="card"
               v-model="indexEditor"
               style="height: 100%"
@@ -84,7 +97,7 @@
               closable
               @on-tab-remove="handleTabRemove"
             >
-              <TabPane
+              <el-tab-pane
                 v-for="value in editorIndex"
                 :key="value.index"
                 :name="value.index.toString()"
@@ -96,12 +109,12 @@
                   :id="'container_' + value.index"
                   style="height: 100%; min-height: calc(100vh - 110px)"
                 ></div>
-              </TabPane>
-            </Tabs> -->
+              </el-tab-pane>
+            </el-tabs> -->
             <el-tabs v-model="indexEditor" type="card" @tab-click="toggleEditor">
               <el-tab-pane v-for="value in editorIndex" :key="value.index">
                 <span slot="label">
-                  <el-tooltip class="item" effect="dark" :content="value.title" placement="top">
+                  <el-tooltip effect="light" class="item" :content="value.title" placement="top">
                     <span>{{ value.file_name }}</span>
                   </el-tooltip>
                 </span>
@@ -123,8 +136,8 @@
 
       <!-- </Modal> -->
       <!-- <div class="demo-drawer-footer">
-        <Button style="margin-right: 8px" @click="modals = false">关闭</Button>
-        <Button type="primary" @click="modals = false">保存</Button>
+        <el-button style="margin-right: 8px" @click="modals = false">关闭</el-button>
+        <el-button type="primary" @click="modals = false">保存</el-button>
       </div> -->
     </Drawer>
     <Modal
@@ -149,7 +162,7 @@
       @on-ok="crudSaveFile"
       @on-cancel="pwdModal = false"
     >
-      <Input v-model="pwd" type="password" placeholder="请输入文件管理密码"></Input>
+      <el-input v-model="pwd" type="password" placeholder="请输入文件管理密码"></el-input>
     </Modal>
   </div>
 </template>
@@ -160,7 +173,7 @@ import { crudList, crudDet, crudDownload, crudSaveFile } from '@/api/systemCodeG
 import * as monaco from 'monaco-editor';
 import { getCookies, removeCookies } from '@/libs/util';
 import Setting from '@/setting';
-import { Input } from 'view-design';
+// import { el-input } from 'view-design';
 export default {
   data() {
     return {
@@ -249,7 +262,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -320,10 +333,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.formValidate.page = index;
-      this.getList();
     },
     // 表格搜索
     userSearchs() {

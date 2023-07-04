@@ -3,20 +3,20 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <span>
-          <Button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
+          <el-button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</el-button>
         </span>
-        <Divider type="vertical" />
+        <el-divider direction="vertical"></el-divider>
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
       </div>
     </div>
     <cards-data :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
       <div class="table-head">
         <h3>关注趋势</h3>
         <DatePicker
           :editable="false"
           :clearable="false"
-          @on-change="onchangeTime"
+          @change="onchangeTime"
           :value="timeVal"
           format="yyyy/MM/dd"
           type="daterange"
@@ -28,7 +28,7 @@
         ></DatePicker>
       </div>
       <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
-    </Card>
+    </el-card>
     <Spin size="large" fix v-if="spinShow"></Spin>
   </div>
 </template>

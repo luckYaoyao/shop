@@ -1,12 +1,12 @@
 <template>
   <div class="box" v-if="configData">
     <div class="c_row-item">
-      <Col class="label" span="4">
+      <el-col class="label" :span="4">
         {{ configData.title }}
-      </Col>
-      <Col span="19" class="slider-box">
+      </el-col>
+      <el-col span="19" class="slider-box">
         <div @click="getLink(configData.title)">
-          <Input
+          <el-input
             :icon="configData.title == '链接' ? 'ios-arrow-forward' : ''"
             :readonly="configData.title == '链接' ? true : false"
             v-model="configData.value"
@@ -14,7 +14,7 @@
             :maxlength="configData.max"
           />
         </div>
-      </Col>
+      </el-col>
     </div>
     <linkaddress ref="linkaddres" @linkUrl="linkUrl"></linkaddress>
   </div>

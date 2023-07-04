@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
@@ -9,10 +9,10 @@
         class="tabform"
         @submit.native.prevent
       >
-        <Row :gutter="24" type="flex" justify="end">
-          <Col span="24" class="ivu-text-left">
-            <FormItem label="留言信息：">
-              <Input
+        <el-row :gutter="24" justify="end">
+          <el-col :span="24" class="ivu-text-left">
+            <el-form-item label="留言信息：">
+              <el-input
                 search
                 enter-button
                 @on-search="selChange"
@@ -22,21 +22,23 @@
                 style="width: 30%; display: inline-table"
                 class="mr"
               />
-            </FormItem>
-          </Col>
-          <Col span="24" class="ivu-text-left">
-            <FormItem label="留言时间：">
-              <RadioGroup
+            </el-form-item>
+          </el-col>
+          <el-col :span="24" class="ivu-text-left">
+            <el-form-item label="留言时间：">
+              <el-radio-group
                 v-model="formValidate.time"
                 type="button"
-                @on-change="selectChange(formValidate.time)"
+                @change="selectChange(formValidate.time)"
                 class="mr"
               >
-                <Radio :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</Radio>
-              </RadioGroup>
+                <el-radio-button :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{
+                  item.text
+                }}</el-radio-button>
+              </el-radio-group>
               <DatePicker
                 :editable="false"
-                @on-change="onchangeTime"
+                @change="onchangeTime"
                 :value="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
@@ -44,30 +46,53 @@
                 placeholder="请选择时间"
                 style="width: 200px"
               ></DatePicker>
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
-      <Table
-        :columns="columns1"
-        :data="list"
-        :loading="loading"
-        no-userFrom-text="暂无数据"
-        no-filtered-userFrom-text="暂无筛选结果"
-      >
-        <template slot-scope="{ row, index }" slot="status">
-          <div>{{ row.status === 1 ? '已处理' : '未处理' }}</div>
-        </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="remarks(row.id)">{{ row.status === 1 ? '备注' : '处理' }}</a>
-          <Divider type="vertical" />
-          <a @click="del(row, '删除反馈', index)">删除</a>
-        </template>
-      </Table>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table :data="list" :loading="loading" no-userFrom-text="暂无数据" no-filtered-userFrom-text="暂无筛选结果">
+        <el-table-column label="ID" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="昵称" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.rela_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="电话" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.phone }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="内容" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.content }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" min-width="130">
+          <template slot-scope="scope">
+            <div>{{ scope.row.status === 1 ? '已处理' : '未处理' }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="时间" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.add_time }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="170">
+          <template slot-scope="scope">
+            <a @click="remarks(scope.row.id)">{{ scope.row.status === 1 ? '备注' : '处理' }}</a>
+            <el-divider direction="vertical"></el-divider>
+            <a @click="del(scope.row, '删除反馈', index)">删除</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page :total="count" show-elevator show-total @on-change="pageChange" :page-size="limit" />
+        <pagination v-if="total" :total="total" :page.sync="page" :limit.sync="limit" @pagination="getList" />
       </div>
-    </Card>
+    </el-card>
   </div>
 </template>
 
@@ -100,51 +125,13 @@ export default {
         ],
       },
       timeVal: [],
-      count: 0,
-      columns1: [
-        {
-          title: 'ID',
-          key: 'id',
-          width: 80,
-        },
-        {
-          title: '昵称',
-          key: 'rela_name',
-          minWidth: 120,
-        },
-        {
-          title: '电话',
-          key: 'phone',
-          minWidth: 120,
-        },
-        {
-          title: '内容',
-          key: 'content',
-          minWidth: 320,
-        },
-        {
-          title: '状态',
-          slot: 'status',
-          minWidth: 120,
-        },
-        {
-          title: '时间',
-          key: 'add_time',
-          minWidth: 120,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 150,
-        },
-      ],
+      total: 0,
     };
   },
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 80;
+      return this.isMobile ? undefined : '85px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -185,7 +172,7 @@ export default {
         title: this.formValidate.title,
       }).then((res) => {
         this.list = res.data.data;
-        this.count = res.data.count;
+        this.total = res.data.total;
       });
     },
     // 删除
@@ -205,10 +192,6 @@ export default {
         .catch((res) => {
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.page = index;
-      this.getList();
     },
   },
 };

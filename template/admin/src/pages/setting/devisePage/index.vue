@@ -3,13 +3,13 @@
     <div class="i-layout-page-header header_top">
       <div class="i-layout-page-header fl_header">
         <router-link :to="{ path: $routeProStr + '/setting/pages/devise' }"
-          ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
+          ><el-button icon="ios-arrow-back" size="small" type="text">返回</el-button></router-link
         >
-        <Divider type="vertical" />
+        <el-divider direction="vertical"></el-divider>
         <span class="ivu-page-header-title mr20" style="padding: 0">页面设计</span>
       </div>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
       <div class="flex-wrapper">
         <!-- :src="iframeUrl" -->
         <iframe class="iframe-box" :src="iframeUrl" frameborder="0" ref="iframe"></iframe>
@@ -20,7 +20,7 @@
         </div>
         <!-- <links v-if="show"></links> -->
       </div>
-    </Card>
+    </el-card>
   </div>
 </template>
 

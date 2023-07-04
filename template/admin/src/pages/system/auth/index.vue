@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
       <div class="auth acea-row row-between-wrapper">
         <div class="acea-row row-middle">
           <Icon type="ios-bulb-outline" class="iconIos blue" />
@@ -13,14 +13,14 @@
             <div class="code">未授权</div>
           </div>
         </div>
-        <!-- <Button class="grey" @click="toCrmeb()" v-if="status === 1">进入官网</Button> -->
+        <!-- <el-button class="grey" @click="toCrmeb()" v-if="status === 1">进入官网</el-button> -->
         <div>
-          <Button type="primary" @click="toCrmeb()" v-if="status === 1">进入官网</Button>
-          <Button type="primary" @click="payment('bz')" v-if="status !== 1">购买授权</Button>
+          <el-button type="primary" @click="toCrmeb()" v-if="status === 1">进入官网</el-button>
+          <el-button type="primary" @click="payment('bz')" v-if="status !== 1">购买授权</el-button>
         </div>
       </div>
-    </Card>
-    <Card :bordered="false" dis-hover class="ivu-mt" v-if="!copyright && status == 1">
+    </el-card>
+    <el-card :bordered="false" shadow="never" class="ivu-mt" v-if="!copyright && status == 1">
       <!-- v-if="copyright == '0' && status == 1" -->
       <div class="auth acea-row row-between-wrapper">
         <div class="acea-row row-middle">
@@ -31,19 +31,19 @@
             <div class="pro_price" v-if="productStatus">￥{{ price }}</div>
           </div>
         </div>
-        <Button type="primary" @click="payment('copyright')">立即购买</Button>
+        <el-button type="primary" @click="payment('copyright')">立即购买</el-button>
       </div>
-    </Card>
-    <Card :bordered="false" dis-hover class="ivu-mt" v-if="copyright">
+    </el-card>
+    <el-card :bordered="false" shadow="never" class="ivu-mt" v-if="copyright">
       <div class="auth acea-row row-between-wrapper">
         <div class="acea-row row-middle">
           <span class="iconfont iconbanquan iconIos blue"></span>
           <div class="acea-row row-middle">
             <span class="update">修改授权信息:</span>
-            <Input style="width: 460px" v-model="copyrightText" />
+            <el-input style="width: 460px" v-model="copyrightText" />
           </div>
         </div>
-        <Button type="primary" @click="saveCopyRight">保存</Button>
+        <el-button type="primary" @click="saveCopyRight">保存</el-button>
       </div>
       <div class="authorized">
         <div>
@@ -57,7 +57,7 @@
         </div>
       </div>
       <span class="prompt">建议尺寸：宽290px*高100px</span>
-    </Card>
+    </el-card>
 
     <Modal
       v-model="isTemplate"
@@ -105,7 +105,7 @@ export default {
     ...mapState('admin/layout', ['isMobile']),
     ...mapState('admin/userLevel', ['categoryId']),
     labelWidth() {
-      return this.isMobile ? undefined : 85;
+      return this.isMobile ? undefined : '85px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';

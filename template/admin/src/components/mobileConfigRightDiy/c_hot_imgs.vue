@@ -35,7 +35,7 @@
             <div class="info-item" v-for="(infos, key) in item.info" :key="key">
               <span>{{ infos.title }}</span>
               <div class="input-box">
-                <Input v-model="infos.value" :placeholder="infos.tips" :maxlength="infos.max" />
+                <el-input v-model="infos.value" :placeholder="infos.tips" :maxlength="infos.max" />
               </div>
             </div>
           </div>
@@ -43,7 +43,7 @@
       </draggable>
     </div>
     <div class="add-btn" v-if="defaults.menu.length < 4">
-      <Button style="width: 100%; height: 40px" @click="addBox">添加板块</Button>
+      <el-button style="width: 100%; height: 40px" @click="addBox">添加板块</el-button>
     </div>
   </div>
 </template>

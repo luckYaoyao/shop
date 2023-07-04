@@ -1,6 +1,6 @@
 <template>
-  <Card :bordered="false" dis-hover>
-    <Alert closable="true">
+  <el-card :bordered="false" shadow="never">
+    <Alert :closable="true">
       <template slot="desc">
         启动定时任务两种方式：<br />
         1、使用命令启动：php think timer start
@@ -8,28 +8,51 @@
         2、使用接口触发定时任务，建议每分钟调用一次，接口地址 https://您的域名/api/crontab/run
       </template>
     </Alert>
-    <Button type="primary" @click="addTask">添加定时任务</Button>
-    <Table :columns="columns" :data="tableData" :loading="loading" class="ivu-mt">
-      <template slot-scope="{ row }" slot="execution_cycle">
-        <span>{{ taskTrip(row) }}</span>
-      </template>
-      <template slot-scope="{ row }" slot="is_open">
-        <i-switch v-model="row.is_open" :true-value="1" :false-value="0" size="large" @on-change="handleChange(row)">
-          <span slot="open">开启</span>
-          <span slot="close">关闭</span>
-        </i-switch>
-      </template>
-      <template slot-scope="{ row }" slot="action">
-        <a @click="edit(row.id)">编辑</a>
-        <Divider type="vertical" />
-        <a @click="handleDelete(row, '删除秒杀商品', index)">删除</a>
-      </template>
-    </Table>
+    <el-button type="primary" @click="addTask">添加定时任务</el-button>
+    <el-table :columns="columns" :data="tableData" :loading="loading" class="ivu-mt">
+      <el-table-column label="title" min-width="150">
+        <template slot-scope="scope">
+          <span>{{ scope.row.name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="任务说明" min-width="130">
+        <template slot-scope="scope">
+          <span>{{ scope.row.content }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="执行周期" min-width="130">
+        <template slot-scope="scope">
+          <span>{{ taskTrip(scope.row) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="是否开启" min-width="130">
+        <template slot-scope="scope">
+          <el-switch
+            class="defineSwitch"
+            :active-value="1"
+            :inactive-value="0"
+            v-model="scope.row.is_open"
+            size="large"
+            @change="handleChange(scope.row)"
+            active-text="开启"
+            inactive-text="关闭"
+          >
+          </el-switch>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" fixed="right" width="170">
+        <template slot-scope="scope">
+          <a @click="edit(scope.row.id)">编辑</a>
+          <el-divider direction="vertical"></el-divider>
+          <a @click="handleDelete(scope.row, '删除秒杀商品', index)">删除</a>
+        </template>
+      </el-table-column>
+    </el-table>
     <div class="acea-row row-right page">
-      <Page :total="total" :current="page" show-elevator show-total @on-change="pageChange" :page-size="limit" />
+      <pagination v-if="total" :total="total" :page.sync="page" :limit.sync="limit" @pagination="getList" />
     </div>
     <creatTask ref="addTask" @submitAsk="getList"></creatTask>
-  </Card>
+  </el-card>
 </template>
 
 <script>
@@ -159,10 +182,6 @@ export default {
         .catch((res) => {
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.page = index;
-      this.getList();
     },
   },
 };

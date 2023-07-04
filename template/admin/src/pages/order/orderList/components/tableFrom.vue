@@ -1,44 +1,44 @@
 <template>
   <div class="table_box">
-    <Form
+    <el-form
       ref="orderData"
       :model="orderData"
-      :label-width="80"
+      label-width="100px"
       label-position="right"
       class="tabform"
       @submit.native.prevent
     >
-      <Row :gutter="24" type="flex" justify="end">
-        <Col span="24" class="ivu-text-left">
-          <FormItem label="订单状态：">
-            <RadioGroup v-model="orderData.status" type="button" @on-change="selectChange2(orderData.status)">
-              <Radio label="">全部</Radio>
-              <Radio label="0">未支付</Radio>
-              <Radio label="1">未发货</Radio>
-              <Radio label="2">待收货</Radio>
-              <Radio label="3">待评价</Radio>
-              <Radio label="4">交易完成</Radio>
-              <Radio label="5">待核销</Radio>
-              <Radio label="6">已核销</Radio>
-              <!--                                <Radio label="-1">退款中 {{  '(' +orderChartType.refunding?orderChartType.refunding:0+ ')' }}</Radio>-->
-              <!--                                <Radio label="-2">已退款 {{  '(' +orderChartType.refund?orderChartType.refund:0+ ')' }}</Radio>-->
-              <Radio label="-2">已退款</Radio>
-              <Radio label="-4">已删除</Radio>
-            </RadioGroup>
-          </FormItem>
-        </Col>
-        <Col span="24" class="ivu-text-left">
-          <FormItem label="支付方式：">
-            <RadioGroup v-model="orderData.pay_type" type="button" @on-change="userSearchs">
-              <Radio v-for="item in payList" :label="item.val" :key="item.id">{{ item.label }}</Radio>
-            </RadioGroup>
-          </FormItem>
-        </Col>
-        <Col span="8" class="ivu-text-left">
-          <FormItem label="创建时间：">
+      <el-row :gutter="24" justify="end">
+        <el-col :span="24" class="ivu-text-left">
+          <el-form-item label="订单状态：">
+            <el-radio-group v-model="orderData.status" type="button" @change="selectChange2(orderData.status)">
+              <el-radio-button label="">全部</el-radio-button>
+              <el-radio-button label="0">未支付</el-radio-button>
+              <el-radio-button label="1">未发货</el-radio-button>
+              <el-radio-button label="2">待收货</el-radio-button>
+              <el-radio-button label="3">待评价</el-radio-button>
+              <el-radio-button label="4">交易完成</el-radio-button>
+              <el-radio-button label="5">待核销</el-radio-button>
+              <el-radio-button label="6">已核销</el-radio-button>
+              <!--                                <el-radio-button label="-1">退款中 {{  '(' +orderChartType.refunding?orderChartType.refunding:0+ ')' }}</el-radio-button>-->
+              <!--                                <el-radio-button label="-2">已退款 {{  '(' +orderChartType.refund?orderChartType.refund:0+ ')' }}</el-radio-button>-->
+              <el-radio-button label="-2">已退款</el-radio-button>
+              <el-radio-button label="-4">已删除</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24" class="ivu-text-left">
+          <el-form-item label="支付方式：">
+            <el-radio-group v-model="orderData.pay_type" type="button" @change="userSearchs">
+              <el-radio-button v-for="item in payList" :label="item.val" :key="item.id">{{ item.label }}</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8" class="ivu-text-left">
+          <el-form-item label="创建时间：">
             <DatePicker
               :editable="false"
-              @on-change="onchangeTime"
+              @change="onchangeTime"
               :value="timeVal"
               format="yyyy/MM/dd HH:mm:ss"
               type="datetimerange"
@@ -48,12 +48,12 @@
               class="mr20"
               :options="options"
             ></DatePicker>
-          </FormItem>
-        </Col>
-        <Col span="16">
-          <Col span="12" class="mr">
-            <FormItem label="搜索：" prop="real_name" label-for="real_name">
-              <Input
+          </el-form-item>
+        </el-col>
+        <el-col :span="16">
+          <el-col :span="12" class="mr">
+            <el-form-item label="搜索：" prop="real_name" label-for="real_name">
+              <el-input
                 v-model="orderData.real_name"
                 search
                 enter-button
@@ -61,36 +61,36 @@
                 element-id="name"
                 @on-search="orderSearch(orderData.real_name)"
               >
-                <Select v-model="orderData.field_key" slot="prepend" style="width: 80px">
-                  <Option value="all">全部</Option>
-                  <Option value="order_id">订单号</Option>
-                  <Option value="uid">UID</Option>
-                  <Option value="real_name">用户姓名</Option>
-                  <Option value="user_phone">用户电话</Option>
-                  <Option value="title">商品名称(模糊)</Option>
-                </Select>
-              </Input>
-            </FormItem>
-          </Col>
-          <!--<Col v-bind="grid">-->
-          <!--<Button class="mr">导出</Button>-->
+                <el-select v-model="orderData.field_key" slot="prepend" style="width: 80px">
+                  <el-option value="all" label="全部"></el-option>
+                  <el-option value="order_id" label="订单号"></el-option>
+                  <el-option value="uid" label="UID"></el-option>
+                  <el-option value="real_name" label="用户姓名"></el-option>
+                  <el-option value="user_phone" label="用户电话"></el-option>
+                  <el-option value="title" label="商品名称(模糊)"></el-option>
+                </el-select>
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <!--<el-col v-bind="grid">-->
+          <!--<el-button class="mr">导出</el-button>-->
           <!--<span class="Refresh" @click="Refresh">刷新</span><Icon type="ios-refresh" />-->
-          <!--</Col>-->
-        </Col>
-        <Col span="24">
+          <!--</el-col>-->
+        </el-col>
+        <el-col :span="24">
           <div class="ml20">
-            <Button v-auth="['order-dels']" class="mr10" type="primary" @click="delAll">批量删除订单</Button>
-            <Button v-auth="['order-write']" type="success" class="mr10 greens" size="default" @click="writeOff">
+            <el-button v-auth="['order-dels']" class="mr10" type="primary" @click="delAll">批量删除订单</el-button>
+            <el-button v-auth="['order-write']" type="success" class="mr10 greens"  @click="writeOff">
               <Icon type="md-list"></Icon>
               订单核销
-            </Button>
-            <Button v-auth="['export-storeOrder']" class="export" icon="ios-share-outline" @click="exportList"
-              >导出</Button
+            </el-button>
+            <el-button v-auth="['export-storeOrder']" class="export" icon="ios-share-outline" @click="exportList"
+              >导出</el-button
             >
           </div>
-        </Col>
-      </Row>
-    </Form>
+        </el-col>
+      </el-row>
+    </el-form>
     <!--订单核销模态框-->
     <Modal
       v-model="modals2"
@@ -100,7 +100,7 @@
       width="400"
       @on-visible-change="changeModal"
     >
-      <Form
+      <el-form
         ref="writeOffFrom"
         :model="writeOffFrom"
         :rules="writeOffRules"
@@ -108,13 +108,13 @@
         class="tabform"
         @submit.native.prevent
       >
-        <FormItem prop="code" label-for="code">
-          <Input style="width: 100%" type="text" placeholder="请输入12位核销码" v-model.number="writeOffFrom.code" />
-        </FormItem>
-      </Form>
+        <el-form-item prop="code" label-for="code">
+          <el-input style="width: 100%" type="text" placeholder="请输入12位核销码" v-model.number="writeOffFrom.code" />
+        </el-form-item>
+      </el-form>
       <div slot="footer">
-        <Button type="primary" @click="ok('writeOffFrom')">立即核销</Button>
-        <Button @click="del('writeOffFrom')">取消</Button>
+        <el-button type="primary" @click="ok('writeOffFrom')">立即核销</el-button>
+        <el-button @click="del('writeOffFrom')">取消</el-button>
       </div>
     </Modal>
   </div>

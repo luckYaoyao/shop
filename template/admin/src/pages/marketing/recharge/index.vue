@@ -38,48 +38,60 @@
 
       <div v-if="name == 'user_recharge_quota'" style="margin-left: 20px">
         <div class="table_box">
-          <div type="flex">
+          <div>
             <div v-bind="grid">
               <div class="title">充值金额设置</div>
-              <Button
+              <el-button
                 type="primary"
                 icon="md-add"
                 @click="groupAdd('添加数据')"
                 style="margin-left: 14px; margin-top: 30px"
-                >添加数据</Button
+                >添加数据</el-button
               >
             </div>
           </div>
           <div class="table">
-            <Table
+            <el-table
               :columns="columns1"
               :data="sginList.list"
               ref="table"
               class="mt25"
               :loading="loading"
-              highlight-row
+              highlight-current-row
               no-userFrom-text="暂无数据"
               no-filtered-userFrom-text="暂无筛选结果"
             >
-              <template slot-scope="{ row, index }" slot="status">
-                <i-switch
-                  v-model="row.status"
-                  :value="row.status"
-                  :true-value="1"
-                  :false-value="0"
-                  @on-change="onchangeIsShow(row)"
-                  size="large"
-                >
-                  <span slot="open">显示</span>
-                  <span slot="close">隐藏</span>
-                </i-switch>
-              </template>
-              <template slot-scope="{ row, index }" slot="action">
-                <a @click="edit(row, '编辑')">编辑</a>
-                <Divider type="vertical" />
-                <a @click="del(row, '删除这条信息', index)">删除</a>
-              </template>
-            </Table>
+              <el-table-column
+                :label="item.title"
+                :min-width="item.minWidth"
+                v-for="(item, index) in columns1"
+                :key="index"
+              >
+                <template slot-scope="scope">
+                  <template v-if="item.key">
+                    <div>
+                      <span>{{ scope.row[item.key] }}</span>
+                    </div>
+                  </template>
+                  <template v-else-if="item.slot === 'status'">
+                    <el-switch
+                      :active-value="1"
+                      :inactive-value="0"
+                      v-model="scope.row.status"
+                      :value="scope.row.status"
+                      @change="onchangeIsShow(scope.row)"
+                      size="large"
+                    >
+                    </el-switch>
+                  </template>
+                  <template v-else-if="item.slot === 'action'">
+                    <a @click="edit(scope.row, '编辑')">编辑</a>
+                    <el-divider direction="vertical"></el-divider>
+                    <a @click="del(scope.row, '删除这条信息', index)">删除</a>
+                  </template>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </div>
       </div>
@@ -125,7 +137,7 @@ export default {
       };
     },
     labelWidth() {
-      return this.isMobile ? undefined : 120;
+      return this.isMobile ? undefined : '120px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -859,7 +871,6 @@ export default {
 }
 
 .table {
-  width: 700px;
   color: #515a6e;
   font-size: 14px;
   background-color: #fff;

@@ -1,34 +1,37 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt mb10">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt mb10">
+      <el-form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <Row type="flex" :gutter="24" align="middle">
-          <Col>
-            <FormItem label="状态：">
-              <Select
+        <el-row :gutter="24" align="middle">
+          <el-col>
+            <el-form-item label="状态：">
+              <el-select
                 style="width: 200px"
                 v-model="formValidate.status"
                 placeholder="请选择状态"
                 element-id="group_id"
                 clearable
-                @on-change="userSearchs"
+                @change="userSearchs"
               >
-                <Option value="all">全部</Option>
-                <Option :value="item.id" v-for="(item, index) in statusList" :key="index">{{
-                  item.status_name
-                }}</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col>
-            <FormItem label="搜索：">
-              <Input
+                <el-option value="all" label="全部"></el-option>
+                <el-option
+                  :value="item.id"
+                  v-for="(item, index) in statusList"
+                  :key="index"
+                  :label="item.status_name"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col>
+            <el-form-item label="搜索：">
+              <el-input
                 style="width: 250px"
                 search
                 enter-button
@@ -36,57 +39,89 @@
                 v-model="formValidate.keyword"
                 @on-search="userSearchs"
               />
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
-    </Card>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Row class="ivu-mt box-wrapper">
-        <Col :xs="24" :sm="24" ref="rightBox">
-          <Table
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-card>
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-row class="ivu-mt box-wrapper">
+        <el-col :xs="24" :sm="24" ref="rightBox">
+          <el-table
             :columns="columns"
             :data="userLists"
             ref="table"
-            :loading="loading"
-            highlight-row
+            v-loading="loading"
+            highlight-current-row
             no-formValidate-text="暂无数据"
             no-filtered-formValidate-text="暂无筛选结果"
           >
-            <template slot-scope="{ row, index }" slot="images">
-              <div class="pictrue-box" v-if="row.images.length">
-                <div v-viewer v-for="(item, index) in row.images || []" :key="index">
-                  <img class="pictrue mr10" v-lazy="item" :src="item" />
+            <el-table-column label="用户UID" width="80">
+              <template slot-scope="scope">
+                <span>{{ scope.row.uid }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="代理商名称" min-width="150">
+              <template slot-scope="scope">
+                <span>{{ scope.row.agent_name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="代理商电话" min-width="150">
+              <template slot-scope="scope">
+                <span>{{ scope.row.phone }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="事业部ID" min-width="150">
+              <template slot-scope="scope">
+                <span>{{ scope.row.division_id }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="申请图片" min-width="150">
+              <template slot-scope="scope">
+                <div class="pictrue-box" v-if="scope.row.images.length">
+                  <div v-viewer v-for="(item, index) in scope.row.images || []" :key="index">
+                    <img class="pictrue mr10" v-lazy="item" :src="item" />
+                  </div>
                 </div>
-              </div>
-            </template>
-            <template slot-scope="{ row, index }" slot="status">
-              <Tag>{{ row.status == 0 ? '申请中' : row.status == 1 ? '已同意' : '已拒绝' }}</Tag>
-            </template>
-            <template slot-scope="{ row, index }" slot="division_end_time">
-              <span> {{ row.division_end_time }}</span>
-            </template>
-            <template slot-scope="{ row, index }" slot="action">
-              <a v-if="row.status == 0" @click="groupAdd(row.id, 1)">同意</a>
-              <Divider v-if="row.status == 0" type="vertical" />
-              <a v-if="row.status == 0" @click="groupAdd(row.id, 0)">拒绝</a>
-              <Divider type="vertical" v-if="row.status == 0" />
-              <a @click="del(row, '删除申请', index)">删除</a>
-            </template>
-          </Table>
+              </template>
+            </el-table-column>
+            <el-table-column label="申请时间" min-width="150">
+              <template slot-scope="scope">
+                <span>{{ scope.row.add_time }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="申请状态" min-width="150">
+              <template slot-scope="scope">
+                <Tag>{{ scope.row.status == 0 ? '申请中' : scope.row.status == 1 ? '已同意' : '已拒绝' }}</Tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="邀请码" min-width="150">
+              <template slot-scope="scope">
+                <Tag>{{ scope.row.division_invite }}</Tag>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" fixed="right" width="170">
+              <template slot-scope="scope">
+                <a v-if="scope.row.status == 0" @click="groupAdd(scope.row.id, 1)">同意</a>
+                <el-divider v-if="scope.row.status == 0" direction="vertical" />
+                <a v-if="scope.row.status == 0" @click="groupAdd(scope.row.id, 0)">拒绝</a>
+                <el-divider direction="vertical" v-if="scope.row.status == 0" />
+                <a @click="del(scope.row, '删除申请', index)">删除</a>
+              </template>
+            </el-table-column>
+          </el-table>
           <div class="acea-row row-right page">
-            <Page
+            <pagination
+              v-if="total"
               :total="total"
-              :current="formValidate.page"
-              show-elevator
-              show-total
-              @on-change="pageChange"
-              :page-size="formValidate.limit"
+              :page.sync="formValidate.page"
+              :limit.sync="formValidate.limit"
+              @pagination="getList"
             />
           </div>
-        </Col>
-      </Row>
-    </Card>
+        </el-col>
+      </el-row>
+    </el-card>
   </div>
 </template>
 
@@ -204,7 +239,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';

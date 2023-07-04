@@ -1,14 +1,14 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
       <div>
-        <Tabs v-model="formValidate.factor" @on-click="onClickTab">
-          <TabPane v-for="(item, index) in tabs" :label="item.name" :name="item.type" :key="index" />
-        </Tabs>
+        <el-tabs v-model="formValidate.factor" @tab-click="onClickTab">
+          <el-tab-pane v-for="(item, index) in tabs" :label="item.name" :name="item.type" :key="index" />
+        </el-tabs>
       </div>
-      <Row type="flex" class="mt10 acea-row row-middle row-center">
-        <Col span="23">
-          <Form
+      <el-row class="mt10 acea-row row-middle row-center">
+        <el-col :span="23">
+          <el-form
             class="form mt30"
             ref="formValidate"
             :rules="ruleValidate"
@@ -18,69 +18,84 @@
             :label-position="labelPosition"
             @submit.native.prevent
           >
-            <Row type="flex">
-              <Col span="24">
-                <FormItem label="活动名称：" prop="name" label-for="name">
-                  <Input class="perW30" placeholder="请输入活动名称" element-id="name" v-model="formValidate.name" />
-                </FormItem>
-              </Col>
-              <Col span="24">
-                <FormItem label="活动时间：">
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="活动名称：" prop="name" label-for="name">
+                  <el-input class="perW30" placeholder="请输入活动名称" element-id="name" v-model="formValidate.name" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="活动时间：">
                   <div class="acea-row row-middle">
                     <DatePicker
                       :editable="false"
                       type="datetimerange"
                       format="yyyy-MM-dd HH:mm"
                       placeholder="请选择活动时间"
-                      @on-change="onchangeTime"
+                      @change="onchangeTime"
                       class="perW30"
                       v-model="formValidate.period"
                     ></DatePicker>
                   </div>
-                </FormItem>
-              </Col>
-              <Col span="24">
-                <FormItem label="参与用户：" prop="attends_user" label-for="attends_user">
-                  <RadioGroup element-id="attends_user" v-model="formValidate.attends_user" @on-change="changeUsers">
-                    <Radio :label="1" class="radio">全部用户</Radio>
-                    <Radio :label="2">部分用户</Radio>
-                  </RadioGroup>
-                </FormItem>
-              </Col>
-              <Col span="24" v-if="formValidate.attends_user == 2">
-                <FormItem label="" :prop="formValidate.attends_user == 2 ? 'user_level' : ''">
+                </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <el-form-item label="参与用户：" prop="attends_user" label-for="attends_user">
+                  <el-radio-group element-id="attends_user" v-model="formValidate.attends_user" @change="changeUsers">
+                    <el-radio :label="1" class="radio">全部用户</el-radio>
+                    <el-radio :label="2">部分用户</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" v-if="formValidate.attends_user == 2">
+                <el-form-item label="" :prop="formValidate.attends_user == 2 ? 'user_level' : ''">
                   <div class="acea-row row-middle">
-                    <Select multiple v-model="formValidate.user_level" class="perW30" placeholder="请选择用户等级">
-                      <Option v-for="item in userLevelListApi" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                    </Select>
+                    <el-select multiple v-model="formValidate.user_level" class="perW30" placeholder="请选择用户等级">
+                      <el-option
+                        v-for="item in userLevelListApi"
+                        :value="item.id"
+                        :key="item.id"
+                        :label="item.name"
+                      ></el-option>
+                    </el-select>
                   </div>
-                </FormItem>
-              </Col>
-              <Col span="24" v-if="formValidate.attends_user == 2">
-                <FormItem label="" :prop="formValidate.attends_user == 2 ? 'is_svip' : ''">
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" v-if="formValidate.attends_user == 2">
+                <el-form-item label="" :prop="formValidate.attends_user == 2 ? 'is_svip' : ''">
                   <div class="acea-row row-middle">
-                    <Select v-model="formValidate.is_svip" class="perW30" clearable placeholder="请选择是否是付费会员">
-                      <Option v-for="item in templateList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                    </Select>
+                    <el-select
+                      v-model="formValidate.is_svip"
+                      class="perW30"
+                      clearable
+                      placeholder="请选择是否是付费会员"
+                    >
+                      <el-option
+                        v-for="item in templateList"
+                        :value="item.id"
+                        :key="item.id"
+                        :label="item.name"
+                      ></el-option>
+                    </el-select>
                   </div>
-                </FormItem>
-              </Col>
-              <Col span="24" v-if="formValidate.attends_user == 2">
-                <FormItem label="" :prop="formValidate.attends_user == 2 ? 'user_label' : ''">
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" v-if="formValidate.attends_user == 2">
+                <el-form-item label="" :prop="formValidate.attends_user == 2 ? 'user_label' : ''">
                   <div class="acea-row row-middle">
-                    <!-- <Select
+                    <!-- <el-select
                       multiple
                       v-model="formValidate.user_label"
                       class="perW30"
                       placeholder="请选择用户标签"
                     >
-                      <Option
+                      <el-option
                         v-for="item in userLabelList"
                         :value="String(item.id)"
                         :key="item.id"
-                        >{{ item.label_name }}</Option
+                        >{{ item.label_name }}</el-option
                       >
-                    </Select> -->
+                    </el-select> -->
                     <div class="labelInput acea-row row-between-wrapper" @click="selectLabelShow = true">
                       <div class="">
                         <div v-if="selectDataLabel.length">
@@ -98,29 +113,30 @@
                     </div>
                   </div>
                   <div class="ml100 grey">三个条件都设置后,必须这些条件都满足的用户才能参加抽奖</div>
-                </FormItem>
-              </Col>
-              <Col span="24" v-if="formValidate.factor == 5">
-                <FormItem
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" v-if="formValidate.factor == 5">
+                <el-form-item
                   label="抽奖次数："
                   :prop="formValidate.factor == 5 ? 'lottery_num_term' : ''"
                   label-for="status"
                 >
-                  <RadioGroup element-id="lottery_num_term" v-model="formValidate.lottery_num_term">
-                    <Radio :label="1" class="radio">每天N次</Radio>
-                    <Radio :label="2">每人N次</Radio>
-                  </RadioGroup>
-                </FormItem>
-              </Col>
-              <Col span="24" v-if="formValidate.factor == 5">
-                <FormItem
+                  <el-radio-group element-id="lottery_num_term" v-model="formValidate.lottery_num_term">
+                    <el-radio :label="1" class="radio">每天N次</el-radio>
+                    <el-radio :label="2">每人N次</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" v-if="formValidate.factor == 5">
+                <el-form-item
                   label="邀请新用户最多可获得抽奖"
                   :prop="formValidate.factor == 5 ? 'lottery_num' : ''"
                   label-for="lottery_num"
                 >
                   <div class="acea-row row-middle">
                     <div class="mr10 grey"></div>
-                    <InputNumber
+                    <el-input-number
+                      controls-position="right"
                       placeholder=""
                       element-id="lottery_num"
                       :min="1"
@@ -130,17 +146,18 @@
                     />
                     <div class="ml10 grey">次</div>
                   </div>
-                </FormItem>
-              </Col>
-              <Col span="24" v-if="formValidate.factor == 5">
-                <FormItem
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" v-if="formValidate.factor == 5">
+                <el-form-item
                   label="邀请一位新用户关注公众号可获得抽奖"
                   :prop="formValidate.factor == 5 ? 'spread_num' : ''"
                   label-for="spread_num"
                 >
                   <div class="acea-row row-middle">
                     <div class="mr10 grey"></div>
-                    <InputNumber
+                    <el-input-number
+                      controls-position="right"
                       placeholder=""
                       element-id="spread_num"
                       :min="1"
@@ -150,10 +167,13 @@
                     />
                     <div class="ml10 grey">次</div>
                   </div>
-                </FormItem>
-              </Col>
-              <Col span="24" v-if="formValidate.factor == 1 || formValidate.factor == 3 || formValidate.factor == 4">
-                <FormItem
+                </el-form-item>
+              </el-col>
+              <el-col
+                :span="24"
+                v-if="formValidate.factor == 1 || formValidate.factor == 3 || formValidate.factor == 4"
+              >
+                <el-form-item
                   :label="formValidate.factor == 1 ? '抽奖消耗积分：' : '抽奖次数：'"
                   :prop="
                     formValidate.factor == 1 || formValidate.factor == 3 || formValidate.factor == 4 ? 'factor_num' : ''
@@ -162,7 +182,8 @@
                 >
                   <div class="acea-row row-middle">
                     <div class="mr10 grey"></div>
-                    <InputNumber
+                    <el-input-number
+                      controls-position="right"
                       placeholder=""
                       element-id="factor_num"
                       :min="1"
@@ -172,83 +193,108 @@
                     />
                     <div class="ml10 grey" v-if="formValidate.factor !== 1">次</div>
                   </div>
-                </FormItem>
-              </Col>
-            </Row>
-            <Row>
-              <Col span="24">
-                <FormItem label="规格选择：" prop="prize">
-                  <Table :data="specsData" :columns="columns" border :draggable="true" @on-drag-drop="onDragDrop">
-                    <template slot-scope="{ row, index }" slot="image">
-                      <div class="acea-row row-middle row-center-wrapper" @click="modalPicTap('dan', 'goods', index)">
-                        <div class="pictrue pictrueTab" v-if="row.image">
-                          <img v-lazy="row.image" />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="规格选择：" prop="prize">
+                  <el-table :data="specsData" border :draggable="true" @on-drag-drop="onDragDrop">
+                    <el-table-column label="序号" type="index" width="50"> </el-table-column>
+                    <el-table-column label="图片" min-width="80">
+                      <template slot-scope="scope">
+                        <div
+                          class="acea-row scope.row-middle scope.row-center-wrapper"
+                          @click="modalPicTap('dan', 'goods', index)"
+                        >
+                          <div class="pictrue pictrueTab" v-if="scope.row.image">
+                            <img v-lazy="scope.row.image" />
+                          </div>
+                          <div class="upLoad pictrueTab acea-row scope.row-center-wrapper" v-else>
+                            <Icon type="ios-camera-outline" size="21" class="iconfonts" />
+                          </div>
                         </div>
-                        <div class="upLoad pictrueTab acea-row row-center-wrapper" v-else>
-                          <Icon type="ios-camera-outline" size="21" class="iconfonts" />
-                        </div>
-                      </div>
-                    </template>
-                    <template slot-scope="{ row, index }" slot="total">
-                      <InputNumber
-                        v-model="row.total"
-                        :max="99999"
-                        :min="0"
-                        :precision="0"
-                        class="priceBox"
-                        @on-change="
-                          (data) => {
-                            changeTotal(data, index);
-                          }
-                        "
-                      ></InputNumber>
-                    </template>
-                    <template slot-scope="{ row, index }" slot="chance">
-                      <InputNumber
-                        v-model="row.chance"
-                        :max="100"
-                        :min="0"
-                        :precision="0"
-                        class="priceBox"
-                        @on-change="
-                          (data) => {
-                            changeChance(data, index);
-                          }
-                        "
-                      ></InputNumber>
-                    </template>
-                    <template slot-scope="{ row, index }" slot="type">
-                      <div>{{ row.type | typeName }}</div>
-                    </template>
-                    <template slot-scope="{ row, index }" slot="setting">
-                      <Button class="submission mr15" @click="editGoods(index)">编辑</Button>
-                      <!-- <Button
-                        v-if="row.type !== 1"
-                        class="submission mr15"
-                        @click="deleteGoods(index)"
-                        >删除</Button
-                      > -->
-                    </template>
-                  </Table>
-                  <Button v-if="specsData.length < 8" type="primary" class="submission mr15 mt20" @click="addGoods"
-                    >添加商品</Button
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="名称" min-width="80">
+                      <template slot-scope="scope">
+                        <div>{{ scope.row.name }}</div>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="奖品" min-width="80">
+                      <template slot-scope="scope">
+                        <div>{{ scope.row.type | typeName }}</div>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="提示语" min-width="80">
+                      <template slot-scope="scope">
+                        <div>{{ scope.row.prompt }}</div>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="数量" min-width="80">
+                      <template slot-scope="scope">
+                        <el-input-number
+                          controls-position="right"
+                          v-model="scope.row.total"
+                          :max="99999"
+                          :min="0"
+                          :precision="0"
+                          class="priceBox"
+                          @change="
+                            (data) => {
+                              changeTotal(data, index);
+                            }
+                          "
+                        ></el-input-number>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="奖品权重" min-width="80">
+                      <template slot-scope="scope">
+                        <el-input-number
+                          controls-position="right"
+                          v-model="scope.row.chance"
+                          :max="100"
+                          :min="0"
+                          :precision="0"
+                          class="priceBox"
+                          @change="
+                            (data) => {
+                              changeChance(data, index);
+                            }
+                          "
+                        ></el-input-number>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="奖品概率" min-width="80">
+                      <template slot-scope="scope">
+                        <div>{{ scope.row.probability }}</div>
+                      </template>
+                    </el-table-column>
+                    <el-table-column label="操作" fixed="right" width="120">
+                      <template slot-scope="scope">
+                        <el-button class="submission mr15" @click="editGoods(index)">编辑</el-button>
+                      </template></el-table-column
+                    >
+                  </el-table>
+                  <el-button v-if="specsData.length < 8" type="primary" class="submission mr15 mt20" @click="addGoods"
+                    >添加商品</el-button
                   >
-                </FormItem>
-                <FormItem>
+                </el-form-item>
+                <el-form-item>
                   <div class="pl60 grey">
                     奖品必须设置为8个，列表中拖拽可调整奖品在九宫中的位置
-                    <Poptip placement="bottom" width="380">
+                    <el-tooltip effect="light" placement="bottom" width="380">
                       <a>查看位置示例图</a>
                       <div class="api" slot="content">
                         <img src="../../../assets/images/lotteryTest.png" alt="" />
                       </div>
-                    </Poptip>
+                    </el-tooltip>
                   </div>
-                </FormItem>
-              </Col>
-            </Row>
+                </el-form-item>
+              </el-col>
+            </el-row>
             <div>
-              <FormItem
+              <el-form-item
                 v-if="formValidate.factor != 3 && formValidate.factor != 4"
                 :prop="formValidate.factor != 3 && formValidate.factor != 4 ? 'image' : ''"
               >
@@ -262,47 +308,47 @@
                 <div class="acea-row">
                   <div class="pictrue" v-if="formValidate.image">
                     <img v-lazy="formValidate.image" />
-                    <Button shape="circle" icon="md-close" @click.native="handleRemove()" class="btndel"></Button>
+                    <el-button shape="circle" icon="md-close" @click.native="handleRemove()" class="btndel"></el-button>
                   </div>
                   <div v-else class="upLoad acea-row row-center-wrapper" @click="modalPicTap('dan', 'danFrom')">
                     <Icon type="ios-camera-outline" size="26" class="iconfonts" />
                   </div>
                 </div>
-              </FormItem>
-              <FormItem
+              </el-form-item>
+              <el-form-item
                 v-if="formValidate.factor != 3 && formValidate.factor != 4"
                 label="中奖名单："
                 :prop="formValidate.factor != 3 && formValidate.factor != 4 ? 'is_all_record' : ''"
                 label-for="is_all_record"
               >
-                <RadioGroup element-id="is_all_record" v-model="formValidate.is_all_record">
-                  <Radio :label="0">关闭</Radio>
-                  <Radio :label="1" class="radio">开启</Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem
+                <el-radio-group element-id="is_all_record" v-model="formValidate.is_all_record">
+                  <el-radio :label="0">关闭</el-radio>
+                  <el-radio :label="1" class="radio">开启</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item
                 v-if="formValidate.factor != 3 && formValidate.factor != 4"
                 label="个人中奖记录："
                 :prop="formValidate.factor != 3 && formValidate.factor != 4 ? 'is_personal_record' : ''"
                 label-for="is_personal_record"
               >
-                <RadioGroup element-id="is_personal_record" v-model="formValidate.is_personal_record">
-                  <Radio :label="0">关闭</Radio>
-                  <Radio :label="1" class="radio">开启</Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem
+                <el-radio-group element-id="is_personal_record" v-model="formValidate.is_personal_record">
+                  <el-radio :label="0">关闭</el-radio>
+                  <el-radio :label="1" class="radio">开启</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item
                 v-if="formValidate.factor != 3 && formValidate.factor != 4"
                 label="活动规则："
                 prop="is_content"
                 label-for="is_content"
               >
-                <RadioGroup element-id="is_content" v-model="formValidate.is_content">
-                  <Radio :label="0">关闭</Radio>
-                  <Radio :label="1" class="radio">开启</Radio>
-                </RadioGroup>
-              </FormItem>
-              <FormItem
+                <el-radio-group element-id="is_content" v-model="formValidate.is_content">
+                  <el-radio :label="0">关闭</el-radio>
+                  <el-radio :label="1" class="radio">开启</el-radio>
+                </el-radio-group>
+              </el-form-item>
+              <el-form-item
                 label=""
                 :prop="
                   formValidate.factor != 3 && formValidate.factor != 4 && formValidate.is_content == 1 ? 'content' : ''
@@ -314,25 +360,25 @@
                   :content="formValidate.content"
                   @editorContent="getEditorContent"
                 ></WangEditor>
-              </FormItem>
-              <FormItem label="活动状态：" prop="status" label-for="status">
-                <RadioGroup element-id="status" v-model="formValidate.status">
-                  <Radio :label="0">关闭</Radio>
-                  <Radio :label="1" class="radio">开启</Radio>
-                </RadioGroup>
-              </FormItem>
+              </el-form-item>
+              <el-form-item label="活动状态：" prop="status" label-for="status">
+                <el-radio-group element-id="status" v-model="formValidate.status">
+                  <el-radio :label="0">关闭</el-radio>
+                  <el-radio :label="1" class="radio">开启</el-radio>
+                </el-radio-group>
+              </el-form-item>
             </div>
-            <FormItem>
-              <Button type="primary" class="submission" :loading="submitOpen" @click="next('formValidate')">
+            <el-form-item>
+              <el-button type="primary" class="submission" :loading="submitOpen" @click="next('formValidate')">
                 <div v-if="!submitOpen">提交</div>
                 <div v-else>提交中</div>
-              </Button>
-            </FormItem>
+              </el-button>
+            </el-form-item>
             <Spin size="large" fix v-if="spinShow"></Spin>
-          </Form>
-        </Col>
-      </Row>
-    </Card>
+          </el-form>
+        </el-col>
+      </el-row>
+    </el-card>
 
     <!-- 上传图片-->
     <Modal
@@ -449,62 +495,6 @@ export default {
       templateList: [
         { id: 0, name: '非付费会员' },
         { id: 1, name: '付费会员' },
-      ],
-      columns: [
-        {
-          title: '序号',
-          type: 'index',
-          width: 60,
-          align: 'center',
-        },
-        {
-          title: '图片',
-          slot: 'image',
-          align: 'center',
-          minWidth: 120,
-        },
-        {
-          title: '名称',
-          align: 'center',
-          minWidth: 80,
-          key: 'name',
-        },
-        {
-          title: '奖品',
-          slot: 'type',
-          align: 'center',
-          minWidth: 80,
-        },
-        {
-          title: '提示语',
-          key: 'prompt',
-          align: 'center',
-          minWidth: 80,
-        },
-        {
-          title: '数量',
-          slot: 'total',
-          align: 'center',
-          minWidth: 80,
-        },
-        {
-          title: '奖品权重',
-          slot: 'chance',
-          align: 'center',
-          minWidth: 80,
-        },
-        {
-          title: '奖品概率',
-          key: 'probability',
-          align: 'center',
-          minWidth: 80,
-        },
-        {
-          title: '操作',
-          slot: 'setting',
-          align: 'center',
-          minWidth: 80,
-        },
       ],
       specsData: [
         {
@@ -633,7 +623,7 @@ export default {
   computed: {
     ...mapState('admin/layout', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 135;
+      return this.isMobile ? undefined : '135px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -662,8 +652,7 @@ export default {
       this.selectDataLabel = data;
     },
     onClickTab(e) {
-      this.formValidate.factor = e;
-      this.getInfo(e);
+      this.getInfo(this.formValidate.factor);
     },
     getEditorContent(data) {
       this.content = data;

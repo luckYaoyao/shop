@@ -14,17 +14,17 @@
             <div class="page-account-top">
               <div class="page-account-top-logo">客服登录</div>
             </div>
-            <Form ref="formInline" :model="formInline" :rules="ruleInline" @keyup.enter="handleSubmit('formInline')">
-              <FormItem prop="username">
-                <Input type="text" v-model="formInline.username" placeholder="请输入用户名" size="large" />
-              </FormItem>
-              <FormItem prop="password">
-                <Input type="password" v-model="formInline.password" placeholder="请输入密码" size="large" />
-              </FormItem>
-              <FormItem>
-                <Button type="primary" long size="large" @click="handleSubmit('formInline')" class="btn">登录 </Button>
-              </FormItem>
-            </Form>
+            <el-form ref="formInline" :model="formInline" :rules="ruleInline" @keyup.enter="handleSubmit('formInline')">
+              <el-form-item prop="username">
+                <el-input type="text" v-model="formInline.username" placeholder="请输入用户名" size="large" />
+              </el-form-item>
+              <el-form-item prop="password">
+                <el-input type="password" v-model="formInline.password" placeholder="请输入密码" size="large" />
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" long size="large" @click="handleSubmit('formInline')" class="btn">登录 </el-button>
+              </el-form-item>
+            </el-form>
             <div class="qh_box" v-if="!isMobile" @click="bindScan"><span class="iconfont iconerweima2"></span></div>
           </div>
           <div :style="{ display: loginType ? 'block' : 'none' }">
@@ -35,7 +35,7 @@
               <div class="qrcode" ref="qrCodeUrl"></div>
               <div class="rxpired-box" v-show="rxpired">
                 <p>已过期</p>
-                <Button type="primary" @click="bindRefresh">点击刷新</Button>
+                <el-button type="primary" @click="bindRefresh">点击刷新</el-button>
               </div>
             </div>
             <div class="qh_box" @click="loginType = 0"><span class="iconfont iconzhanghaomima"></span></div>

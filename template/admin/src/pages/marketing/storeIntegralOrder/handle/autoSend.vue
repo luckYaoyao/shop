@@ -1,77 +1,90 @@
 <template>
   <Modal v-model="modals" scrollable title="订单发送货" class="order_box" :closable="false">
-    <Form ref="formItem" :model="formItem" :label-width="100" @submit.native.prevent>
-      <FormItem label="选择类型：">
-        <RadioGroup v-model="formItem.type" @on-change="changeRadio">
-          <Radio label="1">打印电子面单</Radio>
-          <Radio label="2">送货</Radio>
-          <Radio label="3">虚拟</Radio>
-        </RadioGroup>
-      </FormItem>
+    <el-form ref="formItem" :model="formItem" label-width="100px" @submit.native.prevent>
+      <el-form-item label="选择类型：">
+        <el-radio-group v-model="formItem.type" @change="changeRadio">
+          <el-radio label="1">打印电子面单</el-radio>
+          <el-radio label="2">送货</el-radio>
+          <el-radio label="3">虚拟</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <div v-show="formItem.type === '1'">
-        <FormItem label="快递公司：">
-          <Select
+        <el-form-item label="快递公司：">
+          <el-select
             v-model="formItem.delivery_name"
             filterable
             placeholder="请选择快递公司"
             style="width: 80%"
-            @on-change="expressChange"
+            @change="expressChange"
           >
-            <Option v-for="(item, i) in express" :value="item.value" :key="item.value">{{ item.value }}</Option>
-          </Select>
-        </FormItem>
+            <el-option
+              v-for="(item, i) in express"
+              :value="item.value"
+              :key="item.value"
+              :label="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <template v-if="formItem.type === '1'">
-          <FormItem label="电子面单：" class="express_temp_id">
-            <Select
+          <el-form-item label="电子面单：" class="express_temp_id">
+            <el-select
               v-model="formItem.express_temp_id"
               placeholder="请选择电子面单"
               style="width: 80%"
-              @on-change="expressTempChange"
+              @change="expressTempChange"
             >
-              <Option v-for="(item, i) in expressTemp" :value="item.temp_id" :key="i">{{ item.title }}</Option>
-            </Select>
-            <Button v-if="formItem.express_temp_id" type="text" @click="preview">预览</Button>
-          </FormItem>
-          <FormItem label="寄件人姓名：">
-            <Input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 80%"></Input>
-          </FormItem>
-          <FormItem label="寄件人电话：">
-            <Input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 80%"></Input>
-          </FormItem>
-          <FormItem label="寄件人地址：">
-            <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></Input>
-          </FormItem>
+              <el-option
+                v-for="(item, i) in expressTemp"
+                :value="item.temp_id"
+                :key="i"
+                :label="item.title"
+              ></el-option>
+            </el-select>
+            <el-button v-if="formItem.express_temp_id" type="text" @click="preview">预览</el-button>
+          </el-form-item>
+          <el-form-item label="寄件人姓名：">
+            <el-input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 80%"></el-input>
+          </el-form-item>
+          <el-form-item label="寄件人电话：">
+            <el-input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 80%"></el-input>
+          </el-form-item>
+          <el-form-item label="寄件人地址：">
+            <el-input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></el-input>
+          </el-form-item>
         </template>
       </div>
       <div v-show="formItem.type === '2'">
-        <FormItem label="送货人：">
-          <Select
+        <el-form-item label="送货人：">
+          <el-select
             v-model="formItem.sh_delivery"
             placeholder="请选择送货人"
             style="width: 80%"
-            @on-change="shDeliveryChange"
+            @change="shDeliveryChange"
           >
-            <Option v-for="(item, i) in deliveryList" :value="item.id" :key="i"
-              >{{ item.wx_name }}（{{ item.phone }}）</Option
-            >
-          </Select>
-        </FormItem>
+            <el-option
+              v-for="(item, i) in deliveryList"
+              :value="item.id"
+              :key="i"
+              :label="`${item.wx_name} (${item.phone})`"
+            ></el-option>
+          </el-select>
+        </el-form-item>
       </div>
       <div v-show="formItem.type === '3'">
-        <FormItem label="备注：">
-          <Input
+        <el-form-item label="备注：">
+          <el-input
             v-model="formItem.fictitious_content"
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 5 }"
             placeholder="备注"
             style="width: 80%"
-          ></Input>
-        </FormItem>
+          ></el-input>
+        </el-form-item>
       </div>
-    </Form>
+    </el-form>
     <div slot="footer">
-      <Button @click="cancel">取消</Button>
-      <Button type="primary" @click="putSend">提交</Button>
+      <el-button @click="cancel">取消</el-button>
+      <el-button type="primary" @click="putSend">提交</el-button>
     </div>
     <div ref="viewer" v-viewer v-show="temp">
       <img :src="temp.pic" style="display: none" />

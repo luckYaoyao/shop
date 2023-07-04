@@ -1,6 +1,6 @@
 <template>
   <div class="table_box">
-    <Form
+    <el-form
       ref="orderData"
       :model="orderData"
       :label-width="labelWidth"
@@ -8,27 +8,27 @@
       class="tabform"
       @submit.native.prevent
     >
-      <Row :gutter="24">
-        <Col span="8" class="ivu-text-left">
-          <FormItem label="订单状态：">
-            <RadioGroup
+      <el-row :gutter="24">
+        <el-col :span="8" class="ivu-text-left">
+          <el-form-item label="订单状态：">
+            <el-radio-group
               v-model="orderData.status"
               type="button"
-              @on-change="selectChange2(orderData.status)"
+              @change="selectChange2(orderData.status)"
               style="width: 400px"
             >
-              <Radio label="">全部 {{ '(' + orderChartType.statusAll ? orderChartType.statusAll : 0 + ')' }}</Radio>
-              <Radio label="1">未发货 {{ '(' + orderChartType.unshipped ? orderChartType.unshipped : 0 + ')' }}</Radio>
-              <Radio label="2">待收货 {{ '(' + orderChartType.untake ? orderChartType.untake : 0 + ')' }}</Radio>
-              <Radio label="3">交易完成 {{ '(' + orderChartType.complete ? orderChartType.complete : 0 + ')' }}</Radio>
-            </RadioGroup>
-          </FormItem>
-        </Col>
-        <Col span="8" class="ivu-text-left">
-          <FormItem label="创建时间：">
+              <el-radio-button label="">全部 {{ '(' + orderChartType.statusAll ? orderChartType.statusAll : 0 + ')' }}</el-radio-button>
+              <el-radio-button label="1">未发货 {{ '(' + orderChartType.unshipped ? orderChartType.unshipped : 0 + ')' }}</el-radio-button>
+              <el-radio-button label="2">待收货 {{ '(' + orderChartType.untake ? orderChartType.untake : 0 + ')' }}</el-radio-button>
+              <el-radio-button label="3">交易完成 {{ '(' + orderChartType.complete ? orderChartType.complete : 0 + ')' }}</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8" class="ivu-text-left">
+          <el-form-item label="创建时间：">
             <DatePicker
               :editable="false"
-              @on-change="onchangeTime"
+              @change="onchangeTime"
               :value="timeVal"
               format="yyyy/MM/dd HH:mm:ss"
               type="datetimerange"
@@ -38,14 +38,14 @@
               class="mr20"
               :options="options"
             ></DatePicker>
-          </FormItem>
-        </Col>
-      </Row>
-      <Row :gutter="24" type="flex">
-        <Col span="12">
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-row :gutter="24" >
+        <el-col :span="12">
           <div class="df">
-            <FormItem label="搜索：" prop="real_name" label-for="real_name">
-              <Input
+            <el-form-item label="搜索：" prop="real_name" label-for="real_name">
+              <el-input
                 v-model="orderData.real_name"
                 search
                 enter-button
@@ -54,21 +54,21 @@
                 style="width: 300px"
                 @on-search="orderSearch(orderData.real_name)"
               >
-                <Select v-model="orderData.field_key" slot="prepend" style="width: 80px">
-                  <Option value="all">全部</Option>
-                  <Option value="order_id">订单号</Option>
-                  <Option value="uid">UID</Option>
-                  <Option value="real_name">用户姓名</Option>
-                  <Option value="user_phone">用户电话</Option>
-                  <Option value="store_name">商品名称(模糊)</Option>
-                </Select>
-              </Input>
-            </FormItem>
-            <!-- <Button class="ml10" @click="exports">导出</Button> -->
+                <el-select v-model="orderData.field_key" slot="prepend" style="width: 80px">
+                  <el-option value="all" label="全部"></el-option>
+                  <el-option value="order_id" label="订单号"></el-option>
+                  <el-option value="uid" label="UID"></el-option>
+                  <el-option value="real_name" label="用户姓名"></el-option>
+                  <el-option value="user_phone" label="用户电话"></el-option>
+                  <el-option value="store_name" label="商品名称(模糊)"></el-option>
+                </el-select>
+              </el-input>
+            </el-form-item>
+            <!-- <el-button class="ml10" @click="exports">导出</el-button> -->
           </div>
-        </Col>
-      </Row>
-    </Form>
+        </el-col>
+      </el-row>
+    </el-form>
   </div>
 </template>
 
@@ -260,7 +260,7 @@ export default {
     ...mapState('media', ['isMobile']),
     ...mapState('integralOrder', ['isDels', 'delIdList']),
     labelWidth() {
-      return this.isMobile ? undefined : 80;
+      return this.isMobile ? undefined : '85px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';

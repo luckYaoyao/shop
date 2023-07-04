@@ -3,16 +3,16 @@
     <div class="main">
       <!-- <Tree class="tree" :data="treeData"  @on-contextmenu="handleContextMenu">
           <template #contextMenu>
-            <DropdownItem @click.native="handleContextCreateFolder()">新建文件夹</DropdownItem>
-            <DropdownItem @click.native="handleContextCreateFile()">新建文件</DropdownItem>
-            <DropdownItem @click.native="handleContextDelFolder()" style="color: #ed4014">删除</DropdownItem>
+            <el-dropdown-item @click.native="handleContextCreateFolder()">新建文件夹</el-dropdown-item>
+            <el-dropdown-item @click.native="handleContextCreateFile()">新建文件</el-dropdown-item>
+            <el-dropdown-item @click.native="handleContextDelFolder()" style="color: #ed4014">删除</el-dropdown-item>
           </template>
         </Tree> -->
       <!-- <Tree :data="treeData" :render="renderContent" class="demo-tree-render"></Tree> -->
-      <Card :bordered="false" dis-hover class="ivu-mt mr20 card-tree">
+      <el-card :bordered="false" shadow="never" class="ivu-mt mr20 card-tree">
         <div class="tree">
           <div class="main-btn">
-            <Button class="mb10" type="primary" @click="clickMenu(4)" long>新增分类</Button>
+            <el-button class="mb10" type="primary" @click="clickMenu(4)" long>新增分类</el-button>
           </div>
 
           <vue-tree-list
@@ -34,25 +34,23 @@
                 <span class="" :class="{ open: formValidate.id == slotProps.model.id }">{{
                   slotProps.model.name
                 }}</span>
-                <Dropdown
-                  transfer
-                  @on-click="
+                <el-dropdown
+                  size="small"
+                  @command="
                     (name) => {
                       clickMenu(name, slotProps.model);
                     }
                   "
                 >
-                  <a href="javascript:void(0)">
-                    <Icon class="add" type="ios-more" />
-                  </a>
-                  <template #list>
-                    <DropdownMenu>
-                      <DropdownItem name="1" v-if="!slotProps.model.method">新增接口</DropdownItem>
-                      <DropdownItem name="2" v-if="!slotProps.model.method">编辑分类名</DropdownItem>
-                      <DropdownItem name="3">删除</DropdownItem>
-                    </DropdownMenu>
+                  <span class="el-dropdown-link"> <Icon class="add" type="ios-more" /></span>
+                  <template slot="dropdown">
+                    <el-dropdown-menu>
+                      <el-dropdown-item command="1" v-if="!slotProps.model.method">新增接口</el-dropdown-item>
+                      <el-dropdown-item command="2" v-if="!slotProps.model.method">编辑分类名</el-dropdown-item>
+                      <el-dropdown-item command="3">删除</el-dropdown-item>
+                    </el-dropdown-menu>
                   </template>
-                </Dropdown>
+                </el-dropdown>
               </div>
             </template>
             <!-- 新建文件夹 -->
@@ -82,37 +80,37 @@
             </template>
           </vue-tree-list>
         </div>
-      </Card>
-      <Card :bordered="false" dis-hover class="ivu-mt right-card">
+      </el-card>
+      <el-card :bordered="false" shadow="never" class="ivu-mt right-card">
         <div class="data">
           <div class="eidt-sub">
             <div class="name">
               {{ formValidate.name }}
             </div>
             <div>
-              <!-- <Button type="primary" class="submission mr20" @click="debugging()">调试</Button> -->
-              <Button v-if="formValidate.id" type="primary" class="submission mr20" @click="isEdit = !isEdit">{{
+              <!-- <el-button type="primary" class="submission mr20" @click="debugging()">调试</el-button> -->
+              <el-button v-if="formValidate.id" type="primary" class="submission mr20" @click="isEdit = !isEdit">{{
                 isEdit ? '返回' : '编辑'
-              }}</Button>
-              <Button v-if="isEdit" type="primary" class="submission" @click="handleSubmit('formValidate')"
-                >保存</Button
+              }}</el-button>
+              <el-button v-if="isEdit" type="primary" class="submission" @click="handleSubmit('formValidate')"
+                >保存</el-button
               >
             </div>
           </div>
-          <Form
+          <el-form
             class="formValidate mt20"
             ref="formValidate"
             :rules="ruleValidate"
             :model="formValidate"
-            :label-width="100"
+            label-width="100px"
             :label-position="labelPosition"
             @submit.native.prevent
           >
-            <Row :gutter="24" type="flex">
-              <Col span="24">
+            <el-row :gutter="24">
+              <el-col :span="24">
                 <div class="title">接口信息</div>
-                <FormItem label="接口名称：" prop="name">
-                  <Input
+                <el-form-item label="接口名称：" prop="name">
+                  <el-input
                     v-if="isEdit"
                     class="perW20"
                     type="text"
@@ -121,19 +119,22 @@
                     placeholder="请输入"
                   />
                   <span v-else>{{ formValidate.name || '' }}</span>
-                </FormItem>
-                <FormItem label="请求类型：" prop="name">
-                  <Select v-if="isEdit" v-model="formValidate.method" style="width: 120px">
-                    <Option v-for="(item, index) in requestTypeList" :key="index" :value="item.value">{{
-                      item.label
-                    }}</Option>
-                  </Select>
+                </el-form-item>
+                <el-form-item label="请求类型：" prop="name">
+                  <el-select v-if="isEdit" v-model="formValidate.method" style="width: 120px">
+                    <el-option
+                      v-for="(item, index) in requestTypeList"
+                      :key="index"
+                      :value="item.value"
+                      :label="item.label"
+                    ></el-option>
+                  </el-select>
                   <span v-else class="req-method" :style="'background-color:' + methodColor">{{
                     formValidate.method || ''
                   }}</span>
-                </FormItem>
-                <FormItem label="功能描述：" prop="name">
-                  <Input
+                </el-form-item>
+                <el-form-item label="功能描述：" prop="name">
+                  <el-input
                     v-if="isEdit"
                     class="perW20"
                     type="textarea"
@@ -142,14 +143,14 @@
                     placeholder="请输入"
                   />
                   <span v-else class="text-area">{{ formValidate.describe || '' }}</span>
-                </FormItem>
-              </Col>
-            </Row>
-            <Row :gutter="24" type="flex">
-              <Col span="24">
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="24">
+              <el-col :span="24">
                 <div class="title">调用方式</div>
-                <FormItem label="调用内容：" prop="url">
-                  <Input
+                <el-form-item label="调用内容：" prop="url">
+                  <el-input
                     v-if="isEdit"
                     class="perW20"
                     type="text"
@@ -158,8 +159,8 @@
                     placeholder="请输入"
                   />
                   <span v-else>{{ formValidate.url || '' }}</span>
-                </FormItem>
-                <FormItem label="请求参数：">
+                </el-form-item>
+                <el-form-item label="请求参数：">
                   <vxe-table
                     resizable
                     show-overflow
@@ -228,9 +229,11 @@
                     </vxe-column>
                   </vxe-table>
 
-                  <Button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('xTable')">添加参数</Button>
-                </FormItem>
-                <FormItem label="返回参数：">
+                  <el-button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('xTable')"
+                    >添加参数</el-button
+                  >
+                </el-form-item>
+                <el-form-item label="返回参数：">
                   <vxe-table
                     resizable
                     show-overflow
@@ -288,15 +291,17 @@
                       </template>
                     </vxe-column>
                   </vxe-table>
-                  <Button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('resTable')">添加参数</Button>
-                </FormItem>
-              </Col>
-            </Row>
-            <Row :gutter="24" type="flex">
-              <Col span="24">
+                  <el-button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('resTable')"
+                    >添加参数</el-button
+                  >
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row :gutter="24">
+              <el-col :span="24">
                 <div class="title">调用示例</div>
-                <FormItem label="请求数据示例：" prop="request_example">
-                  <Input
+                <el-form-item label="请求数据示例：" prop="request_example">
+                  <el-input
                     v-if="isEdit"
                     class="perW20"
                     type="textarea"
@@ -305,9 +310,9 @@
                     placeholder="请输入"
                   />
                   <span v-else class="text-area">{{ formValidate.request_example || '' }}</span>
-                </FormItem>
-                <FormItem label="返回数据示例：" prop="return_example">
-                  <Input
+                </el-form-item>
+                <el-form-item label="返回数据示例：" prop="return_example">
+                  <el-input
                     v-if="isEdit"
                     class="perW20"
                     type="textarea"
@@ -316,8 +321,8 @@
                     placeholder="请输入"
                   />
                   <span v-else class="text-area">{{ formValidate.return_example || '' }}</span>
-                </FormItem>
-                <FormItem label="错误码：">
+                </el-form-item>
+                <el-form-item label="错误码：">
                   <vxe-table
                     resizable
                     show-overflow
@@ -355,18 +360,20 @@
                       </template>
                     </vxe-column>
                   </vxe-table>
-                  <Button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('codeTable')">添加参数</Button>
-                </FormItem>
-              </Col>
-            </Row>
-            <!-- <Row :gutter="24" type="flex">
-              <Col span="24">
-                <FormItem>
-                  <Button type="primary" class="submission" @click="handleSubmit('formValidate')">保存</Button>
-                </FormItem>
-              </Col>
-            </Row> -->
-          </Form>
+                  <el-button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('codeTable')"
+                    >添加参数</el-button
+                  >
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <!-- <el-row :gutter="24" >
+              <el-col :span="24">
+                <el-form-item>
+                  <el-button type="primary" class="submission" @click="handleSubmit('formValidate')">保存</el-button>
+                </el-form-item>
+              </el-col>
+            </el-row> -->
+          </el-form>
         </div>
         <!-- <div v-else class="nothing">
           <div class="box" @click="clickMenu(4)">
@@ -382,11 +389,11 @@
             <div class="text">新建接口</div>
           </div>
         </div> -->
-      </Card>
+      </el-card>
     </div>
     <Modal v-model="nameModal" title="分组名称" :loading="loading" @on-ok="asyncOK">
       <label>分组名称：</label>
-      <Input v-model="value" placeholder="请输入分组名称" style="width: 85%" />
+      <el-input v-model="value" placeholder="请输入分组名称" style="width: 85%" />
     </Modal>
     <Modal v-model="debuggingModal" :title="formValidate.name" width="70%" footer-hide :loading="loading">
       <debugging
@@ -506,7 +513,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 50;
+      return this.isMobile ? undefined : '50px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';

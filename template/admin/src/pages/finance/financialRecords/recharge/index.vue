@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mb-16">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mb-16">
+      <el-form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
@@ -9,20 +9,22 @@
         class="tabform"
         @submit.native.prevent
       >
-        <Row :gutter="24" type="flex" justify="end">
-          <Col span="24" class="ivu-text-left">
-            <FormItem label="时间选择：">
-              <RadioGroup
+        <el-row :gutter="24" justify="end">
+          <el-col :span="24" class="ivu-text-left">
+            <el-form-item label="时间选择：">
+              <el-radio-group
                 v-model="formValidate.data"
                 type="button"
-                @on-change="selectChange(formValidate.data)"
+                @change="selectChange(formValidate.data)"
                 class="mr"
               >
-                <Radio :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</Radio>
-              </RadioGroup>
+                <el-radio-button :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{
+                  item.text
+                }}</el-radio-button>
+              </el-radio-group>
               <DatePicker
                 :editable="false"
-                @on-change="onchangeTime"
+                @change="onchangeTime"
                 :value="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
@@ -30,20 +32,20 @@
                 placeholder="请选择时间"
                 style="width: 200px"
               ></DatePicker>
-            </FormItem>
-          </Col>
-          <Col span="24" class="ivu-text-left">
-            <FormItem label="支付类型：">
-              <RadioGroup v-model="formValidate.paid" type="button" @on-change="selChange">
-                <Radio label="">全部</Radio>
-                <Radio label="1">已支付</Radio>
-                <Radio label="0">未支付</Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col>
-          <Col span="24" class="ivu-text-left">
-            <FormItem label="搜索：">
-              <Input
+            </el-form-item>
+          </el-col>
+          <el-col :span="24" class="ivu-text-left">
+            <el-form-item label="支付类型：">
+              <el-radio-group v-model="formValidate.paid" type="button" @change="selChange">
+                <el-radio-button label="">全部</el-radio-button>
+                <el-radio-button label="1">已支付</el-radio-button>
+                <el-radio-button label="0">未支付</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24" class="ivu-text-left">
+            <el-form-item label="搜索：">
+              <el-input
                 search
                 enter-button
                 @on-search="selChange"
@@ -53,50 +55,87 @@
                 style="width: 30%; display: inline-table"
                 class="mr"
               />
-              <Button v-auth="['export-userRecharge']" class="mr" icon="ios-share-outline" @click="exports"
-                >导出</Button
+              <el-button v-auth="['export-userRecharge']" class="mr" icon="ios-share-outline" @click="exports"
+                >导出</el-button
               >
               <!--                            <span class="Refresh">刷新</span><Icon type="ios-refresh" />-->
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
-    </Card>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-card>
     <cards-data :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
-    <Card :bordered="false" dis-hover>
+    <el-card :bordered="false" shadow="never">
       <div>充值记录列表</div>
-      <Table
-        ref="table"
-        :columns="columns"
-        :data="tabList"
-        class="ivu-mt"
-        :loading="loading"
-        no-data-text="暂无数据"
-        no-filtered-data-text="暂无筛选结果"
-      >
-        <template slot-scope="{ row, index }" slot="right">
-          <a
-            href="javascript:void(0);"
-            v-if="row.refund_price <= 0 && row.paid && row.recharge_type != 'system'"
-            @click="refund(row)"
-            >退款</a
-          >
-          <!--                    <Divider type="vertical"  v-if="row.paid"/>-->
-          <a href="javascript:void(0);" v-if="row.paid === 0" @click="del(row, '此条充值记录', index)">删除</a>
-          <span class="refund" v-if="row.refund_price > 0">已退款</span>
-        </template>
-      </Table>
+      <el-table ref="table" :data="tabList" class="ivu-mt" :loading="loading" empty-text="暂无数据"
+        ><el-table-column label="ID" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="头像" min-width="90">
+          <template slot-scope="scope">
+            <div class="tabBox_img" v-viewer>
+              <img v-lazy="scope.row.avatar ? scope.row.avatar : require('../../../../assets/images/moren.jpg')" />
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="用户昵称" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.nickname }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="订单号" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.order_id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="支付金额" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否支付" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.paid_type }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="充值类型" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row._recharge_type }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="支付时间" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row._pay_time }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="170">
+          <template slot-scope="scope">
+            <a
+              href="javascript:void(0);"
+              v-if="scope.row.refund_price <= 0 && scope.row.paid && scope.row.recharge_type != 'system'"
+              @click="refund(scope.row)"
+              >退款</a
+            >
+            <!--                    <el-divider direction="vertical"  v-if="scope.row.paid"/>-->
+            <a href="javascript:void(0);" v-if="scope.row.paid === 0" @click="del(scope.row, '此条充值记录', index)"
+              >删除</a
+            >
+            <span class="refund" v-if="scope.row.refund_price > 0">已退款</span>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="formValidate.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="formValidate.limit"
+          :page.sync="formValidate.page"
+          :limit.sync="formValidate.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
     <!-- 退款表单-->
     <edit-from ref="edits" :FromData="FromData" @submitFail="submitFail"></edit-from>
   </div>
@@ -129,81 +168,6 @@ export default {
       total: 0,
       cardLists: [],
       loading: false,
-      columns: [
-        {
-          title: 'ID',
-          key: 'id',
-          sortable: true,
-          width: 80,
-        },
-        {
-          title: '头像',
-          key: 'avatar',
-          minWidth: 80,
-          render: (h, params) => {
-            return h('viewer', [
-              h(
-                'div',
-                {
-                  style: {
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                  },
-                },
-                [
-                  h('img', {
-                    attrs: {
-                      src: params.row.avatar ? params.row.avatar : require('../../../../assets/images/moren.jpg'),
-                    },
-                    style: {
-                      width: '100%',
-                      height: '100%',
-                    },
-                  }),
-                ],
-              ),
-            ]);
-          },
-        },
-        {
-          title: '用户昵称',
-          key: 'nickname',
-          minWidth: 150,
-        },
-        {
-          title: '订单号',
-          key: 'order_id',
-          minWidth: 150,
-        },
-        {
-          title: '支付金额',
-          key: 'price',
-          minWidth: 110,
-        },
-        {
-          title: '是否支付',
-          key: 'paid_type',
-          minWidth: 110,
-        },
-        {
-          title: '充值类型',
-          key: '_recharge_type',
-          minWidth: 100,
-        },
-        {
-          title: '支付时间',
-          key: '_pay_time',
-          minWidth: 120,
-        },
-        {
-          title: '操作',
-          slot: 'right',
-          fixed: 'right',
-          minWidth: 100,
-        },
-      ],
       tabList: [],
       fromList: {
         title: '选择时间',
@@ -224,7 +188,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 80;
+      return this.isMobile ? undefined : '85px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -309,10 +273,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.formValidate.page = index;
-      this.getList();
     },
     // 小方块
     getUserRecharge() {

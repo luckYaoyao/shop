@@ -1,15 +1,15 @@
 <template>
-  <Card :bordered="false" dis-hover class="ivu-mt-16">
+  <el-card :bordered="false" shadow="never" class="ivu-mt-16">
     <div class="acea-row row-between-wrapper mb20">
       <div class="header-title">商品排行</div>
       <div class="acea-row">
-        <Select v-model="formValidate.sort" style="width: 200px" class="mr20" @on-change="changeMenu">
-          <Option v-for="item in list" :value="item.val" :key="item.val">{{ item.name }}</Option>
-        </Select>
+        <el-select v-model="formValidate.sort" style="width: 200px" class="mr20" @change="changeMenu">
+          <el-option v-for="item in list" :value="item.val" :key="item.val" :label="item.name"></el-option>
+        </el-select>
         <DatePicker
           :editable="false"
           :clearable="false"
-          @on-change="onchangeTime"
+          @change="onchangeTime"
           :value="timeVal"
           format="yyyy/MM/dd"
           type="datetimerange"
@@ -19,42 +19,86 @@
           :options="options"
           class="mr20"
         ></DatePicker>
-        <Button type="primary" class="mr20" @click="getList">查询</Button>
+        <el-button type="primary" class="mr20" @click="getList">查询</el-button>
       </div>
     </div>
-    <Table
+    <el-table
       ref="selection"
-      :columns="columns4"
       :data="tabList"
-      :loading="loading"
-      no-data-text="暂无数据"
-      highlight-row
-      no-filtered-data-text="暂无筛选结果"
+      v-loading="loading"
+      empty-text="暂无数据"
+      highlight-current-row
+      
     >
-      <template slot-scope="{ row, index }" slot="image">
-        <div class="tabBox_img" v-viewer>
-          <img v-lazy="row.image" />
-        </div>
-      </template>
-      <template slot-scope="{ row, index }" slot="profit">
-        <span v-text="$tools.accMul(row.profit, 100).toFixed(2) + '%'"></span>
-      </template>
-      <template slot-scope="{ row, index }" slot="repeats">
-        <span v-text="$tools.accMul(row.repeats, 100) + '%'"></span>
-      </template>
-      <template slot-scope="{ row, index }" slot="changes">
-        <span>{{ $tools.accMul(row.changes, 100) + '%' }}</span>
-      </template>
-      <template slot-scope="{ row, index }" slot="action">
-        <a @click="look(row)">查看</a>
-      </template>
-    </Table>
+      <el-table-column label="商品图片" min-width="90">
+        <template slot-scope="scope">
+          <div class="tabBox_img" v-viewer>
+            <img v-lazy="scope.row.image" />
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="商品名称" min-width="130">
+        <template slot-scope="scope">
+          <span>{{ scope.row.store_name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="浏览量" min-width="130">
+        <template slot-scope="scope">
+          <span>{{ scope.row.visit }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="访客数" min-width="130">
+        <template slot-scope="scope">
+          <span>{{ scope.row.user }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="加购件数" min-width="130">
+        <template slot-scope="scope">
+          <span>{{ scope.row.cart }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="下单件数" min-width="130">
+        <template slot-scope="scope">
+          <span>{{ scope.row.orders }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="支付件数" min-width="130">
+        <template slot-scope="scope">
+          <span>{{ scope.row.pay }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="支付金额" min-width="130">
+        <template slot-scope="scope">
+          <span>{{ scope.row.price }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="毛利率(%)" min-width="130">
+        <template slot-scope="scope">
+          <span v-text="$tools.accMul(scope.row.profit, 100).toFixed(2) + '%'"></span>
+        </template>
+      </el-table-column>
+      <el-table-column label="收藏数" min-width="130">
+        <template slot-scope="scope">
+          <span>{{ scope.row.collect }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="访客-支付转化率(%)" min-width="130">
+        <template slot-scope="scope">
+          <span>{{ $tools.accMul(scope.row.changes, 100) + '%' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" fixed="right" width="80">
+        <template slot-scope="scope">
+          <a @click="look(scope.row)">查看</a>
+        </template>
+      </el-table-column>
+    </el-table>
     <!-- 商品弹窗 -->
     <div v-if="isProductBox">
       <div class="bg" @click="isProductBox = false"></div>
       <goodsDetail :goodsId="goodsId"></goodsDetail>
     </div>
-  </Card>
+  </el-card>
 </template>
 
 <script>
@@ -82,69 +126,6 @@ export default {
       loading: false,
       tabList: [],
       total: 0,
-      columns4: [
-        {
-          title: '商品图片',
-          slot: 'image',
-          minWidth: 80,
-        },
-        {
-          title: '商品名称',
-          width: 180,
-          key: 'store_name',
-        },
-        {
-          title: '浏览量',
-          key: 'visit',
-          minWidth: 100,
-        },
-        {
-          title: '访客数',
-          key: 'user',
-          minWidth: 100,
-        },
-        {
-          title: '加购件数',
-          key: 'cart',
-          minWidth: 100,
-        },
-        {
-          title: '下单件数',
-          key: 'orders',
-          minWidth: 100,
-        },
-        {
-          title: '支付件数',
-          key: 'pay',
-          minWidth: 100,
-        },
-        {
-          title: '支付金额',
-          key: 'price',
-          minWidth: 100,
-        },
-        {
-          title: '毛利率(%)',
-          slot: 'profit',
-          minWidth: 100,
-        },
-        {
-          title: '收藏数',
-          key: 'collect',
-          minWidth: 100,
-        },
-        {
-          title: '访客-支付转化率(%)',
-          slot: 'changes',
-          minWidth: 120,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 80,
-        },
-      ],
       goodsId: '',
       isProductBox: false,
       list: [

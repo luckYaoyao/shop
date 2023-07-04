@@ -1,40 +1,40 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <Row type="flex" :gutter="24">
-          <Col v-bind="grid">
-            <FormItem label="是否显示：">
-              <Select v-model="formValidate.status" placeholder="请选择" clearable @on-change="userSearchs">
-                <Option value="1">显示</Option>
-                <Option value="0">不显示</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="分类名称：" label-for="status2">
-              <Input
+        <el-row :gutter="24">
+          <el-col v-bind="grid">
+            <el-form-item label="是否显示：">
+              <el-select v-model="formValidate.status" placeholder="请选择" clearable @change="userSearchs">
+                <el-option value="1" label="显示"></el-option>
+                <el-option value="0" label="不显示"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="分类名称：" label-for="status2">
+              <el-input
                 search
                 enter-button
                 placeholder="请输入分类名称"
                 v-model="formValidate.title"
                 @on-search="userSearchs"
               />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex">
-          <Col v-bind="grid">
-            <Button type="primary" icon="md-add" @click="classAdd" class="mr20">添加配置分类</Button>
-          </Col>
-        </Row>
-      </Form>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col v-bind="grid">
+            <el-button type="primary" icon="md-add" @click="classAdd" class="mr20">添加配置分类</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
       <vxe-table
         :border="false"
         class="vxeTable mt25"
@@ -51,40 +51,37 @@
         <vxe-table-column field="eng_title" title="分类字段" min-width="150"></vxe-table-column>
         <vxe-table-column field="statuss" title="状态" min-width="150">
           <template v-slot="{ row }">
-            <i-switch
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
               v-model="row.status"
               :value="row.status"
-              :true-value="1"
-              :false-value="0"
-              @on-change="onchangeIsShow(row)"
+              @change="onchangeIsShow(row)"
               size="large"
             >
-              <span slot="open">显示</span>
-              <span slot="close">隐藏</span>
-            </i-switch>
+            </el-switch>
           </template>
         </vxe-table-column>
         <vxe-table-column field="action" title="操作" min-width="150" fixed="right">
           <template v-slot="{ row, index }">
             <a @click="goList(row)">配置列表</a>
-            <Divider type="vertical" />
+            <el-divider direction="vertical"></el-divider>
             <a @click="edit(row)">编辑</a>
-            <Divider type="vertical" />
+            <el-divider direction="vertical"></el-divider>
             <a @click="del(row, '删除分类', index)">删除</a>
           </template>
         </vxe-table-column>
       </vxe-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="formValidate.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="formValidate.limit"
+          :page.sync="formValidate.page"
+          :limit.sync="formValidate.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
 
     <!-- 新建  编辑表单-->
     <edit-from ref="edits" :update="true" :FromData="FromData" @submitFail="submitFail"></edit-from>
@@ -124,7 +121,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -199,10 +196,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.formValidate.page = index;
-      this.getList();
     },
     // 表格搜索
     userSearchs() {

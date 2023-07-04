@@ -4,7 +4,7 @@
       <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div>
         <div style="float: right">
-          <Button class="bnt" type="primary" @click="save">保存</Button>
+          <el-button class="bnt" type="primary" @click="save">保存</el-button>
         </div>
       </div>
     </div>
@@ -59,7 +59,7 @@
           </div>
         </div>
       </div>
-      <div v-if="name == 'admin_login_slide'" class="pciframe" :bordered="false" dis-hover>
+      <div v-if="name == 'admin_login_slide'" class="pciframe" :bordered="false" shadow="never">
         <img src="../../../assets/images/pclogin.png" class="pciframe-box" />
         <div class="pcmoddile_goods">
           <div class="nofont" v-if="tabList.list == ''">暂无照片，请添加~</div>
@@ -96,7 +96,7 @@
         "
         class="iframe"
         :bordered="false"
-        dis-hover
+        shadow="never"
       >
         <iframe :src="url" class="iframe-box" frameborder="0"></iframe>
         <div class="moddile"></div>
@@ -151,13 +151,13 @@
       </div>
       <div v-if="a == 1" style="margin-left: 40px">
         <div class="table_box">
-          <div type="flex">
+          <div>
             <div v-bind="grid">
               <div class="title">隐私权限页面展示：</div>
             </div>
           </div>
           <div>
-            <Form
+            <el-form
               class="form"
               ref="formValidate"
               :model="formValidate"
@@ -167,14 +167,14 @@
               @submit.native.prevent
             >
               <div class="goodsTitle acea-row"></div>
-              <FormItem label="" prop="content" style="margin: 0px">
+              <el-form-item label="" prop="content" style="margin: 0px">
                 <WangEditor
                   style="width: 90%"
                   :content="formValidate.content"
                   @editorContent="getEditorContent"
                 ></WangEditor>
-              </FormItem>
-            </Form>
+              </el-form-item>
+            </el-form>
           </div>
         </div>
       </div>
@@ -190,95 +190,128 @@
       </div>
       <div v-if="name == 'sign_day_num'" style="margin-left: 20px">
         <div class="table_box">
-          <div type="flex">
+          <div>
             <div v-bind="grid">
               <div class="title">签到天数设置</div>
-              <Button
+              <el-button
                 type="primary"
                 icon="md-add"
                 @click="groupAdd('添加数据')"
                 style="margin-left: 14px; margin-top: 30px"
-                >添加数据</Button
+                >添加数据</el-button
               >
             </div>
           </div>
           <div class="table">
-            <Table
-              :columns="columns1"
+            <el-table
               :data="cmsList"
               ref="table"
               class="mt25"
               :loading="loading"
-              highlight-row
+              highlight-current-row
               no-userFrom-text="暂无数据"
               no-filtered-userFrom-text="暂无筛选结果"
             >
-              <template slot-scope="{ row, index }" slot="status">
-                <i-switch
-                  v-model="row.status"
-                  :value="row.status"
-                  :true-value="1"
-                  :false-value="0"
-                  @on-change="onchangeIsShow(row)"
-                  size="large"
-                >
-                  <span slot="open">显示</span>
-                  <span slot="close">隐藏</span>
-                </i-switch>
-              </template>
-              <template slot-scope="{ row, index }" slot="action">
-                <a @click="edit(row, '编辑')">编辑</a>
-                <Divider type="vertical" />
-                <a @click="del(row, '删除这条信息', index)">删除</a>
-              </template>
-            </Table>
+              <el-table-column label="编号" width="80">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.id }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="第几天" min-width="80">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.day }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="获取积分" min-width="80">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.sign_num }}</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column label="是否可用" min-width="80">
+                <template slot-scope="scope">
+                  <el-switch
+                    :active-value="1"
+                    :inactive-value="0"
+                    v-model="scope.row.status"
+                    :value="scope.row.status"
+                    @change="onchangeIsShow(scope.row)"
+                    size="large"
+                  >
+                  </el-switch>
+                </template>
+              </el-table-column>
+              <el-table-column label="排序" min-width="80">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.sort }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" fixed="right" width="150">
+                <template slot-scope="scope">
+                  <a @click="edit(scope.row, '编辑')">编辑</a>
+                  <el-divider direction="vertical"></el-divider>
+                  <a @click="del(scope.row, '删除这条信息', index)">删除</a>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </div>
       </div>
       <div v-if="name == 'user_recharge_quota'" style="margin-left: 20px">
         <div class="table_box">
-          <div type="flex">
+          <div>
             <div v-bind="grid">
               <div class="title">充值金额设置</div>
-              <Button
+              <el-button
                 type="primary"
                 icon="md-add"
                 @click="groupAdd('添加数据')"
                 style="margin-left: 14px; margin-top: 30px"
-                >添加数据</Button
+                >添加数据</el-button
               >
             </div>
           </div>
           <div class="table">
-            <Table
-              :columns="columns1"
+            <el-table
               :data="sginList.list"
               ref="table"
               class="mt25"
               :loading="loading"
-              highlight-row
+              highlight-current-row
               no-userFrom-text="暂无数据"
               no-filtered-userFrom-text="暂无筛选结果"
             >
-              <template slot-scope="{ row, index }" slot="status">
-                <i-switch
-                  v-model="row.status"
-                  :value="row.status"
-                  :true-value="1"
-                  :false-value="0"
-                  @on-change="onchangeIsShow(row)"
-                  size="large"
-                >
-                  <span slot="open">显示</span>
-                  <span slot="close">隐藏</span>
-                </i-switch>
-              </template>
-              <template slot-scope="{ row, index }" slot="action">
-                <a @click="edit(row, '编辑')">编辑</a>
-                <Divider type="vertical" />
-                <a @click="del(row, '删除这条信息', index)">删除</a>
-              </template>
-            </Table>
+              <el-table-column
+                :label="item.title"
+                :min-width="item.minWidth"
+                v-for="(item, index) in columns1"
+                :key="index"
+              >
+                <template slot-scope="scope">
+                  <template v-if="item.key">
+                    <div>
+                      <span>{{ scope.row[item.key] }}</span>
+                    </div>
+                  </template>
+                  <template v-else-if="item.slot === 'status'">
+                    <el-switch
+                      :active-value="1"
+                      :inactive-value="0"
+                      v-model="scope.row.status"
+                      :value="scope.row.status"
+                      @change="onchangeIsShow(scope.row)"
+                      size="large"
+                    >
+                    </el-switch>
+                  </template>
+                  <template v-else-if="item.slot === 'action'">
+                    <a @click="edit(scope.row, '编辑')">编辑</a>
+                    <el-divider direction="vertical"></el-divider>
+                    <a @click="del(scope.row, '删除这条信息', index)">删除</a>
+                  </template>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </div>
       </div>
@@ -334,13 +367,13 @@
                       <div class="info-item">
                         <span>图片名称：</span>
                         <div class="input-box">
-                          <Input v-model="item.comment" placeholder="请填写名称" />
+                          <el-input v-model="item.comment" placeholder="请填写名称" />
                         </div>
                       </div>
                       <div class="info-item">
                         <span>链接地址：</span>
                         <div class="input-box" @click="link(index)">
-                          <Input v-model="item.link" icon="ios-arrow-forward" readonly placeholder="选择链接" />
+                          <el-input v-model="item.link" icon="ios-arrow-forward" readonly placeholder="选择链接" />
                         </div>
                       </div>
                     </div>
@@ -369,13 +402,13 @@
               </div>
               <template>
                 <div class="add-btn">
-                  <Button
+                  <el-button
                     type="primary"
                     ghost
                     style="width: 100px; height: 35px; background-color: #1890ff; color: #ffffff"
                     @click="addBox"
                     >添加图片
-                  </Button>
+                  </el-button>
                 </div>
               </template>
             </div>
@@ -389,23 +422,21 @@
             <div class="title-text">建议尺寸：750 * 1334px，拖拽图片可调整图片顺序哦，最多添加五张</div>
             <div class="list-box">
               <div>
-                <Form :model="formItem" :label-width="80">
-                  <FormItem label="开屏广告:">
-                    <i-switch v-model="formItem.status" :true-value="1" :false-value="0" size="large">
-                      <span slot="开">开启</span>
-                      <span slot="关">关闭</span>
-                    </i-switch>
-                  </FormItem>
-                  <FormItem label="广告时间:">
-                    <Input
+                <el-form :model="formItem" label-width="85px">
+                  <el-form-item label="开屏广告:">
+                    <el-switch :active-value="1" :inactive-value="0" v-model="formItem.status" size="large">
+                    </el-switch>
+                  </el-form-item>
+                  <el-form-item label="广告时间:">
+                    <el-input
                       v-model.number="formItem.time"
                       type="number"
                       placeholder="请输入开屏广告时间"
                       style="width: 150px"
-                    ></Input>
+                    ></el-input>
                     单位(秒)
-                  </FormItem>
-                </Form>
+                  </el-form-item>
+                </el-form>
               </div>
               <draggable class="dragArea list-group" :list="tabList.list" group="peoples" handle=".move-icon">
                 <div class="item" v-for="(item, index) in tabList.list" :key="index">
@@ -425,13 +456,13 @@
                     <div class="info-item">
                       <span>图片名称：</span>
                       <div class="input-box">
-                        <Input v-model="item.comment" placeholder="请填写名称" />
+                        <el-input v-model="item.comment" placeholder="请填写名称" />
                       </div>
                     </div>
                     <div class="info-item">
                       <span>链接地址：</span>
                       <div class="input-box" @click="link(index)">
-                        <Input v-model="item.link" icon="ios-arrow-forward" readonly placeholder="选择链接" />
+                        <el-input v-model="item.link" icon="ios-arrow-forward" readonly placeholder="选择链接" />
                       </div>
                     </div>
                   </div>
@@ -460,13 +491,13 @@
             </div>
             <template v-if="tabList.list.length < 5">
               <div class="add-btn">
-                <Button
+                <el-button
                   type="primary"
                   ghost
                   style="width: 100px; height: 35px; background-color: #1890ff; color: #ffffff"
                   @click="addBox"
                   >添加图片
-                </Button>
+                </el-button>
               </div>
             </template>
           </div>
@@ -518,7 +549,7 @@ export default {
       };
     },
     labelWidth() {
-      return this.isMobile ? undefined : 120;
+      return this.isMobile ? undefined : '120px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';

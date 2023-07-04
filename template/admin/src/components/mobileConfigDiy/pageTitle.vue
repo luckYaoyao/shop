@@ -1,37 +1,37 @@
 <template>
   <div class="box">
     <div class="c_row-item" v-if="this.$route.query.type !== 2">
-      <Col class="label" span="4"> 模板名称 </Col>
-      <Col span="19" class="slider-box">
-        <Input v-model="name" placeholder="选填不超过15个字" maxlength="15" @on-change="changName" />
-      </Col>
+      <el-col class="label" :span="4"> 模板名称 </el-col>
+      <el-col span="19" class="slider-box">
+        <el-input v-model="name" placeholder="选填不超过15个字" maxlength="15" @change="changName" />
+      </el-col>
     </div>
     <div class="c_row-item">
-      <Col class="label" span="4"> 页面标题 </Col>
-      <Col span="19" class="slider-box">
-        <Input v-model="value" placeholder="选填不超过30个字" maxlength="30" @on-change="changVal" />
-      </Col>
+      <el-col class="label" :span="4"> 页面标题 </el-col>
+      <el-col span="19" class="slider-box">
+        <el-input v-model="value" placeholder="选填不超过30个字" maxlength="30" @change="changVal" />
+      </el-col>
     </div>
     <div class="c_row-item">
-      <Col class="label" span="4"> 页面状态 </Col>
-      <Col span="19" class="slider-box">
-        <i-switch v-model="isShow" @on-change="changeState" />
-      </Col>
+      <el-col class="label" :span="4"> 页面状态 </el-col>
+      <el-col span="19" class="slider-box">
+        <el-switch :active-value="1"  :inactive-value="0" v-model="isShow" @change="changeState" />
+      </el-col>
     </div>
     <div class="c_row-item acea-row row-top">
-      <Col class="label" span="4"> 背景设置 </Col>
-      <Col span="19" class="slider-box">
+      <el-col class="label" :span="4"> 背景设置 </el-col>
+      <el-col span="19" class="slider-box">
         <div class="acea-row row-between row-top color">
-          <Checkbox v-model="bgColor" @on-change="bgColorTap">背景色</Checkbox>
-          <ColorPicker v-model="colorPicker" @on-change="colorPickerTap(colorPicker)" />
+          <el-checkbox v-model="bgColor" @change="bgColorTap">背景色</el-checkbox>
+          <ColorPicker v-model="colorPicker" @change="colorPickerTap(colorPicker)" />
         </div>
         <div class="acea-row row-between row-top color">
-          <Checkbox v-model="bgPic" @on-change="bgPicTap">背景图</Checkbox>
-          <RadioGroup v-model="tabVal" type="button" @on-change="radioTap">
-            <Radio :label="index" v-for="(item, index) in picList" :key="index">
+          <el-checkbox v-model="bgPic" @change="bgPicTap">背景图</el-checkbox>
+          <el-radio-group v-model="tabVal" type="button" @change="radioTap">
+            <el-radio-button :label="index" v-for="(item, index) in picList" :key="index">
               <span class="iconfont-diy" :class="item"></span>
-            </Radio>
-          </RadioGroup>
+            </el-radio-button>
+          </el-radio-group>
         </div>
         <div v-if="bgPic">
           <div class="title">建议尺寸：690 * 240px</div>
@@ -44,7 +44,7 @@
             <!--<span class="iconfont-diy icondel_1" @click.stop="bindDelete" v-if="bgPicUrl"></span>-->
           </div>
         </div>
-      </Col>
+      </el-col>
     </div>
     <div>
       <Modal

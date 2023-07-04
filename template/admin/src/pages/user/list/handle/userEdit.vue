@@ -1,21 +1,21 @@
 <template>
   <div>
-    <Form ref="formItem" :rules="ruleValidate" :model="formItem" :label-width="100" @submit.native.prevent>
-      <FormItem label="用户ID：" v-if="formItem.uid">
-        <Input class="form-sty" disabled v-model="formItem.uid" placeholder="请输入编号" style="width: 80%"></Input>
-      </FormItem>
-      <FormItem label="真实姓名：" prop="real_name">
-        <Input
+    <el-form ref="formItem" :rules="ruleValidate" :model="formItem" label-width="100px" @submit.native.prevent>
+      <el-form-item label="用户ID：" v-if="formItem.uid">
+        <el-input class="form-sty" disabled v-model="formItem.uid" placeholder="请输入编号" style="width: 80%"></el-input>
+      </el-form-item>
+      <el-form-item label="真实姓名：" prop="real_name">
+        <el-input
           class="form-sty"
           v-model.trim="formItem.real_name"
           placeholder="请输入真实姓名"
           style="width: 80%"
-        ></Input>
-      </FormItem>
-      <FormItem label="手机号码：" prop="phone">
-        <Input class="form-sty" v-model="formItem.phone" placeholder="请输入手机号码" style="width: 80%"></Input>
-      </FormItem>
-      <FormItem label="生日：">
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="手机号码：" prop="phone">
+        <el-input class="form-sty" v-model="formItem.phone" placeholder="请输入手机号码" style="width: 80%"></el-input>
+      </el-form-item>
+      <el-form-item label="生日：">
         <DatePicker
           class="form-sty"
           type="date"
@@ -23,58 +23,56 @@
           placeholder="请选择生日"
           style="width: 80%"
           format="yyyy-MM-dd"
-          @on-change="formItem.birthday = $event"
+          @change="formItem.birthday = $event"
         ></DatePicker>
-      </FormItem>
-      <FormItem label="身份证号：">
-        <Input class="form-sty" v-model.trim="formItem.card_id" placeholder="请输入身份证号" style="width: 80%"></Input>
-      </FormItem>
-      <FormItem label="用户地址：">
-        <Input class="form-sty" v-model="formItem.addres" placeholder="请输入用户地址" style="width: 80%"></Input>
-      </FormItem>
-      <FormItem label="用户备注：">
-        <Input class="form-sty" v-model="formItem.mark" placeholder="请输入用户备注" style="width: 80%"></Input>
-      </FormItem>
-      <FormItem label="登录密码：" prop="pwd">
-        <Input
+      </el-form-item>
+      <el-form-item label="身份证号：">
+        <el-input class="form-sty" v-model.trim="formItem.card_id" placeholder="请输入身份证号" style="width: 80%"></el-input>
+      </el-form-item>
+      <el-form-item label="用户地址：">
+        <el-input class="form-sty" v-model="formItem.addres" placeholder="请输入用户地址" style="width: 80%"></el-input>
+      </el-form-item>
+      <el-form-item label="用户备注：">
+        <el-input class="form-sty" v-model="formItem.mark" placeholder="请输入用户备注" style="width: 80%"></el-input>
+      </el-form-item>
+      <el-form-item label="登录密码：" prop="pwd">
+        <el-input
           class="form-sty"
           type="password"
           v-model="formItem.pwd"
           placeholder="请输入登录密码（修改用户可不填写，不填写不修改原密码）"
           style="width: 80%"
-        ></Input>
-      </FormItem>
-      <FormItem label="确认密码：" prop="true_pwd">
-        <Input
+        ></el-input>
+      </el-form-item>
+      <el-form-item label="确认密码：" prop="true_pwd">
+        <el-input
           class="form-sty"
           type="password"
           v-model="formItem.true_pwd"
           placeholder="请输入确认密码（修改用户可不填写，不填写不修改原密码）"
           style="width: 80%"
-        ></Input>
-      </FormItem>
+        ></el-input>
+      </el-form-item>
 
-      <FormItem label="用户等级：">
-        <Select v-model="formItem.level" class="form-sty" clearable>
-          <Option v-for="(item, index) in infoData.levelInfo" :key="index" :value="item.id">{{ item.name }}</Option>
-        </Select>
-      </FormItem>
-      <FormItem label="用户分组：">
-        <Select v-model="formItem.group_id" class="form-sty" clearable>
-          <Option v-for="(item, index) in infoData.groupInfo" :key="index" :value="item.id">{{
-            item.group_name
-          }}</Option>
-        </Select>
-      </FormItem>
-      <FormItem label="用户标签：">
-        <!-- <Select v-model="formItem.label_id">
-          <Option
+      <el-form-item label="用户等级：">
+        <el-select v-model="formItem.level" class="form-sty" clearable>
+          <el-option v-for="(item, index) in infoData.levelInfo" :key="index" :value="item.id" :label="item.name"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="用户分组：">
+        <el-select v-model="formItem.group_id" class="form-sty" clearable>
+          <el-option v-for="(item, index) in infoData.groupInfo" :key="index" :value="item.id" :label="item.group_name"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="用户标签：">
+        <!-- <el-select v-model="formItem.label_id">
+          <el-option
             v-for="(item, index) in infoData.labelInfo"
             :key="index"
             :value="item.value"
-            >{{ item.label }}</Option
+            >{{ item.label }}</el-option
           >
-        </Select> -->
+        </el-select> -->
         <div style="display: flex">
           <div class="labelInput acea-row row-between-wrapper" @click="openLabel">
             <div style="width: 90%">
@@ -89,28 +87,28 @@
           </div>
           <span class="addfont" @click="addLabel">新增标签</span>
         </div>
-      </FormItem>
-      <FormItem label="推广资格：">
-        <RadioGroup v-model="formItem.spread_open" class="form-sty">
-          <Radio :label="1">启用</Radio>
-          <Radio :label="0">禁用</Radio>
-        </RadioGroup>
+      </el-form-item>
+      <el-form-item label="推广资格：">
+        <el-radio-group v-model="formItem.spread_open" class="form-sty">
+          <el-radio :label="1">启用</el-radio>
+          <el-radio :label="0">禁用</el-radio>
+        </el-radio-group>
         <div class="tip">禁用用户的推广资格后，在任何分销模式下该用户都无分销权限</div>
-      </FormItem>
-      <FormItem label="推广权限：">
-        <RadioGroup v-model="formItem.is_promoter" class="form-sty">
-          <Radio :label="1">开启</Radio>
-          <Radio :label="0">锁定</Radio>
+      </el-form-item>
+      <el-form-item label="推广权限：">
+        <el-radio-group v-model="formItem.is_promoter" class="form-sty">
+          <el-radio :label="1">开启</el-radio>
+          <el-radio :label="0">锁定</el-radio>
           <div class="tip">指定分销模式下，开启或关闭用户的推广权限</div>
-        </RadioGroup>
-      </FormItem>
-      <FormItem label="用户状态：">
-        <RadioGroup v-model="formItem.status" class="form-sty">
-          <Radio :label="1">开启</Radio>
-          <Radio :label="0">锁定</Radio>
-        </RadioGroup>
-      </FormItem>
-    </Form>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="用户状态：">
+        <el-radio-group v-model="formItem.status" class="form-sty">
+          <el-radio :label="1">开启</el-radio>
+          <el-radio :label="0">锁定</el-radio>
+        </el-radio-group>
+      </el-form-item>
+    </el-form>
 
     <Modal v-model="labelShow" scrollable title="请选择用户标签" :closable="false" width="500" :footer-hide="true">
       <userLabel

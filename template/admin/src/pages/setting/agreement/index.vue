@@ -1,39 +1,39 @@
 <template>
   <div class="agreemant">
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
       <div class="new_card_pd">
-        <Tabs v-model="currentTab" @on-click="changeTab">
-          <TabPane :label="item.label" :name="item.value.toString()" v-for="(item, index) in headerList" :key="index" />
-        </Tabs>
+        <el-tabs v-model="currentTab" @tab-click="changeTab">
+          <el-tab-pane :label="item.label" :name="item.value.toString()" v-for="(item, index) in headerList" :key="index" />
+        </el-tabs>
       </div>
-    </Card>
+    </el-card>
 
-    <Row class="content">
-      <Col span="16">
+    <el-row class="content">
+      <el-col :span="16">
         <WangEditor style="width: 100%" :content="formValidate.content" @editorContent="getEditorContent"></WangEditor>
-      </Col>
-      <Col span="6" style="width: 33%">
+      </el-col>
+      <el-col :span="6" style="width: 33%">
         <div class="ifam">
           <div class="content" v-html="content"></div>
         </div>
-      </Col>
-    </Row>
-    <!-- <Row class="mb10 content">
-      <Button class="bnt" type="primary" @click="save" :loading="loadingExist"
-        >保存</Button
+      </el-col>
+    </el-row>
+    <!-- <el-row class="mb10 content">
+      <el-button class="bnt" type="primary" @click="save" :loading="loadingExist"
+        >保存</el-button
       >
-    </Row> -->
+    </el-row> -->
 
-    <Card
+    <el-card
       :bordered="false"
-      dis-hover
+      shadow="never"
       class="fixed-card"
       :style="{ left: `${!menuCollapse ? '240px' : isMobile ? '0' : '80px'}` }"
     >
       <div class="acea-row row-center">
-        <Button class="bnt" type="primary" @click="save" :loading="loadingExist">保存</Button>
+        <el-button class="bnt" type="primary" @click="save" :loading="loadingExist">保存</el-button>
       </div>
-    </Card>
+    </el-card>
   </div>
 </template>
 
@@ -92,9 +92,9 @@ export default {
     getEditorContent(content) {
       this.content = content;
     },
-    changeTab(data) {
+    changeTab() {
       this.formValidate.content = ' ';
-      getAgreements(data).then((res) => {
+      getAgreements(this.currentTab).then((res) => {
         this.formValidate.id = res.data.id || 0;
         this.formValidate.type = res.data.type;
         this.formValidate.title = res.data.title;

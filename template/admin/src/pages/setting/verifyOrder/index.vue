@@ -1,21 +1,23 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form ref="formValidate" :model="formValidate" :label-width="80" @submit.native.prevent>
-        <Row :gutter="24" type="flex">
-          <Col span="24" class="ivu-text-left">
-            <FormItem label="核销日期：">
-              <RadioGroup
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form ref="formValidate" :model="formValidate" label-width="85px" @submit.native.prevent>
+        <el-row :gutter="24">
+          <el-col :span="24" class="ivu-text-left">
+            <el-form-item label="核销日期：">
+              <el-radio-group
                 v-model="formValidate.data"
                 type="button"
                 class="mr"
-                @on-change="selectChange(formValidate.data)"
+                @change="selectChange(formValidate.data)"
               >
-                <Radio :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</Radio>
-              </RadioGroup>
+                <el-radio-button :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{
+                  item.text
+                }}</el-radio-button>
+              </el-radio-group>
               <DatePicker
                 :editable="false"
-                @on-change="onchangeTime"
+                @change="onchangeTime"
                 :value="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
@@ -23,90 +25,134 @@
                 placeholder="请选择时间"
                 style="width: 200px"
               ></DatePicker>
-            </FormItem>
-          </Col>
-          <Col span="12" class="ivu-text-left">
-            <FormItem label="筛选条件：">
-              <Input enter-button placeholder="请输入搜索内容" v-model="formValidate.real_name" style="width: 430px">
-                <Select v-model="field_key" slot="prepend" style="width: 80px">
-                  <Option value="all">全部</Option>
-                  <Option value="order_id">订单号</Option>
-                  <Option value="uid">UID</Option>
-                  <Option value="real_name">用户姓名</Option>
-                  <Option value="user_phone">用户电话</Option>
-                  <Option value="title">商品名称(模糊)</Option>
-                </Select>
-              </Input>
-            </FormItem>
-          </Col>
-          <Col span="12" class="mr">
-            <FormItem label="选择门店：" label-for="store_name">
-              <Select
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="ivu-text-left">
+            <el-form-item label="筛选条件：">
+              <el-input enter-button placeholder="请输入搜索内容" v-model="formValidate.real_name" style="width: 430px">
+                <el-select v-model="field_key" slot="prepend" style="width: 80px">
+                  <el-option value="all" label="全部"></el-option>
+                  <el-option value="order_id" label="订单号"></el-option>
+                  <el-option value="uid" label="UID"></el-option>
+                  <el-option value="real_name" label="用户姓名"></el-option>
+                  <el-option value="user_phone" label="用户电话"></el-option>
+                  <el-option value="title" label="商品名称(模糊)"></el-option>
+                </el-select>
+              </el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="mr">
+            <el-form-item label="选择门店：" label-for="store_name">
+              <el-select
                 v-model="formValidate.store_id"
                 element-id="store_id"
                 clearable
-                @on-change="userSearchs"
+                @change="userSearchs"
                 style="width: 430px"
               >
-                <Option v-for="item in storeSelectList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="12" class="mr">
-            <FormItem label="" label-for="store_name">
-              <Button type="primary" class="mr15" @click="userSearchs">搜索</Button>
-              <Button class="mr15" @click="refresh">刷新</Button>
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
-      <Table
-        :columns="columns"
+                <el-option
+                  v-for="item in storeSelectList"
+                  :value="item.id"
+                  :key="item.id"
+                  :label="item.name"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="mr">
+            <el-form-item label="" label-for="store_name">
+              <el-button type="primary" class="mr15" @click="userSearchs">搜索</el-button>
+              <el-button class="mr15" @click="refresh">刷新</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table
         :data="orderList"
         ref="table"
         :loading="loading"
-        highlight-row
-        no-data-text="暂无数据"
-        no-filtered-data-text="暂无筛选结果"
+        highlight-current-row
+        empty-text="暂无数据"
         class="orderData mt25"
       >
-        <template slot-scope="{ row, index }" slot="name"> {{ row.nickname }}/{{ row.uid }} </template>
-        <template slot-scope="{ row, index }" slot="spread_nickname">
-          <a href="javascript:void(0);" @click="referenceInfo(row.spread_uid)">{{ row.spread_nickname }}</a>
-        </template>
-        <template slot-scope="{ row, index }" slot="info">
-          <div class="tabBox" v-for="(val, i) in row._info" :key="i">
-            <div class="tabBox_img">
-              <img
-                v-lazy="
-                  val.cart_info.productInfo.attrInfo
-                    ? val.cart_info.productInfo.attrInfo.image
-                    : val.cart_info.productInfo.image
-                "
-              />
+        <el-table-column label="订单号" min-width="180">
+          <template slot-scope="scope">
+            <span>{{ scope.row.order_id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="用户信息" min-width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row.nickname }}/{{ scope.row.uid }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="推荐人信息" min-width="120">
+          <template slot-scope="scope">
+            <a href="javascript:void(0);" @click="referenceInfo(scope.row.spread_uid)">{{
+              scope.row.spread_nickname
+            }}</a>
+          </template>
+        </el-table-column>
+        <el-table-column label="商品信息" min-width="300">
+          <template slot-scope="scope">
+            <div class="tabBox" v-for="(val, i) in scope.row._info" :key="i">
+              <div class="tabBox_img">
+                <img
+                  v-lazy="
+                    val.cart_info.productInfo.attrInfo
+                      ? val.cart_info.productInfo.attrInfo.image
+                      : val.cart_info.productInfo.image
+                  "
+                />
+              </div>
+              <span class="tabBox_tit"
+                >{{ val.cart_info.productInfo.store_name + ' | '
+                }}{{ val.cart_info.productInfo.attrInfo ? val.cart_info.productInfo.attrInfo.suk : '' }}</span
+              >
+              <span class="tabBox_pice">{{ '￥' + val.cart_info.truePrice + ' x ' + val.cart_info.cart_num }}</span>
             </div>
-            <span class="tabBox_tit"
-              >{{ val.cart_info.productInfo.store_name + ' | '
-              }}{{ val.cart_info.productInfo.attrInfo ? val.cart_info.productInfo.attrInfo.suk : '' }}</span
-            >
-            <span class="tabBox_pice">{{ '￥' + val.cart_info.truePrice + ' x ' + val.cart_info.cart_num }}</span>
-          </div>
-        </template>
-        <template slot-scope="{ row, index }" slot="status_name">
-          {{ row.status_name.status_name }}
-        </template>
-      </Table>
+          </template>
+        </el-table-column>
+        <el-table-column label="实际支付" min-width="90">
+          <template slot-scope="scope">
+            <span>{{ scope.row.pay_price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="核销员" min-width="90">
+          <template slot-scope="scope">
+            <span>{{ scope.row.clerk_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="核销门店" min-width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row.store_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="支付状态" min-width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.pay_type_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="订单状态" min-width="80">
+          <template slot-scope="scope">
+            <span> {{ scope.row.status_name.status_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="下单时间" min-width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.add_time }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="formValidate.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="formValidate.limit"
+          :page.sync="formValidate.page"
+          :limit.sync="formValidate.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
     <referrer-info ref="info"></referrer-info>
   </div>
 </template>
@@ -144,60 +190,7 @@ export default {
       },
       timeVal: [],
       storeSelectList: [],
-      columns: [
-        {
-          title: '订单号',
-          key: 'order_id',
-          minWidth: 180,
-          sortable: true,
-        },
-        {
-          title: '用户信息',
-          slot: 'name',
-          minWidth: 120,
-        },
-        {
-          title: '推荐人信息',
-          slot: 'spread_nickname',
-          minWidth: 120,
-        },
-        {
-          title: '商品信息',
-          slot: 'info',
-          minWidth: 300,
-        },
-        {
-          title: '实际支付',
-          key: 'pay_price',
-          minWidth: 90,
-        },
-        {
-          title: '核销员',
-          key: 'clerk_name',
-          minWidth: 90,
-        },
-        {
-          title: '核销门店',
-          key: 'store_name',
-          minWidth: 120,
-        },
-        {
-          title: '支付状态',
-          key: 'pay_type_name',
-          minWidth: 80,
-        },
-        {
-          title: '订单状态',
-          slot: 'status_name',
-          minWidth: 80,
-        },
-        {
-          title: '下单时间',
-          key: 'add_time',
-          minWidth: 130,
-          sortable: true,
-        },
-      ],
+
       orderList: [],
       loading: false,
       total: 0,
@@ -248,10 +241,6 @@ export default {
         .catch((res) => {
           that.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.formValidate.page = index;
-      this.getList();
     },
     referenceInfo(uid) {
       this.$refs.info.isTemplate = true;

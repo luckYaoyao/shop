@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
@@ -9,27 +9,27 @@
         class="tabform"
         @submit.native.prevent
       >
-        <Row :gutter="24" type="flex" justify="end">
-          <Col span="24" class="ivu-text-left">
-            <Col span="7" class="ivu-text-left">
-              <FormItem label="会员类型：">
-                <Select v-model="formValidate.member_type" clearable @on-change="userSearchs">
-                  <Option v-for="item in treeSelect" :value="item.id" :key="item.id">{{ item.label }}</Option>
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="7" class="ivu-text-left ml20">
-              <FormItem label="支付方式：">
-                <Select v-model="formValidate.pay_type" clearable @on-change="paySearchs">
-                  <Option v-for="item in payList" :value="item.val" :key="item.val">{{ item.label }}</Option>
-                </Select>
-              </FormItem>
-            </Col>
-            <Col span="7" class="ivu-text-left ml20">
-              <FormItem label="购买时间：">
+        <el-row :gutter="24" justify="end">
+          <el-col :span="24" class="ivu-text-left">
+            <el-col :span="7" class="ivu-text-left">
+              <el-form-item label="会员类型：">
+                <el-select v-model="formValidate.member_type" clearable @change="userSearchs">
+                  <el-option v-for="item in treeSelect" :value="item.id" :key="item.id" :label="item.label"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="7" class="ivu-text-left ml20">
+              <el-form-item label="支付方式：">
+                <el-select v-model="formValidate.pay_type" clearable @change="paySearchs">
+                  <el-option v-for="item in payList" :value="item.val" :key="item.val" :label="item.label"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="7" class="ivu-text-left ml20">
+              <el-form-item label="购买时间：">
                 <DatePicker
                   :editable="false"
-                  @on-change="onchangeTime"
+                  @change="onchangeTime"
                   :value="timeVal"
                   format="yyyy/MM/dd"
                   type="datetimerange"
@@ -38,11 +38,11 @@
                   style="width: 90%"
                   :options="options"
                 ></DatePicker>
-              </FormItem>
-            </Col>
-            <Col span="7" class="ivu-text-left">
-              <FormItem label="搜索：">
-                <Input
+              </el-form-item>
+            </el-col>
+            <el-col :span="7" class="ivu-text-left">
+              <el-form-item label="搜索：">
+                <el-input
                   search
                   enter-button
                   @on-search="selChange"
@@ -52,45 +52,70 @@
                   style="width: 90%; display: inline-table"
                   class="mr"
                 />
-              </FormItem>
-            </Col>
-          </Col>
-        </Row>
-      </Form>
-      <Table
-        :columns="thead"
+              </el-form-item>
+            </el-col>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table
         :data="tbody"
         ref="table"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        size="small"
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <!--<template slot-scope="{ row, index }" slot="status">-->
-        <!--<i-switch-->
-        <!--v-model="row.status"-->
-        <!--:value="row.status"-->
-        <!--:true-value="1"-->
-        <!--:false-value="0"-->
-        <!--@on-change="onchangeIsShow(row)"-->
-        <!--size="large"-->
-        <!--&gt;-->
-        <!--<span slot="open">激活</span>-->
-        <!--<span slot="close">冻结</span>-->
-        <!--</i-switch>-->
-        <!--</template>-->
-      </Table>
+        <el-table-column label="订单号" width="170">
+          <template slot-scope="scope">
+            <span>{{ scope.row.order_id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="用户名" min-width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.user.nickname }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="手机号码" min-width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.user.phone || '--' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="会员类型" min-width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.member_type }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="有效期限（天）" min-width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.vip_day === -1 ? '永久' : scope.row.vip_day }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="支付金额（元）" min-width="50">
+          <template slot-scope="scope">
+            <span>{{ scope.row.pay_price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="支付方式" min-width="30">
+          <template slot-scope="scope">
+            <span>{{ scope.row.pay_type }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="购买时间" min-width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.pay_time }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="tablePage.page"
-          :page-size="tablePage.limit"
-          show-elevator
-          show-total
-          @on-change="pageChange"
+          :page.sync="tablePage.page"
+          :limit.sync="tablePage.limit"
+          @pagination="getMemberRecord"
         />
       </div>
-    </Card>
+    </el-card>
   </div>
 </template>
 
@@ -277,7 +302,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -330,11 +355,6 @@ export default {
           this.loading = false;
           this.$Message.error(err.msg);
         });
-    },
-    // 分页
-    pageChange(index) {
-      this.tablePage.page = index;
-      this.getMemberRecord();
     },
   },
 };

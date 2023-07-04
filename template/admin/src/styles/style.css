@@ -727,3 +727,30 @@ body {
 .pl10 {
   padding-left: 10px;
 }
+.el-switch__label * {
+  font-size: 12px;
+  line-height: 20px !important;
+}
+.defineSwitch .el-switch__label {
+  position: absolute;
+  display: none;
+  color: #fff !important;
+}
+/*打开时文字位置设置*/
+.defineSwitch .el-switch__label--right {
+  z-index: 1;
+  right: -8px; /*不同场景下可能不同，自行调整*/
+}
+/*关闭时文字位置设置*/
+.defineSwitch .el-switch__label--left {
+  z-index: 1;
+  left: 22px; /*不同场景下可能不同，自行调整*/
+}
+/*显示文字*/
+.defineSwitch .el-switch__label.is-active {
+  display: block;
+}
+.defineSwitch.el-switch .el-switch__core,
+.defineSwitch.el-switch .el-switch__label {
+  width: 55px !important; /*开关按钮的宽度大小*/
+}

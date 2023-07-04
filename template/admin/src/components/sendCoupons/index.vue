@@ -12,7 +12,7 @@
     >
       <div class="acea-row">
         <span class="sp">优惠券名称：</span
-        ><Input
+        ><el-input
           v-model="page.coupon_title"
           search
           enter-button
@@ -21,26 +21,44 @@
           @on-search="userSearchs"
         />
       </div>
-      <Table
-        :columns="columns"
+      <el-table
         :data="couponList"
         ref="table"
         class="mt25"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row, index }" slot="coupon_time">
-          <div v-if="row.coupon_time">{{ row.coupon_time }}</div>
-          <div v-else>{{ row.use_time }}</div>
-        </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="sendGrant(row, '发送优惠券', index)">发送</a>
-        </template>
-      </Table>
+        <el-table-column label="优惠券名称" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.title }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="优惠券面值" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.coupon_price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="优惠券最低消费" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.use_min_price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="优惠券有效期限" min-width="130">
+          <template slot-scope="scope">
+            <div v-if="scope.row.coupon_time">{{ scope.row.coupon_time }}</div>
+            <div v-else>{{ scope.row.use_time }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="90">
+          <template slot-scope="scope">
+            <a @click="sendGrant(scope.row, '发送优惠券', index)">发送</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="page.limit" />
+        <pagination v-if="total" :total="total" :page.sync="page.page" :limit.sync="page.limit" @pagination="getList" />
       </div>
     </Modal>
   </div>
@@ -125,10 +143,6 @@ export default {
     },
     // 表格搜索
     userSearchs() {
-      this.getList();
-    },
-    pageChange(index) {
-      this.page.page = index;
       this.getList();
     },
     // 发送

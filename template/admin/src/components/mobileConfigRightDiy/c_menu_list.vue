@@ -20,16 +20,16 @@
             <div class="info-item" v-for="(infos, key) in item.info" :key="key">
               <span>{{ infos.title }}</span>
               <div class="input-box" @click="getLink(index, key, item.info)">
-                <Input
+                <el-input
                   :icon="key == item.info.length - 1 ? 'ios-arrow-forward' : ''"
                   v-model="infos.value"
                   :readonly="key == item.info.length - 1 ? true : false"
                   :placeholder="infos.tips"
                   :maxlength="infos.max"
                   v-if="configData.isCube"
-                  @on-blur="onBlur"
+                  @blur="onBlur"
                 />
-                <Input
+                <el-input
                   :icon="key == item.info.length - 1 ? 'ios-arrow-forward' : ''"
                   v-model="infos.value"
                   :readonly="key == item.info.length - 1 ? true : false"
@@ -65,12 +65,12 @@
     </div>
     <template v-if="configData.list">
       <div class="add-btn" v-if="configData.list.length < configData.maxList">
-        <Button
+        <el-button
           type="primary"
           ghost
           style="width: 100%; height: 40px; border-color: #1890ff; color: #1890ff"
           @click="addBox"
-          >添加板块</Button
+          >添加板块</el-button
         >
       </div>
     </template>

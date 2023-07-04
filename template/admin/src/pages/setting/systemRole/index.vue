@@ -1,82 +1,101 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <Row type="flex" :gutter="24">
-          <Col v-bind="grid">
-            <FormItem label="状态：" label-for="status">
-              <Select v-model="formValidate.status" placeholder="请选择" @on-change="userSearchs" clearable>
-                <Option value="1">显示</Option>
-                <Option value="0">不显示</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="身份昵称：" label-for="role_name">
-              <Input
+        <el-row :gutter="24">
+          <el-col v-bind="grid">
+            <el-form-item label="状态：" label-for="status">
+              <el-select v-model="formValidate.status" placeholder="请选择" @change="userSearchs" clearable>
+                <el-option value="1" label="显示"></el-option>
+                <el-option value="0" label="不显示"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="身份昵称：" label-for="role_name">
+              <el-input
                 search
                 enter-button
                 placeholder="请输入身份昵称"
                 v-model="formValidate.role_name"
                 @on-search="userSearchs"
               />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex">
-          <Col v-bind="grid">
-            <Button v-auth="['setting-system_role-add']" type="primary" icon="md-add" @click="add('添加')"
-              >添加身份</Button
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col v-bind="grid">
+            <el-button v-auth="['setting-system_role-add']" type="primary" icon="md-add" @click="add('添加')"
+              >添加身份</el-button
             >
-          </Col>
-        </Row>
-      </Form>
-      <Table
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table
         :columns="columns1"
         :data="tableList"
         ref="table"
         class="mt25"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row, index }" slot="is_shows">
-          <i-switch
-            v-model="row.status"
-            :value="row.status"
-            :true-value="1"
-            :false-value="0"
-            @on-change="onchangeIsShow(row)"
-            size="large"
-          >
-            <span slot="open">显示</span>
-            <span slot="close">隐藏</span>
-          </i-switch>
-        </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="edit(row, '编辑')">编辑</a>
-          <Divider type="vertical" />
-          <a @click="del(row, '删除', index)">删除</a>
-        </template>
-      </Table>
+        <el-table-column label="ID" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="身份昵称" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.role_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="权限" min-width="1000">
+          <template slot-scope="scope">
+            <span class="line1">{{ scope.row.rules }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态" min-width="120">
+          <template slot-scope="scope">
+            <el-switch
+              class="defineSwitch"
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.status"
+              :value="scope.row.status"
+              @change="onchangeIsShow(scope.row)"
+              size="large"
+              active-text="显示"
+              inactive-text="隐藏"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="120">
+          <template slot-scope="scope">
+            <a @click="edit(scope.row, '编辑')">编辑</a>
+            <el-divider direction="vertical"></el-divider>
+            <a @click="del(scope.row, '删除', index)">删除</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="formValidate.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="formValidate.limit"
+          :page.sync="formValidate.page"
+          :limit.sync="formValidate.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
     <!-- 新增编辑-->
     <Modal
       v-model="modals"
@@ -88,24 +107,24 @@
       :mask-closable="false"
       width="600"
     >
-      <Form
+      <el-form
         ref="formInline"
         :model="formInline"
         :rules="ruleValidate"
-        :label-width="100"
+        label-width="100px"
         :label-position="labelPosition2"
         @submit.native.prevent
       >
-        <FormItem label="身份名称：" label-for="role_name" prop="role_name">
-          <Input placeholder="请输入身份昵称" v-model="formInline.role_name" />
-        </FormItem>
-        <FormItem label="是否开启：" prop="status">
-          <RadioGroup v-model="formInline.status">
-            <Radio :label="1">开启</Radio>
-            <Radio :label="0">关闭</Radio>
-          </RadioGroup>
-        </FormItem>
-        <FormItem label="权限：">
+        <el-form-item label="身份名称：" label-for="role_name" prop="role_name">
+          <el-input placeholder="请输入身份昵称" v-model="formInline.role_name" />
+        </el-form-item>
+        <el-form-item label="是否开启：" prop="status">
+          <el-radio-group v-model="formInline.status">
+            <el-radio :label="1">开启</el-radio>
+            <el-radio :label="0">关闭</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="权限：">
           <div class="trees-coadd">
             <div class="scollhide">
               <div class="iconlist">
@@ -113,10 +132,10 @@
               </div>
             </div>
           </div>
-        </FormItem>
+        </el-form-item>
         <Spin size="large" fix v-if="spinShow"></Spin>
-        <Button type="primary" size="large" long @click="handleSubmit('formInline')">提交</Button>
-      </Form>
+        <el-button type="primary" size="large" long @click="handleSubmit('formInline')">提交</el-button>
+      </el-form>
     </Modal>
   </div>
 </template>
@@ -144,35 +163,6 @@ export default {
         page: 1,
         limit: 20,
       },
-      columns1: [
-        {
-          title: 'ID',
-          key: 'id',
-          width: 80,
-        },
-        {
-          title: '身份昵称',
-          key: 'role_name',
-          minWidth: 120,
-        },
-        {
-          title: '权限',
-          key: 'rules',
-          tooltip: true,
-          width: 1000,
-        },
-        {
-          title: '状态',
-          slot: 'is_shows',
-          minWidth: 120,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 120,
-        },
-      ],
       tableList: [],
       formInline: {
         role_name: '',
@@ -194,7 +184,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -261,10 +251,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.formValidate.page = index;
-      this.getList();
     },
     // 表格搜索
     userSearchs() {

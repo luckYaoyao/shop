@@ -18,8 +18,8 @@
       <div v-if="!isUser">暂无标签</div>
     </div>
     <div class="footer">
-      <Button type="primary" class="btns" @click="subBtn">确定</Button>
-      <Button type="primary" class="btns" ghost @click="cancel">取消</Button>
+      <el-button type="primary" class="btns" @click="subBtn">确定</el-button>
+      <el-button type="primary" class="btns" ghost @click="cancel">取消</el-button>
     </div>
   </div>
 </template>

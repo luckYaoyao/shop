@@ -3,7 +3,7 @@
     <div class="i-layout-page-header header-title">
       <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div style="float: right">
-        <Button class="bnt" type="primary" @click="onsubmit('formValidate')">保存</Button>
+        <el-button class="bnt" type="primary" @click="onsubmit('formValidate')">保存</el-button>
       </div>
     </div>
     <div class="box-wrapper">
@@ -22,13 +22,13 @@
       </div>
       <div style="margin-left: 40px">
         <div class="table_box">
-          <div type="flex">
+          <div >
             <div v-bind="grid">
               <div class="title">隐私权限页面展示：</div>
             </div>
           </div>
           <div>
-            <Form
+            <el-form
               class="form"
               ref="formValidate"
               :model="formValidate"
@@ -37,14 +37,14 @@
               @submit.native.prevent
             >
               <div class="goodsTitle acea-row"></div>
-              <FormItem label="" style="margin: 0px">
+              <el-form-item label="" style="margin: 0px">
                 <WangEditor
                   style="width: 90%"
                   :content="formValidate.content"
                   @editorContent="getEditorContent"
                 ></WangEditor>
-              </FormItem>
-            </Form>
+              </el-form-item>
+            </el-form>
           </div>
         </div>
       </div>
@@ -94,7 +94,7 @@ export default {
       };
     },
     labelWidth() {
-      return this.isMobile ? undefined : 120;
+      return this.isMobile ? undefined : '120px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';

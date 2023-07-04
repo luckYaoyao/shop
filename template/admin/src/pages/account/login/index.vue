@@ -13,28 +13,29 @@
             <img :src="login_logo" alt="logo" style="width: 100%; height: 74px" />
           </div>
         </div>
-        <Form ref="formInline" :model="formInline" :rules="ruleInline" @keyup.enter="handleSubmit('formInline')">
-          <FormItem prop="username">
-            <Input
+        <el-form ref="formInline" :model="formInline" :rules="ruleInline" @keyup.enter="handleSubmit('formInline')">
+          <el-form-item prop="username">
+            <el-input
               type="text"
               v-model="formInline.username"
               prefix="ios-contact-outline"
               placeholder="请输入用户名"
               size="large"
             />
-          </FormItem>
-          <FormItem prop="password">
-            <Input
+          </el-form-item>
+          <el-form-item prop="password">
+            <el-input
               type="password"
               v-model="formInline.password"
               prefix="ios-lock-outline"
               placeholder="请输入密码"
               size="large"
+              show-password
             />
-          </FormItem>
-          <!-- <FormItem prop="code">
+          </el-form-item>
+          <!-- <el-form-item prop="code">
             <div class="code">
-              <Input
+              <el-input
                 type="text"
                 v-model="formInline.code"
                 prefix="ios-keypad-outline"
@@ -43,13 +44,13 @@
               />
               <img :src="imgcode" class="pictrue" @click="captchas" />
             </div>
-          </FormItem> -->
-          <FormItem class="pt10">
-            <Button type="primary" long :loading="loading" size="large" @click="handleSubmit('formInline')" class="btn"
-              >登录</Button
+          </el-form-item> -->
+          <el-form-item class="pt10">
+            <el-button type="primary" :loading="loading" size="large" @click="handleSubmit('formInline')" class="btn"
+              >登录</el-button
             >
-          </FormItem>
-        </Form>
+          </el-form-item>
+        </el-form>
       </div>
     </div>
 
@@ -422,6 +423,7 @@ export default {
 }
 
 .btn {
+  width: 100%;
   background: linear-gradient(90deg, rgba(25, 180, 241, 1) 0%, rgba(14, 115, 232, 1) 100%) !important;
 }
 

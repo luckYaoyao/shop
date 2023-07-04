@@ -10,44 +10,44 @@
         <p>5、确保前端/admin/src目录、后端app目录有写入创建文件权限</p>
       </template>
     </Alert>
-    <Form ref="foundation" :model="storage" :rules="storageRules" :label-width="130">
-      <FormItem label="生成controller位置">
-        <Input class="form-width" v-model="storage.controller" disabled placeholder="请输入"></Input>
+    <el-form ref="foundation" :model="storage" :rules="storageRules" label-width="130px">
+      <el-form-item label="生成controller位置">
+        <el-input class="form-width" v-model="storage.controller" disabled placeholder="请输入"></el-input>
         <div class="tip">生成后端控制器文件存放位置</div>
-      </FormItem>
-      <FormItem label="生成service位置">
-        <Input class="form-width" v-model="storage.service" disabled placeholder="请输入"></Input>
+      </el-form-item>
+      <el-form-item label="生成service位置">
+        <el-input class="form-width" v-model="storage.service" disabled placeholder="请输入"></el-input>
         <div class="tip">生成后端service文件存放位置</div>
-      </FormItem>
-      <FormItem label="生成dao位置">
-        <Input class="form-width" v-model="storage.dao" disabled placeholder="请输入"></Input>
+      </el-form-item>
+      <el-form-item label="生成dao位置">
+        <el-input class="form-width" v-model="storage.dao" disabled placeholder="请输入"></el-input>
         <div class="tip">生成后端dao文件存放位置</div>
-      </FormItem>
-      <FormItem label="生成model位置">
-        <Input class="form-width" v-model="storage.model" disabled placeholder="请输入"></Input>
+      </el-form-item>
+      <el-form-item label="生成model位置">
+        <el-input class="form-width" v-model="storage.model" disabled placeholder="请输入"></el-input>
         <div class="tip">生成后端model文件存放位置</div>
-      </FormItem>
-      <FormItem label="生成route位置">
-        <Input class="form-width" v-model="storage.route" disabled placeholder="请输入"></Input>
+      </el-form-item>
+      <el-form-item label="生成route位置">
+        <el-input class="form-width" v-model="storage.route" disabled placeholder="请输入"></el-input>
         <div class="tip">生成后端路由存放位置</div>
-      </FormItem>
-      <FormItem label="生成validate位置">
-        <Input class="form-width" v-model="storage.validate" disabled placeholder="请输入"></Input>
+      </el-form-item>
+      <el-form-item label="生成validate位置">
+        <el-input class="form-width" v-model="storage.validate" disabled placeholder="请输入"></el-input>
         <div class="tip">生成后端验证器存放位置</div>
-      </FormItem>
-      <FormItem label="生成pages位置">
-        <Input class="form-width" v-model="storage.pages" disabled placeholder="请输入"></Input>
+      </el-form-item>
+      <el-form-item label="生成pages位置">
+        <el-input class="form-width" v-model="storage.pages" disabled placeholder="请输入"></el-input>
         <div class="tip">生成前端页面文件存放位置</div>
-      </FormItem>
-      <FormItem label="生成api位置">
-        <Input class="form-width" v-model="storage.api" disabled placeholder="请输入"></Input>
+      </el-form-item>
+      <el-form-item label="生成api位置">
+        <el-input class="form-width" v-model="storage.api" disabled placeholder="请输入"></el-input>
         <div class="tip">生成前端api接口文件存放位置</div>
-      </FormItem>
-      <FormItem label="生成router位置">
-        <Input class="form-width" v-model="storage.router" disabled placeholder="请输入"></Input>
+      </el-form-item>
+      <el-form-item label="生成router位置">
+        <el-input class="form-width" v-model="storage.router" disabled placeholder="请输入"></el-input>
         <div class="tip">生成前端路由存放位置</div>
-      </FormItem>
-    </Form>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 

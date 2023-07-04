@@ -12,7 +12,7 @@
         ></component>
       </div>
       <div style="text-align: center" v-if="rCom.length">
-        <Button type="primary" style="width: 100%; margin: 0 auto; height: 40px" @click="saveConfig">保存</Button>
+        <el-button type="primary" style="width: 100%; margin: 0 auto; height: 40px" @click="saveConfig">保存</el-button>
       </div>
     </div>
   </div>

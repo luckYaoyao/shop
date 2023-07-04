@@ -1,9 +1,9 @@
 <template>
-  <Card :bordered="false" dis-hover class="ivu-mt-16">
+  <el-card :bordered="false" shadow="never" class="ivu-mt-16">
     <div class="acea-row row-between-wrapper">
       <div class="header-title mb20">
         公众号用户概括
-        <Poptip word-wrap width="500" trigger="hover" placement="right-start">
+        <el-tooltip effect="light" word-wrap width="500" trigger="hover" placement="right-start">
           <Icon type="ios-information-circle-outline" />
           <div slot="content">
             <div>新增关注用户数</div>
@@ -21,7 +21,7 @@
             <div>累积取关用户数</div>
             <div>筛选时间截止时，取消关注公众号的用户数量</div>
           </div>
-        </Poptip>
+        </el-tooltip>
       </div>
     </div>
     <div class="acea-row mb20">
@@ -48,7 +48,7 @@
     </div>
     <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
     <Spin size="large" fix v-if="spinShow"></Spin>
-  </Card>
+  </el-card>
 </template>
 
 <script>

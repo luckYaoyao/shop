@@ -1,6 +1,6 @@
 <template>
 <div class="upgrade">
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
       <div class="header">
         <div>当前版本<span class="v"></span><span class="num">{{$store.state.userInfo.version}}</span></div>
         <div class="info title">
@@ -10,14 +10,14 @@
           <li>{{upgradeStatus.title}}</li>
         </ul>
         </div>
-        <Button v-if="currentTab == 1 && upgradeStatus.status == 1" type="primary" class="primary btn update" @click="update()">立即更新</Button>
+        <el-button v-if="currentTab == 1 && upgradeStatus.status == 1" type="primary" class="primary btn update" @click="update()">立即更新</el-button>
       </div>
-    </Card>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    </el-card>
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
         <div>
-          <Tabs v-model="currentTab" @on-click="handleClick">
-            <TabPane :label="item.label" :name="item.value.toString()" v-for="item in headerList" :key="item.id"/>
-          </Tabs>
+          <el-tabs v-model="currentTab" @tag-click="handleClick">
+            <el-tab-pane :label="item.label" :name="item.value.toString()" v-for="item in headerList" :key="item.id"/>
+          </el-tabs>
         </div>
           <div class="contentTime" v-if="currentTab == 1">
             <div class="acea-row row-top on" @mouseenter="quearyEvear(item.id,index)" v-for="(item, index) in upgradeList" :key="index" :class="{active:index==dynamic}">
@@ -36,8 +36,8 @@
                             </Panel>
                         </Collapse>
                     </TimelineItem>
-                    <Button v-if="item.client_package_link" type="success"  class="primary btn" @click="downloadFile(item.client_package_link)">移动端源码</Button>
-                    <Button v-if="item.pc_package_link" type="primary" class="primary btn1" @click="downloadFile(item.pc_package_link)">PC端源码</Button>
+                    <el-button v-if="item.client_package_link" type="success"  class="primary btn" @click="downloadFile(item.client_package_link)">移动端源码</el-button>
+                    <el-button v-if="item.pc_package_link" type="primary" class="primary btn1" @click="downloadFile(item.pc_package_link)">PC端源码</el-button>
                 </Timeline>
             </div>
         </div>
@@ -62,14 +62,14 @@
                             </Panel>
                         </Collapse>
                     </TimelineItem>
-                    <!-- <Button v-if="item.data_status == 1" type="primary" class="primary btn" @click="handleDownload(item)">数据库备份</Button>
-                    <Button v-if="item.file_status == 1" type="primary" class="primary btn1" @click="exports(item)">导出文件</Button> -->
+                    <!-- <el-button v-if="item.data_status == 1" type="primary" class="primary btn" @click="handleDownload(item)">数据库备份</el-button>
+                    <el-button v-if="item.file_status == 1" type="primary" class="primary btn1" @click="exports(item)">导出文件</el-button> -->
                 </Timeline>
             </div>
         </div>
         </Scroll>
 
-    </Card>
+    </el-card>
     <!-- 免责声明 -->
     <Modal :loading="modal_loading" v-model="declaration" width="340" height="96" :closable="false" class-name="vertical-center-modal" :mask-closable="false">
         <p slot="header" class="header-modal">
@@ -79,8 +79,8 @@
           <p v-html="upgradeAgreement.content"></p>
         </div>
         <div slot="footer" class="footer">
-            <Button class="cancel" shape="circle" @click="reject">拒绝</Button>
-            <Button shape="circle" type="primary" @click="agree()">同意</Button>
+            <el-button class="cancel" shape="circle" @click="reject">拒绝</el-button>
+            <el-button shape="circle" type="primary" @click="agree()">同意</el-button>
         </div>
     </Modal>
     <!-- 升级 -->
@@ -104,7 +104,7 @@
           <div class="wait">正在更新，请耐心等候～</div>
         </div>
         <div slot="footer">
-          <!-- <div v-if="upgradeProgress.speed == '100.0'"><Button class="back" type="primary" shape="circle" @click="updateModal = false">确认</Button></div> -->
+          <!-- <div v-if="upgradeProgress.speed == '100.0'"><el-button class="back" type="primary" shape="circle" @click="updateModal = false">确认</el-button></div> -->
         </div>
         <div v-if="upgradeProgress.speed == '100.0'" class="describe">
           <i-circle :percent="100" stroke-color="#5cb85c">
@@ -119,8 +119,8 @@
           <div class="success">升级失败</div>
         </div> -->
         <div v-if="upgradeProgress.speed == '100.0'" slot="footer" class="footer2">
-          <Button class="confirm" type="primary" shape="circle" @click="back()">确认</Button>
-          <!-- <div><Button class="back" shape="circle" @click="backSure()">返回</Button></div> -->
+          <el-button class="confirm" type="primary" shape="circle" @click="back()">确认</el-button>
+          <!-- <div><el-button class="back" shape="circle" @click="backSure()">返回</el-button></div> -->
         </div>
     </Modal>
 </div>
@@ -230,9 +230,9 @@ export default {
         this.getUpgradeLogList();
       }
     },
-    handleClick(tab, event) {
+    handleClick() {
       this.page = 1
-      if(tab == 1){
+      if(this.currentTab == 1){
         this.getupgradeableList();
       } else {
         this.upgradeLogList = []

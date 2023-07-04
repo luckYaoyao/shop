@@ -3,15 +3,15 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <router-link :to="{ path: $routeProStr + '/app/wechat/news_category/index' }"
-          ><Button icon="ios-arrow-back" size="small" type="text" v-show="$route.params.id">返回</Button></router-link
+          ><el-button icon="ios-arrow-back" size="small" type="text" v-show="$route.params.id">返回</el-button></router-link
         >
-        <Divider type="vertical" />
+        <el-divider direction="vertical"></el-divider>
         <span class="ivu-page-header-title mr20" style="padding: 0" v-text="$route.meta.title"></span>
       </div>
     </div>
-    <Card :bordered="false" dis-hover class="save_from ivu-mt">
-      <Row type="flex" :gutter="24">
-        <Col :xl="6" :lg="6" :md="12" :sm="24" :xs="24">
+    <el-card :bordered="false" shadow="never" class="save_from ivu-mt">
+      <el-row  :gutter="24">
+        <el-col :xl="6" :lg="6" :md="12" :sm="24" :xs="24">
           <!--                    v-if="list.length!=0"-->
           <div v-for="(item, i) in list" :key="i">
             <div
@@ -28,7 +28,7 @@
                   backgroundSize: '100% 100%',
                 }"
               >
-                <Button type="error" shape="circle" icon="md-trash" @click="del(i)" v-show="isDel"></Button>
+                <el-button type="error" shape="circle" icon="md-trash" @click="del(i)" v-show="isDel"></el-button>
               </div>
               <span class="news_sp">{{ item.title }}</span>
             </div>
@@ -37,21 +37,21 @@
               <div class="news_cent_img ivu-mr-8">
                 <img :src="item.image_input ? item.image_input : baseImg" />
               </div>
-              <Button type="error" shape="circle" icon="md-trash" @click="del(i)"></Button>
+              <el-button type="error" shape="circle" icon="md-trash" @click="del(i)"></el-button>
             </div>
           </div>
           <!-- <div class="acea-row row-center-wrapper">
-            <Button
+            <el-button
               icon="ios-download-outline"
               class="mt20"
               type="primary"
               @click="handleAdd"
-              >添加图文</Button
+              >添加图文</el-button
             >
           </div> -->
-        </Col>
-        <Col :xl="18" :lg="18" :md="12" :sm="24" :xs="24">
-          <Form
+        </el-col>
+        <el-col :xl="18" :lg="18" :md="12" :sm="24" :xs="24">
+          <el-form
             class="saveForm"
             ref="saveForm"
             :model="saveForm"
@@ -60,24 +60,24 @@
             :label-position="labelPosition"
             @submit.native.prevent
           >
-            <Row :gutter="24" type="flex">
-              <Col span="24" class="ml40">
-                <FormItem label="标题：" prop="title">
-                  <Input style="width: 60%" v-model="saveForm.title" type="text" placeholder="请输入文章标题" />
-                </FormItem>
-              </Col>
-              <Col span="24" class="ml40">
-                <FormItem label="作者：" prop="author">
-                  <Input style="width: 60%" v-model="saveForm.author" type="text" placeholder="请输入作者名称" />
-                </FormItem>
-              </Col>
-              <Col span="24" class="ml40">
-                <FormItem label="摘要：" prop="synopsis">
-                  <Input style="width: 60%" v-model="saveForm.synopsis" type="textarea" placeholder="请输入摘要" />
-                </FormItem>
-              </Col>
-              <Col span="24" class="ml40">
-                <FormItem label="图文封面：" prop="image_input">
+            <el-row :gutter="24" >
+              <el-col :span="24" class="ml40">
+                <el-form-item label="标题：" prop="title">
+                  <el-input style="width: 60%" v-model="saveForm.title" type="text" placeholder="请输入文章标题" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" class="ml40">
+                <el-form-item label="作者：" prop="author">
+                  <el-input style="width: 60%" v-model="saveForm.author" type="text" placeholder="请输入作者名称" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" class="ml40">
+                <el-form-item label="摘要：" prop="synopsis">
+                  <el-input style="width: 60%" v-model="saveForm.synopsis" type="textarea" placeholder="请输入摘要" />
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" class="ml40">
+                <el-form-item label="图文封面：" prop="image_input">
                   <div class="picBox" @click="modalPicTap('单选')">
                     <div class="pictrue" v-if="saveForm.image_input">
                       <img :src="saveForm.image_input" />
@@ -86,16 +86,16 @@
                       <Icon type="ios-camera-outline" size="26" />
                     </div>
                   </div>
-                </FormItem>
-                <FormItem label="正文：" prop="content">
+                </el-form-item>
+                <el-form-item label="正文：" prop="content">
                   <WangEditor style="width: 90%" :content="content" @editorContent="getEditorContent"></WangEditor>
-                </FormItem>
-              </Col>
-              <Col span="24" class="ml40">
-                <FormItem>
-                  <Button type="primary" class="submission" @click="subFrom('saveForm')">提交</Button>
-                </FormItem>
-              </Col>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" class="ml40">
+                <el-form-item>
+                  <el-button type="primary" class="submission" @click="subFrom('saveForm')">提交</el-button>
+                </el-form-item>
+              </el-col>
               <Modal
                 v-model="modalPic"
                 width="950px"
@@ -114,11 +114,11 @@
                   v-if="modalPic"
                 ></uploadPictures>
               </Modal>
-            </Row>
-          </Form>
-        </Col>
-      </Row>
-    </Card>
+            </el-row>
+          </el-form>
+        </el-col>
+      </el-row>
+    </el-card>
   </div>
 </template>
 
@@ -219,7 +219,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 120;
+      return this.isMobile ? undefined : '120px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';

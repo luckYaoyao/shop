@@ -1,7 +1,7 @@
 <template>
   <div class="mobile-page">
     <div v-if="isUpdate">
-      <Divider />
+      <el-divider direction="vertical" />
       <div class="title">布局</div>
       <div class="tip">选定布局区域，在下方添加图片，建议添加比例一致的图片</div>
       <div class="advert">

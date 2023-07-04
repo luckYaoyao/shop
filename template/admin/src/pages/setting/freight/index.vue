@@ -1,33 +1,33 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="levelFrom"
         :model="levelFrom"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <Row type="flex" :gutter="24">
-          <Col v-bind="grid">
-            <FormItem label="搜索：" label-for="keyword">
-              <Input
+        <el-row :gutter="24">
+          <el-col v-bind="grid">
+            <el-form-item label="搜索：" label-for="keyword">
+              <el-input
                 search
                 enter-button
                 v-model="levelFrom.keyword"
                 placeholder="请输入物流公司名称或者编码"
                 @on-search="userSearchs"
               />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex">
-          <Col v-bind="grid">
-            <Button type="primary" icon="md-add" @click="syncExpress">同步物流公司</Button>
-          </Col>
-        </Row>
-      </Form>
-      <Table
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col v-bind="grid">
+            <el-button type="primary" icon="md-add" @click="syncExpress">同步物流公司</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table
         :columns="columns1"
         :data="levelLists"
         ref="table"
@@ -36,36 +36,55 @@
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row, index }" slot="is_shows">
-          <i-switch
-            v-model="row.is_show"
-            :value="row.is_show"
-            :true-value="1"
-            :false-value="0"
-            @on-change="onchangeIsShow(row)"
-            size="large"
-          >
-            <span slot="open">显示</span>
-            <span slot="close">隐藏</span>
-          </i-switch>
-        </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="edit(row)">编辑</a>
-          <!--                    <Divider type="vertical" />-->
-          <!--                    <a @click="del(row, '删除物流公司', index)">删除</a>-->
-        </template>
-      </Table>
+        <el-table-column label="ID" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="物流公司名称" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="编码" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.code }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="排序" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.sort }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否显示" min-width="100">
+          <template slot-scope="scope">
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.is_show"
+              :value="scope.row.is_show"
+              @change="onchangeIsShow(scope.row)"
+              size="large"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="80">
+          <template slot-scope="scope">
+            <a @click="edit(scope.row)">编辑</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="levelFrom.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="levelFrom.limit"
+          :page.sync="levelFrom.page"
+          :limit.sync="levelFrom.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
   </div>
 </template>
 <script>
@@ -139,7 +158,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -192,10 +211,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.levelFrom.page = index;
-      this.getList();
     },
     // 添加
     add() {

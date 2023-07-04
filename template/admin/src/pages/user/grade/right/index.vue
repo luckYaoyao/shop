@@ -3,68 +3,88 @@
     <div class="i-layout-page-header header-title">
       <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Table
-        :columns="thead"
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-table
         :data="tbody"
         :loading="loading"
-        highlight-row
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row }" slot="image">
-          <div class="image-wrap" v-viewer>
-            <img v-lazy="row.image" />
-          </div>
-        </template>
-        <template slot-scope="{ row }" slot="status">
-          <i-switch
-            v-model="row.status"
-            :value="row.status"
-            :true-value="1"
-            :false-value="0"
-            size="large"
-            @on-change="statusChange(row)"
-          >
-            <span slot="open">启用</span>
-            <span slot="close">禁用</span>
-          </i-switch>
-        </template>
-        <template slot-scope="{ row }" slot="action">
-          <a @click="edit(row)">编辑</a>
-        </template>
-      </Table>
+        <el-table-column label="权益名称" min-width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row.title }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="展示名称" min-width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row.show_title }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="权益图标" min-width="120">
+          <template slot-scope="scope">
+            <div class="image-wrap" v-viewer>
+              <img v-lazy="scope.row.image" />
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="权益简介" min-width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row.explain }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="权益状态" min-width="120">
+          <template slot-scope="scope">
+            <el-switch
+              class="defineSwitch"
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.status"
+              size="large"
+              @change="statusChange(scope.row)"
+              active-text="启用"
+              inactive-text="禁用"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="170">
+          <template slot-scope="scope">
+            <a @click="edit(scope.row)">编辑</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page :total="total" :current="page" :page-size="limit" show-elevator show-total @on-change="pageChange" />
+        <pagination v-if="total" :total="total" :page.sync="page" :limit.sync="limit" @pagination="getRightList" />
       </div>
-    </Card>
+    </el-card>
     <Modal v-model="modal1" title="编辑会员权益" footer-hide :z-index="555">
-      <Form ref="form" :model="form" :rules="rules" :label-width="80">
-        <Input v-model="form.id" style="display: none"></Input>
-        <Input v-model="form.status" style="display: none"></Input>
-        <Input v-model="form.right_type" style="display: none"></Input>
-        <FormItem label="权益名称" prop="title">
-          <Input v-model.trim="form.title" placeholder="请输入权益名称" disabled></Input>
-        </FormItem>
-        <FormItem label="展示名称" prop="show_title">
-          <Input v-model.trim="form.show_title" placeholder="请输入展示名称"></Input>
-        </FormItem>
-        <FormItem label="权益图标" prop="image">
+      <el-form ref="form" :model="form" :rules="rules" label-width="85px">
+        <el-input v-model="form.id" style="display: none"></el-input>
+        <el-input v-model="form.status" style="display: none"></el-input>
+        <el-input v-model="form.right_type" style="display: none"></el-input>
+        <el-form-item label="权益名称" prop="title">
+          <el-input v-model.trim="form.title" placeholder="请输入权益名称" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="展示名称" prop="show_title">
+          <el-input v-model.trim="form.show_title" placeholder="请输入展示名称"></el-input>
+        </el-form-item>
+        <el-form-item label="权益图标" prop="image">
           <div class="image-group" @click="callImage">
             <img v-if="form.image" v-lazy="form.image" />
             <Icon v-else type="ios-camera-outline" size="26" />
           </div>
-          <Input v-model="form.image" style="display: none"></Input>
-        </FormItem>
-        <FormItem label="权益简介" prop="show_title">
-          <Input
+          <el-input v-model="form.image" style="display: none"></el-input>
+        </el-form-item>
+        <el-form-item label="权益简介" prop="show_title">
+          <el-input
             v-model.trim="form.explain"
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 10 }"
             placeholder="请输入权益简介"
-          ></Input>
-        </FormItem>
-        <FormItem
+          ></el-input>
+        </el-form-item>
+        <el-form-item
           v-show="form.right_type !== 'coupon' && form.right_type !== 'vip_price'"
           :label="
             form.right_type === 'offline' || form.right_type === 'express' || form.right_type === 'vip_price'
@@ -73,12 +93,12 @@
           "
           prop="number"
         >
-          <InputNumber v-model="form.number" :min="1"></InputNumber>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="formSubmit('form')">提交</Button>
-        </FormItem>
-      </Form>
+          <el-input-number controls-position="right" v-model="form.number" :min="1"></el-input-number>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="formSubmit('form')">提交</el-button>
+        </el-form-item>
+      </el-form>
     </Modal>
     <Modal v-model="modal2" width="950px" scrollable footer-hide closable title="选择权益图标" :z-index="888">
       <uploadPictures
@@ -101,32 +121,6 @@ export default {
   components: { uploadPictures },
   data() {
     return {
-      thead: [
-        {
-          title: '权益名称',
-          key: 'title',
-        },
-        {
-          title: '展示名称',
-          key: 'show_title',
-        },
-        {
-          title: '权益图标',
-          slot: 'image',
-        },
-        {
-          title: '权益简介',
-          key: 'explain',
-        },
-        {
-          title: '权益状态',
-          slot: 'status',
-        },
-        {
-          title: '操作',
-          slot: 'action',
-        },
-      ],
       tbody: [],
       loading: false,
       total: 0,
@@ -211,11 +205,6 @@ export default {
       this.form.image = row.image;
       this.form.explain = row.explain;
       this.form.number = row.number;
-    },
-    // 分页
-    pageChange(index) {
-      this.page = index;
-      this.getRightList();
     },
     // 修改
     rightSave() {

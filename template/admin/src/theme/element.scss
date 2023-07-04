@@ -270,3 +270,24 @@
 .el-alert__title {
   word-break: break-all;
 }
+
+// tooltip
+.el-tooltip__popper.is-light {
+  border-color: #f2f2f2 !important;
+}
+
+.el-tooltip__popper .popper__arrow,
+.el-tooltip__popper .popper__arrow::after {
+  color: #f2f2f2 !important;
+}
+// 下拉菜单
+.el-dropdown {
+  font-size: 12px !important;
+}
+.el-dropdown-link {
+  cursor: pointer;
+  color: #2d8cf0;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
+}

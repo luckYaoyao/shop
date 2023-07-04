@@ -1,31 +1,39 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Row type="flex">
-        <Col v-bind="grid">
-          <Button type="primary" icon="md-add" @click="add">添加</Button>
-        </Col>
-      </Row>
-      <Table
-        :columns="columns"
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-row>
+        <el-col v-bind="grid">
+          <el-button type="primary" icon="md-add" @click="add">添加</el-button>
+        </el-col>
+      </el-row>
+      <el-table
         :data="dataList"
         ref="table"
         class="mt25"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="edit(row)">修改</a>
-          <Divider type="vertical" />
-          <a @click="del(row, '删除', index)">删除</a>
-        </template>
-      </Table>
+        <el-table-column :label="item.title" :min-width="item.minWidth" v-for="(item, index) in columns" :key="index">
+          <template slot-scope="scope">
+            <template v-if="item.key">
+              <div>
+                <span>{{ scope.row[item.key] }}</span>
+              </div>
+            </template>
+            <template v-else-if="item.slot === 'action'">
+              <a @click="edit(scope.row)">修改</a>
+              <el-divider direction="vertical"></el-divider>
+              <a @click="del(scope.row, '删除', index)">删除</a>
+            </template>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="from.limit" />
+        <pagination v-if="total" :total="total" :page.sync="from.page" :limit.sync="from.limit" @pagination="getList" />
       </div>
-    </Card>
+    </el-card>
   </div>
 </template>
 
@@ -59,7 +67,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -165,11 +173,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    //分页
-    pageChange(index) {
-      this.from.page = index;
-      this.getList();
     },
     // 修改
     edit(row) {

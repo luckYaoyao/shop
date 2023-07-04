@@ -1,33 +1,33 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="160" label-position="right">
-        <FormItem label="头像">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-width="160px" label-position="right">
+        <el-form-item label="头像">
           <div class="avatar" @click="avatarMoadl = true">
             <img v-if="formValidate.head_pic" :src="formValidate.head_pic" alt="" />
             <img v-else src="../../../assets/images/f.png" alt="" />
           </div>
-        </FormItem>
-        <FormItem label="账号" prop="">
-          <Input type="text" v-model="account" :disabled="true" class="input"></Input>
-        </FormItem>
-        <FormItem label="姓名" prop="real_name">
-          <Input type="text" v-model="formValidate.real_name" class="input"></Input>
-        </FormItem>
-        <FormItem label="原始密码" prop="pwd">
-          <Input type="password" v-model="formValidate.pwd" class="input"></Input>
-        </FormItem>
-        <FormItem label="新密码" prop="new_pwd">
-          <Input type="password" v-model="formValidate.new_pwd" class="input"></Input>
-        </FormItem>
-        <FormItem label="确认新密码" prop="conf_pwd">
-          <Input type="password" v-model="formValidate.conf_pwd" class="input"></Input>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="handleSubmit('formValidate')">提交</Button>
-        </FormItem>
-      </Form>
-    </Card>
+        </el-form-item>
+        <el-form-item label="账号" prop="">
+          <el-input type="text" v-model="account" :disabled="true" class="input"></el-input>
+        </el-form-item>
+        <el-form-item label="姓名" prop="real_name">
+          <el-input type="text" v-model="formValidate.real_name" class="input"></el-input>
+        </el-form-item>
+        <el-form-item label="原始密码" prop="pwd">
+          <el-input type="password" v-model="formValidate.pwd" class="input"></el-input>
+        </el-form-item>
+        <el-form-item label="新密码" prop="new_pwd">
+          <el-input type="password" v-model="formValidate.new_pwd" class="input"></el-input>
+        </el-form-item>
+        <el-form-item label="确认新密码" prop="conf_pwd">
+          <el-input type="password" v-model="formValidate.conf_pwd" class="input"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleSubmit('formValidate')">提交</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
     <Modal v-model="avatarMoadl" footer-hide title="头像上传" width="700">
       <CropperImg v-if="avatarMoadl" @uploadImgSuccess="uploadImgSuccess"></CropperImg>
     </Modal>
@@ -45,7 +45,7 @@ export default {
     ...mapState('media', ['isMobile']),
     ...mapState('userLevel', ['categoryId']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';

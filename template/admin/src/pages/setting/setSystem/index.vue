@@ -4,27 +4,27 @@
       <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
     </div>
     <div class="article-manager">
-      <Card :bordered="false" dis-hover class="ivu-mt fromBox">
-        <Tabs v-model="currentTab" @on-click="changeTab" v-if="headerList.length">
-          <TabPane
+      <el-card :bordered="false" shadow="never" class="ivu-mt fromBox">
+        <el-tabs v-model="currentTab" @tab-click="changeTab" v-if="headerList.length">
+          <el-tab-pane
             :icon="item.icon"
             :label="item.label"
             :name="item.value.toString()"
             v-for="(item, index) in headerList"
             :key="index"
           />
-        </Tabs>
-        <Tabs type="card" v-model="childrenId" v-if="headerChildrenList.length" @on-click="changeChildrenTab">
-          <TabPane
+        </el-tabs>
+        <el-tabs v-model="childrenId" v-if="headerChildrenList.length">
+          <el-tab-pane
             :label="item.label"
             :name="item.id.toString()"
             v-for="(item, index) in headerChildrenList"
             :key="index"
-          ></TabPane>
-        </Tabs>
+          ></el-tab-pane>
+        </el-tabs>
         <form-create :option="option" :rule="rules" @submit="onSubmit" v-if="rules.length !== 0"></form-create>
         <Spin size="large" fix v-if="spinShow"></Spin>
-      </Card>
+      </el-card>
     </div>
   </div>
 </template>
@@ -191,11 +191,8 @@ export default {
     },
     // 选择
     changeTab() {
+      console.log('11');
       this.childrenList();
-    },
-    // 二级选择
-    changeChildrenTab(name) {
-      this.childrenId = name;
     },
     // 提交表单 group
     onSubmit(formData) {

@@ -1,6 +1,6 @@
 <template>
   <div class="diy-page">
-    <Card :bordered="false" dis-hover class="ivu-mt" style="margin: 0 10px">
+    <el-card :bordered="false" shadow="never" class="ivu-mt" style="margin: 0 10px">
       <div class="diy-wrapper" :style="'height:' + clientHeight + 'px;'">
         <!-- 左侧 -->
         <div class="left">
@@ -50,7 +50,7 @@
               </draggable>
             </div>
           </div>
-          <!--                    <div style="padding: 0 20px"><Button type="primary" style="width: 100%" @click="saveConfig">保存</Button></div>-->
+          <!--                    <div style="padding: 0 20px"><el-button type="primary" style="width: 100%" @click="saveConfig">保存</el-button></div>-->
           <div class="wrapper" v-else :style="'height:' + (clientHeight - 46) + 'px;'">
             <div class="link-item" v-for="(item, index) in urlList" :key="index">
               <div class="name">{{ item.name }}</div>
@@ -61,7 +61,7 @@
               </div>
               <div class="lable">
                 <p class="txt">例如：{{ item.example }}</p>
-                <Button size="small" @click="onCopy(item.example)">复制 </Button>
+                <el-button size="small" @click="onCopy(item.example)">复制 </el-button>
               </div>
             </div>
           </div>
@@ -182,12 +182,12 @@
           </div>
         </div>
       </div>
-    </Card>
+    </el-card>
     <!--<div class="foot-box">-->
-    <!--<Button @click="reast">重置</Button>-->
-    <!--<Button type="primary" @click="saveConfig" :loading="loading"-->
+    <!--<el-button @click="reast">重置</el-button>-->
+    <!--<el-button type="primary" @click="saveConfig" :loading="loading"-->
     <!--&gt;保存-->
-    <!--</Button-->
+    <!--</el-button-->
     <!--&gt;-->
     <!--</div>-->
   </div>

@@ -8,15 +8,15 @@
       <draggable class="dragArea list-group" :list="datas[name].list" group="peoples" handle=".icon">
         <div class="input-item" v-for="(item, index) in datas[name].list" :key="index">
           <div class="icon"><Icon type="ios-keypad" size="20" /></div>
-          <Input v-model="item.val" placeholder="选填，不超过十个字" :maxlength="item.maxlength || 10" />
+          <el-input v-model="item.val" placeholder="选填，不超过十个字" :maxlength="item.maxlength || 10" />
           <div class="close" @click="close(index)">
             <Icon type="md-close" size="20" style="color: #d8d8d8" />
           </div>
         </div>
       </draggable>
       <div class="add-btn" @click="addHotTxt">
-        <Button type="primary" ghost style="width: 100%; height: 40px; border-color: #1890ff; color: #1890ff"
-          >添加热词</Button
+        <el-button type="primary" ghost style="width: 100%; height: 40px; border-color: #1890ff; color: #1890ff"
+          >添加热词</el-button
         >
       </div>
     </div>

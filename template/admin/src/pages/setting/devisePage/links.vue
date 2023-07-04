@@ -10,9 +10,9 @@
       </div>
       <div class="tips">
         例如：{{ item.example }}
-        <!--<Button size="small" style="margin-left: 10px" v-clipboard:copy="item.example"-->
+        <!--<el-button size="small" style="margin-left: 10px" v-clipboard:copy="item.example"-->
         <!--v-clipboard:success="onCopy"-->
-        <!--v-clipboard:error="onError">复制</Button>-->
+        <!--v-clipboard:error="onError">复制</el-button>-->
         <span class="copy copy-data" @click="onCopy(item.example)">复制</span>
       </div>
     </div>

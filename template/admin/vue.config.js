@@ -98,11 +98,6 @@ module.exports = {
     config.resolve.alias.set('@api', resolve('src/api'));
     // node
     config.node.set('__dirname', true).set('__filename', true);
-    // 判断是否需要加入模拟数据
-    const entry = config.entry('app');
-    if (Setting.isMock) {
-      entry.add('@/mock').end();
-    }
     config.plugin('monaco').use(new MonacoWebpackPlugin());
   },
 

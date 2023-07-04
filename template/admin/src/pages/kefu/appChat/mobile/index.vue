@@ -106,7 +106,7 @@
         </Upload>
       </div>
       <div class="input-box">
-        <Input v-model="con" placeholder="请输入内容" />
+        <el-input v-model="con" placeholder="请输入内容" />
         <span class="iconfont iconfasong" @click="sendText" :class="{ isSend: isSend }"></span>
       </div>
       <div class="emoji" @click="openBox(1)"><span class="iconfont iconbiaoqing2"></span></div>

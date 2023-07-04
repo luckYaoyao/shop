@@ -1,10 +1,10 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
       <div class="box" ref="picBox">
         <upload-file v-if="uploadShow" :isShow="0" :pageLimit="pageLimit"></upload-file>
       </div>
-    </Card>
+    </el-card>
   </div>
 </template>
 <script>

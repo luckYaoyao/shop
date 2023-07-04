@@ -23,7 +23,7 @@
               <div class="info-item" v-if="infos.title === '链接'">
                 <span>{{ infos.title }}</span>
                 <div class="input-box" @click="getLink(index, key)">
-                  <Input
+                  <el-input
                     v-model="infos.value"
                     :placeholder="infos.tips"
                     :maxlength="infos.maxlength"
@@ -35,7 +35,7 @@
               <div v-else class="info-item">
                 <span>{{ infos.title }}</span>
                 <div class="input-box">
-                  <Input v-model="infos.value" :placeholder="infos.tips" :maxlength="infos.maxlength" width="250px" />
+                  <el-input v-model="infos.value" :placeholder="infos.tips" :maxlength="infos.maxlength" width="250px" />
                 </div>
               </div>
             </div>
@@ -65,13 +65,13 @@
     </div>
     <template v-if="datas[name]">
       <div class="add-btn" v-if="datas[name].list.length < datas[name].max || datas[name].max == ''">
-        <Button
+        <el-button
           type="primary"
           ghost
           style="width: 100%; height: 40px; border-color: #1890ff; color: #1890ff"
           @click="addBox"
           >添加图片
-        </Button>
+        </el-button>
       </div>
     </template>
     <linkaddress ref="linkaddres" @linkUrl="linkUrl"></linkaddress>

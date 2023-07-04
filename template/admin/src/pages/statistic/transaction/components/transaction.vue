@@ -1,9 +1,9 @@
 <template>
-  <Card :bordered="false" dis-hover class="ivu-mt-16">
+  <el-card :bordered="false" shadow="never" class="ivu-mt-16">
     <div class="acea-row row-between-wrapper mb20">
       <div class="header-title">
         交易概况
-        <Poptip word-wrap width="500" trigger="hover" placement="right-start">
+        <el-tooltip effect="light" word-wrap width="500" trigger="hover" placement="right-start">
           <Icon type="ios-information-circle-outline" />
           <div slot="content">
             <div>营业额</div>
@@ -36,13 +36,13 @@
             <div>商品退款金额</div>
             <div>用户成功退款的商品金额</div>
           </div>
-        </Poptip>
+        </el-tooltip>
       </div>
       <div class="acea-row">
         <DatePicker
           :editable="false"
           :clearable="false"
-          @on-change="onchangeTime"
+          @change="onchangeTime"
           :value="timeVal"
           format="yyyy/MM/dd"
           type="daterange"
@@ -52,8 +52,8 @@
           class="mr20"
           :options="options"
         ></DatePicker>
-        <Button type="primary" class="mr20" @click="onSeach">查询</Button>
-        <Button type="primary" @click="excel">导出</Button>
+        <el-button type="primary" class="mr20" @click="onSeach">查询</el-button>
+        <el-button type="primary" @click="excel">导出</el-button>
       </div>
     </div>
     <div class="acea-row mb20">
@@ -88,7 +88,7 @@
     </div>
     <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
     <Spin size="large" fix v-if="spinShow"></Spin>
-  </Card>
+  </el-card>
 </template>
 
 <script>

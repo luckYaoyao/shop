@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="footer">
-        <Button type="primary" class="btn" @click="subBtn">确定</Button>
+        <el-button type="primary" class="btn" @click="subBtn">确定</el-button>
       </div>
     </div>
     <div class="maskModel" @touchmove.prevent v-show="change === true"></div>

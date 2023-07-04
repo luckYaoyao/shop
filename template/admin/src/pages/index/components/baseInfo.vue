@@ -1,11 +1,11 @@
 <template>
-  <Row :gutter="24">
-    <Col v-bind="grid" class="ivu-mb" v-for="(item, index) in infoList" :key="index">
-      <Card :bordered="false" dis-hover :padding="12">
-        <p slot="title">
+  <el-row :gutter="24">
+    <el-col v-bind="grid" class="ivu-mb" v-for="(item, index) in infoList" :key="index">
+      <el-card shadow="never" :padding="12">
+        <p slot="header">
           <span v-text="item.title"></span>
+          <el-tag style="float: right;" type="success">{{ item.date }}</el-tag>
         </p>
-        <Tag slot="extra" color="green">{{ item.date }}</Tag>
         <div>
           <!--<Numeral :value="item.yesterday" style=""/>-->
           <div class="number">{{ item.today }}</div>
@@ -30,17 +30,17 @@
               />
             </span> -->
           </div>
-          <Divider style="margin: 8px 0" />
+          <el-divider style="margin: 8px 0" />
           <div>
-            <Row>
-              <Col span="12" v-text="item.total_name"></Col>
-              <Col span="12" class="ivu-text-right">{{ item.total }}</Col>
-            </Row>
+            <el-row>
+              <el-col :span="12" v-text="item.total_name"></el-col>
+              <el-col :span="12" class="ivu-text-right">{{ item.total }}</el-col>
+            </el-row>
           </div>
         </div>
-      </Card>
-    </Col>
-  </Row>
+      </el-card>
+    </el-col>
+  </el-row>
 </template>
 <script>
 import echarts from 'echarts';
@@ -51,10 +51,10 @@ export default {
       infoList: [],
       grid: {
         xl: 6,
-        lg: 12,
+        lg: 6,
         md: 12,
         sm: 12,
-        xs: 24,
+        xs: 12,
       },
       excessStyle: {
         color: '#f56a00',

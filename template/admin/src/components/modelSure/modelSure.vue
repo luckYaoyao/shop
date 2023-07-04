@@ -9,8 +9,8 @@
       <p v-if="delfromData.info !== undefined">{{ `${delfromData.info}` }}</p>
     </div>
     <div slot="footer" class="acea-row row-right">
-      <Button type="warning" :loading="modal_loading" @click="ok">确定</Button>
-      <Button type="primary" @click="cancel">取消</Button>
+      <el-button type="warning" :loading="modal_loading" @click="ok">确定</el-button>
+      <el-button type="primary" @click="cancel">取消</el-button>
     </div>
   </Modal>
 </template>

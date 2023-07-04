@@ -1,84 +1,125 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="tableFrom"
         :model="tableFrom"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <Row type="flex" :gutter="24">
-          <Col v-bind="grid">
-            <FormItem label="是否有效：" label-for="status">
-              <Select
+        <el-row :gutter="24">
+          <el-col v-bind="grid">
+            <el-form-item label="是否有效：" label-for="status">
+              <el-select
                 v-model="tableFrom.status"
                 placeholder="请选择"
                 clearable
                 element-id="status"
-                @on-change="userSearchs"
+                @change="userSearchs"
               >
-                <Option value="1">有效</Option>
-                <Option value="0">无效</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="优惠券名称：" label-for="title">
-              <Input
+                <el-option value="1" label="有效"></el-option>
+                <el-option value="0" label="无效"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="优惠券名称：" label-for="title">
+              <el-input
                 search
                 enter-button
                 v-model="tableFrom.title"
                 placeholder="请输入优惠券名称"
                 @on-search="userSearchs"
               />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex">
-          <Col v-bind="grid">
-            <Button v-auth="['admin-marketing-store_coupon-add']" type="primary" icon="md-add" @click="add"
-              >添加优惠券</Button
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col v-bind="grid">
+            <el-button v-auth="['admin-marketing-store_coupon-add']" type="primary" icon="md-add" @click="add"
+              >添加优惠券</el-button
             >
-          </Col>
-        </Row>
-      </Form>
-      <Table
-        :columns="columns1"
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table
         :data="tableList"
         ref="table"
         class="mt25"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row, index }" slot="status">
-          <Icon type="md-checkmark" v-if="row.status === 1" color="#0092DC" size="14" />
-          <Icon type="md-close" v-else color="#ed5565" size="14" />
-        </template>
-        <template slot-scope="{ row, index }" slot="add_time">
-          <span> {{ row.add_time | formatDate }}</span>
-        </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="couponInvalid(row, '修改优惠券', index)" v-if="row.status">立即失效</a>
-          <Divider type="vertical" v-if="row.status" />
-          <a @click="couponSend(row)" v-if="row.status" v-auth="['admin-marketing-store_coupon-push']">发布</a>
-          <Divider type="vertical" v-if="row.status" />
-          <a @click="couponDel(row, '删除优惠券', index)">删除</a>
-        </template>
-      </Table>
+        <el-table-column label="ID" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="优惠券名称" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.title }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="优惠券类型" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.type }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="面值" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.coupon_price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="最低消费额" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.use_min_price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="有效期限(天)" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.coupon_time }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="排序" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.sort }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否有效" min-width="130">
+          <template slot-scope="scope">
+            <Icon type="md-checkmark" v-if="scope.row.status === 1" color="#0092DC" size="14" />
+            <Icon type="md-close" v-else color="#ed5565" size="14" />
+          </template>
+        </el-table-column>
+        <el-table-column label="添加时间" min-width="130">
+          <template slot-scope="scope">
+            <span> {{ scope.row.add_time | formatDate }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="170">
+          <template slot-scope="scope">
+            <a @click="couponInvalid(scope.row, '修改优惠券', index)" v-if="scope.row.status">立即失效</a>
+            <el-divider direction="vertical" v-if="scope.row.status" />
+            <a @click="couponSend(scope.row)" v-if="scope.row.status" v-auth="['admin-marketing-store_coupon-push']"
+              >发布</a
+            >
+            <el-divider direction="vertical" v-if="scope.row.status" />
+            <a @click="couponDel(scope.row, '删除优惠券', index)">删除</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="tableFrom.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="tableFrom.limit"
+          :page.sync="tableFrom.page"
+          :limit.sync="tableFrom.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
     <!--表单编辑-->
     <edit-from :FromData="FromData" @changeType="changeType" ref="edits"></edit-from>
   </div>
@@ -180,7 +221,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 90;
+      return this.isMobile ? undefined : '90px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';

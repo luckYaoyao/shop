@@ -8,12 +8,12 @@
     </div>
 
     <div class="layout-navbars-breadcrumb-user-icon">
-      <el-popover
+      <el-tooltip effect="light"
         placement="bottom"
         trigger="click"
         v-model="isShowUserNewsPopover"
         :width="300"
-        popper-class="el-popover-pupop-user-news"
+        popper-class="el-tooltip-pupop-user-news"
       >
         <el-badge :is-dot="isDot" @click.stop="openNews" slot="reference">
           <i class="el-icon-bell" :title="$t('message.user.title4')"></i>
@@ -21,7 +21,7 @@
         <transition name="el-zoom-in-top">
           <UserNews v-show="isShowUserNewsPopover" @haveNews="initIsDot" />
         </transition>
-      </el-popover>
+      </el-tooltip>
     </div>
     <div class="layout-navbars-breadcrumb-user-icon mr10" @click="onScreenfullClick">
       <i

@@ -1,16 +1,31 @@
 <template>
   <Modal v-model="modals" scrollable title="订单记录" width="700" class="order_box" footer-hide>
-    <Card :bordered="false" dis-hover>
-      <Table
+    <el-card :bordered="false" shadow="never">
+      <el-table
         :columns="columns"
-        border
         :data="recordData"
-        :loading="loading"
-        no-data-text="暂无数据"
-        highlight-row
-        no-filtered-data-text="暂无筛选结果"
-      ></Table>
-    </Card>
+        v-loading="loading"
+        empty-text="暂无数据"
+        highlight-current-row
+        
+      >
+        <el-table-column label="订单ID" width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.oid }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作记录" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.change_message }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作时间" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.change_time }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
   </Modal>
 </template>
 

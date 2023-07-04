@@ -1,15 +1,21 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover>
-      <Tabs class="mb20" v-model="currentTab" @on-click="onClickTab" v-if="tablists">
-        <TabPane v-for="(item, index) in tabs" :label="item.label" :name="item.type" :key="index" />
-      </Tabs>
+    <el-card :bordered="false" shadow="never">
+      <el-tabs class="mb20" v-model="currentTab" @tab-click="onClickTab" v-if="tablists">
+        <el-tab-pane v-for="(item, index) in tabs" :name="item.type" :key="index">
+          <span slot="label">
+            <el-badge :hidden="!item.value" :value="item.value" :max="999999">
+              {{ item.label }}
+            </el-badge>
+          </span>
+        </el-tab-pane>
+      </el-tabs>
       <productlist-details
         v-if="currentTab === 'article' || 'project' || 'app'"
         ref="productlist"
       ></productlist-details>
       <Spin size="large" fix v-if="spinShow"></Spin>
-    </Card>
+    </el-card>
   </div>
 </template>
 
@@ -26,87 +32,39 @@ export default {
       tabs: [
         {
           type: '',
-          label: (h) => {
-            return h('div', [
-              h('span', '全部订单'),
-              h('Badge', {
-                props: {
-                  count: Number(this.tablists.all),
-                  'overflow-count': 999999,
-                },
-              }),
-            ]);
-          },
+          label: '全部订单',
+          value: Number(this.tablists?.all) || 0,
+          max: 999999,
         },
         {
           type: '1',
-          label: (h) => {
-            return h('div', [
-              h('span', '普通订单'),
-              h('Badge', {
-                props: {
-                  count: Number(this.tablists.general),
-                  'overflow-count': 999999,
-                },
-              }),
-            ]);
-          },
+          label: '普通订单',
+          value: Number(this.tablists?.general) || 0,
+          max: 999999,
         },
         {
           type: '2',
-          label: (h) => {
-            return h('div', [
-              h('span', '拼团订单'),
-              h('Badge', {
-                props: {
-                  count: Number(this.tablists.pink),
-                  'overflow-count': 999999,
-                },
-              }),
-            ]);
-          },
+          label: '拼团订单',
+          value: Number(this.tablists?.pink) || 0,
+          max: 999999,
         },
         {
           type: '3',
-          label: (h) => {
-            return h('div', [
-              h('span', '秒杀订单'),
-              h('Badge', {
-                props: {
-                  count: Number(this.tablists.seckill),
-                  'overflow-count': 999999,
-                },
-              }),
-            ]);
-          },
+          label: '秒杀订单',
+          value: Number(this.tablists?.seckill) || 0,
+          max: 999999,
         },
         {
           type: '4',
-          label: (h) => {
-            return h('div', [
-              h('span', '砍价订单'),
-              h('Badge', {
-                props: {
-                  count: Number(this.tablists.bargain),
-                  'overflow-count': 999999,
-                },
-              }),
-            ]);
-          },
+          label: '砍价订单',
+          value: Number(this.tablists?.bargain) || 0,
+          max: 999999,
         },
         {
           type: '5',
-          label: (h) => {
-            return h('div', [
-              h('span', '预售订单'),
-              h('Badge', {
-                props: {
-                  count: Number(this.tablists.advance),
-                  'overflow-count': 999999,
-                },
-              }),
-            ]);
-          },
+          label: '预售订单',
+          value: Number(this.tablists?.advance) || 0,
+          max: 999999,
         },
       ],
       spinShow: false,
@@ -192,13 +150,8 @@ export default {
   margin-bottom: 0px !important;
 }
 
-/deep/ .ivu-badge-count-alone {
-  top: -7px;
-  right: 2px;
+/deep/ .el-badge__content.is-fixed {
+  top: 7px;
 }
 
-.i-layout-page-header /deep/ .ivu-badge-count {
-  line-height: 14px;
-  height: 15px;
-}
 </style>

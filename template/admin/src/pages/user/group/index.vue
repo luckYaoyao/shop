@@ -1,36 +1,48 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Row type="flex">
-        <Col v-bind="grid">
-          <Button v-auth="['admin-user-group']" type="primary" icon="md-add" @click="add">添加分组</Button>
-        </Col>
-      </Row>
-      <Table
-        :columns="columns1"
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-row>
+        <el-col v-bind="grid">
+          <el-button v-auth="['admin-user-group']" type="primary" icon="md-add" @click="add">添加分组</el-button>
+        </el-col>
+      </el-row>
+      <el-table
         :data="groupLists"
         ref="table"
         class="mt25"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row, index }" slot="icons">
-          <div class="tabBox_img" v-viewer>
-            <img v-lazy="row.icon" />
-          </div>
-        </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="edit(row.id)">修改</a>
-          <Divider type="vertical" />
-          <a @click="del(row, '删除分组', index)">删除</a>
-        </template>
-      </Table>
+        <el-table-column label="ID" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="分组" min-width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.group_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column fixed="right" label="操作" width="100">
+          <template slot-scope="scope">
+            <a @click="edit(row.id)">修改</a>
+            <el-divider direction="vertical"></el-divider>
+            <a @click="del(row, '删除分组', index)">删除</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="groupFrom.limit" />
+        <pagination
+          v-if="total"
+          :total="total"
+          :page.sync="groupFrom.page"
+          :limit.sync="groupFrom.limit"
+          @pagination="getList"
+        />
       </div>
-    </Card>
+    </el-card>
   </div>
 </template>
 
@@ -49,24 +61,7 @@ export default {
         xs: 24,
       },
       loading: false,
-      columns1: [
-        {
-          title: 'ID',
-          key: 'id',
-          width: 80,
-        },
-        {
-          title: '分组名称',
-          key: 'group_name',
-          minWidth: 600,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 120,
-        },
-      ],
+
       groupFrom: {
         page: 1,
         limit: 15,
@@ -78,7 +73,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -106,10 +101,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.groupFrom.page = index;
-      this.getList();
     },
     // 修改
     edit(id) {

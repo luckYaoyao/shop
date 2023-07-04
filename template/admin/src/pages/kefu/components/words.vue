@@ -19,7 +19,7 @@
             </div>
           </div>
           <div class="input-box">
-            <Input v-model="wordsData.searchTxt" placeholder="搜索快捷回复" :search="true" @on-search="bindSearch" />
+            <el-input v-model="wordsData.searchTxt" placeholder="搜索快捷回复" :search="true" @on-search="bindSearch" />
           </div>
         </div>
         <div class="scroll-box">
@@ -67,12 +67,12 @@
         <span class="iconfont iconcha" @click.stop="closeCate"></span>
       </div>
       <div class="input-box">
-        <Input class="noinput" v-model="cateData.name" placeholder="请输入分组名称" />
+        <el-input class="noinput" v-model="cateData.name" placeholder="请输入分组名称" />
       </div>
       <div class="input-box">
-        <Input class="noinput" v-model="cateData.sort" placeholder="请输入分组排序" />
+        <el-input class="noinput" v-model="cateData.sort" placeholder="请输入分组排序" />
       </div>
-      <Button @click.stop="cateConfirm" class="subBtn" type="primary" :disabled="cateStatus">确定</Button>
+      <el-button @click.stop="cateConfirm" class="subBtn" type="primary" :disabled="cateStatus">确定</el-button>
     </Modal>
     <!-- 添加话术  -->
     <Modal
@@ -88,17 +88,17 @@
         <span class="iconfont iconcha" @click.stop="closeMsgBox"></span>
       </div>
       <div class="input-box">
-        <Input class="noinput" v-model="msgData.title" placeholder="请输入标题名称 (选填)" />
+        <el-input class="noinput" v-model="msgData.title" placeholder="请输入标题名称 (选填)" />
       </div>
       <div class="input-box text-area">
-        <Input class="noinput" :rows="4" type="textarea" v-model="msgData.message" placeholder="请输入您的话术" />
+        <el-input class="noinput" :rows="4" type="textarea" v-model="msgData.message" placeholder="请输入您的话术" />
       </div>
       <div class="input-box">
-        <Select v-model="msgData.msgCateId">
-          <Option v-for="item in selectData" :value="item.id" :key="item.value">{{ item.name }}</Option>
-        </Select>
+        <el-select v-model="msgData.msgCateId">
+          <el-option v-for="item in selectData" :value="item.id" :key="item.value" :label="item.name"></el-option>
+        </el-select>
       </div>
-      <Button @click.stop="msgConfirm" class="subBtn" type="primary" :disabled="msgStatus">确定</Button>
+      <el-button @click.stop="msgConfirm" class="subBtn" type="primary" :disabled="msgStatus">确定</el-button>
     </Modal>
     <!-- 编辑弹窗  -->
     <div class="edit-box" v-if="isWordShow">
@@ -107,7 +107,7 @@
           {{ wordsTabCur ? '个人库' : '公共库' }}<span @click.stop="isWordShow = false">完成</span>
         </div>
         <div class="input-box noinput">
-          <Input v-model="wordsData.searchTxt" placeholder="搜索快捷回复" :search="true" @on-search="bindSearch" />
+          <el-input v-model="wordsData.searchTxt" placeholder="搜索快捷回复" :search="true" @on-search="bindSearch" />
         </div>
       </div>
       <div class="scroll-box">

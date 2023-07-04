@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Row class="ivu-mt box-wrapper">
-      <Col v-bind="grid1" class="left-wrapper">
+    <el-row class="ivu-mt box-wrapper">
+      <el-col v-bind="grid1" class="left-wrapper">
         <Menu :theme="theme3" :active-name="sortName" width="auto">
           <MenuGroup>
             <MenuItem
@@ -31,56 +31,68 @@
             </MenuItem>
           </MenuGroup>
         </Menu>
-      </Col>
-      <Col v-bind="grid2" ref="rightBox">
-        <Card :bordered="false" dis-hover>
-          <Row type="flex">
-            <Col>
-              <Button v-auth="['admin-user-label_add']" type="primary" icon="md-add" @click="add">添加标签</Button>
-              <Button
+      </el-col>
+      <el-col v-bind="grid2" ref="rightBox">
+        <el-card :bordered="false" shadow="never">
+          <el-row>
+            <el-col>
+              <el-button v-auth="['admin-user-label_add']" type="primary" icon="md-add" @click="add"
+                >添加标签</el-button
+              >
+              <el-button
                 v-auth="['admin-user-label_add']"
                 type="success"
                 icon="md-add"
                 @click="addSort"
                 style="margin-left: 10px"
-                >添加分类</Button
+                >添加分类</el-button
               >
-            </Col>
-          </Row>
-          <Table
-            :columns="columns1"
+            </el-col>
+          </el-row>
+          <el-table
             :data="labelLists"
             ref="table"
             class="mt25"
-            :loading="loading"
-            highlight-row
+            v-loading="loading"
+            highlight-current-row
             no-userFrom-text="暂无数据"
             no-filtered-userFrom-text="暂无筛选结果"
           >
-            <template slot-scope="{ row, index }" slot="icons">
-              <div class="tabBox_img" v-viewer>
-                <img v-lazy="row.icon" />
-              </div>
-            </template>
-            <template slot-scope="{ row, index }" slot="action">
-              <a @click="edit(row.id)">修改</a>
-              <Divider type="vertical" />
-              <a @click="del(row, '删除分组', index)">删除</a>
-            </template>
-          </Table>
+            <el-table-column label="ID" width="80">
+              <template slot-scope="scope">
+                <span>{{ scope.row.id }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="标签名称" width="80">
+              <template slot-scope="scope">
+                <span>{{ scope.row.label_name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="分类名称" min-width="80">
+              <template slot-scope="scope">
+                <span>{{ scope.row.cate_name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column fixed="right" label="操作" width="100">
+              <template slot-scope="scope">
+                <a @click="edit(row.id)">修改</a>
+                <el-divider direction="vertical"></el-divider>
+                <a @click="del(row, '删除分组', index)">删除</a>
+              </template>
+            </el-table-column>
+          </el-table>
           <div class="acea-row row-right page">
-            <Page
+            <pagination
+              v-if="total"
               :total="total"
-              :model-value="labelFrom.page"
-              show-elevator
-              show-total
-              @on-change="pageChange"
-              :page-size="labelFrom.limit"
+              :page.sync="labelFrom.page"
+              :limit.sync="labelFrom.limit"
+              @pagination="getList"
             />
           </div>
-        </Card>
-      </Col>
-    </Row>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -107,31 +119,6 @@ export default {
       },
 
       loading: false,
-      columns1: [
-        {
-          title: 'ID',
-          key: 'id',
-          align: 'center',
-          width: 80,
-        },
-        {
-          title: '标签名称',
-          key: 'label_name',
-          align: 'left',
-        },
-        {
-          title: '分类名称',
-          key: 'cate_name',
-          align: 'center',
-        },
-
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          width: 120,
-        },
-      ],
       labelFrom: {
         page: 1,
         limit: 15,
@@ -148,7 +135,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -176,10 +163,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.labelFrom.page = index;
-      this.getList();
     },
     // 修改
     edit(id) {

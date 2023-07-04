@@ -11,9 +11,9 @@
             <p class="dashboard-workplace-header-tip-title">{{ smsAccount }}，祝您每一天开心！</p>
             <p class="dashboard-workplace-header-tip-desc">
               <a href="#" @click="onChangePassswordIndex">修改密码</a>
-              <Divider type="vertical" />
+              <el-divider direction="vertical"></el-divider>
               <!-- <a href="#" @click="onChangePhone">修改手机号</a>
-                <Divider type="vertical" /> -->
+                <el-divider direction="vertical"></el-divider> -->
               <a href="#" @click="signOut">退出登录</a>
             </p>
           </div>
@@ -25,17 +25,17 @@
                 <p class="mb5"><span>短信条数</span></p>
                 <div v-if="sms.open === 0">
                   <p>暂未开通</p>
-                  <Button size="small" type="primary" class="mt3 samll_font" @click="onOpen('sms')">开通服务</Button>
+                  <el-button size="small" type="primary" class="mt3 samll_font" @click="onOpen('sms')">开通服务</el-button>
                 </div>
                 <div v-else>
                   <p>{{ sms.num || 0 }}</p>
-                  <Button
+                  <el-button
                     size="small"
                     type="primary"
                     class="mt3 samll_font"
                     style="textalign: center"
                     @click="mealPay('sms')"
-                    >套餐购买</Button
+                    >套餐购买</el-button
                   >
                 </div>
               </div>
@@ -43,23 +43,23 @@
                 <p class="mb5"><span>采集次数</span></p>
                 <div v-if="copy.open === 0">
                   <p>暂未开通</p>
-                  <Button size="small" type="primary" class="mt3 samll_font" @click="onOpen('copy')">开通服务</Button>
+                  <el-button size="small" type="primary" class="mt3 samll_font" @click="onOpen('copy')">开通服务</el-button>
                 </div>
                 <div v-else>
                   <p>{{ copy.num || 0 }}</p>
-                  <Button size="small" type="primary" class="mt3 samll_font" @click="mealPay('copy')">套餐购买</Button>
+                  <el-button size="small" type="primary" class="mt3 samll_font" @click="mealPay('copy')">套餐购买</el-button>
                 </div>
               </div>
               <div class="header-extra">
                 <p class="mb5"><span>物流查询次数</span></p>
                 <div v-if="query.open === 0">
                   <p>暂未开通</p>
-                  <Button size="small" type="primary" class="mt3 samll_font" @click="onOpen('query')">开通服务</Button>
+                  <el-button size="small" type="primary" class="mt3 samll_font" @click="onOpen('query')">开通服务</el-button>
                 </div>
                 <div v-else>
                   <p>{{ query.num || 0 }}</p>
-                  <Button size="small" type="primary" class="mt3 samll_font" @click="mealPay('expr_query')"
-                    >套餐购买</Button
+                  <el-button size="small" type="primary" class="mt3 samll_font" @click="mealPay('expr_query')"
+                    >套餐购买</el-button
                   >
                 </div>
               </div>
@@ -67,12 +67,12 @@
                 <p class="mb5"><span>面单打印次数</span></p>
                 <div v-if="dump.open === 0">
                   <p>暂未开通</p>
-                  <Button size="small" type="primary" class="mt3 samll_font" @click="onOpen('dump')">开通服务</Button>
+                  <el-button size="small" type="primary" class="mt3 samll_font" @click="onOpen('dump')">开通服务</el-button>
                 </div>
                 <div v-else>
                   <p>{{ dump.num || 0 }}</p>
-                  <Button size="small" type="primary" class="mt3 samll_font" @click="mealPay('expr_dump')"
-                    >套餐购买</Button
+                  <el-button size="small" type="primary" class="mt3 samll_font" @click="mealPay('expr_dump')"
+                    >套餐购买</el-button
                   >
                 </div>
               </div>
@@ -81,15 +81,15 @@
         </div>
       </div>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt" style="min-height: 600px">
+    <el-card :bordered="false" shadow="never" class="ivu-mt" style="min-height: 600px">
       <login-from
-        @on-change="onChangePasssword"
+        @change="onChangePasssword"
         v-if="isShowLogn"
         @on-changes="onChangeReg"
         @on-Login="onLogin"
       ></login-from>
       <forget-password v-if="isShow" @goback="goback" @on-Login="onLogin" :isIndex="isIndex"></forget-password>
-      <register-from v-if="isShowReg" @on-change="logoup"></register-from>
+      <register-from v-if="isShowReg" @change="logoup"></register-from>
       <table-list
         ref="tableLists"
         v-if="isShowList"
@@ -102,7 +102,7 @@
       ></table-list>
       <forget-phone v-if="isForgetPhone" @gobackPhone="gobackPhone" @on-Login="onLogin"></forget-phone>
       <Spin size="large" fix v-if="spinShow"></Spin>
-    </Card>
+    </el-card>
   </div>
 </template>
 

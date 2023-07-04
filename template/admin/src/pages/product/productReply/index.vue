@@ -3,27 +3,29 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <router-link :to="{ path: $routeProStr + '/product/product_list' }" v-if="$route.params.id"
-          ><Button icon="ios-arrow-back" size="small" class="mr20">返回</Button></router-link
+          ><el-button icon="ios-arrow-back" size="small" class="mr20">返回</el-button></router-link
         >
         <span class="ivu-page-header-title mr20">商品评论管理</span>
       </div>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form ref="formValidate" :model="formValidate" :label-width="75" label-position="left" @submit.native.prevent>
-        <Row type="flex" :gutter="24">
-          <Col span="24">
-            <FormItem label="评论时间：">
-              <RadioGroup
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form ref="formValidate" :model="formValidate" label-width="75px" label-position="left" @submit.native.prevent>
+        <el-row :gutter="24">
+          <el-col :span="24">
+            <el-form-item label="评论时间：">
+              <el-radio-group
                 v-model="formValidate.data"
                 type="button"
-                @on-change="selectChange(formValidate.data)"
+                @change="selectChange(formValidate.data)"
                 class="mr"
               >
-                <Radio :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</Radio>
-              </RadioGroup>
+                <el-radio-button :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{
+                  item.text
+                }}</el-radio-button>
+              </el-radio-group>
               <DatePicker
                 :editable="false"
-                @on-change="onchangeTime"
+                @change="onchangeTime"
                 :value="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
@@ -31,97 +33,125 @@
                 placeholder="请选择时间"
                 style="width: 200px"
               ></DatePicker>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="评价状态：">
-              <Select v-model="formValidate.is_reply" placeholder="请选择" clearable @on-change="userSearchs">
-                <Option value="1">已回复</Option>
-                <Option value="0">未回复</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid" v-if="!$route.params.id">
-            <FormItem label="商品信息：" label-for="store_name">
-              <Input
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="评价状态：">
+              <el-select v-model="formValidate.is_reply" placeholder="请选择" clearable @change="userSearchs">
+                <el-option value="1" label="已回复"></el-option>
+                <el-option value="0" label="未回复"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid" v-if="!$route.params.id">
+            <el-form-item label="商品信息：" label-for="store_name">
+              <el-input
                 size="default"
                 enter-button
                 placeholder="请输入商品ID或者商品信息"
                 clearable
                 v-model="formValidate.store_name"
               />
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="用户名称：" label-for="account">
-              <Input size="default" enter-button placeholder="请输入" clearable v-model="formValidate.account" />
-            </FormItem>
-          </Col>
-          <Col :xl="3" :lg="3" :md="12" :sm="12" :xs="24" class="search">
-            <FormItem>
-              <Button type="primary" icon="ios-search" @click="userSearchs">搜索</Button>
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="用户名称：" label-for="account">
+              <el-input size="default" enter-button placeholder="请输入" clearable v-model="formValidate.account" />
+            </el-form-item>
+          </el-col>
+          <el-col :xl="3" :lg="3" :md="12" :sm="12" :xs="24" class="search">
+            <el-form-item>
+              <el-button type="primary" icon="ios-search" @click="userSearchs">搜索</el-button>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
       <!--            <div class="Button">-->
-      <!--                <Button type="primary" class="bnt" icon="md-add">添加评论</Button>-->
+      <!--                <el-button type="primary" class="bnt" icon="md-add">添加评论</el-button>-->
       <!--            </div>-->
-      <Row type="flex">
-        <Col v-bind="grid">
-          <Button v-auth="['product-reply-save_fictitious_reply']" type="primary" icon="md-add" @click="add"
-            >添加自评</Button
+      <el-row>
+        <el-col v-bind="grid">
+          <el-button v-auth="['product-reply-save_fictitious_reply']" type="primary" icon="md-add" @click="add"
+            >添加自评</el-button
           >
-        </Col>
-      </Row>
-      <Table
+        </el-col>
+      </el-row>
+      <el-table
         ref="table"
-        :columns="columns"
         :data="tableList"
         class="ivu-mt mt25"
-        :loading="loading"
+        v-loading="loading"
         @on-sort-change="sortMethod"
-        no-data-text="暂无数据"
-        no-filtered-data-text="暂无筛选结果"
+        empty-text="暂无数据"
       >
-        <template slot-scope="{ row }" slot="info">
-          <div class="imgPic acea-row row-middle">
-            <div class="pictrue" v-viewer><img v-lazy="row.image" /></div>
-            <div class="info">{{ row.store_name }}</div>
-          </div>
-        </template>
-        <template slot-scope="{ row }" slot="content">
-          <div class="mb5 content_font">{{ row.comment }}</div>
-          <div v-viewer class="pictrue mr10" v-for="(item, index) in row.pics || []" :key="index">
-            <img v-lazy="item" :src="item" />
-          </div>
-        </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="reply(row)">回复</a>
-          <Divider type="vertical" />
-          <a @click="del(row, '删除评论', index)">删除</a>
-        </template>
-      </Table>
+        <el-table-column label="评论ID" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="商品信息" min-width="130">
+          <template slot-scope="scope">
+            <div class="imgPic acea-scope.row scope.row-middle">
+              <div class="pictrue" v-viewer><img v-lazy="scope.row.image" /></div>
+              <div class="info">{{ scope.row.store_name }}</div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="用户名称" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.nickname }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="评分" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.score }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="评价内容" min-width="130">
+          <template slot-scope="scope">
+            <div class="mb5 content_font">{{ scope.row.comment }}</div>
+            <div v-viewer class="pictrue mr10" v-for="(item, index) in scope.row.pics || []" :key="index">
+              <img v-lazy="item" :src="item" />
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="回复内容" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.merchant_reply_content }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="评价时间" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.add_time }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="170">
+          <template slot-scope="scope">
+            <a @click="reply(scope.row)">回复</a>
+            <el-divider direction="vertical"></el-divider>
+            <a @click="del(scope.row, '删除评论', index)">删除</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="formValidate.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="formValidate.limit"
+          :page.sync="formValidate.page"
+          :limit.sync="formValidate.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
     <Modal v-model="modals" scrollable title="回复内容" closable>
-      <Form ref="contents" :model="contents" :rules="ruleInline" label-position="right" @submit.native.prevent>
-        <FormItem prop="content">
-          <Input v-model="contents.content" type="textarea" :rows="4" placeholder="请输入回复内容" />
-        </FormItem>
-      </Form>
+      <el-form ref="contents" :model="contents" :rules="ruleInline" label-position="right" @submit.native.prevent>
+        <el-form-item prop="content">
+          <el-input v-model="contents.content" type="textarea" :rows="4" placeholder="请输入回复内容" />
+        </el-form-item>
+      </el-form>
       <div slot="footer">
-        <Button type="primary" @click="oks">确定</Button>
-        <Button @click="cancels">取消</Button>
+        <el-button type="primary" @click="oks">确定</el-button>
+        <el-button @click="cancels">取消</el-button>
       </div>
     </Modal>
   </div>
@@ -170,51 +200,6 @@ export default {
       tableList: [],
       total: 0,
       loading: false,
-      columns: [
-        {
-          title: '评论ID',
-          key: 'id',
-          width: 80,
-        },
-        {
-          title: '商品信息',
-          slot: 'info',
-          minWidth: 230,
-        },
-        {
-          title: '用户名称',
-          key: 'nickname',
-          minWidth: 150,
-        },
-        {
-          title: '评分',
-          key: 'score',
-          sortable: true,
-          minWidth: 90,
-        },
-        {
-          title: '评价内容',
-          slot: 'content',
-          minWidth: 210,
-        },
-        {
-          title: '回复内容',
-          key: 'merchant_reply_content',
-          minWidth: 250,
-        },
-        {
-          title: '评价时间',
-          key: 'add_time',
-          sortable: true,
-          minWidth: 150,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 150,
-        },
-      ],
       timeVal: [],
       contents: {
         content: '',
@@ -328,10 +313,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.formValidate.page = index;
-      this.getList();
     },
     // 表格搜索
     userSearchs() {

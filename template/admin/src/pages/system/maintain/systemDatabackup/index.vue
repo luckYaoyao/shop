@@ -1,84 +1,179 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt listbox">
-      <Tabs class="mb30">
-        <TabPane label="数据库列表">
-          <Card :bordered="false" dis-hover class="tableBox mt10">
-            <div slot="title">
+    <el-card :bordered="false" shadow="never" class="ivu-mt listbox">
+      <el-tabs class="mb30">
+        <el-tab-pane label="数据库列表">
+          <el-card :bordered="false" shadow="never" class="tableBox">
+            <div class="mb10">
               <!--              <span class="ivu-pl-8 mr10">数据库表列表</span>-->
-              <Button type="primary" class="mr10" @click="getBackup">备份</Button>
-              <Button type="primary" class="mr10" @click="getOptimize">优化表</Button>
-              <Button type="primary" class="mr10" @click="getRepair">修复表</Button>
-              <Button type="primary" class="mr10" @click="exportData(1)">导出文件</Button>
+              <el-button type="primary" class="mr10" @click="getBackup">备份</el-button>
+              <el-button type="primary" class="mr10" @click="getOptimize">优化表</el-button>
+              <el-button type="primary" class="mr10" @click="getRepair">修复表</el-button>
+              <el-button type="primary" class="mr10" @click="exportData(1)">导出文件</el-button>
             </div>
-            <Table
+            <el-table
               ref="selection"
-              :columns="columns"
               :data="tabList2"
-              :loading="loading"
-              no-data-text="暂无数据"
-              @on-selection-change="onSelectTab"
-              size="small"
-              no-filtered-data-text="暂无筛选结果"
+              v-loading="loading"
+              empty-text="暂无数据"
+              
+              @select="onSelectTab"
+              @select-all="onSelectTab"
             >
-              <template slot-scope="{ row, index }" slot="comment">
-                <div class="mark">
-                  <div v-if="row.is_edit" class="table-mark" @click="isEditMark(row)">{{ row.comment }}</div>
-                  <Input ref="mark" v-else v-model="row.comment" @on-blur="isEditBlur(row, 0)"></Input>
-                </div>
-              </template>
-              <template slot-scope="{ row }" slot="action">
-                <a @click="Info(row)">详情</a>
-              </template>
-            </Table>
-          </Card>
+              <el-table-column type="selection" width="55"> </el-table-column>
+              <el-table-column label="表名称" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.name }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="备注" min-width="100">
+                <template slot-scope="scope">
+                  <div class="mark">
+                    <div v-if="scope.row.is_edit" class="table-mark" @click="isEditMark(scope.row)">
+                      {{ scope.row.comment }}
+                    </div>
+                    <el-input
+                      ref="mark"
+                      v-else
+                      v-model="scope.row.comment"
+                      @blur="isEditBlur(scope.row, 0)"
+                    ></el-input>
+                  </div>
+                </template>
+              </el-table-column>
+              <el-table-column label="类型" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.engine }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="大小" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.data_length }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="更新时间" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.update_time }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="行数" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.rows }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" fixed="right" width="70">
+                <template slot-scope="scope">
+                  <a @click="Info(scope.row)">详情</a>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-card>
           <!-- 详情模态框-->
           <Drawer :closable="false" width="740" v-model="modals" :title="'[ ' + rows.name + ' ]' + rows.comment">
-            <Table
+            <el-table
               ref="selection"
-              :columns="columns2"
               :data="tabList3"
               :loading="loading2"
-              no-data-text="暂无数据"
+              empty-text="暂无数据"
               max-height="600"
               size="small"
-              no-filtered-data-text="暂无筛选结果"
+              
             >
-              <template slot-scope="{ row, index }" slot="COLUMN_COMMENT">
-                <div class="mark">
-                  <div v-if="row.is_edit" class="table-mark" @click="isEditMark(row)">{{ row.COLUMN_COMMENT }}</div>
-                  <Input ref="mark" v-else v-model="row.COLUMN_COMMENT" @on-blur="isEditBlur(row, 1)"></Input>
-                </div>
-              </template>
-            </Table>
+              <el-table-column label="字段名" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.COLUMN_NAME }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="数据类型" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.COLUMN_TYPE }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="默认值" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.COLUMN_DEFAULT }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="允许非空" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.IS_NULLABLE }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="自动递增" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.EXTRA }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="备注" min-width="100">
+                <template slot-scope="scope">
+                  <div class="mark">
+                    <div v-if="scope.row.is_edit" class="table-mark" @click="isEditMark(scope.row)">
+                      {{ scope.row.COLUMN_COMMENT }}
+                    </div>
+                    <el-input
+                      ref="mark"
+                      v-else
+                      v-model="scope.row.COLUMN_COMMENT"
+                      @blur="isEditBlur(scope.row, 1)"
+                    ></el-input>
+                  </div>
+                </template>
+              </el-table-column>
+            </el-table>
           </Drawer>
-        </TabPane>
-        <TabPane label="备份列表">
-          <Card :bordered="false" dis-hover class="">
-            <Table
+        </el-tab-pane>
+        <el-tab-pane label="备份列表">
+          <el-card :bordered="false" shadow="never" class="">
+            <el-table
               ref="selection"
-              :columns="columns4"
               :data="tabList"
               :loading="loading3"
-              no-data-text="暂无数据"
-              highlight-row
+              empty-text="暂无数据"
+              highlight-current-row
               size="small"
-              no-filtered-data-text="暂无筛选结果"
+              
             >
-              <template slot-scope="{ row, index }" slot="action">
-                <a @click="ImportFile(row)">导入</a>
-                <Divider type="vertical" />
-                <a @click="del(row, '删除该备份', index)">删除</a>
-                <Divider type="vertical" />
-                <a @click="download(row)">下载</a>
-              </template>
-            </Table>
-          </Card>
-        </TabPane>
-      </Tabs>
-    </Card>
+              <el-table-column label="备份名称" min-width="200">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.filename }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="part" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.part }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="大小" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.size }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="compress" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.compress }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="时间" min-width="100">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.backtime }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" fixed="right" width="140">
+                <template slot-scope="scope">
+                  <a @click="ImportFile(scope.row)">导入</a>
+                  <el-divider direction="vertical"></el-divider>
+                  <a @click="del(scope.row, '删除该备份', index)">删除</a>
+                  <el-divider direction="vertical"></el-divider>
+                  <a @click="download(scope.row)">下载</a>
+                </template>
+              </el-table-column>
+            </el-table>
+          </el-card>
+        </el-tab-pane>
+      </el-tabs>
+    </el-card>
     <Modal v-model="markModal" title="修改备注" @on-ok="ok" @on-cancel="cancel" @on-visible-change="cancel">
-      <Input v-model="mark"></Input>
+      <el-input v-model="mark"></el-input>
     </Modal>
   </div>
 </template>
@@ -105,117 +200,9 @@ export default {
       modals: false,
       loading: false,
       tabList: [],
-      columns4: [
-        {
-          title: '备份名称',
-          key: 'filename',
-          minWidth: 200,
-          sortable: true,
-        },
-        {
-          title: 'part',
-          key: 'part',
-          minWidth: 100,
-        },
-        {
-          title: '大小',
-          key: 'size',
-          minWidth: 150,
-        },
-        {
-          title: 'compress',
-          key: 'compress',
-          minWidth: 100,
-        },
-        {
-          title: '时间',
-          key: 'backtime',
-          minWidth: 150,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 80,
-        },
-      ],
       tabList2: [],
-      columns: [
-        {
-          type: 'selection',
-          width: 60,
-          align: 'center',
-        },
-        {
-          title: '表名称',
-          key: 'name',
-          minWidth: 200,
-          sortable: true,
-        },
-        {
-          title: '备注',
-          slot: 'comment',
-          minWidth: 200,
-        },
-        {
-          title: '类型',
-          key: 'engine',
-          minWidth: 130,
-          sortable: true,
-        },
-        {
-          title: '大小',
-          key: 'data_length',
-          minWidth: 130,
-          sortable: true,
-        },
-        {
-          title: '更新时间',
-          key: 'update_time',
-          minWidth: 150,
-          sortable: true,
-        },
-        {
-          title: '行数',
-          key: 'rows',
-          minWidth: 100,
-          sortable: true,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 80,
-        },
-      ],
       selectionList: [],
       tabList3: [],
-      columns2: [
-        {
-          title: '字段名',
-          key: 'COLUMN_NAME',
-        },
-        {
-          title: '数据类型',
-          key: 'COLUMN_TYPE',
-        },
-        {
-          title: '默认值',
-          key: 'COLUMN_DEFAULT',
-        },
-        {
-          title: '允许非空',
-          key: 'IS_NULLABLE',
-        },
-        {
-          title: '自动递增',
-          key: 'EXTRA',
-        },
-        {
-          title: '备注',
-          slot: 'COLUMN_COMMENT',
-        },
-      ],
       rows: {},
       dataList: {},
       loading2: false,

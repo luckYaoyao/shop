@@ -1,27 +1,27 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="artFrom"
         :model="artFrom"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <Row type="flex" :gutter="24">
-          <Col v-bind="grid">
-            <FormItem label="文章分类：" label-for="pid">
+        <el-row :gutter="24">
+          <el-col v-bind="grid">
+            <el-form-item label="文章分类：" label-for="pid">
               <i-select :value="artFrom.pid" placeholder="请选择" style="width: 80%" class="treeSel">
                 <i-option v-for="(item, index) of list" :value="item.value" :key="index" style="display: none">
                   {{ item.title }}
                 </i-option>
                 <Tree :data="treeData" @on-select-change="handleCheckChange"></Tree>
               </i-select>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="文章搜索：" label-for="title">
-              <Input
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="文章搜索：" label-for="title">
+              <el-input
                 search
                 enter-button
                 placeholder="请输入"
@@ -29,56 +29,82 @@
                 style="width: 80%"
                 @on-search="userSearchs"
               />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex">
-          <Col v-bind="grid">
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col v-bind="grid">
             <router-link :to="$routeProStr + '/cms/article/add_article'" v-auth="['cms-article-creat']"
-              ><Button type="primary" class="bnt" icon="md-add">添加文章</Button></router-link
+              ><el-button type="primary" class="bnt" icon="md-add">添加文章</el-button></router-link
             >
-          </Col>
-        </Row>
-      </Form>
-      <Table
-        :columns="columns1"
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table
         :data="cmsList"
         ref="table"
         class="mt25"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row, index }" slot="titles">
-          <span>{{ ' [ ' + row.catename + ' ] ' + row.title }}</span>
-        </template>
-        <template slot-scope="{ row, index }" slot="image_inputs">
-          <div v-if="row.image_input.length !== 0" v-viewer>
-            <div class="tabBox_img" v-for="(item, index) in row.image_input" :key="index">
-              <img v-lazy="item" />
+        <el-table-column label="ID" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="文章图片" min-width="90">
+          <template slot-scope="scope">
+            <div v-if="scope.row.image_input.length !== 0" v-viewer>
+              <div class="tabBox_img" v-for="(item, index) in scope.row.image_input" :key="index">
+                <img v-lazy="item" />
+              </div>
             </div>
-          </div>
-        </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="edit(row)">编辑</a>
-          <Divider type="vertical" />
-          <a @click="artRelation(row, '取消关联', index)">{{ row.product_id === 0 ? '关联' : '取消关联' }}</a>
-          <Divider type="vertical" />
-          <a @click="del(row, '删除文章', index)">删除</a>
-        </template>
-      </Table>
+          </template>
+        </el-table-column>
+        <el-table-column label="文章名称" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ ' [ ' + scope.row.catename + ' ] ' + scope.row.title }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="关联商品" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.store_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="浏览量" min-width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.visit }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="时间" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.add_time | formatDate }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="170">
+          <template slot-scope="scope">
+            <a @click="edit(scope.row)">编辑</a>
+            <el-divider direction="vertical"></el-divider>
+            <a @click="artRelation(scope.row, '取消关联', index)">{{
+              scope.row.product_id === 0 ? '关联' : '取消关联'
+            }}</a>
+            <el-divider direction="vertical"></el-divider>
+            <a @click="del(scope.row, '删除文章', index)">删除</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="artFrom.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="artFrom.limit"
+          :page.sync="artFrom.page"
+          :limit.sync="artFrom.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
     <!--关联-->
     <Modal
       v-model="modals"
@@ -121,53 +147,7 @@ export default {
         limit: 20,
       },
       total: 0,
-      columns1: [
-        {
-          title: 'ID',
-          key: 'id',
-          width: 80,
-        },
-        {
-          title: '文章图片',
-          slot: 'image_inputs',
-          minWidth: 90,
-        },
-        {
-          title: '文章名称',
-          slot: 'titles',
-          minWidth: 130,
-        },
-        {
-          title: '关联商品',
-          key: 'store_name',
-          minWidth: 130,
-        },
-        // {
-        //     title: '排序',
-        //     key: 'sort',
-        //     minWidth: 60
-        // },
-        {
-          title: '浏览量',
-          key: 'visit',
-          minWidth: 80,
-        },
-        {
-          title: '时间',
-          key: 'add_time',
-          sortable: true,
-          render: (h, params) => {
-            return h('div', formatDate(new Date(Number(params.row.add_time) * 1000), 'yyyy-MM-dd hh:mm'));
-          },
-          minWidth: 120,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 150,
-        },
-      ],
+
       cmsList: [],
       treeData: [],
       list: [],
@@ -188,10 +168,18 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
+    },
+  },
+  filters: {
+    formatDate(time) {
+      if (time !== 0) {
+        let date = new Date(time * 1000);
+        return formatDate(date, 'yyyy-MM-dd hh:mm');
+      }
     },
   },
   created() {},
@@ -255,10 +243,6 @@ export default {
         .catch((res) => {
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.artFrom.page = index;
-      this.getList();
     },
     // 下拉树
     handleCheckChange(data) {

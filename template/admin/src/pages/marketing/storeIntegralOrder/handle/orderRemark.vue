@@ -1,8 +1,8 @@
 <template>
   <Modal v-model="modals" scrollable title="请修改内容" class="order_box" :closable="false">
-    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80" @submit.native.prevent>
-      <FormItem label="备注：" prop="remark">
-        <Input
+    <el-form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-width="85px" @submit.native.prevent>
+      <el-form-item label="备注：" prop="remark">
+        <el-input
           v-model="formValidate.remark"
           :maxlength="200"
           :rows="8"
@@ -11,11 +11,11 @@
           placeholder="订单备注"
           style="width: 100%"
         />
-      </FormItem>
-    </Form>
+      </el-form-item>
+    </el-form>
     <div slot="footer">
-      <Button type="primary" @click="putRemark('formValidate')">提交</Button>
-      <Button @click="cancel('formValidate')">取消</Button>
+      <el-button type="primary" @click="putRemark('formValidate')">提交</el-button>
+      <el-button @click="cancel('formValidate')">取消</el-button>
     </div>
   </Modal>
 </template>

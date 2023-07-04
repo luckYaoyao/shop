@@ -3,37 +3,42 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <span>
-          <Button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
+          <el-button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</el-button>
         </span>
-        <Divider type="vertical" />
+        <el-divider direction="vertical"></el-divider>
         <span class="ivu-page-header-title">{{ $route.query.id ? '编辑渠道码' : '添加渠道码' }}</span>
       </div>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form :model="formData" :label-width="150" :rules="ruleValidate">
-        <FormItem label="二维码名称">
-          <Input v-model="formData.name" placeholder="请输入二维码名称"></Input>
-        </FormItem>
-        <FormItem label="二维码分组" :label-width="150">
-          <Select v-model="formData.cate_id" style="width: 320px">
-            <Option :value="item.id" v-for="(item, index) in labelSort" :key="index">{{ item.cate_name }}</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="用户标签" :label-width="150">
-          <!-- <Select
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form :model="formData" label-width="150px" :rules="ruleValidate">
+        <el-form-item label="二维码名称">
+          <el-input v-model="formData.name" placeholder="请输入二维码名称"></el-input>
+        </el-form-item>
+        <el-form-item label="二维码分组" label-width="150px">
+          <el-select v-model="formData.cate_id" style="width: 320px">
+            <el-option
+              :value="item.id"
+              v-for="(item, index) in labelSort"
+              :key="index"
+              :label="item.cate_name"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="用户标签" label-width="150px">
+          <!-- <el-select
             v-model="formData.label_id"
             placeholder="请选择用户标签"
             multiple
             class="perW20"
             style="width: 320px"
           >
-            <Option
+            <el-option
               v-for="item in labelSelect"
               :value="item.id"
               :key="item.id"
-              >{{ item.label_name }}</Option
+              >{{ item.label_name }}</el-option
             >
-          </Select>
+          </el-select>
           <span class="addfont" @click="addLabel">新增标签</span> -->
           <div style="display: flex">
             <div class="labelInput acea-row row-between-wrapper" @click="openLabel">
@@ -49,8 +54,8 @@
             </div>
             <span class="addfont" @click="addLabel">新增标签</span>
           </div>
-        </FormItem>
-        <FormItem label="关联推广员" :label-width="150">
+        </el-form-item>
+        <el-form-item label="关联推广员" label-width="150px">
           <div class="picBox" @click="customer">
             <div class="pictrue" v-if="formData.avatar">
               <img v-lazy="formData.avatar" />
@@ -60,28 +65,28 @@
             </div>
           </div>
           <div class="trip">扫码注册的新用户,将自动成为此推广员的下级,与分销推广功能一致</div>
-        </FormItem>
-        <FormItem label="有效期">
-          <RadioGroup v-model="isReceiveTime">
-            <Radio :label="0">永久</Radio>
-            <Radio :label="1">有效期</Radio>
-          </RadioGroup>
+        </el-form-item>
+        <el-form-item label="有效期">
+          <el-radio-group v-model="isReceiveTime">
+            <el-radio :label="0">永久</el-radio>
+            <el-radio :label="1">有效期</el-radio>
+          </el-radio-group>
           <span v-show="isReceiveTime">
-            <InputNumber
+            <el-input-number controls-position="right"
               :min="1"
               :max="10000"
               :precision="0"
               v-model="formData.time"
               placeholder="请输入天数"
               style="width: 100px"
-            ></InputNumber>
+            ></el-input-number>
             天
           </span>
           <div class="trip">临时码过期后不能再扫码,永久二维码最大创建数量为10万个</div>
-        </FormItem>
-        <FormItem label="回复内容">
-          <Row>
-            <Col span="4">
+        </el-form-item>
+        <el-form-item label="回复内容">
+          <el-row>
+            <el-col :span="4">
               <Menu theme="light" style="width: 150px" :active-name="formData.type" @on-select="selectMenu">
                 <MenuItem name="text">文字内容</MenuItem>
                 <!-- <MenuItem name="url">网址链接</MenuItem> -->
@@ -90,29 +95,33 @@
                 <MenuItem name="image">图片消息</MenuItem>
                 <MenuItem name="news">图文消息</MenuItem>
               </Menu>
-            </Col>
-            <Col span="18">
-              <FormItem label="消息内容：" prop="content" v-if="formData.type === 'text' || formData.type === 'url'">
+            </el-col>
+            <el-col span="18">
+              <el-form-item
+                label="消息内容："
+                prop="content"
+                v-if="formData.type === 'text' || formData.type === 'url'"
+              >
                 <textarea
                   v-model="formData.content.content"
                   :placeholder="formData.type === 'text' ? '请填写消息内容' : '请填写网址链接'"
                   style="width: 50%"
                 ></textarea>
-              </FormItem>
-              <FormItem label="选取图文：" v-if="formData.type === 'news'">
-                <Button type="info" @click="modals = true">选择图文消息</Button>
+              </el-form-item>
+              <el-form-item label="选取图文：" v-if="formData.type === 'news'">
+                <el-button type="info" @click="modals = true">选择图文消息</el-button>
                 <div class="news-box" v-if="formData.content.list.title">
                   <img class="news_pic" :src="formData.content.list.image_input[0]" />
                   <span>{{ formData.content.list.title }}</span>
                 </div>
-              </FormItem>
-              <FormItem
+              </el-form-item>
+              <el-form-item
                 :label="formData.type === 'image' ? '图片地址：' : '语音地址：'"
                 prop="src"
                 v-if="formData.type === 'image' || formData.type === 'voice'"
               >
                 <div class="acea-row row-middle">
-                  <Input
+                  <el-input
                     readonly="readonly"
                     placeholder="请填入链接地址"
                     style="width: 75%"
@@ -131,18 +140,18 @@
                     class="mr20"
                     style="margin-top: 1px"
                   >
-                    <Button type="primary">上传</Button>
+                    <el-button type="primary">上传</el-button>
                   </Upload>
                 </div>
                 <span v-show="formData.type === 'image'">文件最大2Mb，支持bmp/png/jpeg/jpg/gif格式</span>
                 <span v-show="formData.type === 'voice'">文件最大2Mb，支持mp3格式,播放长度不超过60s</span>
-              </FormItem>
-            </Col>
-          </Row>
-        </FormItem>
-      </Form>
-      <Button class="submit" type="primary" @click="save" :loading="loading" :disabled="disabled">立即提交</Button>
-    </Card>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </el-form>
+      <el-button class="submit" type="primary" @click="save" :loading="loading" :disabled="disabled">立即提交</el-button>
+    </el-card>
     <Modal v-model="customerShow" scrollable title="请选择商城用户" :closable="false" width="800">
       <customerInfo v-if="customerShow" @imageObject="imageObject"></customerInfo>
     </Modal>

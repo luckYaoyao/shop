@@ -8,98 +8,111 @@
     width="1000"
     @on-visible-change="changeModal"
   >
-    <Form v-if="modals" ref="formItem" :model="formItem" :label-width="100" @submit.native.prevent>
-      <FormItem label="选择类型：">
-        <RadioGroup v-model="formItem.type" @on-change="changeRadio">
-          <Radio label="1" v-if="virtual_type !== 3">发货</Radio>
-          <Radio label="2" v-if="virtual_type !== 3">送货</Radio>
-          <Radio label="3">无需配送</Radio>
-        </RadioGroup>
-      </FormItem>
-      <FormItem v-if="formItem.type == 1" v-show="export_open" label="发货类型：">
-        <RadioGroup v-model="formItem.express_record_type" @on-change="changeExpress">
-          <Radio label="1">手动填写</Radio>
-          <Radio label="2">电子面单打印</Radio>
-        </RadioGroup>
-      </FormItem>
+    <el-form v-if="modals" ref="formItem" :model="formItem" label-width="100px" @submit.native.prevent>
+      <el-form-item label="选择类型：">
+        <el-radio-group v-model="formItem.type" @change="changeRadio">
+          <el-radio label="1" v-if="virtual_type !== 3">发货</el-radio>
+          <el-radio label="2" v-if="virtual_type !== 3">送货</el-radio>
+          <el-radio label="3">无需配送</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item v-if="formItem.type == 1" v-show="export_open" label="发货类型：">
+        <el-radio-group v-model="formItem.express_record_type" @change="changeExpress">
+          <el-radio label="1">手动填写</el-radio>
+          <el-radio label="2">电子面单打印</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <div>
-        <FormItem label="快递公司：" v-if="formItem.type == 1">
-          <Select
+        <el-form-item label="快递公司：" v-if="formItem.type == 1">
+          <el-select
             v-model="formItem.delivery_name"
             filterable
             placeholder="请选择快递公司"
             style="width: 80%"
-            @on-change="expressChange"
+            @change="expressChange"
           >
-            <Option v-for="(item, i) in express" :value="item.value" :key="item.value">{{ item.value }}</Option>
-          </Select>
-        </FormItem>
-        <FormItem v-if="formItem.express_record_type === '1' && formItem.type == 1" label="快递单号：">
-          <Input v-model="formItem.delivery_id" placeholder="请输入快递单号" style="width: 80%"></Input>
+            <el-option
+              v-for="(item, i) in express"
+              :value="item.value"
+              :key="item.value"
+              :label="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="formItem.express_record_type === '1' && formItem.type == 1" label="快递单号：">
+          <el-input v-model="formItem.delivery_id" placeholder="请输入快递单号" style="width: 80%"></el-input>
           <div class="trips" v-if="formItem.delivery_name == '顺丰速运'">
             <p>顺丰请输入单号 :收件人或寄件人手机号后四位，</p>
             <p>例如：SF000000000000:3941</p>
           </div>
-        </FormItem>
+        </el-form-item>
         <template v-if="formItem.express_record_type === '2' && formItem.type == 1">
-          <FormItem label="电子面单：" class="express_temp_id">
-            <Select
+          <el-form-item label="电子面单：" class="express_temp_id">
+            <el-select
               v-model="formItem.express_temp_id"
               placeholder="请选择电子面单"
               style="width: 80%"
-              @on-change="expressTempChange"
+              @change="expressTempChange"
             >
-              <Option v-for="(item, i) in expressTemp" :value="item.temp_id" :key="i">{{ item.title }}</Option>
-            </Select>
-            <Button v-if="formItem.express_temp_id" type="text" @click="preview">预览</Button>
-          </FormItem>
-          <FormItem label="寄件人姓名：">
-            <Input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 80%"></Input>
-          </FormItem>
-          <FormItem label="寄件人电话：">
-            <Input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 80%"></Input>
-          </FormItem>
-          <FormItem label="寄件人地址：">
-            <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></Input>
-          </FormItem>
+              <el-option
+                v-for="(item, i) in expressTemp"
+                :value="item.temp_id"
+                :key="i"
+                :label="item.title"
+              ></el-option>
+            </el-select>
+            <el-button v-if="formItem.express_temp_id" type="text" @click="preview">预览</el-button>
+          </el-form-item>
+          <el-form-item label="寄件人姓名：">
+            <el-input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 80%"></el-input>
+          </el-form-item>
+          <el-form-item label="寄件人电话：">
+            <el-input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 80%"></el-input>
+          </el-form-item>
+          <el-form-item label="寄件人地址：">
+            <el-input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></el-input>
+          </el-form-item>
         </template>
       </div>
       <div v-show="formItem.type === '2'">
-        <FormItem label="送货人：">
-          <Select
+        <el-form-item label="送货人：">
+          <el-select
             v-model="formItem.sh_delivery"
             placeholder="请选择送货人"
             style="width: 80%"
-            @on-change="shDeliveryChange"
+            @change="shDeliveryChange"
           >
-            <Option v-for="(item, i) in deliveryList" :value="item.id" :key="i"
-              >{{ item.wx_name }}（{{ item.phone }}）</Option
-            >
-          </Select>
-        </FormItem>
+            <el-option
+              v-for="(item, i) in deliveryList"
+              :value="item.id"
+              :key="i"
+              :label="`${item.wx_name}（${item.phone}）`"
+            ></el-option>
+          </el-select>
+        </el-form-item>
       </div>
       <div v-show="formItem.type === '3'">
-        <FormItem label="备注：">
-          <Input
+        <el-form-item label="备注：">
+          <el-input
             v-model="formItem.fictitious_content"
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 5 }"
             placeholder="备注"
             style="width: 80%"
-          ></Input>
-        </FormItem>
+          ></el-input>
+        </el-form-item>
       </div>
       <div v-if="total_num > 1">
-        <FormItem label="分单发货：">
-          <i-switch
+        <el-form-item label="分单发货：">
+          <el-switch :active-value="1"  :inactive-value="0"
             size="large"
             v-model="splitSwitch"
             :disabled="orderStatus === 8 || orderStatus === 11"
-            @on-change="changeSplitStatus"
+            @change="changeSplitStatus"
           >
             <span slot="open">开启</span>
             <span slot="close">关闭</span>
-          </i-switch>
+           </el-switch>
           <div class="trips">
             <p>可选择表格中的商品单独发货，发货后会生成新的订单且不能撤回，请谨慎操作！</p>
           </div>
@@ -128,12 +141,12 @@
               </div>
             </template>
           </i-table>
-        </FormItem>
+        </el-form-item>
       </div>
-    </Form>
+    </el-form>
     <div slot="footer">
-      <Button @click="cancel">取消</Button>
-      <Button type="primary" @click="putSend">提交</Button>
+      <el-button @click="cancel">取消</el-button>
+      <el-button type="primary" @click="putSend">提交</el-button>
     </div>
     <!-- <viewer @inited="inited">
             <img :src="temp.pic" style="display:none" />

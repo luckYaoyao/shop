@@ -2,11 +2,11 @@
   <div>
     <Modal v-model="val" title="商品属性" width="70%" @on-cancel="cancel">
       <div class="Modals">
-        <Form class="form" ref="form" :label-width="70" label-position="right">
-          <Row :gutter="24" type="flex">
-            <Col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
-              <FormItem label="规格：" prop="store_name" label-for="store_name">
-                <Input
+        <el-form class="form" ref="form" label-width="70px" label-position="right">
+          <el-row :gutter="24" >
+            <el-col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
+              <el-form-item label="规格：" prop="store_name" label-for="store_name">
+                <el-input
                   placeholder="规格"
                   style="width: 10%"
                   class="input"
@@ -15,15 +15,15 @@
                   :key="index"
                 >
                   <Icon type="md-close" slot="suffix" />
-                </Input>
-                <Input placeholder="请输入" v-model="specsVal" style="width: 10%" class="input">
+                </el-input>
+                <el-input placeholder="请输入" v-model="specsVal" style="width: 10%" class="input">
                   <Icon type="md-add" slot="suffix" @click="confirm" />
-                </Input>
-                <!--<Button type="primary" icon="md-add" @click="confirm"></Button>-->
-              </FormItem>
-            </Col>
-            <Col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
-              <FormItem
+                </el-input>
+                <!--<el-button type="primary" icon="md-add" @click="confirm"></el-button>-->
+              </el-form-item>
+            </el-col>
+            <el-col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
+              <el-form-item
                 :label="item.attr + ':'"
                 prop="store_name"
                 label-for="store_name"
@@ -33,14 +33,14 @@
                 <Tag type="border" closable color="primary" v-for="(itemn, index) in item.attrVal" :key="index">{{
                   itemn
                 }}</Tag>
-                <Input placeholder="请输入" v-model="item.inputVal" style="width: 10%" class="input">
+                <el-input placeholder="请输入" v-model="item.inputVal" style="width: 10%" class="input">
                   <Icon type="md-add" slot="suffix" @click="confirmAttr(index)" />
-                </Input>
-                <!--<Button type="primary" icon="md-add" @click="confirm"></Button>-->
-              </FormItem>
-            </Col>
-          </Row>
-        </Form>
+                </el-input>
+                <!--<el-button type="primary" icon="md-add" @click="confirm"></el-button>-->
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
       </div>
       <div slot="footer"></div>
     </Modal>

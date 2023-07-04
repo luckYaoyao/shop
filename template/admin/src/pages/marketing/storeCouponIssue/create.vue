@@ -3,9 +3,9 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <router-link :to="{ path: $routeProStr + '/marketing/store_coupon_issue/index' }"
-          ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
+          ><el-button icon="ios-arrow-back" size="small" type="text">返回</el-button></router-link
         >
-        <Divider type="vertical" />
+        <el-divider direction="vertical"></el-divider>
         <span
           class="ivu-page-header-title mr20"
           style="padding: 0"
@@ -13,34 +13,34 @@
         ></span>
       </div>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form :model="formData" :label-width="150">
-        <FormItem label="优惠券名称">
-          <Input v-model="formData.coupon_title" :maxlength="18" placeholder="请输入优惠券名称"></Input>
-        </FormItem>
-        <FormItem label="优惠券面值">
-          <InputNumber :min="1" :max="99999" v-model="formData.coupon_price"></InputNumber>
-        </FormItem>
-        <FormItem label="发送方式">
-          <RadioGroup v-model="formData.receive_type">
-            <Radio :label="1">用户领取</Radio>
-            <Radio :label="2">新用户自动发放</Radio>
-            <Radio :label="3">系统赠送</Radio>
-            <Radio :label="4">付费会员专享</Radio>
-          </RadioGroup>
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form :model="formData" label-width="150px">
+        <el-form-item label="优惠券名称">
+          <el-input v-model="formData.coupon_title" :maxlength="18" placeholder="请输入优惠券名称"></el-input>
+        </el-form-item>
+        <el-form-item label="优惠券面值">
+          <el-input-number controls-position="right" :min="1" :max="99999" v-model="formData.coupon_price"></el-input-number>
+        </el-form-item>
+        <el-form-item label="发送方式">
+          <el-radio-group v-model="formData.receive_type">
+            <el-radio :label="1">用户领取</el-radio>
+            <el-radio :label="2">新用户自动发放</el-radio>
+            <el-radio :label="3">系统赠送</el-radio>
+            <el-radio :label="4">付费会员专享</el-radio>
+          </el-radio-group>
           <div class="tip">
             用户领取：用户需要手动领取优惠券；新用户自动发放：新注册的用户自动发放；系统赠送：后台发放制定用户或者添加到商品里面用户购买该商品获得；付费会员专享：仅付费会员可以领取和使用
           </div>
-        </FormItem>
-        <FormItem label="优惠劵类型">
-          <RadioGroup v-model="formData.type">
-            <Radio :label="0">通用券</Radio>
-            <Radio :label="1">品类券</Radio>
-            <Radio :label="2">商品券</Radio>
-            <!--                        <Radio :label="3">会员券</Radio>-->
-          </RadioGroup>
-        </FormItem>
-        <FormItem v-show="formData.type === 2">
+        </el-form-item>
+        <el-form-item label="优惠劵类型">
+          <el-radio-group v-model="formData.type">
+            <el-radio :label="0">通用券</el-radio>
+            <el-radio :label="1">品类券</el-radio>
+            <el-radio :label="2">商品券</el-radio>
+            <!--                        <el-radio :label="3">会员券</el-radio>-->
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item v-show="formData.type === 2">
           <template>
             <div class="upload-list" v-for="item in productList" :key="item.product_id">
               <img :src="item.image" />
@@ -49,11 +49,11 @@
           </template>
           <Icon type="ios-camera-outline" size="26" @click="modals = true" />
           <div class="info">选择商品</div>
-        </FormItem>
-        <FormItem v-show="formData.type === 1">
-          <!-- <Select v-model="formData.category_id" style="width: 320px" multiple>
-            <Option v-for="item in categoryList" :value="item.id" :key="item.id">{{ item.cate_name }}</Option>
-          </Select> -->
+        </el-form-item>
+        <el-form-item v-show="formData.type === 1">
+          <!-- <el-select v-model="formData.category_id" style="width: 320px" multiple>
+            <el-option v-for="item in categoryList" :value="item.id" :key="item.id">{{ item.cate_name }}</el-option>
+          </el-select> -->
           <el-cascader
             v-model="formData.category_id"
             size="small"
@@ -63,87 +63,87 @@
             style="width: 320px"
           ></el-cascader>
           <div class="info">选择商品的品类</div>
-        </FormItem>
-        <FormItem label="使用门槛">
-          <RadioGroup v-model="isMinPrice">
-            <Radio :label="0">无门槛</Radio>
-            <Radio :label="1">有门槛</Radio>
-          </RadioGroup>
-        </FormItem>
-        <FormItem v-if="isMinPrice">
-          <InputNumber :min="1" :max="99999" v-model="formData.use_min_price"></InputNumber>
+        </el-form-item>
+        <el-form-item label="使用门槛">
+          <el-radio-group v-model="isMinPrice">
+            <el-radio :label="0">无门槛</el-radio>
+            <el-radio :label="1">有门槛</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item v-if="isMinPrice">
+          <el-input-number controls-position="right" :min="1" :max="99999" v-model="formData.use_min_price"></el-input-number>
           <div class="info">填写优惠券的最低消费金额</div>
-        </FormItem>
-        <FormItem label="使用时间">
-          <RadioGroup v-model="isCouponTime">
-            <Radio :label="1">天数</Radio>
-            <Radio :label="0">时间段</Radio>
-          </RadioGroup>
-        </FormItem>
-        <FormItem v-show="isCouponTime" label="">
-          <InputNumber :min="1" v-model="formData.coupon_time" :precision="0"></InputNumber>
+        </el-form-item>
+        <el-form-item label="使用时间">
+          <el-radio-group v-model="isCouponTime">
+            <el-radio :label="1">天数</el-radio>
+            <el-radio :label="0">时间段</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item v-show="isCouponTime" label="">
+          <el-input-number controls-position="right" :min="1" v-model="formData.coupon_time" :precision="0"></el-input-number>
           <div class="info">领取后多少天内有效</div>
-        </FormItem>
-        <FormItem v-show="!isCouponTime" label="">
+        </el-form-item>
+        <el-form-item v-show="!isCouponTime" label="">
           <DatePicker
             :value="datetime1"
             :editable="false"
             type="datetimerange"
             placeholder="领取后在这个时间段内可以使用"
-            @on-change="dateChange"
+            @change="dateChange"
           ></DatePicker>
-        </FormItem>
-        <FormItem label="领取时间" v-if="formData.receive_type != 2 && formData.receive_type != 3">
-          <RadioGroup v-model="isReceiveTime">
-            <Radio :label="1">限时</Radio>
-            <Radio :label="0">不限时</Radio>
-          </RadioGroup>
-        </FormItem>
-        <FormItem v-show="isReceiveTime" label="">
+        </el-form-item>
+        <el-form-item label="领取时间" v-if="formData.receive_type != 2 && formData.receive_type != 3">
+          <el-radio-group v-model="isReceiveTime">
+            <el-radio :label="1">限时</el-radio>
+            <el-radio :label="0">不限时</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item v-show="isReceiveTime" label="">
           <DatePicker
             :value="datetime2"
             type="datetimerange"
             placeholder="在这个时间段内可领取"
-            @on-change="timeChange"
+            @change="timeChange"
           ></DatePicker>
-        </FormItem>
-        <FormItem label="优惠券发布数量" v-if="formData.receive_type != 2 && formData.receive_type != 3">
-          <RadioGroup v-model="formData.is_permanent">
-            <Radio :label="0">限量</Radio>
-            <Radio :label="1">不限量</Radio>
-          </RadioGroup>
-        </FormItem>
-        <FormItem
+        </el-form-item>
+        <el-form-item label="优惠券发布数量" v-if="formData.receive_type != 2 && formData.receive_type != 3">
+          <el-radio-group v-model="formData.is_permanent">
+            <el-radio :label="0">限量</el-radio>
+            <el-radio :label="1">不限量</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item
           v-show="!formData.is_permanent"
           label=""
           v-if="formData.receive_type != 2 && formData.receive_type != 3"
         >
-          <InputNumber :min="1" :max="99999" v-model="formData.total_count" :precision="0"></InputNumber>
+          <el-input-number controls-position="right" :min="1" :max="99999" v-model="formData.total_count" :precision="0"></el-input-number>
           <div class="info">填写优惠券的发布数量</div>
-        </FormItem>
-        <FormItem label="用户领取数量" v-if="formData.receive_type != 2 && formData.receive_type != 3">
-          <InputNumber :min="1" :max="99999" v-model="formData.receive_limit" :precision="0"></InputNumber>
+        </el-form-item>
+        <el-form-item label="用户领取数量" v-if="formData.receive_type != 2 && formData.receive_type != 3">
+          <el-input-number controls-position="right" :min="1" :max="99999" v-model="formData.receive_limit" :precision="0"></el-input-number>
           <div class="info">填写每个用户可以领取多少张</div>
-        </FormItem>
-        <!--                <FormItem label="排序">-->
-        <!--                    <InputNumber-->
+        </el-form-item>
+        <!--                <el-form-item label="排序">-->
+        <!--                    <el-input-number controls-position="right"-->
         <!--                        :min="0"-->
         <!--                        :max="100000000"-->
         <!--                        v-model="formData.sort"-->
         <!--                        :precision="0"-->
-        <!--                    ></InputNumber>-->
-        <!--                </FormItem>-->
-        <FormItem label="状态">
-          <RadioGroup v-model="formData.status">
-            <Radio :label="1">开启</Radio>
-            <Radio :label="0">关闭</Radio>
-          </RadioGroup>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="save" :disabled="disabled">立即创建</Button>
-        </FormItem>
-      </Form>
-    </Card>
+        <!--                    ></el-input-number>-->
+        <!--                </el-form-item>-->
+        <el-form-item label="状态">
+          <el-radio-group v-model="formData.status">
+            <el-radio :label="1">开启</el-radio>
+            <el-radio :label="0">关闭</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="save" :disabled="disabled">立即创建</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
     <Modal
       v-model="modals"
       title="商品列表"

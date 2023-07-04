@@ -5,12 +5,12 @@
       >{{ configData.tabList[configData.tabVal].name }}
     </div>
     <div class="radio-box" :class="{ on: configData.type == 1 }">
-      <RadioGroup v-model="configData.tabVal" type="button" size="large" @on-change="radioChange($event)">
-        <Radio :label="index" v-for="(item, index) in configData.tabList" :key="index">
+      <el-radio-group v-model="configData.tabVal" type="button" size="large" @change="radioChange($event)">
+        <el-radio-button :label="index" v-for="(item, index) in configData.tabList" :key="index">
           <span class="iconfont-diy" :class="item.icon" v-if="item.icon"></span>
           <span v-else>{{ item.name }}</span>
-        </Radio>
-      </RadioGroup>
+        </el-radio-button>
+      </el-radio-group>
     </div>
   </div>
 </template>

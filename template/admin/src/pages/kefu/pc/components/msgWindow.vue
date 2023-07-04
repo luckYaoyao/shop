@@ -13,9 +13,9 @@
         >
       </div>
       <div class="search-box">
-        <Input placeholder="搜索快捷回复" style="width: 100%" v-model="searchTxt" @on-enter="bindSearch">
+        <el-input placeholder="搜索快捷回复" style="width: 100%" v-model="searchTxt" @on-enter="bindSearch">
           <Icon type="ios-search" slot="suffix" />
-        </Input>
+        </el-input>
       </div>
     </div>
     <div class="main">
@@ -49,7 +49,7 @@
         <Scroll :on-reach-bottom="handleReachBottom" class="right-scroll" height="360">
           <div class="msg-item add-box" v-if="tabCur" style="margin-top: 0">
             <div class="box2">
-              <Input
+              <el-input
                 class="input-box"
                 v-model="addMsg.title"
                 placeholder="输入标题（选填）"
@@ -58,17 +58,17 @@
               />
               <div class="conBox" :class="{ active: addMsg.isEdit }">
                 <div class="content">
-                  <Input v-model="addMsg.message" type="textarea" :rows="4" placeholder="请输入内容" />
+                  <el-input v-model="addMsg.message" type="textarea" :rows="4" placeholder="请输入内容" />
                 </div>
                 <div class="bom">
                   <div class="select">
-                    <Select v-model="addMsg.cateId" style="width: 100px" size="small">
-                      <Option v-for="item in sortList" :value="item.id" :key="item.id">{{ item.name }} </Option>
-                    </Select>
+                    <el-select v-model="addMsg.cateId" style="width: 100px" size="small">
+                      <el-option v-for="item in sortList" :value="item.id" :key="item.id">{{ item.name }} </el-option>
+                    </el-select>
                   </div>
                   <div class="btns-box">
-                    <Button @click.stop="addMsg.isEdit = false">取消</Button>
-                    <Button type="primary" @click.stop="bindAdd">保存</Button>
+                    <el-button @click.stop="addMsg.isEdit = false">取消</el-button>
+                    <el-button type="primary" @click.stop="bindAdd">保存</el-button>
                   </div>
                 </div>
               </div>
@@ -86,19 +86,19 @@
               </div>
             </div>
             <div class="box2" v-else>
-              <Input class="input-box" v-model="item.title" placeholder="输入标题（选填）" style="width: 100%" />
+              <el-input class="input-box" v-model="item.title" placeholder="输入标题（选填）" style="width: 100%" />
               <div class="content">
-                <Input v-model="item.message" type="textarea" :rows="4" placeholder="请输入内容" />
+                <el-input v-model="item.message" type="textarea" :rows="4" placeholder="请输入内容" />
               </div>
               <div class="bom">
                 <div class="select">
-                  <Select v-model="cateId" style="width: 100px" size="small">
-                    <Option v-for="item in sortList" :value="item.id" :key="item.id">{{ item.name }} </Option>
-                  </Select>
+                  <el-select v-model="cateId" style="width: 100px" size="small">
+                    <el-option v-for="item in sortList" :value="item.id" :key="item.id" :label="item.name"></el-option>
+                  </el-select>
                 </div>
                 <div class="btns-box">
-                  <Button @click.stop="item.isEdit = false">取消</Button>
-                  <Button type="primary" @click.stop="updataMsg(item)">保存</Button>
+                  <el-button @click.stop="item.isEdit = false">取消</el-button>
+                  <el-button type="primary" @click.stop="updataMsg(item)">保存</el-button>
                 </div>
               </div>
             </div>
@@ -109,14 +109,14 @@
     <Modal v-model="isAddSort" :title="maskTitle" width="304" :mask="false" class="class-box" :footer-hide="true">
       <div class="item">
         <span>分组名称：</span>
-        <Input v-model="classTitle" placeholder="分组名称" />
+        <el-input v-model="classTitle" placeholder="分组名称" />
       </div>
       <div class="item">
         <span>分组排序：</span>
-        <Input v-model="classSort" placeholder="输入排序" />
+        <el-input v-model="classSort" placeholder="输入排序" />
       </div>
       <div class="btn">
-        <Button type="primary" style="background: #1890ff; width: 100%" @click="addServiceCate">确定</Button>
+        <el-button type="primary" style="background: #1890ff; width: 100%" @click="addServiceCate">确定</el-button>
       </div>
     </Modal>
   </div>

@@ -149,20 +149,24 @@
             currenType == 'integral'
           "
         >
-          <Form ref="formValidate" :model="formValidate" class="tabform" v-if="currenType == 'product'">
-            <Row type="flex" :gutter="24">
-              <Col>
-                <FormItem label="" label-for="pid">
-                  <Select v-model="formValidate.cate_id" style="width: 230px" clearable @on-change="userSearchs">
-                    <Option v-for="item in treeSelect" :value="item.id" :key="item.id"
-                      >{{ item.html + item.cate_name }}
-                    </Option>
-                  </Select>
-                </FormItem>
-              </Col>
-              <Col>
-                <FormItem label="" label-for="store_name">
-                  <Input
+          <el-form ref="formValidate" :model="formValidate" class="tabform" v-if="currenType == 'product'">
+            <el-row :gutter="24">
+              <el-col>
+                <el-form-item label="" label-for="pid">
+                  <el-select v-model="formValidate.cate_id" style="width: 230px" clearable @change="userSearchs">
+                    <el-option
+                      v-for="item in treeSelect"
+                      :value="item.id"
+                      :key="item.id"
+                      :label="item.html + item.cate_name"
+                    >
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col>
+                <el-form-item label="" label-for="store_name">
+                  <el-input
                     search
                     enter-button
                     placeholder="请输入商品名称,关键字,编号"
@@ -170,31 +174,16 @@
                     style="width: 250px"
                     @on-search="userSearchs"
                   />
-                </FormItem>
-              </Col>
-            </Row>
-          </Form>
-          <Table
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+          <el-table
             row-key="id"
             ref="table"
-            no-data-text="暂无数据"
-            no-filtered-data-text="暂无筛选结果"
-            :columns="
-              currenType == 'special'
-                ? columns
-                : currenType == 'product_category'
-                ? columns7
-                : currenType == 'bargain' ||
-                  currenType == 'combination' ||
-                  currenType == 'advance' ||
-                  currenType == 'integral'
-                ? bargain
-                : currenType == 'news'
-                ? news
-                : columns8
-            "
+            empty-text="暂无数据"
             :data="tableList"
-            :loading="loading"
+            v-loading="loading"
             :max-height="
               currenType == 'product_category'
                 ? '410'
@@ -209,28 +198,53 @@
                 : ''
             "
           >
-            <template slot-scope="{ row, index }" slot="pic" v-if="row.hasOwnProperty('pic')">
-              <viewer>
-                <div class="tabBox_img">
-                  <img v-lazy="row.pic" />
-                </div>
-              </viewer>
-            </template>
-            <template slot-scope="{ row, index }" slot="image" v-if="row.hasOwnProperty('image')">
-              <viewer>
-                <div class="tabBox_img">
-                  <img v-lazy="row.image" />
-                </div>
-              </viewer>
-            </template>
-            <template slot-scope="{ row, index }" slot="image_input" v-if="row.hasOwnProperty('image_input')">
-              <viewer>
-                <div class="tabBox_img">
-                  <img v-lazy="row.image_input[0]" />
-                </div>
-              </viewer>
-            </template>
-          </Table>
+            <el-table-column
+              :label="item.title"
+              :min-width="item.minWidth"
+              v-for="(item, index) in currenType == 'special'
+                ? columns
+                : currenType == 'product_category'
+                ? columns7
+                : currenType == 'bargain' ||
+                  currenType == 'combination' ||
+                  currenType == 'advance' ||
+                  currenType == 'integral'
+                ? bargain
+                : currenType == 'news'
+                ? news
+                : columns8"
+              :key="index"
+            >
+              <template slot-scope="scope">
+                <template v-if="item.key">
+                  <div>
+                    <span>{{ scope.row[item.key] }}</span>
+                  </div>
+                </template>
+                <template v-else-if="item.slot === 'pic' && scope.row.hasOwnProperty('pic')">
+                  <viewer>
+                    <div class="tabBox_img">
+                      <img v-lazy="scope.row.pic" />
+                    </div>
+                  </viewer>
+                </template>
+                <template v-else-if="item.slot === 'image' && scope.row.hasOwnProperty('image')">
+                  <viewer>
+                    <div class="tabBox_img">
+                      <img v-lazy="scope.row.image" />
+                    </div>
+                  </viewer>
+                </template>
+                <template v-else-if="item.slot === 'image_input' && scope.row.hasOwnProperty('image_input')">
+                  <viewer>
+                    <div class="tabBox_img">
+                      <img v-lazy="scope.row.image_input[0]" />
+                    </div>
+                  </viewer>
+                </template>
+              </template>
+            </el-table-column>
+          </el-table>
           <div
             class="acea-row row-right page"
             v-if="
@@ -243,25 +257,31 @@
               currenType == 'integral'
             "
           >
-            <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="formValidate.limit" />
+            <pagination
+              v-if="total"
+              :total="total"
+              :page.sync="formValidate.page"
+              :limit.sync="formValidate.limit"
+              @pagination="getList"
+            />
           </div>
         </div>
         <div class="right_box" v-if="currenType == 'custom'">
           <!--<div v-if="!tableList.length || customNum==2">-->
-          <!--<Button type="primary" @click="customList" v-if="tableList.length">自定义列表</Button>-->
+          <!--<el-button type="primary" @click="customList" v-if="tableList.length">自定义列表</el-button>-->
           <div style="width: 340px; margin: 150px 100px 0 120px">
-            <Form ref="customdate" :model="customdate" :rules="ruleValidate" :label-width="88">
-              <!--<FormItem label="链接名称：" prop="name">-->
-              <!--<Input v-model="customdate.name" placeholder="会员中心"></Input>-->
-              <!--</FormItem>-->
-              <FormItem label="跳转路径：" prop="url">
-                <Input v-model="customdate.url" placeholder="请输入跳转路径"></Input>
-              </FormItem>
-            </Form>
+            <el-form ref="customdate" :model="customdate" :rules="ruleValidate" :label-width="88">
+              <!--<el-form-item label="链接名称：" prop="name">-->
+              <!--<el-input v-model="customdate.name" placeholder="会员中心"></el-input>-->
+              <!--</el-form-item>-->
+              <el-form-item label="跳转路径：" prop="url">
+                <el-input v-model="customdate.url" placeholder="请输入跳转路径"></el-input>
+              </el-form-item>
+            </el-form>
           </div>
           <!--</div>-->
           <!--<div v-else>-->
-          <!--<Button type="primary" @click="customLink">自定义链接</Button>-->
+          <!--<el-button type="primary" @click="customLink">自定义链接</el-button>-->
           <!--<div class="Box">-->
           <!--<div v-for="(item,index) in tableList" :key="index" class="item">-->
           <!--<div class="cont_box" :class="currenId==item.id?'on':''" @click="getUrl(item)">{{item.name}}</div>-->
@@ -272,13 +292,13 @@
         </div>
       </div>
       <!--<div slot="footer" v-if="categoryId==9&&customNum==2">-->
-      <!--<Button @click="handleReset('customdate')">重置</Button>-->
-      <!--<Button type="primary" @click="handleSubmit('customdate')">确定</Button>-->
+      <!--<el-button @click="handleReset('customdate')">重置</el-button>-->
+      <!--<el-button type="primary" @click="handleSubmit('customdate')">确定</el-button>-->
       <!--</div>-->
       <div slot="footer">
-        <Button @click="cancel">取消</Button>
-        <Button type="primary" @click="handleSubmit('customdate')" v-if="currenType == 'custom'">确定</Button>
-        <Button type="primary" @click="ok" v-else>确定</Button>
+        <el-button @click="cancel">取消</el-button>
+        <el-button type="primary" @click="handleSubmit('customdate')" v-if="currenType == 'custom'">确定</el-button>
+        <el-button type="primary" @click="ok" v-else>确定</el-button>
       </div>
     </Modal>
   </div>
@@ -430,7 +450,7 @@ export default {
         }
         let self = this;
         return h('div', [
-          h('Radio', {
+          h('el-radio', {
             props: {
               value: flag,
             },
@@ -512,10 +532,6 @@ export default {
     },
     handleReset(name) {
       this.$refs[name].resetFields();
-    },
-    pageChange(index) {
-      this.formValidate.page = index;
-      this.getList();
     },
     // 商品分类；
     goodsCategory() {

@@ -1,46 +1,70 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover>
-      <Tabs v-model="isChecked" @on-click="onChangeType">
-        <TabPane label="短信" name="1"></TabPane>
-        <TabPane label="商品采集" name="4"></TabPane>
-        <TabPane label="物流查询" name="3"></TabPane>
-        <TabPane label="电子面单打印" name="2"></TabPane>
-      </Tabs>
+    <el-card :bordered="false" shadow="never">
+      <el-tabs v-model="isChecked" @tab-click="onChangeType">
+        <el-tab-pane label="短信" name="1"></el-tab-pane>
+        <el-tab-pane label="商品采集" name="4"></el-tab-pane>
+        <el-tab-pane label="物流查询" name="3"></el-tab-pane>
+        <el-tab-pane label="电子面单打印" name="2"></el-tab-pane>
+      </el-tabs>
       <!--短信列表-->
       <div class="note" v-if="isChecked === '1' && sms.open === 1">
         <div class="acea-row row-between-wrapper">
           <div>
             <span>短信状态：</span>
-            <RadioGroup type="button" v-model="tableFrom.type" @on-change="selectChange(tableFrom.type)">
-              <Radio label="">全部</Radio>
-              <Radio label="1">成功</Radio>
-              <Radio label="2">失败</Radio>
-              <Radio label="0">发送中</Radio>
-            </RadioGroup>
+            <el-radio-group type="button" v-model="tableFrom.type" @change="selectChange(tableFrom.type)">
+              <el-radio-button label="">全部</el-radio-button>
+              <el-radio-button label="1">成功</el-radio-button>
+              <el-radio-button label="2">失败</el-radio-button>
+              <el-radio-button label="0">发送中</el-radio-button>
+            </el-radio-group>
           </div>
           <div>
-            <Button type="primary" @click="shortMes">短信模板</Button>
-            <Button style="margin-left: 20px" @click="editSign">修改签名</Button>
+            <el-button type="primary" @click="shortMes">短信模板</el-button>
+            <el-button style="margin-left: 20px" @click="editSign">修改签名</el-button>
           </div>
         </div>
-        <Table
-          :columns="columns1"
+        <el-table
           :data="tableList"
-          :loading="loading"
-          highlight-row
+          v-loading="loading"
+          highlight-current-row
           no-userFrom-text="暂无数据"
           no-filtered-userFrom-text="暂无筛选结果"
           class="mt25"
-        ></Table>
+        >
+          <el-table-column label="手机号" width="100">
+            <template slot-scope="scope">
+              <span>{{ scope.row.phone }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="模板内容" min-width="130">
+            <template slot-scope="scope">
+              <span>{{ scope.row.content }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="条数(每67/+1)" min-width="130">
+            <template slot-scope="scope">
+              <span>{{ scope.row.num }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="发送时间" min-width="130">
+            <template slot-scope="scope">
+              <span>{{ scope.row.add_time }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="状态码" min-width="130">
+            <template slot-scope="scope">
+              <span>{{ scope.row._resultcode }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
         <div class="acea-row row-right page">
-          <Page
+          <pagination
+            v-if="total"
             :total="total"
-            :current="tableFrom.page"
-            show-elevator
-            show-total
-            @on-change="pageChange"
-            :page-size="tableFrom.limit"
+            :page.sync="tableFrom.page"
+            :limit.sync="tableFrom.limit"
+            @pagination="getList"
           />
         </div>
       </div>
@@ -52,27 +76,39 @@
           (isChecked === '2' && dump.open === 1)
         "
       >
-        <Table
-          :columns="columns2"
+        <el-table
           :data="tableList"
           :loading="loading"
-          highlight-row
+          highlight-current-row
           no-userFrom-text="暂无数据"
           no-filtered-userFrom-text="暂无筛选结果"
           class="mt25"
         >
-          <template slot-scope="{ row }" slot="num" v-if="isChecked === '3' && query.open === 1">
-            <div>{{ row.content.num }}</div>
-          </template>
-        </Table>
+          <el-table-column
+            :label="item.title"
+            :min-width="item.minWidth"
+            v-for="(item, index) in columns2"
+            :key="index"
+          >
+            <template slot-scope="scope">
+              <template v-if="item.key">
+                <div>
+                  <span>{{ scope.row[item.key] }}</span>
+                </div>
+              </template>
+              <template v-else-if="item.slot === 'num' && isChecked === '3' && query.open === 1">
+                <div>{{ scope.row.content.num }}</div>
+              </template>
+            </template>
+          </el-table-column>
+        </el-table>
         <div class="acea-row row-right page">
-          <Page
+          <pagination
+            v-if="total"
             :total="total"
-            :current="tableFrom.page"
-            show-elevator
-            show-total
-            @on-change="pageChangeOther"
-            :page-size="tableFrom.limit"
+            :page.sync="tableFrom.page"
+            :limit.sync="tableFrom.limit"
+            @pagination="getRecordList"
           />
         </div>
       </div>
@@ -105,7 +141,7 @@
             <span class="wuSp1">电子面单打印未开通哦</span>
             <span class="wuSp2">点击立即开通按钮，即可使用电子面单打印服务哦～～～</span>
           </span>
-          <Button size="default" type="primary" @click="onOpen">立即开通</Button>
+          <el-button size="default" type="primary" @click="onOpen">立即开通</el-button>
         </div>
         <!--短信立即开通-->
         <div class="smsBox" v-if="isSms && isChecked === '1'">
@@ -113,25 +149,27 @@
             <div class="page-account-top">
               <span class="page-account-top-tit">开通短信服务</span>
             </div>
-            <Form
+            <el-form
               ref="formInline"
               :model="formInline"
               :rules="ruleInline"
               @submit.native.prevent
               @keyup.enter="handleSubmit('formInline')"
             >
-              <FormItem prop="sign" class="maxInpt">
-                <Input
+              <el-form-item prop="sign" class="maxInpt">
+                <el-input
                   type="text"
                   v-model="formInline.sign"
                   prefix="ios-contact-outline"
                   placeholder="请输入短信签名"
                 />
-              </FormItem>
-              <FormItem class="maxInpt">
-                <Button type="primary" long size="default" @click="handleSubmit('formInline')" class="btn">登录</Button>
-              </FormItem>
-            </Form>
+              </el-form-item>
+              <el-form-item class="maxInpt">
+                <el-button type="primary" long size="default" @click="handleSubmit('formInline')" class="btn"
+                  >登录</el-button
+                >
+              </el-form-item>
+            </el-form>
           </div>
         </div>
         <!--电子面单立即开通-->
@@ -141,36 +179,44 @@
               <span class="page-account-top-tit" v-if="isChecked === '2'">开通电子面单服务</span>
               <span class="page-account-top-tit" v-if="isChecked === '3'">开通物流查询服务</span>
             </div>
-            <Form
+            <el-form
               ref="formInlineDump"
               :model="formInlineDump"
               :rules="ruleInlineDump"
               @submit.native.prevent
               @keyup.enter="handleSubmitDump('formInlineDump')"
             >
-              <FormItem prop="com" class="maxInpt">
-                <Select
+              <el-form-item prop="com" class="maxInpt">
+                <el-select
                   v-model="formInlineDump.com"
                   placeholder="请选择快递公司"
-                  @on-change="onChangeExport"
+                  @change="onChangeExport"
                   style="text-align: left"
                 >
-                  <Option v-for="(item, index) in exportList" :value="item.code" :key="index">{{ item.name }}</Option>
-                </Select>
-              </FormItem>
-              <FormItem prop="temp_id" class="tempId maxInpt">
+                  <el-option
+                    v-for="(item, index) in exportList"
+                    :value="item.code"
+                    :key="index"
+                    :label="item.name"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item prop="temp_id" class="tempId maxInpt">
                 <div class="acea-row">
-                  <Select
+                  <el-select
                     v-model="formInlineDump.temp_id"
                     placeholder="请选择电子面单模板"
                     style="text-align: left"
                     :class="[formInlineDump.temp_id ? 'width9' : 'width10']"
-                    @on-change="onChangeImg"
+                    @change="onChangeImg"
                   >
-                    <Option v-for="(item, index) in exportTempList" :value="item.temp_id" :key="index">{{
-                      item.title
-                    }}</Option>
-                  </Select>
+                    <el-option
+                      v-for="(item, index) in exportTempList"
+                      :value="item.temp_id"
+                      :key="index"
+                      :label="item.title"
+                    ></el-option>
+                  </el-select>
                   <div v-if="formInlineDump.temp_id">
                     <span class="tempImg">预览</span>
                     <div class="tabBox_img" v-viewer>
@@ -178,49 +224,49 @@
                     </div>
                   </div>
                 </div>
-              </FormItem>
-              <FormItem prop="to_name" class="maxInpt">
-                <Input
+              </el-form-item>
+              <el-form-item prop="to_name" class="maxInpt">
+                <el-input
                   type="text"
                   v-model="formInlineDump.to_name"
                   prefix="ios-contact-outline"
                   placeholder="请填写寄件人姓名"
                 />
-              </FormItem>
-              <FormItem prop="to_tel" class="maxInpt">
-                <Input
+              </el-form-item>
+              <el-form-item prop="to_tel" class="maxInpt">
+                <el-input
                   type="text"
                   v-model="formInlineDump.to_tel"
                   prefix="ios-contact-outline"
                   placeholder="请填写寄件人电话"
                 />
-              </FormItem>
-              <FormItem prop="to_address" class="maxInpt">
-                <Input
+              </el-form-item>
+              <el-form-item prop="to_address" class="maxInpt">
+                <el-input
                   type="text"
                   v-model="formInlineDump.to_address"
                   prefix="ios-contact-outline"
                   placeholder="请填写寄件人详细地址"
                 />
-              </FormItem>
-              <FormItem prop="siid" class="maxInpt">
-                <Input
+              </el-form-item>
+              <el-form-item prop="siid" class="maxInpt">
+                <el-input
                   type="text"
                   v-model="formInlineDump.siid"
                   prefix="ios-contact-outline"
                   placeholder="请填写云打印编号"
                 />
-              </FormItem>
-              <FormItem class="maxInpt">
-                <Button type="primary" long size="default" @click="handleSubmitDump('formInlineDump')" class="btn"
-                  >立即开通</Button
+              </el-form-item>
+              <el-form-item class="maxInpt">
+                <el-button type="primary" long size="default" @click="handleSubmitDump('formInlineDump')" class="btn"
+                  >立即开通</el-button
                 >
-              </FormItem>
-            </Form>
+              </el-form-item>
+            </el-form>
           </div>
         </div>
       </div>
-    </Card>
+    </el-card>
     <Modal
       v-model="modals"
       footer-hide
@@ -230,38 +276,38 @@
       class="order_box"
       @on-cancel="cancel('formInline')"
     >
-      <Form ref="formInline" :model="formInline" :rules="ruleInline" :label-width="100" @submit.native.prevent>
-        <FormItem>
-          <Input
+      <el-form ref="formInline" :model="formInline" :rules="ruleInline" label-width="100px" @submit.native.prevent>
+        <el-form-item>
+          <el-input
             v-model="accountInfo.account"
             disabled
             prefix="ios-person-outline"
             size="large"
             style="width: 87%"
-          ></Input>
-        </FormItem>
-        <FormItem prop="sign">
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="sign">
           <!--<Icon type="   ios-calendar-outline" />-->
-          <Input
+          <el-input
             v-model="formInline.sign"
             prefix="ios-document-outline"
             placeholder="请输入短信签名，例如：CRMEB"
             size="large"
             style="width: 87%"
-          ></Input>
-        </FormItem>
-        <FormItem prop="phone">
-          <Input
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="phone">
+          <el-input
             v-model="formInline.phone"
             prefix="ios-call-outline"
             placeholder="请输入您的手机号"
             size="large"
             style="width: 87%"
-          ></Input>
-        </FormItem>
-        <FormItem prop="code">
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="code">
           <div class="code acea-row row-middle" style="width: 87%">
-            <Input
+            <el-input
               type="text"
               v-model="formInline.code"
               prefix="ios-keypad-outline"
@@ -269,18 +315,18 @@
               size="large"
               style="width: 75%"
             />
-            <Button :disabled="!this.canClick" @click="cutDown" size="large">{{ cutNUm }}</Button>
+            <el-button :disabled="!this.canClick" @click="cutDown" size="large">{{ cutNUm }}</el-button>
           </div>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" long size="large" @click="editSubmit('formInline')" class="btn" style="width: 87%"
-            >确认修改</Button
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" long size="large" @click="editSubmit('formInline')" class="btn" style="width: 87%"
+            >确认修改</el-button
           >
-        </FormItem>
-      </Form>
+        </el-form-item>
+      </el-form>
       <!--<div slot="footer">-->
-      <!--&lt;!&ndash;<Button type="primary" @click="putSend('formInline')">提交</Button>&ndash;&gt;-->
-      <!--&lt;!&ndash;<Button @click="cancel('formInline')">取消</Button>&ndash;&gt;-->
+      <!--&lt;!&ndash;<el-button type="primary" @click="putSend('formInline')">提交</el-button>&ndash;&gt;-->
+      <!--&lt;!&ndash;<el-button @click="cancel('formInline')">取消</el-button>&ndash;&gt;-->
       <!--</div>-->
     </Modal>
   </div>
@@ -349,38 +395,6 @@ export default {
         code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
       },
       isChecked: '1',
-      columns1: [
-        // {
-        //     title: 'ID',
-        //     key: 'id',
-        //     width: 80
-        // },
-        {
-          title: '手机号',
-          key: 'phone',
-          minWidth: 100,
-        },
-        {
-          title: '模板内容',
-          key: 'content',
-          minWidth: 590,
-        },
-        {
-          title: '条数(每67/+1)',
-          key: 'num',
-          minWidth: 100,
-        },
-        {
-          title: '发送时间',
-          key: 'add_time',
-          minWidth: 150,
-        },
-        {
-          title: '状态码',
-          key: '_resultcode',
-          minWidth: 100,
-        },
-      ],
       columns2: [],
       tableFrom: {
         page: 1,
@@ -629,10 +643,6 @@ export default {
           this.$Message.error(res.msg);
         });
     },
-    pageChangeOther(index) {
-      this.tableFrom.page = index;
-      this.getRecordList();
-    },
     // 开通短信提交
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
@@ -744,10 +754,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.tableFrom.page = index;
-      this.getList();
     },
     // 表格搜索
     userSearchs() {

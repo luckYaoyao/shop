@@ -3,31 +3,31 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <router-link :to="{ path: $routeProStr + '/system/code_generation_list' }"
-          ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
+          ><el-button icon="ios-arrow-back" size="small" type="text">返回</el-button></router-link
         >
-        <Divider type="vertical" />
+        <el-divider direction="vertical"></el-divider>
         <span class="ivu-page-header-title mr20" style="padding: 0">添加功能</span>
       </div>
     </div>
     <div class="message">
-      <Card :bordered="false" dis-hover class="">
+      <el-card :bordered="false" shadow="never" class="">
         <Steps :current="currentTab">
           <Step :title="item.label" v-for="(item, index) in headerList" :key="index"></Step>
         </Steps>
-      </Card>
+      </el-card>
     </div>
     <div class="pt10 tab-1" v-show="currentTab == '0'">
-      <Card :bordered="false" dis-hover class="ivu-mt">
+      <el-card :bordered="false" shadow="never" class="ivu-mt">
         <FoundationForm
           ref="Foundation"
           :foundation="formItem.foundation"
           :tableField="tableField"
           @storageData="storageData"
         />
-      </Card>
+      </el-card>
     </div>
     <div class="pt10" v-show="currentTab == '1'">
-      <Card :bordered="false" dis-hover class="ivu-mt">
+      <el-card :bordered="false" shadow="never" class="ivu-mt">
         <TableForm
           ref="TableForm"
           :foundation="formItem.foundation"
@@ -35,17 +35,17 @@
           :id="id"
           @storageData="storageData"
         />
-      </Card>
+      </el-card>
     </div>
     <div class="pt10" v-show="currentTab == '2'">
-      <Card :bordered="false" dis-hover class="ivu-mt">
+      <el-card :bordered="false" shadow="never" class="ivu-mt">
         <StorageLoc :storage="formItem.storage" />
-      </Card>
+      </el-card>
     </div>
-    <Card :bordered="false" class="btn" dis-hover>
-      <Button class="mr20" @click="beforeTab">上一步</Button>
-      <Button type="primary" @click="nextTab">{{ currentTab == 2 ? '提交' : '下一步' }}</Button>
-    </Card>
+    <el-card :bordered="false" class="btn" shadow="never">
+      <el-button class="mr20" @click="beforeTab">上一步</el-button>
+      <el-button type="primary" @click="nextTab">{{ currentTab == 2 ? '提交' : '下一步' }}</el-button>
+    </el-card>
   </div>
 </template>
 

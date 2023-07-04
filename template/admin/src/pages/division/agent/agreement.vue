@@ -3,17 +3,17 @@
     <div class="i-layout-page-header header-title">
       <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form :label-width="80" @submit.native.prevent>
-        <FormItem label="协议内容：">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form label-width="85px" @submit.native.prevent>
+        <el-form-item label="协议内容：">
           <WangEditor :content="agreement.content" @editorContent="getEditorContent"></WangEditor>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="memberAgreementSave">保存</Button>
-        </FormItem>
-      </Form>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="memberAgreementSave">保存</el-button>
+        </el-form-item>
+      </el-form>
       <Spin fix v-if="spinShow"></Spin>
-    </Card>
+    </el-card>
   </div>
 </template>
 

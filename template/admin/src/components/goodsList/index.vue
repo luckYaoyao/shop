@@ -1,14 +1,14 @@
 <template>
   <div class="goodList">
-    <Form ref="formValidate" :model="formValidate" :label-width="120" label-position="right" class="tabform">
-      <Row type="flex" :gutter="24">
-        <Col v-bind="grid" v-if="!liveStatus">
-          <FormItem label="商品分类：" label-for="pid">
-            <!-- <Select v-model="formValidate.cate_id" style="width: 200px" clearable @on-change="userSearchs">
-              <Option v-for="item in treeSelect" :value="item.id" :key="item.id"
+    <el-form ref="formValidate" :model="formValidate" label-width="120px" label-position="right" class="tabform">
+      <el-row :gutter="24">
+        <el-col v-bind="grid" v-if="!liveStatus">
+          <el-form-item label="商品分类：" label-for="pid">
+            <!-- <el-select v-model="formValidate.cate_id" style="width: 200px" clearable @change="userSearchs">
+              <el-option v-for="item in treeSelect" :value="item.id" :key="item.id"
                 >{{ item.html + item.cate_name }}
-              </Option>
-            </Select> -->
+              </el-option>
+            </el-select> -->
             <el-cascader
               v-model="formValidate.cate_id"
               size="small"
@@ -16,20 +16,19 @@
               :props="{ emitPath: false }"
               clearable
             ></el-cascader>
-          </FormItem>
-        </Col>
-        <Col v-bind="grid" v-if="!type && diy">
-          <FormItem label="商品类型：" label-for="pid">
-            <Select v-model="goodType" style="width: 200px" clearable @on-change="userSearchs">
-              <Option v-for="item in goodList" :value="item.activeValue" :key="item.activeValue"
-                >{{ item.title }}
-              </Option>
-            </Select>
-          </FormItem>
-        </Col>
-        <Col v-bind="grid">
-          <FormItem label="商品搜索：" label-for="store_name">
-            <Input
+          </el-form-item>
+        </el-col>
+        <el-col v-bind="grid" v-if="!type && diy">
+          <el-form-item label="商品类型：" label-for="pid">
+            <el-select v-model="goodType" style="width: 200px" clearable @change="userSearchs">
+              <el-option v-for="item in goodList" :value="item.activeValue" :key="item.activeValue" :label="item.title">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col v-bind="grid">
+          <el-form-item label="商品搜索：" label-for="store_name">
+            <el-input
               search
               enter-button
               placeholder="请输入商品名称/关键字/编号"
@@ -37,31 +36,63 @@
               style="width: 250px"
               @on-search="userSearchs"
             />
-          </FormItem>
-        </Col>
-      </Row>
-    </Form>
-    <Table
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <el-table
       ref="table"
-      no-data-text="暂无数据"
-      @on-selection-change="changeCheckbox"
-      no-filtered-data-text="暂无筛选结果"
+      empty-text="暂无数据"
       max-height="400"
-      :columns="liveStatus == false ? columns4 : columns5"
+      :highlight-current-row="many !== 'many'"
       :data="tableList"
-      :loading="loading"
+      v-loading="loading"
+      @select="changeCheckbox"
+      @select-all="changeCheckbox"
     >
-      <template slot-scope="{ row, index }" slot="image">
-        <div class="tabBox_img" v-viewer>
-          <img v-lazy="row.image" />
-        </div>
-      </template>
-    </Table>
+      <el-table-column v-if="many == 'many'" type="selection" width="55"> </el-table-column>
+      <el-table-column v-else width="50">
+        <template slot-scope="scope">
+          <el-radio v-model="templateRadio" :label="scope.row.id" @change.native="getTemplateRow(scope.row)"
+            >&nbsp;</el-radio
+          >
+        </template>
+      </el-table-column>
+
+      <el-table-column label="商品ID" width="80">
+        <template slot-scope="scope">
+          <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="图片" width="80">
+        <template slot-scope="scope">
+          <div class="tabBox_img" v-viewer>
+            <img v-lazy="scope.row.image" />
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="商品名称" min-width="250">
+        <template slot-scope="scope">
+          <span>{{ scope.row.store_name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="商品分类" min-width="150" v-if="liveStatus">
+        <template slot-scope="scope">
+          <span>{{ scope.row.cate_name }}</span>
+        </template>
+      </el-table-column>
+    </el-table>
     <div class="acea-row row-right page">
-      <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="formValidate.limit" />
+      <pagination
+        v-if="total"
+        :total="total"
+        :page.sync="formValidate.page"
+        :limit.sync="formValidate.limit"
+        @pagination="pageChange"
+      />
     </div>
     <div class="footer" slot="footer" v-if="many === 'many' && !diy">
-      <Button type="primary" size="large" :loading="modal_loading" long @click="ok">提交</Button>
+      <el-button type="primary" size="large" :loading="modal_loading" long @click="ok">提交</el-button>
     </div>
   </div>
 </template>
@@ -117,6 +148,8 @@ export default {
   },
   data() {
     return {
+      templateRadio: 0,
+
       modal_loading: false,
       treeSelect: [],
       formValidate: {
@@ -203,53 +236,6 @@ export default {
   },
   computed: {},
   created() {
-    let radio = {
-      width: 60,
-      align: 'center',
-      render: (h, params) => {
-        let id = params.row.id;
-        let flag = false;
-        if (this.currentid === id) {
-          flag = true;
-        } else {
-          flag = false;
-        }
-        let self = this;
-        return h('div', [
-          h('Radio', {
-            props: {
-              value: flag,
-            },
-            on: {
-              'on-change': () => {
-                self.currentid = id;
-                this.productRow = params.row;
-                this.$emit('getProductId', this.productRow);
-                if (this.productRow.id) {
-                  if (this.$route.query.fodder === 'image') {
-                    /* eslint-disable */
-                    let imageObject = {
-                      image: this.productRow.image,
-                      product_id: this.productRow.id,
-                    };
-                    form_create_helper.set('image', imageObject);
-                    form_create_helper.close('image');
-                  }
-                } else {
-                  this.$Message.warning('请先选择商品');
-                }
-              },
-            },
-          }),
-        ]);
-      },
-    };
-
-    let checkbox = {
-      type: 'selection',
-      width: 60,
-      align: 'center',
-    };
     let many = '';
     if (this.ischeckbox) {
       many = 'many';
@@ -257,13 +243,6 @@ export default {
       many = this.$route.query.type;
     }
     this.many = many;
-    if (many === 'many') {
-      this.columns4.unshift(checkbox);
-      this.columns5.unshift(checkbox);
-    } else {
-      this.columns4.unshift(radio);
-      this.columns5.unshift(radio);
-    }
   },
   mounted() {
     this.goodsCategory();
@@ -295,6 +274,21 @@ export default {
           this.$Message.error(res.msg);
         });
     },
+    getTemplateRow(row) {
+      console.log('111');
+      let images = [];
+      let imageObject = {
+        image: row.image,
+        product_id: row.id,
+        store_name: row.store_name,
+        temp_id: row.temp_id,
+      };
+      images.push(imageObject);
+      this.images = images;
+      this.diyVal = row;
+      this.$emit('getProductId', row);
+    },
+    changeRadio(row) {},
     changeCheckbox(selection) {
       let images = [];
       selection.forEach(function (item) {
@@ -308,7 +302,7 @@ export default {
       });
       this.images = images;
       this.diyVal = selection;
-      this.$emit('getProductDiy', selection);
+      this.$emit('getProductId', selection);
     },
     // 商品分类；
     goodsCategory() {
@@ -320,8 +314,7 @@ export default {
           this.$Message.error(res.msg);
         });
     },
-    pageChange(index) {
-      this.formValidate.page = index;
+    pageChange() {
       if (this.diy) {
         this.productList();
       } else {

@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { getMenuSider, getHeaderName } from '@/libs/system';
+import { getMenuSider, getHeaderName, findFirstNonNullChildren } from '@/libs/system';
 import Logo from '@/layout/logo/index.vue';
 
 export default {
@@ -109,8 +109,11 @@ export default {
     // 菜单高亮点击事件
     onColumnsAsideMenuClick(v) {
       let { path, redirect } = v;
-      if (path) this.$router.push(path);
-      else this.$router.push(path);
+      if (v.children) {
+        this.$router.push(findFirstNonNullChildren(v.children).path);
+      } else {
+        this.$router.push(path);
+      }
       // 一个路由设置自动收起菜单
       if (!v.children || v.children.length <= 1) this.$store.state.themeConfig.themeConfig.isCollapse = true;
       else if (v.children.length > 1) this.$store.state.themeConfig.themeConfig.isCollapse = false;

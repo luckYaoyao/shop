@@ -1,19 +1,19 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="pagination"
         :model="pagination"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <Row type="flex" :gutter="24">
-          <Col v-bind="grid" class="ivu-text-left">
-            <FormItem label="创建时间：">
+        <el-row :gutter="24">
+          <el-col v-bind="grid" class="ivu-text-left">
+            <el-form-item label="创建时间：">
               <DatePicker
                 :editable="false"
-                @on-change="onchangeTime"
+                @change="onchangeTime"
                 :value="timeVal"
                 format="yyyy/MM/dd"
                 type="datetimerange"
@@ -23,60 +23,89 @@
                 class="mr20"
                 :options="options"
               ></DatePicker>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="订单号：" label-for="title">
-              <Input
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="订单号：" label-for="title">
+              <el-input
                 search
                 enter-button
                 v-model="pagination.order_id"
                 placeholder="请输入订单号"
                 @on-search="orderSearch"
               />
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="用户名：" label-for="title">
-              <Input search enter-button v-model="pagination.name" placeholder="请输入用户名" @on-search="nameSearch" />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex">
-          <Col v-bind="grid">
-            <Button type="primary" @click="qrcodeShow">查看收款二维码</Button>
-          </Col>
-        </Row>
-      </Form>
-      <Table
-        :columns="thead"
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="用户名：" label-for="title">
+              <el-input
+                search
+                enter-button
+                v-model="pagination.name"
+                placeholder="请输入用户名"
+                @on-search="nameSearch"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col v-bind="grid">
+            <el-button type="primary" @click="qrcodeShow">查看收款二维码</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table
         :data="tbody"
         ref="table"
         class="mt25"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-      </Table>
+        <el-table-column label="订单号" min-width="180">
+          <template slot-scope="scope">
+            <span>{{ scope.row.order_id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="用户信息" min-width="180">
+          <template slot-scope="scope">
+            <span>{{ scope.row.nickname }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="实际支付" min-width="180">
+          <template slot-scope="scope">
+            <span>{{ scope.row.pay_price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="优惠价格" min-width="180">
+          <template slot-scope="scope">
+            <span>{{ scope.row.true_price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="支付时间" min-width="180">
+          <template slot-scope="scope">
+            <span>{{ scope.row.pay_time }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="pagination.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="pagination.limit"
+          :page.sync="pagination.page"
+          :limit.sync="pagination.limit"
+          @pagination="getOrderList"
         />
       </div>
-    </Card>
+    </el-card>
     <Modal v-model="modal" title="收款码" footer-hide>
       <div>
         <!--<div class="acea-row row-around mb10">-->
-        <!--<RadioGroup v-model="animal" @on-change="onchangeCode(animal)" style="width: 180px;">-->
-        <!--<Radio :label="0">二维码</Radio>-->
-        <!--<Radio :label="1">收款码</Radio>-->
-        <!--</RadioGroup>-->
+        <!--<el-radio-group v-model="animal" @change="onchangeCode(animal)" style="width: 180px;">-->
+        <!--<el-radio :label="0">二维码</el-radio>-->
+        <!--<el-radio :label="1">收款码</el-radio>-->
+        <!--</el-radio-group>-->
         <!--<div style="width: 180px;"></div>-->
         <!--</div>-->
         <div v-viewer class="acea-row row-around code">
@@ -113,40 +142,6 @@ export default {
         sm: 24,
         xs: 24,
       },
-      thead: [
-        {
-          title: '订单号',
-          key: 'order_id',
-        },
-        // {
-        //     title: "订单类型",
-        //     render: (h, params) => {
-        //         return h("span", "线下支付");
-        //     }
-        // },
-        {
-          title: '用户信息',
-          key: 'nickname',
-        },
-        {
-          title: '实际支付',
-          key: 'pay_price',
-        },
-        {
-          title: '优惠价格',
-          key: 'true_price',
-        },
-        // {
-        //     title: "订单状态",
-        //     render: (h, params) => {
-        //         return h("span", "已支付");
-        //     }
-        // },
-        {
-          title: '支付时间',
-          key: 'pay_time',
-        },
-      ],
       tbody: [],
       loading: false,
       total: 0,
@@ -234,7 +229,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '85px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -269,11 +264,6 @@ export default {
           this.loading = false;
           this.$Message.error(err.msg);
         });
-    },
-    // 分页
-    pageChange(index) {
-      this.pagination.page = index;
-      this.getOrderList();
     },
     nameSearch() {
       this.pagination.page = 1;

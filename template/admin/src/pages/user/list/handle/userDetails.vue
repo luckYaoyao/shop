@@ -13,60 +13,67 @@
           </div>
         </div>
         <div class="edit-btn">
-          <Button v-if="!isEdit" type="primary" @click="edit">编辑</Button>
-          <Button v-if="isEdit" class="mr20" @click="edit">取消</Button>
-          <Button v-if="isEdit" type="primary" @click="editSave">保存</Button>
+          <el-button v-if="!isEdit" type="primary" @click="edit">编辑</el-button>
+          <el-button v-if="isEdit" class="mr20" @click="edit">取消</el-button>
+          <el-button v-if="isEdit" type="primary" @click="editSave">保存</el-button>
         </div>
       </div>
 
-      <Row type="flex" justify="space-between" class="mt25">
-        <!-- <Col span="4" class="user_menu">
+      <el-row justify="space-between" class="mt25">
+        <!-- <el-col :span="4" class="user_menu">
           <Menu :theme="theme2" :active-name="activeName" @on-select="changeType">
             <MenuItem :name="item.val" v-for="(item, index) in list" :key="index">
               
             </MenuItem>
           </Menu>
-        </Col> -->
-        <Col span="24">
-          <Tabs class="mb20" :value="activeName" @on-click="changeType">
-            <TabPane :name="item.val" v-for="(item, index) in list" :key="index" :label="item.label"></TabPane>
-          </Tabs>
-        </Col>
+        </el-col> -->
+        <el-col :span="24">
+          <el-tabs class="mb20" :value="activeName" @tag-click="changeType">
+            <el-tab-pane :name="item.val" v-for="(item, index) in list" :key="index" :label="item.label"></el-tab-pane>
+          </el-tabs>
+        </el-col>
 
-        <Col span="24">
+        <el-col :span="24">
           <template v-if="activeName === 'user'">
             <userEditForm ref="editForm" :userId="userId" @success="getDetails(userId)" v-if="isEdit"></userEditForm>
             <user-info :ps-info="psInfo" v-else></user-info>
           </template>
           <template v-else>
-            <Table
-              :columns="columns"
+            <el-table
               :data="userLists"
               max-height="400"
               ref="table"
-              :loading="loading"
+              v-loading="loading"
               no-userFrom-text="暂无数据"
               no-filtered-userFrom-text="暂无筛选结果"
             >
-              <template slot-scope="{ row }" slot="number">
-                <div :class="row.pm ? 'plusColor' : 'reduceColor'">
-                  {{ row.pm ? '+' + row.number : '-' + row.number }}
-                </div>
-              </template>
-            </Table>
+              <el-table-column :label="item.title" min-width="120" v-for="(item, index) in columns" :key="index">
+                <template slot-scope="scope">
+                  <template v-if="item.key">
+                    <div>
+                      <span>{{ scope.row[item.key] }}</span>
+                    </div>
+                  </template>
+                  <template v-else-if="item.slot === 'number'">
+                    <div :class="scope.row.pm ? 'plusColor' : 'reduceColor'">
+                      {{ scope.row.pm ? '+' + scope.row.number : '-' + scope.row.number }}
+                    </div>
+                  </template>
+                </template>
+              </el-table-column>
+            </el-table>
             <div class="acea-row row-right page">
-              <Page
+              <pagination
+                v-if="total"
                 :total="total"
-                :current="userFrom.page"
-                show-elevator
-                show-total
-                @on-change="pageChange"
-                :page-size="userFrom.limit"
+                :page.sync="userFrom.page"
+                :limit.sync="userFrom.limit"
+                @pagination="changeType"
               />
             </div>
           </template>
-        </Col>
-      </Row>
+        </el-col>
+      </el-row>
     </Drawer>
   </div>
 </template>
@@ -147,17 +154,12 @@ export default {
           this.$Message.error(res.msg);
         });
     },
-    pageChange(index) {
-      this.userFrom.page = index;
-      this.changeType(this.userFrom.type);
-    },
     // tab选项
-    changeType(name) {
+    changeType() {
       this.loading = true;
-      this.userFrom.type = name;
-      this.activeName = name;
+      this.userFrom.type = this.activeName;
       this.isEdit = false;
-      if (name == 'user') return;
+      if (this.activeName == 'user') return;
       if (this.userFrom.type === '') {
         this.userFrom.type = 'order';
       }

@@ -94,7 +94,7 @@
   border-color: var(--prev-color-primary);
 }
 
-/* Radio 单选框
+/* el-radio 单选框
 ------------------------------- */
 .el-radio,
 .el-checkbox {
@@ -133,7 +133,7 @@
   border-color: var(--prev-border-color-base);
 }
 
-/* Checkbox 多选框
+/* el-checkbox 多选框
 ------------------------------- */
 .el-checkbox__input.is-checked + .el-checkbox__label,
 .el-checkbox-button__inner:hover {
@@ -168,14 +168,14 @@
   border-color: var(--prev-border-color-base);
 }
 
-/* Input 输入框、InputNumber 计数器
+/* el-input 输入框、InputNumber 计数器
 ------------------------------- */
 // input-number
 .el-input__inner:focus,
 .el-input-number__decrease:hover:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled),
 .el-input-number__increase:hover:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled),
 .el-textarea__inner:focus {
-  border-color: var(--prev-color-primary) !important;
+  // border-color: var(--prev-color-primary) !important;
 }
 .el-input-number__increase:hover,
 .el-input-number__decrease:hover {
@@ -236,7 +236,7 @@ $positions: 'top', 'right', 'bottom', 'left';
   background-color: var(--prev-color-hover);
 }
 
-/* Select 选择器
+/* el-select 选择器
 ------------------------------- */
 .el-range-editor.is-active,
 .el-range-editor.is-active:hover,
@@ -301,7 +301,7 @@ $positions: 'top', 'right', 'bottom', 'left';
   background-color: var(--prev-color-hover);
 }
 
-/* Switch 开关
+/* el-switch 开关
 ------------------------------- */
 .el-switch.is-checked .el-switch__core {
   border-color: var(--prev-color-primary) !important;
@@ -490,15 +490,16 @@ $positions: 'top', 'right', 'bottom', 'left';
   color: var(--prev-color-text-primary);
 }
 
-/* Form 表单
+/* el-form 表单
 ------------------------------- */
 .el-form {
   .el-form-item:last-of-type {
-    margin-bottom: 0 !important;
+    // margin-bottom: 0 !important;
   }
 }
 .el-form-item__label {
   color: var(--prev-color-text-regular);
+  font-size: 12px !important;
 }
 
 /* Table 表格
@@ -809,7 +810,7 @@ $positions: 'top', 'right', 'bottom', 'left';
 
 /* Popover 弹出框
 ------------------------------- */
-.el-popover {
+.el-tooltip {
   background-color: var(--prev-bg-white);
   border-color: var(--prev-border-color-lighter);
   color: var(--prev-color-text-regular);
@@ -818,7 +819,7 @@ $positions: 'top', 'right', 'bottom', 'left';
   color: var(--prev-color-text-primary);
 }
 
-/* Card 卡片
+/* el-card 卡片
 ------------------------------- */
 .el-card {
   color: var(--prev-color-text-primary);

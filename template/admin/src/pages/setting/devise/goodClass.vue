@@ -1,6 +1,6 @@
 <template>
   <div class="goodClass">
-    <Card :bordered="false" dis-hover>
+    <el-card :bordered="false" shadow="never">
       <!-- <div class="title">页面设置</div> -->
       <div class="list acea-row row-top">
         <div
@@ -14,7 +14,7 @@
           <div class="name">{{ item.name }}</div>
         </div>
       </div>
-    </Card>
+    </el-card>
   </div>
 </template>
 

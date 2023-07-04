@@ -15,7 +15,7 @@
       </div>
       <div class="upload-box" @click="modals = true"><Icon type="ios-camera-outline" size="36" /></div>
     </div>
-    <Button type="primary" style="width: 100%" @click="bindSub">提交</Button>
+    <el-button type="primary" style="width: 100%" @click="bindSub">提交</el-button>
     <Modal v-model="modals" title="商品列表" class="paymentFooter" scrollable width="900" :footer-hide="true">
       <goods-list
         ref="goodslist"

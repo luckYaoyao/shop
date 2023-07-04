@@ -1,12 +1,12 @@
 <template>
   <div class="base-header">
     <div class="left-header-wrapper">
-      <Input
+      <el-input
         class="search_box"
         prefix="ios-search"
         placeholder="搜索用户名称"
         @on-enter="bindSearch"
-        @on-change="inputChange"
+        @change="inputChange"
       />
       <div class="user_info">
         <img v-lazy="kefuInfo.avatar" alt="" />

@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="acea-row row-center clear_tit">
-      <Button type="primary" @click="clearCache" class="mr20">清除缓存</Button>
-      <Button type="primary" @click="clearlog">清除日志</Button>
+      <el-button type="primary" @click="clearCache" class="mr20">清除缓存</el-button>
+      <el-button type="primary" @click="clearlog">清除日志</el-button>
     </div>
   </div>
 </template>

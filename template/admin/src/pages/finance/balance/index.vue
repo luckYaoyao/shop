@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt mb10">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt mb10">
+      <el-form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
@@ -9,14 +9,14 @@
         class="tabform"
         @submit.native.prevent
       >
-        <Row :gutter="24" type="flex">
-          <Col span="24">
-            <FormItem label="订单时间：">
+        <el-row :gutter="24">
+          <el-col :span="24">
+            <el-form-item label="订单时间：">
               <dateRadio @selectDate="onSelectDate"></dateRadio>
               <DatePicker
                 :editable="false"
                 :clearable="false"
-                @on-change="onchangeTime"
+                @change="onchangeTime"
                 :value="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
@@ -26,74 +26,88 @@
                 :options="options"
                 class="mr20"
               ></DatePicker>
-            </FormItem>
-          </Col>
-          <Col span="24">
-            <FormItem label="交易类型：">
-              <Select
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="交易类型：">
+              <el-select
                 type="button"
                 v-model="formValidate.trading_type"
                 class="mr15"
-                @on-change="selChange"
+                @change="selChange"
                 style="width: 30%"
               >
-                <Option
+                <el-option
                   :label="item"
                   :value="Object.keys(withdrawal)[index]"
                   v-for="(item, index) in Object.values(withdrawal)"
                   :key="index"
-                  >{{ item }}</Option
-                >
-              </Select>
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
-    </Card>
-    <Card :bordered="false" dis-hover>
-      <Table
-        ref="table"
-        :columns="columns"
-        :data="tabList"
-        :loading="loading"
-        no-data-text="暂无数据"
-        no-filtered-data-text="暂无筛选结果"
-      >
-        <template slot-scope="{ row }" slot="extract_price">
-          <div>{{ row.extract_price }}</div>
-        </template>
-        <template slot-scope="{ row }" slot="pay_type">
-          <div v-for="item in payment" :key="item.value">
-            <span v-if="row.pay_type == item.value"> {{ item.title }} </span>
-          </div>
-        </template>
-        <template slot-scope="{ row }" slot="number">
-          <div v-if="row.pm" class="z-price">+ {{ row.number }}</div>
-          <div v-else class="f-price">- {{ row.number }}</div>
-        </template>
-        <template slot-scope="{ row }" slot="add_time">
-          <span> {{ row.add_time | formatDate }}</span>
-        </template>
-        <template slot-scope="{ row }" slot="set">
-          <Button size="small" type="primary" class="item" @click="setMark(row)">备注</Button>
-        </template>
-      </Table>
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-card>
+    <el-card :bordered="false" shadow="never">
+      <el-table ref="table" :columns="columns" :data="tabList" :loading="loading" empty-text="暂无数据">
+        <el-table-column label="ID" width="50">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="关联订单" min-width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row.relation }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="交易时间" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.add_time }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="交易金额" min-width="100">
+          <template slot-scope="scope">
+            <div v-if="scope.row.pm" class="z-price">+ {{ scope.row.number }}</div>
+            <div v-else class="f-price">- {{ scope.row.number }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="用户" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.nickname }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="交易类型" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.type_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.mark }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="70">
+          <template slot-scope="scope">
+            <a @click="setMark(scope.row)">备注</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="formValidate.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="formValidate.limit"
+          :page.sync="formValidate.page"
+          :limit.sync="formValidate.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
     <!-- 拒绝通过-->
     <Modal v-model="modals" scrollable closable title="备注" :mask-closable="false">
-      <Input v-model="mark_msg.mark" type="textarea" :rows="4" placeholder="请输入备注" />
+      <el-input v-model="mark_msg.mark" type="textarea" :rows="4" placeholder="请输入备注" />
       <div slot="footer">
-        <Button type="primary" size="large" long :loading="modal_loading" @click="oks">确定</Button>
+        <el-button type="primary" size="large" long :loading="modal_loading" @click="oks">确定</el-button>
       </div>
     </Modal>
   </div>
@@ -209,7 +223,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 80;
+      return this.isMobile ? undefined : '85px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -278,10 +292,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.formValidate.page = index;
-      this.getList();
     },
     // 编辑提交成功
     submitFail() {

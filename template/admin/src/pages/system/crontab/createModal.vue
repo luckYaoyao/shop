@@ -8,92 +8,105 @@
       @on-cancel="modal = true"
       @on-visible-change="initData"
     >
-      <Form ref="formValidate" :model="formValidate" :label-width="97" label-colon>
-        <FormItem label="任务名称" required>
-          <Row :gutter="16">
-            <Col span="20">
-              <Select v-model="formValidate.mark" label-in-value @on-change="taskChange">
-                <Option v-for="(value, name) in task" :key="name" :value="name">{{ value }}</Option>
-              </Select>
-            </Col>
-          </Row>
-        </FormItem>
-        <FormItem label="执行周期" required>
-          <Row :gutter="14">
-            <Col span="4">
-              <Select v-model="formValidate.type">
-                <Option v-for="item in typeList" :key="item.value" :value="item.value">{{ item.name }}</Option>
-              </Select>
-            </Col>
-            <Col v-if="formValidate.type == 6" span="4">
-              <Select v-model="formValidate.week">
-                <Option v-for="item in 7" :key="item" :value="item">{{ item | formatWeek }}</Option>
-              </Select>
-            </Col>
-            <Col v-if="[4, 7].includes(formValidate.type)" span="4">
+      <el-form ref="formValidate" :model="formValidate" :label-width="97" label-colon>
+        <el-form-item label="任务名称" required>
+          <el-row :gutter="16">
+            <el-col :span="20">
+              <el-select v-model="formValidate.mark" label-in-value @change="taskChange">
+                <el-option v-for="(value, name) in task" :key="name" :value="name" :label="value"></el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item label="执行周期" required>
+          <el-row :gutter="14">
+            <el-col :span="4">
+              <el-select v-model="formValidate.type">
+                <el-option
+                  v-for="item in typeList"
+                  :key="item.value"
+                  :value="item.value"
+                  :label="item.name"
+                ></el-option>
+              </el-select>
+            </el-col>
+            <el-col v-if="formValidate.type == 6" :span="4">
+              <el-select v-model="formValidate.week">
+                <el-option v-for="item in 7" :key="item" :value="item" :label="`${item | formatWeek}`"></el-option>
+              </el-select>
+            </el-col>
+            <el-col v-if="[4, 7].includes(formValidate.type)" :span="4">
               <div class="input-number-wrapper">
-                <InputNumber
+                <el-input-number
+                  controls-position="right"
                   v-model="formValidate.day"
                   :max="formValidate.type === 4 ? 10000 : 31"
                   :min="1"
-                ></InputNumber>
+                ></el-input-number>
                 <span class="suffix">日</span>
               </div>
-            </Col>
-            <Col v-if="[3, 4, 5, 6, 7].includes(formValidate.type)" span="4">
+            </el-col>
+            <el-col v-if="[3, 4, 5, 6, 7].includes(formValidate.type)" :span="4">
               <div class="input-number-wrapper">
-                <InputNumber v-model="formValidate.hour" :max="23" :min="0"></InputNumber>
+                <el-input-number
+                  controls-position="right"
+                  v-model="formValidate.hour"
+                  :max="23"
+                  :min="0"
+                ></el-input-number>
                 <span class="suffix">时</span>
               </div>
-            </Col>
-            <Col span="4" v-if="[2, 3, 4, 5, 6, 7].includes(formValidate.type)">
+            </el-col>
+            <el-col :span="4" v-if="[2, 3, 4, 5, 6, 7].includes(formValidate.type)">
               <div class="input-number-wrapper">
-                <InputNumber
+                <el-input-number
+                  controls-position="right"
                   v-model="formValidate.minute"
                   :max="formValidate.type === 2 ? 36000 : 59"
                   :min="0"
-                ></InputNumber>
+                ></el-input-number>
                 <span class="suffix">分</span>
               </div>
-            </Col>
-            <Col span="4" v-if="[1, 5, 6, 7].includes(formValidate.type)">
+            </el-col>
+            <el-col :span="4" v-if="[1, 5, 6, 7].includes(formValidate.type)">
               <div class="input-number-wrapper">
-                <InputNumber
+                <el-input-number
+                  controls-position="right"
                   v-model="formValidate.second"
                   :max="formValidate.type === 1 ? 36000 : 59"
                   :min="0"
-                ></InputNumber>
+                ></el-input-number>
                 <span class="suffix">秒</span>
               </div>
-            </Col>
-          </Row>
-          <Row :gutter="12">
+            </el-col>
+          </el-row>
+          <el-row :gutter="12">
             <div class="trip">{{ trip }}</div>
-          </Row>
-        </FormItem>
-        <FormItem label="任务说明">
-          <Row :gutter="10">
-            <Col span="20">
-              <Input
+          </el-row>
+        </el-form-item>
+        <el-form-item label="任务说明">
+          <el-row :gutter="10">
+            <el-col :span="20">
+              <el-input
                 v-model="formValidate.content"
                 type="textarea"
                 :autosize="{ minRows: 5, maxRows: 5 }"
                 placeholder="请输入任务说明"
-              ></Input>
-            </Col>
-          </Row>
-        </FormItem>
-        <FormItem label="是否开启">
-          <Row :gutter="10">
-            <Col span="12">
-              <i-switch v-model="formValidate.is_open" :true-value="1" :false-value="0" size="large">
+              ></el-input>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item label="是否开启">
+          <el-row :gutter="10">
+            <el-col :span="12">
+              <el-switch :active-value="1" :inactive-value="0" v-model="formValidate.is_open" size="large">
                 <span slot="open">开启</span>
                 <span slot="close">关闭</span>
-              </i-switch>
-            </Col>
-          </Row>
-        </FormItem>
-      </Form>
+              </el-switch>
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </el-form>
     </Modal>
   </div>
 </template>
@@ -308,5 +321,8 @@ export default {
 .trip {
   padding-left: 15px;
   color: #aaa;
+}
+/deep/ .el-input-number__increase,/deep/ .el-input-number__decrease{
+  display none
 }
 </style>

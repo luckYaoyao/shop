@@ -1,23 +1,23 @@
 <template>
   <div class="article-manager">
     <div class="i-layout-page-header">
-      <Form ref="formInline" :model="formInline" inline>
-        <FormItem class="mr20">
+      <el-form ref="formInline" :model="formInline" inline>
+        <el-form-item class="mr20">
           用户渠道:
-          <Select v-model="channel_type" style="width: 300px" placeholder="用户渠道" @on-change="changeTxt">
-            <Option value="all">全部</Option>
-            <Option value="wechat">公众号</Option>
-            <Option value="routine">小程序</Option>
-            <Option value="h5">H5</Option>
-            <Option value="pc">PC</Option>
-          </Select>
-        </FormItem>
-        <FormItem>
+          <el-select size="small" v-model="channel_type" style="width: 300px" placeholder="用户渠道" @change="changeTxt">
+            <el-option value="all" label="全部"></el-option>
+            <el-option value="wechat" label="公众号"></el-option>
+            <el-option value="routine" label="小程序"></el-option>
+            <el-option value="h5" label="H5"></el-option>
+            <el-option value="pc" label="PC"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
           选择时间:
           <DatePicker
             :editable="false"
             :clearable="false"
-            @on-change="onchangeTime"
+            @change="onchangeTime"
             :value="timeVal"
             format="yyyy/MM/dd"
             type="daterange"
@@ -27,14 +27,14 @@
             class="mr20"
             :options="options"
           ></DatePicker>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="handleSubmit('formInline')">查询</Button>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="excel">导出</Button>
-        </FormItem>
-      </Form>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="handleSubmit('formInline')">查询</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="excel">导出</el-button>
+        </el-form-item>
+      </el-form>
     </div>
     <user-info :formInline="formInline" ref="userInfos" key="1"></user-info>
     <wechet-info :formInline="formInline" ref="wechetInfos" v-if="isShow" key="2"></wechet-info>

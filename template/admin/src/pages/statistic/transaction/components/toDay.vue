@@ -1,7 +1,7 @@
 <template>
-  <Card :bordered="false" dis-hover class="ivu-mt">
-    <Row>
-      <Col v-if="statisticsData" class="br" v-bind="grid">
+  <el-card :bordered="false" shadow="never" class="ivu-mt">
+    <el-row>
+      <el-col v-if="statisticsData" class="br" v-bind="grid">
         <div>
           <div class="title mb15">今日订单金额</div>
           <div class="price">
@@ -17,8 +17,8 @@
           :option-data="optionData"
           :styles="style"
         />
-      </Col>
-      <Col v-if="statisticsData" v-bind="grid">
+      </el-col>
+      <el-col v-if="statisticsData" v-bind="grid">
         <div class="pl25">
           <div class="toDay">
             <span class="toDay-title spBlock mb10">今日订单数</span>
@@ -95,9 +95,9 @@
             </span>
           </div>
         </div>
-      </Col>
-    </Row>
-  </Card>
+      </el-col>
+    </el-row>
+  </el-card>
 </template>
 
 <script>

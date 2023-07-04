@@ -211,15 +211,6 @@ export default {
       component: () => import('@/pages/marketing/storeIntegral/create'),
     },
     {
-      path: 'store_integral/add_store_integral',
-      name: `${pre}addStoreIntegral`,
-      meta: {
-        auth: ['marketing-store_integral-create'],
-        title: '批量添加积分商品',
-      },
-      component: () => import('@/pages/marketing/storeIntegral/addStoreIntegral'),
-    },
-    {
       path: 'store_integral/order_list',
       name: `${pre}storeIntegralOrder`,
       meta: {

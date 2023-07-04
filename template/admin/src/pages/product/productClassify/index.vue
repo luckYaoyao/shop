@@ -1,43 +1,43 @@
 <template>
   <div class="article-manager">
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form ref="artFrom" :model="artFrom" :label-width="75" label-position="right" @submit.native.prevent>
-        <Row type="flex" :gutter="24">
-          <Col v-bind="grid">
-            <FormItem label="商品分类：" prop="pid" label-for="pid">
-              <Select v-model="artFrom.pid" placeholder="请选择商品分类" @on-change="userSearchs" clearable>
-                <Option v-for="item in treeSelect" :value="item.id" :key="item.id">{{ item.cate_name }}</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="分类状态：" label-for="is_show">
-              <Select v-model="artFrom.is_show" placeholder="请选择分类状态" clearable @on-change="userSearchs">
-                <Option value="1">显示</Option>
-                <Option value="0">隐藏</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="分类名称：" label-for="status2">
-              <Input
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form ref="artFrom" :model="artFrom" label-width="75px" label-position="right" @submit.native.prevent>
+        <el-row :gutter="24">
+          <el-col v-bind="grid">
+            <el-form-item label="商品分类：" prop="pid" label-for="pid">
+              <el-select v-model="artFrom.pid" placeholder="请选择商品分类" @change="userSearchs" clearable>
+                <el-option v-for="item in treeSelect" :value="item.id" :key="item.id">{{ item.cate_name }}</el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="分类状态：" label-for="is_show">
+              <el-select v-model="artFrom.is_show" placeholder="请选择分类状态" clearable @change="userSearchs">
+                <el-option value="1" label="显示"></el-option>
+                <el-option value="0" label="隐藏"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="分类名称：" label-for="status2">
+              <el-input
                 search
                 enter-button
                 placeholder="请输入分类名称"
                 v-model="artFrom.cate_name"
                 @on-search="userSearchs"
               />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex">
-          <Col v-bind="grid">
-            <Button v-auth="['product-save-cate']" type="primary" class="bnt" icon="md-add" @click="addClass"
-              >添加分类</Button
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col v-bind="grid">
+            <el-button v-auth="['product-save-cate']" type="primary" class="bnt" icon="md-add" @click="addClass"
+              >添加分类</el-button
             >
-          </Col>
-        </Row>
-      </Form>
+          </el-col>
+        </el-row>
+      </el-form>
       <vxe-table
         class="mt25"
         highlight-hover-row
@@ -58,32 +58,26 @@
         <vxe-table-column field="sort" title="排序" min-width="100" tooltip="true"></vxe-table-column>
         <vxe-table-column field="is_show" title="状态" min-width="120">
           <template v-slot="{ row }">
-            <i-switch
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
               v-model="row.is_show"
               :value="row.is_show"
-              :true-value="1"
-              :false-value="0"
-              @on-change="onchangeIsShow(row)"
+              @change="onchangeIsShow(row)"
               size="large"
             >
-              <span slot="open">显示</span>
-              <span slot="close">隐藏</span>
-            </i-switch>
+            </el-switch>
           </template>
         </vxe-table-column>
         <vxe-table-column field="date" title="操作" width="250" fixed="right" align="center">
           <template v-slot="{ row, index }">
             <a @click="edit(row)">编辑</a>
-            <Divider type="vertical" />
+            <el-divider direction="vertical"></el-divider>
             <a @click="del(row, '删除商品分类', index)">删除</a>
           </template>
         </vxe-table-column>
       </vxe-table>
-      <!--            <div class="acea-row row-right page">-->
-      <!--                <Page :total="total" :current="artFrom.page" show-elevator show-total @on-change="pageChange"-->
-      <!--                      :page-size="artFrom.limit"/>-->
-      <!--            </div>-->
-    </Card>
+    </el-card>
     <!-- 添加 编辑表单-->
     <edit-from ref="edits" :FromData="FromData" @submitFail="userSearchs"></edit-from>
   </div>

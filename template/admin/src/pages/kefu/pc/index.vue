@@ -129,7 +129,7 @@
               </div>
             </div>
             <div class="textarea-box" style="position: relative">
-              <Input
+              <el-input
                 v-paste="handleParse"
                 v-model="chatCon"
                 type="textarea"
@@ -139,7 +139,7 @@
                 style="font-size: 14px; height: 150px"
               />
               <div class="send-btn">
-                <Button class="btns" type="primary" :disabled="disabled" @click.stop="sendText">发送</Button>
+                <el-button class="btns" type="primary" :disabled="disabled" @click.stop="sendText">发送</el-button>
               </div>
             </div>
           </div>

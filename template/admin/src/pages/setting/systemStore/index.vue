@@ -1,7 +1,7 @@
 <template>
   <div class="article-manager">
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="formItem"
         :model="formItem"
         :label-width="labelWidth"
@@ -9,53 +9,53 @@
         :rules="ruleValidate"
         @submit.native.prevent
       >
-        <Row type="flex" :gutter="24">
-          <Col span="24">
-            <Col v-bind="grid">
-              <FormItem label="门店名称：" prop="name" label-for="name">
-                <Input v-model="formItem.name" placeholder="请输入门店名称" />
-              </FormItem>
-            </Col>
-          </Col>
-          <Col span="24">
-            <Col v-bind="grid">
-              <FormItem label="门店简介：" label-for="introduction">
-                <Input v-model="formItem.introduction" placeholder="请输入门店简介" />
-              </FormItem>
-            </Col>
-          </Col>
-          <Col span="24">
-            <Col v-bind="grid">
-              <FormItem label="门店手机号：" label-for="phone" prop="phone">
-                <Input v-model="formItem.phone" type="number" placeholder="请输入门店手机号" />
-              </FormItem>
-            </Col>
-          </Col>
-          <Col span="24">
-            <Col v-bind="grid">
-              <FormItem label="门店地址：" label-for="address" prop="address">
+        <el-row  :gutter="24">
+          <el-col :span="24">
+            <el-col v-bind="grid">
+              <el-form-item label="门店名称：" prop="name" label-for="name">
+                <el-input v-model="formItem.name" placeholder="请输入门店名称" />
+              </el-form-item>
+            </el-col>
+          </el-col>
+          <el-col :span="24">
+            <el-col v-bind="grid">
+              <el-form-item label="门店简介：" label-for="introduction">
+                <el-input v-model="formItem.introduction" placeholder="请输入门店简介" />
+              </el-form-item>
+            </el-col>
+          </el-col>
+          <el-col :span="24">
+            <el-col v-bind="grid">
+              <el-form-item label="门店手机号：" label-for="phone" prop="phone">
+                <el-input v-model="formItem.phone" type="number" placeholder="请输入门店手机号" />
+              </el-form-item>
+            </el-col>
+          </el-col>
+          <el-col :span="24">
+            <el-col v-bind="grid">
+              <el-form-item label="门店地址：" label-for="address" prop="address">
                 <Cascader
                   :data="addresData"
                   :value="formItem.address"
                   v-model="formItem.address"
-                  @on-change="handleChange"
+                  @change="handleChange"
                 ></Cascader>
-              </FormItem>
-            </Col>
-          </Col>
-          <Col span="24">
-            <Col v-bind="grid">
-              <FormItem label="详细地址：" label-for="detailed_address" prop="detailed_address">
-                <Input v-model="formItem.detailed_address" placeholder="请输入详细地址" />
-              </FormItem>
-            </Col>
-          </Col>
-          <Col span="24">
-            <Col v-bind="grid">
-              <FormItem label="核销时效：" label-for="valid_time">
+              </el-form-item>
+            </el-col>
+          </el-col>
+          <el-col :span="24">
+            <el-col v-bind="grid">
+              <el-form-item label="详细地址：" label-for="detailed_address" prop="detailed_address">
+                <el-input v-model="formItem.detailed_address" placeholder="请输入详细地址" />
+              </el-form-item>
+            </el-col>
+          </el-col>
+          <el-col :span="24">
+            <el-col v-bind="grid">
+              <el-form-item label="核销时效：" label-for="valid_time">
                 <DatePicker
                   :editable="false"
-                  @on-change="onchangeDate"
+                  @change="onchangeDate"
                   :value="formItem.valid_time"
                   v-model="formItem.valid_time"
                   format="yyyy/MM/dd"
@@ -63,41 +63,41 @@
                   split-panels
                   placeholder="请选择核销时效"
                 ></DatePicker>
-              </FormItem>
-            </Col>
-          </Col>
-          <Col span="24">
-            <Col v-bind="grid">
-              <FormItem label="门店营业：" label-for="day_time">
+              </el-form-item>
+            </el-col>
+          </el-col>
+          <el-col :span="24">
+            <el-col v-bind="grid">
+              <el-form-item label="门店营业：" label-for="day_time">
                 <TimePicker
                   type="timerange"
-                  @on-change="onchangeTime"
+                  @change="onchangeTime"
                   v-model="formItem.day_time"
                   format="HH:mm:ss"
                   :value="formItem.day_time"
                   placement="bottom-end"
                   placeholder="请选择营业时间"
                 ></TimePicker>
-              </FormItem>
-            </Col>
-          </Col>
-          <Col span="24">
-            <Col v-bind="grid">
-              <FormItem label="门店logo：" prop="image">
+              </el-form-item>
+            </el-col>
+          </el-col>
+          <el-col :span="24">
+            <el-col v-bind="grid">
+              <el-form-item label="门店logo：" prop="image">
                 <div class="picBox" @click="modalPicTap('单选')">
                   <div class="pictrue" v-if="formItem.image"><img v-lazy="formItem.image" /></div>
                   <div class="upLoad acea-row row-center-wrapper" v-else>
                     <Icon type="ios-camera-outline" size="26" class="iconfont" />
                   </div>
                 </div>
-              </FormItem>
-            </Col>
-          </Col>
-          <Col span="24">
-            <Col v-bind="grid">
-              <FormItem label="经纬度：" label-for="status2" prop="latlng">
+              </el-form-item>
+            </el-col>
+          </el-col>
+          <el-col :span="24">
+            <el-col v-bind="grid">
+              <el-form-item label="经纬度：" label-for="status2" prop="latlng">
                 <Tooltip>
-                  <Input
+                  <el-input
                     search
                     enter-button="查找位置"
                     v-model="formItem.latlng"
@@ -107,18 +107,18 @@
                   />
                   <div slot="content">请点击查找位置选择位置</div>
                 </Tooltip>
-              </FormItem>
-            </Col>
-          </Col>
-        </Row>
-        <Row type="flex">
-          <Col v-bind="grid">
-            <Button type="primary" class="ml20" @click="handleSubmit('formItem')">提交</Button>
-          </Col>
-        </Row>
+              </el-form-item>
+            </el-col>
+          </el-col>
+        </el-row>
+        <el-row >
+          <el-col v-bind="grid">
+            <el-button type="primary" class="ml20" @click="handleSubmit('formItem')">提交</el-button>
+          </el-col>
+        </el-row>
         <Spin size="large" fix v-if="spinShow"></Spin>
-      </Form>
-    </Card>
+      </el-form>
+    </el-card>
 
     <Modal
       v-model="modalPic"
@@ -256,7 +256,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 100;
+      return this.isMobile ? undefined : '100px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';

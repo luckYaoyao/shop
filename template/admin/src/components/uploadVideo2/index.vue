@@ -1,15 +1,15 @@
 <template>
   <div>
     <div class="mt20 ml20">
-      <Input class="perW35" v-model="videoLink" placeholder="请输入视频链接" />
+      <el-input class="perW35" v-model="videoLink" placeholder="请输入视频链接" />
       <input type="file" ref="refid" style="display: none" @change="zh_uploadFile_change" />
-      <Button
+      <el-button
         v-if="upload_type !== '1' || videoLink"
         type="primary"
         icon="ios-cloud-upload-outline"
         class="ml10"
         @click="zh_uploadFile"
-        >{{ videoLink ? '确认添加' : '上传视频' }}</Button
+        >{{ videoLink ? '确认添加' : '上传视频' }}</el-button
       >
       <Upload
         v-if="upload_type === '1' && !videoLink"
@@ -22,7 +22,7 @@
         :multiple="true"
         style="display: inline-block"
       >
-        <Button type="primary" icon="ios-cloud-upload-outline">上传视频</Button>
+        <el-button type="primary" icon="ios-cloud-upload-outline">上传视频</el-button>
       </Upload>
       <Progress :percent="progress" :stroke-width="5" v-if="upload.videoIng" />
       <div class="iview-video-style" v-if="formValidate.video_link">
@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="mt50 ml20">
-      <Button type="primary" @click="uploads">确认</Button>
+      <el-button type="primary" @click="uploads">确认</el-button>
     </div>
   </div>
 </template>

@@ -18,81 +18,110 @@
       </template>
     </Alert>
     <div class="df">
-      <Button class="mr20" type="primary" @click="addRow">添加一行</Button>
-      <Checkbox class="mr10" v-model="isCreate" @on-change="addCreate">添加与修改时间</Checkbox>
-      <Checkbox class="mr10" v-model="isDelete" @on-change="addDelete">伪删除</Checkbox>
+      <el-button class="mr20" type="primary" @click="addRow">添加一行</el-button>
+      <el-checkbox class="mr10" v-model="isCreate" @change="addCreate">添加与修改时间</el-checkbox>
+      <el-checkbox class="mr10" v-model="isDelete" @change="addDelete">伪删除</el-checkbox>
     </div>
     <div>
-      <Table
+      <el-table
         ref="selection"
-        :columns="columns"
         :data="tableField"
-        no-data-text="暂无数据"
-        highlight-row
-        :loading="loading"
+        empty-text="暂无数据"
+        highlight-current-row
+        v-loading="loading"
         max-height="600"
         size="small"
-        no-filtered-data-text="暂无筛选结果"
+        
       >
-        <template slot-scope="{ row, index }" slot="field">
-          <Input
-            :disabled="disabledInput(index)"
-            v-model="tableField[index].field"
-            @on-blur="changeField(index)"
-          ></Input>
-        </template>
-        <template slot-scope="{ row, index }" slot="field_type">
-          <Select
-            v-model="tableField[index].field_type"
-            :disabled="disabledInput(index)"
-            @on-change="changeItemField($event, index)"
-          >
-            <Option v-for="item in columnTypeList" :value="item" :key="item">{{ item }}</Option>
-          </Select>
-        </template>
-        <template slot-scope="{ row, index }" slot="limit">
-          <Input v-model="tableField[index].limit" :disabled="disabledInput(index)"></Input>
-        </template>
-        <template slot-scope="{ row, index }" slot="default">
-          <Input v-model="tableField[index].default" :disabled="disabledInput(index)"></Input>
-        </template>
-        <template slot-scope="{ row, index }" slot="comment">
-          <Input
-            v-model="tableField[index].comment"
-            :disabled="disabledInput(index)"
-            @on-change="(e) => changeComment(e, index)"
-          ></Input>
-        </template>
-        <template slot-scope="{ row, index }" slot="required">
-          <Checkbox v-model="tableField[index].required" :disabled="disabledInput(index)"></Checkbox>
-        </template>
-        <template slot-scope="{ row, index }" slot="is_table">
-          <Checkbox v-model="tableField[index].is_table" :disabled="disabledInput(index)"></Checkbox>
-        </template>
-        <template slot-scope="{ row, index }" slot="table_name">
-          <Input v-model="tableField[index].table_name" :disabled="disabledInput(index)"></Input>
-        </template>
-        <template slot-scope="{ row, index }" slot="from_type">
-          <Select v-model="tableField[index].from_type" :disabled="disabledInput(index)">
-            <Option v-for="item in fromTypeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-          </Select>
-        </template>
-        <template slot-scope="{ row, index }" slot="options">
-          <div class="table-options" v-if="['select', 'radio', 'checkbox'].includes(tableField[index].from_type)">
-            <Select>
-              <Option v-for="item in tableField[index].options" :value="item.value" :key="item.value">{{
-                item.label
-              }}</Option>
-            </Select>
-            <Icon class="create" type="md-create" @click="eidtOptions(index)" />
-          </div>
-          <div v-else>--</div>
-        </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <a v-if="!tableField[index].primaryKey && !disabledInput(index)" @click="del(row, index)">删除</a>
-          <span v-else>--</span>
-        </template>
-      </Table>
+        <el-table-column label="字段名称" min-width="100">
+          <template slot-scope="scope">
+            <el-input
+              :disabled="disabledInput(scope.$index)"
+              v-model="scope.row.field"
+              @blur="changeField(scope.$index)"
+            ></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="字段类型" min-width="130">
+          <template slot-scope="scope">
+            <el-select
+              v-model="scope.row.field_type"
+              :disabled="disabledInput(scope.$index)"
+              @change="changeItemField($event, scope.$index)"
+            >
+              <el-option v-for="item in columnTypeList" :value="item" :key="item" :label="item"></el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column label="长度" min-width="130">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.limit" :disabled="disabledInput(scope.$index)"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="默认值" min-width="130">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.default" :disabled="disabledInput(scope.$index)"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="字段描述" min-width="130">
+          <template slot-scope="scope">
+            <el-input
+              v-model="scope.row.comment"
+              :disabled="disabledInput(scope.$index)"
+              @change="(e) => changeComment(e, scope.$index)"
+            ></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="列表" min-width="130">
+          <template slot-scope="scope">
+            <el-checkbox v-model="scope.row.is_table" :disabled="disabledInput(scope.$index)"></el-checkbox>
+          </template>
+        </el-table-column>
+        <el-table-column label="列表名" min-width="130">
+          <template slot-scope="scope">
+            <el-input v-model="scope.row.table_name" :disabled="disabledInput(scope.$index)"></el-input>
+          </template>
+        </el-table-column>
+        <el-table-column label="表单类型" min-width="130">
+          <template slot-scope="scope">
+            <el-select v-model="scope.row.from_type" :disabled="disabledInput(scope.$index)">
+              <el-option
+                v-for="item in fromTypeList"
+                :value="item.value"
+                :key="item.value"
+                :label="item.label"
+              ></el-option>
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column label="字典配置" min-width="130">
+          <template slot-scope="scope">
+            <div class="table-options" v-if="['select', 'radio', 'checkbox'].includes(scope.row.from_type)">
+              <el-select>
+                <el-option
+                  v-for="item in scope.row.options"
+                  :value="item.value"
+                  :key="item.value"
+                  :label="item.label"
+                ></el-option>
+              </el-select>
+              <Icon class="create" type="md-create" @click="eidtOptions(scope.$index)" />
+            </div>
+            <div v-else>--</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="必填" min-width="130">
+          <template slot-scope="scope">
+            <el-checkbox v-model="scope.row.required" :disabled="disabledInput(scope.$index)"></el-checkbox>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="100">
+          <template slot-scope="scope">
+            <a v-if="!scope.row.primaryKey && !disabledInput(scope.$index)" @click="del(row, scope.$index)">删除</a>
+            <span v-else>--</span>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
     <Modal
       v-model="optionsModal"
@@ -106,8 +135,8 @@
     >
       <div class="options-list">
         <div class="item" v-for="(item, index) in optionsList" :key="index">
-          <Input class="mr10" v-model="item.label" placeholder="label" style="width: 150px" />
-          <Input class="mr10" v-model="item.value" placeholder="value" style="width: 150px" />
+          <el-input class="mr10" v-model="item.label" placeholder="label" style="width: 150px" />
+          <el-input class="mr10" v-model="item.value" placeholder="value" style="width: 150px" />
           <Icon v-if="index == optionsList.length - 1" class="add" type="md-add-circle" @click="addOneOptions" />
           <Icon v-if="index > 0" class="add" type="md-remove-circle" @click="delOneOptions(index)" />
         </div>
@@ -367,7 +396,7 @@ export default {
       }
     },
     changeField(index) {
-      console.log(this.tableField[index].field)
+      console.log(this.tableField[index].field);
       if (this.tableField[index].field) {
         for (let i = 0; i < this.tableField.length; i++) {
           const e = this.tableField[i];

@@ -10,15 +10,15 @@
     <div class="main">
       <div class="title">我要反馈</div>
       <div class="input-box">
-        <Input type="text" placeholder="请输入您的姓名" v-model="name" />
+        <el-input type="text" placeholder="请输入您的姓名" v-model="name" />
       </div>
       <div class="input-box">
-        <Input type="text" placeholder="请输入您的联系电话" v-model="phone" />
+        <el-input type="text" placeholder="请输入您的联系电话" v-model="phone" />
       </div>
       <div class="input-box">
-        <Input type="textarea" placeholder="请填写内容" v-model="con" />
+        <el-input type="textarea" placeholder="请填写内容" v-model="con" />
       </div>
-      <Button class="sub_btn" @click="subMit" :disabled="isDisabled">提交</Button>
+      <el-button class="sub_btn" @click="subMit" :disabled="isDisabled">提交</el-button>
     </div>
   </div>
 </template>

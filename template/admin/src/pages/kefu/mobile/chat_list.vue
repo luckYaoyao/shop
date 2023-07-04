@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="search-box">
-        <Input v-model="searchTxt" placeholder="搜索用户名称" @on-enter="bindSearch" />
+        <el-input v-model="searchTxt" placeholder="搜索用户名称" @on-enter="bindSearch" />
       </div>
     </div>
     <div class="list-box" v-if="list.length > 0">

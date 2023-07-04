@@ -1,12 +1,12 @@
 <template>
   <div :style="{ height: scrollerHeight + 'px' || '' }">
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form ref="formValidate" :model="formValidate" :label-width="80" label-position="left" class="tabform">
-        <Row :gutter="24" type="flex" justify="end">
-          <Col span="24">
-            <Col v-bind="grid" class="mr">
-              <FormItem label="图文搜索：" prop="cate_name" label-for="cate_name">
-                <Input
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form ref="formValidate" :model="formValidate" label-width="85px" label-position="left" class="tabform">
+        <el-row :gutter="24"  justify="end">
+          <el-col :span="24">
+            <el-col v-bind="grid" class="mr">
+              <el-form-item label="图文搜索：" prop="cate_name" label-for="cate_name">
+                <el-input
                   search
                   enter-button
                   placeholder="请输入"
@@ -14,17 +14,17 @@
                   v-model="formValidate.cate_name"
                   @on-search="userSearchs"
                 />
-              </FormItem>
-            </Col>
-          </Col>
-        </Row>
-        <Row type="flex" v-show="$route.path === routePre + '/app/wechat/news_category/index'">
+              </el-form-item>
+            </el-col>
+          </el-col>
+        </el-row>
+        <el-row  v-show="$route.path === routePre + '/app/wechat/news_category/index'">
           <router-link :to="routePre + '/app/wechat/news_category/save/0'">
-            <Button type="primary" class="bnt" icon="md-add">添加图文消息</Button>
+            <el-button type="primary" class="bnt" icon="md-add">添加图文消息</el-button>
           </router-link>
-        </Row>
-      </Form>
-    </Card>
+        </el-row>
+      </el-form>
+    </el-card>
     <div class="contentBox">
       <div id="content" :style="{ top: contentTop + 'px' || '', width: contentWidth }" ref="content">
         <vue-waterfall-easy
@@ -48,28 +48,28 @@
                   @mouseenter="mouseenterOut(j)"
                   @mouseleave="mouseenterOver(j)"
                 >
-                  <Button
+                  <el-button
                     type="success"
                     shape="circle"
                     icon="md-create"
                     v-show="props.value.new[i].isDel && isShow"
                     @click="clkk(props.value)"
-                  ></Button>
-                  <Button
+                  ></el-button>
+                  <el-button
                     type="error"
                     shape="circle"
                     icon="md-trash"
                     v-show="props.value.new[i].isDel && isShow"
                     @click="del(props.value, '删除图文', i)"
                     style="margin-top: 5px"
-                  ></Button>
-                  <Button
+                  ></el-button>
+                  <el-button
                     type="primary"
                     icon="md-paper-plane"
                     v-show="props.value.new[i].isDel && isShowSend"
                     shape="circle"
                     @click="send(props.value, '发送', i)"
-                    >推送</Button
+                    >推送</el-button
                   >
                 </div>
                 <span class="news_sp">{{ j.title }}</span>

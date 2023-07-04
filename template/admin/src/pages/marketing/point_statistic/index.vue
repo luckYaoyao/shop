@@ -1,11 +1,11 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mb-16">
+    <el-card :bordered="false" shadow="never" class="ivu-mb-16">
       <dateRadio @selectDate="onSelectDate"></dateRadio>
       <DatePicker
         :editable="false"
         :clearable="false"
-        @on-change="onchangeTime"
+        @change="onchangeTime"
         :value="timeVal"
         format="yyyy/MM/dd"
         type="daterange"
@@ -15,72 +15,96 @@
         :options="options"
         class="mr20"
       ></DatePicker>
-    </Card>
+    </el-card>
     <cards-data :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
-    <Card :bordered="false" dis-hover>
+    <el-card :bordered="false" shadow="never">
       <h3>积分使用趋势</h3>
       <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
-    </Card>
+    </el-card>
     <Spin size="large" fix v-if="spinShow"></Spin>
     <div class="code-row-bg">
-      <Card :bordered="false" dis-hover class="ivu-mt mt10 mr10">
+      <el-card :bordered="false" shadow="never" class="ivu-mt mt10 mr10">
         <div class="acea-row row-between-wrapper">
           <h3 class="header-title">积分来源分析</h3>
           <div class="change-style" @click="echartLeft = !echartLeft">切换样式</div>
         </div>
         <div class="ech-box">
           <echarts-from v-if="echartLeft" ref="visitChart" :infoList="infoList" echartsTitle="circle"></echarts-from>
-          <Table
+          <el-table
             v-show="!echartLeft"
             ref="selection"
-            :columns="columns"
             :data="tabList"
             :loading="loading"
-            no-data-text="暂无数据"
-            highlight-row
-            no-filtered-data-text="暂无筛选结果"
+            empty-text="暂无数据"
+            highlight-current-row
+            
           >
-            <template slot-scope="{ row }" slot="percent">
-              <div class="percent-box">
-                <div class="line">
-                  <div class="bg"></div>
-                  <div class="percent" :style="'width:' + row.percent + '%;'"></div>
+            <el-table-column type="index" width="60"> </el-table-column>
+            <el-table-column label="来源" min-width="80">
+              <template slot-scope="scope">
+                <span>{{ scope.row.name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="金额" width="180">
+              <template slot-scope="scope">
+                <span>{{ scope.row.value }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="占比率" min-width="100">
+              <template slot-scope="scope">
+                <div class="percent-box">
+                  <div class="line">
+                    <div class="bg"></div>
+                    <div class="percent" :style="'width:' + scope.row.percent + '%;'"></div>
+                  </div>
+                  <div class="num">{{ scope.row.percent }}%</div>
                 </div>
-                <div class="num">{{ row.percent }}%</div>
-              </div>
-            </template>
-          </Table>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
-      </Card>
-      <Card :bordered="false" dis-hover class="ivu-mt mt10">
+      </el-card>
+      <el-card :bordered="false" shadow="never" class="ivu-mt mt10">
         <div class="acea-row row-between-wrapper">
           <h3 class="header-title">积分消耗</h3>
           <div class="change-style" @click="echartRight = !echartRight">切换样式</div>
         </div>
         <div class="ech-box">
           <echarts-from v-if="echartRight" ref="visitChart" :infoList="infoList2" echartsTitle="circle"></echarts-from>
-          <Table
-            v-show="!echartRight"
+          <el-table
+            v-show="!echartLeft"
             ref="selection"
-            :columns="columns"
-            :data="tabList2"
-            :loading="loading2"
-            no-data-text="暂无数据"
-            highlight-row
-            no-filtered-data-text="暂无筛选结果"
+            :data="tabList"
+            :loading="loading"
+            empty-text="暂无数据"
+            highlight-current-row
+            
           >
-            <template slot-scope="{ row }" slot="percent">
-              <div class="percent-box">
-                <div class="line">
-                  <div class="bg"></div>
-                  <div class="percent" :style="'width:' + row.percent + '%;'"></div>
+            <el-table-column type="index" width="60"> </el-table-column>
+            <el-table-column label="来源" min-width="80">
+              <template slot-scope="scope">
+                <span>{{ scope.row.name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="金额" width="180">
+              <template slot-scope="scope">
+                <span>{{ scope.row.value }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="占比率" min-width="100">
+              <template slot-scope="scope">
+                <div class="percent-box">
+                  <div class="line">
+                    <div class="bg"></div>
+                    <div class="percent" :style="'width:' + scope.row.percent + '%;'"></div>
+                  </div>
+                  <div class="num">{{ scope.row.percent }}%</div>
                 </div>
-                <div class="num">{{ row.percent }}%</div>
-              </div>
-            </template>
-          </Table>
+              </template>
+            </el-table-column>
+          </el-table>
         </div>
-      </Card>
+      </el-card>
     </div>
   </div>
 </template>
@@ -144,32 +168,6 @@ export default {
       optionData: {},
       spinShow: false,
       options: this.$timeOptions,
-      columns: [
-        {
-          title: '序号',
-          type: 'index',
-          width: 60,
-          align: 'center',
-        },
-        {
-          title: '来源',
-          key: 'name',
-          minWidth: 80,
-          align: 'center',
-        },
-        {
-          title: '金额',
-          width: 180,
-          key: 'value',
-          align: 'center',
-        },
-        {
-          title: '占比率',
-          slot: 'percent',
-          minWidth: 100,
-          align: 'center',
-        },
-      ],
       tabList: [],
       tabList2: [],
     };

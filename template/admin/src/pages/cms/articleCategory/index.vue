@@ -1,42 +1,43 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <Row type="flex" :gutter="24">
-          <Col v-bind="grid">
-            <FormItem label="是否显示：" label-for="status">
-              <Select v-model="status" placeholder="请选择" element-id="status" clearable @on-change="userSearchs">
-                <Option value="all">全部</Option>
-                <Option value="1">显示</Option>
-                <Option value="0">不显示</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="分类昵称：" prop="title" label-for="status2">
-              <Input
+        <el-row :gutter="24">
+          <el-col v-bind="grid">
+            <el-form-item label="是否显示：" label-for="status">
+              <el-select v-model="status" placeholder="请选择" element-id="status" clearable @change="userSearchs">
+                <el-option value="all" label="全部"></el-option>
+                <el-option value="1" label="显示"></el-option>
+                <el-option value="0" label="不显示"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="分类昵称：" prop="title" label-for="status2">
+              <el-input
                 search
                 enter-button
                 placeholder="请输入分类昵称"
                 v-model="formValidate.title"
                 @on-search="userSearchs"
               />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex">
-          <Col v-bind="grid">
-            <Button v-auth="['cms-category-create']" type="primary" icon="md-add" @click="add">添加文章分类</Button>
-          </Col>
-        </Row>
-      </Form>
-      <!-- <Divider dashed /> -->
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col v-bind="grid">
+            <el-button v-auth="['cms-category-create']" type="primary" icon="md-add" @click="add"
+              >添加文章分类</el-button
+            >
+          </el-col>
+        </el-row>
+      </el-form>
       <vxe-table
         class="vxeTable mt25"
         highlight-hover-row
@@ -56,40 +57,37 @@
         </vxe-table-column>
         <vxe-table-column field="status" title="状态" min-width="120">
           <template v-slot="{ row }">
-            <i-switch
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
               v-model="row.status"
               :value="row.status"
-              :true-value="1"
-              :false-value="0"
-              @on-change="onchangeIsShow(row)"
+              @change="onchangeIsShow(row)"
               size="large"
             >
-              <span slot="open">显示</span>
-              <span slot="close">隐藏</span>
-            </i-switch>
+            </el-switch>
           </template>
         </vxe-table-column>
         <vxe-table-column field="date" title="操作" align="center" width="250" fixed="right">
           <template v-slot="{ row }">
             <a @click="edit(row)">编辑</a>
-            <Divider type="vertical" />
+            <el-divider direction="vertical"></el-divider>
             <a @click="del(row, '删除文章分类')">删除</a>
-            <Divider type="vertical" />
+            <el-divider direction="vertical"></el-divider>
             <a @click="lookUp(row)">查看文章</a>
           </template>
         </vxe-table-column>
       </vxe-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="formValidate.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="formValidate.limit"
+          :page.sync="formValidate.page"
+          :limit.sync="formValidate.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
   </div>
 </template>
 <script>
@@ -152,7 +150,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -216,10 +214,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.formValidate.page = index;
-      this.getList();
     },
     // 表格搜索
     userSearchs() {

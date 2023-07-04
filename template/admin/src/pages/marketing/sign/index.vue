@@ -14,50 +14,73 @@
         </div>
       </div>
 
-      <div v-if="name == 'sign_day_num'" style="margin-left: 20px">
+      <div v-if="name == 'sign_day_num'" style="margin-left: 20px; flex: 1">
         <div class="table_box">
-          <div type="flex">
+          <div>
             <div v-bind="grid">
               <div class="title">签到天数设置</div>
-              <Button
+              <el-button
                 type="primary"
                 icon="md-add"
                 @click="groupAdd('添加数据')"
                 style="margin-left: 14px; margin-top: 30px"
-                >添加数据</Button
+                >添加数据</el-button
               >
             </div>
           </div>
           <div class="table">
-            <Table
+            <el-table
               :columns="columns1"
               :data="cmsList"
               ref="table"
               class="mt25"
               :loading="loading"
-              highlight-row
+              highlight-current-row
               no-userFrom-text="暂无数据"
               no-filtered-userFrom-text="暂无筛选结果"
             >
-              <template slot-scope="{ row, index }" slot="status">
-                <i-switch
-                  v-model="row.status"
-                  :value="row.status"
-                  :true-value="1"
-                  :false-value="0"
-                  @on-change="onchangeIsShow(row)"
-                  size="large"
-                >
-                  <span slot="open">显示</span>
-                  <span slot="close">隐藏</span>
-                </i-switch>
-              </template>
-              <template slot-scope="{ row, index }" slot="action">
-                <a @click="edit(row, '编辑')">编辑</a>
-                <Divider type="vertical" />
-                <a @click="del(row, '删除这条信息', index)">删除</a>
-              </template>
-            </Table>
+              <el-table-column label="编号" width="80">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.id }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="第几天" min-width="80">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.day }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="获取积分" min-width="80">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.sign_num }}</span>
+                </template>
+              </el-table-column>
+
+              <el-table-column label="是否可用" min-width="80">
+                <template slot-scope="scope">
+                  <el-switch
+                    :active-value="1"
+                    :inactive-value="0"
+                    v-model="scope.row.status"
+                    :value="scope.row.status"
+                    @change="onchangeIsShow(scope.row)"
+                    size="large"
+                  >
+                  </el-switch>
+                </template>
+              </el-table-column>
+              <el-table-column label="排序" min-width="80">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.sort }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="操作" fixed="right" width="150">
+                <template slot-scope="scope">
+                  <a @click="edit(scope.row, '编辑')">编辑</a>
+                  <el-divider direction="vertical"></el-divider>
+                  <a @click="del(scope.row, '删除这条信息', index)">删除</a>
+                </template>
+              </el-table-column>
+            </el-table>
           </div>
         </div>
       </div>
@@ -101,7 +124,7 @@ export default {
       };
     },
     labelWidth() {
-      return this.isMobile ? undefined : 120;
+      return this.isMobile ? undefined : '120px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -321,7 +344,6 @@ export default {
           let data = res.data;
           let header = data.header;
           let index = [];
-          this.columns1 = header;
           this.loading = false;
         })
         .catch((res) => {
@@ -650,7 +672,7 @@ export default {
 }
 
 .table {
-  width: 700px;
+  // width: 700px;
   color: #515a6e;
   font-size: 14px;
   background-color: #fff;

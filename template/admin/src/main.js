@@ -53,7 +53,7 @@ import 'vue-happy-scroll/docs/happy-scroll.css';
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 // 懒加载
 import VueLazyload from 'vue-lazyload';
-import VXETable from 'vxe-table';
+import VXETable, { t } from 'vxe-table';
 import Viewer from 'v-viewer';
 import VueDND from 'awe-dnd';
 import formCreate from '@form-create/iview';
@@ -70,7 +70,9 @@ import timeOptions from '@/libs/timeOptions';
 import scroll from '@/libs/loading';
 import * as tools from '@/libs/tools';
 import VueTreeList from 'vue-tree-list';
-
+import Pagination from "@/components/Pagination";
+// 全局组件挂载
+Vue.component('Pagination', Pagination)
 // 复制到粘贴板插件
 import VueClipboard from 'vue-clipboard2';
 
@@ -187,7 +189,9 @@ new Vue({
   watch: {
     // 监听路由 控制侧边栏显示 标记当前顶栏菜单（如需要）
     $route(to, from) {
-      const onRoutes = to.meta.activeMenu ? to.meta.activeMenu : '';
+      console.log(to);
+      const onRoutes = to.meta.activeMenu ? to.meta.activeMenu : to.meta.path;
+      console.log(onRoutes);
       this.$store.commit('menu/setActivePath', onRoutes);
       if (to.name == 'crud_crud') {
         this.$store.state.menus.oneLvRoutes.map((e) => {

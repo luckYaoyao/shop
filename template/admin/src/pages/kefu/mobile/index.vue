@@ -51,7 +51,7 @@
     <div class="footer-box">
       <div class="words" @click="showWords"><span class="iconfont iconhuashu1"></span></div>
       <div class="input-box">
-        <Input v-model="con" placeholder="请输入内容" style="font-size: 0.28rem" />
+        <el-input v-model="con" placeholder="请输入内容" style="font-size: 0.28rem" />
         <span class="iconfont iconfasong" @click="sendText" :class="{ isSend: isSend }"></span>
       </div>
       <div class="emoji" @click="openBox(1)"><span class="iconfont iconbiaoqing2"></span></div>
@@ -105,16 +105,16 @@
       <div class="content" :class="{ on: isTransfer }">
         <div class="title">转接客服<span class="iconfont iconcha" @click="closeTransfer"></span></div>
         <div class="list-wrapper">
-          <RadioGroup v-model="activeKF">
-            <Radio class="list-item" v-for="(item, index) in transferList" :label="item.uid" :key="index">
+          <el-radio-group v-model="activeKF">
+            <el-radio class="list-item" v-for="(item, index) in transferList" :label="item.uid" :key="index">
               <div class="avatar-box">
                 <img v-lazy="item.avatar" alt="" />
               </div>
               <p class="nickName">{{ item.wx_name }}</p>
-            </Radio>
-          </RadioGroup>
+            </el-radio>
+          </el-radio-group>
         </div>
-        <Button class="btn" @click="confirm">确定</Button>
+        <el-button class="btn" @click="confirm">确定</el-button>
       </div>
     </div>
   </div>

@@ -1,60 +1,82 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Row type="flex" class="mb20">
-        <Col span="24">
-          <Button v-auth="['setting-delivery_service-add']" type="primary" icon="md-add" @click="add" class="mr10"
-            >添加配送员</Button
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-row class="mb20">
+        <el-col :span="24">
+          <el-button v-auth="['setting-delivery_service-add']" type="primary" icon="md-add" @click="add" class="mr10"
+            >添加配送员</el-button
           >
-        </Col>
-      </Row>
-      <Table
+        </el-col>
+      </el-row>
+      <el-table
         :columns="columns1"
         :data="data1"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row, index }" slot="avatar">
-          <div class="tabBox_img" v-viewer>
-            <img v-lazy="row.avatar" />
-          </div>
-        </template>
-        <template slot-scope="{ row, index }" slot="status">
-          <i-switch
-            v-model="row.status"
-            :value="row.status"
-            :true-value="1"
-            :false-value="0"
-            @on-change="onchangeIsShow(row)"
-            size="large"
-          >
-            <span slot="open">显示</span>
-            <span slot="close">隐藏</span>
-          </i-switch>
-        </template>
-        <template slot-scope="{ row, index }" slot="add_time">
-          <span> {{ row.add_time | formatDate }}</span>
-        </template>
-
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="edit(row)">编辑</a>
-          <Divider type="vertical" />
-          <a @click="del(row, '删除配送员', index)">删除</a>
-        </template>
-      </Table>
+        <el-table-column label="ID" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="头像" min-width="90">
+          <template slot-scope="scope">
+            <div class="tabBox_img" v-viewer>
+              <img v-lazy="scope.row.avatar" />
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="名称" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.nickname }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="手机号码" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.phone }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否显示" min-width="130">
+          <template slot-scope="scope">
+            <el-switch
+              class="defineSwitch"
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.status"
+              :value="scope.row.status"
+              @change="onchangeIsShow(scope.row)"
+              size="large"
+              active-text="显示"
+              inactive-text="隐藏"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="添加时间" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.add_time }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="100">
+          <template slot-scope="scope">
+            <a @click="edit(scope.row)">编辑</a>
+            <el-divider direction="vertical"></el-divider>
+            <a @click="del(scope.row, '删除配送员', index)">删除</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="tableOptions.page"
-          show-elevator
-          show-total
-          :page-size="tableOptions.limit"
-          @on-change="pageChange"
+          :page.sync="tableOptions.page"
+          :limit.sync="tableOptions.limit"
+          @pagination="getOrderDeliveryList"
         />
       </div>
-    </Card>
+    </el-card>
   </div>
 </template>
 
@@ -169,10 +191,6 @@ export default {
         .catch((err) => {
           this.$Message.error(err.msg);
         });
-    },
-    pageChange(index) {
-      this.tableOptions.page = index;
-      this.getOrderDeliveryList();
     },
   },
 };

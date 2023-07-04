@@ -3,9 +3,9 @@
     <div class="i-layout-page-header header-title">
       <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
       <div class="table_box">
-        <Form
+        <el-form
           ref="formValidate"
           :model="formValidate"
           :label-width="labelWidth"
@@ -13,22 +13,22 @@
           class="tabform"
           @submit.native.prevent
         >
-          <Row :gutter="24" type="flex" justify="end">
-            <Col span="24" class="ivu-text-left">
-              <FormItem :label="fromList.title + '：'">
-                <RadioGroup
+          <el-row :gutter="24" justify="end">
+            <el-col :span="24" class="ivu-text-left">
+              <el-form-item :label="fromList.title + '：'">
+                <el-radio-group
                   type="button"
                   v-model="formValidate.data"
                   class="mr15"
-                  @on-change="selectChange(formValidate.data)"
+                  @change="selectChange(formValidate.data)"
                 >
-                  <Radio :label="itemn.val" v-for="(itemn, indexn) in fromList.fromTxt" :key="indexn">
+                  <el-radio-button :label="itemn.val" v-for="(itemn, indexn) in fromList.fromTxt" :key="indexn">
                     {{ itemn.text }}
-                  </Radio>
-                </RadioGroup>
+                  </el-radio-button>
+                </el-radio-group>
                 <DatePicker
                   :editable="false"
-                  @on-change="onchangeTime"
+                  @change="onchangeTime"
                   :value="timeVal"
                   format="yyyy/MM/dd"
                   type="daterange"
@@ -36,115 +36,148 @@
                   placeholder="请选择时间"
                   style="width: 200px"
                 ></DatePicker>
-              </FormItem>
-            </Col>
-            <Col span="24" class="ivu-text-left">
-              <FormItem label="用户分组：">
-                <RadioGroup type="button" v-model="formValidate.groupid">
-                  <Radio :label="item.id" v-for="(item, index) in groupList" :key="index">{{ item.name }}</Radio>
-                </RadioGroup>
-              </FormItem>
-            </Col>
-            <Col span="24" class="ivu-text-left">
-              <FormItem label="用户标签：">
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" class="ivu-text-left">
+              <el-form-item label="用户分组：">
+                <el-radio-group type="button" v-model="formValidate.groupid">
+                  <el-radio-button :label="item.id" v-for="(item, index) in groupList" :key="index">{{
+                    item.name
+                  }}</el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" class="ivu-text-left">
+              <el-form-item label="用户标签：">
                 <TagSelect v-model="tagidList">
                   <TagSelectOption :name="item.id" v-for="(item, index) in tagList" :key="index">{{
                     item.name
                   }}</TagSelectOption>
                 </TagSelect>
-              </FormItem>
-            </Col>
-            <Col span="24" class="ivu-text-left">
-              <Col :xl="7" :lg="12" :md="12" :sm="24" :xs="24">
-                <FormItem label="用户名称：">
-                  <Input placeholder="请输入用户名称" v-model="formValidate.nickname" class="perW90"></Input>
-                </FormItem>
-              </Col>
-              <Col :xl="7" :lg="12" :md="12" :sm="24" :xs="24" class="sex_box">
-                <FormItem label="性别：">
-                  <Select v-model="formValidate.sex" style="width: 90%" clearable>
-                    <Option value="1">男</Option>
-                    <Option value="2">女</Option>
-                    <Option value="0">保密</Option>
-                  </Select>
-                </FormItem>
-              </Col>
-              <Col :xl="7" :lg="12" :md="12" :sm="24" :xs="24" class="subscribe_box">
-                <FormItem label="是否关注公众号：">
-                  <Select v-model="formValidate.subscribe" style="width: 90%" clearable>
-                    <Option value="1">是</Option>
-                    <Option value="0">否</Option>
-                  </Select>
-                </FormItem>
-              </Col>
-              <Col :xl="3" :lg="3" :md="3" :sm="24" :xs="24" class="btn_box">
-                <FormItem>
-                  <Button type="primary" icon="ios-search" label="default" class="userSearch" @click="userSearchs"
-                    >搜索</Button
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" class="ivu-text-left">
+              <el-col :xl="7" :lg="12" :md="12" :sm="24" :xs="24">
+                <el-form-item label="用户名称：">
+                  <el-input placeholder="请输入用户名称" v-model="formValidate.nickname" class="perW90"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :xl="7" :lg="12" :md="12" :sm="24" :xs="24" class="sex_box">
+                <el-form-item label="性别：">
+                  <el-select v-model="formValidate.sex" style="width: 90%" clearable>
+                    <el-option :value="1" label="男"></el-option>
+                    <el-option :value="2" label="女"></el-option>
+                    <el-option :value="0" label="保密"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :xl="7" :lg="12" :md="12" :sm="24" :xs="24" class="subscribe_box">
+                <el-form-item label="是否关注公众号：">
+                  <el-select v-model="formValidate.subscribe" style="width: 90%" clearable>
+                    <el-option value="1" label="是"></el-option>
+                    <el-option value="0" label="否"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :xl="3" :lg="3" :md="3" :sm="24" :xs="24" class="btn_box">
+                <el-form-item>
+                  <el-button type="primary" icon="ios-search" label="default" class="userSearch" @click="userSearchs"
+                    >搜索</el-button
                   >
-                </FormItem>
-              </Col>
-            </Col>
-            <Divider dashed />
-            <Col span="24">
-              <Button type="primary" class="mr20" @click="onSend">发送优惠券</Button>
-              <Button class="greens mr20" size="default" @click="onSendPic">
+                </el-form-item>
+              </el-col>
+            </el-col>
+            <el-divider direction="vertical" dashed />
+            <el-col :span="24">
+              <el-button type="primary" class="mr20" @click="onSend">发送优惠券</el-button>
+              <el-button class="greens mr20" size="default" @click="onSendPic">
                 <Icon type="md-list"></Icon>
                 发送图文消息
-              </Button>
-            </Col>
-          </Row>
-        </Form>
+              </el-button>
+            </el-col>
+          </el-row>
+        </el-form>
       </div>
-      <Table
+      <el-table
         ref="selection"
-        :columns="columns4"
         :data="tabList"
         :loading="loading"
-        no-data-text="暂无数据"
-        highlight-row
+        empty-text="暂无数据"
+        highlight-current-row
         class="mt25"
-        no-filtered-data-text="暂无筛选结果"
-        @on-selection-change="onSelectTab"
+        @select="onSelectTab"
+        @select-all="onSelectTab"
       >
-        <template slot-scope="{ row, index }" slot="headimgurl">
-          <div class="tabBox_img" v-viewer>
-            <img v-lazy="row.headimgurl" />
-          </div>
-        </template>
-        <template slot-scope="{ row }" slot="sex">
-          <span v-show="row.sex === 1">男</span>
-          <span v-show="row.sex === 2">女</span>
-          <span v-show="row.sex === 0">保密</span>
-        </template>
-        <template slot-scope="{ row }" slot="country">
-          <span>{{ row.country + row.province + row.city }}</span>
-        </template>
-        <template slot-scope="{ row }" slot="subscribe">
-          <span v-show="row.subscribe === 1">关注</span>
-          <span v-show="row.subscribe === 0">未关注</span>
-        </template>
-        <template slot-scope="{ row }" slot="createModalFrame">
-          <template>
-            <Dropdown @on-click="changeMenu(row, $event)">
-              <a href="javascript:void(0)"
-                >操作
-                <Icon type="ios-arrow-down"></Icon>
-              </a>
-              <DropdownMenu slot="list">
-                <DropdownItem name="1" v-show="row.subscribe">修改分组</DropdownItem>
-                <DropdownItem name="2" v-show="row.subscribe">修改标签</DropdownItem>
-                <DropdownItem name="3" v-show="row.subscribe">同步标签</DropdownItem>
-                <DropdownItem v-show="!row.subscribe">无法操作</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+        <el-table-column type="selection" width="55"> </el-table-column>
+        <el-table-column label="ID" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.uid }}</span>
           </template>
-        </template>
-      </Table>
+        </el-table-column>
+        <el-table-column label="微信用户名称" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.nickname }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="头像" min-width="130">
+          <template slot-scope="scope">
+            <div class="tabBox_img" v-viewer>
+              <img v-lazy="scope.row.headimgurl" />
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="性别" min-width="130">
+          <template slot-scope="scope">
+            <span v-show="scope.row.sex === 1">男</span>
+            <span v-show="scope.row.sex === 2">女</span>
+            <span v-show="scope.row.sex === 0">保密</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="地区" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.country + scope.row.province + scope.row.city }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否关注公众号" min-width="130">
+          <template slot-scope="scope">
+            <span v-show="scope.row.subscribe === 1">关注</span>
+            <span v-show="scope.row.subscribe === 0">未关注</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="用户分组" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.groupid }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="用户标签" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.tagid_list }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="170">
+          <template slot-scope="scope">
+            <el-dropdown size="small" @command="changeMenu(scope.row, $event)">
+              <span class="el-dropdown-link">操作<i class="el-icon-arrow-down el-icon--right"></i> </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="1" v-show="scope.row.subscribe">修改分组</el-dropdown-item>
+                <el-dropdown-item command="2" v-show="scope.row.subscribe">修改标签</el-dropdown-item>
+                <el-dropdown-item command="3" v-show="scope.row.subscribe">同步标签</el-dropdown-item>
+                <el-dropdown-item v-show="!scope.row.subscribe">无法操作</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="formValidate.limit" />
+        <pagination
+          v-if="total"
+          :total="total"
+          :page.sync="formValidate.page"
+          :limit.sync="formValidate.limit"
+          @pagination="getList"
+        />
       </div>
-    </Card>
+    </el-card>
     <!-- 用户分组和标签编辑-->
     <edit-from ref="edits" :FromData="FromData" @submitFail="submitFail"></edit-from>
     <!-- 发送优惠券-->
@@ -231,51 +264,6 @@ export default {
         sm: 24,
         xs: 24,
       },
-      columns4: [
-        {
-          type: 'selection',
-          min: 60,
-          align: 'center',
-        },
-        {
-          title: 'ID',
-          key: 'uid',
-        },
-        {
-          title: '微信用户名称',
-          key: 'nickname',
-        },
-        {
-          title: '头像',
-          slot: 'headimgurl',
-        },
-        {
-          title: '性别',
-          slot: 'sex',
-        },
-        {
-          title: '地区',
-          slot: 'country',
-        },
-        {
-          title: '是否关注公众号',
-          slot: 'subscribe',
-        },
-        {
-          title: '用户分组',
-          key: 'groupid',
-        },
-        {
-          title: '用户标签',
-          key: 'tagid_list',
-        },
-        {
-          title: '操作',
-          slot: 'createModalFrame',
-          fixed: 'right',
-          width: 100,
-        },
-      ],
       tagList: [],
       groupList: [],
       FromData: null,
@@ -286,7 +274,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 80;
+      return this.isMobile ? undefined : '85px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -415,10 +403,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.formValidate.page = index;
-      this.getList();
     },
     // 搜索
     userSearchs() {

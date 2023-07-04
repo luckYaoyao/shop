@@ -4,13 +4,13 @@
       <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div>
         <div style="float: right">
-          <Button class="bnt" type="primary" @click="save">保存</Button>
+          <el-button class="bnt" type="primary" @click="save">保存</el-button>
         </div>
       </div>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Row class="box-wrapper">
-        <Col :xs="24" :sm="24" :md="6" :lg="3">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-row class="box-wrapper">
+        <el-col :xs="24" :sm="24" :md="6" :lg="3">
           <div class="left_box">
             <div class="left_cont" :class="pageId == 1 ? 'on' : ''" @click="menu(1)">网站LOGO</div>
             <div class="left_cont" :class="pageId == 'pc_home_banner' ? 'on' : ''" @click="menu('pc_home_banner')">
@@ -18,9 +18,9 @@
             </div>
             <div class="left_cont" :class="pageId == 3 ? 'on' : ''" @click="menu(3)">客服页面广告</div>
           </div>
-        </Col>
+        </el-col>
         <div style="display: flex; width: 83%">
-          <Col v-if="pageId == 1 || pageId == 'pc_home_banner'" class="pciframe" :bordered="false" dis-hover>
+          <el-col v-if="pageId == 1 || pageId == 'pc_home_banner'" class="pciframe" :bordered="false" shadow="never">
             <img src="../../../assets/images/pcbanner.png" class="pciframe-box" />
             <div v-if="pageId == 1" class="logoimg">
               <img :src="pclogo" />
@@ -33,15 +33,15 @@
                 </swiper-slide>
               </swiper>
             </div>
-          </Col>
-          <Col v-if="pageId == 3" class="pciframe" :bordered="false" dis-hover>
+          </el-col>
+          <el-col v-if="pageId == 3" class="pciframe" :bordered="false" shadow="never">
             <img src="../../../assets/images/kefu.png" class="pciframe-box" />
             <div class="box3_sile">
               <!-- {{formValidate}} -->
               <div v-html="formValidate.content"></div>
             </div>
-          </Col>
-          <Col v-if="pageId == 'pc_home_banner'">
+          </el-col>
+          <el-col v-if="pageId == 'pc_home_banner'">
             <div class="content">
               <div class="right-box">
                 <div class="hot_imgs">
@@ -73,14 +73,14 @@
                           <div class="info-item">
                             <span>图片名称：</span>
                             <div class="input-box">
-                              <Input v-model="item.title" placeholder="请填写名称" />
+                              <el-input v-model="item.title" placeholder="请填写名称" />
                             </div>
                           </div>
                           <div class="info-item">
                             <span>链接地址：</span>
                             <!-- @click="link(index) icon="ios-arrow-forward" "-->
                             <div class="input-box">
-                              <Input v-model="item.url" placeholder="选择链接" />
+                              <el-input v-model="item.url" placeholder="选择链接" />
                             </div>
                           </div>
                         </div>
@@ -109,20 +109,20 @@
                   </div>
                   <template>
                     <div class="add-btn">
-                      <Button
+                      <el-button
                         type="primary"
                         ghost
                         style="width: 100px; height: 35px; background-color: #1890ff; color: #ffffff"
                         @click="addBox"
                         >添加图片
-                      </Button>
+                      </el-button>
                     </div>
                   </template>
                 </div>
               </div>
             </div>
-          </Col>
-          <Col v-if="pageId == 1">
+          </el-col>
+          <el-col v-if="pageId == 1">
             <div class="content">
               <div class="right-box">
                 <div class="hot_imgs">
@@ -159,16 +159,16 @@
                 </div>
               </div>
             </div>
-          </Col>
-          <Col v-if="pageId == 3" :xs="24" :sm="24" :md="12" :lg="14" style="margin-left: 40px">
+          </el-col>
+          <el-col v-if="pageId == 3" :xs="24" :sm="24" :md="12" :lg="14" style="margin-left: 40px">
             <div class="table_box">
-              <Row type="flex">
-                <Col v-bind="grid">
+              <el-row >
+                <el-col v-bind="grid">
                   <div class="title">隐私权限页面展示：</div>
-                </Col>
-              </Row>
+                </el-col>
+              </el-row>
               <div>
-                <Form
+                <el-form
                   class="form"
                   ref="formValidate"
                   :model="formValidate"
@@ -178,18 +178,18 @@
                   @submit.native.prevent
                 >
                   <div class="goodsTitle acea-row"></div>
-                  <FormItem label="" prop="content" style="margin: 0px">
+                  <el-form-item label="" prop="content" style="margin: 0px">
                     <WangEditor :content="content" @editorContent="getEditorContent"></WangEditor>
-                  </FormItem>
-                </Form>
+                  </el-form-item>
+                </el-form>
               </div>
             </div>
-          </Col>
+          </el-col>
         </div>
-      </Row>
-    </Card>
+      </el-row>
+    </el-card>
     <!-- <div class="save">
-			<Button type="primary" @click="save" >保存</Button>
+			<el-button type="primary" @click="save" >保存</el-button>
 		</div> -->
     <linkaddress ref="linkaddres" @linkUrl="linkUrl"></linkaddress>
   </div>
@@ -297,7 +297,7 @@ export default {
   computed: {
     ...mapState('admin/layout', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 120;
+      return this.isMobile ? undefined : '120px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';

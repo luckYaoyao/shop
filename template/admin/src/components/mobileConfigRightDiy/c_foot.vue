@@ -18,18 +18,18 @@
             </div>
           </div>
           <div class="c_row-item">
-            <Col class="label" span="4"> 名称 </Col>
-            <Col span="19" class="slider-box">
-              <Input v-model="item.name" placeholder="选填不超过10个字" />
-            </Col>
+            <el-col class="label" :span="4"> 名称 </el-col>
+            <el-col span="19" class="slider-box">
+              <el-input v-model="item.name" placeholder="选填不超过10个字" />
+            </el-col>
           </div>
           <div class="c_row-item">
-            <Col class="label" span="4"> 链接 </Col>
-            <Col span="19" class="slider-box">
+            <el-col class="label" :span="4"> 链接 </el-col>
+            <el-col span="19" class="slider-box">
               <div @click="getLink(index)">
-                <Input icon="ios-arrow-forward" v-model="item.link" readonly placeholder="选填不超过10个字" />
+                <el-input icon="ios-arrow-forward" v-model="item.link" readonly placeholder="选填不超过10个字" />
               </div>
-            </Col>
+            </el-col>
           </div>
         </div>
         <div class="del-box" @click="deleteMenu(index)">
@@ -37,7 +37,7 @@
         </div>
       </div>
     </draggable>
-    <Button class="add-btn" type="info" ghost @click="addMenu" v-if="footConfig.length < 5">添加图文导航</Button>
+    <el-button class="add-btn" type="info" ghost @click="addMenu" v-if="footConfig.length < 5">添加图文导航</el-button>
     <div>
       <Modal
         v-model="modalPic"

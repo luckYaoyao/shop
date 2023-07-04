@@ -1,38 +1,75 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Button type="primary" @click="addType">添加类型</Button>
-      <Table
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-button type="primary" @click="addType">添加类型</el-button>
+      <el-table
         class="mt25"
-        :columns="thead"
         :data="tbody"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row, index }" slot="is_del">
-          <i-switch
-            v-model="row.is_del"
-            :value="row.is_del"
-            :true-value="0"
-            :false-value="1"
-            @on-change="onchangeIsShow(row)"
-            size="large"
-          >
-            <span slot="open">启用</span>
-            <span slot="close">禁用</span>
-          </i-switch>
-        </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <a href="javascript:" @click="editType(row)">编辑</a>
-          <Divider type="vertical" v-if="row.type !== 'free' && row.type !== 'ever'" />
-          <a v-if="row.type !== 'free' && row.type !== 'ever'" href="javascript:" @click="del(row, '删除类型', index)"
-            >删除</a
-          >
-        </template>
-      </Table>
-    </Card>
+        <el-table-column label="ID" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="会员名" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.title }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="有限期（天）" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.vip_day === -1 ? '永久' : scope.row.vip_day }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="原价" min-width="90">
+          <template slot-scope="scope">
+            <span>{{ scope.row.price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="优惠价" min-width="90">
+          <template slot-scope="scope">
+            <span>{{ scope.row.pre_price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="排序" min-width="90">
+          <template slot-scope="scope">
+            <span>{{ scope.row.sort }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否开启" min-width="90">
+          <template slot-scope="scope">
+            <el-switch
+              class="defineSwitch"
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.is_del"
+              :value="scope.row.is_del"
+              @change="onchangeIsShow(row)"
+              size="large"
+              active-text="启用"
+              inactive-text="禁用"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="170">
+          <template slot-scope="scope">
+            <a href="javascript:" @click="editType(scope.row)">编辑</a>
+            <el-divider direction="vertical" v-if="scope.row.type !== 'free' && scope.row.type !== 'ever'" />
+            <a
+              v-if="scope.row.type !== 'free' && scope.row.type !== 'ever'"
+              href="javascript:"
+              @click="del(scope.row, '删除类型', index)"
+              >删除</a
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
     <Modal v-model="modal" :title="`${rowModelType}${rowEdit && rowEdit.title}会员`" footer-hide @on-cancel="cancel">
       <form-create v-model="fapi" :rule="rule" @submit="onSubmit"></form-create>
     </Modal>
@@ -46,43 +83,6 @@ export default {
   name: 'list',
   data() {
     return {
-      thead: [
-        {
-          title: 'ID',
-          key: 'id',
-        },
-        {
-          title: '会员名',
-          key: 'title',
-        },
-        {
-          title: '有限期（天）',
-          key: 'vip_day',
-          render: (h, params) => {
-            return h('span', params.row.vip_day === -1 ? '永久' : params.row.vip_day);
-          },
-        },
-        {
-          title: '原价',
-          key: 'price',
-        },
-        {
-          title: '优惠价',
-          key: 'pre_price',
-        },
-        {
-          title: '排序',
-          key: 'sort',
-        },
-        {
-          title: '是否开启',
-          slot: 'is_del',
-        },
-        {
-          title: '操作',
-          slot: 'action',
-        },
-      ],
       tbody: [],
       loading: false,
       modal: false,

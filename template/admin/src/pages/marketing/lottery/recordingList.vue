@@ -1,31 +1,33 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="tableFrom"
         :model="tableFrom"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <Row type="flex" :gutter="24">
-          <Col>
-            <FormItem label="活动类型：" clearable>
-              <RadioGroup v-model="tableFrom.factor" type="button" @on-change="selectChangeFactor()" class="mr">
-                <Radio :label="1">积分抽取</Radio>
-                <Radio :label="3">订单支付</Radio>
-                <Radio :label="4">订单评价</Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col>
-          <Col span="24">
-            <FormItem label="时间选择：">
-              <RadioGroup v-model="tableFrom.data" type="button" @on-change="selectChange(tableFrom.data)" class="mr">
-                <Radio :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</Radio>
-              </RadioGroup>
+        <el-row :gutter="24">
+          <el-col>
+            <el-form-item label="活动类型：" clearable>
+              <el-radio-group v-model="tableFrom.factor" type="button" @change="selectChangeFactor()" class="mr">
+                <el-radio-button :label="1">积分抽取</el-radio-button>
+                <el-radio-button :label="3">订单支付</el-radio-button>
+                <el-radio-button :label="4">订单评价</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="时间选择：">
+              <el-radio-group v-model="tableFrom.data" type="button" @change="selectChange(tableFrom.data)" class="mr">
+                <el-radio-button :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{
+                  item.text
+                }}</el-radio-button>
+              </el-radio-group>
               <DatePicker
                 :editable="false"
-                @on-change="onchangeTime"
+                @change="onchangeTime"
                 :value="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
@@ -33,104 +35,121 @@
                 placeholder="自定义时间"
                 style="width: 200px"
               ></DatePicker>
-            </FormItem>
-          </Col>
-          <Col span="24">
-            <FormItem label="奖品类型：">
-              <RadioGroup v-model="tableFrom.type" type="button" @on-change="selectType()" class="mr">
-                <Radio :label="item.val" v-for="(item, i) in typeList" :key="i">{{ item.text }}</Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col>
-          <!-- <Col v-bind="grid">
-            <FormItem label="领取状态：" clearable>
-              <Select
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="奖品类型：">
+              <el-radio-group v-model="tableFrom.type" type="button" @change="selectType()" class="mr">
+                <el-radio-button :label="item.val" v-for="(item, i) in typeList" :key="i">{{
+                  item.text
+                }}</el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <!-- <el-col v-bind="grid">
+            <el-form-item label="领取状态：" clearable>
+              <el-select
                 v-model="tableFrom.is_receive"
                 placeholder="请选择"
                 clearable
-                @on-change="userSearchs"
+                @change="userSearchs"
               >
-                <Option value="0">待发货</Option>
-                <Option value="1">已发货</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col v-bind="grid">
-            <FormItem label="处理状态：" clearable>
-              <Select
+                <el-option value="0">待发货</el-option>
+                <el-option value="1">已发货</el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col v-bind="grid">
+            <el-form-item label="处理状态：" clearable>
+              <el-select
                 v-model="tableFrom.is_deliver"
                 placeholder="请选择"
                 clearable
-                @on-change="userSearchs"
+                @change="userSearchs"
               >
-                <Option value="0">未处理</Option>
-                <Option value="1">已处理</Option>
-              </Select>
-            </FormItem>
-          </Col> -->
-          <Col v-bind="grid">
-            <FormItem label="搜索用户：" label-for="store_name">
-              <Input
+                <el-option value="0">未处理</el-option>
+                <el-option value="1">已处理</el-option>
+              </el-select>
+            </el-form-item>
+          </el-col> -->
+          <el-col v-bind="grid">
+            <el-form-item label="搜索用户：" label-for="store_name">
+              <el-input
                 search
                 enter-button
                 placeholder="请输入用户信息"
                 v-model="tableFrom.keyword"
                 @on-search="userSearchs"
               />
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
-      <Table
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table
         :columns="columns1"
         :data="tableList"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row, index }" slot="is_fail">
-          <Icon type="md-checkmark" v-if="row.is_fail === 1" color="#0092DC" size="14" />
-          <Icon type="md-close" v-else color="#ed5565" size="14" />
-        </template>
-        <template slot-scope="{ row, index }" slot="user">
-          <span>{{ row.user.nickname }} </span>
-        </template>
-        <template slot-scope="{ row, index }" slot="mark">
-          <span>{{ row.deliver_info.mark }}</span>
-        </template>
-        <template slot-scope="{ row, index }" slot="receive_info">
-          <div v-if="row.receive_info.name">
-            <div>姓名：{{ row.receive_info.name }}</div>
-            <div>电话：{{ row.receive_info.phone }}</div>
-            <div>地址：{{ row.receive_info.address }}</div>
-            <div v-if="row.receive_info.mark">备注：{{ row.receive_info.mark }}</div>
-          </div>
-        </template>
-        <template slot-scope="{ row, index }" slot="prize">
-          <div class="prize">
-            <img :src="row.prize.image" alt="" />
-            <span>{{ row.prize.name }}</span>
-          </div>
-        </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="deliver(row, 1)" v-if="row.type == 6 && row.is_deliver === 0">发货</a>
-          <a v-else-if="row.type == 6 && row.is_deliver === 1" @click="isDeliver(row)">配送信息</a>
-          <Divider type="vertical" v-if="row.type == 6" />
-          <a @click="deliver(row, 2)">备注</a>
-        </template>
-      </Table>
+        <el-table-column label="ID" width="80">
+          <template slot-scope="scope">
+            <div>{{ scope.row.id }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="用户信息" min-width="90">
+          <template slot-scope="scope">
+            <span>{{ scope.row.user.nickname }} </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="奖品信息" min-width="130">
+          <template slot-scope="scope">
+            <div class="prize">
+              <img :src="scope.row.prize.image" alt="" />
+              <span>{{ scope.row.prize.name }}</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="抽奖时间" min-width="100">
+          <template slot-scope="scope">
+            <div>{{ scope.row.add_time }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="收货信息" min-width="100">
+          <template slot-scope="scope">
+            <div v-if="scope.row.receive_info.name">
+              <div>姓名：{{ scope.row.receive_info.name }}</div>
+              <div>电话：{{ scope.row.receive_info.phone }}</div>
+              <div>地址：{{ scope.row.receive_info.address }}</div>
+              <div v-if="scope.row.receive_info.mark">备注：{{ scope.row.receive_info.mark }}</div>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.deliver_info.mark }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="120">
+          <template slot-scope="scope">
+            <a @click="deliver(scope.row, 1)" v-if="scope.row.type == 6 && scope.row.is_deliver === 0">发货</a>
+            <a v-else-if="scope.row.type == 6 && scope.row.is_deliver === 1" @click="isDeliver(scope.row)">配送信息</a>
+            <el-divider direction="vertical" v-if="scope.row.type == 6" />
+            <a @click="deliver(scope.row, 2)">备注</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="tableFrom.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="tableFrom.limit"
+          :page.sync="tableFrom.page"
+          :limit.sync="tableFrom.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
     <!-- 发货-->
     <Modal
       v-model="shipModel"
@@ -142,32 +161,32 @@
       :mask-closable="false"
       :z-index="1"
     >
-      <Form
+      <el-form
         v-model="shipModel"
         :ref="modelType === 1 ? 'shipForm' : 'markForm'"
         :model="modelType === 1 ? shipForm : markForm"
         :rules="modelType === 1 ? ruleShip : ruleMark"
-        :label-width="80"
+        label-width="85px"
       >
-        <FormItem v-if="modelType === 1" label="快递公司" prop="deliver_name">
-          <Select v-model="shipForm.deliver_name">
-            <Option v-for="item in locationList" :value="item.value" :key="item.id">{{ item.value }}</Option>
-          </Select>
-        </FormItem>
-        <FormItem v-if="modelType === 1" label="快递单号" prop="deliver_number">
-          <Input v-model="shipForm.deliver_number" placeholder="请输入快递单号"></Input>
+        <el-form-item v-if="modelType === 1" label="快递公司" prop="deliver_name">
+          <el-select v-model="shipForm.deliver_name">
+            <el-option v-for="item in locationList" :value="item.value" :key="item.id" :label="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="modelType === 1" label="快递单号" prop="deliver_number">
+          <el-input v-model="shipForm.deliver_number" placeholder="请输入快递单号"></el-input>
           <div class="trips" v-if="shipForm.deliver_name == '顺丰速运'">
             <p>顺丰请输入单号 :收件人或寄件人手机号后四位</p>
             <p>例如：SF000000000000:3941</p>
           </div>
-        </FormItem>
-        <FormItem v-if="modelType === 2" label="备注">
-          <Input v-model="markForm.mark" placeholder="请输入备注"></Input>
-        </FormItem>
-        <FormItem>
-          <Button type="primary" @click="ok(modelType === 1 ? 'shipForm' : 'markForm')">提交</Button>
-          <Button @click="cancel('formValidate')" style="margin-left: 8px">关闭</Button>
-        </FormItem></Form
+        </el-form-item>
+        <el-form-item v-if="modelType === 2" label="备注">
+          <el-input v-model="markForm.mark" placeholder="请输入备注"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="ok(modelType === 1 ? 'shipForm' : 'markForm')">提交</el-button>
+          <el-button @click="cancel('formValidate')" style="margin-left: 8px">关闭</el-button>
+        </el-form-item></el-form
       >
     </Modal>
   </div>
@@ -226,44 +245,6 @@ export default {
         { text: '优惠券', val: '5' },
         { text: '商品', val: '6' },
       ],
-      columns1: [
-        {
-          title: 'ID',
-          key: 'id',
-          width: 80,
-        },
-        {
-          title: '用户信息',
-          slot: 'user',
-          minWidth: 90,
-        },
-        {
-          title: '奖品信息',
-          slot: 'prize',
-          minWidth: 130,
-        },
-        {
-          title: '抽奖时间',
-          key: 'add_time',
-          minWidth: 100,
-        },
-        {
-          title: '收货信息',
-          slot: 'receive_info',
-          minWidth: 100,
-        },
-        {
-          title: '备注',
-          slot: 'mark',
-          minWidth: 100,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 130,
-        },
-      ],
       tableList: [],
       grid: {
         xl: 7,
@@ -289,7 +270,7 @@ export default {
   computed: {
     ...mapState('admin/layout', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 80;
+      return this.isMobile ? undefined : '85px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -396,10 +377,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.tableFrom.page = index;
-      this.getList();
     },
     // 表格搜索
     userSearchs() {

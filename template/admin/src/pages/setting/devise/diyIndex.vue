@@ -3,23 +3,23 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <!-- <router-link :to="{ path: $routeProStr + '/setting/pages/devise' }"
-          ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
+          ><el-button icon="ios-arrow-back" size="small" type="text">返回</el-button></router-link
         > -->
-        <!-- <Divider type="vertical" /> -->
+        <!-- <el-divider direction="vertical"></el-divider> -->
         <span class="ivu-page-header-title mr20" style="padding: 0" v-text="$route.meta.title"></span>
         <div class="rbtn">
-          <!-- <Button v-if="pageId !== 0" class="bnt" @click="setmoren" :loading="loading">保存默认</Button>
-          <Button v-if="pageId !== 0" class="bnt ml20" @click="getmoren" :loading="loading">恢复默认</Button> -->
+          <!-- <el-button v-if="pageId !== 0" class="bnt" @click="setmoren" :loading="loading">保存默认</el-button>
+          <el-button v-if="pageId !== 0" class="bnt ml20" @click="getmoren" :loading="loading">恢复默认</el-button> -->
           <!-- <div class="data" @click="setmoren">设置默认</div>
             <div class="data" @click="getmoren">恢复默认</div> -->
-          <Button class="bnt ml20" type="info" @click="preview" :loading="loading">预览</Button>
-          <Button class="bnt ml20" type="primary" @click="saveConfig(0)" :loading="loading">保存</Button>
-          <Button class="ml20" type="error" @click="closeWindow" :loading="loading">关闭</Button>
+          <el-button class="bnt ml20" type="info" @click="preview" :loading="loading">预览</el-button>
+          <el-button class="bnt ml20" type="primary" @click="saveConfig(0)" :loading="loading">保存</el-button>
+          <el-button class="ml20" type="error" @click="closeWindow" :loading="loading">关闭</el-button>
         </div>
       </div>
     </div>
 
-    <Card :bordered="false" dis-hover class="ivu-mt" style="margin: 0 10px">
+    <el-card :bordered="false" shadow="never" class="ivu-mt" style="margin: 0 10px">
       <div class="diy-wrapper">
         <!-- 左侧 -->
         <div class="left">
@@ -72,7 +72,7 @@
               </draggable>
             </div>
           </div>
-          <!--                    <div style="padding: 0 20px"><Button type="primary" style="width: 100%" @click="saveConfig">保存</Button></div>-->
+          <!--                    <div style="padding: 0 20px"><el-button type="primary" style="width: 100%" @click="saveConfig">保存</el-button></div>-->
           <div class="wrapper" v-else :style="'height:' + (clientHeight - 200) + 'px;'">
             <div class="link-item" v-for="(item, index) in urlList" :key="index">
               <div class="name">{{ item.name }}</div>
@@ -83,7 +83,7 @@
               </div>
               <div class="lable">
                 <p class="txt">例如：{{ item.example }}</p>
-                <Button size="small" @click="onCopy(item.example)">复制 </Button>
+                <el-button size="small" @click="onCopy(item.example)">复制 </el-button>
               </div>
             </div>
           </div>
@@ -94,9 +94,9 @@
           style="flex: 1; background: #f0f2f5; display: flex; justify-content: center; padding-top: 20px; height: 100%"
         >
           <div class="acticon">
-            <Button class="bnt mb10" @click="showTitle">页面设置</Button>
-            <Button class="bnt mb10" @click="nameModal = true">另存模板</Button>
-            <Button class="bnt" @click="reast">重置</Button>
+            <el-button class="bnt mb10" @click="showTitle">页面设置</el-button>
+            <el-button class="bnt mb10" @click="nameModal = true">另存模板</el-button>
+            <el-button class="bnt" @click="reast">重置</el-button>
           </div>
           <div class="content">
             <div class="contxt" style="display: flex; flex-direction: column; overflow: hidden; height: 100%">
@@ -210,12 +210,12 @@
           </div>
         </div>
       </div>
-    </Card>
+    </el-card>
     <!--<div class="foot-box">-->
-    <!--<Button @click="reast">重置</Button>-->
-    <!--<Button type="primary" @click="saveConfig" :loading="loading"-->
+    <!--<el-button @click="reast">重置</el-button>-->
+    <!--<el-button type="primary" @click="saveConfig" :loading="loading"-->
     <!--&gt;保存-->
-    <!--</Button-->
+    <!--</el-button-->
     <!--&gt;-->
     <!--</div>-->
     <Modal v-model="modal" title="预览" footer-hide>
@@ -235,7 +235,7 @@
       </div>
     </Modal>
     <Modal v-model="nameModal" title="设置模版名称" :closable="false" @on-ok="saveModal" @on-cancel="nameModal = false">
-      <Input v-model="saveName" placeholder="请输入模版名称"></Input>
+      <el-input v-model="saveName" placeholder="请输入模版名称"></el-input>
     </Modal>
   </div>
 </template>

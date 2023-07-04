@@ -17,8 +17,8 @@
         <p>更多惊喜内容等你来探索，快来看看吧～</p>
       </div>
       <div slot="footer" class="footer">
-        <Button class="cancel" shape="circle" @click="upgrade = false">暂不升级</Button>
-        <Button shape="circle" type="primary" @click="upgradeNow()">立即升级</Button>
+        <el-button class="cancel" shape="circle" @click="upgrade = false">暂不升级</el-button>
+        <el-button shape="circle" type="primary" @click="upgradeNow()">立即升级</el-button>
       </div>
     </Modal>
   </div>

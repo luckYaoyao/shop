@@ -1,9 +1,9 @@
 <template>
   <Modal v-model="modals_son" scrollable footer-hide closable :title="title" :mask-closable="false" width="900">
-    <Button type="primary" id="savefile" class="mr5 mb15" @click="savefile">保存</Button>
-    <Button id="undo" class="mr5 mb15" @click="undofile">撤销</Button>
-    <Button id="redo" class="mr5 mb15" @click="redofile">回退</Button>
-    <Button id="refresh" class="mb15" @click="refreshfile">刷新</Button>
+    <el-button type="primary" id="savefile" class="mr5 mb15" @click="savefile">保存</el-button>
+    <el-button id="undo" class="mr5 mb15" @click="undofile">撤销</el-button>
+    <el-button id="redo" class="mr5 mb15" @click="redofile">回退</el-button>
+    <el-button id="refresh" class="mb15" @click="refreshfile">刷新</el-button>
     <textarea ref="mycode" class="codesql public_text" v-model="code" style="height: 80vh"></textarea>
     <Spin size="large" fix v-if="spinShow"></Spin>
   </Modal>

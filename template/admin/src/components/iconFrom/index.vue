@@ -1,11 +1,11 @@
 <template>
   <div class="iconBox">
-    <Input
+    <el-input
       v-model="iconVal"
       placeholder="输入关键词搜索,注意全是英文"
       clearable
       style="width: 300px"
-      @on-change="upIcon(iconVal)"
+      @change="upIcon(iconVal)"
       ref="search"
     />
     <div class="trees-coadd">

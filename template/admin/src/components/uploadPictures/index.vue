@@ -1,10 +1,10 @@
 <template>
   <div class="Modal">
-    <Row class="colLeft">
-      <Col :xl="6" :lg="6" :md="6" :sm="6" :xs="24" class="colLeft">
+    <el-row class="colLeft">
+      <el-col :xl="6" :lg="6" :md="6" :sm="6" :xs="24" class="colLeft">
         <div class="Nav">
           <div class="input">
-            <Input
+            <el-input
               search
               enter-button
               placeholder="请输入分类名称"
@@ -21,18 +21,18 @@
             </div>
           </div>
         </div>
-      </Col>
-      <Col :xl="18" :lg="18" :md="18" :sm="18" :xs="24" class="colLeft">
+      </el-col>
+      <el-col :xl="18" :lg="18" :md="18" :sm="18" :xs="24" class="colLeft">
         <div class="conter">
           <div class="bnt acea-row row-middle">
-            <Col span="24">
-              <Button
+            <el-col :span="24">
+              <el-button
                 type="primary"
                 :disabled="checkPicList.length === 0"
                 @click="checkPics"
                 class="mr10"
                 v-if="isShow !== 0"
-                >使用选中图片</Button
+                >使用选中图片</el-button
               >
               <Upload
                 :show-upload-list="false"
@@ -46,11 +46,15 @@
                 :on-success="handleSuccess"
                 style="margin-top: 1px; display: inline-block"
               >
-                <Button type="primary">上传图片</Button>
+                <el-button type="primary">上传图片</el-button>
               </Upload>
-              <!--<Button type="success" @click.stop="add" class="mr10">添加分类</Button>-->
-              <Button type="error" class="mr10" :disabled="checkPicList.length === 0" @click.stop="editPicList('图片')"
-                >删除图片</Button
+              <!--<el-button type="success" @click.stop="add" class="mr10">添加分类</el-button>-->
+              <el-button
+                type="error"
+                class="mr10"
+                :disabled="checkPicList.length === 0"
+                @click.stop="editPicList('图片')"
+                >删除图片</el-button
               >
               <i-select :value="pids" placeholder="图片移动至" style="width: 250px" class="treeSel">
                 <i-option v-for="(item, index) of list" :value="item.value" :key="index" style="display: none">
@@ -64,10 +68,10 @@
                   class="treeBox"
                 ></Tree>
               </i-select>
-            </Col>
+            </el-col>
           </div>
           <div class="pictrueList acea-row">
-            <Row :gutter="24" class="conter">
+            <el-row :gutter="24" class="conter">
               <div v-show="isShowPic" class="imagesNo">
                 <Icon type="ios-images" size="60" color="#dbdbdb" />
                 <span class="imagesNo_sp">图片库为空</span>
@@ -98,13 +102,13 @@
                     <p style="width: 80%" v-if="!item.isEdit">
                       {{ item.editName }}
                     </p>
-                    <Input
+                    <el-input
                       size="small"
                       style="width: 80%"
                       type="text"
                       v-model="item.real_name"
                       v-else
-                      @on-blur="bindTxt(item)"
+                      @blur="bindTxt(item)"
                     />
                     <span
                       class="iconfont iconbianji1"
@@ -117,21 +121,21 @@
                   </div>
                 </div>
               </div>
-              <!--<Col class="mb20" v-bind="gridPic"-->
+              <!--<el-col class="mb20" v-bind="gridPic"-->
               <!--v-for="(item, index) in pictrueList" :key="index" >-->
               <!--<div class="pictrueList_pic">-->
               <!--<img :class="item.isSelect ? 'on': '' " v-lazy="item.satt_dir"-->
               <!--@click.stop="changImage(item, index, pictrueList)"/>-->
               <!--</div>-->
-              <!--</Col>-->
-            </Row>
+              <!--</el-col>-->
+            </el-row>
           </div>
           <div class="footer acea-row row-right">
-            <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="fileData.limit" />
+            <pagination v-if="total" :total="total" :page.sync="fileData.page" :limit.sync="fileData.limit" @pagination="pageChange" />
           </div>
         </div>
-      </Col>
-    </Row>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -648,8 +652,7 @@ export default {
           this.$Message.error(res.msg);
         });
     },
-    pageChange(index) {
-      this.fileData.page = index;
+    pageChange() {
       this.getFileList();
       this.checkPicList = [];
     },

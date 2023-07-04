@@ -1,76 +1,112 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form :model="gradeFrom" :label-width="labelWidth" :label-position="labelPosition" @submit.native.prevent>
-        <Row type="flex" :gutter="24">
-          <Col v-bind="grid">
-            <FormItem label="批次名称：" label-for="title">
-              <Input
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form :model="gradeFrom" :label-width="labelWidth" :label-position="labelPosition" @submit.native.prevent>
+        <el-row :gutter="24">
+          <el-col v-bind="grid">
+            <el-form-item label="批次名称：" label-for="title">
+              <el-input
                 search
                 enter-button
                 v-model="gradeFrom.title"
                 placeholder="请输入批次名称"
                 @on-search="userSearchs"
               />
-            </FormItem>
-          </Col>
-        </Row>
-        <Row type="flex">
-          <Col v-bind="grid">
-            <Button type="primary" icon="md-add" @click="addBatch" class="mr20">添加批次</Button>
-            <Button @click="getMemberScan">下载二维码</Button>
-          </Col>
-        </Row>
-      </Form>
-      <Table
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col v-bind="grid">
+            <el-button type="primary" icon="md-add" @click="addBatch" class="mr20">添加批次</el-button>
+            <el-button @click="getMemberScan">下载二维码</el-button>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table
         class="mt25"
         :columns="columns"
         :data="tbody"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row, index }" slot="status">
-          <i-switch
-            v-model="row.status"
-            :value="row.status"
-            :true-value="1"
-            :false-value="0"
-            @on-change="onchangeIsShow(row)"
-            size="large"
-          >
-            <span slot="open">激活</span>
-            <span slot="close">冻结</span>
-          </i-switch>
-        </template>
-        <template slot-scope="{ row, index }" slot="action">
-          <template>
-            <Dropdown @on-click="changeMenu(row, $event, index)" :transfer="true">
-              <a href="javascript:void(0)">
-                更多
-                <Icon type="ios-arrow-down"></Icon>
-              </a>
-              <DropdownMenu slot="list">
-                <DropdownItem name="1">编辑批次名</DropdownItem>
-                <DropdownItem name="2">查看卡列表</DropdownItem>
-                <DropdownItem name="3">导出</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
+        <el-table-column label="编号" width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
           </template>
-        </template>
-      </Table>
+        </el-table-column>
+        <el-table-column label="批次名称" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.title }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="体验天数" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.use_day }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="发卡总数量" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.total_num }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="使用数量" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.use_num }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="制卡时间" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.add_time }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否激活" min-width="100">
+          <template slot-scope="scope">
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.status"
+              :value="scope.row.status"
+              @change="onchangeIsShow(scope.row)"
+              size="large"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="备注" min-width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row.remark }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="制卡时间" min-width="100">
+          <template slot-scope="scope">
+            <span>{{ scope.row.add_time }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="170">
+          <template slot-scope="scope">
+            <el-dropdown size="small" @command="changeMenu(scope.row, $event, index)" :transfer="true">
+              <span class="el-dropdown-link">更多<i class="el-icon-arrow-down el-icon--right"></i> </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item command="1">编辑批次名</el-dropdown-item>
+                <el-dropdown-item command="2">查看卡列表</el-dropdown-item>
+                <el-dropdown-item command="3">导出</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="gradeFrom.page"
-          :page-size="gradeFrom.limit"
-          show-elevator
-          show-total
-          @on-change="pageChange"
+          :page.sync="gradeFrom.page"
+          :limit.sync="gradeFrom.limit"
+          @pagination="getMemberBatch"
         />
       </div>
-    </Card>
+    </el-card>
     <Modal v-model="modal" title="添加批次" footer-hide>
       <form-create v-model="fapi" :rule="rule" @submit="onSubmit"></form-create>
     </Modal>
@@ -275,7 +311,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -352,11 +388,6 @@ export default {
           this.export(row);
           break;
       }
-    },
-    // 分页
-    pageChange(index) {
-      this.gradeFrom.page = index;
-      this.getMemberBatch();
     },
     // 添加批次弹窗
     addBatch() {

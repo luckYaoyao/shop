@@ -1,79 +1,145 @@
 <template>
   <div class="message">
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
       <div class="mb20">
-        <Tabs v-model="currentTab" @on-click="changeTab">
-          <TabPane :label="item.label" :name="item.value.toString()" v-for="(item, index) in headerList" :key="index" />
-        </Tabs>
+        <el-tabs v-model="currentTab" @tab-click="changeTab">
+          <el-tab-pane
+            :label="item.label"
+            :name="item.value.toString()"
+            v-for="(item, index) in headerList"
+            :key="index"
+          />
+        </el-tabs>
       </div>
-      <Row type="flex" class="mb20" v-if="currentTab == 1">
-        <Col>
-          <Button
+      <el-row class="mb20" v-if="currentTab == 1">
+        <el-col>
+          <el-button
             v-auth="['app-wechat-template-sync']"
             icon="md-list"
             type="success"
             @click="routineTemplate"
             style="margin-left: 20px"
-            >同步小程序订阅消息</Button
+            >同步小程序订阅消息</el-button
           >
-          <Button
+          <el-button
             v-auth="['app-wechat-template-sync']"
             icon="md-list"
             type="success"
             @click="wechatTemplate"
             style="margin-left: 20px"
-            >同步微信模版消息</Button
+            >同步微信模版消息</el-button
           >
-        </Col>
-      </Row>
+        </el-col>
+      </el-row>
       <Alert v-if="currentTab == 1" :closable="true">
         <template slot="desc">
           1、公众号：登录微信公众号后台，选择模版消息，将模版消息的所在行业修改副行业为《其他/其他》<br />
           2、小程序：登录微信小程序后台，基本设置，服务类目增加《生活服务> 百货/超市/便利店》
         </template>
       </Alert>
-      <Table
+      <el-table
         :columns="currentTab == 1 ? columns : columns2"
         :data="levelLists"
         ref="table"
         class="mt25"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <template slot-scope="{ row, index }" slot="name">
-          <span class="table">
-            {{ row.name }}
-          </span>
-        </template>
-        <template slot-scope="{ row, index }" slot="title">
-          <span class="table">{{ row.title }}</span>
-        </template>
-        <template
-          slot-scope="{ row }"
-          v-for="item in ['is_system', 'is_wechat', 'is_routine', 'is_sms', 'is_ent_wechat']"
-          :slot="item"
-        >
-          <div v-if="item === 'is_ent_wechat' && currentTab == 1" :key="index">--</div>
-          <i-switch
-            v-model="row[item]"
-            :value="row[item]"
-            :true-value="1"
-            :false-value="2"
-            @on-change="changeSwitch(row, item)"
-            size="large"
-            v-if="row[item] > 0 && currentTab !== 1"
-          >
-            <span slot="open">开启</span>
-            <span slot="close">关闭</span>
-          </i-switch>
-        </template>
-        <template slot-scope="{ row, index }" slot="setting">
-          <span class="setting btn" @click="setting(item, row)">设置</span>
-        </template>
-      </Table>
-    </Card>
+        <el-table-column label="ID" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="通知类型" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="通知场景说明" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.title }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="站内信" min-width="130">
+          <template slot-scope="scope">
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.is_system"
+              :value="scope.row.is_system"
+              @change="changeSwitch(scope.row, item)"
+              size="large"
+              :disabled="scope.row.is_system > 0 && currentTab !== 1"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="公众号模板" min-width="130">
+          <template slot-scope="scope">
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.is_wechat"
+              :value="scope.row.is_wechat"
+              @change="changeSwitch(scope.row, item)"
+              size="large"
+              :disabled="scope.row.is_wechat > 0 && currentTab !== 1"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+
+        <el-table-column label="发送短信" min-width="130">
+          <template slot-scope="scope">
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.is_sms"
+              :value="scope.row.is_sms"
+              @change="changeSwitch(scope.row, item)"
+              size="large"
+              :disabled="scope.row.is_sms > 0 && currentTab !== 1"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="企业微信" min-width="130" v-if="currentTab != 1">
+          <template slot-scope="scope">
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.is_ent_wechat"
+              :value="scope.row.is_ent_wechat"
+              @change="changeSwitch(scope.row, item)"
+              size="large"
+              :disabled="scope.row.is_ent_wechat > 0 && currentTab !== 1"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="小程序订阅" min-width="130" v-if="currentTab == 1">
+          <template slot-scope="scope">
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
+              v-model="scope.row.is_routine"
+              :value="scope.row.is_routine"
+              @change="changeSwitch(scope.row, item)"
+              size="large"
+              :disabled="scope.row.is_routine > 0 && currentTab !== 1"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="170">
+          <template slot-scope="scope">
+            <span class="setting btn" @click="setting(item, scope.row)">设置</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
   </div>
 </template>
 
@@ -88,106 +154,6 @@ export default {
       headerList: [
         { label: '通知会员', value: '1' },
         { label: '通知平台', value: '2' },
-      ],
-      columns: [
-        {
-          title: 'ID',
-          key: 'id',
-          align: 'center',
-          width: 60,
-        },
-        {
-          title: '通知类型',
-          slot: 'name',
-          align: 'center',
-          width: 200,
-        },
-        {
-          title: '通知场景说明',
-          slot: 'title',
-          align: 'center',
-          minWidth: 200,
-        },
-        {
-          title: '站内信',
-          slot: 'is_system',
-          align: 'center',
-          minWidth: 100,
-        },
-        {
-          title: '公众号模板',
-          slot: 'is_wechat',
-          align: 'center',
-          minWidth: 100,
-        },
-        {
-          title: '小程序订阅',
-          slot: 'is_routine',
-          align: 'center',
-          minWidth: 100,
-        },
-        {
-          title: '发送短信',
-          slot: 'is_sms',
-          align: 'center',
-          minWidth: 100,
-        },
-        {
-          title: '设置',
-          slot: 'setting',
-          width: 150,
-          align: 'center',
-        },
-      ],
-      columns2: [
-        {
-          title: 'ID',
-          key: 'id',
-          align: 'center',
-          width: 60,
-        },
-        {
-          title: '通知类型',
-          slot: 'name',
-          align: 'center',
-          width: 200,
-        },
-        {
-          title: '通知场景说明',
-          slot: 'title',
-          align: 'center',
-          minWidth: 200,
-        },
-        {
-          title: '站内信',
-          slot: 'is_system',
-          align: 'center',
-          minWidth: 100,
-        },
-        {
-          title: '公众号模板',
-          slot: 'is_wechat',
-          align: 'center',
-          minWidth: 100,
-        },
-        {
-          title: '发送短信',
-          slot: 'is_sms',
-          align: 'center',
-          minWidth: 100,
-        },
-        {
-          title: '企业微信',
-          slot: 'is_ent_wechat',
-          align: 'center',
-          minWidth: 100,
-        },
-        {
-          title: '设置',
-          slot: 'setting',
-          width: 150,
-          align: 'center',
-        },
       ],
       levelLists: [],
       currentTab: '1',
@@ -208,8 +174,8 @@ export default {
           this.$Message.error(err.msg);
         });
     },
-    changeTab(data) {
-      getNotificationList(data).then((res) => {
+    changeTab() {
+      getNotificationList(this.currentTab).then((res) => {
         this.levelLists = res.data;
       });
     },

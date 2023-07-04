@@ -1,8 +1,8 @@
 <template>
   <div @resize="handleResize">
-    <Row :gutter="24">
-      <Col :xl="16" :lg="12" :md="24" :sm="24" :xs="24" class="ivu-mb dashboard-console-visit">
-        <Card :bordered="false" dis-hover>
+    <el-row :gutter="24">
+      <el-col :xl="16" :lg="12" :md="24" :sm="24" :xs="24" class="ivu-mb dashboard-console-visit">
+        <el-card :bordered="false" shadow="never">
           <div slot="title">
             <Avatar icon="ios-pulse" size="small" style="color: #1890ff; background-color: #e6f7ff" />
             <span class="ivu-pl-8">用户</span>
@@ -14,18 +14,18 @@
             :series="series"
             v-if="infoList && series.length !== 0"
           ></echarts-from>
-        </Card>
-      </Col>
-      <Col :xl="8" :lg="12" :md="24" :sm="24" :xs="24">
-        <Card :bordered="false" dis-hover class="dashboard-console-visit">
+        </el-card>
+      </el-col>
+      <el-col :xl="8" :lg="12" :md="24" :sm="24" :xs="24">
+        <el-card :bordered="false" shadow="never" class="dashboard-console-visit">
           <div slot="title">
             <Avatar icon="ios-analytics" size="small" style="color: #1890ff; background-color: #e6f7ff" />
             <span class="ivu-pl-8">购买用户统计</span>
           </div>
           <echarts-from ref="visitChart" :infoList="infoList" :echartsTitle="circle"></echarts-from>
-        </Card>
-      </Col>
-    </Row>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 

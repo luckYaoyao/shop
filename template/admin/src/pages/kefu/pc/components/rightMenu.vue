@@ -29,9 +29,9 @@
           </div>
           <!-- <div class="item">
                         <span>分组</span>
-                        <Select v-model="activeUserInfo.group_id" size="small" @on-change="onChange" style="flex:1;">
-                            <Option v-for="item in userGroup" :value="item.id" :key="item.value">{{ item.group_name }}</Option>
-                        </Select>
+                        <el-select v-model="activeUserInfo.group_id" size="small" @change="onChange" style="flex:1;">
+                            <el-option v-for="item in userGroup" :value="item.id" :key="item.value">{{ item.group_name }}</el-option>
+                        </el-select>
                     </div> -->
           <div class="label-list">
             <span>分组</span>
@@ -94,7 +94,7 @@
           </div>
         </div>
         <div class="search-box">
-          <Input
+          <el-input
             class="search_box"
             prefix="ios-search"
             @on-enter="orderSearch"
@@ -144,38 +144,38 @@
                   <div class="info-item"><span>实收款：</span>¥ {{ item.pay_price }}</div>
                 </div>
                 <div class="btn-wrapper">
-                  <Button
+                  <el-button
                     class="btn"
                     type="primary"
                     v-if="item._status._type == 1 && item._status._type != 0 && item.shipping_type != 2"
                     @click.stop="openDelivery(item)"
-                    >发货</Button
+                    >发货</el-button
                   >
-                  <Button
+                  <el-button
                     class="btn"
                     type="info"
                     ghost
                     style="color: #1890ff; border-color: #1890ff"
                     v-if="item.refund_status == 1"
                     @click.stop="orderRecord(item.id)"
-                    >退款</Button
+                    >退款</el-button
                   >
-                  <Button
+                  <el-button
                     class="btn"
                     type="info"
                     ghost
                     style="color: #1890ff; border-color: #1890ff"
                     @click.stop="orderEdit(item.id)"
                     v-if="item._status._type == 0"
-                    >改价</Button
+                    >改价</el-button
                   >
-                  <Button
+                  <el-button
                     class="btn"
                     type="info"
                     ghost
                     style="color: #1890ff; border-color: #1890ff"
                     @click.stop="bindRemark(item)"
-                    >备注</Button
+                    >备注</el-button
                   >
                 </div>
               </div>
@@ -202,7 +202,7 @@
           </div>
         </div>
         <div class="search-box">
-          <Input
+          <el-input
             class="search_box"
             @on-enter="productSearch"
             v-model="storeName"

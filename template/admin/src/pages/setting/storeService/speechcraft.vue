@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Row class="ivu-mt box-wrapper">
-      <Col v-bind="grid1" class="left-wrapper">
+    <el-row class="ivu-mt box-wrapper">
+      <el-col v-bind="grid1" class="left-wrapper">
         <Menu :theme="theme3" :active-name="sortName" width="auto">
           <MenuGroup>
             <MenuItem
@@ -27,53 +27,81 @@
             </MenuItem>
           </MenuGroup>
         </Menu>
-      </Col>
-      <Col v-bind="grid2" ref="rightBox">
-        <Card :bordered="false" dis-hover>
-          <Row type="flex" class="mb20">
-            <Col span="24">
-              <Button v-auth="['setting-store_service-add']" type="primary" icon="md-add" @click="add" class="mr10"
-                >添加话术</Button
+      </el-col>
+      <el-col v-bind="grid2" ref="rightBox">
+        <el-card :bordered="false" shadow="never">
+          <el-row class="mb20">
+            <el-col :span="24">
+              <el-button v-auth="['setting-store_service-add']" type="primary" icon="md-add" @click="add" class="mr10"
+                >添加话术</el-button
               >
-              <Button
+              <el-button
                 v-auth="['setting-store_service-add']"
                 type="success"
                 icon="md-add"
                 @click="addSort"
                 style="margin-left: 10px"
-                >添加分类</Button
+                >添加分类</el-button
               >
-            </Col>
-          </Row>
-          <Table
-            :columns="columns1"
+            </el-col>
+          </el-row>
+          <el-table
             :data="tableList"
             :loading="loading"
-            highlight-row
+            highlight-current-row
             no-userFrom-text="暂无数据"
             no-filtered-userFrom-text="暂无筛选结果"
           >
-            <template slot-scope="{ row, index }" slot="avatar">
-              <div class="tabBox_img" v-viewer>
-                <img v-lazy="row.avatar" />
-              </div>
-            </template>
-            <template slot-scope="{ row, index }" slot="add_time">
-              <span> {{ row.add_time }}</span>
-            </template>
-
-            <template slot-scope="{ row, index }" slot="action">
-              <a @click="edit(row)">编辑</a>
-              <Divider type="vertical" />
-              <a @click="del(row, '删除客服', index)">删除</a>
-            </template>
-          </Table>
+            <el-table-column label="ID" width="80">
+              <template slot-scope="scope">
+                <span>{{ scope.row.id }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="分类" min-width="120">
+              <template slot-scope="scope">
+                <span>{{ scope.row.cate_name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="标题" min-width="120">
+              <template slot-scope="scope">
+                <span>{{ scope.row.title }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="详情" min-width="120">
+              <template slot-scope="scope">
+                <span>{{ scope.row.message }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="排序" min-width="120">
+              <template slot-scope="scope">
+                <span>{{ scope.row.sort }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="添加时间" min-width="120">
+              <template slot-scope="scope">
+                <span>{{ scope.row.add_time }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="操作" fixed="right" width="170">
+              <template slot-scope="scope">
+                <a @click="edit(scope.row)">编辑</a>
+                <el-divider direction="vertical"></el-divider>
+                <a @click="del(scope.row, '删除客服', index)">删除</a>
+              </template>
+            </el-table-column>
+          </el-table>
           <div class="acea-row row-right page">
-            <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="tableFrom.limit" />
+            <pagination
+              v-if="total"
+              :total="total"
+              :page.sync="tableFrom.page"
+              :limit.sync="tableFrom.limit"
+              @pagination="getList"
+            />
           </div>
-        </Card>
-      </Col>
-    </Row>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -101,7 +129,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 80;
+      return this.isMobile ? undefined : '85px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -189,86 +217,7 @@ export default {
       },
       loading: false,
       tableList: [],
-      columns1: [
-        {
-          title: 'ID',
-          key: 'id',
-          width: 80,
-        },
-        {
-          title: '分类',
-          key: 'cate_name',
-          minWidth: 120,
-        },
-        {
-          title: '标题',
-          key: 'title',
-          minWidth: 120,
-        },
-        {
-          title: '详情',
-          key: 'message',
-          minWidth: 320,
-        },
-        {
-          title: '排序',
-          key: 'sort',
-          minWidth: 60,
-        },
-        {
-          title: '添加时间',
-          slot: 'add_time',
-          minWidth: 120,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 150,
-        },
-      ],
-      columns4: [
-        {
-          type: 'selection',
-          width: 60,
-          align: 'center',
-        },
-        {
-          title: 'ID',
-          key: 'uid',
-          width: 80,
-        },
-        {
-          title: '微信用户名称',
-          key: 'nickname',
-          minWidth: 160,
-        },
-        {
-          title: '客服头像',
-          slot: 'headimgurl',
-          minWidth: 60,
-        },
-        {
-          title: '用户类型',
-          slot: 'user_type',
-          width: 100,
-        },
-        {
-          title: '性别',
-          slot: 'sex',
-          minWidth: 60,
-        },
-        {
-          title: '地区',
-          slot: 'country',
-          minWidth: 120,
-        },
-        {
-          title: '是否关注公众号',
-          slot: 'subscribe',
-          minWidth: 120,
-        },
-      ],
+
       loading2: false,
       total2: 0,
       addFrom: {
@@ -535,10 +484,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.tableFrom.page = index;
-      this.getList();
     },
     // 修改是否显示
     onchangeIsShow(row) {

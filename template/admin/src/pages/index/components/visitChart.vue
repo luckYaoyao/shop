@@ -1,23 +1,23 @@
 <template>
   <div @resize="handleResize">
-    <Row :gutter="24">
-      <Col san="24" class="ivu-mb">
-        <Card :bordered="false" dis-hover class="dashboard-console-visit">
+    <el-row :gutter="24">
+      <el-col san="24" class="ivu-mb">
+        <el-card :bordered="false" shadow="never" class="dashboard-console-visit">
           <div slot="title">
-            <Row type="flex" justify="center" align="middle">
-              <Col span="8">
+            <el-row  justify="center" align="middle">
+              <el-col :span="8">
                 <Avatar icon="ios-podium" size="small" style="color: #1890ff; background-color: #e6f7ff" />
                 <span class="ivu-pl-8">订单</span>
-              </Col>
-              <Col span="16" class="ivu-text-right">
-                <RadioGroup v-model="visitDate" type="button" class="ivu-mr-8" @on-change="handleChangeVisitType">
-                  <Radio label="thirtyday">30天</Radio>
-                  <Radio label="week">周</Radio>
-                  <Radio label="month">月</Radio>
-                  <Radio label="year">年</Radio>
-                </RadioGroup>
-              </Col>
-            </Row>
+              </el-col>
+              <el-col :span="16" class="ivu-text-right">
+                <el-radio-group v-model="visitDate" type="button" class="ivu-mr-8" @change="handleChangeVisitType">
+                  <el-radio label="thirtyday">30天</el-radio>
+                  <el-radio label="week">周</el-radio>
+                  <el-radio label="month">月</el-radio>
+                  <el-radio label="year">年</el-radio>
+                </el-radio-group>
+              </el-col>
+            </el-row>
           </div>
           <h4>订单量趋势</h4>
           <echarts-from
@@ -27,9 +27,9 @@
             v-if="infoList"
             :yAxisData="yAxisData"
           ></echarts-from>
-        </Card>
-      </Col>
-    </Row>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>

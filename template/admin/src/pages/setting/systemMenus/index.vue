@@ -1,34 +1,34 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="roleData"
         :model="roleData"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <Row type="flex" :gutter="24">
-          <!-- <Col v-bind="grid">
-            <FormItem label="规则状态：">
-              <Select v-model="roleData.is_show" placeholder="请选择" clearable @on-change="getData">
-                <Option value="1">显示</Option>
-                <Option value="0">不显示</Option>
-              </Select>
-            </FormItem>
-          </Col> -->
-          <Col v-bind="grid">
-            <FormItem label="按钮名称：" prop="status2" label-for="status2">
-              <Input v-model="roleData.keyword" search enter-button placeholder="请输入按钮名称" @on-search="getData" />
-            </FormItem>
-          </Col>
-        </Row>
-        <!-- <Row type="flex">
-          <Col v-bind="grid">
-            <Button type="primary" @click="menusAdd('添加规则')" icon="md-add">添加规则 </Button>
-          </Col>
-        </Row> -->
-      </Form>
+        <el-row  :gutter="24">
+          <!-- <el-col v-bind="grid">
+            <el-form-item label="规则状态：">
+              <el-select v-model="roleData.is_show" placeholder="请选择" clearable @change="getData">
+                <el-option value="1">显示</el-option>
+                <el-option value="0">不显示</el-option>
+              </el-select>
+            </el-form-item>
+          </el-col> -->
+          <el-col v-bind="grid">
+            <el-form-item label="按钮名称：" prop="status2" label-for="status2">
+              <el-input v-model="roleData.keyword" search enter-button placeholder="请输入按钮名称" @on-search="getData" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <!-- <el-row >
+          <el-col v-bind="grid">
+            <el-button type="primary" @click="menusAdd('添加规则')" icon="md-add">添加规则 </el-button>
+          </el-col>
+        </el-row> -->
+      </el-form>
       <vxe-table
         :border="false"
         class="vxeTable mt25"
@@ -51,17 +51,15 @@
         <vxe-table-column field="sort" title="排序" width="150"></vxe-table-column>
         <vxe-table-column field="flag" title="是否显示" width="150">
           <template v-slot="{ row }">
-            <i-switch
+            <el-switch :active-value="1"  :inactive-value="0"
               v-model="row.is_show_path"
               :value="row.is_show_path"
-              :true-value="1"
-              :false-value="0"
-              @on-change="onchangeIsShow(row)"
+              @change="onchangeIsShow(row)"
               size="large"
             >
-              <span slot="open">显示</span>
-              <span slot="close">隐藏</span>
-            </i-switch>
+              
+              
+             </el-switch>
           </template>
         </vxe-table-column>
         <vxe-table-column field="date" title="操作" align="center" width="150" fixed="right">
@@ -70,7 +68,7 @@
           </template>
         </vxe-table-column>
       </vxe-table>
-    </Card>
+    </el-card>
     <menus-from
       :formValidate="formValidate"
       :titleFrom="titleFrom"
@@ -92,7 +90,7 @@
         <Alert
           >基础接口，可多选，并且添加后不会再展示出现；删除权限后才会出现；公共接口，可多选，并且添加后会继续展示；</Alert
         >
-        <Input
+        <el-input
           class="mr10"
           v-model="searchRule"
           placeholder="输入关键词搜索"
@@ -102,8 +100,8 @@
           @on-enter="searchRules"
           @on-clear="searchRules"
         />
-        <Button class="mr10" type="primary" @click="searchRules">搜索</Button>
-        <Button @click="init">重置</Button>
+        <el-button class="mr10" type="primary" @click="searchRules">搜索</el-button>
+        <el-button @click="init">重置</el-button>
       </div>
       <div class="route-list">
         <div class="tree">
@@ -133,9 +131,9 @@
           </div>
         </div>
       </div>
-      <!-- <Tabs v-model="routeType" @on-click="changTab">
-        <TabPane :label="item.name" :name="'' + index" v-for="(item, index) in foundationList" :key="item"></TabPane>
-      </Tabs> -->
+      <!-- <el-tabs v-model="routeType" @on-click="changTab">
+        <el-tab-pane :label="item.name" :name="'' + index" v-for="(item, index) in foundationList" :key="item"></el-tab-pane>
+      </el-tabs> -->
     </Modal>
   </div>
 </template>
@@ -204,7 +202,7 @@ export default {
   computed: {
     ...mapState('admin/layout', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 75;
+      return this.isMobile ? undefined : '75px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';

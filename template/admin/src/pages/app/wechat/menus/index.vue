@@ -3,13 +3,13 @@
     <div class="i-layout-page-header header-title">
       <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
       <!-- 公众号设置 -->
-      <Row :gutter="24" type="flex">
-        <Col span="24" class="ml40">
+      <el-row :gutter="24" >
+        <el-col :span="24" class="ml40">
           <!-- 预览功能 -->
-          <Col :span="24">
-            <Col :xl="7" :lg="7" :md="22" :sm="22" :xs="22" class="left mb15">
+          <el-col ::span="24">
+            <el-col :xl="7" :lg="7" :md="22" :sm="22" :xs="22" class="left mb15">
               <img class="top" src="../../../../assets/images/mobilehead.png" />
               <img class="bottom" src="@/assets/images/mobilefoot.png" />
               <div style="background: #f4f5f9; min-height: 438px; position: absolute; top: 63px; width: 320px"></div>
@@ -38,71 +38,71 @@
                   <div class="text" @click="addtext"><Icon type="ios-add" /></div>
                 </div>
               </div>
-            </Col>
-            <Col :xl="11" :lg="12" :md="22" :sm="22" :xs="22">
-              <Tabs value="name1" v-if="checkedMenuId !== null">
-                <TabPane label="菜单信息" name="name1">
-                  <Col span="24" class="userAlert">
+            </el-col>
+            <el-col :xl="11" :lg="12" :md="22" :sm="22" :xs="22">
+              <el-tabs value="name1" v-if="checkedMenuId !== null">
+                <el-tab-pane label="菜单信息" name="name1">
+                  <el-col :span="24" class="userAlert">
                     <div class="box-card right">
                       <Alert show-icon closable class="spwidth"> 已添加子菜单，仅可设置菜单名称</Alert>
-                      <Form
+                      <el-form
                         ref="formValidate"
                         :model="formValidate"
                         :rules="ruleValidate"
-                        :label-width="100"
+                        label-width="100px"
                         class="mt20"
                       >
-                        <FormItem label="菜单名称" prop="name">
-                          <Input v-model="formValidate.name" placeholder="请填写菜单名称" class="spwidth"></Input>
-                        </FormItem>
-                        <FormItem label="规则状态" prop="type">
-                          <Select v-model="formValidate.type" placeholder="请选择规则状态" class="spwidth">
-                            <Option value="click">关键字</Option>
-                            <Option value="view">跳转网页</Option>
-                            <Option value="miniprogram">小程序</Option>
-                          </Select>
-                        </FormItem>
+                        <el-form-item label="菜单名称" prop="name">
+                          <el-input v-model="formValidate.name" placeholder="请填写菜单名称" class="spwidth"></el-input>
+                        </el-form-item>
+                        <el-form-item label="规则状态" prop="type">
+                          <el-select v-model="formValidate.type" placeholder="请选择规则状态" class="spwidth">
+                            <el-option value="click" label="关键字"></el-option>
+                            <el-option value="view" label="跳转网页"></el-option>
+                            <el-option value="miniprogram" label="小程序"></el-option>
+                          </el-select>
+                        </el-form-item>
                         <div v-if="formValidate.type === 'click'">
-                          <FormItem label="关键字" prop="key">
-                            <Input v-model="formValidate.key" placeholder="请填写关键字" class="spwidth"></Input>
-                          </FormItem>
+                          <el-form-item label="关键字" prop="key">
+                            <el-input v-model="formValidate.key" placeholder="请填写关键字" class="spwidth"></el-input>
+                          </el-form-item>
                         </div>
                         <div v-if="formValidate.type === 'miniprogram'">
-                          <FormItem label="appid" prop="appid">
-                            <Input v-model="formValidate.appid" placeholder="请填写appid" class="spwidth"></Input>
-                          </FormItem>
-                          <FormItem label="小程序路径" prop="pagepath">
-                            <Input
+                          <el-form-item label="appid" prop="appid">
+                            <el-input v-model="formValidate.appid" placeholder="请填写appid" class="spwidth"></el-input>
+                          </el-form-item>
+                          <el-form-item label="小程序路径" prop="pagepath">
+                            <el-input
                               v-model="formValidate.pagepath"
                               placeholder="请填写小程序路径"
                               class="spwidth"
-                            ></Input>
-                          </FormItem>
-                          <FormItem label="备用网页" prop="url">
-                            <Input v-model="formValidate.url" placeholder="请填写备用网页" class="spwidth"></Input>
-                          </FormItem>
+                            ></el-input>
+                          </el-form-item>
+                          <el-form-item label="备用网页" prop="url">
+                            <el-input v-model="formValidate.url" placeholder="请填写备用网页" class="spwidth"></el-input>
+                          </el-form-item>
                         </div>
                         <div v-if="formValidate.type === 'view'">
-                          <FormItem label="跳转地址" prop="url">
-                            <Input v-model="formValidate.url" placeholder="请填写跳转地址" class="spwidth"></Input>
-                          </FormItem>
+                          <el-form-item label="跳转地址" prop="url">
+                            <el-input v-model="formValidate.url" placeholder="请填写跳转地址" class="spwidth"></el-input>
+                          </el-form-item>
                         </div>
-                      </Form>
+                      </el-form>
                     </div>
-                  </Col>
-                </TabPane>
-                <Button size="small" type="error" slot="extra" @click="deltMenus">删除</Button>
-              </Tabs>
-              <Col :span="24" v-if="isTrue">
-                <Button type="primary" style="display: block; margin: 10px auto" @click="submenus('formValidate')"
-                  >保存并发布</Button
+                  </el-col>
+                </el-tab-pane>
+                <el-button size="small" type="error" slot="extra" @click="deltMenus">删除</el-button>
+              </el-tabs>
+              <el-col ::span="24" v-if="isTrue">
+                <el-button type="primary" style="display: block; margin: 10px auto" @click="submenus('formValidate')"
+                  >保存并发布</el-button
                 >
-              </Col>
-            </Col>
-          </Col>
-        </Col>
-      </Row>
-    </Card>
+              </el-col>
+            </el-col>
+          </el-col>
+        </el-col>
+      </el-row>
+    </el-card>
 
     <Modal v-model="modal2" width="360">
       <p slot="header" style="color: #f60; text-align: center">
@@ -113,7 +113,7 @@
         <p>确定删除吗？</p>
       </div>
       <div slot="footer">
-        <Button type="error" size="large" long @click="del">确定</Button>
+        <el-button type="error" size="large" long @click="del">确定</el-button>
       </div>
     </Modal>
   </div>

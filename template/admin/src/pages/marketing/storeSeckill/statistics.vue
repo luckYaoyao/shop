@@ -3,73 +3,83 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <span>
-          <Button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
+          <el-button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</el-button>
         </span>
-        <Divider type="vertical" />
+        <el-divider direction="vertical"></el-divider>
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
       </div>
     </div>
     <cards-data :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
     <div>
-      <Tabs v-model="currentTab" @on-click="onClickTab">
-        <TabPane v-for="(item, index) in tabs" :label="item.label" :name="item.type" :key="index" />
-      </Tabs>
+      <el-tabs v-model="currentTab" @tab-click="onClickTab">
+        <el-tab-pane v-for="(item, index) in tabs" :label="item.label" :name="item.type" :key="index" />
+      </el-tabs>
     </div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="pagination"
         :model="pagination"
         :label-width="labelWidth"
         label-position="right"
         @submit.native.prevent
       >
-        <Row type="flex" :gutter="24">
-          <Col span="6" v-if="type == 1">
-            <FormItem label="订单状态：" label-for="status">
-              <Select v-model="pagination.status" clearable placeholder="请选择订单状态" @on-change="changeStatus">
-                <Option value="0">未支付</Option>
-                <Option value="1">待发货</Option>
-                <Option value="2">待收货</Option>
-                <Option value="3">待评价</Option>
-                <Option value="4">交易完成</Option>
-              </Select>
-            </FormItem>
-          </Col>
-          <Col span="6">
-            <FormItem label="搜索：" label-for="title">
-              <Input
+        <el-row :gutter="24">
+          <el-col :span="6" v-if="type == 1">
+            <el-form-item label="订单状态：" label-for="status">
+              <el-select v-model="pagination.status" clearable placeholder="请选择订单状态" @change="changeStatus">
+                <el-option value="0" label="未支付"></el-option>
+                <el-option value="1" label="待发货"></el-option>
+                <el-option value="2" label="待收货"></el-option>
+                <el-option value="3" label="待评价"></el-option>
+                <el-option value="4" label="交易完成"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="搜索：" label-for="title">
+              <el-input
                 search
                 enter-button
                 v-model="pagination.real_name"
                 placeholder="请输入用户姓名|手机号|UID"
                 @on-search="searchList"
               />
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
-      <Table
-        :columns="type ? thead2 : thead"
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <el-table
         :data="tbody"
         ref="table"
         class="mt25"
-        :loading="loading"
-        highlight-row
+        v-loading="loading"
+        highlight-current-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-      </Table>
+        <el-table-column
+          :label="item.title"
+          :min-width="item.minWidth || 100"
+          v-for="(item, index) in type ? thead2 : thead"
+          :key="index"
+        >
+          <template slot-scope="scope">
+            <template v-if="item.key">
+              <span>{{ scope.row[item.key] }}</span>
+            </template>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="pagination.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="pagination.limit"
+          :page.sync="pagination.page"
+          :limit.sync="pagination.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
   </div>
 </template>
 
@@ -195,12 +205,12 @@ export default {
   created() {
     this.id = this.$route.params.id;
     this.getStatistics(this.id);
-    this.getList(this.id);
+    this.getList();
   },
   methods: {
     changeStatus() {
       this.pagination.page = 1;
-      this.getList(this.id);
+      this.getList();
     },
     // 统计
     getStatistics(id) {
@@ -212,7 +222,7 @@ export default {
       });
     },
     // 列表
-    getList(id) {
+    getList() {
       this.loading = true;
       if (this.type == 0) {
         getseckillStatisticsPeople(this.id, this.pagination).then((res) => {
@@ -233,17 +243,12 @@ export default {
     // 标签切换
     onClickTab() {
       this.type = this.currentTab;
-      this.getList(this.id);
+      this.getList();
     },
     // 搜索
     searchList() {
       this.pagination.page = 1;
-      this.getList(this.id);
-    },
-    // 分页
-    pageChange(index) {
-      this.pagination.page = index;
-      this.getList(this.id);
+      this.getList();
     },
   },
 };

@@ -1,21 +1,21 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form ref="formValidate" :model="formValidate" class="tabform" @submit.native.prevent>
-        <Row :gutter="24" type="flex">
-          <Col span="24">
-            <FormItem label="订单时间：">
-              <RadioGroup
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form ref="formValidate" :model="formValidate" class="tabform" @submit.native.prevent>
+        <el-row :gutter="24" >
+          <el-col :span="24">
+            <el-form-item label="订单时间：">
+              <el-radio-group
                 v-model="formValidate.data"
                 type="button"
-                @on-change="selectChange(formValidate.data)"
+                @change="selectChange(formValidate.data)"
                 class="mr"
               >
-                <Radio :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</Radio>
-              </RadioGroup>
+                <el-radio-button :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</el-radio-button>
+              </el-radio-group>
               <DatePicker
                 :editable="false"
-                @on-change="onchangeTime"
+                @change="onchangeTime"
                 :value="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
@@ -23,15 +23,15 @@
                 placeholder="请选择时间"
                 style="width: 200px"
               ></DatePicker>
-            </FormItem> </Col
-        ></Row>
-      </Form>
-    </Card>
+            </el-form-item> </el-col
+        ></el-row>
+      </el-form>
+    </el-card>
     <cards-data :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
     <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
     <Spin size="large" fix v-if="spinShow"></Spin>
     <div class="code-row-bg">
-      <Card :bordered="false" dis-hover class="ivu-mt">
+      <el-card :bordered="false" shadow="never" class="ivu-mt">
         <div class="acea-row row-between-wrapper">
           <div class="header-title">积分来源</div>
           <div>切换样式</div>
@@ -43,8 +43,8 @@
           width="100%"
           v-if="optionData"
         ></echarts-new>
-      </Card>
-      <Card :bordered="false" dis-hover class="ivu-mt">
+      </el-card>
+      <el-card :bordered="false" shadow="never" class="ivu-mt">
         <div class="acea-row row-between-wrapper">
           <div class="header-title">积分消耗</div>
           <div>切换样式</div>
@@ -56,7 +56,7 @@
           width="100%"
           v-if="optionData"
         ></echarts-new>
-      </Card>
+      </el-card>
     </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <Card :bordered="false" dis-hover class="ivu-mt">
-      <Form
+    <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <el-form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
@@ -9,29 +9,29 @@
         class="tabform"
         @submit.native.prevent
       >
-        <Row :gutter="24" type="flex">
-          <Col span="24">
-            <FormItem label="语言分类：">
-              <RadioGroup type="button" v-model="formValidate.is_admin" class="mr15" @on-change="selChange">
-                <Radio :label="item.value" v-for="(item, index) in langType.isAdmin" :key="index"
+        <el-row :gutter="24">
+          <el-col :span="24">
+            <el-form-item label="语言分类：">
+              <el-radio-group type="button" v-model="formValidate.is_admin" class="mr15" @change="selChange">
+                <el-radio-button :label="item.value" v-for="(item, index) in langType.isAdmin" :key="index"
                   >{{ item.title }}
-                </Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col>
-          <Col span="24">
-            <FormItem label="语言类型：">
-              <RadioGroup type="button" v-model="formValidate.type_id" class="mr15" @on-change="selChange">
-                <Radio :label="item.value" v-for="(item, index) in langType.langType" :key="index"
+                </el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="语言类型：">
+              <el-radio-group type="button" v-model="formValidate.type_id" class="mr15" @change="selChange">
+                <el-radio-button :label="item.value" v-for="(item, index) in langType.langType" :key="index"
                   >{{ item.title }}
-                </Radio>
-              </RadioGroup>
-            </FormItem>
-          </Col>
-          <Col span="24">
-            <FormItem label="搜索：">
+                </el-radio-button>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="搜索：">
               <div class="acea-row row-middle">
-                <Input
+                <el-input
                   search
                   enter-button
                   @on-search="selChange"
@@ -41,12 +41,12 @@
                   style="width: 30%"
                 />
               </div>
-            </FormItem>
-          </Col>
-        </Row>
-      </Form>
-    </Card>
-    <Alert class="mt10" closable="true">
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </el-card>
+    <Alert class="mt10" :closable="true">
       使用说明
       <template slot="desc">
         1、前端页面：添加用户端页面语言，添加完成之后状态码为中文文字，前端页面使用 $t(`xxxx`)，js文件中使用
@@ -54,38 +54,56 @@
         2、后端接口：添加后端接口语言，添加完成之后状态码为6位数字，后台抛错或者控制器返回文字的时候直接填写状态码数字
       </template>
     </Alert>
-    <Card :bordered="false" dis-hover>
-      <Row type="flex" class="mb15">
-        <Col>
-          <Button type="primary" icon="md-add" @click="add">添加语句</Button>
-        </Col>
-      </Row>
-      <Table
-        ref="table"
-        :columns="columns"
-        :data="tabList"
-        class="ivu-mt"
-        :loading="loading"
-        no-data-text="暂无数据"
-        no-filtered-data-text="暂无筛选结果"
-      >
-        <template slot-scope="{ row, index }" slot="action">
-          <a @click="edit(row)">编辑</a>
-          <Divider type="vertical" />
-          <a @click="del(row, '删除语言', index)">删除</a>
-        </template>
-      </Table>
+    <el-card :bordered="false" shadow="never">
+      <el-row class="mb15">
+        <el-col>
+          <el-button type="primary" icon="md-add" @click="add">添加语句</el-button>
+        </el-col>
+      </el-row>
+      <el-table ref="table" :data="tabList" class="ivu-mt" :loading="loading" empty-text="暂无数据">
+        <el-table-column label="编号" width="80">
+          <template slot-scope="scope">
+            <span>{{ scope.row.id }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="原语句" min-width="230">
+          <template slot-scope="scope">
+            <span>{{ scope.row.remarks }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="对应语言翻译" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.lang_explain }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="状态码/文字(接口/页面调用参考)" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.code }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="语言类型" min-width="130">
+          <template slot-scope="scope">
+            <span>{{ scope.row.language_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" fixed="right" width="170">
+          <template slot-scope="scope">
+            <a @click="edit(scope.row)">编辑</a>
+            <el-divider direction="vertical"></el-divider>
+            <a @click="del(scope.row, '删除语言', index)">删除</a>
+          </template>
+        </el-table-column>
+      </el-table>
       <div class="acea-row row-right page">
-        <Page
+        <pagination
+          v-if="total"
           :total="total"
-          :current="formValidate.page"
-          show-elevator
-          show-total
-          @on-change="pageChange"
-          :page-size="formValidate.limit"
+          :page.sync="formValidate.page"
+          :limit.sync="formValidate.limit"
+          @pagination="getList"
         />
       </div>
-    </Card>
+    </el-card>
     <Modal
       v-model="addlangModal"
       width="750"
@@ -95,38 +113,40 @@
       @on-cancel="addlangModal = false"
       @on-visible-change="modalChange"
     >
-      <Form ref="langFormData" :model="langFormData" :rules="ruleValidate">
-        <FormItem label="应用端：" class="mb20" :label-width="120">
-          <RadioGroup type="button" v-model="langFormData.is_admin" class="mr15">
-            <Radio :label="item.value" v-for="(item, index) in langType.isAdmin" :key="index">{{ item.title }}</Radio>
-          </RadioGroup>
-        </FormItem>
-        <Input v-model="langFormData.edit" v-show="false"></Input>
-        <FormItem label="需要翻译的语句：" prop="remarks" class="mb20">
-          <Input
+      <el-form ref="langFormData" :model="langFormData" :rules="ruleValidate">
+        <el-form-item label="应用端：" class="mb20" label-width="120px">
+          <el-radio-group type="button" v-model="langFormData.is_admin" class="mr15">
+            <el-radio-button :label="item.value" v-for="(item, index) in langType.isAdmin" :key="index">{{
+              item.title
+            }}</el-radio-button>
+          </el-radio-group>
+        </el-form-item>
+        <el-input v-model="langFormData.edit" v-show="false"></el-input>
+        <el-form-item label="需要翻译的语句：" prop="remarks" class="mb20">
+          <el-input
             v-model="langFormData.remarks"
             placeholder="请输入需要添加翻译的语句"
             style="width: 330px"
             search
             enter-button="翻译"
             @on-search="translate"
-          ></Input>
-        </FormItem>
-        <FormItem prop="remark" class="mb20">
-          <Table
-            ref="langTable"
-            :loading="traTabLoading"
-            :columns="langColumns"
-            :data="langFormData.list"
-            no-data-text="暂无数据"
-            no-filtered-data-text="暂无筛选结果"
-          >
-            <template slot-scope="{ row, index }" slot="lang_explain">
-              <Input v-model="langFormData.list[index].lang_explain" class="priceBox"></Input>
-            </template>
-          </Table>
-        </FormItem>
-      </Form>
+          ></el-input>
+        </el-form-item>
+        <el-form-item prop="remark" class="mb20">
+          <el-table ref="langTable" :loading="traTabLoading" :data="langFormData.list" empty-text="暂无数据">
+            <el-table-column label="语言类型" width="120">
+              <template slot-scope="scope">
+                <span> {{ scope.row.language_name }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="对应语言翻译" min-width="250">
+              <template slot-scope="scope">
+                <el-input v-model="scope.row.lang_explain" class="priceBox"></el-input>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-form-item>
+      </el-form>
     </Modal>
   </div>
 </template>
@@ -216,7 +236,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : 80;
+      return this.isMobile ? undefined : '85px';
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -343,10 +363,6 @@ export default {
           this.loading = false;
           this.$Message.error(res.msg);
         });
-    },
-    pageChange(index) {
-      this.formValidate.page = index;
-      this.getList();
     },
   },
 };
