@@ -9,7 +9,7 @@
           :key="index"
         />
       </Tabs>
-      <Form ref="artFrom" :model="artFrom" :label-width="75" label-position="right" @submit.native.prevent>
+      <Form ref="artFrom" :model="artFrom" :label-width="90" label-position="right" @submit.native.prevent>
         <Row type="flex" :gutter="24">
           <Col v-bind="grid">
             <FormItem label="商品分类：" label-for="pid">
