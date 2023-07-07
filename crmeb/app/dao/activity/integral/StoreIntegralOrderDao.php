@@ -95,7 +95,7 @@ class StoreIntegralOrderDao extends BaseDao
      */
     public function count(array $where = [], bool $search = true)
     {
-        return $this->search($where, $search)->count();
+        return $this->search($where)->count();
     }
 
     /**
