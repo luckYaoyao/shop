@@ -97,7 +97,21 @@
             >虚拟发货备注：{{ orderDatalist.orderInfo.fictitious_content }}</Col
           >
         </Row>
-
+        <Divider style="margin: 20px 0 !important" />
+        <div class="ivu-description-list-title">商品信息</div>
+        <Row class="mb10">
+          <div class="tabBox" v-for="(val, i) in orderDatalist.orderInfo.cartInfo" :key="i">
+            <div class="tabBox_img" v-viewer>
+              <img v-lazy="val.productInfo.attrInfo ? val.productInfo.attrInfo.image : val.productInfo.image" />
+            </div>
+            <span class="tabBox_tit"
+              >{{ val.productInfo.store_name + ' | '
+              }}{{ val.productInfo.attrInfo ? val.productInfo.attrInfo.suk : '' }}</span
+            >
+            <span class="tabBox_pice">{{ '￥' + val.truePrice + ' x ' + val.cart_num }}</span>
+          </div>
+        </Row>
+        <Divider v-if="orderDatalist.orderInfo.invoice" style="margin: 20px 0 !important" />
         <div v-if="orderDatalist.orderInfo.invoice">
           <Divider style="margin: 20px 0 !important" />
           <div class="ivu-description-list-title">发票信息</div>
@@ -151,7 +165,6 @@
             <Col span="12">联系邮箱：{{ orderDatalist.orderInfo.invoice.email || '' }}</Col>
             <Col span="12">联系电话：{{ orderDatalist.orderInfo.invoice.user_phone || '' }}</Col>
           </Row>
-
           <div v-if="orderDatalist.orderInfo.invoice.header_type === 2 && orderDatalist.orderInfo.invoice.type === 2">
             <Row class="mb10">
               <Col span="12"
@@ -188,7 +201,6 @@
             <Col span="12">开票状态：{{ orderDatalist.orderInfo.invoice.is_invoice ? '已开票' : '未开票' }}</Col>
           </Row>
         </div>
-
         <Divider style="margin: 20px 0 !important" v-if="orderDatalist.orderInfo.custom_form.length" />
         <div class="ivu-description-list-title" v-if="orderDatalist.orderInfo.custom_form.length">表单信息</div>
         <Row class="mb10" v-if="orderDatalist.orderInfo.custom_form.length">
@@ -429,6 +441,17 @@ export default {
   img {
     width: 100%;
     height: 100%;
+  }
+}
+.tabBox{
+  display:flex;
+  align-items center
+  .tabBox_img{
+    margin-right 10px
+  }
+  .tabBox_tit{
+    margin-right 20px
+
   }
 }
 </style>
