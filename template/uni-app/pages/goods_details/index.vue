@@ -806,7 +806,15 @@
 			 *
 			 */
 			iptCartNum: function(e) {
-				this.$set(this.attr.productSelect, "cart_num", e);
+				if (e) {
+					let number = 1
+					if (Number.isInteger(parseInt(e)) && parseInt(e) > 0) {
+						number = parseInt(e);
+					}
+					this.$nextTick(e => {
+						this.$set(this.attr.productSelect, "cart_num", e < 0 ? 1 : number);
+					})
+				}
 			},
 			// 后退
 			returns() {
