@@ -130,7 +130,8 @@ class User extends AuthController
     public function info($uid)
     {
         if (!$uid) return app('json')->fail(100100);
-        return app('json')->success($this->services->userInfo($uid));
+        $data = $this->services->userInfo($uid);
+        return app('json')->success(compact('data'));
     }
 
     /**
