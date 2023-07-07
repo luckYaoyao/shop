@@ -696,13 +696,6 @@ export default {
         });
     },
     async handleSubmit() {
-      if (!this.formValidate.name) {
-        return this.$Message.warning('请输入接口名称');
-      } else if (!this.formValidate.method) {
-        return this.$Message.warning('请选择请求类型');
-      } else if (!this.formValidate.path) {
-        return this.$Message.warning('请输入路由地址');
-      }
       this.formValidate.request = await this.$refs.xTable.getTableData().tableData;
       this.formValidate.response = await this.$refs.resTable.getTableData().tableData;
       this.formValidate.error_code = await this.$refs.codeTable.getTableData().tableData;
