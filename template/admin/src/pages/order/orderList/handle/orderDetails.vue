@@ -1,6 +1,6 @@
 <template>
   <div v-if="orderDatalist">
-    <Drawer title="订单详情" :closable="false" width="700" v-model="modals" scrollable>
+    <Drawer title="订单详情" :mask-closable="false" width="700" v-model="modals" scrollable>
       <Card :bordered="false" dis-hover class="i-table-no-border">
         <div class="ivu-description-list-title">收货信息</div>
         <Row class="mb10">
