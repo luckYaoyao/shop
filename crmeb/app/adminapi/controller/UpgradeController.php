@@ -17976,7 +17976,7 @@ SQL
                 'whereTable' => "system_config_tab",
                 'findSql' => "select id from @table where `eng_title` = 'system_sms'",
                 'whereSql' => "SELECT id as tabId FROM `@whereTable` WHERE `eng_title`='basics'",
-                'sql' => "UPDATE `@table` SET `pid` = @tabId, `status` = 1 WHERE `eng_title` = 'system_sms'"
+                'sql' => "UPDATE `@table` SET `pid` = @tabId, `status` = 1, `type` = 0 WHERE `eng_title` = 'system_sms'"
             ],
             [
                 'code' => 510,
