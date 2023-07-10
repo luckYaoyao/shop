@@ -734,8 +734,8 @@ class UpgradeController
      */
     public function upData()
     {
-        $data['new_version'] = 'CRMEB-BZ v5.0.0';
-        $data['new_code'] = 500;
+        $data['new_version'] = 'CRMEB-BZ v5.1.0';
+        $data['new_code'] = 510;
         $data['update_sql'] = [
             [
                 'code' => 500,
@@ -17976,7 +17976,7 @@ SQL
                 'whereTable' => "system_config_tab",
                 'findSql' => "select id from @table where `eng_title` = 'system_sms'",
                 'whereSql' => "SELECT id as tabId FROM `@whereTable` WHERE `eng_title`='basics'",
-                'sql' => "UPDATE `@table` SET `config_tab_id` = @tabId WHERE `menu_name` = 'system_sms'"
+                'sql' => "UPDATE `@table` SET `pid` = @tabId WHERE `eng_title` = 'system_sms'"
             ],
             [
                 'code' => 510,
@@ -17985,21 +17985,21 @@ SQL
                 'whereTable' => "system_config_tab",
                 'findSql' => "select id from @table where `eng_title` = 'online_translation'",
                 'whereSql' => "SELECT id as tabId FROM `@whereTable` WHERE `eng_title`='basics'",
-                'sql' => "UPDATE `@table` SET `config_tab_id` = @tabId WHERE `menu_name` = 'online_translation'"
+                'sql' => "UPDATE `@table` SET `pid` = @tabId WHERE `eng_title` = 'online_translation'"
             ],
             [
                 'code' => 510,
                 'type' => 7,
                 'table' => "system_config",
                 'findSql' => "select id from @table where `menu_name` = 'sms_account'",
-                'sql' => "UPDATE `@table` SET `info` = `一号通应用AppId`, `desc` = '一号通账号内创建应用的AppId' WHERE `menu_name` = 'sms_account'"
+                'sql' => "UPDATE `@table` SET `info` = '一号通应用AppId', `desc` = '一号通账号内创建应用的AppId' WHERE `menu_name` = 'sms_account'"
             ],
             [
                 'code' => 510,
                 'type' => 7,
                 'table' => "system_config",
                 'findSql' => "select id from @table where `menu_name` = 'sms_token'",
-                'sql' => "UPDATE `@table` SET `info` = `一号通应用AppSecret`, `desc` = '一号通账号内创建应用的AppSecret' WHERE `menu_name` = 'sms_token'"
+                'sql' => "UPDATE `@table` SET `info` = '一号通应用AppSecret', `desc` = '一号通账号内创建应用的AppSecret' WHERE `menu_name` = 'sms_token'"
             ],
             [
                 'code' => 510,
@@ -18015,7 +18015,7 @@ SQL
                 'whereTable' => "system_config_tab",
                 'findSql' => "select id from @table where `menu_name` = 'jd_accessKey'",
                 'whereSql' => "SELECT id as tabId FROM `@whereTable` WHERE `eng_title`='jd_oss_config'",
-                'sql' => "INSERT INTO `@table` VALUES (NULL, 'jd_accessKey', 'text', 'input', @table, '', 1, '', 100, 0, '\"\"', '京东云accessKey', '京东云accessKey', 0, 1)"
+                'sql' => "INSERT INTO `@table` VALUES (NULL, 'jd_accessKey', 'text', 'input', @tabId, '', 1, '', 100, 0, '\"\"', '京东云accessKey', '京东云accessKey', 0, 1)"
             ],
             [
                 'code' => 510,
@@ -18024,7 +18024,7 @@ SQL
                 'whereTable' => "system_config_tab",
                 'findSql' => "select id from @table where `menu_name` = 'jd_secretKey'",
                 'whereSql' => "SELECT id as tabId FROM `@whereTable` WHERE `eng_title`='jd_oss_config'",
-                'sql' => "INSERT INTO `@table` VALUES (NULL, 'jd_secretKey', 'text', 'input', @table, '', 1, '', 100, 0, '\"\"', '京东云secretKey', '京东云secretKey', 0, 1)"
+                'sql' => "INSERT INTO `@table` VALUES (NULL, 'jd_secretKey', 'text', 'input', @tabId, '', 1, '', 100, 0, '\"\"', '京东云secretKey', '京东云secretKey', 0, 1)"
             ],
             [
                 'code' => 510,
@@ -18033,7 +18033,7 @@ SQL
                 'whereTable' => "system_config_tab",
                 'findSql' => "select id from @table where `menu_name` = 'hw_accessKey'",
                 'whereSql' => "SELECT id as tabId FROM `@whereTable` WHERE `eng_title`='obs_config'",
-                'sql' => "INSERT INTO `@table` VALUES (NULL, 'hw_accessKey', 'text', 'input', @table, '', 1, '', 100, 0, '\"\"', '华为云accessKey', '华为云accessKey', 0, 1)"
+                'sql' => "INSERT INTO `@table` VALUES (NULL, 'hw_accessKey', 'text', 'input', @tabId, '', 1, '', 100, 0, '\"\"', '华为云accessKey', '华为云accessKey', 0, 1)"
             ],
             [
                 'code' => 510,
@@ -18042,7 +18042,7 @@ SQL
                 'whereTable' => "system_config_tab",
                 'findSql' => "select id from @table where `menu_name` = 'hw_secretKey'",
                 'whereSql' => "SELECT id as tabId FROM `@whereTable` WHERE `eng_title`='obs_config'",
-                'sql' => "INSERT INTO `@table` VALUES (NULL, 'hw_secretKey', 'text', 'input', @table, '', 1, '', 100, 0, '\"\"', '华为云secretKey', '华为云secretKey', 0, 1)"
+                'sql' => "INSERT INTO `@table` VALUES (NULL, 'hw_secretKey', 'text', 'input', @tabId, '', 1, '', 100, 0, '\"\"', '华为云secretKey', '华为云secretKey', 0, 1)"
             ],
             [
                 'code' => 510,
@@ -18051,7 +18051,7 @@ SQL
                 'whereTable' => "system_config_tab",
                 'findSql' => "select id from @table where `menu_name` = 'ty_secretKey'",
                 'whereSql' => "SELECT id as tabId FROM `@whereTable` WHERE `eng_title`='ty_oss_config'",
-                'sql' => "INSERT INTO `@table` VALUES (NULL, 'ty_secretKey', 'text', 'input', @table, '', 1, '', 100, 0, '\"\"', '天翼云secretKey', '天翼云secretKey', 0, 1)"
+                'sql' => "INSERT INTO `@table` VALUES (NULL, 'ty_secretKey', 'text', 'input', @tabId, '', 1, '', 100, 0, '\"\"', '天翼云secretKey', '天翼云secretKey', 0, 1)"
             ],
             [
                 'code' => 510,
@@ -18060,7 +18060,7 @@ SQL
                 'whereTable' => "system_config_tab",
                 'findSql' => "select id from @table where `menu_name` = 'ty_accessKey'",
                 'whereSql' => "SELECT id as tabId FROM `@whereTable` WHERE `eng_title`='ty_oss_config'",
-                'sql' => "INSERT INTO `@table` VALUES (NULL, 'ty_accessKey', 'text', 'input', @table, '', 1, '', 100, 0, '\"\"', '天翼云accessKey', '天翼云accessKey', 0, 1)"
+                'sql' => "INSERT INTO `@table` VALUES (NULL, 'ty_accessKey', 'text', 'input', @tabId, '', 1, '', 100, 0, '\"\"', '天翼云accessKey', '天翼云accessKey', 0, 1)"
             ],
             [
                 'code' => 510,
@@ -18069,7 +18069,7 @@ SQL
                 'whereTable' => "system_config_tab",
                 'findSql' => "select id from @table where `menu_name` = 'coupon_return_open'",
                 'whereSql' => "SELECT id as tabId FROM `@whereTable` WHERE `eng_title`='store_base'",
-                'sql' => "INSERT INTO `@table` VALUES (NULL, 'coupon_return_open', 'radio', 'input', @table, '1=>退还\n0=>不退还', 1, '', 0, 0, '\"1\"', '优惠券退还状态', '优惠券是否退回开关，商品成功退款后，退回/不退回使用的优惠券', 0, 1)"
+                'sql' => "INSERT INTO `@table` VALUES (NULL, 'coupon_return_open', 'radio', 'input', @tabId, '1=>退还\n0=>不退还', 1, '', 0, 0, '\"1\"', '优惠券退还状态', '优惠券是否退回开关，商品成功退款后，退回/不退回使用的优惠券', 0, 1)"
             ],
 
         ];
