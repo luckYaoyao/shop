@@ -37,19 +37,15 @@
             </el-form-item>
           </el-col>
           <template v-if="collapse">
-            <el-col ::span="18">
+            <el-col :::span="18">
               <el-col v-bind="grid">
                 <el-form-item label="用户标签：" label-for="label_id">
                   <div class="labelInput acea-row row-between-wrapper" @click="openSelectLabel">
                     <div style="width: 90%">
                       <div v-if="selectDataLabel.length">
-                        <Tag
-                          :closable="false"
-                          v-for="(item, index) in selectDataLabel"
-                          @on-close="closeLabel(item)"
-                          :key="index"
-                          >{{ item.label_name }}</Tag
-                        >
+                        <el-tag :closable="false" v-for="(item, index) in selectDataLabel" :key="index">{{
+                          item.label_name
+                        }}</el-tag>
                       </div>
                       <span class="span" v-else>选择用户关联标签</span>
                     </div>
@@ -71,7 +67,7 @@
                 </el-form-item>
               </el-col>
             </el-col>
-            <el-col :span="18">
+            <el-col ::span="18">
               <el-col v-bind="grid">
                 <el-form-item label="用户分组：" label-for="group_id">
                   <el-select v-model="group_id" placeholder="请选择用户分组" element-id="group_id" clearable>
@@ -99,7 +95,7 @@
                 </el-form-item>
               </el-col>
             </el-col>
-            <el-col :span="18">
+            <el-col ::span="18">
               <!-- <el-col v-bind="grid">
                 <el-form-item label="性别：" label-for="sex">
                   <el-radio-group v-model="userFrom.sex" type="button">
@@ -159,7 +155,7 @@
                 </el-form-item>
               </el-col>
             </el-col>
-            <el-col :span="18">
+            <el-col ::span="18">
               <el-col v-bind="grid">
                 <el-form-item label="访问情况：" label-for="user_time_type">
                   <el-select
@@ -177,23 +173,22 @@
               </el-col>
               <el-col v-bind="grid" v-if="user_time_type">
                 <el-form-item label="访问时间：" label-for="user_time">
-                  <!--<DatePicker clearable @change="onchangeTime" v-model="timeVal" :value="timeVal"  format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="选择时间" v-width="'100%'"></DatePicker>-->
-                  <DatePicker
+                  <el-date-picker
                     :editable="false"
                     @change="onchangeTime"
-                    :value="timeVal"
+                    v-modal="timeVal"
                     format="yyyy/MM/dd"
                     type="datetimerange"
-                    placement="bottom-start"
-                    placeholder="请选择访问时间"
-                    style="width: 300px"
+                    value-format="yyyy/MM/dd"
+                    range-separator="至"
+                    start-placeholder="开始日期"
+                    end-placeholder="结束日期"
                     class="mr20"
-                    :options="options"
-                  ></DatePicker>
+                  ></el-date-picker>
                 </el-form-item>
               </el-col>
             </el-col>
-            <el-col :span="18">
+            <el-col ::span="18">
               <el-col v-bind="grid">
                 <el-form-item label="地区：" label-for="country">
                   <el-select
@@ -210,7 +205,13 @@
               </el-col>
               <el-col v-bind="grid" v-if="userFrom.country === 'domestic'">
                 <el-form-item label="省份：">
-                  <Cascader :data="addresData" :value="address" v-model="address" @change="handleChange"></Cascader>
+                  <el-cascader
+                    :options="addresData"
+                    :value="address"
+                    v-model="address"
+                    @change="handleChange"
+                    clearable
+                  ></el-cascader>
                 </el-form-item>
               </el-col>
             </el-col>
@@ -231,7 +232,6 @@
           </el-col>
         </el-row>
       </el-form>
-      <el-divider direction="vertical" dashed />
       <el-row justify="space-between" class="mt20">
         <el-col ::span="24">
           <el-button v-auth="['admin-user-save']" type="primary" class="mr10" @click="edit({ uid: 0 })"
@@ -241,7 +241,6 @@
           <el-button
             v-auth="['admin-wechat-news']"
             class="greens mr10"
-            size="default"
             @click="onSendPic"
             v-if="userFrom.user_type === 'wechat'"
           >
@@ -255,9 +254,11 @@
           <!-- <el-button v-auth="['admin-user-synchro']" class="mr20" @click="synchro">同步公众号用户</el-button> -->
         </el-col>
         <el-col ::span="24" class="userAlert" v-if="selectionList.length">
-          <Alert show-icon>
-            已选择<i class="userI"> {{ selectionList.length }} </i>项</Alert
-          >
+          <el-alert show-icon>
+            <template slot="title">
+              已选择<i class="userI"> {{ selectionList.length }} </i>项
+            </template>
+          </el-alert>
         </el-col>
       </el-row>
       <el-table
@@ -338,7 +339,7 @@
         <el-table-column label="操作" fixed="right" width="120">
           <template slot-scope="scope">
             <template v-if="scope.row.is_del != 1">
-              <a @click="userDetail(row)">详情</a>
+              <a @click="userDetail(scope.row)">详情</a>
 
               <el-divider direction="vertical"></el-divider>
               <el-dropdown size="small" @command="changeMenu(scope.row, $event, scope.$index)" :transfer="true">
@@ -379,7 +380,7 @@
     <!-- 会员详情-->
     <user-details ref="userDetails"></user-details>
     <!--发送图文消息 -->
-    <Modal v-model="modal13" scrollable title="发送消息" width="1200" height="800" footer-hide class="modelBox">
+    <el-dialog :visible.sync="modal13" title="发送消息" width="1200px" class="modelBox">
       <news-category
         v-if="modal13"
         :isShowSend="isShowSend"
@@ -389,9 +390,9 @@
         :contentWidth="contentWidth"
         :maxCols="maxCols"
       ></news-category>
-    </Modal>
+    </el-dialog>
     <!--修改推广人-->
-    <Modal v-model="promoterShow" scrollable title="修改推广人" class="order_box" :closable="false">
+    <el-dialog :visible.sync="promoterShow" title="修改推广人" class="order_box" :show-close="false">
       <el-form ref="formInline" :model="formInline" label-width="100px" @submit.native.prevent>
         <el-form-item v-if="formInline" label="选择推广人：" prop="image">
           <div class="picBox" @click="customer">
@@ -408,11 +409,11 @@
         <el-button type="primary" @click="putSend('formInline')">提交</el-button>
         <el-button @click="cancel('formInline')">取消</el-button>
       </div>
-    </Modal>
-    <Modal v-model="customerShow" scrollable title="请选择商城用户" :closable="false" width="50%">
+    </el-dialog>
+    <el-dialog :visible.sync="customerShow" title="请选择商城用户" :show-close="false" width="50%">
       <customerInfo v-if="customerShow" @imageObject="imageObject"></customerInfo>
-    </Modal>
-    <Modal v-model="labelShow" scrollable title="请选择用户标签" :closable="false" width="500" :footer-hide="true">
+    </el-dialog>
+    <el-dialog :visible.sync="labelShow" title="请选择用户标签" width="500px" :show-close="false">
       <userLabel
         v-if="labelShow"
         :uid="labelActive.uid"
@@ -421,23 +422,21 @@
         @activeData="activeData"
         @onceGetList="onceGetList"
       ></userLabel>
-    </Modal>
-    <Drawer :closable="false" width="700" v-model="modals" title="用户信息填写">
+    </el-dialog>
+    <el-drawer :visible.sync="modals" :wrapperClosable="false" size="700" title="用户信息填写">
       <userEdit ref="userEdit" v-if="modals" :userData="userData"></userEdit>
-      <div class="demo-drawer-footer">
+      <div class="demo-drawer__footer">
         <el-button style="margin-right: 8px" @click="modals = false">取消</el-button>
         <el-button type="primary" @click="setUser">提交</el-button>
       </div>
-    </Drawer>
+    </el-drawer>
     <!-- 用户标签 -->
-    <Modal
-      v-model="selectLabelShow"
-      scrollable
+    <el-dialog
+      :visible.sync="selectLabelShow"
       title="请选择用户标签"
-      :closable="false"
-      width="500"
-      :footer-hide="true"
-      :mask-closable="false"
+      width="500px"
+      :show-close="false"
+      :close-on-click-modal="false"
     >
       <userLabel
         v-if="selectLabelShow"
@@ -447,7 +446,7 @@
         @activeData="activeSelectData"
         @close="labelClose"
       ></userLabel>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -689,29 +688,29 @@ export default {
         ids.push(i.id);
       });
       data.label_id = ids;
-      // if (!data.real_name) return this.$Message.warning("请输入真实姓名");
-      // if (!data.phone) return this.$Message.warning("请输入手机号");
-      // if (!data.pwd) return this.$Message.warning("请输入密码");
-      // if (!data.true_pwd) return this.$Message.warning("请输入确认密码");
+      // if (!data.real_name) return this.$message.warning("请输入真实姓名");
+      // if (!data.phone) return this.$message.warning("请输入手机号");
+      // if (!data.pwd) return this.$message.warning("请输入密码");
+      // if (!data.true_pwd) return this.$message.warning("请输入确认密码");
       if (data.uid) {
         editUser(data)
           .then((res) => {
             this.modals = false;
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.getList();
           })
           .catch((err) => {
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       } else {
         setUser(data)
           .then((res) => {
             this.modals = false;
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.getList();
           })
           .catch((err) => {
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       }
     },
@@ -730,17 +729,17 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (!this.formInline.spread_uid) {
-            return this.$Message.error('请上传用户');
+            return this.$message.error('请上传用户');
           }
           agentSpreadApi(this.formInline)
             .then((res) => {
               this.promoterShow = false;
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.getList();
               this.$refs[name].resetFields();
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         }
       });
@@ -755,16 +754,16 @@ export default {
       //     this.getList();
       //   })
       //   .catch((res) => {
-      //     this.$Message.error(res.msg);
+      //     this.$message.error(res.msg);
       //   });
     },
     synchro() {
       userSynchro()
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 分组列表
@@ -777,7 +776,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     onClickTab() {
@@ -807,7 +806,7 @@ export default {
     // 批量设置分组；
     setGroup() {
       if (this.ids.length === 0) {
-        this.$Message.warning('请选择要设置分组的用户');
+        this.$message.warning('请选择要设置分组的用户');
       } else {
         let uids = { uids: this.ids };
         this.$modalForm(userSetGroup(uids)).then(() => this.getList());
@@ -816,7 +815,7 @@ export default {
     // 批量设置标签；
     setLabel() {
       if (this.ids.length === 0) {
-        this.$Message.warning('请选择要设置标签的用户');
+        this.$message.warning('请选择要设置标签的用户');
       } else {
         let uids = { uids: this.ids };
         this.labelActive.uid = 0;
@@ -849,7 +848,7 @@ export default {
         this.labelShow = false;
         this.selectedIds = new Set();
         this.getList();
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
       });
     },
     //是否为付费会员；
@@ -867,7 +866,8 @@ export default {
       }
     },
     // 选择地址
-    handleChange(value, selectedData) {
+    handleChange(selectedData) {
+      console.log(selectedData)
       this.selectedData = selectedData.map((o) => o.label);
       this.userFrom.province = this.selectedData[0];
       this.userFrom.city = this.selectedData[1];
@@ -875,7 +875,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.userFrom.user_time = this.timeVal.join('-');
+      this.userFrom.user_time = this.timeVal ? this.timeVal.join('-') : '';
     },
     userDetail(row) {
       this.$refs.userDetails.modals = true;
@@ -956,7 +956,7 @@ export default {
       //     this.$refs.edits.modals = true;
       //   })
       //   .catch((res) => {
-      //     this.$Message.error(res.msg);
+      //     this.$message.error(res.msg);
       //   });
     },
     // 赠送会员等级
@@ -972,7 +972,7 @@ export default {
       //     this.$refs.edits.modals = true;
       //   })
       //   .catch((res) => {
-      //     this.$Message.error(res.msg);
+      //     this.$message.error(res.msg);
       //   });
     },
     // 删除
@@ -987,11 +987,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 清除会员删除成功
@@ -1030,7 +1030,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 用户导出
@@ -1129,7 +1129,7 @@ export default {
           this.userData = res.data;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 获取积分余额表单
@@ -1144,16 +1144,16 @@ export default {
       };
       isShowApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 点击发送优惠券
     onSend() {
       if (this.ids.length === 0) {
-        this.$Message.warning('请选择要发送优惠券的用户');
+        this.$message.warning('请选择要发送优惠券的用户');
       } else {
         this.$refs.sends.modals = true;
         this.$refs.sends.getList();
@@ -1162,7 +1162,7 @@ export default {
     // 发送图文消息
     onSendPic() {
       if (this.ids.length === 0) {
-        this.$Message.warning('请选择要发送图文消息的用户');
+        this.$message.warning('请选择要发送图文消息的用户');
       } else {
         this.modal13 = true;
       }

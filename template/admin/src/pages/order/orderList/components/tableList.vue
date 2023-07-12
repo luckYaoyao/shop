@@ -307,12 +307,12 @@ export default {
           };
           this.$modalSure(this.delfromData)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.$emit('changeGetTabs');
               this.getList();
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
           // this.modalTitleSs = '修改立即支付';
           break;
@@ -345,11 +345,11 @@ export default {
           };
           this.$modalSure(this.delfromData)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.getList();
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
           // this.modalTitleSs = '修改确认收货';
           break;
@@ -363,12 +363,12 @@ export default {
           };
           this.$modalSure(this.delfromData)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.$emit('changeGetTabs');
               this.getList();
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
           break;
         case '11':
@@ -381,11 +381,11 @@ export default {
           };
           this.$modalSure(this.delfromData)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.getList();
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
           break;
         case '12':
@@ -451,7 +451,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 全选
@@ -524,11 +524,11 @@ export default {
       if (row.is_del === 1) {
         this.$modalSure(data)
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.getList();
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else {
         const title = '错误！';
@@ -555,7 +555,7 @@ export default {
           this.$refs.edits.modals = true;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 获取详情表单数据
@@ -575,7 +575,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改成功
@@ -598,7 +598,7 @@ export default {
           this.$refs.edits.modals = true;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 不退款表单数据
@@ -630,7 +630,7 @@ export default {
           this.$refs.edits.modals = true;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     change(status) {},

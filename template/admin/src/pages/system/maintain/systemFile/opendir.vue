@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt" v-loading="spinShow">
       <div v-if="isShowList" class="backs-box">
         <div class="backs">
           <span class="back" @click="goBack(false)"><Icon type="md-arrow-round-back" class="icon" /></span>
@@ -18,7 +18,6 @@
         v-loading="loading"
         empty-text="暂无数据"
         class="mt20"
-        
       >
         <el-table-column label="文件/文件夹名" min-width="150">
           <template slot-scope="scope">
@@ -55,15 +54,14 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <Modal
-      :class-name="className"
-      v-model="modals"
-      scrollable
-      footer-hide
-      closable
-      :mask-closable="false"
+    <el-dialog
+      :visible.sync="modals"
+      :custom-class="className"
+      :close-on-click-modal="false"
       width="80%"
-      :before-close="editModalChange"
+      @close="editModalChange"
+      append-to-body
+      :title="editorIndex[indexEditor].title"
     >
       <p slot="header" class="diy-header" ref="diyHeader">
         <span>{{ title }}</span>
@@ -87,15 +85,17 @@
             </div>
           </div>
           <div class="file-left">
-            <Tree
+            <el-tree
               class="diy-tree-render"
               :data="navList"
-              :render="renderContent"
-              :load-data="loadData"
-              @on-contextmenu="handleContextMenu"
+              :render-content="renderContent"
+              :load="loadData"
+              @node-contextmenu="handleContextMenu"
               expand-node
+              lazy
+              :props="props"
             >
-              <template transfer slot="contextMenu">
+              <!-- <template transfer slot="contextMenu">
                 <DropdownItem v-if="contextData && contextData.isDir" @click.native="handleContextCreateFolder()"
                   >新建文件夹</DropdownItem
                 >
@@ -104,8 +104,8 @@
                 >
                 <DropdownItem @click.native="handleContextRename()">重命名</DropdownItem>
                 <DropdownItem @click.native="handleContextDelFolder()" style="color: #ed4014">删除</DropdownItem>
-              </template>
-            </Tree>
+              </template> -->
+            </el-tree>
           </div>
           <div class="file-fix"></div>
           <div class="file-content">
@@ -113,7 +113,7 @@
               type="card"
               v-model="indexEditor"
               style="height: 100%"
-              @tag-click="toggleEditor"
+              @tab-click="toggleEditor"
               :animated="false"
               closable
               @tab-remove="handleTabRemove"
@@ -126,14 +126,13 @@
                 :icon="value.icon"
                 v-if="value.tab"
               >
-                <div ref="container" :id="'container_' + value.index" style="height: 100%; min-height: 560px"></div>
+                <div ref="container" :id="'container_' + value.index" style="height: 100%; min-height: 580px"></div>
               </el-tab-pane>
             </el-tabs>
           </div>
-          <Spin size="large" fix v-if="spinShow"></Spin>
         </div>
       </div>
-    </Modal>
+    </el-dialog>
 
     <div v-show="formShow" class="diy-from">
       <div class="diy-from-header">
@@ -210,7 +209,7 @@ export default {
       spinShow: false,
       loading: false,
       tabList: [],
-     
+
       formItem: {
         //记录当前路径信息，获取文件列表时使用
         dir: '',
@@ -234,6 +233,11 @@ export default {
       formTitle: '', //表单标题
       fileToken: getCookies('file_token'),
       routeList: [], //  打开文件路径
+      props: {
+        label: 'title',
+        children: 'children',
+        isLeaf: 'isLeaf',
+      },
     };
   },
 
@@ -241,7 +245,7 @@ export default {
     loginFrom,
   },
   mounted() {
-    this.initEditor();
+    // this.initEditor();
   },
   created() {
     this.getList();
@@ -356,7 +360,7 @@ export default {
       this.dir = row.path;
       // 创建代码容器
       if (this.editorList.length <= 0) {
-        this.initEditor();
+        // this.initEditor();
       }
       this.openfile(row.pathname, false);
     },
@@ -412,20 +416,22 @@ export default {
     },
     // 侧边栏异步加载
     loadData(item, callback) {
-      if (item.isDir) {
+      console.log(item);
+      if (!item.data.isLeaf) {
         this.formItem = {
-          dir: item.path,
+          dir: item.data.path,
           superior: 0,
-          filedir: item.title,
+          filedir: item.data.title,
           fileToken: this.fileToken,
         };
         opendirListApi(this.formItem)
           .then(async (res) => {
+            console.log(res);
             callback(res.data.navList);
           })
           .catch((res) => {
             if (res.status == 110008) {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
               this.isShowLogn = true;
               this.isShowList = false;
               this.loading = false;
@@ -436,7 +442,7 @@ export default {
       }
     },
     // 自定义显示
-    renderContent(h, { root, node, data }) {
+    renderContent(h, { node, data, root }) {
       let that = this;
       return h(
         'span',
@@ -463,7 +469,7 @@ export default {
           h('span', [
             h('Icon', {
               props: {
-                type: data.isDir ? 'md-folder' : 'ios-document-outline',
+                type: !data.isLeaf ? 'md-folder' : 'ios-document-outline',
               },
               style: {
                 marginRight: '8px',
@@ -487,6 +493,7 @@ export default {
      * @param {Object} data
      */
     clickDir(data, root, node) {
+      console.log(data, root, node, 'data, root, node');
       let that = this;
       that.navItem = data;
       that.pathname = data.pathname;
@@ -578,6 +585,11 @@ export default {
       };
       openfileApi(params)
         .then(async (res) => {
+          if (!is_edit) {
+            that.modals = true;
+            that.spinShow = false;
+            this.initEditor();
+          }
           let data = res.data;
           that.code = data.content;
           // 保存相对信息
@@ -585,10 +597,6 @@ export default {
           that.editorList[that.indexEditor].oldCode = that.code;
           //改变属性
           that.changeModel(data.mode, that.code);
-          if (!is_edit) {
-            that.modals = true;
-            that.spinShow = false;
-          }
         })
         .catch((res) => {
           that.catchFun(res);
@@ -729,7 +737,7 @@ export default {
               break;
           }
         } else {
-          this.$Message.error('Fail!');
+          this.$message.error('Fail!');
         }
       });
     },
@@ -746,15 +754,15 @@ export default {
      */
     catchFun(res) {
       if (res.status) {
-        if (res.status == 400) this.$Message.error(res.msg);
+        if (res.status == 400) this.$message.error(res.msg);
         if (res.status == 110008) {
-          // this.$Message.error(res.msg);
+          // this.$message.error(res.msg);
           this.isShowLogn = true;
           this.isShowList = false;
           this.loading = false;
         }
       } else {
-        // this.$Message.error('文件编码不被兼容，无法正确读取文件!');
+        // this.$message.error('文件编码不被兼容，无法正确读取文件!');
       }
       //关闭蒙版层
       if (this.spinShow) this.spinShow = false;
@@ -808,10 +816,10 @@ export default {
       };
       markSave(this.fileToken, data)
         .then((res) => {
-          // this.$Message.success(res.msg);
+          // this.$message.success(res.msg);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     handleTabRemove(index) {
@@ -996,7 +1004,7 @@ export default {
 .file-box {
   .file-left {
     position: absolute;
-    top: 53px;
+    top: 58px;
     left: 0;
     height: 90%;
     // height: 100%;
@@ -1004,8 +1012,7 @@ export default {
     width: 25%;
     max-width: 250px;
     overflow: auto;
-    background-color: #222222;
-    box-shadow: #000000 -6px 0 6px -6px inset;
+    background-color: #292929;
   }
 
   .file-fix {
@@ -1016,7 +1023,7 @@ export default {
     // bottom: 0px;
     // overflow: auto;
     min-height: 600px;
-    background-color: #222222;
+    background-color: #292929;
   }
 }
 
@@ -1032,11 +1039,11 @@ export default {
   }
 }
 
->>>.ivu-modal-body {
-  padding: 0;
+>>>.el-dialog__body {
+  padding: 0 !important;
 }
 
->>>.ivu-modal-content {
+>>>.el-dialog__body {
   background-color: #292929;
 }
 
@@ -1073,11 +1080,11 @@ export default {
   border:1px solid #c2c2c2;
   padding: 3px 5px
 }
-.mark /deep/ .ivu-input{
+.mark /deep/ .el-input__inner{
     background: #fff;
     border-radius: .39rem;
 }
-.mark /deep/ .ivu-input, .ivu-input:hover, .ivu-input:focus {
+.mark /deep/ .el-input__inner, .el-input__inner:hover, .el-input__inner:focus {
     border: transparent;
     box-shadow: none;
 }
@@ -1170,7 +1177,12 @@ body >>>.ivu-select-dropdown {
     background-color: #2f2f2f !important;
   }
 }
-
+>>>.el-tabs__item{
+  background-color: #fff;
+}
+>>>.el-tree{
+  background-color: #292929 !important;
+}
 .file-box {
   .file-left::-webkit-scrollbar {
     width: 4px;
@@ -1261,13 +1273,13 @@ body >>>.ivu-select-dropdown {
 
 .ivu-tabs {
   .ivu-tabs-content-animated {
-    min-height: 560px;
+    min-height: 580px;
     height: 73vh;
     margin-top: -1px;
   }
 
   .ivu-tabs-tabpane {
-    min-height: 560px;
+    min-height: 580px;
     height: 73vh;
     margin-top: -1px;
   }

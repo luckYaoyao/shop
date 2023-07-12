@@ -1,8 +1,8 @@
 <template>
   <div>
     <!-- 修复升级 -->
-    <Modal
-      v-model="upgrade"
+    <el-dialog
+      :visible.sync="upgrade"
       width="390"
       height="96"
       :closable="false"
@@ -16,11 +16,11 @@
         <h2>您有新的修复版本可升级</h2>
         <p>更多惊喜内容等你来探索，快来看看吧～</p>
       </div>
-      <div slot="footer" class="footer">
-        <el-button class="cancel" shape="circle" @click="upgrade = false">暂不升级</el-button>
+      <span slot="footer" class="dialog-footer">
+        <el-button shape="circle" @click="upgrade = false">暂不升级</el-button>
         <el-button shape="circle" type="primary" @click="upgradeNow()">立即升级</el-button>
-      </div>
-    </Modal>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>

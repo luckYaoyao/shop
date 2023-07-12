@@ -23,18 +23,18 @@
         <el-row :gutter="24">
           <el-col v-bind="grid" class="ivu-text-left">
             <el-form-item label="退款时间：">
-              <DatePicker
+              <el-date-picker
                 :editable="false"
                 @change="onchangeTime"
-                :value="timeVal"
+                v-model="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
-                placement="bottom-start"
-                placeholder="请选择时间"
-                style="width: 200px"
+                value-format="yyyy/MM/dd"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
                 class="mr20"
-                :options="options"
-              ></DatePicker>
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col v-bind="grid">
@@ -51,7 +51,6 @@
         </el-row>
       </el-form>
       <el-table
-        :columns="thead"
         :data="tbody"
         ref="table"
         v-loading="loading"
@@ -218,61 +217,11 @@ export default {
     return {
       grid: {
         xl: 7,
-        lg: 7,
+        lg: 8,
         md: 12,
         sm: 24,
         xs: 24,
       },
-      thead: [
-        {
-          title: '订单号',
-          align: 'center',
-          slot: 'order_id',
-          minWidth: 150,
-        },
-        {
-          title: '用户信息',
-          key: 'nickname',
-          minWidth: 100,
-        },
-        {
-          title: '商品信息',
-          slot: 'info',
-          minWidth: 330,
-        },
-        {
-          title: '实际支付',
-          key: 'pay_price',
-          minWidth: 70,
-        },
-        {
-          title: '发起退款时间',
-          key: 'add_time',
-          minWidth: 100,
-        },
-        {
-          title: '退款状态',
-          slot: 'refund_type',
-          minWidth: 100,
-        },
-        {
-          title: '退款信息',
-          slot: 'statusName',
-          minWidth: 120,
-        },
-        {
-          title: '售后备注',
-          key: 'remark',
-          minWidth: 100,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 150,
-          align: 'center',
-        },
-      ],
       tbody: [],
       num: [],
       orderDatalist: null,
@@ -383,8 +332,8 @@ export default {
     // 具体日期搜索()；
     onchangeTime(e) {
       this.pagination.page = 1;
-      this.timeVal = e;
-      this.pagination.time = this.timeVal[0] ? this.timeVal.join('-') : '';
+      this.timeVal = e || [];
+      this.pagination.time = this.timeVal[0] ? this.timeVal ? this.timeVal.join('-') : '' : '';
       this.getOrderList();
     },
     // 操作
@@ -400,11 +349,11 @@ export default {
           };
           this.$modalSure(this.delfromData)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.getOrderList();
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
           // this.modalTitleSs = '修改立即支付';
           break;
@@ -447,12 +396,12 @@ export default {
           };
           this.$modalSure(this.delfromData)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.$emit('changeGetTabs');
               this.getOrderList();
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
           break;
         case '11':
@@ -465,11 +414,11 @@ export default {
           };
           this.$modalSure(this.delfromData)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.getOrderList();
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
           break;
         default:
@@ -493,11 +442,11 @@ export default {
         };
         this.$modalSure(this.delfromData)
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.getOrderList();
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else {
         this.$modalForm(getNewRefundFrom(id)).then(() => {
@@ -514,7 +463,7 @@ export default {
           this.$refs.edits.modals = true;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 获取详情表单数据
@@ -534,7 +483,7 @@ export default {
           });
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 删除单条订单
@@ -542,11 +491,11 @@ export default {
       if (row.is_del === 1) {
         this.$modalSure(data)
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.getOrderList();
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else {
         const title = '错误！';
@@ -586,7 +535,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     nameSearch() {
@@ -606,7 +555,7 @@ export default {
           this.$refs.edits.modals = true;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

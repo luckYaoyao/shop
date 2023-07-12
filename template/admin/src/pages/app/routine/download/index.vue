@@ -17,13 +17,13 @@
               <div class="line"></div>
               <div class="right title">小程序设置</div>
             </div>
-            <Alert v-if="!pageData.appId && !pageData.code">
-              <template slot="desc">
+            <el-alert v-if="!pageData.appId && !pageData.code">
+              <template slot="title">
                 您尚未配置小程序信息，请<router-link :to="{ path: $routeProStr + '/setting/system_config_retail/3/7' }"
                   >立即设置</router-link
                 ></template
               >
-            </Alert>
+            </el-alert>
             <div class="content-box">
               <div class="left">小程序名称：</div>
               <div class="right">{{ pageData.routine_name || '未命名' }}</div>
@@ -122,11 +122,11 @@ export default {
           window.open(res.data.url);
         })
         .catch((err) => {
-          this.$Message.warning(err.msg);
+          this.$message.warning(err.msg);
         });
     },
     downLoadCode(url) {
-      if (!url) return this.$Message.warning('暂无小程序码');
+      if (!url) return this.$message.warning('暂无小程序码');
       var image = new Image();
       image.src = url;
       // 解决跨域 Canvas 污染问题

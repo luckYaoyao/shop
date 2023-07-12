@@ -70,9 +70,9 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <Modal v-model="modal" :title="`${rowModelType}${rowEdit && rowEdit.title}会员`" footer-hide @on-cancel="cancel">
+    <el-dialog :visible.sync="modal" :title="`${rowModelType}${rowEdit && rowEdit.title}会员`" @closed="cancel">
       <form-create v-model="fapi" :rule="rule" @submit="onSubmit"></form-create>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -224,11 +224,11 @@ export default {
       };
       memberCard(data)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getMemberShip();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     cancel() {
@@ -245,7 +245,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     addType() {
@@ -268,11 +268,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getMemberShip();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     editType(row) {
@@ -324,12 +324,12 @@ export default {
       memberShipSave(this.rowEdit.id, formData)
         .then((res) => {
           this.modal = false;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getMemberShip();
           this.cancel();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
   },

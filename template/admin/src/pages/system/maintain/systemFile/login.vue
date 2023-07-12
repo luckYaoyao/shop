@@ -72,7 +72,7 @@ export default {
         if (valid) {
           opendirLoginApi(this.formInline)
             .then(async (res) => {
-              this.$Message.success('登录成功!');
+              this.$message.success('登录成功!');
               //   this.$emit('on-Login', res.data);
               let expires = this.getExpiresTime(res.data.expires_time);
               // 记录用户登陆信息
@@ -82,7 +82,7 @@ export default {
               });
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;

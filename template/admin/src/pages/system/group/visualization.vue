@@ -10,20 +10,18 @@
     </div>
     <div class="box-wrapper">
       <div class="left-wrapper" v-if="!$route.params.id && groupAll.length">
-        <Menu :theme="theme3" :active-name="sortName" width="auto">
-          <MenuGroup>
-            <MenuItem
-              :name="item.config_name"
-              class="menu-item"
-              v-for="(item, index) in groupAll"
-              :key="index"
-              @click.native="edits(item)"
-            >
-              {{ item.name }}
-            </MenuItem>
-            <MenuItem name="guide" class="menu-item" @click.native="edits(2)"> 开屏广告 </MenuItem>
-          </MenuGroup>
-        </Menu>
+        <div class="tree-vis">
+          <div
+            class="tab-item"
+            :class="{ active: item.id == pageId }"
+            v-for="(item, index) in groupAll"
+            :key="index"
+            @click="edits(item)"
+          >
+            {{ item.name }}
+          </div>
+          <div class="tab-item" :class="{ active: pageId == 1617 }" @click="edits(2)">开屏广告</div>
+        </div>
       </div>
       <div v-if="name == 'user_recharge_quota'" class="iframe">
         <div class="iframe-boxs">
@@ -109,7 +107,7 @@
           "
           class="moddile_box"
         >
-          <div class="nofonts" v-if="tabList.list == '' || !tabList.list.length || !tabList.list[0].img">
+          <div class="nofonts" v-if="!tabList.list || !tabList.list.length || !tabList.list[0].img">
             暂无照片，请添加~
           </div>
           <swiper v-else :options="swiperOption" class="swiperimg">
@@ -380,15 +378,12 @@
                   </div>
                 </draggable>
                 <div>
-                  <Modal
-                    v-model="modalPic"
+                  <el-dialog
+                    :visible.sync="modalPic"
                     width="950px"
-                    scrollable
-                    footer-hide
-                    closable
                     title="上传商品图"
-                    :mask-closable="false"
-                    :z-index="999"
+                    :close-on-click-modal="false"
+                    :show-close="false"
                   >
                     <uploadPictures
                       :isChoice="isChoice"
@@ -397,7 +392,7 @@
                       :gridPic="gridPic"
                       v-if="modalPic"
                     ></uploadPictures>
-                  </Modal>
+                  </el-dialog>
                 </div>
               </div>
               <template>
@@ -469,16 +464,7 @@
                 </div>
               </draggable>
               <div>
-                <Modal
-                  v-model="modalPic"
-                  width="950px"
-                  scrollable
-                  footer-hide
-                  closable
-                  title="上传商品图"
-                  :mask-closable="false"
-                  :z-index="999"
-                >
+                <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
                   <uploadPictures
                     :isChoice="isChoice"
                     @getPic="getPic"
@@ -486,7 +472,7 @@
                     :gridPic="gridPic"
                     v-if="modalPic"
                   ></uploadPictures>
-                </Modal>
+                </el-dialog>
               </div>
             </div>
             <template v-if="tabList.list.length < 5">
@@ -596,11 +582,7 @@ export default {
           prevEl: '.swiper-button-prev',
         },
         //自动轮播
-        autoplay: {
-          delay: 2000,
-          //当用户滑动图片后继续自动轮播
-          disableOnInteraction: false,
-        },
+        autoplay: false,
         //开启循环模式
         loop: false,
       },
@@ -688,9 +670,9 @@ export default {
     handleSuccess(res, file, fileList) {
       if (res.status === 200) {
         this.$set(this.formItem, 'video_link', res.data.src);
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
       } else {
-        this.$Message.error(res.msg);
+        this.$message.error(res.msg);
       }
     },
     zh_uploadFile() {
@@ -808,7 +790,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     edits(row) {
@@ -821,6 +803,7 @@ export default {
       } else if (row == 2) {
         this.a = 0;
         this.guide = 2;
+        this.pageId = 1617;
         getOpenAdv().then((res) => {
           if (res.data) {
             this.formItem = res.data;
@@ -888,7 +871,7 @@ export default {
         };
       } else {
         if (this.tabList.list.length == 5) {
-          this.$Message.warning('最多添加五张呦');
+          this.$message.warning('最多添加五张呦');
         } else {
           let obj = JSON.parse(JSON.stringify(this.lastObj));
           this.tabList.list.push(obj);
@@ -921,7 +904,7 @@ export default {
       } else if (this.guide == 2) {
         this.formItem.value = this.tabList.list;
         openAdvSave(this.formItem).then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         });
       } else {
         this.loadingExist = true;
@@ -932,11 +915,11 @@ export default {
         })
           .then((res) => {
             this.loadingExist = false;
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((err) => {
             this.loadingExist = false;
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       }
     },
@@ -956,7 +939,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -980,10 +963,10 @@ export default {
       this.$modalSure(delfromData)
         .then((res) => {
           this.info();
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改是否显示
@@ -991,12 +974,12 @@ export default {
       groupDataSetApi('setting/group_data/set_status/' + row.id + '/' + row.status)
         .then(async (res) => {
           this.url = this.BaseURL + '/pages/users/user_sgin/index';
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.info();
         })
         .catch((res) => {
           this.url = this.BaseURL + '/pages/users/user_sgin/index';
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     getGroupAll() {
@@ -1007,7 +990,7 @@ export default {
           this.pageId = res.data[0].id;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     getContent(val) {
@@ -1019,10 +1002,10 @@ export default {
         if (valid) {
           setAgreement(this.formValidate)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;
@@ -1040,7 +1023,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },
@@ -1860,5 +1843,17 @@ export default {
   top: 0;
   background-color: rgba(0, 0, 0, 0.5);
   text-align: center;
+}
+.tree-vis{
+  display flex
+  flex-direction: column;
+  .tab-item{
+    padding 15px 20px
+    cursor pointer
+  }
+  .active{
+    background-color: var(--prev-bg-menu-hover-ba-color);
+    border-right: 2px solid var(--prev-color-primary);
+  }
 }
 </style>

@@ -11,21 +11,6 @@
     </div>
     <el-card :bordered="false" shadow="never" class="ivu-mt">
       <el-row class="ivu-mt box-wrapper">
-        <el-col :xs="24" :sm="24" :md="6" :lg="4" class="left-wrapper" v-if="!$route.params.id && groupAll.length">
-          <Menu :theme="theme3" :active-name="sortName" width="auto">
-            <MenuGroup>
-              <MenuItem
-                :name="item.id"
-                class="menu-item"
-                v-for="(item, index) in groupAll"
-                :key="index"
-                @click.native="bindMenuItem(item, index)"
-              >
-                {{ item.name }}
-              </MenuItem>
-            </MenuGroup>
-          </Menu>
-        </el-col>
         <el-col :xs="24" :sm="24" :md="$route.params.id ? 24 : 17" :lg="$route.params.id ? 24 : 20" ref="rightBox">
           <el-form
             ref="formValidate"
@@ -51,7 +36,6 @@
             </el-row>
           </el-form>
           <el-table
-            :columns="columns1"
             :data="tabList"
             ref="table"
             class="mt25"
@@ -127,6 +111,7 @@ export default {
   components: { editFrom },
   data() {
     return {
+      treeId: '',
       grid: {
         xl: 7,
         lg: 7,
@@ -197,7 +182,7 @@ export default {
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 返回
@@ -234,7 +219,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格头部
@@ -294,7 +279,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索
@@ -315,11 +300,11 @@ export default {
     onchangeIsShow(row) {
       groupDataSetApi(this.getUrl(`/set_status/${row.id}/${row.status}`))
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -340,11 +325,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tabList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },
@@ -392,4 +377,44 @@ export default {
     img
         width 100%
         height 100%
+.tree {
+      min-height: 374px;
+      /deep/ .file-name {
+        display: flex;
+        align-items: center;
+        .icon {
+          width: 12px;
+          height: 12px;
+          margin-right: 8px;
+        }
+      }
+      /deep/ .el-tree-node {
+        // margin-right: 16px;
+      }
+      /deep/ .el-tree-node__children .el-tree-node {
+        margin-right: 0;
+      }
+      /deep/ .el-tree-node__content {
+        width: 100%;
+        height: 36px;
+      }
+      /deep/ .custom-tree-node {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-right: 17px;
+        font-size: 13px;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 0.6);
+        line-height: 13px;
+      }
+      /deep/ .is-current {
+        background: #f1f9ff !important;
+        color: #1890ff !important;
+      }
+      /deep/ .is-current .custom-tree-node {
+        color: #1890ff !important;
+      }
+    }
 </style>

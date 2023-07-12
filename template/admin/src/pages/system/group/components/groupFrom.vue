@@ -1,17 +1,14 @@
 <template>
   <div>
-    <Modal
-      v-model="modals"
-      width="850"
-      scrollable
-      footer-hide
-      closable
-      :title="titleFrom"
-      :mask-closable="false"
-      @on-cancel="handleReset"
-    >
-      <el-form ref="formValidate" :model="formValidate" label-width="100px" :rules="ruleValidate" @submit.native.prevent>
-        <el-row  :gutter="24">
+    <el-dialog :visible.sync="modals" width="850" :title="titleFrom" :close-on-click-modal="false">
+      <el-form
+        ref="formValidate"
+        :model="formValidate"
+        label-width="100px"
+        :rules="ruleValidate"
+        @submit.native.prevent
+      >
+        <el-row :gutter="24">
           <el-col :span="24">
             <el-form-item label="数据组名称：" prop="name">
               <el-input v-model="formValidate.name" placeholder="请输入数据组名称" style="width: 90%"></el-input>
@@ -95,12 +92,13 @@
               <el-button type="primary" @click="addType">添加字段</el-button>
             </el-form-item>
           </el-col>
-          <el-col :span="24">
-            <el-button type="primary" long @click="handleSubmit('formValidate')" :disabled="valids">提交</el-button>
-          </el-col>
         </el-row>
       </el-form>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="handleReset">取 消</el-button>
+        <el-button type="primary" @click="handleSubmit('formValidate')" :disabled="valids">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -189,7 +187,7 @@ export default {
           this.formValidate = res.data.info;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 提交
@@ -201,22 +199,22 @@ export default {
       };
       this.$refs[name].validate((valid) => {
         if (valid) {
-          if (this.formValidate.typelist.length === 0) return this.$Message.error('请添加字段名称：姓名！');
+          if (this.formValidate.typelist.length === 0) return this.$message.error('请添加字段名称：姓名！');
           groupAddApi(data)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.modals = false;
               this.$refs[name].resetFields();
               this.formValidate.typelist = [];
               this.$emit('getList');
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
-          if (!this.formValidate.name) return this.$Message.error('请添加数据组名称！');
-          if (!this.formValidate.config_name) return this.$Message.error('请添加数据字段！');
-          if (!this.formValidate.info) return this.$Message.error('请添加数据简介！');
+          if (!this.formValidate.name) return this.$message.error('请添加数据组名称！');
+          if (!this.formValidate.config_name) return this.$message.error('请添加数据字段！');
+          if (!this.formValidate.info) return this.$message.error('请添加数据简介！');
         }
       });
     },

@@ -195,7 +195,7 @@ export default {
           this.chinaConfigure();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     //性别
@@ -265,7 +265,7 @@ export default {
           };
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

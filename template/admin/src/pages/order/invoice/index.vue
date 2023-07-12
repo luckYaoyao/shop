@@ -29,18 +29,19 @@
             <!--                        </el-col>-->
             <el-col :span="24" class="ivu-text-left">
               <el-form-item label="创建时间：">
-                <DatePicker
+                <el-date-picker
                   :editable="false"
                   @change="onchangeTime"
-                  :value="timeVal"
+                  v-model="timeVal"
                   format="yyyy/MM/dd"
                   type="datetimerange"
-                  placement="bottom-start"
-                  placeholder="请选择时间"
-                  style="width: 300px"
+                  value-format="yyyy/MM/dd"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  style="width: 380px"
                   class="mr20"
-                  :options="options"
-                ></DatePicker>
+                ></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="24">
@@ -77,7 +78,6 @@
         <el-tab-pane :label="'退款发票（' + tablists.refund + '）'" name="3" />
       </el-tabs>
       <el-table
-        :columns="columns"
         :data="orderList"
         ref="table"
         :loading="loading"
@@ -145,15 +145,7 @@
         />
       </div>
     </el-card>
-    <Modal
-      v-model="invoiceShow"
-      scrollable
-      title="发票详情"
-      class="order_box"
-      width="700"
-      @on-cancel="cancel"
-      footer-hide
-    >
+    <el-dialog :visible.sync="invoiceShow" title="发票详情" class="order_box" width="700px" @closed="cancel">
       <el-form ref="formInline" :model="formInline" label-width="100px" @submit.native.prevent>
         <div v-if="invoiceDetails.header_type === 1 && invoiceDetails.type === 1">
           <div class="list">
@@ -266,10 +258,10 @@
         </el-form-item>
         <el-button type="primary" @click="handleSubmit()" style="width: 100%; margin: 0 10px">确定</el-button>
       </el-form>
-    </Modal>
-    <Modal v-model="orderShow" scrollable title="订单详情" footer-hide class="order_box" width="700">
+    </el-dialog>
+    <el-dialog v-model="orderShow" title="订单详情" class="order_box" width="700px">
       <orderDetall :orderId="orderId" @detall="detall" v-if="orderShow"></orderDetall>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -378,97 +370,6 @@ export default {
         sm: 24,
         xs: 24,
       },
-      columns: [
-        {
-          title: '订单号',
-          key: 'order_id',
-          minWidth: 170,
-        },
-        // {
-        //     title: '订单类型',
-        //     key: 'pink_name',
-        //     minWidth: 150
-        // },
-        {
-          title: '订单金额',
-          slot: 'pay_price',
-          minWidth: 100,
-        },
-        {
-          title: '发票类型',
-          slot: 'type',
-          minWidth: 120,
-          filters: [
-            {
-              label: '电子普通发票',
-              value: 1,
-            },
-            {
-              label: '纸质专用发票',
-              value: 2,
-            },
-          ],
-          filterMultiple: false,
-          filterMethod(value, row) {
-            if (value === 1) {
-              return row.type === 1;
-            } else if (value === 2) {
-              return row.type === 2;
-            }
-          },
-        },
-        {
-          title: '发票抬头类型',
-          slot: 'header_type',
-          minWidth: 110,
-          filters: [
-            {
-              label: '个人',
-              value: 1,
-            },
-            {
-              label: '企业',
-              value: 2,
-            },
-          ],
-          filterMultiple: false,
-          filterMethod(value, row) {
-            if (value === 1) {
-              return row.header_type === 1;
-            } else if (value === 2) {
-              return row.header_type === 2;
-            }
-          },
-        },
-        // {
-        //     title: '支付状态',
-        //     key: 'pay_type_name',
-        //     minWidth: 90
-        // },
-        {
-          title: '下单时间',
-          key: 'add_time',
-          minWidth: 150,
-          sortable: true,
-        },
-        {
-          title: '开票状态',
-          slot: 'is_invoice',
-          minWidth: 80,
-        },
-        {
-          title: '订单状态',
-          slot: 'status',
-          minWidth: 80,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 150,
-          align: 'center',
-        },
-      ],
       orderList: [],
       total: 0, // 总条数
       orderData: {
@@ -515,18 +416,18 @@ export default {
     },
     handleSubmit() {
       if (this.formInline.is_invoice === 1) {
-        if (this.formInline.invoice_number.trim() === '') return this.$Message.error('请填写发票编号');
+        if (this.formInline.invoice_number.trim() === '') return this.$message.error('请填写发票编号');
       }
       orderInvoiceSet(this.invoiceDetails.invoice_id, this.formInline)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.invoiceShow = false;
           this.getList();
           this.empty();
           this.getTabs();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     edit(row) {
@@ -548,7 +449,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     getTabs() {
@@ -557,7 +458,7 @@ export default {
           this.tablists = res.data;
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 精确搜索()
@@ -569,8 +470,8 @@ export default {
     // 具体日期搜索()；
     onchangeTime(e) {
       this.orderData.page = 1;
-      this.timeVal = e;
-      this.orderData.data = this.timeVal[0] ? this.timeVal.join('-') : '';
+      this.timeVal = e || [];
+      this.orderData.data = this.timeVal[0] ? this.timeVal ? this.timeVal.join('-') : '' : '';
       this.getList();
       this.getTabs();
     },

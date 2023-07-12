@@ -27,9 +27,9 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
-            <a @click="edit(row.id)">修改</a>
+            <a @click="edit(scope.row.id)">修改</a>
             <el-divider direction="vertical"></el-divider>
-            <a @click="del(row, '删除分组', index)">删除</a>
+            <a @click="del(scope.row, '删除分组', scope.$index)">删除</a>
           </template>
         </el-table-column>
       </el-table>
@@ -99,7 +99,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改
@@ -117,12 +117,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.groupLists.splice(num, 1);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

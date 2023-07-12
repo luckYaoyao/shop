@@ -46,14 +46,14 @@
         </el-row>
       </el-form>
     </el-card>
-    <Alert class="mt10" :closable="true">
+    <el-alert class="mt10" :closable="true">
       使用说明
-      <template slot="desc">
+      <template slot="title">
         1、前端页面：添加用户端页面语言，添加完成之后状态码为中文文字，前端页面使用 $t(`xxxx`)，js文件中使用
         this.t(`xxxx`) 或者使用 that.t(`xxxx`)<br />
         2、后端接口：添加后端接口语言，添加完成之后状态码为6位数字，后台抛错或者控制器返回文字的时候直接填写状态码数字
       </template>
-    </Alert>
+    </el-alert>
     <el-card :bordered="false" shadow="never">
       <el-row class="mb15">
         <el-col>
@@ -104,15 +104,7 @@
         />
       </div>
     </el-card>
-    <Modal
-      v-model="addlangModal"
-      width="750"
-      title="添加需要翻译的语句"
-      :loading="FormLoading"
-      @on-ok="ok"
-      @on-cancel="addlangModal = false"
-      @on-visible-change="modalChange"
-    >
+    <el-dialog :visible.sync="addlangModal" width="750px" title="添加需要翻译的语句" @closed="modalChange">
       <el-form ref="langFormData" :model="langFormData" :rules="ruleValidate">
         <el-form-item label="应用端：" class="mb20" label-width="120px">
           <el-radio-group type="button" v-model="langFormData.is_admin" class="mr15">
@@ -147,7 +139,11 @@
           </el-table>
         </el-form-item>
       </el-form>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addlangModal = false">取 消</el-button>
+        <el-button type="primary" @click="ok">翻 译</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -174,39 +170,6 @@ export default {
         code: [{ required: true, message: '请输入状态码/文字', trigger: 'blur' }],
         remarks: [{ required: true, message: '请输入文字', trigger: 'blur' }],
       },
-      columns: [
-        {
-          title: '编号',
-          key: 'id',
-          width: 80,
-        },
-        {
-          title: '原语句',
-          key: 'remarks',
-          minWidth: 250,
-        },
-        {
-          title: '对应语言翻译',
-          key: 'lang_explain',
-          minWidth: 250,
-        },
-        {
-          title: '状态码/文字(接口/页面调用参考)',
-          key: 'code',
-          minWidth: 100,
-        },
-        {
-          title: '语言类型',
-          key: 'language_name',
-          minWidth: 100,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          width: 100,
-        },
-      ],
       langColumns: [
         {
           title: '语言类型',
@@ -248,7 +211,7 @@ export default {
   methods: {
     translate() {
       if (!this.langFormData.remarks.trim()) {
-        return this.$Message.warning('请先输入翻译内容');
+        return this.$message.warning('请先输入翻译内容');
       }
       this.traTabLoading = true;
       langCodeTranslate({
@@ -262,7 +225,7 @@ export default {
         })
         .catch((err) => {
           this.traTabLoading = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     add() {
@@ -282,12 +245,12 @@ export default {
         this.$nextTick(() => {
           this.FormLoading = true;
         });
-        return this.$Message.error('请先输入语言说明');
+        return this.$message.error('请先输入语言说明');
       }
       langCodeSettingSave(this.langFormData)
         .then((res) => {
           this.addlangModal = false;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((err) => {
@@ -295,7 +258,7 @@ export default {
           this.$nextTick(() => {
             this.FormLoading = true;
           });
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     edit(row) {
@@ -311,7 +274,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 删除
@@ -325,24 +288,22 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tabList.splice(num, 1);
           // this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
-    modalChange(status) {
-      if (!status) {
-        this.langFormData = {
-          is_admin: 0,
-          name: '',
-          code: '',
-          list: [],
-        };
-        this.code = null;
-      }
+    modalChange() {
+      this.langFormData = {
+        is_admin: 0,
+        name: '',
+        code: '',
+        list: [],
+      };
+      this.code = null;
     },
     // 选择
     selChange() {
@@ -361,7 +322,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

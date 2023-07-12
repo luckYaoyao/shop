@@ -97,7 +97,7 @@ export default {
           this.loading = false;
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
           this.loading = false;
         });
     },

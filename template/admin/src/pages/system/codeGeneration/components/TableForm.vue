@@ -1,8 +1,8 @@
 <template>
   <div class="main">
-    <Alert closable>
+    <el-alert closable>
       crud生成说明
-      <template #desc>
+      <template #title>
         <p>
           1、字段配置中表存在生成的字段为表内列的信息,并且主键、伪删除字段不允许设置为列，主键默认展示在列表中，伪删除字段不允许展示
         </p>
@@ -16,7 +16,7 @@
         <p>5、在字段配置中，表单类型为不生成时创建后不会生成对应的表单项</p>
         <p>6、添加字段id、create_time、update_time、delete_time为不可用字段</p>
       </template>
-    </Alert>
+    </el-alert>
     <div class="df">
       <el-button class="mr20" type="primary" @click="addRow">添加一行</el-button>
       <el-checkbox class="mr10" v-model="isCreate" @change="addCreate">添加与修改时间</el-checkbox>
@@ -31,7 +31,6 @@
         v-loading="loading"
         max-height="600"
         size="small"
-        
       >
         <el-table-column label="字段名称" min-width="100">
           <template slot-scope="scope">
@@ -123,16 +122,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <Modal
-      v-model="optionsModal"
-      scrollable
-      title="字典配置"
-      closable
-      :mask-closable="false"
-      width="400px"
-      @on-ok="addOptions"
-      @on-cancel="optionsModal = false"
-    >
+    <el-dialog :visible.sync="optionsModal" title="字典配置" :close-on-click-modal="false" width="400px">
       <div class="options-list">
         <div class="item" v-for="(item, index) in optionsList" :key="index">
           <el-input class="mr10" v-model="item.label" placeholder="label" style="width: 150px" />
@@ -141,7 +131,11 @@
           <Icon v-if="index > 0" class="add" type="md-remove-circle" @click="delOneOptions(index)" />
         </div>
       </div>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="optionsModal = false">取 消</el-button>
+        <el-button type="primary" @click="addOptions">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -169,67 +163,6 @@ export default {
       optionsModal: false,
       isCreate: false,
       isDelete: false,
-      columns: [
-        {
-          title: '字段名称',
-          slot: 'field',
-          minWidth: 100,
-        },
-        {
-          title: '字段类型',
-          slot: 'field_type',
-          minWidth: 100,
-        },
-        {
-          title: '长度',
-          slot: 'limit',
-          minWidth: 100,
-        },
-        {
-          title: '默认值',
-          slot: 'default',
-          minWidth: 100,
-        },
-        {
-          title: '字段描述',
-          slot: 'comment',
-          minWidth: 100,
-        },
-        {
-          title: '列表',
-          slot: 'is_table',
-          width: 70,
-          align: 'center',
-        },
-        {
-          title: '列表名',
-          slot: 'table_name',
-          minWidth: 120,
-          align: 'center',
-        },
-        {
-          title: '表单类型',
-          slot: 'from_type',
-          minWidth: 100,
-        },
-        {
-          title: '字典配置',
-          slot: 'options',
-          minWidth: 100,
-        },
-        {
-          title: '必填',
-          slot: 'required',
-          width: 70,
-          align: 'center',
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          width: 70,
-          align: 'center',
-        },
-      ],
       fromTypeList: [],
       loading: false,
       tableField: [],
@@ -290,7 +223,7 @@ export default {
       for (let i = 0; i < this.tableField.length; i++) {
         const el = this.tableField[i];
         if ((!el.field || !el.field_type) && !['addTimestamps', 'addSoftDelete'].includes(el.field_type)) {
-          return this.$Message.warning('请先完善上一条数据');
+          return this.$message.warning('请先完善上一条数据');
         }
         if (
           el.is_table &&
@@ -298,7 +231,7 @@ export default {
           !Number(el.primaryKey) &&
           !['addTimestamps', 'addSoftDelete'].includes(el.field_type)
         ) {
-          return this.$Message.warning('请输入列表名');
+          return this.$message.warning('请输入列表名');
         }
       }
       let i = this.tableField.length;
@@ -334,7 +267,7 @@ export default {
           this.$nextTick((e) => {
             this.isCreate = false;
           });
-          return this.$Message.warning('已存在 create_time或update_time');
+          return this.$message.warning('已存在 create_time或update_time');
         }
         let data = [
           {
@@ -373,7 +306,7 @@ export default {
         let haveDel = this.tableField.findIndex((e) => e.field === 'delete_time');
         if (haveDel > 0) {
           this.isDelete = false;
-          return this.$Message.warning('已存在 delete_time');
+          return this.$message.warning('已存在 delete_time');
         }
         let data = [
           {
@@ -401,7 +334,7 @@ export default {
         for (let i = 0; i < this.tableField.length; i++) {
           const e = this.tableField[i];
           if (['id', 'create_time', 'update_time', 'delete_time'].includes(this.tableField[index].field)) {
-            this.$Message.warning('列表中已存在该字段名称');
+            this.$message.warning('列表中已存在该字段名称');
             this.tableField[index].field = '';
             return;
           }

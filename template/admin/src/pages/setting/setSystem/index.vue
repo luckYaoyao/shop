@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="spinShow">
     <div class="i-layout-page-header header-title" v-if="!headerList.length">
       <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
     </div>
@@ -23,7 +23,6 @@
           ></el-tab-pane>
         </el-tabs>
         <form-create :option="option" :rule="rules" @submit="onSubmit" v-if="rules.length !== 0"></form-create>
-        <Spin size="large" fix v-if="spinShow"></Spin>
       </el-card>
     </div>
   </div>
@@ -57,7 +56,7 @@ export default {
                 if (res.status === 200) {
                   file.url = res.data.src;
                 } else {
-                  this.$Message.error(res.msg);
+                  this.$message.error(res.msg);
                 }
               },
             },
@@ -126,7 +125,7 @@ export default {
           })
           .catch((err) => {
             this.spinShow = false;
-            this.$Message.error(err);
+            this.$message.error(err);
           });
       });
     },
@@ -174,7 +173,7 @@ export default {
           })
           .catch((res) => {
             this.spinShow = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       });
     },
@@ -202,7 +201,7 @@ export default {
         data: formData,
       })
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           if (formData.site_name) {
             localStorage.setItem('ADMIN_TITLE', formData.site_name);
             this.$store.commit('setAdminTitle', formData.site_name);
@@ -210,7 +209,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

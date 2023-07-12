@@ -129,7 +129,7 @@ export default {
     },
     addRow() {
       let foundation = this.formItem.foundation;
-      if (!foundation.tableName) return this.$Message.warning('请先填写表名');
+      if (!foundation.tableName) return this.$message.warning('请先填写表名');
       let data = {
         menuName: foundation.menuName,
         tableName: foundation.tableName,
@@ -158,16 +158,16 @@ export default {
           this.currentTab++;
         })
         .catch((err) => {
-          this.$Message.warning(err.msg);
+          this.$message.warning(err.msg);
         });
     },
     nextTab() {
       if (this.currentTab == 0) {
-        // if (!this.formItem.foundation.pid) return this.$Message.warning('请选择菜单');
-        if (!this.formItem.foundation.tableName) return this.$Message.warning('请输入表名');
-        if (!this.formItem.foundation.modelName) return this.$Message.warning('请输入模块名');
+        // if (!this.formItem.foundation.pid) return this.$message.warning('请选择菜单');
+        if (!this.formItem.foundation.tableName) return this.$message.warning('请输入表名');
+        if (!this.formItem.foundation.modelName) return this.$message.warning('请输入模块名');
         if (!this.formItem.foundation.isTable) {
-          if (!this.$refs.TableForm.tableField.length) return this.$Message.warning('请先添加表数据');
+          if (!this.$refs.TableForm.tableField.length) return this.$message.warning('请先添加表数据');
           if (this.$refs.TableForm.tableField.length)
             for (let i = 0; i < this.$refs.TableForm.tableField.length; i++) {
               const el = this.$refs.TableForm.tableField[i];
@@ -175,7 +175,7 @@ export default {
                 ['addSoftDelete', 'addTimestamps'].indexOf(el.field_type) === -1 &&
                 (!el.field || !el.field_type || !el.comment)
               ) {
-                return this.$Message.warning('请完善sql表数据');
+                return this.$message.warning('请完善sql表数据');
               }
             }
         }
@@ -221,7 +221,7 @@ export default {
       this.reqloading = true;
       codeCrud(data)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getMenusUnique();
           this.reqloading = false;
 
@@ -234,7 +234,7 @@ export default {
         })
         .catch((err) => {
           this.reqloading = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     getMenusUnique() {

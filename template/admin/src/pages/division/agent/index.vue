@@ -33,7 +33,6 @@
             </el-col>
           </el-row>
           <el-table
-            :columns="columns"
             :data="userLists"
             ref="table"
             class="mt25"
@@ -118,9 +117,8 @@
         </el-col>
       </el-row>
     </el-card>
-    <Modal v-model="staffModal" scrollable title="员工列表" class="order_box" width="800" footer-hide>
+    <el-dialog :visible.sync="staffModal" title="员工列表" class="order_box" width="800px">
       <el-table
-        :columns="columns2"
         :data="clerkLists"
         ref="table"
         class="mt25"
@@ -165,7 +163,7 @@
           @pagination="getClerkList"
         />
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -192,76 +190,6 @@ export default {
         proportion: 0,
         image: '',
       },
-      columns2: [
-        {
-          title: '用户UID',
-          key: 'uid',
-          width: 80,
-        },
-        {
-          title: '头像',
-          slot: 'avatars',
-          minWidth: 60,
-        },
-        {
-          title: '姓名',
-          slot: 'nickname',
-          minWidth: 150,
-        },
-        {
-          title: '分销比例',
-          slot: 'division_percent',
-          minWidth: 100,
-        },
-      ],
-      columns: [
-        {
-          title: '用户UID',
-          key: 'uid',
-          width: 80,
-        },
-        {
-          title: '头像',
-          slot: 'avatars',
-          minWidth: 60,
-        },
-        {
-          title: '姓名',
-          slot: 'nickname',
-          minWidth: 150,
-        },
-        {
-          title: '分销比例',
-          slot: 'division_percent',
-          minWidth: 100,
-        },
-        {
-          title: '员工数量',
-          key: 'agent_count',
-          minWidth: 100,
-        },
-        {
-          title: '订单数量',
-          key: 'order_count',
-          minWidth: 100,
-        },
-        {
-          title: '截止时间',
-          slot: 'division_end_time',
-          minWidth: 100,
-        },
-        {
-          title: '状态',
-          slot: 'status',
-          minWidth: 100,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 120,
-        },
-      ],
       FromData: null,
       loading: false,
       current: 0,
@@ -329,7 +257,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 添加表单
@@ -348,10 +276,10 @@ export default {
       };
       isShowApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -366,11 +294,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.userLists.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

@@ -21,17 +21,17 @@
                   item.text
                 }}</el-radio-button>
               </el-radio-group>
-              <DatePicker
-                :editable="true"
-                :clearable="true"
+              <el-date-picker
+                v-model="timeVal"
+                :editable="false"
                 @change="onchangeTime"
-                :value="timeVal"
-                format="yyyy/MM/dd"
+                value-format="yyyy/MM/dd"
                 type="daterange"
                 placement="bottom-end"
-                placeholder="请选择时间"
-                style="width: 200px"
-              ></DatePicker>
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col v-bind="grid">
@@ -57,7 +57,6 @@
     <el-card :bordered="false" shadow="never">
       <el-table
         ref="selection"
-        :columns="columns"
         :data="tableList"
         class="ivu-mt"
         v-loading="loading"
@@ -151,14 +150,20 @@
         </el-table-column>
       </el-table>
       <div class="acea-row row-right page">
-        <pagination v-if="total" :total="total" :page.sync="formValidate.page" :limit.sync="formValidate.limit" @pagination="getList" />
+        <pagination
+          v-if="total"
+          :total="total"
+          :page.sync="formValidate.page"
+          :limit.sync="formValidate.limit"
+          @pagination="getList"
+        />
       </div>
     </el-card>
     <!-- 推广人列表-->
     <promoters-list ref="promotersLists"></promoters-list>
     <!-- 推广二维码-->
-    <Modal v-model="modals" scrollable footer-hide closable title="推广二维码" :mask-closable="false" width="600">
-      <div class="acea-row row-around">
+    <el-dialog :visible.sync="modals" title="推广二维码" :close-on-click-modal="false" width="600">
+      <div class="acea-row row-around" v-loading="spinShow">
         <div class="acea-row row-column-around row-between-wrapper">
           <div class="QRpic" v-if="code_src"><img v-lazy="code_src" /></div>
           <span class="QRpic_sp1 mt10" @click="getWeChat">公众号推广二维码</span>
@@ -172,10 +177,9 @@
           <span class="QRpic_sp2 mt10" @click="getH5">H5推广二维码</span>
         </div>
       </div>
-      <Spin size="large" fix v-if="spinShow"></Spin>
-    </Modal>
+    </el-dialog>
     <!--修改推广人-->
-    <Modal v-model="promoterShow" scrollable title="修改推广人" class="order_box" :closable="false">
+    <el-dialog :visible.sync="promoterShow" title="修改推广人" class="order_box" :show-close="false">
       <el-form ref="formInline" :model="formInline" label-width="100px" @submit.native.prevent>
         <el-form-item label="用户头像：" prop="image">
           <div class="picBox" @click="customer">
@@ -188,14 +192,14 @@
           </div>
         </el-form-item>
       </el-form>
-      <div slot="footer">
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancel('formInline')">取 消</el-button>
         <el-button type="primary" @click="putSend('formInline')">提交</el-button>
-        <el-button @click="cancel('formInline')">取消</el-button>
-      </div>
-    </Modal>
-    <Modal v-model="customerShow" scrollable title="请选择商城用户" :closable="false" width="50%">
+      </span>
+    </el-dialog>
+    <el-dialog :visible.sync="customerShow" title="请选择商城用户" :show-close="false" width="50%">
       <customerInfo v-if="customerShow" @imageObject="imageObject"></customerInfo>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -257,105 +261,6 @@ export default {
       loading: false,
       tableList: [],
       timeVal: [],
-      columns: [
-        // {
-        //     type: 'selection',
-        //     width: 60,
-        //     align: 'center'
-        // },
-        {
-          title: 'ID',
-          key: 'uid',
-          width: 80,
-        },
-        {
-          title: '头像',
-          key: 'headimgurl',
-          minWidth: 60,
-          render: (h, params) => {
-            return h('viewer', [
-              h(
-                'div',
-                {
-                  style: {
-                    width: '36px',
-                    height: '36px',
-                    borderRadius: '4px',
-                    cursor: 'pointer',
-                  },
-                },
-                [
-                  h('img', {
-                    attrs: {
-                      src: params.row.headimgurl ? params.row.headimgurl : require('../../assets/images/moren.jpg'),
-                    },
-                    style: {
-                      width: '100%',
-                      height: '100%',
-                    },
-                  }),
-                ],
-              ),
-            ]);
-          },
-        },
-        {
-          title: '用户信息',
-          slot: 'nickname',
-          minWidth: 120,
-        },
-        {
-          title: '推广用户数量',
-          key: 'spread_count',
-          minWidth: 125,
-        },
-        {
-          title: '分销等级',
-          slot: 'agentLevel',
-          minWidth: 120,
-        },
-        {
-          title: '订单数量',
-          key: 'order_count',
-          minWidth: 90,
-        },
-        {
-          title: '订单金额',
-          key: 'order_price',
-          minWidth: 120,
-        },
-        {
-          title: '佣金总金额',
-          key: 'brokerage_money',
-          minWidth: 120,
-        },
-        {
-          title: '已提现金额',
-          key: 'extract_count_price',
-          minWidth: 120,
-        },
-        {
-          title: '提现次数',
-          key: 'extract_count_num',
-          minWidth: 100,
-        },
-        {
-          title: '未提现金额',
-          key: 'new_money',
-          minWidth: 105,
-        },
-        {
-          title: '上级推广人',
-          key: 'spread_name',
-          minWidth: 105,
-        },
-        {
-          title: '操作',
-          slot: 'right',
-          fixed: 'right',
-          minWidth: 130,
-        },
-      ],
       code_src: '',
       code_xcx: '',
       code_h5: '',
@@ -385,17 +290,17 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (!this.formInline.spread_uid) {
-            return this.$Message.error('请上传用户');
+            return this.$message.error('请上传用户');
           }
           agentSpreadApi(this.formInline)
             .then((res) => {
               this.promoterShow = false;
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.getList();
               this.$refs[name].resetFields();
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         }
       });
@@ -412,7 +317,7 @@ export default {
           location.href = res.data[0];
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 操作
@@ -463,11 +368,11 @@ export default {
       };
       this.$modalSure(delfromDatap)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 取消自己推广资格
@@ -481,11 +386,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     edit(row) {
@@ -513,13 +418,13 @@ export default {
           this.cardLists = data.res;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.data = this.timeVal.join('-');
+      this.formValidate.data = this.timeVal ? this.timeVal.join('-') : '';
       this.formValidate.page = 1;
       if (!e[0]) {
         this.formValidate.data = '';
@@ -547,7 +452,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索
@@ -578,7 +483,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 小程序推广二维码
@@ -595,7 +500,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     getH5() {
@@ -611,7 +516,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

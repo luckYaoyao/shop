@@ -42,7 +42,7 @@ export function modalSure(delfromData) {
         }, 300);
       },
       onCancel: () => {
-        this.$Message.info('取消成功');
+        this.$message.info('取消成功');
       },
     });
   });

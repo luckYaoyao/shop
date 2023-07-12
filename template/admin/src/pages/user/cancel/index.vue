@@ -11,17 +11,6 @@
         <el-row :gutter="24">
           <el-col v-bind="grid">
             <el-form-item label="状态：" label-for="status1">
-              <!-- <el-select
-                v-model="levelFrom.status"
-                placeholder="请选择"
-                clearable
-                element-id="status1"
-                @change="userSearchs"
-              >
-                <el-option value="0">待审核</el-option>
-                <el-option value="1">通过</el-option>
-                <el-option value="1">拒绝</el-option>
-              </el-select> -->
               <el-radio-group v-model="levelFrom.status" type="button" @change="userSearchs(levelFrom.status)">
                 <el-radio-button label="">全部</el-radio-button>
                 <el-radio-button label="0">待审核</el-radio-button>
@@ -168,11 +157,11 @@ export default {
       };
       this.$modalSure(this.delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     refuse(row) {
@@ -184,11 +173,11 @@ export default {
       };
       this.$modalSure(this.delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     submitFail(text) {
@@ -199,12 +188,12 @@ export default {
       userCancelSetMark(data)
         .then((res) => {
           this.$refs.remark.modals = false;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((err) => {
           this.$refs.remark.modals = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
 
@@ -220,7 +209,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索

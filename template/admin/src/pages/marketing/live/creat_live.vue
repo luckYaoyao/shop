@@ -19,32 +19,34 @@
         :rules="ruleValidate"
         @submit.native.prevent
       >
-        <el-col :span="24">
-          <Alert type="warning" show-icon style="width: 550px; margin-left: 17px; margin-bottom: 25px"
-            >必须前往微信小程序官方后台开通直播权限，关注<span style="color: red; cursor: pointer" @click="codeImg"
-              >【小程序直播】</span
-            >须知直播状态</Alert
-          >
-        </el-col>
-        <el-col :span="24">
-          <el-form-item label="选择主播：" prop="anchor_wechat">
-            <el-select
-              v-model="formValidate.anchor_wechat"
-              filterable
-              clearable
-              style="width: 300px"
-              @change="anchorName"
-            >
-              <el-option
-                v-for="(item, index) in liveList"
-                :value="item.wechat"
-                :key="index"
-                :label="item.wechat"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-row :gutter="24" >
+        <el-row :gutter="24">
+          <el-col :span="24">
+            <el-alert class="mb10" type="warning" show-icon :closable="false">
+              <span slot="title"
+                >必须前往微信小程序官方后台开通直播权限，关注<span style="color: red; cursor: pointer" @click="codeImg"
+                  >【小程序直播】</span
+                >须知直播状态</span
+              >
+            </el-alert>
+          </el-col>
+          <el-col :span="24">
+            <el-form-item label="选择主播：" prop="anchor_wechat">
+              <el-select
+                v-model="formValidate.anchor_wechat"
+                filterable
+                clearable
+                style="width: 300px"
+                @change="anchorName"
+              >
+                <el-option
+                  v-for="(item, index) in liveList"
+                  :value="item.wechat"
+                  :key="index"
+                  :label="item.wechat"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="24">
             <el-form-item label="直播间名称：" prop="name">
               <el-input
@@ -100,14 +102,18 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="直播时间：" prop="name">
-              <DatePicker
+              <el-date-picker
                 type="datetimerange"
                 format="yyyy-MM-dd HH:mm"
                 placeholder="请选择直播时间"
-                style="width: 300px"
-                :value="timeVal"
+                style="width: 380px"
+                v-model="timeVal"
                 @change="selectDate"
-              ></DatePicker>
+                value-format="yyyy-MM-dd HH:mm"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -168,7 +174,7 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row :gutter="24" >
+        <el-row :gutter="24">
           <el-col v-bind="grid" :span="24">
             <el-button :loading="loading" type="primary" style="margin-left: 99px" @click="handleSubmit('formItem')">
               <span v-if="!loading">提交</span>
@@ -185,16 +191,7 @@
       </el-form>
     </el-card>
     <div>
-      <Modal
-        v-model="modalPic"
-        width="950px"
-        scrollable
-        footer-hide
-        closable
-        title="上传商品图"
-        :mask-closable="false"
-        :z-index="888"
-      >
+      <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false" :z-index="888">
         <uploadPictures
           :isChoice="isChoice"
           @getPic="getPic"
@@ -202,16 +199,15 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </Modal>
+      </el-dialog>
     </div>
-    <Modal v-model="modal3" title="二维码" @on-cancel="cancel" footer-hide>
+    <el-dialog :visible.sync="modal3" title="二维码">
       <div class="acea-row row-around">
         <div v-viewer class="QRpic">
           <img src="https://res.wx.qq.com/op_res/9rSix1dhHfK4rR049JL0PHJ7TpOvkuZ3mE0z7Ou_Etvjf-w1J_jVX0rZqeStLfwh" />
         </div>
       </div>
-      <!-- <Spin fix v-if="spin"></Spin> -->
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -342,6 +338,7 @@ export default {
       this.modal3 = false;
     },
     codeImg() {
+      console.log('111');
       this.modal3 = true;
     },
     anchorName(e) {
@@ -363,7 +360,7 @@ export default {
           this.liveList = res.data.list;
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
     // 点击图文封面
@@ -391,7 +388,7 @@ export default {
       this.loading = true;
       liveAdd(this.formValidate)
         .then((res) => {
-          this.$Message.success('添加成功');
+          this.$message.success('添加成功');
           setTimeout(() => {
             this.loading = false;
             this.$router.push({ path: this.$routeProStr + '/marketing/live/live_room' });
@@ -401,7 +398,7 @@ export default {
           setTimeout(() => {
             this.loading = false;
           }, 1000);
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
   },

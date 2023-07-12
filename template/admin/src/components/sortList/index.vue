@@ -28,7 +28,6 @@
       empty-text="暂无数据"
       
       max-height="400"
-      :columns="columns"
       :data="tableList"
       :loading="loading"
       @select="selectionGood"
@@ -118,7 +117,7 @@ export default {
           this.treeSelect = res.data;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 列表
@@ -131,7 +130,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索

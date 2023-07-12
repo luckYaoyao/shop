@@ -19,7 +19,12 @@
           <el-input v-model="formData.coupon_title" :maxlength="18" placeholder="请输入优惠券名称"></el-input>
         </el-form-item>
         <el-form-item label="优惠券面值">
-          <el-input-number controls-position="right" :min="1" :max="99999" v-model="formData.coupon_price"></el-input-number>
+          <el-input-number
+            controls-position="right"
+            :min="1"
+            :max="99999"
+            v-model="formData.coupon_price"
+          ></el-input-number>
         </el-form-item>
         <el-form-item label="发送方式">
           <el-radio-group v-model="formData.receive_type">
@@ -71,7 +76,12 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item v-if="isMinPrice">
-          <el-input-number controls-position="right" :min="1" :max="99999" v-model="formData.use_min_price"></el-input-number>
+          <el-input-number
+            controls-position="right"
+            :min="1"
+            :max="99999"
+            v-model="formData.use_min_price"
+          ></el-input-number>
           <div class="info">填写优惠券的最低消费金额</div>
         </el-form-item>
         <el-form-item label="使用时间">
@@ -81,17 +91,26 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item v-show="isCouponTime" label="">
-          <el-input-number controls-position="right" :min="1" v-model="formData.coupon_time" :precision="0"></el-input-number>
+          <el-input-number
+            controls-position="right"
+            :min="1"
+            v-model="formData.coupon_time"
+            :precision="0"
+          ></el-input-number>
           <div class="info">领取后多少天内有效</div>
         </el-form-item>
         <el-form-item v-show="!isCouponTime" label="">
-          <DatePicker
-            :value="datetime1"
+          <el-date-picker
+            v-model="datetime1"
             :editable="false"
             type="datetimerange"
-            placeholder="领取后在这个时间段内可以使用"
+            value-format="yyyy/MM/dd HH:mm:ss"
+            style="width: 380px"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
             @change="dateChange"
-          ></DatePicker>
+          ></el-date-picker>
         </el-form-item>
         <el-form-item label="领取时间" v-if="formData.receive_type != 2 && formData.receive_type != 3">
           <el-radio-group v-model="isReceiveTime">
@@ -100,12 +119,16 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item v-show="isReceiveTime" label="">
-          <DatePicker
-            :value="datetime2"
+          <el-date-picker
+            v-model="datetime2"
             type="datetimerange"
-            placeholder="在这个时间段内可领取"
+            value-format="yyyy/MM/dd HH:mm:ss"
+            style="width: 380px"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
             @change="timeChange"
-          ></DatePicker>
+          ></el-date-picker>
         </el-form-item>
         <el-form-item label="优惠券发布数量" v-if="formData.receive_type != 2 && formData.receive_type != 3">
           <el-radio-group v-model="formData.is_permanent">
@@ -118,11 +141,23 @@
           label=""
           v-if="formData.receive_type != 2 && formData.receive_type != 3"
         >
-          <el-input-number controls-position="right" :min="1" :max="99999" v-model="formData.total_count" :precision="0"></el-input-number>
+          <el-input-number
+            controls-position="right"
+            :min="1"
+            :max="99999"
+            v-model="formData.total_count"
+            :precision="0"
+          ></el-input-number>
           <div class="info">填写优惠券的发布数量</div>
         </el-form-item>
         <el-form-item label="用户领取数量" v-if="formData.receive_type != 2 && formData.receive_type != 3">
-          <el-input-number controls-position="right" :min="1" :max="99999" v-model="formData.receive_limit" :precision="0"></el-input-number>
+          <el-input-number
+            controls-position="right"
+            :min="1"
+            :max="99999"
+            v-model="formData.receive_limit"
+            :precision="0"
+          ></el-input-number>
           <div class="info">填写每个用户可以领取多少张</div>
         </el-form-item>
         <!--                <el-form-item label="排序">-->
@@ -144,17 +179,9 @@
         </el-form-item>
       </el-form>
     </el-card>
-    <Modal
-      v-model="modals"
-      title="商品列表"
-      footerHide
-      class="paymentFooter"
-      scrollable
-      width="900"
-      @on-cancel="cancel"
-    >
+    <el-dialog :visible.sync="modals" title="商品列表" class="paymentFooter" width="900px">
       <goods-list ref="goodslist" v-if="modals" :ischeckbox="true" @getProductId="getProductId"></goods-list>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -256,7 +283,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     makeDate(data) {
@@ -272,43 +299,43 @@ export default {
     // 创建
     save() {
       if (!this.formData.coupon_title) {
-        return this.$Message.error('请输入优惠券名称');
+        return this.$message.error('请输入优惠券名称');
       }
       if (this.formData.type === 2) {
         if (!this.formData.product_id) {
-          return this.$Message.error('请选择商品');
+          return this.$message.error('请选择商品');
         }
       }
       if (this.formData.type === 1) {
         if (!this.formData.category_id) {
-          return this.$Message.error('请选择品类');
+          return this.$message.error('请选择品类');
         }
       }
       if (this.formData.coupon_price <= 0) {
-        return this.$Message.error('优惠券面值不能小于0');
+        return this.$message.error('优惠券面值不能小于0');
       }
       if (!this.isMinPrice) {
         this.formData.use_min_price = 0;
       } else {
         if (this.formData.use_min_price < 1) {
-          return this.$Message.error('优惠券最低消费不能小于0');
+          return this.$message.error('优惠券最低消费不能小于0');
         }
       }
       if (this.isCouponTime) {
         this.formData.start_use_time = 0;
         this.formData.end_use_time = 0;
         if (this.formData.coupon_time < 1) {
-          return this.$Message.error('使用有效期限不能小于1天');
+          return this.$message.error('使用有效期限不能小于1天');
         }
       } else {
         this.formData.coupon_time = 0;
         if (!this.formData.start_use_time) {
-          return this.$Message.error('请选择使用有效期限');
+          return this.$message.error('请选择使用有效期限');
         }
       }
       if (this.isReceiveTime) {
         if (!this.formData.start_time) {
-          return this.$Message.error('请选择领取时间');
+          return this.$message.error('请选择领取时间');
         }
       } else {
         this.formData.start_time = 0;
@@ -321,11 +348,11 @@ export default {
         this.formData.total_count = 0;
       } else {
         if (this.formData.total_count < 1) {
-          return this.$Message.error('发布数量不能小于1');
+          return this.$message.error('发布数量不能小于1');
         }
       }
       if (this.formData.receive_limit < 1) {
-        return this.$Message.error('每个用户可以领取数量不能小于1');
+        return this.$message.error('每个用户可以领取数量不能小于1');
       }
       if (this.formData.type == 0) {
         this.formData.product_id = '';
@@ -341,7 +368,7 @@ export default {
       this.disabled = true;
       couponSaveApi(this.formData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           setTimeout(() => {
             this.disabled = false;
             this.$router.push({
@@ -351,7 +378,7 @@ export default {
         })
         .catch((err) => {
           this.disabled = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 使用有效期--时间段

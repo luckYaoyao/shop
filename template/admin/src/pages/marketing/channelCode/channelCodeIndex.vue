@@ -2,35 +2,35 @@
   <div>
     <el-row class="ivu-mt box-wrapper" ref="warpper">
       <el-col :span="3" class="left-wrapper">
-        <Menu :theme="theme3" :active-name="sortName" width="auto">
-          <MenuGroup>
-            <MenuItem
-              :name="item.id"
-              class="menu-item"
-              :class="index === current ? 'showOn' : ''"
-              v-for="(item, index) in labelSort"
-              :key="index"
-              @click.native="bindMenuItem(item, index)"
-            >
-              {{ item.cate_name }}
-              <div class="icon-box" v-if="index != 0">
-                <Icon type="ios-more" size="24" @click.stop="showMenu(item)" />
-              </div>
-              <div class="right-menu ivu-poptip-inner" v-show="item.status" v-if="index != 0">
-                <div class="ivu-poptip-body" @click="labelEdit(item)">
-                  <div class="ivu-poptip-body-content">
-                    <div class="ivu-poptip-body-content-inner">编辑分类</div>
-                  </div>
-                </div>
-                <div class="ivu-poptip-body" @click="deleteSort(item, '删除分类', index)">
-                  <div class="ivu-poptip-body-content">
-                    <div class="ivu-poptip-body-content-inner">删除分类</div>
-                  </div>
-                </div>
-              </div>
-            </MenuItem>
-          </MenuGroup>
-        </Menu>
+        <div class="tree">
+          <el-tree
+            :data="labelSort"
+            node-key="id"
+            default-expand-all
+            highlight-current
+            :expand-on-click-node="false"
+            @node-click="bindMenuItem"
+            :current-node-key="treeId"
+          >
+            <span class="custom-tree-node" slot-scope="{ data }">
+              <span class="file-name">
+                <i class="icon el-icon-folder-remove"></i>
+                {{ data.cate_name }}</span
+              >
+              <span>
+                <el-dropdown @command="(command) => clickMenu(data, command)">
+                  <Icon class="add" type="ios-more" />
+                  <template slot="dropdown">
+                    <el-dropdown-menu>
+                      <el-dropdown-item command="1">编辑分类</el-dropdown-item>
+                      <el-dropdown-item v-if="data.id" command="2">删除分类</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </span>
+            </span>
+          </el-tree>
+        </div>
       </el-col>
       <el-col :span="21" ref="rightBox">
         <el-card :bordered="false" shadow="never">
@@ -160,7 +160,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <Modal v-model="modals" scrollable footer-hide closable title="渠道码用户列表" :mask-closable="false" width="900">
+    <el-dialog :visible.sync="modals" title="渠道码用户列表" :close-on-click-modal="false" width="900px">
       <el-table ref="selection" :data="tabList" empty-text="暂无数据" highlight-current-row max-height="400">
         <el-table-column label="UID" min-width="120">
           <template slot-scope="scope">
@@ -189,7 +189,7 @@
           @pagination="getUserList"
         />
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -226,6 +226,7 @@ export default {
   },
   data() {
     return {
+      treeId: '',
       isChat: true,
       formValidate3: {
         page: 1,
@@ -315,7 +316,7 @@ export default {
       }
     },
     downLoadCode(url) {
-      if (!url) return this.$Message.warning('暂无二维码');
+      if (!url) return this.$message.warning('暂无二维码');
       var image = new Image();
       image.src = url;
       // 解决跨域 Canvas 污染问题
@@ -351,7 +352,7 @@ export default {
         .catch((res) => {
           this.loading = false;
           this.tabList = [];
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
 
@@ -383,7 +384,10 @@ export default {
     labelEdit(item) {
       this.$modalForm(wechatQrcodeCreate(item.id)).then(() => this.getUserLabelAll(1));
     },
-    deleteSort(row, tit, num) {
+    deleteSort(row, tit) {
+      let num = this.labelSort.findIndex((e) => {
+        return e.id == row.id;
+      });
       let delfromData = {
         title: tit,
         num: num,
@@ -393,13 +397,13 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.labelSort.splice(num, 1);
           this.labelSort = [];
           this.getUserLabelAll();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 显示标签小菜单
@@ -457,7 +461,7 @@ export default {
         })
         .catch((res) => {
           this.loading2 = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 搜索
@@ -476,11 +480,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tableList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 列表
@@ -495,7 +499,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改是否显示
@@ -506,11 +510,20 @@ export default {
       };
       wechatQrcodeStatusApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
+    },
+    // 点击菜单
+    clickMenu(data, name) {
+      console.log(name, data);
+      if (name == 1) {
+        this.labelEdit(data);
+      } else if (name == 2) {
+        this.deleteSort(data, '删除分类');
+      }
     },
   },
 };
@@ -601,4 +614,44 @@ export default {
     min-width: 121px;
   }
 }
+.tree {
+      min-height: 374px;
+      /deep/ .file-name {
+        display: flex;
+        align-items: center;
+        .icon {
+          width: 12px;
+          height: 12px;
+          margin-right: 8px;
+        }
+      }
+      /deep/ .el-tree-node {
+        // margin-right: 16px;
+      }
+      /deep/ .el-tree-node__children .el-tree-node {
+        margin-right: 0;
+      }
+      /deep/ .el-tree-node__content {
+        width: 100%;
+        height: 36px;
+      }
+      /deep/ .custom-tree-node {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-right: 17px;
+        font-size: 13px;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 0.6);
+        line-height: 13px;
+      }
+      /deep/ .is-current {
+        background: #f1f9ff !important;
+        color: #1890ff !important;
+      }
+      /deep/ .is-current .custom-tree-node {
+        color: #1890ff !important;
+      }
+    }
 </style>

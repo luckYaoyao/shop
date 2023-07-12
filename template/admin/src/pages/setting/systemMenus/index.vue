@@ -8,7 +8,7 @@
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row  :gutter="24">
+        <el-row :gutter="24">
           <!-- <el-col v-bind="grid">
             <el-form-item label="规则状态：">
               <el-select v-model="roleData.is_show" placeholder="请选择" clearable @change="getData">
@@ -19,7 +19,13 @@
           </el-col> -->
           <el-col v-bind="grid">
             <el-form-item label="按钮名称：" prop="status2" label-for="status2">
-              <el-input v-model="roleData.keyword" search enter-button placeholder="请输入按钮名称" @on-search="getData" />
+              <el-input
+                v-model="roleData.keyword"
+                search
+                enter-button
+                placeholder="请输入按钮名称"
+                @on-search="getData"
+              />
             </el-form-item>
           </el-col>
         </el-row>
@@ -52,15 +58,15 @@
         <vxe-table-column field="sort" title="排序" width="150"></vxe-table-column>
         <vxe-table-column field="flag" title="是否显示" width="150">
           <template v-slot="{ row }">
-            <el-switch :active-value="1"  :inactive-value="0"
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
               v-model="row.is_show_path"
               :value="row.is_show_path"
               @change="onchangeIsShow(row)"
               size="large"
             >
-              
-              
-             </el-switch>
+            </el-switch>
           </template>
         </vxe-table-column>
         <vxe-table-column field="date" title="操作" align="center" width="150" fixed="right">
@@ -78,19 +84,11 @@
       ref="menusFrom"
       @clearFrom="clearFrom"
     ></menus-from>
-    <Modal
-      v-model="ruleModal"
-      scrollable
-      width="1100"
-      title="权限列表"
-      @on-ok="addRouters"
-      @on-cancel="ruleModal = false"
-      @on-visible-change="modalchange"
-    >
+    <el-dialog :visible.sync="ruleModal" width="1100px" title="权限列表" @closed="modalchange">
       <div class="search-rule">
-        <Alert
-          >基础接口，可多选，并且添加后不会再展示出现；删除权限后才会出现；公共接口，可多选，并且添加后会继续展示；</Alert
-        >
+        <el-alert
+          title="基础接口，可多选，并且添加后不会再展示出现；删除权限后才会出现；公共接口，可多选，并且添加后会继续展示；"
+        ></el-alert>
         <el-input
           class="mr10"
           v-model="searchRule"
@@ -135,7 +133,11 @@
       <!-- <el-tabs v-model="routeType" @on-click="changTab">
         <el-tab-pane :label="item.name" :name="'' + index" v-for="(item, index) in foundationList" :key="item"></el-tab-pane>
       </el-tabs> -->
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="ruleModal = false">取 消</el-button>
+        <el-button type="primary" @click="addRouters">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -227,7 +229,7 @@ export default {
           this.getData();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     selectRule(data) {
@@ -311,11 +313,11 @@ export default {
       };
       isShowApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.$store.dispatch('menus/getMenusNavList');
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 请求列表
@@ -346,7 +348,7 @@ export default {
             this.formValidate.is_show_path = 0;
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else {
         this.formValidate.pid = pid;
@@ -375,13 +377,13 @@ export default {
 
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getData();
           this.getMenusUnique();
           // this.$store.dispatch('menus/getMenusNavList');
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 规则详情
@@ -392,7 +394,7 @@ export default {
           this.$refs.menusFrom.modals = true;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -424,7 +426,7 @@ export default {
     //         this.spinShow = false;
     //     }).catch(res => {
     //         this.spinShow = false;
-    //         this.$Message.error(res.msg);
+    //         this.$message.error(res.msg);
     //     })
     // },
     // 列表
@@ -437,11 +439,11 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     changeMenu(data) {
-      console.log(data)
+      console.log(data);
       this.changeData(this.tableData, data);
       this.getMenusUnique();
     },

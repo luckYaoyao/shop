@@ -27,17 +27,18 @@
             </el-col>
             <el-col :span="7" class="ivu-text-left ml20">
               <el-form-item label="购买时间：">
-                <DatePicker
+                <el-date-picker
                   :editable="false"
                   @change="onchangeTime"
-                  :value="timeVal"
+                  v-model="timeVal"
                   format="yyyy/MM/dd"
                   type="datetimerange"
-                  placement="bottom-start"
-                  placeholder="请选择时间"
-                  style="width: 90%"
-                  :options="options"
-                ></DatePicker>
+                  value-format="yyyy/MM/dd"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  
+                ></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="7" class="ivu-text-left">
@@ -329,8 +330,8 @@ export default {
     },
     // 具体日期
     onchangeTime(e) {
-      this.timeVal = e;
-      this.formValidate.add_time = this.timeVal[0] ? this.timeVal.join('-') : '';
+      this.timeVal = e || [];
+      this.formValidate.add_time = this.timeVal[0] ? this.timeVal ? this.timeVal.join('-') : '' : '';
       this.tablePage.page = 1;
       this.getMemberRecord();
     },
@@ -353,7 +354,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
   },

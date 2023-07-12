@@ -12,18 +12,17 @@
 
     <el-row class="ivu-mt" type="flex">
       <el-col :span="3" class="left-wrapper">
-        <Menu :theme="theme3" :active-name="1" width="auto">
-          <MenuGroup>
-            <MenuItem
-              :name="item.id"
-              v-for="(item, index) in menuList"
-              :key="index"
-              @click.native="bindMenuItem(index)"
-            >
-              {{ item.name }}
-            </MenuItem>
-          </MenuGroup>
-        </Menu>
+        <div class="tree-vis">
+          <div
+            class="tab-item"
+            :class="{ active: item.id == cardShow + 1 }"
+            v-for="(item, index) in menuList"
+            :key="index"
+            @click="bindMenuItem(index)"
+          >
+            {{ item.name }}
+          </div>
+        </div>
       </el-col>
       <el-col :span="21">
         <el-card :bordered="false" shadow="never" v-if="cardShow == 0">
@@ -71,9 +70,9 @@
                 </el-table-column>
                 <el-table-column label="模板类型" min-width="130">
                   <template slot-scope="scope">
-                    <Tag color="primary" v-if="scope.row.is_diy">{{ scope.row.type_name }}{{ scope.row.id }}</Tag>
-                    <Tag color="warning" v-else>{{ scope.row.type_name }}</Tag>
-                    <Tag color="success" v-if="scope.row.status == 1">首页</Tag>
+                    <el-tag color="primary" v-if="scope.row.is_diy">{{ scope.row.type_name }}{{ scope.row.id }}</el-tag>
+                    <el-tag color="warning" v-else>{{ scope.row.type_name }}</el-tag>
+                    <el-tag color="success" v-if="scope.row.status == 1">首页</el-tag>
                   </template>
                 </el-table-column>
                 <el-table-column label="添加时间" min-width="130">
@@ -86,7 +85,7 @@
                     <span>{{ scope.row.update_time }}</span>
                   </template>
                 </el-table-column>
-                <el-table-column label="操作" fixed="right" width="170">
+                <el-table-column label="操作" fixed="right" width="210">
                   <template slot-scope="scope">
                     <div
                       style="display: inline-block"
@@ -144,16 +143,7 @@
         <users v-else ref="users" @parentFun="getChildData"></users>
       </el-col>
     </el-row>
-    <Modal
-      v-model="isTemplate"
-      scrollable
-      footer-hide
-      closable
-      title="开发移动端链接"
-      :z-index="1"
-      width="500"
-      @on-cancel="cancel"
-    >
+    <el-dialog :visible.sync="isTemplate" title="开发移动端链接" :z-index="1" width="500" @closed="cancel">
       <div class="article-manager">
         <el-card :bordered="false" shadow="never" class="ivu-mt">
           <el-form
@@ -173,18 +163,14 @@
                 </el-col>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col v-bind="grid">
-                <el-button type="primary" class="ml20" @click="handleSubmit('formItem')" style="width: 100%"
-                  >提交</el-button
-                >
-              </el-col>
-            </el-row>
           </el-form>
         </el-card>
       </div>
-    </Modal>
-    <Modal v-model="modal" title="预览" footer-hide>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="handleSubmit('formItem')">提交</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :visible.sync="modal" title="预览">
       <div>
         <div v-viewer class="acea-row row-around code">
           <div class="acea-row row-column-around row-between-wrapper">
@@ -199,7 +185,7 @@
           </div>
         </div>
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -248,7 +234,7 @@ export default {
       iframeUrl: '',
       modal: false,
       BaseURL: Setting.apiBaseURL.replace(/adminapi/, ''),
-      cardShow: 0,
+      cardShow: 1,
       loadingExist: false,
       isDiy: 1,
       qrcodeImg: '',
@@ -305,10 +291,10 @@ export default {
       this.cardShow = index;
     },
     onCopy() {
-      this.$Message.success('复制预览链接成功');
+      this.$message.success('复制预览链接成功');
     },
     onError() {
-      this.$Message.error('复制预览链接失败');
+      this.$message.error('复制预览链接失败');
     },
     //生成二维码
     creatQrCode(id) {
@@ -330,7 +316,7 @@ export default {
           this.qrcodeImg = res.data.image;
         })
         .catch((err) => {
-          this.$Message.error(err);
+          this.$message.error(err);
         });
     },
     preview(row) {
@@ -369,11 +355,11 @@ export default {
     setDefault(row) {
       setDefault(row.id)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 获取列表
@@ -394,7 +380,7 @@ export default {
       this.formItem.id = row.id;
       if (!row.is_diy) {
         if (!row.status) {
-          this.$Message.error('请先设为首页在进行编辑');
+          this.$message.error('请先设为首页在进行编辑');
         } else {
           this.$router.push({
             path: this.$routeProStr + '/setting/pages/diy',
@@ -430,7 +416,7 @@ export default {
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 使用模板
@@ -444,20 +430,20 @@ export default {
           })
             .then((res) => {
               this.refreshFrame();
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.$Modal.remove();
               this.getList();
             })
             .catch((res) => {
               this.$Modal.remove();
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         },
       });
     },
     recovery(row) {
       recovery(row.id).then((res) => {
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
         this.getList();
       });
     },
@@ -631,6 +617,18 @@ export default {
     border: 1px solid #EEEEEE;
     border-radius: 50%;
     margin: 13px auto 0 auto;
+  }
+}
+.tree-vis{
+  display flex
+  flex-direction: column;
+  .tab-item{
+    padding 15px 20px
+    cursor pointer
+  }
+  .active{
+    background-color: var(--prev-bg-menu-hover-ba-color);
+    border-right: 2px solid var(--prev-color-primary);
   }
 }
 </style>

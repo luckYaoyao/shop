@@ -1,6 +1,6 @@
 <template>
   <div v-if="orderDatalist">
-    <Modal v-model="modals" scrollable title="订单信息" width="700" class="order_box" footer-hide>
+    <el-dialog :visible.sync="modals" title="订单信息" width="700px" class="order_box">
       <el-card :bordered="false" shadow="never" class="i-table-no-border">
         <div class="ivu-description-list-title">收货信息</div>
         <el-row class="mb10">
@@ -63,8 +63,8 @@
           </el-row>
         </div>
       </el-card>
-    </Modal>
-    <Modal v-model="modal2" scrollable title="物流查询" width="350" class="order_box2">
+    </el-dialog>
+    <el-dialog :visible.sync="modal2" title="物流查询" width="350px" class="order_box2">
       <div class="logistics acea-row row-top">
         <div class="logistics_img"><img src="../../../../assets/images/expressi.jpg" /></div>
         <div class="logistics_cent">
@@ -74,15 +74,14 @@
       </div>
       <div class="acea-row row-column-around trees-coadd">
         <div class="scollhide">
-          <Timeline>
-            <TimelineItem v-for="(item, i) in result" :key="i">
-              <p class="time" v-text="item.time"></p>
-              <p class="content" v-text="item.status"></p>
-            </TimelineItem>
-          </Timeline>
+          <el-timeline>
+            <el-timeline-item v-for="(item, i) in result" :key="i" :timestamp="item.time">
+              {{ item.status }}
+            </el-timeline-item>
+          </el-timeline>
         </div>
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -120,7 +119,7 @@ export default {
           this.result = res.data.result;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

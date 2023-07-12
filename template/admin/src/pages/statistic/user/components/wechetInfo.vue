@@ -1,5 +1,5 @@
 <template>
-  <el-card :bordered="false" shadow="never" class="ivu-mt-16">
+  <el-card :bordered="false" shadow="never" class="ivu-mt-16" v-loading="spinShow">
     <div class="acea-row row-between-wrapper">
       <div class="header-title mb20">
         公众号用户概括
@@ -47,7 +47,6 @@
       </div>
     </div>
     <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
-    <Spin size="large" fix v-if="spinShow"></Spin>
   </el-card>
 </template>
 
@@ -95,11 +94,11 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.dataTime = this.timeVal.join('-');
+      this.dataTime = this.timeVal ? this.timeVal.join('-') : '';
       this.name = this.dataTime;
       this.getStatistics();
       this.getTrend();
-      // this.userFrom.user_time = this.timeVal.join('-')
+      // this.userFrom.user_time = this.timeVal ? this.timeVal.join('-') : ''
     },
     // 统计
     getStatistics() {
@@ -135,7 +134,7 @@ export default {
           ];
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 统计图
@@ -233,7 +232,7 @@ export default {
           this.spinShow = false;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
           this.spinShow = false;
         });
     },

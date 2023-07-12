@@ -152,10 +152,10 @@ export default {
         };
         captchaApi(data)
           .then(async (res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
         let time = setInterval(() => {
           this.cutNUm--;
@@ -166,7 +166,7 @@ export default {
           }
         }, 1000);
       } else {
-        this.$Message.warning('请填写手机号!');
+        this.$message.warning('请填写手机号!');
       }
     },
     handleSubmit1(name) {
@@ -183,11 +183,11 @@ export default {
         if (valid) {
           updateHoneApi(this.formInline)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.current = 2;
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;
@@ -203,11 +203,11 @@ export default {
             password: this.formInline.password,
           })
             .then(async (res) => {
-              num === 1 ? this.$Message.success('原手机号密码正确') : this.$Message.success('登录成功');
+              num === 1 ? this.$message.success('原手机号密码正确') : this.$message.success('登录成功');
               num === 1 ? (this.current = 1) : this.$emit('on-Login');
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;

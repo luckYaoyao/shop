@@ -1,5 +1,5 @@
 <template>
-  <div class="Box">
+  <div class="Box" v-loading="spinShow">
     <el-card>
       <div>
         生成的商品默认是没有上架的，请手动上架商品！
@@ -355,19 +355,15 @@
               </el-form-item>
             </el-col>
           </div>
-          <Spin size="large" fix v-if="spinShow"></Spin>
         </div>
       </el-row>
     </el-form>
-    <Modal
-      v-model="modalPic"
+    <el-dialog
+      :visible.sync="modalPic"
       width="950px"
-      scrollable
-      footer-hide
-      closable
       title="上传商品图"
       :mask-closable="false"
-      :z-index="9999"
+      :close-on-click-modal="false"
     >
       <uploadPictures
         :isChoice="isChoice"
@@ -376,7 +372,7 @@
         :gridPic="gridPic"
         v-if="modalPic"
       ></uploadPictures>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -661,7 +657,7 @@ export default {
           this.treeSelect = res.data;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 生成表单
@@ -669,7 +665,7 @@ export default {
       if (this.soure_link) {
         var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
         if (!reg.test(this.soure_link)) {
-          return this.$Message.warning('请输入以http开头的地址！');
+          return this.$message.warning('请输入以http开头的地址！');
         }
         this.spinShow = true;
         this.artFrom.url = this.soure_link;
@@ -689,10 +685,10 @@ export default {
           })
           .catch((res) => {
             this.spinShow = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else {
-        this.$Message.warning('请输入链接地址！');
+        this.$message.warning('请输入链接地址！');
       }
     },
     // 提交
@@ -716,7 +712,7 @@ export default {
           // this.formValidate.items = [];
           crawlSaveApi(this.formValidate)
             .then((res) => {
-              this.$Message.success('商品默认为不上架状态请手动上架商品!');
+              this.$message.success('商品默认为不上架状态请手动上架商品!');
               setTimeout(() => {
                 this.modal_loading = false;
               }, 500);
@@ -726,11 +722,11 @@ export default {
             })
             .catch((res) => {
               this.modal_loading = false;
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           if (!this.formValidate.cate_id) {
-            this.$Message.warning('请填写商品分类！');
+            this.$message.warning('请填写商品分类！');
           }
         }
       });

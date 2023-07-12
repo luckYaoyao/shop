@@ -54,12 +54,11 @@
       </div>
     </div>
     <!-- 添加分组  -->
-    <Modal
-      v-model="cateData.isCate"
-      width="300"
-      :footer-hide="true"
-      :closable="false"
-      class-name="vertical-center-modal"
+    <el-dialog
+      :visible.sync="cateData.isCate"
+      width="300px"
+      :show-close="false"
+      custom-class="vertical-center-modal"
       class="words-box"
     >
       <div class="mask-title">
@@ -73,14 +72,13 @@
         <el-input class="noinput" v-model="cateData.sort" placeholder="请输入分组排序" />
       </div>
       <el-button @click.stop="cateConfirm" class="subBtn" type="primary" :disabled="cateStatus">确定</el-button>
-    </Modal>
+    </el-dialog>
     <!-- 添加话术  -->
-    <Modal
-      v-model="msgData.isCateMeg"
-      width="300"
-      :footer-hide="true"
-      :closable="false"
-      class-name="vertical-center-modal"
+    <el-dialog
+      :visible.sync="msgData.isCateMeg"
+      width="300px"
+      :show-close="false"
+      custom-class="vertical-center-modal"
       class="words-box"
     >
       <div class="mask-title">
@@ -99,7 +97,7 @@
         </el-select>
       </div>
       <el-button @click.stop="msgConfirm" class="subBtn" type="primary" :disabled="msgStatus">确定</el-button>
-    </Modal>
+    </el-dialog>
     <!-- 编辑弹窗  -->
     <div class="edit-box" v-if="isWordShow">
       <div class="head">
@@ -147,12 +145,11 @@
       </div>
     </div>
     <!-- 编辑分组列表 -->
-    <Modal
-      v-model="editList.status"
-      width="300"
-      :footer-hide="true"
-      :closable="false"
-      class-name="vertical-center-modal"
+    <el-dialog
+      :visible.sync="editList.status"
+      width="300px"
+      :show-close="false"
+      custom-class="vertical-center-modal"
       class="words-box cate-list"
     >
       <div class="mask-title">
@@ -168,7 +165,7 @@
           </div>
         </div>
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -381,11 +378,11 @@ export default {
             this.page = 1;
             this.wordsData.isScroll = true;
             this.wordsList = [];
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.getServiceCate();
           })
           .catch((error) => {
-            this.$Message.error(error.msg);
+            this.$message.error(error.msg);
           });
       } else {
         editServiceCate(this.cateData.id, {
@@ -399,7 +396,7 @@ export default {
           this.page = 1;
           this.wordsData.isScroll = true;
           this.wordsList = [];
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getServiceCate();
         });
       }
@@ -422,14 +419,14 @@ export default {
             this.msgData.title = '';
             this.msgData.message = '';
             this.msgData.msgCateId = this.wordsData.cateId;
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.wordsData.isScroll = true;
             this.wordsData.page = 1;
             this.wordsList = [];
             this.getWordsList();
           })
           .catch((error) => {
-            this.$Message.error(error.msg);
+            this.$message.error(error.msg);
           });
       } else {
         serviceCateUpdate(this.msgData.editId, {
@@ -441,7 +438,7 @@ export default {
           this.msgData.title = '';
           this.msgData.message = '';
           this.msgData.msgCateId = this.wordsData.cateId;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.wordsData.isScroll = true;
           this.wordsData.page = 1;
           this.wordsList = [];
@@ -470,10 +467,10 @@ export default {
       this.$modalSure(delfromData)
         .then((res) => {
           this.wordsList.splice(num, 1);
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     delCate(row, tit, num) {
@@ -491,11 +488,11 @@ export default {
           this.page = 1;
           this.wordsData.isScroll = true;
           this.wordsList = [];
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getServiceCate();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

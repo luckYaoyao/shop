@@ -4,7 +4,7 @@
       <el-col class="label" :span="4">
         <span>{{ configData.title || '商品数量' }}</span>
       </el-col>
-      <el-col span="19" class="slider-box">
+      <el-col :span="19" class="slider-box">
         <!--<el-input v-model="configData.val" type="number" placeholder="请输入数量" @change="bindChange" style="text-align: right;"/>-->
         <el-input-number controls-position="right"
           v-model="configData.val"

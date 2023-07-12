@@ -8,12 +8,9 @@
       </div>
     </div>
     <div>
-      <Modal
-        v-model="modalPic"
+      <el-dialog
+        :visible.sync="modalPic"
         width="950px"
-        scrollable
-        footer-hide
-        closable
         title="上传商品图"
         :mask-closable="false"
         :z-index="888"
@@ -25,7 +22,7 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </Modal>
+      </el-dialog>
     </div>
   </div>
 </template>

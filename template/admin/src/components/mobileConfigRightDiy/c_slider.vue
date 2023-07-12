@@ -4,7 +4,7 @@
       <el-col class="label" :span="4" v-if="configData.title">
         {{ configData.title }}
       </el-col>
-      <el-col span="18" class="slider-box">
+      <el-col :span="18" class="slider-box">
         <Slider v-model="configData.val" show-input @change="sliderChange($event)" :min="configData.min"></Slider>
       </el-col>
     </div>

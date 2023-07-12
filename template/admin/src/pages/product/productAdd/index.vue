@@ -1,5 +1,5 @@
 <template>
-  <div class="" id="shopp-manager">
+  <div class="" id="shopp-manager" v-loading="spinShow">
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <router-link :to="{ path: $routeProStr + '/product/product_list' }"
@@ -146,18 +146,18 @@
                 @click="zh_uploadFile"
                 >确认添加</el-button
               >
-              <Upload
+              <el-upload
                 v-if="upload_type === '1' && !videoLink"
-                :show-upload-list="false"
+                :show-file-list="false"
                 :action="fileUrl2"
                 :before-upload="videoSaveToUrl"
                 :data="uploadData"
                 :headers="header"
-                :multiple="true"
+                :multiple="false"
                 style="display: inline-block"
               >
                 <div v-if="seletVideo === 0 && !formValidate.video_link" class="videbox">+</div>
-              </Upload>
+              </el-upload>
               <div class="iview-video-style" v-if="formValidate.video_link">
                 <video
                   style="width: 100%; height: 100% !important; border-radius: 10px"
@@ -239,16 +239,14 @@
                       </div>
                       <div class="rulesBox">
                         <draggable :list="item.detail" handle=".drag">
-                          <Tag
-                            type="dot"
+                          <el-tag
                             closable
                             color="primary"
                             v-for="(j, indexn) in item.detail"
                             :key="indexn"
-                            :name="j"
                             class="mr20 drag"
-                            @on-close="handleRemove2(item.detail, indexn)"
-                            >{{ j }}</Tag
+                            @close="handleRemove2(item.detail, indexn)"
+                            >{{ j }}</el-tag
                           >
                         </draggable>
                         <el-input
@@ -266,7 +264,7 @@
                 <!-- <div  v-for="(item, index) in attrs" :key="index">
                                     <div class="acea-row row-middle"><span class="mr5">{{item.value}}</span><Icon type="ios-close-circle" size="14" class="curs" @click="handleRemoveRole(index)"/></div>
                                     <div class="rulesBox">
-                                        <Tag type="dot" closable color="primary" v-for="(j, indexn) in item.detail" :key="indexn" :name="j" class="mr20" @on-close="handleRemove2(item.detail,indexn)">{{j}}</Tag>
+                                        <el-tag type="dot" closable color="primary" v-for="(j, indexn) in item.detail" :key="indexn" :name="j" class="mr20" @on-close="handleRemove2(item.detail,indexn)">{{j}}</el-tag>
                                         <el-input search enter-button="添加" placeholder="请输入属性名称" v-model="item.detail.attrsVal" @on-search="createAttr(item.detail.attrsVal,index)" style="width: 150px"/>
                                     </div>
                                 </div> -->
@@ -786,9 +784,9 @@
           <el-col v-bind="grid3">
             <el-form-item label="购买送优惠券：">
               <div v-if="couponName.length" class="mb20">
-                <Tag closable v-for="(item, index) in couponName" :key="index" @on-close="handleClose(item)">{{
+                <el-tag closable v-for="(item, index) in couponName" :key="index" @close="handleClose(item)">{{
                   item.title
-                }}</Tag>
+                }}</el-tag>
               </div>
               <el-button type="primary" @click="addCoupon">添加优惠券</el-button>
             </el-form-item>
@@ -799,9 +797,9 @@
                 <div class="labelInput acea-row row-between-wrapper" @click="openLabel">
                   <div style="width: 90%">
                     <div v-if="dataLabel.length">
-                      <Tag closable v-for="(item, index) in dataLabel" @on-close="closeLabel(item)" :key="index">{{
+                      <el-tag closable v-for="(item, index) in dataLabel" @close="closeLabel(item)" :key="index">{{
                         item.label_name
-                      }}</Tag>
+                      }}</el-tag>
                     </div>
                     <span class="span" v-else>选择用户关联标签</span>
                   </div>
@@ -1112,15 +1110,17 @@
           <el-col :span="24" v-if="formValidate.presale">
             <el-form-item label="预售活动时间：" prop="presale_time">
               <div class="acea-row row-middle">
-                <DatePicker
+                <el-date-picker
                   :editable="false"
                   type="datetimerange"
                   format="yyyy-MM-dd HH:mm"
-                  placeholder="请选择活动时间"
+                  value-format="yyyy-MM-dd HH:mm"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
                   @change="onchangeTime"
-                  :value="formValidate.presale_time"
                   v-model="formValidate.presale_time"
-                ></DatePicker>
+                ></el-date-picker>
               </div>
               <div class="titTip">设置活动开启结束时间，用户可以在设置时间内发起参与预售</div>
             </el-form-item>
@@ -1343,15 +1343,8 @@
             >保存</el-button
           >
         </el-form-item>
-        <Spin size="large" fix v-if="spinShow"></Spin>
       </el-form>
-      <el-dialog
-        :visible.sync="modalPic"
-        width="1024px"
-        scrollable
-        title="上传商品图"
-        :close-on-click-modal="false"
-      >
+      <el-dialog :visible.sync="modalPic" width="1024px" scrollable title="上传商品图" :close-on-click-modal="false">
         <uploadPictures
           :isChoice="isChoice"
           @getPic="getPic"
@@ -1361,15 +1354,13 @@
           v-if="modalPic"
         ></uploadPictures>
       </el-dialog>
-      <Modal
-        v-model="addVirtualModel"
+      <el-dialog
+        :visible.sync="addVirtualModel"
         width="700px"
-        closable
         title="添加卡密"
-        :mask-closable="false"
-        :z-index="1"
-        footer-hide
-        @on-visible-change="initVirtualData"
+        :show-close="false"
+        :close-on-click-modal="false"
+        @closed="initVirtualData"
       >
         <div class="trip"></div>
         <div class="type-radio">
@@ -1421,18 +1412,18 @@
               </div>
               <div class="add-more" v-if="disk_type == 2">
                 <el-button type="primary" @click="handleAdd" icon="md-add">新增</el-button>
-                <Upload class="ml10" :action="cardUrl" :data="uploadData" :headers="header" :on-success="upFile">
+                <el-upload class="ml10" :action="cardUrl" :data="uploadData" :headers="header" :on-success="upFile">
                   <el-button icon="ios-cloud-upload-outline">导入卡密</el-button>
-                </Upload>
+                </el-upload>
               </div>
             </el-form-item>
           </el-form>
         </div>
-        <div class="footer">
-          <div class="clear" @click="closeVirtual">取消</div>
-          <div class="submit" @click="upVirtual">确认</div>
-        </div>
-      </Modal>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="closeVirtual">取 消</el-button>
+          <el-button type="primary" @click="upVirtual">确 定</el-button>
+        </span>
+      </el-dialog>
     </el-card>
     <freightTemplate :template="template" v-on:changeTemplate="changeTemplate" ref="templates"></freightTemplate>
     <add-attr ref="addattr" @getList="userSearchs"></add-attr>
@@ -1445,35 +1436,29 @@
     ></coupon-list>
     <coupon-list ref="goodsCoupon" many="one" :luckDraw="true" @getCouponId="goodsCouponId"></coupon-list>
     <!-- 生成淘宝京东表单-->
-    <Modal
-      v-model="modals"
-      @on-cancel="cancel"
+    <el-dialog
+      :visible.sync="modals"
+      @closed="cancel"
       class="Box"
-      scrollable
-      footer-hide
-      closable
       title="复制淘宝、天猫、京东、苏宁、1688"
-      :mask-closable="false"
-      width="800"
-      height="500"
+      :close-on-click-modal="false"
+      width="800px"
     >
       <tao-bao ref="taobaos" v-if="modals" @on-close="onClose"></tao-bao>
-    </Modal>
-    <Modal v-model="goods_modals" title="商品列表" footerHide class="paymentFooter" scrollable width="900">
+    </el-dialog>
+    <el-dialog v-model="goods_modals" title="商品列表" footerHide class="paymentFooter" scrollable width="900px">
       <goods-list v-if="goods_modals" ref="goodslist" :ischeckbox="true" @getProductId="getProductId"></goods-list>
-    </Modal>
+    </el-dialog>
     <!-- 用户标签 -->
-    <Modal
+    <el-dialog
       v-model="labelShow"
-      scrollable
       title="请选择用户标签"
-      :closable="false"
-      width="500"
-      :footer-hide="true"
-      :mask-closable="false"
+      :show-close="false"
+      width="500px"
+      :close-on-click-modal="false"
     >
       <userLabel ref="userLabel" @activeData="activeData" @close="labelClose"></userLabel>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -2060,7 +2045,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     }
     if (this.$route.query.type) {
@@ -2086,7 +2071,7 @@ export default {
           this.progress = 100;
         },
         error: (e) => {
-          this.$Message.error(e.msg);
+          this.$message.error(e.msg);
         },
         uploading: (chunk, allChunk) => {
           this.videoIng = true;
@@ -2106,7 +2091,7 @@ export default {
             .then((res) => {})
             .catch((res) => {
               this.formValidate.spec_type = this.spec_type;
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           if (this.formValidate.spec_type == 1) {
@@ -2187,7 +2172,7 @@ export default {
     // 自定义留言 新增表单
     addcustom() {
       if (this.formValidate.custom_form.length > 9) {
-        this.$Message.warning('最多添加10条');
+        this.$message.warning('最多添加10条');
       } else {
         this.formValidate.custom_form.push({
           title: '',
@@ -2369,7 +2354,7 @@ export default {
         for (let i = 0; i < this.virtualList.length; i++) {
           const element = this.virtualList[i];
           if (!element.value) {
-            this.$Message.error('请输入所有卡密');
+            this.$message.error('请输入所有卡密');
             return;
           }
         }
@@ -2384,10 +2369,10 @@ export default {
         this.$set(this[this.tabName][this.tabIndex], 'disk_info', '');
       } else {
         if (!this.disk_info.length) {
-          return this.$Message.error('请填写卡密信息');
+          return this.$message.error('请填写卡密信息');
         }
         if (!this.stock) {
-          return this.$Message.error('请填写库存数量');
+          return this.$message.error('请填写库存数量');
         }
         this.$set(this[this.tabName][this.tabIndex], 'stock', Number(this.stock));
         this.$set(this[this.tabName][this.tabIndex], 'stock', Number(this.stock));
@@ -2556,14 +2541,12 @@ export default {
     },
     // 初始化卡密信息
     initVirtualData(status) {
-      if (!status) {
-        this.virtualList = [
-          {
-            key: '',
-            value: '',
-          },
-        ];
-      }
+      this.virtualList = [
+        {
+          key: '',
+          value: '',
+        },
+      ];
     },
     removeVirtual(index) {
       this.virtualList.splice(index, 1);
@@ -2614,10 +2597,10 @@ export default {
         checkActivityApi(id)
           .then((res) => {
             this.manyFormValidate.splice(index, 1);
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else {
         this.manyFormValidate.splice(index, 1);
@@ -2702,7 +2685,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 取消
@@ -2741,7 +2724,7 @@ export default {
         this.showIput = false;
         this.createBnt = true;
       } else {
-        this.$Message.warning('请添加完整的规格！');
+        this.$message.warning('请添加完整的规格！');
       }
     },
     // 添加属性
@@ -2755,7 +2738,7 @@ export default {
           return item;
         }, []);
       } else {
-        this.$Message.warning('请添加属性');
+        this.$message.warning('请添加属性');
       }
     },
     // 商品分类；
@@ -2765,7 +2748,7 @@ export default {
           this.treeSelect = res.data;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     //视视上传类型
@@ -2782,7 +2765,7 @@ export default {
           .then((res) => {})
           .catch((res) => {
             this.formValidate.spec_type = this.spec_type;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       }
     },
@@ -2798,7 +2781,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     handleRemove(i) {
@@ -2873,37 +2856,37 @@ export default {
             this.formValidate.is_copy = 1;
           }
           if (this.formValidate.spec_type === 1 && this.manyFormValidate.length === 0) {
-            return this.$Message.warning('商品信息-请点击生成多规格');
-            // return this.$Message.warning('请点击生成规格！');
+            return this.$message.warning('商品信息-请点击生成多规格');
+            // return this.$message.warning('请点击生成规格！');
           }
           let item = this.formValidate.attrs;
           for (let i = 0; i < item.length; i++) {
             if (item[i].stock > 1000000) {
-              return this.$Message.error('规格库存-库存超出系统范围(1000000)');
+              return this.$message.error('规格库存-库存超出系统范围(1000000)');
             }
           }
           if (this.formValidate.is_sub[0] === 1) {
             for (let i = 0; i < item.length; i++) {
               if (item[i].brokerage === null || item[i].brokerage_two === null) {
-                return this.$Message.error('营销设置- 一二级返佣不能为空');
+                return this.$message.error('营销设置- 一二级返佣不能为空');
               }
             }
           } else {
             for (let i = 0; i < item.length; i++) {
               if (item[i].vip_price === null) {
-                return this.$Message.error('营销设置-会员价不能为空');
+                return this.$message.error('营销设置-会员价不能为空');
               }
             }
           }
           if (this.formValidate.is_sub.length === 2) {
             for (let i = 0; i < item.length; i++) {
               if (item[i].brokerage === null || item[i].brokerage_two === null || item[i].vip_price === null) {
-                return this.$Message.error('营销设置- 一二级返佣和会员价不能为空');
+                return this.$message.error('营销设置- 一二级返佣和会员价不能为空');
               }
             }
           }
           if (this.formValidate.freight == 3 && !this.formValidate.temp_id) {
-            return this.$Message.warning('商品信息-运费模板不能为空');
+            return this.$message.warning('商品信息-运费模板不能为空');
           }
           let activeIds = [];
           this.dataLabel.forEach((item) => {
@@ -2916,10 +2899,10 @@ export default {
           productAddApi(this.formValidate)
             .then(async (res) => {
               this.openSubimit = false;
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               if (this.$route.params.id === '0') {
                 cacheDelete().catch((err) => {
-                  this.$Message.error(err.msg);
+                  this.$message.error(err.msg);
                 });
               }
               setTimeout(() => {
@@ -2931,21 +2914,21 @@ export default {
               setTimeout((e) => {
                 this.openSubimit = false;
               }, 1000);
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           if (!this.formValidate.store_name) {
-            return this.$Message.warning('商品信息-商品名称不能为空');
+            return this.$message.warning('商品信息-商品名称不能为空');
           } else if (!this.formValidate.cate_id.length) {
-            return this.$Message.warning('商品信息-商品分类不能为空');
+            return this.$message.warning('商品信息-商品分类不能为空');
           } else if (!this.formValidate.unit_name) {
-            return this.$Message.warning('商品信息-商品单位不能为空');
+            return this.$message.warning('商品信息-商品单位不能为空');
           } else if (!this.formValidate.slider_image.length) {
-            return this.$Message.warning('商品信息-商品轮播图不能为空');
+            return this.$message.warning('商品信息-商品轮播图不能为空');
           } else if (!this.formValidate.logistics.length && !this.formValidate.virtual_type) {
-            return this.$Message.warning('物流设置-至少选择一种物流方式');
+            return this.$message.warning('物流设置-至少选择一种物流方式');
           } else if (!this.formValidate.temp_id && this.formValidate.freight == 3) {
-            return this.$Message.warning('商品信息-运费模板不能为空');
+            return this.$message.warning('商品信息-运费模板不能为空');
           }
         }
       });
@@ -2956,7 +2939,7 @@ export default {
     // 表单验证
     validate(prop, status, error) {
       if (status === false) {
-        this.$Message.warning(error);
+        this.$message.warning(error);
       }
     },
     // 移动

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt" v-loading="spinShow">
       <el-form
         ref="formValidate"
         :model="formValidate"
@@ -38,7 +38,6 @@
         </el-row>
       </el-form>
       <el-table
-        :columns="columns1"
         :data="tableList"
         ref="table"
         class="mt25"
@@ -97,15 +96,12 @@
       </div>
     </el-card>
     <!-- 新增编辑-->
-    <Modal
-      v-model="modals"
-      @on-cancel="onCancel"
-      scrollable
-      footer-hide
-      closable
+    <el-dialog
+      :visible.sync="modals"
       :title="`${modelTit}身份`"
-      :mask-closable="false"
-      width="600"
+      :close-on-click-modal="false"
+      :show-close="false"
+      width="600px"
     >
       <el-form
         ref="formInline"
@@ -128,15 +124,25 @@
           <div class="trees-coadd">
             <div class="scollhide">
               <div class="iconlist">
-                <Tree :data="menusList" show-checkbox ref="tree"></Tree>
+                <el-tree
+                  :data="menusList"
+                  node-key="id"
+                  show-checkbox
+                  highlight-current
+                  ref="tree"
+                  :default-checked-keys="selectIds"
+                  :props="defaultProps"
+                ></el-tree>
               </div>
             </div>
           </div>
         </el-form-item>
-        <Spin size="large" fix v-if="spinShow"></Spin>
-        <el-button type="primary" size="large" long @click="handleSubmit('formInline')">提交</el-button>
       </el-form>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="onCancel">取 消</el-button>
+        <el-button type="primary" @click="handleSubmit('formInline')">提 交</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -171,6 +177,7 @@ export default {
         id: 0,
       },
       menusList: [],
+      selectIds: [],
       modelTit: '',
       ruleValidate: {
         role_name: [{ required: true, message: '请输入身份昵称', trigger: 'blur' }],
@@ -178,6 +185,10 @@ export default {
         // checked_menus: [
         //     { required: true, validator: validateStatus, trigger: 'change' }
         // ]
+      },
+      defaultProps: {
+        children: 'children',
+        label: 'title',
       },
     };
   },
@@ -215,11 +226,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tableList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改是否显示
@@ -230,10 +241,10 @@ export default {
       };
       roleSetStatusApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 列表
@@ -249,7 +260,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索
@@ -289,7 +300,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 详情
@@ -300,12 +311,17 @@ export default {
           let data = res.data;
           this.formInline = data.role || this.formInline;
           this.formInline.checked_menus = this.formInline.rules;
-          this.tidyRes(data.menus);
+          this.selectIds = this.formInline.rules.split(',');
+          this.$nextTick((e) => {
+            this.tidyRes(data.menus);
+            // this.$refs.tree.setCheckedKeys(Array(arr));
+          });
           this.spinShow = false;
         })
         .catch((res) => {
+          console.log(res);
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     tidyRes(menus) {
@@ -313,11 +329,10 @@ export default {
       menus.map((menu) => {
         if (menu.title === '主页') {
           menu.checked = true;
-          menu.disableCheckbox = true;
+          // menu.disabled = true;
           if (menu.children.length) {
             menu.children.map((v) => {
-              v.checked = true;
-              v.disableCheckbox = true;
+              // v.disabled = true;
             });
           }
           data.push(menu);
@@ -348,20 +363,21 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.formInline.checked_menus = [];
-          this.$refs.tree.getCheckedAndIndeterminateNodes().map((node) => {
+          this.$refs.tree.getCheckedNodes().map((node) => {
             this.formInline.checked_menus.push(node.id);
           });
-          if (this.formInline.checked_menus.length === 0) return this.$Message.warning('请至少选择一个权限');
+          console.log(this.formInline.checked_menus, 'this.formInline.checked_menus');
+          if (this.formInline.checked_menus.length === 0) return this.$message.warning('请至少选择一个权限');
           roleCreatApi(this.formInline)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.modals = false;
               this.getList();
               this.$refs[name].resetFields();
               this.formInline.checked_menus = [];
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;
@@ -371,6 +387,8 @@ export default {
     onCancel() {
       this.$refs['formInline'].resetFields();
       this.formInline.checked_menus = [];
+      this.selectIds = [];
+      this.modals = false;
     },
   },
 };

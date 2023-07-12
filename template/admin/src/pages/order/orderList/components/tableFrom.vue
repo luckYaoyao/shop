@@ -30,24 +30,26 @@
         <el-col :span="24" class="ivu-text-left">
           <el-form-item label="支付方式：">
             <el-radio-group v-model="orderData.pay_type" type="button" @change="userSearchs">
-              <el-radio-button v-for="item in payList" :label="item.val" :key="item.id">{{ item.label }}</el-radio-button>
+              <el-radio-button v-for="item in payList" :label="item.val" :key="item.id">{{
+                item.label
+              }}</el-radio-button>
             </el-radio-group>
           </el-form-item>
         </el-col>
         <el-col :span="8" class="ivu-text-left">
           <el-form-item label="创建时间：">
-            <DatePicker
+            <el-date-picker
+              v-model="timeVal"
+              type="datetimerange"
               :editable="false"
               @change="onchangeTime"
-              :value="timeVal"
-              format="yyyy/MM/dd HH:mm:ss"
-              type="datetimerange"
-              placement="bottom-start"
-              placeholder="请选择创建时间"
-              style="width: 300px"
+              value-format="yyyy/MM/dd HH:mm:ss"
+              style="width: 380px"
               class="mr20"
-              :options="options"
-            ></DatePicker>
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            ></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="16">
@@ -80,7 +82,7 @@
         <el-col :span="24">
           <div class="ml20">
             <el-button v-auth="['order-dels']" class="mr10" type="primary" @click="delAll">批量删除订单</el-button>
-            <el-button v-auth="['order-write']" type="success" class="mr10 greens"  @click="writeOff">
+            <el-button v-auth="['order-write']" type="success" class="mr10 greens" @click="writeOff">
               <Icon type="md-list"></Icon>
               订单核销
             </el-button>
@@ -92,13 +94,13 @@
       </el-row>
     </el-form>
     <!--订单核销模态框-->
-    <Modal
-      v-model="modals2"
+    <el-dialog
+      :visible.sync="modals2"
       title="订单核销"
       class="paymentFooter"
-      :closable="false"
-      width="400"
-      @on-visible-change="changeModal"
+      :show-close="false"
+      width="400px"
+      @closed="changeModal"
     >
       <el-form
         ref="writeOffFrom"
@@ -116,7 +118,7 @@
         <el-button type="primary" @click="ok('writeOffFrom')">立即核销</el-button>
         <el-button @click="del('writeOffFrom')">取消</el-button>
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -283,7 +285,7 @@ export default {
   },
   created() {
     // this.timeVal = this.today;
-    // this.orderData.data = this.timeVal.join('-');
+    // this.orderData.data = this.timeVal ? this.timeVal.join('-') : '';
     if (this.$route.fullPath === this.$routeProStr + '/order/list?status=1') {
       this.getPath();
     }
@@ -295,8 +297,8 @@ export default {
       this.getOrderStatus(this.orderData.status);
       this.$emit('getList', 1);
     },
-    changeModal(status) {
-      if (!status) this.writeOffFrom.code = '';
+    changeModal() {
+      this.writeOffFrom.code = '';
     },
     // 导出
     async exportList() {
@@ -331,8 +333,8 @@ export default {
     },
     // 具体日期
     onchangeTime(e) {
-      this.timeVal = e;
-      this.orderData.data = this.timeVal[0] ? this.timeVal.join('-') : '';
+      this.timeVal = e || [];
+      this.orderData.data = this.timeVal[0] ? (this.timeVal ? this.timeVal.join('-') : '') : '';
       this.$store.dispatch('order/getOrderTabs', { data: this.orderData.data });
       this.getOrderTime(this.orderData.data);
       this.$emit('getList', 1);
@@ -372,7 +374,7 @@ export default {
     // 批量删除
     delAll() {
       if (this.delIdList.length === 0) {
-        this.$Message.error('请先选择删除的订单！');
+        this.$message.error('请先选择删除的订单！');
       } else {
         if (this.isDels) {
           let idss = {
@@ -386,11 +388,11 @@ export default {
           };
           this.$modalSure(delfromData)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.$emit('getList');
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           const title = '错误！';
@@ -414,41 +416,41 @@ export default {
           putWrite(this.writeOffFrom)
             .then(async (res) => {
               if (res.status === 200) {
-                this.$Message.success(res.msg);
+                this.$message.success(res.msg);
                 // this.modals2 = false
                 // this.$refs[name].resetFields()
                 // this.$emit('getList')
               } else {
-                this.$Message.error(res.msg);
+                this.$message.error(res.msg);
               }
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
-          this.$Message.error('请填写正确的核销码');
+          this.$message.error('请填写正确的核销码');
         }
       });
     },
     // 订单核销
     ok(name) {
       if (!this.writeOffFrom.code) {
-        this.$Message.warning('请先验证订单！');
+        this.$message.warning('请先验证订单！');
       } else {
         this.writeOffFrom.confirm = 1;
         putWrite(this.writeOffFrom)
           .then(async (res) => {
             if (res.status === 200) {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.modals2 = false;
               this.$refs[name].resetFields();
               this.$emit('getList', 1);
             } else {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             }
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       }
     },

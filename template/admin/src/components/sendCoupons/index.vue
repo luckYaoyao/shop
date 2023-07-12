@@ -1,15 +1,6 @@
 <template>
   <div>
-    <Modal
-      v-model="modals"
-      :z-index="100"
-      scrollable
-      footer-hide
-      closable
-      title="发送优惠券"
-      :mask-closable="false"
-      width="900"
-    >
+    <el-dialog :visible.sync="modals" :z-index="100" title="发送优惠券" :close-on-click-modal="false" width="900">
       <div class="acea-row">
         <span class="sp">优惠券名称：</span
         ><el-input
@@ -60,7 +51,7 @@
       <div class="acea-row row-right page">
         <pagination v-if="total" :total="total" :page.sync="page.page" :limit.sync="page.limit" @pagination="getList" />
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -79,38 +70,6 @@ export default {
       modals: false,
       loading: false,
       couponList: [],
-      columns: [
-        {
-          title: '优惠券名称',
-          key: 'title',
-          align: 'center',
-          minWidth: 100,
-        },
-        {
-          title: '优惠券面值',
-          key: 'coupon_price',
-          align: 'center',
-          minWidth: 80,
-        },
-        {
-          title: '优惠券最低消费',
-          key: 'use_min_price',
-          align: 'center',
-          minWidth: 150,
-        },
-        {
-          title: '优惠券有效期限',
-          slot: 'coupon_time',
-          align: 'center',
-          minWidth: 120,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          align: 'center',
-          width: 120,
-        },
-      ],
       page: {
         page: 1, // 当前页
         limit: 15,
@@ -133,12 +92,12 @@ export default {
             this.loading = false;
           } else {
             this.loading = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           }
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索
@@ -159,10 +118,10 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

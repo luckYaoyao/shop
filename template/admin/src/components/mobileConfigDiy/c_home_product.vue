@@ -148,7 +148,7 @@ export default {
           this.configObj.productList.list = res.data.list;
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
   },

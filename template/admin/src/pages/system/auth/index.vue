@@ -59,28 +59,10 @@
       <span class="prompt">建议尺寸：宽290px*高100px</span>
     </el-card>
 
-    <Modal
-      v-model="isTemplate"
-      scrollable
-      footer-hide
-      closable
-      title="商业授权"
-      :z-index="1"
-      width="447"
-      @on-cancel="cancel"
-    >
+    <el-dialog :visible.sync="isTemplate" title="商业授权" width="447px" @closed="cancel">
       <iframe width="100%" height="580" :src="iframeUrl" frameborder="0"></iframe>
-    </Modal>
-    <Modal
-      v-model="modalPic"
-      width="960px"
-      scrollable
-      footer-hide
-      closable
-      title="上传授权图片"
-      :mask-closable="false"
-      :z-index="1"
-    >
+    </el-dialog>
+    <el-dialog :visible.sync="modalPic" width="960px" title="上传授权图片" :close-on-click-modal="false">
       <uploadPictures
         :isChoice="isChoice"
         @getPic="getPic"
@@ -88,7 +70,7 @@
         :gridPic="gridPic"
         v-if="modalPic"
       ></uploadPictures>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -184,7 +166,7 @@ export default {
     getCrmebCopyRight() {
       getCrmebCopyRight().then((res) => {
         this.getAuth();
-        return this.$Message.success(res.msg);
+        return this.$message.success(res.msg);
       });
     },
     //保存版权信息
@@ -193,7 +175,7 @@ export default {
         copyright: this.copyrightText,
         copyright_img: this.authorizedPicture,
       }).then((res) => {
-        return this.$Message.success(res.msg);
+        return this.$message.success(res.msg);
       });
     },
     // 选择图片
@@ -237,7 +219,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     toCrmeb() {
@@ -250,14 +232,14 @@ export default {
           this.productStatus = true;
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
       crmebProduct({ type: 'pro' })
         .then((res) => {
           this.proPrice = res.data.attr.price;
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     payment(product) {

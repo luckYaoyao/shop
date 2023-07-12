@@ -8,7 +8,7 @@
       </span>
     </div>
     <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-row  :gutter="24">
+      <el-row :gutter="24">
         <el-col v-bind="grid" class="mb20" v-for="(item, index) in tabList" :key="index">
           <div class="clear_box">
             <span class="clear_box_sp1" v-text="item.title"></span>
@@ -23,17 +23,18 @@
       </el-row>
     </el-card>
     <!-- 更换域名-->
-    <Modal v-model="modals" class="tableBox" scrollable closable title="更换域名" :mask-closable="false">
+    <el-dialog :visible.sync="modals" class="tableBox" title="更换域名" :close-on-click-modal="false">
       <div class="acea-row row-column">
         <span>请输入需要替换的域名，格式为：http://域名。</span>
         <span>替换规则：会使用当前[设置]里面的[网站域名]去替换成当前您输入的域名。</span>
         <span class="mb15">替换成功后再去更换[网站域名]。</span>
         <el-input v-model="value6" type="textarea" :rows="4" placeholder="请输入网站域名..." />
       </div>
-      <div slot="footer">
-        <el-button type="primary" size="large" long @click="changeYU">确定</el-button>
-      </div>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="modals = false">取 消</el-button>
+        <el-button type="primary" @click="changeYU">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -146,10 +147,10 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 更换域名
@@ -157,10 +158,10 @@ export default {
       replaceSiteUrlApi({ url: this.value6 })
         .then((res) => {
           this.modals = false;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

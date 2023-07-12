@@ -58,7 +58,7 @@
         <pagination v-if="total" :total="total" :page.sync="page" :limit.sync="limit" @pagination="getRightList" />
       </div>
     </el-card>
-    <Modal v-model="modal1" title="编辑会员权益" footer-hide :z-index="555">
+    <el-dialog :visible.sync="modal1" title="编辑会员权益">
       <el-form ref="form" :model="form" :rules="rules" label-width="85px">
         <el-input v-model="form.id" style="display: none"></el-input>
         <el-input v-model="form.status" style="display: none"></el-input>
@@ -99,8 +99,8 @@
           <el-button type="primary" @click="formSubmit('form')">提交</el-button>
         </el-form-item>
       </el-form>
-    </Modal>
-    <Modal v-model="modal2" width="950px" scrollable footer-hide closable title="选择权益图标" :z-index="888">
+    </el-dialog>
+    <el-dialog :visible.sync="modal2" width="950px" title="选择权益图标">
       <uploadPictures
         v-if="modal2"
         isChoice="单选"
@@ -108,7 +108,7 @@
         :gridPic="gridPic"
         @getPic="getPic"
       ></uploadPictures>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -179,7 +179,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$Message.error(err);
+          this.$message.error(err);
         });
     },
     // 改变状态
@@ -212,10 +212,10 @@ export default {
         .then((res) => {
           this.modal1 = false;
           this.getRightList();
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     formSubmit(name) {

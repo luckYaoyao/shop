@@ -1,15 +1,15 @@
 <template>
   <el-card :bordered="false" shadow="never">
-    <Alert :closable="true">
-      <template slot="desc">
+    <el-alert closable>
+      <template slot="title">
         启动定时任务两种方式：<br />
         1、使用命令启动：php think timer start
         --d；如果更改了执行周期、编辑是否开启、删除定时任务需要重新启动下定时任务确保生效；<br />
         2、使用接口触发定时任务，建议每分钟调用一次，接口地址 https://您的域名/api/crontab/run
       </template>
-    </Alert>
+    </el-alert>
     <el-button type="primary" @click="addTask">添加定时任务</el-button>
-    <el-table :columns="columns" :data="tableData" :loading="loading" class="ivu-mt">
+    <el-table :data="tableData" :loading="loading" class="ivu-mt">
       <el-table-column label="title" min-width="150">
         <template slot-scope="scope">
           <span>{{ scope.row.name }}</span>
@@ -64,44 +64,6 @@ export default {
   data() {
     return {
       loading: false,
-      columns: [
-        {
-          title: '名称',
-          key: 'name',
-          minWidth: 150,
-        },
-        {
-          title: '任务说明',
-          key: 'content',
-          minWidth: 120,
-        },
-        // {
-        //   title: '最后执行时间',
-        //   key: 'last_execution_time',
-        //   minWidth: 120,
-        // },
-        // {
-        //   title: '下次执行时间',
-        //   key: 'next_execution_time',
-        //   minWidth: 120,
-        // },
-        {
-          title: '执行周期',
-          slot: 'execution_cycle',
-          minWidth: 160,
-        },
-        {
-          title: '是否开启',
-          slot: 'is_open',
-          minWidth: 100,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          align: 'center',
-          minWidth: 100,
-        },
-      ],
       tableData: [],
       page: 1,
       limit: 15,
@@ -145,7 +107,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     addTask() {
@@ -165,22 +127,22 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 是否开启
     handleChange({ id, is_open }) {
       showTimer(id, is_open)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

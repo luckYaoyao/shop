@@ -15,25 +15,26 @@
           @submit.native.prevent
         >
           <el-form-item label="创建时间：">
-            <DatePicker
+            <el-date-picker
               :editable="false"
               :clearable="false"
               @change="onchangeTime"
-              :value="timeVal"
-              format="yyyy/MM/dd"
+              v-model="timeVal"
+              value-format="yyyy/MM/dd"
               type="daterange"
               placement="bottom-start"
-              placeholder="请选择时间"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
               style="width: 200px"
               :options="options"
               class="mr20"
-            ></DatePicker>
+            ></el-date-picker>
           </el-form-item>
         </el-form>
       </div>
       <div class="table">
         <el-table
-          :columns="columns"
           :data="orderList"
           ref="table"
           class="mt25"
@@ -91,18 +92,9 @@
         </div>
       </div>
     </el-card>
-    <Modal
-      v-model="modals"
-      scrollable
-      footer-hide
-      closable
-      title="账单详情"
-      :mask-closable="false"
-      @on-cancel="cancel"
-      width="1000"
-    >
+    <el-dialog :visible.sync="modals" title="账单详情" width="1000">
       <commission-details v-if="modals" ref="commission" :ids="ids" :time="formValidate.time"></commission-details>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -132,45 +124,6 @@ export default {
       total: 0,
       loading: false,
       tab: 'day',
-      columns: [
-        {
-          title: 'ID',
-          key: 'id',
-          width: 60,
-        },
-        {
-          title: '标题',
-          key: 'title',
-          minWidth: 80,
-        },
-        {
-          title: '日期',
-          key: 'add_time',
-          minWidth: 80,
-        },
-        {
-          title: '收入金额',
-          slot: 'income_price',
-          minWidth: 80,
-        },
-        {
-          title: '支出金额',
-          slot: 'exp_price',
-          minWidth: 80,
-        },
-        {
-          title: '入账金额',
-          slot: 'entry_price',
-          minWidth: 80,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 120,
-          align: 'center',
-        },
-      ],
       orderList: [
         {
           id: '1',
@@ -245,8 +198,8 @@ export default {
     },
     // 具体日期
     onchangeTime(e) {
-      this.timeVal = e;
-      this.formValidate.time = this.timeVal[0] ? this.timeVal.join('-') : '';
+      this.timeVal = e || [];
+      this.formValidate.time = this.timeVal[0] ? this.timeVal ? this.timeVal.join('-') : '' : '';
       this.formValidate.page = 1;
       this.getList();
     },

@@ -33,7 +33,6 @@
       <el-table
         class="mt25"
         ref="table"
-        :columns="columns4"
         :data="tableList"
         :loading="loading"
         highlight-current-row
@@ -199,7 +198,7 @@ export default {
     del(row, tit) {
       let data = {};
       if (tit === '批量删除规格') {
-        if (this.selectedIds.size === 0) return this.$Message.warning('请选择要删除的规格！');
+        if (this.selectedIds.size === 0) return this.$message.warning('请选择要删除的规格！');
         data = {
           ids: this.ids.join(','),
         };
@@ -217,11 +216,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getDataList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     addAttr() {
@@ -248,7 +247,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索

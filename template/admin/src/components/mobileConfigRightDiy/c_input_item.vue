@@ -4,7 +4,7 @@
       <el-col class="label" :span="4">
         {{ configData.title }}
       </el-col>
-      <el-col span="19" class="slider-box">
+      <el-col :span="19" class="slider-box">
         <div @click="getLink(configData.title)">
           <el-input
             :icon="configData.title == '链接' ? 'ios-arrow-forward' : ''"

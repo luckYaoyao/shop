@@ -234,30 +234,28 @@
       </div>
     </template>
     <!-- 发货弹窗 -->
-    <Modal v-model="isDelivery" title="订单发送货" :footer-hide="true">
-      <delivery v-if="isDelivery" :virtualType="virtual_type" @close="deliveryClose" @ok="deliveryOk" :orderId="orderId"></delivery>
-    </Modal>
+    <el-dialog :visible.sync="isDelivery" title="订单发送货">
+      <delivery
+        v-if="isDelivery"
+        :virtualType="virtual_type"
+        @close="deliveryClose"
+        @ok="deliveryOk"
+        :orderId="orderId"
+      ></delivery>
+    </el-dialog>
     <!-- 订单备注 -->
-    <Modal
-      v-model="isRemarks"
-      title="请修改内容"
-      :footer-hide="true"
-      :mask="true"
-      width="520"
-      :closable="false"
-      class="none-radius"
-    >
+    <el-dialog v-model="isRemarks" title="请修改内容" width="520px" :show-close="false" class="none-radius">
       <remarks :remarkId="remarkId" v-if="isRemarks" @close="deliveryClose" @remarkSuccess="remarkSuccess"></remarks>
-    </Modal>
+    </el-dialog>
     <!-- 用户标签 -->
-    <Modal v-model="isUserLabel" :footer-hide="true" width="320" class="label-box" :closable="false" :mask="true">
+    <el-dialog v-model="isUserLabel" width="320px" class="label-box" :show-close="false">
       <p class="label-head" slot="header">
         <span>选择用户标签</span>
       </p>
       <userLabel v-if="isUserLabel" @close="deliveryClose" :uid="uid" @editLabel="editLabel"></userLabel>
-    </Modal>
+    </el-dialog>
     <!-- 用户标签 -->
-    <Modal v-model="isUserGroup" :footer-hide="true" width="320" class="label-box" :closable="false" :mask="true">
+    <el-dialog v-model="isUserGroup" width="320px" class="label-box" :show-close="false">
       <p class="label-head" slot="header">
         <span>选择分组</span>
       </p>
@@ -269,7 +267,7 @@
         :uid="uid"
         @editUserLabel="editUserLabel"
       ></userGroup>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -615,7 +613,7 @@ export default {
     editUserLabel(id) {
       this.isUserGroup = false;
       putGroupApi(this.uid, id).then((res) => {
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
         this.getUserInfo();
       });
     },

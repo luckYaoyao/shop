@@ -29,7 +29,7 @@
                 <el-col class="label">
                   <span>{{ list.title }}</span>
                 </el-col>
-                <el-col span="19" class="slider-box">
+                <el-col :span="19" class="slider-box">
                   <el-input v-model="list.val" :placeholder="list.pla" :maxlength="list.max" style="text-align: right" />
                 </el-col>
               </div>

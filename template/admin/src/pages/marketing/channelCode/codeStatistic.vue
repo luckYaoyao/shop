@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="spinShow">
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <span>
@@ -13,23 +13,22 @@
     <el-card :bordered="false" shadow="never" class="ivu-mt">
       <div class="table-head">
         <h3>关注趋势</h3>
-        <DatePicker
+        <el-date-picker
           :editable="false"
           :clearable="false"
           @change="onchangeTime"
-          :value="timeVal"
+          v-model="timeVal"
           format="yyyy/MM/dd"
           type="daterange"
-          placement="bottom-start"
-          placeholder="请选择时间"
-          style="width: 200px"
-          :options="options"
+          value-format="yyyy/MM/dd"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
           class="mr20"
-        ></DatePicker>
+        ></el-date-picker>
       </div>
       <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
     </el-card>
-    <Spin size="large" fix v-if="spinShow"></Spin>
   </div>
 </template>
 
@@ -97,32 +96,6 @@ export default {
       optionData: {},
       spinShow: false,
       options: this.$timeOptions,
-      columns: [
-        {
-          title: '序号',
-          type: 'index',
-          width: 60,
-          align: 'center',
-        },
-        {
-          title: '来源',
-          key: 'name',
-          minWidth: 80,
-          align: 'center',
-        },
-        {
-          title: '金额',
-          width: 180,
-          key: 'value',
-          align: 'center',
-        },
-        {
-          title: '占比率',
-          slot: 'percent',
-          minWidth: 100,
-          align: 'center',
-        },
-      ],
     };
   },
   created() {
@@ -169,7 +142,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.time = this.timeVal.join('-');
+      this.formValidate.time = this.timeVal ? this.timeVal.join('-') : '';
       this.name = this.formValidate.time;
       this.wechatQrcodeStatistic();
     },

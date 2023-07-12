@@ -6,30 +6,24 @@
         <el-select v-model="formValidate.sort" style="width: 200px" class="mr20" @change="changeMenu">
           <el-option v-for="item in list" :value="item.val" :key="item.val" :label="item.name"></el-option>
         </el-select>
-        <DatePicker
+        <el-date-picker
           :editable="false"
           :clearable="false"
           @change="onchangeTime"
-          :value="timeVal"
+          v-model="timeVal"
           format="yyyy/MM/dd"
           type="datetimerange"
-          placement="bottom-start"
-          placeholder="请选择时间"
-          style="width: 200px"
-          :options="options"
+          value-format="yyyy/MM/dd"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          
           class="mr20"
-        ></DatePicker>
+        ></el-date-picker>
         <el-button type="primary" class="mr20" @click="getList">查询</el-button>
       </div>
     </div>
-    <el-table
-      ref="selection"
-      :data="tabList"
-      v-loading="loading"
-      empty-text="暂无数据"
-      highlight-current-row
-      
-    >
+    <el-table ref="selection" :data="tabList" v-loading="loading" empty-text="暂无数据" highlight-current-row>
       <el-table-column label="商品图片" min-width="90">
         <template slot-scope="scope">
           <div class="tabBox_img" v-viewer>
@@ -178,7 +172,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.data = this.timeVal.join('-');
+      this.formValidate.data = this.timeVal ? this.timeVal.join('-') : '';
       this.name = this.formValidate.data;
     },
     changeMenu(name) {
@@ -196,7 +190,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     look(row) {

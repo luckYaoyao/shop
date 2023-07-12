@@ -21,14 +21,14 @@
           </div>
           <div class="item">
             <el-form-item label="生日：">
-              <DatePicker
+              <el-date-picker
                 class="form-sty"
                 type="date"
-                :value="formItem.birthday"
+                v-model="formItem.birthday"
                 placeholder="请选择生日"
                 format="yyyy-MM-dd"
-                @change="formItem.birthday = $event"
-              ></DatePicker>
+                value-format="yyyy-MM-dd"
+              ></el-date-picker>
             </el-form-item>
           </div>
           <div class="item">
@@ -74,14 +74,24 @@
           <div class="item">
             <el-form-item label="用户等级：">
               <el-select v-model="formItem.level" class="form-sty" clearable>
-                <el-option v-for="(item, index) in infoData.levelInfo" :key="index" :value="item.id" :label="item.name"></el-option>
+                <el-option
+                  v-for="(item, index) in infoData.levelInfo"
+                  :key="index"
+                  :value="item.id"
+                  :label="item.name"
+                ></el-option>
               </el-select>
             </el-form-item>
           </div>
           <div class="item">
             <el-form-item label="用户分组：">
               <el-select v-model="formItem.group_id" class="form-sty" clearable>
-                <el-option v-for="(item, index) in infoData.groupInfo" :key="index" :value="item.id" :label="item.group_name"></el-option>
+                <el-option
+                  v-for="(item, index) in infoData.groupInfo"
+                  :key="index"
+                  :value="item.id"
+                  :label="item.group_name"
+                ></el-option>
               </el-select>
             </el-form-item>
           </div>
@@ -91,9 +101,9 @@
                 <div class="labelInput acea-row row-between-wrapper" @click="openLabel">
                   <div style="width: 90%">
                     <div v-if="dataLabel.length">
-                      <Tag closable v-for="(item, index) in dataLabel" :key="index" @on-close="closeLabel(item)">{{
+                      <el-tag closable v-for="(item, index) in dataLabel" :key="index" @close="closeLabel(item)">{{
                         item.label_name
-                      }}</Tag>
+                      }}</el-tag>
                     </div>
                     <span class="span" v-else>选择用户关联标签</span>
                   </div>
@@ -148,7 +158,7 @@
         </div>
       </div>
     </el-form>
-    <Modal v-model="labelShow" scrollable title="请选择用户标签" :closable="false" width="500" :footer-hide="true">
+    <el-dialog :visible.sync="labelShow" title="请选择用户标签" :show-close="false" width="500px">
       <userLabel
         v-if="labelShow"
         :only_get="true"
@@ -156,7 +166,7 @@
         @close="labelClose"
         @activeData="activeData"
       ></userLabel>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -247,27 +257,27 @@ export default {
         ids.push(i.id);
       });
       data.label_id = ids;
-      // if (!data.real_name) return this.$Message.warning("请输入真实姓名");
-      // if (!data.phone) return this.$Message.warning("请输入手机号");
-      // if (!data.pwd) return this.$Message.warning("请输入密码");
-      // if (!data.true_pwd) return this.$Message.warning("请输入确认密码");
+      // if (!data.real_name) return this.$message.warning("请输入真实姓名");
+      // if (!data.phone) return this.$message.warning("请输入手机号");
+      // if (!data.pwd) return this.$message.warning("请输入密码");
+      // if (!data.true_pwd) return this.$message.warning("请输入确认密码");
       if (data.uid) {
         editUser(data)
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.$emit('success');
           })
           .catch((err) => {
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       } else {
         setUser(data)
           .then((res) => {
             this.$emit('success');
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((err) => {
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       }
     },
@@ -303,7 +313,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 标签弹窗关闭

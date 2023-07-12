@@ -144,11 +144,11 @@
       </div>
     </el-card>
     <!--详情-->
-    <Modal v-model="modals" title="直播间详情" class="paymentFooter" scrollable width="700" :footer-hide="true">
+    <el-dialog :visible.sync="modals" title="直播间详情" class="paymentFooter" width="700px">
       <details-from ref="studioDetail" />
-    </Modal>
+    </el-dialog>
     <!-- 添加商品 -->
-    <Modal v-model="isShowBox" title="添加商品" class="paymentFooter" scrollable width="700" :footer-hide="true">
+    <el-dialog :visible.sync="isShowBox" title="添加商品" class="paymentFooter" width="700px">
       <!--            <addGoods :datas="activeItem" @getData="getData" ref="liveAdd"></addGoods>-->
       <goods-list
         ref="goodslist"
@@ -158,7 +158,7 @@
         :ischeckbox="true"
         :liveStatus="true"
       ></goods-list>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -269,10 +269,10 @@ export default {
     onchangeIsShow({ id, is_show }) {
       liveShow(id, is_show)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
     //  详情
@@ -292,12 +292,12 @@ export default {
         goods_ids: data,
       })
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.isShowBox = false;
           this.$refs.liveAdd.goodsList = [];
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
           this.isShowBox = false;
           this.$refs.liveAdd.goodsList = [];
         });
@@ -306,11 +306,11 @@ export default {
     syncRoom() {
       liveSyncRoom()
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((error) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 删除
@@ -324,13 +324,13 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tabList.splice(num, 1);
 
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     getProductId(data) {

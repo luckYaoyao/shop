@@ -14,16 +14,18 @@
                 item.text
               }}</el-radio-button>
             </el-radio-group>
-            <DatePicker
+            <el-date-picker
               :editable="false"
               @change="onchangeTime"
-              :value="timeVal"
-              format="yyyy/MM/dd"
+              v-model="timeVal"
+              value-format="yyyy/MM/dd"
               type="daterange"
               placement="bottom-end"
-              placeholder="请选择时间"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
               style="width: 200px"
-            ></DatePicker>
+            ></el-date-picker>
           </el-form-item>
         </el-col>
         <el-col :span="12" class="ivu-text-left">
@@ -161,7 +163,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.data = this.timeVal.join('-');
+      this.formValidate.data = this.timeVal ? this.timeVal.join('-') : '';
       this.getListService();
     },
     // 选择时间
@@ -185,7 +187,7 @@ export default {
         })
         .catch((res) => {
           this.loading2 = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 搜索
@@ -212,7 +214,7 @@ export default {
           });
         }
       } else {
-        this.$Message.warning('请先选择商品');
+        this.$message.warning('请先选择商品');
       }
     },
   },

@@ -279,16 +279,16 @@ export default {
           this.loading = false;
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     handleSubmit(name) {
       getNotificationSave(this.formData)
         .then((res) => {
-          this.$Message.success('设置成功');
+          this.$message.success('设置成功');
         })
         .catch((err) => {
-          this.$Message.error(err);
+          this.$message.error(err);
         });
     },
     handleReset(name) {

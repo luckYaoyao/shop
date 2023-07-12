@@ -271,7 +271,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     getTemplateRow(row) {
@@ -311,7 +311,7 @@ export default {
           this.treeSelect = res.data;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     pageChange() {
@@ -349,7 +349,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else {
         liveGoods({
@@ -382,7 +382,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       }
     },
@@ -400,7 +400,7 @@ export default {
           }
         }
       } else {
-        this.$Message.warning('请先选择商品');
+        this.$message.warning('请先选择商品');
       }
     },
     // 表格搜索

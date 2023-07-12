@@ -71,7 +71,7 @@ export default {
           this.labelList = res.data;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     selectLabel(label) {

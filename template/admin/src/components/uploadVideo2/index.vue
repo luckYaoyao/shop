@@ -11,9 +11,9 @@
         @click="zh_uploadFile"
         >{{ videoLink ? '确认添加' : '上传视频' }}</el-button
       >
-      <Upload
+      <el-upload
         v-if="upload_type === '1' && !videoLink"
-        :show-upload-list="false"
+        :show-file-list="false"
         :action="fileUrl"
         class="ml10"
         :before-upload="videoSaveToUrl"
@@ -23,7 +23,7 @@
         style="display: inline-block"
       >
         <el-button type="primary" icon="ios-cloud-upload-outline">上传视频</el-button>
-      </Upload>
+      </el-upload>
       <Progress :percent="progress" :stroke-width="5" v-if="upload.videoIng" />
       <div class="iview-video-style" v-if="formValidate.video_link">
         <video
@@ -81,7 +81,7 @@ export default {
           this.progress = 100;
         },
         error: (e) => {
-          this.$Message.error(e.msg);
+          this.$message.error(e.msg);
         },
         uploading: (chunk, allChunk) => {
           this.videoIng = true;
@@ -106,9 +106,9 @@ export default {
     handleSuccess(res, file, fileList) {
       if (res.status === 200) {
         this.formValidate.video_link = res.data.src;
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
       } else {
-        this.$Message.error(res.msg);
+        this.$message.error(res.msg);
       }
     },
     getToken() {

@@ -168,7 +168,7 @@ export default {
       //     this.$refs.edits.modals = true;
       //     this.FromData = res.data;
       // }).catch(res => {
-      //     this.$Message.error(res.msg);
+      //     this.$message.error(res.msg);
       // })
     },
     // 编辑
@@ -178,7 +178,7 @@ export default {
       //     this.FromData = res.data;
       //     this.$refs.edits.modals = true;
       // }).catch(res => {
-      //     this.$Message.error(res.msg);
+      //     this.$message.error(res.msg);
       // })
     },
     // 删除
@@ -192,11 +192,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 列表
@@ -212,7 +212,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索
@@ -228,10 +228,10 @@ export default {
       };
       statusApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 查看文章

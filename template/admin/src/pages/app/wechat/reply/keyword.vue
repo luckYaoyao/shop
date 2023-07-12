@@ -44,7 +44,6 @@
         </el-row>
       </el-form>
       <el-table
-        :columns="columns1"
         :data="tabList"
         ref="table"
         class="mt25"
@@ -102,7 +101,7 @@
         />
       </div>
     </el-card>
-    <Modal v-model="modal" title="二维码" footer-hide>
+    <el-dialog :visible.sync="modal" title="二维码">
       <div class="acea-row row-around">
         <div class="acea-row row-column-around row-between-wrapper">
           <div v-viewer class="QRpic">
@@ -110,7 +109,7 @@
           </div>
         </div>
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -194,7 +193,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改是否显示
@@ -205,10 +204,10 @@ export default {
       };
       keywordsetStatusApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索
@@ -234,25 +233,22 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tabList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 下载二维码
     download(row) {
-      this.$Spin.show();
       downloadReplyCode(row.id)
         .then((res) => {
-          this.$Spin.hide();
           this.modal = true;
           this.qrcode = res.data.url;
         })
         .catch((err) => {
-          this.$Spin.hide();
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
   },

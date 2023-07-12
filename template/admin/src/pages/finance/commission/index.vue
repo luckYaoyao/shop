@@ -52,7 +52,6 @@
       </el-form>
       <el-table
         ref="table"
-        :columns="columns"
         :data="tabList"
         :loading="loading"
         empty-text="暂无数据"
@@ -118,41 +117,6 @@ export default {
         page: 1, // 当前页
         limit: 20, // 每页显示条数
       },
-      columns: [
-        {
-          title: '用户信息',
-          key: 'nickname',
-          minWidth: 150,
-        },
-        {
-          title: '总佣金金额',
-          key: 'sum_number',
-          sortable: 'custom',
-          minWidth: 120,
-        },
-        {
-          title: '账户余额',
-          key: 'now_money',
-          minWidth: 100,
-        },
-        {
-          title: '账户佣金',
-          key: 'brokerage_price',
-          sortable: 'custom',
-          minWidth: 120,
-        },
-        {
-          title: '提现到账佣金',
-          key: 'extract_price',
-          minWidth: 150,
-        },
-        // {
-        //   title: '操作',
-        //   slot: 'action',
-        //   fixed: 'right',
-        //   minWidth: 100
-        // }
-      ],
     };
   },
   computed: {
@@ -180,7 +144,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 搜索
@@ -201,7 +165,7 @@ export default {
           location.href = res.data[0];
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 详情

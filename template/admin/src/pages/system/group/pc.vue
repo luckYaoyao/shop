@@ -87,15 +87,11 @@
                       </div>
                     </draggable>
                     <div>
-                      <Modal
-                        v-model="modalPic"
+                      <el-dialog
+                        :visible.sync="modalPic"
                         width="950px"
-                        scrollable
-                        footer-hide
-                        closable
                         title="上传商品图"
-                        :mask-closable="false"
-                        :z-index="999"
+                        :close-on-click-modal="false"
                       >
                         <uploadPictures
                           :isChoice="isChoice"
@@ -104,7 +100,7 @@
                           :gridPic="gridPic"
                           v-if="modalPic"
                         ></uploadPictures>
-                      </Modal>
+                      </el-dialog>
                     </div>
                   </div>
                   <template>
@@ -136,15 +132,11 @@
                       <div class="img_fonts">更换图片</div>
                     </div>
                     <div>
-                      <Modal
-                        v-model="modalPic"
+                      <el-dialog
+                        :visible.sync="modalPic"
                         width="950px"
-                        scrollable
-                        footer-hide
-                        closable
                         title="上传商品图"
-                        :mask-closable="false"
-                        :z-index="999"
+                        :close-on-click-modal="false"
                       >
                         <uploadPictures
                           :isChoice="isChoice"
@@ -153,7 +145,7 @@
                           :gridPic="gridPic"
                           v-if="modalPic"
                         ></uploadPictures>
-                      </Modal>
+                      </el-dialog>
                     </div>
                   </div>
                 </div>
@@ -162,7 +154,7 @@
           </el-col>
           <el-col v-if="pageId == 3" :xs="24" :sm="24" :md="12" :lg="14" style="margin-left: 40px">
             <div class="table_box">
-              <el-row >
+              <el-row>
                 <el-col v-bind="grid">
                   <div class="title">隐私权限页面展示：</div>
                 </el-col>
@@ -321,10 +313,10 @@ export default {
         if (valid) {
           setKfAdv(this.formValidate)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;
@@ -343,7 +335,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 添加表单
@@ -364,7 +356,7 @@ export default {
             });
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       }
       if (this.pageId == 1) {
@@ -395,7 +387,7 @@ export default {
         };
       } else {
         if (this.tabList.list.length == 5) {
-          this.$Message.warning('最多添加五张呦');
+          this.$message.warning('最多添加五张呦');
         } else {
           let obj = JSON.parse(JSON.stringify(this.lastObj));
           this.tabList.list.push(obj);
@@ -429,19 +421,19 @@ export default {
       if (this.pageId == 'pc_home_banner') {
         groupSaveApi({ config_name: this.pageId, data: this.tabList.list })
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((err) => {
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       }
       if (this.pageId == 1) {
         pcLogoSave({ pc_logo: this.pclogo })
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((err) => {
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       }
       if (this.pageId == 3) {

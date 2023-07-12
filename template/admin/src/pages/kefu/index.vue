@@ -42,13 +42,6 @@
           </div>
         </div>
       </div>
-      <!--            <Modal v-model="modals" scrollable footer-hide closable title="请完成安全校验" :mask-closable="false" :z-index="2"-->
-      <!--                   width="342">-->
-      <!--                <div class="captchaBox">-->
-      <!--                    <div id="captcha" style="position: relative" ref="captcha"></div>-->
-      <!--                    <div id="msg"></div>-->
-      <!--                </div>-->
-      <!--            </Modal>-->
     </div>
     <div class="foot-box" v-if="copyright">{{ copyright }}</div>
     <div class="foot-box" v-else>
@@ -172,7 +165,7 @@ export default {
     },
     // 关闭模态框
     closeModel() {
-      let msg = this.$Message.loading({
+      let msg = this.$message.loading({
         content: '登录中...',
         duration: 0,
       });
@@ -206,7 +199,7 @@ export default {
           let data = res === undefined ? {} : res;
           this.errorNum++;
           this.captchas();
-          this.$Message.error(data.msg || '登录失败');
+          this.$message.error(data.msg || '登录失败');
           if (this.jigsaw) this.jigsaw.reset();
         });
     },
@@ -217,7 +210,7 @@ export default {
     },
     closefail() {
       if (this.jigsaw) this.jigsaw.reset();
-      this.$Message.error('校验错误');
+      this.$message.error('校验错误');
     },
     handleResize(event) {
       this.fullWidth = document.documentElement.clientWidth;
@@ -253,7 +246,7 @@ export default {
           this.timeNum = 0;
           window.clearInterval(this.scanTime);
           this.rxpired = true;
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
     // 扫码登录情况

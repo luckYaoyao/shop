@@ -20,15 +20,17 @@
           </el-col>
           <el-col :xl="6" :lg="12" :md="13" :sm="12" :xs="24">
             <el-form-item label="时间范围：" class="tab_data">
-              <DatePicker
+              <el-date-picker
                 :editable="false"
                 style="width: 80%"
                 @change="onchangeTime"
                 format="yyyy/MM/dd"
+                value-format="yyyy/MM/dd"
                 type="daterange"
-                placement="bottom-end"
-                placeholder="请选择时间"
-              ></DatePicker>
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :xl="6" :lg="12" :md="13" :sm="12" :xs="24">
@@ -148,7 +150,7 @@ export default {
           this.billList = res.data.list;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 列表
@@ -163,7 +165,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 搜索
@@ -185,7 +187,7 @@ export default {
           location.href = res.data[0];
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

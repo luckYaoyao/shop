@@ -71,11 +71,11 @@ export default {
         if (valid) {
           configApi(this.formInline)
             .then(async (res) => {
-              this.$Message.success('登录成功!');
+              this.$message.success('登录成功!');
               this.$emit('on-Login');
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;

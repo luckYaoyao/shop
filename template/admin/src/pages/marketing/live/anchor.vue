@@ -113,7 +113,7 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.labelLists.splice(num, 1);
           if (!this.labelLists.length && this.labelFrom.page != 1) {
             this.labelFrom.page -= 1;
@@ -123,7 +123,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 分组列表
@@ -138,7 +138,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

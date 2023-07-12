@@ -12,7 +12,7 @@
       <el-button v-if="codes" class="ml10 copy-btn" type="success" @click="insertCopy()">复制结果</el-button>
     </div>
     <div class="params">
-      <el-tabs class="mt10" v-model="paramsType" @tag-click="changeTab">
+      <el-tabs class="mt10" v-model="paramsType" @tab-click="changeTab">
         <el-tab-pane label="Params" name="Params"> </el-tab-pane>
         <el-tab-pane label="Body" name="Body"> </el-tab-pane>
         <el-tab-pane label="Header" name="Header"> </el-tab-pane>
@@ -325,10 +325,10 @@ export default {
     insertCopy() {
       this.$copyText(this.codes)
         .then((message) => {
-          this.$Message.success('复制成功');
+          this.$message.success('复制成功');
         })
         .catch((err) => {
-          this.$Message.error('复制失败');
+          this.$message.error('复制失败');
         });
     },
     async requestData() {
@@ -346,11 +346,11 @@ export default {
       console.log(url);
       requestMethod(url, method, params, body, headers)
         .then((res) => {
-          if (!res) return this.$Message.error('接口异常');
+          if (!res) return this.$message.error('接口异常');
           this.codes = JSON.stringify(res);
         })
         .catch((err) => {
-          if (!err) return this.$Message.error('接口异常');
+          if (!err) return this.$message.error('接口异常');
           this.codes = JSON.stringify(err);
         });
     },

@@ -34,7 +34,6 @@
         </el-col>
       </el-row>
       <el-table
-        :columns="columns"
         :data="storeLists"
         ref="table"
         class="mt25"
@@ -149,50 +148,6 @@ export default {
         store_id: 0,
       },
       loading: false,
-      columns: [
-        {
-          title: 'ID',
-          key: 'id',
-          width: 80,
-          sortable: true,
-        },
-        {
-          title: '微信名称',
-          key: 'nickname',
-          minWidth: 100,
-        },
-        {
-          title: '头像',
-          slot: 'avatar',
-          minWidth: 100,
-        },
-        {
-          title: '核销员名称',
-          key: 'staff_name',
-          minWidth: 100,
-        },
-        {
-          title: '所属提货点',
-          key: 'name',
-          minWidth: 100,
-        },
-        {
-          title: '添加时间',
-          key: 'add_time',
-          minWidth: 100,
-        },
-        {
-          title: '状态',
-          slot: 'status',
-          minWidth: 100,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 120,
-        },
-      ],
       storeLists: [],
       storeSelectList: [],
       total: 0,
@@ -219,7 +174,7 @@ export default {
           that.total = res.data.count;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 搜索；
@@ -238,11 +193,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.storeLists.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 添加核销员；

@@ -75,7 +75,7 @@
     </el-card>
 
     <!--聊天记录-->
-    <Modal v-model="modals3" footer-hide scrollable closable title="聊天记录" width="700">
+    <el-dialog :visible.sync="modals3" title="聊天记录" width="700px">
       <div v-if="isChat" class="modelBox">
         <el-table
           :loading="loading3"
@@ -155,7 +155,7 @@
           />
         </div>
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -281,7 +281,7 @@ export default {
           }
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
     getExpiresTime(expiresTime) {
@@ -317,7 +317,7 @@ export default {
             })
             .catch((res) => {
               this.loading2 = false;
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
           resolve();
         }, 2000);
@@ -344,7 +344,7 @@ export default {
         })
         .catch((res) => {
           this.loading5 = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改成功
@@ -370,7 +370,7 @@ export default {
         })
         .catch((res) => {
           this.loading3 = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -396,7 +396,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.data = this.timeVal.join('-');
+      this.formValidate.data = this.timeVal ? this.timeVal.join('-') : '';
       this.formValidate.page = 1;
       this.getListService();
     },
@@ -421,7 +421,7 @@ export default {
         })
         .catch((res) => {
           tkefucreateApihis.loading2 = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     pageChange2(pageIndex) {
@@ -445,11 +445,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tableList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 列表
@@ -464,7 +464,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改是否显示
@@ -475,27 +475,27 @@ export default {
       };
       kefusetStatusApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 添加客服
     putRemark() {
       if (this.addFrom.uids.length === 0) {
-        return this.$Message.warning('请选择要添加的客服');
+        return this.$message.warning('请选择要添加的客服');
       }
       kefuAddApi(this.addFrom)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.modals = false;
           this.getList();
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

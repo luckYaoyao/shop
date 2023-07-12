@@ -1,5 +1,5 @@
 <template>
-  <Modal scrollable v-model="modal" @on-cancel="onCancel" title="商品规格" width="950">
+  <el-dialog :visible.sync="modal" @closed="onCancel" title="商品规格" width="950px" v-loading="spinShow">
     <el-form
       ref="formDynamic"
       :model="formDynamic"
@@ -24,16 +24,14 @@
               ><Icon type="ios-close-circle" @click="handleRemove(index)" />
             </div>
             <div class="rulesBox">
-              <Tag
-                type="dot"
+              <el-tag
                 class=""
                 closable
                 color="primary"
                 v-for="(j, indexn) in item.detail"
                 :key="indexn"
-                :name="j"
-                @on-close="handleRemove2(item.detail, indexn)"
-                >{{ j }}</Tag
+                @close="handleRemove2(item.detail, indexn)"
+                >{{ j }}</el-tag
               >
               <el-input
                 search
@@ -64,14 +62,13 @@
             <el-button @click="offAttrName">取消</el-button>
           </el-col>
         </el-col>
-        <Spin size="large" fix v-if="spinShow"></Spin>
       </el-row>
       <el-button type="primary" icon="md-add" @click="addBtn" v-if="!isBtn" class="ml95 mt10">添加新规格</el-button>
     </el-form>
-    <div slot="footer">
+    <span slot="footer" class="dialog-footer">
       <el-button type="primary" :loading="modal_loading" @click="handleSubmit('formDynamic')">确定</el-button>
-    </div>
-  </Modal>
+    </span>
+  </el-dialog>
 </template>
 
 <script>
@@ -130,7 +127,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 提交
@@ -138,13 +135,13 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (this.formDynamic.spec.length === 0) {
-            return this.$Message.warning('请至少添加一条商品规格！');
+            return this.$message.warning('请至少添加一条商品规格！');
           }
           this.modal_loading = true;
           setTimeout(() => {
             ruleAddApi(this.formDynamic, this.ids)
               .then((res) => {
-                this.$Message.success(res.msg);
+                this.$message.success(res.msg);
                 setTimeout(() => {
                   this.modal = false;
                   this.modal_loading = false;
@@ -156,7 +153,7 @@ export default {
               })
               .catch((res) => {
                 this.modal_loading = false;
-                this.$Message.error(res.msg);
+                this.$message.error(res.msg);
               });
           }, 1200);
         } else {
@@ -202,7 +199,7 @@ export default {
         this.attrsVal = '';
         this.isBtn = false;
       } else {
-        this.$Message.warning('请添加规格名称或规格值');
+        this.$message.warning('请添加规格名称或规格值');
       }
     },
     // 添加属性
@@ -216,7 +213,7 @@ export default {
           return item;
         }, []);
       } else {
-        this.$Message.warning('请添加属性');
+        this.$message.warning('请添加属性');
       }
     },
   },

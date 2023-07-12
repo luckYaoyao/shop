@@ -24,7 +24,6 @@
       </el-form>
       <el-table
         class="mt25"
-        :columns="columns"
         :data="tbody"
         v-loading="loading"
         highlight-current-row
@@ -107,16 +106,16 @@
         />
       </div>
     </el-card>
-    <Modal v-model="modal" title="添加批次" footer-hide>
+    <el-dialog :visible.sync="modal" title="添加批次">
       <form-create v-model="fapi" :rule="rule" @submit="onSubmit"></form-create>
-    </Modal>
-    <Modal v-model="cardModal" title="卡列表" footer-hide width="1000">
+    </el-dialog>
+    <el-dialog :visible.sync="cardModal" title="卡列表" width="1000px">
       <cardList v-if="cardModal" :id="id"></cardList>
-    </Modal>
-    <Modal v-model="modal2" title="编辑批次名" footer-hide>
+    </el-dialog>
+    <el-dialog :visible.sync="modal2" title="编辑批次名">
       <form-create :rule="rule2" @submit="onSubmit2"></form-create>
-    </Modal>
-    <Modal v-model="modal3" title="二维码" footer-hide>
+    </el-dialog>
+    <el-dialog :visible.sync="modal3" title="二维码">
       <div v-if="qrcode" class="acea-row row-around">
         <div v-if="qrcode && qrcode.wechat_img" class="acea-row row-column-around row-between-wrapper">
           <div v-viewer class="QRpic">
@@ -131,8 +130,7 @@
           <span class="mt10">小程序二维码</span>
         </div>
       </div>
-      <Spin v-else></Spin>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -156,45 +154,6 @@ export default {
         sm: 24,
         xs: 24,
       },
-      columns: [
-        {
-          title: '编号',
-          key: 'id',
-        },
-        {
-          title: '批次名称',
-          key: 'title',
-        },
-        {
-          title: '体验天数',
-          key: 'use_day',
-        },
-        {
-          title: '发卡总数量',
-          key: 'total_num',
-        },
-        {
-          title: '使用数量',
-          key: 'use_num',
-        },
-        {
-          title: '制卡时间',
-          key: 'add_time',
-        },
-        {
-          title: '是否激活',
-          slot: 'status',
-        },
-        {
-          title: '备注',
-          key: 'remark',
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-        },
-      ],
       tbody: [],
       total: 0,
       gradeFrom: {
@@ -332,7 +291,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 批次名称查询
@@ -347,10 +306,10 @@ export default {
         value: row.status,
       })
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 导出
@@ -399,12 +358,12 @@ export default {
       memberBatchSave(0, formData)
         .then((res) => {
           this.modal = false;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getMemberBatch();
           this.fapi.resetFields();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     onSubmit2(formData) {
@@ -414,25 +373,22 @@ export default {
       })
         .then((res) => {
           this.modal2 = false;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getMemberBatch();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 会员卡二维码
     getMemberScan() {
-      this.$Spin.show();
       userMemberScan()
         .then((res) => {
-          this.$Spin.hide();
           this.qrcode = res.data;
           this.modal3 = true;
         })
         .catch((err) => {
-          this.$Spin.hide();
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
   },

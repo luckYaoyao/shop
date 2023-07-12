@@ -168,14 +168,14 @@ export default {
         .then(async (res) => {
           let data = res.data;
           if (!data.status) {
-            this.$Message.warning('请先登录');
+            this.$message.warning('请先登录');
             this.$router.push(this.$routeProStr + '/setting/sms/sms_config/index?url=' + this.$route.path);
           } else {
             this.getList();
           }
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 等级列表
@@ -248,7 +248,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 添加
@@ -259,7 +259,7 @@ export default {
           this.$refs.edits.modals = true;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索

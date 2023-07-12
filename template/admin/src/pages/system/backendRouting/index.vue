@@ -419,11 +419,15 @@
         </el-card>
       </div>
     </div>
-    <Modal v-model="nameModal" title="分组名称" :loading="loading" @on-ok="asyncOK">
+    <el-dialog :visible.sync="nameModal" title="分组名称">
       <label>分组名称：</label>
       <el-input v-model="value" placeholder="请输入分组名称" style="width: 85%" />
-    </Modal>
-    <Drawer v-model="debuggingModal" :title="formValidate.name" width="70%" footer-hide :loading="loading">
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="nameModal = false">取 消</el-button>
+        <el-button type="primary" @click="asyncOK">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-drawer :visible.sync="debuggingModal" :title="formValidate.name" size="70%"  :wrapperClosable="false" :loading="loading">
       <debugging
         v-if="debuggingModal"
         :formValidate="formValidate"
@@ -431,7 +435,7 @@
         :requestTypeList="requestTypeList"
         :apiType="apiType"
       />
-    </Drawer>
+    </el-drawer>
   </div>
 </template>
 
@@ -609,7 +613,7 @@ export default {
         onOk: () => {
           syncRoute(this.apiType).then((res) => {
             this.getInterfaceList('one');
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.$Modal.remove();
           });
         },
@@ -671,7 +675,7 @@ export default {
           })
           .catch((err) => {
             console.log(err);
-            this.$Message.error(err);
+            this.$message.error(err);
           });
       } catch (error) {
         console.log(error);
@@ -692,16 +696,16 @@ export default {
           this.formValidate = res.data;
         })
         .catch((err) => {
-          this.$Message.error(err);
+          this.$message.error(err);
         });
     },
     async handleSubmit() {
       if (!this.formValidate.name) {
-        return this.$Message.warning('请输入接口名称');
+        return this.$message.warning('请输入接口名称');
       } else if (!this.formValidate.method) {
-        return this.$Message.warning('请选择请求类型');
+        return this.$message.warning('请选择请求类型');
       } else if (!this.formValidate.path) {
-        return this.$Message.warning('请输入路由地址');
+        return this.$message.warning('请输入路由地址');
       }
       this.formValidate.request = await this.$refs.xTable.getTableData().tableData;
       this.formValidate.response = await this.$refs.resTable.getTableData().tableData;
@@ -710,11 +714,11 @@ export default {
       await routeSave(this.formValidate)
         .then((res) => {
           this.isEdit = false;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getRoteData(this.paramsId);
         })
         .catch((err) => {
-          this.$Message.error(err);
+          this.$message.error(err);
         });
     },
     async insertEvent(type) {
@@ -825,11 +829,11 @@ export default {
       };
       routeSave(data)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getInterfaceList();
         })
         .catch((err) => {
-          this.$Message.error(err);
+          this.$message.error(err);
         });
     },
     //侧边栏右键点击事件
@@ -930,11 +934,11 @@ export default {
         onOk: () => {
           method(node.id)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               node.remove();
             })
             .catch((err) => {
-              this.$Message.error(err);
+              this.$message.error(err);
             });
         },
         onCancel: () => {},
@@ -949,10 +953,10 @@ export default {
         };
         interfaceEditName(data)
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((err) => {
-            this.$Message.error(err);
+            this.$message.error(err);
           });
       }
     },

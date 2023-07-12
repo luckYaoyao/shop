@@ -282,11 +282,11 @@ export default {
             }
             orderDelivery(this.orderId, paramsData)
               .then((res) => {
-                this.$Message.success(res.msg);
+                this.$message.success(res.msg);
                 this.$emit('ok');
               })
               .catch((error) => {
-                this.$Message.error(error.msg);
+                this.$message.error(error.msg);
               });
           } else {
           }
@@ -306,11 +306,11 @@ export default {
           sh_delivery_uid: people.id,
         })
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.$emit('ok');
           })
           .catch((error) => {
-            this.$Message.error(error.msg);
+            this.$message.error(error.msg);
           });
       }
       if (this.formValidate.gender == 3) {
@@ -319,11 +319,11 @@ export default {
           remark: this.formValidate.msg,
         })
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.$emit('ok');
           })
           .catch((error) => {
-            this.$Message.error(error.msg);
+            this.$message.error(error.msg);
           });
       }
     },
@@ -349,7 +349,7 @@ export default {
           }
         });
       } else {
-        this.$Message.error('请选择电子面单');
+        this.$message.error('请选择电子面单');
       }
     },
   },

@@ -17,11 +17,11 @@ export function modelSure(formRequestPromise, Title) {
         formRequestPromise
           .then(({ data }) => {})
           .catch(() => {
-            this.$Message.error('表单加载失败');
+            this.$message.error('表单加载失败');
           });
       },
       // onCancel: () => {
-      //     this.$Message.info('取消成功');
+      //     this.$message.info('取消成功');
       // }
     });
   });

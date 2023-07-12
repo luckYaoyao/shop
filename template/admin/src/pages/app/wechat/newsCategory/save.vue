@@ -3,14 +3,16 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <router-link :to="{ path: $routeProStr + '/app/wechat/news_category/index' }"
-          ><el-button icon="ios-arrow-back" size="small" type="text" v-show="$route.params.id">返回</el-button></router-link
+          ><el-button icon="ios-arrow-back" size="small" type="text" v-show="$route.params.id"
+            >返回</el-button
+          ></router-link
         >
         <el-divider direction="vertical"></el-divider>
         <span class="ivu-page-header-title mr20" style="padding: 0" v-text="$route.meta.title"></span>
       </div>
     </div>
     <el-card :bordered="false" shadow="never" class="save_from ivu-mt">
-      <el-row  :gutter="24">
+      <el-row :gutter="24">
         <el-col :xl="6" :lg="6" :md="12" :sm="24" :xs="24">
           <!--                    v-if="list.length!=0"-->
           <div v-for="(item, i) in list" :key="i">
@@ -60,7 +62,7 @@
             :label-position="labelPosition"
             @submit.native.prevent
           >
-            <el-row :gutter="24" >
+            <el-row :gutter="24">
               <el-col :span="24" class="ml40">
                 <el-form-item label="标题：" prop="title">
                   <el-input style="width: 60%" v-model="saveForm.title" type="text" placeholder="请输入文章标题" />
@@ -96,16 +98,7 @@
                   <el-button type="primary" class="submission" @click="subFrom('saveForm')">提交</el-button>
                 </el-form-item>
               </el-col>
-              <Modal
-                v-model="modalPic"
-                width="950px"
-                scrollable
-                footer-hide
-                closable
-                title="上传文章图"
-                :mask-closable="false"
-                :z-index="888"
-              >
+              <el-dialog :visible.sync="modalPic" width="950px" title="上传文章图" :close-on-click-modal="false">
                 <uploadPictures
                   :isChoice="isChoice"
                   @getPic="getPic"
@@ -113,7 +106,7 @@
                   :gridPic="gridPic"
                   v-if="modalPic"
                 ></uploadPictures>
-              </Modal>
+              </el-dialog>
             </el-row>
           </el-form>
         </el-col>
@@ -269,7 +262,7 @@ export default {
     // 删除
     del(i) {
       if (i === 0) {
-        this.$Message.warning('不能再删除了');
+        this.$message.warning('不能再删除了');
       } else {
         this.list.splice(i, 1);
         this.saveForm = {};
@@ -285,7 +278,7 @@ export default {
           this.content = this.list[this.current].content;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 提交数据
@@ -298,7 +291,7 @@ export default {
           };
           wechatNewsAddApi(data)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               setTimeout(() => {
                 this.$router.push({
                   path: this.$routeProStr + '/app/wechat/news_category/index',
@@ -306,7 +299,7 @@ export default {
               }, 500);
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;
@@ -316,42 +309,42 @@ export default {
     check() {
       for (let index in this.list) {
         if (!this.list[index].title) {
-          this.$Message.warning('请输入文章的标题');
+          this.$message.warning('请输入文章的标题');
           return false;
         } else if (!this.list[index].author) {
-          this.$Message.warning('请输入文章的作者');
+          this.$message.warning('请输入文章的作者');
           return false;
         } else if (!this.list[index].synopsis) {
-          this.$Message.warning('请输入文章的摘要');
+          this.$message.warning('请输入文章的摘要');
           return false;
         } else if (!this.list[index].image_input) {
-          this.$Message.warning('请输入文章的图文封面');
+          this.$message.warning('请输入文章的图文封面');
           return false;
         } else if (!this.list[index].content) {
-          this.$Message.warning('请输入文章的内容');
+          this.$message.warning('请输入文章的内容');
           return false;
         } else {
           return true;
         }
       }
       // if(!this.saveForm.title){
-      //     this.$Message.warning('请输入文章的标题');
+      //     this.$message.warning('请输入文章的标题');
       //     return false;
       // }
       // else if(!this.saveForm.author){
-      //     this.$Message.warning('请输入文章的作者');
+      //     this.$message.warning('请输入文章的作者');
       //     return false;
       // }
       // else if(!this.saveForm.synopsis){
-      //     this.$Message.warning('请输入文章的摘要');
+      //     this.$message.warning('请输入文章的摘要');
       //     return false;
       // }
       // else if(!this.saveForm.image_input){
-      //     this.$Message.warning('请输入文章的图文封面');
+      //     this.$message.warning('请输入文章的图文封面');
       //     return false;
       // }
       // else if(!this.saveForm.content){
-      //     this.$Message.warning('请输入文章的内容');
+      //     this.$message.warning('请输入文章的内容');
       //     return false;
       // }else{
       //     return true

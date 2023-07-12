@@ -5,7 +5,7 @@
         <el-col class="label" :span="4">
           <span>{{ item.title }}</span>
         </el-col>
-        <el-col span="19" class="slider-box">
+        <el-col :span="19" class="slider-box">
           <div class="input-box" @click="getLink(index)">
             <el-input v-model="item.val" :placeholder="item.pla" :maxlength="item.max" icon="ios-arrow-forward" readonly />
           </div>
@@ -15,7 +15,7 @@
         <el-col class="label" :span="4">
           <span>{{ item.title }}</span>
         </el-col>
-        <el-col span="19" class="slider-box">
+        <el-col :span="19" class="slider-box">
           <el-input v-model="item.val" :placeholder="item.pla" :maxlength="item.max" style="text-align: right" />
         </el-col>
       </div>

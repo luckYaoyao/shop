@@ -8,7 +8,7 @@
       :label-position="labelPosition"
       class="tabform"
     >
-      <el-row :gutter="24"  justify="end">
+      <el-row :gutter="24" justify="end">
         <el-col :span="24" class="ivu-text-left">
           <el-form-item label="订单状态：">
             <el-radio-group v-model="DataList.status" type="button" @change="selectChange(DataList.status)">
@@ -31,15 +31,16 @@
           </el-col>
           <el-col v-bind="grid">
             <el-form-item class="tab_data">
-              <DatePicker
+              <el-date-picker
                 :editable="false"
-                :value="value2"
-                format="yyyy/MM/dd"
+                v-model="value2"
+                value-format="yyyy/MM/dd"
                 type="daterange"
-                placement="bottom-end"
-                placeholder="el-select date"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
                 style="width: 200px"
-              ></DatePicker>
+              ></el-date-picker>
             </el-form-item>
           </el-col>
         </el-col>

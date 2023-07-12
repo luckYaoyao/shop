@@ -32,16 +32,7 @@
         </div>
       </draggable>
       <div>
-        <Modal
-          v-model="modalPic"
-          width="950px"
-          scrollable
-          footer-hide
-          closable
-          title="上传商品图"
-          :mask-closable="false"
-          :z-index="1"
-        >
+        <el-dialog v-model="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
           <uploadPictures
             :isChoice="isChoice"
             @getPic="getPic"
@@ -49,7 +40,7 @@
             :gridPic="gridPic"
             v-if="modalPic"
           ></uploadPictures>
-        </Modal>
+        </el-dialog>
       </div>
     </div>
     <template v-if="listData">

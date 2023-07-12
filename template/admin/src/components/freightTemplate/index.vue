@@ -1,12 +1,12 @@
 <template>
   <div>
-    <Modal
-      v-model="isTemplate"
+    <el-dialog
+      :visible.sync="isTemplate"
       title="运费模版"
       width="70%"
       if="isTemplate"
       @on-cancel="cancel"
-      @on-visible-change="close"
+      @closed="close"
     >
       <div class="Modals">
         <el-form class="form" ref="formData" label-width="120px" label-position="right">
@@ -192,7 +192,7 @@
         </el-form>
       </div>
       <div slot="footer"></div>
-    </Modal>
+    </el-dialog>
     <city ref="city" @selectCity="selectCity" :type="type" :selectArr="selectArr"></city>
   </div>
 </template>
@@ -253,10 +253,8 @@ export default {
   },
   computed: {},
   methods: {
-    close(status) {
-      if (!status) {
-        this.$emit('close');
-      }
+    close() {
+      this.$emit('close');
     },
     editFrom(id) {
       this.id = id;
@@ -318,8 +316,7 @@ export default {
       this.$refs.city.getCityList();
       this.$refs.city.addressModal = true;
     },
-    changeRadio() {
-    },
+    changeRadio() {},
     // 提交
     handleSubmit: function () {
       let that = this;
@@ -389,7 +386,7 @@ export default {
           },
         ];
         this.$emit('addSuccess');
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
       });
     },
     // 删除
@@ -410,10 +407,10 @@ export default {
       //   };
       //   this.$modalSure(delfromData)
       //     .then((res) => {
-      //       this.$Message.success(res.msg);
+      //       this.$message.success(res.msg);
       //     })
       //     .catch((res) => {
-      //       this.$Message.error(res.msg);
+      //       this.$message.error(res.msg);
       //     });
     },
     // 关闭

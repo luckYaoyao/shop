@@ -15,11 +15,10 @@
         </div>
       </div>
     </div>
-
-    <div class="footer">
-      <el-button type="primary" class="btns" @click="subBtn">确定</el-button>
-      <el-button type="primary" class="btns" ghost @click="cancel">取消</el-button>
-    </div>
+    <span slot="footer" class="dialog-footer">
+      <el-button @click="cancel">取 消</el-button>
+      <el-button type="primary" @click="subBtn">确 定</el-button>
+    </span>
   </div>
 </template>
 
@@ -126,11 +125,11 @@ export default {
           this.$emit('onceGetList');
           this.activeIds = [];
           this.unLaberids = [];
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.$emit('close');
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
     cancel() {

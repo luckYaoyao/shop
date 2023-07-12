@@ -133,9 +133,9 @@
       </div>
     </el-card>
     <!--详情-->
-    <Modal v-model="modals" title="商品详情" class="paymentFooter" scrollable width="700" :footer-hide="true">
+    <el-dialog :visible.sync="modals" title="商品详情" class="paymentFooter" scrollable width="700px">
       <goodsFrom ref="goodsDetail" />
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -217,10 +217,10 @@ export default {
     onchangeIsShow({ id, is_show }) {
       liveGoodsShow(id, is_show)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
     // 列表数据
@@ -233,7 +233,7 @@ export default {
           this.loading = false;
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
           this.loading = false;
         });
     },
@@ -252,11 +252,11 @@ export default {
     syncGoods() {
       liveSyncGoods()
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((error) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     edit(row) {
@@ -274,13 +274,13 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tabList.splice(num, 1);
 
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

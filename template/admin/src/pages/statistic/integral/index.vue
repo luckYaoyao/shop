@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div v-loading="spinShow">
     <el-card :bordered="false" shadow="never" class="ivu-mt">
       <el-form ref="formValidate" :model="formValidate" class="tabform" @submit.native.prevent>
-        <el-row :gutter="24" >
+        <el-row :gutter="24">
           <el-col :span="24">
             <el-form-item label="订单时间：">
               <el-radio-group
@@ -11,25 +11,27 @@
                 @change="selectChange(formValidate.data)"
                 class="mr"
               >
-                <el-radio-button :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</el-radio-button>
+                <el-radio-button :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{
+                  item.text
+                }}</el-radio-button>
               </el-radio-group>
-              <DatePicker
+              <el-date-picker
                 :editable="false"
                 @change="onchangeTime"
-                :value="timeVal"
+                v-model="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
-                placement="bottom-end"
-                placeholder="请选择时间"
-                style="width: 200px"
-              ></DatePicker>
+                value-format="yyyy/MM/dd"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
             </el-form-item> </el-col
         ></el-row>
       </el-form>
     </el-card>
     <cards-data :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
     <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
-    <Spin size="large" fix v-if="spinShow"></Spin>
     <div class="code-row-bg">
       <el-card :bordered="false" shadow="never" class="ivu-mt">
         <div class="acea-row row-between-wrapper">
@@ -138,7 +140,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.dataTime = this.timeVal.join('-');
+      this.dataTime = this.timeVal ? this.timeVal.join('-') : '';
       this.name = this.dataTime;
     },
     // 统计图
@@ -236,7 +238,7 @@ export default {
           this.spinShow = false;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
           this.spinShow = false;
         });
     },

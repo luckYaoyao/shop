@@ -149,7 +149,7 @@
       </div>
     </el-card>
     <!-- 领取记录 -->
-    <Modal v-model="modals2" scrollable footer-hide closable title="领取记录" :mask-closable="false" width="700">
+    <el-dialog :visible.sync="modals2" title="领取记录" :close-on-click-modal="false" width="700">
       <el-table
         :data="receiveList"
         ref="table"
@@ -182,7 +182,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -280,7 +280,7 @@ export default {
         })
         .catch((res) => {
           this.loading2 = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 领取记录改变分页
@@ -299,11 +299,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tableList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 列表
@@ -320,7 +320,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索

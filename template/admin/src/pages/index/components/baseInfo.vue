@@ -7,12 +7,10 @@
           <el-tag style="float: right;" type="success">{{ item.date }}</el-tag>
         </p>
         <div>
-          <!--<Numeral :value="item.yesterday" style=""/>-->
           <div class="number">{{ item.today }}</div>
           <div class="ivu-pt-8" style="height: 42px">
             <span>昨日 {{ item.yesterday }}</span>
             <span class="ivu-mr">
-              <!--日同比 <Trend :flag="Number(item.today_ratio)>=0?'up':'down'">{{Number(item.today_ratio)}}%</Trend>-->
               日环比 {{ Number(item.today_ratio) }}%
               <Icon
                 :type="Number(item.today_ratio) >= 0 ? 'md-arrow-dropup' : 'md-arrow-dropdown'"
@@ -20,15 +18,6 @@
                 :class="Number(item.today_ratio) >= 0 ? ' ' : 'on'"
               />
             </span>
-            <!-- <span style="display: inline-block">
-              周同比 <Trend :flag="Number(item.week_ratio)>=0?'up':'down'">{{Number(item.week_ratio)}}%</Trend>
-              周环比 {{ Number(item.week_ratio) }}%
-              <Icon
-                :type="Number(item.week_ratio) >= 0 ? 'md-arrow-dropup' : 'md-arrow-dropdown'"
-                class="iconColor"
-                :class="Number(item.week_ratio) >= 0 ? ' ' : 'on'"
-              />
-            </span> -->
           </div>
           <el-divider style="margin: 8px 0" />
           <div>
@@ -43,7 +32,6 @@
   </el-row>
 </template>
 <script>
-import echarts from 'echarts';
 import { headerApi } from '@/api/index';
 export default {
   data() {
@@ -72,7 +60,7 @@ export default {
           this.infoList = data.info;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

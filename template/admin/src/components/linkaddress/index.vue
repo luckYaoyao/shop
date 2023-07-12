@@ -1,9 +1,17 @@
 <template>
   <div>
-    <Modal v-model="modals" scrollable closable title="选择链接" :mask-closable="false" width="860" @on-cancel="cancel">
+    <el-dialog :visible.sync="modals" title="选择链接" :close-on-click-modal="false" width="860">
       <div class="table_box">
         <div class="left_box">
-          <Tree :data="categoryData" @on-select-change="handleCheckChange"></Tree>
+          <el-tree
+            :data="categoryData"
+            node-key="id"
+            default-expand-all
+            :props="props"
+            highlight-current
+            @node-click="handleCheckChange"
+            :current-node-key="treeId"
+          ></el-tree>
         </div>
         <div class="right_box" v-if="currenType == 'link'">
           <div v-if="basicsList.length">
@@ -151,9 +159,9 @@
         >
           <el-form ref="formValidate" :model="formValidate" class="tabform" v-if="currenType == 'product'">
             <el-row :gutter="24">
-              <el-col>
+              <el-col :span="8">
                 <el-form-item label="" label-for="pid">
-                  <el-select v-model="formValidate.cate_id" style="width: 230px" clearable @change="userSearchs">
+                  <el-select v-model="formValidate.cate_id" style="width: 180px" clearable @change="userSearchs">
                     <el-option
                       v-for="item in treeSelect"
                       :value="item.id"
@@ -164,15 +172,15 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col>
+              <el-col :span="12">
                 <el-form-item label="" label-for="store_name">
                   <el-input
                     search
                     enter-button
                     placeholder="请输入商品名称,关键字,编号"
                     v-model="formValidate.store_name"
-                    style="width: 250px"
-                    @on-search="userSearchs"
+                    style="width: 200px"
+                    @change="userSearchs"
                   />
                 </el-form-item>
               </el-col>
@@ -200,6 +208,7 @@
           >
             <el-table-column
               :label="item.title"
+              :width="item.width"
               :min-width="item.minWidth"
               v-for="(item, index) in currenType == 'special'
                 ? columns
@@ -304,12 +313,12 @@
           </div>
         </div>
       </div>
-      <div slot="footer">
-        <el-button @click="cancel">取消</el-button>
-        <el-button type="primary" @click="handleSubmit('customdate')" v-if="currenType == 'custom'">确定</el-button>
-        <el-button type="primary" @click="ok" v-else>确定</el-button>
-      </div>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="handleSubmit('customdate')" v-if="currenType == 'custom'">确 定</el-button>
+        <el-button type="primary" @click="ok" v-else>确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -331,6 +340,10 @@ export default {
       modals: false,
       categoryData: [],
       currenType: 'link',
+      props: {
+        label: 'name',
+        children: 'children',
+      },
       columns: [
         {
           title: 'ID',
@@ -494,14 +507,14 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tableList.splice(num, 1);
           if (!this.tableList.length) {
             this.customNum = 2;
           }
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     customLink() {
@@ -519,7 +532,7 @@ export default {
           this.tableList = res.data.list;
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     handleSubmit(name) {
@@ -536,15 +549,15 @@ export default {
           this.reset();
           // saveLink(this.customdate,this.categoryId).then(res=>{
           // 	this.getCustomList();
-          // 	this.$Message.success(res.msg);
+          // 	this.$message.success(res.msg);
           // 	this.$emit("linkUrl",this.customdate.url);
           // 	this.modals = false
           // 	this.reset();
           // }).catch(err=>{
-          // 	this.$Message.error(err.msg);
+          // 	this.$message.error(err.msg);
           // })
         } else {
-          this.$Message.error('请填写信息');
+          this.$message.error('请填写信息');
         }
       });
     },
@@ -558,7 +571,7 @@ export default {
           this.treeSelect = res.data;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索
@@ -582,10 +595,10 @@ export default {
         .then((res) => {
           res.data[0].children[0].selected = true;
           this.categoryData = res.data;
-          this.handleCheckChange('', res.data[0].children[0]);
+          this.handleCheckChange(res.data[0].children[0]);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     getList() {
@@ -603,7 +616,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else if (this.currenType == 'seckill') {
         seckillListApi(this.formValidate)
@@ -618,7 +631,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else if (this.currenType == 'advance') {
         presellListApi(this.formValidate)
@@ -633,7 +646,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
             advance;
           });
       } else if (this.currenType == 'bargain') {
@@ -649,7 +662,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else if (this.currenType == 'combination') {
         combinationListApi(this.formValidate)
@@ -664,7 +677,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else if (this.currenType == 'news') {
         cmsListApi(this.formValidate)
@@ -679,7 +692,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else if (this.currenType == 'integral') {
         integralProductListApi(this.formValidate)
@@ -694,21 +707,22 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       }
     },
-    handleCheckChange(data, event) {
+    handleCheckChange(data) {
       this.reset();
       let id = '';
-      if (event.pid) {
-        id = event.id;
-        this.categoryId = event.id;
+      this.treeId = data.id;
+      if (data.pid) {
+        id = data.id;
+        this.categoryId = data.id;
       } else {
         return false;
       }
       this.loading = true;
-      this.currenType = event.type;
+      this.currenType = data.type;
       if (
         this.currenType == 'product' ||
         this.currenType == 'seckill' ||
@@ -777,13 +791,13 @@ export default {
           })
           .catch((err) => {
             this.loading = false;
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       }
     },
     ok() {
       if (this.currenUrl == '') {
-        return this.$Message.warning('请选择链接');
+        return this.$message.warning('请选择链接');
       } else {
         this.$emit('linkUrl', this.currenUrl);
         this.modals = false;
@@ -899,7 +913,7 @@ export default {
     margin-left: 23px;
     font-size: 13px;
     font-family: PingFang SC;
-    width: 645px;
+    flex:1;
     height: 470px;
     overflow-x: hidden;
     overflow-y: auto;

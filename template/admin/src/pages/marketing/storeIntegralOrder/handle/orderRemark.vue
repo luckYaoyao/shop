@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modals" scrollable title="请修改内容" class="order_box" :closable="false">
+  <el-dialog :visible.sync="modals" title="请修改内容" class="order_box" :show-close="false">
     <el-form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-width="85px" @submit.native.prevent>
       <el-form-item label="备注：" prop="remark">
         <el-input
@@ -13,11 +13,11 @@
         />
       </el-form-item>
     </el-form>
-    <div slot="footer">
-      <el-button type="primary" @click="putRemark('formValidate')">提交</el-button>
+    <span slot="footer" class="dialog-footer">
       <el-button @click="cancel('formValidate')">取消</el-button>
-    </div>
-  </Modal>
+      <el-button type="primary" @click="putRemark('formValidate')">提交</el-button>
+    </span>
+  </el-dialog>
 </template>
 
 <script>
@@ -52,16 +52,16 @@ export default {
         if (valid) {
           integralOrderPutRemarkData(data)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.modals = false;
               this.$refs[name].resetFields();
               this.$emit('submitFail');
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
-          this.$Message.warning('请填写备注信息');
+          this.$message.warning('请填写备注信息');
         }
       });
     },

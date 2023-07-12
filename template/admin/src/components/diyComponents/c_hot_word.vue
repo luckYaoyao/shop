@@ -66,7 +66,7 @@ export default {
       if (this.datas[this.name].list.length < 20) {
         this.datas[this.name].list.push(obj);
       } else {
-        this.$Message.warning('最多添加20个热词');
+        this.$message.warning('最多添加20个热词');
       }
     },
     close(index) {

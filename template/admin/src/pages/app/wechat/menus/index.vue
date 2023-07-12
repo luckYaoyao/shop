@@ -5,7 +5,7 @@
     </div>
     <el-card :bordered="false" shadow="never" class="ivu-mt">
       <!-- 公众号设置 -->
-      <el-row :gutter="24" >
+      <el-row :gutter="24">
         <el-col :span="24" class="ml40">
           <!-- 预览功能 -->
           <el-col ::span="24">
@@ -44,7 +44,7 @@
                 <el-tab-pane label="菜单信息" name="name1">
                   <el-col :span="24" class="userAlert">
                     <div class="box-card right">
-                      <Alert show-icon closable class="spwidth"> 已添加子菜单，仅可设置菜单名称</Alert>
+                      <el-alert type="info" show-icon closable title="已添加子菜单，仅可设置菜单名称"></el-alert>
                       <el-form
                         ref="formValidate"
                         :model="formValidate"
@@ -79,12 +79,20 @@
                             ></el-input>
                           </el-form-item>
                           <el-form-item label="备用网页" prop="url">
-                            <el-input v-model="formValidate.url" placeholder="请填写备用网页" class="spwidth"></el-input>
+                            <el-input
+                              v-model="formValidate.url"
+                              placeholder="请填写备用网页"
+                              class="spwidth"
+                            ></el-input>
                           </el-form-item>
                         </div>
                         <div v-if="formValidate.type === 'view'">
                           <el-form-item label="跳转地址" prop="url">
-                            <el-input v-model="formValidate.url" placeholder="请填写跳转地址" class="spwidth"></el-input>
+                            <el-input
+                              v-model="formValidate.url"
+                              placeholder="请填写跳转地址"
+                              class="spwidth"
+                            ></el-input>
                           </el-form-item>
                         </div>
                       </el-form>
@@ -104,7 +112,7 @@
       </el-row>
     </el-card>
 
-    <Modal v-model="modal2" width="360">
+    <el-dialog :visible.sync="modal2" width="360">
       <p slot="header" style="color: #f60; text-align: center">
         <Icon type="ios-information-circle"></Icon>
         <span>删除</span>
@@ -112,10 +120,10 @@
       <div style="text-align: center">
         <p>确定删除吗？</p>
       </div>
-      <div slot="footer">
+      <span slot="footer" class="dialog-footer">
         <el-button type="error" size="large" long @click="del">确定</el-button>
-      </div>
-    </Modal>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -184,7 +192,7 @@ export default {
           this.list = data.menus;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 点击保存提交
@@ -208,13 +216,13 @@ export default {
       };
       MenuApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.checkedMenuId = null;
           this.formValidate = {};
           this.isTrue = false;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 点击元素
@@ -254,22 +262,22 @@ export default {
       if (this.checkedMenuId === null) return true;
       if (!this.isTrue) return true;
       if (!this.formValidate.name) {
-        this.$Message.warning('请输入按钮名称!');
+        this.$message.warning('请输入按钮名称!');
         return false;
       }
       if (this.formValidate.type === 'click' && !this.formValidate.key) {
-        this.$Message.warning('请输入关键字!');
+        this.$message.warning('请输入关键字!');
         return false;
       }
       if (this.formValidate.type === 'view' && !reg.test(this.formValidate.url)) {
-        this.$Message.warning('请输入正确的跳转地址!');
+        this.$message.warning('请输入正确的跳转地址!');
         return false;
       }
       if (
         this.formValidate.type === 'miniprogram' &&
         (!this.formValidate.appid || !this.formValidate.pagepath || !this.formValidate.url)
       ) {
-        this.$Message.warning('请填写完整小程序配置!');
+        this.$message.warning('请填写完整小程序配置!');
         return false;
       }
       return true;
@@ -279,7 +287,7 @@ export default {
       if (this.isTrue) {
         this.modal2 = true;
       } else {
-        this.$Message.warning('请选择菜单!');
+        this.$message.warning('请选择菜单!');
       }
     },
     // 确认删除

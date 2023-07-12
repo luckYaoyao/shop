@@ -64,15 +64,12 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <Modal
-      v-model="isTemplate"
-      scrollable
-      footer-hide
-      closable
+    <el-dialog
+      :visible.sync="isTemplate"
       title="开发移动端链接"
-      :z-index="1"
-      width="500"
-      @on-cancel="cancel"
+      width="500px"
+      :show-close="false"
+      :close-on-click-modal="false"
     >
       <div class="article-manager">
         <el-card :bordered="false" shadow="never" class="ivu-mt">
@@ -93,17 +90,14 @@
                 </el-col>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col v-bind="grid">
-                <el-button type="primary" class="ml20" @click="handleSubmit('formItem')" style="width: 100%"
-                  >提交</el-button
-                >
-              </el-col>
-            </el-row>
           </el-form>
         </el-card>
       </div>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取消</el-button>
+        <el-button type="primary" @click="handleSubmit('formItem')">提交</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -173,11 +167,11 @@ export default {
     setDefault(row) {
       getRecovery(row.id)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 添加
@@ -215,23 +209,23 @@ export default {
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 使用模板
     setStatus(row) {
       setStatus(row.id)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
     recovery(row) {
       recovery(row.id).then((res) => {
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
         this.getList();
       });
     },

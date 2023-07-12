@@ -1,8 +1,7 @@
 <template>
   <div style="width: 100%">
-    <Modal v-model="modals" scrollable footer-hide closable title="用户详情" :mask-closable="false" width="700">
-      <Spin size="large" fix v-if="spinShow"></Spin>
-      <div class="">
+    <el-dialog :visible.sync="modals" title="用户详情" :close-on-click-modal="false" width="700px">
+      <div class="" v-loading="spinShow">
         <div class="dashboard-workplace-header-tip">
           <div class="dashboard-workplace-header-tip-desc">
             <span class="dashboard-workplace-header-tip-desc-sp">姓名：{{ detailsData.nickname }}</span>
@@ -32,15 +31,17 @@
           <!--                    </el-col>-->
           <el-col :span="12">
             <el-form-item label="时间范围：" class="tab_data">
-              <DatePicker
+              <el-date-picker
                 :editable="false"
                 style="width: 100%"
                 @change="onchangeTime"
                 format="yyyy-MM-dd"
+                value-format="yyyy-MM-dd"
                 type="daterange"
-                placement="bottom-end"
-                placeholder="请选择时间范围"
-              ></DatePicker>
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="4">
@@ -81,7 +82,7 @@
           @pagination="getList"
         />
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -140,12 +141,12 @@ export default {
             this.spinShow = false;
           } else {
             this.spinShow = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           }
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 列表
@@ -160,7 +161,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 搜索

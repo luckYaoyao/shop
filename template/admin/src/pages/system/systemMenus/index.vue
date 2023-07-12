@@ -8,7 +8,7 @@
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row  :gutter="24">
+        <el-row :gutter="24">
           <el-col v-bind="grid">
             <el-form-item label="规则状态：">
               <el-select v-model="roleData.is_show" placeholder="请选择" clearable @change="getData">
@@ -19,11 +19,17 @@
           </el-col>
           <el-col v-bind="grid">
             <el-form-item label="按钮名称：" prop="status2" label-for="status2">
-              <el-input v-model="roleData.keyword" search enter-button placeholder="请输入按钮名称" @on-search="getData" />
+              <el-input
+                v-model="roleData.keyword"
+                search
+                enter-button
+                placeholder="请输入按钮名称"
+                @on-search="getData"
+              />
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row >
+        <el-row>
           <el-col v-bind="grid">
             <el-button type="primary" @click="menusAdd('添加规则')" icon="md-add">添加规则 </el-button>
           </el-col>
@@ -52,13 +58,15 @@
         </vxe-table-column>
         <vxe-table-column field="flag" title="规则状态" min-width="120">
           <template v-slot="{ row }">
-            <el-switch :active-value="1"  :inactive-value="0"
+            <el-switch
+              :active-value="1"
+              :inactive-value="0"
               v-model="row.is_show"
               :value="row.is_show"
               @change="onchangeIsShow(row)"
               size="large"
             >
-             </el-switch>
+            </el-switch>
           </template>
         </vxe-table-column>
         <vxe-table-column field="mark" title="备注" min-width="120"></vxe-table-column>
@@ -66,7 +74,7 @@
           <template v-slot="{ row }">
             <span>
               <a @click="addRoute(row)" v-if="row.auth_type === 1 || row.auth_type === 3">选择权限</a>
-              <el-divider type="vertical" v-if="row.auth_type === 1 || row.auth_type === 3"/>
+              <el-divider type="vertical" v-if="row.auth_type === 1 || row.auth_type === 3" />
               <a @click="addE(row, '添加子菜单')" v-if="row.auth_type === 1 || row.auth_type === 3">添加下级</a>
               <!-- <a @click="addE(row, '添加规则')" v-else>添加规则</a> -->
             </span>
@@ -86,19 +94,13 @@
       ref="menusFrom"
       @clearFrom="clearFrom"
     ></menus-from>
-    <Modal
-      v-model="ruleModal"
-      scrollable
-      width="1100"
-      title="权限列表"
-      @on-ok="addRouters"
-      @on-cancel="ruleModal = false"
-      @on-visible-change="modalchange"
-    >
+    <el-dialog :visible.sync="ruleModal" width="1100px" title="权限列表" @closed="modalchange">
       <div class="search-rule">
-        <Alert
-          >1.接口可多选，可重复添加；<br>2.添加路由按照路由规则进行添加，即可在开发工具->接口管理里面点击同步；<br>3.同步完成即可在此选择对应的接口；</Alert
-        >
+        <el-alert>
+          <template slot="title">
+            1.接口可多选，可重复添加；<br />2.添加路由按照路由规则进行添加，即可在开发工具->接口管理里面点击同步；<br />3.同步完成即可在此选择对应的接口；
+          </template>
+        </el-alert>
         <el-input
           class="mr10"
           v-model="searchRule"
@@ -140,7 +142,11 @@
           </div>
         </div>
       </div>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="ruleModal = false">取 消</el-button>
+        <el-button type="primary" @click="addRouters">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -230,7 +236,7 @@ export default {
           this.getData();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     selectRule(data) {
@@ -313,11 +319,11 @@ export default {
       };
       isShowApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.$store.dispatch('menus/getMenusNavList');
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 请求列表
@@ -348,7 +354,7 @@ export default {
             this.formValidate.is_show_path = 0;
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else {
         this.formValidate.pid = pid;
@@ -377,13 +383,13 @@ export default {
 
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getData();
           this.getMenusUnique();
           // this.$store.dispatch('menus/getMenusNavList');
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 规则详情
@@ -394,7 +400,7 @@ export default {
           this.$refs.menusFrom.modals = true;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -425,7 +431,7 @@ export default {
     //         this.spinShow = false;
     //     }).catch(res => {
     //         this.spinShow = false;
-    //         this.$Message.error(res.msg);
+    //         this.$message.error(res.msg);
     //     })
     // },
     // 列表
@@ -439,7 +445,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     getMenusUnique() {

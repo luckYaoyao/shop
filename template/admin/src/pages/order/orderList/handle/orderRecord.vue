@@ -1,13 +1,7 @@
 <template>
-  <Drawer title="订单记录" :closable="false" width="700" scrollable v-model="modals">
+  <el-drawer :visible.sync="modals" title="订单记录" :wrapperClosable="false" :size="700">
     <el-card :bordered="false" shadow="never">
-      <el-table
-        :data="recordData"
-        v-loading="loading"
-        empty-text="暂无数据"
-        highlight-current-row
-        
-      >
+      <el-table :data="recordData" v-loading="loading" empty-text="暂无数据" highlight-current-row>
         <el-table-column label="订单ID" min-width="100">
           <template slot-scope="scope">
             <span>{{ scope.row.oid }}</span>
@@ -25,7 +19,7 @@
         </el-table-column>
       </el-table>
     </el-card>
-  </Drawer>
+  </el-drawer>
 </template>
 
 <script>
@@ -61,7 +55,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

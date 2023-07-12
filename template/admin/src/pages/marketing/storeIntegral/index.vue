@@ -11,18 +11,19 @@
         <el-row :gutter="24">
           <el-col>
             <el-form-item label="创建时间：" label-for="user_time">
-              <!--<DatePicker clearable @change="onchangeTime" v-model="timeVal" :value="timeVal"  format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="选择时间" v-width="'100%'"></DatePicker>-->
-              <DatePicker
+              <el-date-picker
                 :editable="false"
                 @change="onchangeTime"
-                :value="timeVal"
+                v-model="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
-                placement="bottom-start"
-                placeholder="自定义时间"
-                style="width: 200px"
+                value-format="yyyy/MM/dd"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                
                 class="mr20"
-              ></DatePicker>
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col>
@@ -229,7 +230,7 @@ export default {
           location.href = res.data[0];
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -255,11 +256,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tableList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 列表
@@ -276,7 +277,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索
@@ -287,7 +288,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.tableFrom.integral_time = this.timeVal.join('-');
+      this.tableFrom.integral_time = this.timeVal ? this.timeVal.join('-') : '';
     },
     // 修改是否显示
     onchangeIsShow(row) {
@@ -297,10 +298,10 @@ export default {
       };
       integralIsShowApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

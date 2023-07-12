@@ -1,14 +1,10 @@
 <template>
   <div v-if="FromData">
-    <Modal
-      v-model="modals"
-      scrollable
-      footer-hide
-      closable
+    <el-dialog :visible.sync="modals"
       :title="FromData.title"
       :z-index="1"
       width="700"
-      @on-cancel="cancel"
+      @closed="cancel"
     >
       <template>
         <div class="radio acea-row row-middle" v-if="FromData.action === '/marketing/coupon/save.html'">
@@ -28,7 +24,7 @@
         ref="fc"
         handleIcon="false"
       ></form-create>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -93,7 +89,7 @@ export default {
       })
         .then((res) => {
           if (this.update) this.$parent.getList();
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.modals = false;
           setTimeout(() => {
             this.$emit('submitFail');
@@ -102,7 +98,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 关闭按钮

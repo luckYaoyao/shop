@@ -7,7 +7,6 @@
         </el-col>
       </el-row>
       <el-table
-        :columns="columns1"
         :data="tableList"
         v-loading="loading"
         highlight-current-row
@@ -161,7 +160,7 @@ export default {
           this.loading = false;
         })
         .catch((err) => {
-          this.$Message.error(err);
+          this.$message.error(err);
           this.loading = false;
         });
     },
@@ -182,19 +181,19 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tableList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$Message.success('成功!');
+          this.$message.success('成功!');
         } else {
-          this.$Message.error('失败!');
+          this.$message.error('失败!');
         }
       });
     },

@@ -19,13 +19,13 @@
           </div>
           <div class="c_row-item">
             <el-col class="label" :span="4"> 名称 </el-col>
-            <el-col span="19" class="slider-box">
+            <el-col :span="19" class="slider-box">
               <el-input v-model="item.name" placeholder="选填不超过10个字" />
             </el-col>
           </div>
           <div class="c_row-item">
             <el-col class="label" :span="4"> 链接 </el-col>
-            <el-col span="19" class="slider-box">
+            <el-col :span="19" class="slider-box">
               <el-input v-model="item.link" placeholder="选填不超过10个字" />
             </el-col>
           </div>
@@ -45,12 +45,12 @@
       </el-button>
     </div>
     <div>
-      <Modal
+      <el-dialog
         v-model="modalPic"
         width="950px"
         scrollable
         footer-hide
-        closable
+        :show-close="false"
         title="上传商品图"
         :mask-closable="false"
         :z-index="888"
@@ -62,7 +62,7 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </Modal>
+      </el-dialog>
     </div>
   </div>
 </template>

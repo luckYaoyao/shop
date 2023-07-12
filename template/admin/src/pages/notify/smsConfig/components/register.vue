@@ -100,10 +100,10 @@ export default {
         };
         captchaApi(data)
           .then(async (res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
         let time = setInterval(() => {
           this.cutNUm--;
@@ -114,7 +114,7 @@ export default {
           }
         }, 1000);
       } else {
-        this.$Message.warning('请填写手机号!');
+        this.$message.warning('请填写手机号!');
       }
     },
     // 注册
@@ -123,13 +123,13 @@ export default {
         if (valid) {
           registerApi(this.formInline)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               setTimeout(() => {
                 this.changelogo();
               }, 1000);
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;

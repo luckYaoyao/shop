@@ -1,14 +1,6 @@
 <template>
   <div>
     <div class="main">
-      <!-- <Tree class="tree" :data="treeData"  @on-contextmenu="handleContextMenu">
-          <template #contextMenu>
-            <el-dropdown-item @click.native="handleContextCreateFolder()">新建文件夹</el-dropdown-item>
-            <el-dropdown-item @click.native="handleContextCreateFile()">新建文件</el-dropdown-item>
-            <el-dropdown-item @click.native="handleContextDelFolder()" style="color: #ed4014">删除</el-dropdown-item>
-          </template>
-        </Tree> -->
-      <!-- <Tree :data="treeData" :render="renderContent" class="demo-tree-render"></Tree> -->
       <el-card :bordered="false" shadow="never" class="ivu-mt mr20 card-tree">
         <div class="tree">
           <div class="main-btn">
@@ -391,18 +383,22 @@
         </div> -->
       </el-card>
     </div>
-    <Modal v-model="nameModal" title="分组名称" :loading="loading" @on-ok="asyncOK">
+    <el-dialog :visible.sync="nameModal" title="分组名称" @on-ok="asyncOK">
       <label>分组名称：</label>
       <el-input v-model="value" placeholder="请输入分组名称" style="width: 85%" />
-    </Modal>
-    <Modal v-model="debuggingModal" :title="formValidate.name" width="70%" footer-hide :loading="loading">
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="nameModal = false">取 消</el-button>
+        <el-button type="primary" @click="asyncOK">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog :visible.sync="debuggingModal" :title="formValidate.name" width="70%">
       <debugging
         v-if="debuggingModal"
         :formValidate="formValidate"
         :typeList="typeList"
         :requestTypeList="requestTypeList"
       />
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -559,7 +555,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.$Message.error(err);
+          this.$message.error(err);
         });
     },
     onClick(params) {
@@ -570,17 +566,17 @@ export default {
             this.formValidate = res.data;
           })
           .catch((err) => {
-            this.$Message.error(err);
+            this.$message.error(err);
           });
       }
     },
     async handleSubmit() {
       if (!this.formValidate.name) {
-        return this.$Message.warning('请输入接口名称');
+        return this.$message.warning('请输入接口名称');
       } else if (!this.formValidate.method) {
-        return this.$Message.warning('请选择请求类型');
+        return this.$message.warning('请选择请求类型');
       } else if (!this.formValidate.url) {
-        return this.$Message.warning('请输入调用方式');
+        return this.$message.warning('请输入调用方式');
       }
       this.formValidate.request_params = await this.$refs.xTable.getTableData().tableData;
       this.formValidate.return_params = await this.$refs.resTable.getTableData().tableData;
@@ -588,11 +584,11 @@ export default {
       await interfaceSave(this.formValidate)
         .then((res) => {
           this.isEdit = false;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getInterfaceList();
         })
         .catch((err) => {
-          this.$Message.error(err);
+          this.$message.error(err);
         });
     },
     async insertEvent(type) {
@@ -700,11 +696,11 @@ export default {
       };
       interfaceSave(data)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getInterfaceList();
         })
         .catch((err) => {
-          this.$Message.error(err);
+          this.$message.error(err);
         });
     },
     //侧边栏右键点击事件
@@ -804,11 +800,11 @@ export default {
         onOk: () => {
           interfaceDel(node.id)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               node.remove();
             })
             .catch((err) => {
-              this.$Message.error(err);
+              this.$message.error(err);
             });
         },
         onCancel: () => {},
@@ -823,10 +819,10 @@ export default {
         };
         interfaceEditName(data)
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((err) => {
-            this.$Message.error(err);
+            this.$message.error(err);
           });
       }
     },

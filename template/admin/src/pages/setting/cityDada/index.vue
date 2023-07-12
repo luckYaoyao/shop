@@ -107,10 +107,10 @@ export default {
     cleanCache() {
       cityCleanCacheApi()
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         });
     },
     // 添加
@@ -156,12 +156,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.cityLists.splice(num, 1);
           this.getList(this.cityId);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     handleLoadData(item, node, callback) {

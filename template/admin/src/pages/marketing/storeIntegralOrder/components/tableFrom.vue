@@ -17,31 +17,41 @@
               @change="selectChange2(orderData.status)"
               style="width: 400px"
             >
-              <el-radio-button label="">全部 {{ '(' + orderChartType.statusAll ? orderChartType.statusAll : 0 + ')' }}</el-radio-button>
-              <el-radio-button label="1">未发货 {{ '(' + orderChartType.unshipped ? orderChartType.unshipped : 0 + ')' }}</el-radio-button>
-              <el-radio-button label="2">待收货 {{ '(' + orderChartType.untake ? orderChartType.untake : 0 + ')' }}</el-radio-button>
-              <el-radio-button label="3">交易完成 {{ '(' + orderChartType.complete ? orderChartType.complete : 0 + ')' }}</el-radio-button>
+              <el-radio-button label=""
+                >全部 {{ '(' + orderChartType.statusAll ? orderChartType.statusAll : 0 + ')' }}</el-radio-button
+              >
+              <el-radio-button label="1"
+                >未发货 {{ '(' + orderChartType.unshipped ? orderChartType.unshipped : 0 + ')' }}</el-radio-button
+              >
+              <el-radio-button label="2"
+                >待收货 {{ '(' + orderChartType.untake ? orderChartType.untake : 0 + ')' }}</el-radio-button
+              >
+              <el-radio-button label="3"
+                >交易完成 {{ '(' + orderChartType.complete ? orderChartType.complete : 0 + ')' }}</el-radio-button
+              >
             </el-radio-group>
           </el-form-item>
         </el-col>
         <el-col :span="8" class="ivu-text-left">
           <el-form-item label="创建时间：">
-            <DatePicker
+            <el-date-picker
               :editable="false"
               @change="onchangeTime"
-              :value="timeVal"
+              v-model="timeVal"
               format="yyyy/MM/dd HH:mm:ss"
               type="datetimerange"
-              placement="bottom-start"
-              placeholder="自定义时间"
-              style="width: 300px"
+              value-format="yyyy/MM/dd HH:mm:ss"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              style="width: 380px"
               class="mr20"
               :options="options"
-            ></DatePicker>
+            ></el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>
-      <el-row :gutter="24" >
+      <el-row :gutter="24">
         <el-col :span="12">
           <div class="df">
             <el-form-item label="搜索：" prop="real_name" label-for="real_name">
@@ -282,7 +292,7 @@ export default {
   },
   created() {
     // this.timeVal = this.today;
-    // this.orderData.data = this.timeVal.join('-');
+    // this.orderData.data = this.timeVal ? this.timeVal.join('-') : '';
     if (this.$route.fullPath === this.$routeProStr + '/order/list?status=1') {
       this.getPath();
     }
@@ -326,7 +336,7 @@ export default {
     //       location.href = res.data[0];
     //     })
     //     .catch((res) => {
-    //       this.$Message.error(res.msg);
+    //       this.$message.error(res.msg);
     //     });
     // },
     // 数据导出；
@@ -358,8 +368,8 @@ export default {
     },
     // 具体日期
     onchangeTime(e) {
-      this.timeVal = e;
-      this.orderData.data = this.timeVal[0] ? this.timeVal.join('-') : '';
+      this.timeVal = e || [];
+      this.orderData.data = this.timeVal[0] ? this.timeVal ? this.timeVal.join('-') : '' : '';
       this.$store.dispatch('integralOrder/getOrderTabs', {
         data: this.orderData.data,
       });
@@ -403,7 +413,7 @@ export default {
     // 批量删除
     delAll() {
       if (this.delIdList.length === 0) {
-        this.$Message.error('请先选择删除的订单！');
+        this.$message.error('请先选择删除的订单！');
       } else {
         if (this.isDels) {
           this.delIdList.filter((item) => {
@@ -422,11 +432,11 @@ export default {
           };
           this.$modalSure(delfromData)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.tabList();
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           const title = '错误！';
@@ -483,11 +493,11 @@ export default {
     // 上传成功
     uploadSuccess(res, file, fileList) {
       if (res.status === 200) {
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
         this.file = res.data.src;
         this.fileList = fileList;
       } else {
-        this.$Message.error(res.msg);
+        this.$message.error(res.msg);
       }
     },
     //移除文件
@@ -502,11 +512,11 @@ export default {
         file: this.file,
       })
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.fileList = [];
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
           this.fileList = [];
         });
     },
@@ -522,7 +532,7 @@ export default {
         this.$refs.send.getList();
         this.$refs.send.getDeliveryList();
       } else {
-        this.$Message.error('请选择本页订单');
+        this.$message.error('请选择本页订单');
       }
     },
     // 自动批量发货-取消
@@ -546,7 +556,7 @@ export default {
           window.open(res.data[0]);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
   },

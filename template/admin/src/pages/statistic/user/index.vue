@@ -4,7 +4,13 @@
       <el-form ref="formInline" :model="formInline" inline>
         <el-form-item class="mr20">
           用户渠道:
-          <el-select size="small" v-model="channel_type" style="width: 300px" placeholder="用户渠道" @change="changeTxt">
+          <el-select
+            size="small"
+            v-model="channel_type"
+            style="width: 300px"
+            placeholder="用户渠道"
+            @change="changeTxt"
+          >
             <el-option value="all" label="全部"></el-option>
             <el-option value="wechat" label="公众号"></el-option>
             <el-option value="routine" label="小程序"></el-option>
@@ -14,19 +20,20 @@
         </el-form-item>
         <el-form-item>
           选择时间:
-          <DatePicker
+          <el-date-picker
             :editable="false"
             :clearable="false"
             @change="onchangeTime"
-            :value="timeVal"
+            v-model="timeVal"
             format="yyyy/MM/dd"
             type="daterange"
-            placement="bottom-start"
-            placeholder="请选择时间"
-            style="width: 300px"
+            value-format="yyyy/MM/dd"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            
             class="mr20"
-            :options="options"
-          ></DatePicker>
+          ></el-date-picker>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSubmit('formInline')">查询</el-button>
@@ -89,7 +96,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formInline.data = this.timeVal.join('-');
+      this.formInline.data = this.timeVal ? this.timeVal.join('-') : '';
     },
     handleSubmit() {
       this.$refs.userInfos.getStatistics();

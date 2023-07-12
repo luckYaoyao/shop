@@ -377,10 +377,10 @@ export default {
       memberSave(this.userData)
         .then((res) => {
           this.$emit('parentFun', false);
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
           this.$emit('parentFun', false);
         });
     },

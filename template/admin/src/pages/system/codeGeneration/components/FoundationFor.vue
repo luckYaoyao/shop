@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <Alert closable> crud生成说明 不能生成系统自带的表；已经生成过的表还能继续生成 </Alert>
+    <el-alert closable title="crud生成说明 不能生成系统自带的表；已经生成过的表还能继续生成"></el-alert>
     <el-form ref="foundation" :model="foundation" :rules="foundationRules" label-width="100px">
       <el-form-item label="菜单">
         <el-cascader
@@ -55,62 +55,6 @@ export default {
       },
       menusList: [],
       columnTypeList: [],
-      columns: [
-        {
-          title: '字段名称',
-          slot: 'field',
-          minWidth: 100,
-        },
-        {
-          title: '字段类型',
-          slot: 'field_type',
-          minWidth: 100,
-        },
-        {
-          title: '长度',
-          slot: 'limit',
-          minWidth: 100,
-        },
-        {
-          title: '默认值',
-          slot: 'default',
-          minWidth: 100,
-        },
-        {
-          title: '字段描述',
-          slot: 'comment',
-          minWidth: 100,
-        },
-        {
-          title: '列表',
-          slot: 'is_table',
-          width: 70,
-          align: 'center',
-        },
-        {
-          title: '列表名',
-          slot: 'table_name',
-          minWidth: 120,
-          align: 'center',
-        },
-        {
-          title: '表单类型',
-          slot: 'from_type',
-          minWidth: 100,
-        },
-        {
-          title: '必填',
-          slot: 'required',
-          width: 70,
-          align: 'center',
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          width: 70,
-          align: 'center',
-        },
-      ],
       fromTypeList: [
         {
           value: '0',

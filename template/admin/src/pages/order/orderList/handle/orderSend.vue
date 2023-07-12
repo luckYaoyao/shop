@@ -1,12 +1,11 @@
 <template>
-  <Modal
-    v-model="modals"
-    scrollable
+  <el-dialog
+    :visible.sync="modals"
     title="订单发送货"
     class="order_box"
-    :closable="false"
-    width="1000"
-    @on-visible-change="changeModal"
+    :show-close="false"
+    width="1000px"
+    @closed="changeModal"
   >
     <el-form
       v-if="modals"
@@ -108,13 +107,16 @@
             </el-radio-group>
           </el-form-item>
           <el-form-item label="取件时间：" v-if="formItem.express_record_type == 3">
-            <TimePicker
+            <el-time-picker
+              is-range
               v-model="formItem.pickup_time"
               format="HH:mm"
-              type="timerange"
-              placement="bottom-end"
-              placeholder="选择取件时间范围"
-              style="width: 168px"
+              value-format="HH:mm"
+              range-separator="至"
+              start-placeholder="开始时间"
+              end-placeholder="结束时间"
+              placeholder="选择时间范围"
+              @change="onchangeTime"
             />
           </el-form-item>
         </template>
@@ -226,7 +228,7 @@
     <div ref="viewer" v-viewer>
       <img :src="temp.pic" style="display: none" />
     </div>
-  </Modal>
+  </el-dialog>
 </template>
 
 <script>
@@ -272,6 +274,7 @@ export default {
         fictitious_content: '',
         service_type: '',
         day_type: 0,
+        pickup_time: ['', ''],
       },
       modals: false,
       express: [],
@@ -337,16 +340,14 @@ export default {
           if (this.formItem.type == 1) {
             this.deliveryErrorMsg = err.msg;
           }
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     selectOne(data) {
       this.selectData = data;
     },
-    changeModal(status) {
-      if (!status) {
-        this.cancel();
-      }
+    changeModal() {
+      this.cancel();
     },
     changeSplitStatus(status) {
       // this.splitSwitch = status;
@@ -449,7 +450,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     printImg(url) {
@@ -472,29 +473,29 @@ export default {
       };
       if (this.formItem.type === '1' && this.formItem.express_record_type === '2') {
         if (this.formItem.delivery_name === '') {
-          return this.$Message.error('快递公司不能为空');
+          return this.$message.error('快递公司不能为空');
         } else if (this.formItem.express_temp_id === '') {
-          return this.$Message.error('电子面单不能为空');
+          return this.$message.error('电子面单不能为空');
         } else if (this.formItem.to_name === '') {
-          return this.$Message.error('寄件人姓名不能为空');
+          return this.$message.error('寄件人姓名不能为空');
         } else if (this.formItem.to_tel === '') {
-          return this.$Message.error('寄件人电话不能为空');
+          return this.$message.error('寄件人电话不能为空');
         } else if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(this.formItem.to_tel)) {
-          return this.$Message.error('请输入正确的手机号码');
+          return this.$message.error('请输入正确的手机号码');
         } else if (this.formItem.to_addr === '') {
-          return this.$Message.error('寄件人地址不能为空');
+          return this.$message.error('寄件人地址不能为空');
         }
       }
       if (this.formItem.type === '1' && this.formItem.express_record_type === '1') {
         if (this.formItem.delivery_name === '') {
-          return this.$Message.error('快递公司不能为空');
+          return this.$message.error('快递公司不能为空');
         } else if (this.formItem.delivery_id === '') {
-          return this.$Message.error('快递单号不能为空');
+          return this.$message.error('快递单号不能为空');
         }
       }
       if (this.formItem.type === '2') {
         if (this.formItem.sh_delivery === '') {
-          return this.$Message.error('送货人不能为空');
+          return this.$message.error('送货人不能为空');
         }
       }
       if (this.splitSwitch) {
@@ -508,7 +509,7 @@ export default {
         splitDelivery(data)
           .then((res) => {
             this.modals = false;
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             localStorage.setItem('DELIVERY_DATA', JSON.stringify(this.formItem));
             this.$emit('submitFail');
             this.reset();
@@ -516,13 +517,13 @@ export default {
             if (res.data.label) this.printImg(res.data.label);
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else {
         putDelivery(data)
           .then(async (res) => {
             this.modals = false;
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             localStorage.setItem('DELIVERY_DATA', JSON.stringify(this.formItem));
             this.splitSwitch = false;
             this.$emit('submitFail');
@@ -530,7 +531,7 @@ export default {
             if (res.data.label) this.printImg(res.data.label);
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       }
     },
@@ -573,11 +574,11 @@ export default {
             this.expressTemp = res.data;
             this.formItem.express_temp_id = res.data.length ? res.data[0].temp_id : '';
             if (!res.data.length) {
-              this.$Message.error('请配置你所选快递公司的电子面单');
+              this.$message.error('请配置你所选快递公司的电子面单');
             }
           })
           .catch((err) => {
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       } else if (this.formItem.express_record_type == '3') {
         this.expressTemp = expressItem.list;
@@ -604,7 +605,7 @@ export default {
           this.deliveryList = res.data.list;
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     getSheetInfo() {
@@ -623,7 +624,7 @@ export default {
           // this.formItem.to_addr = data.to_add;
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     shDeliveryChange(value) {

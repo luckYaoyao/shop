@@ -9,7 +9,6 @@
         </el-col>
       </el-row>
       <el-table
-        :columns="columns1"
         :data="data1"
         v-loading="loading"
         highlight-current-row
@@ -153,7 +152,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 添加配送员
@@ -175,21 +174,21 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.data1.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 是否显示
     onchangeIsShow(row) {
       orderDeliveryStatus(row)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
   },

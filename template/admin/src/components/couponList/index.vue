@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="isTemplate" title="优惠券列表" width="60%" @on-ok="ok" @on-cancel="cancel">
+    <el-dialog :visible.sync="isTemplate" title="优惠券列表" append-to-body width="60%">
       <el-table
         :data="couponList"
         ref="table"
@@ -67,9 +67,9 @@
         </el-table-column>
         <el-table-column label="状态" min-width="100">
           <template slot-scope="scope">
-            <Tag color="blue" v-show="scope.row.status === 1">正常</Tag>
-            <Tag color="gold" v-show="scope.row.status === 0">未开启</Tag>
-            <Tag color="red" v-show="scope.row.status === -1">已失效</Tag>
+            <el-tag color="blue" v-show="scope.row.status === 1">正常</el-tag>
+            <el-tag color="gold" v-show="scope.row.status === 0">未开启</el-tag>
+            <el-tag color="red" v-show="scope.row.status === -1">已失效</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -82,7 +82,11 @@
           @pagination="tableList"
         />
       </div>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="ok">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -211,6 +215,7 @@ export default {
       } else {
         this.$emit('nameId', this.selectedIds, this.selectedNames);
       }
+      this.isTemplate = false;
     },
     pageChange(index) {
       this.tableFrom.page = index;

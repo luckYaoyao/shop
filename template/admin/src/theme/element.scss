@@ -59,7 +59,7 @@
   }
 }
 .el-dialog__body {
-  max-height: calc(90vh - 111px) !important;
+  // max-height: calc(90vh - 111px) !important;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -89,7 +89,7 @@
 .el-table::before,
 .el-table--group::after,
 .el-table--border::after {
-  z-index: 99 !important;
+  z-index: 1 !important;
 }
 
 /* 下拉选择器/时间选择器滚动条

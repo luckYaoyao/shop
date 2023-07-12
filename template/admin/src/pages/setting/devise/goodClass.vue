@@ -51,10 +51,10 @@ export default {
       colorChange(num == 1 ? 1 : this.activeStyle + 1, 'category')
         .then((res) => {
           this.$emit('parentFun', false);
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
           this.$emit('parentFun', false);
         });
     },

@@ -106,7 +106,7 @@
         </Scroll>
       </div>
     </div>
-    <Modal v-model="isAddSort" :title="maskTitle" width="304" :mask="false" class="class-box" :footer-hide="true">
+    <el-dialog :visible.sync="isAddSort" :title="maskTitle" width="304px" class="class-box">
       <div class="item">
         <span>分组名称：</span>
         <el-input v-model="classTitle" placeholder="分组名称" />
@@ -115,10 +115,11 @@
         <span>分组排序：</span>
         <el-input v-model="classSort" placeholder="输入排序" />
       </div>
-      <div class="btn">
-        <el-button type="primary" style="background: #1890ff; width: 100%" @click="addServiceCate">确定</el-button>
-      </div>
-    </Modal>
+      <div class="btn"></div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="addServiceCate">确定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -294,7 +295,7 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.isScroll = true;
           this.page = 1;
           this.list = [];
@@ -302,7 +303,7 @@ export default {
           this.serviceCate();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 获取分类
@@ -351,11 +352,11 @@ export default {
         message: item.message,
       })
         .then((res) => {
-          this.$Message.success('修改成功');
+          this.$message.success('修改成功');
           item.isEdit = false;
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
           item.isEdit = true;
         });
     },
@@ -384,7 +385,7 @@ export default {
           this.addMsg.message = '';
           this.addMsg.cateId = '';
           this.addMsg.isEdit = false;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           res.data.isEdit = false;
           this.page = 1;
           this.list = [];
@@ -392,7 +393,7 @@ export default {
           this.serviceCate();
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
     // 删除
@@ -407,11 +408,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.list.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 添加分类
@@ -424,7 +425,7 @@ export default {
           .then((res) => {
             this.classTitle = '';
             this.classSort = '';
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.isAddSort = false;
             this.page = 1;
             this.list = [];
@@ -434,7 +435,7 @@ export default {
           .catch((error) => {
             this.classTitle = '';
             this.classSort = '';
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else {
         addServiceCate({
@@ -444,7 +445,7 @@ export default {
           .then((res) => {
             this.classTitle = '';
             this.classSort = '';
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.isAddSort = false;
             this.page = 1;
             this.list = [];
@@ -454,7 +455,7 @@ export default {
           .catch((error) => {
             this.classTitle = '';
             this.classSort = '';
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       }
     },

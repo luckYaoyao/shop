@@ -1,7 +1,6 @@
 <template>
   <div style="width: 100%">
-    <Drawer title="用户详情" :closable="false" width="1100" scrollable v-model="modals" @on-visible-change="draChange">
-      <Spin size="large" fix v-if="spinShow"></Spin>
+    <el-drawer :visible.sync="modals" title="用户详情" :wrapperClosable="false" :size="1100" @closed="draChange">
       <div class="acea-row head">
         <div class="avatar mr15"><img :src="psInfo.avatar" /></div>
         <div class="dashboard-workplace-header-tip">
@@ -18,17 +17,9 @@
           <el-button v-if="isEdit" type="primary" @click="editSave">保存</el-button>
         </div>
       </div>
-
       <el-row justify="space-between" class="mt25">
-        <!-- <el-col :span="4" class="user_menu">
-          <Menu :theme="theme2" :active-name="activeName" @on-select="changeType">
-            <MenuItem :name="item.val" v-for="(item, index) in list" :key="index">
-              
-            </MenuItem>
-          </Menu>
-        </el-col> -->
         <el-col :span="24">
-          <el-tabs class="mb20" :value="activeName" @tag-click="changeType">
+          <el-tabs class="mb20" :value="activeName" @tab-click="changeType">
             <el-tab-pane :name="item.val" v-for="(item, index) in list" :key="index" :label="item.label"></el-tab-pane>
           </el-tabs>
         </el-col>
@@ -74,7 +65,7 @@
           </template>
         </el-col>
       </el-row>
-    </Drawer>
+    </el-drawer>
   </div>
 </template>
 
@@ -125,10 +116,8 @@ export default {
     editSave() {
       this.$refs.editForm.setUser();
     },
-    draChange(status) {
-      if (!status) {
-        this.isEdit = false;
-      }
+    draChange() {
+      this.isEdit = false;
     },
     // 会员详情
     getDetails(id) {
@@ -146,12 +135,12 @@ export default {
             this.spinShow = false;
           } else {
             this.spinShow = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           }
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // tab选项
@@ -336,12 +325,12 @@ export default {
             this.loading = false;
           } else {
             this.loading = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           }
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

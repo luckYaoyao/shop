@@ -2,28 +2,28 @@
   <div class="box">
     <div class="c_row-item" v-if="this.$route.query.type !== 2">
       <el-col class="label" :span="4"> 模板名称 </el-col>
-      <el-col span="19" class="slider-box">
+      <el-col :span="19" class="slider-box">
         <el-input v-model="name" placeholder="选填不超过15个字" maxlength="15" @change="changName" />
       </el-col>
     </div>
     <div class="c_row-item">
       <el-col class="label" :span="4"> 页面标题 </el-col>
-      <el-col span="19" class="slider-box">
+      <el-col :span="19" class="slider-box">
         <el-input v-model="value" placeholder="选填不超过30个字" maxlength="30" @change="changVal" />
       </el-col>
     </div>
     <div class="c_row-item">
       <el-col class="label" :span="4"> 页面状态 </el-col>
-      <el-col span="19" class="slider-box">
-        <el-switch :active-value="1"  :inactive-value="0" v-model="isShow" @change="changeState" />
+      <el-col :span="19" class="slider-box">
+        <el-switch :active-value="1" :inactive-value="0" v-model="isShow" @change="changeState" />
       </el-col>
     </div>
     <div class="c_row-item acea-row row-top">
       <el-col class="label" :span="4"> 背景设置 </el-col>
-      <el-col span="19" class="slider-box">
+      <el-col :span="19" class="slider-box">
         <div class="acea-row row-between row-top color">
           <el-checkbox v-model="bgColor" @change="bgColorTap">背景色</el-checkbox>
-          <ColorPicker v-model="colorPicker" @change="colorPickerTap(colorPicker)" />
+          <el-color-picker v-model="colorPicker" @change="colorPickerTap(colorPicker)"></el-color-picker>
         </div>
         <div class="acea-row row-between row-top color">
           <el-checkbox v-model="bgPic" @change="bgPicTap">背景图</el-checkbox>
@@ -47,16 +47,7 @@
       </el-col>
     </div>
     <div>
-      <Modal
-        v-model="modalPic"
-        width="950px"
-        scrollable
-        footer-hide
-        closable
-        title="上传背景图"
-        :mask-closable="false"
-        :z-index="1"
-      >
+      <el-dialog :visible.sync="modalPic" width="950px" title="上传背景图" :close-on-click-modal="false" :z-index="1">
         <uploadPictures
           :isChoice="isChoice"
           @getPic="getPic"
@@ -64,7 +55,7 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </Modal>
+      </el-dialog>
     </div>
   </div>
 </template>

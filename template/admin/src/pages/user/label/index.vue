@@ -2,35 +2,35 @@
   <div>
     <el-row class="ivu-mt box-wrapper">
       <el-col v-bind="grid1" class="left-wrapper">
-        <Menu :theme="theme3" :active-name="sortName" width="auto">
-          <MenuGroup>
-            <MenuItem
-              :name="item.id"
-              class="menu-item"
-              :class="index === current ? 'showOn' : ''"
-              v-for="(item, index) in labelSort"
-              :key="index"
-              @click.native="bindMenuItem(item, index)"
-            >
-              {{ item.name }}
-              <div class="icon-box" v-if="index != 0">
-                <Icon type="ios-more" size="24" @click.stop="showMenu(item)" />
-              </div>
-              <div class="right-menu ivu-poptip-inner" v-show="item.status" v-if="index != 0">
-                <div class="ivu-poptip-body" @click="labelEdit(item)">
-                  <div class="ivu-poptip-body-content">
-                    <div class="ivu-poptip-body-content-inner">编辑</div>
-                  </div>
-                </div>
-                <div class="ivu-poptip-body" @click="deleteSort(item, '删除分类', index)">
-                  <div class="ivu-poptip-body-content">
-                    <div class="ivu-poptip-body-content-inner">删除</div>
-                  </div>
-                </div>
-              </div>
-            </MenuItem>
-          </MenuGroup>
-        </Menu>
+        <div class="tree">
+          <el-tree
+            :data="labelSort"
+            node-key="id"
+            default-expand-all
+            highlight-current
+            :expand-on-click-node="false"
+            @node-click="bindMenuItem"
+            :current-node-key="treeId"
+          >
+            <span class="custom-tree-node" slot-scope="{ data }">
+              <span class="file-name">
+                <i class="icon el-icon-folder-remove"></i>
+                {{ data.name }}</span
+              >
+              <span>
+                <el-dropdown @command="(command) => clickMenu(data, command)">
+                  <Icon class="add" type="ios-more" />
+                  <template slot="dropdown">
+                    <el-dropdown-menu>
+                      <el-dropdown-item command="1">编辑分类</el-dropdown-item>
+                      <el-dropdown-item v-if="data.id" command="2">删除分类</el-dropdown-item>
+                    </el-dropdown-menu>
+                  </template>
+                </el-dropdown>
+              </span>
+            </span>
+          </el-tree>
+        </div>
       </el-col>
       <el-col v-bind="grid2" ref="rightBox">
         <el-card :bordered="false" shadow="never">
@@ -75,9 +75,9 @@
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
               <template slot-scope="scope">
-                <a @click="edit(row.id)">修改</a>
+                <a @click="edit(scope.row.id)">修改</a>
                 <el-divider direction="vertical"></el-divider>
-                <a @click="del(row, '删除分组', index)">删除</a>
+                <a @click="del(scope.row, '删除分组', scope.$index)">删除</a>
               </template>
             </el-table-column>
           </el-table>
@@ -103,6 +103,7 @@ export default {
   name: 'user_label',
   data() {
     return {
+      treeId: '',
       grid1: {
         xl: 4,
         lg: 4,
@@ -161,7 +162,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改
@@ -179,12 +180,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.labelLists.splice(num, 1);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 标签分类
@@ -224,7 +225,10 @@ export default {
     addSort() {
       this.$modalForm(userLabelCreate()).then(() => this.getUserLabelAll());
     },
-    deleteSort(row, tit, num) {
+    deleteSort(row, tit) {
+      let num = this.labelSort.findIndex((e) => {
+        return e.id == row.id;
+      });
       let delfromData = {
         title: tit,
         num: num,
@@ -234,14 +238,21 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.labelSort.splice(num, 1);
           this.labelSort = [];
           this.getUserLabelAll();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
+    },
+    clickMenu(data, name) {
+      if (name == 1) {
+        this.labelEdit(data);
+      } else if (name == 2) {
+        this.deleteSort(data, '删除分类');
+      }
     },
     bindMenuItem(name, index) {
       this.labelFrom.page = 1;
@@ -306,4 +317,44 @@ export default {
     min-width: 121px;
   }
 }
+.tree {
+      min-height: 374px;
+      /deep/ .file-name {
+        display: flex;
+        align-items: center;
+        .icon {
+          width: 12px;
+          height: 12px;
+          margin-right: 8px;
+        }
+      }
+      /deep/ .el-tree-node {
+        // margin-right: 16px;
+      }
+      /deep/ .el-tree-node__children .el-tree-node {
+        margin-right: 0;
+      }
+      /deep/ .el-tree-node__content {
+        width: 100%;
+        height: 36px;
+      }
+      /deep/ .custom-tree-node {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-right: 17px;
+        font-size: 13px;
+        font-weight: 400;
+        color: rgba(0, 0, 0, 0.6);
+        line-height: 13px;
+      }
+      /deep/ .is-current {
+        background: #f1f9ff !important;
+        color: #1890ff !important;
+      }
+      /deep/ .is-current .custom-tree-node {
+        color: #1890ff !important;
+      }
+    }
 </style>

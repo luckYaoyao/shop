@@ -23,16 +23,17 @@
                   item.text
                 }}</el-radio-button>
               </el-radio-group>
-              <DatePicker
+              <el-date-picker
                 :editable="false"
                 @change="onchangeTime"
-                :value="timeVal"
-                format="yyyy/MM/dd"
+                v-model="timeVal"
                 type="daterange"
-                placement="bottom-end"
-                placeholder="请选择时间"
-                style="width: 200px"
-              ></DatePicker>
+                value-format="yyyy/MM/dd"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col v-bind="grid">
@@ -143,7 +144,7 @@
         />
       </div>
     </el-card>
-    <Modal v-model="modals" scrollable title="回复内容" closable>
+    <el-dialog :visible.sync="modals" scrollable title="回复内容">
       <el-form ref="contents" :model="contents" :rules="ruleInline" label-position="right" @submit.native.prevent>
         <el-form-item prop="content">
           <el-input v-model="contents.content" type="textarea" :rows="4" placeholder="请输入回复内容" />
@@ -153,7 +154,7 @@
         <el-button type="primary" @click="oks">确定</el-button>
         <el-button @click="cancels">取消</el-button>
       </div>
-    </Modal>
+    </el-dialog>
     <addReply
       :visible.sync="replyModal"
       :goods="goodsData"
@@ -165,28 +166,43 @@
       @callPicture="callPicture"
       @removePicture="removePicture"
     ></addReply>
-    <Modal v-model="goodsModal" title="选择商品" width="960" scrollable footer-hide>
+    <el-dialog :visible.sync="goodsModal" title="选择商品" width="960px">
       <goodsList v-if="replyModal" @getProductId="getProductId"></goodsList>
-    </Modal>
-    <Modal v-model="attrModal" title="选择商品规格" width="960" scrollable footer-hide>
-      <Table :columns="tableColumns" :data="goodsData.attrs" height="500">
-        <template slot-scope="{ row, index }" slot="image">
-          <div class="product-data">
-            <img class="image" :src="row.image" />
-          </div>
-        </template>
-      </Table>
-    </Modal>
-    <Modal
-      v-model="pictureModal"
-      width="960px"
-      scrollable
-      footer-hide
-      closable
-      title="上传商品图"
-      :mask-closable="false"
-      :z-index="1"
-    >
+    </el-dialog>
+    <el-dialog :visible.sync="attrModal" title="选择商品规格" width="960px">
+      <el-table ref="table" :row-key="getRowKey" :data="goodsData.attrs" height="500">
+        <el-table-column label="" width="60">
+          <template slot-scope="scope">
+            <el-radio v-model="templateRadio" :label="scope.row.id" @change.native="getTemplateRow(scope.row)"
+              >&nbsp;</el-radio
+            >
+          </template>
+        </el-table-column>
+        <el-table-column label="图片" width="120">
+          <template slot-scope="scope">
+            <div class="product-data">
+              <img class="image" :src="scope.row.image" />
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column label="规格" min-width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row.suk }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="售价" min-width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row.ot_price }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="优惠价" min-width="120">
+          <template slot-scope="scope">
+            <span>{{ scope.row.price }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
+    <el-dialog :visible.sync="pictureModal" width="960px" title="上传商品图" :close-on-click-modal="false">
       <uploadPictures
         :isChoice="isChoice"
         @getPic="getPic"
@@ -195,7 +211,7 @@
         :gridPic="gridPic"
         v-if="pictureModal"
       ></uploadPictures>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -215,6 +231,7 @@ export default {
   },
   data() {
     return {
+      templateRadio: 0,
       modals: false,
       replyModal: false,
       pictureModal: false,
@@ -265,54 +282,6 @@ export default {
           { text: '本年', val: 'year' },
         ],
       },
-      tableColumns: [
-        // {
-        //   type: "selection",
-        //   width: 60,
-        //   align: "center",
-        // },
-        {
-          width: 60,
-          align: 'center',
-          render: (h, params) => {
-            return h('Radio', {
-              props: {
-                value: params.row.unique === this.attrData.unique,
-              },
-              on: {
-                'on-change': () => {
-                  this.attrData = params.row;
-                  this.attrModal = false;
-                },
-              },
-            });
-          },
-        },
-        {
-          title: '图片',
-          slot: 'image',
-          width: 120,
-          align: 'center',
-        },
-        {
-          title: '规格',
-          key: 'suk',
-          align: 'center',
-          minWidth: 120,
-        },
-        {
-          title: '售价',
-          key: 'ot_price',
-          align: 'center',
-          minWidth: 120,
-        },
-        {
-          title: '优惠价',
-          key: 'price',
-          align: 'center',
-          minWidth: 120,
-        },
-      ],
       value: '45',
       tableList: [],
       goodsAddType: '',
@@ -362,19 +331,26 @@ export default {
       // this.$modalForm(fictitiousReply(this.formValidate.product_id)).then(() => this.getList());
       this.replyModal = true;
     },
+    getRowKey(row) {
+      return row.id;
+    },
+    getTemplateRow(row) {
+      this.attrData = row;
+      this.attrModal = false;
+    },
     oks() {
       this.modals = true;
       this.$refs['contents'].validate((valid) => {
         if (valid) {
           setReplyApi(this.contents, this.rows.id)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.modals = false;
               this.$refs['contents'].resetFields();
               this.getList();
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;
@@ -396,12 +372,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tableList.splice(num, 1);
           this.total = this.total - 1;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 回复
@@ -411,8 +387,8 @@ export default {
     },
     // 具体日期
     onchangeTime(e) {
-      this.timeVal = e;
-      this.formValidate.data = this.timeVal[0] ? this.timeVal.join('-') : '';
+      this.timeVal = e || [];
+      this.formValidate.data = this.timeVal[0] ? this.timeVal ? this.timeVal.join('-') : '' : '';
       this.formValidate.page = 1;
       this.getList();
     },
@@ -447,7 +423,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索

@@ -1,6 +1,6 @@
 <template>
-  <div v-if="orderDatalist">
-    <Drawer title="订单详情" :closable="false" width="700" v-model="modals" scrollable>
+  <div>
+    <el-drawer :visible.sync="modals" title="订单详情" :wrapperClosable="false" :size="700">
       <el-card :bordered="false" shadow="never" class="i-table-no-border">
         <div class="ivu-description-list-title">收货信息</div>
         <el-row class="mb10">
@@ -57,7 +57,10 @@
           <el-col :span="12" class="fontColor3 mb10" v-if="parseFloat(orderDatalist.orderInfo.back_integral)"
             >退回积分：{{ parseFloat(orderDatalist.orderInfo.back_integral) }}</el-col
           >
-          <el-col :span="12" class="fontColor3 mb10" v-if="parseFloat(orderDatalist.orderInfo.gain_integral) && orderDatalist.orderInfo.paid == 1"
+          <el-col
+            :span="12"
+            class="fontColor3 mb10"
+            v-if="parseFloat(orderDatalist.orderInfo.gain_integral) && orderDatalist.orderInfo.paid == 1"
             >赠送积分：{{ parseFloat(orderDatalist.orderInfo.gain_integral) }}</el-col
           >
           <el-col :span="12" class="mb10">创建时间：{{ orderDatalist.orderInfo._add_time }}</el-col>
@@ -247,8 +250,8 @@
           </el-row>
         </div>
       </el-card>
-    </Drawer>
-    <Modal v-model="modal2" scrollable title="物流查询" width="350" class="order_box2">
+    </el-drawer>
+    <el-dialog :visible.sync="modal2" title="物流查询" width="350px" class="order_box2">
       <div class="logistics acea-row row-top">
         <div class="logistics_img">
           <img src="../../../../assets/images/expressi.jpg" />
@@ -260,15 +263,14 @@
       </div>
       <div class="acea-row row-column-around trees-coadd">
         <div class="scollhide">
-          <Timeline>
-            <TimelineItem v-for="(item, i) in result" :key="i">
-              <p class="time" v-text="item.time"></p>
-              <p class="content" v-text="item.status"></p>
-            </TimelineItem>
-          </Timeline>
+          <el-timeline>
+            <el-timeline-item v-for="(item, i) in result" :key="i" :timestamp="item.time">
+              {{ item.status }}
+            </el-timeline-item>
+          </el-timeline>
         </div>
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -307,7 +309,7 @@ export default {
           this.result = res.data.result;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

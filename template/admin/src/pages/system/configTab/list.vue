@@ -104,17 +104,14 @@
     </el-card>
 
     <!-- 新建 表单-->
-    <Modal
-      v-model="modals2"
-      scrollable
-      footer-hide
-      :closable="true"
+    <el-dialog
+      :visible.sync="modals2"
       title="添加配置字段"
-      :mask-closable="false"
-      :z-index="1"
-      width="700"
+      :close-on-click-modal="false"
+      :show-close="false"
+      width="700px"
     >
-      <el-tabs v-model="typeFrom.type" @tag-click="onhangeTab" class="tabsName">
+      <el-tabs v-model="typeFrom.type" @tab-click="onhangeTab" class="tabsName">
         <el-tab-pane label="文本框 " name="0"></el-tab-pane>
         <el-tab-pane label="多行文本框" name="1"></el-tab-pane>
         <el-tab-pane label="单选框" name="2"></el-tab-pane>
@@ -130,7 +127,7 @@
         ref="fc"
         handleIcon="false"
       ></form-create>
-    </Modal>
+    </el-dialog>
     <!-- 编辑表单-->
     <edit-from ref="edits" :FromData="FromData" @submitFail="submitFail"></edit-from>
   </div>
@@ -203,7 +200,7 @@ export default {
           this.modals2 = true;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑表单
@@ -220,7 +217,7 @@ export default {
           this.modals2 = true;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 提交表单
@@ -231,7 +228,7 @@ export default {
         data: formData,
       })
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           setTimeout(() => {
             this.modals2 = false;
           }, 1000);
@@ -240,7 +237,7 @@ export default {
           }, 1500);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改成功
@@ -271,7 +268,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     pageChange(index) {
@@ -289,21 +286,21 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.classList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改是否显示
     onchangeIsShow(row) {
       configSetStatusApi(row.id, row.status)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

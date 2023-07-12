@@ -16,7 +16,6 @@
           <el-button type="primary" @click="memberAgreementSave">保存</el-button>
         </el-form-item>
       </el-form>
-      <Spin fix v-if="spinShow"></Spin>
     </el-card>
   </div>
 </template>
@@ -64,22 +63,19 @@ export default {
           this.id = id;
         })
         .catch((err) => {
-          this.$Message.error(err);
+          this.$message.error(err);
           this.spinShow = false;
         });
     },
     // 保存
     memberAgreementSave() {
-      this.$Spin.show();
       memberAgreementSave(this.id, this.agreement)
         .then((res) => {
-          this.$Spin.hide();
-          this.$Message.success('保存成功');
+          this.$message.success('保存成功');
           this.memberAgreement();
         })
         .catch((err) => {
-          this.$Spin.hide();
-          this.$Message.error(err);
+          this.$message.error(err);
         });
     },
   },

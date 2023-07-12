@@ -1,15 +1,5 @@
 <template>
-  <Modal
-    v-model="modals"
-    :z-index="1"
-    scrollable
-    footer-hide
-    closable
-    title="等级任务"
-    :mask-closable="false"
-    width="950"
-    @on-cancel="handleReset"
-  >
+  <el-dialog :visible.sync="modals" title="等级任务" :close-on-click-modal="false" width="950px" @closed="handleReset">
     <el-form
       ref="levelFrom"
       :model="levelFrom"
@@ -46,7 +36,11 @@
         <el-button type="primary" icon="md-add" @click="add">添加等级任务</el-button>
       </el-col>
       <el-col :span="24" class="userAlert">
-        <Alert show-icon closable>添加等级任务,任务类型中的{$num}会自动替换成限定数量+系统预设的单位生成任务名</Alert>
+        <el-alert show-icon closable>
+          <template slot="title">
+            添加等级任务,任务类型中的{$num}会自动替换成限定数量+系统预设的单位生成任务名
+          </template>
+        </el-alert>
       </el-col>
     </el-row>
     <el-divider direction="vertical" dashed />
@@ -129,7 +123,7 @@
     </div>
     <!-- 新建 编辑表单-->
     <edit-from ref="edits" :FromData="FromData" @submitFail="submitFail" :titleType="titleType"></edit-from>
-  </Modal>
+  </el-dialog>
 </template>
 
 <script>
@@ -214,7 +208,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改显示隐藏
@@ -225,10 +219,10 @@ export default {
       };
       setTaskShowApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 设置任务是否达成
@@ -239,10 +233,10 @@ export default {
       };
       setTaskMustApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 新建编辑提交成功
@@ -260,11 +254,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.levelLists.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

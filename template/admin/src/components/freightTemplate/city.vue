@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Modal v-model="addressModal" title="选择可配送区域" width="50%" class="modal" :mask="true">
+    <el-dialog :visible.sync="addressModal" title="选择可配送区域" width="50%" class="modal">
       <el-row :gutter="24" >
         <el-col :xl="24" :lg="24" :md="24" :sm="24" :xs="24" class="item">
           <div class="acea-row row-right row-middle">
@@ -50,8 +50,7 @@
         <el-button @click="close">取消</el-button>
         <el-button type="primary" @click="confirm">确定</el-button>
       </div>
-      <Spin size="large" fix v-if="loading"></Spin>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 

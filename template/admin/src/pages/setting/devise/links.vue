@@ -52,7 +52,7 @@ export default {
     this.$nextTick(function () {
       const clipboard = new ClipboardJS('.copy-data');
       clipboard.on('success', () => {
-        this.$Message.success('复制成功');
+        this.$message.success('复制成功');
       });
     });
   },
@@ -60,14 +60,14 @@ export default {
     onCopy(copyData) {
       this.$copyText(copyData)
         .then((message) => {
-          this.$Message.success('复制成功');
+          this.$message.success('复制成功');
         })
         .catch((err) => {
-          this.$Message.error('复制失败');
+          this.$message.error('复制失败');
         });
     },
     // onError () {
-    //     this.$Message.error('复制成功');
+    //     this.$message.error('复制成功');
     // }
   },
 };

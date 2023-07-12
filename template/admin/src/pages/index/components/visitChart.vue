@@ -4,9 +4,13 @@
       <el-col san="24" class="ivu-mb">
         <el-card :bordered="false" shadow="never" class="dashboard-console-visit">
           <div slot="title">
-            <el-row  justify="center" align="middle">
+            <el-row justify="center" align="middle">
               <el-col :span="8">
-                <Avatar icon="ios-podium" size="small" style="color: #1890ff; background-color: #e6f7ff" />
+                <el-avatar
+                  icon="el-icon-s-marketing"
+                  size="small"
+                  style="color: #1890ff; background-color: #e6f7ff"
+                ></el-avatar>
                 <span class="ivu-pl-8">订单</span>
               </el-col>
               <el-col :span="16" class="ivu-text-right">
@@ -104,7 +108,7 @@ export default {
             ]);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 时间改变

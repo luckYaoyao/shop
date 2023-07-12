@@ -43,14 +43,10 @@
         </div>
       </draggable>
       <div>
-        <Modal
-          v-model="modalPic"
+        <el-dialog :visible.sync="modalPic"
           width="950px"
-          scrollable
-          footer-hide
-          closable
           title="上传图片"
-          :mask-closable="false"
+          :close-on-click-modal="false"
           :z-index="1"
         >
           <uploadPictures
@@ -60,7 +56,7 @@
             :gridPic="gridPic"
             v-if="modalPic"
           ></uploadPictures>
-        </Modal>
+        </el-dialog>
       </div>
     </div>
     <template v-if="configData.list">

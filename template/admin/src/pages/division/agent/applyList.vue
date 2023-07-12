@@ -48,7 +48,6 @@
       <el-row class="ivu-mt box-wrapper">
         <el-col :xs="24" :sm="24" ref="rightBox">
           <el-table
-            :columns="columns"
             :data="userLists"
             ref="table"
             v-loading="loading"
@@ -92,12 +91,12 @@
             </el-table-column>
             <el-table-column label="申请状态" min-width="150">
               <template slot-scope="scope">
-                <Tag>{{ scope.row.status == 0 ? '申请中' : scope.row.status == 1 ? '已同意' : '已拒绝' }}</Tag>
+                <el-tag>{{ scope.row.status == 0 ? '申请中' : scope.row.status == 1 ? '已同意' : '已拒绝' }}</el-tag>
               </template>
             </el-table-column>
             <el-table-column label="邀请码" min-width="150">
               <template slot-scope="scope">
-                <Tag>{{ scope.row.division_invite }}</Tag>
+                <el-tag>{{ scope.row.division_invite }}</el-tag>
               </template>
             </el-table-column>
             <el-table-column label="操作" fixed="right" width="170">
@@ -160,54 +159,6 @@ export default {
         {
           status_name: '已拒绝',
           id: 2,
-        },
-      ],
-      columns: [
-        {
-          title: '用户UID',
-          key: 'uid',
-          width: 80,
-        },
-        {
-          title: '代理商名称',
-          key: 'agent_name',
-          minWidth: 150,
-        },
-        {
-          title: '代理商电话',
-          key: 'phone',
-          minWidth: 100,
-        },
-        {
-          title: '事业部ID',
-          key: 'division_id',
-          minWidth: 100,
-        },
-        {
-          title: '申请图片',
-          slot: 'images',
-          minWidth: 100,
-        },
-        {
-          title: '申请时间',
-          key: 'add_time',
-          minWidth: 100,
-        },
-        {
-          title: '申请状态',
-          slot: 'status',
-          minWidth: 100,
-        },
-        {
-          title: '邀请码',
-          key: 'division_invite',
-          minWidth: 100,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          minWidth: 120,
         },
       ],
       FromData: null,
@@ -277,7 +228,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     pageChange(index) {
@@ -304,10 +255,10 @@ export default {
       };
       isShowApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -322,11 +273,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.userLists.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

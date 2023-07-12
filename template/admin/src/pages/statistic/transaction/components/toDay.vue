@@ -430,7 +430,7 @@ export default {
         })
         .catch((res) => {
           this.listLoading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     getOrder() {},

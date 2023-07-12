@@ -105,9 +105,9 @@
         </el-table-column>
         <el-table-column label="活动状态" min-width="100">
           <template slot-scope="scope">
-            <Tag color="blue" v-show="scope.row.start_name === '进行中'">进行中</Tag>
-            <Tag color="volcano" v-show="scope.row.start_name === '未开始'">未开始</Tag>
-            <Tag color="cyan" v-show="scope.row.start_name === '已结束'">已结束</Tag>
+            <el-tag color="blue" v-show="scope.row.start_name === '进行中'">进行中</el-tag>
+            <el-tag color="volcano" v-show="scope.row.start_name === '未开始'">未开始</el-tag>
+            <el-tag color="cyan" v-show="scope.row.start_name === '已结束'">已结束</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="结束时间" min-width="150">
@@ -265,11 +265,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tableList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     viewInfo(row) {
@@ -290,7 +290,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索
@@ -306,10 +306,10 @@ export default {
       };
       combinationSetStatusApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

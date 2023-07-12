@@ -267,15 +267,7 @@
         </div>
       </div>
     </el-card>
-    <Modal
-      v-model="modals"
-      footer-hide
-      scrollable
-      closable
-      title="短信账户签名修改"
-      class="order_box"
-      @on-cancel="cancel('formInline')"
-    >
+    <el-dialog :visible.sync="modals" title="短信账户签名修改" class="order_box" @closed="cancel('formInline')">
       <el-form ref="formInline" :model="formInline" :rules="ruleInline" label-width="100px" @submit.native.prevent>
         <el-form-item>
           <el-input
@@ -324,11 +316,7 @@
           >
         </el-form-item>
       </el-form>
-      <!--<div slot="footer">-->
-      <!--&lt;!&ndash;<el-button type="primary" @click="putSend('formInline')">提交</el-button>&ndash;&gt;-->
-      <!--&lt;!&ndash;<el-button @click="cancel('formInline')">取消</el-button>&ndash;&gt;-->
-      <!--</div>-->
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -461,10 +449,10 @@ export default {
         };
         captchaApi(data)
           .then(async (res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
         let time = setInterval(() => {
           this.cutNUm--;
@@ -475,7 +463,7 @@ export default {
           }
         }, 1000);
       } else {
-        this.$Message.warning('请填写手机号!');
+        this.$message.warning('请填写手机号!');
       }
     },
     editSign() {
@@ -493,11 +481,11 @@ export default {
           serveSign(this.formInline)
             .then((res) => {
               this.modals = false;
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.$refs[name].resetFields();
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         }
       });
@@ -514,7 +502,7 @@ export default {
           this.exportList = res.data;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 快递公司选择
@@ -529,7 +517,7 @@ export default {
           this.exportTempList = res.data.data;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     onChangeType() {
@@ -640,7 +628,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 开通短信提交
@@ -649,12 +637,12 @@ export default {
         if (valid) {
           serveSmsOpenApi(this.formInline)
             .then(async (res) => {
-              this.$Message.success('开通成功!');
+              this.$message.success('开通成功!');
               this.getList();
               this.$emit('openService', 'sms');
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;
@@ -698,7 +686,7 @@ export default {
           serveOpen().then((res) => {
             this.getRecordList();
             this.isLogistics = true;
-            this.$Message.info(res.msg);
+            this.$message.info(res.msg);
             this.$emit('openService', 'query');
           });
         },
@@ -720,7 +708,7 @@ export default {
                 this.$emit('openService', 'copy');
               })
               .catch((res) => {
-                this.$Message.error(res.msg);
+                this.$message.error(res.msg);
               });
           }, 300);
         },
@@ -752,7 +740,7 @@ export default {
         .catch((res) => {
           this.spinShow = false;
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索
@@ -764,12 +752,12 @@ export default {
         if (valid) {
           serveOpnExpressApi(this.formInlineDump)
             .then(async (res) => {
-              this.$Message.success('开通成功!');
+              this.$message.success('开通成功!');
               this.getRecordList();
               this.$emit('openService', 'dump');
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;

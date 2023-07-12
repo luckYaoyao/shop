@@ -52,11 +52,11 @@ export default {
             remark: this.formValidate.con,
           })
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.$emit('remarkSuccess');
             })
             .catch((error) => {
-              this.$Message.error(error.msg);
+              this.$message.error(error.msg);
             });
         } else {
         }

@@ -33,16 +33,7 @@
         <!--<el-button class="grey" v-else-if="status === 0">审核中</el-button>-->
       </div>
     </el-card>
-    <Modal
-      v-model="isTemplate"
-      scrollable
-      footer-hide
-      closable
-      title="申请商业授权"
-      :z-index="1"
-      width="640"
-      @on-cancel="cancel"
-    >
+    <el-dialog :visible.sync="isTemplate" title="申请商业授权" width="640px">
       <div class="article-manager">
         <el-card :bordered="false" shadow="never">
           <el-form
@@ -53,7 +44,7 @@
             :rules="ruleValidate"
             @submit.native.prevent
           >
-            <el-row  :gutter="24">
+            <el-row :gutter="24">
               <el-col :span="24">
                 <el-col>
                   <el-form-item label="企业名称：" prop="company_name" label-for="company_name">
@@ -64,7 +55,11 @@
               <el-col :span="24">
                 <el-col>
                   <el-form-item label="企业域名：" prop="domain_name" label-for="domain_name">
-                    <el-input v-model="formItem.domain_name" :disabled="true" placeholder="请输入域名，格式：baidu.com" />
+                    <el-input
+                      v-model="formItem.domain_name"
+                      :disabled="true"
+                      placeholder="请输入域名，格式：baidu.com"
+                    />
                   </el-form-item>
                 </el-col>
               </el-col>
@@ -101,15 +96,14 @@
                 </el-col>
               </el-col>
             </el-row>
-            <el-row >
-              <el-col :span="24">
-                <el-button type="primary" @click="handleSubmit('formItem')" class="submit">提交</el-button>
-              </el-col>
-            </el-row>
           </el-form>
         </el-card>
       </div>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="handleSubmit('formItem')">提 交</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -170,11 +164,11 @@ export default {
             .then((res) => {
               this.isTemplate = false;
               this.getAuth();
-              return this.$Message.success(res.msg);
+              return this.$message.success(res.msg);
             })
             .catch((res) => {
               this.captchsChang();
-              return this.$Message.error(res.msg);
+              return this.$message.error(res.msg);
             });
         } else {
           return false;

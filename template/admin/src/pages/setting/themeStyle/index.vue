@@ -89,7 +89,7 @@ export default {
           this.changeColor(this.current);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     submit() {
@@ -97,7 +97,7 @@ export default {
       colorChange(this.current, 'color_change')
         .then((res) => {
           this.loadingExist = false;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch(() => {
           this.loadingExist = false;

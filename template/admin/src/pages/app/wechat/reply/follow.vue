@@ -5,7 +5,7 @@
     </div>
     <el-card :bordered="false" shadow="never" class="ivu-mt">
       <!-- 公众号设置 -->
-      <el-row :gutter="24" >
+      <el-row :gutter="24">
         <el-col :span="24" class="ml40">
           <!-- 预览功能 -->
           <el-col ::span="24">
@@ -54,14 +54,14 @@
                     <el-form-item label="关键字：" prop="val" v-if="$route.params.id">
                       <div class="arrbox">
                         <!--:closable="$route.params.id==='0'? true : false"-->
-                        <Tag
-                          @on-close="handleClose"
+                        <el-tag
+                          @close="handleClose(item)"
                           :name="item"
                           :closable="true"
                           v-for="(item, index) in labelarr"
                           :key="index"
                           >{{ item }}
-                        </Tag>
+                        </el-tag>
                         <!--:readonly="$route.params.id!=='0'"-->
                         <input
                           class="arrbox_ip"
@@ -116,8 +116,8 @@
                           class="mr15"
                           v-model="formValidate.data.src"
                         />
-                        <Upload
-                          :show-upload-list="false"
+                        <el-upload
+                          :show-file-list="false"
                           :action="fileUrl"
                           :on-success="handleSuccess"
                           :format="formValidate.type === 'image' ? formatImg : formatVoice"
@@ -129,7 +129,7 @@
                           style="margin-top: 1px"
                         >
                           <el-button type="primary">上传</el-button>
-                        </Upload>
+                        </el-upload>
                       </div>
                       <span v-show="formValidate.type === 'image'">文件最大2Mb，支持bmp/png/jpeg/jpg/gif格式</span>
                       <span v-show="formValidate.type === 'voice'">文件最大2Mb，支持mp3格式,播放长度不超过60s</span>
@@ -149,7 +149,7 @@
     </el-card>
 
     <!--图文消息 -->
-    <Modal v-model="modals" scrollable title="发送消息" width="1200" height="800" footer-hide class="modelBox">
+    <el-dialog :visible.sync="modals" title="发送消息" width="1200px" :lock-scroll="false" class="modelBox">
       <news-category
         v-if="modals"
         @getCentList="getCentList"
@@ -158,7 +158,7 @@
         :contentWidth="contentWidth"
         :maxCols="maxCols"
       ></news-category>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -264,7 +264,7 @@ export default {
       }
       this.val = '';
     },
-    handleClose(event, name) {
+    handleClose(name) {
       const index = this.labelarr.indexOf(name);
       this.labelarr.splice(index, 1);
     },
@@ -307,7 +307,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 选择图文
@@ -340,20 +340,20 @@ export default {
     handleSuccess(res, file) {
       if (res.status === 200) {
         this.formValidate.data.src = res.data.src;
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
       } else {
-        this.$Message.error(res.msg);
+        this.$message.error(res.msg);
       }
     },
     handleFormatError(file) {
       if (this.formValidate.type === 'image') {
-        this.$Message.warning('请上传bmp/png/jpeg/jpg/gif格式的图片');
+        this.$message.warning('请上传bmp/png/jpeg/jpg/gif格式的图片');
       } else {
-        this.$Message.warning('请上传mp3/wma/wav/amr格式的语音');
+        this.$message.warning('请上传mp3/wma/wav/amr格式的语音');
       }
     },
     handleMaxSize(file) {
-      this.$Message.warning('请上传文件2M以内的文件');
+      this.$message.warning('请上传文件2M以内的文件');
     },
     // 保存
     submenus(name) {
@@ -375,10 +375,10 @@ export default {
           replyApi(data)
             .then(async (res) => {
               this.operation();
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;
@@ -437,6 +437,9 @@ export default {
     text-align: left;
     box-sizing border-box;
     width: 90%;
+    .el-tag{
+      margin-right: 3px;
+    }
 }
 
 .arrbox_ip {

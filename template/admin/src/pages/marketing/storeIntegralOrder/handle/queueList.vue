@@ -1,9 +1,5 @@
 <template>
-  <Modal v-model="modal" title="任务列表" width="1000" footer-hide>
-    <!-- <div> -->
-    <!-- <div class="i-layout-page-header">
-            <PageHeader class="product_tabs" title="任务列表" hidden-breadcrumb></PageHeader>
-        </div> -->
+  <el-dialog :visible.sync="modal" title="任务列表" width="1000px">
     <el-card :bordered="false" shadow="never" class="ivu-mt">
       <el-form
         ref="formValidate"
@@ -16,17 +12,19 @@
         <el-row :gutter="24">
           <el-col span="10">
             <el-form-item label="操作时间：">
-              <DatePicker
+              <el-date-picker
                 :editable="false"
                 @change="onchangeTime"
-                :value="timeVal"
+                v-model="timeVal"
                 format="yyyy/MM/dd"
                 type="datetimerange"
-                placement="bottom-start"
-                placeholder="自定义时间"
+                value-format="yyyy/MM/dd"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
                 style="width: 90%"
                 :options="options"
-              ></DatePicker>
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="7">
@@ -116,8 +114,8 @@
         />
       </div>
     </el-card>
-    <Modal v-model="modal1" width="900" footer-hide>
-      <el-table height="500" class="mt25" :columns="columns4" :data="data2" v-loading="loading2">
+    <el-dialog :visible.sync="modal1" width="900px">
+      <el-table height="500" class="mt25" :data="data2" v-loading="loading2">
         <el-table-column
           :label="item.title"
           :min-width="item.minWidth || 100"
@@ -142,9 +140,9 @@
           @pagination="getDeliveryLog"
         />
       </div>
-    </Modal>
+    </el-dialog>
     <!-- </div> -->
-  </Modal>
+  </el-dialog>
 </template>
 
 <script>
@@ -411,8 +409,8 @@ export default {
     },
     // 搜索-操作时间
     onchangeTime(time) {
-      this.timeVal = time;
-      this.formValidate.data = this.timeVal[0] ? this.timeVal.join('-') : '';
+      this.timeVal = time || [];
+      this.formValidate.data = this.timeVal[0] ? this.timeVal ? this.timeVal.join('-') : '' : '';
       this.page1.pageNum = 1;
       this.getQueue();
     },
@@ -472,7 +470,7 @@ export default {
               window.open(res.data[0]);
             })
             .catch((err) => {
-              this.$Message.error(err.msg);
+              this.$message.error(err.msg);
             });
           break;
         // 重新执行
@@ -499,33 +497,33 @@ export default {
     queueAgain(id, type) {
       queueAgain(id, type)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getQueue();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 清除异常任务
     queueDel(id, type) {
       queueDel(id, type)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getQueue();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 停止任务
     stopQueue(id) {
       stopWrongQueue(id)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getQueue();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
   },

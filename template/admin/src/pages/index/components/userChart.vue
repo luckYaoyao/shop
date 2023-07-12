@@ -4,7 +4,7 @@
       <el-col :xl="16" :lg="12" :md="24" :sm="24" :xs="24" class="ivu-mb dashboard-console-visit">
         <el-card :bordered="false" shadow="never">
           <div slot="title">
-            <Avatar icon="ios-pulse" size="small" style="color: #1890ff; background-color: #e6f7ff" />
+            <el-avatar icon="el-icon-user-solid" size="small" style="color: #1890ff; background-color: #e6f7ff" ></el-avatar>
             <span class="ivu-pl-8">用户</span>
           </div>
           <echarts-from
@@ -19,7 +19,7 @@
       <el-col :xl="8" :lg="12" :md="24" :sm="24" :xs="24">
         <el-card :bordered="false" shadow="never" class="dashboard-console-visit">
           <div slot="title">
-            <Avatar icon="ios-analytics" size="small" style="color: #1890ff; background-color: #e6f7ff" />
+            <el-avatar icon="el-icon-s-marketing" size="small" style="color: #1890ff; background-color: #e6f7ff" ></el-avatar>
             <span class="ivu-pl-8">购买用户统计</span>
           </div>
           <echarts-from ref="visitChart" :infoList="infoList" :echartsTitle="circle"></echarts-from>
@@ -74,7 +74,7 @@ export default {
           this.bing_xdata = res.bing_xdata;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     getRank() {
@@ -84,7 +84,7 @@ export default {
           this.lists = data.list;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 监听页面宽度变化，刷新表格

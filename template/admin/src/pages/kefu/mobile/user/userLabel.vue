@@ -84,11 +84,11 @@ export default {
         un_label_ids: unLaberids,
       })
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.$emit('editLabel', false);
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
     close: function () {

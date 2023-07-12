@@ -7,7 +7,7 @@
         </el-tabs>
       </div>
       <el-row class="mt10 acea-row row-middle row-center">
-        <el-col :span="23">
+        <el-col :span="23" v-loading="spinShow">
           <el-form
             class="form mt30"
             ref="formValidate"
@@ -27,15 +27,18 @@
               <el-col :span="24">
                 <el-form-item label="活动时间：">
                   <div class="acea-row row-middle">
-                    <DatePicker
+                    <el-date-picker
                       :editable="false"
                       type="datetimerange"
                       format="yyyy-MM-dd HH:mm"
-                      placeholder="请选择活动时间"
+                      value-format="yyyy-MM-dd HH:mm"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
                       @change="onchangeTime"
                       class="perW30"
                       v-model="formValidate.period"
-                    ></DatePicker>
+                    ></el-date-picker>
                   </div>
                 </el-form-item>
               </el-col>
@@ -99,12 +102,12 @@
                     <div class="labelInput acea-row row-between-wrapper" @click="selectLabelShow = true">
                       <div class="">
                         <div v-if="selectDataLabel.length">
-                          <Tag
+                          <el-tag
                             :closable="false"
                             v-for="(item, index) in selectDataLabel"
-                            @on-close="closeLabel(item)"
+                            @close="closeLabel(item)"
                             :key="index"
-                            >{{ item.label_name }}</Tag
+                            >{{ item.label_name }}</el-tag
                           >
                         </div>
                         <span class="span" v-else>选择用户标签</span>
@@ -374,40 +377,21 @@
                 <div v-else>提交中</div>
               </el-button>
             </el-form-item>
-            <Spin size="large" fix v-if="spinShow"></Spin>
           </el-form>
         </el-col>
       </el-row>
     </el-card>
 
     <!-- 上传图片-->
-    <Modal
-      v-model="modalPic"
-      width="950px"
-      scrollable
-      footer-hide
-      closable
-      title="上传商品图"
-      :mask-closable="false"
-      :z-index="1"
-    >
+    <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
       <uploadPictures :isChoice="isChoice" @getPic="getPic" v-if="modalPic"></uploadPictures>
-    </Modal>
+    </el-dialog>
     <!-- 上传图片-->
-    <Modal
-      v-model="addGoodsModel"
-      width="60%"
-      scrollable
-      footer-hide
-      closable
-      :title="title"
-      :mask-closable="false"
-      :z-index="1"
-    >
+    <el-dialog v-model="addGoodsModel" width="60%" :title="title" :close-on-click-modal="false">
       <addGoods v-if="addGoodsModel" @addGoodsData="addGoodsData" :editData="editData"></addGoods>
-    </Modal>
+    </el-dialog>
     <!-- 用户标签 -->
-    <Modal
+    <el-dialog
       v-model="selectLabelShow"
       scrollable
       title="请选择用户标签"
@@ -425,7 +409,7 @@
         @activeData="activeSelectData"
         @close="labelClose"
       ></userLabel>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -819,7 +803,7 @@ export default {
           if (this.formValidate.id && !this.copy) {
             lotteryEditApi(this.formValidate.id, this.formValidate)
               .then(async (res) => {
-                this.$Message.success(res.msg);
+                this.$message.success(res.msg);
                 this.submitOpen = false;
                 // setTimeout(() => {
                 //   this.submitOpen = false;
@@ -830,13 +814,13 @@ export default {
               })
               .catch((res) => {
                 this.submitOpen = false;
-                this.$Message.error(res.msg);
+                this.$message.error(res.msg);
               });
           } else {
             lotteryCreateApi(this.formValidate)
               .then(async (res) => {
                 this.submitOpen = false;
-                this.$Message.success(res.msg);
+                this.$message.success(res.msg);
                 // setTimeout(() => {
                 //   this.submitOpen = false;
                 //   this.$router.push({
@@ -846,7 +830,7 @@ export default {
               })
               .catch((res) => {
                 this.submitOpen = false;
-                this.$Message.error(res.msg);
+                this.$message.error(res.msg);
               });
           }
         } else {
@@ -882,7 +866,7 @@ export default {
     // 表单验证
     validate(prop, status, error) {
       if (status === false) {
-        this.$Message.error(error);
+        this.$message.error(error);
         return false;
       } else {
         return true;
@@ -918,7 +902,7 @@ export default {
         ? this.$set(this.specsData, [this.editIndex], data)
         : this.specsData.length < 8
         ? this.specsData.push(data)
-        : this.$Message.warning('最多添加8个奖品');
+        : this.$message.warning('最多添加8个奖品');
       this.getProbability();
       this.addGoodsModel = false;
       this.editIndex = null;

@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modals" scrollable title="备注" class="order_box" :closable="false">
+  <el-dialog :visible.sync="modals" title="备注" class="order_box" :show-close="false">
     <el-form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-width="85px" @submit.native.prevent>
       <el-form-item label="备注：" prop="remark">
         <el-input
@@ -16,7 +16,7 @@
       <el-button type="primary" @click="putRemark('formValidate')">提交</el-button>
       <el-button @click="cancel('formValidate')">取消</el-button>
     </div>
-  </Modal>
+  </el-dialog>
 </template>
 
 <script>
@@ -52,7 +52,7 @@ export default {
         if (valid) {
           this.$emit('submitFail', this.formValidate.remark);
         } else {
-          this.$Message.warning('请填写备注信息');
+          this.$message.warning('请填写备注信息');
         }
       });
     },

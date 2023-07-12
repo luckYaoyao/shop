@@ -36,16 +36,18 @@
                   item.text
                 }}</el-radio-button>
               </el-radio-group>
-              <DatePicker
+              <el-date-picker
                 :editable="false"
                 @change="onchangeTime"
-                :value="timeVal"
+                v-model="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
-                placement="bottom-end"
-                placeholder="请选择时间"
-                style="width: 200px"
-              ></DatePicker>
+                value-format="yyyy/MM/dd"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                
+              ></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -160,7 +162,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.time = this.timeVal.join('-');
+      this.formValidate.time = this.timeVal ? this.timeVal.join('-') : '';
       this.page = 1;
       this.getList();
     },
@@ -186,11 +188,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.list.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

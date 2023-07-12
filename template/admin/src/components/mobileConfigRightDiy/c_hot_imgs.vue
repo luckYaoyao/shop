@@ -11,14 +11,10 @@
             <img :src="item.img" alt="" v-if="item.img" />
             <div class="upload-box" v-else><Icon type="ios-camera-outline" size="36" /></div>
             <div>
-              <Modal
-                v-model="modalPic"
+              <el-dialog :visible.sync="modalPic"
                 width="950px"
-                scrollable
-                footer-hide
-                closable
                 title="上传图片"
-                :mask-closable="false"
+                :close-on-click-modal="false"
                 :z-index="1"
               >
                 <uploadPictures
@@ -28,7 +24,7 @@
                   :gridPic="gridPic"
                   v-if="modalPic"
                 ></uploadPictures>
-              </Modal>
+              </el-dialog>
             </div>
           </div>
           <div class="info">

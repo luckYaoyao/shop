@@ -1,5 +1,5 @@
 <template>
-  <el-card :bordered="false" shadow="never" class="ivu-mt-16">
+  <el-card :bordered="false" shadow="never" class="ivu-mt-16" v-loading="spinShow">
     <div class="acea-row row-between-wrapper mb20">
       <div class="header-title">
         交易概况
@@ -13,7 +13,9 @@
             <div>交易毛利金额 = 营业额 - 支出金额</div>
             <br />
             <div>商品支付金额</div>
-            <div>选定条件下，用户购买商品的实际支付金额，包括微信支付、余额支付、支付宝支付、线下支付金额（拼团商品在成团之后计入，线下支付订单在后台确认支付后计入）</div>
+            <div>
+              选定条件下，用户购买商品的实际支付金额，包括微信支付、余额支付、支付宝支付、线下支付金额（拼团商品在成团之后计入，线下支付订单在后台确认支付后计入）
+            </div>
             <br />
             <div>购买会员金额</div>
             <div>选定条件下，用户成功购买付费会员的金额</div>
@@ -39,19 +41,19 @@
         </el-tooltip>
       </div>
       <div class="acea-row">
-        <DatePicker
+        <el-date-picker
           :editable="false"
           :clearable="false"
           @change="onchangeTime"
-          :value="timeVal"
+          v-model="timeVal"
           format="yyyy/MM/dd"
           type="daterange"
-          placement="bottom-start"
-          placeholder="请选择时间"
-          style="width: 200px"
+          value-format="yyyy/MM/dd"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
           class="mr20"
-          :options="options"
-        ></DatePicker>
+        ></el-date-picker>
         <el-button type="primary" class="mr20" @click="onSeach">查询</el-button>
         <el-button type="primary" @click="excel">导出</el-button>
       </div>
@@ -87,7 +89,6 @@
       </div>
     </div>
     <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
-    <Spin size="large" fix v-if="spinShow"></Spin>
   </el-card>
 </template>
 
@@ -137,7 +138,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.dataTime = this.timeVal.join('-');
+      this.dataTime = this.timeVal ? this.timeVal.join('-') : '';
       this.name = this.dataTime;
     },
     // 统计
@@ -167,7 +168,7 @@ export default {
           this.spinShow = false;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
           this.spinShow = false;
         });
     },
@@ -343,7 +344,7 @@ export default {
           // this.TrendList =
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

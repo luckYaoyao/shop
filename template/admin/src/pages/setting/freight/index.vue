@@ -37,7 +37,6 @@
         </el-row>
       </el-form>
       <el-table
-        :columns="columns1"
         :data="levelLists"
         ref="table"
         class="mt25"
@@ -186,11 +185,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.levelLists.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改是否显示
@@ -201,10 +200,10 @@ export default {
       };
       freightStatusApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 等级列表
@@ -219,7 +218,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 添加
@@ -229,7 +228,7 @@ export default {
       //     this.FromData = res.data;
       //     this.$refs.edits.modals = true;
       // }).catch(res => {
-      //     this.$Message.error(res.msg);
+      //     this.$message.error(res.msg);
       // })
     },
     // 编辑
@@ -239,7 +238,7 @@ export default {
       //     this.FromData = res.data;
       //     this.$refs.edits.modals = true;
       // }).catch(res => {
-      //     this.$Message.error(res.msg);
+      //     this.$message.error(res.msg);
       // })
     },
     // 表格搜索
@@ -250,11 +249,11 @@ export default {
     syncExpress() {
       freightSyncExpressApi()
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

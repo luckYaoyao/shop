@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="spinShow">
     <div class="i-layout-page-header header_top">
       <div class="i-layout-page-header fl_header">
         <router-link :to="{ path: $routeProStr + '/setting/sms/sms_config/index' }"
@@ -80,7 +80,6 @@
             <div class="list-goods-list-item-code mr20"><img v-lazy="code.code_url" v-if="code.code_url" /></div>
           </el-col>
         </el-col>
-        <Spin size="large" fix v-if="spinShow"></Spin>
       </el-row>
     </el-card>
   </div>
@@ -115,7 +114,7 @@ export default {
         .then(async (res) => {
           let data = res.data;
           if (!data.status) {
-            this.$Message.warning('请先登录');
+            this.$message.warning('请先登录');
             this.$router.push({
               path: this.$routeProStr + '/setting/sms/sms_config/index?url=' + this.$route.path,
               query: {
@@ -128,7 +127,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 平台用户信息
@@ -152,7 +151,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     onChangeType() {
@@ -175,7 +174,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
           this.list = [];
         });
     },
@@ -204,7 +203,7 @@ export default {
         })
         .catch((res) => {
           this.code = '';
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

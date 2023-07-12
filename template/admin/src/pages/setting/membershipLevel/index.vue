@@ -23,7 +23,6 @@
         <el-col v-bind="grid"> </el-col>
       </el-row>
       <el-table
-        :columns="columns1"
         :data="tabList"
         ref="table"
         v-loading="loading"
@@ -58,7 +57,7 @@
             <span>{{ scope.row.one_brokerage }}%</span>
           </template>
         </el-table-column>
-        <el-table-column label="一级分佣比例(上浮后)" min-width="130">
+        <el-table-column label="一级分佣比例(上浮后)" min-width="150">
           <template slot-scope="scope">
             <span>{{ scope.row.one_brokerage_ratio }}%</span>
           </template>
@@ -68,7 +67,7 @@
             <span>{{ scope.row.two_brokerage }}%</span>
           </template>
         </el-table-column>
-        <el-table-column label="二级分佣比例(上浮后)" min-width="130">
+        <el-table-column label="二级分佣比例(上浮后)" min-width="150">
           <template slot-scope="scope">
             <span>{{ scope.row.two_brokerage_ratio }}%</span>
           </template>
@@ -89,7 +88,7 @@
             </el-switch>
           </template>
         </el-table-column>
-        <el-table-column label="一级分佣比例(上浮后)" min-width="130">
+        <el-table-column label="一级分佣比例(上浮后)" min-width="150">
           <template slot-scope="scope">
             <span>{{ scope.row.one_brokerage_ratio }}%</span>
           </template>
@@ -115,7 +114,7 @@
       </div>
     </el-card>
     <div class="task-modal">
-      <Modal v-model="modal2" title="添加任务" footer-hide width="1000">
+      <el-dialog :visible.sync="modal2" title="添加任务" width="1000px">
         <div class="header">
           <h4>搜索条件</h4>
           <div class="search">
@@ -140,7 +139,6 @@
           </div>
           <div>
             <el-table
-              :columns="columns2"
               :data="taskTabList"
               ref="table"
               class="mt25"
@@ -201,7 +199,7 @@
             </el-table>
           </div>
         </div>
-      </Modal>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -388,7 +386,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 列表
@@ -403,7 +401,7 @@ export default {
         })
         .catch((res) => {
           this.taskLoading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索
@@ -428,22 +426,22 @@ export default {
     onchangeIsShow(row) {
       membershipSetApi(`agent/level/set_status/${row.id}/${row.status}`)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改是否显示
     onchangeTaskIsShow(row) {
       levelTaskSetApi(`agent/level_task/set_status/${row.id}/${row.status}`)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getTaskList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     //添加等级任务
@@ -478,11 +476,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tabList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 删除
@@ -496,11 +494,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.taskTabList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

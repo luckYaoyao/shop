@@ -25,16 +25,18 @@
                   item.text
                 }}</el-radio-button>
               </el-radio-group>
-              <DatePicker
+              <el-date-picker
                 :editable="false"
                 @change="onchangeTime"
-                :value="timeVal"
+                v-model="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
-                placement="bottom-end"
-                placeholder="自定义时间"
-                style="width: 200px"
-              ></DatePicker>
+                value-format="yyyy/MM/dd"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -86,7 +88,6 @@
         </el-row>
       </el-form>
       <el-table
-        :columns="columns1"
         :data="tableList"
         v-loading="loading"
         highlight-current-row
@@ -151,15 +152,11 @@
       </div>
     </el-card>
     <!-- 发货-->
-    <Modal
-      v-model="shipModel"
+    <el-dialog
+      :visible.sync="shipModel"
       width="40%"
-      scrollable
-      closable
-      footer-hide
       :title="!modelTitle ? (modelType === 1 ? '发货' : '备注') : modelTitle"
-      :mask-closable="false"
-      :z-index="1"
+      :close-on-click-modal="false"
     >
       <el-form
         v-model="shipModel"
@@ -188,7 +185,7 @@
           <el-button @click="cancel('formValidate')" style="margin-left: 8px">关闭</el-button>
         </el-form-item></el-form
       >
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -305,7 +302,7 @@ export default {
       this.$refs[name].validate((valid) => {
         lotteryRecordDeliver(this.modelType == 1 ? this.shipForm : this.markForm)
           .then((res) => {
-            this.$Message.success('操作成功');
+            this.$message.success('操作成功');
             this.shipModel = false;
             this.getList();
             this.shipForm = {
@@ -320,7 +317,7 @@ export default {
             };
           })
           .catch((err) => {
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       });
     },
@@ -336,13 +333,13 @@ export default {
           this.locationList = res.data;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 具体日期
     onchangeTime(e) {
-      this.timeVal = e;
-      this.tableFrom.data = this.timeVal[0] ? this.timeVal.join('-') : '';
+      this.timeVal = e || [];
+      this.tableFrom.data = this.timeVal[0] ? (this.timeVal ? this.timeVal.join('-') : '') : '';
       this.tableFrom.page = 1;
       this.getList();
     },
@@ -375,7 +372,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索

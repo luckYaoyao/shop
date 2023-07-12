@@ -8,30 +8,12 @@
       <monaco @change="changeValue" :value="newHtml" />
     </div>
 
-    <Modal
-      v-model="modalPic"
-      width="1024px"
-      scrollable
-      footer-hide
-      closable
-      title="上传图片"
-      :mask-closable="false"
-      :z-index="9"
-    >
+    <el-dialog :visible.sync="modalPic" width="1024px" title="上传图片" :close-on-click-modal="false">
       <uploadPictures v-if="modalPic" :isChoice="isChoice" @getPic="getPic" @getPicD="getPicD"></uploadPictures>
-    </Modal>
-    <Modal
-      v-model="modalVideo"
-      width="800px"
-      scrollable
-      footer-hide
-      closable
-      title="上传视频"
-      :mask-closable="false"
-      :z-index="9"
-    >
+    </el-dialog>
+    <el-dialog :visible.sync="modalVideo" width="800px" title="上传视频" :close-on-click-modal="false">
       <uploadVideo v-if="modalVideo" @getVideo="getvideo"></uploadVideo>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 <script>

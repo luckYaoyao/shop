@@ -168,10 +168,10 @@ export default {
         };
         captchaApi(data)
           .then(async (res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
         let time = setInterval(() => {
           this.cutNUm--;
@@ -182,7 +182,7 @@ export default {
           }
         }, 1000);
       } else {
-        this.$Message.warning('请填写手机号!');
+        this.$message.warning('请填写手机号!');
       }
     },
     handleSubmit1(name, current) {
@@ -193,7 +193,7 @@ export default {
               this.current = 1;
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;
@@ -206,11 +206,11 @@ export default {
         if (valid) {
           serveModifyApi(this.formInline)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.current = 2;
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;
@@ -226,11 +226,11 @@ export default {
             password: this.formInline.password,
           })
             .then(async (res) => {
-              this.$Message.success('登录成功!');
+              this.$message.success('登录成功!');
               this.$emit('on-Login');
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;

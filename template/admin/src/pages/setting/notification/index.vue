@@ -31,14 +31,13 @@
           >
         </el-col>
       </el-row>
-      <Alert v-if="currentTab == 1" :closable="true">
-        <template slot="desc">
+      <el-alert v-if="currentTab == 1" closable>
+        <template slot="title">
           1、公众号：登录微信公众号后台，选择模版消息，将模版消息的所在行业修改副行业为《其他/其他》<br />
           2、小程序：登录微信小程序后台，基本设置，服务类目增加《生活服务> 百货/超市/便利店》
         </template>
-      </Alert>
+      </el-alert>
       <el-table
-        :columns="currentTab == 1 ? columns : columns2"
         :data="levelLists"
         ref="table"
         class="mt25"
@@ -168,10 +167,10 @@ export default {
     changeSwitch(row, item) {
       noticeStatus(item, row[item], row.id)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     changeTab() {
@@ -183,22 +182,22 @@ export default {
     routineTemplate() {
       routineSyncTemplate()
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.changeTab(this.currentTab);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 同步微信模版消息
     wechatTemplate() {
       wechatSyncTemplate()
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.changeTab(this.currentTab);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 开启关闭

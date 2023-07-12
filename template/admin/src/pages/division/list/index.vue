@@ -122,7 +122,7 @@
         </el-col>
       </el-row>
     </el-card>
-    <Modal v-model="staffModal" scrollable title="代理商列表" class="order_box" width="800" footer-hide>
+    <el-dialog :visible.sync="staffModal" title="代理商列表" class="order_box" width="800px">
       <el-table
         :data="clerkLists"
         ref="table"
@@ -178,7 +178,7 @@
           @pagination="getClerkList"
         />
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -273,7 +273,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 添加表单
@@ -292,10 +292,10 @@ export default {
       };
       isShowApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -310,11 +310,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.userLists.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

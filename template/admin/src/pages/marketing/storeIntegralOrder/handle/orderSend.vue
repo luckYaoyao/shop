@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modals" scrollable title="订单发送货" class="order_box" :closable="false">
+  <el-dialog :visible.sync="modals" title="订单发送货" class="order_box" :show-close="false">
     <el-form ref="formItem" :model="formItem" label-width="100px" @submit.native.prevent>
       <el-form-item label="选择类型：">
         <el-radio-group v-model="formItem.type" @change="changeRadio">
@@ -95,17 +95,14 @@
         </el-form-item>
       </div>
     </el-form>
-    <div slot="footer">
+    <span slot="footer" class="dialog-footer">
       <el-button @click="cancel">取消</el-button>
       <el-button type="primary" @click="putSend">提交</el-button>
-    </div>
-    <!-- <viewer @inited="inited">
-            <img :src="temp.pic" style="display:none" />
-        </viewer> -->
+    </span>
     <div ref="viewer" v-viewer v-show="temp">
       <img :src="temp.pic" style="display: none" />
     </div>
-  </Modal>
+  </el-dialog>
 </template>
 
 <script>
@@ -233,7 +230,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 提交
@@ -244,63 +241,63 @@ export default {
       };
       if (this.formItem.type === '1' && this.formItem.express_record_type === '2') {
         if (this.formItem.delivery_name === '') {
-          return this.$Message.error('快递公司不能为空');
+          return this.$message.error('快递公司不能为空');
         } else if (this.formItem.express_temp_id === '') {
-          return this.$Message.error('电子面单不能为空');
+          return this.$message.error('电子面单不能为空');
         } else if (this.formItem.to_name === '') {
-          return this.$Message.error('寄件人姓名不能为空');
+          return this.$message.error('寄件人姓名不能为空');
         } else if (this.formItem.to_tel === '') {
-          return this.$Message.error('寄件人电话不能为空');
+          return this.$message.error('寄件人电话不能为空');
         } else if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(this.formItem.to_tel)) {
-          return this.$Message.error('请输入正确的手机号码');
+          return this.$message.error('请输入正确的手机号码');
         } else if (this.formItem.to_addr === '') {
-          return this.$Message.error('寄件人地址不能为空');
+          return this.$message.error('寄件人地址不能为空');
         }
       }
       if (this.formItem.type === '1' && this.formItem.express_record_type === '1') {
         if (this.formItem.delivery_name === '') {
-          return this.$Message.error('快递公司不能为空');
+          return this.$message.error('快递公司不能为空');
         } else if (this.formItem.delivery_id === '') {
-          return this.$Message.error('快递单号不能为空');
+          return this.$message.error('快递单号不能为空');
         }
       }
       if (this.formItem.type === '2') {
         if (this.formItem.sh_delivery === '') {
-          return this.$Message.error('送货人不能为空');
+          return this.$message.error('送货人不能为空');
         }
       }
       integralOrderPutDelivery(data)
         .then(async (res) => {
           this.$emit('submitFail');
           this.modals = false;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.reset();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
       // if (this.formItem.type == 3) {
       //     putDelivery(data).then(async res => {
       //         this.modals = false;
-      //         this.$Message.success(res.msg);
+      //         this.$message.success(res.msg);
       //         this.$refs[name].resetFields();
       //         this.$emit('submitFail')
       //     }).catch(res => {
-      //         this.$Message.error(res.msg);
+      //         this.$message.error(res.msg);
       //     })
       // } else {
       //     this.$refs[name].validate((valid) => {
       //         if (valid) {
       //             putDelivery(data).then(async res => {
       //                 this.modals = false;
-      //                 this.$Message.success(res.msg);
+      //                 this.$message.success(res.msg);
       //                 this.$refs[name].resetFields();
       //                 this.$emit('submitFail')
       //             }).catch(res => {
-      //                 this.$Message.error(res.msg);
+      //                 this.$message.error(res.msg);
       //             })
       //         } else {
-      //             this.$Message.error('请填写信息');
+      //             this.$message.error('请填写信息');
       //         }
       //     })
       // }
@@ -329,11 +326,11 @@ export default {
           .then((res) => {
             this.expressTemp = res.data;
             if (!res.data.length) {
-              this.$Message.error('请配置你所选快递公司的电子面单');
+              this.$message.error('请配置你所选快递公司的电子面单');
             }
           })
           .catch((err) => {
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       }
     },
@@ -343,7 +340,7 @@ export default {
           this.deliveryList = res.data.list;
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     getSheetInfo() {
@@ -362,7 +359,7 @@ export default {
           this.formItem.to_addr = data.to_add;
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     shDeliveryChange(value) {

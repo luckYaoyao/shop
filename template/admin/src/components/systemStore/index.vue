@@ -1,16 +1,8 @@
 <template>
   <div>
-    <Modal
-      v-model="isTemplate"
-      scrollable
-      footer-hide
-      closable
-      :title="formItem.id ? '编辑提货点' : '添加提货点'"
-      :z-index="1"
-      @on-cancel="cancel"
-    >
+    <el-dialog :visible.sync="isTemplate" :title="formItem.id ? '编辑提货点' : '添加提货点'" @closed="cancel">
       <div class="article-manager">
-        <el-card :bordered="false" shadow="never" class="ivu-mt">
+        <el-card :bordered="false" shadow="never" class="ivu-mt" v-loading="spinShow">
           <el-form
             ref="formItem"
             :model="formItem"
@@ -19,7 +11,7 @@
             :rules="ruleValidate"
             @submit.native.prevent
           >
-            <el-row  :gutter="24">
+            <el-row :gutter="24">
               <el-col :span="24">
                 <el-col v-bind="grid">
                   <el-form-item label="提货点名称：" prop="name" label-for="name">
@@ -44,12 +36,12 @@
               <el-col :span="24">
                 <el-col v-bind="grid">
                   <el-form-item label="提货点地址：" label-for="address" prop="address">
-                    <Cascader
-                      :data="addresData"
+                    <el-cascader
+                      :options="addresData"
                       :value="formItem.address"
                       v-model="formItem.address"
                       @change="handleChange"
-                    ></Cascader>
+                    ></el-cascader>
                   </el-form-item>
                 </el-col>
               </el-col>
@@ -70,15 +62,17 @@
               <el-col :span="24">
                 <el-col v-bind="grid">
                   <el-form-item label="提货点营业：" label-for="day_time" prop="day_time">
-                    <TimePicker
-                      type="timerange"
+                    <el-time-picker
+                      is-range
                       @change="onchangeTime"
                       v-model="formItem.day_time"
                       format="HH:mm:ss"
-                      :value="formItem.day_time"
-                      placement="bottom-end"
-                      placeholder="请选择营业时间"
-                    ></TimePicker>
+                      value-format="HH:mm:ss"
+                      range-separator="至"
+                      start-placeholder="开始时间"
+                      end-placeholder="结束时间"
+                      placeholder="选择时间范围"
+                    ></el-time-picker>
                   </el-form-item>
                 </el-col>
               </el-col>
@@ -113,40 +107,31 @@
               <el-col :span="24">
                 <el-col v-bind="grid">
                   <el-form-item label="经纬度：" label-for="status2" prop="latlng">
-                    <Tooltip>
-                      <el-input
-                        search
-                        enter-button="查找位置"
-                        v-model="formItem.latlng"
-                        style="width: 100%"
-                        placeholder="请查找位置"
-                        @on-search="onSearch"
-                      />
+                    <el-tooltip>
+                      <el-input v-model="formItem.latlng" style="width: 100%" placeholder="请查找位置">
+                        <el-button type="primary" slot="append" @click="onSearch">查找位置</el-button>
+                      </el-input>
                       <div slot="content">请点击查找位置选择位置</div>
-                    </Tooltip>
+                    </el-tooltip>
                   </el-form-item>
                 </el-col>
               </el-col>
             </el-row>
-            <el-row >
+            <!-- <el-row>
               <div class="btn">
                 <el-button type="primary" long @click="handleSubmit('formItem')">{{
                   formItem.id ? '修改' : '提交'
                 }}</el-button>
               </div>
-            </el-row>
-            <Spin size="large" fix v-if="spinShow"></Spin>
+            </el-row> -->
           </el-form>
         </el-card>
 
-        <Modal
-          v-model="modalPic"
+        <el-dialog
+          :visible.sync="modalPic"
           width="950px"
-          scrollable
-          footer-hide
-          closable
           :title="modalTitle"
-          :mask-closable="false"
+          :close-on-click-modal="false"
           :z-index="888"
         >
           <uploadPictures
@@ -156,22 +141,22 @@
             :gridPic="gridPic"
             v-if="modalPic"
           ></uploadPictures>
-        </Modal>
+        </el-dialog>
 
-        <Modal
-          v-model="modalMap"
-          scrollable
-          footer-hide
-          closable
+        <el-dialog
+          :visible.sync="modalMap"
           title="请选择地址"
-          :mask-closable="false"
+          :close-on-click-modal="false"
           :z-index="1"
           class="mapBox"
         >
-          <iframe id="mapPage" width="100%" height="100%" frameborder="0" v-bind:src="keyUrl"></iframe>
-        </Modal>
+          <iframe id="mapPage" width="100%" height="600px" frameborder="0" v-bind:src="keyUrl"></iframe>
+        </el-dialog>
       </div>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" long @click="handleSubmit('formItem')">{{ formItem.id ? '修改' : '提交' }}</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -222,7 +207,7 @@ export default {
         address2: [],
         detailed_address: '',
         valid_time: [],
-        day_time: [],
+        day_time: ['', ''],
         latlng: '',
         id: 0,
       },
@@ -361,6 +346,7 @@ export default {
           let info = res.data.info || null;
           that.formItem = info || that.formItem;
           that.formItem.address = info.address2;
+          that.formItem.day_time = info.day_time.split('-');
           that.spinShow = false;
         })
         .catch(function (res) {
@@ -400,6 +386,7 @@ export default {
       this.formItem.day_time = e;
     },
     onSearch() {
+      console.log('111');
       if (!this.keyUrl) {
         keyApi()
           .then(async (res) => {
@@ -408,7 +395,7 @@ export default {
             this.modalMap = true;
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else {
         this.modalMap = true;
@@ -420,14 +407,14 @@ export default {
         if (valid) {
           storeAddApi(this.formItem)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.isTemplate = false;
               this.$parent.getList();
               this.$refs[name].resetFields();
               this.clearFrom();
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;

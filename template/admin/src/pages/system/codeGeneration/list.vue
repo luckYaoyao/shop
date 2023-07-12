@@ -1,10 +1,9 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
+    <el-card :bordered="false" shadow="never" class="ivu-mt" v-loading="spinShow">
       <el-button type="primary" @click="groupAdd()" class="mr20">添加功能</el-button>
       <!-- <el-button type="success" @click="buildCode()" class="mr20">重新发布</el-button> -->
       <el-table
-        :columns="columns1"
         :data="tabList"
         ref="table"
         class="mt25"
@@ -60,25 +59,15 @@
         />
       </div>
     </el-card>
-    <Drawer
-      :class-name="className"
+    <el-drawer
+      :visible.sync="modals"
+      :custom-class="className"
       title="Create"
-      v-model="modals"
-      width="80%"
-      :mask-closable="false"
+      size="80%"
+      :wrapperClosable="false"
       :styles="styles"
-      :before-close="editModalChange"
+      @closed="editModalChange"
     >
-      <!-- <Modal
-      v-model="modals"
-      scrollable
-      footer-hide
-      closable
-      :mask-closable="false"
-      width="80%"
-      :before-close="editModalChange"
-    > -->
-
       <p slot="header" class="diy-header" ref="diyHeader">
         <span>{{ title }}</span>
       </p>
@@ -130,40 +119,29 @@
               <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane> -->
             </el-tabs>
           </div>
-          <Spin size="large" fix v-if="spinShow"></Spin>
         </div>
       </div>
-
-      <!-- </Modal> -->
-      <!-- <div class="demo-drawer-footer">
-        <el-button style="margin-right: 8px" @click="modals = false">关闭</el-button>
-        <el-button type="primary" @click="modals = false">保存</el-button>
-      </div> -->
-    </Drawer>
-    <Modal
-      v-model="buildModals"
-      scrollable
+    </el-drawer>
+    <el-dialog
+      :visible.sync="buildModals"
       title="终端"
-      footer-hide
-      closable
-      :mask-closable="false"
+      :show-close="false"
+      :close-on-click-modal="false"
       width="60%"
-      :before-close="editModalChange"
+      @close="editModalChange"
     >
-      <Alert type="warning">当前终端未运行于安装服务下，部分命令可能无法执行.</Alert>
+      <el-alert type="warning" title="当前终端未运行于安装服务下，部分命令可能无法执行."></el-alert>
       <div>
         <div v-for="(item, index) in codeBuildList" :key="index">{{ item }}</div>
       </div>
-    </Modal>
-    <Modal
-      v-model="pwdModal"
-      title="文件管理密码"
-      :closable="false"
-      @on-ok="crudSaveFile"
-      @on-cancel="pwdModal = false"
-    >
+    </el-dialog>
+    <el-dialog :visible.sync="pwdModal" title="文件管理密码" :show-close="false" :close-on-click-modal="false">
       <el-input v-model="pwd" type="password" placeholder="请输入文件管理密码"></el-input>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="pwdModal = false">取 消</el-button>
+        <el-button type="primary" @click="crudSaveFile">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -286,10 +264,10 @@ export default {
       crudSaveFile(this.editId, data)
         .then((res) => {
           this.pwd = '';
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     downLoad(row) {
@@ -331,7 +309,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索
@@ -356,12 +334,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tabList.splice(num, 1);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -473,15 +451,15 @@ export default {
      */
     catchFun(res) {
       if (res.status) {
-        if (res.status == 400) this.$Message.error(res.msg);
+        if (res.status == 400) this.$message.error(res.msg);
         if (res.status == 110008) {
-          // this.$Message.error(res.msg);
+          // this.$message.error(res.msg);
           this.isShowLogn = true;
           this.isShowList = false;
           this.loading = false;
         }
       } else {
-        // this.$Message.error('文件编码不被兼容，无法正确读取文件!');
+        // this.$message.error('文件编码不被兼容，无法正确读取文件!');
       }
       //关闭蒙版层
       if (this.spinShow) this.spinShow = false;

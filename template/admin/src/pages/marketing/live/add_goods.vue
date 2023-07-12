@@ -83,7 +83,7 @@
         </div>
       </div>
     </el-card>
-    <Modal v-model="modals" title="商品列表" class="paymentFooter" scrollable width="900" :footer-hide="true">
+    <el-dialog :visible.sync="modals" title="商品列表" class="paymentFooter" width="900px">
       <goods-list
         ref="goodslist"
         :selectIds="selectIds"
@@ -91,7 +91,7 @@
         v-if="modals"
         :ischeckbox="true"
       ></goods-list>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -147,7 +147,7 @@ export default {
           this.isShowBox = true;
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
     getProductId(data) {
@@ -182,7 +182,7 @@ export default {
         goods_info: this.tabList,
       })
         .then((res) => {
-          this.$Message.success('添加成功');
+          this.$message.success('添加成功');
           this.disabled = false;
           setTimeout(() => {
             this.$router.push({ path: this.$routeProStr + '/marketing/live/live_goods' });
@@ -190,7 +190,7 @@ export default {
         })
         .catch((error) => {
           this.disabled = false;
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
   },

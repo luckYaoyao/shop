@@ -192,7 +192,7 @@ export default {
                 instance.confirmButtonText = this.$t('message.user.logOutExit');
                 AccountLogout().then((res) => {
                   done();
-                  this.$Message.success('您已成功退出');
+                  this.$message.success('您已成功退出');
                   this.$store.commit('clearAll');
                   // localStorage.clear();
                   // sessionStorage.clear();

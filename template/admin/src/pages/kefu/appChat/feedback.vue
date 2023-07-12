@@ -78,7 +78,7 @@ export default {
               this.isShow = true;
             })
             .cache((err) => {
-              this.$Message.error(err.msg);
+              this.$message.error(err.msg);
             });
         } else {
         }
@@ -94,7 +94,7 @@ export default {
           this.notice = res.data.feedback;
         })
         .cache((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
   },

@@ -22,7 +22,7 @@
         <div class="goodsTitle acea-row">
           <div class="title">文章信息</div>
         </div>
-        <el-row :gutter="24" >
+        <el-row :gutter="24">
           <el-col v-bind="grid" class="mr50">
             <el-form-item label="标题：" prop="title" label-for="title">
               <el-input v-model="formValidate.title" placeholder="请输入" element-id="title" style="width: 90%" />
@@ -76,7 +76,7 @@
         <div class="goodsTitle acea-row">
           <div class="title">其他设置</div>
         </div>
-        <el-row :gutter="24" >
+        <el-row :gutter="24">
           <!--                    <el-col :span="24">-->
           <!--                        <el-form-item label="原文链接：">-->
           <!--                            <el-input v-model="formValidate.url" placeholder="请输入" element-id="url" style="width: 60%"/>-->
@@ -101,16 +101,7 @@
         </el-row>
         <el-button type="primary" class="submission" @click="onsubmit('formValidate')">提交</el-button>
       </el-form>
-      <Modal
-        v-model="modalPic"
-        width="950px"
-        scrollable
-        footer-hide
-        closable
-        title="上传商品图"
-        :mask-closable="false"
-        :z-index="888"
-      >
+      <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
         <uploadPictures
           :isChoice="isChoice"
           @getPic="getPic"
@@ -118,7 +109,7 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </Modal>
+      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -262,7 +253,7 @@ export default {
           this.treeData = res.data;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 提交数据
@@ -272,13 +263,13 @@ export default {
         if (valid) {
           cmsAddApi(this.formValidate)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               setTimeout(() => {
                 this.$router.push({ path: this.$routeProStr + '/cms/article/index' });
               }, 500);
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;
@@ -307,7 +298,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

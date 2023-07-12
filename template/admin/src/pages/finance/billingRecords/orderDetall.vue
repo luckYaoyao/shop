@@ -1,5 +1,5 @@
 <template>
-  <div class="order_detail" v-if="orderDetail.userInfo">
+  <div class="order_detail" v-if="orderDetail.userInfo" v-loading="spinShow">
     <div class="msg-box">
       <div class="box-title">收货信息</div>
       <div class="msg-wrapper">
@@ -51,7 +51,7 @@
       </div>
     </div>
     <div class="goods-box">
-      <el-table  :data="orderList">
+      <el-table :data="orderList">
         <el-table-column label="商品ID" width="80">
           <template slot-scope="scope">
             <span>{{ scope.row.productInfo.id }}</span>
@@ -82,7 +82,6 @@
         </el-table-column>
       </el-table>
     </div>
-    <Spin fix v-if="spinShow"></Spin>
   </div>
 </template>
 
@@ -117,7 +116,7 @@ export default {
         })
         .catch((err) => {
           this.spinShow = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
           this.$emit('detall', false);
         });
     },

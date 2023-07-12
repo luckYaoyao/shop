@@ -5,7 +5,7 @@
         <span v-if="datas[name].show">{{ datas[name].title }}</span>
         <span v-else>数量</span>
       </el-col>
-      <el-col span="19" class="slider-box">
+      <el-col :span="19" class="slider-box">
         <el-input
           v-model="datas[name].val"
           type="number"

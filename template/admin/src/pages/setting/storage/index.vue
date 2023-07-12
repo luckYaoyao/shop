@@ -280,7 +280,7 @@
                   </div>
                   <div class="flex">
                     <el-form-item class="contentIput" label="水印字体颜色：" prop="name">
-                      <ColorPicker v-model="formValidate.watermark_text_color" />
+                      <el-color-picker v-model="formValidate.watermark_text_color"></el-color-picker>
                     </el-form-item>
                     <el-form-item class="contentIput" label="水印位置：" prop="mail">
                       <div class="conents">
@@ -422,7 +422,7 @@
         </div>
       </el-card>
     </div>
-    <Modal v-model="configuModal" title="CNAME配置">
+    <el-dialog :visible.sync="configuModal" title="CNAME配置">
       <div>
         <div class="confignv"><span class="configtit">主机记录：</span>{{ configData.domain }}</div>
         <div class="confignv"><span class="configtit">记录类型：</span>CNAME</div>
@@ -431,18 +431,8 @@
           <span class="copy copy-data" @click="insertCopy(configData.cname)">复制</span>
         </div>
       </div>
-      <div slot="footer"></div>
-    </Modal>
-    <Modal
-      v-model="modalPic"
-      width="950px"
-      scrollable
-      footer-hide
-      closable
-      title="上传商品图"
-      :mask-closable="false"
-      :z-index="888"
-    >
+    </el-dialog>
+    <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
       <uploadPictures
         :isChoice="isChoice"
         @getPic="getPic"
@@ -450,7 +440,7 @@
         :gridPic="gridPic"
         v-if="modalPic"
       ></uploadPictures>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -568,19 +558,19 @@ export default {
     insertCopy(text) {
       this.$copyText(text)
         .then((message) => {
-          this.$Message.success('复制成功');
+          this.$message.success('复制成功');
         })
         .catch((err) => {
-          this.$Message.error('复制失败');
+          this.$message.error('复制失败');
         });
     },
     changeSave(type) {
       saveType(type)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     bindbox(item) {
@@ -599,7 +589,7 @@ export default {
           if (valid) {
             this.postMessage(this.formValidate);
           } else {
-            this.$Message.error('Fail!');
+            this.$message.error('Fail!');
           }
         });
       } else {
@@ -610,10 +600,10 @@ export default {
     postMessage(data) {
       positionPostApi(data)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 选择图片
@@ -633,11 +623,11 @@ export default {
     synchro() {
       storageSynchApi(this.currentTab)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getlist();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 添加存储空间
@@ -667,15 +657,15 @@ export default {
             // resolve();
             storageStatusApi(row.id)
               .then((res) => {
-                this.$Message.success(res.msg);
+                this.$message.success(res.msg);
                 this.getlist();
               })
               .catch((err) => {
-                this.$Message.error(err.msg);
+                this.$message.error(err.msg);
               });
           },
           onCancel: () => {
-            this.$Message.info('已取消');
+            this.$message.info('已取消');
             this.getlist();
           },
         });
@@ -721,11 +711,11 @@ export default {
       }
       storageSwitchApi({ type: this.localStorage })
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getlist();
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 删除
@@ -739,11 +729,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getlist();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

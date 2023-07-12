@@ -59,7 +59,7 @@
         <el-table-column label="身份" min-width="130">
           <template slot-scope="scope">
             <div v-if="scope.row.roles.length !== 0">
-              <Tag color="blue" v-for="(item, index) in scope.row.roles.split(',')" :key="index" v-text="item"></Tag>
+              <el-tag v-for="(item, index) in scope.row.roles.split(',')" :key="index">{{ item }}</el-tag>
             </div>
           </template>
         </el-table-column>
@@ -168,10 +168,10 @@ export default {
       };
       setShowApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 请求列表
@@ -190,7 +190,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 添加表单
@@ -201,7 +201,7 @@ export default {
           this.$refs.adminfrom.modals = true;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -215,7 +215,7 @@ export default {
           this.$refs.adminfrom.modals = true;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 删除
@@ -229,11 +229,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.list.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索

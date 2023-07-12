@@ -1,27 +1,26 @@
 <template>
-  <div>
+  <div v-loading="spinShow">
     <el-card :bordered="false" shadow="never" class="ivu-mb-16">
       <dateRadio @selectDate="onSelectDate"></dateRadio>
-      <DatePicker
+      <el-date-picker
         :editable="false"
         :clearable="false"
         @change="onchangeTime"
-        :value="timeVal"
+        v-model="timeVal"
         format="yyyy/MM/dd"
         type="daterange"
-        placement="bottom-start"
-        placeholder="请选择时间"
-        style="width: 200px"
-        :options="options"
+        value-format="yyyy/MM/dd"
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
         class="mr20"
-      ></DatePicker>
+      ></el-date-picker>
     </el-card>
     <cards-data :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
     <el-card class="ivu-mb-16" :bordered="false" shadow="never">
       <h3>余额使用趋势</h3>
       <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
     </el-card>
-    <Spin size="large" fix v-if="spinShow"></Spin>
     <div class="code-row-bg">
       <el-card :bordered="false" shadow="never" class="ivu-mt">
         <div class="acea-row row-between-wrapper">
@@ -37,7 +36,6 @@
             :loading="loading"
             empty-text="暂无数据"
             highlight-current-row
-            
           >
             <el-table-column type="index" label="序号" width="50"> </el-table-column>
             <el-table-column label="来源" min-width="80">
@@ -78,7 +76,6 @@
             v-loading="loading2"
             empty-text="暂无数据"
             highlight-current-row
-            
           >
             <el-table-column type="index" label="序号" width="50"> </el-table-column>
             <el-table-column label="来源" min-width="80">
@@ -218,7 +215,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.time = this.timeVal.join('-');
+      this.formValidate.time = this.timeVal ? this.timeVal.join('-') : '';
       this.name = this.formValidate.time;
       this.getBalanceBasic();
       this.getBalanceTrend();
@@ -318,7 +315,7 @@ export default {
           this.spinShow = false;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
           this.spinShow = false;
         });
     },

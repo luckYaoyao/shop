@@ -75,9 +75,9 @@
               </div>
             </template>
             <template v-else-if="item.slot === 'status'">
-              <Tag color="blue" v-show="scope.row.status === 1">进行中</Tag>
-              <Tag color="volcano" v-show="scope.row.status === 2">已失败</Tag>
-              <Tag color="cyan" v-show="scope.row.status === 3">已成功</Tag>
+              <el-tag color="blue" v-show="scope.row.status === 1">进行中</el-tag>
+              <el-tag color="volcano" v-show="scope.row.status === 2">已失败</el-tag>
+              <el-tag color="cyan" v-show="scope.row.status === 3">已成功</el-tag>
             </template>
             <template v-else-if="item.slot === 'action'">
               <a @click="Info(scope.row)">查看详情</a>
@@ -96,16 +96,7 @@
       </div>
     </el-card>
     <!-- 详情模态框-->
-    <Modal
-      v-model="modals"
-      class="tableBox"
-      scrollable
-      footer-hide
-      closable
-      title="查看详情"
-      :mask-closable="false"
-      width="750"
-    >
+    <el-dialog :visible.sync="modals" class="tableBox" title="查看详情" :close-on-click-modal="false" width="750px">
       <el-table
         ref="selection"
         :data="tabList3"
@@ -138,7 +129,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -353,7 +344,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

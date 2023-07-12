@@ -22,16 +22,18 @@
                   item.text
                 }}</el-radio-button>
               </el-radio-group>
-              <DatePicker
+              <el-date-picker
                 :editable="false"
                 @change="onchangeTime"
-                :value="timeVal"
+                v-model="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
-                placement="bottom-end"
-                placeholder="请选择时间"
-                style="width: 200px"
-              ></DatePicker>
+                value-format="yyyy/MM/dd"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col v-bind="grid">
@@ -91,9 +93,9 @@
         </el-table-column>
         <el-table-column label="状态" min-width="120">
           <template slot-scope="scope">
-            <Tag color="blue" v-show="scope.row.status === 1">进行中</Tag>
-            <Tag color="cyan" v-show="scope.row.status === 2">已完成</Tag>
-            <Tag color="volcano" v-show="scope.row.status === 3">未完成</Tag>
+            <el-tag color="blue" v-show="scope.row.status === 1">进行中</el-tag>
+            <el-tag color="cyan" v-show="scope.row.status === 2">已完成</el-tag>
+            <el-tag color="volcano" v-show="scope.row.status === 3">未完成</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" fixed="right" width="100">
@@ -114,16 +116,7 @@
     </el-card>
 
     <!-- 详情模态框-->
-    <Modal
-      v-model="modals"
-      class="tableBox"
-      scrollable
-      footer-hide
-      closable
-      title="查看详情"
-      :mask-closable="false"
-      width="750"
-    >
+    <el-dialog :visible.sync="modals" class="tableBox" title="查看详情" :close-on-click-modal="false" width="750px">
       <el-table
         ref="selection"
         :columns="columns2"
@@ -163,12 +156,12 @@
         </el-table-column>
         <el-table-column label="订单状态" min-width="100">
           <template slot-scope="scope">
-            <Tag color="volcano" v-show="scope.row.is_refund != 0">已退款</Tag>
-            <Tag color="cyan" v-show="scope.row.is_refund === 0">未退款</Tag>
+            <el-tag color="volcano" v-show="scope.row.is_refund != 0">已退款</el-tag>
+            <el-tag color="cyan" v-show="scope.row.is_refund === 0">未退款</el-tag>
           </template>
         </el-table-column>
       </el-table>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -278,7 +271,7 @@ export default {
           this.cardLists = data.res;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 查看详情
@@ -293,16 +286,16 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 具体日期
     onchangeTime(e) {
-      this.timeVal = e;
+      this.timeVal = e || [];
       if (this.timeVal[0] === '') {
         this.formValidate.data = '';
       } else {
-        this.formValidate.data = this.timeVal.join('-');
+        this.formValidate.data = this.timeVal ? this.timeVal.join('-') : '';
       }
       this.formValidate.page = 1;
       this.getList();
@@ -327,7 +320,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     pageChange(index) {

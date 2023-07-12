@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never">
+    <el-card :bordered="false" shadow="never" v-loading="spinShow">
       <el-tabs class="mb20" v-model="currentTab" @tab-click="onClickTab" v-if="tablists">
         <el-tab-pane v-for="(item, index) in tabs" :name="item.type" :key="index">
           <span slot="label">
@@ -14,7 +14,6 @@
         v-if="currentTab === 'article' || 'project' || 'app'"
         ref="productlist"
       ></productlist-details>
-      <Spin size="large" fix v-if="spinShow"></Spin>
     </el-card>
   </div>
 </template>
@@ -122,7 +121,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     onClickTab() {
@@ -153,5 +152,4 @@ export default {
 /deep/ .el-badge__content.is-fixed {
   top: 7px;
 }
-
 </style>

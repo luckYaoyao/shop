@@ -4,7 +4,7 @@
       <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
     </div>
     <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form label-width="85px" @submit.native.prevent>
+      <el-form label-width="85px" @submit.native.prevent v-loading="spinShow">
         <el-form-item label="协议内容：">
           <WangEditor :content="agreement.content" @editorContent="getEditorContent"></WangEditor>
         </el-form-item>
@@ -12,7 +12,6 @@
           <el-button type="primary" @click="memberAgreementSave">保存</el-button>
         </el-form-item>
       </el-form>
-      <Spin fix v-if="spinShow"></Spin>
     </el-card>
   </div>
 </template>
@@ -56,22 +55,19 @@ export default {
           this.agreement.id = id || 0;
         })
         .catch((err) => {
-          this.$Message.error(err);
+          this.$message.error(err);
           this.spinShow = false;
         });
     },
     // 保存
     memberAgreementSave() {
-      this.$Spin.show();
       agentAgreementSave(this.agreement)
         .then((res) => {
-          this.$Spin.hide();
-          this.$Message.success('保存成功');
+          this.$message.success('保存成功');
           this.memberAgreement();
         })
         .catch((err) => {
-          this.$Spin.hide();
-          this.$Message.error(err);
+          this.$message.error(err);
         });
     },
   },

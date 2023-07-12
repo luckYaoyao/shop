@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <div class="mb20">
-        <el-tabs v-model="artFrom.type" @tag-click="onClickTab">
+      <div class="mb20" v-if="headeNum.show.name">
+        <el-tabs v-model="artFrom.type" @tab-click="onClickTab">
           <el-tab-pane :label="headeNum.show.name + '(' + headeNum.show.num + ')'" name="0" />
           <el-tab-pane :label="headeNum.hide.name + '(' + headeNum.hide.num + ')'" name="1" />
           <el-tab-pane :label="headeNum.recycle.name + '(' + headeNum.recycle.num + ')'" name="2" />
@@ -174,7 +174,7 @@ export default {
           that.headeNum = res.data.count;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     getList() {
@@ -187,7 +187,7 @@ export default {
           that.total = res.data.count;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 搜索；
@@ -212,12 +212,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.storeLists.splice(num, 1);
           this.storeHeade();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 添加提货点；

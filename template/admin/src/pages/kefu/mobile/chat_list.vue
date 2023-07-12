@@ -230,7 +230,7 @@ export default {
             if (data.recored.is_tourist == this.tabCur) this.list.unshift(data.recored);
           }
           if (data.recored.is_tourist != this.tabCur && data.recored.id) {
-            this.$Notice.info({
+            this.$notify.info({
               title: this.tabCur ? '用户发来消息啦！' : '游客发来消息啦！',
             });
           }

@@ -30,7 +30,6 @@
           </div>
           <div class="table">
             <el-table
-              :columns="columns1"
               :data="cmsList"
               ref="table"
               class="mt25"
@@ -147,7 +146,6 @@ export default {
       a: 0, //判断的隐私协议
       guide: 0,
       bgimg: 0,
-      columns1: [],
       bgCol: '',
       name: 'sign_day_num',
       grid: {
@@ -287,7 +285,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     addBox() {
@@ -305,7 +303,7 @@ export default {
         };
       } else {
         if (this.tabList.list.length == 5) {
-          this.$Message.warning('最多添加五张呦');
+          this.$message.warning('最多添加五张呦');
         } else {
           let obj = JSON.parse(JSON.stringify(this.lastObj));
           this.tabList.list.push(obj);
@@ -318,7 +316,7 @@ export default {
       } else if (this.guide == 2) {
         this.formItem.value = this.tabList.list;
         openAdvSave(this.formItem).then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         });
       } else {
         this.loadingExist = true;
@@ -329,11 +327,11 @@ export default {
         })
           .then((res) => {
             this.loadingExist = false;
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((err) => {
             this.loadingExist = false;
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       }
     },
@@ -348,7 +346,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -372,10 +370,10 @@ export default {
       this.$modalSure(delfromData)
         .then((res) => {
           this.info();
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改是否显示
@@ -383,12 +381,12 @@ export default {
       groupDataSetApi('setting/group_data/set_status/' + row.id + '/' + row.status)
         .then(async (res) => {
           this.url = this.BaseURL + '/pages/users/user_sgin/index';
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.info();
         })
         .catch((res) => {
           this.url = this.BaseURL + '/pages/users/user_sgin/index';
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     getGroupAll() {
@@ -399,7 +397,7 @@ export default {
           this.pageId = res.data[0].id;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 提交数据
@@ -408,10 +406,10 @@ export default {
         if (valid) {
           setAgreement(this.formValidate)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;

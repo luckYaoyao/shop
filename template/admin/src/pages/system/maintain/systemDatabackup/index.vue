@@ -16,7 +16,6 @@
               :data="tabList2"
               v-loading="loading"
               empty-text="暂无数据"
-              
               @select="onSelectTab"
               @select-all="onSelectTab"
             >
@@ -32,12 +31,7 @@
                     <div v-if="scope.row.is_edit" class="table-mark" @click="isEditMark(scope.row)">
                       {{ scope.row.comment }}
                     </div>
-                    <el-input
-                      ref="mark"
-                      v-else
-                      v-model="scope.row.comment"
-                      @blur="isEditBlur(scope.row, 0)"
-                    ></el-input>
+                    <el-input ref="mark" v-else v-model="scope.row.comment" @blur="isEditBlur(scope.row, 0)"></el-input>
                   </div>
                 </template>
               </el-table-column>
@@ -69,7 +63,12 @@
             </el-table>
           </el-card>
           <!-- 详情模态框-->
-          <Drawer :closable="false" width="740" v-model="modals" :title="'[ ' + rows.name + ' ]' + rows.comment">
+          <el-drawer
+            :visible.sync="modals"
+            :wrapperClosable="false"
+            :size="740"
+            :title="'[ ' + rows.name + ' ]' + rows.comment"
+          >
             <el-table
               ref="selection"
               :data="tabList3"
@@ -77,7 +76,6 @@
               empty-text="暂无数据"
               max-height="600"
               size="small"
-              
             >
               <el-table-column label="字段名" min-width="100">
                 <template slot-scope="scope">
@@ -120,7 +118,7 @@
                 </template>
               </el-table-column>
             </el-table>
-          </Drawer>
+          </el-drawer>
         </el-tab-pane>
         <el-tab-pane label="备份列表">
           <el-card :bordered="false" shadow="never" class="">
@@ -131,7 +129,6 @@
               empty-text="暂无数据"
               highlight-current-row
               size="small"
-              
             >
               <el-table-column label="备份名称" min-width="200">
                 <template slot-scope="scope">
@@ -172,9 +169,13 @@
         </el-tab-pane>
       </el-tabs>
     </el-card>
-    <Modal v-model="markModal" title="修改备注" @on-ok="ok" @on-cancel="cancel" @on-visible-change="cancel">
+    <el-dialog :visible.sync="markModal" title="修改备注" @closed="cancel">
       <el-input v-model="mark"></el-input>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="ok">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -242,7 +243,7 @@ export default {
     ok() {
       this.changeMarkData.mark = this.mark;
       updateMark(this.changeMarkData).then((res) => {
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
         if (this.changeMarkData.is_field) {
           this.Info({ name: this.changeMarkData.table, comment: this.rows.comment });
         } else {
@@ -260,12 +261,12 @@ export default {
         time: row.time,
       })
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getfileList();
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 删除备份记录表
@@ -281,11 +282,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tabList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 上传头部token
@@ -303,7 +304,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$Message.error(res);
+          this.$message.error(res);
         });
     },
     // 导出备份记录表
@@ -329,16 +330,16 @@ export default {
     // 备份表
     getBackup() {
       if (this.selectionList.length === 0) {
-        return this.$Message.warning('请选择表');
+        return this.$message.warning('请选择表');
       }
       backupBackupApi(this.dataList)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getfileList();
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 备份记录表列表
@@ -352,33 +353,33 @@ export default {
         })
         .catch((res) => {
           this.loading3 = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 优化表
     getOptimize() {
       if (this.selectionList.length === 0) {
-        return this.$Message.warning('请选择表');
+        return this.$message.warning('请选择表');
       }
       backupOptimizeApi(this.dataList)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修复表
     getRepair() {
       if (this.selectionList.length === 0) {
-        return this.$Message.warning('请选择表');
+        return this.$message.warning('请选择表');
       }
       backupRepairApi(this.dataList)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 数据库列表
@@ -392,7 +393,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 详情
@@ -411,7 +412,7 @@ export default {
         })
         .catch((res) => {
           this.loading2 = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     isEditMark(row) {
@@ -430,10 +431,10 @@ export default {
 
       updateMark(this.changeMarkData)
         .then((res) => {
-          // this.$Message.success(res.msg);
+          // this.$message.success(res.msg);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
   },

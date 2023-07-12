@@ -1,5 +1,5 @@
 <template>
-  <div class="Box">
+  <div class="Box" v-loading="spinShow">
     <el-card>
       <div>
         生成的商品默认是没有上架的，请手动上架商品！
@@ -12,9 +12,15 @@
       </div>
       <div>商品采集设置：设置 > 系统设置 > 第三方接口设置 > 采集商品配置</div>
     </el-card>
-    <el-form class="formValidate mt20" ref="formValidate" label-width="120px" label-position="right" @submit.native.prevent>
-      <el-row :gutter="24" >
-        <el-col span="18">
+    <el-form
+      class="formValidate mt20"
+      ref="formValidate"
+      label-width="120px"
+      label-position="right"
+      @submit.native.prevent
+    >
+      <el-row :gutter="24">
+        <el-col :span="18">
           <el-form-item label="链接地址：">
             <el-input
               search
@@ -28,7 +34,6 @@
         </el-col>
       </el-row>
     </el-form>
-    <Spin size="large" fix v-if="spinShow"></Spin>
   </div>
 </template>
 
@@ -85,7 +90,7 @@ export default {
       if (this.soure_link) {
         var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
         if (!reg.test(this.soure_link)) {
-          return this.$Message.warning('请输入以http开头的地址！');
+          return this.$message.warning('请输入以http开头的地址！');
         }
         this.spinShow = true;
         this.artFrom.url = this.soure_link;
@@ -97,10 +102,10 @@ export default {
           })
           .catch((res) => {
             this.spinShow = false;
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else {
-        this.$Message.warning('请输入链接地址！');
+        this.$message.warning('请输入链接地址！');
       }
     },
   },

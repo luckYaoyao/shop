@@ -24,7 +24,7 @@
           <template slot-scope="scope">
             <div class="acea-scope.row scope.row-middle">
               <span>{{ scope.row.language_name }}</span>
-              <Tag class="ml10" color="default" v-if="scope.row.is_default">默认</Tag>
+              <el-tag class="ml10" color="default" v-if="scope.row.is_default">默认</el-tag>
             </div>
           </template>
         </el-table-column>
@@ -123,7 +123,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -141,23 +141,23 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.list.splice(num, 1);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 修改状态
     changeSwitch(row) {
       langTypeStatus(row.id, row.status)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
           row.status = !row.status ? 1 : 0;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

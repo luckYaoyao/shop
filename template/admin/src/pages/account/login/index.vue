@@ -175,7 +175,7 @@ export default {
           this.login_captcha = data.login_captcha;
         })
         .catch((err) => {
-          this.$Message.error(err);
+          this.$message.error(err);
           this.login_logo = require('@/assets/images/logo.png');
           this.swiperList = [{ slide: this.defaultSwiperList }];
         });
@@ -187,7 +187,7 @@ export default {
     closeModel(params) {
       this.isShow = false;
       // noinspection JSVoidFunctionReturnValueUsed
-      let msg = this.$Message.loading({
+      let msg = this.$message.loading({
         content: '登录中...',
         duration: 0,
       });
@@ -231,17 +231,21 @@ export default {
           this.login_captcha = 0;
           try {
             if (data.queue === false) {
-              this.$Notice.warning({
+              this.$notify.warning({
                 title: '温馨提示',
-                desc: '您的【消息队列】未开启，没有开启会导致异步任务无法执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7217" target="_blank">点击查看开启方法</a>',
-                duration: 30,
+                dangerouslyUseHTMLString: true,
+                message:
+                  '您的【消息队列】未开启，没有开启会导致异步任务无法执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7217" target="_blank">点击查看开启方法</a>',
+                duration: 30000,
               });
             }
             if (data.timer === false) {
-              this.$Notice.warning({
+              this.$notify.warning({
                 title: '温馨提示',
-                desc: '您的【定时任务】未开启，没有开启会导致自动收货、未支付自动取消订单、订单自动好评、拼团到期退款等任务无法正常执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7211" target="_blank">点击查看开启方法</a>',
-                duration: 30,
+                dangerouslyUseHTMLString: true,
+                message:
+                  '您的【定时任务】未开启，没有开启会导致自动收货、未支付自动取消订单、订单自动好评、拼团到期退款等任务无法正常执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7211" target="_blank">点击查看开启方法</a>',
+                duration: 30000,
               });
             }
 
@@ -255,7 +259,7 @@ export default {
         .catch((res) => {
           msg();
           let data = res === undefined ? {} : res;
-          this.$Message.error(data.msg || '登录失败');
+          this.$message.error(data.msg || '登录失败');
           this.login_captcha = res.data.login_captcha;
         });
       setTimeout((e) => {
@@ -287,20 +291,24 @@ export default {
         socket.onerror = (err) => {
           if (!isNotice) {
             isNotice = true;
-            this.$Notice.warning({
+            this.$notify.warning({
               title: '温馨提示',
-              desc: '您的【长连接】未开启，没有开启会导致系统默认客服无法使用,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7219" target="_blank">点击查看开启方法</a>',
-              duration: 30,
+              message:
+                '您的【长连接】未开启，没有开启会导致系统默认客服无法使用,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7219" target="_blank">点击查看开启方法</a>',
+              dangerouslyUseHTMLString: true,
+              duration: 30000,
             });
           }
         };
         socket.onclose = (err) => {
           if (!isNotice) {
             isNotice = true;
-            this.$Notice.warning({
+            this.$notify.warning({
               title: '温馨提示',
-              desc: '您的【长连接】未开启，没有开启会导致系统默认客服无法使用,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7219" target="_blank">点击查看开启方法</a>',
-              duration: 30,
+              message:
+                '您的【长连接】未开启，没有开启会导致系统默认客服无法使用,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7219" target="_blank">点击查看开启方法</a>',
+              dangerouslyUseHTMLString: true,
+              duration: 30000,
             });
           }
         };
@@ -314,7 +322,7 @@ export default {
 
     closefail() {
       // if (this.jigsaw) this.jigsaw.reset();
-      this.$Message.error('校验错误');
+      this.$message.error('校验错误');
     },
     handleResize(event) {
       this.fullWidth = document.documentElement.clientWidth;

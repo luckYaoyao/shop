@@ -35,7 +35,12 @@
               <div v-else class="info-item">
                 <span>{{ infos.title }}</span>
                 <div class="input-box">
-                  <el-input v-model="infos.value" :placeholder="infos.tips" :maxlength="infos.maxlength" width="250px" />
+                  <el-input
+                    v-model="infos.value"
+                    :placeholder="infos.tips"
+                    :maxlength="infos.maxlength"
+                    width="250px"
+                  />
                 </div>
               </div>
             </div>
@@ -43,24 +48,21 @@
         </div>
       </draggable>
       <div>
-        <Modal
-          v-model="modalPic"
+        <el-dialog
+          :visible.sync="modalPic"
           width="950px"
-          scrollable
-          footer-hide
-          closable
           title="上传商品图"
-          :mask-closable="false"
+          :close-on-click-modal="false"
           :z-index="888"
         >
-          <uploadPictures
+          <uploadPictures 
             :isChoice="isChoice"
             @getPic="getPic"
             :gridBtn="gridBtn"
             :gridPic="gridPic"
             v-if="modalPic"
           ></uploadPictures>
-        </Modal>
+        </el-dialog>
       </div>
     </div>
     <template v-if="datas[name]">

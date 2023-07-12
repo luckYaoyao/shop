@@ -35,7 +35,6 @@
       </el-row>
       <el-table
         ref="table"
-        :columns="columns"
         :data="tabList"
         class="ivu-mt mt25"
         :loading="loading"
@@ -101,34 +100,6 @@ export default {
       },
       total: 0,
       loading: false,
-      columns: [
-        {
-          title: '编号',
-          key: 'id',
-          width: 120,
-        },
-        {
-          title: '浏览器语言识别码',
-          key: 'code',
-          minWidth: 150,
-        },
-        {
-          title: '语言说明',
-          key: 'name',
-          minWidth: 180,
-        },
-        {
-          title: '关联语言',
-          key: 'link_lang',
-          minWidth: 180,
-        },
-        {
-          title: '操作',
-          slot: 'action',
-          fixed: 'right',
-          width: 100,
-        },
-      ],
       tabList: [],
       code: null,
     };
@@ -164,12 +135,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tabList.splice(num, 1);
           // this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     selChange() {
@@ -187,7 +158,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

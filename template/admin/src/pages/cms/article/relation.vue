@@ -1,13 +1,10 @@
 <template>
-  <Modal
-    v-model="modals"
-    scrollable
-    footer-hide
-    closable
+  <el-dialog
+    :visible.sync="modals"
     title="选择商品"
-    :mask-closable="false"
+    :close-on-click-modal="false"
     width="950"
-    @on-cancel="handleReset"
+    @closed="handleReset"
   >
     <el-form
       ref="levelFrom"
@@ -33,7 +30,6 @@
     </el-form>
     <el-divider direction="vertical" dashed />
     <el-table
-      :columns="columns1"
       :data="levelLists"
       ref="table"
       :loading="loading"
@@ -80,7 +76,7 @@
     </div>
     <!-- 新建 编辑表单-->
     <edit-from ref="edits" :FromData="FromData" @submitFail="submitFail" :titleType="titleType"></edit-from>
-  </Modal>
+  </el-dialog>
 </template>
 
 <script>
@@ -119,7 +115,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     pageChange(index) {

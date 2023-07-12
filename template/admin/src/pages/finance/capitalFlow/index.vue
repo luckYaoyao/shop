@@ -12,19 +12,21 @@
         <el-row :gutter="24">
           <el-col :span="24">
             <el-form-item label="订单时间：">
-              <DatePicker
+              <el-date-picker
                 :editable="false"
                 :clearable="false"
                 @change="onchangeTime"
-                :value="timeVal"
+                v-model="timeVal"
                 format="yyyy/MM/dd"
+                value-format="yyyy/MM/dd"
                 type="daterange"
                 placement="bottom-start"
-                placeholder="请选择时间"
-                style="width: 200px"
-                :options="options"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                
                 class="mr20"
-              ></DatePicker>
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -115,12 +117,12 @@
       </div>
     </el-card>
     <!-- 拒绝通过-->
-    <Modal v-model="modals" scrollable closable title="备注" :mask-closable="false">
+    <el-dialog :visible.sync="modals" title="备注" :close-on-click-modal="false">
       <el-input v-model="mark_msg.mark" type="textarea" :rows="4" placeholder="请输入备注" />
-      <div slot="footer">
+      <span slot="footer" class="dialog-footer">
         <el-button type="primary" size="large" long :loading="modal_loading" @click.prevent="oks">确定</el-button>
-      </div>
-    </Modal>
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -152,54 +154,6 @@ export default {
       modals: false,
       total: 0,
       loading: false,
-      columns: [
-        {
-          title: '交易单号',
-          key: 'flow_id',
-          width: 180,
-        },
-        {
-          title: '关联订单',
-          key: 'order_id',
-          minWidth: 180,
-        },
-        {
-          title: '交易时间',
-          key: 'add_time',
-          minWidth: 90,
-        },
-        {
-          title: '交易金额',
-          slot: 'price',
-          minWidth: 150,
-        },
-        {
-          title: '交易用户',
-          key: 'nickname',
-          minWidth: 150,
-        },
-        {
-          title: '交易类型',
-          key: 'trading_type',
-          minWidth: 100,
-        },
-        {
-          title: '支付方式',
-          slot: 'pay_type',
-          minWidth: 100,
-        },
-        {
-          title: '备注',
-          key: 'mark',
-          minWidth: 100,
-        },
-        {
-          title: '操作',
-          slot: 'set',
-          fixed: 'right',
-          width: 100,
-        },
-      ],
       tabList: [],
       withdrawal: [],
       payment: [
@@ -254,14 +208,14 @@ export default {
       this.modal_loading = true;
       setMarks(this.extractId, this.mark_msg)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.modal_loading = false;
           this.modals = false;
           this.getList();
         })
         .catch((err) => {
           this.modal_loading = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     // 备注
@@ -273,7 +227,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.time = this.timeVal.join('-');
+      this.formValidate.time = this.timeVal ? this.timeVal.join('-') : '';
       this.formValidate.page = 1;
       this.getList();
     },
@@ -296,7 +250,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑提交成功

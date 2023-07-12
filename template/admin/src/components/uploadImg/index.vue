@@ -243,7 +243,7 @@ export default {
             const file = this.ruleForm.imgList[i].raw;
             await this.uploadItem(file);
             if (i == this.ruleForm.imgList.length - 1) {
-              this.$Message.success('上传成功');
+              this.$message.success('上传成功');
               this.$emit('uploadSuccess');
               this.uploadModal = false;
               this.loading = false;
@@ -260,7 +260,7 @@ export default {
           this.loading = true;
           onlineUpload({ pid: this.ruleForm.region, images: urls })
             .then((res) => {
-              this.$Message.success('上传成功');
+              this.$message.success('上传成功');
               this.$emit('uploadSuccess');
               this.uploadModal = false;
               this.loading = false;
@@ -268,7 +268,7 @@ export default {
             })
             .catch((err) => {
               this.loading = false;
-              this.$Message.error(err.msg);
+              this.$message.error(err.msg);
             });
         }
       } else if (this.ruleForm.type == 2) {
@@ -276,7 +276,7 @@ export default {
           return e.att_id;
         });
         moveApi({ pid: this.ruleForm.region, images: attId }).then((res) => {
-          this.$Message.success('上传成功');
+          this.$message.success('上传成功');
           this.$emit('uploadSuccess');
           this.uploadModal = false;
           this.initData();
@@ -304,7 +304,7 @@ export default {
           })
           .catch((err) => {
             this.loading = false;
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       });
     },

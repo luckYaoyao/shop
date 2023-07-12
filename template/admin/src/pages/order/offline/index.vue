@@ -11,18 +11,19 @@
         <el-row :gutter="24">
           <el-col v-bind="grid" class="ivu-text-left">
             <el-form-item label="创建时间：">
-              <DatePicker
+              <el-date-picker
                 :editable="false"
                 @change="onchangeTime"
-                :value="timeVal"
+                v-model="timeVal"
                 format="yyyy/MM/dd"
                 type="datetimerange"
-                placement="bottom-start"
-                placeholder="请选择时间"
-                style="width: 300px"
+                value-format="yyyy/MM/dd"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
+                style="width: 380px"
                 class="mr20"
-                :options="options"
-              ></DatePicker>
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col v-bind="grid">
@@ -99,32 +100,22 @@
         />
       </div>
     </el-card>
-    <Modal v-model="modal" title="收款码" footer-hide>
-      <div>
-        <!--<div class="acea-row row-around mb10">-->
-        <!--<el-radio-group v-model="animal" @change="onchangeCode(animal)" style="width: 180px;">-->
-        <!--<el-radio :label="0">二维码</el-radio>-->
-        <!--<el-radio :label="1">收款码</el-radio>-->
-        <!--</el-radio-group>-->
-        <!--<div style="width: 180px;"></div>-->
-        <!--</div>-->
-        <div v-viewer class="acea-row row-around code">
-          <Spin fix v-if="spin"></Spin>
-          <div class="acea-row row-column-around row-between-wrapper">
-            <div class="QRpic">
-              <img v-lazy="qrcode && qrcode.wechat" />
-            </div>
-            <span class="mt10">{{ animal ? '公众号收款码' : '公众号二维码' }}</span>
+    <el-dialog :visible.sync="modal" title="收款码">
+      <div v-viewer class="acea-row row-around code" v-loading="spinShow">
+        <div class="acea-row row-column-around row-between-wrapper">
+          <div class="QRpic">
+            <img v-lazy="qrcode && qrcode.wechat" />
           </div>
-          <div class="acea-row row-column-around row-between-wrapper">
-            <div class="QRpic">
-              <img v-lazy="qrcode && qrcode.routine" />
-            </div>
-            <span class="mt10">{{ animal ? '小程序收款码' : '小程序二维码' }}</span>
+          <span class="mt10">{{ animal ? '公众号收款码' : '公众号二维码' }}</span>
+        </div>
+        <div class="acea-row row-column-around row-between-wrapper">
+          <div class="QRpic">
+            <img v-lazy="qrcode && qrcode.routine" />
           </div>
+          <span class="mt10">{{ animal ? '小程序收款码' : '小程序二维码' }}</span>
         </div>
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -246,8 +237,8 @@ export default {
     // 具体日期搜索()；
     onchangeTime(e) {
       this.pagination.page = 1;
-      this.timeVal = e;
-      this.pagination.add_time = this.timeVal[0] ? this.timeVal.join('-') : '';
+      this.timeVal = e || [];
+      this.pagination.add_time = this.timeVal[0] ? (this.timeVal ? this.timeVal.join('-') : '') : '';
       this.getOrderList();
     },
     // 订单列表
@@ -262,7 +253,7 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     nameSearch() {
@@ -286,7 +277,7 @@ export default {
         })
         .catch((err) => {
           this.spin = false;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
   },

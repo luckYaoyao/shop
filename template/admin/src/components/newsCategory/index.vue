@@ -189,10 +189,10 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     clickFn(event, { index, value }) {
@@ -212,7 +212,7 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.$nextTick(() => {
             this.imgsArr = [];
           });
@@ -220,7 +220,7 @@ export default {
           this.getData();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 删除成功
@@ -281,7 +281,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },
@@ -291,7 +291,7 @@ export default {
 
 <style scoped lang="stylus">
 .contentBox {
-  height: 100%;
+  // height: 100%;
   width: 100%;
   position: static;
 

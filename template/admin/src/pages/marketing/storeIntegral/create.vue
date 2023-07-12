@@ -14,7 +14,7 @@
       </div>
     </div>
     <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-row class="mt30 acea-row row-middle row-center">
+      <el-row class="mt30 acea-row row-middle row-center" v-loading="spinShow">
         <el-col :span="20">
           <Steps :current="current">
             <Step title="选择积分商品"></Step>
@@ -163,7 +163,13 @@
               </el-col>
               <el-col :span="24">
                 <el-form-item label="规格选择：">
-                  <el-table :data="specsData" border class="mt25" highlight-current-row @selection-change="changeCheckbox">
+                  <el-table
+                    :data="specsData"
+                    border
+                    class="mt25"
+                    highlight-current-row
+                    @selection-change="changeCheckbox"
+                  >
                     <el-table-column type="selection" width="55"> </el-table-column>
                     <el-table-column
                       :label="item.title"
@@ -245,33 +251,15 @@
               </el-form-item>
             </el-col>
           </el-form>
-          <Spin size="large" fix v-if="spinShow"></Spin>
         </el-col>
       </el-row>
     </el-card>
     <!-- 选择商品-->
-    <Modal
-      v-model="modals"
-      title="商品列表"
-      class="paymentFooter"
-      footerHide
-      scrollable
-      width="900"
-      @on-cancel="cancel"
-    >
+    <el-dialog :visible.sync="modals" title="商品列表" class="paymentFooter" width="900px">
       <goods-list ref="goodslist" @getProductId="getProductId"></goods-list>
-    </Modal>
+    </el-dialog>
     <!-- 上传图片-->
-    <Modal
-      v-model="modalPic"
-      width="950px"
-      scrollable
-      footer-hide
-      closable
-      title="上传商品图"
-      :mask-closable="false"
-      :z-index="1"
-    >
+    <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
       <uploadPictures
         :isChoice="isChoice"
         @getPic="getPic"
@@ -280,7 +268,7 @@
         :gridPic="gridPic"
         v-if="modalPic"
       ></uploadPictures>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -534,7 +522,7 @@ export default {
     // 表单验证
     validate(prop, status, error) {
       if (status === false) {
-        this.$Message.error(error);
+        this.$message.error(error);
       }
     },
     // 商品id
@@ -606,7 +594,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 下一步
@@ -622,7 +610,7 @@ export default {
             integralAddApi(this.formValidate)
               .then(async (res) => {
                 this.submitOpen = false;
-                this.$Message.success(res.msg);
+                this.$message.success(res.msg);
                 setTimeout(() => {
                   this.$router.push({
                     path: this.$routeProStr + '/marketing/store_integral/index',
@@ -631,7 +619,7 @@ export default {
               })
               .catch((res) => {
                 this.submitOpen = false;
-                this.$Message.error(res.msg);
+                this.$message.error(res.msg);
               });
           } else {
             return false;
@@ -651,14 +639,14 @@ export default {
             }
             this.current += 1;
           } else {
-            return this.$Message.warning('请完善您的信息');
+            return this.$message.warning('请完善您的信息');
           }
         });
       } else {
         if (this.formValidate.image) {
           this.current += 1;
         } else {
-          this.$Message.warning('请选择商品');
+          this.$message.warning('请选择商品');
         }
       }
     },

@@ -4,15 +4,14 @@
       <el-col class="label" :span="4" v-if="configData.title">
         {{ configData.title }}
       </el-col>
-      <el-col span="19" class="slider-box">
-        <Cascader
-          :data="configData.list"
+      <el-col :span="19" class="slider-box">
+        <el-cascader
+          :options="configData.list"
           placeholder="请选择商品分类"
-          change-on-select
           v-model="configData.activeValue"
           filterable
           @change="sliderChange"
-        ></Cascader>
+        ></el-cascader>
       </el-col>
     </div>
   </div>

@@ -44,9 +44,9 @@
             <div class="labelInput acea-row row-between-wrapper" @click="openLabel">
               <div style="width: 90%">
                 <div v-if="dataLabel.length">
-                  <Tag closable v-for="(item, index) in dataLabel" @on-close="closeLabel(item)" :key="index">{{
+                  <el-tag closable v-for="(item, index) in dataLabel" @close="closeLabel(item)" :key="index">{{
                     item.label_name
-                  }}</Tag>
+                  }}</el-tag>
                 </div>
                 <span class="span" v-else>选择用户关联标签</span>
               </div>
@@ -72,7 +72,8 @@
             <el-radio :label="1">有效期</el-radio>
           </el-radio-group>
           <span v-show="isReceiveTime">
-            <el-input-number controls-position="right"
+            <el-input-number
+              controls-position="right"
               :min="1"
               :max="10000"
               :precision="0"
@@ -85,78 +86,72 @@
           <div class="trip">临时码过期后不能再扫码,永久二维码最大创建数量为10万个</div>
         </el-form-item>
         <el-form-item label="回复内容">
-          <el-row>
-            <el-col :span="4">
-              <Menu theme="light" style="width: 150px" :active-name="formData.type" @on-select="selectMenu">
-                <MenuItem name="text">文字内容</MenuItem>
-                <!-- <MenuItem name="url">网址链接</MenuItem> -->
-                <!-- <MenuItem name="3">小程序</MenuItem> -->
-                <MenuItem name="voice">声音消息</MenuItem>
-                <MenuItem name="image">图片消息</MenuItem>
-                <MenuItem name="news">图文消息</MenuItem>
-              </Menu>
-            </el-col>
-            <el-col span="18">
-              <el-form-item
-                label="消息内容："
-                prop="content"
-                v-if="formData.type === 'text' || formData.type === 'url'"
-              >
-                <textarea
-                  v-model="formData.content.content"
-                  :placeholder="formData.type === 'text' ? '请填写消息内容' : '请填写网址链接'"
-                  style="width: 50%"
-                ></textarea>
-              </el-form-item>
-              <el-form-item label="选取图文：" v-if="formData.type === 'news'">
-                <el-button type="info" @click="modals = true">选择图文消息</el-button>
-                <div class="news-box" v-if="formData.content.list.title">
-                  <img class="news_pic" :src="formData.content.list.image_input[0]" />
-                  <span>{{ formData.content.list.title }}</span>
-                </div>
-              </el-form-item>
-              <el-form-item
-                :label="formData.type === 'image' ? '图片地址：' : '语音地址：'"
-                prop="src"
-                v-if="formData.type === 'image' || formData.type === 'voice'"
-              >
-                <div class="acea-row row-middle">
-                  <el-input
-                    readonly="readonly"
-                    placeholder="请填入链接地址"
-                    style="width: 75%"
-                    class="mr15"
-                    v-model="formData.content.src"
-                  />
-                  <Upload
-                    :show-upload-list="false"
-                    :action="fileUrl"
-                    :on-success="handleSuccess"
-                    :format="formData.type === 'image' ? formatImg : formatVoice"
-                    :max-size="2048"
-                    :headers="header"
-                    :on-format-error="handleFormatError"
-                    :on-exceeded-size="handleMaxSize"
-                    class="mr20"
-                    style="margin-top: 1px"
-                  >
-                    <el-button type="primary">上传</el-button>
-                  </Upload>
-                </div>
-                <span v-show="formData.type === 'image'">文件最大2Mb，支持bmp/png/jpeg/jpg/gif格式</span>
-                <span v-show="formData.type === 'voice'">文件最大2Mb，支持mp3格式,播放长度不超过60s</span>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <el-radio-group v-model="formData.type">
+            <el-radio label="text">文字内容</el-radio>
+            <el-radio label="voice">声音消息</el-radio>
+            <el-radio label="image">图片消息</el-radio>
+            <el-radio label="news">图文消息</el-radio>
+          </el-radio-group>
         </el-form-item>
+        <el-row>
+          <el-col span="24">
+            <el-form-item label="消息内容：" prop="content" v-if="formData.type === 'text' || formData.type === 'url'">
+              <textarea
+                v-model="formData.content.content"
+                :placeholder="formData.type === 'text' ? '请填写消息内容' : '请填写网址链接'"
+                style="width: 50%"
+              ></textarea>
+            </el-form-item>
+            <el-form-item label="选取图文：" v-if="formData.type === 'news'">
+              <el-button type="info" @click="modals = true">选择图文消息</el-button>
+              <div class="news-box" v-if="formData.content.list.title">
+                <img class="news_pic" :src="formData.content.list.image_input[0]" />
+                <span>{{ formData.content.list.title }}</span>
+              </div>
+            </el-form-item>
+            <el-form-item
+              :label="formData.type === 'image' ? '图片地址：' : '语音地址：'"
+              prop="src"
+              v-if="formData.type === 'image' || formData.type === 'voice'"
+            >
+              <div class="acea-row row-middle">
+                <el-input
+                  readonly="readonly"
+                  placeholder="请填入链接地址"
+                  style="width: 75%"
+                  class="mr15"
+                  v-model="formData.content.src"
+                />
+                <el-upload
+                  :show-file-list="false"
+                  :action="fileUrl"
+                  :on-success="handleSuccess"
+                  :format="formData.type === 'image' ? formatImg : formatVoice"
+                  :max-size="2048"
+                  :headers="header"
+                  :on-format-error="handleFormatError"
+                  :on-exceeded-size="handleMaxSize"
+                  class="mr20"
+                  style="margin-top: 1px"
+                >
+                  <el-button type="primary">上传</el-button>
+                </el-upload>
+              </div>
+              <span v-show="formData.type === 'image'">文件最大2Mb，支持bmp/png/jpeg/jpg/gif格式</span>
+              <span v-show="formData.type === 'voice'">文件最大2Mb，支持mp3格式,播放长度不超过60s</span>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
-      <el-button class="submit" type="primary" @click="save" :loading="loading" :disabled="disabled">立即提交</el-button>
+      <el-button class="submit" type="primary" @click="save" :loading="loading" :disabled="disabled"
+        >立即提交</el-button
+      >
     </el-card>
-    <Modal v-model="customerShow" scrollable title="请选择商城用户" :closable="false" width="800">
+    <el-dialog :visible.sync="customerShow" title="请选择商城用户" :show-close="false" width="800px">
       <customerInfo v-if="customerShow" @imageObject="imageObject"></customerInfo>
-    </Modal>
+    </el-dialog>
     <!--图文消息 -->
-    <Modal v-model="modals" scrollable title="发送消息" width="1200" height="800" footer-hide class="modelBox">
+    <el-dialog :visible.sync="modals" title="发送消息" width="1200px" class="modelBox">
       <news-category
         v-if="modals"
         @getCentList="getCentList"
@@ -165,8 +160,8 @@
         :contentWidth="contentWidth"
         :maxCols="maxCols"
       ></news-category>
-    </Modal>
-    <Modal
+    </el-dialog>
+    <el-dialog
       v-model="labelShow"
       scrollable
       title="请选择用户标签"
@@ -176,7 +171,7 @@
       :mask-closable="false"
     >
       <userLabel ref="userLabel" @activeData="activeData" @close="labelClose"></userLabel>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -308,7 +303,7 @@ export default {
           this.labelSelect = res.data.list;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     imageObject(e) {
@@ -324,20 +319,20 @@ export default {
     handleSuccess(res, file) {
       if (res.status === 200) {
         this.formData.content.src = res.data.src;
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
       } else {
-        this.$Message.error(res.msg);
+        this.$message.error(res.msg);
       }
     },
     handleFormatError(file) {
       if (this.formData.type === 'image') {
-        this.$Message.warning('请上传bmp/png/jpeg/jpg/gif格式的图片');
+        this.$message.warning('请上传bmp/png/jpeg/jpg/gif格式的图片');
       } else {
-        this.$Message.warning('请上传mp3/wma/wav/amr格式的语音');
+        this.$message.warning('请上传mp3/wma/wav/amr格式的语音');
       }
     },
     handleMaxSize(file) {
-      this.$Message.warning('请上传文件2M以内的文件');
+      this.$message.warning('请上传文件2M以内的文件');
     },
     // 上传头部token
     getToken() {
@@ -356,13 +351,13 @@ export default {
     // 创建
     save() {
       if (!this.formData.name) {
-        return this.$Message.error('请输入二维码名称');
+        return this.$message.error('请输入二维码名称');
       }
       if (!this.formData.cate_id) {
-        return this.$Message.error('请选择分组');
+        return this.$message.error('请选择分组');
       }
       if (!this.dataLabel.length) {
-        return this.$Message.error('请选择用户标签');
+        return this.$message.error('请选择用户标签');
       } else {
         let ids = [];
         this.dataLabel.map((i) => {
@@ -371,28 +366,28 @@ export default {
         this.formData.label_id = ids;
       }
       if (!this.formData.uid) {
-        return this.$Message.error('请选择推广员');
+        return this.$message.error('请选择推广员');
       }
       if (this.isReceiveTime) {
         if (this.formData.time < 1) {
-          return this.$Message.error('使用有效期限不能小于1天');
+          return this.$message.error('使用有效期限不能小于1天');
         }
       } else {
         this.formData.time = 0;
       }
       if (this.formData.type === 'text' || this.formData.type === 'url') {
         if (!this.formData.content.content.trim()) {
-          return this.$Message.error('请输入内容');
+          return this.$message.error('请输入内容');
         }
       }
       if (this.formData.type === 'voice' || this.formData.type === 'image') {
         if (!this.formData.content.src.trim()) {
-          return this.$Message.error('请先上传消息');
+          return this.$message.error('请先上传消息');
         }
       }
       if (this.formData.type === 'news') {
         if (!this.formData.content.list.title.trim()) {
-          return this.$Message.error('请选择图文消息');
+          return this.$message.error('请选择图文消息');
         }
       }
       this.disabled = false;
@@ -400,7 +395,7 @@ export default {
       wechatQrcodeSaveApi(this.id, this.formData)
         .then((res) => {
           this.disabled = true;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           setTimeout(() => {
             this.$router.push({
               path: this.$routeProStr + '/marketing/channel_code/channelCodeIndex',
@@ -409,7 +404,7 @@ export default {
         })
         .catch((err) => {
           this.disabled = true;
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
   },

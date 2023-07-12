@@ -13,9 +13,9 @@
       </el-form-item>
       <el-form-item label="赠送优惠券：" v-if="formValidate.type == 5">
         <div v-if="couponName.length" class="mb20">
-          <Tag closable v-for="(item, index) in couponName" :key="index" @on-close="handleClose(item)">{{
+          <el-tag closable v-for="(item, index) in couponName" :key="index" @close="handleClose(item)">{{
             item.title
-          }}</Tag>
+          }}</el-tag>
         </div>
         <el-button type="primary" @click="addCoupon" v-if="!couponName.length">添加优惠券</el-button>
       </el-form-item>
@@ -24,7 +24,8 @@
         prop="num"
         v-if="[2, 3, 4].includes(formValidate.type)"
       >
-        <el-input-number controls-position="right"
+        <el-input-number
+          controls-position="right"
           v-model="formValidate.num"
           placeholder="请输入金额数量"
           :max="formValidate.type == 4 ? 999 : 99999"
@@ -53,7 +54,12 @@
         </div>
       </el-form-item>
       <el-form-item label="奖品名称" prop="name">
-        <el-input v-model="formValidate.name" :maxlength="10" placeholder="请输入奖品名称" style="width: 300px"></el-input>
+        <el-input
+          v-model="formValidate.name"
+          :maxlength="10"
+          placeholder="请输入奖品名称"
+          style="width: 300px"
+        ></el-input>
       </el-form-item>
       <el-form-item label="奖品图片" prop="image">
         <template v-if="formValidate.image">
@@ -68,7 +74,8 @@
         <!-- <div class="info">选择商品</div> -->
       </el-form-item>
       <el-form-item label="奖品数量" prop="total">
-        <el-input-number controls-position="right"
+        <el-input-number
+          controls-position="right"
           v-model="formValidate.total"
           placeholder="请输入奖品数量"
           :max="99999"
@@ -78,7 +85,8 @@
         ></el-input-number>
       </el-form-item>
       <el-form-item label="奖品权重" prop="chance">
-        <el-input-number controls-position="right"
+        <el-input-number
+          controls-position="right"
           v-model="formValidate.chance"
           placeholder="请输入奖品权重"
           :max="100"
@@ -88,36 +96,24 @@
         ></el-input-number>
       </el-form-item>
       <el-form-item label="提示语" prop="prompt">
-        <el-input v-model="formValidate.prompt" :maxlength="15" placeholder="请输入提示语" style="width: 300px"></el-input>
+        <el-input
+          v-model="formValidate.prompt"
+          :maxlength="15"
+          placeholder="请输入提示语"
+          style="width: 300px"
+        ></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="handleSubmit('formValidate')">提交</el-button>
       </el-form-item>
     </el-form>
     <!-- 上传图片-->
-    <Modal
-      v-model="modalPic"
-      width="950px"
-      scrollable
-      footer-hide
-      closable
-      title="上传图片"
-      :mask-closable="false"
-      :z-index="1"
-    >
+    <el-dialog :visible.sync="modalPic" width="950px" title="上传图片" :close-on-click-modal="false">
       <uploadPictures :isChoice="isChoice" @getPic="getPic" v-if="modalPic"></uploadPictures>
-    </Modal>
-    <Modal
-      v-model="modals"
-      title="商品列表"
-      footerHide
-      class="paymentFooter"
-      scrollable
-      width="900"
-      @on-cancel="cancel"
-    >
+    </el-dialog>
+    <el-dialog :visible.sync="modals" title="商品列表" class="paymentFooter" width="900px">
       <goods-list ref="goodslist" @getProductId="getProductId"></goods-list>
-    </Modal>
+    </el-dialog>
     <coupon-list ref="couponTemplates" :luckDraw="true" @getCouponId="getCouponId"></coupon-list>
     <!--<coupon-list-->
     <!--ref="couponTemplates"-->
@@ -251,9 +247,9 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.$emit('addGoodsData', this.formValidate);
-          this.$Message.success('添加成功');
+          this.$message.success('添加成功');
         } else {
-          this.$Message.warning('请完善数据');
+          this.$message.warning('请完善数据');
         }
       });
     },
@@ -272,7 +268,7 @@ export default {
     // 选择的商品
     getProductId(productList) {
       // if (productList.length > 1) {
-      //   this.$Message.warning("最多添加一个商品");
+      //   this.$message.warning("最多添加一个商品");
       //   return;
       // }
       this.formValidate.product_id = productList.id;

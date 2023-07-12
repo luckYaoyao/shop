@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modals" scrollable title="订单记录" width="700" class="order_box" footer-hide>
+  <el-dialog :visible.sync="modals" scrollable title="订单记录" width="700px" class="order_box">
     <el-card :bordered="false" shadow="never">
       <el-table
         :columns="columns"
@@ -26,7 +26,7 @@
         </el-table-column>
       </el-table>
     </el-card>
-  </Modal>
+  </el-dialog>
 </template>
 
 <script>
@@ -82,7 +82,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },

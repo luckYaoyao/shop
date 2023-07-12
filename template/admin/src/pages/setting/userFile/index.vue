@@ -56,10 +56,10 @@ export default {
         if (valid) {
           setFilePassword(this.formValidate)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         }
       });

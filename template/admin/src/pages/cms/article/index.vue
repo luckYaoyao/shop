@@ -11,12 +11,16 @@
         <el-row :gutter="24">
           <el-col v-bind="grid">
             <el-form-item label="文章分类：" label-for="pid">
-              <i-select :value="artFrom.pid" placeholder="请选择" style="width: 80%" class="treeSel">
-                <i-option v-for="(item, index) of list" :value="item.value" :key="index" style="display: none">
-                  {{ item.title }}
-                </i-option>
-                <Tree :data="treeData" @on-select-change="handleCheckChange"></Tree>
-              </i-select>
+              <el-cascader
+                v-model="artFrom.pid"
+                placeholder="请选择"
+                style="width: 80%"
+                class="treeSel"
+                @change="handleCheckChange"
+                :options="treeData"
+                :props="props"
+              >
+              </el-cascader>
             </el-form-item>
           </el-col>
           <el-col v-bind="grid">
@@ -106,17 +110,9 @@
       </div>
     </el-card>
     <!--关联-->
-    <Modal
-      v-model="modals"
-      title="商品列表"
-      footerHide
-      class="paymentFooter"
-      scrollable
-      width="900"
-      @on-cancel="cancel"
-    >
+    <el-dialog :visible.sync="modals" title="商品列表" class="paymentFooter" width="900" @closed="cancel">
       <goods-list ref="goodslist" @getProductId="getProductId" v-if="modals"></goods-list>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -159,6 +155,11 @@ export default {
       rows: {},
       modal_loading: false,
       modals: false,
+      props: {
+        value: 'id',
+        label: 'title',
+        emitPath: false,
+      },
     };
   },
   components: {
@@ -196,7 +197,7 @@ export default {
       };
       relationApi(data, this.rows.id)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           row.id = 0;
           this.modal_loading = false;
           this.modals = false;
@@ -207,7 +208,7 @@ export default {
         .catch((res) => {
           this.modal_loading = false;
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     cancel() {
@@ -225,7 +226,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 分类
@@ -241,26 +242,13 @@ export default {
           this.treeData.unshift(obj);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 下拉树
     handleCheckChange(data) {
-      let value = '';
-      let title = '';
-      this.list = [];
-      this.artFrom.pid = 0;
-      data.forEach((item, index) => {
-        value += `${item.id},`;
-        title += `${item.title},`;
-      });
-      value = value.substring(0, value.length - 1);
-      title = title.substring(0, title.length - 1);
-      this.list.push({
-        value,
-        title,
-      });
-      this.artFrom.pid = value;
+      console.log(data);
+      this.artFrom.pid = data ? data : 0;
       this.artFrom.page = 1;
       this.getList();
     },
@@ -283,11 +271,11 @@ export default {
         };
         this.$modalSure(delfromData)
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.getList();
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       }
     },
@@ -302,11 +290,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.cmsList.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索

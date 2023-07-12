@@ -1,12 +1,10 @@
 <template>
   <div>
-    <Modal
-      v-model="modal"
+    <el-dialog
+      :visible.sync="modal"
       :title="formValidate.id ? '编辑定时任务' : '添加定时任务'"
-      width="900"
-      @on-ok="handleSubmit"
-      @on-cancel="modal = true"
-      @on-visible-change="initData"
+      width="900px"
+      @closed="initData"
     >
       <el-form ref="formValidate" :model="formValidate" :label-width="97" label-colon>
         <el-form-item label="任务名称" required>
@@ -107,7 +105,11 @@
           </el-row>
         </el-form-item>
       </el-form>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="modal = true">取 消</el-button>
+        <el-button type="primary" @click="handleSubmit">提 交</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -211,20 +213,18 @@ export default {
       });
     },
     initData(status) {
-      if (!status) {
-        this.formValidate = {
-          mark: '',
-          content: '',
-          is_open: 0,
-          type: 6,
-          week: 1,
-          day: 1,
-          hour: 1,
-          minute: 30,
-          second: 0,
-        };
-        this.modal = false;
-      }
+      this.formValidate = {
+        mark: '',
+        content: '',
+        is_open: 0,
+        type: 6,
+        week: 1,
+        day: 1,
+        hour: 1,
+        minute: 30,
+        second: 0,
+      };
+      this.modal = false;
     },
     timerInfo(id) {
       timerInfo(id).then((res) => {
@@ -240,7 +240,7 @@ export default {
     // 提交
     handleSubmit() {
       if (!this.formValidate.mark) {
-        return this.$Message.error({
+        return this.$message.error({
           content: '请选择任务名称',
           onClose: () => {
             // this.loading = false;
@@ -255,7 +255,7 @@ export default {
     saveTimer(data) {
       saveTimer(data)
         .then((res) => {
-          this.$Message.success({
+          this.$message.success({
             content: res.msg,
             onClose: () => {
               this.$emit('submitAsk');
@@ -263,7 +263,7 @@ export default {
           });
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
   },

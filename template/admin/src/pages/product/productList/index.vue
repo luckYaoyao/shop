@@ -22,7 +22,7 @@
                 v-model="artFrom.cate_id"
                 size="small"
                 :options="treeSelect"
-                :props="{multiple: false, emitPath: false,checkStrictly: true, }"
+                :props="{ multiple: false, emitPath: false, checkStrictly: true }"
                 clearable
               ></el-cascader>
             </el-form-item>
@@ -177,29 +177,22 @@
       <attribute :attrTemplate="attrTemplate" v-on:changeTemplate="changeTemplate"></attribute>
     </el-card>
     <!-- 生成淘宝京东表单-->
-    <Modal
-      v-model="modals"
+    <el-dialog
+      :visible.sync="modals"
       class="Box"
-      scrollable
-      footer-hide
-      closable
       title="复制淘宝、天猫、京东、苏宁、1688"
-      :mask-closable="false"
-      width="1200"
-      height="500"
+      :close-on-click-modal="false"
+      width="1200px"
     >
       <tao-bao ref="taobaos" v-if="modals" @on-close="onClose"></tao-bao>
-    </Modal>
-    <Modal
-      v-model="batchModal"
+    </el-dialog>
+    <el-dialog
+      :visible.sync="batchModal"
       class="batch-box"
-      scrollable
-      :closable="false"
       title="批量设置"
-      :mask-closable="false"
-      width="1000"
-      @on-ok="batchSub"
-      @on-cancel="clearBatchData"
+      :show-close="false"
+      :close-on-click-modal="false"
+      width="1000px"
     >
       <el-form
         class="batchFormData"
@@ -223,7 +216,7 @@
                 v-model="batchFormData.cate_id"
                 size="small"
                 :options="treeSelect"
-                :props="{ multiple: true, emitPath: false,checkStrictly: true, }"
+                :props="{ multiple: true, emitPath: false, checkStrictly: true }"
                 clearable
               ></el-cascader>
             </el-form-item>
@@ -281,9 +274,9 @@
             </el-form-item>
             <el-form-item label="赠送优惠券：" v-if="batchType == 4">
               <div v-if="couponName.length" class="mb20">
-                <Tag closable v-for="(item, index) in couponName" :key="index" @on-close="handleClose(item)">{{
+                <el-tag closable v-for="(item, index) in couponName" :key="index" @close="handleClose(item)">{{
                   item.title
-                }}</Tag>
+                }}</el-tag>
               </div>
               <el-button type="primary" @click="addCoupon">添加优惠券</el-button>
             </el-form-item>
@@ -292,9 +285,9 @@
                 <div class="labelInput acea-row row-between-wrapper" @click="openLabel">
                   <div style="width: 90%">
                     <div v-if="dataLabel.length">
-                      <Tag closable v-for="(item, index) in dataLabel" @on-close="closeLabel(item)" :key="index">{{
+                      <el-tag closable v-for="(item, index) in dataLabel" @close="closeLabel(item)" :key="index">{{
                         item.label_name
-                      }}</Tag>
+                      }}</el-tag>
                     </div>
                     <span class="span" v-else>选择用户关联标签</span>
                   </div>
@@ -314,19 +307,15 @@
           </el-col>
         </el-row>
       </el-form>
-    </Modal>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="clearBatchData">取 消</el-button>
+        <el-button type="primary" @click="batchSub">确 定</el-button>
+      </span>
+    </el-dialog>
     <!-- 用户标签 -->
-    <Modal
-      v-model="labelShow"
-      scrollable
-      title="请选择用户标签"
-      :closable="false"
-      width="500"
-      :footer-hide="true"
-      :mask-closable="false"
-    >
+    <el-dialog v-model="labelShow" title="请选择用户标签" width="500px" :show-close="false" :close-on-click-modal="false">
       <userLabel ref="userLabel" @activeData="activeData" @close="labelClose"></userLabel>
-    </Modal>
+    </el-dialog>
     <!-- 商品弹窗 -->
     <div v-if="isProductBox">
       <div class="bg" @click="isProductBox = false"></div>
@@ -445,14 +434,14 @@ export default {
       data.label_id = activeIds;
       batchSetting(data)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getDataList();
           this.clearBatchData(false);
           this.ids = [];
           this.clearAll(false);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     clearBatchData(status) {
@@ -474,7 +463,7 @@ export default {
     // 批量设置商品
     batchSelect(type) {
       if (!this.ids.length) {
-        this.$Message.warning('请选择要修改的商品');
+        this.$message.warning('请选择要修改的商品');
       } else {
         this.batchType = type;
         this.batchModal = true;
@@ -575,39 +564,39 @@ export default {
     // 批量上架
     onShelves() {
       if (this.ids.length === 0) {
-        this.$Message.warning('请选择要上架的商品');
+        this.$message.warning('请选择要上架的商品');
       } else {
         let data = {
           ids: this.ids,
         };
         productShowApi(data)
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.goodHeade();
             this.getDataList();
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       }
     },
     // 批量下架
     onDismount() {
       if (this.ids.length === 0) {
-        this.$Message.warning('请选择要下架的商品');
+        this.$message.warning('请选择要下架的商品');
       } else {
         let data = {
           ids: this.ids,
         };
         productUnshowApi(data)
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.artFrom.page = 1;
             this.goodHeade();
             this.getDataList();
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       }
     },
@@ -681,7 +670,7 @@ export default {
           this.headeNum = res.data.list;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 商品分类；
@@ -691,7 +680,7 @@ export default {
           this.treeSelect = res.data;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 商品列表；
@@ -713,7 +702,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     showSelectData() {
@@ -740,13 +729,13 @@ export default {
     changeSwitch(row) {
       PostgoodsIsShow(row.id, row.is_show)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.goodHeade();
           this.getDataList();
         })
         .catch((res) => {
           row.is_show = !row.is_show ? 1 : 0;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 数据导出；
@@ -784,12 +773,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.tableList.splice(num, 1);
           this.goodHeade();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 删除成功

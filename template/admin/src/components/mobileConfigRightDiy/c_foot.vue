@@ -19,13 +19,13 @@
           </div>
           <div class="c_row-item">
             <el-col class="label" :span="4"> 名称 </el-col>
-            <el-col span="19" class="slider-box">
+            <el-col :span="19" class="slider-box">
               <el-input v-model="item.name" placeholder="选填不超过10个字" />
             </el-col>
           </div>
           <div class="c_row-item">
             <el-col class="label" :span="4"> 链接 </el-col>
-            <el-col span="19" class="slider-box">
+            <el-col :span="19" class="slider-box">
               <div @click="getLink(index)">
                 <el-input icon="ios-arrow-forward" v-model="item.link" readonly placeholder="选填不超过10个字" />
               </div>
@@ -39,14 +39,11 @@
     </draggable>
     <el-button class="add-btn" type="info" ghost @click="addMenu" v-if="footConfig.length < 5">添加图文导航</el-button>
     <div>
-      <Modal
-        v-model="modalPic"
+      <el-dialog
+        :visible.sync="modalPic"
         width="950px"
-        scrollable
-        footer-hide
-        closable
         title="上传底部菜单"
-        :mask-closable="false"
+        :close-on-click-modal="false"
         :z-index="1"
       >
         <uploadPictures
@@ -56,7 +53,7 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </Modal>
+      </el-dialog>
     </div>
     <linkaddress ref="linkaddres" @linkUrl="linkUrl"></linkaddress>
   </div>

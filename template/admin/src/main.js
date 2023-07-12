@@ -189,9 +189,7 @@ new Vue({
   watch: {
     // 监听路由 控制侧边栏显示 标记当前顶栏菜单（如需要）
     $route(to, from) {
-      console.log(to);
       const onRoutes = to.meta.activeMenu ? to.meta.activeMenu : to.meta.path;
-      console.log(onRoutes);
       this.$store.commit('menu/setActivePath', onRoutes);
       if (to.name == 'crud_crud') {
         this.$store.state.menus.oneLvRoutes.map((e) => {

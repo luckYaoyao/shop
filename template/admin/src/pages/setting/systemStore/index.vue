@@ -1,5 +1,5 @@
 <template>
-  <div class="article-manager">
+  <div class="article-manager" v-loading="spinShow">
     <el-card :bordered="false" shadow="never" class="ivu-mt">
       <el-form
         ref="formItem"
@@ -9,7 +9,7 @@
         :rules="ruleValidate"
         @submit.native.prevent
       >
-        <el-row  :gutter="24">
+        <el-row :gutter="24">
           <el-col :span="24">
             <el-col v-bind="grid">
               <el-form-item label="门店名称：" prop="name" label-for="name">
@@ -34,12 +34,12 @@
           <el-col :span="24">
             <el-col v-bind="grid">
               <el-form-item label="门店地址：" label-for="address" prop="address">
-                <Cascader
-                  :data="addresData"
+                <el-cascader
+                  :options="addresData"
                   :value="formItem.address"
                   v-model="formItem.address"
                   @change="handleChange"
-                ></Cascader>
+                ></el-cascader>
               </el-form-item>
             </el-col>
           </el-col>
@@ -53,31 +53,33 @@
           <el-col :span="24">
             <el-col v-bind="grid">
               <el-form-item label="核销时效：" label-for="valid_time">
-                <DatePicker
+                <el-date-picker
                   :editable="false"
                   @change="onchangeDate"
-                  :value="formItem.valid_time"
                   v-model="formItem.valid_time"
                   format="yyyy/MM/dd"
                   type="daterange"
-                  split-panels
-                  placeholder="请选择核销时效"
-                ></DatePicker>
+                  value-format="yyyy/MM/dd"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                ></el-date-picker>
               </el-form-item>
             </el-col>
           </el-col>
           <el-col :span="24">
             <el-col v-bind="grid">
               <el-form-item label="门店营业：" label-for="day_time">
-                <TimePicker
-                  type="timerange"
+                <el-time-picker
                   @change="onchangeTime"
                   v-model="formItem.day_time"
                   format="HH:mm:ss"
-                  :value="formItem.day_time"
-                  placement="bottom-end"
-                  placeholder="请选择营业时间"
-                ></TimePicker>
+                  value-format="HH:mm:ss"
+                  range-separator="至"
+                  start-placeholder="开始时间"
+                  end-placeholder="结束时间"
+                  placeholder="选择时间范围"
+                ></el-time-picker>
               </el-form-item>
             </el-col>
           </el-col>
@@ -96,39 +98,30 @@
           <el-col :span="24">
             <el-col v-bind="grid">
               <el-form-item label="经纬度：" label-for="status2" prop="latlng">
-                <Tooltip>
-                  <el-input
-                    search
-                    enter-button="查找位置"
-                    v-model="formItem.latlng"
-                    style="width: 100%"
-                    placeholder="请查找位置"
-                    @on-search="onSearch"
-                  />
+                <el-tooltip>
+                  <el-input v-model="formItem.latlng" style="width: 100%" placeholder="请查找位置">
+                    <el-button type="primary" slot="append" @click="onSearch">查找位置</el-button>
+                  </el-input>
                   <div slot="content">请点击查找位置选择位置</div>
-                </Tooltip>
+                </el-tooltip>
               </el-form-item>
             </el-col>
           </el-col>
         </el-row>
-        <el-row >
+        <el-row>
           <el-col v-bind="grid">
             <el-button type="primary" class="ml20" @click="handleSubmit('formItem')">提交</el-button>
           </el-col>
         </el-row>
-        <Spin size="large" fix v-if="spinShow"></Spin>
       </el-form>
     </el-card>
 
-    <Modal
-      v-model="modalPic"
+    <el-dialog
+      :visible.sync="modalPic"
       width="950px"
-      scrollable
-      footer-hide
-      closable
       title="上传商品图"
-      :mask-closable="false"
-      :z-index="888"
+      :close-on-click-modal="false"
+      :show-close="false"
     >
       <uploadPictures
         :isChoice="isChoice"
@@ -137,20 +130,17 @@
         :gridPic="gridPic"
         v-if="modalPic"
       ></uploadPictures>
-    </Modal>
+    </el-dialog>
 
-    <Modal
-      v-model="modalMap"
-      scrollable
-      footer-hide
-      closable
+    <el-dialog
+      :visible.sync="modalMap"
       title="上传商品图"
-      :mask-closable="false"
-      :z-index="1"
+      :show-close="false"
+      :close-on-click-modal="false"
       class="mapBox"
     >
       <iframe id="mapPage" width="100%" height="100%" frameborder="0" v-bind:src="keyUrl"></iframe>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -193,7 +183,7 @@ export default {
         address2: [],
         detailed_address: '',
         valid_time: [],
-        day_time: [],
+        day_time: ['', ''],
         latlng: '',
         id: 0,
       },
@@ -309,7 +299,7 @@ export default {
           this.keyUrl = `https://apis.map.qq.com/tools/locpicker?type=1&key=${keys}&referer=myapp`;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 详情
@@ -324,7 +314,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 选择图片
@@ -358,10 +348,10 @@ export default {
         if (valid) {
           storeAddApi(this.formItem)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
           return false;

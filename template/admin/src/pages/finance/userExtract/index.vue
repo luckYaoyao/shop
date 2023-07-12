@@ -22,16 +22,18 @@
                   item.text
                 }}</el-radio-button>
               </el-radio-group>
-              <DatePicker
+              <el-date-picker
                 :editable="false"
                 @change="onchangeTime"
-                :value="timeVal"
+                v-model="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
-                placement="bottom-end"
-                placeholder="请选择时间"
+                value-format="yyyy/MM/dd"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
                 style="width: 200px"
-              ></DatePicker>
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -178,12 +180,12 @@
     <!-- 编辑表单-->
     <edit-from ref="edits" :FromData="FromData" @submitFail="submitFail"></edit-from>
     <!-- 拒绝通过-->
-    <Modal v-model="modals" scrollable closable title="未通过原因" :mask-closable="false">
+    <el-dialog :visible.sync="modals" title="未通过原因" :close-on-click-modal="false">
       <el-input v-model="fail_msg.message" type="textarea" :rows="4" placeholder="请输入未通过原因" />
       <div slot="footer">
         <el-button type="primary" size="large" long :loading="modal_loading" @click="oks">确定</el-button>
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -215,54 +217,6 @@ export default {
       total: 0,
       cardLists: [],
       loading: false,
-      columns: [
-        {
-          title: 'ID',
-          key: 'id',
-          width: 80,
-        },
-        {
-          title: '用户信息',
-          slot: 'nickname',
-          minWidth: 180,
-        },
-        {
-          title: '提现金额',
-          slot: 'extract_price',
-          minWidth: 90,
-        },
-        {
-          title: '提现方式',
-          slot: 'extract_type',
-          minWidth: 150,
-        },
-        {
-          title: '收款码',
-          slot: 'qrcode_url',
-          minWidth: 150,
-        },
-        {
-          title: '添加时间',
-          slot: 'add_time',
-          minWidth: 100,
-        },
-        {
-          title: '备注',
-          key: 'mark',
-          minWidth: 100,
-        },
-        {
-          title: '审核状态',
-          slot: 'status',
-          minWidth: 180,
-        },
-        {
-          title: '操作',
-          slot: 'createModalFrame',
-          fixed: 'right',
-          width: 100,
-        },
-      ],
       tabList: [],
       fromList: {
         title: '选择时间',
@@ -368,13 +322,13 @@ export default {
       this.modal_loading = true;
       refuseApi(this.extractId, this.fail_msg)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.modal_loading = false;
           this.modals = false;
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 通过
@@ -388,17 +342,17 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.data = this.timeVal.join('-');
+      this.formValidate.data = this.timeVal ? this.timeVal.join('-') : '';
       this.formValidate.page = 1;
       this.getList();
     },
@@ -433,7 +387,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -447,7 +401,7 @@ export default {
           this.$refs.edits.modals = true;
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑提交成功

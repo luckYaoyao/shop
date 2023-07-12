@@ -8,28 +8,6 @@
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <!-- <el-row  :gutter="24">
-          <el-col v-bind="grid">
-            <el-form-item label="状态：" label-for="status1">
-              <el-select v-model="status" placeholder="请选择" @change="userSearchs" clearable>
-                <el-option value="all">全部</el-option>
-                <el-option value="1">开启</el-option>
-                <el-option value="0">关闭</el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid">
-            <el-form-item label="搜索：" label-for="status2">
-              <el-input
-                search
-                enter-button
-                placeholder="请输入账号"
-                v-model="formValidate.name"
-                @on-search="userSearchs"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row> -->
         <el-row>
           <el-col v-bind="grid">
             <el-button v-auth="['setting-system_admin-add']" type="primary" @click="add" icon="md-add"
@@ -112,13 +90,12 @@
         />
       </div>
     </el-card>
-    <Modal
-      v-model="modals"
-      scrollable
+    <el-dialog
+      :visible.sync="modals"
       :title="type == 0 ? '添加账号' : '编辑账号'"
-      :mask-closable="false"
-      width="700"
-      :closable="false"
+      :close-on-click-modal="false"
+      :show-close="false"
+      width="700px"
     >
       <el-form
         ref="modalsdate"
@@ -154,15 +131,31 @@
               >{{ item.name }}</el-checkbox
             >
           </el-checkbox-group> -->
-          <Tree :data="intList" multiple show-checkbox ref="tree" @on-check-change="selectTree"></Tree>
+          <el-tree
+            :data="intList"
+            :props="props"
+            multiple
+            show-checkbox
+            ref="tree"
+            node-key="id"
+            :default-checked-keys="selectIds"
+            @check-change="selectTree"
+          ></el-tree>
         </el-form-item>
       </el-form>
-      <div slot="footer">
-        <el-button type="primary" @click="ok('modalsdate')">确定</el-button>
-        <el-button @click="cancel">取消</el-button>
-      </div>
-    </Modal>
-    <Modal v-model="settingModals" scrollable title="设置推送" :mask-closable="false" width="900" :closable="false">
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="ok('modalsdate')">确 定</el-button>
+      </span>
+    </el-dialog>
+    <el-dialog
+      :visible.sync="settingModals"
+      scrollable
+      title="设置推送"
+      width="900px"
+      :close-on-click-modal="false"
+      :show-close="false"
+    >
       <el-form
         class="setting-style"
         ref="settingData"
@@ -248,7 +241,7 @@
         <el-button type="primary" @click="submit('settingData')">确定</el-button>
         <el-button @click="settingModals = false">取消</el-button>
       </div>
-    </Modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -290,17 +283,6 @@ export default {
       status: '',
       list: [],
       intList: [],
-      columns: [
-        {
-          type: 'selection',
-          width: 60,
-          align: 'center',
-        },
-        {
-          title: '接口名称',
-          key: 'name',
-        },
-      ],
       FromData: null,
       modalTitleSs: '',
       ids: Number,
@@ -326,6 +308,11 @@ export default {
       editValidate: {
         appsecret: [{ required: false, message: '请输入正确的密码 (6到32位之间)', trigger: 'blur', min: 6, max: 32 }],
       },
+      props: {
+        label: 'title',
+        disabled: 'disableCheckbox',
+      },
+      selectIds: [],
     };
   },
   computed: {
@@ -349,10 +336,10 @@ export default {
       };
       setShowApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 请求列表
@@ -371,7 +358,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 添加
@@ -388,20 +375,28 @@ export default {
     },
     selectTree(e, i) {},
     getIntList(type, list) {
+      let arr = [];
       interfaceList().then((res) => {
         this.intList = res.data;
         if (!type) {
+          console.log('111');
           this.intList.map((item) => {
             if (item.id === 1) {
               item.checked = true;
               item.disableCheckbox = true;
+              arr.push(item.id);
               if (item.children.length) {
                 item.children.map((v) => {
                   v.checked = true;
                   v.disableCheckbox = true;
+                  arr.push(v.id);
                 });
               }
             }
+          });
+          this.$nextTick((e) => {
+            this.selectIds = arr;
+            console.log(this.selectIds);
           });
         } else {
           list.map((item) => {
@@ -419,6 +414,7 @@ export default {
               listData(e.children || [], item);
             });
           });
+          this.selectIds = list;
         }
         function listData(list, id) {
           if (list.length) {
@@ -457,11 +453,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.list.splice(num, 1);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 编辑
@@ -478,7 +474,7 @@ export default {
     },
     submit(name) {
       setUpPush(this.settingData).then((res) => {
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
         this.settingModals = false;
         this.getList();
       });
@@ -486,10 +482,10 @@ export default {
     textOutUrl() {
       textOutUrl(this.settingData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     ok(name) {
@@ -497,7 +493,7 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.modalsdate.rules = [];
-          this.$refs.tree.getCheckedAndIndeterminateNodes().map((node) => {
+          this.$refs.tree.getCheckedNodes().map((node) => {
             this.modalsdate.rules.push(node.id);
           });
           if (this.modalsid) this.modalsdate.id = this.modalsid;
@@ -509,15 +505,15 @@ export default {
                 title: '',
                 rules: [],
               };
-              (this.modals = false), this.$Message.success(res.msg);
+              (this.modals = false), this.$message.success(res.msg);
               this.modalsid = '';
               this.getList();
             })
             .catch((err) => {
-              this.$Message.error(err.msg);
+              this.$message.error(err.msg);
             });
         } else {
-          this.$Message.warning('请完善数据');
+          this.$message.warning('请完善数据');
         }
       });
     },

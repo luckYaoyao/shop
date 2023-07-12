@@ -60,8 +60,8 @@
     <!-- 工具 -->
     <div class="tool-wrapper" v-if="isTool">
       <div class="tool-item">
-        <Upload
-          :show-upload-list="false"
+        <el-upload
+          :show-file-list="false"
           :action="fileUrl"
           class="mr10 mb10"
           :before-upload="beforeUpload"
@@ -75,7 +75,7 @@
         >
           <img src="../static/tool-01.png" mode="" />
           <div>图片</div>
-        </Upload>
+        </el-upload>
       </div>
       <div class="tool-item" @click="goTransfer">
         <img src="../static/tool-02.png" mode="" />
@@ -299,7 +299,7 @@ export default {
       this.$router.go(-1);
     },
     handleFormatError(file) {
-      this.$Message.error('上传图片只能是 jpg、jpg、jpeg、gif 格式!');
+      this.$message.error('上传图片只能是 jpg、jpg、jpeg、gif 格式!');
     },
     // 用户详情
     goUserInfo(item, status) {
@@ -314,10 +314,10 @@ export default {
     // 上传成功
     handleSuccess(res, file, fileList) {
       if (res.status === 200) {
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
         this.sendMsg(res.data.url, 3);
       } else {
-        this.$Message.error(res.msg);
+        this.$message.error(res.msg);
       }
     },
     // 滚动到底部
@@ -383,14 +383,14 @@ export default {
             this.transferList.forEach((el, index) => {
               el.isCheck = false;
             });
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             this.isTransfer = false;
           })
           .catch((error) => {
-            this.$Message.error(error.msg);
+            this.$message.error(error.msg);
           });
       } else {
-        this.$Message.error('请选择转接客服');
+        this.$message.error('请选择转接客服');
       }
     },
     // 商品信息
@@ -453,7 +453,7 @@ export default {
     // 发送消息
     sendText() {
       if (!this.isSend) {
-        return this.$Message.error('请输入内容');
+        return this.$message.error('请输入内容');
       }
       this.sendMsg(this.con, 1);
       this.con = '';

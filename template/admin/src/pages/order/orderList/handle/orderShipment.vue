@@ -1,5 +1,5 @@
 <template>
-  <Modal v-model="modals" scrollable title="取消寄件" class="order_box" :closable="false">
+  <el-dialog :visible.sync="modals" title="取消寄件" class="order_box" :show-close="false">
     <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80" @submit.native.prevent>
       <FormItem label="备注：" prop="msg">
         <Input
@@ -12,11 +12,11 @@
         />
       </FormItem>
     </Form>
-    <div slot="footer">
-      <Button type="primary" @click="putRemark('formValidate')">提交</Button>
+    <span slot="footer" class="dialog-footer">
       <Button @click="cancel('formValidate')">取消</Button>
-    </div>
-  </Modal>
+      <Button type="primary" @click="putRemark('formValidate')">提交</Button>
+    </span>
+  </el-dialog>
 </template>
 
 <script>
@@ -53,16 +53,16 @@ export default {
         if (valid) {
           shipmentCancelOrder(this.orderId, data)
             .then(async (res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               this.modals = false;
               this.$refs[name].resetFields();
               this.$emit('submitFail');
             })
             .catch((res) => {
-              this.$Message.error(res.msg);
+              this.$message.error(res.msg);
             });
         } else {
-          this.$Message.warning('请填写备注信息');
+          this.$message.warning('请填写备注信息');
         }
       });
     },

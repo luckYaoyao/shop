@@ -22,7 +22,7 @@
             <Step title="修改商品详情"></Step>
           </Steps>
         </el-col>
-        <el-col :span="23">
+        <el-col :span="23" v-loading="spinShow">
           <el-form
             class="form mt30"
             ref="formValidate"
@@ -105,16 +105,18 @@
               <el-col :span="24">
                 <el-form-item label="拼团时间：" prop="section_time">
                   <div class="acea-row row-middle">
-                    <DatePicker
+                    <el-date-picker
                       :editable="false"
                       type="datetimerange"
                       format="yyyy-MM-dd HH:mm"
-                      placeholder="请选择活动时间"
+                      value-format="yyyy-MM-dd HH:mm"
+                      range-separator="至"
+                      start-placeholder="开始日期"
+                      end-placeholder="结束日期"
                       @change="onchangeTime"
                       class="perW30"
-                      :value="formValidate.section_time"
                       v-model="formValidate.section_time"
-                    ></DatePicker>
+                    ></el-date-picker>
                     <div class="ml10 grey">设置活动开启结束时间，用户可以在设置时间内发起参与拼团</div>
                   </div>
                 </el-form-item>
@@ -414,33 +416,15 @@
               ></el-button>
             </el-form-item>
           </el-form>
-          <Spin size="large" fix v-if="spinShow"></Spin>
         </el-col>
       </el-row>
     </el-card>
     <!-- 选择商品-->
-    <Modal
-      v-model="modals"
-      title="商品列表"
-      footerHide
-      class="paymentFooter"
-      scrollable
-      width="900"
-      @on-cancel="cancel"
-    >
+    <el-dialog :visible.sync="modals" title="商品列表" class="paymentFooter" width="900px">
       <goods-list ref="goodslist" @getProductId="getProductId"></goods-list>
-    </Modal>
+    </el-dialog>
     <!-- 上传图片-->
-    <Modal
-      v-model="modalPic"
-      width="950px"
-      scrollable
-      footer-hide
-      closable
-      title="上传商品图"
-      :mask-closable="false"
-      :z-index="888"
-    >
+    <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
       <uploadPictures
         :isChoice="isChoice"
         @getPic="getPic"
@@ -449,7 +433,7 @@
         :gridPic="gridPic"
         v-if="modalPic"
       ></uploadPictures>
-    </Modal>
+    </el-dialog>
     <!-- 运费模板-->
     <freight-template ref="template" @addSuccess="productGetTemplate"></freight-template>
   </div>
@@ -776,7 +760,7 @@ export default {
     // 表单验证
     validate(prop, status, error) {
       if (status === false) {
-        this.$Message.error(error);
+        this.$message.error(error);
       }
     },
     // 商品id
@@ -863,7 +847,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 下一步
@@ -882,7 +866,7 @@ export default {
             combinationCreatApi(this.formValidate)
               .then(async (res) => {
                 this.submitOpen = false;
-                this.$Message.success(res.msg);
+                this.$message.success(res.msg);
                 setTimeout(() => {
                   this.$router.push({
                     path: this.$routeProStr + '/marketing/store_combination/index',
@@ -891,7 +875,7 @@ export default {
               })
               .catch((res) => {
                 this.submitOpen = false;
-                this.$Message.error(res.msg);
+                this.$message.error(res.msg);
               });
           } else {
             return false;
@@ -917,20 +901,20 @@ export default {
                   return that.$Message.error('拼团限量必须大于0');
                 }
                 if (this.formValidate.attrs[index].quota > this.formValidate.attrs[index]['stock']) {
-                  return this.$Message.error('拼团限量不能超过规格库存');
+                  return this.$message.error('拼团限量不能超过规格库存');
                 }
               }
             }
             this.current += 1;
           } else {
-            return this.$Message.warning('请完善您的信息');
+            return this.$message.warning('请完善您的信息');
           }
         });
       } else {
         if (this.formValidate.image) {
           this.current += 1;
         } else {
-          this.$Message.warning('请选择商品');
+          this.$message.warning('请选择商品');
         }
       }
     },

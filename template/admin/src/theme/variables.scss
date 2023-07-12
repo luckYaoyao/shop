@@ -431,7 +431,7 @@ $positions: 'top', 'right', 'bottom', 'left';
   color: var(--prev-color-text-white);
 }
 
-/* Upload 上传
+/* el-upload 上传
 ------------------------------- */
 .el-upload-list__item.is-success .el-upload-list__item-name:focus,
 .el-upload-list__item.is-success .el-upload-list__item-name:hover,
@@ -467,7 +467,7 @@ $positions: 'top', 'right', 'bottom', 'left';
   background-color: var(--prev-bg-color);
 }
 
-/* ColorPicker 颜色选择器
+/* el-color-picker 颜色选择器
 ------------------------------- */
 .el-color-picker__trigger {
   border-color: var(--prev-border-color-light);
@@ -824,6 +824,7 @@ $positions: 'top', 'right', 'bottom', 'left';
 .el-card {
   color: var(--prev-color-text-primary);
   background-color: var(--prev-bg-white);
+  border: none !important;
   border-color: var(--prev-border-color-lighter);
 }
 .el-card__header {
@@ -951,6 +952,7 @@ $positions: 'top', 'right', 'bottom', 'left';
   width: 100%;
   height: 100%;
   overflow: auto;
+  padding: 20px;
 }
 .el-drawer__header {
   padding: 0 15px !important;

@@ -114,9 +114,9 @@
                 @mouseleave="enterMouse(item)"
               >
                 <p class="number" v-if="item.num > 0">
-                  <Badge :count="item.num" type="error" :offset="[11, 12]">
+                  <el-badge :value="item.num" type="primary">
                     <a href="#" class="demo-badge"></a>
-                  </Badge>
+                  </el-badge>
                 </p>
                 <img
                   :class="item.isSelect ? 'on' : ''"
@@ -325,11 +325,11 @@ export default {
         onOk: () => {
           method(node.id)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               node.remove();
             })
             .catch((err) => {
-              this.$Message.error(err);
+              this.$message.error(err);
             });
         },
         onCancel: () => {},
@@ -344,10 +344,10 @@ export default {
         };
         interfaceEditName(data)
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((err) => {
-            this.$Message.error(err);
+            this.$message.error(err);
           });
       }
     },
@@ -384,7 +384,7 @@ export default {
         this.getMove();
       } else {
         if (!this.ids.toString()) {
-          this.$Message.warning('请先选择图片');
+          this.$message.warning('请先选择图片');
           return;
         }
       }
@@ -398,14 +398,14 @@ export default {
       };
       moveApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getFileList();
           this.pids = 0;
           this.checkPicList = [];
           this.ids = [];
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     delImg(id) {
@@ -420,12 +420,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getFileList();
           this.checkPicList = [];
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 删除图片
@@ -441,12 +441,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getFileList();
           this.initData();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     initData() {
@@ -489,12 +489,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
           this.checkPicList = [];
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 确认删除树
@@ -533,7 +533,7 @@ export default {
           // this.addFlag(this.treeData);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     loadData(item, callback) {
@@ -585,7 +585,7 @@ export default {
           });
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     showSelectData() {
@@ -647,10 +647,10 @@ export default {
     // 上传之前
     beforeUpload(file) {
       // if (file.size > 2097152) {
-      //   this.$Message.error(file.name + "大小超过2M!");
+      //   this.$message.error(file.name + "大小超过2M!");
       // } else
       if (!/image\/\w+/.test(file.type)) {
-        this.$Message.error('请上传以jpg、jpeg、png等结尾的图片文件'); //FileExt.toLowerCase()
+        this.$message.error('请上传以jpg、jpeg、png等结尾的图片文件'); //FileExt.toLowerCase()
         return false;
       }
       this.uploadData = {
@@ -666,11 +666,11 @@ export default {
     // 上传成功
     handleSuccess(res, file, fileList) {
       if (res.status === 200) {
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
         this.fileData.page = 1;
         this.getFileList();
       } else {
-        this.$Message.error(res.msg);
+        this.$message.error(res.msg);
       }
     },
     // 关闭
@@ -712,12 +712,12 @@ export default {
     // 点击使用选中图片
     checkPics() {
       if (this.isChoice === '单选') {
-        if (this.checkPicList.length > 1) return this.$Message.warning('最多只能选一张图片');
+        if (this.checkPicList.length > 1) return this.$message.warning('最多只能选一张图片');
         this.$emit('getPic', this.checkPicList[0]);
       } else {
         let maxLength = this.$route.query.maxLength;
         if (maxLength != undefined && this.checkPicList.length > Number(maxLength))
-          return this.$Message.warning('最多只能选' + maxLength + '张图片');
+          return this.$message.warning('最多只能选' + maxLength + '张图片');
         this.$emit('getPicD', this.checkPicList);
       }
     },
@@ -730,7 +730,7 @@ export default {
     // 修改图片文字上传
     bindTxt(item) {
       if (item.real_name == '') {
-        this.$Message.error('请填写内容');
+        this.$message.error('请填写内容');
       }
       fileUpdateApi(item.att_id, {
         real_name: item.real_name,
@@ -738,10 +738,10 @@ export default {
         .then((res) => {
           this.editName(item);
           item.isEdit = false;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
   },
@@ -815,12 +815,16 @@ export default {
     right: 0;
     top: 0;
   }
+  /deep/ .el-badge__content.is-fixed {
+    top: 15px;
+    right: 25px;
+  }
 }
 .Nav {
   width: 100%;
   border-right: 1px solid #eee;
   min-width: 220px;
-  max-width: 220px;
+  max-width: 250px;
 }
 .trees-coadd {
   width: 100%;

@@ -23,18 +23,18 @@
           </el-col>
           <el-col :xl="6" :lg="10" :md="10" :sm="24" :xs="24">
             <el-form-item label="选择时间：" label-for="user_time">
-              <DatePicker
+              <el-date-picker
                 :editable="false"
-                clearable
                 @change="onchangeTime"
                 v-model="timeVal"
-                :value="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
-                placement="bottom-end"
-                placeholder="选择时间"
+                value-format="yyyy-MM-dd"
+                range-separator="至"
+                start-placeholder="开始日期"
+                end-placeholder="结束日期"
                 class="perW100"
-              ></DatePicker>
+              ></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :xl="4" :lg="4" :md="4" :sm="24" :xs="24">
@@ -163,7 +163,7 @@ export default {
           });
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 具体日期
@@ -186,7 +186,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 表格搜索
@@ -207,7 +207,7 @@ export default {
           location.href = res.data[0];
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
   },
