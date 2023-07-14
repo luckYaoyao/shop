@@ -193,8 +193,10 @@ APP下载：http://app.crmeb.cn/bzv（苹果手机直接在APP Store里搜索CRM
 
 ###  📖 UI界面展示
 
-![输入图片说明](readme/pic/ui.jpg)
-![输入图片说明](readme/pic/ui2.jpg)
+![输入图片说明](readme/pic/ui_01.jpg)
+![输入图片说明](readme/pic/ui_02.jpg)
+![输入图片说明](readme/pic/ui2_01.jpg)
+![输入图片说明](readme/pic/ui2_02.jpg)
 
 ---
 
