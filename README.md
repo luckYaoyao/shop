@@ -191,7 +191,7 @@ APP下载：http://app.crmeb.cn/bzv（苹果手机直接在APP Store里搜索CRM
 
 ---
 
-###  📲 UI界面展示
+###  📖 UI界面展示
 
 ![输入图片说明](readme/pic/ui.jpg)
 ![输入图片说明](readme/pic/ui2.jpg)
@@ -199,18 +199,18 @@ APP下载：http://app.crmeb.cn/bzv（苹果手机直接在APP Store里搜索CRM
 ---
 
 
-###  📲 CRMEB公益
+###  📕 CRMEB公益
 做开源，帮助更多人！CRMEB开源项目，不仅让开发者从中受益，也在公益活动中帮助了很多人，对此，我们很荣幸，也乐此不疲！
 
 So~~想要用CRMEB开源商城系统做公益项目的朋友，可以来免费申请商业版系统哦！有需要的朋友，快去找官方客服咨询吧！
 
 ---
-###  📲 捐赠
+###  💎 捐赠
 赠人玫瑰，手留余香！CRMEB诚挚地邀请大家积极参与捐赠，我们会将捐赠获得的费用，悉数用于支持公益项目，让善意无限传递下去！
 在此深表感谢~
 
 ---
-###  📲 CRMEB互动
+###  📞 CRMEB互动
 #### 技术娱乐！代码写累了？那就歇会吧！扫码让你开心一刻！
 ![输入图片说明](readme/pic/小剧场.jpg)
 #### 技术社区！找方法、提bug、看官方消息、拿活跃大奖！都在 <a href="https://www.crmeb.com/ask" target="_blank">CRMEB 技术社区</a> 应有尽有
@@ -219,8 +219,8 @@ So~~想要用CRMEB开源商城系统做公益项目的朋友，可以来免费�
 
 ---
 
-###  📲 感谢参与开发者
-####感谢大神们提交代码（排名不分先后）
+###  📻 感谢参与开发者
+#### 感谢大神们提交代码（排名不分先后）
 @yizhisamoye，@bys1123，@xaboy，@youngxj0，@jacklincheung，@392256866，@sxsea
 
 欢迎<a href="https://gitee.com/ZhongBangKeJi/CRMEB/issues" target="_blank">反馈问题</a>
@@ -228,11 +228,11 @@ So~~想要用CRMEB开源商城系统做公益项目的朋友，可以来免费�
 欢迎<a href="https://gitee.com/ZhongBangKeJi/CRMEB/pulls" target="_blank">提交代码</a>
 
 ---
-###  📲 特别鸣谢
+###  📸 特别鸣谢
 排名不分先后，感谢这些软件的开发者：thinkphp、iview、vue、mysql、redis、uniapp、echarts、tree-table-vue、swiper、form-create等，如有遗漏请联系我！
 
 ---
-###  📲 核心开发团队
+###  🎬 核心开发团队
 产品：木子刀客
 
 技术：聆听、等风来、xaboy、吴汐、最后一片叶、旺仔、小小、娜娜、归来仍是少年
@@ -243,7 +243,7 @@ UI：xy-yyds、LXT
 
 
 ---
-###  📲 使用须知
+###  📺 使用须知
 1、允许用于个人学习、毕业设计、教学案例、公益事业、商业使用；
 
 2、如果商用必须保留版权信息，请自觉遵守；
@@ -252,7 +252,7 @@ UI：xy-yyds、LXT
 
 
 ---
-###  📲 版权信息
+###  💾 版权信息
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
