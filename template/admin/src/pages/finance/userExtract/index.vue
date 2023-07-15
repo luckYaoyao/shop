@@ -89,9 +89,14 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="提现金额" min-width="130">
+        <el-table-column label="提现金额" min-width="100">
           <template slot-scope="scope">
             <div>{{ scope.row.extract_price }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="提现手续费" min-width="100">
+          <template slot-scope="scope">
+            <div>{{ scope.row.extract_fee }}</div>
           </template>
         </el-table-column>
         <el-table-column label="提现方式" min-width="130">

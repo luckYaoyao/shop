@@ -462,10 +462,13 @@ class UserExtractServices extends BaseServices
         if ($data['money'] <= 0) {
             throw new ApiException(400664);
         }
+        $data['extract_fee'] = bcmul((string)$data['money'], bcdiv((string)sys_config('withdrawal_fee', '0'), '100', 2), 2);
+        $data['extract_price'] = bcsub((string)$data['money'], $data['extract_fee'], 2);
         $insertData = [
             'uid' => $user['uid'],
             'extract_type' => $data['extract_type'],
-            'extract_price' => $data['money'],
+            'extract_price' => $data['extract_price'],
+            'extract_fee' => $data['extract_fee'],
             'add_time' => time(),
             'balance' => $user['brokerage_price'],
             'status' => 0
@@ -482,12 +485,12 @@ class UserExtractServices extends BaseServices
         if ($data['extract_type'] == 'alipay') {
             $insertData['alipay_code'] = $data['alipay_code'];
             $insertData['qrcode_url'] = $data['qrcode_url'];
-            $mark = '使用支付宝提现' . $insertData['extract_price'] . '元';
+            $mark = '使用支付宝提现' . $insertData['extract_price'] . '元，手续费' . $insertData['extract_fee'] . '元';
         } else if ($data['extract_type'] == 'bank') {
-            $mark = '使用银联卡' . $insertData['bank_code'] . '提现' . $insertData['extract_price'] . '元';
+            $mark = '使用银联卡' . $insertData['bank_code'] . '提现' . $insertData['extract_price'] . '元，手续费' . $insertData['extract_fee'] . '元';
         } else if ($data['extract_type'] == 'weixin') {
             $insertData['qrcode_url'] = $data['qrcode_url'];
-            $mark = '使用微信提现' . $insertData['extract_price'] . '元';
+            $mark = '使用微信提现' . $insertData['extract_price'] . '元，手续费' . $insertData['extract_fee'] . '元';
             if (sys_config('brokerage_type', 0) && $openid) {
                 if ($data['money'] < 1) {
                     throw new ApiException(400665);
