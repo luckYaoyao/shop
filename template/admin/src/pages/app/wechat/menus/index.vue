@@ -8,7 +8,7 @@
       <el-row :gutter="24">
         <el-col :span="24" class="ml40">
           <!-- 预览功能 -->
-          <el-col ::span="24">
+          <el-col :span="24">
             <el-col :xl="7" :lg="7" :md="22" :sm="22" :xs="22" class="left mb15">
               <img class="top" src="../../../../assets/images/mobilehead.png" />
               <img class="bottom" src="@/assets/images/mobilefoot.png" />
@@ -101,7 +101,7 @@
                 </el-tab-pane>
                 <el-button size="small" type="error" slot="extra" @click="deltMenus">删除</el-button>
               </el-tabs>
-              <el-col ::span="24" v-if="isTrue">
+              <el-col :span="24" v-if="isTrue">
                 <el-button type="primary" style="display: block; margin: 10px auto" @click="submenus('formValidate')"
                   >保存并发布</el-button
                 >

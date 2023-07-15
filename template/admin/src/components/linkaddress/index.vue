@@ -207,6 +207,28 @@
             "
           >
             <el-table-column
+              width="50"
+              v-if="
+                [
+                  'special',
+                  'product',
+                  'seckill',
+                  'product_category',
+                  'bargain',
+                  'combination',
+                  'advance',
+                  'integral',
+                  'news',
+                ].includes(currenType)
+              "
+            >
+              <template slot-scope="scope">
+                <el-radio v-model="templateRadio" :label="scope.row.id" @change.native="getTemplateRow(scope.row)"
+                  >&nbsp;</el-radio
+                >
+              </template>
+            </el-table-column>
+            <el-table-column
               :label="item.title"
               :width="item.width"
               :min-width="item.minWidth"
@@ -287,7 +309,7 @@
                 <el-input v-model="customdate.url" placeholder="请输入跳转路径"></el-input>
               </el-form-item> -->
               <div class="mb30 radioGroup">
-                <el-radio-group v-model="customdate.status" @on-change="radioTap('customdate')">
+                <el-radio-group v-model="customdate.status" @input="radioTap('customdate')">
                   <el-radio :label="1">
                     <span>普通链接</span>
                   </el-radio>
@@ -344,6 +366,7 @@ export default {
         label: 'name',
         children: 'children',
       },
+      templateRadio: 0,
       columns: [
         {
           title: 'ID',
@@ -462,40 +485,12 @@ export default {
   created() {
     this.getSort();
     this.goodsCategory();
-    let radio = {
-      width: 60,
-      align: 'center',
-      render: (h, params) => {
-        let id = params.row.id;
-        let flag = false;
-        if (this.presentId === id) {
-          flag = true;
-        } else {
-          flag = false;
-        }
-        let self = this;
-        return h('div', [
-          h('el-radio', {
-            props: {
-              value: flag,
-            },
-            on: {
-              'on-change': () => {
-                self.presentId = id;
-                this.currenUrl = params.row.url;
-              },
-            },
-          }),
-        ]);
-      },
-    };
-    this.columns.unshift(radio);
-    this.columns7.unshift(radio);
-    this.columns8.unshift(radio);
-    this.bargain.unshift(radio);
-    this.news.unshift(radio);
   },
   methods: {
+    getTemplateRow(row) {
+      this.presentId = row.id;
+      this.currenUrl = row.url;
+    },
     // 删除
     delLink(row, tit, num) {
       let delfromData = {

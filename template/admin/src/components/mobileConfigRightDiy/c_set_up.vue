@@ -2,8 +2,8 @@
   <div class="setUp">
     <template>
       <el-tabs v-model="configData.tabVal">
-        <el-tab-pane label="内容设置" />
-        <el-tab-pane label="样式设置" />
+        <el-tab-pane label="内容设置" name="0"></el-tab-pane>
+        <el-tab-pane label="样式设置" name="1"></el-tab-pane>
       </el-tabs>
     </template>
   </div>

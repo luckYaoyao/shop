@@ -32,7 +32,7 @@
           </el-col>
           <el-col v-bind="grid" v-if="authType != 2">
             <el-form-item label="页面地址：" prop="menu_path">
-              <el-input v-model="formValidate.menu_path" placeholder="请输入页面地址" @on-change="changeUnique">
+              <el-input v-model="formValidate.menu_path" placeholder="请输入页面地址" @change="changeUnique">
                 <template #prepend>
                   <span>{{ $routeProStr }}</span>
                 </template>
@@ -51,7 +51,7 @@
           </el-col>
           <el-col v-bind="grid" v-if="authType == 2">
             <el-form-item label="接口地址：" prop="api_url">
-              <el-input v-model="formValidate.api_url" placeholder="请输入接口地址" @on-change="changeUnique">
+              <el-input v-model="formValidate.api_url" placeholder="请输入接口地址" @change="changeUnique">
               </el-input>
             </el-form-item>
           </el-col>

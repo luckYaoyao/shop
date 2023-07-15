@@ -1,11 +1,11 @@
 <template>
   <el-row  justify="center" align="middle">
     <el-col :span="20" style="margin-top: 70px" class="mb50">
-      <Steps :current="current">
-        <Step title="验证账号信息"></Step>
-        <Step title="修改手机号码"></Step>
-        <Step title="登录"></Step>
-      </Steps>
+      <el-steps :active="current">
+        <el-step title="验证账号信息"></el-step>
+        <el-step title="修改手机号码"></el-step>
+        <el-step title="登录"></el-step>
+      </el-steps>
     </el-col>
     <el-col :span="24">
       <div class="index_from page-account-container">

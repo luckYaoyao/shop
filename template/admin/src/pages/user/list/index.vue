@@ -24,7 +24,7 @@
               </el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12" class="ivu-text-left userFrom" v-if="!collapse">
+          <el-col v-bind="grid" v-if="!collapse">
             <el-form-item>
               <el-button type="primary" icon="ios-search" label="default" class="mr15" @click="userSearchs"
                 >搜索</el-button
@@ -37,188 +37,143 @@
             </el-form-item>
           </el-col>
           <template v-if="collapse">
-            <el-col :::span="18">
-              <el-col v-bind="grid">
-                <el-form-item label="用户标签：" label-for="label_id">
-                  <div class="labelInput acea-row row-between-wrapper" @click="openSelectLabel">
-                    <div style="width: 90%">
-                      <div v-if="selectDataLabel.length">
-                        <el-tag :closable="false" v-for="(item, index) in selectDataLabel" :key="index">{{
-                          item.label_name
-                        }}</el-tag>
-                      </div>
-                      <span class="span" v-else>选择用户关联标签</span>
+            <el-col v-bind="grid">
+              <el-form-item label="用户标签：" label-for="label_id">
+                <div class="labelInput acea-row row-between-wrapper" @click="openSelectLabel">
+                  <div style="width: 90%">
+                    <div v-if="selectDataLabel.length">
+                      <el-tag :closable="false" v-for="(item, index) in selectDataLabel" :key="index">{{
+                        item.label_name
+                      }}</el-tag>
                     </div>
-                    <div class="ivu-icon ivu-icon-ios-arrow-down"></div>
+                    <span class="span" v-else>选择用户关联标签</span>
                   </div>
-                </el-form-item>
-              </el-col>
-              <el-col v-bind="grid">
-                <el-form-item label="下单次数：" label-for="pay_count">
-                  <el-select v-model="pay_count" placeholder="请选择下单次数" element-id="pay_count" clearable>
-                    <el-option value="all" label="全部"></el-option>
-                    <el-option value="-1" label="0次"></el-option>
-                    <el-option value="0" label="1次以上"></el-option>
-                    <el-option value="1" label="2次以上"></el-option>
-                    <el-option value="2" label="3次以上"></el-option>
-                    <el-option value="3" label="4次以上"></el-option>
-                    <el-option value="4" label="5次以上"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
+                  <div class="ivu-icon ivu-icon-ios-arrow-down"></div>
+                </div>
+              </el-form-item>
             </el-col>
-            <el-col ::span="18">
-              <el-col v-bind="grid">
-                <el-form-item label="用户分组：" label-for="group_id">
-                  <el-select v-model="group_id" placeholder="请选择用户分组" element-id="group_id" clearable>
-                    <el-option value="all" label="全部"></el-option>
-                    <el-option
-                      :value="item.id"
-                      v-for="(item, index) in groupList"
-                      :key="index"
-                      :label="item.group_name"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col v-bind="grid">
-                <el-form-item label="用户等级：" label-for="level">
-                  <el-select v-model="level" placeholder="请选择用户等级" element-id="level" clearable>
-                    <el-option value="all" label="全部">全部</el-option>
-                    <el-option
-                      :value="item.id"
-                      v-for="(item, index) in levelList"
-                      :key="index"
-                      :label="item.name"
-                    ></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
+            <el-col v-bind="grid">
+              <el-form-item label="下单次数：" label-for="pay_count">
+                <el-select v-model="pay_count" placeholder="请选择下单次数" element-id="pay_count" clearable>
+                  <el-option value="all" label="全部"></el-option>
+                  <el-option value="-1" label="0次"></el-option>
+                  <el-option value="0" label="1次以上"></el-option>
+                  <el-option value="1" label="2次以上"></el-option>
+                  <el-option value="2" label="3次以上"></el-option>
+                  <el-option value="3" label="4次以上"></el-option>
+                  <el-option value="4" label="5次以上"></el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
-            <el-col ::span="18">
-              <!-- <el-col v-bind="grid">
-                <el-form-item label="性别：" label-for="sex">
-                  <el-radio-group v-model="userFrom.sex" type="button">
-                    <el-radio-button label="">
-                      <span>全部</span>
-                    </el-radio-button>
-                    <el-radio-button label="1">
-                      <span>男</span>
-                    </el-radio-button>
-                    <el-radio-button label="2">
-                      <span>女</span>
-                    </el-radio-button>
-                    <el-radio-button label="0">
-                      <span>保密</span>
-                    </el-radio-button>
-                  </el-radio-group>
-                </el-form-item>
-              </el-col> -->
-              <el-col v-bind="grid">
-                <el-form-item label="身份：" label-for="is_promoter">
-                  <el-radio-group v-model="userFrom.is_promoter" type="button">
-                    <el-radio-button label="">
-                      <span>全部</span>
-                    </el-radio-button>
-                    <el-radio-button label="1">
-                      <span>推广员</span>
-                    </el-radio-button>
-                    <el-radio-button label="0">
-                      <span>普通用户</span>
-                    </el-radio-button>
-                  </el-radio-group>
-                </el-form-item>
-              </el-col>
-              <el-col v-bind="grid">
-                <el-form-item label="付费会员：" label-for="isMember">
-                  <!-- <el-select
-                    v-model="userFrom.isMember"
-                    placeholder="请选择付费会员"
-                    element-id="isMember"
-                    clearable
-                    @change="changeMember"
-                  >
-                    <el-option :value="1">是</el-option>
-                    <el-option :value="0">否</el-option>
-                  </el-select> -->
-                  <el-radio-group v-model="userFrom.isMember" type="button">
-                    <el-radio-button label="">
-                      <span>全部</span>
-                    </el-radio-button>
-                    <el-radio-button label="1">
-                      <span>是</span>
-                    </el-radio-button>
-                    <el-radio-button label="0">
-                      <span>否</span>
-                    </el-radio-button>
-                  </el-radio-group>
-                </el-form-item>
-              </el-col>
+            <el-col v-bind="grid">
+              <el-form-item label="用户分组：" label-for="group_id">
+                <el-select v-model="group_id" placeholder="请选择用户分组" element-id="group_id" clearable>
+                  <el-option value="all" label="全部"></el-option>
+                  <el-option
+                    :value="item.id"
+                    v-for="(item, index) in groupList"
+                    :key="index"
+                    :label="item.group_name"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
-            <el-col ::span="18">
-              <el-col v-bind="grid">
-                <el-form-item label="访问情况：" label-for="user_time_type">
-                  <el-select
-                    v-model="user_time_type"
-                    placeholder="请选择访问情况"
-                    element-id="user_time_type"
-                    clearable
-                  >
-                    <el-option value="" label="全部"></el-option>
-                    <el-option value="visitno" label="时间段未访问"></el-option>
-                    <el-option value="visit" label="时间段访问过"></el-option>
-                    <el-option value="add_time" label="首次访问"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col v-bind="grid" v-if="user_time_type">
-                <el-form-item label="访问时间：" label-for="user_time">
-                  <el-date-picker
-                    :editable="false"
-                    @change="onchangeTime"
-                    v-modal="timeVal"
-                    format="yyyy/MM/dd"
-                    type="datetimerange"
-                    value-format="yyyy/MM/dd"
-                    range-separator="至"
-                    start-placeholder="开始日期"
-                    end-placeholder="结束日期"
-                    class="mr20"
-                  ></el-date-picker>
-                </el-form-item>
-              </el-col>
+            <el-col v-bind="grid">
+              <el-form-item label="用户等级：" label-for="level">
+                <el-select v-model="level" placeholder="请选择用户等级" element-id="level" clearable>
+                  <el-option value="all" label="全部">全部</el-option>
+                  <el-option
+                    :value="item.id"
+                    v-for="(item, index) in levelList"
+                    :key="index"
+                    :label="item.name"
+                  ></el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
-            <el-col ::span="18">
-              <el-col v-bind="grid">
-                <el-form-item label="地区：" label-for="country">
-                  <el-select
-                    v-model="userFrom.country"
-                    placeholder="请选择国家"
-                    element-id="country"
-                    clearable
-                    @change="changeCountry"
-                  >
-                    <el-option value="domestic" label="中国"></el-option>
-                    <el-option value="abroad" label="外国"></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col v-bind="grid" v-if="userFrom.country === 'domestic'">
-                <el-form-item label="省份：">
-                  <el-cascader
-                    :options="addresData"
-                    :value="address"
-                    v-model="address"
-                    @change="handleChange"
-                    clearable
-                  ></el-cascader>
-                </el-form-item>
-              </el-col>
+            <el-col v-bind="grid">
+              <el-form-item label="身份：" label-for="is_promoter">
+                <el-radio-group v-model="userFrom.is_promoter" type="button">
+                  <el-radio-button label="">
+                    <span>全部</span>
+                  </el-radio-button>
+                  <el-radio-button label="1">
+                    <span>推广员</span>
+                  </el-radio-button>
+                  <el-radio-button label="0">
+                    <span>普通用户</span>
+                  </el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+            <el-col v-bind="grid">
+              <el-form-item label="付费会员：" label-for="isMember">
+                <el-radio-group v-model="userFrom.isMember" type="button">
+                  <el-radio-button label="">
+                    <span>全部</span>
+                  </el-radio-button>
+                  <el-radio-button label="1">
+                    <span>是</span>
+                  </el-radio-button>
+                  <el-radio-button label="0">
+                    <span>否</span>
+                  </el-radio-button>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+            <el-col v-bind="grid">
+              <el-form-item label="访问情况：" label-for="user_time_type">
+                <el-select v-model="user_time_type" placeholder="请选择访问情况" element-id="user_time_type" clearable>
+                  <el-option value="" label="全部"></el-option>
+                  <el-option value="visitno" label="时间段未访问"></el-option>
+                  <el-option value="visit" label="时间段访问过"></el-option>
+                  <el-option value="add_time" label="首次访问"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col v-bind="grid2" v-if="user_time_type">
+              <el-form-item label="访问时间：" label-for="user_time">
+                <el-date-picker
+                  :editable="false"
+                  @change="onchangeTime"
+                  v-modal="timeVal"
+                  format="yyyy/MM/dd"
+                  type="datetimerange"
+                  value-format="yyyy/MM/dd"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  class="mr20"
+                ></el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col v-bind="grid">
+              <el-form-item label="地区：" label-for="country">
+                <el-select
+                  v-model="userFrom.country"
+                  placeholder="请选择国家"
+                  element-id="country"
+                  clearable
+                  @change="changeCountry"
+                >
+                  <el-option value="domestic" label="中国"></el-option>
+                  <el-option value="abroad" label="外国"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col v-bind="grid" v-if="userFrom.country === 'domestic'">
+              <el-form-item label="省份：">
+                <el-cascader
+                  :options="addresData"
+                  :value="address"
+                  v-model="address"
+                  @change="handleChange"
+                  clearable
+                ></el-cascader>
+              </el-form-item>
             </el-col>
           </template>
-        </el-row>
-        <el-row v-if="collapse">
-          <el-col :span="13" class="ivu-text-right userFrom">
+          <el-col v-bind="grid" class="userFrom" v-if="collapse">
             <el-form-item>
               <el-button type="primary" icon="ios-search" label="default" class="mr15" @click="userSearchs"
                 >搜索</el-button
@@ -232,8 +187,8 @@
           </el-col>
         </el-row>
       </el-form>
-      <el-row justify="space-between" class="mt20">
-        <el-col ::span="24">
+      <el-row :gutter="24" justify="space-between" class="mt20">
+        <el-col :span="24">
           <el-button v-auth="['admin-user-save']" type="primary" class="mr10" @click="edit({ uid: 0 })"
             >添加用户</el-button
           >
@@ -253,7 +208,7 @@
 
           <!-- <el-button v-auth="['admin-user-synchro']" class="mr20" @click="synchro">同步公众号用户</el-button> -->
         </el-col>
-        <el-col ::span="24" class="userAlert" v-if="selectionList.length">
+        <el-col :span="24" class="userAlert" v-if="selectionList.length">
           <el-alert show-icon>
             <template slot="title">
               已选择<i class="userI"> {{ selectionList.length }} </i>项
@@ -405,10 +360,10 @@
           </div>
         </el-form-item>
       </el-form>
-      <div slot="footer">
-        <el-button type="primary" @click="putSend('formInline')">提交</el-button>
+      <span slot="footer" class="dialog-footer">
         <el-button @click="cancel('formInline')">取消</el-button>
-      </div>
+        <el-button type="primary" @click="putSend('formInline')">提交</el-button>
+      </span>
     </el-dialog>
     <el-dialog :visible.sync="customerShow" title="请选择商城用户" :show-close="false" width="50%">
       <customerInfo v-if="customerShow" @imageObject="imageObject"></customerInfo>
@@ -599,17 +554,17 @@ export default {
       contentTop: '130',
       contentWidth: '98%',
       grid: {
-        xl: 8,
-        lg: 12,
-        md: 12,
-        sm: 24,
+        xl: 6,
+        lg: 6,
+        md: 8,
+        sm: 12,
         xs: 24,
       },
       grid2: {
-        xl: 18,
-        lg: 16,
-        md: 12,
-        sm: 24,
+        xl: 8,
+        lg: 8,
+        md: 8,
+        sm: 12,
         xs: 24,
       },
       loading: false,
@@ -867,7 +822,7 @@ export default {
     },
     // 选择地址
     handleChange(selectedData) {
-      console.log(selectedData)
+      console.log(selectedData);
       this.selectedData = selectedData.map((o) => o.label);
       this.userFrom.province = this.selectedData[0];
       this.userFrom.city = this.selectedData[1];

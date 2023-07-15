@@ -194,7 +194,13 @@
           </el-table>
         </div>
         <div class="footer acea-row row-right">
-          <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="fileData.limit" />
+          <pagination
+            v-if="total"
+            :total="total"
+            :page.sync="fileData.page"
+            @pagination="pageChange"
+            :limit.sync="fileData.limit"
+          ></pagination>
         </div>
       </div>
     </div>

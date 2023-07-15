@@ -46,7 +46,7 @@
         </vue-scroll>
       </div>
       <div class="right-box">
-        <Scroll :on-reach-bottom="handleReachBottom" class="right-scroll" height="360">
+        <div v-infinite-scroll="handleReachBottom" class="right-scroll" height="360">
           <div class="msg-item add-box" v-if="tabCur" style="margin-top: 0">
             <div class="box2">
               <el-input
@@ -103,7 +103,7 @@
               </div>
             </div>
           </div>
-        </Scroll>
+        </div>
       </div>
     </div>
     <el-dialog :visible.sync="isAddSort" :title="maskTitle" width="304px" class="class-box">

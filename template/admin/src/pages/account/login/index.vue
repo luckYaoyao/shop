@@ -187,10 +187,7 @@ export default {
     closeModel(params) {
       this.isShow = false;
       // noinspection JSVoidFunctionReturnValueUsed
-      let msg = this.$message.loading({
-        content: '登录中...',
-        duration: 0,
-      });
+   
       this.loading = true;
       AccountLogin({
         account: this.formInline.username,
@@ -200,7 +197,6 @@ export default {
         captchaVerification: params ? params.captchaVerification : '',
       })
         .then(async (res) => {
-          msg();
           let data = res.data;
           let expires = this.getExpiresTime(data.expires_time);
           // 记录用户登陆信息
@@ -257,7 +253,6 @@ export default {
           });
         })
         .catch((res) => {
-          msg();
           let data = res === undefined ? {} : res;
           this.$message.error(data.msg || '登录失败');
           this.login_captcha = res.data.login_captcha;

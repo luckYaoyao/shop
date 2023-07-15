@@ -8,7 +8,7 @@
       <el-row :gutter="24">
         <el-col :span="24" class="ml40">
           <!-- 预览功能 -->
-          <el-col ::span="24">
+          <el-col :span="24">
             <el-col :xl="7" :lg="7" :md="22" :sm="22" :xs="22" class="left mb15">
               <img class="top" src="../../../../assets/images/mobilehead.png" />
               <img class="bottom" src="../../../../assets/images/mobilefoot.png" />
@@ -137,7 +137,7 @@
                   </el-form>
                 </div>
               </el-col>
-              <el-col ::span="24">
+              <el-col :span="24">
                 <div class="acea-row row-center">
                   <el-button type="primary" class="mr20" @click="submenus('formValidate')">保存并发布 </el-button>
                 </div>

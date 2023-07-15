@@ -41,7 +41,7 @@
               </el-timeline>
           </div>
         </div>
-        <Scroll v-if="currentTab == 2" :on-reach-bottom="handleReachBottom" height="550">
+        <div  v-if="currentTab == 2" v-infinite-scroll="handleReachBottom" height="550">
           <div class="contentTime" >
               <div class="acea-row row-top off" @mouseenter="quearyEvear(item.id,index)" v-for="(item,index) in upgradeLogList" :key="index" :class="{active:index==dynamic}">
                   <div class="time">
@@ -67,8 +67,7 @@
                   </el-timeline>
               </div>
           </div>
-        </Scroll>
-
+        </div>
     </el-card>
     <!-- 免责声明 -->
     <el-dialog :visible.sync="declaration" 

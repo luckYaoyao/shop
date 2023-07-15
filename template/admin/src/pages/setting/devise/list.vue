@@ -28,7 +28,7 @@
         <el-card :bordered="false" shadow="never" v-if="cardShow == 0">
           <el-row v-if="cardShow == 0" type="flex">
             <el-col style="width: 310px; height: 550px; margin-right: 30px" v-if="isDiy">
-              <iframe class="iframe-box" :src="imgUrl" frameborder="0" ref="iframe"></iframe>
+              <iframe class="iframe-box" :src="iframeUrl" frameborder="0" ref="iframe"></iframe>
               <div class="mask"></div>
             </el-col>
             <el-col :span="isDiy ? '' : 24" v-bind="isDiy ? grid : ''" :class="isDiy ? 'table' : ''">
@@ -234,7 +234,7 @@ export default {
       iframeUrl: '',
       modal: false,
       BaseURL: Setting.apiBaseURL.replace(/adminapi/, ''),
-      cardShow: 1,
+      cardShow: 0,
       loadingExist: false,
       isDiy: 1,
       qrcodeImg: '',

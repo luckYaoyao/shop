@@ -103,7 +103,7 @@
           />
         </div>
         <div v-if="orderList.length > 0">
-          <Scroll :on-reach-bottom="orderReachBottom" height="650" class="right-scroll">
+          <div v-infinite-scroll="orderReachBottom" height="650" class="right-scroll">
             <div class="order-list">
               <div class="order-item" v-for="(item, index) in orderList" :key="index">
                 <div class="head">
@@ -180,7 +180,7 @@
                 </div>
               </div>
             </div>
-          </Scroll>
+          </div>
         </div>
         <empty v-if="orderList.length == 0 && orderConfig.type === ''" status="3" msg="暂无订单信息"></empty>
         <empty v-if="orderList.length == 0 && orderConfig.type === 0" status="4" msg="暂无未支付订单"></empty>
@@ -211,8 +211,8 @@
           />
         </div>
         <div class="list-wrapper" v-if="goodsConfig.buyList.length > 0">
-          <Scroll :on-reach-bottom="goodsReachBottom" height="650" class="right-scroll">
-            <div class="list-item" v-for="item in goodsConfig.buyList">
+          <div v-infinite-scroll="goodsReachBottom" height="650" class="right-scroll">
+            <div class="list-item" v-for="(item, index) in goodsConfig.buyList" :key="index">
               <div class="img-box">
                 <img :src="item.image" alt="" />
               </div>
@@ -228,7 +228,7 @@
                 </div>
               </div>
             </div>
-          </Scroll>
+          </div>
         </div>
         <empty v-else status="3" msg="暂无商品信息"></empty>
       </div>

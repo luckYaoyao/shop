@@ -16,12 +16,12 @@
     <el-card :bordered="false" shadow="never" class="ivu-mt">
       <el-row class="mt30 acea-row row-middle row-center">
         <el-col :span="20">
-          <Steps :current="current">
-            <Step title="选择砍价商品"></Step>
-            <Step title="填写基础信息"></Step>
-            <Step title="修改商品详情"></Step>
-            <Step title="修改商品规则"></Step>
-          </Steps>
+          <el-steps :active="current">
+            <el-step title="选择砍价商品"></el-step>
+            <el-step title="填写基础信息"></el-step>
+            <el-step title="修改商品详情"></el-step>
+            <el-step title="修改商品规则"></el-step>
+          </el-steps>
         </el-col>
         <el-col :span="23" v-loading="spinShow">
           <el-form
@@ -637,41 +637,9 @@ export default {
       productAttrsApi(row.id, 2)
         .then((res) => {
           let data = res.data.info;
-          let radio = {
-            title: '选择',
-            key: 'chose',
-            width: 60,
-            align: 'center',
-            render: (h, params) => {
-              let uid = params.index;
-              let flag = false;
-              if (this.currentid === uid) {
-                flag = true;
-              } else {
-                flag = false;
-              }
-              let self = this;
-              return h('div', [
-                h('el-radio', {
-                  props: {
-                    value: flag,
-                  },
-                  on: {
-                    'on-change': () => {
-                      self.currentid = uid;
-                      let attrs = [];
-                      attrs.push(params.row);
-                      self.formValidate.attrs = attrs;
-                    },
-                  },
-                }),
-              ]);
-            },
-          };
           that.columns = data.header;
           // that.columns.unshift(radio);
           that.specsData = data.attrs;
-          that.inputChange(data);
           that.formValidate.items = data.items;
         })
         .catch((res) => {
@@ -683,50 +651,6 @@ export default {
       let attrs = [];
       this.push(row);
       this.formValidate.attrs = attrs;
-    },
-    inputChange(data) {
-      let that = this;
-      let $index = [];
-      data.header.forEach(function (item, index) {
-        if (item.type === 1) {
-          $index.push({ index: index, key: item.key, title: item.title });
-        }
-      });
-      $index.forEach(function (item, index) {
-        let title = item.title;
-        let key = item.key;
-        let row = {
-          title: title,
-          key: key,
-          align: 'center',
-          minWidth: 100,
-          render: (h, params) => {
-            return h('div', [
-              h('InputNumber', {
-                props: {
-                  min: 1,
-                  precision: 0,
-                  value: params.row.quota,
-                },
-                on: {
-                  'on-change': (e) => {
-                    params.row.quota = e;
-                    that.specsData[params.index] = params.row;
-                    if (!!that.formValidate.attrs && that.formValidate.attrs.length) {
-                      that.formValidate.attrs.forEach((v, index) => {
-                        if (v.id === params.row.id) {
-                          that.formValidate.attrs.splice(index, 1, params.row);
-                        }
-                      });
-                    }
-                  },
-                },
-              }),
-            ]);
-          },
-        };
-        that.columns.splice(item.index, 1, row);
-      });
     },
     // 获取运费模板；
     productGetTemplate() {
@@ -818,40 +742,7 @@ export default {
           this.formValidate.rule = info.rule === null ? '' : info.rule;
           this.$set(this.formValidate, 'items', info.attrs.items);
           this.description = this.formValidate.description;
-
           this.columns = info.attrs.header;
-          let radio = {
-            title: '选择',
-            key: 'chose',
-            width: 60,
-            align: 'center',
-            render: (h, params) => {
-              let uid = params.index;
-              let flag = false;
-              if (this.currentid === uid) {
-                flag = true;
-              } else {
-                flag = false;
-              }
-              let self = this;
-              return h('div', [
-                h('el-radio', {
-                  props: {
-                    value: flag,
-                  },
-                  on: {
-                    'on-change': () => {
-                      self.currentid = uid;
-                      let attrs = [];
-                      attrs.push(params.row);
-                      self.formValidate.attrs = attrs;
-                    },
-                  },
-                }),
-              ]);
-            },
-          };
-          that.columns.unshift(radio);
           this.specsData = info.attrs.value;
           let defaultAttrs = [];
           info.attrs.value.forEach(function (item, index) {

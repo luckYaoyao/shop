@@ -16,11 +16,11 @@
     <el-card :bordered="false" shadow="never" class="ivu-mt">
       <el-row class="mt30 acea-row row-middle row-center" v-loading="spinShow">
         <el-col :span="20">
-          <Steps :current="current">
-            <Step title="选择积分商品"></Step>
-            <Step title="填写基础信息"></Step>
-            <Step title="修改商品详情"></Step>
-          </Steps>
+          <el-steps :active="current">
+            <el-step title="选择积分商品"></el-step>
+            <el-step title="填写基础信息"></el-step>
+            <el-step title="修改商品详情"></el-step>
+          </el-steps>
         </el-col>
         <el-col :span="23">
           <el-form
@@ -465,55 +465,10 @@ export default {
           });
           that.formValidate.items = data.items;
           that.columns = data.header;
-          that.inputChange(data);
         })
         .catch((res) => {
           that.$Message.error(res.msg);
         });
-    },
-    inputChange(data) {
-      let that = this;
-      let $index = [];
-      data.header.forEach(function (item, index) {
-        if (item.type === 1) {
-          $index.push({ index: index, key: item.key, title: item.title });
-        }
-      });
-      $index.forEach(function (item, index) {
-        let title = item.title;
-        let key = item.key;
-        let row = {
-          title: title,
-          key: key,
-          align: 'center',
-          minWidth: 120,
-          render: (h, params) => {
-            return h('div', [
-              h('InputNumber', {
-                props: {
-                  min: 0,
-                  precision: 0,
-                  value: key === 'price' ? params.row.price : params.row.quota,
-                },
-                on: {
-                  'on-change': (e) => {
-                    key === 'price' ? (params.row.price = e) : (params.row.quota = e);
-                    that.specsData[params.index] = params.row;
-                    if (!!that.formValidate.attrs && that.formValidate.attrs.length) {
-                      that.formValidate.attrs.forEach((v, index) => {
-                        if (v.id === params.row.id) {
-                          that.formValidate.attrs.splice(index, 1, params.row);
-                        }
-                      });
-                    }
-                  },
-                },
-              }),
-            ]);
-          },
-        };
-        that.columns.splice(item.index, 1, row);
-      });
     },
     // 多选
     changeCheckbox(selection) {
@@ -589,7 +544,6 @@ export default {
             }
           }
           that.formValidate.attrs = attr;
-          that.inputChange(data);
           this.spinShow = false;
         })
         .catch((res) => {

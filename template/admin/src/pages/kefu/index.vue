@@ -165,17 +165,12 @@ export default {
     },
     // 关闭模态框
     closeModel() {
-      let msg = this.$message.loading({
-        content: '登录中...',
-        duration: 0,
-      });
       AccountLogin({
         account: this.formInline.username,
         password: this.formInline.password,
         imgcode: this.formInline.code,
       })
         .then(async (res) => {
-          msg();
           let expires = this.getExpiresTime(res.data.exp_time);
           // 记录用户登陆信息
           setCookies('kefu_uuid', res.data.kefuInfo.uid, expires);
@@ -195,7 +190,6 @@ export default {
           }
         })
         .catch((res) => {
-          msg();
           let data = res === undefined ? {} : res;
           this.errorNum++;
           this.captchas();

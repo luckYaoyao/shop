@@ -11,9 +11,9 @@
     </div>
     <div class="message">
       <el-card :bordered="false" shadow="never" class="">
-        <Steps :current="currentTab">
-          <Step :title="item.label" v-for="(item, index) in headerList" :key="index"></Step>
-        </Steps>
+        <el-steps :active="currentTab">
+          <el-step :title="item.label" v-for="(item, index) in headerList" :key="index"></el-step>
+        </el-steps>
       </el-card>
     </div>
     <div class="pt10 tab-1" v-show="currentTab == '0'">

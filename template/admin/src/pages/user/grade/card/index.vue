@@ -106,15 +106,56 @@
         />
       </div>
     </el-card>
-    <el-dialog :visible.sync="modal" title="添加批次">
-      <form-create v-model="fapi" :rule="rule" @submit="onSubmit"></form-create>
+    <el-dialog :visible.sync="modal" width="600px" :title="`${formValidate.id ? '编辑' : '添加'}批次`">
+      <!-- <form-create v-model="fapi" :rule="rule" @submit="onSubmit"></form-create> -->
+      <el-form ref="formValidate" :model="formValidate" label-width="100px" @submit.native.prevent>
+        <el-form-item label="批次名称：">
+          <el-input placeholder="请输入批次名称" element-id="unit_name" v-model="formValidate.title" />
+        </el-form-item>
+        <template v-if="!formValidate.id">
+          <el-form-item label="制卡数量：">
+            <el-input-number
+              controls-position="right"
+              placeholder="请输入制卡数量"
+              element-id="sort"
+              :precision="0"
+              :max="100000"
+              :min="1"
+              v-model="formValidate.total_num"
+              class="perW10"
+            />
+          </el-form-item>
+          <el-form-item label="体验天数：">
+            <el-input-number
+              controls-position="right"
+              placeholder="请输入体验天数"
+              element-id="sort"
+              :precision="0"
+              :max="100000"
+              :min="1"
+              v-model="formValidate.use_day"
+              class="perW10"
+            />
+          </el-form-item>
+          <el-form-item label="是否激活：">
+            <el-radio-group element-id="status" v-model="formValidate.status">
+              <el-radio :label="1" class="radio">激活</el-radio>
+              <el-radio :label="0">冻结</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="备注：">
+            <el-input type="textarea" placeholder="请输入备注" :max="100000" v-model="formValidate.remark" />
+          </el-form-item>
+        </template>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="modal = false">取消</el-button>
+        <el-button type="primary" @click="onSubmit()">提交</el-button>
+      </span>
     </el-dialog>
     <el-dialog :visible.sync="cardModal" title="卡列表" width="1000px">
-      <cardList v-if="cardModal" :id="id"></cardList>
-    </el-dialog>
-    <el-dialog :visible.sync="modal2" title="编辑批次名">
-      <form-create :rule="rule2" @submit="onSubmit2"></form-create>
-    </el-dialog>
+      <cardList v-if="cardModal" :id="id"></cardList> </el-dialog
+    >=
     <el-dialog :visible.sync="modal3" title="二维码">
       <div v-if="qrcode" class="acea-row row-around">
         <div v-if="qrcode && qrcode.wechat_img" class="acea-row row-column-around row-between-wrapper">
@@ -163,105 +204,16 @@ export default {
       },
       loading: false,
       modal: false,
-      rule: [
-        {
-          type: 'input',
-          field: 'title',
-          title: '批次名称',
-          validate: [
-            {
-              required: true,
-              message: '请输入批次名称',
-              trigger: 'blur',
-            },
-          ],
-        },
-        {
-          type: 'InputNumber',
-          field: 'total_num',
-          title: '制卡数量',
-          value: 1,
-          props: {
-            min: 1,
-            precision: 0,
-            max: 100000,
-          },
-          on: {
-            'on-change': (data) => {
-              if (data > 100000) {
-                this.$nextTick((e) => {
-                  this.rule[1].value = 100000;
-                });
-              }
-            },
-          },
-        },
-        {
-          type: 'InputNumber',
-          field: 'use_day',
-          title: '体验天数',
-          value: 1,
-          props: {
-            min: 1,
-            precision: 0,
-            max: 100000,
-          },
-          on: {
-            'on-change': (data) => {
-              if (data > 100000) {
-                this.$nextTick((e) => {
-                  this.rule[2].value = 100000;
-                });
-              }
-            },
-          },
-        },
-        {
-          type: 'radio',
-          field: 'status',
-          title: '是否激活',
-          value: '0',
-          options: [
-            {
-              value: '0',
-              label: '冻结',
-            },
-            {
-              value: '1',
-              label: '激活',
-            },
-          ],
-        },
-        {
-          type: 'input',
-          field: 'remark',
-          title: '备注',
-          props: {
-            type: 'textarea',
-          },
-        },
-      ],
+
+      formValidate: {
+        id: 0,
+        title: '',
+        total_num: 1,
+        use_day: 1,
+        status: 1,
+        remark: '',
+      },
       modal2: false,
-      rule2: [
-        {
-          type: 'hidden',
-          field: 'id',
-          value: '',
-        },
-        {
-          type: 'input',
-          field: 'title',
-          title: '批次名称',
-          value: '',
-          validate: [
-            {
-              required: true,
-              message: '请输入批次名称',
-              trigger: 'blur',
-            },
-          ],
-        },
-      ],
       modal3: false,
       qrcode: null,
       fapi: {},
@@ -335,9 +287,9 @@ export default {
     changeMenu(row, name) {
       switch (name) {
         case '1':
-          this.rule2[0].value = row.id;
-          this.rule2[1].value = row.title;
-          this.modal2 = true;
+          this.formValidate.id = row.id;
+          this.formValidate.title = row.title;
+          this.modal = true;
           break;
         case '2':
           this.id = row.id;
@@ -350,36 +302,39 @@ export default {
     },
     // 添加批次弹窗
     addBatch() {
-      this.fapi.resetFields();
+      // this.fapi.resetFields();
       this.modal = true;
+      this.formValidate.id = 0;
+      this.formValidate.title = '';
     },
     // 提交批次
-    onSubmit(formData) {
-      memberBatchSave(0, formData)
-        .then((res) => {
-          this.modal = false;
-          this.$message.success(res.msg);
-          this.getMemberBatch();
-          this.fapi.resetFields();
+    onSubmit() {
+      if (this.formValidate.id) {
+        memberBatchSetValue(this.formValidate.id, {
+          field: 'title',
+          value: this.formValidate.id,
         })
-        .catch((err) => {
-          this.$message.error(err.msg);
-        });
+          .then((res) => {
+            this.modal = false;
+            this.$message.success(res.msg);
+            this.getMemberBatch();
+          })
+          .catch((err) => {
+            this.$message.error(err.msg);
+          });
+      } else {
+        memberBatchSave(this.formValidate.id, this.formValidate)
+          .then((res) => {
+            this.modal = false;
+            this.$message.success(res.msg);
+            this.getMemberBatch();
+          })
+          .catch((err) => {
+            this.$message.error(err.msg);
+          });
+      }
     },
-    onSubmit2(formData) {
-      memberBatchSetValue(formData.id, {
-        field: 'title',
-        value: formData.title,
-      })
-        .then((res) => {
-          this.modal2 = false;
-          this.$message.success(res.msg);
-          this.getMemberBatch();
-        })
-        .catch((err) => {
-          this.$message.error(err.msg);
-        });
-    },
+    onSubmit2(formData) {},
     // 会员卡二维码
     getMemberScan() {
       userMemberScan()
