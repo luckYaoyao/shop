@@ -13,7 +13,7 @@ CRMEB开源商城系统PHP版
         <img src="https://img.shields.io/badge/Licence-GPL3.0-green.svg?style=flat" />
     </a>
     <a href="http://www.crmeb.com">
-        <img src="https://img.shields.io/badge/Edition-4.5-blue.svg" />
+        <img src="https://img.shields.io/badge/Edition-5.0-blue.svg" />
     </a>
      <a href="https://gitee.com/ZhongBangKeJi/CRMEB/repository/archive/master.zip">
         <img src="https://img.shields.io/badge/Download-150m-red.svg" />
@@ -55,7 +55,7 @@ v5.0.0 更新说明【更新时间2023年06月12日】
 8、增加小程序发货信息管理接口
 9、优惠券优化，优惠券修改后台添加，增加多分类，恢复系统赠送功能
 10、后台分类样式统一，优化分类选择体验
-以及其他共计21跳更新和优化
+以及其他共计21条更新和优化
 
 v4.7.1 更新说明【更新时间2023年04月26日】
 1.优化订单下单时订单号的生成
@@ -68,9 +68,9 @@ v4.7.1 更新说明【更新时间2023年04月26日】
 8.不能修改cos空间名，cos优化；
 9.核销订单部分退款问题优化
 10.更新修改后台admin之后无法选择图片的问题
-以及其他共计40跳更新和优化
+以及其他共计40条更新和优化
 ```
-### 用心做开源，我们也很需要你的鼓励！右上角Star，等你点亮！
+### 用心做开源，我们也很需要你的鼓励！右上角Star🌟，等你点亮！
 
 ---
 
@@ -93,6 +93,7 @@ CRMEB开源商城Java版：https://gitee.com/ZhongBangKeJi/crmeb_java
 6.快速上手：详细帮助文档、后台接口管理、后台数据库字典、系统文件管理备注、代码注释、一键安装；
 7.系统安全：系统操作日志、系统生产日志、文件校验、数据备份；
 8.高 性 能：支持Redis缓存、队列、长连接、多种云储存、支持集群部署。
+
 ~~~
 ---
 
@@ -101,7 +102,7 @@ CRMEB开源商城Java版：https://gitee.com/ZhongBangKeJi/crmeb_java
 ```
 Nignx/Apache/IIS
 PHP 7.1 ~ 7.4 
-MySQL 5.7
+MySQL 5.7 ～ 8.0
 Redis
 ```
 
@@ -111,7 +112,7 @@ Redis
 
 ###  📱 系统演示
 
-![输入图片说明](readme/pic/20公众号.jpg)
+![输入图片说明](readme/pic/公众号.jpg)
 
 管理后台： http://v5.crmeb.net/admin
 
@@ -154,10 +155,10 @@ APP下载：http://app.crmeb.cn/bzv（苹果手机直接在APP Store里搜索CRM
 
 ###  📖 UI界面展示
 
-![输入图片说明](readme/pic/ui_01.jpg)
-![输入图片说明](readme/pic/ui_02.jpg)
-![输入图片说明](readme/pic/ui2_01.jpg)
-![输入图片说明](readme/pic/ui2_02.jpg)
+![输入图片说明](readme/pic/PHP_01.jpg)
+![输入图片说明](readme/pic/PHP_02.jpg)
+![输入图片说明](readme/pic/PHP_03.jpg)
+![输入图片说明](readme/pic/PHP_04.jpg)
 
 ---
 
@@ -177,7 +178,7 @@ So~~想要用CRMEB开源商城系统做公益项目的朋友，可以来免费�
 #### 技术娱乐！代码写累了？那就歇会吧！扫码让你开心一刻！
 ![输入图片说明](readme/pic/小剧场.jpg)
 #### 技术社区！找方法、提bug、看官方消息、拿活跃大奖！都在 <a href="https://www.crmeb.com/ask" target="_blank">CRMEB 技术社区</a> 应有尽有
-#### 技术交流！跟着官方，不迷路！欢迎扫码加入CRMEB 开源项目群，一手消息及资源，尽在掌握！
+#### 技术交流！<a href="https://pd.qq.com/s/1v2yb4e0p" target="_blank">CRMEB开源商城系统开发QQ频道已开启，点击加入一起交流学习</a>
 ![输入图片说明](readme/pic/联系我们.jpg)
 
 ---
