@@ -78,7 +78,7 @@
               <a @click="addE(row, '添加子菜单')" v-if="row.auth_type === 1 || row.auth_type === 3">添加下级</a>
               <!-- <a @click="addE(row, '添加规则')" v-else>添加规则</a> -->
             </span>
-            <Divider type="vertical" v-if="row.auth_type === 1 || row.auth_type === 3" />
+            <el-divider direction="vertical" v-if="row.auth_type === 1 || row.auth_type === 3"></el-divider>
             <a @click="edit(row, '编辑')">编辑</a>
             <el-divider direction="vertical"></el-divider>
             <a @click="del(row, '删除规则')">删除</a>
