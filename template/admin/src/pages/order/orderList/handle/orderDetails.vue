@@ -96,9 +96,23 @@
             >虚拟发货备注：{{ orderDatalist.orderInfo.fictitious_content }}</el-col
           >
         </el-row>
-
+        <el-divider></el-divider>
+        <div class="ivu-description-list-title">商品信息</div>
+        <el-row class="mb10">
+          <div class="tabBox" v-for="(val, i) in orderDatalist.orderInfo.cartInfo" :key="i">
+            <div class="tabBox_img" v-viewer>
+              <img v-lazy="val.productInfo.attrInfo ? val.productInfo.attrInfo.image : val.productInfo.image" />
+            </div>
+            <span class="tabBox_tit"
+              >{{ val.productInfo.store_name + ' | '
+              }}{{ val.productInfo.attrInfo ? val.productInfo.attrInfo.suk : '' }}</span
+            >
+            <span class="tabBox_pice">{{ '￥' + val.truePrice + ' x ' + val.cart_num }}</span>
+          </div>
+        </el-row>
+        <el-divider></el-divider>
         <div v-if="orderDatalist.orderInfo.invoice">
-          <Divider style="margin: 20px 0 !important" />
+          <el-divider></el-divider>
           <div class="ivu-description-list-title">发票信息</div>
           <el-row class="mb10">
             <el-col span="12">发票抬头：{{ orderDatalist.orderInfo.invoice.name }}</el-col>
@@ -150,7 +164,6 @@
             <el-col span="12">联系邮箱：{{ orderDatalist.orderInfo.invoice.email || '' }}</el-col>
             <el-col span="12">联系电话：{{ orderDatalist.orderInfo.invoice.user_phone || '' }}</el-col>
           </el-row>
-
           <div v-if="orderDatalist.orderInfo.invoice.header_type === 2 && orderDatalist.orderInfo.invoice.type === 2">
             <el-row class="mb10">
               <el-col span="12"
@@ -187,8 +200,7 @@
             <el-col span="12">开票状态：{{ orderDatalist.orderInfo.invoice.is_invoice ? '已开票' : '未开票' }}</el-col>
           </el-row>
         </div>
-
-        <Divider style="margin: 20px 0 !important" v-if="orderDatalist.orderInfo.custom_form.length" />
+        <el-divider v-if="orderDatalist.orderInfo.custom_form.length"></el-divider>
         <div class="ivu-description-list-title" v-if="orderDatalist.orderInfo.custom_form.length">表单信息</div>
         <el-row class="mb10" v-if="orderDatalist.orderInfo.custom_form.length">
           <el-col
@@ -427,6 +439,17 @@ export default {
   img {
     width: 100%;
     height: 100%;
+  }
+}
+.tabBox{
+  display:flex;
+  align-items center
+  .tabBox_img{
+    margin-right 10px
+  }
+  .tabBox_tit{
+    margin-right 20px
+
   }
 }
 </style>

@@ -201,6 +201,9 @@ class SystemRouteServices extends BaseServices
     {
         $oneId = app()->make(SystemRouteCateServices::class)->value(['app_name' => $app, 'name' => $cateName, 'pid' => 0], 'id');
         if (!$oneId) {
+            //修复重复同步后反复增加二级文件夹
+            $id = app()->make(SystemRouteCateServices::class)->value(['app_name' => $app, 'name' => $cateName, 'pid' => $pid], 'id');
+            if ($id) return $id;
             $res = app()->make(SystemRouteCateServices::class)->save([
                 'app_name' => $app,
                 'name' => $cateName,

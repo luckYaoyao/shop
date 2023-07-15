@@ -13,11 +13,6 @@
         <el-row :gutter="24">
           <el-col v-bind="grid">
             <el-form-item label="商品分类：" label-for="pid">
-              <!-- <el-select v-model="artFrom.cate_id" placeholder="请选择商品分类" clearable @change="userSearchs">
-                <el-option v-for="item in treeSelect" :value="item.id" :key="item.id">{{
-                  item.html + item.cate_name
-                }}</el-option>
-              </el-select> -->
               <el-cascader
                 v-model="artFrom.cate_id"
                 size="small"

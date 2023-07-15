@@ -67,7 +67,7 @@
                 <!-- <el-dropdown-item name="10" v-show="scope.row._status >= 2">订单打印</el-dropdown-item> -->
                 <el-dropdown-item command="4" v-show="scope.row.status !== 4">订单备注</el-dropdown-item>
                 <el-dropdown-item command="8" v-show="scope.row.status === 2">已收货</el-dropdown-item>
-                <!-- <el-dropdown-item name="9">删除订单</el-dropdown-item> -->
+                <el-dropdown-item command="9" v-show="row.is_del === 1">删除订单</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </template>

@@ -674,8 +674,7 @@ export default {
             }
           })
           .catch((err) => {
-            console.log(err);
-            this.$message.error(err);
+            this.$message.error(err.msg);
           });
       } catch (error) {
         console.log(error);
@@ -696,7 +695,7 @@ export default {
           this.formValidate = res.data;
         })
         .catch((err) => {
-          this.$message.error(err);
+          this.$message.error(err.msg);
         });
     },
     async handleSubmit() {
@@ -718,7 +717,7 @@ export default {
           this.getRoteData(this.paramsId);
         })
         .catch((err) => {
-          this.$message.error(err);
+          this.$message.error(err.msg);
         });
     },
     async insertEvent(type) {
@@ -833,7 +832,7 @@ export default {
           this.getInterfaceList();
         })
         .catch((err) => {
-          this.$message.error(err);
+          this.$message.error(err.msg);
         });
     },
     //侧边栏右键点击事件
@@ -938,7 +937,7 @@ export default {
               node.remove();
             })
             .catch((err) => {
-              this.$message.error(err);
+              this.$message.error(err.msg);
             });
         },
         onCancel: () => {},
@@ -956,7 +955,7 @@ export default {
             this.$message.success(res.msg);
           })
           .catch((err) => {
-            this.$message.error(err);
+            this.$message.error(err.msg);
           });
       }
     },

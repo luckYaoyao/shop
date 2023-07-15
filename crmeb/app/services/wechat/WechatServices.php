@@ -395,8 +395,7 @@ class WechatServices extends BaseServices
                 if (!$uid && !$res) {
                     return false;
                 }
-            }
-            if ($openid && $storeUserMobile) {
+            } elseif ($openid && $storeUserMobile) {
                 /** @var UserServices $userServices */
                 $userServices = app()->make(UserServices::class);
                 $uid = $this->dao->value(['openid' => $openid], 'uid');
