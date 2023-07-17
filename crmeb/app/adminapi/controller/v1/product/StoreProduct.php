@@ -238,7 +238,8 @@ class StoreProduct extends AuthController
             ['is_copy', 0],//是否是复制商品
             ['is_limit', 0],//是否限购
             ['limit_type', 0],//限购类型
-            ['limit_num', 0]//限购数量
+            ['limit_num', 0],//限购数量
+            ['min_qty', 1],//起购数量
         ]);
         $this->service->save((int)$id, $data);
         return app('json')->success(100000);

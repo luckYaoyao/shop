@@ -43,12 +43,12 @@
 					<view class="title">{{$t(`数量`)}}</view>
 					<view class="carnum acea-row row-left">
 						<view class="item reduce acea-row row-center-wrapper"
-							:class="attr.productSelect.cart_num <= 1 ? 'on' : ''"
-							v-if="attr.productSelect.cart_num <= 1">
+							:class="attr.productSelect.cart_num <= minQty ? 'on' : ''"
+							v-if="attr.productSelect.cart_num <= minQty">
 							<text class="iconfont icon-shangpinshuliang-jian"></text>
 						</view>
 						<view class="item reduce acea-row row-center-wrapper"
-							:class="attr.productSelect.cart_num <= 1 ? 'on' : ''" @click="CartNumDes" v-else>
+							:class="attr.productSelect.cart_num <= minQty ? 'on' : ''" @click="CartNumDes" v-else>
 							<text class="iconfont icon-shangpinshuliang-jian"></text>
 						</view>
 						<view class='item num acea-row row-middle'>
@@ -94,6 +94,10 @@
 				default: () => {}
 			},
 			limitNum: {
+				type: Number,
+				value: 0
+			},
+			minQty: {
 				type: Number,
 				value: 0
 			},

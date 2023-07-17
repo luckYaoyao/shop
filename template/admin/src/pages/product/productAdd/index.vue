@@ -1068,6 +1068,17 @@
             <div class="line"></div>
           </el-col>
           <el-col :span="24">
+            <el-form-item label="起购数量：">
+              <el-input-number
+                controls-position="right"
+                :min="0"
+                :max="999999"
+                v-model="formValidate.min_qty"
+                placeholder="请输入起购数量"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
             <el-form-item label="是否限购：">
               <el-switch :active-value="1" :inactive-value="0" v-model="formValidate.is_limit" size="large">
                 <span slot="open">开启</span>
@@ -1810,6 +1821,7 @@ export default {
         selectRule: '',
         coupon_ids: [],
         command_word: '',
+        min_qty: 1,
       },
       ruleList: [],
       templateList: [],

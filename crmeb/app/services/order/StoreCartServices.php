@@ -321,7 +321,10 @@ class StoreCartServices extends BaseServices
         //购物车修改数量检查限购
         /** @var StoreProductServices $productServices */
         $productServices = app()->make(StoreProductServices::class);
-        $limitInfo = $productServices->get($carInfo->product_id, ['is_limit', 'limit_type', 'limit_num']);
+        $limitInfo = $productServices->get($carInfo->product_id, ['is_limit', 'limit_type', 'limit_num', 'min_qty']);
+        if ($number < $limitInfo['min_qty']) {
+            throw new ApiException('不能小于起购数量');
+        }
         if ($limitInfo['is_limit']) {
             if ($limitInfo['limit_type'] == 1 && $number > $limitInfo['limit_num']) {
                 throw new ApiException(410239, ['limit' => $limitInfo['limit_num']]);
