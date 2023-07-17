@@ -1,17 +1,17 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row :gutter="24" align="middle">
-          <el-col v-bind="grid">
-            <el-form-item label="搜索：" label-for="status">
-              <el-input
+        <Row type="flex" :gutter="24" align="middle">
+          <Col v-bind="grid">
+            <FormItem label="搜索：" label-for="status">
+              <Input
                 style="width: 300px"
                 search
                 enter-button
@@ -19,151 +19,124 @@
                 v-model="formValidate.keyword"
                 @on-search="userSearchs"
               />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-card>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-row class="ivu-mt box-wrapper">
-        <el-col :xs="24" :sm="24" ref="rightBox">
-          <el-row>
-            <el-col v-bind="grid">
-              <el-button type="primary" @click="groupAdd('0')" class="mr20">添加代理商</el-button>
-            </el-col>
-          </el-row>
-          <el-table
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
+    </Card>
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Row class="ivu-mt box-wrapper">
+        <Col :xs="24" :sm="24" ref="rightBox">
+          <Row type="flex">
+            <Col v-bind="grid">
+              <Button type="primary" @click="groupAdd('0')" class="mr20">添加代理商</Button>
+            </Col>
+          </Row>
+          <Table
+            :columns="columns"
             :data="userLists"
             ref="table"
             class="mt25"
-            v-loading="loading"
-            highlight-current-row
+            :loading="loading"
+            highlight-row
             no-formValidate-text="暂无数据"
             no-filtered-formValidate-text="暂无筛选结果"
           >
-            <el-table-column label="用户UID" width="80">
-              <template slot-scope="scope">
-                <span>{{ scope.row.uid }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="头像" min-width="90">
-              <template slot-scope="scope">
-                <div class="tabBox_img" v-viewer>
-                  <img v-lazy="scope.row.avatar" />
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="姓名" min-width="130">
-              <template slot-scope="scope">
-                <div class="acea-row">
-                  <Icon type="md-male" v-show="scope.row.sex === '男'" color="#2db7f5" size="15" class="mr5" />
-                  <Icon type="md-female" v-show="scope.row.sex === '女'" color="#ed4014" size="15" class="mr5" />
-                  <div v-text="scope.row.nickname"></div>
-                </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="分销比例" min-width="130">
-              <template slot-scope="scope">
-                <span> {{ scope.row.division_percent }}%</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="代理商数量" min-width="130">
-              <template slot-scope="scope">
-                <span>{{ scope.row.agent_count }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="订单数量" min-width="130">
-              <template slot-scope="scope">
-                <span>{{ scope.row.order_count }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="截止时间" min-width="130">
-              <template slot-scope="scope">
-                <span>{{ scope.row.division_end_time }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="状态" min-width="130">
-              <template slot-scope="scope">
-                <el-switch
-                  :active-value="1"
-                  :inactive-value="0"
-                  v-model="scope.row.division_status"
-                  :value="scope.row.division_status"
-                  @change="onchangeIsShow(scope.row)"
-                  size="large"
-                >
-                </el-switch>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" fixed="right" width="170">
-              <template slot-scope="scope">
-                <a @click="jump(scope.row.uid)">查看员工</a>
-                <el-divider direction="vertical"></el-divider>
-                <a @click="groupAdd(scope.row.uid)">编辑</a>
-                <el-divider direction="vertical"></el-divider>
-                <a @click="del(scope.row, '删除代理商', index)">删除</a>
-              </template>
-            </el-table-column>
-          </el-table>
+            <template slot-scope="{ row, index }" slot="avatars">
+              <div class="tabBox_img" v-viewer>
+                <img v-lazy="row.avatar" />
+              </div>
+            </template>
+            <template slot-scope="{ row, index }" slot="nickname">
+              <div class="acea-row">
+                <Icon type="md-male" v-show="row.sex === '男'" color="#2db7f5" size="15" class="mr5" />
+                <Icon type="md-female" v-show="row.sex === '女'" color="#ed4014" size="15" class="mr5" />
+                <div v-text="row.nickname"></div>
+              </div>
+              <!--                    <div v-show="row.vip_name" class="vipName">{{row.vip_name}}</div>-->
+            </template>
+            <template slot-scope="{ row, index }" slot="status">
+              <i-switch
+                v-model="row.division_status"
+                :value="row.division_status"
+                :true-value="1"
+                :false-value="0"
+                @on-change="onchangeIsShow(row)"
+                size="large"
+              >
+                <span slot="open">显示</span>
+                <span slot="close">隐藏</span>
+              </i-switch>
+            </template>
+            <template slot-scope="{ row, index }" slot="division_end_time">
+              <span> {{ row.division_end_time }}</span>
+            </template>
+            <template slot-scope="{ row, index }" slot="division_percent">
+              <span> {{ row.division_percent }}%</span>
+            </template>
+            <template slot-scope="{ row, index }" slot="action">
+              <a @click="jump(row.uid)">查看员工</a>
+              <Divider type="vertical" />
+              <a @click="groupAdd(row.uid)">编辑</a>
+              <Divider type="vertical" />
+              <a @click="del(row, '删除代理商', index)">删除</a>
+            </template>
+          </Table>
           <div class="acea-row row-right page">
-            <pagination
-              v-if="total"
+            <Page
               :total="total"
-              :page.sync="formValidate.page"
-              :limit.sync="formValidate.limit"
-              @pagination="getList"
+              :current="formValidate.page"
+              show-elevator
+              show-total
+              @on-change="pageChange"
+              :page-size="formValidate.limit"
             />
           </div>
-        </el-col>
-      </el-row>
-    </el-card>
-    <el-dialog :visible.sync="staffModal" title="员工列表" class="order_box" width="800px">
-      <el-table
+        </Col>
+      </Row>
+    </Card>
+    <Modal v-model="staffModal" scrollable title="员工列表" class="order_box" width="800" footer-hide>
+      <Table
+        :columns="columns2"
         :data="clerkLists"
         ref="table"
         class="mt25"
-        v-loading="loading"
-        highlight-current-row
+        :loading="loading"
+        highlight-row
         no-formValidate-text="暂无数据"
         no-filtered-formValidate-text="暂无筛选结果"
       >
-        <el-table-column label="用户UID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.uid }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="头像" min-width="90">
-          <template slot-scope="scope">
-            <div class="tabBox_img" v-viewer>
-              <img v-lazy="scope.row.avatar" />
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="姓名" min-width="130">
-          <template slot-scope="scope">
-            <div class="acea-row">
-              <Icon type="md-male" v-show="scope.row.sex === '男'" color="#2db7f5" size="15" class="mr5" />
-              <Icon type="md-female" v-show="scope.row.sex === '女'" color="#ed4014" size="15" class="mr5" />
-              <div v-text="scope.row.nickname"></div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="分销比例" min-width="130">
-          <template slot-scope="scope">
-            <span> {{ scope.row.division_percent }}%</span>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template slot-scope="{ row, index }" slot="avatars">
+          <div class="tabBox_img" v-viewer>
+            <img v-lazy="row.avatar" />
+          </div>
+        </template>
+        <template slot-scope="{ row, index }" slot="nickname">
+          <div class="acea-row">
+            <Icon type="md-male" v-show="row.sex === '男'" color="#2db7f5" size="15" class="mr5" />
+            <Icon type="md-female" v-show="row.sex === '女'" color="#ed4014" size="15" class="mr5" />
+            <div v-text="row.nickname"></div>
+          </div>
+          <!--                    <div v-show="row.vip_name" class="vipName">{{row.vip_name}}</div>-->
+        </template>
+        <template slot-scope="{ row, index }" slot="agent_end_time">
+          <span> {{ row.agent_end_time | formatDate }}</span>
+        </template>
+        <template slot-scope="{ row, index }" slot="division_percent">
+          <span> {{ row.division_percent }}%</span>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total2"
+        <Page
           :total="total2"
-          :page.sync="clerkReqData.page"
-          :limit.sync="clerkReqData.limit"
-          @pagination="getClerkList"
+          :current="clerkReqData.page"
+          show-elevator
+          show-total
+          @on-change="clerkPageChange"
+          :page-size="clerkReqData.limit"
         />
       </div>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 
@@ -190,6 +163,76 @@ export default {
         proportion: 0,
         image: '',
       },
+      columns2: [
+        {
+          title: '用户UID',
+          key: 'uid',
+          width: 80,
+        },
+        {
+          title: '头像',
+          slot: 'avatars',
+          minWidth: 60,
+        },
+        {
+          title: '姓名',
+          slot: 'nickname',
+          minWidth: 150,
+        },
+        {
+          title: '分销比例',
+          slot: 'division_percent',
+          minWidth: 100,
+        },
+      ],
+      columns: [
+        {
+          title: '用户UID',
+          key: 'uid',
+          width: 80,
+        },
+        {
+          title: '头像',
+          slot: 'avatars',
+          minWidth: 60,
+        },
+        {
+          title: '姓名',
+          slot: 'nickname',
+          minWidth: 150,
+        },
+        {
+          title: '分销比例',
+          slot: 'division_percent',
+          minWidth: 100,
+        },
+        {
+          title: '员工数量',
+          key: 'agent_count',
+          minWidth: 100,
+        },
+        {
+          title: '订单数量',
+          key: 'order_count',
+          minWidth: 100,
+        },
+        {
+          title: '截止时间',
+          slot: 'division_end_time',
+          minWidth: 100,
+        },
+        {
+          title: '状态',
+          slot: 'status',
+          minWidth: 100,
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          fixed: 'right',
+          minWidth: 120,
+        },
+      ],
       FromData: null,
       loading: false,
       current: 0,
@@ -218,7 +261,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '75px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -257,8 +300,16 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.formValidate.page = index;
+      this.getList();
+    },
+    clerkPageChange() {
+      this.clerkReqData.page = index;
+      this.getClerkList();
     },
     // 添加表单
     groupAdd(id) {
@@ -276,10 +327,10 @@ export default {
       };
       isShowApi(data)
         .then(async (res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 编辑
@@ -294,11 +345,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.userLists.splice(num, 1);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },

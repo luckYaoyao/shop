@@ -4,24 +4,26 @@
       <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div>
         <div style="float: right">
-          <el-button class="bnt" type="primary" @click="save">保存</el-button>
+          <Button class="bnt" type="primary" @click="save">保存</Button>
         </div>
       </div>
     </div>
     <div class="box-wrapper">
       <div class="left-wrapper" v-if="!$route.params.id && groupAll.length">
-        <div class="tree-vis">
-          <div
-            class="tab-item"
-            :class="{ active: item.id == pageId }"
-            v-for="(item, index) in groupAll"
-            :key="index"
-            @click="edits(item)"
-          >
-            {{ item.name }}
-          </div>
-          <div class="tab-item" :class="{ active: pageId == 1617 }" @click="edits(2)">开屏广告</div>
-        </div>
+        <Menu :theme="theme3" :active-name="sortName" width="auto">
+          <MenuGroup>
+            <MenuItem
+              :name="item.config_name"
+              class="menu-item"
+              v-for="(item, index) in groupAll"
+              :key="index"
+              @click.native="edits(item)"
+            >
+              {{ item.name }}
+            </MenuItem>
+            <MenuItem name="guide" class="menu-item" @click.native="edits(2)"> 开屏广告 </MenuItem>
+          </MenuGroup>
+        </Menu>
       </div>
       <div v-if="name == 'user_recharge_quota'" class="iframe">
         <div class="iframe-boxs">
@@ -57,7 +59,7 @@
           </div>
         </div>
       </div>
-      <div v-if="name == 'admin_login_slide'" class="pciframe" :bordered="false" shadow="never">
+      <div v-if="name == 'admin_login_slide'" class="pciframe" :bordered="false" dis-hover>
         <img src="../../../assets/images/pclogin.png" class="pciframe-box" />
         <div class="pcmoddile_goods">
           <div class="nofont" v-if="tabList.list == ''">暂无照片，请添加~</div>
@@ -94,7 +96,7 @@
         "
         class="iframe"
         :bordered="false"
-        shadow="never"
+        dis-hover
       >
         <iframe :src="url" class="iframe-box" frameborder="0"></iframe>
         <div class="moddile"></div>
@@ -107,7 +109,7 @@
           "
           class="moddile_box"
         >
-          <div class="nofonts" v-if="!tabList.list || !tabList.list.length || !tabList.list[0].img">
+          <div class="nofonts" v-if="tabList.list == '' || !tabList.list.length || !tabList.list[0].img">
             暂无照片，请添加~
           </div>
           <swiper v-else :options="swiperOption" class="swiperimg">
@@ -149,13 +151,13 @@
       </div>
       <div v-if="a == 1" style="margin-left: 40px">
         <div class="table_box">
-          <div>
+          <div type="flex">
             <div v-bind="grid">
               <div class="title">隐私权限页面展示：</div>
             </div>
           </div>
           <div>
-            <el-form
+            <Form
               class="form"
               ref="formValidate"
               :model="formValidate"
@@ -165,14 +167,14 @@
               @submit.native.prevent
             >
               <div class="goodsTitle acea-row"></div>
-              <el-form-item label="" prop="content" style="margin: 0px">
+              <FormItem label="" prop="content" style="margin: 0px">
                 <WangEditor
                   style="width: 90%"
                   :content="formValidate.content"
                   @editorContent="getEditorContent"
                 ></WangEditor>
-              </el-form-item>
-            </el-form>
+              </FormItem>
+            </Form>
           </div>
         </div>
       </div>
@@ -188,128 +190,95 @@
       </div>
       <div v-if="name == 'sign_day_num'" style="margin-left: 20px">
         <div class="table_box">
-          <div>
+          <div type="flex">
             <div v-bind="grid">
               <div class="title">签到天数设置</div>
-              <el-button
+              <Button
                 type="primary"
                 icon="md-add"
                 @click="groupAdd('添加数据')"
                 style="margin-left: 14px; margin-top: 30px"
-                >添加数据</el-button
+                >添加数据</Button
               >
             </div>
           </div>
           <div class="table">
-            <el-table
+            <Table
+              :columns="columns1"
               :data="cmsList"
               ref="table"
               class="mt25"
               :loading="loading"
-              highlight-current-row
+              highlight-row
               no-userFrom-text="暂无数据"
               no-filtered-userFrom-text="暂无筛选结果"
             >
-              <el-table-column label="编号" width="80">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.id }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="第几天" min-width="80">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.day }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="获取积分" min-width="80">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.sign_num }}</span>
-                </template>
-              </el-table-column>
-
-              <el-table-column label="是否可用" min-width="80">
-                <template slot-scope="scope">
-                  <el-switch
-                    :active-value="1"
-                    :inactive-value="0"
-                    v-model="scope.row.status"
-                    :value="scope.row.status"
-                    @change="onchangeIsShow(scope.row)"
-                    size="large"
-                  >
-                  </el-switch>
-                </template>
-              </el-table-column>
-              <el-table-column label="排序" min-width="80">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.sort }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" fixed="right" width="150">
-                <template slot-scope="scope">
-                  <a @click="edit(scope.row, '编辑')">编辑</a>
-                  <el-divider direction="vertical"></el-divider>
-                  <a @click="del(scope.row, '删除这条信息', index)">删除</a>
-                </template>
-              </el-table-column>
-            </el-table>
+              <template slot-scope="{ row, index }" slot="status">
+                <i-switch
+                  v-model="row.status"
+                  :value="row.status"
+                  :true-value="1"
+                  :false-value="0"
+                  @on-change="onchangeIsShow(row)"
+                  size="large"
+                >
+                  <span slot="open">显示</span>
+                  <span slot="close">隐藏</span>
+                </i-switch>
+              </template>
+              <template slot-scope="{ row, index }" slot="action">
+                <a @click="edit(row, '编辑')">编辑</a>
+                <Divider type="vertical" />
+                <a @click="del(row, '删除这条信息', index)">删除</a>
+              </template>
+            </Table>
           </div>
         </div>
       </div>
       <div v-if="name == 'user_recharge_quota'" style="margin-left: 20px">
         <div class="table_box">
-          <div>
+          <div type="flex">
             <div v-bind="grid">
               <div class="title">充值金额设置</div>
-              <el-button
+              <Button
                 type="primary"
                 icon="md-add"
                 @click="groupAdd('添加数据')"
                 style="margin-left: 14px; margin-top: 30px"
-                >添加数据</el-button
+                >添加数据</Button
               >
             </div>
           </div>
           <div class="table">
-            <el-table
+            <Table
+              :columns="columns1"
               :data="sginList.list"
               ref="table"
               class="mt25"
               :loading="loading"
-              highlight-current-row
+              highlight-row
               no-userFrom-text="暂无数据"
               no-filtered-userFrom-text="暂无筛选结果"
             >
-              <el-table-column
-                :label="item.title"
-                :min-width="item.minWidth"
-                v-for="(item, index) in columns1"
-                :key="index"
-              >
-                <template slot-scope="scope">
-                  <template v-if="item.key">
-                    <div>
-                      <span>{{ scope.row[item.key] }}</span>
-                    </div>
-                  </template>
-                  <template v-else-if="item.slot === 'status'">
-                    <el-switch
-                      :active-value="1"
-                      :inactive-value="0"
-                      v-model="scope.row.status"
-                      :value="scope.row.status"
-                      @change="onchangeIsShow(scope.row)"
-                      size="large"
-                    >
-                    </el-switch>
-                  </template>
-                  <template v-else-if="item.slot === 'action'">
-                    <a @click="edit(scope.row, '编辑')">编辑</a>
-                    <el-divider direction="vertical"></el-divider>
-                    <a @click="del(scope.row, '删除这条信息', index)">删除</a>
-                  </template>
-                </template>
-              </el-table-column>
-            </el-table>
+              <template slot-scope="{ row, index }" slot="status">
+                <i-switch
+                  v-model="row.status"
+                  :value="row.status"
+                  :true-value="1"
+                  :false-value="0"
+                  @on-change="onchangeIsShow(row)"
+                  size="large"
+                >
+                  <span slot="open">显示</span>
+                  <span slot="close">隐藏</span>
+                </i-switch>
+              </template>
+              <template slot-scope="{ row, index }" slot="action">
+                <a @click="edit(row, '编辑')">编辑</a>
+                <Divider type="vertical" />
+                <a @click="del(row, '删除这条信息', index)">删除</a>
+              </template>
+            </Table>
           </div>
         </div>
       </div>
@@ -365,25 +334,28 @@
                       <div class="info-item">
                         <span>图片名称：</span>
                         <div class="input-box">
-                          <el-input v-model="item.comment" placeholder="请填写名称" />
+                          <Input v-model="item.comment" placeholder="请填写名称" />
                         </div>
                       </div>
                       <div class="info-item">
                         <span>链接地址：</span>
                         <div class="input-box" @click="link(index)">
-                          <el-input v-model="item.link" icon="ios-arrow-forward" readonly placeholder="选择链接" />
+                          <Input v-model="item.link" icon="ios-arrow-forward" readonly placeholder="选择链接" />
                         </div>
                       </div>
                     </div>
                   </div>
                 </draggable>
                 <div>
-                  <el-dialog
-                    :visible.sync="modalPic"
+                  <Modal
+                    v-model="modalPic"
                     width="950px"
+                    scrollable
+                    footer-hide
+                    closable
                     title="上传商品图"
-                    :close-on-click-modal="false"
-                    :show-close="false"
+                    :mask-closable="false"
+                    :z-index="999"
                   >
                     <uploadPictures
                       :isChoice="isChoice"
@@ -392,18 +364,18 @@
                       :gridPic="gridPic"
                       v-if="modalPic"
                     ></uploadPictures>
-                  </el-dialog>
+                  </Modal>
                 </div>
               </div>
               <template>
                 <div class="add-btn">
-                  <el-button
+                  <Button
                     type="primary"
                     ghost
                     style="width: 100px; height: 35px; background-color: #1890ff; color: #ffffff"
                     @click="addBox"
                     >添加图片
-                  </el-button>
+                  </Button>
                 </div>
               </template>
             </div>
@@ -417,21 +389,23 @@
             <div class="title-text">建议尺寸：750 * 1334px，拖拽图片可调整图片顺序哦，最多添加五张</div>
             <div class="list-box">
               <div>
-                <el-form :model="formItem" label-width="85px">
-                  <el-form-item label="开屏广告:">
-                    <el-switch :active-value="1" :inactive-value="0" v-model="formItem.status" size="large">
-                    </el-switch>
-                  </el-form-item>
-                  <el-form-item label="广告时间:">
-                    <el-input
+                <Form :model="formItem" :label-width="80">
+                  <FormItem label="开屏广告:">
+                    <i-switch v-model="formItem.status" :true-value="1" :false-value="0" size="large">
+                      <span slot="开">开启</span>
+                      <span slot="关">关闭</span>
+                    </i-switch>
+                  </FormItem>
+                  <FormItem label="广告时间:">
+                    <Input
                       v-model.number="formItem.time"
                       type="number"
                       placeholder="请输入开屏广告时间"
                       style="width: 150px"
-                    ></el-input>
+                    ></Input>
                     单位(秒)
-                  </el-form-item>
-                </el-form>
+                  </FormItem>
+                </Form>
               </div>
               <draggable class="dragArea list-group" :list="tabList.list" group="peoples" handle=".move-icon">
                 <div class="item" v-for="(item, index) in tabList.list" :key="index">
@@ -451,20 +425,29 @@
                     <div class="info-item">
                       <span>图片名称：</span>
                       <div class="input-box">
-                        <el-input v-model="item.comment" placeholder="请填写名称" />
+                        <Input v-model="item.comment" placeholder="请填写名称" />
                       </div>
                     </div>
                     <div class="info-item">
                       <span>链接地址：</span>
                       <div class="input-box" @click="link(index)">
-                        <el-input v-model="item.link" icon="ios-arrow-forward" readonly placeholder="选择链接" />
+                        <Input v-model="item.link" icon="ios-arrow-forward" readonly placeholder="选择链接" />
                       </div>
                     </div>
                   </div>
                 </div>
               </draggable>
               <div>
-                <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
+                <Modal
+                  v-model="modalPic"
+                  width="950px"
+                  scrollable
+                  footer-hide
+                  closable
+                  title="上传商品图"
+                  :mask-closable="false"
+                  :z-index="999"
+                >
                   <uploadPictures
                     :isChoice="isChoice"
                     @getPic="getPic"
@@ -472,18 +455,18 @@
                     :gridPic="gridPic"
                     v-if="modalPic"
                   ></uploadPictures>
-                </el-dialog>
+                </Modal>
               </div>
             </div>
             <template v-if="tabList.list.length < 5">
               <div class="add-btn">
-                <el-button
+                <Button
                   type="primary"
                   ghost
                   style="width: 100px; height: 35px; background-color: #1890ff; color: #ffffff"
                   @click="addBox"
                   >添加图片
-                </el-button>
+                </Button>
               </div>
             </template>
           </div>
@@ -535,7 +518,7 @@ export default {
       };
     },
     labelWidth() {
-      return this.isMobile ? undefined : '120px';
+      return this.isMobile ? undefined : 120;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -582,7 +565,11 @@ export default {
           prevEl: '.swiper-button-prev',
         },
         //自动轮播
-        autoplay: false,
+        autoplay: {
+          delay: 2000,
+          //当用户滑动图片后继续自动轮播
+          disableOnInteraction: false,
+        },
         //开启循环模式
         loop: false,
       },
@@ -670,9 +657,9 @@ export default {
     handleSuccess(res, file, fileList) {
       if (res.status === 200) {
         this.$set(this.formItem, 'video_link', res.data.src);
-        this.$message.success(res.msg);
+        this.$Message.success(res.msg);
       } else {
-        this.$message.error(res.msg);
+        this.$Message.error(res.msg);
       }
     },
     zh_uploadFile() {
@@ -790,7 +777,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     edits(row) {
@@ -803,7 +790,6 @@ export default {
       } else if (row == 2) {
         this.a = 0;
         this.guide = 2;
-        this.pageId = 1617;
         getOpenAdv().then((res) => {
           if (res.data) {
             this.formItem = res.data;
@@ -871,7 +857,7 @@ export default {
         };
       } else {
         if (this.tabList.list.length == 5) {
-          this.$message.warning('最多添加五张呦');
+          this.$Message.warning('最多添加五张呦');
         } else {
           let obj = JSON.parse(JSON.stringify(this.lastObj));
           this.tabList.list.push(obj);
@@ -904,7 +890,7 @@ export default {
       } else if (this.guide == 2) {
         this.formItem.value = this.tabList.list;
         openAdvSave(this.formItem).then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         });
       } else {
         this.loadingExist = true;
@@ -915,11 +901,11 @@ export default {
         })
           .then((res) => {
             this.loadingExist = false;
-            this.$message.success(res.msg);
+            this.$Message.success(res.msg);
           })
           .catch((err) => {
             this.loadingExist = false;
-            this.$message.error(err.msg);
+            this.$Message.error(err.msg);
           });
       }
     },
@@ -939,7 +925,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 编辑
@@ -963,10 +949,10 @@ export default {
       this.$modalSure(delfromData)
         .then((res) => {
           this.info();
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 修改是否显示
@@ -974,12 +960,12 @@ export default {
       groupDataSetApi('setting/group_data/set_status/' + row.id + '/' + row.status)
         .then(async (res) => {
           this.url = this.BaseURL + '/pages/users/user_sgin/index';
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.info();
         })
         .catch((res) => {
           this.url = this.BaseURL + '/pages/users/user_sgin/index';
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     getGroupAll() {
@@ -990,7 +976,7 @@ export default {
           this.pageId = res.data[0].id;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     getContent(val) {
@@ -1002,10 +988,10 @@ export default {
         if (valid) {
           setAgreement(this.formValidate)
             .then(async (res) => {
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
             })
             .catch((res) => {
-              this.$message.error(res.msg);
+              this.$Message.error(res.msg);
             });
         } else {
           return false;
@@ -1023,7 +1009,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },
@@ -1843,17 +1829,5 @@ export default {
   top: 0;
   background-color: rgba(0, 0, 0, 0.5);
   text-align: center;
-}
-.tree-vis{
-  display flex
-  flex-direction: column;
-  .tab-item{
-    padding 15px 20px
-    cursor pointer
-  }
-  .active{
-    background-color: var(--prev-bg-menu-hover-ba-color);
-    border-right: 2px solid var(--prev-color-primary);
-  }
 }
 </style>

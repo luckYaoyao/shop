@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
@@ -9,41 +9,40 @@
         class="tabform"
         @submit.native.prevent
       >
-        <el-row :gutter="24" justify="end">
-          <el-col :span="24" class="ivu-text-left">
-            <el-col :span="7" class="ivu-text-left">
-              <el-form-item label="会员类型：">
-                <el-select v-model="formValidate.member_type" clearable @change="userSearchs">
-                  <el-option v-for="item in treeSelect" :value="item.id" :key="item.id" :label="item.label"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="7" class="ivu-text-left ml20">
-              <el-form-item label="支付方式：">
-                <el-select v-model="formValidate.pay_type" clearable @change="paySearchs">
-                  <el-option v-for="item in payList" :value="item.val" :key="item.val" :label="item.label"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="7" class="ivu-text-left ml20">
-              <el-form-item label="购买时间：">
-                <el-date-picker
+        <Row :gutter="24" type="flex" justify="end">
+          <Col span="24" class="ivu-text-left">
+            <Col span="7" class="ivu-text-left">
+              <FormItem label="会员类型：">
+                <Select v-model="formValidate.member_type" clearable @on-change="userSearchs">
+                  <Option v-for="item in treeSelect" :value="item.id" :key="item.id">{{ item.label }}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="7" class="ivu-text-left ml20">
+              <FormItem label="支付方式：">
+                <Select v-model="formValidate.pay_type" clearable @on-change="paySearchs">
+                  <Option v-for="item in payList" :value="item.val" :key="item.val">{{ item.label }}</Option>
+                </Select>
+              </FormItem>
+            </Col>
+            <Col span="7" class="ivu-text-left ml20">
+              <FormItem label="购买时间：">
+                <DatePicker
                   :editable="false"
-                  @change="onchangeTime"
-                  v-model="timeVal"
+                  @on-change="onchangeTime"
+                  :value="timeVal"
                   format="yyyy/MM/dd"
                   type="datetimerange"
-                  value-format="yyyy/MM/dd"
-                  range-separator="至"
-                  start-placeholder="开始日期"
-                  end-placeholder="结束日期"
-                  
-                ></el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="7" class="ivu-text-left">
-              <el-form-item label="搜索：">
-                <el-input
+                  placement="bottom-start"
+                  placeholder="请选择时间"
+                  style="width: 90%"
+                  :options="options"
+                ></DatePicker>
+              </FormItem>
+            </Col>
+            <Col span="7" class="ivu-text-left">
+              <FormItem label="搜索：">
+                <Input
                   search
                   enter-button
                   @on-search="selChange"
@@ -53,70 +52,45 @@
                   style="width: 90%; display: inline-table"
                   class="mr"
                 />
-              </el-form-item>
-            </el-col>
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table
+              </FormItem>
+            </Col>
+          </Col>
+        </Row>
+      </Form>
+      <Table
+        :columns="thead"
         :data="tbody"
         ref="table"
-        v-loading="loading"
-        size="small"
+        :loading="loading"
+        highlight-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column label="订单号" width="170">
-          <template slot-scope="scope">
-            <span>{{ scope.row.order_id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="用户名" min-width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.user.nickname }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="手机号码" min-width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.user.phone || '--' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="会员类型" min-width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.member_type }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="有效期限（天）" min-width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.vip_day === -1 ? '永久' : scope.row.vip_day }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="支付金额（元）" min-width="50">
-          <template slot-scope="scope">
-            <span>{{ scope.row.pay_price }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="支付方式" min-width="30">
-          <template slot-scope="scope">
-            <span>{{ scope.row.pay_type }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="购买时间" min-width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.pay_time }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
+        <!--<template slot-scope="{ row, index }" slot="status">-->
+        <!--<i-switch-->
+        <!--v-model="row.status"-->
+        <!--:value="row.status"-->
+        <!--:true-value="1"-->
+        <!--:false-value="0"-->
+        <!--@on-change="onchangeIsShow(row)"-->
+        <!--size="large"-->
+        <!--&gt;-->
+        <!--<span slot="open">激活</span>-->
+        <!--<span slot="close">冻结</span>-->
+        <!--</i-switch>-->
+        <!--</template>-->
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="tablePage.page"
-          :limit.sync="tablePage.limit"
-          @pagination="getMemberRecord"
+          :current="tablePage.page"
+          :page-size="tablePage.limit"
+          show-elevator
+          show-total
+          @on-change="pageChange"
         />
       </div>
-    </el-card>
+    </Card>
   </div>
 </template>
 
@@ -303,7 +277,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '75px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -330,8 +304,8 @@ export default {
     },
     // 具体日期
     onchangeTime(e) {
-      this.timeVal = e || [];
-      this.formValidate.add_time = this.timeVal[0] ? this.timeVal ? this.timeVal.join('-') : '' : '';
+      this.timeVal = e;
+      this.formValidate.add_time = this.timeVal[0] ? this.timeVal.join('-') : '';
       this.tablePage.page = 1;
       this.getMemberRecord();
     },
@@ -354,8 +328,13 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
+    },
+    // 分页
+    pageChange(index) {
+      this.tablePage.page = index;
+      this.getMemberRecord();
     },
   },
 };

@@ -1,7 +1,11 @@
 <template>
-  <el-dialog :visible.sync="modal" title="任务列表" width="1000px">
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+  <Modal v-model="modal" title="任务列表" width="1000" footer-hide>
+    <!-- <div> -->
+    <!-- <div class="i-layout-page-header">
+            <PageHeader class="product_tabs" title="任务列表" hidden-breadcrumb></PageHeader>
+        </div> -->
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
@@ -9,140 +13,87 @@
         class="tabform"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col span="10">
-            <el-form-item label="操作时间：">
-              <el-date-picker
+        <Row :gutter="24" type="flex">
+          <Col span="10">
+            <FormItem label="操作时间：">
+              <DatePicker
                 :editable="false"
-                @change="onchangeTime"
-                v-model="timeVal"
+                @on-change="onchangeTime"
+                :value="timeVal"
                 format="yyyy/MM/dd"
                 type="datetimerange"
-                value-format="yyyy/MM/dd"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
+                placement="bottom-start"
+                placeholder="自定义时间"
                 style="width: 90%"
                 :options="options"
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="7">
-            <el-form-item label="类型：">
-              <el-select v-model="formValidate.type" clearable @change="typeSearchs">
-                <el-option
-                  v-for="item in typeList"
-                  :value="item.value"
-                  :key="item.value"
-                  :label="item.label"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="7">
-            <el-form-item label="状态：">
-              <el-select v-model="formValidate.status" clearable @change="statusSearchs">
-                <el-option
-                  v-for="item in statusList"
-                  :value="item.value"
-                  :key="item.value"
-                  :label="item.label"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table class="mt25" height="530" :data="data1" v-loading="loading">
-        <el-table-column label="ID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="7">
+            <FormItem label="类型：">
+              <Select v-model="formValidate.type" clearable @on-change="typeSearchs">
+                <Option v-for="item in typeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="7">
+            <FormItem label="状态：">
+              <Select v-model="formValidate.status" clearable @on-change="statusSearchs">
+                <Option v-for="item in statusList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
+      <Table class="mt25" height="530" :columns="columns1" :data="data1" :loading="loading">
+        <template slot-scope="{ row, index }" slot="action">
+          <template v-if="row.is_show_log">
+            <a @click="deliveryLook(row)">查看</a>
+            <Divider type="vertical" />
           </template>
-        </el-table-column>
-        <el-table-column label="操作时间" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.add_time }}</span>
+          <template>
+            <Dropdown @on-click="changeMenu(row, $event)">
+              <a>更多<Icon type="ios-arrow-down"></Icon></a>
+              <DropdownMenu slot="list">
+                <DropdownItem name="1">下载</DropdownItem>
+                <DropdownItem name="2">重新执行</DropdownItem>
+                <DropdownItem v-if="row.is_stop_button" name="3">停止任务</DropdownItem>
+                <DropdownItem v-if="row.is_error_button" name="4">清除异常任务</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </template>
-        </el-table-column>
-        <el-table-column label="发货单数" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.total_num }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="成功发货单数" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.success_num }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="发货类型" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.title }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="状态" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.status_cn }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="170">
-          <template slot-scope="scope">
-            <template v-if="scope.row.is_show_log">
-              <a @click="deliveryLook(scope.row)">查看</a>
-              <el-divider direction="vertical"></el-divider>
-            </template>
-            <template>
-              <el-dropdown size="small" @command="changeMenu(scope.row, $event)">
-                <span class="el-dropdown-link">更多<i class="el-icon-arrow-down el-icon--right"></i> </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="1">下载</el-dropdown-item>
-                  <el-dropdown-item command="2">重新执行</el-dropdown-item>
-                  <el-dropdown-item v-if="scope.row.is_stop_button" command="3">停止任务</el-dropdown-item>
-                  <el-dropdown-item v-if="scope.row.is_error_button" command="4">清除异常任务</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </template>
-          </template>
-        </el-table-column>
-      </el-table>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="page1.total"
+        <Page
           :total="page1.total"
-          :page.sync="page1.pageNum"
-          :limit.sync="page1.pageSize"
-          @pagination="getQueue"
+          :current="page1.pageNum"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          @on-page-size-change="limitChange"
+          :page-size="page1.pageSize"
+          show-sizer
         />
       </div>
-    </el-card>
-    <el-dialog :visible.sync="modal1" width="900px">
-      <el-table height="500" class="mt25" :data="data2" v-loading="loading2">
-        <el-table-column
-          :label="item.title"
-          :min-width="item.minWidth || 100"
-          v-for="(item, index) in columns4"
-          :key="index"
-        >
-          <template slot-scope="scope">
-            <template v-if="item.key">
-              <div>
-                <span>{{ scope.row[item.key] }}</span>
-              </div>
-            </template>
-          </template>
-        </el-table-column>
-      </el-table>
+    </Card>
+    <Modal v-model="modal1" width="900" footer-hide>
+      <Table height="500" class="mt25" :columns="columns4" :data="data2" :loading="loading2"></Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="page2.total"
+        <Page
           :total="page2.total"
-          :page.sync="page2.pageNum"
-          :limit.sync="page2.pageSize"
-          @pagination="getDeliveryLog"
+          :current="page2.pageNum"
+          show-elevator
+          show-total
+          @on-change="pageChange2"
+          @on-page-size-change="limitChange2"
+          :page-size="page2.pageSize"
+          show-sizer
         />
       </div>
-    </el-dialog>
+    </Modal>
     <!-- </div> -->
-  </el-dialog>
+  </Modal>
 </template>
 
 <script>
@@ -153,6 +104,39 @@ export default {
   data() {
     return {
       modal: false,
+      columns1: [
+        {
+          title: 'ID',
+          key: 'id',
+        },
+        {
+          title: '操作时间',
+          key: 'add_time',
+        },
+        {
+          title: '发货单数',
+          key: 'total_num',
+        },
+        {
+          title: '成功发货单数',
+          key: 'success_num',
+        },
+        {
+          title: '发货类型',
+          key: 'title',
+        },
+        {
+          title: '状态',
+          key: 'status_cn',
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          // fixed: 'right',
+          width: 150,
+          align: 'center',
+        },
+      ],
       data1: [],
       page1: {
         total: 0, // 总条数
@@ -372,7 +356,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '75px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -407,10 +391,27 @@ export default {
           this.loading = false;
         });
     },
+    pageChange(index) {
+      this.page1.pageNum = index;
+      this.getQueue();
+    },
+    // 查看-分页
+    pageChange2(index) {
+      this.page2.pageNum = index;
+      this.getDeliveryLog();
+    },
+    limitChange(limit) {
+      this.page1.pageSize = limit;
+      this.getQueue();
+    },
+    limitChange2(limit) {
+      this.page2.pageSize = limit;
+      this.getDeliveryLog();
+    },
     // 搜索-操作时间
     onchangeTime(time) {
-      this.timeVal = time || [];
-      this.formValidate.data = this.timeVal[0] ? this.timeVal ? this.timeVal.join('-') : '' : '';
+      this.timeVal = time;
+      this.formValidate.data = this.timeVal[0] ? this.timeVal.join('-') : '';
       this.page1.pageNum = 1;
       this.getQueue();
     },
@@ -470,7 +471,7 @@ export default {
               window.open(res.data[0]);
             })
             .catch((err) => {
-              this.$message.error(err.msg);
+              this.$Message.error(err.msg);
             });
           break;
         // 重新执行
@@ -497,33 +498,33 @@ export default {
     queueAgain(id, type) {
       queueAgain(id, type)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getQueue();
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     // 清除异常任务
     queueDel(id, type) {
       queueDel(id, type)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getQueue();
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     // 停止任务
     stopQueue(id) {
       stopWrongQueue(id)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getQueue();
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
   },

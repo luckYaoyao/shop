@@ -2,22 +2,22 @@
   <div class="numbox" v-if="datas[name]">
     <div class="c_row-item" v-for="(item, index) in datas[name].list" :key="index">
       <div class="dif" v-if="item.title === '链接'">
-        <el-col class="label" :span="4">
+        <Col class="label" span="4">
           <span>{{ item.title }}</span>
-        </el-col>
-        <el-col :span="19" class="slider-box">
+        </Col>
+        <Col span="19" class="slider-box">
           <div class="input-box" @click="getLink(index)">
-            <el-input v-model="item.val" :placeholder="item.pla" :maxlength="item.max" icon="ios-arrow-forward" readonly />
+            <Input v-model="item.val" :placeholder="item.pla" :maxlength="item.max" icon="ios-arrow-forward" readonly />
           </div>
-        </el-col>
+        </Col>
       </div>
       <div class="dif" v-else>
-        <el-col class="label" :span="4">
+        <Col class="label" span="4">
           <span>{{ item.title }}</span>
-        </el-col>
-        <el-col :span="19" class="slider-box">
-          <el-input v-model="item.val" :placeholder="item.pla" :maxlength="item.max" style="text-align: right" />
-        </el-col>
+        </Col>
+        <Col span="19" class="slider-box">
+          <Input v-model="item.val" :placeholder="item.pla" :maxlength="item.max" style="text-align: right" />
+        </Col>
       </div>
     </div>
     <linkaddress ref="linkaddres" @linkUrl="linkUrl"></linkaddress>

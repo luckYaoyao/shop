@@ -1,6 +1,6 @@
 <template>
   <div class="btn-box" style="display: none">
-    <el-button type="primary" @click="handleSubmit('formInline')" style="text-align: center; width: 60%">确定</el-button>
+    <Button type="primary" @click="handleSubmit('formInline')" style="text-align: center; width: 60%">确定</Button>
   </div>
 </template>
 

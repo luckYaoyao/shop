@@ -1,8 +1,8 @@
 <template>
   <div>
     <!--v-if="item.count && item.count!='0.00'"-->
-    <el-row  align="middle" :gutter="10" class="ivu-mt">
-      <el-col
+    <Row type="flex" align="middle" :gutter="10" class="ivu-mt">
+      <Col
         :xl="item.col"
         :lg="6"
         :md="12"
@@ -12,7 +12,7 @@
         v-for="(item, index) in cardLists"
         :key="index"
       >
-        <el-card shadow="never" class="card_cent">
+        <Card shadow :padding="0" class="card_cent">
           <div class="card_box">
             <div
               class="card_box_cir"
@@ -42,9 +42,9 @@
               <span class="sp2" v-text="item.name"></span>
             </div>
           </div>
-        </el-card>
-      </el-col>
-    </el-row>
+        </Card>
+      </Col>
+    </Row>
   </div>
 </template>
 
@@ -95,7 +95,7 @@ export default {
     display flex
     align-items: center
     /*justify-content: center*/
-    // padding: 25px
+    padding: 25px
     box-sizing: border-box
     border-radius: 4px
     .card_box_cir

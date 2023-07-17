@@ -1,83 +1,81 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt" v-loading="spinShow">
-      <el-button type="primary" @click="groupAdd()" class="mr20">添加功能</el-button>
-      <!-- <el-button type="success" @click="buildCode()" class="mr20">重新发布</el-button> -->
-      <el-table
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Button type="primary" @click="groupAdd()" class="mr20">添加功能</Button>
+      <!-- <Button type="success" @click="buildCode()" class="mr20">重新发布</Button> -->
+      <Table
+        :columns="columns1"
         :data="tabList"
         ref="table"
         class="mt25"
-        v-loading="loading"
-        highlight-current-row
+        :loading="loading"
+        highlight-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column label="ID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="菜单名" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="表名" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.table_name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="表备注" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.table_comment }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="添加时间" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.add_time }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="170">
-          <template slot-scope="scope">
-            <a @click="edit(scope.row, '编辑')">查看</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="editItem(scope.row)">编辑</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="downLoad(scope.row)">下载</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="del(scope.row, '删除', index)">删除</a>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template slot-scope="{ row, index }" slot="statuss">
+          <i-switch
+            v-model="row.status"
+            :value="row.status"
+            :true-value="1"
+            :false-value="0"
+            @on-change="onchangeIsShow(row)"
+            size="large"
+          >
+            <span slot="open">显示</span>
+            <span slot="close">隐藏</span>
+          </i-switch>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <a @click="edit(row, '编辑')">查看</a>
+          <Divider type="vertical" />
+          <a @click="editItem(row)">编辑</a>
+          <Divider type="vertical" />
+          <a @click="downLoad(row)">下载</a>
+          <Divider type="vertical" />
+          <a @click="del(row, '删除', index)">删除</a>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="formValidate.page"
-          :limit.sync="formValidate.limit"
-          @pagination="getList"
+          :current="formValidate.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="formValidate.limit"
         />
       </div>
-    </el-card>
-    <el-drawer
-      :visible.sync="modals"
-      :custom-class="className"
+    </Card>
+    <Drawer
+      :class-name="className"
       title="Create"
-      size="80%"
-      :wrapperClosable="false"
+      v-model="modals"
+      width="80%"
+      :mask-closable="false"
       :styles="styles"
-      @closed="editModalChange"
+      :before-close="editModalChange"
     >
+      <!-- <Modal
+      v-model="modals"
+      scrollable
+      footer-hide
+      closable
+      :mask-closable="false"
+      width="80%"
+      :before-close="editModalChange"
+    > -->
+
       <p slot="header" class="diy-header" ref="diyHeader">
         <span>{{ title }}</span>
       </p>
       <div class="file" style="height: 100%">
-        <el-button class="save" type="primary" @click="pwdModal = true">保存</el-button>
+        <Button class="save" type="primary" @click="pwdModal = true">保存</Button>
 
         <div class="file-box">
           <div class="file-fix"></div>
           <div class="file-content">
-            <!-- <el-tabs
+            <!-- <Tabs
               type="card"
               v-model="indexEditor"
               style="height: 100%"
@@ -86,7 +84,7 @@
               closable
               @on-tab-remove="handleTabRemove"
             >
-              <el-tab-pane
+              <TabPane
                 v-for="value in editorIndex"
                 :key="value.index"
                 :name="value.index.toString()"
@@ -98,12 +96,12 @@
                   :id="'container_' + value.index"
                   style="height: 100%; min-height: calc(100vh - 110px)"
                 ></div>
-              </el-tab-pane>
-            </el-tabs> -->
+              </TabPane>
+            </Tabs> -->
             <el-tabs v-model="indexEditor" type="card" @tab-click="toggleEditor">
               <el-tab-pane v-for="value in editorIndex" :key="value.index">
                 <span slot="label">
-                  <el-tooltip effect="light" class="item" :content="value.title" placement="top">
+                  <el-tooltip class="item" effect="dark" :content="value.title" placement="top">
                     <span>{{ value.file_name }}</span>
                   </el-tooltip>
                 </span>
@@ -119,29 +117,40 @@
               <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane> -->
             </el-tabs>
           </div>
+          <Spin size="large" fix v-if="spinShow"></Spin>
         </div>
       </div>
-    </el-drawer>
-    <el-dialog
-      :visible.sync="buildModals"
+
+      <!-- </Modal> -->
+      <!-- <div class="demo-drawer-footer">
+        <Button style="margin-right: 8px" @click="modals = false">关闭</Button>
+        <Button type="primary" @click="modals = false">保存</Button>
+      </div> -->
+    </Drawer>
+    <Modal
+      v-model="buildModals"
+      scrollable
       title="终端"
-      :show-close="false"
-      :close-on-click-modal="false"
+      footer-hide
+      closable
+      :mask-closable="false"
       width="60%"
-      @close="editModalChange"
+      :before-close="editModalChange"
     >
-      <el-alert type="warning" title="当前终端未运行于安装服务下，部分命令可能无法执行."></el-alert>
+      <Alert type="warning">当前终端未运行于安装服务下，部分命令可能无法执行.</Alert>
       <div>
         <div v-for="(item, index) in codeBuildList" :key="index">{{ item }}</div>
       </div>
-    </el-dialog>
-    <el-dialog :visible.sync="pwdModal" title="文件管理密码" :show-close="false" :close-on-click-modal="false">
-      <el-input v-model="pwd" type="password" placeholder="请输入文件管理密码"></el-input>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="pwdModal = false">取 消</el-button>
-        <el-button type="primary" @click="crudSaveFile">确 定</el-button>
-      </span>
-    </el-dialog>
+    </Modal>
+    <Modal
+      v-model="pwdModal"
+      title="文件管理密码"
+      :closable="false"
+      @on-ok="crudSaveFile"
+      @on-cancel="pwdModal = false"
+    >
+      <Input v-model="pwd" type="password" placeholder="请输入文件管理密码"></Input>
+    </Modal>
   </div>
 </template>
 
@@ -151,7 +160,7 @@ import { crudList, crudDet, crudDownload, crudSaveFile } from '@/api/systemCodeG
 import * as monaco from 'monaco-editor';
 import { getCookies, removeCookies } from '@/libs/util';
 import Setting from '@/setting';
-// import { el-input } from 'view-design';
+import { Input } from 'view-design';
 export default {
   data() {
     return {
@@ -240,7 +249,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '75px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -264,10 +273,10 @@ export default {
       crudSaveFile(this.editId, data)
         .then((res) => {
           this.pwd = '';
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     downLoad(row) {
@@ -309,8 +318,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.formValidate.page = index;
+      this.getList();
     },
     // 表格搜索
     userSearchs() {
@@ -334,12 +347,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.tabList.splice(num, 1);
           this.getList();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 编辑
@@ -451,15 +464,15 @@ export default {
      */
     catchFun(res) {
       if (res.status) {
-        if (res.status == 400) this.$message.error(res.msg);
+        if (res.status == 400) this.$Message.error(res.msg);
         if (res.status == 110008) {
-          // this.$message.error(res.msg);
+          // this.$Message.error(res.msg);
           this.isShowLogn = true;
           this.isShowList = false;
           this.loading = false;
         }
       } else {
-        // this.$message.error('文件编码不被兼容，无法正确读取文件!');
+        // this.$Message.error('文件编码不被兼容，无法正确读取文件!');
       }
       //关闭蒙版层
       if (this.spinShow) this.spinShow = false;

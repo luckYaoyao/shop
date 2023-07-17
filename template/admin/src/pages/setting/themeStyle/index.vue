@@ -4,32 +4,32 @@
       <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div>
         <div style="float: right">
-          <el-button class="bnt" type="primary" @click="submit">保存</el-button>
+          <Button class="bnt" type="primary" @click="submit">保存</Button>
         </div>
       </div>
     </div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt" :style="'min-height:' + clientHeight + 'px'">
-      <el-form :label-width="labelWidth">
-        <el-form-item label="选择配色方案：">
-          <el-radio-group v-model="current" @change="changeColor">
-            <el-radio :label="1" border class="box">天空蓝<i class="iconfont iconxuanzhong6"></i></el-radio>
-            <el-radio :label="2" border class="box green">生鲜绿<i class="iconfont iconxuanzhong6"></i></el-radio>
-            <el-radio :label="3" border class="box red">热情红<i class="iconfont iconxuanzhong6"></i></el-radio>
-            <el-radio :label="4" border class="box pink">魅力粉<i class="iconfont iconxuanzhong6"></i></el-radio>
-            <el-radio :label="5" border class="box orange">活力橙<i class="iconfont iconxuanzhong6"></i></el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="当前风格示例：">
+    <Card :bordered="false" dis-hover class="ivu-mt" :style="'min-height:' + clientHeight + 'px'">
+      <Form :label-width="labelWidth">
+        <FormItem label="选择配色方案：">
+          <RadioGroup v-model="current" @on-change="changeColor">
+            <Radio :label="1" border class="box">天空蓝<i class="iconfont iconxuanzhong6"></i></Radio>
+            <Radio :label="2" border class="box green">生鲜绿<i class="iconfont iconxuanzhong6"></i></Radio>
+            <Radio :label="3" border class="box red">热情红<i class="iconfont iconxuanzhong6"></i></Radio>
+            <Radio :label="4" border class="box pink">魅力粉<i class="iconfont iconxuanzhong6"></i></Radio>
+            <Radio :label="5" border class="box orange">活力橙<i class="iconfont iconxuanzhong6"></i></Radio>
+          </RadioGroup>
+        </FormItem>
+        <FormItem label="当前风格示例：">
           <div class="acea-row row-top">
             <div class="pictrue" v-for="(item, index) in picList" :key="index">
               <img :src="item.image" />
             </div>
           </div>
-        </el-form-item>
-      </el-form>
-    </el-card>
+        </FormItem>
+      </Form>
+    </Card>
     <!--<div class="footer acea-row row-center-wrapper">-->
-    <!--<el-button type="primary" @click="submit">保存</el-button>-->
+    <!--<Button type="primary" @click="submit">保存</Button>-->
     <!--</div>-->
   </div>
 </template>
@@ -62,7 +62,7 @@ export default {
   computed: {
     ...mapState('admin/layout', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '110px';
+      return this.isMobile ? undefined : 100;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -89,7 +89,7 @@ export default {
           this.changeColor(this.current);
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     submit() {
@@ -97,7 +97,7 @@ export default {
       colorChange(this.current, 'color_change')
         .then((res) => {
           this.loadingExist = false;
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch(() => {
           this.loadingExist = false;
@@ -130,7 +130,9 @@ export default {
 
 <style scoped lang="stylus">
 .box {
+  height: 40px;
   width: 100px;
+  line-height: 40px;
   text-align: center;
 }
 

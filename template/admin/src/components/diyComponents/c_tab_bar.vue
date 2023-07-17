@@ -18,16 +18,16 @@
             </div>
           </div>
           <div class="c_row-item">
-            <el-col class="label" :span="4"> 名称 </el-col>
-            <el-col :span="19" class="slider-box">
-              <el-input v-model="item.name" placeholder="选填不超过10个字" />
-            </el-col>
+            <Col class="label" span="4"> 名称 </Col>
+            <Col span="19" class="slider-box">
+              <Input v-model="item.name" placeholder="选填不超过10个字" />
+            </Col>
           </div>
           <div class="c_row-item">
-            <el-col class="label" :span="4"> 链接 </el-col>
-            <el-col :span="19" class="slider-box">
-              <el-input v-model="item.link" placeholder="选填不超过10个字" />
-            </el-col>
+            <Col class="label" span="4"> 链接 </Col>
+            <Col span="19" class="slider-box">
+              <Input v-model="item.link" placeholder="选填不超过10个字" />
+            </Col>
           </div>
         </div>
         <div class="del-box" @click="deleteMenu(index)">
@@ -36,21 +36,21 @@
       </div>
     </draggable>
     <div class="add-btn" v-if="datas[name].list.length < 5">
-      <el-button
+      <Button
         type="primary"
         ghost
         style="width: 100%; height: 40px; border-color: #1890ff; color: #1890ff"
         @click="addMenu"
         >添加图文导航
-      </el-button>
+      </Button>
     </div>
     <div>
-      <el-dialog
+      <Modal
         v-model="modalPic"
         width="950px"
         scrollable
         footer-hide
-        :show-close="false"
+        closable
         title="上传商品图"
         :mask-closable="false"
         :z-index="888"
@@ -62,7 +62,7 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </el-dialog>
+      </Modal>
     </div>
   </div>
 </template>

@@ -261,6 +261,9 @@ class StoreProductServices extends BaseServices
         $label_id = explode(',', $productInfo['label_id']);
         $productInfo['label_id'] = $userLabelServices->getLabelList(['ids' => $label_id], ['id', 'label_name']);
         $productInfo['give_integral'] = floatval($productInfo['give_integral']);
+        $productInfo['presale'] = boolval($productInfo['presale'] ?? 0);
+        $productInfo['is_limit'] = boolval($productInfo['is_limit'] ?? 0);
+        $productInfo['vip_product'] = boolval($productInfo['vip_product'] ?? 0);
         $productInfo['presale_time'] = $productInfo['presale_start_time'] == 0 ? [] : [date('Y-m-d H:i:s', $productInfo['presale_start_time']), date('Y-m-d H:i:s', $productInfo['presale_end_time'])];
         $productInfo['description'] = $storeDescriptionServices->getDescription(['product_id' => $id, 'type' => 0]);
         $productInfo['custom_form'] = json_decode($productInfo['custom_form'], true);

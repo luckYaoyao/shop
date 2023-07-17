@@ -13,9 +13,9 @@
         >
       </div>
       <div class="search-box">
-        <el-input placeholder="搜索快捷回复" style="width: 100%" v-model="searchTxt" @on-enter="bindSearch">
+        <Input placeholder="搜索快捷回复" style="width: 100%" v-model="searchTxt" @on-enter="bindSearch">
           <Icon type="ios-search" slot="suffix" />
-        </el-input>
+        </Input>
       </div>
     </div>
     <div class="main">
@@ -46,10 +46,10 @@
         </vue-scroll>
       </div>
       <div class="right-box">
-        <div v-infinite-scroll="handleReachBottom" class="right-scroll" height="360">
+        <Scroll :on-reach-bottom="handleReachBottom" class="right-scroll" height="360">
           <div class="msg-item add-box" v-if="tabCur" style="margin-top: 0">
             <div class="box2">
-              <el-input
+              <Input
                 class="input-box"
                 v-model="addMsg.title"
                 placeholder="输入标题（选填）"
@@ -58,17 +58,17 @@
               />
               <div class="conBox" :class="{ active: addMsg.isEdit }">
                 <div class="content">
-                  <el-input v-model="addMsg.message" type="textarea" :rows="4" placeholder="请输入内容" />
+                  <Input v-model="addMsg.message" type="textarea" :rows="4" placeholder="请输入内容" />
                 </div>
                 <div class="bom">
                   <div class="select">
-                    <el-select v-model="addMsg.cateId" style="width: 100px" size="small">
-                      <el-option v-for="item in sortList" :value="item.id" :key="item.id">{{ item.name }} </el-option>
-                    </el-select>
+                    <Select v-model="addMsg.cateId" style="width: 100px" size="small">
+                      <Option v-for="item in sortList" :value="item.id" :key="item.id">{{ item.name }} </Option>
+                    </Select>
                   </div>
                   <div class="btns-box">
-                    <el-button @click.stop="addMsg.isEdit = false">取消</el-button>
-                    <el-button type="primary" @click.stop="bindAdd">保存</el-button>
+                    <Button @click.stop="addMsg.isEdit = false">取消</Button>
+                    <Button type="primary" @click.stop="bindAdd">保存</Button>
                   </div>
                 </div>
               </div>
@@ -86,40 +86,39 @@
               </div>
             </div>
             <div class="box2" v-else>
-              <el-input class="input-box" v-model="item.title" placeholder="输入标题（选填）" style="width: 100%" />
+              <Input class="input-box" v-model="item.title" placeholder="输入标题（选填）" style="width: 100%" />
               <div class="content">
-                <el-input v-model="item.message" type="textarea" :rows="4" placeholder="请输入内容" />
+                <Input v-model="item.message" type="textarea" :rows="4" placeholder="请输入内容" />
               </div>
               <div class="bom">
                 <div class="select">
-                  <el-select v-model="cateId" style="width: 100px" size="small">
-                    <el-option v-for="item in sortList" :value="item.id" :key="item.id" :label="item.name"></el-option>
-                  </el-select>
+                  <Select v-model="cateId" style="width: 100px" size="small">
+                    <Option v-for="item in sortList" :value="item.id" :key="item.id">{{ item.name }} </Option>
+                  </Select>
                 </div>
                 <div class="btns-box">
-                  <el-button @click.stop="item.isEdit = false">取消</el-button>
-                  <el-button type="primary" @click.stop="updataMsg(item)">保存</el-button>
+                  <Button @click.stop="item.isEdit = false">取消</Button>
+                  <Button type="primary" @click.stop="updataMsg(item)">保存</Button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        </Scroll>
       </div>
     </div>
-    <el-dialog :visible.sync="isAddSort" :title="maskTitle" width="304px" class="class-box">
+    <Modal v-model="isAddSort" :title="maskTitle" width="304" :mask="false" class="class-box" :footer-hide="true">
       <div class="item">
         <span>分组名称：</span>
-        <el-input v-model="classTitle" placeholder="分组名称" />
+        <Input v-model="classTitle" placeholder="分组名称" />
       </div>
       <div class="item">
         <span>分组排序：</span>
-        <el-input v-model="classSort" placeholder="输入排序" />
+        <Input v-model="classSort" placeholder="输入排序" />
       </div>
-      <div class="btn"></div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="addServiceCate">确定</el-button>
-      </span>
-    </el-dialog>
+      <div class="btn">
+        <Button type="primary" style="background: #1890ff; width: 100%" @click="addServiceCate">确定</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -295,7 +294,7 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.isScroll = true;
           this.page = 1;
           this.list = [];
@@ -303,7 +302,7 @@ export default {
           this.serviceCate();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 获取分类
@@ -352,11 +351,11 @@ export default {
         message: item.message,
       })
         .then((res) => {
-          this.$message.success('修改成功');
+          this.$Message.success('修改成功');
           item.isEdit = false;
         })
         .catch((error) => {
-          this.$message.error(error.msg);
+          this.$Message.error(error.msg);
           item.isEdit = true;
         });
     },
@@ -385,7 +384,7 @@ export default {
           this.addMsg.message = '';
           this.addMsg.cateId = '';
           this.addMsg.isEdit = false;
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           res.data.isEdit = false;
           this.page = 1;
           this.list = [];
@@ -393,7 +392,7 @@ export default {
           this.serviceCate();
         })
         .catch((error) => {
-          this.$message.error(error.msg);
+          this.$Message.error(error.msg);
         });
     },
     // 删除
@@ -408,11 +407,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.list.splice(num, 1);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 添加分类
@@ -425,7 +424,7 @@ export default {
           .then((res) => {
             this.classTitle = '';
             this.classSort = '';
-            this.$message.success(res.msg);
+            this.$Message.success(res.msg);
             this.isAddSort = false;
             this.page = 1;
             this.list = [];
@@ -435,7 +434,7 @@ export default {
           .catch((error) => {
             this.classTitle = '';
             this.classSort = '';
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           });
       } else {
         addServiceCate({
@@ -445,7 +444,7 @@ export default {
           .then((res) => {
             this.classTitle = '';
             this.classSort = '';
-            this.$message.success(res.msg);
+            this.$Message.success(res.msg);
             this.isAddSort = false;
             this.page = 1;
             this.list = [];
@@ -455,7 +454,7 @@ export default {
           .catch((error) => {
             this.classTitle = '';
             this.classSort = '';
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           });
       }
     },

@@ -1,10 +1,11 @@
 <template>
-  <div v-loading="spinShow">
+  <div>
     <productlist-details
       class="ivu-mt"
       v-if="currentTab === 'article' || 'project' || 'app'"
       ref="productlist"
     ></productlist-details>
+    <Spin size="large" fix v-if="spinShow"></Spin>
   </div>
 </template>
 
@@ -67,7 +68,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
       // getOrdes({}).then(async res => {
       //     this.tablists = res.data;
@@ -75,7 +76,7 @@ export default {
       //     this.spinShow = false;
       // }).catch(res => {
       //     this.spinShow = false;
-      //     this.$message.error(res.msg);
+      //     this.$Message.error(res.msg);
       // })
     },
     onClickTab() {

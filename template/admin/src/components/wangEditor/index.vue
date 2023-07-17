@@ -4,16 +4,34 @@
       <div ref="wang-editor" class="wang-editor" />
     </div>
     <div v-if="monacoBox">
-      <el-button type="primary" class="bottom" @click="getHtmlint">可视化界面</el-button>
+      <Button type="primary" class="bottom" @click="getHtmlint">可视化界面</Button>
       <monaco @change="changeValue" :value="newHtml" />
     </div>
 
-    <el-dialog :visible.sync="modalPic" width="1024px" title="上传图片" :close-on-click-modal="false">
+    <Modal
+      v-model="modalPic"
+      width="1024px"
+      scrollable
+      footer-hide
+      closable
+      title="上传图片"
+      :mask-closable="false"
+      :z-index="9"
+    >
       <uploadPictures v-if="modalPic" :isChoice="isChoice" @getPic="getPic" @getPicD="getPicD"></uploadPictures>
-    </el-dialog>
-    <el-dialog :visible.sync="modalVideo" width="800px" title="上传视频" :close-on-click-modal="false">
+    </Modal>
+    <Modal
+      v-model="modalVideo"
+      width="800px"
+      scrollable
+      footer-hide
+      closable
+      title="上传视频"
+      :mask-closable="false"
+      :z-index="9"
+    >
       <uploadVideo v-if="modalVideo" @getVideo="getvideo"></uploadVideo>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 <script>

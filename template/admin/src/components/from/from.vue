@@ -1,19 +1,23 @@
 <template>
   <div v-if="FromData">
-    <el-dialog :visible.sync="modals"
+    <Modal
+      v-model="modals"
+      scrollable
+      footer-hide
+      closable
       :title="FromData.title"
       :z-index="1"
       width="700"
-      @closed="cancel"
+      @on-cancel="cancel"
     >
       <template>
         <div class="radio acea-row row-middle" v-if="FromData.action === '/marketing/coupon/save.html'">
           <div class="name ivu-form-item-content">优惠券类型</div>
-          <el-radio-group v-model="type" @change="couponsType">
-            <el-radio :label="0">通用券</el-radio>
-            <el-radio :label="1">品类券</el-radio>
-            <el-radio :label="2">商品券</el-radio>
-          </el-radio-group>
+          <Radio-group v-model="type" @on-change="couponsType">
+            <Radio :label="0">通用券</Radio>
+            <Radio :label="1">品类券</Radio>
+            <Radio :label="2">商品券</Radio>
+          </Radio-group>
         </div>
       </template>
       <form-create
@@ -24,7 +28,7 @@
         ref="fc"
         handleIcon="false"
       ></form-create>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 
@@ -89,7 +93,7 @@ export default {
       })
         .then((res) => {
           if (this.update) this.$parent.getList();
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.modals = false;
           setTimeout(() => {
             this.$emit('submitFail');
@@ -98,7 +102,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 关闭按钮

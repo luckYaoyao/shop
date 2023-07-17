@@ -1,42 +1,43 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="levelFrom"
         :model="levelFrom"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col v-bind="grid">
-            <el-form-item label="是否显示：" label-for="keyword">
-              <el-radio-group v-model="levelFrom.is_show" type="button" @input="userSearchs">
-                <el-radio label="">全部</el-radio>
-                <el-radio label="1">显示</el-radio>
-                <el-radio label="0">隐藏</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid">
-            <el-form-item label="搜索：" label-for="keyword">
-              <el-input
+        <Row type="flex" :gutter="24">
+          <Col v-bind="grid">
+            <FormItem label="是否显示：" label-for="keyword">
+              <RadioGroup v-model="levelFrom.is_show" type="button" @on-change="userSearchs">
+                <Radio label="">全部</Radio>
+                <Radio label="1">显示</Radio>
+                <Radio label="0">隐藏</Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <FormItem label="搜索：" label-for="keyword">
+              <Input
                 search
                 enter-button
                 v-model="levelFrom.keyword"
                 placeholder="请输入物流公司名称或者编码"
                 @on-search="userSearchs"
               />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col v-bind="grid">
-            <el-button type="primary" icon="md-add" @click="syncExpress">同步物流公司</el-button>
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table
+            </FormItem>
+          </Col>
+        </Row>
+        <Row type="flex">
+          <Col v-bind="grid">
+            <Button type="primary" icon="md-add" @click="syncExpress">同步物流公司</Button>
+          </Col>
+        </Row>
+      </Form>
+      <Table
+        :columns="columns1"
         :data="levelLists"
         ref="table"
         class="mt25"
@@ -44,55 +45,36 @@
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column label="ID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="物流公司名称" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="编码" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.code }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="排序" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.sort }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="是否显示" min-width="100">
-          <template slot-scope="scope">
-            <el-switch
-              :active-value="1"
-              :inactive-value="0"
-              v-model="scope.row.is_show"
-              :value="scope.row.is_show"
-              @change="onchangeIsShow(scope.row)"
-              size="large"
-            >
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="80">
-          <template slot-scope="scope">
-            <a @click="edit(scope.row)">编辑</a>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template slot-scope="{ row, index }" slot="is_shows">
+          <i-switch
+            v-model="row.is_show"
+            :value="row.is_show"
+            :true-value="1"
+            :false-value="0"
+            @on-change="onchangeIsShow(row)"
+            size="large"
+          >
+            <span slot="open">显示</span>
+            <span slot="close">隐藏</span>
+          </i-switch>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <a @click="edit(row)">编辑</a>
+          <!--                    <Divider type="vertical" />-->
+          <!--                    <a @click="del(row, '删除物流公司', index)">删除</a>-->
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="levelFrom.page"
-          :limit.sync="levelFrom.limit"
-          @pagination="getList"
+          :current="levelFrom.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="levelFrom.limit"
         />
       </div>
-    </el-card>
+    </Card>
   </div>
 </template>
 <script>
@@ -167,7 +149,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '75px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -185,11 +167,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.levelLists.splice(num, 1);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 修改是否显示
@@ -200,10 +182,10 @@ export default {
       };
       freightStatusApi(data)
         .then(async (res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 等级列表
@@ -218,8 +200,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.levelFrom.page = index;
+      this.getList();
     },
     // 添加
     add() {
@@ -228,7 +214,7 @@ export default {
       //     this.FromData = res.data;
       //     this.$refs.edits.modals = true;
       // }).catch(res => {
-      //     this.$message.error(res.msg);
+      //     this.$Message.error(res.msg);
       // })
     },
     // 编辑
@@ -238,7 +224,7 @@ export default {
       //     this.FromData = res.data;
       //     this.$refs.edits.modals = true;
       // }).catch(res => {
-      //     this.$message.error(res.msg);
+      //     this.$Message.error(res.msg);
       // })
     },
     // 表格搜索
@@ -249,11 +235,11 @@ export default {
     syncExpress() {
       freightSyncExpressApi()
         .then(async (res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },

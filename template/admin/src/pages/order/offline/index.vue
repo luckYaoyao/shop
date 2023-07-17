@@ -1,121 +1,101 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="pagination"
         :model="pagination"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col v-bind="grid" class="ivu-text-left">
-            <el-form-item label="创建时间：">
-              <el-date-picker
+        <Row type="flex" :gutter="24">
+          <Col v-bind="grid" class="ivu-text-left">
+            <FormItem label="创建时间：">
+              <DatePicker
                 :editable="false"
-                @change="onchangeTime"
-                v-model="timeVal"
+                @on-change="onchangeTime"
+                :value="timeVal"
                 format="yyyy/MM/dd"
                 type="datetimerange"
-                value-format="yyyy/MM/dd"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                style="width: 380px"
+                placement="bottom-start"
+                placeholder="请选择时间"
+                style="width: 300px"
                 class="mr20"
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid">
-            <el-form-item label="订单号：" label-for="title">
-              <el-input
+                :options="options"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <FormItem label="订单号：" label-for="title">
+              <Input
                 search
                 enter-button
                 v-model="pagination.order_id"
                 placeholder="请输入订单号"
                 @on-search="orderSearch"
               />
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid">
-            <el-form-item label="用户名：" label-for="title">
-              <el-input
-                search
-                enter-button
-                v-model="pagination.name"
-                placeholder="请输入用户名"
-                @on-search="nameSearch"
-              />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col v-bind="grid">
-            <el-button type="primary" @click="qrcodeShow">查看收款二维码</el-button>
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <FormItem label="用户名：" label-for="title">
+              <Input search enter-button v-model="pagination.name" placeholder="请输入用户名" @on-search="nameSearch" />
+            </FormItem>
+          </Col>
+        </Row>
+        <Row type="flex">
+          <Col v-bind="grid">
+            <Button type="primary" @click="qrcodeShow">查看收款二维码</Button>
+          </Col>
+        </Row>
+      </Form>
+      <Table
+        :columns="thead"
         :data="tbody"
         ref="table"
         class="mt25"
-        v-loading="loading"
-        highlight-current-row
+        :loading="loading"
+        highlight-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column label="订单号" min-width="180">
-          <template slot-scope="scope">
-            <span>{{ scope.row.order_id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="用户信息" min-width="180">
-          <template slot-scope="scope">
-            <span>{{ scope.row.nickname }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="实际支付" min-width="180">
-          <template slot-scope="scope">
-            <span>{{ scope.row.pay_price }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="优惠价格" min-width="180">
-          <template slot-scope="scope">
-            <span>{{ scope.row.true_price }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="支付时间" min-width="180">
-          <template slot-scope="scope">
-            <span>{{ scope.row.pay_time }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="pagination.page"
-          :limit.sync="pagination.limit"
-          @pagination="getOrderList"
+          :current="pagination.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="pagination.limit"
         />
       </div>
-    </el-card>
-    <el-dialog :visible.sync="modal" title="收款码">
-      <div v-viewer class="acea-row row-around code" v-loading="spinShow">
-        <div class="acea-row row-column-around row-between-wrapper">
-          <div class="QRpic">
-            <img v-lazy="qrcode && qrcode.wechat" />
+    </Card>
+    <Modal v-model="modal" title="收款码" footer-hide>
+      <div>
+        <!--<div class="acea-row row-around mb10">-->
+        <!--<RadioGroup v-model="animal" @on-change="onchangeCode(animal)" style="width: 180px;">-->
+        <!--<Radio :label="0">二维码</Radio>-->
+        <!--<Radio :label="1">收款码</Radio>-->
+        <!--</RadioGroup>-->
+        <!--<div style="width: 180px;"></div>-->
+        <!--</div>-->
+        <div v-viewer class="acea-row row-around code">
+          <Spin fix v-if="spin"></Spin>
+          <div class="acea-row row-column-around row-between-wrapper">
+            <div class="QRpic">
+              <img v-lazy="qrcode && qrcode.wechat" />
+            </div>
+            <span class="mt10">{{ animal ? '公众号收款码' : '公众号二维码' }}</span>
           </div>
-          <span class="mt10">{{ animal ? '公众号收款码' : '公众号二维码' }}</span>
-        </div>
-        <div class="acea-row row-column-around row-between-wrapper">
-          <div class="QRpic">
-            <img v-lazy="qrcode && qrcode.routine" />
+          <div class="acea-row row-column-around row-between-wrapper">
+            <div class="QRpic">
+              <img v-lazy="qrcode && qrcode.routine" />
+            </div>
+            <span class="mt10">{{ animal ? '小程序收款码' : '小程序二维码' }}</span>
           </div>
-          <span class="mt10">{{ animal ? '小程序收款码' : '小程序二维码' }}</span>
         </div>
       </div>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 
@@ -133,6 +113,40 @@ export default {
         sm: 24,
         xs: 24,
       },
+      thead: [
+        {
+          title: '订单号',
+          key: 'order_id',
+        },
+        // {
+        //     title: "订单类型",
+        //     render: (h, params) => {
+        //         return h("span", "线下支付");
+        //     }
+        // },
+        {
+          title: '用户信息',
+          key: 'nickname',
+        },
+        {
+          title: '实际支付',
+          key: 'pay_price',
+        },
+        {
+          title: '优惠价格',
+          key: 'true_price',
+        },
+        // {
+        //     title: "订单状态",
+        //     render: (h, params) => {
+        //         return h("span", "已支付");
+        //     }
+        // },
+        {
+          title: '支付时间',
+          key: 'pay_time',
+        },
+      ],
       tbody: [],
       loading: false,
       total: 0,
@@ -220,7 +234,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '85px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -237,8 +251,8 @@ export default {
     // 具体日期搜索()；
     onchangeTime(e) {
       this.pagination.page = 1;
-      this.timeVal = e || [];
-      this.pagination.add_time = this.timeVal[0] ? (this.timeVal ? this.timeVal.join('-') : '') : '';
+      this.timeVal = e;
+      this.pagination.add_time = this.timeVal[0] ? this.timeVal.join('-') : '';
       this.getOrderList();
     },
     // 订单列表
@@ -253,8 +267,13 @@ export default {
         })
         .catch((err) => {
           this.loading = false;
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
+    },
+    // 分页
+    pageChange(index) {
+      this.pagination.page = index;
+      this.getOrderList();
     },
     nameSearch() {
       this.pagination.page = 1;
@@ -277,7 +296,7 @@ export default {
         })
         .catch((err) => {
           this.spin = false;
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
   },

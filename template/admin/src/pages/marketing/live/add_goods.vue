@@ -3,14 +3,14 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <span>
-          <el-button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</el-button>
+          <Button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
         </span>
-        <el-divider direction="vertical"></el-divider>
+        <Divider type="vertical" />
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
       </div>
     </div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
@@ -18,9 +18,9 @@
         class="tabform"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col :span="24">
-            <el-form-item label="选择商品：">
+        <Row :gutter="24" type="flex">
+          <Col span="24">
+            <FormItem label="选择商品：">
               <div class="box">
                 <div class="box-item" v-for="(item, index) in goodsList" :key="index">
                   <img :src="item.image" alt="" />
@@ -30,60 +30,42 @@
                   <Icon type="ios-camera-outline" size="36" />
                 </div>
               </div>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
       <div class="active-btn" v-if="goodsList.length > 0">
-        <el-button type="success" @click="liveGoods">生成直播商品</el-button>
+        <Button type="success" @click="liveGoods">生成直播商品</Button>
       </div>
       <div class="table-box" v-if="isShowBox">
-        <el-table
+        <Table
+          :columns="columns1"
           :data="tabList"
           ref="table"
           class="mt25"
-          v-loading="loading"
+          :loading="loading"
           no-userFrom-text="暂无数据"
           no-filtered-userFrom-text="暂无筛选结果"
         >
-          <el-table-column label="商品ID" width="80">
-            <template slot-scope="scope">
-              <span>{{ scope.row.id }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="商品信息" min-width="90">
-            <template slot-scope="scope">
-              <div class="product_box">
-                <img :src="scope.row.image" alt="" />
-                <span>{{ scope.row.store_name }}</span>
-              </div>
-            </template>
-          </el-table-column>
-          <el-table-column label="直播售价" min-width="130">
-            <template slot-scope="scope">
-              <span>{{ scope.row.price }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="库存" min-width="130">
-            <template slot-scope="scope">
-              <span>{{ scope.row.stock }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" fixed="right" width="80">
-            <template slot-scope="scope">
-              <a @click="del(scope.row, index)">删除</a>
-            </template>
-          </el-table-column>
-        </el-table>
+          <template slot-scope="{ row, index }" slot="img">
+            <div class="product_box">
+              <img :src="row.image" alt="" />
+              <span>{{ row.store_name }}</span>
+            </div>
+          </template>
+          <template slot-scope="{ row, index }" slot="action">
+            <a @click="del(row, index)">删除</a>
+          </template>
+        </Table>
 
         <div class="sub_btn">
-          <el-button type="primary" style="width: 8%" @click="bindSub" :disabled="disabled" :loading="loadings"
-            >提交</el-button
+          <Button type="primary" style="width: 8%" @click="bindSub" :disabled="disabled" :loading="loadings"
+            >提交</Button
           >
         </div>
       </div>
-    </el-card>
-    <el-dialog :visible.sync="modals" title="商品列表" class="paymentFooter" width="900px">
+    </Card>
+    <Modal v-model="modals" title="商品列表" class="paymentFooter" scrollable width="900" :footer-hide="true">
       <goods-list
         ref="goodslist"
         :selectIds="selectIds"
@@ -91,7 +73,7 @@
         v-if="modals"
         :ischeckbox="true"
       ></goods-list>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 
@@ -107,7 +89,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '100px';
+      return this.isMobile ? undefined : 100;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -121,6 +103,47 @@ export default {
       goodsList: [],
       tempGoods: {},
       formValidate: {},
+      columns1: [
+        { key: 'id', title: '商品ID' },
+        { slot: 'img', title: '商品信息' },
+        { key: 'price', title: '直播售价' },
+        // {
+        //   key: 'price',
+        //   title: '直播售价',
+        //   render: (h, params) => {
+        //     return h('Input', {
+        //       props: {
+        //         type: 'number',
+        //         value: params.row.price,
+        //       },
+        //       on: {
+        //         input: (val) => {
+        //           this.tabList[params.index].price = val;
+        //         },
+        //       },
+        //     });
+        //   },
+        // },
+        // {
+        //   key: 'cost_price',
+        //   title: '直播原价',
+        //   render: (h, params) => {
+        //     return h('Input', {
+        //       props: {
+        //         type: 'number',
+        //         value: params.row.cost_price,
+        //       },
+        //       on: {
+        //         input: (val) => {
+        //           this.tabList[params.index].cost_price = val;
+        //         },
+        //       },
+        //     });
+        //   },
+        // },
+        { key: 'stock', title: '库存' },
+        { slot: 'action', fixed: 'right', title: '操作' },
+      ],
       tabList: [],
       disabled: false,
       loadings: false,
@@ -147,7 +170,7 @@ export default {
           this.isShowBox = true;
         })
         .catch((error) => {
-          this.$message.error(error.msg);
+          this.$Message.error(error.msg);
         });
     },
     getProductId(data) {
@@ -182,7 +205,7 @@ export default {
         goods_info: this.tabList,
       })
         .then((res) => {
-          this.$message.success('添加成功');
+          this.$Message.success('添加成功');
           this.disabled = false;
           setTimeout(() => {
             this.$router.push({ path: this.$routeProStr + '/marketing/live/live_goods' });
@@ -190,7 +213,7 @@ export default {
         })
         .catch((error) => {
           this.disabled = false;
-          this.$message.error(error.msg);
+          this.$Message.error(error.msg);
         });
     },
   },

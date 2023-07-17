@@ -13,29 +13,28 @@
             <img :src="login_logo" alt="logo" style="width: 100%; height: 74px" />
           </div>
         </div>
-        <el-form ref="formInline" :model="formInline" :rules="ruleInline" @keyup.enter="handleSubmit('formInline')">
-          <el-form-item prop="username">
-            <el-input
+        <Form ref="formInline" :model="formInline" :rules="ruleInline" @keyup.enter="handleSubmit('formInline')">
+          <FormItem prop="username">
+            <Input
               type="text"
               v-model="formInline.username"
               prefix="ios-contact-outline"
               placeholder="请输入用户名"
               size="large"
             />
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input
+          </FormItem>
+          <FormItem prop="password">
+            <Input
               type="password"
               v-model="formInline.password"
               prefix="ios-lock-outline"
               placeholder="请输入密码"
               size="large"
-              show-password
             />
-          </el-form-item>
-          <!-- <el-form-item prop="code">
+          </FormItem>
+          <!-- <FormItem prop="code">
             <div class="code">
-              <el-input
+              <Input
                 type="text"
                 v-model="formInline.code"
                 prefix="ios-keypad-outline"
@@ -44,13 +43,13 @@
               />
               <img :src="imgcode" class="pictrue" @click="captchas" />
             </div>
-          </el-form-item> -->
-          <el-form-item class="pt10">
-            <el-button type="primary" :loading="loading" size="large" @click="handleSubmit('formInline')" class="btn"
-              >登录</el-button
+          </FormItem> -->
+          <FormItem class="pt10">
+            <Button type="primary" long :loading="loading" size="large" @click="handleSubmit('formInline')" class="btn"
+              >登录</Button
             >
-          </el-form-item>
-        </el-form>
+          </FormItem>
+        </Form>
       </div>
     </div>
 
@@ -175,7 +174,7 @@ export default {
           this.login_captcha = data.login_captcha;
         })
         .catch((err) => {
-          this.$message.error(err);
+          this.$Message.error(err);
           this.login_logo = require('@/assets/images/logo.png');
           this.swiperList = [{ slide: this.defaultSwiperList }];
         });
@@ -187,7 +186,10 @@ export default {
     closeModel(params) {
       this.isShow = false;
       // noinspection JSVoidFunctionReturnValueUsed
-   
+      let msg = this.$Message.loading({
+        content: '登录中...',
+        duration: 0,
+      });
       this.loading = true;
       AccountLogin({
         account: this.formInline.username,
@@ -197,6 +199,7 @@ export default {
         captchaVerification: params ? params.captchaVerification : '',
       })
         .then(async (res) => {
+          msg();
           let data = res.data;
           let expires = this.getExpiresTime(data.expires_time);
           // 记录用户登陆信息
@@ -227,21 +230,17 @@ export default {
           this.login_captcha = 0;
           try {
             if (data.queue === false) {
-              this.$notify.warning({
+              this.$Notice.warning({
                 title: '温馨提示',
-                dangerouslyUseHTMLString: true,
-                message:
-                  '您的【消息队列】未开启，没有开启会导致异步任务无法执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7217" target="_blank">点击查看开启方法</a>',
-                duration: 30000,
+                desc: '您的【消息队列】未开启，没有开启会导致异步任务无法执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7217" target="_blank">点击查看开启方法</a>',
+                duration: 30,
               });
             }
             if (data.timer === false) {
-              this.$notify.warning({
+              this.$Notice.warning({
                 title: '温馨提示',
-                dangerouslyUseHTMLString: true,
-                message:
-                  '您的【定时任务】未开启，没有开启会导致自动收货、未支付自动取消订单、订单自动好评、拼团到期退款等任务无法正常执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7211" target="_blank">点击查看开启方法</a>',
-                duration: 30000,
+                desc: '您的【定时任务】未开启，没有开启会导致自动收货、未支付自动取消订单、订单自动好评、拼团到期退款等任务无法正常执行。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7211" target="_blank">点击查看开启方法</a>',
+                duration: 30,
               });
             }
 
@@ -253,8 +252,9 @@ export default {
           });
         })
         .catch((res) => {
+          msg();
           let data = res === undefined ? {} : res;
-          this.$message.error(data.msg || '登录失败');
+          this.$Message.error(data.msg || '登录失败');
           this.login_captcha = res.data.login_captcha;
         });
       setTimeout((e) => {
@@ -286,24 +286,20 @@ export default {
         socket.onerror = (err) => {
           if (!isNotice) {
             isNotice = true;
-            this.$notify.warning({
+            this.$Notice.warning({
               title: '温馨提示',
-              message:
-                '您的【长连接】未开启，没有开启会导致系统默认客服无法使用,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7219" target="_blank">点击查看开启方法</a>',
-              dangerouslyUseHTMLString: true,
-              duration: 30000,
+              desc: '您的【长连接】未开启，没有开启会导致系统默认客服无法使用,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7219" target="_blank">点击查看开启方法</a>',
+              duration: 30,
             });
           }
         };
         socket.onclose = (err) => {
           if (!isNotice) {
             isNotice = true;
-            this.$notify.warning({
+            this.$Notice.warning({
               title: '温馨提示',
-              message:
-                '您的【长连接】未开启，没有开启会导致系统默认客服无法使用,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7219" target="_blank">点击查看开启方法</a>',
-              dangerouslyUseHTMLString: true,
-              duration: 30000,
+              desc: '您的【长连接】未开启，没有开启会导致系统默认客服无法使用,后台订单通知无法收到。请尽快执行命令开启！！<a href="https://doc.crmeb.com/single/crmeb_v4/7219" target="_blank">点击查看开启方法</a>',
+              duration: 30,
             });
           }
         };
@@ -317,7 +313,7 @@ export default {
 
     closefail() {
       // if (this.jigsaw) this.jigsaw.reset();
-      this.$message.error('校验错误');
+      this.$Message.error('校验错误');
     },
     handleResize(event) {
       this.fullWidth = document.documentElement.clientWidth;
@@ -426,7 +422,6 @@ export default {
 }
 
 .btn {
-  width: 100%;
   background: linear-gradient(90deg, rgba(25, 180, 241, 1) 0%, rgba(14, 115, 232, 1) 100%) !important;
 }
 

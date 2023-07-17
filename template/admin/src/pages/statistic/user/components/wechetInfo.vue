@@ -1,9 +1,9 @@
 <template>
-  <el-card :bordered="false" shadow="never" class="ivu-mt-16" v-loading="spinShow">
+  <Card :bordered="false" dis-hover class="ivu-mt-16">
     <div class="acea-row row-between-wrapper">
       <div class="header-title mb20">
         公众号用户概括
-        <el-tooltip effect="light" word-wrap width="500" trigger="hover" placement="right-start">
+        <Poptip word-wrap width="500" trigger="hover" placement="right-start">
           <Icon type="ios-information-circle-outline" />
           <div slot="content">
             <div>新增关注用户数</div>
@@ -21,7 +21,7 @@
             <div>累积取关用户数</div>
             <div>筛选时间截止时，取消关注公众号的用户数量</div>
           </div>
-        </el-tooltip>
+        </Poptip>
       </div>
     </div>
     <div class="acea-row mb20">
@@ -47,7 +47,8 @@
       </div>
     </div>
     <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
-  </el-card>
+    <Spin size="large" fix v-if="spinShow"></Spin>
+  </Card>
 </template>
 
 <script>
@@ -94,11 +95,11 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.dataTime = this.timeVal ? this.timeVal.join('-') : '';
+      this.dataTime = this.timeVal.join('-');
       this.name = this.dataTime;
       this.getStatistics();
       this.getTrend();
-      // this.userFrom.user_time = this.timeVal ? this.timeVal.join('-') : ''
+      // this.userFrom.user_time = this.timeVal.join('-')
     },
     // 统计
     getStatistics() {
@@ -134,7 +135,7 @@ export default {
           ];
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 统计图
@@ -232,7 +233,7 @@ export default {
           this.spinShow = false;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
           this.spinShow = false;
         });
     },

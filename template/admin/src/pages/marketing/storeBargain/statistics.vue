@@ -3,133 +3,125 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <span>
-          <el-button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</el-button>
+          <Button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
         </span>
-        <el-divider direction="vertical"></el-divider>
+        <Divider type="vertical" />
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
       </div>
     </div>
     <cards-data :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
     <div>
-      <el-tabs v-model="type" @tab-click="onClickTab">
-        <el-tab-pane v-for="(item, index) in tabs" :label="item.label" :name="item.type" :key="index" />
-      </el-tabs>
+      <Tabs v-model="currentTab" @on-click="onClickTab">
+        <TabPane v-for="(item, index) in tabs" :label="item.label" :name="item.type" :key="index" />
+      </Tabs>
     </div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="pagination"
         :model="pagination"
         :label-width="labelWidth"
         label-position="right"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col :span="6" v-if="type == 1">
-            <el-form-item label="订单状态：" label-for="status">
-              <el-select v-model="pagination.status" placeholder="请选择订单状态" clearable @change="searchList">
-                <el-option value="0" label="未支付"></el-option>
-                <el-option value="1" label="待发货"></el-option>
-                <el-option value="2" label="待收货"></el-option>
-                <el-option value="3" label="待评价"></el-option>
-                <el-option value="4" label="交易完成"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item label="搜索：" label-for="title">
-              <el-input
+        <Row type="flex" :gutter="24">
+          <Col span="6" v-if="type == 1">
+            <FormItem label="订单状态：" label-for="status">
+              <Select v-model="pagination.status" placeholder="请选择订单状态" clearable @on-change="searchList">
+                <Option value="0">未支付</Option>
+                <Option value="1">待发货</Option>
+                <Option value="2">待收货</Option>
+                <Option value="3">待评价</Option>
+                <Option value="4">交易完成</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col span="6">
+            <FormItem label="搜索：" label-for="title">
+              <Input
                 search
                 enter-button
                 v-model="pagination.real_name"
                 :placeholder="type == 1 ? '请输入用户姓名|订单号|UID' : '请输入用户UID'"
                 @on-search="searchList"
               />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
+      <Table
+        :columns="type ? thead2 : thead"
         :data="tbody"
         ref="table"
         class="mt25"
-        v-loading="loading"
-        highlight-current-row
+        :loading="loading"
+        highlight-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column
-          :label="item.title"
-          :min-width="item.minWidth"
-          v-for="(item, index) in type ? thead2 : thead"
-          :key="index"
-        >
-          <template slot-scope="scope">
-            <template v-if="item.key">
-              <div>
-                <span>{{ scope.row[item.key] }}</span>
-              </div>
-            </template>
-            <template v-else-if="item.slot === 'avatar'">
-              <div class="tabBox_img" v-viewer>
-                <img v-lazy="scope.row.avatar" />
-              </div>
-            </template>
-            <template v-else-if="item.slot === 'status'">
-              <el-tag color="blue" v-show="scope.row.status === 1">进行中</el-tag>
-              <el-tag color="volcano" v-show="scope.row.status === 2">已失败</el-tag>
-              <el-tag color="cyan" v-show="scope.row.status === 3">已成功</el-tag>
-            </template>
-            <template v-else-if="item.slot === 'action'">
-              <a @click="Info(scope.row)">查看详情</a>
-            </template>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template slot-scope="{ row }" slot="avatar">
+          <div class="tabBox_img" v-viewer>
+            <img v-lazy="row.avatar" />
+          </div>
+        </template>
+        <template slot-scope="{ row }" slot="num">
+          <span> {{ row.already_num + ' / ' + row.people_num }}</span>
+        </template>
+        <template slot-scope="{ row }" slot="status">
+          <Tag color="blue" v-show="row.status === 1">进行中</Tag>
+          <Tag color="volcano" v-show="row.status === 2">已失败</Tag>
+          <Tag color="cyan" v-show="row.status === 3">已成功</Tag>
+        </template>
+        <template slot-scope="{ row }" slot="action">
+          <a @click="Info(row)">查看详情</a>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="pagination.page"
-          :limit.sync="pagination.limit"
-          @pagination="getList"
+          :current="pagination.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="pagination.limit"
         />
       </div>
-    </el-card>
+    </Card>
     <!-- 详情模态框-->
-    <el-dialog :visible.sync="modals" class="tableBox" title="查看详情" :close-on-click-modal="false" width="750px">
-      <el-table
+    <Modal
+      v-model="modals"
+      class="tableBox"
+      scrollable
+      footer-hide
+      closable
+      title="查看详情"
+      :mask-closable="false"
+      width="750"
+    >
+      <Table
         ref="selection"
+        :columns="columns2"
         :data="tabList3"
-        v-loading="loading2"
-        empty-text="暂无数据"
-        highlight-current-row
+        :loading="loading2"
+        no-data-text="暂无数据"
+        highlight-row
         max-height="600"
         size="small"
+        no-filtered-data-text="暂无筛选结果"
       >
-        <el-table-column label="用户ID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.uid }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="用户头像" min-width="90">
-          <template slot-scope="scope">
-            <div class="tabBox_img" v-viewer>
-              <img v-lazy="scope.row.avatar" />
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="砍价金额" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.price }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="砍价时间" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.add_time }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-dialog>
+        <template slot-scope="{ row }" slot="nickname">
+          <span> {{ row.nickname + ' / ' + row.uid }}</span>
+        </template>
+        <template slot-scope="{ row }" slot="avatar">
+          <div class="tabBox_img" v-viewer>
+            <img v-lazy="row.avatar" />
+          </div>
+        </template>
+        <template slot-scope="{ row }" slot="action">
+          <Tag color="cyan" v-show="row.is_refund === 1">已退款</Tag>
+          <Tag color="volcano" v-show="row.is_refund === 0">未退款</Tag>
+        </template>
+      </Table>
+    </Modal>
   </div>
 </template>
 
@@ -278,6 +270,31 @@ export default {
         status: '',
       },
       type: 0,
+      columns2: [
+        {
+          title: '用户ID',
+          key: 'uid',
+          width: 80,
+        },
+        {
+          title: '用户头像',
+          slot: 'avatar',
+        },
+        {
+          title: '用户名称',
+          slot: 'nickname',
+          minWidth: 100,
+        },
+        {
+          title: '砍价金额',
+          key: 'price',
+        },
+        {
+          title: '砍价时间',
+          key: 'add_time',
+          minWidth: 100,
+        },
+      ],
     };
   },
   created() {
@@ -332,6 +349,11 @@ export default {
       this.pagination.page = 1;
       this.getList(this.id);
     },
+    // 分页
+    pageChange(index) {
+      this.pagination.page = index;
+      this.getList(this.id);
+    },
     // 查看详情
     Info(row) {
       this.modals = true;
@@ -344,7 +366,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },

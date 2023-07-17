@@ -10,15 +10,15 @@
           <div class="icon">
             <Icon type="ios-keypad" size="20" />
           </div>
-          <el-input v-model="item.val" maxlength="10" placeholder="选填，不超过十个字" />
+          <Input v-model="item.val" maxlength="10" placeholder="选填，不超过十个字" />
           <div class="delete" @click.stop="bindDelete(index)">
             <Icon type="ios-close-circle" size="20" />
           </div>
         </div>
       </draggable>
       <div class="add-btn" @click="addHotTxt" v-if="configData.list.length < 20">
-        <el-button type="primary" ghost style="width: 100%; height: 40px; border-color: #1890ff; color: #1890ff"
-          >添加热词</el-button
+        <Button type="primary" ghost style="width: 100%; height: 40px; border-color: #1890ff; color: #1890ff"
+          >添加热词</Button
         >
       </div>
     </div>

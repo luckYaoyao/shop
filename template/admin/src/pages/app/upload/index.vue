@@ -93,7 +93,7 @@ export default {
           }
         }
       } else {
-        this.$message.warning('请先选择图片');
+        this.$Message.warning('请先选择图片');
       }
     },
     handleRemove(file) {
@@ -135,7 +135,7 @@ export default {
           })
           .catch((err) => {
             this.loading = false;
-            this.$message.error(err.msg);
+            this.$Message.error(err.msg);
           });
       });
     },

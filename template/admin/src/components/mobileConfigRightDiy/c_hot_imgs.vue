@@ -11,10 +11,14 @@
             <img :src="item.img" alt="" v-if="item.img" />
             <div class="upload-box" v-else><Icon type="ios-camera-outline" size="36" /></div>
             <div>
-              <el-dialog :visible.sync="modalPic"
+              <Modal
+                v-model="modalPic"
                 width="950px"
+                scrollable
+                footer-hide
+                closable
                 title="上传图片"
-                :close-on-click-modal="false"
+                :mask-closable="false"
                 :z-index="1"
               >
                 <uploadPictures
@@ -24,14 +28,14 @@
                   :gridPic="gridPic"
                   v-if="modalPic"
                 ></uploadPictures>
-              </el-dialog>
+              </Modal>
             </div>
           </div>
           <div class="info">
             <div class="info-item" v-for="(infos, key) in item.info" :key="key">
               <span>{{ infos.title }}</span>
               <div class="input-box">
-                <el-input v-model="infos.value" :placeholder="infos.tips" :maxlength="infos.max" />
+                <Input v-model="infos.value" :placeholder="infos.tips" :maxlength="infos.max" />
               </div>
             </div>
           </div>
@@ -39,7 +43,7 @@
       </draggable>
     </div>
     <div class="add-btn" v-if="defaults.menu.length < 4">
-      <el-button style="width: 100%; height: 40px" @click="addBox">添加板块</el-button>
+      <Button style="width: 100%; height: 40px" @click="addBox">添加板块</Button>
     </div>
   </div>
 </template>

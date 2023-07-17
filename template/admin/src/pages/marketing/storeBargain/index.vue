@@ -1,157 +1,108 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="tableFrom"
         :model="tableFrom"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col v-bind="grid">
-            <el-form-item label="砍价状态：">
-              <el-select placeholder="请选择" v-model="tableFrom.status" clearable @change="userSearchs">
-                <el-option value="1" label="开启"></el-option>
-                <el-option value="0" label="关闭"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid">
-            <el-form-item label="商品搜索：" label-for="store_name">
-              <el-input
+        <Row type="flex" :gutter="24">
+          <Col v-bind="grid">
+            <FormItem label="砍价状态：">
+              <Select placeholder="请选择" v-model="tableFrom.status" clearable @on-change="userSearchs">
+                <Option value="1">开启</Option>
+                <Option value="0">关闭</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <FormItem label="商品搜索：" label-for="store_name">
+              <Input
                 search
                 enter-button
                 placeholder="请输入商品名称，ID"
                 v-model="tableFrom.store_name"
                 @on-search="userSearchs"
               />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row class="mb20">
-          <el-col v-bind="grid">
-            <el-button
-              v-auth="['marketing-store_bargain-create']"
-              type="primary"
-              icon="md-add"
-              @click="add"
-              class="mr10"
-              >添加砍价商品</el-button
+            </FormItem>
+          </Col>
+        </Row>
+        <Row type="flex" class="mb20">
+          <Col v-bind="grid">
+            <Button v-auth="['marketing-store_bargain-create']" type="primary" icon="md-add" @click="add" class="mr10"
+              >添加砍价商品</Button
             >
-            <el-button v-auth="['export-storeBargain']" class="export" icon="ios-share-outline" @click="exportList"
-              >导出</el-button
+            <Button v-auth="['export-storeBargain']" class="export" icon="ios-share-outline" @click="exportList"
+              >导出</Button
             >
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table
+          </Col>
+        </Row>
+      </Form>
+      <Table
+        :columns="columns1"
         :data="tableList"
         :loading="loading"
-        highlight-current-row
+        highlight-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column label="ID" width="80">
-          <template slot-scope="scope">
-            <div>{{ scope.row.id }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="砍价图片" min-width="60">
-          <template slot-scope="scope">
-            <div class="tabBox_img" v-viewer>
-              <img v-lazy="scope.row.image" />
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="砍价名称" min-width="150">
-          <template slot-scope="scope">
-            <div>{{ scope.row.title }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="砍价价格" min-width="100">
-          <template slot-scope="scope">
-            <div>{{ scope.row.price }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="最低价" min-width="100">
-          <template slot-scope="scope">
-            <div>{{ scope.row.min_price }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="参与人数" min-width="100">
-          <template slot-scope="scope">
-            <div>{{ scope.row.count_people_all }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="帮忙砍价人数" min-width="100">
-          <template slot-scope="scope">
-            <div>{{ scope.row.count_people_help }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="砍价成功人数" min-width="100">
-          <template slot-scope="scope">
-            <div>{{ scope.row.count_people_success }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="限量" min-width="80">
-          <template slot-scope="scope">
-            <div>{{ scope.row.quota_show }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="限量剩余" min-width="80">
-          <template slot-scope="scope">
-            <div>{{ scope.row.quota }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="活动状态" min-width="100">
-          <template slot-scope="scope">
-            <el-tag color="blue" v-show="scope.row.start_name === '进行中'">进行中</el-tag>
-            <el-tag color="volcano" v-show="scope.row.start_name === '未开始'">未开始</el-tag>
-            <el-tag color="cyan" v-show="scope.row.start_name === '已结束'">已结束</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="结束时间" min-width="120">
-          <template slot-scope="scope">
-            <span> {{ scope.row.stop_time | formatDate }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="上架状态" min-width="100">
-          <template slot-scope="scope">
-            <el-switch
-              :active-value="1"
-              :inactive-value="0"
-              v-model="scope.row.status"
-              :value="scope.row.status"
-              :disabled="scope.row.stop_status ? true : false"
-              @change="onchangeIsShow(scope.row)"
-              size="large"
-            >
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="170">
-          <template slot-scope="scope">
-            <a v-if="scope.row.stop_status === 0" @click="edit(scope.row, 0)">编辑</a>
-            <el-divider v-if="scope.row.stop_status === 0" direction="vertical" />
-            <a @click="edit(scope.row, 1)">复制</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="del(scope.row, '删除砍价商品', index)">删除</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="viewInfo(scope.row)">统计</a>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template slot-scope="{ row, index }" slot="is_fail">
+          <Icon type="md-checkmark" v-if="row.is_fail === 1" color="#0092DC" size="14" />
+          <Icon type="md-close" v-else color="#ed5565" size="14" />
+        </template>
+        <template slot-scope="{ row, index }" slot="image">
+          <div class="tabBox_img" v-viewer>
+            <img v-lazy="row.image" />
+          </div>
+        </template>
+        <template slot-scope="{ row, index }" slot="bargain_min_price">
+          <span>{{ row.bargain_min_price }}~{{ row.bargain_max_price }}</span>
+        </template>
+        <template slot-scope="{ row, index }" slot="start_name">
+          <Tag color="blue" v-show="row.start_name === '进行中'">进行中</Tag>
+          <Tag color="volcano" v-show="row.start_name === '未开始'">未开始</Tag>
+          <Tag color="cyan" v-show="row.start_name === '已结束'">已结束</Tag>
+        </template>
+        <template slot-scope="{ row, index }" slot="stop_time">
+          <span> {{ row.stop_time | formatDate }}</span>
+        </template>
+        <template slot-scope="{ row, index }" slot="status">
+          <i-switch
+            v-model="row.status"
+            :value="row.status"
+            :true-value="1"
+            :disabled="row.stop_status ? true : false"
+            :false-value="0"
+            @on-change="onchangeIsShow(row)"
+            size="large"
+          >
+            <span slot="open">开启</span>
+            <span slot="close">关闭</span>
+          </i-switch>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <a v-if="row.stop_status === 0" @click="edit(row, 0)">编辑</a>
+          <Divider v-if="row.stop_status === 0" type="vertical" />
+          <a @click="edit(row, 1)">复制</a>
+          <Divider type="vertical" />
+          <a @click="del(row, '删除砍价商品', index)">删除</a>
+          <Divider type="vertical" />
+          <a @click="viewInfo(row)">统计</a>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="tableFrom.page"
-          :limit.sync="tableFrom.limit"
-          @pagination="getList"
+          :current="tableFrom.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="tableFrom.limit"
         />
       </div>
-    </el-card>
+    </Card>
   </div>
 </template>
 
@@ -271,7 +222,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '85px';
+      return this.isMobile ? undefined : 80;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -332,11 +283,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.tableList.splice(num, 1);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     viewInfo(row) {
@@ -357,8 +308,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.tableFrom.page = index;
+      this.getList();
     },
     // 表格搜索
     userSearchs() {
@@ -373,11 +328,11 @@ export default {
       };
       bargainSetStatusApi(data)
         .then(async (res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },

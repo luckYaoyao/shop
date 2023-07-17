@@ -1,37 +1,37 @@
 <template>
   <div class="box">
     <div class="c_row-item" v-if="this.$route.query.type !== 2">
-      <el-col class="label" :span="4"> 模板名称 </el-col>
-      <el-col :span="19" class="slider-box">
-        <el-input v-model="name" placeholder="选填不超过15个字" maxlength="15" @change="changName" />
-      </el-col>
+      <Col class="label" span="4"> 模板名称 </Col>
+      <Col span="19" class="slider-box">
+        <Input v-model="name" placeholder="选填不超过15个字" maxlength="15" @on-change="changName" />
+      </Col>
     </div>
     <div class="c_row-item">
-      <el-col class="label" :span="4"> 页面标题 </el-col>
-      <el-col :span="19" class="slider-box">
-        <el-input v-model="value" placeholder="选填不超过30个字" maxlength="30" @change="changVal" />
-      </el-col>
+      <Col class="label" span="4"> 页面标题 </Col>
+      <Col span="19" class="slider-box">
+        <Input v-model="value" placeholder="选填不超过30个字" maxlength="30" @on-change="changVal" />
+      </Col>
     </div>
     <div class="c_row-item">
-      <el-col class="label" :span="4"> 页面状态 </el-col>
-      <el-col :span="19" class="slider-box">
-        <el-switch :active-value="1" :inactive-value="0" v-model="isShow" @change="changeState" />
-      </el-col>
+      <Col class="label" span="4"> 页面状态 </Col>
+      <Col span="19" class="slider-box">
+        <i-switch v-model="isShow" @on-change="changeState" />
+      </Col>
     </div>
     <div class="c_row-item acea-row row-top">
-      <el-col class="label" :span="4"> 背景设置 </el-col>
-      <el-col :span="19" class="slider-box">
+      <Col class="label" span="4"> 背景设置 </Col>
+      <Col span="19" class="slider-box">
         <div class="acea-row row-between row-top color">
-          <el-checkbox v-model="bgColor" @change="bgColorTap">背景色</el-checkbox>
-          <el-color-picker v-model="colorPicker" @change="colorPickerTap(colorPicker)"></el-color-picker>
+          <Checkbox v-model="bgColor" @on-change="bgColorTap">背景色</Checkbox>
+          <ColorPicker v-model="colorPicker" @on-change="colorPickerTap(colorPicker)" />
         </div>
         <div class="acea-row row-between row-top color">
-          <el-checkbox v-model="bgPic" @change="bgPicTap">背景图</el-checkbox>
-          <el-radio-group v-model="tabVal" type="button" @change="radioTap">
-            <el-radio-button :label="index" v-for="(item, index) in picList" :key="index">
+          <Checkbox v-model="bgPic" @on-change="bgPicTap">背景图</Checkbox>
+          <RadioGroup v-model="tabVal" type="button" @on-change="radioTap">
+            <Radio :label="index" v-for="(item, index) in picList" :key="index">
               <span class="iconfont-diy" :class="item"></span>
-            </el-radio-button>
-          </el-radio-group>
+            </Radio>
+          </RadioGroup>
         </div>
         <div v-if="bgPic">
           <div class="title">建议尺寸：690 * 240px</div>
@@ -44,10 +44,19 @@
             <!--<span class="iconfont-diy icondel_1" @click.stop="bindDelete" v-if="bgPicUrl"></span>-->
           </div>
         </div>
-      </el-col>
+      </Col>
     </div>
     <div>
-      <el-dialog :visible.sync="modalPic" width="950px" title="上传背景图" :close-on-click-modal="false" :z-index="1">
+      <Modal
+        v-model="modalPic"
+        width="950px"
+        scrollable
+        footer-hide
+        closable
+        title="上传背景图"
+        :mask-closable="false"
+        :z-index="1"
+      >
         <uploadPictures
           :isChoice="isChoice"
           @getPic="getPic"
@@ -55,7 +64,7 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </el-dialog>
+      </Modal>
     </div>
   </div>
 </template>

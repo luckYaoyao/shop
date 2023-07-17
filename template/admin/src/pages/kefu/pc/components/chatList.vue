@@ -50,9 +50,9 @@
           <div class="right-box">
             <div class="time">{{ item.update_time | toDay }}</div>
             <div class="num">
-              <el-badge :value="item.mssage_num">
+              <Badge :count="item.mssage_num">
                 <a href="#" class="demo-badge"></a>
-              </el-badge>
+              </Badge>
             </div>
           </div>
         </div>
@@ -101,9 +101,9 @@ export default {
             if (el.to_uid == nVal.to_uid) {
               el.online = nVal.online;
               if (nVal.online == 1) {
-                this.$notify.info({
+                this.$Notice.info({
                   title: '上线通知',
-                  message: `${el.nickname}上线`,
+                  desc: `${el.nickname}上线`,
                 });
               }
             }
@@ -200,7 +200,7 @@ export default {
               }
               arr.unshift(oldVal);
             }
-            this.$notify.info({
+            this.$Notice.info({
               title: '您有一条转接消息！',
             });
           }
@@ -227,7 +227,7 @@ export default {
           }
         }
         if (data.recored.is_tourist != this.hdTabCur && data.recored.id) {
-          this.$notify.info({
+          this.$Notice.info({
             title: this.hdTabCur ? '用户发来消息啦！' : '游客发来消息啦！',
           });
         }

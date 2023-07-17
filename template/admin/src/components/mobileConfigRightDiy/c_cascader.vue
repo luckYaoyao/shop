@@ -1,18 +1,19 @@
 <template>
   <div class="slider-box">
     <div class="c_row-item">
-      <el-col class="label" :span="4" v-if="configData.title">
+      <Col class="label" span="4" v-if="configData.title">
         {{ configData.title }}
-      </el-col>
-      <el-col :span="19" class="slider-box">
-        <el-cascader
-          :options="configData.list"
+      </Col>
+      <Col span="19" class="slider-box">
+        <Cascader
+          :data="configData.list"
           placeholder="请选择商品分类"
+          change-on-select
           v-model="configData.activeValue"
           filterable
-          @change="sliderChange"
-        ></el-cascader>
-      </el-col>
+          @on-change="sliderChange"
+        ></Cascader>
+      </Col>
     </div>
   </div>
 </template>

@@ -94,7 +94,7 @@
   border-color: var(--prev-color-primary);
 }
 
-/* el-radio 单选框
+/* Radio 单选框
 ------------------------------- */
 .el-radio,
 .el-checkbox {
@@ -133,7 +133,7 @@
   border-color: var(--prev-border-color-base);
 }
 
-/* el-checkbox 多选框
+/* Checkbox 多选框
 ------------------------------- */
 .el-checkbox__input.is-checked + .el-checkbox__label,
 .el-checkbox-button__inner:hover {
@@ -168,14 +168,14 @@
   border-color: var(--prev-border-color-base);
 }
 
-/* el-input 输入框、InputNumber 计数器
+/* Input 输入框、InputNumber 计数器
 ------------------------------- */
 // input-number
 .el-input__inner:focus,
 .el-input-number__decrease:hover:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled),
 .el-input-number__increase:hover:not(.is-disabled) ~ .el-input .el-input__inner:not(.is-disabled),
 .el-textarea__inner:focus {
-  // border-color: var(--prev-color-primary) !important;
+  border-color: var(--prev-color-primary) !important;
 }
 .el-input-number__increase:hover,
 .el-input-number__decrease:hover {
@@ -236,7 +236,7 @@ $positions: 'top', 'right', 'bottom', 'left';
   background-color: var(--prev-color-hover);
 }
 
-/* el-select 选择器
+/* Select 选择器
 ------------------------------- */
 .el-range-editor.is-active,
 .el-range-editor.is-active:hover,
@@ -301,7 +301,7 @@ $positions: 'top', 'right', 'bottom', 'left';
   background-color: var(--prev-color-hover);
 }
 
-/* el-switch 开关
+/* Switch 开关
 ------------------------------- */
 .el-switch.is-checked .el-switch__core {
   border-color: var(--prev-color-primary) !important;
@@ -431,7 +431,7 @@ $positions: 'top', 'right', 'bottom', 'left';
   color: var(--prev-color-text-white);
 }
 
-/* el-upload 上传
+/* Upload 上传
 ------------------------------- */
 .el-upload-list__item.is-success .el-upload-list__item-name:focus,
 .el-upload-list__item.is-success .el-upload-list__item-name:hover,
@@ -467,7 +467,7 @@ $positions: 'top', 'right', 'bottom', 'left';
   background-color: var(--prev-bg-color);
 }
 
-/* el-color-picker 颜色选择器
+/* ColorPicker 颜色选择器
 ------------------------------- */
 .el-color-picker__trigger {
   border-color: var(--prev-border-color-light);
@@ -490,16 +490,15 @@ $positions: 'top', 'right', 'bottom', 'left';
   color: var(--prev-color-text-primary);
 }
 
-/* el-form 表单
+/* Form 表单
 ------------------------------- */
 .el-form {
   .el-form-item:last-of-type {
-    // margin-bottom: 0 !important;
+    margin-bottom: 0 !important;
   }
 }
 .el-form-item__label {
   color: var(--prev-color-text-regular);
-  font-size: 12px !important;
 }
 
 /* Table 表格
@@ -810,7 +809,7 @@ $positions: 'top', 'right', 'bottom', 'left';
 
 /* Popover 弹出框
 ------------------------------- */
-.el-tooltip {
+.el-popover {
   background-color: var(--prev-bg-white);
   border-color: var(--prev-border-color-lighter);
   color: var(--prev-color-text-regular);
@@ -819,12 +818,11 @@ $positions: 'top', 'right', 'bottom', 'left';
   color: var(--prev-color-text-primary);
 }
 
-/* el-card 卡片
+/* Card 卡片
 ------------------------------- */
 .el-card {
   color: var(--prev-color-text-primary);
   background-color: var(--prev-bg-white);
-  border: none !important;
   border-color: var(--prev-border-color-lighter);
 }
 .el-card__header {
@@ -952,7 +950,6 @@ $positions: 'top', 'right', 'bottom', 'left';
   width: 100%;
   height: 100%;
   overflow: auto;
-  padding: 20px;
 }
 .el-drawer__header {
   padding: 0 15px !important;

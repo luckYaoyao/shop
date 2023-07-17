@@ -1,16 +1,16 @@
 <template>
   <div>
-    <el-dialog :visible.sync="addressModal" title="选择可配送区域" width="50%" class="modal">
-      <el-row :gutter="24" >
-        <el-col :xl="24" :lg="24" :md="24" :sm="24" :xs="24" class="item">
+    <Modal v-model="addressModal" title="选择可配送区域" width="50%" class="modal" :mask="true">
+      <Row :gutter="24" type="flex">
+        <Col :xl="24" :lg="24" :md="24" :sm="24" :xs="24" class="item">
           <div class="acea-row row-right row-middle">
-            <el-checkbox v-model="iSselect" @change="allCheckbox">全选</el-checkbox>
+            <Checkbox v-model="iSselect" @on-change="allCheckbox">全选</Checkbox>
             <div class="empty" @click="empty">清空</div>
           </div>
-        </el-col>
-      </el-row>
-      <el-row :gutter="24"  :loading="loading">
-        <el-col
+        </Col>
+      </Row>
+      <Row :gutter="24" type="flex" :loading="loading">
+        <Col
           :xl="6"
           :lg="6"
           :md="6"
@@ -22,35 +22,36 @@
           v-if="item.isShow"
         >
           <div @mouseenter="enter(index)" @mouseleave="leave()">
-            <el-checkbox v-model="item.checked" :label="item.name" @change="checkedClick(index)">{{
+            <Checkbox v-model="item.checked" :label="item.name" @on-change="checkedClick(index)">{{
               item.name
-            }}</el-checkbox
+            }}</Checkbox
             ><span class="red">({{ (item.count || 0) + '/' + item.childNum }})</span>
             <div class="city" v-show="activeCity === index">
               <div class="checkBox">
                 <div class="arrow"></div>
                 <div>
-                  <el-checkbox
+                  <Checkbox
                     v-model="city.checked"
                     :label="city.name"
-                    @change="primary(index, indexn)"
+                    @on-change="primary(index, indexn)"
                     class="itemn"
                     v-for="(city, indexn) in item.children"
                     :key="indexn"
                     v-show="city.isShow"
-                    >{{ city.name }}</el-checkbox
+                    >{{ city.name }}</Checkbox
                   >
                 </div>
               </div>
             </div>
           </div>
-        </el-col>
-      </el-row>
+        </Col>
+      </Row>
       <div slot="footer">
-        <el-button @click="close">取消</el-button>
-        <el-button type="primary" @click="confirm">确定</el-button>
+        <Button @click="close">取消</Button>
+        <Button type="primary" @click="confirm">确定</Button>
       </div>
-    </el-dialog>
+      <Spin size="large" fix v-if="loading"></Spin>
+    </Modal>
   </div>
 </template>
 

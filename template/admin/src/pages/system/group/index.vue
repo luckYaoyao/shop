@@ -1,81 +1,74 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col v-bind="grid">
-            <el-form-item label="数据搜索：" label-for="status2">
-              <el-input
+        <Row type="flex" :gutter="24">
+          <Col v-bind="grid">
+            <FormItem label="数据搜索：" label-for="status2">
+              <Input
                 search
                 enter-button
                 placeholder="请输入ID,KEY,数据组名称,简介"
                 v-model="formValidate.title"
                 @on-search="userSearchs"
               />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col v-bind="grid">
-            <el-button type="primary" icon="md-add" @click="groupAdd('添加数据组')" class="mr20">添加数据组</el-button>
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table
+            </FormItem>
+          </Col>
+        </Row>
+        <Row type="flex">
+          <Col v-bind="grid">
+            <Button type="primary" icon="md-add" @click="groupAdd('添加数据组')" class="mr20">添加数据组</Button>
+          </Col>
+        </Row>
+      </Form>
+      <Table
+        :columns="columns1"
         :data="tabList"
         ref="table"
         class="mt25"
         :loading="loading"
-        highlight-current-row
+        highlight-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column label="ID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="KEY" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.config_name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="数据组名称" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="简介" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.info }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="170">
-          <template slot-scope="scope">
-            <a @click="goList(scope.row)">数据列表</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="edit(scope.row, '编辑')">编辑</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="del(scope.row, '删除数据组', index)">删除</a>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template slot-scope="{ row, index }" slot="statuss">
+          <i-switch
+            v-model="row.status"
+            :value="row.status"
+            :true-value="1"
+            :false-value="0"
+            @on-change="onchangeIsShow(row)"
+            size="large"
+          >
+            <span slot="open">显示</span>
+            <span slot="close">隐藏</span>
+          </i-switch>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <a @click="goList(row)">数据列表</a>
+          <Divider type="vertical" />
+          <a @click="edit(row, '编辑')">编辑</a>
+          <Divider type="vertical" />
+          <a @click="del(row, '删除数据组', index)">删除</a>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="formValidate.page"
-          :limit.sync="formValidate.limit"
-          @pagination="getList"
+          :current="formValidate.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="formValidate.limit"
         />
       </div>
-    </el-card>
+    </Card>
     <!-- 新增 编辑-->
     <group-from
       ref="groupfroms"
@@ -111,7 +104,34 @@ export default {
       loading: false,
       tabList: [],
       total: 0,
-
+      columns1: [
+        {
+          title: 'ID',
+          key: 'id',
+          width: 80,
+        },
+        {
+          title: 'KEY',
+          key: 'config_name',
+          minWidth: 130,
+        },
+        {
+          title: '数据组名称',
+          key: 'name',
+          minWidth: 130,
+        },
+        {
+          title: '简介',
+          key: 'info',
+          minWidth: 130,
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          fixed: 'right',
+          minWidth: 150,
+        },
+      ],
       FromData: null,
       titleFrom: '',
       groupId: 0,
@@ -121,7 +141,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '75px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -149,8 +169,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.formValidate.page = index;
+      this.getList();
     },
     // 表格搜索
     userSearchs() {
@@ -175,12 +199,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.tabList.splice(num, 1);
           this.getList();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 编辑

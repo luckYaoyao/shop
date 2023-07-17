@@ -17,7 +17,7 @@
             <div class="con-item" v-for="(list, key) in item.chiild" :key="key">
               <span>{{ list.title }}</span>
               <div style="width: 100%" @click="getLink(index, key, item)">
-                <el-input
+                <Input
                   :icon="key && !item.link ? 'ios-arrow-forward' : ''"
                   :readonly="key && !item.link ? true : false"
                   v-model="list.val"
@@ -28,9 +28,9 @@
             </div>
             <div class="con-item" v-if="item.link">
               <span>{{ item.link.title }}</span>
-              <el-select v-model="item.link.activeVal" style="" @change="sliderChange(index)">
-                <el-option v-for="(item, j) in item.link.optiops" :value="item.value" :key="j" :label="item.label"></el-option>
-              </el-select>
+              <Select v-model="item.link.activeVal" style="" @on-change="sliderChange(index)">
+                <Option v-for="(item, j) in item.link.optiops" :value="item.value" :key="j">{{ item.label }} </Option>
+              </Select>
             </div>
           </div>
           <div class="delete" @click.stop="bindDelete(index)">
@@ -41,8 +41,8 @@
     </div>
     <div v-if="configData.list">
       <div class="add-btn" @click="addHotTxt" v-if="configData.list.length < configData.max">
-        <el-button type="primary" ghost style="width: 100%; height: 40px; border-color: #1890ff; color: #1890ff"
-          >添加模块</el-button
+        <Button type="primary" ghost style="width: 100%; height: 40px; border-color: #1890ff; color: #1890ff"
+          >添加模块</Button
         >
       </div>
     </div>

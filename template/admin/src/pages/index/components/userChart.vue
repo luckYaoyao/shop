@@ -1,10 +1,10 @@
 <template>
   <div @resize="handleResize">
-    <el-row :gutter="24">
-      <el-col :xl="16" :lg="12" :md="24" :sm="24" :xs="24" class="ivu-mb dashboard-console-visit">
-        <el-card :bordered="false" shadow="never">
+    <Row :gutter="24">
+      <Col :xl="16" :lg="12" :md="24" :sm="24" :xs="24" class="ivu-mb dashboard-console-visit">
+        <Card :bordered="false" dis-hover>
           <div slot="title">
-            <el-avatar icon="el-icon-user-solid" size="small" style="color: #1890ff; background-color: #e6f7ff" ></el-avatar>
+            <Avatar icon="ios-pulse" size="small" style="color: #1890ff; background-color: #e6f7ff" />
             <span class="ivu-pl-8">用户</span>
           </div>
           <echarts-from
@@ -14,18 +14,18 @@
             :series="series"
             v-if="infoList && series.length !== 0"
           ></echarts-from>
-        </el-card>
-      </el-col>
-      <el-col :xl="8" :lg="12" :md="24" :sm="24" :xs="24">
-        <el-card :bordered="false" shadow="never" class="dashboard-console-visit">
+        </Card>
+      </Col>
+      <Col :xl="8" :lg="12" :md="24" :sm="24" :xs="24">
+        <Card :bordered="false" dis-hover class="dashboard-console-visit">
           <div slot="title">
-            <el-avatar icon="el-icon-s-marketing" size="small" style="color: #1890ff; background-color: #e6f7ff" ></el-avatar>
+            <Avatar icon="ios-analytics" size="small" style="color: #1890ff; background-color: #e6f7ff" />
             <span class="ivu-pl-8">购买用户统计</span>
           </div>
           <echarts-from ref="visitChart" :infoList="infoList" :echartsTitle="circle"></echarts-from>
-        </el-card>
-      </el-col>
-    </el-row>
+        </Card>
+      </Col>
+    </Row>
   </div>
 </template>
 
@@ -74,7 +74,7 @@ export default {
           this.bing_xdata = res.bing_xdata;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     getRank() {
@@ -84,7 +84,7 @@ export default {
           this.lists = data.list;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 监听页面宽度变化，刷新表格

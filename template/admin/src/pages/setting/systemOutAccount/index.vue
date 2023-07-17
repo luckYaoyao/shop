@@ -1,247 +1,216 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row>
-          <el-col v-bind="grid">
-            <el-button v-auth="['setting-system_admin-add']" type="primary" @click="add" icon="md-add"
-              >添加账号</el-button
-            >
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table
+        <!-- <Row type="flex" :gutter="24">
+          <Col v-bind="grid">
+            <FormItem label="状态：" label-for="status1">
+              <Select v-model="status" placeholder="请选择" @on-change="userSearchs" clearable>
+                <Option value="all">全部</Option>
+                <Option value="1">开启</Option>
+                <Option value="0">关闭</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <FormItem label="搜索：" label-for="status2">
+              <Input
+                search
+                enter-button
+                placeholder="请输入账号"
+                v-model="formValidate.name"
+                @on-search="userSearchs"
+              />
+            </FormItem>
+          </Col>
+        </Row> -->
+        <Row type="flex">
+          <Col v-bind="grid">
+            <Button v-auth="['setting-system_admin-add']" type="primary" @click="add" icon="md-add">添加账号</Button>
+          </Col>
+        </Row>
+      </Form>
+      <Table
+        :columns="columns1"
         :data="list"
         class="mt25"
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
-        v-loading="loading"
-        highlight-current-row
+        :loading="loading"
+        highlight-row
       >
-        <el-table-column label="编号" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="账号" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.appid }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="描述" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.title }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="添加时间" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.add_time }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="最后登录时间" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.last_time }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="最后登录ip" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.ip }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="状态" min-width="130">
-          <template slot-scope="scope">
-            <el-switch
-              class="defineSwitch"
-              :active-value="1"
-              :inactive-value="0"
-              v-model="scope.row.status"
-              :value="scope.row.status"
-              @change="onchangeIsShow(scope.row)"
-              size="large"
-              active-text="开启"
-              inactive-text="关闭"
-            >
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="140">
-          <template slot-scope="scope">
-            <a @click="setUp(scope.row)">设置</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="edit(scope.row)">编辑</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="del(scope.row, '删除账号', index)">删除</a>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template slot-scope="{ row }" slot="roles">
+          <div v-if="row.roles.length !== 0">
+            <Tag color="blue" v-for="(item, index) in row.roles.split(',')" :key="index" v-text="item"></Tag>
+          </div>
+        </template>
+        <template slot-scope="{ row }" slot="status">
+          <i-switch
+            v-model="row.status"
+            :value="row.status"
+            :true-value="1"
+            :false-value="0"
+            @on-change="onchangeIsShow(row)"
+            size="large"
+          >
+            <span slot="open">开启</span>
+            <span slot="close">关闭</span>
+          </i-switch>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <a @click="setUp(row)">设置</a>
+          <Divider type="vertical" />
+          <a @click="edit(row)">编辑</a>
+          <Divider type="vertical" />
+          <a @click="del(row, '删除账号', index)">删除</a>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="formValidate.page"
-          :limit.sync="formValidate.limit"
-          @pagination="getList"
+          :current="formValidate.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="formValidate.limit"
         />
       </div>
-    </el-card>
-    <el-dialog
-      :visible.sync="modals"
+    </Card>
+    <Modal
+      v-model="modals"
+      scrollable
       :title="type == 0 ? '添加账号' : '编辑账号'"
-      :close-on-click-modal="false"
-      :show-close="false"
-      width="700px"
+      :mask-closable="false"
+      width="700"
+      :closable="false"
     >
-      <el-form
+      <Form
         ref="modalsdate"
         :model="modalsdate"
         :rules="type == 0 ? ruleValidate : editValidate"
-        label-width="70px"
+        :label-width="70"
         label-position="right"
       >
-        <el-form-item label="账号" prop="appid">
+        <FormItem label="账号" prop="appid">
           <div style="display: flex">
-            <el-input type="text" v-model="modalsdate.appid" :disabled="type != 0"></el-input>
+            <Input type="text" v-model="modalsdate.appid" :disabled="type != 0"></Input>
           </div>
-        </el-form-item>
-        <el-form-item label="密码" prop="appsecret">
+        </FormItem>
+        <FormItem label="密码" prop="appsecret">
           <div style="display: flex">
-            <el-input type="text" v-model="modalsdate.appsecret" class="input"></el-input>
-            <el-button type="primary" @click="reset" class="reset">重置</el-button>
+            <Input type="text" v-model="modalsdate.appsecret" class="input"></Input>
+            <Button type="primary" @click="reset" class="reset">重置</Button>
           </div>
-        </el-form-item>
-        <el-form-item label="描述" prop="title">
+        </FormItem>
+        <FormItem label="描述" prop="title">
           <div style="display: flex">
-            <el-input type="textarea" v-model="modalsdate.title"></el-input>
+            <Input type="textarea" v-model="modalsdate.title"></Input>
           </div>
-        </el-form-item>
-        <el-form-item label="接口权限" prop="title">
-          <!-- <el-checkbox-group v-model="modalsdate.rules">
-            <el-checkbox
+        </FormItem>
+        <FormItem label="接口权限" prop="title">
+          <!-- <CheckboxGroup v-model="modalsdate.rules">
+            <Checkbox
               :disabled="[2, 3].includes(item.id)"
               style="width: 30%"
               v-for="item in intList"
               :key="item.id"
               :label="item.id"
-              >{{ item.name }}</el-checkbox
+              >{{ item.name }}</Checkbox
             >
-          </el-checkbox-group> -->
-          <el-tree
-            :data="intList"
-            :props="props"
-            multiple
-            show-checkbox
-            ref="tree"
-            node-key="id"
-            :default-checked-keys="selectIds"
-            @check-change="selectTree"
-          ></el-tree>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="ok('modalsdate')">确 定</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog
-      :visible.sync="settingModals"
-      scrollable
-      title="设置推送"
-      width="900px"
-      :close-on-click-modal="false"
-      :show-close="false"
-    >
-      <el-form
+          </CheckboxGroup> -->
+          <Tree :data="intList" multiple show-checkbox ref="tree" @on-check-change="selectTree"></Tree>
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button type="primary" @click="ok('modalsdate')">确定</Button>
+        <Button @click="cancel">取消</Button>
+      </div>
+    </Modal>
+    <Modal v-model="settingModals" scrollable title="设置推送" :mask-closable="false" width="900" :closable="false">
+      <Form
         class="setting-style"
         ref="settingData"
         :model="settingData"
         :rules="type == 0 ? ruleValidate : editValidate"
-        label-width="140px"
+        :label-width="140"
         label-position="right"
       >
-        <el-form-item label="推送开关" prop="switch">
-          <el-switch v-model="settingData.push_open" :active-value="1" :inactive-value="0" />
-        </el-form-item>
-        <el-form-item label="推送账号" prop="push_account">
+        <FormItem label="推送开关" prop="switch">
+          <Switch v-model="settingData.push_open" :true-value="1" :false-value="0" />
+        </FormItem>
+        <FormItem label="推送账号" prop="push_account">
           <div class="form-content">
-            <el-input type="text" v-model="settingData.push_account" placeholder="请输入推送账号"></el-input>
+            <Input type="text" v-model="settingData.push_account" placeholder="请输入推送账号"></Input>
             <span class="trip">接受推送方获取token的账号</span>
           </div>
-        </el-form-item>
-        <el-form-item label="推送密码" prop="push_password">
+        </FormItem>
+        <FormItem label="推送密码" prop="push_password">
           <div class="form-content">
-            <el-input type="text" v-model="settingData.push_password" placeholder="请输入推送密码"></el-input>
+            <Input type="text" v-model="settingData.push_password" placeholder="请输入推送密码"></Input>
             <span class="trip">接受推送方获取token的密码</span>
           </div>
-        </el-form-item>
-        <el-form-item label="获取TOKEN接口" prop="push_token_url">
+        </FormItem>
+        <FormItem label="获取TOKEN接口" prop="push_token_url">
           <div class="form-content">
             <div class="input-button">
-              <el-input type="text" v-model="settingData.push_token_url" placeholder="请输入获取TOKEN接口"></el-input>
-              <el-button class="ml10" type="primary" @click="textOutUrl(settingData.id)">测试链接</el-button>
+              <Input type="text" v-model="settingData.push_token_url" placeholder="请输入获取TOKEN接口"></Input>
+              <Button class="ml10" type="primary" @click="textOutUrl(settingData.id)">测试链接</Button>
             </div>
             <span class="trip"
               >接受推送方获取token的URL地址，POST方法，传入push_account和push_password，返回token和有效时间time(秒)</span
             >
           </div>
-        </el-form-item>
-        <el-form-item label="用户数据修改推送接口" prop="user_update_push">
+        </FormItem>
+        <FormItem label="用户数据修改推送接口" prop="user_update_push">
           <div class="form-content">
-            <el-input
-              type="text"
-              v-model="settingData.user_update_push"
-              placeholder="请输入用户数据修改推送接口"
-            ></el-input>
+            <Input type="text" v-model="settingData.user_update_push" placeholder="请输入用户数据修改推送接口"></Input>
             <span class="trip">用户修改积分，余额，经验等将用户信息推送至该地址，POST方法</span>
           </div>
-        </el-form-item>
-        <el-form-item label="订单创建推送接口" prop="order_create_push">
+        </FormItem>
+        <FormItem label="订单创建推送接口" prop="order_create_push">
           <div class="form-content">
-            <el-input
-              type="text"
-              v-model="settingData.order_create_push"
-              placeholder="请输入订单创建推送接口"
-            ></el-input>
+            <Input type="text" v-model="settingData.order_create_push" placeholder="请输入订单创建推送接口"></Input>
             <span class="trip">订单创建时推送订单信息至该地址，POST方法</span>
           </div>
-        </el-form-item>
-        <el-form-item label="订单支付推送接口" prop="order_pay_push">
+        </FormItem>
+        <FormItem label="订单支付推送接口" prop="order_pay_push">
           <div class="form-content">
-            <el-input type="text" v-model="settingData.order_pay_push" placeholder="请输入订单支付推送接口"></el-input>
+            <Input type="text" v-model="settingData.order_pay_push" placeholder="请输入订单支付推送接口"></Input>
             <span class="trip">订单完成支付时推送订单已支付信息至该地址，POST方法</span>
           </div>
-        </el-form-item>
-        <el-form-item label="售后订单创建推送接口" prop="refund_create_push">
+        </FormItem>
+        <FormItem label="售后订单创建推送接口" prop="refund_create_push">
           <div class="form-content">
-            <el-input
+            <Input
               type="text"
               v-model="settingData.refund_create_push"
               placeholder="请输入售后订单创建推送接口"
-            ></el-input>
+            ></Input>
             <span class="trip">售后订单生成时推送售后单信息至该地址，POST方法</span>
           </div>
-        </el-form-item>
-        <el-form-item label="售后订单取消推送接口" prop="refund_cancel_push">
+        </FormItem>
+        <FormItem label="售后订单取消推送接口" prop="refund_cancel_push">
           <div class="form-content">
-            <el-input
+            <Input
               type="text"
               v-model="settingData.refund_cancel_push"
               placeholder="请输入售后订单取消推送接口"
-            ></el-input>
+            ></Input>
             <span class="trip">售后订单取消时推送售后单取消信息至该地址，POST方法</span>
           </div>
-        </el-form-item>
-      </el-form>
+        </FormItem>
+      </Form>
       <div slot="footer">
-        <el-button type="primary" @click="submit('settingData')">确定</el-button>
-        <el-button @click="settingModals = false">取消</el-button>
+        <Button type="primary" @click="submit('settingData')">确定</Button>
+        <Button @click="settingModals = false">取消</Button>
       </div>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 
@@ -283,6 +252,61 @@ export default {
       status: '',
       list: [],
       intList: [],
+      columns: [
+        {
+          type: 'selection',
+          width: 60,
+          align: 'center',
+        },
+        {
+          title: '接口名称',
+          key: 'name',
+        },
+      ],
+      columns1: [
+        {
+          title: '编号',
+          key: 'id',
+          minWidth: 80,
+        },
+        {
+          title: '账号',
+          key: 'appid',
+          minWidth: 150,
+        },
+        {
+          title: '描述',
+          key: 'title',
+          minWidth: 250,
+        },
+        {
+          title: '添加时间',
+          key: 'add_time',
+          minWidth: 180,
+        },
+        {
+          title: '最后登录时间',
+          key: 'last_time',
+          minWidth: 180,
+        },
+        {
+          title: '最后登录ip',
+          key: 'ip',
+          minWidth: 180,
+        },
+        {
+          title: '状态',
+          slot: 'status',
+          minWidth: 90,
+        },
+        {
+          title: '操作',
+          key: 'action',
+          slot: 'action',
+          fixed: 'right',
+          minWidth: 120,
+        },
+      ],
       FromData: null,
       modalTitleSs: '',
       ids: Number,
@@ -308,17 +332,12 @@ export default {
       editValidate: {
         appsecret: [{ required: false, message: '请输入正确的密码 (6到32位之间)', trigger: 'blur', min: 6, max: 32 }],
       },
-      props: {
-        label: 'title',
-        disabled: 'disableCheckbox',
-      },
-      selectIds: [],
     };
   },
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '50px';
+      return this.isMobile ? undefined : 50;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -336,10 +355,10 @@ export default {
       };
       setShowApi(data)
         .then(async (res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 请求列表
@@ -358,8 +377,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.formValidate.page = index;
+      this.getList();
     },
     // 添加
     add() {
@@ -375,28 +398,20 @@ export default {
     },
     selectTree(e, i) {},
     getIntList(type, list) {
-      let arr = [];
       interfaceList().then((res) => {
         this.intList = res.data;
         if (!type) {
-          console.log('111');
           this.intList.map((item) => {
             if (item.id === 1) {
               item.checked = true;
               item.disableCheckbox = true;
-              arr.push(item.id);
               if (item.children.length) {
                 item.children.map((v) => {
                   v.checked = true;
                   v.disableCheckbox = true;
-                  arr.push(v.id);
                 });
               }
             }
-          });
-          this.$nextTick((e) => {
-            this.selectIds = arr;
-            console.log(this.selectIds);
           });
         } else {
           list.map((item) => {
@@ -414,7 +429,6 @@ export default {
               listData(e.children || [], item);
             });
           });
-          this.selectIds = list;
         }
         function listData(list, id) {
           if (list.length) {
@@ -453,11 +467,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.list.splice(num, 1);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 编辑
@@ -474,7 +488,7 @@ export default {
     },
     submit(name) {
       setUpPush(this.settingData).then((res) => {
-        this.$message.success(res.msg);
+        this.$Message.success(res.msg);
         this.settingModals = false;
         this.getList();
       });
@@ -482,10 +496,10 @@ export default {
     textOutUrl() {
       textOutUrl(this.settingData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     ok(name) {
@@ -493,7 +507,7 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           this.modalsdate.rules = [];
-          this.$refs.tree.getCheckedNodes().map((node) => {
+          this.$refs.tree.getCheckedAndIndeterminateNodes().map((node) => {
             this.modalsdate.rules.push(node.id);
           });
           if (this.modalsid) this.modalsdate.id = this.modalsid;
@@ -505,15 +519,15 @@ export default {
                 title: '',
                 rules: [],
               };
-              (this.modals = false), this.$message.success(res.msg);
+              (this.modals = false), this.$Message.success(res.msg);
               this.modalsid = '';
               this.getList();
             })
             .catch((err) => {
-              this.$message.error(err.msg);
+              this.$Message.error(err.msg);
             });
         } else {
-          this.$message.warning('请完善数据');
+          this.$Message.warning('请完善数据');
         }
       });
     },

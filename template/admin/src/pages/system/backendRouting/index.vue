@@ -2,19 +2,19 @@
   <div>
     <div>
       <div class="tabs">
-        <el-tabs v-model="apiType">
-          <el-tab-pane label="管理端接口" name="adminapi"></el-tab-pane>
-          <el-tab-pane label="用户端接口" name="api"></el-tab-pane>
-          <el-tab-pane label="客服端接口" name="kefuapi"></el-tab-pane>
-          <el-tab-pane label="对外接口" name="outapi"></el-tab-pane>
-        </el-tabs>
+        <Tabs v-model="apiType">
+          <TabPane label="管理端接口" name="adminapi"></TabPane>
+          <TabPane label="用户端接口" name="api"></TabPane>
+          <TabPane label="客服端接口" name="kefuapi"></TabPane>
+          <TabPane label="对外接口" name="outapi"></TabPane>
+        </Tabs>
       </div>
       <div class="main">
         <div class="ivu-mt mr20 card-tree">
           <div class="tree">
             <div class="main-btn">
-              <el-button class="mb5 mr10" style="flex: 1" type="primary" @click="clickMenu(4)" long>新增分类</el-button>
-              <el-button class="mr10" type="success" @click="syncRoute()">同步</el-button>
+              <Button class="mb5 mr10" style="flex: 1" type="primary" @click="clickMenu(4)" long>新增分类</Button>
+              <Button class="mr10" type="success" @click="syncRoute()">同步</Button>
             </div>
 
             <vue-tree-list
@@ -45,24 +45,25 @@
                     }"
                     >{{ slotProps.model.name }}</span
                   >
-                  <el-dropdown
-                    size="small"
+                  <Dropdown
                     transfer
-                    @command="
+                    @on-click="
                       (name) => {
                         clickMenu(name, slotProps.model);
                       }
                     "
                   >
-                    <span class="el-dropdown-link"> <Icon class="add" type="ios-more" /></span>
-                    <template slot="dropdown">
-                      <el-dropdown-menu>
-                        <el-dropdown-item command="1" v-if="!slotProps.model.method">新增接口</el-dropdown-item>
-                        <el-dropdown-item command="2" v-if="!slotProps.model.method">编辑分类名</el-dropdown-item>
-                        <el-dropdown-item command="3">删除</el-dropdown-item>
-                      </el-dropdown-menu>
+                    <a href="javascript:void(0)">
+                      <Icon class="add" type="ios-more" />
+                    </a>
+                    <template #list>
+                      <DropdownMenu>
+                        <DropdownItem name="1" v-if="!slotProps.model.method">新增接口</DropdownItem>
+                        <DropdownItem name="2" v-if="!slotProps.model.method">编辑分类名</DropdownItem>
+                        <DropdownItem name="3">删除</DropdownItem>
+                      </DropdownMenu>
                     </template>
-                  </el-dropdown>
+                  </Dropdown>
                 </div>
               </template>
               <!-- 新建文件夹 -->
@@ -93,36 +94,36 @@
             </vue-tree-list>
           </div>
         </div>
-        <el-card :bordered="false" shadow="never" class="ivu-mt right-card">
+        <Card :bordered="false" dis-hover class="ivu-mt right-card">
           <div class="data">
             <div class="eidt-sub">
               <div class="name">
                 {{ formValidate.name }}
               </div>
               <div>
-                <el-button type="info" class="submission mr20" @click="debugging()">调试</el-button>
-                <el-button v-if="formValidate.id" type="primary" class="submission mr20" @click="isEdit = !isEdit">{{
+                <Button type="info" class="submission mr20" @click="debugging()">调试</Button>
+                <Button v-if="formValidate.id" type="primary" class="submission mr20" @click="isEdit = !isEdit">{{
                   isEdit ? '返回' : '编辑'
-                }}</el-button>
-                <el-button v-if="isEdit" type="primary" class="submission" @click="handleSubmit('formValidate')"
-                  >保存</el-button
+                }}</Button>
+                <Button v-if="isEdit" type="primary" class="submission" @click="handleSubmit('formValidate')"
+                  >保存</Button
                 >
               </div>
             </div>
-            <el-form
+            <Form
               class="formValidate mt20"
               ref="formValidate"
               :rules="ruleValidate"
               :model="formValidate"
-              label-width="100px"
+              :label-width="100"
               :label-position="labelPosition"
               @submit.native.prevent
             >
-              <el-row :gutter="24">
-                <el-col :span="24">
+              <Row :gutter="24" type="flex">
+                <Col span="24">
                   <div class="title">接口信息</div>
-                  <el-form-item label="接口名称：" prop="name">
-                    <el-input
+                  <FormItem label="接口名称：" prop="name">
+                    <Input
                       v-if="isEdit"
                       class="perW20"
                       type="text"
@@ -131,22 +132,19 @@
                       placeholder="请输入"
                     />
                     <span v-else>{{ formValidate.name || '' }}</span>
-                  </el-form-item>
-                  <el-form-item label="请求类型：" prop="name">
-                    <el-select v-if="isEdit" v-model="formValidate.method" style="width: 120px">
-                      <el-option
-                        v-for="(item, index) in requestTypeList"
-                        :key="index"
-                        :value="item.value"
-                        :label="item.label"
-                      ></el-option>
-                    </el-select>
+                  </FormItem>
+                  <FormItem label="请求类型：" prop="name">
+                    <Select v-if="isEdit" v-model="formValidate.method" style="width: 120px">
+                      <Option v-for="(item, index) in requestTypeList" :key="index" :value="item.value">{{
+                        item.label
+                      }}</Option>
+                    </Select>
                     <span v-else class="req-method" :style="'background-color:' + methodColor">{{
                       formValidate.method || ''
                     }}</span>
-                  </el-form-item>
-                  <el-form-item label="功能描述：" prop="name">
-                    <el-input
+                  </FormItem>
+                  <FormItem label="功能描述：" prop="name">
+                    <Input
                       v-if="isEdit"
                       class="perW20"
                       type="textarea"
@@ -155,8 +153,8 @@
                       placeholder="请输入"
                     />
                     <span v-else class="text-area">{{ formValidate.describe || '--' }}</span>
-                  </el-form-item>
-                  <el-form-item label="所属分类：" prop="name" v-if="isEdit">
+                  </FormItem>
+                  <FormItem label="所属分类：" prop="name" v-if="isEdit">
                     <el-cascader
                       v-model="formValidate.cate_id"
                       size="small"
@@ -164,27 +162,33 @@
                       :props="{ checkStrictly: true, multiple: false, emitPath: false, value: 'id', label: 'name' }"
                       clearable
                     ></el-cascader>
-                  </el-form-item>
-                  <el-form-item label="是否公共：" prop="name">
-                    <el-switch v-if="isEdit" v-model="formValidate.type" :active-value="1" :inactive-value="0">
-                    </el-switch>
+                  </FormItem>
+                  <FormItem label="是否公共：" prop="name">
+                    <Switch v-if="isEdit" v-model="formValidate.type" :true-value="1" :false-value="0">
+                      <template #open>
+                        <span>是</span>
+                      </template>
+                      <template #close>
+                        <span>否</span>
+                      </template>
+                    </Switch>
                     <span v-else class="text-area">{{ formValidate.type ? '是' : '否' }}</span>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="24">
-                <el-col :span="24">
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row :gutter="24" type="flex">
+                <Col span="24">
                   <div class="title">调用方式</div>
-                  <el-form-item label="路由地址：" prop="path">
+                  <FormItem label="路由地址：" prop="path">
                     <span>{{ formValidate.path || '' }}</span>
-                  </el-form-item>
-                  <el-form-item label="文件地址：" prop="path">
+                  </FormItem>
+                  <FormItem label="文件地址：" prop="path">
                     <span>{{ formValidate.file_path || '' }}</span>
-                  </el-form-item>
-                  <el-form-item label="方法名：" prop="path">
+                  </FormItem>
+                  <FormItem label="方法名：" prop="path">
                     <span>{{ formValidate.action || '' }}</span>
-                  </el-form-item>
-                  <el-form-item label="请求参数：">
+                  </FormItem>
+                  <FormItem label="请求参数：">
                     <vxe-table
                       resizable
                       show-overflow
@@ -253,11 +257,9 @@
                       </vxe-column>
                     </vxe-table>
 
-                    <el-button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('xTable')"
-                      >添加参数</el-button
-                    >
-                  </el-form-item>
-                  <el-form-item label="返回参数：">
+                    <Button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('xTable')">添加参数</Button>
+                  </FormItem>
+                  <FormItem label="返回参数：">
                     <vxe-table
                       resizable
                       show-overflow
@@ -315,17 +317,15 @@
                         </template>
                       </vxe-column>
                     </vxe-table>
-                    <el-button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('resTable')"
-                      >添加参数</el-button
-                    >
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row :gutter="24">
-                <el-col :span="24">
+                    <Button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('resTable')">添加参数</Button>
+                  </FormItem>
+                </Col>
+              </Row>
+              <Row :gutter="24" type="flex">
+                <Col span="24">
                   <div class="title">调用示例</div>
-                  <el-form-item label="请求数据示例：" prop="request_example">
-                    <el-input
+                  <FormItem label="请求数据示例：" prop="request_example">
+                    <Input
                       v-if="isEdit"
                       class="perW20"
                       type="textarea"
@@ -334,9 +334,9 @@
                       placeholder="请输入"
                     />
                     <span v-else class="text-area">{{ formValidate.request_example || '' }}</span>
-                  </el-form-item>
-                  <el-form-item label="返回数据示例：" prop="response_example">
-                    <el-input
+                  </FormItem>
+                  <FormItem label="返回数据示例：" prop="response_example">
+                    <Input
                       v-if="isEdit"
                       class="perW20"
                       type="textarea"
@@ -345,8 +345,8 @@
                       placeholder="请输入"
                     />
                     <span v-else class="text-area">{{ formValidate.response_example || '' }}</span>
-                  </el-form-item>
-                  <el-form-item label="错误码：">
+                  </FormItem>
+                  <FormItem label="错误码：">
                     <vxe-table
                       resizable
                       show-overflow
@@ -387,20 +387,20 @@
                         </template>
                       </vxe-column>
                     </vxe-table>
-                    <el-button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('codeTable')"
-                      >添加参数</el-button
+                    <Button class="mt10" v-if="isEdit" type="primary" @click="insertEvent('codeTable')"
+                      >添加参数</Button
                     >
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <!-- <el-row :gutter="24" >
-              <el-col :span="24">
-                <el-form-item>
-                  <el-button type="primary" class="submission" @click="handleSubmit('formValidate')">保存</el-button>
-                </el-form-item>
-              </el-col>
-            </el-row> -->
-            </el-form>
+                  </FormItem>
+                </Col>
+              </Row>
+              <!-- <Row :gutter="24" type="flex">
+              <Col span="24">
+                <FormItem>
+                  <Button type="primary" class="submission" @click="handleSubmit('formValidate')">保存</Button>
+                </FormItem>
+              </Col>
+            </Row> -->
+            </Form>
           </div>
           <!-- <div v-else class="nothing">
           <div class="box" @click="clickMenu(4)">
@@ -416,18 +416,14 @@
             <div class="text">新建接口</div>
           </div>
         </div> -->
-        </el-card>
+        </Card>
       </div>
     </div>
-    <el-dialog :visible.sync="nameModal" title="分组名称">
+    <Modal v-model="nameModal" title="分组名称" :loading="loading" @on-ok="asyncOK">
       <label>分组名称：</label>
-      <el-input v-model="value" placeholder="请输入分组名称" style="width: 85%" />
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="nameModal = false">取 消</el-button>
-        <el-button type="primary" @click="asyncOK">确 定</el-button>
-      </span>
-    </el-dialog>
-    <el-drawer :visible.sync="debuggingModal" :title="formValidate.name" size="70%"  :wrapperClosable="false" :loading="loading">
+      <Input v-model="value" placeholder="请输入分组名称" style="width: 85%" />
+    </Modal>
+    <Drawer v-model="debuggingModal" :title="formValidate.name" width="70%" footer-hide :loading="loading">
       <debugging
         v-if="debuggingModal"
         :formValidate="formValidate"
@@ -435,7 +431,7 @@
         :requestTypeList="requestTypeList"
         :apiType="apiType"
       />
-    </el-drawer>
+    </Drawer>
   </div>
 </template>
 
@@ -596,7 +592,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '50px';
+      return this.isMobile ? undefined : 50;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -613,7 +609,7 @@ export default {
         onOk: () => {
           syncRoute(this.apiType).then((res) => {
             this.getInterfaceList('one');
-            this.$message.success(res.msg);
+            this.$Message.success(res.msg);
             this.$Modal.remove();
           });
         },
@@ -674,7 +670,8 @@ export default {
             }
           })
           .catch((err) => {
-            this.$message.error(err.msg);
+            console.log(err);
+            this.$Message.error(err.msg);
           });
       } catch (error) {
         console.log(error);
@@ -695,17 +692,10 @@ export default {
           this.formValidate = res.data;
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     async handleSubmit() {
-      if (!this.formValidate.name) {
-        return this.$message.warning('请输入接口名称');
-      } else if (!this.formValidate.method) {
-        return this.$message.warning('请选择请求类型');
-      } else if (!this.formValidate.path) {
-        return this.$message.warning('请输入路由地址');
-      }
       this.formValidate.request = await this.$refs.xTable.getTableData().tableData;
       this.formValidate.response = await this.$refs.resTable.getTableData().tableData;
       this.formValidate.error_code = await this.$refs.codeTable.getTableData().tableData;
@@ -713,11 +703,11 @@ export default {
       await routeSave(this.formValidate)
         .then((res) => {
           this.isEdit = false;
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getRoteData(this.paramsId);
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     async insertEvent(type) {
@@ -828,11 +818,11 @@ export default {
       };
       routeSave(data)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getInterfaceList();
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     //侧边栏右键点击事件
@@ -933,11 +923,11 @@ export default {
         onOk: () => {
           method(node.id)
             .then((res) => {
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
               node.remove();
             })
             .catch((err) => {
-              this.$message.error(err.msg);
+              this.$Message.error(err.msg);
             });
         },
         onCancel: () => {},
@@ -952,10 +942,10 @@ export default {
         };
         interfaceEditName(data)
           .then((res) => {
-            this.$message.success(res.msg);
+            this.$Message.success(res.msg);
           })
           .catch((err) => {
-            this.$message.error(err.msg);
+            this.$Message.error(err.msg);
           });
       }
     },

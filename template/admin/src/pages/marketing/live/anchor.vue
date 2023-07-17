@@ -1,58 +1,38 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-row>
-        <el-col v-bind="grid">
-          <el-button v-auth="['admin-user-label_add']" type="primary" icon="md-add" @click="add">添加主播</el-button>
-        </el-col>
-      </el-row>
-      <el-table
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Row type="flex">
+        <Col v-bind="grid">
+          <Button v-auth="['admin-user-label_add']" type="primary" icon="md-add" @click="add">添加主播</Button>
+        </Col>
+      </Row>
+      <Table
+        :columns="columns1"
         :data="labelLists"
         ref="table"
         class="mt25"
-        v-loading="loading"
-        highlight-current-row
+        :loading="loading"
+        highlight-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column label="ID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="名称" min-width="300">
-          <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="电话" min-width="300">
-          <template slot-scope="scope">
-            <span>{{ scope.row.phone }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="微信号" min-width="300">
-          <template slot-scope="scope">
-            <span>{{ scope.row.wechat }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="170">
-          <template slot-scope="scope">
-            <a @click="edit(scope.row.id)">修改</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="del(scope.row, '删除主播', index)">删除</a>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template slot-scope="{ row, index }" slot="icons">
+          <viewer>
+            <div class="tabBox_img">
+              <img v-lazy="row.icon" />
+            </div>
+          </viewer>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <a @click="edit(row.id)">修改</a>
+          <Divider type="vertical" />
+          <a @click="del(row, '删除主播', index)">删除</a>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
-          :total="total"
-          :page.sync="labelFrom.page"
-          :limit.sync="labelFrom.limit"
-          @pagination="getList"
-        />
+        <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="labelFrom.limit" />
       </div>
-    </el-card>
+    </Card>
   </div>
 </template>
 
@@ -71,6 +51,34 @@ export default {
         xs: 24,
       },
       loading: false,
+      columns1: [
+        {
+          title: 'ID',
+          key: 'id',
+          minWidth: 120,
+        },
+        {
+          title: '名称',
+          key: 'name',
+          minWidth: 300,
+        },
+        {
+          title: '电话',
+          key: 'phone',
+          minWidth: 300,
+        },
+        {
+          title: '微信号',
+          key: 'wechat',
+          minWidth: 300,
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          fixed: 'right',
+          minWidth: 120,
+        },
+      ],
       labelFrom: {
         kerword: '',
         page: 1,
@@ -83,7 +91,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '75px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -99,7 +107,6 @@ export default {
     },
     // 修改
     edit(id) {
-      console.log(id);
       this.$modalForm(liveAuchorAdd(id)).then(() => this.getList());
     },
     // 删除
@@ -113,7 +120,7 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.labelLists.splice(num, 1);
           if (!this.labelLists.length && this.labelFrom.page != 1) {
             this.labelFrom.page -= 1;
@@ -123,7 +130,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 分组列表
@@ -138,8 +145,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.labelFrom.page = index;
+      this.getList();
     },
   },
 };

@@ -20,16 +20,16 @@
             <div class="info-item" v-for="(infos, key) in item.info" :key="key">
               <span>{{ infos.title }}</span>
               <div class="input-box" @click="getLink(index, key, item.info)">
-                <el-input
+                <Input
                   :icon="key == item.info.length - 1 ? 'ios-arrow-forward' : ''"
                   v-model="infos.value"
                   :readonly="key == item.info.length - 1 ? true : false"
                   :placeholder="infos.tips"
                   :maxlength="infos.max"
                   v-if="configData.isCube"
-                  @blur="onBlur"
+                  @on-blur="onBlur"
                 />
-                <el-input
+                <Input
                   :icon="key == item.info.length - 1 ? 'ios-arrow-forward' : ''"
                   v-model="infos.value"
                   :readonly="key == item.info.length - 1 ? true : false"
@@ -43,10 +43,14 @@
         </div>
       </draggable>
       <div>
-        <el-dialog :visible.sync="modalPic"
+        <Modal
+          v-model="modalPic"
           width="950px"
+          scrollable
+          footer-hide
+          closable
           title="上传图片"
-          :close-on-click-modal="false"
+          :mask-closable="false"
           :z-index="1"
         >
           <uploadPictures
@@ -56,17 +60,17 @@
             :gridPic="gridPic"
             v-if="modalPic"
           ></uploadPictures>
-        </el-dialog>
+        </Modal>
       </div>
     </div>
     <template v-if="configData.list">
       <div class="add-btn" v-if="configData.list.length < configData.maxList">
-        <el-button
+        <Button
           type="primary"
           ghost
           style="width: 100%; height: 40px; border-color: #1890ff; color: #1890ff"
           @click="addBox"
-          >添加板块</el-button
+          >添加板块</Button
         >
       </div>
     </template>

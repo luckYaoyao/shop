@@ -1,168 +1,130 @@
 <template>
   <div class="article-manager">
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col :span="24">
-            <el-form-item label="时间选择：">
-              <el-radio-group
+        <Row type="flex" :gutter="24">
+          <Col span="24">
+            <FormItem label="时间选择：">
+              <RadioGroup
                 v-model="formValidate.data"
                 type="button"
-                @change="selectChange(formValidate.data)"
+                @on-change="selectChange(formValidate.data)"
                 class="mr"
               >
-                <el-radio :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</el-radio>
-              </el-radio-group>
-              <el-date-picker
+                <Radio :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</Radio>
+              </RadioGroup>
+              <DatePicker
                 :editable="false"
-                @change="onchangeTime"
-                v-model="timeVal"
+                @on-change="onchangeTime"
+                :value="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
-                value-format="yyyy/MM/dd"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid">
-            <el-form-item label="预售状态：">
-              <el-select v-model="formValidate.status" placeholder="请选择" clearable @change="userSearchs">
-                <el-option :value="1" label="进行中"></el-option>
-                <el-option :value="2" label="已失败"></el-option>
-                <el-option :value="3" label="已成功"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table
+                placement="bottom-end"
+                placeholder="自定义时间"
+                style="width: 200px"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <FormItem label="预售状态：">
+              <Select v-model="formValidate.status" placeholder="请选择" clearable @on-change="userSearchs">
+                <Option :value="1">进行中</Option>
+                <Option :value="2">已失败</Option>
+                <Option :value="3">已成功</Option>
+              </Select>
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
+      <Table
+        :columns="columns1"
         :data="tableList"
         class="mt25"
-        v-loading="loading"
-        highlight-current-row
+        :loading="loading"
+        highlight-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column label="头像" min-width="100">
-          <template slot-scope="scope">
-            <div class="tabBox_img" v-viewer>
-              <img v-lazy="scope.row.avatar" />
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="发起用户" min-width="130">
-          <template slot-scope="scope">
-            <span> {{ scope.row.nickname + ' / ' + scope.row.uid }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="开启时间" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.add_time }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="预售商品" min-width="300">
-          <template slot-scope="scope">
-            <span>{{ scope.row.title }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="最低价" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.bargain_price_min }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="当前价" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.now_price }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="总预售次数" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.people_num }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="剩余预售次数" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.num }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="结束时间" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.datatime }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="状态" min-width="130">
-          <template slot-scope="scope">
-            <el-tag color="blue" v-show="scope.row.status === 1">进行中</el-tag>
-            <el-tag color="volcano" v-show="scope.row.status === 2">已失败</el-tag>
-            <el-tag color="cyan" v-show="scope.row.status === 3">已成功</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="100">
-          <template slot-scope="scope">
-            <a @click="Info(scope.row)">查看详情</a>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template slot-scope="{ row, index }" slot="avatar">
+          <div class="tabBox_img" v-viewer>
+            <img v-lazy="row.avatar" />
+          </div>
+        </template>
+        <template slot-scope="{ row, index }" slot="nickname">
+          <span> {{ row.nickname + ' / ' + row.uid }}</span>
+        </template>
+        <template slot-scope="{ row, index }" slot="title">
+          <span> {{ row.title }}</span>
+        </template>
+        <template slot-scope="{ row, index }" slot="add_time">
+          <span> {{ row.add_time }}</span>
+        </template>
+        <template slot-scope="{ row, index }" slot="datatime">
+          <span> {{ row.datatime }}</span>
+        </template>
+        <template slot-scope="{ row, index }" slot="status">
+          <Tag color="blue" v-show="row.status === 1">进行中</Tag>
+          <Tag color="volcano" v-show="row.status === 2">已失败</Tag>
+          <Tag color="cyan" v-show="row.status === 3">已成功</Tag>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <a @click="Info(row)">查看详情</a>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="formValidate.page"
-          :limit.sync="formValidate.limit"
-          @pagination="getList"
+          :current="formValidate.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="formValidate.limit"
         />
       </div>
-    </el-card>
+    </Card>
 
     <!-- 详情模态框-->
-    <el-dialog :visible.sync="modals" class="tableBox" title="查看详情" :close-on-click-modal="false" width="750px">
-      <el-table
+    <Modal
+      v-model="modals"
+      class="tableBox"
+      scrollable
+      footer-hide
+      closable
+      title="查看详情"
+      :mask-closable="false"
+      width="750"
+    >
+      <Table
         ref="selection"
+        :columns="columns2"
         :data="tabList3"
-        v-loading="loading2"
-        empty-text="暂无数据"
-        highlight-current-row
+        :loading="loading2"
+        no-data-text="暂无数据"
+        highlight-row
         max-height="600"
         size="small"
+        no-filtered-data-text="暂无筛选结果"
       >
-        <el-table-column label="用户ID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.uid }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="用户头像" min-width="90">
-          <template slot-scope="scope">
-            <div class="tabBox_img" v-viewer>
-              <img v-lazy="scope.row.avatar" />
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="用户名称" min-width="130">
-          <template slot-scope="scope">
-            <span> {{ scope.row.nickname + ' / ' + scope.row.uid }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="预售金额" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.price }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="预售时间" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.add_time }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-dialog>
+        <template slot-scope="{ row, index }" slot="nickname">
+          <span> {{ row.nickname + ' / ' + row.uid }}</span>
+        </template>
+        <template slot-scope="{ row, index }" slot="avatar">
+          <div class="tabBox_img" v-viewer>
+            <img v-lazy="row.avatar" />
+          </div>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <Tag color="cyan" v-show="row.is_refund === 1">已退款</Tag>
+          <Tag color="volcano" v-show="row.is_refund === 0">未退款</Tag>
+        </template>
+      </Table>
+    </Modal>
   </div>
 </template>
 
@@ -275,13 +237,37 @@ export default {
       timeVal: [],
       loading2: false,
       tabList3: [],
+      columns2: [
+        {
+          title: '用户ID',
+          key: 'uid',
+          width: 80,
+        },
+        {
+          title: '用户头像',
+          slot: 'avatar',
+        },
+        {
+          title: '用户名称',
+          slot: 'nickname',
+          minWidth: 150,
+        },
+        {
+          title: '预售金额',
+          key: 'price',
+        },
+        {
+          title: '预售时间',
+          key: 'add_time',
+        },
+      ],
       rows: {},
     };
   },
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '75px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -303,13 +289,13 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 具体日期
     onchangeTime(e) {
-      this.timeVal = e || [];
-      this.formValidate.data = this.timeVal[0] ? this.timeVal ? this.timeVal.join('-') : '' : '';
+      this.timeVal = e;
+      this.formValidate.data = this.timeVal[0] ? this.timeVal.join('-') : '';
       this.formValidate.page = 1;
       this.getList();
     },
@@ -333,7 +319,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     pageChange(index) {

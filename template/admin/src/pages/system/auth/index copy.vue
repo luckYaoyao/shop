@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
+    <Card :bordered="false" dis-hover class="ivu-mt">
       <div class="auth acea-row row-between-wrapper">
         <div class="acea-row row-middle">
           <Icon type="ios-bulb-outline" class="iconIos blue" v-if="status === 1" />
@@ -26,17 +26,26 @@
           <!--<div class="code blue">授权申请已提交，请等待审核</div>-->
           <!--</div>-->
         </div>
-        <el-button @click="toCrmeb()" v-if="status === 1">进入官网</el-button>
-        <el-button type="primary" @click="isTemplate = true" v-else>申请授权</el-button>
-        <!--<el-button type="primary" @click="isTemplate = true" v-else-if="status === -1 || status === -9">申请授权</el-button>-->
-        <!--<el-button type="primary" @click="isTemplate = true" v-else-if="status === 2">重新申请</el-button>-->
-        <!--<el-button class="grey" v-else-if="status === 0">审核中</el-button>-->
+        <Button @click="toCrmeb()" v-if="status === 1">进入官网</Button>
+        <Button type="primary" @click="isTemplate = true" v-else>申请授权</Button>
+        <!--<Button type="primary" @click="isTemplate = true" v-else-if="status === -1 || status === -9">申请授权</Button>-->
+        <!--<Button type="primary" @click="isTemplate = true" v-else-if="status === 2">重新申请</Button>-->
+        <!--<Button class="grey" v-else-if="status === 0">审核中</Button>-->
       </div>
-    </el-card>
-    <el-dialog :visible.sync="isTemplate" title="申请商业授权" width="640px">
+    </Card>
+    <Modal
+      v-model="isTemplate"
+      scrollable
+      footer-hide
+      closable
+      title="申请商业授权"
+      :z-index="1"
+      width="640"
+      @on-cancel="cancel"
+    >
       <div class="article-manager">
-        <el-card :bordered="false" shadow="never">
-          <el-form
+        <Card :bordered="false" dis-hover>
+          <Form
             ref="formItem"
             :model="formItem"
             :label-width="labelWidth"
@@ -44,29 +53,25 @@
             :rules="ruleValidate"
             @submit.native.prevent
           >
-            <el-row :gutter="24">
-              <el-col :span="24">
-                <el-col>
-                  <el-form-item label="企业名称：" prop="company_name" label-for="company_name">
-                    <el-input v-model="formItem.company_name" placeholder="请填写您的企业名称" />
-                  </el-form-item>
-                </el-col>
-              </el-col>
-              <el-col :span="24">
-                <el-col>
-                  <el-form-item label="企业域名：" prop="domain_name" label-for="domain_name">
-                    <el-input
-                      v-model="formItem.domain_name"
-                      :disabled="true"
-                      placeholder="请输入域名，格式：baidu.com"
-                    />
-                  </el-form-item>
-                </el-col>
-              </el-col>
-              <el-col :span="24">
-                <el-col>
-                  <el-form-item label="订单号：" label-for="order_id" prop="order_id">
-                    <el-input
+            <Row type="flex" :gutter="24">
+              <Col span="24">
+                <Col>
+                  <FormItem label="企业名称：" prop="company_name" label-for="company_name">
+                    <Input v-model="formItem.company_name" placeholder="请填写您的企业名称" />
+                  </FormItem>
+                </Col>
+              </Col>
+              <Col span="24">
+                <Col>
+                  <FormItem label="企业域名：" prop="domain_name" label-for="domain_name">
+                    <Input v-model="formItem.domain_name" :disabled="true" placeholder="请输入域名，格式：baidu.com" />
+                  </FormItem>
+                </Col>
+              </Col>
+              <Col span="24">
+                <Col>
+                  <FormItem label="订单号：" label-for="order_id" prop="order_id">
+                    <Input
                       v-model="formItem.order_id"
                       placeholder="请输入您在淘宝或小程序购买的源码订单号"
                       class="customer"
@@ -74,36 +79,37 @@
                       <a slot="append" target="_blank" href="http://www.crmeb.com/web/auth/query.html"
                         >联系客服获取订单号</a
                       >
-                    </el-input>
-                  </el-form-item>
-                </el-col>
-              </el-col>
-              <el-col :span="24">
-                <el-col>
-                  <el-form-item label="手机号：" label-for="phone" prop="phone">
-                    <el-input v-model="formItem.phone" type="number" placeholder="负责人电话" />
-                  </el-form-item>
-                </el-col>
-              </el-col>
-              <el-col :span="24">
-                <el-col>
-                  <el-form-item label="验证码：" label-for="captcha" prop="captcha">
+                    </Input>
+                  </FormItem>
+                </Col>
+              </Col>
+              <Col span="24">
+                <Col>
+                  <FormItem label="手机号：" label-for="phone" prop="phone">
+                    <Input v-model="formItem.phone" type="number" placeholder="负责人电话" />
+                  </FormItem>
+                </Col>
+              </Col>
+              <Col span="24">
+                <Col>
+                  <FormItem label="验证码：" label-for="captcha" prop="captcha">
                     <div class="acea-row row-middle code">
-                      <el-input v-model="formItem.captcha" placeholder="验证码" class="input" />
+                      <Input v-model="formItem.captcha" placeholder="验证码" class="input" />
                       <img @click="captchsChang" :src="captchs" class="pictrue" />
                     </div>
-                  </el-form-item>
-                </el-col>
-              </el-col>
-            </el-row>
-          </el-form>
-        </el-card>
+                  </FormItem>
+                </Col>
+              </Col>
+            </Row>
+            <Row type="flex">
+              <Col span="24">
+                <Button type="primary" @click="handleSubmit('formItem')" class="submit">提交</Button>
+              </Col>
+            </Row>
+          </Form>
+        </Card>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="handleSubmit('formItem')">提 交</el-button>
-      </span>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 <script>
@@ -116,7 +122,7 @@ export default {
     ...mapState('media', ['isMobile']),
     ...mapState('userLevel', ['categoryId']),
     labelWidth() {
-      return this.isMobile ? undefined : '85px';
+      return this.isMobile ? undefined : 85;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -164,11 +170,11 @@ export default {
             .then((res) => {
               this.isTemplate = false;
               this.getAuth();
-              return this.$message.success(res.msg);
+              return this.$Message.success(res.msg);
             })
             .catch((res) => {
               this.captchsChang();
-              return this.$message.error(res.msg);
+              return this.$Message.error(res.msg);
             });
         } else {
           return false;

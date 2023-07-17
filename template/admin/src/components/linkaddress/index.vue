@@ -1,17 +1,9 @@
 <template>
   <div>
-    <el-dialog :visible.sync="modals" title="选择链接" :close-on-click-modal="false" width="860">
+    <Modal v-model="modals" scrollable closable title="选择链接" :mask-closable="false" width="860" @on-cancel="cancel">
       <div class="table_box">
         <div class="left_box">
-          <el-tree
-            :data="categoryData"
-            node-key="id"
-            default-expand-all
-            :props="props"
-            highlight-current
-            @node-click="handleCheckChange"
-            :current-node-key="treeId"
-          ></el-tree>
+          <Tree :data="categoryData" @on-select-change="handleCheckChange"></Tree>
         </div>
         <div class="right_box" v-if="currenType == 'link'">
           <div v-if="basicsList.length">
@@ -157,41 +149,52 @@
             currenType == 'integral'
           "
         >
-          <el-form ref="formValidate" :model="formValidate" class="tabform" v-if="currenType == 'product'">
-            <el-row :gutter="24">
-              <el-col :span="8">
-                <el-form-item label="" label-for="pid">
-                  <el-select v-model="formValidate.cate_id" style="width: 180px" clearable @change="userSearchs">
-                    <el-option
-                      v-for="item in treeSelect"
-                      :value="item.id"
-                      :key="item.id"
-                      :label="item.html + item.cate_name"
-                    >
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="12">
-                <el-form-item label="" label-for="store_name">
-                  <el-input
+          <Form ref="formValidate" :model="formValidate" class="tabform" v-if="currenType == 'product'">
+            <Row type="flex" :gutter="24">
+              <Col>
+                <FormItem label="" label-for="pid">
+                  <Select v-model="formValidate.cate_id" style="width: 230px" clearable @on-change="userSearchs">
+                    <Option v-for="item in treeSelect" :value="item.id" :key="item.id"
+                      >{{ item.html + item.cate_name }}
+                    </Option>
+                  </Select>
+                </FormItem>
+              </Col>
+              <Col>
+                <FormItem label="" label-for="store_name">
+                  <Input
                     search
                     enter-button
                     placeholder="请输入商品名称,关键字,编号"
                     v-model="formValidate.store_name"
-                    style="width: 200px"
-                    @change="userSearchs"
+                    style="width: 250px"
+                    @on-search="userSearchs"
                   />
-                </el-form-item>
-              </el-col>
-            </el-row>
-          </el-form>
-          <el-table
+                </FormItem>
+              </Col>
+            </Row>
+          </Form>
+          <Table
             row-key="id"
             ref="table"
-            empty-text="暂无数据"
+            no-data-text="暂无数据"
+            no-filtered-data-text="暂无筛选结果"
+            :columns="
+              currenType == 'special'
+                ? columns
+                : currenType == 'product_category'
+                ? columns7
+                : currenType == 'bargain' ||
+                  currenType == 'combination' ||
+                  currenType == 'advance' ||
+                  currenType == 'integral'
+                ? bargain
+                : currenType == 'news'
+                ? news
+                : columns8
+            "
             :data="tableList"
-            v-loading="loading"
+            :loading="loading"
             :max-height="
               currenType == 'product_category'
                 ? '410'
@@ -206,76 +209,28 @@
                 : ''
             "
           >
-            <el-table-column
-              width="50"
-              v-if="
-                [
-                  'special',
-                  'product',
-                  'seckill',
-                  'product_category',
-                  'bargain',
-                  'combination',
-                  'advance',
-                  'integral',
-                  'news',
-                ].includes(currenType)
-              "
-            >
-              <template slot-scope="scope">
-                <el-radio v-model="templateRadio" :label="scope.row.id" @change.native="getTemplateRow(scope.row)"
-                  >&nbsp;</el-radio
-                >
-              </template>
-            </el-table-column>
-            <el-table-column
-              :label="item.title"
-              :width="item.width"
-              :min-width="item.minWidth"
-              v-for="(item, index) in currenType == 'special'
-                ? columns
-                : currenType == 'product_category'
-                ? columns7
-                : currenType == 'bargain' ||
-                  currenType == 'combination' ||
-                  currenType == 'advance' ||
-                  currenType == 'integral'
-                ? bargain
-                : currenType == 'news'
-                ? news
-                : columns8"
-              :key="index"
-            >
-              <template slot-scope="scope">
-                <template v-if="item.key">
-                  <div>
-                    <span>{{ scope.row[item.key] }}</span>
-                  </div>
-                </template>
-                <template v-else-if="item.slot === 'pic' && scope.row.hasOwnProperty('pic')">
-                  <viewer>
-                    <div class="tabBox_img">
-                      <img v-lazy="scope.row.pic" />
-                    </div>
-                  </viewer>
-                </template>
-                <template v-else-if="item.slot === 'image' && scope.row.hasOwnProperty('image')">
-                  <viewer>
-                    <div class="tabBox_img">
-                      <img v-lazy="scope.row.image" />
-                    </div>
-                  </viewer>
-                </template>
-                <template v-else-if="item.slot === 'image_input' && scope.row.hasOwnProperty('image_input')">
-                  <viewer>
-                    <div class="tabBox_img">
-                      <img v-lazy="scope.row.image_input[0]" />
-                    </div>
-                  </viewer>
-                </template>
-              </template>
-            </el-table-column>
-          </el-table>
+            <template slot-scope="{ row, index }" slot="pic" v-if="row.hasOwnProperty('pic')">
+              <viewer>
+                <div class="tabBox_img">
+                  <img v-lazy="row.pic" />
+                </div>
+              </viewer>
+            </template>
+            <template slot-scope="{ row, index }" slot="image" v-if="row.hasOwnProperty('image')">
+              <viewer>
+                <div class="tabBox_img">
+                  <img v-lazy="row.image" />
+                </div>
+              </viewer>
+            </template>
+            <template slot-scope="{ row, index }" slot="image_input" v-if="row.hasOwnProperty('image_input')">
+              <viewer>
+                <div class="tabBox_img">
+                  <img v-lazy="row.image_input[0]" />
+                </div>
+              </viewer>
+            </template>
+          </Table>
           <div
             class="acea-row row-right page"
             v-if="
@@ -288,59 +243,55 @@
               currenType == 'integral'
             "
           >
-            <pagination
-              v-if="total"
-              :total="total"
-              :page.sync="formValidate.page"
-              :limit.sync="formValidate.limit"
-              @pagination="getList"
-            />
+            <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="formValidate.limit" />
           </div>
         </div>
         <div class="right_box" v-if="currenType == 'custom'">
           <!--<div v-if="!tableList.length || customNum==2">-->
-          <!--<el-button type="primary" @click="customList" v-if="tableList.length">自定义列表</el-button>-->
+          <!--<Button type="primary" @click="customList" v-if="tableList.length">自定义列表</Button>-->
           <div style="width: 340px; margin: 150px 100px 0 120px">
-            <el-form ref="customdate" :model="customdate" :rules="ruleValidate" :label-width="100">
-              <!--<el-form-item label="链接名称：" prop="name">-->
-              <!--<el-input v-model="customdate.name" placeholder="会员中心"></el-input>-->
-              <!--</el-form-item>-->
-              <!-- <el-form-item label="跳转路径：" prop="url">
-                <el-input v-model="customdate.url" placeholder="请输入跳转路径"></el-input>
-              </el-form-item> -->
+            <Form ref="customdate" :model="customdate" :rules="ruleValidate" :label-width="100">
+              <!--<FormItem label="链接名称：" prop="name">-->
+              <!--<Input v-model="customdate.name" placeholder="会员中心"></Input>-->
+              <!--</FormItem>-->
+              <!-- <FormItem label="跳转路径：" prop="url">
+                <Input v-model="customdate.url" placeholder="请输入跳转路径"></Input>
+              </FormItem> -->
               <div class="mb30 radioGroup">
-                <el-radio-group v-model="customdate.status" @input="radioTap('customdate')">
-                  <el-radio :label="1">
+                <RadioGroup v-model="customdate.status" @on-change="radioTap('customdate')">
+                  <Radio :label="1">
+                    <Icon></Icon>
                     <span>普通链接</span>
-                  </el-radio>
-                  <el-radio :label="2">
+                  </Radio>
+                  <Radio :label="2">
+                    <Icon></Icon>
                     <span>跳转其他小程序</span>
-                  </el-radio>
-                </el-radio-group>
+                  </Radio>
+                </RadioGroup>
               </div>
               <div v-if="customdate.status == 1">
-                <el-form-item label="跳转路径：" prop="url" key="url">
-                  <el-input v-model="customdate.url" placeholder="请输入正确跳转路径"></el-input>
-                </el-form-item>
+                <FormItem label="跳转路径：" prop="url" key="url">
+                  <Input v-model="customdate.url" placeholder="请输入正确跳转路径"></Input>
+                </FormItem>
               </div>
               <div v-if="customdate.status == 2">
-                <el-form-item label="APPID：" prop="appid" key="appid">
-                  <el-input v-model="customdate.appid" placeholder="请输入正确APPID"></el-input>
-                </el-form-item>
-                <el-form-item label="小程序路径：" prop="mpUrl" key="mpUrl">
-                  <el-input v-model="customdate.mpUrl" placeholder="请输入正确小程序路径"></el-input>
-                </el-form-item>
+                <FormItem label="APPID：" prop="appid" key="appid">
+                  <Input v-model="customdate.appid" placeholder="请输入正确APPID"></Input>
+                </FormItem>
+                <FormItem label="小程序路径：" prop="mpUrl" key="mpUrl">
+                  <Input v-model="customdate.mpUrl" placeholder="请输入正确小程序路径"></Input>
+                </FormItem>
               </div>
-            </el-form>
+            </Form>
           </div>
         </div>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="handleSubmit('customdate')" v-if="currenType == 'custom'">确 定</el-button>
-        <el-button type="primary" @click="ok" v-else>确 定</el-button>
-      </span>
-    </el-dialog>
+      <div slot="footer">
+        <Button @click="cancel">取消</Button>
+        <Button type="primary" @click="handleSubmit('customdate')" v-if="currenType == 'custom'">确定</Button>
+        <Button type="primary" @click="ok" v-else>确定</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -362,11 +313,6 @@ export default {
       modals: false,
       categoryData: [],
       currenType: 'link',
-      props: {
-        label: 'name',
-        children: 'children',
-      },
-      templateRadio: 0,
       columns: [
         {
           title: 'ID',
@@ -485,12 +431,40 @@ export default {
   created() {
     this.getSort();
     this.goodsCategory();
+    let radio = {
+      width: 60,
+      align: 'center',
+      render: (h, params) => {
+        let id = params.row.id;
+        let flag = false;
+        if (this.presentId === id) {
+          flag = true;
+        } else {
+          flag = false;
+        }
+        let self = this;
+        return h('div', [
+          h('Radio', {
+            props: {
+              value: flag,
+            },
+            on: {
+              'on-change': () => {
+                self.presentId = id;
+                this.currenUrl = params.row.url;
+              },
+            },
+          }),
+        ]);
+      },
+    };
+    this.columns.unshift(radio);
+    this.columns7.unshift(radio);
+    this.columns8.unshift(radio);
+    this.bargain.unshift(radio);
+    this.news.unshift(radio);
   },
   methods: {
-    getTemplateRow(row) {
-      this.presentId = row.id;
-      this.currenUrl = row.url;
-    },
     // 删除
     delLink(row, tit, num) {
       let delfromData = {
@@ -502,14 +476,14 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.tableList.splice(num, 1);
           if (!this.tableList.length) {
             this.customNum = 2;
           }
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     customLink() {
@@ -527,7 +501,7 @@ export default {
           this.tableList = res.data.list;
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     handleSubmit(name) {
@@ -544,20 +518,24 @@ export default {
           this.reset();
           // saveLink(this.customdate,this.categoryId).then(res=>{
           // 	this.getCustomList();
-          // 	this.$message.success(res.msg);
+          // 	this.$Message.success(res.msg);
           // 	this.$emit("linkUrl",this.customdate.url);
           // 	this.modals = false
           // 	this.reset();
           // }).catch(err=>{
-          // 	this.$message.error(err.msg);
+          // 	this.$Message.error(err.msg);
           // })
         } else {
-          this.$message.error('请填写信息');
+          this.$Message.error('请填写信息');
         }
       });
     },
     handleReset(name) {
       this.$refs[name].resetFields();
+    },
+    pageChange(index) {
+      this.formValidate.page = index;
+      this.getList();
     },
     // 商品分类；
     goodsCategory() {
@@ -566,7 +544,7 @@ export default {
           this.treeSelect = res.data;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 表格搜索
@@ -590,10 +568,10 @@ export default {
         .then((res) => {
           res.data[0].children[0].selected = true;
           this.categoryData = res.data;
-          this.handleCheckChange(res.data[0].children[0]);
+          this.handleCheckChange('', res.data[0].children[0]);
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     getList() {
@@ -611,7 +589,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           });
       } else if (this.currenType == 'seckill') {
         seckillListApi(this.formValidate)
@@ -626,7 +604,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           });
       } else if (this.currenType == 'advance') {
         presellListApi(this.formValidate)
@@ -641,7 +619,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
             advance;
           });
       } else if (this.currenType == 'bargain') {
@@ -657,7 +635,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           });
       } else if (this.currenType == 'combination') {
         combinationListApi(this.formValidate)
@@ -672,7 +650,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           });
       } else if (this.currenType == 'news') {
         cmsListApi(this.formValidate)
@@ -687,7 +665,7 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           });
       } else if (this.currenType == 'integral') {
         integralProductListApi(this.formValidate)
@@ -702,22 +680,21 @@ export default {
           })
           .catch((res) => {
             this.loading = false;
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           });
       }
     },
-    handleCheckChange(data) {
+    handleCheckChange(data, event) {
       this.reset();
       let id = '';
-      this.treeId = data.id;
-      if (data.pid) {
-        id = data.id;
-        this.categoryId = data.id;
+      if (event.pid) {
+        id = event.id;
+        this.categoryId = event.id;
       } else {
         return false;
       }
       this.loading = true;
-      this.currenType = data.type;
+      this.currenType = event.type;
       if (
         this.currenType == 'product' ||
         this.currenType == 'seckill' ||
@@ -786,13 +763,13 @@ export default {
           })
           .catch((err) => {
             this.loading = false;
-            this.$message.error(err.msg);
+            this.$Message.error(err.msg);
           });
       }
     },
     ok() {
       if (this.currenUrl == '') {
-        return this.$message.warning('请选择链接');
+        return this.$Message.warning('请选择链接');
       } else {
         this.$emit('linkUrl', this.currenUrl);
         this.modals = false;
@@ -908,7 +885,7 @@ export default {
     margin-left: 23px;
     font-size: 13px;
     font-family: PingFang SC;
-    flex:1;
+    width: 645px;
     height: 470px;
     overflow-x: hidden;
     overflow-y: auto;

@@ -1,62 +1,61 @@
 <template>
   <div class="table_box">
-    <el-form
+    <Form
       ref="DataList"
       :model="DataList"
       :rules="rules"
-      label-width="85px"
+      :label-width="80"
       :label-position="labelPosition"
       class="tabform"
     >
-      <el-row :gutter="24" justify="end">
-        <el-col :span="24" class="ivu-text-left">
-          <el-form-item label="订单状态：">
-            <el-radio-group v-model="DataList.status" type="button" @change="selectChange(DataList.status)">
-              <el-radio-button :label="item.label" v-for="(item, i) in typeName" :key="i">{{
+      <Row :gutter="24" type="flex" justify="end">
+        <Col span="24" class="ivu-text-left">
+          <FormItem label="订单状态：">
+            <RadioGroup v-model="DataList.status" type="button" @on-change="selectChange(DataList.status)">
+              <Radio :label="item.label" v-for="(item, i) in typeName" :key="i">{{
                 item.name + '(' + item.num + ')'
-              }}</el-radio-button>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24" class="ivu-text-left">
-          <el-col v-bind="grid">
-            <el-form-item label="创建时间：">
-              <el-radio-group v-model="DataList.data" type="button" @change="timeChange(DataList.data)">
-                <el-radio-button label="today">今天</el-radio-button>
-                <el-radio-button label="yesterday">昨天</el-radio-button>
-                <el-radio-button label="lately7">最近7天</el-radio-button>
-                <el-radio-button label="lately30">最近30天</el-radio-button>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid">
-            <el-form-item class="tab_data">
-              <el-date-picker
+              }}</Radio>
+            </RadioGroup>
+          </FormItem>
+        </Col>
+        <Col span="24" class="ivu-text-left">
+          <Col v-bind="grid">
+            <FormItem label="创建时间：">
+              <RadioGroup v-model="DataList.data" type="button" @on-change="timeChange(DataList.data)">
+                <Radio label="today">今天</Radio>
+                <Radio label="yesterday">昨天</Radio>
+                <Radio label="lately7">最近7天</Radio>
+                <Radio label="lately30">最近30天</Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <FormItem class="tab_data">
+              <DatePicker
                 :editable="false"
-                v-model="value2"
-                value-format="yyyy/MM/dd"
+                :value="value2"
+                format="yyyy/MM/dd"
                 type="daterange"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
+                placement="bottom-end"
+                placeholder="Select date"
                 style="width: 200px"
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-col>
-        <el-col :span="24" class="ivu-text-left" v-if="$route.path === routePro + '/echarts/trade/order'">
-          <el-form-item label="订单类型：">
-            <el-radio-group v-model="currentTab" type="button" @change="onClickTab(currentTab)">
-              <el-radio-button label="">全部</el-radio-button>
-              <el-radio-button label="1">普通</el-radio-button>
-              <el-radio-button label="2">拼团</el-radio-button>
-              <el-radio-button label="3">砍价</el-radio-button>
-              <el-radio-button label="4">秒杀</el-radio-button>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
+              ></DatePicker>
+            </FormItem>
+          </Col>
+        </Col>
+        <Col span="24" class="ivu-text-left" v-if="$route.path === routePro + '/echarts/trade/order'">
+          <FormItem label="订单类型：">
+            <RadioGroup v-model="currentTab" type="button" @on-change="onClickTab(currentTab)">
+              <Radio label="">全部</Radio>
+              <Radio label="1">普通</Radio>
+              <Radio label="2">拼团</Radio>
+              <Radio label="3">砍价</Radio>
+              <Radio label="4">秒杀</Radio>
+            </RadioGroup>
+          </FormItem>
+        </Col>
+      </Row>
+    </Form>
   </div>
 </template>
 

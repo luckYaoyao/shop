@@ -1,22 +1,22 @@
 <template>
   <div class="content" v-if="interfaceData">
     <div class="head">
-      <el-input v-model="interfaceData.path">
+      <Input v-model="interfaceData.path">
         <template #prepend>
-          <el-select v-model="interfaceData.method" style="width: 120px">
-            <el-option v-for="(item, index) in requestTypeList" :key="index" :value="item.value" :label="item.label"></el-option>
-          </el-select>
+          <Select v-model="interfaceData.method" style="width: 120px">
+            <Option v-for="(item, index) in requestTypeList" :key="index" :value="item.value">{{ item.label }}</Option>
+          </Select>
         </template>
-      </el-input>
-      <el-button class="ml20" type="primary" @click="requestData">请求</el-button>
-      <el-button v-if="codes" class="ml10 copy-btn" type="success" @click="insertCopy()">复制结果</el-button>
+      </Input>
+      <Button class="ml20" type="primary" @click="requestData">请求</Button>
+      <Button v-if="codes" class="ml10 copy-btn" type="success" @click="insertCopy()">复制结果</Button>
     </div>
     <div class="params">
-      <el-tabs class="mt10" v-model="paramsType" @tab-click="changeTab">
-        <el-tab-pane label="Params" name="Params"> </el-tab-pane>
-        <el-tab-pane label="Body" name="Body"> </el-tab-pane>
-        <el-tab-pane label="Header" name="Header"> </el-tab-pane>
-      </el-tabs>
+      <Tabs class="mt10" v-model="paramsType" @on-click="changeTab">
+        <TabPane label="Params" name="Params"> </TabPane>
+        <TabPane label="Body" name="Body"> </TabPane>
+        <TabPane label="Header" name="Header"> </TabPane>
+      </Tabs>
       <div v-show="paramsType === 'Params'">
         <vxe-table
           class="mt10"
@@ -83,13 +83,13 @@
             </template>
           </vxe-column>
         </vxe-table>
-        <el-button class="mt10" type="primary" @click="insertEvent('xTable')">添加参数</el-button>
+        <Button class="mt10" type="primary" @click="insertEvent('xTable')">添加参数</Button>
       </div>
       <div v-show="paramsType === 'Body'">
-        <el-radio-group v-model="bodyType" class="mt10">
-          <el-radio label="form-data"></el-radio>
-          <el-radio label="json"></el-radio>
-        </el-radio-group>
+        <RadioGroup v-model="bodyType" class="mt10">
+          <Radio label="form-data"></Radio>
+          <Radio label="json"></Radio>
+        </RadioGroup>
         <vxe-table
           v-if="bodyType == 'form-data'"
           class="mt10"
@@ -157,10 +157,10 @@
           </vxe-column>
         </vxe-table>
         <div v-else>
-          <el-input v-model="jsonBody" type="textarea" :rows="8" placeholder="请求数据" />
+          <Input v-model="jsonBody" type="textarea" :rows="8" placeholder="请求数据" />
         </div>
-        <el-button v-if="bodyType == 'form-data'" class="mt10" type="primary" @click="insertEvent('yTable')"
-          >添加参数</el-button
+        <Button v-if="bodyType == 'form-data'" class="mt10" type="primary" @click="insertEvent('yTable')"
+          >添加参数</Button
         >
       </div>
 
@@ -200,7 +200,7 @@
             </template>
           </vxe-column>
         </vxe-table>
-        <el-button class="mt10" type="primary" @click="insertEvent('zTable')">添加参数</el-button>
+        <Button class="mt10" type="primary" @click="insertEvent('zTable')">添加参数</Button>
         <!-- <h4 class="mt10 title">全局Header参数</h4>
         <vxe-table
           class="mt10"
@@ -325,10 +325,10 @@ export default {
     insertCopy() {
       this.$copyText(this.codes)
         .then((message) => {
-          this.$message.success('复制成功');
+          this.$Message.success('复制成功');
         })
         .catch((err) => {
-          this.$message.error('复制失败');
+          this.$Message.error('复制失败');
         });
     },
     async requestData() {
@@ -346,11 +346,11 @@ export default {
       console.log(url);
       requestMethod(url, method, params, body, headers)
         .then((res) => {
-          if (!res) return this.$message.error('接口异常');
+          if (!res) return this.$Message.error('接口异常');
           this.codes = JSON.stringify(res);
         })
         .catch((err) => {
-          if (!err) return this.$message.error('接口异常');
+          if (!err) return this.$Message.error('接口异常');
           this.codes = JSON.stringify(err);
         });
     },

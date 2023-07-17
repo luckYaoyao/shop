@@ -2,8 +2,8 @@
   <div class="edit">
     <!-- <div class="i-layout-page-header">
       <router-link :to="{ path: '/admin/setting/notification/index' }"
-        ><el-button icon="ios-arrow-back" size="small" class="mr20"
-          >返回</el-button
+        ><Button icon="ios-arrow-back" size="small" class="mr20"
+          >返回</Button
         ></router-link
       >
       <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
@@ -11,35 +11,31 @@
     <div class="i-layout-page-header header_top">
       <div class="i-layout-page-header fl_header">
         <router-link :to="{ path: $routeProStr + '/setting/notification/index' }"
-          ><el-button icon="ios-arrow-back" size="small" type="text">返回</el-button></router-link
+          ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         >
-        <el-divider direction="vertical"></el-divider>
+        <Divider type="vertical" />
         <span class="ivu-page-header-title mr20" style="padding: 0" v-text="$route.meta.title"></span>
       </div>
     </div>
     <div class="tabs">
-      <el-row :gutter="32">
-        <el-col span="32" class="demo-tabs-style1" style="padding: 16px">
-          <el-tabs v-model="tagName" @tab-click="changeTabs">
-            <el-tab-pane v-for="(item, index) in tabsList" :key="index" :name="item.slot" :label="item.title">
-              <el-form class="form-sty" ref="formData" :model="formData" :rules="ruleValidate" label-width="85px">
+      <Row :gutter="32">
+        <Col span="32" class="demo-tabs-style1" style="padding: 16px">
+          <Tabs @on-click="changeTabs">
+            <TabPane v-for="(item, index) in tabsList" :key="index" :name="item.slot" :label="item.title">
+              <Form class="form-sty" ref="formData" :model="formData" :rules="ruleValidate" :label-width="80">
                 <div v-if="item.slot === 'is_system' && !loading">
-                  <el-form-item label="通知标题">
-                    <el-input
-                      v-model="formData.system_title"
-                      placeholder="请输入通知标题"
-                      style="width: 500px"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="通知内容">
+                  <FormItem label="通知标题">
+                    <Input v-model="formData.system_title" placeholder="请输入通知标题" style="width: 500px"></Input>
+                  </FormItem>
+                  <FormItem label="通知内容">
                     <div class="content">
-                      <el-input
+                      <Input
                         v-model="formData.system_text"
                         type="textarea"
                         :autosize="{ minRows: 5, maxRows: 8 }"
                         placeholder="请输入通知内容"
                         style="width: 500px"
-                      ></el-input>
+                      ></Input>
                       <div class="trip">
                         <div>请输入模板消息详细内容对应的变量。关键字个数需与已添加的模板一致。 可以使用如下变量：</div>
                         <div v-for="(item, index) in formData.variable.split(',')" :key="index">
@@ -47,122 +43,122 @@
                         </div>
                       </div>
                     </div>
-                  </el-form-item>
-                  <el-form-item label="状态" prop="is_system">
-                    <el-radio-group v-model="formData.is_system">
-                      <el-radio :label="1">开启</el-radio>
-                      <el-radio :label="2">关闭</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
+                  </FormItem>
+                  <FormItem label="状态" prop="is_system">
+                    <RadioGroup v-model="formData.is_system">
+                      <Radio :label="1">开启</Radio>
+                      <Radio :label="2">关闭</Radio>
+                    </RadioGroup>
+                  </FormItem>
                 </div>
                 <div v-if="item.slot === 'is_sms' && !loading">
-                  <el-form-item label="短信模版ID">
-                    <el-input v-model="formData.sms_id" placeholder="短信模版ID" style="width: 500px"></el-input>
-                  </el-form-item>
-                  <el-form-item label="通知内容">
+                  <FormItem label="短信模版ID">
+                    <Input v-model="formData.sms_id" placeholder="短信模版ID" style="width: 500px"></Input>
+                  </FormItem>
+                  <FormItem label="通知内容">
                     <div class="content">
-                      <el-input
+                      <Input
                         v-model="formData.content"
                         type="textarea"
                         disabled
                         :autosize="{ minRows: 5, maxRows: 8 }"
                         placeholder="请输入通知内容"
                         style="width: 500px"
-                      ></el-input>
+                      ></Input>
                     </div>
-                  </el-form-item>
-                  <el-form-item label="状态" prop="is_sms">
-                    <el-radio-group v-model="formData.is_sms">
-                      <el-radio :label="1">开启</el-radio>
-                      <el-radio :label="2">关闭</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
+                  </FormItem>
+                  <FormItem label="状态" prop="is_sms">
+                    <RadioGroup v-model="formData.is_sms">
+                      <Radio :label="1">开启</Radio>
+                      <Radio :label="2">关闭</Radio>
+                    </RadioGroup>
+                  </FormItem>
                 </div>
                 <div v-else-if="item.slot === 'is_wechat' && !loading">
-                  <el-form-item label="ID">
-                    <el-input
+                  <FormItem label="ID">
+                    <Input
                       v-model="formData.templage_message_id"
                       disabled
                       placeholder="请输入通模板编号"
                       style="width: 500px"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="模板编号">
-                    <el-input
+                    ></Input>
+                  </FormItem>
+                  <FormItem label="模板编号">
+                    <Input
                       v-model="formData.tempkey"
                       disabled
                       placeholder="请输入通模板编号"
                       style="width: 500px"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="模板">
-                    <el-input
+                    ></Input>
+                  </FormItem>
+                  <FormItem label="模板">
+                    <Input
                       disabled
                       v-model="formData.content"
                       type="textarea"
                       :autosize="{ minRows: 5, maxRows: 8 }"
                       placeholder="请输入模板"
                       style="width: 500px"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="模板ID">
-                    <el-input v-model="formData.tempid" placeholder="请输入模板ID" style="width: 500px"></el-input>
-                  </el-form-item>
-                  <el-form-item label="状态" prop="is_wechat">
-                    <el-radio-group v-model="formData.is_wechat">
-                      <el-radio :label="1">开启</el-radio>
-                      <el-radio :label="2">关闭</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
+                    ></Input>
+                  </FormItem>
+                  <FormItem label="模板ID">
+                    <Input v-model="formData.tempid" placeholder="请输入模板ID" style="width: 500px"></Input>
+                  </FormItem>
+                  <FormItem label="状态" prop="is_wechat">
+                    <RadioGroup v-model="formData.is_wechat">
+                      <Radio :label="1">开启</Radio>
+                      <Radio :label="2">关闭</Radio>
+                    </RadioGroup>
+                  </FormItem>
                 </div>
                 <div v-else-if="item.slot === 'is_routine' && !loading">
-                  <el-form-item label="ID">
-                    <el-input
+                  <FormItem label="ID">
+                    <Input
                       v-model="formData.templage_message_id"
                       disabled
                       placeholder="请输入通模板编号"
                       style="width: 500px"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="模板编号">
-                    <el-input
+                    ></Input>
+                  </FormItem>
+                  <FormItem label="模板编号">
+                    <Input
                       v-model="formData.tempkey"
                       disabled
                       placeholder="请输入通模板编号"
                       style="width: 500px"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="模板">
-                    <el-input
+                    ></Input>
+                  </FormItem>
+                  <FormItem label="模板">
+                    <Input
                       disabled
                       v-model="formData.content"
                       type="textarea"
                       :autosize="{ minRows: 5, maxRows: 8 }"
                       placeholder="请输入模板"
                       style="width: 500px"
-                    ></el-input>
-                  </el-form-item>
-                  <el-form-item label="模板ID">
-                    <el-input v-model="formData.tempid" placeholder="请输入模板ID" style="width: 500px"></el-input>
-                  </el-form-item>
-                  <el-form-item label="状态" prop="is_routine">
-                    <el-radio-group v-model="formData.is_routine">
-                      <el-radio :label="1">开启</el-radio>
-                      <el-radio :label="2">关闭</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
+                    ></Input>
+                  </FormItem>
+                  <FormItem label="模板ID">
+                    <Input v-model="formData.tempid" placeholder="请输入模板ID" style="width: 500px"></Input>
+                  </FormItem>
+                  <FormItem label="状态" prop="is_routine">
+                    <RadioGroup v-model="formData.is_routine">
+                      <Radio :label="1">开启</Radio>
+                      <Radio :label="2">关闭</Radio>
+                    </RadioGroup>
+                  </FormItem>
                 </div>
 
                 <div v-else-if="item.slot === 'is_ent_wechat' && !loading">
-                  <el-form-item label="通知内容">
+                  <FormItem label="通知内容">
                     <div class="content">
-                      <el-input
+                      <Input
                         v-model="formData.ent_wechat_text"
                         type="textarea"
                         :autosize="{ minRows: 5, maxRows: 8 }"
                         placeholder="请输入通知内容"
                         style="width: 500px"
-                      ></el-input>
+                      ></Input>
                       <div class="trip">
                         <div>请输入模板消息详细内容对应的变量。关键字个数需与已添加的模板一致。 可以使用如下变量：</div>
                         <div v-for="(item, index) in formData.variable.split(',')" :key="index">
@@ -170,28 +166,28 @@
                         </div>
                       </div>
                     </div>
-                  </el-form-item>
-                  <el-form-item label="机器人链接">
+                  </FormItem>
+                  <FormItem label="机器人链接">
                     <div class="content">
-                      <el-input v-model="formData.url" placeholder="请输入机器人链接" style="width: 500px"></el-input>
+                      <Input v-model="formData.url" placeholder="请输入机器人链接" style="width: 500px"></Input>
                       <div class="trip">企业微信群机器人链接</div>
                     </div>
-                  </el-form-item>
-                  <el-form-item label="状态" prop="is_ent_wechat">
-                    <el-radio-group v-model="formData.is_ent_wechat">
-                      <el-radio :label="1">开启</el-radio>
-                      <el-radio :label="2">关闭</el-radio>
-                    </el-radio-group>
-                  </el-form-item>
+                  </FormItem>
+                  <FormItem label="状态" prop="is_ent_wechat">
+                    <RadioGroup v-model="formData.is_ent_wechat">
+                      <Radio :label="1">开启</Radio>
+                      <Radio :label="2">关闭</Radio>
+                    </RadioGroup>
+                  </FormItem>
                 </div>
-                <el-form-item>
-                  <el-button type="primary" @click="handleSubmit('formData')">提交</el-button>
-                </el-form-item>
-              </el-form>
-            </el-tab-pane>
-          </el-tabs>
-        </el-col>
-      </el-row>
+                <FormItem>
+                  <Button type="primary" @click="handleSubmit('formData')">提交</Button>
+                </FormItem>
+              </Form>
+            </TabPane>
+          </Tabs>
+        </Col>
+      </Row>
     </div>
   </div>
 </template>
@@ -227,7 +223,6 @@ export default {
       formData: {},
       id: 0,
       loading: true,
-      tagName: 'is_system',
       ruleValidate: {
         name: [
           {
@@ -255,11 +250,11 @@ export default {
   },
   created() {
     this.id = this.$route.query.id;
-    this.changeTabs();
+    this.changeTabs('is_system');
   },
   methods: {
-    changeTabs() {
-      this.getData(this.id, this.tagName);
+    changeTabs(name) {
+      this.getData(this.id, name);
     },
     getData(id, name) {
       this.loading = true;
@@ -279,16 +274,16 @@ export default {
           this.loading = false;
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     handleSubmit(name) {
       getNotificationSave(this.formData)
         .then((res) => {
-          this.$message.success('设置成功');
+          this.$Message.success('设置成功');
         })
         .catch((err) => {
-          this.$message.error(err);
+          this.$Message.error(err);
         });
     },
     handleReset(name) {

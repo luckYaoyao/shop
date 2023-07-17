@@ -1,20 +1,20 @@
 <template>
   <div class="numbox" v-if="datas[name]">
     <div class="c_row-item">
-      <el-col class="label" :span="4">
+      <Col class="label" span="4">
         <span v-if="datas[name].show">{{ datas[name].title }}</span>
         <span v-else>数量</span>
-      </el-col>
-      <el-col :span="19" class="slider-box">
-        <el-input
+      </Col>
+      <Col span="19" class="slider-box">
+        <Input
           v-model="datas[name].val"
           type="number"
           placeholder="请输入数量"
           style="text-align: right; width: 350px"
-          @blur="numberVal(datas[name].val)"
-          @change="maxNum(datas[name].val)"
+          @on-blur="numberVal(datas[name].val)"
+          @on-change="maxNum(datas[name].val)"
         />
-      </el-col>
+      </Col>
     </div>
   </div>
 </template>

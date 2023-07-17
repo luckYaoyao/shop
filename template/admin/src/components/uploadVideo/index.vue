@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="mt20 ml20">
-      <el-input class="perW35" v-model="videoLink" placeholder="请输入视频链接" />
+      <Input class="perW35" v-model="videoLink" placeholder="请输入视频链接" />
       <input type="file" ref="refid" style="display: none" @change="zh_uploadFile_change" />
-      <el-button
+      <Button
         v-if="upload_type !== '1' || videoLink"
         type="primary"
         icon="ios-cloud-upload-outline"
         class="ml10"
         @click="zh_uploadFile"
-        >{{ videoLink ? '确认添加' : '上传视频' }}</el-button
+        >{{ videoLink ? '确认添加' : '上传视频' }}</Button
       >
-      <el-upload
+      <Upload
         v-if="upload_type === '1' && !videoLink"
-        :show-file-list="false"
+        :show-upload-list="false"
         :action="fileUrl"
         class="ml10"
         :before-upload="videoSaveToUrl"
@@ -22,8 +22,8 @@
         :multiple="true"
         style="display: inline-block"
       >
-        <el-button type="primary" icon="ios-cloud-upload-outline">上传视频</el-button>
-      </el-upload>
+        <Button type="primary" icon="ios-cloud-upload-outline">上传视频</Button>
+      </Upload>
       <Progress :percent="progress" :stroke-width="5" v-if="upload.videoIng" />
       <div class="iview-video-style" v-if="formValidate.video_link">
         <video
@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="mt50 ml20">
-      <el-button type="primary" @click="uploads">确认</el-button>
+      <Button type="primary" @click="uploads">确认</Button>
     </div>
   </div>
 </template>
@@ -88,9 +88,9 @@ export default {
     handleSuccess(res, file, fileList) {
       if (res.status === 200) {
         this.formValidate.video_link = res.data.src;
-        this.$message.success(res.msg);
+        this.$Message.success(res.msg);
       } else {
-        this.$message.error(res.msg);
+        this.$Message.error(res.msg);
       }
     },
     videoSaveToUrl(file) {
@@ -102,7 +102,7 @@ export default {
           this.progress = 100;
         },
         error: (e) => {
-          this.$message.error(e.msg);
+          this.$Message.error(e.msg);
         },
         uploading: (chunk, allChunk) => {
           this.videoIng = true;

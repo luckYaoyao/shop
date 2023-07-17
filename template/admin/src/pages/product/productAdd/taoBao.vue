@@ -1,6 +1,6 @@
 <template>
-  <div class="Box" v-loading="spinShow">
-    <el-card>
+  <div class="Box">
+    <Card :dis-hover="true">
       <div>
         生成的商品默认是没有上架的，请手动上架商品！
         <a href="http://help.crmeb.net/crmeb-v4/1863579" v-if="copyConfig.copy_type == 2" target="_blank"
@@ -11,18 +11,12 @@
         >
       </div>
       <div>商品采集设置：设置 > 系统设置 > 第三方接口设置 > 采集商品配置</div>
-    </el-card>
-    <el-form
-      class="formValidate mt20"
-      ref="formValidate"
-      label-width="120px"
-      label-position="right"
-      @submit.native.prevent
-    >
-      <el-row :gutter="24">
-        <el-col :span="18">
-          <el-form-item label="链接地址：">
-            <el-input
+    </Card>
+    <Form class="formValidate mt20" ref="formValidate" :label-width="120" label-position="right" @submit.native.prevent>
+      <Row :gutter="24" type="flex">
+        <Col span="18">
+          <FormItem label="链接地址：">
+            <Input
               search
               enter-button="确定"
               v-model="soure_link"
@@ -30,10 +24,11 @@
               class="numPut"
               @on-search="add"
             />
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
+          </FormItem>
+        </Col>
+      </Row>
+    </Form>
+    <Spin size="large" fix v-if="spinShow"></Spin>
   </div>
 </template>
 
@@ -90,7 +85,7 @@ export default {
       if (this.soure_link) {
         var reg = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&:/~\+#]*[\w\-\@?^=%&/~\+#])?/;
         if (!reg.test(this.soure_link)) {
-          return this.$message.warning('请输入以http开头的地址！');
+          return this.$Message.warning('请输入以http开头的地址！');
         }
         this.spinShow = true;
         this.artFrom.url = this.soure_link;
@@ -102,10 +97,10 @@ export default {
           })
           .catch((res) => {
             this.spinShow = false;
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           });
       } else {
-        this.$message.warning('请输入链接地址！');
+        this.$Message.warning('请输入链接地址！');
       }
     },
   },

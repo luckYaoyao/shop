@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt"></el-card>
+    <Card :bordered="false" dis-hover class="ivu-mt"></Card>
   </div>
 </template>
 

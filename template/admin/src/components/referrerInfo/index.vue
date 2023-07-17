@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-dialog :visible.sync="isTemplate" title="推荐人信息" width="45%" @closed="cancel">
-      <div class="Modals" v-loading="spinShow">
+    <Modal v-model="isTemplate" title="推荐人信息" width="45%" @on-cancel="cancel">
+      <div class="Modals">
         <div class="header acea-row row-middle">
           <div class="pictrue"><img :src="spread.avatar" /></div>
           <div class="name">{{ spread.nickname }}</div>
@@ -49,7 +49,9 @@
           </div>
         </div>
       </div>
-    </el-dialog>
+      <div slot="footer"></div>
+      <Spin size="large" fix v-if="spinShow"></Spin>
+    </Modal>
   </div>
 </template>
 

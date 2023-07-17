@@ -13,7 +13,11 @@
         <div class="chat-content">
           <div class="chat-body">
             <happy-scroll size="5" resize hide-horizontal :scroll-top="scrollTop" @vertical-start="scrollHandler">
-              <div style="width: 600px; padding: 20px" id="chat_scroll" ref="scrollBox" v-loading="isLoad">
+              <div style="width: 600px; padding: 20px" id="chat_scroll" ref="scrollBox">
+                <Spin v-show="isLoad">
+                  <Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
+                  <div>Loading</div>
+                </Spin>
                 <div
                   class="chat-item"
                   v-for="(item, index) in records"
@@ -86,8 +90,8 @@
                   <span class="iconfont iconbiaoqing1"></span>
                 </div>
                 <div class="icon-item">
-                  <el-upload
-                    :show-file-list="false"
+                  <Upload
+                    :show-upload-list="false"
                     :headers="header"
                     :data="uploadData"
                     :on-success="handleSuccess"
@@ -96,7 +100,7 @@
                     :action="upload"
                   >
                     <span class="iconfont icontupian1"></span>
-                  </el-upload>
+                  </Upload>
                 </div>
                 <div class="icon-item" @click.stop.stop="isMsg = true">
                   <span class="iconfont iconliaotian"></span>
@@ -120,7 +124,7 @@
               </div>
             </div>
             <div class="textarea-box" style="position: relative">
-              <el-input
+              <Input
                 ref="chatInput"
                 v-paste="handleParse"
                 v-model="chatCon"
@@ -131,7 +135,7 @@
                 style="font-size: 14px; height: 150px"
               />
               <div class="send-btn">
-                <el-button class="btns" type="primary" :disabled="disabled" @click.stop="sendText">发送</el-button>
+                <Button class="btns" type="primary" :disabled="disabled" @click.stop="sendText">发送</Button>
               </div>
             </div>
           </div>
@@ -146,9 +150,9 @@
         </div>
       </div>
       <!-- 用户标签 -->
-      <el-dialog :visible.sync="isMsg" class="none-radius isMsgbox" width="600px">
+      <Modal v-model="isMsg" :mask="true" class="none-radius isMsgbox" width="600" :footer-hide="true">
         <msgWindow v-if="isMsg" @close="msgClose" @activeTxt="activeTxt"></msgWindow>
-      </el-dialog>
+      </Modal>
       <!-- 商品弹窗 -->
       <div v-if="isProductBox">
         <div class="bg" @click.stop="isProductBox = false"></div>
@@ -156,9 +160,9 @@
       </div>
       <!-- 订单详情 -->
       <div v-if="isOrder">
-        <el-dialog :visible.sync="isOrder" title="订单信息" width="700px" class="none-radius">
+        <Modal v-model="isOrder" title="订单信息" width="700" :footer-hide="true" :mask="true" class="none-radius">
           <orderDetail :orderId="orderId"></orderDetail>
-        </el-dialog>
+        </Modal>
       </div>
     </div>
   </div>
@@ -339,10 +343,10 @@ export default {
           // mp3.play();
         });
         ws.$on('socket_error', () => {
-          this.$message.error('连接失败');
+          this.$Message.error('连接失败');
         });
         ws.$on('err_tip', (data) => {
-          this.$message.error(data.msg);
+          this.$Message.error(data.msg);
         });
         //用户上线提醒广播
         ws.$on('user_online', (data) => {
@@ -370,7 +374,7 @@ export default {
   },
   methods: {
     handleFormatError(file) {
-      this.$message.error('上传图片只能是 jpg、jpg、jpeg、gif 格式!');
+      this.$Message.error('上传图片只能是 jpg、jpg、jpeg、gif 格式!');
     },
     bindEnter(e) {},
     //微信截图上传图片时触发
@@ -407,10 +411,10 @@ export default {
     // 上传成功
     handleSuccess(res, file, fileList) {
       if (res.status === 200) {
-        this.$message.success(res.msg);
+        this.$Message.success(res.msg);
         this.sendMsg(res.data.url, 3);
       } else {
-        this.$message.error(res.msg);
+        this.$Message.error(res.msg);
       }
     },
     //订单详情
@@ -434,7 +438,7 @@ export default {
       if (e.shiftKey && e.keyCode == 13) {
       } else if (e.keyCode == 13) {
         if (e.target.value == '') {
-          return this.$message.error('请输入消息');
+          return this.$Message.error('请输入消息');
         }
         this.sendMsg(e.target.value, 1);
         this.chatCon = '';
@@ -605,7 +609,7 @@ export default {
     transferPeople(data) {
       this.transferId = data.id;
       this.isTransfer = false;
-      this.$message.success('转接成功');
+      this.$Message.success('转接成功');
       Socket.then((ws) => {
         ws.send({
           type: 'to_chat',

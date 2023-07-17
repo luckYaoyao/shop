@@ -1,21 +1,21 @@
 <template>
   <div class="numbox" v-if="configData">
     <div class="c_row-item">
-      <el-col class="label" :span="4">
+      <Col class="label" span="4">
         <span>{{ configData.title || '商品数量' }}</span>
-      </el-col>
-      <el-col :span="19" class="slider-box">
-        <!--<el-input v-model="configData.val" type="number" placeholder="请输入数量" @change="bindChange" style="text-align: right;"/>-->
-        <el-input-number controls-position="right"
+      </Col>
+      <Col span="19" class="slider-box">
+        <!--<Input v-model="configData.val" type="number" placeholder="请输入数量" @on-change="bindChange" style="text-align: right;"/>-->
+        <InputNumber
           v-model="configData.val"
           placeholder="请输入数量"
           :step="1"
           :max="100"
           :min="1"
-          @change="bindChange"
+          @on-change="bindChange"
           style="text-align: right"
-        ></el-input-number>
-      </el-col>
+        ></InputNumber>
+      </Col>
     </div>
   </div>
 </template>

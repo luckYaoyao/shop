@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt" v-loading="spinShow">
+    <Card :bordered="false" dis-hover class="ivu-mt">
       <div v-if="isShowList" class="backs-box">
         <div class="backs">
           <span class="back" @click="goBack(false)"><Icon type="md-arrow-round-back" class="icon" /></span>
@@ -11,57 +11,49 @@
         </div>
         <span class="refresh" @click="refreshRoute"><Icon type="md-refresh" class="icon" /></span>
       </div>
-      <el-table
+      <Table
         v-if="isShowList"
         ref="selection"
+        :columns="columns4"
         :data="tabList"
-        v-loading="loading"
-        empty-text="暂无数据"
+        :loading="loading"
+        no-data-text="暂无数据"
         class="mt20"
+        no-filtered-data-text="暂无筛选结果"
       >
-        <el-table-column label="文件/文件夹名" min-width="150">
-          <template slot-scope="scope">
-            <div @click="currentChange(scope.row)">
-              <Icon type="ios-folder-outline" v-if="scope.row.isDir" class="mr5" />
-              <Icon type="ios-document-outline" v-else class="mr5" />
-              <span>{{ scope.row.filename }}</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="文件/文件夹大小" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.size }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="更新时间" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.mtime }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="备注" min-width="120">
-          <template slot-scope="scope">
-            <div class="mark">
-              <div v-if="scope.row.is_edit" class="table-mark" @click="isEditMark(scope.row)">{{ scope.row.mark }}</div>
-              <el-input ref="mark" v-else v-model="scope.row.mark" @blur="isEditBlur(scope.row)"></el-input>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="60">
-          <template slot-scope="scope">
-            <a @click="open(scope.row)" v-if="scope.row.isDir">打开</a>
-            <a @click="edit(scope.row)" v-else>编辑</a>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
-    <el-dialog
-      :visible.sync="modals"
-      :custom-class="className"
-      :close-on-click-modal="false"
+        <template slot-scope="{ row }" slot="filename">
+          <div @click="currentChange(row)">
+            <Icon type="ios-folder-outline" v-if="row.isDir" class="mr5" />
+            <Icon type="ios-document-outline" v-else class="mr5" />
+            <span>{{ row.filename }}</span>
+          </div>
+        </template>
+        <template slot-scope="{ row }" slot="isWritable">
+          <span v-text="row.isWritable ? '是' : '否'"></span>
+        </template>
+        <template slot-scope="{ row, index }" slot="mark">
+          <div class="mark">
+            <div v-if="row.is_edit" class="table-mark" @click="isEditMark(row)">{{ row.mark }}</div>
+            <Input ref="mark" v-else v-model="row.mark" @on-blur="isEditBlur(row)"></Input>
+          </div>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <a @click="open(row)" v-if="row.isDir">打开</a>
+          <a @click="edit(row)" v-else>编辑</a>
+          <!-- <Divider type="vertical" />
+          <a @click.stop="mark(row)">备注</a> -->
+        </template>
+      </Table>
+    </Card>
+    <Modal
+      :class-name="className"
+      v-model="modals"
+      scrollable
+      footer-hide
+      closable
+      :mask-closable="false"
       width="80%"
-      @close="editModalChange"
-      append-to-body
-      :title="editorIndex[indexEditor].title"
+      :before-close="editModalChange"
     >
       <p slot="header" class="diy-header" ref="diyHeader">
         <span>{{ title }}</span>
@@ -73,29 +65,27 @@
         />
       </p>
       <div style="height: 100%">
-        <el-button type="primary" id="savefile" class="diy-button" @click="savefile(indexEditor)">保存</el-button>
-        <el-button id="refresh" class="diy-button" @click="refreshfile">刷新</el-button>
+        <Button type="primary" id="savefile" class="diy-button" @click="savefile(indexEditor)">保存</Button>
+        <Button id="refresh" class="diy-button" @click="refreshfile">刷新</Button>
 
         <div class="file-box">
           <div class="show-info">
             <div class="show-text" :title="navItem.pathname">目录: {{ navItem.pathname }}</div>
             <div class="diy-button-list">
-              <el-button class="diy-button" @click="goBack(true)">返回上一级</el-button>
-              <el-button class="diy-button" @click="getList(true, true)">刷新</el-button>
+              <Button class="diy-button" @click="goBack(true)">返回上一级</Button>
+              <Button class="diy-button" @click="getList(true, true)">刷新</Button>
             </div>
           </div>
           <div class="file-left">
-            <el-tree
+            <Tree
               class="diy-tree-render"
               :data="navList"
-              :render-content="renderContent"
-              :load="loadData"
-              @node-contextmenu="handleContextMenu"
+              :render="renderContent"
+              :load-data="loadData"
+              @on-contextmenu="handleContextMenu"
               expand-node
-              lazy
-              :props="props"
             >
-              <!-- <template transfer slot="contextMenu">
+              <template transfer slot="contextMenu">
                 <DropdownItem v-if="contextData && contextData.isDir" @click.native="handleContextCreateFolder()"
                   >新建文件夹</DropdownItem
                 >
@@ -104,21 +94,21 @@
                 >
                 <DropdownItem @click.native="handleContextRename()">重命名</DropdownItem>
                 <DropdownItem @click.native="handleContextDelFolder()" style="color: #ed4014">删除</DropdownItem>
-              </template> -->
-            </el-tree>
+              </template>
+            </Tree>
           </div>
           <div class="file-fix"></div>
           <div class="file-content">
-            <el-tabs
+            <Tabs
               type="card"
               v-model="indexEditor"
               style="height: 100%"
-              @tab-click="toggleEditor"
+              @on-click="toggleEditor"
               :animated="false"
               closable
-              @tab-remove="handleTabRemove"
+              @on-tab-remove="handleTabRemove"
             >
-              <el-tab-pane
+              <TabPane
                 v-for="value in editorIndex"
                 :key="value.index"
                 :name="value.index.toString()"
@@ -126,33 +116,34 @@
                 :icon="value.icon"
                 v-if="value.tab"
               >
-                <div ref="container" :id="'container_' + value.index" style="height: 100%; min-height: 580px"></div>
-              </el-tab-pane>
-            </el-tabs>
+                <div ref="container" :id="'container_' + value.index" style="height: 100%; min-height: 560px"></div>
+              </TabPane>
+            </Tabs>
           </div>
+          <Spin size="large" fix v-if="spinShow"></Spin>
         </div>
       </div>
-    </el-dialog>
+    </Modal>
 
     <div v-show="formShow" class="diy-from">
       <div class="diy-from-header">
         {{ formTitle
         }}<span :title="contextData ? contextData.pathname : ''">{{ contextData ? contextData.pathname : '' }}</span>
       </div>
-      <el-form ref="formInline" :model="formFile" :rules="ruleInline" inline>
-        <el-form-item prop="filename" class="diy-file">
-          <el-input type="text" class="diy-file" v-model="formFile.filename" placeholder="请输入名字">
+      <Form ref="formInline" :model="formFile" :rules="ruleInline" inline>
+        <FormItem prop="filename" class="diy-file">
+          <Input type="text" class="diy-file" v-model="formFile.filename" placeholder="请输入名字">
             <Icon type="ios-folder-open-outline" slot="prepend"></Icon>
-          </el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button class="diy-button" @click="handleSubmit('formInline')">确定</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button class="diy-button" @click="formExit()">取消</el-button>
-        </el-form-item>
+          </Input>
+        </FormItem>
+        <FormItem>
+          <Button class="diy-button" @click="handleSubmit('formInline')">确定</Button>
+        </FormItem>
+        <FormItem>
+          <Button class="diy-button" @click="formExit()">取消</Button>
+        </FormItem>
         <div class="form-mask" v-show="formShow"></div>
-      </el-form>
+      </Form>
     </div>
   </div>
 </template>
@@ -209,7 +200,41 @@ export default {
       spinShow: false,
       loading: false,
       tabList: [],
-
+      columns4: [
+        {
+          title: '文件/文件夹名',
+          slot: 'filename',
+          minWidth: 150,
+          back: '返回上级',
+          sortable: true,
+        },
+        // {
+        //   title: '文件/文件夹路径',
+        //   key: 'real_path',
+        //   minWidth: 150,
+        // },
+        {
+          title: '文件/文件夹大小',
+          key: 'size',
+          minWidth: 100,
+        },
+        {
+          title: '更新时间',
+          key: 'mtime',
+          minWidth: 150,
+          sortable: true,
+        },
+        {
+          title: '备注',
+          slot: 'mark',
+          minWidth: 150,
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          width: 100,
+        },
+      ],
       formItem: {
         //记录当前路径信息，获取文件列表时使用
         dir: '',
@@ -233,11 +258,6 @@ export default {
       formTitle: '', //表单标题
       fileToken: getCookies('file_token'),
       routeList: [], //  打开文件路径
-      props: {
-        label: 'title',
-        children: 'children',
-        isLeaf: 'isLeaf',
-      },
     };
   },
 
@@ -245,7 +265,7 @@ export default {
     loginFrom,
   },
   mounted() {
-    // this.initEditor();
+    this.initEditor();
   },
   created() {
     this.getList();
@@ -360,7 +380,7 @@ export default {
       this.dir = row.path;
       // 创建代码容器
       if (this.editorList.length <= 0) {
-        // this.initEditor();
+        this.initEditor();
       }
       this.openfile(row.pathname, false);
     },
@@ -416,22 +436,20 @@ export default {
     },
     // 侧边栏异步加载
     loadData(item, callback) {
-      console.log(item);
-      if (!item.data.isLeaf) {
+      if (item.isDir) {
         this.formItem = {
-          dir: item.data.path,
+          dir: item.path,
           superior: 0,
-          filedir: item.data.title,
+          filedir: item.title,
           fileToken: this.fileToken,
         };
         opendirListApi(this.formItem)
           .then(async (res) => {
-            console.log(res);
             callback(res.data.navList);
           })
           .catch((res) => {
             if (res.status == 110008) {
-              this.$message.error(res.msg);
+              this.$Message.error(res.msg);
               this.isShowLogn = true;
               this.isShowList = false;
               this.loading = false;
@@ -442,7 +460,7 @@ export default {
       }
     },
     // 自定义显示
-    renderContent(h, { node, data, root }) {
+    renderContent(h, { root, node, data }) {
       let that = this;
       return h(
         'span',
@@ -469,7 +487,7 @@ export default {
           h('span', [
             h('Icon', {
               props: {
-                type: !data.isLeaf ? 'md-folder' : 'ios-document-outline',
+                type: data.isDir ? 'md-folder' : 'ios-document-outline',
               },
               style: {
                 marginRight: '8px',
@@ -493,7 +511,6 @@ export default {
      * @param {Object} data
      */
     clickDir(data, root, node) {
-      console.log(data, root, node, 'data, root, node');
       let that = this;
       that.navItem = data;
       that.pathname = data.pathname;
@@ -503,8 +520,8 @@ export default {
           return e.pathname === data.pathname;
         });
         if (i > -1) {
+          that.toggleEditor(i);
           that.indexEditor = i.toString();
-          that.toggleEditor();
         } else {
           let index = that.editorIndex.length;
           // 创建tabs
@@ -585,11 +602,6 @@ export default {
       };
       openfileApi(params)
         .then(async (res) => {
-          if (!is_edit) {
-            that.modals = true;
-            that.spinShow = false;
-            this.initEditor();
-          }
           let data = res.data;
           that.code = data.content;
           // 保存相对信息
@@ -597,6 +609,10 @@ export default {
           that.editorList[that.indexEditor].oldCode = that.code;
           //改变属性
           that.changeModel(data.mode, that.code);
+          if (!is_edit) {
+            that.modals = true;
+            that.spinShow = false;
+          }
         })
         .catch((res) => {
           that.catchFun(res);
@@ -737,7 +753,7 @@ export default {
               break;
           }
         } else {
-          this.$message.error('Fail!');
+          this.$Message.error('Fail!');
         }
       });
     },
@@ -754,15 +770,15 @@ export default {
      */
     catchFun(res) {
       if (res.status) {
-        if (res.status == 400) this.$message.error(res.msg);
+        if (res.status == 400) this.$Message.error(res.msg);
         if (res.status == 110008) {
-          // this.$message.error(res.msg);
+          // this.$Message.error(res.msg);
           this.isShowLogn = true;
           this.isShowList = false;
           this.loading = false;
         }
       } else {
-        // this.$message.error('文件编码不被兼容，无法正确读取文件!');
+        // this.$Message.error('文件编码不被兼容，无法正确读取文件!');
       }
       //关闭蒙版层
       if (this.spinShow) this.spinShow = false;
@@ -793,8 +809,8 @@ export default {
      * 切换选项卡
      * @param {Object} index
      */
-    toggleEditor() {
-      let index = Number(this.indexEditor);
+    toggleEditor(index) {
+      index = Number(index);
       this.code = this.editorList[index].oldCode; //设置文件打开时的代码
       this.editor = this.editorList[index].editor; //设置编辑器实例
     },
@@ -816,10 +832,10 @@ export default {
       };
       markSave(this.fileToken, data)
         .then((res) => {
-          // this.$message.success(res.msg);
+          // this.$Message.success(res.msg);
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     handleTabRemove(index) {
@@ -1004,7 +1020,7 @@ export default {
 .file-box {
   .file-left {
     position: absolute;
-    top: 58px;
+    top: 53px;
     left: 0;
     height: 90%;
     // height: 100%;
@@ -1012,7 +1028,8 @@ export default {
     width: 25%;
     max-width: 250px;
     overflow: auto;
-    background-color: #292929;
+    background-color: #222222;
+    box-shadow: #000000 -6px 0 6px -6px inset;
   }
 
   .file-fix {
@@ -1023,7 +1040,7 @@ export default {
     // bottom: 0px;
     // overflow: auto;
     min-height: 600px;
-    background-color: #292929;
+    background-color: #222222;
   }
 }
 
@@ -1039,11 +1056,11 @@ export default {
   }
 }
 
->>>.el-dialog__body {
-  padding: 0 !important;
+>>>.ivu-modal-body {
+  padding: 0;
 }
 
->>>.el-dialog__body {
+>>>.ivu-modal-content {
   background-color: #292929;
 }
 
@@ -1080,11 +1097,11 @@ export default {
   border:1px solid #c2c2c2;
   padding: 3px 5px
 }
-.mark /deep/ .el-input__inner{
+.mark /deep/ .ivu-input{
     background: #fff;
     border-radius: .39rem;
 }
-.mark /deep/ .el-input__inner, .el-input__inner:hover, .el-input__inner:focus {
+.mark /deep/ .ivu-input, .ivu-input:hover, .ivu-input:focus {
     border: transparent;
     box-shadow: none;
 }
@@ -1177,12 +1194,7 @@ body >>>.ivu-select-dropdown {
     background-color: #2f2f2f !important;
   }
 }
->>>.el-tabs__item{
-  background-color: #fff;
-}
->>>.el-tree{
-  background-color: #292929 !important;
-}
+
 .file-box {
   .file-left::-webkit-scrollbar {
     width: 4px;
@@ -1273,13 +1285,13 @@ body >>>.ivu-select-dropdown {
 
 .ivu-tabs {
   .ivu-tabs-content-animated {
-    min-height: 580px;
+    min-height: 560px;
     height: 73vh;
     margin-top: -1px;
   }
 
   .ivu-tabs-tabpane {
-    min-height: 580px;
+    min-height: 560px;
     height: 73vh;
     margin-top: -1px;
   }

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mb-16">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mb-16">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
@@ -9,55 +9,51 @@
         class="tabform"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col :span="24">
-            <el-form-item label="时间选择：">
-              <el-radio-group
+        <Row :gutter="24" type="flex">
+          <Col span="24">
+            <FormItem label="时间选择：">
+              <RadioGroup
                 v-model="formValidate.data"
                 type="button"
-                @change="selectChange(formValidate.data)"
+                @on-change="selectChange(formValidate.data)"
                 class="mr"
               >
-                <el-radio-button :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{
-                  item.text
-                }}</el-radio-button>
-              </el-radio-group>
-              <el-date-picker
+                <Radio :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</Radio>
+              </RadioGroup>
+              <DatePicker
                 :editable="false"
-                @change="onchangeTime"
-                v-model="timeVal"
+                @on-change="onchangeTime"
+                :value="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
-                value-format="yyyy/MM/dd"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
+                placement="bottom-end"
+                placeholder="请选择时间"
                 style="width: 200px"
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="提现状态：">
-              <el-radio-group type="button" v-model="formValidate.status" class="mr15" @change="selChange">
-                <el-radio-button :label="itemn.value" v-for="(itemn, indexn) in treeData.withdrawal" :key="indexn">{{
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="24">
+            <FormItem label="提现状态：">
+              <RadioGroup type="button" v-model="formValidate.status" class="mr15" @on-change="selChange">
+                <Radio :label="itemn.value" v-for="(itemn, indexn) in treeData.withdrawal" :key="indexn">{{
                   itemn.title
-                }}</el-radio-button>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="提现方式：">
-              <el-radio-group type="button" v-model="formValidate.extract_type" class="mr15" @change="selChange">
-                <el-radio-button :label="itemn.value" v-for="(itemn, indexn) in treeData.payment" :key="indexn">{{
+                }}</Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          <Col span="24">
+            <FormItem label="提现方式：">
+              <RadioGroup type="button" v-model="formValidate.extract_type" class="mr15" @on-change="selChange">
+                <Radio :label="itemn.value" v-for="(itemn, indexn) in treeData.payment" :key="indexn">{{
                   itemn.title
-                }}</el-radio-button>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="搜索：">
+                }}</Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          <Col span="24">
+            <FormItem label="搜索：">
               <div class="acea-row row-middle">
-                <el-input
+                <Input
                   search
                   enter-button
                   @on-search="selChange"
@@ -68,129 +64,96 @@
                 />
                 <router-link :to="$routeProStr + '/finance/finance/commission'" class="ml20">佣金记录</router-link>
               </div>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-card>
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
+    </Card>
     <cards-data :cardLists="cardLists" v-if="extractStatistics"></cards-data>
-    <el-card :bordered="false" shadow="never">
-      <el-table ref="table" :data="tabList" class="ivu-mt" :loading="loading" empty-text="暂无数据">
-        <el-table-column label="ID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="用户信息" min-width="130">
-          <template slot-scope="scope">
+    <Card :bordered="false" dis-hover>
+      <Table
+        ref="table"
+        :columns="columns"
+        :data="tabList"
+        class="ivu-mt"
+        :loading="loading"
+        no-data-text="暂无数据"
+        no-filtered-data-text="暂无筛选结果"
+      >
+        <template slot-scope="{ row }" slot="nickname">
+          <div>
+            用户昵称: {{ row.nickname }} <br />
+            用户id:{{ row.uid }}
+          </div>
+        </template>
+        <template slot-scope="{ row }" slot="extract_price">
+          <div>{{ row.extract_price }}</div>
+        </template>
+        <template slot-scope="{ row, index }" slot="add_time">
+          <span> {{ row.add_time | formatDate }}</span>
+        </template>
+        <template slot-scope="{ row }" slot="extract_type">
+          <div class="type" v-if="row.extract_type === 'bank'">
+            <div class="item">姓名:{{ row.real_name }}</div>
+            <div class="item">银行卡号:{{ row.bank_code }}</div>
+            <div class="item">银行开户地址:{{ row.bank_address }}</div>
+          </div>
+          <div class="type" v-if="row.extract_type === 'weixin'">
+            <div class="item">昵称:{{ row.nickname }}</div>
+            <div class="item">微信号:{{ row.wechat }}</div>
+          </div>
+          <div class="type" v-if="row.extract_type === 'alipay'">
+            <div class="item">姓名:{{ row.real_name }}</div>
+            <div class="item">支付宝号:{{ row.alipay_code }}</div>
+          </div>
+          <div class="type" v-if="row.extract_type === 'balance'">
+            <div class="item">姓名:{{ row.real_name }}</div>
+            <div class="item">提现方式：佣金转入余额</div>
+          </div>
+        </template>
+        <template slot-scope="{ row, index }" slot="qrcode_url">
+          <div class="tabBox_img" v-viewer v-if="row.extract_type === 'weixin' || row.extract_type === 'alipay'">
+            <img v-lazy="row.qrcode_url" />
+          </div>
+        </template>
+        <template slot-scope="{ row, index }" slot="status">
+          <div class="status" v-if="row.status === 0">
+            <div class="statusVal">申请中</div>
             <div>
-              用户昵称: {{ scope.row.nickname }} <br />
-              用户id:{{ scope.row.uid }}
+              <Button type="error" icon="md-close" size="small" class="item" @click="invalid(row)">驳回</Button>
+              <Button type="info" icon="md-checkmark" size="small" class="item" @click="adopt(row, '审核通过', index)"
+                >通过</Button
+              >
             </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="提现金额" min-width="100">
-          <template slot-scope="scope">
-            <div>{{ scope.row.extract_price }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="提现手续费" min-width="100">
-          <template slot-scope="scope">
-            <div>{{ scope.row.extract_fee }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="提现方式" min-width="130">
-          <template slot-scope="scope">
-            <div class="type" v-if="scope.row.extract_type === 'bank'">
-              <div class="item">姓名:{{ scope.row.real_name }}</div>
-              <div class="item">银行卡号:{{ scope.row.bank_code }}</div>
-              <div class="item">银行开户地址:{{ scope.row.bank_address }}</div>
-            </div>
-            <div class="type" v-if="scope.row.extract_type === 'weixin'">
-              <div class="item">昵称:{{ scope.row.nickname }}</div>
-              <div class="item">微信号:{{ scope.row.wechat }}</div>
-            </div>
-            <div class="type" v-if="scope.row.extract_type === 'alipay'">
-              <div class="item">姓名:{{ scope.row.real_name }}</div>
-              <div class="item">支付宝号:{{ scope.row.alipay_code }}</div>
-            </div>
-            <div class="type" v-if="scope.row.extract_type === 'balance'">
-              <div class="item">姓名:{{ scope.row.real_name }}</div>
-              <div class="item">提现方式：佣金转入余额</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="收款码" min-width="90">
-          <template slot-scope="scope">
-            <div
-              class="tabBox_img"
-              v-viewer
-              v-if="scope.row.extract_type === 'weixin' || scope.row.extract_type === 'alipay'"
-            >
-              <img v-lazy="scope.row.qrcode_url" />
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="添加时间" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.add_time | formatDate }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="备注" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.mark }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="审核状态" min-width="130">
-          <template slot-scope="scope">
-            <div class="status" v-if="scope.row.status === 0">
-              <div class="statusVal">申请中</div>
-              <div>
-                <el-button type="error" icon="md-close" size="small" class="item" @click="invalid(scope.row)"
-                  >驳回</el-button
-                >
-                <el-button
-                  type="info"
-                  icon="md-checkmark"
-                  size="small"
-                  class="item"
-                  @click="adopt(scope.row, '审核通过', index)"
-                  >通过</el-button
-                >
-              </div>
-            </div>
-            <div class="statusVal" v-if="scope.row.status === 1">提现通过</div>
-            <div class="statusVal" v-if="scope.row.status === -1">
-              提现未通过<br />未通过原因：{{ scope.row.fail_msg }}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="170">
-          <template slot-scope="scope">
-            <a href="javascript:void(0);" @click="edit(scope.row)">编辑</a>
-          </template>
-        </el-table-column>
-      </el-table>
+          </div>
+          <div class="statusVal" v-if="row.status === 1">提现通过</div>
+          <div class="statusVal" v-if="row.status === -1">提现未通过<br />未通过原因：{{ row.fail_msg }}</div>
+        </template>
+        <template slot-scope="{ row }" slot="createModalFrame">
+          <a href="javascript:void(0);" @click="edit(row)">编辑</a>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="formValidate.page"
-          :limit.sync="formValidate.limit"
-          @pagination="getList"
+          :current="formValidate.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="formValidate.limit"
         />
       </div>
-    </el-card>
+    </Card>
 
     <!-- 编辑表单-->
     <edit-from ref="edits" :FromData="FromData" @submitFail="submitFail"></edit-from>
     <!-- 拒绝通过-->
-    <el-dialog :visible.sync="modals" title="未通过原因" :close-on-click-modal="false">
-      <el-input v-model="fail_msg.message" type="textarea" :rows="4" placeholder="请输入未通过原因" />
+    <Modal v-model="modals" scrollable closable title="未通过原因" :mask-closable="false">
+      <Input v-model="fail_msg.message" type="textarea" :rows="4" placeholder="请输入未通过原因" />
       <div slot="footer">
-        <el-button type="primary" size="large" long :loading="modal_loading" @click="oks">确定</el-button>
+        <Button type="primary" size="large" long :loading="modal_loading" @click="oks">确定</Button>
       </div>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 <script>
@@ -222,6 +185,54 @@ export default {
       total: 0,
       cardLists: [],
       loading: false,
+      columns: [
+        {
+          title: 'ID',
+          key: 'id',
+          width: 80,
+        },
+        {
+          title: '用户信息',
+          slot: 'nickname',
+          minWidth: 180,
+        },
+        {
+          title: '提现金额',
+          slot: 'extract_price',
+          minWidth: 90,
+        },
+        {
+          title: '提现方式',
+          slot: 'extract_type',
+          minWidth: 150,
+        },
+        {
+          title: '收款码',
+          slot: 'qrcode_url',
+          minWidth: 150,
+        },
+        {
+          title: '添加时间',
+          slot: 'add_time',
+          minWidth: 100,
+        },
+        {
+          title: '备注',
+          key: 'mark',
+          minWidth: 100,
+        },
+        {
+          title: '审核状态',
+          slot: 'status',
+          minWidth: 180,
+        },
+        {
+          title: '操作',
+          slot: 'createModalFrame',
+          fixed: 'right',
+          width: 100,
+        },
+      ],
       tabList: [],
       fromList: {
         title: '选择时间',
@@ -298,7 +309,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '85px';
+      return this.isMobile ? undefined : 80;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -327,13 +338,13 @@ export default {
       this.modal_loading = true;
       refuseApi(this.extractId, this.fail_msg)
         .then(async (res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.modal_loading = false;
           this.modals = false;
           this.getList();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 通过
@@ -347,17 +358,17 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.data = this.timeVal ? this.timeVal.join('-') : '';
+      this.formValidate.data = this.timeVal.join('-');
       this.formValidate.page = 1;
       this.getList();
     },
@@ -392,8 +403,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.formValidate.page = index;
+      this.getList();
     },
     // 编辑
     edit(row) {
@@ -406,7 +421,7 @@ export default {
           this.$refs.edits.modals = true;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 编辑提交成功

@@ -1,61 +1,59 @@
 <template>
   <div class="table_box">
-    <el-form
+    <Form
       ref="orderData"
       :model="orderData"
-      label-width="100px"
+      :label-width="80"
       label-position="right"
       class="tabform"
       @submit.native.prevent
     >
-      <el-row :gutter="24" justify="end">
-        <el-col :span="24" class="ivu-text-left">
-          <el-form-item label="订单状态：">
-            <el-radio-group v-model="orderData.status" type="button" @change="selectChange2(orderData.status)">
-              <el-radio-button label="">全部</el-radio-button>
-              <el-radio-button label="0">未支付</el-radio-button>
-              <el-radio-button label="1">未发货</el-radio-button>
-              <el-radio-button label="2">待收货</el-radio-button>
-              <el-radio-button label="3">待评价</el-radio-button>
-              <el-radio-button label="4">交易完成</el-radio-button>
-              <el-radio-button label="5">待核销</el-radio-button>
-              <el-radio-button label="6">已核销</el-radio-button>
-              <!--                                <el-radio-button label="-1">退款中 {{  '(' +orderChartType.refunding?orderChartType.refunding:0+ ')' }}</el-radio-button>-->
-              <!--                                <el-radio-button label="-2">已退款 {{  '(' +orderChartType.refund?orderChartType.refund:0+ ')' }}</el-radio-button>-->
-              <el-radio-button label="-2">已退款</el-radio-button>
-              <el-radio-button label="-4">已删除</el-radio-button>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24" class="ivu-text-left">
-          <el-form-item label="支付方式：">
-            <el-radio-group v-model="orderData.pay_type" type="button" @change="userSearchs">
-              <el-radio-button v-for="item in payList" :label="item.val" :key="item.id">{{
-                item.label
-              }}</el-radio-button>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8" class="ivu-text-left">
-          <el-form-item label="创建时间：">
-            <el-date-picker
-              v-model="timeVal"
-              type="datetimerange"
+      <Row :gutter="24" type="flex" justify="end">
+        <Col span="24" class="ivu-text-left">
+          <FormItem label="订单状态：">
+            <RadioGroup v-model="orderData.status" type="button" @on-change="selectChange2(orderData.status)">
+              <Radio label="">全部</Radio>
+              <Radio label="0">未支付</Radio>
+              <Radio label="1">未发货</Radio>
+              <Radio label="2">待收货</Radio>
+              <Radio label="3">待评价</Radio>
+              <Radio label="4">交易完成</Radio>
+              <Radio label="5">待核销</Radio>
+              <Radio label="6">已核销</Radio>
+              <!--                                <Radio label="-1">退款中 {{  '(' +orderChartType.refunding?orderChartType.refunding:0+ ')' }}</Radio>-->
+              <!--                                <Radio label="-2">已退款 {{  '(' +orderChartType.refund?orderChartType.refund:0+ ')' }}</Radio>-->
+              <Radio label="-2">已退款</Radio>
+              <Radio label="-4">已删除</Radio>
+            </RadioGroup>
+          </FormItem>
+        </Col>
+        <Col span="24" class="ivu-text-left">
+          <FormItem label="支付方式：">
+            <RadioGroup v-model="orderData.pay_type" type="button" @on-change="userSearchs">
+              <Radio v-for="item in payList" :label="item.val" :key="item.id">{{ item.label }}</Radio>
+            </RadioGroup>
+          </FormItem>
+        </Col>
+        <Col span="8" class="ivu-text-left">
+          <FormItem label="创建时间：">
+            <DatePicker
               :editable="false"
-              @change="onchangeTime"
-              value-format="yyyy/MM/dd HH:mm:ss"
-              style="width: 380px"
+              @on-change="onchangeTime"
+              :value="timeVal"
+              format="yyyy/MM/dd HH:mm:ss"
+              type="datetimerange"
+              placement="bottom-start"
+              placeholder="请选择创建时间"
+              style="width: 300px"
               class="mr20"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
-        <el-col :span="16">
-          <el-col :span="12" class="mr">
-            <el-form-item label="搜索：" prop="real_name" label-for="real_name">
-              <el-input
+              :options="options"
+            ></DatePicker>
+          </FormItem>
+        </Col>
+        <Col span="16">
+          <Col span="12" class="mr">
+            <FormItem label="搜索：" prop="real_name" label-for="real_name">
+              <Input
                 v-model="orderData.real_name"
                 search
                 enter-button
@@ -63,46 +61,46 @@
                 element-id="name"
                 @on-search="orderSearch(orderData.real_name)"
               >
-                <el-select v-model="orderData.field_key" slot="prepend" style="width: 80px">
-                  <el-option value="all" label="全部"></el-option>
-                  <el-option value="order_id" label="订单号"></el-option>
-                  <el-option value="uid" label="UID"></el-option>
-                  <el-option value="real_name" label="用户姓名"></el-option>
-                  <el-option value="user_phone" label="用户电话"></el-option>
-                  <el-option value="title" label="商品名称(模糊)"></el-option>
-                </el-select>
-              </el-input>
-            </el-form-item>
-          </el-col>
-          <!--<el-col v-bind="grid">-->
-          <!--<el-button class="mr">导出</el-button>-->
+                <Select v-model="orderData.field_key" slot="prepend" style="width: 80px">
+                  <Option value="all">全部</Option>
+                  <Option value="order_id">订单号</Option>
+                  <Option value="uid">UID</Option>
+                  <Option value="real_name">收件人姓名</Option>
+                  <Option value="user_phone">收件人电话</Option>
+                  <Option value="title">商品名称(模糊)</Option>
+                </Select>
+              </Input>
+            </FormItem>
+          </Col>
+          <!--<Col v-bind="grid">-->
+          <!--<Button class="mr">导出</Button>-->
           <!--<span class="Refresh" @click="Refresh">刷新</span><Icon type="ios-refresh" />-->
-          <!--</el-col>-->
-        </el-col>
-        <el-col :span="24">
+          <!--</Col>-->
+        </Col>
+        <Col span="24">
           <div class="ml20">
-            <el-button v-auth="['order-dels']" class="mr10" type="primary" @click="delAll">批量删除订单</el-button>
-            <el-button v-auth="['order-write']" type="success" class="mr10 greens" @click="writeOff">
+            <Button v-auth="['order-dels']" class="mr10" type="primary" @click="delAll">批量删除订单</Button>
+            <Button v-auth="['order-write']" type="success" class="mr10 greens" size="default" @click="writeOff">
               <Icon type="md-list"></Icon>
               订单核销
-            </el-button>
-            <el-button v-auth="['export-storeOrder']" class="export" icon="ios-share-outline" @click="exportList"
-              >导出</el-button
+            </Button>
+            <Button v-auth="['export-storeOrder']" class="export" icon="ios-share-outline" @click="exportList"
+              >导出</Button
             >
           </div>
-        </el-col>
-      </el-row>
-    </el-form>
+        </Col>
+      </Row>
+    </Form>
     <!--订单核销模态框-->
-    <el-dialog
-      :visible.sync="modals2"
+    <Modal
+      v-model="modals2"
       title="订单核销"
       class="paymentFooter"
-      :show-close="false"
-      width="400px"
-      @closed="changeModal"
+      :closable="false"
+      width="400"
+      @on-visible-change="changeModal"
     >
-      <el-form
+      <Form
         ref="writeOffFrom"
         :model="writeOffFrom"
         :rules="writeOffRules"
@@ -110,15 +108,15 @@
         class="tabform"
         @submit.native.prevent
       >
-        <el-form-item prop="code" label-for="code">
-          <el-input style="width: 100%" type="text" placeholder="请输入12位核销码" v-model.number="writeOffFrom.code" />
-        </el-form-item>
-      </el-form>
+        <FormItem prop="code" label-for="code">
+          <Input style="width: 100%" type="text" placeholder="请输入12位核销码" v-model.number="writeOffFrom.code" />
+        </FormItem>
+      </Form>
       <div slot="footer">
-        <el-button type="primary" @click="ok('writeOffFrom')">立即核销</el-button>
-        <el-button @click="del('writeOffFrom')">取消</el-button>
+        <Button type="primary" @click="ok('writeOffFrom')">立即核销</Button>
+        <Button @click="del('writeOffFrom')">取消</Button>
       </div>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 
@@ -285,7 +283,7 @@ export default {
   },
   created() {
     // this.timeVal = this.today;
-    // this.orderData.data = this.timeVal ? this.timeVal.join('-') : '';
+    // this.orderData.data = this.timeVal.join('-');
     if (this.$route.fullPath === this.$routeProStr + '/order/list?status=1') {
       this.getPath();
     }
@@ -297,8 +295,8 @@ export default {
       this.getOrderStatus(this.orderData.status);
       this.$emit('getList', 1);
     },
-    changeModal() {
-      this.writeOffFrom.code = '';
+    changeModal(status) {
+      if (!status) this.writeOffFrom.code = '';
     },
     // 导出
     async exportList() {
@@ -333,8 +331,8 @@ export default {
     },
     // 具体日期
     onchangeTime(e) {
-      this.timeVal = e || [];
-      this.orderData.data = this.timeVal[0] ? (this.timeVal ? this.timeVal.join('-') : '') : '';
+      this.timeVal = e;
+      this.orderData.data = this.timeVal[0] ? this.timeVal.join('-') : '';
       this.$store.dispatch('order/getOrderTabs', { data: this.orderData.data });
       this.getOrderTime(this.orderData.data);
       this.$emit('getList', 1);
@@ -374,7 +372,7 @@ export default {
     // 批量删除
     delAll() {
       if (this.delIdList.length === 0) {
-        this.$message.error('请先选择删除的订单！');
+        this.$Message.error('请先选择删除的订单！');
       } else {
         if (this.isDels) {
           let idss = {
@@ -388,11 +386,11 @@ export default {
           };
           this.$modalSure(delfromData)
             .then((res) => {
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
               this.$emit('getList');
             })
             .catch((res) => {
-              this.$message.error(res.msg);
+              this.$Message.error(res.msg);
             });
         } else {
           const title = '错误！';
@@ -416,41 +414,41 @@ export default {
           putWrite(this.writeOffFrom)
             .then(async (res) => {
               if (res.status === 200) {
-                this.$message.success(res.msg);
+                this.$Message.success(res.msg);
                 // this.modals2 = false
                 // this.$refs[name].resetFields()
                 // this.$emit('getList')
               } else {
-                this.$message.error(res.msg);
+                this.$Message.error(res.msg);
               }
             })
             .catch((res) => {
-              this.$message.error(res.msg);
+              this.$Message.error(res.msg);
             });
         } else {
-          this.$message.error('请填写正确的核销码');
+          this.$Message.error('请填写正确的核销码');
         }
       });
     },
     // 订单核销
     ok(name) {
       if (!this.writeOffFrom.code) {
-        this.$message.warning('请先验证订单！');
+        this.$Message.warning('请先验证订单！');
       } else {
         this.writeOffFrom.confirm = 1;
         putWrite(this.writeOffFrom)
           .then(async (res) => {
             if (res.status === 200) {
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
               this.modals2 = false;
               this.$refs[name].resetFields();
               this.$emit('getList', 1);
             } else {
-              this.$message.error(res.msg);
+              this.$Message.error(res.msg);
             }
           })
           .catch((res) => {
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           });
       }
     },

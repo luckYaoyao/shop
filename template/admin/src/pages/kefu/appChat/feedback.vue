@@ -13,27 +13,27 @@
           <div class="ft" v-text="notice"></div>
         </div>
         <div>
-          <el-form :model="formItem" ref="formItem" class="pl15" :rules="ruleValidate">
-            <el-form-item prop="rela_name">
-              <el-input v-model="formItem.rela_name" placeholder="请输入您的姓名"></el-input>
-            </el-form-item>
-            <el-form-item prop="phone">
-              <el-input v-model="formItem.phone" placeholder="请输入您的联系电话"></el-input>
-            </el-form-item>
-            <el-form-item prop="content">
-              <el-input v-model="formItem.content" class="mb10" type="textarea" placeholder="请输入留言内容"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="handleSubmit('formItem')" style="width: 100%">提交留言</el-button>
-            </el-form-item>
-          </el-form>
+          <Form :model="formItem" ref="formItem" class="pl15" :rules="ruleValidate">
+            <FormItem prop="rela_name">
+              <Input v-model="formItem.rela_name" placeholder="请输入您的姓名"></Input>
+            </FormItem>
+            <FormItem prop="phone">
+              <Input v-model="formItem.phone" placeholder="请输入您的联系电话"></Input>
+            </FormItem>
+            <FormItem prop="content">
+              <Input v-model="formItem.content" class="mb10" type="textarea" placeholder="请输入留言内容"></Input>
+            </FormItem>
+            <FormItem>
+              <Button type="primary" @click="handleSubmit('formItem')" style="width: 100%">提交留言</Button>
+            </FormItem>
+          </Form>
         </div>
       </div>
       <div class="sure" v-if="isShow">
         <div class="sure-yuan"><Icon type="md-checkmark" color="#fff" size="30" /></div>
         <div class="sp1 mb10">提交成功</div>
         <div class="sp2 mb30">您的信息提交成功，我们会尽快与您取得联系！</div>
-        <el-button type="primary" @click="close">好的</el-button>
+        <Button type="primary" @click="close">好的</Button>
       </div>
     </div>
     <div class="maskModel" @touchmove.prevent v-show="change === true"></div>
@@ -78,7 +78,7 @@ export default {
               this.isShow = true;
             })
             .cache((err) => {
-              this.$message.error(err.msg);
+              this.$Message.error(err.msg);
             });
         } else {
         }
@@ -94,7 +94,7 @@ export default {
           this.notice = res.data.feedback;
         })
         .cache((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
   },

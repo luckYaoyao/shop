@@ -67,6 +67,7 @@ const themeConfigModule = {
       isGrayscale: false,
       // 是否开启色弱模式
       isInvert: false,
+
       /**
        * 其它设置
        */

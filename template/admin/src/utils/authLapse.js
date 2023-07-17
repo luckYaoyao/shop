@@ -10,22 +10,26 @@
 
 export function authLapse(data) {
   return new Promise((resolve, reject) => {
-    const h = this.$createElement;
-    this.$notify.warning({
+    this.$Notice.warning({
       title: data.title,
-      duration: 3000,
-      message: h('div', [
-        h(
-          'a',
-          {
-            attrs: {
-              href: 'http://www.crmeb.com',
-              target: '_blank',
+      duration: 3,
+      desc: data.info,
+      render: (h) => {
+        return h('div', [
+          h(
+            'a',
+            {
+              attrs: {
+                href: 'http://www.crmeb.com',
+              },
             },
-          },
-          data.info,
-        ),
-      ]),
+            data.info,
+          ),
+        ]);
+      },
     });
+    // if(data.status === false){
+    //
+    // }
   });
 }

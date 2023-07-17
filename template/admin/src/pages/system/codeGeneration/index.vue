@@ -3,31 +3,31 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <router-link :to="{ path: $routeProStr + '/system/code_generation_list' }"
-          ><el-button icon="ios-arrow-back" size="small" type="text">返回</el-button></router-link
+          ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         >
-        <el-divider direction="vertical"></el-divider>
+        <Divider type="vertical" />
         <span class="ivu-page-header-title mr20" style="padding: 0">添加功能</span>
       </div>
     </div>
     <div class="message">
-      <el-card :bordered="false" shadow="never" class="">
-        <el-steps :active="currentTab">
-          <el-step :title="item.label" v-for="(item, index) in headerList" :key="index"></el-step>
-        </el-steps>
-      </el-card>
+      <Card :bordered="false" dis-hover class="">
+        <Steps :current="currentTab">
+          <Step :title="item.label" v-for="(item, index) in headerList" :key="index"></Step>
+        </Steps>
+      </Card>
     </div>
     <div class="pt10 tab-1" v-show="currentTab == '0'">
-      <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <Card :bordered="false" dis-hover class="ivu-mt">
         <FoundationForm
           ref="Foundation"
           :foundation="formItem.foundation"
           :tableField="tableField"
           @storageData="storageData"
         />
-      </el-card>
+      </Card>
     </div>
     <div class="pt10" v-show="currentTab == '1'">
-      <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <Card :bordered="false" dis-hover class="ivu-mt">
         <TableForm
           ref="TableForm"
           :foundation="formItem.foundation"
@@ -35,17 +35,17 @@
           :id="id"
           @storageData="storageData"
         />
-      </el-card>
+      </Card>
     </div>
     <div class="pt10" v-show="currentTab == '2'">
-      <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <Card :bordered="false" dis-hover class="ivu-mt">
         <StorageLoc :storage="formItem.storage" />
-      </el-card>
+      </Card>
     </div>
-    <el-card :bordered="false" class="btn" shadow="never">
-      <el-button class="mr20" @click="beforeTab">上一步</el-button>
-      <el-button type="primary" @click="nextTab">{{ currentTab == 2 ? '提交' : '下一步' }}</el-button>
-    </el-card>
+    <Card :bordered="false" class="btn" dis-hover>
+      <Button class="mr20" @click="beforeTab">上一步</Button>
+      <Button type="primary" @click="nextTab">{{ currentTab == 2 ? '提交' : '下一步' }}</Button>
+    </Card>
   </div>
 </template>
 
@@ -129,7 +129,7 @@ export default {
     },
     addRow() {
       let foundation = this.formItem.foundation;
-      if (!foundation.tableName) return this.$message.warning('请先填写表名');
+      if (!foundation.tableName) return this.$Message.warning('请先填写表名');
       let data = {
         menuName: foundation.menuName,
         tableName: foundation.tableName,
@@ -158,16 +158,16 @@ export default {
           this.currentTab++;
         })
         .catch((err) => {
-          this.$message.warning(err.msg);
+          this.$Message.warning(err.msg);
         });
     },
     nextTab() {
       if (this.currentTab == 0) {
-        // if (!this.formItem.foundation.pid) return this.$message.warning('请选择菜单');
-        if (!this.formItem.foundation.tableName) return this.$message.warning('请输入表名');
-        if (!this.formItem.foundation.modelName) return this.$message.warning('请输入模块名');
+        // if (!this.formItem.foundation.pid) return this.$Message.warning('请选择菜单');
+        if (!this.formItem.foundation.tableName) return this.$Message.warning('请输入表名');
+        if (!this.formItem.foundation.modelName) return this.$Message.warning('请输入模块名');
         if (!this.formItem.foundation.isTable) {
-          if (!this.$refs.TableForm.tableField.length) return this.$message.warning('请先添加表数据');
+          if (!this.$refs.TableForm.tableField.length) return this.$Message.warning('请先添加表数据');
           if (this.$refs.TableForm.tableField.length)
             for (let i = 0; i < this.$refs.TableForm.tableField.length; i++) {
               const el = this.$refs.TableForm.tableField[i];
@@ -175,7 +175,7 @@ export default {
                 ['addSoftDelete', 'addTimestamps'].indexOf(el.field_type) === -1 &&
                 (!el.field || !el.field_type || !el.comment)
               ) {
-                return this.$message.warning('请完善sql表数据');
+                return this.$Message.warning('请完善sql表数据');
               }
             }
         }
@@ -221,7 +221,7 @@ export default {
       this.reqloading = true;
       codeCrud(data)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getMenusUnique();
           this.reqloading = false;
 
@@ -234,7 +234,7 @@ export default {
         })
         .catch((err) => {
           this.reqloading = false;
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     getMenusUnique() {

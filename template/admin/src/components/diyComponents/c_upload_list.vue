@@ -23,7 +23,7 @@
               <div class="info-item" v-if="infos.title === '链接'">
                 <span>{{ infos.title }}</span>
                 <div class="input-box" @click="getLink(index, key)">
-                  <el-input
+                  <Input
                     v-model="infos.value"
                     :placeholder="infos.tips"
                     :maxlength="infos.maxlength"
@@ -35,12 +35,7 @@
               <div v-else class="info-item">
                 <span>{{ infos.title }}</span>
                 <div class="input-box">
-                  <el-input
-                    v-model="infos.value"
-                    :placeholder="infos.tips"
-                    :maxlength="infos.maxlength"
-                    width="250px"
-                  />
+                  <Input v-model="infos.value" :placeholder="infos.tips" :maxlength="infos.maxlength" width="250px" />
                 </div>
               </div>
             </div>
@@ -48,32 +43,35 @@
         </div>
       </draggable>
       <div>
-        <el-dialog
-          :visible.sync="modalPic"
+        <Modal
+          v-model="modalPic"
           width="950px"
+          scrollable
+          footer-hide
+          closable
           title="上传商品图"
-          :close-on-click-modal="false"
+          :mask-closable="false"
           :z-index="888"
         >
-          <uploadPictures 
+          <uploadPictures
             :isChoice="isChoice"
             @getPic="getPic"
             :gridBtn="gridBtn"
             :gridPic="gridPic"
             v-if="modalPic"
           ></uploadPictures>
-        </el-dialog>
+        </Modal>
       </div>
     </div>
     <template v-if="datas[name]">
       <div class="add-btn" v-if="datas[name].list.length < datas[name].max || datas[name].max == ''">
-        <el-button
+        <Button
           type="primary"
           ghost
           style="width: 100%; height: 40px; border-color: #1890ff; color: #1890ff"
           @click="addBox"
           >添加图片
-        </el-button>
+        </Button>
       </div>
     </template>
     <linkaddress ref="linkaddres" @linkUrl="linkUrl"></linkaddress>

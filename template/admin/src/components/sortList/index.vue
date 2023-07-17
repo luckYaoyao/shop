@@ -1,17 +1,17 @@
 <template>
   <div class="goodList">
-    <el-form ref="formValidate" :model="formValidate" label-width="120px" label-position="right" class="tabform">
-      <el-row :gutter="24">
-        <el-col v-bind="grid">
-          <el-form-item label="商品分类：" label-for="pid">
-            <el-select v-model="formValidate.pid" style="width: 230px" clearable @change="userSearchs">
-              <el-option v-for="item in treeSelect" :value="item.id" :key="item.id" :label="item.cate_name"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col v-bind="grid">
-          <el-form-item label="商品搜索：" label-for="store_name">
-            <el-input
+    <Form ref="formValidate" :model="formValidate" :label-width="120" label-position="right" class="tabform">
+      <Row type="flex" :gutter="24">
+        <Col v-bind="grid">
+          <FormItem label="商品分类：" label-for="pid">
+            <Select v-model="formValidate.pid" style="width: 230px" clearable @on-change="userSearchs">
+              <Option v-for="item in treeSelect" :value="item.id" :key="item.id">{{ item.cate_name }} </Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Col v-bind="grid">
+          <FormItem label="商品搜索：" label-for="store_name">
+            <Input
               search
               enter-button
               placeholder="请输入商品分类,id"
@@ -19,38 +19,26 @@
               style="width: 80%"
               @on-search="userSearchs"
             />
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
-    <el-table
+          </FormItem>
+        </Col>
+      </Row>
+    </Form>
+    <Table
       ref="table"
-      empty-text="暂无数据"
-      
+      no-data-text="暂无数据"
+      no-filtered-data-text="暂无筛选结果"
       max-height="400"
+      :columns="columns"
       :data="tableList"
       :loading="loading"
-      @select="selectionGood"
+      @on-selection-change="selectionGood"
     >
-      <el-table-column type="selection" width="55"> </el-table-column>
-      <el-table-column label="商品ID" width="80">
-        <template slot-scope="scope">
-          <span>{{ scope.row.id }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="图片" min-width="90">
-        <template slot-scope="scope">
-          <div class="tabBox_img" v-viewer>
-            <img v-lazy="scope.row.pic" />
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="商品分类" min-width="130">
-        <template slot-scope="scope">
-          <span>{{ scope.row.cate_name }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
+      <template slot-scope="{ row, index }" slot="image">
+        <div class="tabBox_img" v-viewer>
+          <img v-lazy="row.pic" />
+        </div>
+      </template>
+    </Table>
   </div>
 </template>
 
@@ -117,7 +105,7 @@ export default {
           this.treeSelect = res.data;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 列表
@@ -130,7 +118,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 表格搜索

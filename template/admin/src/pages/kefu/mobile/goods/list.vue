@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="search-box">
-        <el-input
+        <Input
           type="text"
           placeholder="搜索商品名称/ID"
           v-model="searchTxt"

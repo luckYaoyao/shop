@@ -10,9 +10,9 @@
       </div>
       <div class="tips">
         例如：{{ item.example }}
-        <!--<el-button size="small" style="margin-left: 10px" v-clipboard:copy="item.example"-->
+        <!--<Button size="small" style="margin-left: 10px" v-clipboard:copy="item.example"-->
         <!--v-clipboard:success="onCopy"-->
-        <!--v-clipboard:error="onError">复制</el-button>-->
+        <!--v-clipboard:error="onError">复制</Button>-->
         <span class="copy copy-data" @click="onCopy(item.example)">复制</span>
       </div>
     </div>
@@ -52,7 +52,7 @@ export default {
     this.$nextTick(function () {
       this.clipboard = new ClipboardJS('.copy-data');
       this.clipboard.on('success', () => {
-        this.$message.success('复制成功');
+        this.$Message.success('复制成功');
       });
     });
   },
@@ -64,14 +64,14 @@ export default {
     onCopy(copyData) {
       this.$copyText(copyData)
         .then((message) => {
-          this.$message.success('复制成功');
+          this.$Message.success('复制成功');
         })
         .catch((err) => {
-          this.$message.error('复制失败');
+          this.$Message.error('复制失败');
         });
     },
     // onError () {
-    //     this.$message.error('复制成功');
+    //     this.$Message.error('复制成功');
     // }
   },
 };

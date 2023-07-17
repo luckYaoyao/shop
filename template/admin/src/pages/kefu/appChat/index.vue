@@ -15,7 +15,11 @@
       <div class="main">
         <div class="chat">
           <div class="record" @scroll="onScroll" ref="record">
-            <div id="chat_scroll" ref="scrollBox" v-loading="loading">
+            <div id="chat_scroll" ref="scrollBox">
+              <Spin v-show="loading">
+                <Icon type="ios-loading" size="18" class="demo-spin-icon-load"></Icon>
+                <div>Loading</div>
+              </Spin>
               <ul>
                 <template v-for="item in records">
                   <li :key="item.id" :class="{ right: item.uid === serviceData.tourist_uid }" :id="`chat_${item.id}`">
@@ -91,8 +95,8 @@
                   <span class="iconfont iconbiaoqing1"></span>
                 </button>
                 <button title="图片" v-if="kufuToken">
-                  <el-upload
-                    :show-file-list="false"
+                  <Upload
+                    :show-upload-list="false"
                     :action="uploadAction"
                     :before-upload="beforeUpload"
                     :format="['jpg', 'jpeg', 'png', 'gif']"
@@ -102,7 +106,7 @@
                     :on-error="uploadError"
                   >
                     <span class="iconfont icontupian1"></span>
-                  </el-upload>
+                  </Upload>
                 </button>
               </div>
               <!--                            <div>-->
@@ -309,10 +313,10 @@ export default {
         });
       });
       ws.$on('socket_error', () => {
-        this.$message.error('连接失败');
+        this.$Message.error('连接失败');
       });
       ws.$on('err_tip', (data) => {
-        this.$message.error(data.msg);
+        this.$Message.error(data.msg);
       });
       ws.$on('success', (data) => {
         this.is_tourist = 0;
@@ -373,7 +377,7 @@ export default {
           }
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
           this.change = true;
         });
     },
@@ -455,7 +459,7 @@ export default {
           });
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
           this.loading = false;
         });
     },
@@ -560,13 +564,13 @@ export default {
       return promise;
     },
     handleFormatError(file) {
-      this.$message.error('上传图片只能是 jpg、jpg、jpeg、gif 格式!');
+      this.$Message.error('上传图片只能是 jpg、jpg、jpeg、gif 格式!');
     },
     uploadSuccess(res) {
       this.sendMsg(res.data.url, 3);
     },
     uploadError(error) {
-      this.$message.error(error);
+      this.$Message.error(error);
     },
   },
 };

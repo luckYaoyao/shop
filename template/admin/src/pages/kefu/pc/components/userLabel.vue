@@ -15,8 +15,8 @@
       </div>
     </div>
     <div class="footer">
-      <el-button type="primary" class="btns" @click="subBtn">确定</el-button>
-      <el-button type="primary" class="btns" ghost @click="cancel">取消</el-button>
+      <Button type="primary" class="btns" @click="subBtn">确定</Button>
+      <Button type="primary" class="btns" ghost @click="cancel">取消</Button>
     </div>
   </div>
 </template>
@@ -78,11 +78,11 @@ export default {
         un_label_ids: unLaberids,
       })
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.$emit('editLabel');
         })
         .catch((error) => {
-          this.$message.error(error.msg);
+          this.$Message.error(error.msg);
         });
     },
     cancel() {

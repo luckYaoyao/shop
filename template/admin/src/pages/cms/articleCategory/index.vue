@@ -1,43 +1,42 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col v-bind="grid">
-            <el-form-item label="是否显示：" label-for="status">
-              <el-select v-model="status" placeholder="请选择" element-id="status" clearable @change="userSearchs">
-                <el-option value="all" label="全部"></el-option>
-                <el-option value="1" label="显示"></el-option>
-                <el-option value="0" label="不显示"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid">
-            <el-form-item label="分类昵称：" prop="title" label-for="status2">
-              <el-input
+        <Row type="flex" :gutter="24">
+          <Col v-bind="grid">
+            <FormItem label="是否显示：" label-for="status">
+              <Select v-model="status" placeholder="请选择" element-id="status" clearable @on-change="userSearchs">
+                <Option value="all">全部</Option>
+                <Option value="1">显示</Option>
+                <Option value="0">不显示</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <FormItem label="分类昵称：" prop="title" label-for="status2">
+              <Input
                 search
                 enter-button
                 placeholder="请输入分类昵称"
                 v-model="formValidate.title"
                 @on-search="userSearchs"
               />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col v-bind="grid">
-            <el-button v-auth="['cms-category-create']" type="primary" icon="md-add" @click="add"
-              >添加文章分类</el-button
-            >
-          </el-col>
-        </el-row>
-      </el-form>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row type="flex">
+          <Col v-bind="grid">
+            <Button v-auth="['cms-category-create']" type="primary" icon="md-add" @click="add">添加文章分类</Button>
+          </Col>
+        </Row>
+      </Form>
+      <!-- <Divider dashed /> -->
       <vxe-table
         class="vxeTable mt25"
         highlight-hover-row
@@ -57,37 +56,40 @@
         </vxe-table-column>
         <vxe-table-column field="status" title="状态" min-width="120">
           <template v-slot="{ row }">
-            <el-switch
-              :active-value="1"
-              :inactive-value="0"
+            <i-switch
               v-model="row.status"
               :value="row.status"
-              @change="onchangeIsShow(row)"
+              :true-value="1"
+              :false-value="0"
+              @on-change="onchangeIsShow(row)"
               size="large"
             >
-            </el-switch>
+              <span slot="open">显示</span>
+              <span slot="close">隐藏</span>
+            </i-switch>
           </template>
         </vxe-table-column>
         <vxe-table-column field="date" title="操作" align="center" width="250" fixed="right">
           <template v-slot="{ row }">
             <a @click="edit(row)">编辑</a>
-            <el-divider direction="vertical"></el-divider>
+            <Divider type="vertical" />
             <a @click="del(row, '删除文章分类')">删除</a>
-            <el-divider direction="vertical"></el-divider>
+            <Divider type="vertical" />
             <a @click="lookUp(row)">查看文章</a>
           </template>
         </vxe-table-column>
       </vxe-table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="formValidate.page"
-          :limit.sync="formValidate.limit"
-          @pagination="getList"
+          :current="formValidate.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="formValidate.limit"
         />
       </div>
-    </el-card>
+    </Card>
   </div>
 </template>
 <script>
@@ -150,7 +152,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '75px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -168,7 +170,7 @@ export default {
       //     this.$refs.edits.modals = true;
       //     this.FromData = res.data;
       // }).catch(res => {
-      //     this.$message.error(res.msg);
+      //     this.$Message.error(res.msg);
       // })
     },
     // 编辑
@@ -178,7 +180,7 @@ export default {
       //     this.FromData = res.data;
       //     this.$refs.edits.modals = true;
       // }).catch(res => {
-      //     this.$message.error(res.msg);
+      //     this.$Message.error(res.msg);
       // })
     },
     // 删除
@@ -192,11 +194,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 列表
@@ -212,8 +214,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.formValidate.page = index;
+      this.getList();
     },
     // 表格搜索
     userSearchs() {
@@ -228,10 +234,10 @@ export default {
       };
       statusApi(data)
         .then(async (res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 查看文章

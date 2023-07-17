@@ -38,59 +38,48 @@
 
       <div v-if="name == 'user_recharge_quota'" style="margin-left: 20px">
         <div class="table_box">
-          <div>
+          <div type="flex">
             <div v-bind="grid">
               <div class="title">充值金额设置</div>
-              <el-button
+              <Button
                 type="primary"
                 icon="md-add"
                 @click="groupAdd('添加数据')"
                 style="margin-left: 14px; margin-top: 30px"
-                >添加数据</el-button
+                >添加数据</Button
               >
             </div>
           </div>
           <div class="table">
-            <el-table
+            <Table
+              :columns="columns1"
               :data="sginList.list"
               ref="table"
               class="mt25"
               :loading="loading"
-              highlight-current-row
+              highlight-row
               no-userFrom-text="暂无数据"
               no-filtered-userFrom-text="暂无筛选结果"
             >
-              <el-table-column
-                :label="item.title"
-                :min-width="item.minWidth"
-                v-for="(item, index) in columns1"
-                :key="index"
-              >
-                <template slot-scope="scope">
-                  <template v-if="item.key">
-                    <div>
-                      <span>{{ scope.row[item.key] }}</span>
-                    </div>
-                  </template>
-                  <template v-else-if="item.slot === 'status'">
-                    <el-switch
-                      :active-value="1"
-                      :inactive-value="0"
-                      v-model="scope.row.status"
-                      :value="scope.row.status"
-                      @change="onchangeIsShow(scope.row)"
-                      size="large"
-                    >
-                    </el-switch>
-                  </template>
-                  <template v-else-if="item.slot === 'action'">
-                    <a @click="edit(scope.row, '编辑')">编辑</a>
-                    <el-divider direction="vertical"></el-divider>
-                    <a @click="del(scope.row, '删除这条信息', index)">删除</a>
-                  </template>
-                </template>
-              </el-table-column>
-            </el-table>
+              <template slot-scope="{ row, index }" slot="status">
+                <i-switch
+                  v-model="row.status"
+                  :value="row.status"
+                  :true-value="1"
+                  :false-value="0"
+                  @on-change="onchangeIsShow(row)"
+                  size="large"
+                >
+                  <span slot="open">显示</span>
+                  <span slot="close">隐藏</span>
+                </i-switch>
+              </template>
+              <template slot-scope="{ row, index }" slot="action">
+                <a @click="edit(row, '编辑')">编辑</a>
+                <Divider type="vertical" />
+                <a @click="del(row, '删除这条信息', index)">删除</a>
+              </template>
+            </Table>
           </div>
         </div>
       </div>
@@ -136,7 +125,7 @@ export default {
       };
     },
     labelWidth() {
-      return this.isMobile ? undefined : '120px';
+      return this.isMobile ? undefined : 120;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -278,9 +267,9 @@ export default {
     handleSuccess(res, file, fileList) {
       if (res.status === 200) {
         this.$set(this.formItem, 'video_link', res.data.src);
-        this.$message.success(res.msg);
+        this.$Message.success(res.msg);
       } else {
-        this.$message.error(res.msg);
+        this.$Message.error(res.msg);
       }
     },
     zh_uploadFile() {
@@ -398,7 +387,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     edits(row) {
@@ -465,7 +454,7 @@ export default {
         };
       } else {
         if (this.tabList.list.length == 5) {
-          this.$message.warning('最多添加五张呦');
+          this.$Message.warning('最多添加五张呦');
         } else {
           let obj = JSON.parse(JSON.stringify(this.lastObj));
           this.tabList.list.push(obj);
@@ -498,7 +487,7 @@ export default {
       } else if (this.guide == 2) {
         this.formItem.value = this.tabList.list;
         openAdvSave(this.formItem).then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         });
       } else {
         this.loadingExist = true;
@@ -509,11 +498,11 @@ export default {
         })
           .then((res) => {
             this.loadingExist = false;
-            this.$message.success(res.msg);
+            this.$Message.success(res.msg);
           })
           .catch((err) => {
             this.loadingExist = false;
-            this.$message.error(err.msg);
+            this.$Message.error(err.msg);
           });
       }
     },
@@ -533,7 +522,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 编辑
@@ -557,10 +546,10 @@ export default {
       this.$modalSure(delfromData)
         .then((res) => {
           this.info();
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 修改是否显示
@@ -568,12 +557,12 @@ export default {
       groupDataSetApi('setting/group_data/set_status/' + row.id + '/' + row.status)
         .then(async (res) => {
           this.url = this.BaseURL + '/pages/users/user_sgin/index';
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.info();
         })
         .catch((res) => {
           this.url = this.BaseURL + '/pages/users/user_sgin/index';
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     getGroupAll() {
@@ -584,7 +573,7 @@ export default {
           this.pageId = res.data[0].id;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     getContent(val) {
@@ -596,10 +585,10 @@ export default {
         if (valid) {
           setAgreement(this.formValidate)
             .then(async (res) => {
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
             })
             .catch((res) => {
-              this.$message.error(res.msg);
+              this.$Message.error(res.msg);
             });
         } else {
           return false;
@@ -617,7 +606,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },
@@ -874,6 +863,7 @@ export default {
 }
 
 .table {
+  width: 700px;
   color: #515a6e;
   font-size: 14px;
   background-color: #fff;

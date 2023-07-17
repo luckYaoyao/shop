@@ -1,107 +1,86 @@
 <template>
-  <div v-loading="spinShow">
-    <el-card :bordered="false" shadow="never" class="ivu-mb-16">
+  <div>
+    <Card :bordered="false" dis-hover class="ivu-mb-16">
       <dateRadio @selectDate="onSelectDate"></dateRadio>
-      <el-date-picker
+      <DatePicker
         :editable="false"
         :clearable="false"
-        @change="onchangeTime"
-        v-model="timeVal"
+        @on-change="onchangeTime"
+        :value="timeVal"
         format="yyyy/MM/dd"
         type="daterange"
-        value-format="yyyy/MM/dd"
-        range-separator="至"
-        start-placeholder="开始日期"
-        end-placeholder="结束日期"
+        placement="bottom-start"
+        placeholder="请选择时间"
+        style="width: 200px"
+        :options="options"
         class="mr20"
-      ></el-date-picker>
-    </el-card>
+      ></DatePicker>
+    </Card>
     <cards-data :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
-    <el-card class="ivu-mb-16" :bordered="false" shadow="never">
+    <Card class="ivu-mb-16" :bordered="false" dis-hover>
       <h3>营业趋势</h3>
       <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
-    </el-card>
+    </Card>
+    <Spin size="large" fix v-if="spinShow"></Spin>
     <div class="code-row-bg">
-      <el-card :bordered="false" shadow="never" class="ivu-mt">
+      <Card :bordered="false" dis-hover class="ivu-mt">
         <div class="acea-row row-between-wrapper">
           <h3 class="header-title">订单来源分析</h3>
           <div class="change-style" @click="echartLeft = !echartLeft">切换样式</div>
         </div>
         <div class="ech-box">
           <echarts-from v-if="echartLeft" ref="visitChart" :infoList="infoList" echartsTitle="circle"></echarts-from>
-          <el-table
+          <Table
             v-show="!echartLeft"
             ref="selection"
+            :columns="columns"
             :data="tabList"
-            v-loading="loading"
-            empty-text="暂无数据"
-            highlight-current-row
+            :loading="loading"
+            no-data-text="暂无数据"
+            highlight-row
+            no-filtered-data-text="暂无筛选结果"
           >
-            <el-table-column type="index" label="序号" width="50"> </el-table-column>
-            <el-table-column label="来源" min-width="80">
-              <template slot-scope="scope">
-                <span>{{ scope.row.name }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="金额" min-width="130">
-              <template slot-scope="scope">
-                <span>{{ scope.row.value }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="占比率" min-width="130">
-              <template slot-scope="scope">
-                <div class="percent-box">
-                  <div class="line">
-                    <div class="bg"></div>
-                    <div class="percent" :style="'width:' + scope.row.percent + '%;'"></div>
-                  </div>
-                  <div class="num">{{ scope.row.percent }}%</div>
+            <template slot-scope="{ row }" slot="percent">
+              <div class="percent-box">
+                <div class="line">
+                  <div class="bg"></div>
+                  <div class="percent" :style="'width:' + row.percent + '%;'"></div>
                 </div>
-              </template>
-            </el-table-column>
-          </el-table>
+                <div class="num">{{ row.percent }}%</div>
+              </div>
+            </template>
+          </Table>
         </div>
-      </el-card>
-      <el-card :bordered="false" shadow="never" class="ivu-mt">
+      </Card>
+      <Card :bordered="false" dis-hover class="ivu-mt">
         <div class="acea-row row-between-wrapper">
           <h3 class="header-title">订单类型分析</h3>
           <div class="change-style" @click="echartRight = !echartRight">切换样式</div>
         </div>
         <div class="ech-box">
           <echarts-from v-if="echartRight" ref="visitChart" :infoList="infoList2" echartsTitle="circle"></echarts-from>
-          <el-table
+          <Table
             v-show="!echartRight"
             ref="selection"
+            :columns="columns"
             :data="tabList2"
             :loading="loading2"
-            empty-text="暂无数据"
-            highlight-current-row
+            no-data-text="暂无数据"
+            highlight-row
+            no-filtered-data-text="暂无筛选结果"
           >
-            <el-table-column type="index" label="序号" width="50"> </el-table-column>
-            <el-table-column label="来源" min-width="80">
-              <template slot-scope="scope">
-                <span>{{ scope.row.name }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="金额" min-width="130">
-              <template slot-scope="scope">
-                <span>{{ scope.row.value }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="占比率" min-width="130">
-              <template slot-scope="scope">
-                <div class="percent-box">
-                  <div class="line">
-                    <div class="bg"></div>
-                    <div class="percent" :style="'width:' + scope.row.percent + '%;'"></div>
-                  </div>
-                  <div class="num">{{ scope.row.percent }}%</div>
+            <template slot-scope="{ row }" slot="percent">
+              <div class="percent-box">
+                <div class="line">
+                  <div class="bg"></div>
+                  <div class="percent" :style="'width:' + row.percent + '%;'"></div>
                 </div>
-              </template>
-            </el-table-column>
-          </el-table>
+                <div class="num">{{ row.percent }}%</div>
+              </div>
+            </template>
+          </Table>
         </div>
-      </el-card>
+      </Card>
     </div>
   </div>
 </template>
@@ -171,7 +150,32 @@ export default {
       optionData: {},
       spinShow: false,
       options: this.$timeOptions,
-
+      columns: [
+        {
+          title: '序号',
+          type: 'index',
+          width: 60,
+          align: 'center',
+        },
+        {
+          title: '来源',
+          key: 'name',
+          minWidth: 80,
+          align: 'center',
+        },
+        {
+          title: '金额',
+          width: 180,
+          key: 'value',
+          align: 'center',
+        },
+        {
+          title: '占比率',
+          slot: 'percent',
+          minWidth: 100,
+          align: 'center',
+        },
+      ],
       tabList: [],
       tabList2: [],
     };
@@ -240,7 +244,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.time = this.timeVal ? this.timeVal.join('-') : '';
+      this.formValidate.time = this.timeVal.join('-');
       this.name = this.formValidate.time;
       this.getBasic();
       this.getTrend();
@@ -340,7 +344,7 @@ export default {
           this.spinShow = false;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
           this.spinShow = false;
         });
     },

@@ -2041,17 +2041,6 @@ class UserServices extends BaseServices
         if (!$userInfo) {
             return false;
         }
-
-        //根据手机号码查询此用户注销过，不反推广佣金
-        if ($userInfo['phone'] != '' && $this->dao->getCount(['phone' => $userInfo['phone'], 'is_del' => 1])) {
-            return false;
-        }
-        //根据openid查询此用户注销过，不反推广佣金
-        $openidArray = app()->make(WechatUserServices::class)->getColumn(['uid' => $uid], 'openid', 'id');
-        if ($this->dao->getCount([['openid', 'in', $openidArray], ['is_del', '=', 1]])) {
-            return false;
-        }
-
         if (!$spread_user) {
             $spread_user = $this->dao->getOne(['uid' => $spread_uid, 'status' => 1]);
         }

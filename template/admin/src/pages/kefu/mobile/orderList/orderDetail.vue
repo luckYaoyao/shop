@@ -199,10 +199,10 @@ export default {
     copyText(text) {
       this.$copyText(text)
         .then((message) => {
-          this.$message.success('复制成功');
+          this.$Message.success('复制成功');
         })
         .catch((err) => {
-          this.$message.error('复制失败');
+          this.$Message.error('复制失败');
         });
     },
     getIndex: function () {

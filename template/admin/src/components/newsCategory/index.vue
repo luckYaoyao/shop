@@ -1,12 +1,12 @@
 <template>
   <div :style="{ height: scrollerHeight + 'px' || '' }">
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form ref="formValidate" :model="formValidate" label-width="85px" label-position="left" class="tabform">
-        <el-row :gutter="24"  justify="end">
-          <el-col :span="24">
-            <el-col v-bind="grid" class="mr">
-              <el-form-item label="图文搜索：" prop="cate_name" label-for="cate_name">
-                <el-input
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form ref="formValidate" :model="formValidate" :label-width="80" label-position="left" class="tabform">
+        <Row :gutter="24" type="flex" justify="end">
+          <Col span="24">
+            <Col v-bind="grid" class="mr">
+              <FormItem label="图文搜索：" prop="cate_name" label-for="cate_name">
+                <Input
                   search
                   enter-button
                   placeholder="请输入"
@@ -14,17 +14,17 @@
                   v-model="formValidate.cate_name"
                   @on-search="userSearchs"
                 />
-              </el-form-item>
-            </el-col>
-          </el-col>
-        </el-row>
-        <el-row  v-show="$route.path === routePre + '/app/wechat/news_category/index'">
+              </FormItem>
+            </Col>
+          </Col>
+        </Row>
+        <Row type="flex" v-show="$route.path === routePre + '/app/wechat/news_category/index'">
           <router-link :to="routePre + '/app/wechat/news_category/save/0'">
-            <el-button type="primary" class="bnt" icon="md-add">添加图文消息</el-button>
+            <Button type="primary" class="bnt" icon="md-add">添加图文消息</Button>
           </router-link>
-        </el-row>
-      </el-form>
-    </el-card>
+        </Row>
+      </Form>
+    </Card>
     <div class="contentBox">
       <div id="content" :style="{ top: contentTop + 'px' || '', width: contentWidth }" ref="content">
         <vue-waterfall-easy
@@ -48,28 +48,28 @@
                   @mouseenter="mouseenterOut(j)"
                   @mouseleave="mouseenterOver(j)"
                 >
-                  <el-button
+                  <Button
                     type="success"
                     shape="circle"
                     icon="md-create"
                     v-show="props.value.new[i].isDel && isShow"
                     @click="clkk(props.value)"
-                  ></el-button>
-                  <el-button
+                  ></Button>
+                  <Button
                     type="error"
                     shape="circle"
                     icon="md-trash"
                     v-show="props.value.new[i].isDel && isShow"
                     @click="del(props.value, '删除图文', i)"
                     style="margin-top: 5px"
-                  ></el-button>
-                  <el-button
+                  ></Button>
+                  <Button
                     type="primary"
                     icon="md-paper-plane"
                     v-show="props.value.new[i].isDel && isShowSend"
                     shape="circle"
                     @click="send(props.value, '发送', i)"
-                    >推送</el-button
+                    >推送</Button
                   >
                 </div>
                 <span class="news_sp">{{ j.title }}</span>
@@ -189,10 +189,10 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     clickFn(event, { index, value }) {
@@ -212,7 +212,7 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.$nextTick(() => {
             this.imgsArr = [];
           });
@@ -220,7 +220,7 @@ export default {
           this.getData();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 删除成功
@@ -281,7 +281,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },
@@ -291,7 +291,7 @@ export default {
 
 <style scoped lang="stylus">
 .contentBox {
-  // height: 100%;
+  height: 100%;
   width: 100%;
   position: static;
 

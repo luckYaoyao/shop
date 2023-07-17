@@ -1,11 +1,12 @@
 <template>
-  <el-dialog :visible.sync="modals_son" :title="title" :close-on-click-modal="false" width="900px">
-    <el-button type="primary" id="savefile" class="mr5 mb15" @click="savefile">保存</el-button>
-    <el-button id="undo" class="mr5 mb15" @click="undofile">撤销</el-button>
-    <el-button id="redo" class="mr5 mb15" @click="redofile">回退</el-button>
-    <el-button id="refresh" class="mb15" @click="refreshfile">刷新</el-button>
+  <Modal v-model="modals_son" scrollable footer-hide closable :title="title" :mask-closable="false" width="900">
+    <Button type="primary" id="savefile" class="mr5 mb15" @click="savefile">保存</Button>
+    <Button id="undo" class="mr5 mb15" @click="undofile">撤销</Button>
+    <Button id="redo" class="mr5 mb15" @click="redofile">回退</Button>
+    <Button id="refresh" class="mb15" @click="refreshfile">刷新</Button>
     <textarea ref="mycode" class="codesql public_text" v-model="code" style="height: 80vh"></textarea>
-  </el-dialog>
+    <Spin size="large" fix v-if="spinShow"></Spin>
+  </Modal>
 </template>
 
 <script>
@@ -124,11 +125,11 @@ export default {
       };
       savefileApi(data)
         .then(async (res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.modals = false;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 撤销

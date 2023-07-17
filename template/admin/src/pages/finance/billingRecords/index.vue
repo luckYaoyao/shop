@@ -1,100 +1,86 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
+    <Card :bordered="false" dis-hover class="ivu-mt">
       <div class="ivu-mt tabbox">
-        <el-tabs v-model="tab" @tab-click="onClickTab" class="mb20">
-          <el-tab-pane label="日账单" name="day" />
-          <el-tab-pane label="周账单" name="week" />
-          <el-tab-pane label="月账单" name="month" />
-        </el-tabs>
-        <el-form
+        <Tabs @on-click="onClickTab" class="mb20">
+          <TabPane label="日账单" name="day" />
+          <TabPane label="周账单" name="week" />
+          <TabPane label="月账单" name="month" />
+        </Tabs>
+        <Form
           ref="formValidate"
           :model="formValidate"
           :label-width="labelWidth"
           :label-position="labelPosition"
           @submit.native.prevent
         >
-          <el-form-item label="创建时间：">
-            <el-date-picker
+          <FormItem label="创建时间：">
+            <DatePicker
               :editable="false"
               :clearable="false"
-              @change="onchangeTime"
-              v-model="timeVal"
-              value-format="yyyy/MM/dd"
+              @on-change="onchangeTime"
+              :value="timeVal"
+              format="yyyy/MM/dd"
               type="daterange"
               placement="bottom-start"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
+              placeholder="请选择时间"
               style="width: 200px"
               :options="options"
               class="mr20"
-            ></el-date-picker>
-          </el-form-item>
-        </el-form>
+            ></DatePicker>
+          </FormItem>
+        </Form>
       </div>
       <div class="table">
-        <el-table
+        <Table
+          :columns="columns"
           :data="orderList"
           ref="table"
           class="mt25"
-          v-loading="loading"
-          highlight-current-row
+          :loading="loading"
+          highlight-row
           no-userFrom-text="暂无数据"
           no-filtered-userFrom-text="暂无筛选结果"
         >
-          <el-table-column label="ID" width="80">
-            <template slot-scope="scope">
-              <span>{{ scope.row.id }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="标题" min-width="130">
-            <template slot-scope="scope">
-              <span>{{ scope.row.title }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="日期" min-width="130">
-            <template slot-scope="scope">
-              <span>{{ scope.row.add_time }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="收入金额" min-width="130">
-            <template slot-scope="scope">
-              <span style="color: #f5222d">￥{{ scope.row.income_price }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="支出金额" min-width="130">
-            <template slot-scope="scope">
-              <span style="color: #00c050">￥{{ scope.row.exp_price }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="入账金额" min-width="130">
-            <template slot-scope="scope">
-              <span>￥{{ scope.row.entry_price }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="操作" fixed="right" width="170">
-            <template slot-scope="scope">
-              <a @click="Info(scope.row)">账单详情</a>
-              <el-divider direction="vertical"></el-divider>
-              <a @click="download(scope.row)">下载</a>
-            </template>
-          </el-table-column>
-        </el-table>
+          <template slot-scope="{ row }" slot="income_price">
+            <span style="color: #f5222d">￥{{ row.income_price }}</span>
+          </template>
+          <template slot-scope="{ row }" slot="exp_price">
+            <span style="color: #00c050">￥{{ row.exp_price }}</span>
+          </template>
+          <template slot-scope="{ row }" slot="entry_price">
+            <span>￥{{ row.entry_price }}</span>
+          </template>
+          <template slot-scope="{ row }" slot="action">
+            <a @click="Info(row)">账单详情</a>
+            <Divider type="vertical" />
+            <a @click="download(row)">下载</a>
+          </template>
+        </Table>
         <div class="acea-row row-right page">
-          <pagination
-            v-if="total"
+          <Page
             :total="total"
-            :page.sync="formValidate.page"
-            :limit.sync="formValidate.limit"
-            @pagination="getList"
+            :current="formValidate.page"
+            show-elevator
+            show-total
+            @on-change="pageChange"
+            :page-size="formValidate.limit"
           />
         </div>
       </div>
-    </el-card>
-    <el-dialog :visible.sync="modals" title="账单详情" width="1000">
+    </Card>
+    <Modal
+      v-model="modals"
+      scrollable
+      footer-hide
+      closable
+      title="账单详情"
+      :mask-closable="false"
+      @on-cancel="cancel"
+      width="1000"
+    >
       <commission-details v-if="modals" ref="commission" :ids="ids" :time="formValidate.time"></commission-details>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 
@@ -124,6 +110,46 @@ export default {
       total: 0,
       loading: false,
       tab: 'day',
+      staff: [],
+      columns: [
+        {
+          title: 'ID',
+          key: 'id',
+          width: 60,
+        },
+        {
+          title: '标题',
+          key: 'title',
+          minWidth: 80,
+        },
+        {
+          title: '日期',
+          key: 'add_time',
+          minWidth: 80,
+        },
+        {
+          title: '收入金额',
+          slot: 'income_price',
+          minWidth: 80,
+        },
+        {
+          title: '支出金额',
+          slot: 'exp_price',
+          minWidth: 80,
+        },
+        {
+          title: '入账金额',
+          slot: 'entry_price',
+          minWidth: 80,
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          fixed: 'right',
+          minWidth: 120,
+          align: 'center',
+        },
+      ],
       orderList: [
         {
           id: '1',
@@ -158,7 +184,7 @@ export default {
   },
   computed: {
     labelWidth() {
-      return this.isMobile ? undefined : '85px';
+      return this.isMobile ? undefined : 80;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -166,9 +192,16 @@ export default {
   },
   mounted() {
     this.onClickTab(this.tab);
+    this.staffApi();
   },
   methods: {
-    onClickTab() {
+    staffApi() {
+      staffListInfo().then((res) => {
+        this.staff = res.data;
+      });
+    },
+    onClickTab(e) {
+      this.tab = e;
       this.getList();
     },
     search() {
@@ -198,9 +231,14 @@ export default {
     },
     // 具体日期
     onchangeTime(e) {
-      this.timeVal = e || [];
-      this.formValidate.time = this.timeVal[0] ? this.timeVal ? this.timeVal.join('-') : '' : '';
+      this.timeVal = e;
+      this.formValidate.time = this.timeVal[0] ? this.timeVal.join('-') : '';
       this.formValidate.page = 1;
+      this.getList();
+    },
+    //分页
+    pageChange(status) {
+      this.formValidate.page = status;
       this.getList();
     },
     // 账单详情

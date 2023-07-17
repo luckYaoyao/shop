@@ -1,34 +1,35 @@
 <template>
-  <div v-loading="spinShow">
+  <div>
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <span>
-          <el-button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</el-button>
+          <Button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
         </span>
-        <el-divider direction="vertical"></el-divider>
+        <Divider type="vertical" />
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
       </div>
     </div>
     <cards-data :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
+    <Card :bordered="false" dis-hover class="ivu-mt">
       <div class="table-head">
         <h3>关注趋势</h3>
-        <el-date-picker
+        <DatePicker
           :editable="false"
           :clearable="false"
-          @change="onchangeTime"
-          v-model="timeVal"
+          @on-change="onchangeTime"
+          :value="timeVal"
           format="yyyy/MM/dd"
           type="daterange"
-          value-format="yyyy/MM/dd"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          placement="bottom-start"
+          placeholder="请选择时间"
+          style="width: 200px"
+          :options="options"
           class="mr20"
-        ></el-date-picker>
+        ></DatePicker>
       </div>
       <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
-    </el-card>
+    </Card>
+    <Spin size="large" fix v-if="spinShow"></Spin>
   </div>
 </template>
 
@@ -96,6 +97,32 @@ export default {
       optionData: {},
       spinShow: false,
       options: this.$timeOptions,
+      columns: [
+        {
+          title: '序号',
+          type: 'index',
+          width: 60,
+          align: 'center',
+        },
+        {
+          title: '来源',
+          key: 'name',
+          minWidth: 80,
+          align: 'center',
+        },
+        {
+          title: '金额',
+          width: 180,
+          key: 'value',
+          align: 'center',
+        },
+        {
+          title: '占比率',
+          slot: 'percent',
+          minWidth: 100,
+          align: 'center',
+        },
+      ],
     };
   },
   created() {
@@ -142,7 +169,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.time = this.timeVal ? this.timeVal.join('-') : '';
+      this.formValidate.time = this.timeVal.join('-');
       this.name = this.formValidate.time;
       this.wechatQrcodeStatistic();
     },

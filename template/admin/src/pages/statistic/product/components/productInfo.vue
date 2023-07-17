@@ -1,9 +1,9 @@
 <template>
-  <el-card :bordered="false" shadow="never" class="ivu-mt" v-loading="spinShow">
+  <Card :bordered="false" dis-hover class="ivu-mt">
     <div class="acea-row row-between-wrapper mb20">
       <div class="header-title">
         商品概况
-        <el-tooltip effect="light" word-wrap width="500" trigger="hover" placement="right-start">
+        <Poptip word-wrap width="500" trigger="hover" placement="right-start">
           <Icon type="ios-information-circle-outline" />
           <div slot="content">
             <div>商品浏览量</div>
@@ -16,19 +16,13 @@
             <div>在选定条件下，添加商品进入购物车的商品件数</div>
             <br />
             <div>下单件数</div>
-            <div>
-              在选定条件下，成功下单的商品件数之和（拼团商品在成团之后计入，线下支付订单在后台确认支付后计入，不剔除退款订单）
-            </div>
+            <div>在选定条件下，成功下单的商品件数之和（拼团商品在成团之后计入，线下支付订单在后台确认支付后计入，不剔除退款订单）</div>
             <br />
             <div>支付件数</div>
-            <div>
-              在选定条件下，成功付款订单的商品件数之和（拼团商品在成团之后计入，线下支付订单在后台确认支付后计入，不剔除退款订单）
-            </div>
+            <div>在选定条件下，成功付款订单的商品件数之和（拼团商品在成团之后计入，线下支付订单在后台确认支付后计入，不剔除退款订单）</div>
             <br />
             <div>支付金额</div>
-            <div>
-              在选定条件下，成功付款订单的商品金额之和（拼团商品在成团之后计入，线下支付订单在后台确认支付后计入，不剔除退款订单）
-            </div>
+            <div>在选定条件下，成功付款订单的商品金额之和（拼团商品在成团之后计入，线下支付订单在后台确认支付后计入，不剔除退款订单）</div>
             <br />
             <div>成本金额</div>
             <div>在选定条件下，成功付款订单的商品成本金额之和</div>
@@ -43,24 +37,24 @@
             <div>在选定条件下， 付款人数 / 访客数</div>
             <br />
           </div>
-        </el-tooltip>
+        </Poptip>
       </div>
       <div class="acea-row">
-        <el-date-picker
+        <DatePicker
           :editable="false"
           :clearable="false"
-          @change="onchangeTime"
-          v-model="timeVal"
+          @on-change="onchangeTime"
+          :value="timeVal"
           format="yyyy/MM/dd"
           type="daterange"
-          value-format="yyyy/MM/dd"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
+          placement="bottom-start"
+          placeholder="请选择时间"
+          style="width: 200px"
           class="mr15"
-        ></el-date-picker>
-        <el-button type="primary" class="mr15" @click="onSeach">查询</el-button>
-        <el-button type="primary" @click="excel">导出</el-button>
+          :options="options"
+        ></DatePicker>
+        <Button type="primary" class="mr15" @click="onSeach">查询</Button>
+        <Button type="primary" @click="excel">导出</Button>
       </div>
     </div>
     <div class="acea-row mb20">
@@ -86,7 +80,8 @@
       </div>
     </div>
     <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
-  </el-card>
+    <Spin size="large" fix v-if="spinShow"></Spin>
+  </Card>
 </template>
 
 <script>
@@ -144,7 +139,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.dataTime = this.timeVal ? this.timeVal.join('-') : '';
+      this.dataTime = this.timeVal.join('-');
     },
     // 统计
     getStatistics() {
@@ -205,7 +200,7 @@ export default {
           ];
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 统计图
@@ -323,7 +318,7 @@ export default {
           this.spinShow = false;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
           this.spinShow = false;
         });
     },

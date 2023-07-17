@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt"> 后台from表单 </el-card>
+    <Card :bordered="false" dis-hover class="ivu-mt"> 后台from表单 </Card>
   </div>
 </template>
 

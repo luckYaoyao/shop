@@ -114,9 +114,9 @@
                 @mouseleave="enterMouse(item)"
               >
                 <p class="number" v-if="item.num > 0">
-                  <el-badge :value="item.num" type="primary">
+                  <Badge :count="item.num" type="error" :offset="[11, 12]">
                     <a href="#" class="demo-badge"></a>
-                  </el-badge>
+                  </Badge>
                 </p>
                 <img
                   :class="item.isSelect ? 'on' : ''"
@@ -194,13 +194,7 @@
           </el-table>
         </div>
         <div class="footer acea-row row-right">
-          <pagination
-            v-if="total"
-            :total="total"
-            :page.sync="fileData.page"
-            @pagination="pageChange"
-            :limit.sync="fileData.limit"
-          ></pagination>
+          <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="fileData.limit" />
         </div>
       </div>
     </div>
@@ -331,11 +325,11 @@ export default {
         onOk: () => {
           method(node.id)
             .then((res) => {
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
               node.remove();
             })
             .catch((err) => {
-              this.$message.error(err);
+              this.$Message.error(err);
             });
         },
         onCancel: () => {},
@@ -350,10 +344,10 @@ export default {
         };
         interfaceEditName(data)
           .then((res) => {
-            this.$message.success(res.msg);
+            this.$Message.success(res.msg);
           })
           .catch((err) => {
-            this.$message.error(err);
+            this.$Message.error(err);
           });
       }
     },
@@ -390,7 +384,7 @@ export default {
         this.getMove();
       } else {
         if (!this.ids.toString()) {
-          this.$message.warning('请先选择图片');
+          this.$Message.warning('请先选择图片');
           return;
         }
       }
@@ -405,14 +399,14 @@ export default {
       if (!data.images) return;
       moveApi(data)
         .then(async (res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getFileList();
           this.pids = 0;
           this.checkPicList = [];
           this.ids = [];
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     delImg(id) {
@@ -427,12 +421,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getFileList();
           this.checkPicList = [];
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 删除图片
@@ -448,12 +442,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getFileList();
           this.initData();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     initData() {
@@ -496,12 +490,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getList();
           this.checkPicList = [];
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 确认删除树
@@ -540,7 +534,7 @@ export default {
           // this.addFlag(this.treeData);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     loadData(item, callback) {
@@ -592,7 +586,7 @@ export default {
           });
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     showSelectData() {
@@ -654,10 +648,10 @@ export default {
     // 上传之前
     beforeUpload(file) {
       // if (file.size > 2097152) {
-      //   this.$message.error(file.name + "大小超过2M!");
+      //   this.$Message.error(file.name + "大小超过2M!");
       // } else
       if (!/image\/\w+/.test(file.type)) {
-        this.$message.error('请上传以jpg、jpeg、png等结尾的图片文件'); //FileExt.toLowerCase()
+        this.$Message.error('请上传以jpg、jpeg、png等结尾的图片文件'); //FileExt.toLowerCase()
         return false;
       }
       this.uploadData = {
@@ -673,11 +667,11 @@ export default {
     // 上传成功
     handleSuccess(res, file, fileList) {
       if (res.status === 200) {
-        this.$message.success(res.msg);
+        this.$Message.success(res.msg);
         this.fileData.page = 1;
         this.getFileList();
       } else {
-        this.$message.error(res.msg);
+        this.$Message.error(res.msg);
       }
     },
     // 关闭
@@ -719,12 +713,12 @@ export default {
     // 点击使用选中图片
     checkPics() {
       if (this.isChoice === '单选') {
-        if (this.checkPicList.length > 1) return this.$message.warning('最多只能选一张图片');
+        if (this.checkPicList.length > 1) return this.$Message.warning('最多只能选一张图片');
         this.$emit('getPic', this.checkPicList[0]);
       } else {
         let maxLength = this.$route.query.maxLength;
         if (maxLength != undefined && this.checkPicList.length > Number(maxLength))
-          return this.$message.warning('最多只能选' + maxLength + '张图片');
+          return this.$Message.warning('最多只能选' + maxLength + '张图片');
         this.$emit('getPicD', this.checkPicList);
       }
     },
@@ -737,7 +731,7 @@ export default {
     // 修改图片文字上传
     bindTxt(item) {
       if (item.real_name == '') {
-        this.$message.error('请填写内容');
+        this.$Message.error('请填写内容');
       }
       fileUpdateApi(item.att_id, {
         real_name: item.real_name,
@@ -745,10 +739,10 @@ export default {
         .then((res) => {
           this.editName(item);
           item.isEdit = false;
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((error) => {
-          this.$message.error(error.msg);
+          this.$Message.error(error.msg);
         });
     },
   },
@@ -822,16 +816,12 @@ export default {
     right: 0;
     top: 0;
   }
-  /deep/ .el-badge__content.is-fixed {
-    top: 15px;
-    right: 25px;
-  }
 }
 .Nav {
   width: 100%;
   border-right: 1px solid #eee;
   min-width: 220px;
-  max-width: 250px;
+  max-width: 220px;
 }
 .trees-coadd {
   width: 100%;

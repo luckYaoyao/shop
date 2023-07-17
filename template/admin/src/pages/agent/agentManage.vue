@@ -1,169 +1,113 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mb-16">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mb-16">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col :span="24">
-            <el-form-item label="时间选择：">
-              <el-radio-group
+        <Row type="flex" :gutter="24">
+          <Col span="24">
+            <FormItem label="时间选择：">
+              <RadioGroup
                 v-model="formValidate.data"
                 type="button"
-                @change="selectChange(formValidate.data)"
+                @on-change="selectChange(formValidate.data)"
                 class="mr"
               >
-                <el-radio-button :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{
-                  item.text
-                }}</el-radio-button>
-              </el-radio-group>
-              <el-date-picker
-                v-model="timeVal"
-                :editable="false"
-                @change="onchangeTime"
-                value-format="yyyy/MM/dd"
+                <Radio :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</Radio>
+              </RadioGroup>
+              <DatePicker
+                :editable="true"
+                :clearable="true"
+                @on-change="onchangeTime"
+                :value="timeVal"
+                format="yyyy/MM/dd"
                 type="daterange"
                 placement="bottom-end"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid">
-            <el-form-item label="搜索：" label-for="status">
-              <el-input
+                placeholder="请选择时间"
+                style="width: 200px"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <FormItem label="搜索：" label-for="status">
+              <Input
                 search
                 enter-button
                 placeholder="请输入姓名、电话、UID"
                 v-model="formValidate.nickname"
                 @on-search="userSearchs"
               />
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid">
-            <el-button v-auth="['export-userAgent']" class="export" icon="ios-share-outline" @click="exports"
-              >导出</el-button
-            >
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-card>
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <Button v-auth="['export-userAgent']" class="export" icon="ios-share-outline" @click="exports">导出</Button>
+          </Col>
+        </Row>
+      </Form>
+    </Card>
     <cards-data :cardLists="cardLists" v-if="cardLists.length >= 0"></cards-data>
-    <el-card :bordered="false" shadow="never">
-      <el-table
+    <Card :bordered="false" dis-hover>
+      <Table
         ref="selection"
+        :columns="columns"
         :data="tableList"
         class="ivu-mt"
-        v-loading="loading"
-        empty-text="暂无数据"
-        highlight-current-row
+        :loading="loading"
+        no-data-text="暂无数据"
+        highlight-row
+        no-filtered-data-text="暂无筛选结果"
       >
-        <el-table-column label="ID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.uid }}</span>
+        <template slot-scope="{ row }" slot="nickname">
+          <div class="name">
+            <div class="item">昵称:{{ row.nickname }}</div>
+            <div class="item">姓名:{{ row.real_name }}</div>
+            <div class="item">电话:{{ row.phone }}</div>
+          </div>
+        </template>
+        <template slot-scope="{ row }" slot="agentLevel">
+          <div>{{ row.agentLevel ? row.agentLevel.name : '--' }}</div>
+        </template>
+        <template slot-scope="{ row, index }" slot="right">
+          <a @click="promoters(row, 'man')">推广人</a>
+          <Divider type="vertical" />
+          <template>
+            <Dropdown @on-click="changeMenu(row, $event, index)" :transfer="true">
+              <a href="javascript:void(0)">
+                更多
+                <Icon type="ios-arrow-down"></Icon>
+              </a>
+              <DropdownMenu slot="list">
+                <DropdownItem name="1">推广订单</DropdownItem>
+                <DropdownItem name="2">推广二维码</DropdownItem>
+                <DropdownItem name="3">修改上级推广人</DropdownItem>
+                <DropdownItem name="4" v-if="row.spread_uid">清除上级推广人</DropdownItem>
+                <DropdownItem name="5">取消推广资格</DropdownItem>
+                <DropdownItem name="6">修改分销等级</DropdownItem>
+              </DropdownMenu>
+            </Dropdown>
           </template>
-        </el-table-column>
-        <el-table-column label="商品图片" min-width="90">
-          <template slot-scope="scope">
-            <div class="tabBox_img" v-viewer>
-              <img v-lazy="scope.row.headimgurl ? scope.row.headimgurl : require('../../assets/images/moren.jpg')" />
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="用户信息" min-width="120">
-          <template slot-scope="scope">
-            <div class="name">
-              <div class="item">昵称:{{ scope.row.nickname }}</div>
-              <div class="item">姓名:{{ scope.row.real_name }}</div>
-              <div class="item">电话:{{ scope.row.phone }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="推广用户数量" min-width="120">
-          <template slot-scope="scope">
-            <span>{{ scope.row.spread_count }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="分销等级" min-width="120">
-          <template slot-scope="scope">
-            <div>{{ scope.row.agentLevel ? scope.row.agentLevel.name : '--' }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="订单数量" min-width="120">
-          <template slot-scope="scope">
-            <div>{{ scope.row.order_count }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="订单金额" min-width="120">
-          <template slot-scope="scope">
-            <div>{{ scope.row.order_price }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="佣金总金额" min-width="120">
-          <template slot-scope="scope">
-            <div>{{ scope.row.brokerage_money }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="已提现金额" min-width="120">
-          <template slot-scope="scope">
-            <div>{{ scope.row.extract_count_price }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="提现次数" min-width="120">
-          <template slot-scope="scope">
-            <div>{{ scope.row.extract_count_num }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="未提现金额" min-width="120">
-          <template slot-scope="scope">
-            <div>{{ scope.row.new_money }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="上级推广人" min-width="120">
-          <template slot-scope="scope">
-            <div>{{ scope.row.spread_name }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="170">
-          <template slot-scope="scope">
-            <a @click="promoters(scope.row, 'man')">推广人</a>
-            <el-divider direction="vertical"></el-divider>
-            <template>
-              <el-dropdown size="small" @command="changeMenu(scope.row, $event, index)" :transfer="true">
-                <span class="el-dropdown-link">更多<i class="el-icon-arrow-down el-icon--right"></i> </span>
-                <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item command="1">推广订单</el-dropdown-item>
-                  <el-dropdown-item command="2">推广二维码</el-dropdown-item>
-                  <el-dropdown-item command="3">修改上级推广人</el-dropdown-item>
-                  <el-dropdown-item command="4" v-if="scope.row.spread_uid">清除上级推广人</el-dropdown-item>
-                  <el-dropdown-item command="5">取消推广资格</el-dropdown-item>
-                  <el-dropdown-item command="6">修改分销等级</el-dropdown-item>
-                </el-dropdown-menu>
-              </el-dropdown>
-            </template>
-          </template>
-        </el-table-column>
-      </el-table>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="formValidate.page"
-          :limit.sync="formValidate.limit"
-          @pagination="getList"
+          :current="formValidate.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="formValidate.limit"
         />
       </div>
-    </el-card>
+    </Card>
     <!-- 推广人列表-->
     <promoters-list ref="promotersLists"></promoters-list>
     <!-- 推广二维码-->
-    <el-dialog :visible.sync="modals" title="推广二维码" :close-on-click-modal="false" width="600">
-      <div class="acea-row row-around" v-loading="spinShow">
+    <Modal v-model="modals" scrollable footer-hide closable title="推广二维码" :mask-closable="false" width="600">
+      <div class="acea-row row-around">
         <div class="acea-row row-column-around row-between-wrapper">
           <div class="QRpic" v-if="code_src"><img v-lazy="code_src" /></div>
           <span class="QRpic_sp1 mt10" @click="getWeChat">公众号推广二维码</span>
@@ -177,11 +121,12 @@
           <span class="QRpic_sp2 mt10" @click="getH5">H5推广二维码</span>
         </div>
       </div>
-    </el-dialog>
+      <Spin size="large" fix v-if="spinShow"></Spin>
+    </Modal>
     <!--修改推广人-->
-    <el-dialog :visible.sync="promoterShow" title="修改推广人" class="order_box" :show-close="false">
-      <el-form ref="formInline" :model="formInline" label-width="100px" @submit.native.prevent>
-        <el-form-item label="用户头像：" prop="image">
+    <Modal v-model="promoterShow" scrollable title="修改推广人" class="order_box" :closable="false">
+      <Form ref="formInline" :model="formInline" :label-width="100" @submit.native.prevent>
+        <FormItem label="用户头像：" prop="image">
           <div class="picBox" @click="customer">
             <div class="pictrue" v-if="formInline.image">
               <img v-lazy="formInline.image" />
@@ -190,16 +135,16 @@
               <Icon type="ios-camera-outline" size="26" />
             </div>
           </div>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel('formInline')">取 消</el-button>
-        <el-button type="primary" @click="putSend('formInline')">提交</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog :visible.sync="customerShow" title="请选择商城用户" :show-close="false" width="50%">
+        </FormItem>
+      </Form>
+      <div slot="footer">
+        <Button type="primary" @click="putSend('formInline')">提交</Button>
+        <Button @click="cancel('formInline')">取消</Button>
+      </div>
+    </Modal>
+    <Modal v-model="customerShow" scrollable title="请选择商城用户" :closable="false" width="50%">
       <customerInfo v-if="customerShow" @imageObject="imageObject"></customerInfo>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 
@@ -261,6 +206,105 @@ export default {
       loading: false,
       tableList: [],
       timeVal: [],
+      columns: [
+        // {
+        //     type: 'selection',
+        //     width: 60,
+        //     align: 'center'
+        // },
+        {
+          title: 'ID',
+          key: 'uid',
+          width: 80,
+        },
+        {
+          title: '头像',
+          key: 'headimgurl',
+          minWidth: 60,
+          render: (h, params) => {
+            return h('viewer', [
+              h(
+                'div',
+                {
+                  style: {
+                    width: '36px',
+                    height: '36px',
+                    borderRadius: '4px',
+                    cursor: 'pointer',
+                  },
+                },
+                [
+                  h('img', {
+                    attrs: {
+                      src: params.row.headimgurl ? params.row.headimgurl : require('../../assets/images/moren.jpg'),
+                    },
+                    style: {
+                      width: '100%',
+                      height: '100%',
+                    },
+                  }),
+                ],
+              ),
+            ]);
+          },
+        },
+        {
+          title: '用户信息',
+          slot: 'nickname',
+          minWidth: 120,
+        },
+        {
+          title: '推广用户数量',
+          key: 'spread_count',
+          minWidth: 125,
+        },
+        {
+          title: '分销等级',
+          slot: 'agentLevel',
+          minWidth: 120,
+        },
+        {
+          title: '订单数量',
+          key: 'order_count',
+          minWidth: 90,
+        },
+        {
+          title: '订单金额',
+          key: 'order_price',
+          minWidth: 120,
+        },
+        {
+          title: '佣金总金额',
+          key: 'brokerage_money',
+          minWidth: 120,
+        },
+        {
+          title: '已提现金额',
+          key: 'extract_count_price',
+          minWidth: 120,
+        },
+        {
+          title: '提现次数',
+          key: 'extract_count_num',
+          minWidth: 100,
+        },
+        {
+          title: '未提现金额',
+          key: 'new_money',
+          minWidth: 105,
+        },
+        {
+          title: '上级推广人',
+          key: 'spread_name',
+          minWidth: 105,
+        },
+        {
+          title: '操作',
+          slot: 'right',
+          fixed: 'right',
+          minWidth: 130,
+        },
+      ],
       code_src: '',
       code_xcx: '',
       code_h5: '',
@@ -274,7 +318,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '85px';
+      return this.isMobile ? undefined : 80;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -290,17 +334,17 @@ export default {
       this.$refs[name].validate((valid) => {
         if (valid) {
           if (!this.formInline.spread_uid) {
-            return this.$message.error('请上传用户');
+            return this.$Message.error('请上传用户');
           }
           agentSpreadApi(this.formInline)
             .then((res) => {
               this.promoterShow = false;
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
               this.getList();
               this.$refs[name].resetFields();
             })
             .catch((res) => {
-              this.$message.error(res.msg);
+              this.$Message.error(res.msg);
             });
         }
       });
@@ -317,7 +361,7 @@ export default {
           location.href = res.data[0];
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 操作
@@ -368,11 +412,11 @@ export default {
       };
       this.$modalSure(delfromDatap)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 取消自己推广资格
@@ -386,11 +430,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getList();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     edit(row) {
@@ -418,13 +462,13 @@ export default {
           this.cardLists = data.res;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.data = this.timeVal ? this.timeVal.join('-') : '';
+      this.formValidate.data = this.timeVal.join('-');
       this.formValidate.page = 1;
       if (!e[0]) {
         this.formValidate.data = '';
@@ -452,8 +496,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.formValidate.page = index;
+      this.getList();
     },
     // 表格搜索
     userSearchs() {
@@ -483,7 +531,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 小程序推广二维码
@@ -500,7 +548,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     getH5() {
@@ -516,7 +564,7 @@ export default {
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },

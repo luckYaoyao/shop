@@ -1,8 +1,8 @@
 <template>
-  <el-dialog :visible.sync="modals" title="备注" class="order_box" :show-close="false">
-    <el-form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-width="85px" @submit.native.prevent>
-      <el-form-item label="备注：" prop="remark">
-        <el-input
+  <Modal v-model="modals" scrollable title="备注" class="order_box" :closable="false">
+    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80" @submit.native.prevent>
+      <FormItem label="备注：" prop="remark">
+        <Input
           v-model="formValidate.remark"
           :maxlength="200"
           show-word-limit
@@ -10,13 +10,13 @@
           placeholder="请输入备注信息"
           style="width: 100%"
         />
-      </el-form-item>
-    </el-form>
+      </FormItem>
+    </Form>
     <div slot="footer">
-      <el-button type="primary" @click="putRemark('formValidate')">提交</el-button>
-      <el-button @click="cancel('formValidate')">取消</el-button>
+      <Button type="primary" @click="putRemark('formValidate')">提交</Button>
+      <Button @click="cancel('formValidate')">取消</Button>
     </div>
-  </el-dialog>
+  </Modal>
 </template>
 
 <script>
@@ -52,7 +52,7 @@ export default {
         if (valid) {
           this.$emit('submitFail', this.formValidate.remark);
         } else {
-          this.$message.warning('请填写备注信息');
+          this.$Message.warning('请填写备注信息');
         }
       });
     },

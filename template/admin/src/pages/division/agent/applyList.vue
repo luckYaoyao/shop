@@ -1,37 +1,34 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt mb10">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt mb10">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row :gutter="24" align="middle">
-          <el-col>
-            <el-form-item label="状态：">
-              <el-select
+        <Row type="flex" :gutter="24" align="middle">
+          <Col>
+            <FormItem label="状态：">
+              <Select
                 style="width: 200px"
                 v-model="formValidate.status"
                 placeholder="请选择状态"
                 element-id="group_id"
                 clearable
-                @change="userSearchs"
+                @on-change="userSearchs"
               >
-                <el-option value="all" label="全部"></el-option>
-                <el-option
-                  :value="item.id"
-                  v-for="(item, index) in statusList"
-                  :key="index"
-                  :label="item.status_name"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col>
-            <el-form-item label="搜索：">
-              <el-input
+                <Option value="all">全部</Option>
+                <Option :value="item.id" v-for="(item, index) in statusList" :key="index">{{
+                  item.status_name
+                }}</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col>
+            <FormItem label="搜索：">
+              <Input
                 style="width: 250px"
                 search
                 enter-button
@@ -39,88 +36,57 @@
                 v-model="formValidate.keyword"
                 @on-search="userSearchs"
               />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-card>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-row class="ivu-mt box-wrapper">
-        <el-col :xs="24" :sm="24" ref="rightBox">
-          <el-table
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
+    </Card>
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Row class="ivu-mt box-wrapper">
+        <Col :xs="24" :sm="24" ref="rightBox">
+          <Table
+            :columns="columns"
             :data="userLists"
             ref="table"
-            v-loading="loading"
-            highlight-current-row
+            :loading="loading"
+            highlight-row
             no-formValidate-text="暂无数据"
             no-filtered-formValidate-text="暂无筛选结果"
           >
-            <el-table-column label="用户UID" width="80">
-              <template slot-scope="scope">
-                <span>{{ scope.row.uid }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="代理商名称" min-width="150">
-              <template slot-scope="scope">
-                <span>{{ scope.row.agent_name }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="代理商电话" min-width="150">
-              <template slot-scope="scope">
-                <span>{{ scope.row.phone }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="事业部ID" min-width="150">
-              <template slot-scope="scope">
-                <span>{{ scope.row.division_id }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="申请图片" min-width="150">
-              <template slot-scope="scope">
-                <div class="pictrue-box" v-if="scope.row.images.length">
-                  <div v-viewer v-for="(item, index) in scope.row.images || []" :key="index">
-                    <img class="pictrue mr10" v-lazy="item" :src="item" />
-                  </div>
+            <template slot-scope="{ row, index }" slot="images">
+              <div class="pictrue-box" v-if="row.images.length">
+                <div v-viewer v-for="(item, index) in row.images || []" :key="index">
+                  <img class="pictrue mr10" v-lazy="item" :src="item" />
                 </div>
-              </template>
-            </el-table-column>
-            <el-table-column label="申请时间" min-width="150">
-              <template slot-scope="scope">
-                <span>{{ scope.row.add_time }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="申请状态" min-width="150">
-              <template slot-scope="scope">
-                <el-tag>{{ scope.row.status == 0 ? '申请中' : scope.row.status == 1 ? '已同意' : '已拒绝' }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="邀请码" min-width="150">
-              <template slot-scope="scope">
-                <el-tag>{{ scope.row.division_invite }}</el-tag>
-              </template>
-            </el-table-column>
-            <el-table-column label="操作" fixed="right" width="170">
-              <template slot-scope="scope">
-                <a v-if="scope.row.status == 0" @click="groupAdd(scope.row.id, 1)">同意</a>
-                <el-divider v-if="scope.row.status == 0" direction="vertical" />
-                <a v-if="scope.row.status == 0" @click="groupAdd(scope.row.id, 0)">拒绝</a>
-                <el-divider direction="vertical" v-if="scope.row.status == 0" />
-                <a @click="del(scope.row, '删除申请', index)">删除</a>
-              </template>
-            </el-table-column>
-          </el-table>
+              </div>
+            </template>
+            <template slot-scope="{ row, index }" slot="status">
+              <Tag>{{ row.status == 0 ? '申请中' : row.status == 1 ? '已同意' : '已拒绝' }}</Tag>
+            </template>
+            <template slot-scope="{ row, index }" slot="division_end_time">
+              <span> {{ row.division_end_time }}</span>
+            </template>
+            <template slot-scope="{ row, index }" slot="action">
+              <a v-if="row.status == 0" @click="groupAdd(row.id, 1)">同意</a>
+              <Divider v-if="row.status == 0" type="vertical" />
+              <a v-if="row.status == 0" @click="groupAdd(row.id, 0)">拒绝</a>
+              <Divider type="vertical" v-if="row.status == 0" />
+              <a @click="del(row, '删除申请', index)">删除</a>
+            </template>
+          </Table>
           <div class="acea-row row-right page">
-            <pagination
-              v-if="total"
+            <Page
               :total="total"
-              :page.sync="formValidate.page"
-              :limit.sync="formValidate.limit"
-              @pagination="getList"
+              :current="formValidate.page"
+              show-elevator
+              show-total
+              @on-change="pageChange"
+              :page-size="formValidate.limit"
             />
           </div>
-        </el-col>
-      </el-row>
-    </el-card>
+        </Col>
+      </Row>
+    </Card>
   </div>
 </template>
 
@@ -161,6 +127,54 @@ export default {
           id: 2,
         },
       ],
+      columns: [
+        {
+          title: '用户UID',
+          key: 'uid',
+          width: 80,
+        },
+        {
+          title: '代理商名称',
+          key: 'agent_name',
+          minWidth: 150,
+        },
+        {
+          title: '代理商电话',
+          key: 'phone',
+          minWidth: 100,
+        },
+        {
+          title: '事业部ID',
+          key: 'division_id',
+          minWidth: 100,
+        },
+        {
+          title: '申请图片',
+          slot: 'images',
+          minWidth: 100,
+        },
+        {
+          title: '申请时间',
+          key: 'add_time',
+          minWidth: 100,
+        },
+        {
+          title: '申请状态',
+          slot: 'status',
+          minWidth: 100,
+        },
+        {
+          title: '邀请码',
+          key: 'division_invite',
+          minWidth: 100,
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          fixed: 'right',
+          minWidth: 120,
+        },
+      ],
       FromData: null,
       loading: false,
       current: 0,
@@ -190,7 +204,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '75px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -228,7 +242,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     pageChange(index) {
@@ -255,10 +269,10 @@ export default {
       };
       isShowApi(data)
         .then(async (res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 编辑
@@ -273,11 +287,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.userLists.splice(num, 1);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },

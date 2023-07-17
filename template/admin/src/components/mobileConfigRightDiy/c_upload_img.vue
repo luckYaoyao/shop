@@ -10,11 +10,15 @@
       <span class="iconfont-diy icondel_1" @click.stop="bindDelete" v-if="configData.url && configData.type"></span>
     </div>
     <div>
-      <el-dialog
-        :visible.sync="modalPic"
+      <Modal
+        v-model="modalPic"
         width="950px"
+        scrollable
+        footer-hide
+        closable
         :title="configData.header ? configData.header : '上传图片'"
-        :close-on-click-modal="false"
+        :mask-closable="false"
+        :z-index="1"
       >
         <uploadPictures
           :isChoice="isChoice"
@@ -23,7 +27,7 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </el-dialog>
+      </Modal>
     </div>
   </div>
 </template>

@@ -1,6 +1,7 @@
 <template>
   <div style="width: 100%">
-    <el-drawer :visible.sync="modals" title="用户详情" :wrapperClosable="false" :size="1100" @closed="draChange">
+    <Drawer title="用户详情" :mask-closable="false" width="1100" scrollable v-model="modals" @on-visible-change="draChange">
+      <Spin size="large" fix v-if="spinShow"></Spin>
       <div class="acea-row head">
         <div class="avatar mr15"><img :src="psInfo.avatar" /></div>
         <div class="dashboard-workplace-header-tip">
@@ -12,60 +13,61 @@
           </div>
         </div>
         <div class="edit-btn">
-          <el-button v-if="!isEdit" type="primary" @click="edit">编辑</el-button>
-          <el-button v-if="isEdit" class="mr20" @click="edit">取消</el-button>
-          <el-button v-if="isEdit" type="primary" @click="editSave">保存</el-button>
+          <Button v-if="!isEdit" type="primary" @click="edit">编辑</Button>
+          <Button v-if="isEdit" class="mr20" @click="edit">取消</Button>
+          <Button v-if="isEdit" type="primary" @click="editSave">保存</Button>
         </div>
       </div>
-      <el-row justify="space-between" class="mt25">
-        <el-col :span="24">
-          <el-tabs class="mb20" :value="activeName" @tab-click="changeType">
-            <el-tab-pane :name="item.val" v-for="(item, index) in list" :key="index" :label="item.label"></el-tab-pane>
-          </el-tabs>
-        </el-col>
 
-        <el-col :span="24">
+      <Row type="flex" justify="space-between" class="mt25">
+        <!-- <Col span="4" class="user_menu">
+          <Menu :theme="theme2" :active-name="activeName" @on-select="changeType">
+            <MenuItem :name="item.val" v-for="(item, index) in list" :key="index">
+              
+            </MenuItem>
+          </Menu>
+        </Col> -->
+        <Col span="24">
+          <Tabs class="mb20" :value="activeName" @on-click="changeType">
+            <TabPane :name="item.val" v-for="(item, index) in list" :key="index" :label="item.label"></TabPane>
+          </Tabs>
+        </Col>
+
+        <Col span="24">
           <template v-if="activeName === 'user'">
             <userEditForm ref="editForm" :userId="userId" @success="getDetails(userId)" v-if="isEdit"></userEditForm>
             <user-info :ps-info="psInfo" v-else></user-info>
           </template>
           <template v-else>
-            <el-table
+            <Table
+              :columns="columns"
               :data="userLists"
               max-height="400"
               ref="table"
-              v-loading="loading"
+              :loading="loading"
               no-userFrom-text="暂无数据"
               no-filtered-userFrom-text="暂无筛选结果"
             >
-              <el-table-column :label="item.title" min-width="120" v-for="(item, index) in columns" :key="index">
-                <template slot-scope="scope">
-                  <template v-if="item.key">
-                    <div>
-                      <span>{{ scope.row[item.key] }}</span>
-                    </div>
-                  </template>
-                  <template v-else-if="item.slot === 'number'">
-                    <div :class="scope.row.pm ? 'plusColor' : 'reduceColor'">
-                      {{ scope.row.pm ? '+' + scope.row.number : '-' + scope.row.number }}
-                    </div>
-                  </template>
-                </template>
-              </el-table-column>
-            </el-table>
+              <template slot-scope="{ row }" slot="number">
+                <div :class="row.pm ? 'plusColor' : 'reduceColor'">
+                  {{ row.pm ? '+' + row.number : '-' + row.number }}
+                </div>
+              </template>
+            </Table>
             <div class="acea-row row-right page">
-              <pagination
-                v-if="total"
+              <Page
                 :total="total"
-                :page.sync="userFrom.page"
-                :limit.sync="userFrom.limit"
-                @pagination="changeType"
+                :current="userFrom.page"
+                show-elevator
+                show-total
+                @on-change="pageChange"
+                :page-size="userFrom.limit"
               />
             </div>
           </template>
-        </el-col>
-      </el-row>
-    </el-drawer>
+        </Col>
+      </Row>
+    </Drawer>
   </div>
 </template>
 
@@ -116,8 +118,10 @@ export default {
     editSave() {
       this.$refs.editForm.setUser();
     },
-    draChange() {
-      this.isEdit = false;
+    draChange(status) {
+      if (!status) {
+        this.isEdit = false;
+      }
     },
     // 会员详情
     getDetails(id) {
@@ -135,20 +139,25 @@ export default {
             this.spinShow = false;
           } else {
             this.spinShow = false;
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           }
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
+    pageChange(index) {
+      this.userFrom.page = index;
+      this.changeType(this.userFrom.type);
+    },
     // tab选项
-    changeType() {
+    changeType(name) {
       this.loading = true;
-      this.userFrom.type = this.activeName;
+      this.userFrom.type = name;
+      this.activeName = name;
       this.isEdit = false;
-      if (this.activeName == 'user') return;
+      if (name == 'user') return;
       if (this.userFrom.type === '') {
         this.userFrom.type = 'order';
       }
@@ -325,12 +334,12 @@ export default {
             this.loading = false;
           } else {
             this.loading = false;
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           }
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },

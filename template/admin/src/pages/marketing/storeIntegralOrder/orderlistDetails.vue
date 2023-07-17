@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never">
+    <Card :bordered="false" dis-hover>
       <table-form
         ref="orderData"
         :is-all="isAll"
@@ -21,7 +21,7 @@
         @order-select="orderSelect"
         @updata="updata"
       />
-    </el-card>
+    </Card>
   </div>
 </template>
 

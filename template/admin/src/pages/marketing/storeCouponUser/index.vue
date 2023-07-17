@@ -1,104 +1,64 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="tableFrom"
         :model="tableFrom"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col v-bind="grid">
-            <el-form-item label="是否有效：">
-              <el-select placeholder="请选择" clearable v-model="tableFrom.status" @change="userSearchs">
-                <el-option value="1" label="已使用"></el-option>
-                <el-option value="0" label="未使用"></el-option>
-                <el-option value="2" label="已过期"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid">
-            <el-form-item label="领取人：" label-for="nickname">
-              <el-input placeholder="请输入领取人" v-model="tableFrom.nickname" clearable />
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid">
-            <el-form-item label="优惠券搜索：" label-for="coupon_title">
-              <el-input
+        <Row type="flex" :gutter="24">
+          <Col v-bind="grid">
+            <FormItem label="是否有效：">
+              <Select placeholder="请选择" clearable v-model="tableFrom.status" @on-change="userSearchs">
+                <Option value="1">已使用</Option>
+                <Option value="0">未使用</Option>
+                <Option value="2">已过期</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <FormItem label="领取人：" label-for="nickname">
+              <Input placeholder="请输入领取人" v-model="tableFrom.nickname" clearable />
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <FormItem label="优惠券搜索：" label-for="coupon_title">
+              <Input
                 search
                 enter-button
                 placeholder="请输入优惠券名称"
                 v-model="tableFrom.coupon_title"
                 @on-search="userSearchs"
               />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table :data="tableList">
-        <el-table-column label="ID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="优惠券名称" min-width="150">
-          <template slot-scope="scope">
-            <span>{{ scope.row.coupon_title }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="领取人" min-width="150">
-          <template slot-scope="scope">
-            <span>{{ scope.row.nickname }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="面值" min-width="150">
-          <template slot-scope="scope">
-            <span>{{ scope.row.coupon_price }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="最低消费额" min-width="150">
-          <template slot-scope="scope">
-            <span>{{ scope.row.use_min_price }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="开始使用时间" min-width="150">
-          <template slot-scope="scope">
-            <span>{{ scope.row.start_time | formatDate }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="结束使用时间" min-width="150">
-          <template slot-scope="scope">
-            <span>{{ scope.row.end_time | formatDate }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="获取方式" min-width="150">
-          <template slot-scope="scope">
-            <span>{{ scope.row.type }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="是否可用" min-width="150">
-          <template slot-scope="scope">
-            <Icon type="md-checkmark" v-if="scope.row.is_fail === 0" color="#0092DC" size="14" />
-            <Icon type="md-close" v-else color="#ed5565" size="14" />
-          </template>
-        </el-table-column>
-        <el-table-column label="状态" min-width="150">
-          <template slot-scope="scope">
-            <span>{{ scope.row.status }}</span>
-          </template>
-        </el-table-column>
-      </el-table>
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
+      <Table :columns="columns1" :data="tableList">
+        <template slot-scope="{ row, index }" slot="is_fail">
+          <Icon type="md-checkmark" v-if="row.is_fail === 0" color="#0092DC" size="14" />
+          <Icon type="md-close" v-else color="#ed5565" size="14" />
+        </template>
+        <template slot-scope="{ row, index }" slot="add_time">
+          <span> {{ row.start_time | formatDate }}</span>
+        </template>
+        <template slot-scope="{ row, index }" slot="end_time">
+          <span> {{ row.end_time | formatDate }}</span>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="tableFrom.page"
-          :limit.sync="tableFrom.limit"
-          @pagination="getList"
+          :current="tableFrom.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="tableFrom.limit"
         />
       </div>
-    </el-card>
+    </Card>
   </div>
 </template>
 
@@ -118,6 +78,58 @@ export default {
   },
   data() {
     return {
+      columns1: [
+        {
+          title: 'ID',
+          key: 'id',
+          width: 80,
+        },
+        {
+          title: '优惠券名称',
+          key: 'coupon_title',
+          minWidth: 150,
+        },
+        {
+          title: '领取人',
+          key: 'nickname',
+          minWidth: 130,
+        },
+        {
+          title: '面值',
+          key: 'coupon_price',
+          minWidth: 100,
+        },
+        {
+          title: '最低消费额',
+          key: 'use_min_price',
+          minWidth: 120,
+        },
+        {
+          title: '开始使用时间',
+          slot: 'add_time',
+          minWidth: 150,
+        },
+        {
+          title: '结束使用时间',
+          slot: 'end_time',
+          minWidth: 150,
+        },
+        {
+          title: '获取方式',
+          key: 'type',
+          minWidth: 150,
+        },
+        {
+          title: '是否可用',
+          slot: 'is_fail',
+          minWidth: 120,
+        },
+        {
+          title: '状态',
+          key: 'status',
+          minWidth: 170,
+        },
+      ],
       tableList: [],
       grid: {
         xl: 7,
@@ -139,7 +151,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '90px';
+      return this.isMobile ? undefined : 90;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -162,8 +174,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.tableFrom.page = index;
+      this.getList();
     },
     // 表格搜索
     userSearchs() {

@@ -8,12 +8,12 @@
     </div>
 
     <div class="layout-navbars-breadcrumb-user-icon">
-      <el-tooltip effect="light"
+      <el-popover
         placement="bottom"
         trigger="click"
         v-model="isShowUserNewsPopover"
         :width="300"
-        popper-class="el-tooltip-pupop-user-news"
+        popper-class="el-popover-pupop-user-news"
       >
         <el-badge :is-dot="isDot" @click.stop="openNews" slot="reference">
           <i class="el-icon-bell" :title="$t('message.user.title4')"></i>
@@ -21,7 +21,7 @@
         <transition name="el-zoom-in-top">
           <UserNews v-show="isShowUserNewsPopover" @haveNews="initIsDot" />
         </transition>
-      </el-tooltip>
+      </el-popover>
     </div>
     <div class="layout-navbars-breadcrumb-user-icon mr10" @click="onScreenfullClick">
       <i
@@ -192,7 +192,7 @@ export default {
                 instance.confirmButtonText = this.$t('message.user.logOutExit');
                 AccountLogout().then((res) => {
                   done();
-                  this.$message.success('您已成功退出');
+                  this.$Message.success('您已成功退出');
                   this.$store.commit('clearAll');
                   // localStorage.clear();
                   // sessionStorage.clear();

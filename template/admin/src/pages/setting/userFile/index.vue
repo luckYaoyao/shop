@@ -1,21 +1,21 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form ref="formValidate" :model="formValidate" :rules="ruleValidate" label-width="160px" label-position="right">
-        <el-form-item label="账号" prop="">
-          <el-input type="text" v-model="account" :disabled="true" class="input"></el-input>
-        </el-form-item>
-        <el-form-item label="文件管理新密码" prop="file_pwd">
-          <el-input type="password" v-model="formValidate.file_pwd" class="input"></el-input>
-        </el-form-item>
-        <el-form-item label="文件管理确认新密码" prop="conf_file_pwd">
-          <el-input type="password" v-model="formValidate.conf_file_pwd" class="input"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleSubmit('formValidate')">提交</el-button>
-        </el-form-item>
-      </el-form>
-    </el-card>
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="160" label-position="right">
+        <FormItem label="账号" prop="">
+          <Input type="text" v-model="account" :disabled="true" class="input"></Input>
+        </FormItem>
+        <FormItem label="文件管理新密码" prop="file_pwd">
+          <Input type="password" v-model="formValidate.file_pwd" class="input"></Input>
+        </FormItem>
+        <FormItem label="文件管理确认新密码" prop="conf_file_pwd">
+          <Input type="password" v-model="formValidate.conf_file_pwd" class="input"></Input>
+        </FormItem>
+        <FormItem>
+          <Button type="primary" @click="handleSubmit('formValidate')">提交</Button>
+        </FormItem>
+      </Form>
+    </Card>
   </div>
 </template>
 
@@ -28,7 +28,7 @@ export default {
     ...mapState('media', ['isMobile']),
     ...mapState('userLevel', ['categoryId']),
     labelWidth() {
-      return this.isMobile ? undefined : '75px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -56,10 +56,10 @@ export default {
         if (valid) {
           setFilePassword(this.formValidate)
             .then((res) => {
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
             })
             .catch((res) => {
-              this.$message.error(res.msg);
+              this.$Message.error(res.msg);
             });
         }
       });

@@ -15,12 +15,16 @@
       </draggable>
     </div>
 
-    <el-dialog
-      :visible.sync="modals"
+    <Modal
+      v-model="modals"
+      :loading="loading"
       :title="titles"
       class="paymentFooter"
       :class="type ? '' : 'middleTop'"
+      scrollable
       width="900"
+      @on-cancel="cancel"
+      @on-ok="ok"
     >
       <sort-list ref="goodslist" @getProductDiy="getProductDiy" v-if="modals && type == 1"></sort-list>
       <goods-list
@@ -32,11 +36,7 @@
         :diy="true"
         v-if="modals && type != 1"
       ></goods-list>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="cancel">取 消</el-button>
-        <el-button type="primary" @click="ok">确 定</el-button>
-      </span>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 
@@ -127,7 +127,7 @@ export default {
     },
     ok() {
       if (!this.tempGoods.length) {
-        return this.$message.warning('请先选择商品');
+        return this.$Message.warning('请先选择商品');
       }
       let list = this.defaults.goodsList.list;
       list.push.apply(list, this.tempGoods);
@@ -135,7 +135,6 @@ export default {
       let picList = this.unique(list);
       this.defaults.goodsList.list = picList;
       // this.defaults.goodsList.list.push(this.tempGoods);
-      this.modals = false;
     },
     bindDelete(index) {
       this.defaults.goodsList.list.splice(index, 1);

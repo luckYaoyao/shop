@@ -29,9 +29,9 @@
           </div>
           <!-- <div class="item">
                         <span>分组</span>
-                        <el-select v-model="activeUserInfo.group_id" size="small" @change="onChange" style="flex:1;">
-                            <el-option v-for="item in userGroup" :value="item.id" :key="item.value">{{ item.group_name }}</el-option>
-                        </el-select>
+                        <Select v-model="activeUserInfo.group_id" size="small" @on-change="onChange" style="flex:1;">
+                            <Option v-for="item in userGroup" :value="item.id" :key="item.value">{{ item.group_name }}</Option>
+                        </Select>
                     </div> -->
           <div class="label-list">
             <span>分组</span>
@@ -94,7 +94,7 @@
           </div>
         </div>
         <div class="search-box">
-          <el-input
+          <Input
             class="search_box"
             prefix="ios-search"
             @on-enter="orderSearch"
@@ -103,7 +103,7 @@
           />
         </div>
         <div v-if="orderList.length > 0">
-          <div v-infinite-scroll="orderReachBottom" height="650" class="right-scroll">
+          <Scroll :on-reach-bottom="orderReachBottom" height="650" class="right-scroll">
             <div class="order-list">
               <div class="order-item" v-for="(item, index) in orderList" :key="index">
                 <div class="head">
@@ -144,43 +144,43 @@
                   <div class="info-item"><span>实收款：</span>¥ {{ item.pay_price }}</div>
                 </div>
                 <div class="btn-wrapper">
-                  <el-button
+                  <Button
                     class="btn"
                     type="primary"
                     v-if="item._status._type == 1 && item._status._type != 0 && item.shipping_type != 2"
                     @click.stop="openDelivery(item)"
-                    >发货</el-button
+                    >发货</Button
                   >
-                  <el-button
+                  <Button
                     class="btn"
                     type="info"
                     ghost
                     style="color: #1890ff; border-color: #1890ff"
                     v-if="item.refund_status == 1"
                     @click.stop="orderRecord(item.id)"
-                    >退款</el-button
+                    >退款</Button
                   >
-                  <el-button
+                  <Button
                     class="btn"
                     type="info"
                     ghost
                     style="color: #1890ff; border-color: #1890ff"
                     @click.stop="orderEdit(item.id)"
                     v-if="item._status._type == 0"
-                    >改价</el-button
+                    >改价</Button
                   >
-                  <el-button
+                  <Button
                     class="btn"
                     type="info"
                     ghost
                     style="color: #1890ff; border-color: #1890ff"
                     @click.stop="bindRemark(item)"
-                    >备注</el-button
+                    >备注</Button
                   >
                 </div>
               </div>
             </div>
-          </div>
+          </Scroll>
         </div>
         <empty v-if="orderList.length == 0 && orderConfig.type === ''" status="3" msg="暂无订单信息"></empty>
         <empty v-if="orderList.length == 0 && orderConfig.type === 0" status="4" msg="暂无未支付订单"></empty>
@@ -202,7 +202,7 @@
           </div>
         </div>
         <div class="search-box">
-          <el-input
+          <Input
             class="search_box"
             @on-enter="productSearch"
             v-model="storeName"
@@ -211,8 +211,8 @@
           />
         </div>
         <div class="list-wrapper" v-if="goodsConfig.buyList.length > 0">
-          <div v-infinite-scroll="goodsReachBottom" height="650" class="right-scroll">
-            <div class="list-item" v-for="(item, index) in goodsConfig.buyList" :key="index">
+          <Scroll :on-reach-bottom="goodsReachBottom" height="650" class="right-scroll">
+            <div class="list-item" v-for="item in goodsConfig.buyList">
               <div class="img-box">
                 <img :src="item.image" alt="" />
               </div>
@@ -228,34 +228,36 @@
                 </div>
               </div>
             </div>
-          </div>
+          </Scroll>
         </div>
         <empty v-else status="3" msg="暂无商品信息"></empty>
       </div>
     </template>
     <!-- 发货弹窗 -->
-    <el-dialog :visible.sync="isDelivery" title="订单发送货">
-      <delivery
-        v-if="isDelivery"
-        :virtualType="virtual_type"
-        @close="deliveryClose"
-        @ok="deliveryOk"
-        :orderId="orderId"
-      ></delivery>
-    </el-dialog>
+    <Modal v-model="isDelivery" title="订单发送货" :footer-hide="true">
+      <delivery v-if="isDelivery" :virtualType="virtual_type" @close="deliveryClose" @ok="deliveryOk" :orderId="orderId"></delivery>
+    </Modal>
     <!-- 订单备注 -->
-    <el-dialog v-model="isRemarks" title="请修改内容" width="520px" :show-close="false" class="none-radius">
+    <Modal
+      v-model="isRemarks"
+      title="请修改内容"
+      :footer-hide="true"
+      :mask="true"
+      width="520"
+      :closable="false"
+      class="none-radius"
+    >
       <remarks :remarkId="remarkId" v-if="isRemarks" @close="deliveryClose" @remarkSuccess="remarkSuccess"></remarks>
-    </el-dialog>
+    </Modal>
     <!-- 用户标签 -->
-    <el-dialog v-model="isUserLabel" width="320px" class="label-box" :show-close="false">
+    <Modal v-model="isUserLabel" :footer-hide="true" width="320" class="label-box" :closable="false" :mask="true">
       <p class="label-head" slot="header">
         <span>选择用户标签</span>
       </p>
       <userLabel v-if="isUserLabel" @close="deliveryClose" :uid="uid" @editLabel="editLabel"></userLabel>
-    </el-dialog>
+    </Modal>
     <!-- 用户标签 -->
-    <el-dialog v-model="isUserGroup" width="320px" class="label-box" :show-close="false">
+    <Modal v-model="isUserGroup" :footer-hide="true" width="320" class="label-box" :closable="false" :mask="true">
       <p class="label-head" slot="header">
         <span>选择分组</span>
       </p>
@@ -267,7 +269,7 @@
         :uid="uid"
         @editUserLabel="editUserLabel"
       ></userGroup>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 
@@ -613,7 +615,7 @@ export default {
     editUserLabel(id) {
       this.isUserGroup = false;
       putGroupApi(this.uid, id).then((res) => {
-        this.$message.success(res.msg);
+        this.$Message.success(res.msg);
         this.getUserInfo();
       });
     },

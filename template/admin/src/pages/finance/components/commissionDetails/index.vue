@@ -1,83 +1,58 @@
 <template>
   <div>
-    <el-form
+    <Form
       ref="formValidate"
       :label-width="labelWidth"
       :label-position="labelPosition"
       class="tabform"
       @submit.native.prevent
     >
-      <el-row :gutter="24">
-        <el-col v-bind="grid">
-          <el-form-item label="订单搜索：" label-for="status1">
-            <el-input v-model="formValidate.keywords" placeholder="请输入交易单号/交易人" class="input"></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col>
+      <Row type="flex" :gutter="24">
+        <Col v-bind="grid">
+          <FormItem label="订单搜索：" label-for="status1">
+            <Input v-model="formValidate.keywords" placeholder="请输入交易单号/交易人" class="input"></Input>
+          </FormItem>
+        </Col>
+        <Col>
           <div class="search" @click="searchs">搜索</div>
-        </el-col>
-        <el-col>
+        </Col>
+        <Col>
           <div class="reset" @click="reset">重置</div>
-        </el-col>
-      </el-row>
-    </el-form>
-    <el-table
+        </Col>
+      </Row>
+    </Form>
+    <!-- <Divider dashed/> -->
+    <Table
+      :columns="columns"
       :data="tabList"
       ref="table"
-      v-loading="loading"
+      :loading="loading"
       no-userFrom-text="暂无数据"
       no-filtered-userFrom-text="暂无筛选结果"
       class="table"
     >
-      <el-table-column label="交易单号" width="180">
-        <template slot-scope="scope">
-          <span>{{ scope.row.flow_id }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="关联订单" min-width="130">
-        <template slot-scope="scope">
-          <span>{{ scope.row.order_id }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="交易时间" min-width="130">
-        <template slot-scope="scope">
-          <span>{{ scope.row.add_time }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="交易金额" min-width="130">
-        <template slot-scope="scope">
-          <div v-if="scope.row.price >= 0" class="z-price">+{{ scope.row.price }}</div>
-          <div v-if="scope.row.price < 0" class="f-price">{{ scope.row.price }}</div>
-        </template>
-      </el-table-column>
-      <el-table-column label="交易用户" min-width="130">
-        <template slot-scope="scope">
-          <span>{{ scope.row.nickname }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="交易类型" min-width="130">
-        <template slot-scope="scope">
-          <span>{{ scope.row.pay_type_name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="支付方式" min-width="130">
-        <template slot-scope="scope">
-          <span>{{ scope.row.order_id }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="备注" min-width="130">
-        <template slot-scope="scope">
-          <span>{{ scope.row.mark }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
+      <template slot-scope="{ row }" slot="extract_price">
+        <div>{{ row.extract_price }}</div>
+      </template>
+      <template slot-scope="{ row }" slot="pay_type">
+        <span> {{ row.pay_type_name }} </span>
+      </template>
+      <template slot-scope="{ row }" slot="price">
+        <div v-if="row.price >= 0" class="z-price">+{{ row.price }}</div>
+        <div v-if="row.price < 0" class="f-price">{{ row.price }}</div>
+      </template>
+      <template slot-scope="{ row }" slot="add_time">
+        <span> {{ row.add_time | formatDate }}</span>
+      </template>
+    </Table>
     <div class="acea-row row-right page">
-      <pagination
-        v-if="total"
+      <Page
         :total="total"
-        :page.sync="formValidate.page"
-        :limit.sync="formValidate.limit"
-        @pagination="getList"
+        :current="formValidate.page"
+        show-elevator
+        show-total
+        @on-change="pageChange"
+        :page-size="formValidate.limit"
       />
     </div>
   </div>
@@ -110,6 +85,48 @@ export default {
         limit: 20,
       },
       total: 0,
+      columns: [
+        {
+          title: '交易单号',
+          key: 'flow_id',
+          width: 180,
+        },
+        {
+          title: '关联订单',
+          key: 'order_id',
+          minWidth: 180,
+        },
+        {
+          title: '交易时间',
+          key: 'add_time',
+          minWidth: 120,
+        },
+        {
+          title: '交易金额',
+          slot: 'price',
+          minWidth: 80,
+        },
+        {
+          title: '交易用户',
+          key: 'nickname',
+          minWidth: 80,
+        },
+        {
+          title: '交易类型',
+          key: 'trading_type',
+          minWidth: 80,
+        },
+        {
+          title: '支付方式',
+          slot: 'pay_type',
+          minWidth: 100,
+        },
+        {
+          title: '备注',
+          key: 'mark',
+          minWidth: 100,
+        },
+      ],
       tabList: [],
       payment: [
         {
@@ -148,14 +165,14 @@ export default {
   computed: {
     ...mapState('admin/layout', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '85px';
+      return this.isMobile ? undefined : 80;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
     },
   },
   mounted() {
-    this.getList();
+    this.getList(this.ids);
   },
   methods: {
     staffApi() {
@@ -165,7 +182,7 @@ export default {
     },
     searchs() {
       this.formValidate.page = 1;
-      this.getList();
+      this.getList(this.ids);
     },
     // 时间
     onchangeTime(e) {
@@ -173,8 +190,9 @@ export default {
       this.formValidate.end_time = e[1];
     },
     // 列表
-    getList() {
-      this.formValidate.ids = this.ids;
+    getList(id) {
+      this.ids = id;
+      this.formValidate.ids = id;
       this.loading = true;
       getFlowList(this.formValidate)
         .then(async (res) => {
@@ -185,8 +203,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.formValidate.page = index;
+      this.getList(this.ids);
     },
     reset() {
       this.formValidate = {
@@ -197,7 +219,7 @@ export default {
         page: 1,
         limit: 10,
       };
-      this.getList();
+      this.getList(this.ids);
     },
     // 关闭按钮
     cancel() {

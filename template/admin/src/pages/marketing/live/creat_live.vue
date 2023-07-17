@@ -3,14 +3,14 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <span>
-          <el-button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</el-button>
+          <Button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
         </span>
-        <el-divider direction="vertical"></el-divider>
+        <Divider type="vertical" />
         <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
       </div>
     </div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
@@ -19,106 +19,95 @@
         :rules="ruleValidate"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col :span="24">
-            <el-alert class="mb10" type="warning" show-icon :closable="false">
-              <span slot="title"
-                >必须前往微信小程序官方后台开通直播权限，关注<span style="color: red; cursor: pointer" @click="codeImg"
-                  >【小程序直播】</span
-                >须知直播状态</span
-              >
-            </el-alert>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="选择主播：" prop="anchor_wechat">
-              <el-select
-                v-model="formValidate.anchor_wechat"
-                filterable
-                clearable
-                style="width: 300px"
-                @change="anchorName"
-              >
-                <el-option
-                  v-for="(item, index) in liveList"
-                  :value="item.wechat"
-                  :key="index"
-                  :label="item.wechat"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="直播间名称：" prop="name">
-              <el-input
+        <Col span="24">
+          <Alert type="warning" show-icon style="width: 550px; margin-left: 17px; margin-bottom: 25px"
+            >必须前往微信小程序官方后台开通直播权限，关注<span style="color: red; cursor: pointer" @click="codeImg"
+              >【小程序直播】</span
+            >须知直播状态</Alert
+          >
+        </Col>
+        <Col span="24">
+          <FormItem label="选择主播：" prop="anchor_wechat">
+            <Select
+              v-model="formValidate.anchor_wechat"
+              filterable
+              clearable
+              style="width: 300px"
+              @on-change="anchorName"
+            >
+              <Option v-for="(item, index) in liveList" :value="item.wechat" :key="index">{{ item.wechat }}</Option>
+            </Select>
+          </FormItem>
+        </Col>
+        <Row :gutter="24" type="flex">
+          <Col span="24">
+            <FormItem label="直播间名称：" prop="name">
+              <Input
                 enter-button
                 placeholder="请输入直播间名称"
                 element-id="name"
                 v-model="formValidate.name"
                 style="width: 300px"
               />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
+            </FormItem>
+          </Col>
+          <Col span="24">
             <div style="display: flex">
-              <el-form-item label="背景图：" prop="name">
+              <FormItem label="背景图：" prop="name">
                 <div @click="modalPicTap(0)" class="box">
                   <img :src="formValidate.cover_img" alt="" v-if="formValidate.cover_img" />
                   <div class="upload-box" v-else>
                     <Icon type="ios-camera-outline" size="36" />
                   </div>
                 </div>
-              </el-form-item>
+              </FormItem>
               <span style="margin-left: 20px; color: #b0bac5">尺寸：1080*1920px</span>
             </div>
-          </el-col>
-          <el-col :span="24">
+          </Col>
+          <Col span="24">
             <div style="display: flex">
-              <el-form-item label="分享图：" prop="name">
+              <FormItem label="分享图：" prop="name">
                 <div @click="modalPicTap(1)" class="box">
                   <img :src="formValidate.share_img" alt="" v-if="formValidate.share_img" />
                   <div class="upload-box" v-else>
                     <Icon type="ios-camera-outline" size="36" />
                   </div>
                 </div>
-              </el-form-item>
+              </FormItem>
               <span style="margin-left: 20px; color: #b0bac5">尺寸：800*640px</span>
             </div>
-          </el-col>
-          <!--<el-col :span="24">-->
-          <!--<el-form-item label="主播昵称：">-->
-          <!--<el-input enter-button  placeholder="请输入主播昵称" element-id="anchor_name" v-model="formValidate.anchor_name" style="width: 60%;"/>-->
-          <!--</el-form-item>-->
-          <!--</el-col>-->
-          <el-col :span="24">
-            <el-form-item label="联系电话：">
-              <el-input
+          </Col>
+          <!--<Col span="24">-->
+          <!--<FormItem label="主播昵称：">-->
+          <!--<Input enter-button  placeholder="请输入主播昵称" element-id="anchor_name" v-model="formValidate.anchor_name" style="width: 60%;"/>-->
+          <!--</FormItem>-->
+          <!--</Col>-->
+          <Col span="24">
+            <FormItem label="联系电话：">
+              <Input
                 enter-button
                 placeholder="请输入主播联系电话"
                 element-id="phone"
                 v-model="formValidate.phone"
                 style="width: 300px"
               />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="直播时间：" prop="name">
-              <el-date-picker
+            </FormItem>
+          </Col>
+          <Col span="24">
+            <FormItem label="直播时间：" prop="name">
+              <DatePicker
                 type="datetimerange"
                 format="yyyy-MM-dd HH:mm"
                 placeholder="请选择直播时间"
-                style="width: 380px"
-                v-model="timeVal"
-                @change="selectDate"
-                value-format="yyyy-MM-dd HH:mm"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="排序：">
-              <el-input
+                style="width: 300px"
+                :value="timeVal"
+                @on-change="selectDate"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col span="24">
+            <FormItem label="排序：">
+              <Input
                 type="number"
                 enter-button
                 placeholder="0"
@@ -126,72 +115,81 @@
                 v-model="formValidate.sort"
                 style="width: 300px"
               />
-            </el-form-item>
-          </el-col>
-          <!-- <el-col :span="24">
-            <el-form-item label="显示样式：">
-              <el-radio-group v-model="formValidate.screen_type">
-                <el-radio :label="item.label" v-for="(item, index) in screen_type" :key="index">
+            </FormItem>
+          </Col>
+          <!-- <Col span="24">
+            <FormItem label="显示样式：">
+              <RadioGroup v-model="formValidate.screen_type">
+                <Radio :label="item.label" v-for="(item, index) in screen_type" :key="index">
                   <span>{{ item.value }}</span>
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col> -->
-          <el-col :span="24">
-            <el-form-item label="直播间类型：">
-              <el-radio-group v-model="formValidate.type">
-                <el-radio :label="item.label" v-for="(item, index) in type" :key="index">
+                </Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col> -->
+          <Col span="24">
+            <FormItem label="直播间类型：">
+              <RadioGroup v-model="formValidate.type">
+                <Radio :label="item.label" v-for="(item, index) in type" :key="index">
                   <span>{{ item.value }}</span>
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="直播间点赞：">
-              <el-radio-group v-model="formValidate.close_like">
-                <el-radio :label="item.label" v-for="(item, index) in close_like" :key="index">
+                </Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          <Col span="24">
+            <FormItem label="直播间点赞：">
+              <RadioGroup v-model="formValidate.close_like">
+                <Radio :label="item.label" v-for="(item, index) in close_like" :key="index">
                   <span>{{ item.value }}</span>
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="直播卖货：">
-              <el-radio-group v-model="formValidate.close_goods">
-                <el-radio :label="item.label" v-for="(item, index) in close_goods" :key="index">
+                </Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          <Col span="24">
+            <FormItem label="直播卖货：">
+              <RadioGroup v-model="formValidate.close_goods">
+                <Radio :label="item.label" v-for="(item, index) in close_goods" :key="index">
                   <span>{{ item.value }}</span>
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="直播间评论：">
-              <el-radio-group v-model="formValidate.close_comment">
-                <el-radio :label="item.label" v-for="(item, index) in close_comment" :key="index">
+                </Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          <Col span="24">
+            <FormItem label="直播间评论：">
+              <RadioGroup v-model="formValidate.close_comment">
+                <Radio :label="item.label" v-for="(item, index) in close_comment" :key="index">
                   <span>{{ item.value }}</span>
-                </el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row :gutter="24">
-          <el-col v-bind="grid" :span="24">
-            <el-button :loading="loading" type="primary" style="margin-left: 99px" @click="handleSubmit('formItem')">
+                </Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+        </Row>
+        <Row :gutter="24" type="flex">
+          <Col v-bind="grid" span="24">
+            <Button :loading="loading" type="primary" style="margin-left: 99px" @click="handleSubmit('formItem')">
               <span v-if="!loading">提交</span>
               <span v-else>提交中...</span>
-            </el-button>
-            <!-- <el-button
+            </Button>
+            <!-- <Button
               type="primary"
               @click="handleSubmit('formItem')"
               style="width: 19%; margin-left: 99px"
-              >提交</el-button
+              >提交</Button
             > -->
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-card>
+          </Col>
+        </Row>
+      </Form>
+    </Card>
     <div>
-      <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false" :z-index="888">
+      <Modal
+        v-model="modalPic"
+        width="950px"
+        scrollable
+        footer-hide
+        closable
+        title="上传商品图"
+        :mask-closable="false"
+        :z-index="888"
+      >
         <uploadPictures
           :isChoice="isChoice"
           @getPic="getPic"
@@ -199,15 +197,16 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </el-dialog>
+      </Modal>
     </div>
-    <el-dialog :visible.sync="modal3" title="二维码">
+    <Modal v-model="modal3" title="二维码" @on-cancel="cancel" footer-hide>
       <div class="acea-row row-around">
         <div v-viewer class="QRpic">
           <img src="https://res.wx.qq.com/op_res/9rSix1dhHfK4rR049JL0PHJ7TpOvkuZ3mE0z7Ou_Etvjf-w1J_jVX0rZqeStLfwh" />
         </div>
       </div>
-    </el-dialog>
+      <!-- <Spin fix v-if="spin"></Spin> -->
+    </Modal>
   </div>
 </template>
 
@@ -223,7 +222,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '100px';
+      return this.isMobile ? undefined : 100;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -338,7 +337,6 @@ export default {
       this.modal3 = false;
     },
     codeImg() {
-      console.log('111');
       this.modal3 = true;
     },
     anchorName(e) {
@@ -360,7 +358,7 @@ export default {
           this.liveList = res.data.list;
         })
         .catch((error) => {
-          this.$message.error(error.msg);
+          this.$Message.error(error.msg);
         });
     },
     // 点击图文封面
@@ -388,7 +386,7 @@ export default {
       this.loading = true;
       liveAdd(this.formValidate)
         .then((res) => {
-          this.$message.success('添加成功');
+          this.$Message.success('添加成功');
           setTimeout(() => {
             this.loading = false;
             this.$router.push({ path: this.$routeProStr + '/marketing/live/live_room' });
@@ -398,7 +396,7 @@ export default {
           setTimeout(() => {
             this.loading = false;
           }, 1000);
-          this.$message.error(error.msg);
+          this.$Message.error(error.msg);
         });
     },
   },

@@ -22,7 +22,7 @@
         </div>
       </div>
       <div class="footer">
-        <el-button type="primary" class="btn" @click="subBtn">确定</el-button>
+        <Button type="primary" class="btn" @click="subBtn">确定</Button>
       </div>
     </div>
     <div class="maskModel" @touchmove.prevent v-show="change === true"></div>
@@ -84,11 +84,11 @@ export default {
         un_label_ids: unLaberids,
       })
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.$emit('editLabel', false);
         })
         .catch((error) => {
-          this.$message.error(error.msg);
+          this.$Message.error(error.msg);
         });
     },
     close: function () {

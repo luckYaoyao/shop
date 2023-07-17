@@ -3,23 +3,23 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <!-- <router-link :to="{ path: $routeProStr + '/setting/pages/devise' }"
-          ><el-button icon="ios-arrow-back" size="small" type="text">返回</el-button></router-link
+          ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         > -->
-        <!-- <el-divider direction="vertical"></el-divider> -->
+        <!-- <Divider type="vertical" /> -->
         <span class="ivu-page-header-title mr20" style="padding: 0" v-text="$route.meta.title"></span>
         <div class="rbtn">
-          <!-- <el-button v-if="pageId !== 0" class="bnt" @click="setmoren" :loading="loading">保存默认</el-button>
-          <el-button v-if="pageId !== 0" class="bnt ml20" @click="getmoren" :loading="loading">恢复默认</el-button> -->
+          <!-- <Button v-if="pageId !== 0" class="bnt" @click="setmoren" :loading="loading">保存默认</Button>
+          <Button v-if="pageId !== 0" class="bnt ml20" @click="getmoren" :loading="loading">恢复默认</Button> -->
           <!-- <div class="data" @click="setmoren">设置默认</div>
             <div class="data" @click="getmoren">恢复默认</div> -->
-          <el-button class="bnt ml20" type="info" @click="preview" :loading="loading">预览</el-button>
-          <el-button class="bnt ml20" type="primary" @click="saveConfig(0)" :loading="loading">保存</el-button>
-          <el-button class="ml20" type="error" @click="closeWindow" :loading="loading">关闭</el-button>
+          <Button class="bnt ml20" type="info" @click="preview" :loading="loading">预览</Button>
+          <Button class="bnt ml20" type="primary" @click="saveConfig(0)" :loading="loading">保存</Button>
+          <Button class="ml20" type="error" @click="closeWindow" :loading="loading">关闭</Button>
         </div>
       </div>
     </div>
 
-    <el-card :bordered="false" shadow="never" style="margin: 0 10px">
+    <Card :bordered="false" dis-hover class="ivu-mt" style="margin: 0 10px">
       <div class="diy-wrapper">
         <!-- 左侧 -->
         <div class="left">
@@ -72,7 +72,7 @@
               </draggable>
             </div>
           </div>
-          <!--                    <div style="padding: 0 20px"><el-button type="primary" style="width: 100%" @click="saveConfig">保存</el-button></div>-->
+          <!--                    <div style="padding: 0 20px"><Button type="primary" style="width: 100%" @click="saveConfig">保存</Button></div>-->
           <div class="wrapper" v-else :style="'height:' + (clientHeight - 200) + 'px;'">
             <div class="link-item" v-for="(item, index) in urlList" :key="index">
               <div class="name">{{ item.name }}</div>
@@ -83,7 +83,7 @@
               </div>
               <div class="lable">
                 <p class="txt">例如：{{ item.example }}</p>
-                <el-button size="small" @click="onCopy(item.example)">复制 </el-button>
+                <Button size="small" @click="onCopy(item.example)">复制 </Button>
               </div>
             </div>
           </div>
@@ -93,10 +93,10 @@
           class="wrapper-con"
           style="flex: 1; background: #f0f2f5; display: flex; justify-content: center; padding-top: 20px; height: 100%"
         >
-          <div class="acticons">
-            <el-button class="bnt mb10" @click="showTitle">页面设置</el-button>
-            <el-button class="bnt mb10" @click="nameModal = true">另存模板</el-button>
-            <el-button class="bnt" @click="reast">重置</el-button>
+          <div class="acticon">
+            <Button class="bnt mb10" @click="showTitle">页面设置</Button>
+            <Button class="bnt mb10" @click="nameModal = true">另存模板</Button>
+            <Button class="bnt" @click="reast">重置</Button>
           </div>
           <div class="content">
             <div class="contxt" style="display: flex; flex-direction: column; overflow: hidden; height: 100%">
@@ -159,9 +159,9 @@
                         ></component>
                         <div class="delete-box">
                           <div class="handleType">
-                            <el-tooltip content="删除当前模块" placement="top">
+                            <Tooltip content="删除当前模块" placement="top">
                               <div class="iconfont iconshanchu2" @click.stop="bindDelete(item, key)"></div>
-                            </el-tooltip>
+                            </Tooltip>
 
                             <div class="iconfont iconfuzhi" @click.stop="bindAddDom(item, 0, key)"></div>
                             <div
@@ -210,15 +210,15 @@
           </div>
         </div>
       </div>
-    </el-card>
+    </Card>
     <!--<div class="foot-box">-->
-    <!--<el-button @click="reast">重置</el-button>-->
-    <!--<el-button type="primary" @click="saveConfig" :loading="loading"-->
+    <!--<Button @click="reast">重置</Button>-->
+    <!--<Button type="primary" @click="saveConfig" :loading="loading"-->
     <!--&gt;保存-->
-    <!--</el-button-->
+    <!--</Button-->
     <!--&gt;-->
     <!--</div>-->
-    <el-dialog :visible.sync="modal" title="预览">
+    <Modal v-model="modal" title="预览" footer-hide>
       <div>
         <div v-viewer class="acea-row row-around code">
           <div class="acea-row row-column-around row-between-wrapper">
@@ -233,14 +233,10 @@
           </div>
         </div>
       </div>
-    </el-dialog>
-    <el-dialog :visible.sync="nameModal" title="设置模版名称" :show-close="false">
-      <el-input v-model="saveName" placeholder="请输入模版名称"></el-input>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="nameModal = false">取 消</el-button>
-        <el-button type="primary" @click="saveModal">确 定</el-button>
-      </span>
-    </el-dialog>
+    </Modal>
+    <Modal v-model="nameModal" title="设置模版名称" :closable="false" @on-ok="saveModal" @on-cancel="nameModal = false">
+      <Input v-model="saveName" placeholder="请输入模版名称"></Input>
+    </Modal>
   </div>
 </template>
 
@@ -379,7 +375,7 @@ export default {
   },
   methods: {
     saveModal() {
-      if (!this.saveName) return this.$message.warning('请先输入模板名称');
+      if (!this.saveName) return this.$Message.warning('请先输入模板名称');
       this.saveConfig(1, this.saveName);
     },
     //小程序二维码
@@ -389,7 +385,7 @@ export default {
           this.qrcodeImg = res.data.image;
         })
         .catch((err) => {
-          this.$message.error(err);
+          this.$Message.error(err);
         });
     },
     preview(row) {
@@ -450,14 +446,14 @@ export default {
     onCopy(copyData) {
       this.$copyText(copyData)
         .then((message) => {
-          this.$message.success('复制成功');
+          this.$Message.success('复制成功');
         })
         .catch((err) => {
-          this.$message.error('复制失败');
+          this.$Message.error('复制失败');
         });
     },
     onError() {
-      this.$message.error('复制失败');
+      this.$Message.error('复制失败');
     },
     //设置默认数据
     setmoren() {
@@ -467,10 +463,10 @@ export default {
         onOk: () => {
           setDefault(this.pageId)
             .then((res) => {
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
             })
             .catch((err) => {
-              this.$message.error(err.msg);
+              this.$Message.error(err.msg);
             });
         },
         onCancel: () => {},
@@ -484,11 +480,11 @@ export default {
         onOk: () => {
           recovery(this.pageId)
             .then((res) => {
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
               this.reload();
             })
             .catch((err) => {
-              this.$message.error(err.msg);
+              this.$Message.error(err.msg);
             });
         },
         onCancel: () => {},
@@ -546,11 +542,11 @@ export default {
       // 中间拖拽排序
       if (evt.moved) {
         if (evt.moved.element.name == 'search_box' || evt.moved.element.name == 'nav_bar') {
-          return this.$message.warning('该组件禁止拖拽');
+          return this.$Message.warning('该组件禁止拖拽');
         }
 
         // if (evt.moved.element.name == "nav_bar") {
-        //     return this.$message.warning("该组件禁止拖拽");
+        //     return this.$Message.warning("该组件禁止拖拽");
         // }
         evt.moved.oldNum = this.mConfig[evt.moved.oldIndex].num;
         evt.moved.newNum = this.mConfig[evt.moved.newIndex].num;
@@ -612,15 +608,15 @@ export default {
         }
       }
       if (item.name == 'search_box' || item.name == 'nav_bar') {
-        return this.$message.warning('该组件禁止移动');
+        return this.$Message.warning('该组件禁止移动');
       }
       // if (item.name == "nav_bar") {
-      //     return this.$message.warning("该组件禁止移动");
+      //     return this.$Message.warning("该组件禁止移动");
       // }
       if (type) {
         // if(this.mConfig[index-1].name  == "search_box" || this.mConfig[index-1].name  == "nav_bar"){
         if (this.mConfig[index - 1].name == 'search_box') {
-          return this.$message.warning('搜索框必须为顶部');
+          return this.$Message.warning('搜索框必须为顶部');
         }
         this.swapArray(this.mConfig, index - 1, index);
       } else {
@@ -652,11 +648,11 @@ export default {
     // 组件添加
     addDomCon(item, type, index) {
       if (item.name == 'search_box') {
-        if (this.isSearch) return this.$message.error('该组件只能添加一次');
+        if (this.isSearch) return this.$Message.error('该组件只能添加一次');
         this.isSearch = true;
       }
       if (item.name == 'nav_bar') {
-        if (this.isTab) return this.$message.error('该组件只能添加一次');
+        if (this.isTab) return this.$Message.error('该组件只能添加一次');
         this.isTab = true;
       }
       idGlobal += 1;
@@ -822,17 +818,17 @@ export default {
             this.pageId = res.data.id;
           }
           this.saveName = '';
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 保存配置
     saveConfig(init, name) {
       if (this.mConfig.length == 0) {
-        return this.$message.error('暂未添加任何组件，保存失败！');
+        return this.$Message.error('暂未添加任何组件，保存失败！');
       }
       this.loading = true;
       let val = this.$store.state.mobildConfig.defaultArray;
@@ -913,7 +909,7 @@ export default {
     // 重置
     reast() {
       if (this.pageId == 0) {
-        this.$message.error('新增页面，无法重置');
+        this.$Message.error('新增页面，无法重置');
       } else {
         this.$Modal.confirm({
           title: '提示',
@@ -974,16 +970,13 @@ export default {
 
 .wrapper-con {
   position relative
-  .acticons{
+  .acticon{
     position absolute
     right: 20px
     top 20px
     display: flex;
     flex-direction: column;
     z-index: 9;
-    .el-button+.el-button{
-      margin-left: 0;
-    }
   }
   /* min-width 700px; */
 }
@@ -1355,10 +1348,7 @@ export default {
             font-weight: bold;
             text-align: center;
             padding: 4px 0;
-            .el-tooltip{
-              background-color: inherit;
-              color: inherit;
-            }
+
             .iconfont {
               padding: 5px 0;
 

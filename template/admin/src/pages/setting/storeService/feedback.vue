@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
@@ -9,10 +9,10 @@
         class="tabform"
         @submit.native.prevent
       >
-        <el-row :gutter="24" justify="end">
-          <el-col :span="24" class="ivu-text-left">
-            <el-form-item label="留言信息：">
-              <el-input
+        <Row :gutter="24" type="flex" justify="end">
+          <Col span="24" class="ivu-text-left">
+            <FormItem label="留言信息：">
+              <Input
                 search
                 enter-button
                 @on-search="selChange"
@@ -22,79 +22,52 @@
                 style="width: 30%; display: inline-table"
                 class="mr"
               />
-            </el-form-item>
-          </el-col>
-          <el-col :span="24" class="ivu-text-left">
-            <el-form-item label="留言时间：">
-              <el-radio-group
+            </FormItem>
+          </Col>
+          <Col span="24" class="ivu-text-left">
+            <FormItem label="留言时间：">
+              <RadioGroup
                 v-model="formValidate.time"
                 type="button"
-                @change="selectChange(formValidate.time)"
+                @on-change="selectChange(formValidate.time)"
                 class="mr"
               >
-                <el-radio-button :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{
-                  item.text
-                }}</el-radio-button>
-              </el-radio-group>
-              <el-date-picker
+                <Radio :label="item.val" v-for="(item, i) in fromList.fromTxt" :key="i">{{ item.text }}</Radio>
+              </RadioGroup>
+              <DatePicker
                 :editable="false"
-                @change="onchangeTime"
-                v-model="timeVal"
+                @on-change="onchangeTime"
+                :value="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
-                value-format="yyyy/MM/dd"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table :data="list" :loading="loading" no-userFrom-text="暂无数据" no-filtered-userFrom-text="暂无筛选结果">
-        <el-table-column label="ID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="昵称" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.rela_name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="电话" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.phone }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="内容" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.content }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="状态" min-width="130">
-          <template slot-scope="scope">
-            <div>{{ scope.row.status === 1 ? '已处理' : '未处理' }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="时间" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.add_time }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="170">
-          <template slot-scope="scope">
-            <a @click="remarks(scope.row.id)">{{ scope.row.status === 1 ? '备注' : '处理' }}</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="del(scope.row, '删除反馈', index)">删除</a>
-          </template>
-        </el-table-column>
-      </el-table>
+                placement="bottom-end"
+                placeholder="请选择时间"
+                style="width: 200px"
+              ></DatePicker>
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
+      <Table
+        :columns="columns1"
+        :data="list"
+        :loading="loading"
+        no-userFrom-text="暂无数据"
+        no-filtered-userFrom-text="暂无筛选结果"
+      >
+        <template slot-scope="{ row, index }" slot="status">
+          <div>{{ row.status === 1 ? '已处理' : '未处理' }}</div>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <a @click="remarks(row.id)">{{ row.status === 1 ? '备注' : '处理' }}</a>
+          <Divider type="vertical" />
+          <a @click="del(row, '删除反馈', index)">删除</a>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination v-if="total" :total="total" :page.sync="page" :limit.sync="limit" @pagination="getList" />
+        <Page :total="count" show-elevator show-total @on-change="pageChange" :page-size="limit" />
       </div>
-    </el-card>
+    </Card>
   </div>
 </template>
 
@@ -127,13 +100,51 @@ export default {
         ],
       },
       timeVal: [],
-      total: 0,
+      count: 0,
+      columns1: [
+        {
+          title: 'ID',
+          key: 'id',
+          width: 80,
+        },
+        {
+          title: '昵称',
+          key: 'rela_name',
+          minWidth: 120,
+        },
+        {
+          title: '电话',
+          key: 'phone',
+          minWidth: 120,
+        },
+        {
+          title: '内容',
+          key: 'content',
+          minWidth: 320,
+        },
+        {
+          title: '状态',
+          slot: 'status',
+          minWidth: 120,
+        },
+        {
+          title: '时间',
+          key: 'add_time',
+          minWidth: 120,
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          fixed: 'right',
+          minWidth: 150,
+        },
+      ],
     };
   },
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '85px';
+      return this.isMobile ? undefined : 80;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -162,7 +173,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formValidate.time = this.timeVal ? this.timeVal.join('-') : '';
+      this.formValidate.time = this.timeVal.join('-');
       this.page = 1;
       this.getList();
     },
@@ -174,7 +185,7 @@ export default {
         title: this.formValidate.title,
       }).then((res) => {
         this.list = res.data.data;
-        this.total = res.data.total;
+        this.count = res.data.count;
       });
     },
     // 删除
@@ -188,12 +199,16 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.list.splice(num, 1);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.page = index;
+      this.getList();
     },
   },
 };

@@ -1,112 +1,85 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col v-bind="grid">
-            <el-form-item label="状态：" label-for="status1">
-              <el-select v-model="status" placeholder="请选择" @change="userSearchs" clearable>
-                <el-option value="all" label="全部"></el-option>
-                <el-option value="1" label="开启"></el-option>
-                <el-option value="0" label="关闭"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid">
-            <el-form-item label="搜索：" label-for="status2">
-              <el-input
+        <Row type="flex" :gutter="24">
+          <Col v-bind="grid">
+            <FormItem label="状态：" label-for="status1">
+              <Select v-model="status" placeholder="请选择" @on-change="userSearchs" clearable>
+                <Option value="all">全部</Option>
+                <Option value="1">开启</Option>
+                <Option value="0">关闭</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col v-bind="grid">
+            <FormItem label="搜索：" label-for="status2">
+              <Input
                 search
                 enter-button
                 placeholder="请输入姓名或者账号"
                 v-model="formValidate.name"
                 @on-search="userSearchs"
               />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col v-bind="grid">
-            <el-button v-auth="['setting-system_admin-add']" type="primary" @click="add" icon="md-add"
-              >添加管理员</el-button
-            >
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table
+            </FormItem>
+          </Col>
+        </Row>
+        <Row type="flex">
+          <Col v-bind="grid">
+            <Button v-auth="['setting-system_admin-add']" type="primary" @click="add" icon="md-add">添加管理员</Button>
+          </Col>
+        </Row>
+      </Form>
+      <Table
+        :columns="columns1"
         :data="list"
         class="mt25"
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
-        v-loading="loading"
-        highlight-current-row
+        :loading="loading"
+        highlight-row
       >
-        <el-table-column label="姓名" width="120">
-          <template slot-scope="scope">
-            <span>{{ scope.row.real_name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="账号" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.account }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="身份" min-width="130">
-          <template slot-scope="scope">
-            <div v-if="scope.row.roles.length !== 0">
-              <el-tag v-for="(item, index) in scope.row.roles.split(',')" :key="index">{{ item }}</el-tag>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="最后一次登录时间" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row._last_time }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="最后一次登录ip" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.last_ip }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="开启" min-width="70">
-          <template slot-scope="scope">
-            <el-switch
-              class="defineSwitch"
-              :active-value="1"
-              :inactive-value="0"
-              v-model="scope.row.status"
-              :value="scope.row.status"
-              @change="onchangeIsShow(scope.row)"
-              size="large"
-              active-text="开启"
-              inactive-text="关闭"
-            >
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="100">
-          <template slot-scope="scope">
-            <a @click="edit(scope.row)">编辑</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="del(scope.row, '删除管理员', index)">删除</a>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template slot-scope="{ row, index }" slot="roles">
+          <div v-if="row.roles.length !== 0">
+            <Tag color="blue" v-for="(item, index) in row.roles.split(',')" :key="index" v-text="item"></Tag>
+          </div>
+        </template>
+        <template slot-scope="{ row, index }" slot="status">
+          <i-switch
+            v-model="row.status"
+            :value="row.status"
+            :true-value="1"
+            :false-value="0"
+            @on-change="onchangeIsShow(row)"
+            size="large"
+          >
+            <span slot="open">开启</span>
+            <span slot="close">关闭</span>
+          </i-switch>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <a @click="edit(row)">编辑</a>
+          <Divider type="vertical" />
+          <a @click="del(row, '删除管理员', index)">删除</a>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="formValidate.page"
-          :limit.sync="formValidate.limit"
-          @pagination="getList"
+          :current="formValidate.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="formValidate.limit"
         />
       </div>
-    </el-card>
+    </Card>
     <!-- 添加 编辑 -->
     <admin-from :FromData="FromData" ref="adminfrom" @submitFail="submitFail"></admin-from>
   </div>
@@ -142,6 +115,45 @@ export default {
       },
       status: '',
       list: [],
+      columns1: [
+        {
+          title: '姓名',
+          key: 'real_name',
+          minWidth: 120,
+        },
+        {
+          title: '账号',
+          key: 'account',
+          minWidth: 150,
+        },
+        {
+          title: '身份',
+          slot: 'roles',
+          minWidth: 250,
+        },
+        {
+          title: '最后一次登录时间',
+          key: '_last_time',
+          minWidth: 180,
+        },
+        {
+          title: '最后一次登录ip',
+          key: 'last_ip',
+          minWidth: 180,
+        },
+        {
+          title: '开启',
+          slot: 'status',
+          minWidth: 90,
+        },
+        {
+          title: '操作',
+          key: 'action',
+          slot: 'action',
+          fixed: 'right',
+          minWidth: 120,
+        },
+      ],
       FromData: null,
       modalTitleSs: '',
       ids: Number,
@@ -150,7 +162,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '50px';
+      return this.isMobile ? undefined : 50;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -168,10 +180,10 @@ export default {
       };
       setShowApi(data)
         .then(async (res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 请求列表
@@ -190,8 +202,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.formValidate.page = index;
+      this.getList();
     },
     // 添加表单
     add() {
@@ -201,7 +217,7 @@ export default {
           this.$refs.adminfrom.modals = true;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 编辑
@@ -215,7 +231,7 @@ export default {
           this.$refs.adminfrom.modals = true;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 删除
@@ -229,11 +245,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.list.splice(num, 1);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 表格搜索

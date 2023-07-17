@@ -3,7 +3,7 @@
     <div class="i-layout-page-header header-title">
       <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div style="float: right">
-        <el-button class="bnt" type="primary" @click="onsubmit('formValidate')">保存</el-button>
+        <Button class="bnt" type="primary" @click="onsubmit('formValidate')">保存</Button>
       </div>
     </div>
     <div class="box-wrapper">
@@ -22,13 +22,13 @@
       </div>
       <div style="margin-left: 40px">
         <div class="table_box">
-          <div >
+          <div type="flex">
             <div v-bind="grid">
               <div class="title">隐私权限页面展示：</div>
             </div>
           </div>
           <div>
-            <el-form
+            <Form
               class="form"
               ref="formValidate"
               :model="formValidate"
@@ -37,14 +37,14 @@
               @submit.native.prevent
             >
               <div class="goodsTitle acea-row"></div>
-              <el-form-item label="" style="margin: 0px">
+              <FormItem label="" style="margin: 0px">
                 <WangEditor
                   style="width: 90%"
                   :content="formValidate.content"
                   @editorContent="getEditorContent"
                 ></WangEditor>
-              </el-form-item>
-            </el-form>
+              </FormItem>
+            </Form>
           </div>
         </div>
       </div>
@@ -94,7 +94,7 @@ export default {
       };
     },
     labelWidth() {
-      return this.isMobile ? undefined : '120px';
+      return this.isMobile ? undefined : 120;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -207,7 +207,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     getContent(val) {
@@ -218,10 +218,10 @@ export default {
       this.formValidate.content = this.content;
       setAgreement(this.formValidate)
         .then(async (res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     //详情
@@ -236,7 +236,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },

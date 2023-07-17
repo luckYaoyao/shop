@@ -1,18 +1,18 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt mb10">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt mb10">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col :span="24">
-            <el-form-item label="搜索：">
+        <Row :gutter="24" type="flex">
+          <Col span="24">
+            <FormItem label="搜索：">
               <div class="acea-row row-middle">
-                <el-input
+                <Input
                   search
                   enter-button
                   @on-search="selChange"
@@ -22,62 +22,43 @@
                   style="width: 30%"
                 />
               </div>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </el-card>
-    <el-card :bordered="false" shadow="never">
-      <el-row>
-        <el-col v-bind="grid">
-          <el-button type="primary" icon="md-add" @click="add">添加语言地区</el-button>
-        </el-col>
-      </el-row>
-      <el-table
+            </FormItem>
+          </Col>
+        </Row>
+      </Form>
+    </Card>
+    <Card :bordered="false" dis-hover>
+      <Row type="flex">
+        <Col v-bind="grid">
+          <Button type="primary" icon="md-add" @click="add">添加语言地区</Button>
+        </Col>
+      </Row>
+      <Table
         ref="table"
+        :columns="columns"
         :data="tabList"
         class="ivu-mt mt25"
         :loading="loading"
-        empty-text="暂无数据"
+        no-data-text="暂无数据"
+        no-filtered-data-text="暂无筛选结果"
       >
-        <el-table-column label="编号" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="浏览器语言识别码" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.code }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="语言说明" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="关联语言" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.link_lang }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="100">
-          <template slot-scope="scope">
-            <a @click="edit(scope.row)">编辑</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="del(scope.row, '删除地区语言', index)">删除</a>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template slot-scope="{ row, index }" slot="action">
+          <a @click="edit(row)">编辑</a>
+          <Divider type="vertical" />
+          <a @click="del(row, '删除地区语言', index)">删除</a>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="formValidate.page"
-          :limit.sync="formValidate.limit"
-          @pagination="getList"
+          :current="formValidate.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="formValidate.limit"
         />
       </div>
-    </el-card>
+    </Card>
   </div>
 </template>
 <script>
@@ -100,6 +81,34 @@ export default {
       },
       total: 0,
       loading: false,
+      columns: [
+        {
+          title: '编号',
+          key: 'id',
+          width: 120,
+        },
+        {
+          title: '浏览器语言识别码',
+          key: 'code',
+          minWidth: 150,
+        },
+        {
+          title: '语言说明',
+          key: 'name',
+          minWidth: 180,
+        },
+        {
+          title: '关联语言',
+          key: 'link_lang',
+          minWidth: 180,
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          fixed: 'right',
+          width: 100,
+        },
+      ],
       tabList: [],
       code: null,
     };
@@ -107,7 +116,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '85px';
+      return this.isMobile ? undefined : 80;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -135,12 +144,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.tabList.splice(num, 1);
           // this.getList();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     selChange() {
@@ -158,8 +167,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.formValidate.page = index;
+      this.getList();
     },
   },
 };

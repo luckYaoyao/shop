@@ -1,7 +1,7 @@
 <template>
-  <el-radio-group v-model="selectIndexTime" type="button" @change="onSelectTime">
-    <el-radio-button :label="index" v-for="(item, index) in options.shortcuts" :key="index">{{ item.text }}</el-radio-button>
-  </el-radio-group>
+  <RadioGroup v-model="selectIndexTime" type="button" @on-change="onSelectTime">
+    <Radio :label="index" v-for="(item, index) in options.shortcuts" :key="index">{{ item.text }}</Radio>
+  </RadioGroup>
 </template>
 
 <script>

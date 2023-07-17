@@ -1,49 +1,26 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
+    <Card :bordered="false" dis-hover class="ivu-mt">
       <div class="acea-row row-between-wrapper mb20">
-        <el-row>
-          <el-col v-bind="grid">
+        <Row type="flex">
+          <Col v-bind="grid">
             <div class="button acea-row row-middle">
-              <el-button class="mr20" type="primary" icon="md-add" @click="add(0)">添加省份</el-button>
-              <el-button type="primary" @click="cleanCache">清除缓存</el-button>
+              <Button class="mr20" type="primary" icon="md-add" @click="add(0)">添加省份</Button>
+              <Button type="primary" @click="cleanCache">清除缓存</Button>
             </div>
-          </el-col>
-        </el-row>
+          </Col>
+        </Row>
       </div>
-      <el-table
-        row-key="id"
-        :load="handleLoadData"
-        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-        :data="cityLists"
-        lazy
-      >
-        <el-table-column label="编号" width="120">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="地区名称" min-width="300">
-          <template slot-scope="scope">
-            <span>{{ scope.row.label }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="上级名称" min-width="300">
-          <template slot-scope="scope">
-            <span>{{ scope.row.parent_name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="170">
-          <template slot-scope="scope">
-            <a v-if="scope.row.hasOwnProperty('children')" @click="add(scope.row.city_id)">添加</a>
-            <el-divider direction="vertical" v-if="scope.row.hasOwnProperty('children')" />
-            <a @click="edit(scope.row.id)">编辑</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="del(scope.row, '删除城市', index)">删除</a>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
+      <Table row-key="id" :load-data="handleLoadData" :columns="columns1" :data="cityLists">
+        <template slot-scope="{ row, index }" slot="action">
+          <a v-if="row.hasOwnProperty('children')" @click="add(row.city_id)">添加</a>
+          <Divider v-if="row.hasOwnProperty('children')" type="vertical" />
+          <a @click="edit(row.id)">编辑</a>
+          <Divider type="vertical" />
+          <a @click="del(row, '删除城市', index)">删除</a>
+        </template>
+      </Table>
+    </Card>
   </div>
 </template>
 
@@ -93,7 +70,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '75px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -107,10 +84,10 @@ export default {
     cleanCache() {
       cityCleanCacheApi()
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         });
     },
     // 添加
@@ -156,15 +133,15 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.cityLists.splice(num, 1);
           this.getList(this.cityId);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
-    handleLoadData(item, node, callback) {
+    handleLoadData(item, callback) {
       cityListApi(item.city_id).then((res) => {
         callback(res.data);
       });

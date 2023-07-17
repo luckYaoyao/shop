@@ -18,8 +18,8 @@
       <div v-if="!isUser">暂无标签</div>
     </div>
     <div class="footer">
-      <el-button type="primary" class="btns" @click="subBtn">确定</el-button>
-      <el-button type="primary" class="btns" ghost @click="cancel">取消</el-button>
+      <Button type="primary" class="btns" @click="subBtn">确定</Button>
+      <Button type="primary" class="btns" ghost @click="cancel">取消</Button>
     </div>
   </div>
 </template>
@@ -71,7 +71,7 @@ export default {
           this.labelList = res.data;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     selectLabel(label) {

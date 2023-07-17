@@ -15,8 +15,8 @@
       </div>
       <div class="upload-box" @click="modals = true"><Icon type="ios-camera-outline" size="36" /></div>
     </div>
-    <el-button type="primary" style="width: 100%" @click="bindSub">提交</el-button>
-    <el-dialog :visible.sync="modals" title="商品列表" class="paymentFooter" width="900px">
+    <Button type="primary" style="width: 100%" @click="bindSub">提交</Button>
+    <Modal v-model="modals" title="商品列表" class="paymentFooter" scrollable width="900" :footer-hide="true">
       <goods-list
         ref="goodslist"
         @getProductId="getProductId"
@@ -24,7 +24,7 @@
         :ischeckbox="true"
         :liveStatus="true"
       ></goods-list>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 

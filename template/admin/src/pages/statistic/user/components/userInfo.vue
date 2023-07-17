@@ -1,9 +1,9 @@
 <template>
-  <el-card :bordered="false" shadow="never" class="ivu-mt-16" v-loading="spinShow">
+  <Card :bordered="false" dis-hover class="ivu-mt-16">
     <div class="acea-row row-between-wrapper">
       <div class="header-title mb20">
         用户概况
-        <el-tooltip effect="light" word-wrap width="500" trigger="hover" placement="right-start">
+        <Poptip word-wrap width="500" trigger="hover" placement="right-start">
           <Icon type="ios-information-circle-outline" />
           <div slot="content">
             <div>访客数</div>
@@ -42,12 +42,12 @@
             <div>累积成交用户数</div>
             <div>筛选时间截止时，下单并支付成功的用户</div>
           </div>
-        </el-tooltip>
+        </Poptip>
       </div>
     </div>
-    <div class="mb20">
-      <el-row>
-        <el-col v-bind="grid" v-for="(item, index) in list" :key="index">
+    <div class="mb20" style="padding-left: 25px">
+      <Row>
+        <Col v-bind="grid" v-for="(item, index) in list" :key="index">
           <div class="acea-row mb30 fwn">
             <div class="iconCrl mr15" :class="item.colors">
               <i class="iconfont" :class="item.icon"></i>
@@ -65,11 +65,12 @@
               /></span>
             </div>
           </div>
-        </el-col>
-      </el-row>
+        </Col>
+      </Row>
     </div>
     <echarts-new :option-data="optionData" :styles="style" height="100%" width="100%" v-if="optionData"></echarts-new>
-  </el-card>
+    <Spin size="large" fix v-if="spinShow"></Spin>
+  </Card>
 </template>
 
 <script>
@@ -96,7 +97,7 @@ export default {
       spinShow: false,
       grid: {
         xl: 4,
-        lg: 4,
+        lg: 8,
         md: 12,
         sm: 24,
         xs: 24,
@@ -121,7 +122,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.dataTime = this.timeVal ? this.timeVal.join('-') : '';
+      this.dataTime = this.timeVal.join('-');
       this.name = this.dataTime;
     },
     // 统计
@@ -205,7 +206,7 @@ export default {
           ];
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 统计图
@@ -303,7 +304,7 @@ export default {
           this.spinShow = false;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
           this.spinShow = false;
         });
     },

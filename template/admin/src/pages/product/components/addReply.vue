@@ -1,71 +1,67 @@
 <template>
-  <el-dialog :visible.sync="visible" title="添加自评" width="700" :show-close="false" :close-on-click-modal="false">
-    <el-form :model="formData" label-width="125px">
-      <el-form-item label="商品">
+  <Modal :value="visible" :z-index="2" title="添加自评" width="700" @on-ok="onOk" @on-cancel="onCancel">
+    <Form :model="formData" :label-width="125">
+      <FormItem label="商品">
         <div class="upload-box" @click="callGoods">
           <img v-if="goods.id" :src="goods.image" class="image" />
           <Icon v-else type="ios-add" />
         </div>
-      </el-form-item>
-      <el-form-item v-if="goods.id" label="商品规格">
+      </FormItem>
+      <FormItem v-if="goods.id" label="商品规格">
         <div class="upload-box" @click="callAttr">
           <img v-if="attr.image" :src="attr.image" class="image" />
-          <i v-else class="el-icon-plus" />
+          <Icon v-else type="ios-add" />
         </div>
         <div>{{ attr.suk }}</div>
-      </el-form-item>
-      <el-form-item label="用户头像">
+      </FormItem>
+      <FormItem label="用户头像">
         <div class="upload-box" @click="callPicture('单选')">
           <img v-if="avatar.att_dir" :src="avatar.att_dir" class="image" />
-          <el-button
-            v-if="avatar.att_dir"
-            shape="circle"
-            icon="md-close"
-            class="btn"
-            @click.stop="removeUser"
-          ></el-button>
-          <i v-else class="el-icon-plus" />
+          <Button v-if="avatar.att_dir" shape="circle" icon="md-close" class="btn" @click.stop="removeUser"></Button>
+          <Icon v-else type="ios-add" />
         </div>
-      </el-form-item>
-      <el-form-item label="用户名称">
-        <el-input v-model="formData.nickname" placeholder="请输入用户名称"></el-input>
-      </el-form-item>
-      <el-form-item label="评价文字">
-        <el-input v-model="formData.comment" type="textarea" placeholder="请输入评价文字"></el-input>
-      </el-form-item>
-      <el-form-item label="商品分数">
+      </FormItem>
+      <FormItem label="用户名称">
+        <Input v-model="formData.nickname" placeholder="请输入用户名称"></Input>
+      </FormItem>
+      <FormItem label="评价文字">
+        <Input
+          v-model="formData.comment"
+          type="textarea"
+          :autosize="{ minRows: 2 }"
+          placeholder="请输入评价文字"
+        ></Input>
+      </FormItem>
+      <FormItem label="商品分数">
         <Rate v-model="product_score" />
-      </el-form-item>
-      <el-form-item label="服务分数">
+      </FormItem>
+      <FormItem label="服务分数">
         <Rate v-model="service_score" />
-      </el-form-item>
-      <el-form-item label="评价图片">
+      </FormItem>
+      <FormItem label="评价图片">
         <div v-for="item in picture" :key="item.att_id" class="upload-box">
           <img :src="item.att_dir" class="image" />
-          <el-button shape="circle" icon="md-close" class="btn" @click="removePicture(item.att_id)"></el-button>
+          <Button shape="circle" icon="md-close" class="btn" @click="removePicture(item.att_id)"></Button>
         </div>
         <div v-if="picture.length < 8" class="upload-box" @click="callPicture('多选')">
           <Icon type="ios-add" />
         </div>
-      </el-form-item>
-      <el-form-item label="评价时间">
-        <el-date-picker
-          v-model="add_time"
+      </FormItem>
+      <FormItem label="评价时间">
+        <DatePicker
+          :value="add_time"
           type="datetime"
-          value-format="yyyy/MM/dd"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          
-          @change="onChange"
+          placeholder="请选择评论时间(不选择默认当前添加时间)"
+          style="width: 200px"
+          @on-change="onChange"
         />
-      </el-form-item>
-    </el-form>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="onCancel">取 消</el-button>
-      <el-button type="primary" @click="onOk">确 定</el-button>
-    </span>
-  </el-dialog>
+      </FormItem>
+    </Form>
+    <template slot="footer">
+      <Button @click="onCancel">取消</Button>
+      <Button type="primary" @click="onOk">确定</Button>
+    </template>
+  </Modal>
 </template>
 
 <script>
@@ -151,25 +147,25 @@ export default {
     },
     onOk() {
       if (!this.goods.id) {
-        return this.$message.error('请选择商品');
+        return this.$Message.error('请选择商品');
       }
       if (!this.attr.image) {
-        return this.$message.error('请选择商品规格');
+        return this.$Message.error('请选择商品规格');
       }
       if (!this.avatar.att_dir) {
-        return this.$message.error('请选择用户头像');
+        return this.$Message.error('请选择用户头像');
       }
       if (!this.formData.nickname) {
-        return this.$message.error('请填写用户昵称');
+        return this.$Message.error('请填写用户昵称');
       }
       if (!this.formData.comment) {
-        return this.$message.error('请填写评论内容');
+        return this.$Message.error('请填写评论内容');
       }
       if (!this.product_score) {
-        return this.$message.error('商品分数必须是1-5之间的整数');
+        return this.$Message.error('商品分数必须是1-5之间的整数');
       }
       if (!this.service_score) {
-        return this.$message.error('服务分数必须是1-5之间的整数');
+        return this.$Message.error('服务分数必须是1-5之间的整数');
       }
       let data = {
         image: {
@@ -187,11 +183,11 @@ export default {
       };
       saveFictitiousReply(data)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.$emit('update:visible', false);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     onCancel() {

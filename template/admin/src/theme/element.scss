@@ -59,7 +59,7 @@
   }
 }
 .el-dialog__body {
-  // max-height: calc(90vh - 111px) !important;
+  max-height: calc(90vh - 111px) !important;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -89,7 +89,7 @@
 .el-table::before,
 .el-table--group::after,
 .el-table--border::after {
-  z-index: 1 !important;
+  z-index: 99 !important;
 }
 
 /* 下拉选择器/时间选择器滚动条
@@ -269,25 +269,4 @@
 ------------------------------- */
 .el-alert__title {
   word-break: break-all;
-}
-
-// tooltip
-.el-tooltip__popper.is-light {
-  border-color: #f2f2f2 !important;
-}
-
-.el-tooltip__popper .popper__arrow,
-.el-tooltip__popper .popper__arrow::after {
-  color: #f2f2f2 !important;
-}
-// 下拉菜单
-.el-dropdown {
-  font-size: 12px !important;
-}
-.el-dropdown-link {
-  cursor: pointer;
-  color: #2d8cf0;
-}
-.el-icon-arrow-down {
-  font-size: 12px;
 }

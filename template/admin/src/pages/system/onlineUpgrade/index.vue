@@ -1,6 +1,6 @@
 <template>
 <div class="upgrade">
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
+    <Card :bordered="false" dis-hover class="ivu-mt">
       <div class="header">
         <div>当前版本<span class="v"></span><span class="num">{{$store.state.userInfo.version}}</span></div>
         <div class="info title">
@@ -10,86 +10,81 @@
           <li>{{upgradeStatus.title}}</li>
         </ul>
         </div>
-        <el-button v-if="currentTab == 1 && upgradeStatus.status == 1" type="primary" class="primary btn update" @click="update()">立即更新</el-button>
+        <Button v-if="currentTab == 1 && upgradeStatus.status == 1" type="primary" class="primary btn update" @click="update()">立即更新</Button>
       </div>
-    </el-card>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-          <el-tabs v-model="currentTab" @tab-click="handleClick">
-            <el-tab-pane :label="item.label" :name="item.value.toString()" v-for="item in headerList" :key="item.id" ></el-tab-pane>
-          </el-tabs>
-        <div class="contentTime" v-if="currentTab == 1">
-          <div class="acea-row row-top on" @mouseenter="quearyEvear(item.id,index)" v-for="(item, index) in upgradeList" :key="index" :class="{active:index==dynamic}">
-              <div class="time">{{item.release_time}}</div>
-              <el-timeline class="list">
-                  <el-timeline-item>
-                      <!-- <Icon :type="index==0 ? 'md-radio-button-on' : 'md-radio-button-off'" slot="dot"/> -->
-                      <el-collapse>
-                          <el-collapse-item >
-                            <template slot="title">
-                              {{item.title}} v{{item.first_version}}.{{item.second_version}}.{{item.third_version}}.{{item.fourth_version}}<Icon type="ios-arrow-down" />
-                            </template>
-                            <p class="info">
-                              <ul style="white-space: pre-wrap;">
-                                <li v-html="item.content"></li>
-                              </ul>
-                            </p>
-                          </el-collapse-item>
-                      </el-collapse>
-                  </el-timeline-item>
-                  <el-button v-if="item.client_package_link" type="success"  class="primary btn" @click="downloadFile(item.client_package_link)">移动端源码</el-button>
-                  <el-button v-if="item.pc_package_link" type="primary" class="primary btn1" @click="downloadFile(item.pc_package_link)">PC端源码</el-button>
-              </el-timeline>
-          </div>
+    </Card>
+    <Card :bordered="false" dis-hover class="ivu-mt">
+        <div>
+          <Tabs v-model="currentTab" @on-click="handleClick">
+            <TabPane :label="item.label" :name="item.value.toString()" v-for="item in headerList" :key="item.id"/>
+          </Tabs>
         </div>
-        <div  v-if="currentTab == 2" v-infinite-scroll="handleReachBottom" height="550">
-          <div class="contentTime" >
-              <div class="acea-row row-top off" @mouseenter="quearyEvear(item.id,index)" v-for="(item,index) in upgradeLogList" :key="index" :class="{active:index==dynamic}">
-                  <div class="time">
-                      <div v-if="index == 0">最近更新</div>
-                      <div>{{item.upgrade_time}}</div>
-                    </div>
-                  <el-timeline class="list">
-                      <el-timeline-item>
-                          <Icon :type="index==0 ? 'md-radio-button-on' : 'md-radio-button-off'" slot="dot"/>
-                          <el-collapse>
-                              <el-collapse-item>
-                                <template slot="title">
-                                  {{item.title}} v{{item.first_version}}.{{item.second_version}}.{{item.third_version}}.{{item.fourth_version}}<Icon type="ios-arrow-down" />
-                                </template>
-                                <p class="info">
-                                  <ul style="white-space: pre-wrap;">
-                                    <li v-html="item.content"></li>
-                                  </ul>
-                                </p>
-                              </el-collapse-item>
-                          </el-collapse>
-                      </el-timeline-item>
-                  </el-timeline>
-              </div>
-          </div>
+          <div class="contentTime" v-if="currentTab == 1">
+            <div class="acea-row row-top on" @mouseenter="quearyEvear(item.id,index)" v-for="(item, index) in upgradeList" :key="index" :class="{active:index==dynamic}">
+                <div class="time">{{item.release_time}}</div>
+                <Timeline class="list">
+                    <TimelineItem>
+                        <!-- <Icon :type="index==0 ? 'md-radio-button-on' : 'md-radio-button-off'" slot="dot"/> -->
+                        <Collapse simple>
+                            <Panel hide-arrow>
+                                {{item.title}} v{{item.first_version}}.{{item.second_version}}.{{item.third_version}}.{{item.fourth_version}}<Icon type="ios-arrow-down" />
+                              <p slot="content" class="info">
+                                <ul style="white-space: pre-wrap;">
+                                  <li v-html="item.content"></li>
+                                </ul>
+                              </p>
+                            </Panel>
+                        </Collapse>
+                    </TimelineItem>
+                    <Button v-if="item.client_package_link" type="success"  class="primary btn" @click="downloadFile(item.client_package_link)">移动端源码</Button>
+                    <Button v-if="item.pc_package_link" type="primary" class="primary btn1" @click="downloadFile(item.pc_package_link)">PC端源码</Button>
+                </Timeline>
+            </div>
         </div>
-    </el-card>
+        <Scroll v-if="currentTab == 2" :on-reach-bottom="handleReachBottom" height="550">
+        <div class="contentTime" >
+            <div class="acea-row row-top off" @mouseenter="quearyEvear(item.id,index)" v-for="(item,index) in upgradeLogList" :key="index" :class="{active:index==dynamic}">
+                <div class="time">
+                    <div v-if="index == 0">最近更新</div>
+                    <div>{{item.upgrade_time}}</div>
+                  </div>
+                <Timeline class="list">
+                    <TimelineItem>
+                        <Icon :type="index==0 ? 'md-radio-button-on' : 'md-radio-button-off'" slot="dot"/>
+                        <Collapse simple>
+                            <Panel hide-arrow>
+                                {{item.title}} v{{item.first_version}}.{{item.second_version}}.{{item.third_version}}.{{item.fourth_version}}<Icon type="ios-arrow-down" />
+                              <p slot="content" class="info">
+                                <ul style="white-space: pre-wrap;">
+                                  <li v-html="item.content"></li>
+                                </ul>
+                              </p>
+                            </Panel>
+                        </Collapse>
+                    </TimelineItem>
+                    <!-- <Button v-if="item.data_status == 1" type="primary" class="primary btn" @click="handleDownload(item)">数据库备份</Button>
+                    <Button v-if="item.file_status == 1" type="primary" class="primary btn1" @click="exports(item)">导出文件</Button> -->
+                </Timeline>
+            </div>
+        </div>
+        </Scroll>
+
+    </Card>
     <!-- 免责声明 -->
-    <el-dialog :visible.sync="declaration" 
-      width="340px"  
-      custom-clas="vertical-center-modal"       
-      :show-close="false"
-      :close-on-click-modal="false"
-    >
+    <Modal :loading="modal_loading" v-model="declaration" width="340" height="96" :closable="false" class-name="vertical-center-modal" :mask-closable="false">
         <p slot="header" class="header-modal">
           <span>{{upgradeAgreement.title}}</span>
         </p>
         <div class="describe">
           <p v-html="upgradeAgreement.content"></p>
         </div>
-         <span slot="footer" class="dialog-footer">
-          <el-button @click="reject">拒 绝</el-button>
-          <el-button type="primary" @click="agree">同 意</el-button>
-      </span>
-    </el-dialog>
+        <div slot="footer" class="footer">
+            <Button class="cancel" shape="circle" @click="reject">拒绝</Button>
+            <Button shape="circle" type="primary" @click="agree()">同意</Button>
+        </div>
+    </Modal>
     <!-- 升级 -->
-    <el-dialog v-model="updateModal" width="340px"  custom-clas="vertical-center-modal" :show-close="false"
-      :close-on-click-modal="false">
+    <Modal v-model="updateModal" width="340" height="96" :closable="false" class-name="vertical-center-modal" :mask-closable="false" @on-cancel="cancel">
         <p slot="header" class="header-modal2">
           <span >升级至v{{forceVersion}}</span>
         </p>
@@ -109,7 +104,7 @@
           <div class="wait">正在更新，请耐心等候～</div>
         </div>
         <div slot="footer">
-          <!-- <div v-if="upgradeProgress.speed == '100.0'"><el-button class="back" type="primary" shape="circle" @click="updateModal = false">确认</el-button></div> -->
+          <!-- <div v-if="upgradeProgress.speed == '100.0'"><Button class="back" type="primary" shape="circle" @click="updateModal = false">确认</Button></div> -->
         </div>
         <div v-if="upgradeProgress.speed == '100.0'" class="describe">
           <i-circle :percent="100" stroke-color="#5cb85c">
@@ -124,14 +119,10 @@
           <div class="success">升级失败</div>
         </div> -->
         <div v-if="upgradeProgress.speed == '100.0'" slot="footer" class="footer2">
-          <el-button class="confirm" type="primary" shape="circle" @click="back()">确认</el-button>
-          <!-- <div><el-button class="back" shape="circle" @click="backSure()">返回</el-button></div> -->
+          <Button class="confirm" type="primary" shape="circle" @click="back()">确认</Button>
+          <!-- <div><Button class="back" shape="circle" @click="backSure()">返回</Button></div> -->
         </div>
-        <span v-if="upgradeProgress.speed == '100.0'" slot="footer" class="dialog-footer">
-          <el-button @click="cancel">取 消</el-button>
-          <el-button type="primary" @click="back">确 认</el-button>
-        </span>
-    </el-dialog>
+    </Modal>
 </div>
 </template>
 
@@ -234,14 +225,14 @@ export default {
   methods: {
     handleReachBottom(){
       if(this.count === this.upgradeLogList.length) {
-        this.$message.warning('暂无更多升级记录')
+        this.$Message.warning('暂无更多升级记录')
       } else {
         this.getUpgradeLogList();
       }
     },
-    handleClick() {
+    handleClick(tab, event) {
       this.page = 1
-      if(this.currentTab == 1){
+      if(tab == 1){
         this.getupgradeableList();
       } else {
         this.upgradeLogList = []
@@ -273,7 +264,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
 
@@ -349,7 +340,7 @@ export default {
         })
         .catch((err) => {
           clearInterval(this.timer);
-          this.$message.error('下载终止');
+          this.$Message.error('下载终止');
           this.updateModal = false;
         });
     },
@@ -366,7 +357,7 @@ export default {
         })
         .catch((res) => {
           clearInterval(this.timer);
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 升级协议
@@ -377,7 +368,7 @@ export default {
           this.declaration = true;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 升级状态
@@ -391,7 +382,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 立即更新
@@ -443,7 +434,7 @@ export default {
       clearInterval(this.timer);
       AccountLogout()
         .then((res) => {
-          this.$message.success('您已成功退出');
+          this.$Message.success('您已成功退出');
           this.$router.replace(this.$routeProStr + '/login');
           localStorage.clear();
           removeCookies('token');

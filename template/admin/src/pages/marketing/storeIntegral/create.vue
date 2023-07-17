@@ -3,9 +3,9 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <router-link :to="{ path: $routeProStr + '/marketing/store_integral/index' }"
-          ><el-button icon="ios-arrow-back" size="small" type="text">返回</el-button></router-link
+          ><Button icon="ios-arrow-back" size="small" type="text">返回</Button></router-link
         >
-        <el-divider direction="vertical"></el-divider>
+        <Divider type="vertical" />
         <span
           class="ivu-page-header-title mr20"
           style="padding: 0"
@@ -13,17 +13,17 @@
         ></span>
       </div>
     </div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-row class="mt30 acea-row row-middle row-center" v-loading="spinShow">
-        <el-col :span="20">
-          <el-steps :active="current">
-            <el-step title="选择积分商品"></el-step>
-            <el-step title="填写基础信息"></el-step>
-            <el-step title="修改商品详情"></el-step>
-          </el-steps>
-        </el-col>
-        <el-col :span="23">
-          <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Row type="flex" class="mt30 acea-row row-middle row-center">
+        <Col span="20">
+          <Steps :current="current">
+            <Step title="选择积分商品"></Step>
+            <Step title="填写基础信息"></Step>
+            <Step title="修改商品详情"></Step>
+          </Steps>
+        </Col>
+        <Col span="23">
+          <Form
             class="form mt30"
             ref="formValidate"
             :model="formValidate"
@@ -33,7 +33,7 @@
             :label-position="labelPosition"
             @submit.native.prevent
           >
-            <el-form-item label="选择商品：" prop="image_input" v-if="current === 0">
+            <FormItem label="选择商品：" prop="image_input" v-if="current === 0">
               <div class="picBox" @click="changeGoods">
                 <div class="pictrue" v-if="formValidate.image">
                   <img v-lazy="formValidate.image" />
@@ -42,10 +42,10 @@
                   <Icon type="ios-camera-outline" size="26" class="iconfonts" />
                 </div>
               </div>
-            </el-form-item>
-            <el-col v-show="current === 1">
-              <el-col :span="24">
-                <el-form-item prop="image">
+            </FormItem>
+            <Col v-show="current === 1" type="flex">
+              <Col span="24">
+                <FormItem prop="image">
                   <div class="custom-label" slot="label">
                     <div>
                       <div>商品主图</div>
@@ -61,10 +61,10 @@
                       <Icon type="ios-camera-outline" size="26" class="iconfonts" />
                     </div>
                   </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
-                <el-form-item prop="images">
+                </FormItem>
+              </Col>
+              <Col span="24">
+                <FormItem prop="images">
                   <div class="custom-label" slot="label">
                     <div>
                       <div>商品轮播图</div>
@@ -84,7 +84,12 @@
                       @dragend="handleDragEnd($event, item)"
                     >
                       <img v-lazy="item" />
-                      <i class="el-icon-circle-close btndel" @click="handleRemove(index)"></i>
+                      <Button
+                        shape="circle"
+                        icon="md-close"
+                        @click.native="handleRemove(index)"
+                        class="btndel"
+                      ></Button>
                     </div>
                     <div
                       v-if="formValidate.images.length < 10"
@@ -94,20 +99,19 @@
                       <Icon type="ios-camera-outline" size="26" class="iconfonts" />
                     </div>
                   </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
-                <el-col v-bind="grid">
-                  <el-form-item label="商品标题：" prop="title" label-for="title">
-                    <el-input placeholder="请输入商品标题" element-id="title" v-model="formValidate.title" />
-                  </el-form-item>
-                </el-col>
-              </el-col>
-              <el-col :span="24">
-                <el-form-item label="用户兑换数量限制：" prop="num">
+                </FormItem>
+              </Col>
+              <Col span="24">
+                <Col v-bind="grid">
+                  <FormItem label="商品标题：" prop="title" label-for="title">
+                    <Input placeholder="请输入商品标题" element-id="title" v-model="formValidate.title" />
+                  </FormItem>
+                </Col>
+              </Col>
+              <Col span="24">
+                <FormItem label="用户兑换数量限制：" prop="num">
                   <div class="acea-row row-middle">
-                    <el-input-number
-                      controls-position="right"
+                    <InputNumber
                       :min="1"
                       :max="99999"
                       placeholder="请输入数量限制"
@@ -120,146 +124,130 @@
                       每个用户可购买该商品总数限制。例如设置为4，表示本活动,每个用户最多可兑换总数4个
                     </div>
                   </div>
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
-                <el-form-item label="单位：" prop="unit_name" label-for="unit_name">
-                  <el-input
+                </FormItem>
+              </Col>
+              <Col span="24">
+                <FormItem label="单位：" prop="unit_name" label-for="unit_name">
+                  <Input
                     placeholder="请输入单位"
                     element-id="unit_name"
                     v-model="formValidate.unit_name"
                     class="perW20"
                   />
-                </el-form-item>
-              </el-col>
+                </FormItem>
+              </Col>
 
-              <el-col :span="24">
-                <el-form-item label="排序：">
-                  <el-input-number
-                    controls-position="right"
+              <Col span="24">
+                <FormItem label="排序：">
+                  <InputNumber
                     placeholder="请输入排序"
                     element-id="sort"
                     :precision="0"
                     v-model="formValidate.sort"
                     class="perW10"
                   />
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
-                <el-form-item label="上架状态：" props="is_show" label-for="status">
-                  <el-radio-group element-id="is_show" v-model="formValidate.is_show">
-                    <el-radio :label="1" class="radio">开启</el-radio>
-                    <el-radio :label="0">关闭</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-              </el-col>
-              <el-col v-bind="grid2">
-                <el-form-item label="热门推荐：" props="is_host" label-for="is_host">
-                  <el-radio-group element-id="is_host" v-model="formValidate.is_host">
-                    <el-radio :label="1" class="radio">开启</el-radio>
-                    <el-radio :label="0">关闭</el-radio>
-                  </el-radio-group>
-                </el-form-item>
-              </el-col>
-              <el-col :span="24">
-                <el-form-item label="规格选择：">
-                  <el-table
+                </FormItem>
+              </Col>
+              <Col span="24">
+                <FormItem label="上架状态：" props="is_show" label-for="status">
+                  <RadioGroup element-id="is_show" v-model="formValidate.is_show">
+                    <Radio :label="1" class="radio">开启</Radio>
+                    <Radio :label="0">关闭</Radio>
+                  </RadioGroup>
+                </FormItem>
+              </Col>
+              <Col v-bind="grid2">
+                <FormItem label="热门推荐：" props="is_host" label-for="is_host">
+                  <RadioGroup element-id="is_host" v-model="formValidate.is_host">
+                    <Radio :label="1" class="radio">开启</Radio>
+                    <Radio :label="0">关闭</Radio>
+                  </RadioGroup>
+                </FormItem>
+              </Col>
+              <Col span="24">
+                <FormItem label="规格选择：">
+                  <Table
                     :data="specsData"
+                    :columns="columns"
                     border
                     class="mt25"
-                    highlight-current-row
-                    @selection-change="changeCheckbox"
+                    highlight-row
+                    @on-selection-change="changeCheckbox"
                   >
-                    <el-table-column type="selection" width="55"> </el-table-column>
-                    <el-table-column
-                      :label="item.title"
-                      :min-width="item.minWidth"
-                      v-for="(item, index) in columns"
-                      :key="index"
-                    >
-                      <template slot-scope="scope">
-                        <template v-if="item.key">
-                          <div>
-                            <span>{{ scope.row[item.key] }}</span>
-                          </div>
-                        </template>
-                        <template v-else-if="item.slot === 'pic'">
-                          <div
-                            class="acea-row row-middle row-center-wrapper"
-                            @click="modalPicTap('dan', 'danTable', index)"
-                          >
-                            <div class="pictrue pictrueTab" v-if="scope.row.pic">
-                              <img v-lazy="scope.row.pic" />
-                            </div>
-                            <div class="upLoad pictrueTab acea-row row-center-wrapper" v-else>
-                              <Icon type="ios-camera-outline" size="21" class="iconfonts" />
-                            </div>
-                          </div>
-                        </template>
-                        <template v-else-if="item.slot === 'price'">
-                          <el-input-number
-                            controls-position="right"
-                            v-model="scope.row.price"
-                            :min="0"
-                            :precision="2"
-                            class="priceBox"
-                            :active-change="false"
-                          ></el-input-number>
-                        </template>
-                        <template v-else-if="item.slot === 'quota'">
-                          <el-input-number
-                            controls-position="right"
-                            v-model="scope.row.quota"
-                            :min="1"
-                            active-change
-                            class="priceBox"
-                          ></el-input-number>
-                        </template>
-                      </template>
-                    </el-table-column>
-                  </el-table>
-                </el-form-item>
-              </el-col>
-            </el-col>
-            <el-row v-show="current === 2">
-              <el-col :span="24">
-                <el-form-item label="内容：">
+                    <template slot-scope="{ row, index }" slot="pic">
+                      <div
+                        class="acea-row row-middle row-center-wrapper"
+                        @click="modalPicTap('dan', 'danTable', index)"
+                      >
+                        <div class="pictrue pictrueTab" v-if="row.pic">
+                          <img v-lazy="row.pic" />
+                        </div>
+                        <div class="upLoad pictrueTab acea-row row-center-wrapper" v-else>
+                          <Icon type="ios-camera-outline" size="21" class="iconfont" />
+                        </div>
+                      </div>
+                    </template>
+                  </Table>
+                </FormItem>
+              </Col>
+            </Col>
+            <Row v-show="current === 2">
+              <Col span="24">
+                <FormItem label="内容：">
                   <WangEditor
                     style="width: 90%"
                     :content="formValidate.description"
                     @editorContent="getEditorContent"
                   ></WangEditor>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-col :span="24">
-              <el-form-item>
-                <el-button
+                </FormItem>
+              </Col>
+            </Row>
+            <Col span="24">
+              <FormItem>
+                <Button
                   class="submission mr15"
                   @click="step"
                   v-show="current !== 0"
                   :disabled="$route.params.id && current === 1"
                   >上一步
-                </el-button>
-                <el-button
+                </Button>
+                <Button
                   :disabled="submitOpen && current === 2"
                   type="primary"
                   class="submission"
                   @click="next('formValidate')"
                   v-text="current === 2 ? '提交' : '下一步'"
-                ></el-button>
-              </el-form-item>
-            </el-col>
-          </el-form>
-        </el-col>
-      </el-row>
-    </el-card>
+                ></Button>
+              </FormItem>
+            </Col>
+          </Form>
+          <Spin size="large" fix v-if="spinShow"></Spin>
+        </Col>
+      </Row>
+    </Card>
     <!-- 选择商品-->
-    <el-dialog :visible.sync="modals" title="商品列表" class="paymentFooter" width="900px">
+    <Modal
+      v-model="modals"
+      title="商品列表"
+      class="paymentFooter"
+      footerHide
+      scrollable
+      width="900"
+      @on-cancel="cancel"
+    >
       <goods-list ref="goodslist" @getProductId="getProductId"></goods-list>
-    </el-dialog>
+    </Modal>
     <!-- 上传图片-->
-    <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
+    <Modal
+      v-model="modalPic"
+      width="950px"
+      scrollable
+      footer-hide
+      closable
+      title="上传商品图"
+      :mask-closable="false"
+      :z-index="1"
+    >
       <uploadPictures
         :isChoice="isChoice"
         @getPic="getPic"
@@ -268,7 +256,7 @@
         :gridPic="gridPic"
         v-if="modalPic"
       ></uploadPictures>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 
@@ -436,7 +424,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '135px';
+      return this.isMobile ? undefined : 135;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -459,16 +447,67 @@ export default {
       productAttrsApi(rows.id, 4)
         .then((res) => {
           let data = res.data.info;
+          let selection = {
+            type: 'selection',
+            width: 60,
+            align: 'center',
+          };
           that.specsData = data.attrs;
           that.specsData.forEach(function (item, index) {
             that.$set(that.specsData[index], 'id', index);
           });
           that.formValidate.items = data.items;
           that.columns = data.header;
+          that.columns.unshift(selection);
+          that.inputChange(data);
         })
         .catch((res) => {
           that.$Message.error(res.msg);
         });
+    },
+    inputChange(data) {
+      let that = this;
+      let $index = [];
+      data.header.forEach(function (item, index) {
+        if (item.type === 1) {
+          $index.push({ index: index, key: item.key, title: item.title });
+        }
+      });
+      $index.forEach(function (item, index) {
+        let title = item.title;
+        let key = item.key;
+        let row = {
+          title: title,
+          key: key,
+          align: 'center',
+          minWidth: 120,
+          render: (h, params) => {
+            return h('div', [
+              h('InputNumber', {
+                props: {
+                  min: 0,
+                  precision: 0,
+                  value: key === 'price' ? params.row.price : params.row.quota,
+                },
+                on: {
+                  'on-change': (e) => {
+                    key === 'price' ? (params.row.price = e) : (params.row.quota = e);
+                    that.specsData[params.index] = params.row;
+                    if (!!that.formValidate.attrs && that.formValidate.attrs.length) {
+                      that.formValidate.attrs.forEach((v, index) => {
+                        if (v.id === params.row.id) {
+                          that.formValidate.attrs.splice(index, 1, params.row);
+                        }
+                      });
+                    }
+                  },
+                },
+              }),
+            ]);
+          },
+        };
+        that.columns.splice(item.index, 1, row);
+      });
     },
     // 多选
     changeCheckbox(selection) {
@@ -477,7 +516,7 @@ export default {
     // 表单验证
     validate(prop, status, error) {
       if (status === false) {
-        this.$message.error(error);
+        this.$Message.error(error);
       }
     },
     // 商品id
@@ -529,9 +568,15 @@ export default {
         .then(async (res) => {
           let that = this;
           let info = res.data.info;
+          let selection = {
+            type: 'selection',
+            width: 60,
+            align: 'center',
+          };
           this.formValidate = info;
           this.$set(this.formValidate, 'items', info.attrs.items);
           this.columns = info.attrs.header;
+          this.columns.unshift(selection);
           this.specsData = info.attrs.value;
           that.specsData.forEach(function (item, index) {
             that.$set(that.specsData[index], 'id', index);
@@ -544,11 +589,12 @@ export default {
             }
           }
           that.formValidate.attrs = attr;
+          that.inputChange(data);
           this.spinShow = false;
         })
         .catch((res) => {
           this.spinShow = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 下一步
@@ -564,7 +610,7 @@ export default {
             integralAddApi(this.formValidate)
               .then(async (res) => {
                 this.submitOpen = false;
-                this.$message.success(res.msg);
+                this.$Message.success(res.msg);
                 setTimeout(() => {
                   this.$router.push({
                     path: this.$routeProStr + '/marketing/store_integral/index',
@@ -573,7 +619,7 @@ export default {
               })
               .catch((res) => {
                 this.submitOpen = false;
-                this.$message.error(res.msg);
+                this.$Message.error(res.msg);
               });
           } else {
             return false;
@@ -593,14 +639,14 @@ export default {
             }
             this.current += 1;
           } else {
-            return this.$message.warning('请完善您的信息');
+            return this.$Message.warning('请完善您的信息');
           }
         });
       } else {
         if (this.formValidate.image) {
           this.current += 1;
         } else {
-          this.$message.warning('请选择商品');
+          this.$Message.warning('请选择商品');
         }
       }
     },

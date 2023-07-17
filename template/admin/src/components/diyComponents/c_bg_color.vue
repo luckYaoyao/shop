@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="c_row-item" v-if="configData[this.configNum]">
-      <el-col :span="8" class="c_label">{{ configData[this.configNum][name].title }}</el-col>
-      <el-col span="14" class="color-box">
+      <Col span="8" class="c_label">{{ configData[this.configNum][name].title }}</Col>
+      <Col span="14" class="color-box">
         <div class="color-item" v-for="(color, key) in configData[this.configNum][name].color" :key="key">
-          <el-color-picker v-model="color.item" @change="changeColor($event, color)" show-alpha></el-color-picker
+          <ColorPicker v-model="color.item" @on-change="changeColor($event, color)" alpha></ColorPicker
           ><span @click="resetBgA(color, index, key)">重置</span>
         </div>
-      </el-col>
+      </Col>
     </div>
   </div>
 </template>

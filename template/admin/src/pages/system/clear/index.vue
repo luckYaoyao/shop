@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="acea-row row-center clear_tit">
-      <el-button type="primary" @click="clearCache" class="mr20">清除缓存</el-button>
-      <el-button type="primary" @click="clearlog">清除日志</el-button>
+      <Button type="primary" @click="clearCache" class="mr20">清除缓存</Button>
+      <Button type="primary" @click="clearlog">清除日志</Button>
     </div>
   </div>
 </template>
@@ -26,10 +26,10 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     clearlog() {
@@ -42,10 +42,10 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },

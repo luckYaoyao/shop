@@ -1,48 +1,47 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="tableFrom"
         :model="tableFrom"
         :label-width="labelWidth"
         :label-position="labelPosition"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col>
-            <el-form-item label="创建时间：" label-for="user_time">
-              <el-date-picker
+        <Row type="flex" :gutter="24">
+          <Col>
+            <FormItem label="创建时间：" label-for="user_time">
+              <!--<DatePicker clearable @on-change="onchangeTime" v-model="timeVal" :value="timeVal"  format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="选择时间" v-width="'100%'"></DatePicker>-->
+              <DatePicker
                 :editable="false"
-                @change="onchangeTime"
-                v-model="timeVal"
+                @on-change="onchangeTime"
+                :value="timeVal"
                 format="yyyy/MM/dd"
                 type="daterange"
-                value-format="yyyy/MM/dd"
-                range-separator="至"
-                start-placeholder="开始日期"
-                end-placeholder="结束日期"
-                
+                placement="bottom-start"
+                placeholder="自定义时间"
+                style="width: 200px"
                 class="mr20"
-              ></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col>
-            <el-form-item label="上架状态：">
-              <el-select
+              ></DatePicker>
+            </FormItem>
+          </Col>
+          <Col>
+            <FormItem label="上架状态：">
+              <Select
                 placeholder="请选择"
                 clearable
                 style="width: 200px"
                 v-model="tableFrom.is_show"
-                @change="userSearchs"
+                @on-change="userSearchs"
               >
-                <el-option value="1" label="上架"></el-option>
-                <el-option value="0" label="下架"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col>
-            <el-form-item label="商品搜索：" label-for="store_name">
-              <el-input
+                <Option value="1">上架</Option>
+                <Option value="0">下架</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col>
+            <FormItem label="商品搜索：" label-for="store_name">
+              <Input
                 search
                 enter-button
                 style="width: 200px"
@@ -50,108 +49,80 @@
                 v-model="tableFrom.store_name"
                 @on-search="userSearchs"
               />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row class="mb20">
-          <el-col>
-            <el-button
-              v-auth="['marketing-store_integral-create']"
+            </FormItem>
+          </Col>
+        </Row>
+        <Row type="flex" class="mb20">
+          <Col>
+            <Button v-auth="['marketing-store_integral-create']" type="primary" icon="md-add" @click="add" class="mr10"
+              >添加积分商品</Button
+            >
+            <!-- <Button
+              v-auth="['marketing-store_seckill-create']"
               type="primary"
               icon="md-add"
-              @click="add"
+              @click="addMore"
               class="mr10"
-              >添加积分商品</el-button
-            >
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table
+              >批量添加积分商品</Button
+            > -->
+            <!--<Button v-auth="['export-storeSeckill']" class="export" icon="ios-share-outline" @click="exports">导出</Button>-->
+          </Col>
+        </Row>
+      </Form>
+      <Table
+        :columns="columns1"
         :data="tableList"
         :loading="loading"
-        highlight-current-row
+        highlight-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column label="ID" min-width="50">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="商品图片" min-width="40">
-          <template slot-scope="scope">
-            <viewer>
-              <div class="tabBox_img">
-                <img v-lazy="scope.row.image" />
-              </div>
-            </viewer>
-          </template>
-        </el-table-column>
-        <el-table-column label="活动标题" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.title }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="兑换积分" min-width="60">
-          <template slot-scope="scope">
-            <span>{{ scope.row.price }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="限量" min-width="60">
-          <template slot-scope="scope">
-            <span>{{ scope.row.quota_show }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="限量剩余" min-width="60">
-          <template slot-scope="scope">
-            <span>{{ scope.row.quota }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="创建时间" min-width="100">
-          <template slot-scope="scope">
-            <span>{{ scope.row.add_time }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="排序" min-width="60">
-          <template slot-scope="scope">
-            <span>{{ scope.row.sort }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="状态" min-width="60">
-          <template slot-scope="scope">
-            <el-switch
-              :active-value="1"
-              :inactive-value="0"
-              v-model="scope.row.is_show"
-              :value="scope.row.is_show"
-              @change="onchangeIsShow(scope.row)"
-              size="large"
-            >
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="200">
-          <template slot-scope="scope">
-            <a @click="orderList(scope.row)">兑换记录</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="edit(scope.row)">编辑</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="copy(scope.row)">复制</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="del(scope.row, '删除积分商品', index)">删除</a>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template slot-scope="{ row, index }" slot="image">
+          <viewer>
+            <div class="tabBox_img">
+              <img v-lazy="row.image" />
+            </div>
+          </viewer>
+        </template>
+        <template slot-scope="{ row, index }" slot="stop_time">
+          <span> {{ row.stop_time | formatDate }}</span>
+        </template>
+        <template slot-scope="{ row, index }" slot="is_show">
+          <i-switch
+            v-model="row.is_show"
+            :value="row.is_show"
+            :true-value="1"
+            :false-value="0"
+            @on-change="onchangeIsShow(row)"
+            size="large"
+          >
+            <span slot="open">上架</span>
+            <span slot="close">下架</span>
+          </i-switch>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <!-- <a v-if="row.stop_status === 1" @click="copy(row)" >一键复制</a>
+                    <a v-else @click="edit(row)" >编辑</a> -->
+          <a @click="orderList(row)">兑换记录</a>
+          <Divider type="vertical" />
+          <a @click="edit(row)">编辑</a>
+          <Divider type="vertical" />
+          <a @click="copy(row)">复制</a>
+          <Divider type="vertical" />
+          <a @click="del(row, '删除积分商品', index)">删除</a>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="tableFrom.page"
-          :limit.sync="tableFrom.limit"
-          @pagination="getList"
+          :current="tableFrom.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="tableFrom.limit"
         />
       </div>
-    </el-card>
+    </Card>
   </div>
 </template>
 
@@ -172,7 +143,59 @@ export default {
   data() {
     return {
       loading: false,
-
+      columns1: [
+        {
+          title: 'ID',
+          key: 'id',
+          width: 80,
+        },
+        {
+          title: '商品图片',
+          slot: 'image',
+          minWidth: 90,
+        },
+        {
+          title: '活动标题',
+          key: 'title',
+          minWidth: 130,
+        },
+        {
+          title: '兑换积分',
+          key: 'price',
+          minWidth: 100,
+        },
+        {
+          title: '限量',
+          key: 'quota_show',
+          minWidth: 130,
+        },
+        {
+          title: '限量剩余',
+          key: 'quota',
+          minWidth: 130,
+        },
+        {
+          title: '创建时间',
+          key: 'add_time',
+          minWidth: 130,
+        },
+        {
+          title: '排序',
+          key: 'sort',
+          minWidth: 50,
+        },
+        {
+          title: '状态',
+          slot: 'is_show',
+          minWidth: 100,
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          fixed: 'right',
+          minWidth: 130,
+        },
+      ],
       tableList: [],
       timeVal: [],
       grid: {
@@ -195,7 +218,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '85px';
+      return this.isMobile ? undefined : 80;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -208,6 +231,11 @@ export default {
     // 添加
     add() {
       this.$router.push({ path: this.$routeProStr + '/marketing/store_integral/create' });
+    },
+    addMore() {
+      this.$router.push({
+        path: this.$routeProStr + '/marketing/store_integral/add_store_integral',
+      });
     },
     orderList(row) {
       this.$router.push({
@@ -230,7 +258,7 @@ export default {
           location.href = res.data[0];
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 编辑
@@ -256,11 +284,11 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.tableList.splice(num, 1);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 列表
@@ -277,8 +305,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.tableFrom.page = index;
+      this.getList();
     },
     // 表格搜索
     userSearchs() {
@@ -288,7 +320,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.tableFrom.integral_time = this.timeVal ? this.timeVal.join('-') : '';
+      this.tableFrom.integral_time = this.timeVal.join('-');
     },
     // 修改是否显示
     onchangeIsShow(row) {
@@ -298,10 +330,10 @@ export default {
       };
       integralIsShowApi(data)
         .then(async (res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },

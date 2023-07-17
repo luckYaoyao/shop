@@ -16,13 +16,13 @@
             <div class="info-item" v-if="item.hasOwnProperty('name')">
               <span>{{ type == 1 ? '管理名称：' : type == 2 ? '广告名称' : '服务名称：' }}</span>
               <div class="input-box">
-                <el-input v-model="item.name" :placeholder="type == 2 ? '请输入名称' : '服务中心'" :maxlength="4" />
+                <Input v-model="item.name" :placeholder="type == 2 ? '请输入名称' : '服务中心'" :maxlength="4" />
               </div>
             </div>
             <div class="info-item">
               <span>链接地址：</span>
               <div class="input-box" @click="getLink(index)">
-                <el-input v-model="item.url" icon="ios-arrow-forward" readonly placeholder="选择链接" />
+                <Input v-model="item.url" icon="ios-arrow-forward" readonly placeholder="选择链接" />
               </div>
             </div>
           </div>
@@ -32,7 +32,16 @@
         </div>
       </draggable>
       <div>
-        <el-dialog v-model="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
+        <Modal
+          v-model="modalPic"
+          width="950px"
+          scrollable
+          footer-hide
+          closable
+          title="上传商品图"
+          :mask-closable="false"
+          :z-index="1"
+        >
           <uploadPictures
             :isChoice="isChoice"
             @getPic="getPic"
@@ -40,17 +49,17 @@
             :gridPic="gridPic"
             v-if="modalPic"
           ></uploadPictures>
-        </el-dialog>
+        </Modal>
       </div>
     </div>
     <template v-if="listData">
       <div class="add-btn" v-if="(type != 1 && type != 2) || (type == 2 && listData.length < 5)">
-        <el-button
+        <Button
           type="primary"
           ghost
           style="width: 100px; height: 30px; background: #1890ff; color: #fff; font-size: 13px"
           @click="addBox"
-          >添加板块</el-button
+          >添加板块</Button
         >
       </div>
     </template>

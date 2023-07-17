@@ -1,12 +1,12 @@
 <template>
   <div>
-    <el-dialog :visible.sync="val" title="商品属性" width="70%" @closed="cancel">
+    <Modal v-model="val" title="商品属性" width="70%" @on-cancel="cancel">
       <div class="Modals">
-        <el-form class="form" ref="form" label-width="70px" label-position="right">
-          <el-row :gutter="24">
-            <el-col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
-              <el-form-item label="规格：" prop="store_name" label-for="store_name">
-                <el-input
+        <Form class="form" ref="form" :label-width="70" label-position="right">
+          <Row :gutter="24" type="flex">
+            <Col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
+              <FormItem label="规格：" prop="store_name" label-for="store_name">
+                <Input
                   placeholder="规格"
                   style="width: 10%"
                   class="input"
@@ -15,34 +15,35 @@
                   :key="index"
                 >
                   <Icon type="md-close" slot="suffix" />
-                </el-input>
-                <el-input placeholder="请输入" v-model="specsVal" style="width: 10%" class="input">
+                </Input>
+                <Input placeholder="请输入" v-model="specsVal" style="width: 10%" class="input">
                   <Icon type="md-add" slot="suffix" @click="confirm" />
-                </el-input>
-                <!--<el-button type="primary" icon="md-add" @click="confirm"></el-button>-->
-              </el-form-item>
-            </el-col>
-            <el-col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
-              <el-form-item
+                </Input>
+                <!--<Button type="primary" icon="md-add" @click="confirm"></Button>-->
+              </FormItem>
+            </Col>
+            <Col :xl="24" :lg="24" :md="24" :sm="24" :xs="24">
+              <FormItem
                 :label="item.attr + ':'"
                 prop="store_name"
                 label-for="store_name"
                 v-for="(item, index) in attrList"
                 :key="index"
               >
-                <el-tag  closable color="primary" v-for="(itemn, index) in item.attrVal" :key="index">{{
+                <Tag type="border" closable color="primary" v-for="(itemn, index) in item.attrVal" :key="index">{{
                   itemn
-                }}</el-tag>
-                <el-input placeholder="请输入" v-model="item.inputVal" style="width: 10%" class="input">
+                }}</Tag>
+                <Input placeholder="请输入" v-model="item.inputVal" style="width: 10%" class="input">
                   <Icon type="md-add" slot="suffix" @click="confirmAttr(index)" />
-                </el-input>
-                <!--<el-button type="primary" icon="md-add" @click="confirm"></el-button>-->
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
+                </Input>
+                <!--<Button type="primary" icon="md-add" @click="confirm"></Button>-->
+              </FormItem>
+            </Col>
+          </Row>
+        </Form>
       </div>
-    </el-dialog>
+      <div slot="footer"></div>
+    </Modal>
   </div>
 </template>
 
@@ -76,7 +77,7 @@ export default {
     },
     confirm() {
       if (this.specsVal === '') {
-        this.$message.error('请填写规格名称');
+        this.$Message.error('请填写规格名称');
       } else {
         this.specs.push(this.specsVal);
         this.attrList.push({
@@ -88,7 +89,7 @@ export default {
         if (this.specsVal !== '') {
           this.attrList.forEach((item) => {
             if (item.attrVal.length < 1) {
-              this.$message.error('请填写规格属性');
+              this.$Message.error('请填写规格属性');
             }
           });
         }
@@ -97,7 +98,7 @@ export default {
     confirmAttr(index) {
       let attrList = this.attrList[index];
       if (attrList.inputVal === '') {
-        this.$message.error('请填写规格属性');
+        this.$Message.error('请填写规格属性');
       } else {
         attrList.attrVal.push(attrList.inputVal);
         attrList.inputVal === '';

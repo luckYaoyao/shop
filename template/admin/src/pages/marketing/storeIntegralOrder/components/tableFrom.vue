@@ -1,6 +1,6 @@
 <template>
   <div class="table_box">
-    <el-form
+    <Form
       ref="orderData"
       :model="orderData"
       :label-width="labelWidth"
@@ -8,54 +8,44 @@
       class="tabform"
       @submit.native.prevent
     >
-      <el-row :gutter="24">
-        <el-col :span="8" class="ivu-text-left">
-          <el-form-item label="订单状态：">
-            <el-radio-group
+      <Row :gutter="24">
+        <Col span="8" class="ivu-text-left">
+          <FormItem label="订单状态：">
+            <RadioGroup
               v-model="orderData.status"
               type="button"
-              @change="selectChange2(orderData.status)"
+              @on-change="selectChange2(orderData.status)"
               style="width: 400px"
             >
-              <el-radio-button label=""
-                >全部 {{ '(' + orderChartType.statusAll ? orderChartType.statusAll : 0 + ')' }}</el-radio-button
-              >
-              <el-radio-button label="1"
-                >未发货 {{ '(' + orderChartType.unshipped ? orderChartType.unshipped : 0 + ')' }}</el-radio-button
-              >
-              <el-radio-button label="2"
-                >待收货 {{ '(' + orderChartType.untake ? orderChartType.untake : 0 + ')' }}</el-radio-button
-              >
-              <el-radio-button label="3"
-                >交易完成 {{ '(' + orderChartType.complete ? orderChartType.complete : 0 + ')' }}</el-radio-button
-              >
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8" class="ivu-text-left">
-          <el-form-item label="创建时间：">
-            <el-date-picker
+              <Radio label="">全部 {{ '(' + orderChartType.statusAll ? orderChartType.statusAll : 0 + ')' }}</Radio>
+              <Radio label="1">未发货 {{ '(' + orderChartType.unshipped ? orderChartType.unshipped : 0 + ')' }}</Radio>
+              <Radio label="2">待收货 {{ '(' + orderChartType.untake ? orderChartType.untake : 0 + ')' }}</Radio>
+              <Radio label="3">交易完成 {{ '(' + orderChartType.complete ? orderChartType.complete : 0 + ')' }}</Radio>
+            </RadioGroup>
+          </FormItem>
+        </Col>
+        <Col span="8" class="ivu-text-left">
+          <FormItem label="创建时间：">
+            <DatePicker
               :editable="false"
-              @change="onchangeTime"
-              v-model="timeVal"
+              @on-change="onchangeTime"
+              :value="timeVal"
               format="yyyy/MM/dd HH:mm:ss"
               type="datetimerange"
-              value-format="yyyy/MM/dd HH:mm:ss"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              style="width: 380px"
+              placement="bottom-start"
+              placeholder="自定义时间"
+              style="width: 300px"
               class="mr20"
               :options="options"
-            ></el-date-picker>
-          </el-form-item>
-        </el-col>
-      </el-row>
-      <el-row :gutter="24">
-        <el-col :span="12">
+            ></DatePicker>
+          </FormItem>
+        </Col>
+      </Row>
+      <Row :gutter="24" type="flex">
+        <Col span="12">
           <div class="df">
-            <el-form-item label="搜索：" prop="real_name" label-for="real_name">
-              <el-input
+            <FormItem label="搜索：" prop="real_name" label-for="real_name">
+              <Input
                 v-model="orderData.real_name"
                 search
                 enter-button
@@ -64,21 +54,21 @@
                 style="width: 300px"
                 @on-search="orderSearch(orderData.real_name)"
               >
-                <el-select v-model="orderData.field_key" slot="prepend" style="width: 80px">
-                  <el-option value="all" label="全部"></el-option>
-                  <el-option value="order_id" label="订单号"></el-option>
-                  <el-option value="uid" label="UID"></el-option>
-                  <el-option value="real_name" label="用户姓名"></el-option>
-                  <el-option value="user_phone" label="用户电话"></el-option>
-                  <el-option value="store_name" label="商品名称(模糊)"></el-option>
-                </el-select>
-              </el-input>
-            </el-form-item>
-            <!-- <el-button class="ml10" @click="exports">导出</el-button> -->
+                <Select v-model="orderData.field_key" slot="prepend" style="width: 80px">
+                  <Option value="all">全部</Option>
+                  <Option value="order_id">订单号</Option>
+                  <Option value="uid">UID</Option>
+                  <Option value="real_name">用户姓名</Option>
+                  <Option value="user_phone">用户电话</Option>
+                  <Option value="store_name">商品名称(模糊)</Option>
+                </Select>
+              </Input>
+            </FormItem>
+            <!-- <Button class="ml10" @click="exports">导出</Button> -->
           </div>
-        </el-col>
-      </el-row>
-    </el-form>
+        </Col>
+      </Row>
+    </Form>
   </div>
 </template>
 
@@ -270,7 +260,7 @@ export default {
     ...mapState('media', ['isMobile']),
     ...mapState('integralOrder', ['isDels', 'delIdList']),
     labelWidth() {
-      return this.isMobile ? undefined : '85px';
+      return this.isMobile ? undefined : 80;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -292,7 +282,7 @@ export default {
   },
   created() {
     // this.timeVal = this.today;
-    // this.orderData.data = this.timeVal ? this.timeVal.join('-') : '';
+    // this.orderData.data = this.timeVal.join('-');
     if (this.$route.fullPath === this.$routeProStr + '/order/list?status=1') {
       this.getPath();
     }
@@ -336,7 +326,7 @@ export default {
     //       location.href = res.data[0];
     //     })
     //     .catch((res) => {
-    //       this.$message.error(res.msg);
+    //       this.$Message.error(res.msg);
     //     });
     // },
     // 数据导出；
@@ -368,8 +358,8 @@ export default {
     },
     // 具体日期
     onchangeTime(e) {
-      this.timeVal = e || [];
-      this.orderData.data = this.timeVal[0] ? this.timeVal ? this.timeVal.join('-') : '' : '';
+      this.timeVal = e;
+      this.orderData.data = this.timeVal[0] ? this.timeVal.join('-') : '';
       this.$store.dispatch('integralOrder/getOrderTabs', {
         data: this.orderData.data,
       });
@@ -413,7 +403,7 @@ export default {
     // 批量删除
     delAll() {
       if (this.delIdList.length === 0) {
-        this.$message.error('请先选择删除的订单！');
+        this.$Message.error('请先选择删除的订单！');
       } else {
         if (this.isDels) {
           this.delIdList.filter((item) => {
@@ -432,11 +422,11 @@ export default {
           };
           this.$modalSure(delfromData)
             .then((res) => {
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
               this.tabList();
             })
             .catch((res) => {
-              this.$message.error(res.msg);
+              this.$Message.error(res.msg);
             });
         } else {
           const title = '错误！';
@@ -493,11 +483,11 @@ export default {
     // 上传成功
     uploadSuccess(res, file, fileList) {
       if (res.status === 200) {
-        this.$message.success(res.msg);
+        this.$Message.success(res.msg);
         this.file = res.data.src;
         this.fileList = fileList;
       } else {
-        this.$message.error(res.msg);
+        this.$Message.error(res.msg);
       }
     },
     //移除文件
@@ -512,11 +502,11 @@ export default {
         file: this.file,
       })
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.fileList = [];
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
           this.fileList = [];
         });
     },
@@ -532,7 +522,7 @@ export default {
         this.$refs.send.getList();
         this.$refs.send.getDeliveryList();
       } else {
-        this.$message.error('请选择本页订单');
+        this.$Message.error('请选择本页订单');
       }
     },
     // 自动批量发货-取消
@@ -556,7 +546,7 @@ export default {
           window.open(res.data[0]);
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
   },

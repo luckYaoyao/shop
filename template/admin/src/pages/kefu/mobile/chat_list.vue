@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="search-box">
-        <el-input v-model="searchTxt" placeholder="搜索用户名称" @on-enter="bindSearch" />
+        <Input v-model="searchTxt" placeholder="搜索用户名称" @on-enter="bindSearch" />
       </div>
     </div>
     <div class="list-box" v-if="list.length > 0">
@@ -230,7 +230,7 @@ export default {
             if (data.recored.is_tourist == this.tabCur) this.list.unshift(data.recored);
           }
           if (data.recored.is_tourist != this.tabCur && data.recored.id) {
-            this.$notify.info({
+            this.$Notice.info({
               title: this.tabCur ? '用户发来消息啦！' : '游客发来消息啦！',
             });
           }

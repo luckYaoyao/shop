@@ -1,29 +1,30 @@
 <template>
-  <div v-loading="spinShow">
+  <div>
     <div class="i-layout-page-header header-title" v-if="!headerList.length">
       <span class="ivu-page-header-title">{{ $route.meta.title }}</span>
     </div>
     <div class="article-manager">
-      <el-card :bordered="false" shadow="never" class="ivu-mt fromBox">
-        <el-tabs v-model="currentTab" @tab-click="changeTab" v-if="headerList.length">
-          <el-tab-pane
+      <Card :bordered="false" dis-hover class="ivu-mt fromBox">
+        <Tabs v-model="currentTab" @on-click="changeTab" v-if="headerList.length">
+          <TabPane
             :icon="item.icon"
             :label="item.label"
             :name="item.value.toString()"
             v-for="(item, index) in headerList"
             :key="index"
           />
-        </el-tabs>
-        <el-tabs v-model="childrenId" v-if="headerChildrenList.length">
-          <el-tab-pane
+        </Tabs>
+        <Tabs type="card" v-model="childrenId" v-if="headerChildrenList.length" @on-click="changeChildrenTab">
+          <TabPane
             :label="item.label"
             :name="item.id.toString()"
             v-for="(item, index) in headerChildrenList"
             :key="index"
-          ></el-tab-pane>
-        </el-tabs>
+          ></TabPane>
+        </Tabs>
         <form-create :option="option" :rule="rules" @submit="onSubmit" v-if="rules.length !== 0"></form-create>
-      </el-card>
+        <Spin size="large" fix v-if="spinShow"></Spin>
+      </Card>
     </div>
   </div>
 </template>
@@ -56,7 +57,7 @@ export default {
                 if (res.status === 200) {
                   file.url = res.data.src;
                 } else {
-                  this.$message.error(res.msg);
+                  this.$Message.error(res.msg);
                 }
               },
             },
@@ -125,7 +126,7 @@ export default {
           })
           .catch((err) => {
             this.spinShow = false;
-            this.$message.error(err);
+            this.$Message.error(err);
           });
       });
     },
@@ -173,7 +174,7 @@ export default {
           })
           .catch((res) => {
             this.spinShow = false;
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           });
       });
     },
@@ -190,8 +191,11 @@ export default {
     },
     // 选择
     changeTab() {
-      console.log('11');
       this.childrenList();
+    },
+    // 二级选择
+    changeChildrenTab(name) {
+      this.childrenId = name;
     },
     // 提交表单 group
     onSubmit(formData) {
@@ -201,7 +205,7 @@ export default {
         data: formData,
       })
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           if (formData.site_name) {
             localStorage.setItem('ADMIN_TITLE', formData.site_name);
             this.$store.commit('setAdminTitle', formData.site_name);
@@ -209,7 +213,7 @@ export default {
           }
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },

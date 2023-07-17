@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         ref="formValidate"
         :model="formValidate"
         :label-width="labelWidth"
@@ -9,19 +9,19 @@
         class="tabform"
         @submit.native.prevent
       >
-        <el-row :gutter="24">
-          <el-col :span="24">
-            <el-form-item label="直播状态：">
-              <el-radio-group type="button" v-model="formValidate.status" class="mr15" @change="selChange">
-                <el-radio-button :label="itemn.value" v-for="(itemn, indexn) in treeData.withdrawal" :key="indexn">{{
+        <Row :gutter="24" type="flex">
+          <Col span="24">
+            <FormItem label="直播状态：">
+              <RadioGroup type="button" v-model="formValidate.status" class="mr15" @on-change="selChange">
+                <Radio :label="itemn.value" v-for="(itemn, indexn) in treeData.withdrawal" :key="indexn">{{
                   itemn.title
-                }}</el-radio-button>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="搜索：">
-              <el-input
+                }}</Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          <Col span="24">
+            <FormItem label="搜索：">
+              <Input
                 search
                 enter-button
                 @on-search="selChange"
@@ -30,125 +30,76 @@
                 v-model="formValidate.kerword"
                 style="width: 30%"
               />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col v-bind="grid">
-            <el-button
-              v-auth="['setting-system_menus-add']"
-              type="primary"
-              @click="menusAdd('添加直播间')"
-              icon="md-add"
-              >添加直播间</el-button
+            </FormItem>
+          </Col>
+        </Row>
+        <Row type="flex">
+          <Col v-bind="grid">
+            <Button v-auth="['setting-system_menus-add']" type="primary" @click="menusAdd('添加直播间')" icon="md-add"
+              >添加直播间</Button
             >
-            <el-button
+            <Button
               v-auth="['setting-system_menus-add']"
               icon="md-list"
               type="success"
               @click="syncRoom"
               style="margin-left: 20px"
-              >同步直播间</el-button
+              >同步直播间</Button
             >
-          </el-col>
-        </el-row>
-      </el-form>
-      <el-table
+          </Col>
+        </Row>
+      </Form>
+      <Table
+        :columns="columns1"
         :data="tabList"
         ref="table"
         class="mt25"
         :loading="loading"
-        highlight-current-row
+        highlight-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column label="直播间ID" width="80">
-          <template slot-scope="scope">
-            <span>{{ scope.row.id }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="直播间名称" min-width="35">
-          <template slot-scope="scope">
-            <span>{{ scope.row.name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="主播昵称" min-width="35">
-          <template slot-scope="scope">
-            <span>{{ scope.row.anchor_name }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="主播微信号" min-width="35">
-          <template slot-scope="scope">
-            <span>{{ scope.row.anchor_wechat }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="直播开始时间" min-width="35">
-          <template slot-scope="scope">
-            <span>{{ scope.row.start_time }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="计划结束时间" min-width="35">
-          <template slot-scope="scope">
-            <span>{{ scope.row.end_time }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="创建时间" min-width="35">
-          <template slot-scope="scope">
-            <span>{{ scope.row.add_time }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="显示状态" min-width="35">
-          <template slot-scope="scope">
-            <el-switch
-              class="defineSwitch"
-              :active-value="1"
-              :inactive-value="0"
-              v-model="scope.row.is_show"
-              :value="scope.row.is_show"
-              @change="onchangeIsShow(scope.row)"
-              size="large"
-              active-text="开启"
-              inactive-text="关闭"
-            >
-            </el-switch>
-          </template>
-        </el-table-column>
-        <el-table-column label="直播状态" min-width="35">
-          <template slot-scope="scope">
-            <div>{{ scope.row.live_status | liveReviewStatusFilter }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="排序" min-width="35">
-          <template slot-scope="scope">
-            <div>{{ scope.row.sort }}</div>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="170">
-          <template slot-scope="scope">
-            <a @click="detail(scope.row, '详情')">详情</a>
-            <el-divider direction="vertical"></el-divider>
-            <a @click="del(scope.row, '删除这条信息', index)">删除</a>
-            <el-divider direction="vertical" v-if="scope.row.live_status == 102" />
-            <a v-if="scope.row.live_status == 102" @click="addGoods(scope.row)">添加商品</a>
-          </template>
-        </el-table-column>
-      </el-table>
+        <template slot-scope="{ row, index }" slot="is_mer_show">
+          <i-switch
+            v-model="row.is_show"
+            :value="row.is_show"
+            :true-value="1"
+            :false-value="0"
+            @on-change="onchangeIsShow(row)"
+            size="large"
+          >
+            <span slot="open">显示</span>
+            <span slot="close">隐藏</span>
+          </i-switch>
+        </template>
+        <template slot-scope="{ row, index }" slot="status">
+          <div>{{ row.live_status | liveReviewStatusFilter }}</div>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <a @click="detail(row, '详情')">详情</a>
+          <Divider type="vertical" />
+          <a @click="del(row, '删除这条信息', index)">删除</a>
+          <Divider type="vertical" v-if="row.live_status == 102" />
+          <a v-if="row.live_status == 102" @click="addGoods(row)">添加商品</a>
+        </template>
+      </Table>
       <div class="acea-row row-right page">
-        <pagination
-          v-if="total"
+        <Page
           :total="total"
-          :page.sync="formValidate.page"
-          :limit.sync="formValidate.limit"
-          @pagination="getList"
+          :current="formValidate.page"
+          show-elevator
+          show-total
+          @on-change="pageChange"
+          :page-size="formValidate.limit"
         />
       </div>
-    </el-card>
+    </Card>
     <!--详情-->
-    <el-dialog :visible.sync="modals" title="直播间详情" class="paymentFooter" width="700px">
+    <Modal v-model="modals" title="直播间详情" class="paymentFooter" scrollable width="700" :footer-hide="true">
       <details-from ref="studioDetail" />
-    </el-dialog>
+    </Modal>
     <!-- 添加商品 -->
-    <el-dialog :visible.sync="isShowBox" title="添加商品" class="paymentFooter" width="700px">
+    <Modal v-model="isShowBox" title="添加商品" class="paymentFooter" scrollable width="700" :footer-hide="true">
       <!--            <addGoods :datas="activeItem" @getData="getData" ref="liveAdd"></addGoods>-->
       <goods-list
         ref="goodslist"
@@ -158,7 +109,7 @@
         :ischeckbox="true"
         :liveStatus="true"
       ></goods-list>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 
@@ -235,7 +186,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '85px';
+      return this.isMobile ? undefined : 80;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -265,14 +216,19 @@ export default {
         path: this.$routeProStr + '/marketing/live/add_live_room',
       });
     },
+    // 分页
+    pageChange(index) {
+      this.formValidate.page = index;
+      this.getList();
+    },
     // 直播间显示隐藏
     onchangeIsShow({ id, is_show }) {
       liveShow(id, is_show)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((error) => {
-          this.$message.error(error.msg);
+          this.$Message.error(error.msg);
         });
     },
     //  详情
@@ -292,12 +248,12 @@ export default {
         goods_ids: data,
       })
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.isShowBox = false;
           this.$refs.liveAdd.goodsList = [];
         })
         .catch((error) => {
-          this.$message.error(error.msg);
+          this.$Message.error(error.msg);
           this.isShowBox = false;
           this.$refs.liveAdd.goodsList = [];
         });
@@ -306,11 +262,11 @@ export default {
     syncRoom() {
       liveSyncRoom()
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getList();
         })
         .catch((error) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 删除
@@ -324,13 +280,13 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.tabList.splice(num, 1);
 
           this.getList();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     getProductId(data) {

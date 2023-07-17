@@ -346,7 +346,7 @@
 				@closeChange="closeChange" :showAnimate="showAnimate" @boxStatus="boxStatus">
 			</shareRedPackets>
 			<!-- 组件 -->
-			<productWindow :attr="attr" :isShow="1" :iSplus="1" :limitNum="storeInfo.limit_num" :minQty="storeInfo.min_qty"
+			<productWindow :attr="attr" :isShow="1" :iSplus="1" :limitNum="storeInfo.limit_num"
 				:unitName="storeInfo.unit_name" @myevent="onMyEvent" @ChangeAttr="ChangeAttr"
 				@ChangeCartNum="ChangeCartNum" @attrVal="attrVal" @iptCartNum="iptCartNum" id="product-window"
 				:is_vip="is_vip" @getImg="showImg" :is_virtual="storeInfo.is_virtual">
@@ -807,12 +807,12 @@
 			 */
 			iptCartNum: function(e) {
 				if (e) {
-					let number = this.storeInfo.min_qty;
-					if (Number.isInteger(parseInt(e)) && parseInt(e) >= this.storeInfo.min_qty) {
+					let number = 1
+					if (Number.isInteger(parseInt(e)) && parseInt(e) > 0) {
 						number = parseInt(e);
 					}
 					this.$nextTick(e => {
-						this.$set(this.attr.productSelect, "cart_num", e < 0 ? this.storeInfo.min_qty : number);
+						this.$set(this.attr.productSelect, "cart_num", e < 0 ? 1 : number);
 					})
 				}
 			},
@@ -939,13 +939,13 @@
 				if (changeValue) {
 					num.cart_num++;
 					if (num.cart_num > stock) {
-						this.$set(this.attr.productSelect, "cart_num", stock ? stock : this.storeInfo.min_qty);
+						this.$set(this.attr.productSelect, "cart_num", stock ? stock : 1);
 						this.$set(this, "cart_num", stock ? stock : 1);
 					}
 				} else {
 					num.cart_num--;
 					if (num.cart_num < 1) {
-						this.$set(this.attr.productSelect, "cart_num", this.storeInfo.min_qty);
+						this.$set(this.attr.productSelect, "cart_num", 1);
 						this.$set(this, "cart_num", 1);
 					}
 				}
@@ -982,7 +982,7 @@
 					this.$set(this.attr.productSelect, "price", productSelect.price);
 					this.$set(this.attr.productSelect, "stock", productSelect.stock);
 					this.$set(this.attr.productSelect, "unique", productSelect.unique);
-					this.$set(this.attr.productSelect, "cart_num", this.storeInfo.min_qty);
+					this.$set(this.attr.productSelect, "cart_num", 1);
 					this.$set(
 						this.attr.productSelect,
 						"vip_price",
@@ -1261,7 +1261,7 @@
 					this.$set(this.attr.productSelect, "price", productSelect.price);
 					this.$set(this.attr.productSelect, "stock", productSelect.stock);
 					this.$set(this.attr.productSelect, "unique", productSelect.unique);
-					this.$set(this.attr.productSelect, "cart_num", this.storeInfo.min_qty);
+					this.$set(this.attr.productSelect, "cart_num", 1);
 					this.$set(this, "attrValue", value.join(","));
 					this.$set(
 						this.attr.productSelect,
@@ -1301,7 +1301,7 @@
 						"unique",
 						this.storeInfo.unique || ""
 					);
-					this.$set(this.attr.productSelect, "cart_num", this.storeInfo.min_qty);
+					this.$set(this.attr.productSelect, "cart_num", 1);
 					this.$set(
 						this.attr.productSelect,
 						"vip_price",

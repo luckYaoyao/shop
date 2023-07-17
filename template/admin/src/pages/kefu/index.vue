@@ -14,17 +14,17 @@
             <div class="page-account-top">
               <div class="page-account-top-logo">客服登录</div>
             </div>
-            <el-form ref="formInline" :model="formInline" :rules="ruleInline" @keyup.enter="handleSubmit('formInline')">
-              <el-form-item prop="username">
-                <el-input type="text" v-model="formInline.username" placeholder="请输入用户名" size="large" />
-              </el-form-item>
-              <el-form-item prop="password">
-                <el-input type="password" v-model="formInline.password" placeholder="请输入密码" size="large" />
-              </el-form-item>
-              <el-form-item>
-                <el-button type="primary" long size="large" @click="handleSubmit('formInline')" class="btn">登录 </el-button>
-              </el-form-item>
-            </el-form>
+            <Form ref="formInline" :model="formInline" :rules="ruleInline" @keyup.enter="handleSubmit('formInline')">
+              <FormItem prop="username">
+                <Input type="text" v-model="formInline.username" placeholder="请输入用户名" size="large" />
+              </FormItem>
+              <FormItem prop="password">
+                <Input type="password" v-model="formInline.password" placeholder="请输入密码" size="large" />
+              </FormItem>
+              <FormItem>
+                <Button type="primary" long size="large" @click="handleSubmit('formInline')" class="btn">登录 </Button>
+              </FormItem>
+            </Form>
             <div class="qh_box" v-if="!isMobile" @click="bindScan"><span class="iconfont iconerweima2"></span></div>
           </div>
           <div :style="{ display: loginType ? 'block' : 'none' }">
@@ -35,13 +35,20 @@
               <div class="qrcode" ref="qrCodeUrl"></div>
               <div class="rxpired-box" v-show="rxpired">
                 <p>已过期</p>
-                <el-button type="primary" @click="bindRefresh">点击刷新</el-button>
+                <Button type="primary" @click="bindRefresh">点击刷新</Button>
               </div>
             </div>
             <div class="qh_box" @click="loginType = 0"><span class="iconfont iconzhanghaomima"></span></div>
           </div>
         </div>
       </div>
+      <!--            <Modal v-model="modals" scrollable footer-hide closable title="请完成安全校验" :mask-closable="false" :z-index="2"-->
+      <!--                   width="342">-->
+      <!--                <div class="captchaBox">-->
+      <!--                    <div id="captcha" style="position: relative" ref="captcha"></div>-->
+      <!--                    <div id="msg"></div>-->
+      <!--                </div>-->
+      <!--            </Modal>-->
     </div>
     <div class="foot-box" v-if="copyright">{{ copyright }}</div>
     <div class="foot-box" v-else>
@@ -165,12 +172,17 @@ export default {
     },
     // 关闭模态框
     closeModel() {
+      let msg = this.$Message.loading({
+        content: '登录中...',
+        duration: 0,
+      });
       AccountLogin({
         account: this.formInline.username,
         password: this.formInline.password,
         imgcode: this.formInline.code,
       })
         .then(async (res) => {
+          msg();
           let expires = this.getExpiresTime(res.data.exp_time);
           // 记录用户登陆信息
           setCookies('kefu_uuid', res.data.kefuInfo.uid, expires);
@@ -190,10 +202,11 @@ export default {
           }
         })
         .catch((res) => {
+          msg();
           let data = res === undefined ? {} : res;
           this.errorNum++;
           this.captchas();
-          this.$message.error(data.msg || '登录失败');
+          this.$Message.error(data.msg || '登录失败');
           if (this.jigsaw) this.jigsaw.reset();
         });
     },
@@ -204,7 +217,7 @@ export default {
     },
     closefail() {
       if (this.jigsaw) this.jigsaw.reset();
-      this.$message.error('校验错误');
+      this.$Message.error('校验错误');
     },
     handleResize(event) {
       this.fullWidth = document.documentElement.clientWidth;
@@ -240,7 +253,7 @@ export default {
           this.timeNum = 0;
           window.clearInterval(this.scanTime);
           this.rxpired = true;
-          this.$message.error(error.msg);
+          this.$Message.error(error.msg);
         });
     },
     // 扫码登录情况

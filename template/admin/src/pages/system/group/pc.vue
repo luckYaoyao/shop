@@ -4,13 +4,13 @@
       <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div>
         <div style="float: right">
-          <el-button class="bnt" type="primary" @click="save">保存</el-button>
+          <Button class="bnt" type="primary" @click="save">保存</Button>
         </div>
       </div>
     </div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-row class="box-wrapper">
-        <el-col :xs="24" :sm="24" :md="6" :lg="3">
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Row class="box-wrapper">
+        <Col :xs="24" :sm="24" :md="6" :lg="3">
           <div class="left_box">
             <div class="left_cont" :class="pageId == 1 ? 'on' : ''" @click="menu(1)">网站LOGO</div>
             <div class="left_cont" :class="pageId == 'pc_home_banner' ? 'on' : ''" @click="menu('pc_home_banner')">
@@ -18,9 +18,9 @@
             </div>
             <div class="left_cont" :class="pageId == 3 ? 'on' : ''" @click="menu(3)">客服页面广告</div>
           </div>
-        </el-col>
+        </Col>
         <div style="display: flex; width: 83%">
-          <el-col v-if="pageId == 1 || pageId == 'pc_home_banner'" class="pciframe" :bordered="false" shadow="never">
+          <Col v-if="pageId == 1 || pageId == 'pc_home_banner'" class="pciframe" :bordered="false" dis-hover>
             <img src="../../../assets/images/pcbanner.png" class="pciframe-box" />
             <div v-if="pageId == 1" class="logoimg">
               <img :src="pclogo" />
@@ -33,15 +33,15 @@
                 </swiper-slide>
               </swiper>
             </div>
-          </el-col>
-          <el-col v-if="pageId == 3" class="pciframe" :bordered="false" shadow="never">
+          </Col>
+          <Col v-if="pageId == 3" class="pciframe" :bordered="false" dis-hover>
             <img src="../../../assets/images/kefu.png" class="pciframe-box" />
             <div class="box3_sile">
               <!-- {{formValidate}} -->
               <div v-html="formValidate.content"></div>
             </div>
-          </el-col>
-          <el-col v-if="pageId == 'pc_home_banner'">
+          </Col>
+          <Col v-if="pageId == 'pc_home_banner'">
             <div class="content">
               <div class="right-box">
                 <div class="hot_imgs">
@@ -73,25 +73,29 @@
                           <div class="info-item">
                             <span>图片名称：</span>
                             <div class="input-box">
-                              <el-input v-model="item.title" placeholder="请填写名称" />
+                              <Input v-model="item.title" placeholder="请填写名称" />
                             </div>
                           </div>
                           <div class="info-item">
                             <span>链接地址：</span>
                             <!-- @click="link(index) icon="ios-arrow-forward" "-->
                             <div class="input-box">
-                              <el-input v-model="item.url" placeholder="选择链接" />
+                              <Input v-model="item.url" placeholder="选择链接" />
                             </div>
                           </div>
                         </div>
                       </div>
                     </draggable>
                     <div>
-                      <el-dialog
-                        :visible.sync="modalPic"
+                      <Modal
+                        v-model="modalPic"
                         width="950px"
+                        scrollable
+                        footer-hide
+                        closable
                         title="上传商品图"
-                        :close-on-click-modal="false"
+                        :mask-closable="false"
+                        :z-index="999"
                       >
                         <uploadPictures
                           :isChoice="isChoice"
@@ -100,25 +104,25 @@
                           :gridPic="gridPic"
                           v-if="modalPic"
                         ></uploadPictures>
-                      </el-dialog>
+                      </Modal>
                     </div>
                   </div>
                   <template>
                     <div class="add-btn">
-                      <el-button
+                      <Button
                         type="primary"
                         ghost
                         style="width: 100px; height: 35px; background-color: #1890ff; color: #ffffff"
                         @click="addBox"
                         >添加图片
-                      </el-button>
+                      </Button>
                     </div>
                   </template>
                 </div>
               </div>
             </div>
-          </el-col>
-          <el-col v-if="pageId == 1">
+          </Col>
+          <Col v-if="pageId == 1">
             <div class="content">
               <div class="right-box">
                 <div class="hot_imgs">
@@ -132,11 +136,15 @@
                       <div class="img_fonts">更换图片</div>
                     </div>
                     <div>
-                      <el-dialog
-                        :visible.sync="modalPic"
+                      <Modal
+                        v-model="modalPic"
                         width="950px"
+                        scrollable
+                        footer-hide
+                        closable
                         title="上传商品图"
-                        :close-on-click-modal="false"
+                        :mask-closable="false"
+                        :z-index="999"
                       >
                         <uploadPictures
                           :isChoice="isChoice"
@@ -145,22 +153,22 @@
                           :gridPic="gridPic"
                           v-if="modalPic"
                         ></uploadPictures>
-                      </el-dialog>
+                      </Modal>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </el-col>
-          <el-col v-if="pageId == 3" :xs="24" :sm="24" :md="12" :lg="14" style="margin-left: 40px">
+          </Col>
+          <Col v-if="pageId == 3" :xs="24" :sm="24" :md="12" :lg="14" style="margin-left: 40px">
             <div class="table_box">
-              <el-row>
-                <el-col v-bind="grid">
+              <Row type="flex">
+                <Col v-bind="grid">
                   <div class="title">隐私权限页面展示：</div>
-                </el-col>
-              </el-row>
+                </Col>
+              </Row>
               <div>
-                <el-form
+                <Form
                   class="form"
                   ref="formValidate"
                   :model="formValidate"
@@ -170,18 +178,18 @@
                   @submit.native.prevent
                 >
                   <div class="goodsTitle acea-row"></div>
-                  <el-form-item label="" prop="content" style="margin: 0px">
+                  <FormItem label="" prop="content" style="margin: 0px">
                     <WangEditor :content="content" @editorContent="getEditorContent"></WangEditor>
-                  </el-form-item>
-                </el-form>
+                  </FormItem>
+                </Form>
               </div>
             </div>
-          </el-col>
+          </Col>
         </div>
-      </el-row>
-    </el-card>
+      </Row>
+    </Card>
     <!-- <div class="save">
-			<el-button type="primary" @click="save" >保存</el-button>
+			<Button type="primary" @click="save" >保存</Button>
 		</div> -->
     <linkaddress ref="linkaddres" @linkUrl="linkUrl"></linkaddress>
   </div>
@@ -289,7 +297,7 @@ export default {
   computed: {
     ...mapState('admin/layout', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '120px';
+      return this.isMobile ? undefined : 120;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -313,10 +321,10 @@ export default {
         if (valid) {
           setKfAdv(this.formValidate)
             .then(async (res) => {
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
             })
             .catch((res) => {
-              this.$message.error(res.msg);
+              this.$Message.error(res.msg);
             });
         } else {
           return false;
@@ -335,7 +343,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 添加表单
@@ -356,7 +364,7 @@ export default {
             });
           })
           .catch((res) => {
-            this.$message.error(res.msg);
+            this.$Message.error(res.msg);
           });
       }
       if (this.pageId == 1) {
@@ -387,7 +395,7 @@ export default {
         };
       } else {
         if (this.tabList.list.length == 5) {
-          this.$message.warning('最多添加五张呦');
+          this.$Message.warning('最多添加五张呦');
         } else {
           let obj = JSON.parse(JSON.stringify(this.lastObj));
           this.tabList.list.push(obj);
@@ -421,19 +429,19 @@ export default {
       if (this.pageId == 'pc_home_banner') {
         groupSaveApi({ config_name: this.pageId, data: this.tabList.list })
           .then((res) => {
-            this.$message.success(res.msg);
+            this.$Message.success(res.msg);
           })
           .catch((err) => {
-            this.$message.error(err.msg);
+            this.$Message.error(err.msg);
           });
       }
       if (this.pageId == 1) {
         pcLogoSave({ pc_logo: this.pclogo })
           .then((res) => {
-            this.$message.success(res.msg);
+            this.$Message.success(res.msg);
           })
           .catch((err) => {
-            this.$message.error(err.msg);
+            this.$Message.error(err.msg);
           });
       }
       if (this.pageId == 3) {

@@ -1,18 +1,18 @@
 <template>
   <div class="txt_tab" v-if="configData">
     <div class="c_row-item">
-      <el-col class="c_label">
+      <Col class="c_label">
         {{ configData.title }}
         <span>{{ configData.list[configData.type].val }}</span>
-      </el-col>
-      <el-col class="color-box">
-        <el-radio-group v-model="configData.type" type="button" @change="radioChange($event)">
-          <el-radio-button :label="key" v-for="(radio, key) in configData.list" :key="key">
+      </Col>
+      <Col class="color-box">
+        <RadioGroup v-model="configData.type" type="button" @on-change="radioChange($event)">
+          <Radio :label="key" v-for="(radio, key) in configData.list" :key="key">
             <span class="iconfont-diy" :class="radio.icon" v-if="radio.icon"></span>
             <span v-else>{{ radio.val }}</span>
-          </el-radio-button>
-        </el-radio-group>
-      </el-col>
+          </Radio>
+        </RadioGroup>
+      </Col>
     </div>
   </div>
 </template>

@@ -1,98 +1,86 @@
 <template>
   <div>
-    <el-row class="ivu-mt box-wrapper">
-      <el-col v-bind="grid1" class="left-wrapper">
-        <div class="tree">
-          <el-tree
-            :data="labelSort"
-            node-key="id"
-            default-expand-all
-            highlight-current
-            :expand-on-click-node="false"
-            @node-click="bindMenuItem"
-            :current-node-key="treeId"
-          >
-            <span class="custom-tree-node" slot-scope="{ data }">
-              <span class="file-name">
-                <i class="icon el-icon-folder-remove"></i>
-                {{ data.name }}</span
-              >
-              <span>
-                <el-dropdown @command="(command) => clickMenu(data, command)">
-                  <Icon class="add" type="ios-more" />
-                  <template slot="dropdown">
-                    <el-dropdown-menu>
-                      <el-dropdown-item command="1">编辑分类</el-dropdown-item>
-                      <el-dropdown-item v-if="data.id" command="2">删除分类</el-dropdown-item>
-                    </el-dropdown-menu>
-                  </template>
-                </el-dropdown>
-              </span>
-            </span>
-          </el-tree>
-        </div>
-      </el-col>
-      <el-col v-bind="grid2" ref="rightBox">
-        <el-card :bordered="false" shadow="never">
-          <el-row>
-            <el-col>
-              <el-button v-auth="['admin-user-label_add']" type="primary" icon="md-add" @click="add"
-                >添加标签</el-button
-              >
-              <el-button
+    <Row class="ivu-mt box-wrapper">
+      <Col v-bind="grid1" class="left-wrapper">
+        <Menu :theme="theme3" :active-name="sortName" width="auto">
+          <MenuGroup>
+            <MenuItem
+              :name="item.id"
+              class="menu-item"
+              :class="index === current ? 'showOn' : ''"
+              v-for="(item, index) in labelSort"
+              :key="index"
+              @click.native="bindMenuItem(item, index)"
+            >
+              {{ item.name }}
+              <div class="icon-box" v-if="index != 0">
+                <Icon type="ios-more" size="24" @click.stop="showMenu(item)" />
+              </div>
+              <div class="right-menu ivu-poptip-inner" v-show="item.status" v-if="index != 0">
+                <div class="ivu-poptip-body" @click="labelEdit(item)">
+                  <div class="ivu-poptip-body-content">
+                    <div class="ivu-poptip-body-content-inner">编辑</div>
+                  </div>
+                </div>
+                <div class="ivu-poptip-body" @click="deleteSort(item, '删除分类', index)">
+                  <div class="ivu-poptip-body-content">
+                    <div class="ivu-poptip-body-content-inner">删除</div>
+                  </div>
+                </div>
+              </div>
+            </MenuItem>
+          </MenuGroup>
+        </Menu>
+      </Col>
+      <Col v-bind="grid2" ref="rightBox">
+        <Card :bordered="false" dis-hover>
+          <Row type="flex">
+            <Col>
+              <Button v-auth="['admin-user-label_add']" type="primary" icon="md-add" @click="add">添加标签</Button>
+              <Button
                 v-auth="['admin-user-label_add']"
                 type="success"
                 icon="md-add"
                 @click="addSort"
                 style="margin-left: 10px"
-                >添加分类</el-button
+                >添加分类</Button
               >
-            </el-col>
-          </el-row>
-          <el-table
+            </Col>
+          </Row>
+          <Table
+            :columns="columns1"
             :data="labelLists"
             ref="table"
             class="mt25"
-            v-loading="loading"
-            highlight-current-row
+            :loading="loading"
+            highlight-row
             no-userFrom-text="暂无数据"
             no-filtered-userFrom-text="暂无筛选结果"
           >
-            <el-table-column label="ID" width="80">
-              <template slot-scope="scope">
-                <span>{{ scope.row.id }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="标签名称" width="80">
-              <template slot-scope="scope">
-                <span>{{ scope.row.label_name }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="分类名称" min-width="80">
-              <template slot-scope="scope">
-                <span>{{ scope.row.cate_name }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column fixed="right" label="操作" width="100">
-              <template slot-scope="scope">
-                <a @click="edit(scope.row.id)">修改</a>
-                <el-divider direction="vertical"></el-divider>
-                <a @click="del(scope.row, '删除分组', scope.$index)">删除</a>
-              </template>
-            </el-table-column>
-          </el-table>
+            <template slot-scope="{ row, index }" slot="icons">
+              <div class="tabBox_img" v-viewer>
+                <img v-lazy="row.icon" />
+              </div>
+            </template>
+            <template slot-scope="{ row, index }" slot="action">
+              <a @click="edit(row.id)">修改</a>
+              <Divider type="vertical" />
+              <a @click="del(row, '删除分组', index)">删除</a>
+            </template>
+          </Table>
           <div class="acea-row row-right page">
-            <pagination
-              v-if="total"
+            <Page
               :total="total"
-              :page.sync="labelFrom.page"
-              :limit.sync="labelFrom.limit"
-              @pagination="getList"
+              :model-value="labelFrom.page"
+              show-elevator
+              show-total
+              @on-change="pageChange"
+              :page-size="labelFrom.limit"
             />
           </div>
-        </el-card>
-      </el-col>
-    </el-row>
+        </Card>
+      </Col>
+    </Row>
   </div>
 </template>
 
@@ -103,7 +91,6 @@ export default {
   name: 'user_label',
   data() {
     return {
-      treeId: '',
       grid1: {
         xl: 4,
         lg: 4,
@@ -120,6 +107,31 @@ export default {
       },
 
       loading: false,
+      columns1: [
+        {
+          title: 'ID',
+          key: 'id',
+          align: 'center',
+          width: 80,
+        },
+        {
+          title: '标签名称',
+          key: 'label_name',
+          align: 'left',
+        },
+        {
+          title: '分类名称',
+          key: 'cate_name',
+          align: 'center',
+        },
+
+        {
+          title: '操作',
+          slot: 'action',
+          fixed: 'right',
+          width: 120,
+        },
+      ],
       labelFrom: {
         page: 1,
         limit: 15,
@@ -136,7 +148,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '75px';
+      return this.isMobile ? undefined : 75;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -162,8 +174,12 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
+    },
+    pageChange(index) {
+      this.labelFrom.page = index;
+      this.getList();
     },
     // 修改
     edit(id) {
@@ -180,12 +196,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.labelLists.splice(num, 1);
           this.getList();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 标签分类
@@ -225,10 +241,7 @@ export default {
     addSort() {
       this.$modalForm(userLabelCreate()).then(() => this.getUserLabelAll());
     },
-    deleteSort(row, tit) {
-      let num = this.labelSort.findIndex((e) => {
-        return e.id == row.id;
-      });
+    deleteSort(row, tit, num) {
       let delfromData = {
         title: tit,
         num: num,
@@ -238,21 +251,14 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.labelSort.splice(num, 1);
           this.labelSort = [];
           this.getUserLabelAll();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
-    },
-    clickMenu(data, name) {
-      if (name == 1) {
-        this.labelEdit(data);
-      } else if (name == 2) {
-        this.deleteSort(data, '删除分类');
-      }
     },
     bindMenuItem(name, index) {
       this.labelFrom.page = 1;
@@ -317,44 +323,4 @@ export default {
     min-width: 121px;
   }
 }
-.tree {
-      min-height: 374px;
-      /deep/ .file-name {
-        display: flex;
-        align-items: center;
-        .icon {
-          width: 12px;
-          height: 12px;
-          margin-right: 8px;
-        }
-      }
-      /deep/ .el-tree-node {
-        // margin-right: 16px;
-      }
-      /deep/ .el-tree-node__children .el-tree-node {
-        margin-right: 0;
-      }
-      /deep/ .el-tree-node__content {
-        width: 100%;
-        height: 36px;
-      }
-      /deep/ .custom-tree-node {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding-right: 17px;
-        font-size: 13px;
-        font-weight: 400;
-        color: rgba(0, 0, 0, 0.6);
-        line-height: 13px;
-      }
-      /deep/ .is-current {
-        background: #f1f9ff !important;
-        color: #1890ff !important;
-      }
-      /deep/ .is-current .custom-tree-node {
-        color: #1890ff !important;
-      }
-    }
 </style>

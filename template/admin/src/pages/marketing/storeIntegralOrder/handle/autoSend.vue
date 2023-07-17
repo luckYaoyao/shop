@@ -1,95 +1,82 @@
 <template>
-  <el-dialog :visible.sync="modals"  title="订单发送货" class="order_box" :show-close="false">
-    <el-form ref="formItem" :model="formItem" label-width="100px" @submit.native.prevent>
-      <el-form-item label="选择类型：">
-        <el-radio-group v-model="formItem.type" @change="changeRadio">
-          <el-radio label="1">打印电子面单</el-radio>
-          <el-radio label="2">送货</el-radio>
-          <el-radio label="3">虚拟</el-radio>
-        </el-radio-group>
-      </el-form-item>
+  <Modal v-model="modals" scrollable title="订单发送货" class="order_box" :closable="false">
+    <Form ref="formItem" :model="formItem" :label-width="100" @submit.native.prevent>
+      <FormItem label="选择类型：">
+        <RadioGroup v-model="formItem.type" @on-change="changeRadio">
+          <Radio label="1">打印电子面单</Radio>
+          <Radio label="2">送货</Radio>
+          <Radio label="3">虚拟</Radio>
+        </RadioGroup>
+      </FormItem>
       <div v-show="formItem.type === '1'">
-        <el-form-item label="快递公司：">
-          <el-select
+        <FormItem label="快递公司：">
+          <Select
             v-model="formItem.delivery_name"
             filterable
             placeholder="请选择快递公司"
             style="width: 80%"
-            @change="expressChange"
+            @on-change="expressChange"
           >
-            <el-option
-              v-for="(item, i) in express"
-              :value="item.value"
-              :key="item.value"
-              :label="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+            <Option v-for="(item, i) in express" :value="item.value" :key="item.value">{{ item.value }}</Option>
+          </Select>
+        </FormItem>
         <template v-if="formItem.type === '1'">
-          <el-form-item label="电子面单：" class="express_temp_id">
-            <el-select
+          <FormItem label="电子面单：" class="express_temp_id">
+            <Select
               v-model="formItem.express_temp_id"
               placeholder="请选择电子面单"
               style="width: 80%"
-              @change="expressTempChange"
+              @on-change="expressTempChange"
             >
-              <el-option
-                v-for="(item, i) in expressTemp"
-                :value="item.temp_id"
-                :key="i"
-                :label="item.title"
-              ></el-option>
-            </el-select>
-            <el-button v-if="formItem.express_temp_id" type="text" @click="preview">预览</el-button>
-          </el-form-item>
-          <el-form-item label="寄件人姓名：">
-            <el-input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 80%"></el-input>
-          </el-form-item>
-          <el-form-item label="寄件人电话：">
-            <el-input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 80%"></el-input>
-          </el-form-item>
-          <el-form-item label="寄件人地址：">
-            <el-input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></el-input>
-          </el-form-item>
+              <Option v-for="(item, i) in expressTemp" :value="item.temp_id" :key="i">{{ item.title }}</Option>
+            </Select>
+            <Button v-if="formItem.express_temp_id" type="text" @click="preview">预览</Button>
+          </FormItem>
+          <FormItem label="寄件人姓名：">
+            <Input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 80%"></Input>
+          </FormItem>
+          <FormItem label="寄件人电话：">
+            <Input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 80%"></Input>
+          </FormItem>
+          <FormItem label="寄件人地址：">
+            <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 80%"></Input>
+          </FormItem>
         </template>
       </div>
       <div v-show="formItem.type === '2'">
-        <el-form-item label="送货人：">
-          <el-select
+        <FormItem label="送货人：">
+          <Select
             v-model="formItem.sh_delivery"
             placeholder="请选择送货人"
             style="width: 80%"
-            @change="shDeliveryChange"
+            @on-change="shDeliveryChange"
           >
-            <el-option
-              v-for="(item, i) in deliveryList"
-              :value="item.id"
-              :key="i"
-              :label="`${item.wx_name} (${item.phone})`"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+            <Option v-for="(item, i) in deliveryList" :value="item.id" :key="i"
+              >{{ item.wx_name }}（{{ item.phone }}）</Option
+            >
+          </Select>
+        </FormItem>
       </div>
       <div v-show="formItem.type === '3'">
-        <el-form-item label="备注：">
-          <el-input
+        <FormItem label="备注：">
+          <Input
             v-model="formItem.fictitious_content"
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 5 }"
             placeholder="备注"
             style="width: 80%"
-          ></el-input>
-        </el-form-item>
+          ></Input>
+        </FormItem>
       </div>
-    </el-form>
+    </Form>
     <div slot="footer">
-      <el-button @click="cancel">取消</el-button>
-      <el-button type="primary" @click="putSend">提交</el-button>
+      <Button @click="cancel">取消</Button>
+      <Button type="primary" @click="putSend">提交</Button>
     </div>
     <div ref="viewer" v-viewer v-show="temp">
       <img :src="temp.pic" style="display: none" />
     </div>
-  </el-dialog>
+  </Modal>
 </template>
 
 <script>
@@ -199,7 +186,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 提交
@@ -218,17 +205,17 @@ export default {
       }
       if (this.formItem.type === '1') {
         if (this.formItem.delivery_name === '') {
-          return this.$message.error('快递公司不能为空');
+          return this.$Message.error('快递公司不能为空');
         } else if (this.formItem.express_temp_id === '') {
-          return this.$message.error('电子面单不能为空');
+          return this.$Message.error('电子面单不能为空');
         } else if (this.formItem.to_name === '') {
-          return this.$message.error('寄件人姓名不能为空');
+          return this.$Message.error('寄件人姓名不能为空');
         } else if (this.formItem.to_tel === '') {
-          return this.$message.error('寄件人电话不能为空');
+          return this.$Message.error('寄件人电话不能为空');
         } else if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(this.formItem.to_tel)) {
-          return this.$message.error('请输入正确的手机号码');
+          return this.$Message.error('请输入正确的手机号码');
         } else if (this.formItem.to_addr === '') {
-          return this.$message.error('寄件人地址不能为空');
+          return this.$Message.error('寄件人地址不能为空');
         }
       }
       if (this.formItem.type === '2') {
@@ -236,17 +223,17 @@ export default {
           this.formItem.express_temp_id = '';
         }
         if (this.formItem.sh_delivery === '') {
-          return this.$message.error('送货人不能为空');
+          return this.$Message.error('送货人不能为空');
         }
       }
       otherBatchDelivery(data)
         .then(async (res) => {
           this.modals = false;
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.reset();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
           this.modals = false;
         });
     },
@@ -272,11 +259,11 @@ export default {
           .then((res) => {
             this.expressTemp = res.data;
             if (!res.data.length) {
-              this.$message.error('请配置你所选快递公司的电子面单');
+              this.$Message.error('请配置你所选快递公司的电子面单');
             }
           })
           .catch((err) => {
-            this.$message.error(err.msg);
+            this.$Message.error(err.msg);
           });
       }
     },
@@ -286,7 +273,7 @@ export default {
           this.deliveryList = res.data.list;
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     getSheetInfo() {
@@ -305,7 +292,7 @@ export default {
           this.formItem.to_addr = data.to_add;
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     shDeliveryChange(value) {

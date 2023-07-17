@@ -4,173 +4,177 @@
       <span class="ivu-page-header-title mr20">{{ $route.meta.title }}</span>
       <div>
         <div style="float: right" v-if="cardShow == 1 || cardShow == 2">
-          <el-button class="bnt" type="primary" @click="submit" :loading="loadingExist">保存</el-button>
-          <el-button class="bnt ml20" @click="reast">重置</el-button>
+          <Button class="bnt" type="primary" @click="submit" :loading="loadingExist">保存</Button>
+          <Button class="bnt ml20" @click="reast">重置</Button>
         </div>
       </div>
     </div>
 
-    <el-row class="ivu-mt" type="flex">
-      <el-col :span="3" class="left-wrapper">
-        <div class="tree-vis">
-          <div
-            class="tab-item"
-            :class="{ active: item.id == cardShow + 1 }"
-            v-for="(item, index) in menuList"
-            :key="index"
-            @click="bindMenuItem(index)"
-          >
-            {{ item.name }}
-          </div>
-        </div>
-      </el-col>
-      <el-col :span="21">
-        <el-card :bordered="false" shadow="never" v-if="cardShow == 0">
-          <el-row v-if="cardShow == 0" type="flex">
-            <el-col style="width: 310px; height: 550px; margin-right: 30px" v-if="isDiy">
+    <Row class="ivu-mt box-wrapper">
+      <Col span="3" class="left-wrapper">
+        <Menu :theme="theme3" :active-name="1" width="auto">
+          <MenuGroup>
+            <MenuItem
+              :name="item.id"
+              v-for="(item, index) in menuList"
+              :key="index"
+              @click.native="bindMenuItem(index)"
+            >
+              {{ item.name }}
+            </MenuItem>
+          </MenuGroup>
+        </Menu>
+      </Col>
+      <Col span="21" class="right-wrapper">
+        <Card :bordered="false" dis-hover v-if="cardShow == 0">
+          <Row v-if="cardShow == 0">
+            <Col style="width: 310px; height: 550px; margin-right: 30px; position: relative" v-if="isDiy">
               <iframe class="iframe-box" :src="iframeUrl" frameborder="0" ref="iframe"></iframe>
               <div class="mask"></div>
-            </el-col>
-            <el-col :span="isDiy ? '' : 24" v-bind="isDiy ? grid : ''" :class="isDiy ? 'table' : ''">
+            </Col>
+            <Col :span="isDiy ? '' : 24" v-bind="isDiy ? grid : ''" :class="isDiy ? 'table' : ''">
               <div class="acea-row row-between-wrapper">
-                <el-row>
-                  <el-col v-bind="grid">
+                <Row type="flex">
+                  <Col v-bind="grid">
                     <div class="button acea-row row-middle">
-                      <el-button type="primary" icon="md-add"
+                      <Button type="primary" icon="md-add"
                         ><a
                           class="target-add"
                           ref="target"
                           :href="`${url}${$routeProStr}/setting/pages/diy_index?id=0&name=首页&type=0`"
                           target="_blank"
                           >添加专题页
-                        </a></el-button
+                        </a></Button
                       >
                     </div>
-                  </el-col>
-                </el-row>
+                  </Col>
+                </Row>
               </div>
-              <el-table
+              <Table
+                :columns="columns1"
                 :data="list"
                 ref="table"
                 class="mt25"
-                v-loading="loading"
-                highlight-current-row
+                :loading="loading"
+                highlight-row
                 no-userFrom-text="暂无数据"
                 no-filtered-userFrom-text="暂无筛选结果"
               >
-                <el-table-column label="页面ID" width="80">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.id }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column label="模板名称" min-width="130">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.name }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column label="模板类型" min-width="130">
-                  <template slot-scope="scope">
-                    <el-tag color="primary" v-if="scope.row.is_diy">{{ scope.row.type_name }}{{ scope.row.id }}</el-tag>
-                    <el-tag color="warning" v-else>{{ scope.row.type_name }}</el-tag>
-                    <el-tag color="success" v-if="scope.row.status == 1">首页</el-tag>
-                  </template>
-                </el-table-column>
-                <el-table-column label="添加时间" min-width="130">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.add_time }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column label="更新时间" min-width="130">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.update_time }}</span>
-                  </template>
-                </el-table-column>
-                <el-table-column label="操作" fixed="right" width="210">
-                  <template slot-scope="scope">
-                    <div
-                      style="display: inline-block"
-                      v-if="scope.row.status || scope.row.is_diy"
-                      @click="edit(scope.row)"
+                <template slot-scope="{ row, index }" slot="region">
+                  <div class="font-blue">首页</div>
+                </template>
+                <template slot-scope="{ row, index }" slot="type_name">
+                  <Tag color="primary" v-if="row.is_diy">{{ row.type_name }}{{ row.id }}</Tag>
+                  <Tag color="warning" v-else>{{ row.type_name }}</Tag>
+                  <Tag color="success" v-if="row.status == 1">首页</Tag>
+                </template>
+                <template slot-scope="{ row, index }" slot="action">
+                  <div style="display: inline-block" v-if="row.status || row.is_diy" @click="edit(row)">
+                    <a
+                      v-if="row.is_diy === 1"
+                      class="target"
+                      ref="target"
+                      :href="`${url}${$routeProStr}/setting/pages/diy_index?id=${row.id}&name=${
+                        row.template_name || 'moren'
+                      }`"
+                      target="_blank"
                     >
-                      <a
-                        v-if="scope.row.is_diy === 1"
-                        class="target"
-                        ref="target"
-                        :href="`${url}${$routeProStr}/setting/pages/diy_index?id=${scope.row.id}&name=${
-                          scope.row.template_name || 'moren'
-                        }`"
-                        target="_blank"
-                      >
-                        编辑</a
-                      >
-                      <a v-else class="target">编辑</a>
-                    </div>
-                    <el-divider
-                      direction="vertical"
-                      v-if="(scope.row.status || scope.row.is_diy) && scope.row.id != 1 && scope.row.status != 1"
-                    />
+                      编辑</a
+                    >
+                    <a v-else class="target">编辑</a>
+                  </div>
+                  <Divider type="vertical" v-if="(row.status || row.is_diy) && row.id != 1 && row.status != 1" />
 
-                    <div style="display: inline-block" v-if="scope.row.id != 1 && scope.row.status != 1">
-                      <a @click="del(scope.row, '删除此模板', index)">删除</a>
-                    </div>
-                    <el-divider
-                      direction="vertical"
-                      v-if="(scope.row.id != 1 && scope.row.status != 1) || scope.row.is_diy"
-                    />
-                    <div style="display: inline-block" v-if="scope.row.is_diy">
-                      <a @click="preview(scope.row, index)">预览</a>
-                    </div>
-                    <el-divider direction="vertical" v-if="scope.row.is_diy && scope.row.status != 1" />
-                    <div style="display: inline-block" v-if="scope.row.status != 1">
-                      <a @click="setStatus(scope.row, index)">设为首页</a>
-                    </div>
-                  </template>
-                </el-table-column>
-              </el-table>
+                  <div style="display: inline-block" v-if="row.id != 1 && row.status != 1">
+                    <a @click="del(row, '删除此模板', index)">删除</a>
+                  </div>
+                  <Divider type="vertical" v-if="(row.id != 1 && row.status != 1) || row.is_diy" />
+                  <div style="display: inline-block" v-if="row.is_diy">
+                    <a @click="preview(row, index)">预览</a>
+                  </div>
+                  <Divider type="vertical" v-if="row.is_diy && row.status != 1" />
+                  <div style="display: inline-block" v-if="row.status != 1">
+                    <a @click="setStatus(row, index)">设为首页</a>
+                  </div>
+
+                  <!-- <Divider type="vertical" v-if="row.status != 1" />
+                  <template>
+                    <Dropdown @on-click="changeMenu(row, index, $event)">
+                      <a href="javascript:void(0)"
+                        >更多
+                        <Icon type="ios-arrow-down"></Icon>
+                      </a>
+                      <DropdownMenu slot="list">
+                        <DropdownItem name="1" v-show="!row.type"
+                          >设置默认数据</DropdownItem
+                        >
+                        <DropdownItem name="2" v-show="!row.type"
+                          >恢复默认数据</DropdownItem
+                        >
+                        <DropdownItem name="3" v-show="row.id != 1"
+                          >删除模板</DropdownItem
+                        >
+                      </DropdownMenu>
+                    </Dropdown>
+                  </template> -->
+                </template>
+              </Table>
               <div class="acea-row row-right page">
-                <pagination
-                  v-if="total"
+                <Page
                   :total="total"
-                  :page.sync="diyFrom.page"
-                  :limit.sync="diyFrom.limit"
-                  @pagination="getList"
+                  :current="diyFrom.page"
+                  show-elevator
+                  show-total
+                  @on-change="pageChange"
+                  :page-size="diyFrom.limit"
                 />
               </div>
-            </el-col>
-          </el-row>
-        </el-card>
+            </Col>
+          </Row>
+        </Card>
         <goodClass v-else-if="cardShow == 1" ref="category" @parentFun="getChildData"></goodClass>
         <users v-else ref="users" @parentFun="getChildData"></users>
-      </el-col>
-    </el-row>
-    <el-dialog :visible.sync="isTemplate" title="开发移动端链接" :z-index="1" width="500" @closed="cancel">
+      </Col>
+    </Row>
+    <Modal
+      v-model="isTemplate"
+      scrollable
+      footer-hide
+      closable
+      title="开发移动端链接"
+      :z-index="1"
+      width="500"
+      @on-cancel="cancel"
+    >
       <div class="article-manager">
-        <el-card :bordered="false" shadow="never" class="ivu-mt">
-          <el-form
+        <Card :bordered="false" dis-hover class="ivu-mt">
+          <Form
             ref="formItem"
             :model="formItem"
-            label-width="120px"
+            :label-width="120"
             label-position="right"
             :rules="ruleValidate"
             @submit.native.prevent
           >
-            <el-row :gutter="24">
-              <el-col :span="24">
-                <el-col v-bind="grid">
-                  <el-form-item label="开发移动端链接：" prop="link" label-for="link">
-                    <el-input v-model="formItem.link" placeholder="http://localhost:8080" />
-                  </el-form-item>
-                </el-col>
-              </el-col>
-            </el-row>
-          </el-form>
-        </el-card>
+            <Row type="flex" :gutter="24">
+              <Col span="24">
+                <Col v-bind="grid">
+                  <FormItem label="开发移动端链接：" prop="link" label-for="link">
+                    <Input v-model="formItem.link" placeholder="http://localhost:8080" />
+                  </FormItem>
+                </Col>
+              </Col>
+            </Row>
+            <Row type="flex">
+              <Col v-bind="grid">
+                <Button type="primary" class="ml20" @click="handleSubmit('formItem')" style="width: 100%">提交</Button>
+              </Col>
+            </Row>
+          </Form>
+        </Card>
       </div>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="handleSubmit('formItem')">提交</el-button>
-      </span>
-    </el-dialog>
-    <el-dialog :visible.sync="modal" title="预览">
+    </Modal>
+    <Modal v-model="modal" title="预览" footer-hide>
       <div>
         <div v-viewer class="acea-row row-around code">
           <div class="acea-row row-column-around row-between-wrapper">
@@ -185,7 +189,7 @@
           </div>
         </div>
       </div>
-    </el-dialog>
+    </Modal>
   </div>
 </template>
 
@@ -228,6 +232,39 @@ export default {
         {
           name: '个人中心',
           id: 3,
+        },
+      ],
+      columns1: [
+        {
+          title: '页面ID',
+          key: 'id',
+          width: 80,
+        },
+        {
+          title: '模板名称',
+          key: 'name',
+          minWidth: 100,
+        },
+        {
+          title: '模板类型',
+          slot: 'type_name',
+          minWidth: 100,
+        },
+        {
+          title: '添加时间',
+          key: 'add_time',
+          minWidth: 100,
+        },
+        {
+          title: '更新时间',
+          key: 'update_time',
+          minWidth: 100,
+        },
+        {
+          title: '操作',
+          slot: 'action',
+          // fixed: "right",
+          minWidth: 180,
         },
       ],
       list: [],
@@ -291,10 +328,10 @@ export default {
       this.cardShow = index;
     },
     onCopy() {
-      this.$message.success('复制预览链接成功');
+      this.$Message.success('复制预览链接成功');
     },
     onError() {
-      this.$message.error('复制预览链接失败');
+      this.$Message.error('复制预览链接失败');
     },
     //生成二维码
     creatQrCode(id) {
@@ -316,7 +353,7 @@ export default {
           this.qrcodeImg = res.data.image;
         })
         .catch((err) => {
-          this.$message.error(err);
+          this.$Message.error(err);
         });
     },
     preview(row) {
@@ -355,11 +392,11 @@ export default {
     setDefault(row) {
       setDefault(row.id)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.getList();
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     // 获取列表
@@ -375,12 +412,16 @@ export default {
         this.total = data.count;
       });
     },
+    pageChange(status) {
+      this.diyFrom.page = status;
+      this.getList();
+    },
     // 编辑
     edit(row) {
       this.formItem.id = row.id;
       if (!row.is_diy) {
         if (!row.status) {
-          this.$message.error('请先设为首页在进行编辑');
+          this.$Message.error('请先设为首页在进行编辑');
         } else {
           this.$router.push({
             path: this.$routeProStr + '/setting/pages/diy',
@@ -416,7 +457,7 @@ export default {
           this.getList();
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 使用模板
@@ -430,20 +471,20 @@ export default {
           })
             .then((res) => {
               this.refreshFrame();
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
               this.$Modal.remove();
               this.getList();
             })
             .catch((res) => {
               this.$Modal.remove();
-              this.$message.error(res.msg);
+              this.$Message.error(res.msg);
             });
         },
       });
     },
     recovery(row) {
       recovery(row.id).then((res) => {
-        this.$message.success(res.msg);
+        this.$Message.success(res.msg);
         this.getList();
       });
     },
@@ -617,18 +658,6 @@ export default {
     border: 1px solid #EEEEEE;
     border-radius: 50%;
     margin: 13px auto 0 auto;
-  }
-}
-.tree-vis{
-  display flex
-  flex-direction: column;
-  .tab-item{
-    padding 15px 20px
-    cursor pointer
-  }
-  .active{
-    background-color: var(--prev-bg-menu-hover-ba-color);
-    border-right: 2px solid var(--prev-color-primary);
   }
 }
 </style>

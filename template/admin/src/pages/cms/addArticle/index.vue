@@ -3,14 +3,14 @@
     <div class="i-layout-page-header header-title">
       <div class="fl_header">
         <span>
-          <el-button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</el-button>
+          <Button icon="ios-arrow-back" size="small" type="text" @click="$router.go(-1)">返回</Button>
         </span>
-        <el-divider direction="vertical"></el-divider>
+        <Divider type="vertical" />
         <span class="ivu-page-header-title">{{ $route.params.id ? '编辑文章' : '添加文章' }}</span>
       </div>
     </div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-form
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Form
         class="form"
         ref="formValidate"
         :model="formValidate"
@@ -22,39 +22,35 @@
         <div class="goodsTitle acea-row">
           <div class="title">文章信息</div>
         </div>
-        <el-row :gutter="24">
-          <el-col v-bind="grid" class="mr50">
-            <el-form-item label="标题：" prop="title" label-for="title">
-              <el-input v-model="formValidate.title" placeholder="请输入" element-id="title" style="width: 90%" />
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid" class="mr50">
-            <el-form-item label="作者：" prop="author" label-for="author">
-              <el-input v-model="formValidate.author" placeholder="请输入" element-id="author" style="width: 90%" />
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid" class="mr50">
-            <el-form-item label="文章分类：" label-for="cid" prop="cid">
+        <Row :gutter="24" type="flex">
+          <Col v-bind="grid" class="mr50">
+            <FormItem label="标题：" prop="title" label-for="title">
+              <Input v-model="formValidate.title" placeholder="请输入" element-id="title" style="width: 90%" />
+            </FormItem>
+          </Col>
+          <Col v-bind="grid" class="mr50">
+            <FormItem label="作者：" prop="author" label-for="author">
+              <Input v-model="formValidate.author" placeholder="请输入" element-id="author" style="width: 90%" />
+            </FormItem>
+          </Col>
+          <Col v-bind="grid" class="mr50">
+            <FormItem label="文章分类：" label-for="cid" prop="cid">
               <div class="perW90">
-                <el-select v-model="formValidate.cid">
-                  <el-option
-                    v-for="item in treeData"
-                    :value="item.id"
-                    :disabled="item.disabled"
-                    :key="item.id"
-                    :label="item.html + item.title"
-                  ></el-option>
-                </el-select>
+                <Select v-model="formValidate.cid">
+                  <Option v-for="item in treeData" :value="item.id" :disabled="item.disabled" :key="item.id">{{
+                    item.html + item.title
+                  }}</Option>
+                </Select>
               </div>
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid" class="mr50">
-            <el-form-item label="文章简介：" prop="synopsis" label-for="synopsis">
-              <el-input v-model="formValidate.synopsis" type="textarea" placeholder="请输入" style="width: 90%" />
-            </el-form-item>
-          </el-col>
-          <el-col v-bind="grid" class="mr50">
-            <el-form-item label="图文封面：" prop="image_input">
+            </FormItem>
+          </Col>
+          <Col v-bind="grid" class="mr50">
+            <FormItem label="文章简介：" prop="synopsis" label-for="synopsis">
+              <Input v-model="formValidate.synopsis" type="textarea" placeholder="请输入" style="width: 90%" />
+            </FormItem>
+          </Col>
+          <Col v-bind="grid" class="mr50">
+            <FormItem label="图文封面：" prop="image_input">
               <div class="picBox" @click="modalPicTap('单选')">
                 <div class="pictrue" v-if="formValidate.image_input">
                   <img :src="formValidate.image_input" />
@@ -64,44 +60,53 @@
                 </div>
               </div>
               <div class="tip">建议尺寸：500 x 312 px</div>
-            </el-form-item>
-          </el-col>
-        </el-row>
+            </FormItem>
+          </Col>
+        </Row>
         <div class="goodsTitle acea-row">
           <div class="title">文章内容</div>
         </div>
-        <el-form-item label="文章内容：" prop="content">
+        <FormItem label="文章内容：" prop="content">
           <WangEditor style="width: 90%" :content="formValidate.content" @editorContent="getEditorContent"></WangEditor>
-        </el-form-item>
+        </FormItem>
         <div class="goodsTitle acea-row">
           <div class="title">其他设置</div>
         </div>
-        <el-row :gutter="24">
-          <!--                    <el-col :span="24">-->
-          <!--                        <el-form-item label="原文链接：">-->
-          <!--                            <el-input v-model="formValidate.url" placeholder="请输入" element-id="url" style="width: 60%"/>-->
-          <!--                        </el-form-item>-->
-          <!--                    </el-col>-->
-          <el-col :span="24">
-            <el-form-item label="banner显示：" label-for="is_banner">
-              <el-radio-group v-model="formValidate.is_banner" element-id="is_banner">
-                <el-radio :label="1" class="radio">显示</el-radio>
-                <el-radio :label="0">不显示</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24">
-            <el-form-item label="热门文章：" label-for="is_hot">
-              <el-radio-group v-model="formValidate.is_hot" element-id="is_hot">
-                <el-radio :label="1" class="radio">显示</el-radio>
-                <el-radio :label="0">不显示</el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-button type="primary" class="submission" @click="onsubmit('formValidate')">提交</el-button>
-      </el-form>
-      <el-dialog :visible.sync="modalPic" width="950px" title="上传商品图" :close-on-click-modal="false">
+        <Row :gutter="24" type="flex">
+          <!--                    <Col span="24">-->
+          <!--                        <FormItem label="原文链接：">-->
+          <!--                            <Input v-model="formValidate.url" placeholder="请输入" element-id="url" style="width: 60%"/>-->
+          <!--                        </FormItem>-->
+          <!--                    </Col>-->
+          <Col span="24">
+            <FormItem label="banner显示：" label-for="is_banner">
+              <RadioGroup v-model="formValidate.is_banner" element-id="is_banner">
+                <Radio :label="1" class="radio">显示</Radio>
+                <Radio :label="0">不显示</Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+          <Col span="24">
+            <FormItem label="热门文章：" label-for="is_hot">
+              <RadioGroup v-model="formValidate.is_hot" element-id="is_hot">
+                <Radio :label="1" class="radio">显示</Radio>
+                <Radio :label="0">不显示</Radio>
+              </RadioGroup>
+            </FormItem>
+          </Col>
+        </Row>
+        <Button type="primary" class="submission" @click="onsubmit('formValidate')">提交</Button>
+      </Form>
+      <Modal
+        v-model="modalPic"
+        width="950px"
+        scrollable
+        footer-hide
+        closable
+        title="上传商品图"
+        :mask-closable="false"
+        :z-index="888"
+      >
         <uploadPictures
           :isChoice="isChoice"
           @getPic="getPic"
@@ -109,8 +114,8 @@
           :gridPic="gridPic"
           v-if="modalPic"
         ></uploadPictures>
-      </el-dialog>
-    </el-card>
+      </Modal>
+    </Card>
   </div>
 </template>
 
@@ -208,7 +213,7 @@ export default {
   computed: {
     ...mapState('media', ['isMobile']),
     labelWidth() {
-      return this.isMobile ? undefined : '120px';
+      return this.isMobile ? undefined : 120;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'right';
@@ -253,7 +258,7 @@ export default {
           this.treeData = res.data;
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 提交数据
@@ -263,13 +268,13 @@ export default {
         if (valid) {
           cmsAddApi(this.formValidate)
             .then(async (res) => {
-              this.$message.success(res.msg);
+              this.$Message.success(res.msg);
               setTimeout(() => {
                 this.$router.push({ path: this.$routeProStr + '/cms/article/index' });
               }, 500);
             })
             .catch((res) => {
-              this.$message.error(res.msg);
+              this.$Message.error(res.msg);
             });
         } else {
           return false;
@@ -298,7 +303,7 @@ export default {
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
   },

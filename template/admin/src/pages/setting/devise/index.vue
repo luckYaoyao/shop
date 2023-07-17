@@ -1,6 +1,6 @@
 <template>
   <div class="diy-page">
-    <el-card :bordered="false" shadow="never" class="ivu-mt" style="margin: 0 10px">
+    <Card :bordered="false" dis-hover class="ivu-mt" style="margin: 0 10px">
       <div class="diy-wrapper" :style="'height:' + clientHeight + 'px;'">
         <!-- 左侧 -->
         <div class="left">
@@ -50,7 +50,7 @@
               </draggable>
             </div>
           </div>
-          <!--                    <div style="padding: 0 20px"><el-button type="primary" style="width: 100%" @click="saveConfig">保存</el-button></div>-->
+          <!--                    <div style="padding: 0 20px"><Button type="primary" style="width: 100%" @click="saveConfig">保存</Button></div>-->
           <div class="wrapper" v-else :style="'height:' + (clientHeight - 46) + 'px;'">
             <div class="link-item" v-for="(item, index) in urlList" :key="index">
               <div class="name">{{ item.name }}</div>
@@ -61,7 +61,7 @@
               </div>
               <div class="lable">
                 <p class="txt">例如：{{ item.example }}</p>
-                <el-button size="small" @click="onCopy(item.example)">复制 </el-button>
+                <Button size="small" @click="onCopy(item.example)">复制 </Button>
               </div>
             </div>
           </div>
@@ -182,12 +182,12 @@
           </div>
         </div>
       </div>
-    </el-card>
+    </Card>
     <!--<div class="foot-box">-->
-    <!--<el-button @click="reast">重置</el-button>-->
-    <!--<el-button type="primary" @click="saveConfig" :loading="loading"-->
+    <!--<Button @click="reast">重置</Button>-->
+    <!--<Button type="primary" @click="saveConfig" :loading="loading"-->
     <!--&gt;保存-->
-    <!--</el-button-->
+    <!--</Button-->
     <!--&gt;-->
     <!--</div>-->
   </div>
@@ -321,34 +321,34 @@ export default {
     onCopy(copyData) {
       this.$copyText(copyData)
         .then((message) => {
-          this.$message.success('复制成功');
+          this.$Message.success('复制成功');
         })
         .catch((err) => {
-          this.$message.error('复制失败');
+          this.$Message.error('复制失败');
         });
     },
     onError() {
-      this.$message.error('复制失败');
+      this.$Message.error('复制失败');
     },
     //设置默认数据
     setmoren() {
       setDefault(this.pageId)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     //恢复默认
     getmoren() {
       recovery(this.pageId)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.reload();
         })
         .catch((err) => {
-          this.$message.error(err.msg);
+          this.$Message.error(err.msg);
         });
     },
     // 获取url
@@ -403,10 +403,10 @@ export default {
       // 中间拖拽排序
       if (evt.moved) {
         if (evt.moved.element.name == 'search_box' || evt.moved.element.name == 'nav_bar') {
-          return this.$message.warning('该组件禁止拖拽');
+          return this.$Message.warning('该组件禁止拖拽');
         }
         // if (evt.moved.element.name == "nav_bar") {
-        //     return this.$message.warning("该组件禁止拖拽");
+        //     return this.$Message.warning("该组件禁止拖拽");
         // }
         evt.moved.oldNum = this.mConfig[evt.moved.oldIndex].num;
         evt.moved.newNum = this.mConfig[evt.moved.newIndex].num;
@@ -468,15 +468,15 @@ export default {
         }
       }
       if (item.name == 'search_box' || item.name == 'nav_bar') {
-        return this.$message.warning('该组件禁止移动');
+        return this.$Message.warning('该组件禁止移动');
       }
       // if (item.name == "nav_bar") {
-      //     return this.$message.warning("该组件禁止移动");
+      //     return this.$Message.warning("该组件禁止移动");
       // }
       if (type) {
         // if(this.mConfig[index-1].name  == "search_box" || this.mConfig[index-1].name  == "nav_bar"){
         if (this.mConfig[index - 1].name == 'search_box') {
-          return this.$message.warning('搜索框必须为顶部');
+          return this.$Message.warning('搜索框必须为顶部');
         }
         this.swapArray(this.mConfig, index - 1, index);
       } else {
@@ -508,11 +508,11 @@ export default {
     // 组件添加
     addDomCon(item, type, index) {
       if (item.name == 'search_box') {
-        if (this.isSearch) return this.$message.error('该组件只能添加一次');
+        if (this.isSearch) return this.$Message.error('该组件只能添加一次');
         this.isSearch = true;
       }
       if (item.name == 'nav_bar') {
-        if (this.isTab) return this.$message.error('该组件只能添加一次');
+        if (this.isTab) return this.$Message.error('该组件只能添加一次');
         this.isTab = true;
       }
       idGlobal += 1;
@@ -673,17 +673,17 @@ export default {
         .then((res) => {
           this.loading = false;
           this.pageId = res.data.id;
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
         })
         .catch((res) => {
           this.loading = false;
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     // 保存配置
     saveConfig() {
       if (this.mConfig.length == 0) {
-        return this.$message.error('暂未添加任何组件，保存失败！');
+        return this.$Message.error('暂未添加任何组件，保存失败！');
       }
       this.loading = true;
       let val = this.$store.state.mobildConfig.defaultArray;
@@ -766,7 +766,7 @@ export default {
     // 重置
     reast() {
       if (this.pageId == 0) {
-        this.$message.error('新增页面，无法重置');
+        this.$Message.error('新增页面，无法重置');
       } else {
         this.$Modal.confirm({
           title: '提示',

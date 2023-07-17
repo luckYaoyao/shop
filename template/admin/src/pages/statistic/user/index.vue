@@ -1,47 +1,40 @@
 <template>
   <div class="article-manager">
     <div class="i-layout-page-header">
-      <el-form ref="formInline" :model="formInline" inline>
-        <el-form-item class="mr20">
+      <Form ref="formInline" :model="formInline" inline>
+        <FormItem class="mr20">
           用户渠道:
-          <el-select
-            size="small"
-            v-model="channel_type"
-            style="width: 300px"
-            placeholder="用户渠道"
-            @change="changeTxt"
-          >
-            <el-option value="all" label="全部"></el-option>
-            <el-option value="wechat" label="公众号"></el-option>
-            <el-option value="routine" label="小程序"></el-option>
-            <el-option value="h5" label="H5"></el-option>
-            <el-option value="pc" label="PC"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
+          <Select v-model="channel_type" style="width: 300px" placeholder="用户渠道" @on-change="changeTxt">
+            <Option value="all">全部</Option>
+            <Option value="wechat">公众号</Option>
+            <Option value="routine">小程序</Option>
+            <Option value="h5">H5</Option>
+            <Option value="pc">PC</Option>
+          </Select>
+        </FormItem>
+        <FormItem>
           选择时间:
-          <el-date-picker
+          <DatePicker
             :editable="false"
             :clearable="false"
-            @change="onchangeTime"
-            v-model="timeVal"
+            @on-change="onchangeTime"
+            :value="timeVal"
             format="yyyy/MM/dd"
             type="daterange"
-            value-format="yyyy/MM/dd"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-            
+            placement="bottom-start"
+            placeholder="请选择时间"
+            style="width: 300px"
             class="mr20"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="handleSubmit('formInline')">查询</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="excel">导出</el-button>
-        </el-form-item>
-      </el-form>
+            :options="options"
+          ></DatePicker>
+        </FormItem>
+        <FormItem>
+          <Button type="primary" @click="handleSubmit('formInline')">查询</Button>
+        </FormItem>
+        <FormItem>
+          <Button type="primary" @click="excel">导出</Button>
+        </FormItem>
+      </Form>
     </div>
     <user-info :formInline="formInline" ref="userInfos" key="1"></user-info>
     <wechet-info :formInline="formInline" ref="wechetInfos" v-if="isShow" key="2"></wechet-info>
@@ -96,7 +89,7 @@ export default {
     // 具体日期
     onchangeTime(e) {
       this.timeVal = e;
-      this.formInline.data = this.timeVal ? this.timeVal.join('-') : '';
+      this.formInline.data = this.timeVal.join('-');
     },
     handleSubmit() {
       this.$refs.userInfos.getStatistics();

@@ -1,6 +1,6 @@
 <template>
   <div ref="code_box" class="text">
-    <el-input v-model="content" type="textarea" placeholder="" @change="changeContent" />
+    <Input v-model="content" type="textarea" placeholder="" @on-change="changeContent" />
   </div>
 </template>
 

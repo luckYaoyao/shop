@@ -1,65 +1,42 @@
 <template>
   <div>
-    <el-card :bordered="false" shadow="never" class="ivu-mt">
-      <el-row class="mb20">
-        <el-col :span="24">
-          <el-button type="primary" icon="md-add" @click="add" class="mr10">发布版本</el-button>
-        </el-col>
-      </el-row>
-      <el-table
+    <Card :bordered="false" dis-hover class="ivu-mt">
+      <Row type="flex" class="mb20">
+        <Col span="24">
+          <Button type="primary" icon="md-add" @click="add" class="mr10">发布版本</Button>
+        </Col>
+      </Row>
+      <Table
+        :columns="columns1"
         :data="tableList"
-        v-loading="loading"
-        highlight-current-row
+        :loading="loading"
+        highlight-row
         no-userFrom-text="暂无数据"
         no-filtered-userFrom-text="暂无筛选结果"
       >
-        <el-table-column label="版本号" width="80">
-          <template slot-scope="scope">
-            <el-tooltip
-              effect="light"
-              v-if="scope.row.is_new"
-              trigger="hover"
-              placement="top-start"
-              content="当前为最新线上版本!"
-            >
-              <Icon size="16" type="ios-bookmark" color="red" style="margin-right: 10px" />
-            </el-tooltip>
-          </template>
-        </el-table-column>
-        <el-table-column label="平台类型" min-width="90">
-          <template slot-scope="scope">
-            <div class="tabBox_img" v-viewer>
-              <span>{{ scope.row.platform === 1 ? '安卓' : '苹果' }}</span>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column label="升级信息" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.info }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="是否强制" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.is_force === 1 ? '强制' : '非强制' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="发布日期" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.add_time }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="下载地址" min-width="130">
-          <template slot-scope="scope">
-            <span>{{ scope.row.url }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="操作" fixed="right" width="60">
-          <template slot-scope="scope">
-            <a @click="edit(scope.row)">编辑</a>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
+        <template slot-scope="{ row }" slot="version">
+          <Poptip v-if="row.is_new" trigger="hover" placement="top-start" content="当前为最新线上版本!">
+            <Icon size="16" type="ios-bookmark" color="red" style="margin-right: 10px" />
+          </Poptip>
+          <Icon v-else size="16" type="ios-bookmark" color="white" style="margin-right: 10px" />
+          <span>{{ row.version }} </span>
+        </template>
+        <template slot-scope="{ row }" slot="platform">
+          <span>{{ row.platform === 1 ? '安卓' : '苹果' }}</span>
+        </template>
+        <template slot-scope="{ row }" slot="is_force">
+          <span>{{ row.is_force === 1 ? '强制' : '非强制' }}</span>
+        </template>
+        <template slot-scope="{ row, index }" slot="action">
+          <a @click="edit(row)">编辑</a>
+          <!-- <Divider type="vertical" /> -->
+          <!-- <a @click="del(row, '删除版本', index)">删除</a> -->
+        </template>
+      </Table>
+      <div class="acea-row row-right page">
+        <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="tableFrom.limit" />
+      </div>
+    </Card>
   </div>
 </template>
 
@@ -72,7 +49,7 @@ export default {
     ...mapState('media', ['isMobile']),
     ...mapState('userLevel', ['categoryId']),
     labelWidth() {
-      return this.isMobile ? undefined : '85px';
+      return this.isMobile ? undefined : 80;
     },
     labelPosition() {
       return this.isMobile ? 'top' : 'left';
@@ -160,7 +137,7 @@ export default {
           this.loading = false;
         })
         .catch((err) => {
-          this.$message.error(err);
+          this.$Message.error(err);
           this.loading = false;
         });
     },
@@ -181,19 +158,19 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$message.success(res.msg);
+          this.$Message.success(res.msg);
           this.tableList.splice(num, 1);
         })
         .catch((res) => {
-          this.$message.error(res.msg);
+          this.$Message.error(res.msg);
         });
     },
     handleSubmit(name) {
       this.$refs[name].validate((valid) => {
         if (valid) {
-          this.$message.success('成功!');
+          this.$Message.success('成功!');
         } else {
-          this.$message.error('失败!');
+          this.$Message.error('失败!');
         }
       });
     },
