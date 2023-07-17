@@ -13,10 +13,10 @@ CRMEB开源商城系统PHP版
         <img src="https://img.shields.io/badge/Licence-GPL3.0-green.svg?style=flat" />
     </a>
     <a href="http://www.crmeb.com">
-        <img src="https://img.shields.io/badge/Edition-5.0-blue.svg" />
+        <img src="https://img.shields.io/badge/Edition-5.1-blue.svg" />
     </a>
      <a href="https://gitee.com/ZhongBangKeJi/CRMEB/repository/archive/master.zip">
-        <img src="https://img.shields.io/badge/Download-150m-red.svg" />
+        <img src="https://img.shields.io/badge/Download-240m-red.svg" />
     </a>
     <a href='https://gitee.com/ZhongBangKeJi/CRMEB/stargazers'>
        <img src='https://gitee.com/ZhongBangKeJi/CRMEB/badge/star.svg?theme=gvp' alt='star'></img>
