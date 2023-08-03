@@ -534,10 +534,10 @@ class Cos extends BaseUpload
         $this->storageRegion = $region;
         try {
             $res = $this->app()->PutBucketCors($name, [
-                'AllowedHeaders' => ['*'],
-                'AllowedMethods' => ['PUT', 'GET', 'POST', 'DELETE', 'HEAD'],
-                'AllowedOrigins' => ['*'],
-                'ExposeHeaders' => ['ETag', 'Content-Length', 'x-cos-request-id'],
+                'AllowedHeader' => ['*'],
+                'AllowedMethod' => ['PUT', 'GET', 'POST', 'DELETE', 'HEAD'],
+                'AllowedOrigin' => ['*'],
+                'ExposeHeader' => ['ETag', 'Content-Length', 'x-cos-request-id'],
                 'MaxAgeSeconds' => 12
             ]);
             if (isset($res['RequestId'])) {
