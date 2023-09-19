@@ -387,22 +387,22 @@
 							case 'order_confirm':
 								if (that.id) {
 									uni.navigateTo({
-										url: `/pages/goods/order_confirm/index${that.urlQuery}&invoice_id=${that.id}&invoice_type=${formData.type}`
+										url: `/pages/goods/order_confirm/index${that.urlQuery}&invoice_id=${that.id}&invoice_type=${formData.type}&header_type=${this.header_type}`
 									})
 								} else {
 									uni.navigateTo({
-										url: `/pages/goods/order_confirm/index${that.urlQuery}&invoice_id=${res.data.id}&invoice_type=${formData.type}`
+										url: `/pages/goods/order_confirm/index${that.urlQuery}&invoice_id=${res.data.id}&invoice_type=${formData.type}&header_type=${this.header_type}`
 									})
 								}
 								break;
 							case 'order_details':
 								if (that.id) {
 									uni.navigateTo({
-										url: `/pages/goods/order_details/index?order_id=${that.order_id}&invoice_id=${that.id}`
+										url: `/pages/goods/order_details/index?order_id=${that.order_id}&invoice_id=${that.id}&header_type=${this.header_type}`
 									})
 								} else {
 									uni.navigateTo({
-										url: `/pages/goods/order_details/index?order_id=${that.order_id}&invoice_id=${res.data.id}`
+										url: `/pages/goods/order_details/index?order_id=${that.order_id}&invoice_id=${res.data.id}&header_type=${this.header_type}`
 									})
 								}
 								break;

@@ -1,183 +1,231 @@
 <template>
-  <Modal
-    v-model="modals"
-    scrollable
+  <el-dialog
+    :visible.sync="modals"
     title="订单发送货"
     class="order_box"
-    :closable="false"
-    width="1000"
-    @on-visible-change="changeModal"
+    :show-close="true"
+    width="1000px"
+    @closed="changeModal"
   >
-    <Form
+    <el-form
       v-if="modals"
       ref="formItem"
       :rules="ruleValidate"
       :model="formItem"
-      :label-width="100"
+      label-width="100px"
       @submit.native.prevent
+      v-loading="isLoading"
     >
-      <FormItem label="选择类型：">
-        <RadioGroup v-model="formItem.type" @on-change="changeRadio">
-          <Radio label="1" v-if="virtual_type !== 3">发货</Radio>
-          <Radio label="2" v-if="virtual_type !== 3">送货</Radio>
-          <Radio label="3">无需配送</Radio>
-        </RadioGroup>
-      </FormItem>
-      <FormItem v-if="formItem.type == 1" v-show="export_open" label="发货类型：">
-        <RadioGroup v-model="formItem.express_record_type" @on-change="changeExpress">
-          <Radio label="3">商家寄件</Radio>
-          <Radio label="1">录入单号</Radio>
-          <Radio label="2">电子面单打印</Radio>
-        </RadioGroup>
-      </FormItem>
+      <el-form-item label="选择类型：">
+        <el-radio-group v-model="formItem.type" @input="changeRadio">
+          <el-radio label="1" v-if="virtual_type !== 3">发货</el-radio>
+          <el-radio label="2" v-if="virtual_type !== 3">送货</el-radio>
+          <el-radio label="3">无需配送</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item v-if="formItem.type == 1" v-show="export_open" label="发货类型：">
+        <el-radio-group v-model="formItem.express_record_type" @input="changeExpress">
+          <el-radio label="3">商家寄件</el-radio>
+          <el-radio label="1">录入单号</el-radio>
+          <el-radio label="2">电子面单打印</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <template v-if="['2', '3'].includes(formItem.express_record_type) && formItem.type == 1">
-        <FormItem label="寄件人姓名：">
-          <Input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 60%"></Input>
-        </FormItem>
-        <FormItem label="寄件人电话：">
-          <Input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 60%"></Input>
-        </FormItem>
-        <FormItem label="寄件人地址：">
-          <Input v-model="formItem.to_addr" placeholder="请输入寄件人地址" style="width: 60%" @on-blur="watchPrice"></Input>
-        </FormItem>
+        <el-form-item label="寄件人姓名：">
+          <el-input v-model="formItem.to_name" placeholder="请输入寄件人姓名" style="width: 60%"></el-input>
+        </el-form-item>
+        <el-form-item label="寄件人电话：">
+          <el-input v-model="formItem.to_tel" placeholder="请输入寄件人电话" style="width: 60%"></el-input>
+        </el-form-item>
+        <el-form-item label="寄件人地址：">
+          <el-input
+            v-model="formItem.to_addr"
+            placeholder="请输入寄件人地址"
+            style="width: 60%"
+            @blur="watchPrice"
+          ></el-input>
+        </el-form-item>
       </template>
       <div>
-        <FormItem label="快递公司：" v-if="formItem.type == 1">
+        <el-form-item label="快递公司：" v-if="formItem.type == 1">
           <div class="from-box">
-            <Select
+            <el-select
               v-model="formItem.delivery_name"
               filterable
               placeholder="请选择快递公司"
               style="width: 60%"
-              @on-change="expressChange"
+              @change="expressChange"
             >
-              <Option
+              <el-option
                 v-for="item in formItem.express_record_type == 3 ? kuaidiExpress : express"
                 :value="item.value"
                 :key="item.value"
-                >{{ item.value }}</Option
+                >{{ item.value }}</el-option
               >
-            </Select>
+            </el-select>
             <div class="trip">{{ deliveryErrorMsg }}</div>
           </div>
-        </FormItem>
-        <FormItem label="快递业务类型：" v-if="formItem.type == 1 && formItem.express_record_type == 3">
-          <Select v-model="formItem.service_type" filterable placeholder="请选择业务类型" style="width: 60%" @on-change="watchPrice">
-            <Option v-for="item in serviceTypeList" :value="item" :key="item">{{ item }}</Option>
-          </Select>
-        </FormItem>
-        <FormItem v-if="formItem.express_record_type === '1' && formItem.type == 1" label="快递单号：">
-          <Input v-model="formItem.delivery_id" placeholder="请输入快递单号" style="width: 60%"></Input>
+        </el-form-item>
+        <el-form-item label="快递业务类型：" v-if="formItem.type == 1 && formItem.express_record_type == 3">
+          <el-select
+            v-model="formItem.service_type"
+            filterable
+            placeholder="请选择业务类型"
+            style="width: 60%"
+            @change="watchPrice"
+          >
+            <el-option v-for="item in serviceTypeList" :value="item" :key="item">{{ item }}</el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item v-if="formItem.express_record_type === '1' && formItem.type == 1" label="快递单号：">
+          <el-input v-model="formItem.delivery_id" placeholder="请输入快递单号" style="width: 60%"></el-input>
           <div class="trips" v-if="formItem.delivery_name == '顺丰速运'">
             <p>顺丰请输入单号 :收件人或寄件人手机号后四位，</p>
             <p>例如：SF000000000000:3941</p>
           </div>
-        </FormItem>
+        </el-form-item>
         <template v-if="['2', '3'].includes(formItem.express_record_type) && formItem.type == 1">
-          <FormItem label="电子面单：" class="express_temp_id">
-            <Select
+          <el-form-item label="电子面单：" class="express_temp_id">
+            <el-select
               v-model="formItem.express_temp_id"
               placeholder="请选择电子面单"
               style="width: 60%"
-              @on-change="expressTempChange"
+              @change="expressTempChange"
             >
-              <Option v-for="(item, i) in expressTemp" :value="item.temp_id" :key="i">{{ item.title }}</Option>
-            </Select>
+              <el-option
+                v-for="(item, i) in expressTemp"
+                :value="item.temp_id"
+                :key="i"
+                :label="item.title"
+              ></el-option>
+            </el-select>
             <Button v-if="formItem.express_temp_id" type="text" @click="preview">预览</Button>
-          </FormItem>
-          <FormItem label="预计寄件金额：" v-if="formItem.express_record_type == 3">
+          </el-form-item>
+          <el-form-item label="预计寄件金额：" v-if="formItem.express_record_type == 3">
             <span class="red">{{ sendPrice }}</span>
-            <a class="ml10" @click="watchPrice">立即计算</a>
-          </FormItem>
-          <FormItem label="取件日期：" v-if="formItem.express_record_type == 3">
-            <RadioGroup v-model="formItem.day_type" type="button">
-              <Radio :label="0">今天</Radio>
-              <Radio :label="1">明天</Radio>
-              <Radio :label="2">后天</Radio>
-            </RadioGroup>
-          </FormItem>
-          <FormItem label="取件时间：" v-if="formItem.express_record_type == 3">
-            <TimePicker
+            <a class="ml10 coumped" @click="watchPrice">立即计算</a>
+          </el-form-item>
+          <el-form-item label="取件日期：" v-if="formItem.express_record_type == 3">
+            <el-radio-group v-model="formItem.day_type" type="button">
+              <el-radio :label="0">今天</el-radio>
+              <el-radio :label="1">明天</el-radio>
+              <el-radio :label="2">后天</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="取件时间：" v-if="formItem.express_record_type == 3">
+            <el-time-picker
+              is-range
               v-model="formItem.pickup_time"
               format="HH:mm"
-              type="timerange"
-              placement="bottom-end"
-              placeholder="选择取件时间范围"
-              style="width: 168px"
+              value-format="HH:mm"
+              range-separator="-"
+              start-placeholder="开始时间"
+              end-placeholder="结束时间"
+              placeholder="选择时间范围"
             />
-          </FormItem>
+          </el-form-item>
         </template>
       </div>
       <div v-if="formItem.type === '2'">
-        <FormItem label="送货人：" :prop="formItem.type == '2' ? 'sh_delivery' : ''">
-          <Select
+        <el-form-item label="送货人：" :prop="formItem.type == '2' ? 'sh_delivery' : ''">
+          <el-select
             v-model="formItem.sh_delivery"
             placeholder="请选择送货人"
             style="width: 60%"
-            @on-change="shDeliveryChange"
+            @change="shDeliveryChange"
           >
-            <Option v-for="(item, i) in deliveryList" :value="item.id" :key="i"
-              >{{ item.wx_name }}（{{ item.phone }}）</Option
-            >
-          </Select>
-        </FormItem>
+            <el-option
+              v-for="(item, i) in deliveryList"
+              :value="item.id"
+              :key="i"
+              :label="`${item.wx_name}（${item.phone}）`"
+            ></el-option>
+          </el-select>
+        </el-form-item>
       </div>
       <div v-show="formItem.type === '3'">
-        <FormItem label="备注：">
-          <Input
+        <el-form-item label="备注：">
+          <el-input
             v-model="formItem.fictitious_content"
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 5 }"
             placeholder="备注"
             style="width: 60%"
-          ></Input>
-        </FormItem>
+          ></el-input>
+        </el-form-item>
       </div>
       <div v-if="total_num > 1">
-        <FormItem label="分单发货：">
-          <i-switch
+        <el-form-item label="分单发货：">
+          <el-switch
+            :active-value="1"
+            :inactive-value="0"
             size="large"
             v-model="splitSwitch"
             :disabled="orderStatus === 8 || orderStatus === 11"
-            @on-change="changeSplitStatus"
+            @change="changeSplitStatus"
           >
             <span slot="open">开启</span>
             <span slot="close">关闭</span>
-          </i-switch>
+          </el-switch>
           <div class="trips">
             <p>可选择表格中的商品单独发货，发货后会生成新的订单且不能撤回，请谨慎操作！</p>
           </div>
-          <i-table
+          <el-table
             v-if="splitSwitch && manyFormValidate.length"
+            ref="table"
             :data="manyFormValidate"
-            @on-selection-change="selectOne"
-            :columns="header"
+            @selection-change="selectOne"
           >
-            <template slot-scope="{ row, index }" slot="image">
-              <div class="product-data">
-                <img class="image" :src="row.cart_info.productInfo.image" />
-                <div class="line2">
-                  {{ row.cart_info.productInfo.store_name }}
+            <el-table-column type="selection" width="55"> </el-table-column>
+            <el-table-column label="商品信息" width="200">
+              <template slot-scope="scope">
+                <div class="product-data">
+                  <img class="image" :src="scope.row.cart_info.productInfo.image" />
+                  <div class="line2">
+                    {{ scope.row.cart_info.productInfo.store_name }}
+                  </div>
                 </div>
-              </div>
-            </template>
-            <template slot-scope="{ row, index }" slot="value">
-              <div class="product-data">
-                <div>{{ row.cart_info.productInfo.attrInfo.suk }}</div>
-              </div>
-            </template>
-            <template slot-scope="{ row, index }" slot="price">
-              <div class="product-data">
-                <div>{{ row.cart_info.truePrice }}</div>
-              </div>
-            </template>
-          </i-table>
-        </FormItem>
+              </template>
+            </el-table-column>
+            <el-table-column label="规格" min-width="120">
+              <template slot-scope="scope">
+                <div>{{ scope.row.cart_info.productInfo.attrInfo.suk }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column label="价格" min-width="120">
+              <template slot-scope="scope">
+                <div class="product-data">
+                  <div>{{ scope.row.cart_info.truePrice }}</div>
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column label="总数" min-width="120">
+              <template slot-scope="scope">
+                <div>{{ scope.row.cart_num }}</div>
+              </template>
+            </el-table-column>
+            <el-table-column label="待发数量" width="180">
+              <template slot-scope="scope">
+                <el-input-number
+                  v-model="scope.row.num"
+                  :controls="false"
+                  :min="1"
+                  :max="scope.row.surplus_num"
+                  @change="
+                    (e) => {
+                      handleChange(e, scope.row, scope.$index);
+                    }
+                  "
+                ></el-input-number>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-form-item>
       </div>
-    </Form>
+    </el-form>
     <div slot="footer">
-      <Button @click="cancel">取消</Button>
-      <Button type="primary" @click="putSend">提交</Button>
+      <el-button @click="cancel">取消</el-button>
+      <el-button type="primary" @click="putSend">提交</el-button>
     </div>
     <!-- <viewer @inited="inited">
             <img :src="temp.pic" style="display:none" />
@@ -185,7 +233,7 @@
     <div ref="viewer" v-viewer>
       <img :src="temp.pic" style="display: none" />
     </div>
-  </Modal>
+  </el-dialog>
 </template>
 
 <script>
@@ -231,6 +279,7 @@ export default {
         fictitious_content: '',
         service_type: '',
         day_type: 0,
+        pickup_time: ['', ''],
       },
       modals: false,
       express: [],
@@ -240,71 +289,12 @@ export default {
       temp: {},
       export_open: false,
       manyFormValidate: [],
-      header: [
-        {
-          type: 'selection',
-          width: 60,
-          align: 'center',
-        },
-        {
-          title: '商品信息',
-          slot: 'image',
-          width: 200,
-          align: 'center',
-        },
-        {
-          title: '规格',
-          slot: 'value',
-          align: 'center',
-          minWidth: 120,
-        },
-        {
-          title: '价格',
-          slot: 'price',
-          align: 'center',
-          minWidth: 120,
-        },
-        {
-          title: '总数',
-          key: 'cart_num',
-          align: 'center',
-          minWidth: 120,
-        },
-        {
-          title: '待发数量',
-          key: 'surplus_num',
-          align: 'center',
-          width: 180,
-          render: (h, params) => {
-            return h('div', [
-              h('InputNumber', {
-                props: {
-                  min: 1,
-                  max: params.row.surplus_num,
-                  value: params.row.num || params.row.surplus_num,
-                },
-                on: {
-                  'on-change': (e) => {
-                    // params.row.surplus_num = e || 1;
-                    params.row.num = e || 1;
-                    this.manyFormValidate[params.index] = params.row;
-                    this.selectData.forEach((v, index) => {
-                      if (v.cart_id === params.row.cart_id) {
-                        this.selectData.splice(index, 1, params.row);
-                      }
-                    });
-                  },
-                },
-              }),
-            ]);
-          },
-        },
-      ],
       selectData: [],
       serviceTypeList: [],
       sendPrice: 0,
       ruleValidate: { sh_delivery: [{ required: true, message: '请输入送货人', trigger: 'change' }] },
       deliveryErrorMsg: '',
+      isLoading: true,
     };
   },
   watch: {
@@ -322,7 +312,17 @@ export default {
     }
   },
   methods: {
+    handleChange(e, params, index) {
+      params.num = e || 1;
+      this.manyFormValidate[index] = params;
+      this.selectData.forEach((v, i) => {
+        if (v.cart_id === params.cart_id) {
+          this.selectData.splice(i, 1, params);
+        }
+      });
+    },
     watchPrice() {
+      if (this.formItem.express_record_type != 3) return;
       let data = {
         kuaidicom: this.formItem.delivery_code,
         send_address: this.formItem.to_addr,
@@ -338,7 +338,6 @@ export default {
       });
       orderPrice(data)
         .then((res) => {
-          console.log(res);
           this.sendPrice = res.data.price;
           this.deliveryErrorMsg = '';
         })
@@ -346,16 +345,15 @@ export default {
           if (this.formItem.type == 1) {
             this.deliveryErrorMsg = err.msg;
           }
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     selectOne(data) {
       this.selectData = data;
     },
-    changeModal(status) {
-      if (!status) {
-        this.cancel();
-      }
+    changeModal() {
+      this.cancel();
+      this.isLoading = true;
     },
     changeSplitStatus(status) {
       // this.splitSwitch = status;
@@ -405,6 +403,7 @@ export default {
       }
     },
     changeExpress(j) {
+      this.deliveryErrorMsg = '';
       switch (j) {
         case '1':
           this.formItem.delivery_name = '';
@@ -427,7 +426,6 @@ export default {
     },
     kuaidiComsList(status) {
       kuaidiComsList().then((res) => {
-        console.log(res);
         this.kuaidiExpress = res.data;
         if (this.formItem.delivery_name) this.expressChange(this.formItem.delivery_name);
       });
@@ -455,10 +453,11 @@ export default {
         .then(async (res) => {
           this.express = res.data;
           this.getSheetInfo();
+          // this.isLoading = false;
         })
         .catch((res) => {
           this.loading = false;
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     printImg(url) {
@@ -481,29 +480,29 @@ export default {
       };
       if (this.formItem.type === '1' && this.formItem.express_record_type === '2') {
         if (this.formItem.delivery_name === '') {
-          return this.$Message.error('快递公司不能为空');
+          return this.$message.error('快递公司不能为空');
         } else if (this.formItem.express_temp_id === '') {
-          return this.$Message.error('电子面单不能为空');
+          return this.$message.error('电子面单不能为空');
         } else if (this.formItem.to_name === '') {
-          return this.$Message.error('寄件人姓名不能为空');
+          return this.$message.error('寄件人姓名不能为空');
         } else if (this.formItem.to_tel === '') {
-          return this.$Message.error('寄件人电话不能为空');
+          return this.$message.error('寄件人电话不能为空');
         } else if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(this.formItem.to_tel)) {
-          return this.$Message.error('请输入正确的手机号码');
+          return this.$message.error('请输入正确的手机号码');
         } else if (this.formItem.to_addr === '') {
-          return this.$Message.error('寄件人地址不能为空');
+          return this.$message.error('寄件人地址不能为空');
         }
       }
       if (this.formItem.type === '1' && this.formItem.express_record_type === '1') {
         if (this.formItem.delivery_name === '') {
-          return this.$Message.error('快递公司不能为空');
+          return this.$message.error('快递公司不能为空');
         } else if (this.formItem.delivery_id === '') {
-          return this.$Message.error('快递单号不能为空');
+          return this.$message.error('快递单号不能为空');
         }
       }
       if (this.formItem.type === '2') {
         if (this.formItem.sh_delivery === '') {
-          return this.$Message.error('送货人不能为空');
+          return this.$message.error('送货人不能为空');
         }
       }
       if (this.splitSwitch) {
@@ -517,7 +516,7 @@ export default {
         splitDelivery(data)
           .then((res) => {
             this.modals = false;
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             localStorage.setItem('DELIVERY_DATA', JSON.stringify(this.formItem));
             this.$emit('submitFail');
             this.reset();
@@ -525,13 +524,13 @@ export default {
             if (res.data.label) this.printImg(res.data.label);
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       } else {
         putDelivery(data)
           .then(async (res) => {
             this.modals = false;
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
             localStorage.setItem('DELIVERY_DATA', JSON.stringify(this.formItem));
             this.splitSwitch = false;
             this.$emit('submitFail');
@@ -539,7 +538,7 @@ export default {
             if (res.data.label) this.printImg(res.data.label);
           })
           .catch((res) => {
-            this.$Message.error(res.msg);
+            this.$message.error(res.msg);
           });
       }
     },
@@ -562,7 +561,6 @@ export default {
       let expressItem = (this.formItem.express_record_type == '3' ? this.kuaidiExpress : this.express).find((item) => {
         return item.value === value;
       });
-      console.log(value, expressItem);
       if (expressItem === undefined) {
         return;
       }
@@ -571,7 +569,7 @@ export default {
         this.formItem.service_type = expressItem.types.length ? expressItem.types[0] : '';
       }
       this.formItem.delivery_code = expressItem.code;
-      if (this.formItem.to_name && this.formItem.to_addr) this.watchPrice();
+      if (this.formItem.to_name && this.formItem.to_addr && this.formItem.express_record_type == 3) this.watchPrice();
       if (this.formItem.express_record_type === '2') {
         this.expressTemp = [];
         this.formItem.express_temp_id = '';
@@ -582,11 +580,11 @@ export default {
             this.expressTemp = res.data;
             this.formItem.express_temp_id = res.data.length ? res.data[0].temp_id : '';
             if (!res.data.length) {
-              this.$Message.error('请配置你所选快递公司的电子面单');
+              this.$message.error('请配置你所选快递公司的电子面单');
             }
           })
           .catch((err) => {
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       } else if (this.formItem.express_record_type == '3') {
         this.expressTemp = expressItem.list;
@@ -613,7 +611,7 @@ export default {
           this.deliveryList = res.data.list;
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     getSheetInfo() {
@@ -629,10 +627,11 @@ export default {
           if (!this.export_open) {
             this.formItem.express_record_type = '1';
           }
-          // this.formItem.to_addr = data.to_add;
+          this.formItem.to_addr = data.to_add;
+          this.isLoading = false;
         })
         .catch((err) => {
-          this.$Message.error(err.msg);
+          this.$message.error(err.msg);
         });
     },
     shDeliveryChange(value) {
@@ -651,11 +650,7 @@ export default {
       if (this.temp === undefined) {
         this.temp = {};
       }
-      console.log(this.temp);
     },
-    // inited (viewer) {
-    //     this.$viewer = viewer;
-    // },
     preview() {
       this.$refs.viewer.$viewer.show();
       // this.$viewer.show();
@@ -685,15 +680,17 @@ export default {
 }
 .trips {
   color: #ccc;
+  font-size: 12px;
 }
 .product-data {
   display: flex;
   align-items: center;
-  justify-content: center;
+  /* width: 200px; */
 }
 .product-data .image {
   width: 50px !important;
   height: 50px !important;
+  margin-right: 10px;
 }
 .line2 {
   display: -webkit-box;
@@ -709,6 +706,9 @@ export default {
   bottom: -26px;
   left: 0;
   color: red;
+  font-size: 12px;
+}
+.coumped {
   font-size: 12px;
 }
 </style>

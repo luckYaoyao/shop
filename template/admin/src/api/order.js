@@ -167,7 +167,7 @@ export function getNewRefundFrom(id) {
  */
 export function getExpressData(status) {
   return request({
-    url: `/order/express_list?status=` + status,
+    url: `/order/express_list?status=${status || ''}`,
     method: 'get',
   });
 }
@@ -577,5 +577,16 @@ export function putRefundRemarkData(data) {
     url: `/refund/remark/${data.id}`,
     method: 'put',
     data: data.remark,
+  });
+}
+
+/**
+ * @description 导入发货单
+ */
+export function importExpress(data) {
+  return request({
+    url: '/order/delivery/import_express',
+    method: 'get',
+    params: data,
   });
 }

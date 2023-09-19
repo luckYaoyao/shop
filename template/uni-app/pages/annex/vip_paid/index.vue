@@ -24,7 +24,7 @@
 				</view>
 			</view>
 		</view>
-		<view class="right-section">
+		<view class="right-section" v-if="memberRights.length">
 			<view class="section-hd acea-row row-center-wrapper">
 				<view class="title acea-row row-center row-bottom"><text
 						class="iconfont icon-huiyuan2"></text>{{$t(`SVIP会员尊享权`)}}
@@ -743,7 +743,7 @@
 					data = {
 						member_card_code: '',
 						member_card_pwd: '',
-						from: 'H5 '
+						from: 'H5'
 					};
 				if (!formData.account) {
 					return uni.showToast({

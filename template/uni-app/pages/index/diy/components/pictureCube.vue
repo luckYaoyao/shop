@@ -7,12 +7,12 @@
 		</view>
 		<view class="advertItem02 acea-row" v-if="style==1">
 			<view class="item" v-for="(item,index) in picList" :key="index" @click="goDetail(item)">
-				<image :src="item.image" mode="aspectFill" :style="'height:'+ imageH +'rpx;'"></image>
+				<image :src="item.image" mode="widthFix" :style="'height:'+ imageH +'rpx;'"></image>
 			</view>
 		</view>
 		<view class="advertItem02 advertItem03 acea-row" v-if="style==2">
 			<view class="item" v-for="(item,index) in picList" :key="index" @click="goDetail(item)">
-				<image :src="item.image" mode="aspectFill" :style="'height:'+ imageH +'rpx;'"></image>
+				<image :src="item.image" mode="widthFix":style="'height:'+ imageH +'rpx;'"></image>
 			</view>
 		</view>
 		<view class="advertItem04 acea-row" v-if="style==3">

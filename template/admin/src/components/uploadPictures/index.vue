@@ -2,19 +2,13 @@
   <div class="Modal">
     <div class="colLeft">
       <div class="Nav">
-        <!-- <div class="input">
-            <Input
-              search
-              enter-button
-              placeholder="请输入分类名称"
-              v-model="uploadName.name"
-              style="width: 90%"
-              @on-search="changePage"
-            />
-          </div> -->
         <div class="trees-coadd">
+          <div v-if="isPage" class="tree_tit" @click="addSort">
+            <i class="el-icon-circle-plus"></i>
+            添加分类
+          </div>
           <div class="scollhide">
-            <div class="tree">
+            <div :class="isPage ? 'tree' : 'isTree'">
               <el-tree
                 :data="treeData"
                 node-key="id"
@@ -25,13 +19,17 @@
                 :current-node-key="treeId"
               >
                 <span class="custom-tree-node" slot-scope="{ data }">
-                  <span class="file-name">
+                  <!-- <span class="file-name">
                     <i class="icon el-icon-folder-remove"></i>
                     {{ data.title }}</span
-                  >
+                  > -->
+                  <span class="file-name">
+                    <img v-if="!data.pid" class="icon" src="@/assets/images/file.jpg" />
+                    <span class="name line1">{{ data.name }}</span>
+                  </span>
                   <span>
                     <el-dropdown @command="(command) => clickMenu(data, command)">
-                      <Icon class="add" type="ios-more" />
+                      <i class="el-icon-more el-icon--right"></i>
                       <template slot="dropdown">
                         <el-dropdown-menu>
                           <el-dropdown-item command="1">新增分类</el-dropdown-item>
@@ -89,12 +87,13 @@
             >
               <i slot="suffix" class="el-icon-search el-input__icon" @click="getFileList"></i>
             </el-input>
-            <el-radio-group v-model="lietStyle" size="small" @change="radioChange">
+            <el-radio-group v-model="lietStyle" size="small" @input="radioChange">
               <el-radio-button label="list">
                 <i class="el-icon-menu"></i>
               </el-radio-button>
               <el-radio-button label="table">
-                <i class="el-icon-files"></i>
+                <!-- <i class="el-icon-files"></i> -->
+                <span class="iconfont iconliebiao"></span>
               </el-radio-button>
             </el-radio-group>
           </div>
@@ -102,33 +101,33 @@
         <div class="pictrueList acea-row" :class="{ 'is-modal': !isPage }">
           <div v-if="lietStyle == 'list'" style="width: 100%">
             <div v-show="isShowPic" class="imagesNo">
-              <Icon type="ios-images" size="60" color="#dbdbdb" />
+              <i class="el-icon-picture" style="color: #dbdbdb; font-size: 60px"></i>
               <span class="imagesNo_sp">图片库为空</span>
             </div>
-            <div class="acea-row mb10">
+            <div ref="imgListBox" class="acea-row mb10">
               <div
-                class="pictrueList_pic mr10 mb10"
+                class="pictrueList_pic mb10 mt10"
                 v-for="(item, index) in pictrueList"
                 :key="index"
+                :style="{ margin: picmargin }"
                 @mouseenter="enterMouse(item)"
                 @mouseleave="enterMouse(item)"
               >
                 <p class="number" v-if="item.num > 0">
-                  <Badge :count="item.num" type="error" :offset="[11, 12]">
+                  <el-badge :value="item.num" type="primary">
                     <a href="#" class="demo-badge"></a>
-                  </Badge>
+                  </el-badge>
                 </p>
-                <img
-                  :class="item.isSelect ? 'on' : ''"
-                  v-lazy="item.satt_dir"
-                  @click.stop="changImage(item, index, pictrueList)"
-                />
-                <div style="operate-item " @mouseenter="enterLeave(item)" @mouseleave="enterLeave(item)">
+                <div class="img" :class="item.isSelect ? 'on' : ''">
+                  <img v-lazy="item.satt_dir" @click.stop="changImage(item, index, pictrueList)" />
+                </div>
+
+                <div class="operate-item" @mouseenter="enterLeave(item)" @mouseleave="enterLeave(item)">
                   <p v-if="!item.isEdit">
                     {{ item.editName }}
                   </p>
                   <el-input size="small" type="text" v-model="item.real_name" v-else @blur="bindTxt(item)" />
-                  <div class="operate-item operate-height">
+                  <div class="operate-height">
                     <span class="operate mr10" @click="editPicList(item.att_id)" v-if="item.isShowEdit">删除</span>
                     <span class="operate mr10" @click="item.isEdit = !item.isEdit" v-if="item.isShowEdit">改名</span>
                     <span class="operate" @click="lookImg(item)" v-if="item.isShowEdit">查看</span>
@@ -194,7 +193,15 @@
           </el-table>
         </div>
         <div class="footer acea-row row-right">
-          <Page :total="total" show-elevator show-total @on-change="pageChange" :page-size="fileData.limit" />
+          <pagination
+            v-if="total"
+            :total="total"
+            :pageCount="9"
+            layout="total, prev, pager, next, jumper"
+            :page.sync="fileData.page"
+            @pagination="pageChange"
+            :limit.sync="fileData.limit"
+          ></pagination>
         </div>
       </div>
     </div>
@@ -297,9 +304,16 @@ export default {
       imageUrl: '',
       loading: false,
       multipleSelection: [],
+      picmargin: '5px', //默认距离右边距离
     };
   },
   mounted() {
+    if (this.isPage) {
+      let hang = parseInt((document.body.clientHeight - this.$refs.imgListBox.clientHeight - 325) / 180); //计算行数
+      let col = parseInt(this.$refs.imgListBox.clientWidth / 156); //计算列数
+      this.fileData.limit = col * hang; //计算分页数量
+      this.picmargin = parseInt(this.$refs.imgListBox.clientWidth - col * 146) / (2 * col) + 'px'; //平均分布计算margin距离
+    }
     this.getToken();
     this.getList();
     this.getFileList();
@@ -319,21 +333,26 @@ export default {
     },
     onDel(node) {
       let method = node.cate_id ? routeDel : routeCateDel;
-      this.$Modal.confirm({
-        title: '警告',
-        content: '<p>删除后无法恢复，请确认后删除！</p>',
-        onOk: () => {
+      this.$msgbox({
+        title: '提示',
+        message: '是否确定删除该菜单',
+        showCancelButton: true,
+        cancelButtonText: '取消',
+        confirmButtonText: '删除',
+        iconClass: 'el-icon-warning',
+        confirmButtonClass: 'btn-custom-cancel',
+      })
+        .then(() => {
           method(node.id)
             .then((res) => {
-              this.$Message.success(res.msg);
+              this.$message.success(res.msg);
               node.remove();
             })
             .catch((err) => {
-              this.$Message.error(err);
+              this.$message.error(err);
             });
-        },
-        onCancel: () => {},
-      });
+        })
+        .catch(() => {});
     },
 
     onChangeName(params) {
@@ -344,16 +363,19 @@ export default {
         };
         interfaceEditName(data)
           .then((res) => {
-            this.$Message.success(res.msg);
+            this.$message.success(res.msg);
           })
           .catch((err) => {
-            this.$Message.error(err);
+            this.$message.error(err);
           });
       }
     },
+    // 添加分类
+    addSort() {
+      this.append({ id: this.treeId || 0 });
+    },
     // 点击菜单
     clickMenu(data, name) {
-      console.log(name, data);
       if (name == 1) {
         this.append(data);
       } else if (name == 2) {
@@ -384,7 +406,7 @@ export default {
         this.getMove();
       } else {
         if (!this.ids.toString()) {
-          this.$Message.warning('请先选择图片');
+          this.$message.warning('请先选择图片');
           return;
         }
       }
@@ -399,14 +421,14 @@ export default {
       if (!data.images) return;
       moveApi(data)
         .then(async (res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getFileList();
           this.pids = 0;
           this.checkPicList = [];
           this.ids = [];
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     delImg(id) {
@@ -421,12 +443,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getFileList();
           this.checkPicList = [];
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 删除图片
@@ -442,12 +464,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getFileList();
           this.initData();
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     initData() {
@@ -490,12 +512,12 @@ export default {
       };
       this.$modalSure(delfromData)
         .then((res) => {
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
           this.getList();
           this.checkPicList = [];
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     // 确认删除树
@@ -519,7 +541,7 @@ export default {
     // 分类列表树
     getList(type) {
       let data = {
-        title: '全部图片',
+        name: '全部图片',
         id: '',
         pid: 0,
       };
@@ -530,11 +552,9 @@ export default {
           }
           res.data.list.unshift(data);
           this.treeData = res.data.list;
-          console.log(this.treeData);
-          // this.addFlag(this.treeData);
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     loadData(item, callback) {
@@ -586,7 +606,7 @@ export default {
           });
         })
         .catch((res) => {
-          this.$Message.error(res.msg);
+          this.$message.error(res.msg);
         });
     },
     showSelectData() {
@@ -621,7 +641,6 @@ export default {
     //  选中某一行
     handleSelectRow(selection) {
       let arr = this.unique(selection);
-      console.log(selection, arr);
       const uniqueArr = [];
       const ids = [];
       for (let i = 0; i < arr.length; i++) {
@@ -648,10 +667,10 @@ export default {
     // 上传之前
     beforeUpload(file) {
       // if (file.size > 2097152) {
-      //   this.$Message.error(file.name + "大小超过2M!");
+      //   this.$message.error(file.name + "大小超过2M!");
       // } else
       if (!/image\/\w+/.test(file.type)) {
-        this.$Message.error('请上传以jpg、jpeg、png等结尾的图片文件'); //FileExt.toLowerCase()
+        this.$message.error('请上传以jpg、jpeg、png等结尾的图片文件'); //FileExt.toLowerCase()
         return false;
       }
       this.uploadData = {
@@ -667,11 +686,11 @@ export default {
     // 上传成功
     handleSuccess(res, file, fileList) {
       if (res.status === 200) {
-        this.$Message.success(res.msg);
+        this.$message.success(res.msg);
         this.fileData.page = 1;
         this.getFileList();
       } else {
-        this.$Message.error(res.msg);
+        this.$message.error(res.msg);
       }
     },
     // 关闭
@@ -713,12 +732,12 @@ export default {
     // 点击使用选中图片
     checkPics() {
       if (this.isChoice === '单选') {
-        if (this.checkPicList.length > 1) return this.$Message.warning('最多只能选一张图片');
+        if (this.checkPicList.length > 1) return this.$message.warning('最多只能选一张图片');
         this.$emit('getPic', this.checkPicList[0]);
       } else {
         let maxLength = this.$route.query.maxLength;
         if (maxLength != undefined && this.checkPicList.length > Number(maxLength))
-          return this.$Message.warning('最多只能选' + maxLength + '张图片');
+          return this.$message.warning('最多只能选' + maxLength + '张图片');
         this.$emit('getPicD', this.checkPicList);
       }
     },
@@ -726,12 +745,12 @@ export default {
       let it = item.real_name.split('.');
       let it1 = it[1] == undefined ? [] : it[1];
       let len = it[0].length + it1.length;
-      item.editName = len < 10 ? item.real_name : item.real_name.substr(0, 2) + '...' + item.real_name.substr(-5, 5);
+      item.editName = len < 10 ? item.real_name : item.real_name.substr(0, 4) + '...' + item.real_name.substr(-5, 5);
     },
     // 修改图片文字上传
     bindTxt(item) {
       if (item.real_name == '') {
-        this.$Message.error('请填写内容');
+        this.$message.error('请填写内容');
       }
       fileUpdateApi(item.att_id, {
         real_name: item.real_name,
@@ -739,10 +758,10 @@ export default {
         .then((res) => {
           this.editName(item);
           item.isEdit = false;
-          this.$Message.success(res.msg);
+          this.$message.success(res.msg);
         })
         .catch((error) => {
-          this.$Message.error(error.msg);
+          this.$message.error(error.msg);
         });
     },
   },
@@ -771,7 +790,9 @@ export default {
 .selectTreeClass {
   background: #d5e8fc;
 }
-
+.tree_tit {
+  padding-top: 7px;
+}
 .treeBox {
   width: 100%;
   height: 100%;
@@ -779,22 +800,43 @@ export default {
 }
 .is-modal .pictrueList_pic {
   width: 100px;
-  margin-right: 10px !important;
-
-  img {
-    width: 100%;
+  margin: 10px 5px !important;
+  .img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100px;
     height: 100px;
+    background-color: rgb(248, 248, 248);
+    padding: 2px;
+    img {
+      max-width: 96px;
+      max-height: 96px;
+      // object-fit: cover;
+    }
+    .operate-height {
+      bottom: -8px;
+    }
   }
 }
 .pictrueList_pic {
   position: relative;
   width: 146px;
   cursor: pointer;
-  margin-right: 19px !important;
-  img {
+  // margin-right: 20px !important;
+  .img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 146px;
     height: 146px;
-    object-fit: cover;
+    background-color: rgb(248, 248, 248);
+    padding: 3px;
+    img {
+      max-width: 140px;
+      max-height: 140px;
+      // object-fit: cover;
+    }
   }
 
   p {
@@ -816,12 +858,16 @@ export default {
     right: 0;
     top: 0;
   }
+  /deep/ .el-badge__content.is-fixed {
+    top: 13px;
+    right: 25px;
+  }
 }
 .Nav {
   width: 100%;
   border-right: 1px solid #eee;
   min-width: 220px;
-  max-width: 220px;
+  max-width: max-content;
 }
 .trees-coadd {
   width: 100%;
@@ -835,11 +881,15 @@ export default {
     padding: 0px 0 10px 0;
     box-sizing: border-box;
 
-    .tree {
+    .isTree {
       min-height: 374px;
+      max-height: 550px;
       /deep/ .file-name {
         display: flex;
         align-items: center;
+        .name {
+          max-width: 7em;
+        }
         .icon {
           width: 12px;
           height: 12px;
@@ -861,7 +911,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-right: 17px;
+        padding-right: 20px;
         font-size: 13px;
         font-weight: 400;
         color: rgba(0, 0, 0, 0.6);
@@ -869,10 +919,10 @@ export default {
       }
       /deep/ .is-current {
         background: #f1f9ff !important;
-        color: #1890ff !important;
+        color: var(--prev-color-primary) !important;
       }
       /deep/ .is-current .custom-tree-node {
-        color: #1890ff !important;
+        color: var(--prev-color-primary) !important;
       }
     }
   }
@@ -920,6 +970,9 @@ export default {
   width: 100%;
   height: 100%;
   margin-left: 20px !important;
+  .iconliebiao {
+    font-size: 12px;
+  }
 }
 
 .conter .bnt {
@@ -932,17 +985,19 @@ export default {
   // width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  // height: 300px;
+  min-height: 463px;
+}
+.conter .pictrueList.is-modal {
+  max-height: 480px;
 }
 .right-col {
   // flex: 1;
 }
 .conter .pictrueList img {
-  width: 100%;
+  max-width: 100%;
 }
-
-.conter .pictrueList img.on {
-  border: 2px solid #5fb878;
+.conter .pictrueList .img.on {
+  border: 2px solid var(--prev-color-primary);
 }
 
 .conter .footer {
@@ -995,12 +1050,19 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+  margin: 5px 0;
 }
 .operate-height {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 16px;
+  position: absolute;
+  bottom: -10px;
 }
 .operate {
-  color: #1890ff;
+  color: var(--prev-color-primary);
   font-size: 12px;
   white-space: nowrap;
 }

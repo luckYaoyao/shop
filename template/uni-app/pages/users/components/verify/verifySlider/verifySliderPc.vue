@@ -63,7 +63,6 @@ import { resetSize } from "../utils/util";
 		getAjcaptcha,
 		ajcaptchaCheck
 	} from '@/api/api.js';
-//  "captchaType":"blockPuzzle",
 export default {
   name: "VerifySlide",
   props: {

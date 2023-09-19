@@ -70,6 +70,8 @@
 							<view class="introduce" v-text="storeInfo.store_name || ''"></view>
 							<view class="limit_good" v-if="storeInfo.limit_type > 0">
 								{{storeInfo.limit_type == 1 ? $t(`单次限购`) : $t(`永久限购`)}}{{storeInfo.limit_num}}{{$t(storeInfo.unit_name)}}
+								<text class='line' v-if='storeInfo.limit_type > 0 && storeInfo.min_qty > 1'> | </text>
+								<text v-if='storeInfo.min_qty > 1'>{{$t(`起购`)}}{{ storeInfo.min_qty + storeInfo.unit_name }}</text>
 							</view>
 							<view class="label acea-row row-between-wrapper" style="padding-bottom: 20rpx">
 								<view class="">
@@ -346,7 +348,7 @@
 				@closeChange="closeChange" :showAnimate="showAnimate" @boxStatus="boxStatus">
 			</shareRedPackets>
 			<!-- 组件 -->
-			<productWindow :attr="attr" :isShow="1" :iSplus="1" :limitNum="storeInfo.limit_num"
+			<productWindow :attr="attr" :isShow="1" :iSplus="1" :limitNum="storeInfo.limit_num" :minQty="storeInfo.min_qty"
 				:unitName="storeInfo.unit_name" @myevent="onMyEvent" @ChangeAttr="ChangeAttr"
 				@ChangeCartNum="ChangeCartNum" @attrVal="attrVal" @iptCartNum="iptCartNum" id="product-window"
 				:is_vip="is_vip" @getImg="showImg" :is_virtual="storeInfo.is_virtual">
@@ -807,12 +809,12 @@
 			 */
 			iptCartNum: function(e) {
 				if (e) {
-					let number = 1
-					if (Number.isInteger(parseInt(e)) && parseInt(e) > 0) {
+					let number = this.storeInfo.min_qty;
+					if (Number.isInteger(parseInt(e)) && parseInt(e) >= this.storeInfo.min_qty) {
 						number = parseInt(e);
 					}
 					this.$nextTick(e => {
-						this.$set(this.attr.productSelect, "cart_num", e < 0 ? 1 : number);
+						this.$set(this.attr.productSelect, "cart_num", e < 0 ? this.storeInfo.min_qty : number);
 					})
 				}
 			},
@@ -939,13 +941,13 @@
 				if (changeValue) {
 					num.cart_num++;
 					if (num.cart_num > stock) {
-						this.$set(this.attr.productSelect, "cart_num", stock ? stock : 1);
+						this.$set(this.attr.productSelect, "cart_num", stock ? stock : this.storeInfo.min_qty);
 						this.$set(this, "cart_num", stock ? stock : 1);
 					}
 				} else {
 					num.cart_num--;
 					if (num.cart_num < 1) {
-						this.$set(this.attr.productSelect, "cart_num", 1);
+						this.$set(this.attr.productSelect, "cart_num", this.storeInfo.min_qty);
 						this.$set(this, "cart_num", 1);
 					}
 				}
@@ -982,7 +984,7 @@
 					this.$set(this.attr.productSelect, "price", productSelect.price);
 					this.$set(this.attr.productSelect, "stock", productSelect.stock);
 					this.$set(this.attr.productSelect, "unique", productSelect.unique);
-					this.$set(this.attr.productSelect, "cart_num", 1);
+					this.$set(this.attr.productSelect, "cart_num", this.storeInfo.min_qty);
 					this.$set(
 						this.attr.productSelect,
 						"vip_price",
@@ -1261,7 +1263,7 @@
 					this.$set(this.attr.productSelect, "price", productSelect.price);
 					this.$set(this.attr.productSelect, "stock", productSelect.stock);
 					this.$set(this.attr.productSelect, "unique", productSelect.unique);
-					this.$set(this.attr.productSelect, "cart_num", 1);
+					this.$set(this.attr.productSelect, "cart_num", this.storeInfo.min_qty);
 					this.$set(this, "attrValue", value.join(","));
 					this.$set(
 						this.attr.productSelect,
@@ -1301,7 +1303,7 @@
 						"unique",
 						this.storeInfo.unique || ""
 					);
-					this.$set(this.attr.productSelect, "cart_num", 1);
+					this.$set(this.attr.productSelect, "cart_num", this.storeInfo.min_qty);
 					this.$set(
 						this.attr.productSelect,
 						"vip_price",
@@ -2365,6 +2367,9 @@
 		font-size: 16rpx;
 		margin: 10rpx 30rpx;
 		color: red;
+		.line{
+			padding: 0 6rpx;
+		}
 	}
 
 	.attrImg {

@@ -23,7 +23,7 @@
 	export default {
 		data() {
 			return {
-				autoplay: false,
+				autoplay: true,
 				duration: 500,
 				jumpover: this.$t(`跳过`),
 				experience: this.$t(`立即体验`),

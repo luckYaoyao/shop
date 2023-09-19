@@ -749,6 +749,9 @@ uni-checkbox:not([disabled]) .uni-checkbox-input:hover{
 .bg-green{
 	background-color: #3CBB45;
 }
+.bg-theme{
+	background-color: var(--view-theme);
+}
 uni-toast .uni-toast {
     font-size: 30rpx;
 }

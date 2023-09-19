@@ -469,14 +469,12 @@
 			this.invChecked = options.invoice_id || '';
 			this.header_type = options.header_type || '1';
 			this.couponTitle = options.couponTitle || this.$t(`请选择`)
-
-			switch (options.invoice_type) {
-				case '1':
-					this.invTitle = this.$t(`电子普通发票`);
-					break;
-				case '2':
-					this.invTitle = this.$t(`电子专用发票`);
-					break;
+			if (options.invoice_id) {
+				let name = ''
+				name += options.header_type == 1 ? this.$t(`个人`) : this.$t(`企业`);
+				name += options.invoice_type == 1 ? this.$t(`普通`) : this.$t(`专用`);
+				name += this.$t(`发票`);
+				this.invTitle = name;
 			}
 			// #ifndef APP-PLUS
 			this.textareaStatus = true;
@@ -551,10 +549,10 @@
 			},
 			// 选择发票
 			invChange(id) {
+				let name = '';
 				this.invChecked = id;
 				this.invShow = false;
 				const result = this.invList.find(item => item.id === id);
-				let name = '';
 				name += result.header_type === 1 ? this.$t(`个人`) : this.$t(`企业`);
 				name += result.type === 1 ? this.$t(`普通`) : this.$t(`专用`);
 				name += this.$t(`发票`);

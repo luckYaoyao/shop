@@ -2,18 +2,15 @@
   <div>
     <el-dialog
       title="上传图片"
-      append-to-body
-      :modal-append-to-body="true"
       :visible.sync="uploadModal"
       :width="isIframe ? '100%' : '1024px'"
       :fullscreen="isIframe"
       @close="closed"
-      top="5vh"
     >
       <div class="main" v-loading="loading">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
           <el-form-item label="上传方式：" prop="type">
-            <el-radio-group v-model="ruleForm.type" @change="radioChange(ruleForm.type)">
+            <el-radio-group v-model="ruleForm.type" @input="radioChange(ruleForm.type)">
               <el-radio :label="0">本地上传</el-radio>
               <el-radio :label="1">网络上传</el-radio>
               <el-radio :label="2">扫码上传</el-radio>
@@ -125,7 +122,7 @@
 
       <span slot="footer" class="dialog-footer">
         <el-button @click="clear">取 消</el-button>
-        <el-button type="primary" @click="submitUpload">确 定</el-button>
+        <el-button type="primary" :disabled="!ruleForm.imgList.length" @click="submitUpload">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -218,7 +215,6 @@ export default {
       let token = this.scanToken.split('token=')[1];
       scanUploadGet(token).then((res) => {
         this.ruleForm.imgList = res.data;
-        console.log(res);
       });
     },
 
@@ -232,6 +228,7 @@ export default {
       });
     },
     async submitUpload() {
+      if (!this.ruleForm.imgList.length) return this.$message.warning('请先选择图片');
       if (this.ruleForm.type == 0) {
         this.uploadData = {
           pid: this.ruleForm.region,
@@ -243,7 +240,7 @@ export default {
             const file = this.ruleForm.imgList[i].raw;
             await this.uploadItem(file);
             if (i == this.ruleForm.imgList.length - 1) {
-              this.$Message.success('上传成功');
+              this.$message.success('上传成功');
               this.$emit('uploadSuccess');
               this.uploadModal = false;
               this.loading = false;
@@ -260,7 +257,7 @@ export default {
           this.loading = true;
           onlineUpload({ pid: this.ruleForm.region, images: urls })
             .then((res) => {
-              this.$Message.success('上传成功');
+              this.$message.success('上传成功');
               this.$emit('uploadSuccess');
               this.uploadModal = false;
               this.loading = false;
@@ -268,7 +265,7 @@ export default {
             })
             .catch((err) => {
               this.loading = false;
-              this.$Message.error(err.msg);
+              this.$message.error(err.msg);
             });
         }
       } else if (this.ruleForm.type == 2) {
@@ -276,7 +273,7 @@ export default {
           return e.att_id;
         });
         moveApi({ pid: this.ruleForm.region, images: attId }).then((res) => {
-          this.$Message.success('上传成功');
+          this.$message.success('上传成功');
           this.$emit('uploadSuccess');
           this.uploadModal = false;
           this.initData();
@@ -304,7 +301,7 @@ export default {
           })
           .catch((err) => {
             this.loading = false;
-            this.$Message.error(err.msg);
+            this.$message.error(err.msg);
           });
       });
     },
@@ -321,7 +318,6 @@ export default {
       });
     },
     handleWebRemove(file) {
-      console.log(file);
       let index = this.ruleForm.imgList.findIndex((e) => {
         return e.url == file.url;
       });
@@ -417,11 +413,11 @@ export default {
   font-size: 16px;
 }
 .main{
-    min-height: 500px
+    min-height: 410px
 }
 .pictrue {
-  width: 60px;
-  height: 60px;
+  width: 60px !important;
+  height: 60px !important;
   border: 1px dotted rgba(0, 0, 0, 0.1);
   margin-right: 10px;
   position: relative;
@@ -447,18 +443,18 @@ export default {
     margin-left 14px
     font-size: 12px;
     font-weight: 400;
-    color: #1890FF;
+    color: var(--prev-color-primary);
     cursor pointer
 }
-/deep/ .el-upload--picture-card, /deep/ .el-upload-list--picture-card .el-upload-list__item{
+.uploadCont /deep/ .el-upload--picture-card, /deep/ .el-upload-list--picture-card .el-upload-list__item{
     width 64px
     height 64px
     line-height: 72px;
     overflow inherit
 }
-/deep/ .el-upload--picture-card, /deep/ .el-upload-list--picture-card .el-upload-list__item img{
-    width 64px
-    height 64px
+.uploadCont /deep/ .el-upload--picture-card, /deep/ .el-upload-list--picture-card .el-upload-list__item img{
+    width 64px !important
+    height 64px !important
     border-radius: 6px;
     object-fit: cover;
 }

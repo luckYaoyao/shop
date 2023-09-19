@@ -13,10 +13,11 @@ import request from '@/libs/request';
 /*
  * 获取商品表单头数量；
  * */
-export function getGoodHeade() {
+export function getGoodHeade(data) {
   return request({
     url: 'product/product/type_header',
     method: 'get',
+    params: data,
   });
 }
 
@@ -402,8 +403,9 @@ export function uploadType() {
     method: 'get',
   });
 }
+
 /**
- * @description 商品添加编辑-- 用户标签
+ * @description 导入卡密
  */
 export function importCard(data) {
   return request({

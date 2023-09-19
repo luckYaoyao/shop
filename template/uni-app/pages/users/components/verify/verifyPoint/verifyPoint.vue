@@ -148,6 +148,9 @@
                                 this.text = '验证成功'
                                 this.bindingClick = false
 								setTimeout(()=>{
+										this.$emit('success', {
+											captchaVerification
+										})
 									if (this.mode=='pop') {
 										this.$parent.clickShow = false;
 									}

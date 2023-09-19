@@ -202,7 +202,8 @@
             "onLocationChange",
             "startLocationUpdateBackground",
             "chooseAddress"
-        ]
+        ],
+        "__usePrivacyCheck__" : true
     },
     "mp-alipay" : {
         "usingComponents" : true

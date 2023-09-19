@@ -37,7 +37,7 @@
 			<image src="/static/images/line.jpg" />
 		</view>
 		<view class="pos-order-goods">
-			<navigator :url="`/pages/goods_details/index?id=${item.productInfo.product_id}`" hover-class="none"
+			<navigator :url="`/pages/goods_details/index?id=${item.productInfo.product_id ? item.productInfo.product_id : item.productInfo.id}`" hover-class="none"
 				class="goods acea-row row-between-wrapper" v-for="(item, index) in orderInfo.cartInfo" :key="index">
 				<view class="picTxt acea-row row-between-wrapper">
 					<view class="pictrue">
@@ -114,7 +114,7 @@
 			<view class='item acea-row row-between'>
 				<view>{{$t(`商品总价`)}}：</view>
 				<view class='conter'>
-					{{$t(`￥`)}}{{(parseFloat(orderInfo.total_price)+parseFloat(orderInfo.vip_true_price)).toFixed(2)}}
+					{{$t(`￥`)}}{{(parseFloat(orderInfo.total_price || 0)+parseFloat(orderInfo.vip_true_price || 0)).toFixed(2)}}
 				</view>
 			</view>
 			<view class='item acea-row row-between' v-if="orderInfo.pay_postage > 0">
@@ -137,7 +137,7 @@
 				<view>{{$t(`积分抵扣`)}}：</view>
 				<view class='conter'>-{{$t(`￥`)}}{{parseFloat(orderInfo.deduction_price).toFixed(2)}}</view>
 			</view>
-			<view class='actualPay acea-row row-right'>{{$t(`实付款`)}}：<text class='money'>{{$t(`￥`)}}{{parseFloat(orderInfo.pay_price).toFixed(2)}}</text></view>
+			<view class='actualPay acea-row row-right'>{{$t(`实付款`)}}：<text class='money'>{{$t(`￥`)}}{{parseFloat(orderInfo.pay_price || 0).toFixed(2)}}</text></view>
 		</view>
 
 		<view class="wrapper" v-if="

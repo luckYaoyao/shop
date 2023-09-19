@@ -461,6 +461,7 @@
 	.pos-order-list .list .item .order-num .state {
 		color: #2291f8;
 		font-weight: normal;
+		font-size: 24rpx;
 	}
 
 	.pos-order-list .list .item .order-num .state.on {

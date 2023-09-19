@@ -67,7 +67,6 @@ const themeConfigModule = {
       isGrayscale: false,
       // 是否开启色弱模式
       isInvert: false,
-
       /**
        * 其它设置
        */
@@ -96,7 +95,7 @@ const themeConfigModule = {
       // 网站主标题（菜单导航、浏览器当前网页标题）
       globalTitle: 'crmeb-admin',
       // 网站副标题（登录页顶部文字）
-      globalViceTitle: 'SMALL@小柒',
+      globalViceTitle: '',
       // 网站描述（登录页顶部文字）
       globalViceDes: 'vue2',
       // 默认初始语言，可选值"<zh-cn|en|zh-tw>"，默认 zh-cn
