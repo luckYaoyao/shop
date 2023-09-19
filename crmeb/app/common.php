@@ -507,6 +507,9 @@ if (!function_exists('image_to_base64')) {
         $avatar = str_replace('https', 'http', $avatar);
         try {
             $url = parse_url($avatar);
+            if ($url['scheme'] . '://' . $url['host'] == sys_config('site_url')) {
+                return "data:image/jpeg;base64," . base64_encode(file_get_contents(public_path() . substr($url['path'], 1)));
+            }
             $url = $url['host'];
             $header = [
                 'User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:45.0) Gecko/20100101 Firefox/45.0',
@@ -953,7 +956,7 @@ if (!function_exists('getLang')) {
             //获取接口传入的语言类型
             if (!$range = $request->header('cb-lang')) {
                 //没有传入则使用系统默认语言显示
-                $range = $langTypeServices->cacheDriver()->remember('range_name', function () use ($langTypeServices) {
+                $range = CacheService::remember('range_name', function () use ($langTypeServices) {
                     return $langTypeServices->value(['is_default' => 1], 'file_name');
                 });
                 if (!$range) {
@@ -967,7 +970,7 @@ if (!function_exists('getLang')) {
             }
 
             // 获取type_id
-            $typeId = $langCountryServices->cacheDriver()->remember('type_id_' . $range, function () use ($langCountryServices, $range) {
+            $typeId = CacheService::remember('type_id_' . $range, function () use ($langCountryServices, $range) {
                 return $langCountryServices->value(['code' => $range], 'type_id') ?: 1;
             }, 3600);
 

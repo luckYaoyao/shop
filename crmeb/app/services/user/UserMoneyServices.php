@@ -194,10 +194,10 @@ class UserMoneyServices extends BaseServices
 
     /**
      * 余额统计基础
-     * @param $where
      * @return array
+     * @throws \ReflectionException
      */
-    public function getBasic($where)
+    public function getBasic()
     {
         /** @var UserServices $userServices */
         $userServices = app()->make(UserServices::class);
@@ -218,7 +218,7 @@ class UserMoneyServices extends BaseServices
     public function getTrend($where)
     {
         $time = explode('-', $where['time']);
-        if (count($time) != 2) throw new AdminException(100100);
+        if (count($time) != 2) throw new AdminException('请选择时间');
         $dayCount = (strtotime($time[1]) - strtotime($time[0])) / 86400 + 1;
         $data = [];
         if ($dayCount == 1) {

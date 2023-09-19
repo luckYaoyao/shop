@@ -440,14 +440,11 @@ class Cos extends BaseUpload
     public function deleteBucket(string $name)
     {
         try {
-            $res = $this->app()->deleteBucket($name);
-            if ($res->get('RequestId')) {
-                return true;
-            }
+            $this->app()->deleteBucket($name);
+            return true;
         } catch (\Throwable $e) {
             return $this->setError($e->getMessage());
         }
-        return false;
     }
 
     /**
@@ -459,8 +456,8 @@ class Cos extends BaseUpload
     {
         $this->storageRegion = $region;
         try {
-            $res = $this->app()->GetBucketDomain($name);
-            $domainRules = $res->toArray()['DomainRules'];
+            $res = $this->app()->getBucketDomain($name);
+            $domainRules = $res['DomainRules'];
             return array_column($domainRules, 'Name');
         } catch (\Throwable $e) {
         }
@@ -533,7 +530,7 @@ class Cos extends BaseUpload
     {
         $this->storageRegion = $region;
         try {
-            $res = $this->app()->PutBucketCors($name, [
+            $res = $this->app()->putBucketCors($name, [
                 'AllowedHeader' => ['*'],
                 'AllowedMethod' => ['PUT', 'GET', 'POST', 'DELETE', 'HEAD'],
                 'AllowedOrigin' => ['*'],

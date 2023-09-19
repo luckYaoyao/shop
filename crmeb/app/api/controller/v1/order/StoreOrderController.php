@@ -14,24 +14,16 @@ use app\Request;
 use app\services\pay\PayServices;
 use app\services\shipping\ExpressServices;
 use app\services\system\admin\SystemAdminServices;
-use app\services\user\UserInvoiceServices;
-use crmeb\exceptions\ApiException;
-use crmeb\exceptions\ApiStatusException;
-use crmeb\services\pay\extend\allinpay\AllinPay;
 use app\services\activity\{lottery\LuckLotteryServices,
-    bargain\StoreBargainServices,
-    combination\StoreCombinationServices,
-    combination\StorePinkServices,
-    seckill\StoreSeckillServices
+    combination\StorePinkServices
 };
 use app\services\activity\coupon\StoreCouponIssueServices;
-use app\services\order\{OtherOrderServices,
+use app\services\order\{
     StoreCartServices,
     StoreOrderCartInfoServices,
     StoreOrderComputedServices,
     StoreOrderCreateServices,
     StoreOrderEconomizeServices,
-    StoreOrderInvoiceServices,
     StoreOrderRefundServices,
     StoreOrderServices,
     StoreOrderStatusServices,
@@ -43,8 +35,12 @@ use app\services\pay\YuePayServices;
 use app\services\product\product\StoreProductReplyServices;
 use app\services\shipping\ShippingTemplatesServices;
 use crmeb\services\CacheService;
-use think\facade\Cache;
+use Psr\SimpleCache\InvalidArgumentException;
+use think\db\exception\DataNotFoundException;
+use think\db\exception\DbException;
+use think\db\exception\ModelNotFoundException;
 use think\facade\Log;
+use think\Response;
 
 /**
  * 订单控制器
@@ -83,7 +79,7 @@ class StoreOrderController
      * 获取确认订单页面是否展示快递配送和到店自提
      * @param Request $request
      * @return mixed
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function checkShipping(Request $request)
     {
@@ -96,10 +92,10 @@ class StoreOrderController
      * @param Request $request
      * @param ShippingTemplatesServices $services
      * @return mixed
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws InvalidArgumentException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function confirm(Request $request, ShippingTemplatesServices $services)
     {
@@ -154,21 +150,14 @@ class StoreOrderController
     /**
      * 订单创建
      * @param Request $request
-     * @param StoreBargainServices $bargainServices
-     * @param StorePinkServices $pinkServices
      * @param StoreOrderCreateServices $createServices
-     * @param StoreSeckillServices $seckillServices
-     * @param UserInvoiceServices $userInvoiceServices
-     * @param StoreOrderInvoiceServices $storeOrderInvoiceServices
-     * @param StoreCombinationServices $combinationServices
      * @param $key
-     * @return \think\Response
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @return Response
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
-    public function create(Request $request, StoreBargainServices $bargainServices, StorePinkServices $pinkServices, StoreOrderCreateServices $createServices, StoreSeckillServices $seckillServices, UserInvoiceServices $userInvoiceServices, StoreOrderInvoiceServices $storeOrderInvoiceServices, StoreCombinationServices $combinationServices, $key)
+    public function create(Request $request, StoreOrderCreateServices $createServices, $key)
     {
         if (!$key) return app('json')->fail(100100);
         $userInfo = $request->user()->toArray();
@@ -220,10 +209,10 @@ class StoreOrderController
      * @param Request $request
      * @param $orderId
      * @param string $type
-     * @return \think\Response
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @return Response
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/2/13
@@ -243,7 +232,6 @@ class StoreOrderController
      * @param OrderPayServices $payServices
      * @param YuePayServices $yuePayServices
      * @return mixed
-     * @throws \Psr\SimpleCache\InvalidArgumentException
      */
     public function pay(Request $request, StorePinkServices $services, OrderPayServices $payServices, YuePayServices $yuePayServices)
     {
@@ -310,9 +298,9 @@ class StoreOrderController
      * 订单列表
      * @param Request $request
      * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function lst(Request $request)
     {
@@ -339,9 +327,9 @@ class StoreOrderController
      * @param StoreOrderEconomizeServices $services
      * @param $uni
      * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function detail(Request $request, StoreOrderEconomizeServices $services, $uni)
     {
@@ -354,9 +342,9 @@ class StoreOrderController
      * 代付订单详情
      * @param Request $request
      * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function friendDetail(Request $request)
     {
@@ -419,7 +407,7 @@ class StoreOrderController
      * 订单删除
      * @param Request $request
      * @return mixed
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function del(Request $request)
     {
@@ -464,9 +452,9 @@ class StoreOrderController
      * @param $uni
      * @param string $type
      * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function express(Request $request, StoreOrderCartInfoServices $services, ExpressServices $expressServices, $uni, $type = '')
     {
@@ -502,7 +490,7 @@ class StoreOrderController
             $cartInfo = $services->getCartColunm(['oid' => $order['id']], 'cart_info', 'unique');
             $info = [];
             $cartNew = [];
-            foreach ($cartInfo as $k => $cart) {
+            foreach ($cartInfo as $cart) {
                 $cart = json_decode($cart, true);
                 $cartNew['cart_num'] = $cart['cart_num'];
                 $cartNew['truePrice'] = $cart['truePrice'];
@@ -535,8 +523,8 @@ class StoreOrderController
      * @param Request $request
      * @param StoreOrderCartInfoServices $cartInfoServices
      * @param StoreProductReplyServices $replyServices
-     * @return \think\Response|void
-     * @throws \Psr\SimpleCache\InvalidArgumentException
+     * @return Response|void
+     * @throws InvalidArgumentException
      */
     public function comment(Request $request, StoreOrderCartInfoServices $cartInfoServices, StoreProductReplyServices $replyServices)
     {
@@ -663,9 +651,9 @@ class StoreOrderController
      * 获取退货商品列表
      * @param Request $request
      * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function refundCartInfoList(Request $request)
     {
@@ -686,10 +674,10 @@ class StoreOrderController
      * @param StoreOrderServices $storeOrderServices
      * @param $id
      * @return mixed
-     * @throws \Psr\SimpleCache\InvalidArgumentException
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws InvalidArgumentException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function applyRefund(Request $request, StoreOrderRefundServices $services, StoreOrderServices $storeOrderServices, $id)
     {
@@ -755,9 +743,9 @@ class StoreOrderController
      * 订单取消   未支付的订单回退积分,回退优惠券,回退库存
      * @param Request $request
      * @return mixed
-     * @throws \think\db\exception\DataNotFoundException
-     * @throws \think\db\exception\DbException
-     * @throws \think\db\exception\ModelNotFoundException
+     * @throws DataNotFoundException
+     * @throws DbException
+     * @throws ModelNotFoundException
      */
     public function cancel(Request $request)
     {
@@ -801,7 +789,7 @@ class StoreOrderController
     /**
      * 商家寄件回调
      * @param Request $request
-     * @return \think\Response
+     * @return Response
      * @author 等风来
      * @email 136327134@qq.com
      * @date 2023/6/12
@@ -809,19 +797,10 @@ class StoreOrderController
     public function callBack(Request $request)
     {
         $data = $request->postMore([
-            ['t', ''],
-            ['sign', ''],
             ['type', ''],
             ['data', ''],
         ]);
-
-        \think\facade\Log::error('回调:' . json_encode($data));
-
-        $data['data']['id'] = (int)$data['data']['id'];
-        if (md5(json_encode($data['data']) . $data['t']) != $data['sign']) {
-            return app('json')->fail('验签失败');
-        }
-
+        $data['data'] = $this->decrypt($data['data'], sys_config('sms_token'));
         switch ($data['type']) {
             case 'order_success'://下单成功
                 $update = [
@@ -893,5 +872,24 @@ class StoreOrderController
         }
 
         return app('json')->success();
+    }
+
+    /**
+     * 解密商家寄件回调
+     * @param string $encryptedData
+     * @param string $key
+     * @return false|string
+     * @author: 吴汐
+     * @email: 442384644@qq.com
+     * @date: 2023/8/31
+     */
+    function decrypt(string $encryptedData, string $key)
+    {
+        $key = substr($key, 0, 32);
+        $decodedData = base64_decode($encryptedData);
+        $iv = substr($decodedData, 0, 16);
+        $encrypted = substr($decodedData, 16);
+        $decrypted = openssl_decrypt($encrypted, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv);
+        return $decrypted;
     }
 }

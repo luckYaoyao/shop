@@ -104,6 +104,7 @@ class SystemAttachmentCategory extends AuthController
             ['pid', 0],
             ['name', '']
         ]);
+        if (is_array($data['pid'])) $data['pid'] = end($data['pid']);
         if (!$data['name']) {
             return app('json')->fail(400100);
         }

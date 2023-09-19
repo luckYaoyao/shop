@@ -68,8 +68,12 @@ class WechatUserServices extends BaseServices
 
     /**
      * 用uid获得 微信openid
-     * @param $uid
+     * @param int $uid
+     * @param string $userType
      * @return mixed
+     * @author: 吴汐
+     * @email: 442384644@qq.com
+     * @date: 2023/8/17
      */
     public function uidToOpenid(int $uid, string $userType = 'wechat')
     {

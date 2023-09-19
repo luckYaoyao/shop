@@ -223,7 +223,7 @@ class User extends BaseModel
      */
     public function searchLikeAttr($query, $value)
     {
-        $query->where('account|nickname|phone|real_name|uid', 'LIKE', "%$value%");
+        $query->where('account|nickname|phone|real_name|uid', 'like', '%' . $value . '%');
     }
 
     /**

@@ -477,6 +477,9 @@ class StoreOrderServices extends BaseServices
                         $item['color'] = '#457856';
                         break;
                 }
+            } elseif ($item['combination_id']) {
+                $item['pink_name'] = '[拼团订单]';
+                $item['color'] = '#32c5e9';
             } elseif ($item['seckill_id']) {
                 $item['pink_name'] = '[秒杀订单]';
                 $item['color'] = '#32c5e9';
@@ -531,7 +534,7 @@ class StoreOrderServices extends BaseServices
             if ($item['paid'] == 0 && $item['status'] == 0) {
                 $status_name['status_name'] = '未支付';
             } else if ($item['paid'] == 1 && $item['status'] == 0 && $item['shipping_type'] == 1 && $item['refund_status'] == 0) {
-                $status_name['status_name'] = '未发货';
+                $status_name['status_name'] = $item['combination_id'] && isset($item['pinkStatus']) && $item['pinkStatus'] == 1 ? '未发货(拼团中)' : '未发货';
             } else if ($item['paid'] == 1 && $item['status'] == 4 && $item['shipping_type'] == 1 && $item['refund_status'] == 0) {
                 $status_name['status_name'] = '部分发货';
             } else if ($item['paid'] == 1 && $item['status'] == 0 && $item['shipping_type'] == 2 && $item['refund_status'] == 0) {
@@ -796,12 +799,14 @@ HTML;
                     'change_time' => time(),
                     'change_message' => '修改商品总价为：' . $data['total_price'] . ' 实际支付金额' . $data['pay_price']
                 ]);
-            $res = $res && $services->save([
-                    'oid' => $id,
-                    'change_type' => 'order_edit',
-                    'change_time' => time(),
-                    'change_message' => '修改订单赠送积分为：' . $data['gain_integral']
-                ]);
+            if (isset($data['gain_integral'])) {
+                $res = $res && $services->save([
+                        'oid' => $id,
+                        'change_type' => 'order_edit',
+                        'change_time' => time(),
+                        'change_message' => '修改订单赠送积分为：' . $data['gain_integral']
+                    ]);
+            }
             if ($res) {
                 $order = $this->dao->getOne(['id' => $id, 'is_del' => 0]);
                 //改价短信提醒
@@ -2726,6 +2731,15 @@ HTML;
         return true;
     }
 
+    /**
+     * 判断订单是否全部发货
+     * @param int $pid
+     * @param int $order_id
+     * @return bool
+     * @author: 吴汐
+     * @email: 442384644@qq.com
+     * @date: 2023/8/31
+     */
     public function checkSubOrderNotSend(int $pid, int $order_id)
     {
         $order_count = $this->dao->getSubOrderNotSend($pid, $order_id);
@@ -2736,6 +2750,15 @@ HTML;
         }
     }
 
+    /**
+     * 判断是否存在子未收货子订单
+     * @param int $pid
+     * @param int $order_id
+     * @return bool
+     * @author: 吴汐
+     * @email: 442384644@qq.com
+     * @date: 2023/8/31
+     */
     public function checkSubOrderNotTake(int $pid, int $order_id)
     {
         $order_count = $this->dao->getSubOrderNotTake($pid, $order_id);

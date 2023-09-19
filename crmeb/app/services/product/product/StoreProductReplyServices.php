@@ -63,16 +63,16 @@ class StoreProductReplyServices extends BaseServices
     public function createForm(int $product_id)
     {
         if ($product_id == 0) {
-            $field[] = Form::frameImage('image', '商品', Url::buildUrl(config('app.admin_prefix', 'admin') . '/store.StoreProduct/index', array('fodder' => 'image')))->icon('ios-add')->width('950px')->height('560px')->modal(['footer-hide' => true])->Props(['srcKey' => 'image']);
+            $field[] = Form::frameImage('image', '商品', Url::buildUrl(config('app.admin_prefix', 'admin') . '/store.StoreProduct/index', array('fodder' => 'image')))->icon('el-icon-picture-outline')->width('950px')->height('560px')->Props(['srcKey' => 'image', 'footer' => false]);
         } else {
             $field[] = Form::hidden('product_id', $product_id);
         }
-        $field[] = Form::frameImage('avatar', '用户头像', Url::buildUrl(config('app.admin_prefix', 'admin') . '/widget.images/index', array('fodder' => 'avatar')))->icon('ios-add')->width('950px')->height('560px')->modal(['footer-hide' => true]);
+        $field[] = Form::frameImage('avatar', '用户头像', Url::buildUrl(config('app.admin_prefix', 'admin') . '/widget.images/index', array('fodder' => 'avatar')))->icon('el-icon-picture-outline')->width('950px')->height('560px')->props(['footer' => false]);
         $field[] = Form::input('nickname', '用户名称')->col(24);
         $field[] = Form::input('comment', '评价文字')->type('textarea');
         $field[] = Form::rate('product_score', '商品分数', 0)->allowHalf(false);
         $field[] = Form::rate('service_score', '服务分数', 0)->allowHalf(false);
-        $field[] = Form::frameImages('pics', '评价图片', Url::buildUrl(config('app.admin_prefix', 'admin') . '/widget.images/index', array('fodder' => 'pics', 'type' => 'many', 'maxLength' => 8)))->maxLength(8)->icon('ios-add')->width('950px')->height('560px')->modal(['footer-hide' => true])->props(['closeBtn' => false, 'okBtn' => false]);
+        $field[] = Form::frameImages('pics', '评价图片', Url::buildUrl(config('app.admin_prefix', 'admin') . '/widget.images/index', array('fodder' => 'pics', 'type' => 'many', 'maxLength' => 8)))->maxLength(8)->icon('el-icon-picture-outline')->width('950px')->height('560px')->props(['closeBtn' => false, 'okBtn' => false, 'footer' => false]);
         $field[] = Form::dateTime('add_time', '评论时间', '')->placeholder('请选择评论时间(不选择默认当前添加时间)')->style(['width' => '300px']);
         return create_form('添加虚拟评论', $field, Url::buildUrl('/product/reply/save_fictitious_reply'), 'POST');
     }

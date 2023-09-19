@@ -39,6 +39,8 @@ Route::group(function () {
 
     //扫码上传图片
     Route::post('image/scan_upload', 'PublicController/scanUpload')->option(['real_name' => '扫码上传图片']);
+    //路由导入
+    Route::get('route/import_api', 'PublicController/import')->option(['real_name' => '路由导入']);
 
 })->middleware(AllowOriginMiddleware::class)->option(['mark' => 'login', 'mark_name' => '登录相关']);
 

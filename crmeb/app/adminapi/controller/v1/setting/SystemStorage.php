@@ -89,6 +89,7 @@ class SystemStorage extends AuthController
             ['accessKey', ''],
             ['secretKey', ''],
             ['appid', ''],
+            ['storageRegion', ''],
         ]);
 
         $this->services->saveConfig((int)$type, $data);

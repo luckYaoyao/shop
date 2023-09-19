@@ -699,6 +699,7 @@ class StoreOrderRefundServices extends BaseServices
                 'change_time' => time()
             ]);
         });
+        $orderRefundInfo['refuse_reason'] = $data['refuse_reason'];
         event('NoticeListener', [['orderInfo' => $orderRefundInfo], 'send_order_refund_no_status']);
         return true;
     }
@@ -1067,6 +1068,8 @@ class StoreOrderRefundServices extends BaseServices
         [$page, $limit] = $this->getPageValue();
         $list = $this->dao->getList($where, $page, $limit);
         $count = $this->dao->count($where);
+        $orderInfoList = $this->storeOrderServices->getColumn([['id', 'in', array_column($list, 'store_order_id')]], 'order_id,status', 'id');
+        $store_order_status = [-2 => '已退款', -1 => '退款中', '未发货', '待收货', '待评价', '已完成'];
         if ($list) {
             foreach ($list as &$item) {
                 $item['paid'] = 1;
@@ -1100,6 +1103,8 @@ class StoreOrderRefundServices extends BaseServices
                     '_type' => $_type,
                     '_title' => $_title,
                 ];
+                $item['store_order_order_id'] = $orderInfoList[$item['store_order_id']]['order_id'];
+                $item['store_order_status'] = $store_order_status[$orderInfoList[$item['store_order_id']]['status']];
             }
         }
         $data['list'] = $list;

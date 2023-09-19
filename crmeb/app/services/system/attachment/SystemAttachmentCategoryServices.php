@@ -118,10 +118,36 @@ class SystemAttachmentCategoryServices extends BaseServices
      */
     public function form($info = [])
     {
+        [$pidList, $data] = $this->getPidList((int)($info['pid'] ?? 0));
         return [
-            Form::select('pid', '上级分类', (int)($info['pid'] ?? ''))->setOptions($this->getCateList(['pid' => 0]))->filterable(true),
+            Form::cascader('pid', '上级分类', $data)->options($pidList)->filterable(true)->props(['props' => ['multiple' => false, 'checkStrictly' => true, 'emitPath' => false]])->style(['width' => '100%']),
             Form::input('name', '分类名称', $info['name'] ?? '')->maxlength(30),
         ];
+    }
+
+    /**
+     * 获取分类
+     * @param $value
+     * @return array
+     * @throws \ReflectionException
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @author: 吴汐
+     * @email: 442384644@qq.com
+     * @date: 2023/9/12
+     */
+    public function getPidList($value)
+    {
+        $pidList = $this->dao->selectList([], 'id as value, pid, name as label')->toArray();
+        if ($value) {
+            $data = get_tree_value($pidList, $value);
+        } else {
+            $data = [0];
+        }
+        $pidList = get_tree_children($pidList, 'children', 'value');
+        array_unshift($pidList, ['value' => 0, 'pid' => 0, 'label' => '顶级分类']);
+        return [$pidList, array_reverse($data)];
     }
 
     /**

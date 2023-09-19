@@ -68,24 +68,29 @@ class StoreProductServices extends BaseServices
 
     /**
      * 获取顶部标签
+     * @param array $where
      * @return array[]
+     * @author: 吴汐
+     * @email: 442384644@qq.com
+     * @date: 2023/8/31
      */
-    public function getHeader()
+    public function getHeader($where = [])
     {
+        $where['cate_id'] = $where['cate_id'] != '' ? app()->make(StoreCategoryServices::class)->getColumn(['pid' => $where['cate_id']], 'id') : [];
         //出售中的商品
-        $onsale = $this->dao->getCount(['type' => 1]);
+        $onsale = $this->dao->getCount($where + ['type' => 1]);
         //仓库中的商品
-        $forsale = $this->dao->getCount(['type' => 2]);
-        //已经售馨商品
-        $outofstock = $this->dao->getCount(['type' => 4]);
+        $forsale = $this->dao->getCount($where + ['type' => 2]);
+        //已经售罄商品
+        $outofstock = $this->dao->getCount($where + ['type' => 4]);
         //警戒库存商品
-        $policeforce = $this->dao->getCount(['type' => 5, 'store_stock' => sys_config('store_stock') > 0 ? sys_config('store_stock') : 2]);
+        $policeforce = $this->dao->getCount($where + ['type' => 5, 'store_stock' => sys_config('store_stock') > 0 ? sys_config('store_stock') : 2]);
         //回收站的商品
-        $recycle = $this->dao->getCount(['type' => 6]);
+        $recycle = $this->dao->getCount($where + ['type' => 6]);
         return [
             ['type' => 1, 'name' => '出售中的商品', 'count' => $onsale],
             ['type' => 2, 'name' => '仓库中的商品', 'count' => $forsale],
-            ['type' => 4, 'name' => '已经售馨商品', 'count' => $outofstock],
+            ['type' => 4, 'name' => '已经售罄商品', 'count' => $outofstock],
             ['type' => 5, 'name' => '警戒库存商品', 'count' => $policeforce],
             ['type' => 6, 'name' => '回收站的商品', 'count' => $recycle]
         ];
@@ -127,7 +132,8 @@ class StoreProductServices extends BaseServices
         /** @var StoreCategoryServices $categoryService */
         $categoryService = app()->make(StoreCategoryServices::class);
         $cateList = $categoryService->getCateParentAndChildName($cateIds);
-        $preantCateList = $categoryService->getColumn([
+        $oneCateList = $categoryService->getColumn(['pid' => 0], 'id');
+        $parentCateList = $categoryService->getColumn([
             ['id', 'in', $cateIds]
         ], 'cate_name', 'id');
         foreach ($list as &$item) {
@@ -140,8 +146,8 @@ class StoreProductServices extends BaseServices
             foreach ($cateName as $k => $v) {
                 $item['cate_name'][] = $v['one'] . '/' . $v['two'];
             }
-            if (!count($item['cate_name']) && isset($preantCateList[$item['cate_id']])) {
-                $item['cate_name'][] = $preantCateList[$item['cate_id']];
+            foreach (explode(',', $item['cate_id']) as $cate_value) {
+                if (in_array($cate_value, $oneCateList)) $item['cate_name'][] = $parentCateList[$cate_value];
             }
             $item['cate_name'] = is_array($item['cate_name']) ? implode(',', $item['cate_name']) : '';
             $item['stock_attr'] = $item['stock'] > 0;//库存
@@ -261,9 +267,6 @@ class StoreProductServices extends BaseServices
         $label_id = explode(',', $productInfo['label_id']);
         $productInfo['label_id'] = $userLabelServices->getLabelList(['ids' => $label_id], ['id', 'label_name']);
         $productInfo['give_integral'] = floatval($productInfo['give_integral']);
-        $productInfo['presale'] = boolval($productInfo['presale'] ?? 0);
-        $productInfo['is_limit'] = boolval($productInfo['is_limit'] ?? 0);
-        $productInfo['vip_product'] = boolval($productInfo['vip_product'] ?? 0);
         $productInfo['presale_time'] = $productInfo['presale_start_time'] == 0 ? [] : [date('Y-m-d H:i:s', $productInfo['presale_start_time']), date('Y-m-d H:i:s', $productInfo['presale_end_time'])];
         $productInfo['description'] = $storeDescriptionServices->getDescription(['product_id' => $id, 'type' => 0]);
         $productInfo['custom_form'] = json_decode($productInfo['custom_form'], true);
@@ -978,7 +981,7 @@ class StoreProductServices extends BaseServices
         }
         $header[] = ['title' => '图片', 'slot' => 'pic', 'align' => 'center', 'minWidth' => 120];
         if ($type == 1) {
-            $header[] = ['title' => '秒杀价', 'type' => 1, 'key' => 'price', 'align' => 'center', 'minWidth' => 80];
+            $header[] = ['title' => '秒杀价', 'slot' => 'price', 'align' => 'center', 'minWidth' => 80];
             $header[] = ['title' => '成本价', 'key' => 'cost', 'align' => 'center', 'minWidth' => 80];
             $header[] = ['title' => '原价', 'key' => 'ot_price', 'align' => 'center', 'minWidth' => 80];
         } elseif ($type == 2) {
@@ -991,7 +994,7 @@ class StoreProductServices extends BaseServices
             $header[] = ['title' => '成本价', 'key' => 'cost', 'align' => 'center', 'minWidth' => 80];
             $header[] = ['title' => '日常售价', 'key' => 'r_price', 'align' => 'center', 'minWidth' => 80];
         } elseif ($type == 4) {
-            $header[] = ['title' => '兑换积分', 'key' => 'price', 'type' => 1, 'align' => 'center', 'minWidth' => 80];
+            $header[] = ['title' => '兑换积分', 'slot' => 'price', 'type' => 1, 'align' => 'center', 'minWidth' => 80];
         } elseif ($type == 6) {
             $header[] = ['title' => '预售价', 'key' => 'price', 'type' => 1, 'align' => 'center', 'minWidth' => 80];
             $header[] = ['title' => '成本价', 'key' => 'cost', 'align' => 'center', 'minWidth' => 80];
@@ -1001,11 +1004,7 @@ class StoreProductServices extends BaseServices
             $header[] = ['title' => '原价', 'key' => 'ot_price', 'align' => 'center', 'minWidth' => 80];
         }
         $header[] = ['title' => '库存', 'key' => 'stock', 'align' => 'center', 'minWidth' => 80];
-        if ($type == 2 || $type == 6) {
-            $header[] = ['title' => '限量', 'key' => 'quota', 'type' => 1, 'align' => 'center', 'minWidth' => 80];
-        } else {
-            $header[] = ['title' => '限量', 'key' => 'quota', 'type' => 1, 'align' => 'center', 'minWidth' => 80];
-        }
+        $header[] = ['title' => '限量', 'slot' => 'quota', 'type' => 1, 'align' => 'center', 'minWidth' => 80];
         $header[] = ['title' => '重量(KG)', 'key' => 'weight', 'align' => 'center', 'minWidth' => 80];
         $header[] = ['title' => '体积(m³)', 'key' => 'volume', 'align' => 'center', 'minWidth' => 80];
         $header[] = ['title' => '商品编号', 'key' => 'bar_code', 'align' => 'center', 'minWidth' => 80];

@@ -12,6 +12,7 @@ namespace app\adminapi\controller\v1\file;
 
 use app\adminapi\controller\AuthController;
 use app\services\system\attachment\SystemAttachmentServices;
+use crmeb\services\CacheService;
 use think\facade\App;
 
 /**
@@ -150,7 +151,7 @@ class SystemAttachment extends AuthController
             ['pid', 0]
         ], true);
         $uploadToken = md5(time());
-        $this->service->cacheDriver()->set('scan_upload', $uploadToken, 600);
+        CacheService::set('scan_upload', $uploadToken, 600);
         $url = sys_config('site_url') . '/app/upload?pid=' . $pid . '&token=' . $uploadToken;
         return app('json')->success(['url' => $url]);
     }
@@ -164,7 +165,7 @@ class SystemAttachment extends AuthController
      */
     public function removeUploadQrcode()
     {
-        $this->service->cacheDriver()->delete('scan_upload');
+        CacheService::delete('scan_upload');
         return app('json')->success();
     }
 

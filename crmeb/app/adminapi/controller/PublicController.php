@@ -14,6 +14,7 @@ namespace app\adminapi\controller;
 
 use app\Request;
 use app\services\system\attachment\SystemAttachmentServices;
+use app\services\system\SystemRouteServices;
 use crmeb\services\CacheService;
 use think\Response;
 
@@ -65,10 +66,20 @@ class PublicController
             ['pid', 0]
         ], true);
         $service = app()->make(SystemAttachmentServices::class);
-        if ($service->cacheDriver()->get('scan_upload') != $uploadToken) {
+        if (CacheService::get('scan_upload') != $uploadToken) {
             return app('json')->fail(410086);
         }
         $service->upload((int)$pid, $file, $upload_type, $type, '', $uploadToken);
         return app('json')->success(100032);
+    }
+
+    public function import(Request $request)
+    {
+        $filePath = $request->param('file_path', '');
+        if (empty($filePath)) {
+            return app('json')->fail(12894);
+        }
+        app()->make(SystemRouteServices::class)->import($filePath);
+        return app('json')->success(100010);
     }
 }

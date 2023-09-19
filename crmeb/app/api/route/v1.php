@@ -157,6 +157,7 @@ Route::group(function () {
         Route::get('sign/config', 'v1.user.UserSignController/sign_config')->name('signConfig')->option(['real_name' => '签到配置']);//签到配置
         Route::get('sign/list', 'v1.user.UserSignController/sign_list')->name('signList')->option(['real_name' => '签到列表']);//签到列表
         Route::get('sign/month', 'v1.user.UserSignController/sign_month')->name('signIntegral')->option(['real_name' => '签到列表（年月）']);//签到列表（年月）
+        Route::get('sign/remind/:status', 'v1.user.UserSignController/sign_remind')->name('signRemind')->option(['real_name' => '签到提醒开关']);//签到列表（年月）
         Route::post('sign/user', 'v1.user.UserSignController/sign_user')->name('signUser')->option(['real_name' => '签到用户信息']);//签到用户信息
         Route::post('sign/integral', 'v1.user.UserSignController/sign_integral')->name('signIntegral')->option(['real_name' => '公众号授权登录'])->middleware(BlockerMiddleware::class);//签到
     })->option(['mark' => 'sign', 'mark_name' => '签到']);

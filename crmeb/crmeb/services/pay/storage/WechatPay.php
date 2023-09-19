@@ -118,7 +118,7 @@ class WechatPay extends BasePay implements PayInterface
                 $result = MiniProgramService::refund($outTradeNo, $refundNo, $totalFee, $refundFee, $opUserId, $refundReason, $type, $refundAccount);
             }
         }
-        if ($opt['pay_new_weixin_open']) {
+        if (!empty($opt['pay_new_weixin_open'])) {
             if ($result['errcode'] != 0) throw new AdminException($result['errmsg']);
         } else {
             if (isset($result['return_code']) && $result['return_code'] != 'SUCCESS') throw new AdminException($result['return_msg']);

@@ -41,7 +41,11 @@ class StoreProduct extends AuthController
      */
     public function type_header()
     {
-        $list = $this->service->getHeader();
+        $where = $this->request->getMore([
+            ['store_name', ''],
+            ['cate_id', ''],
+        ]);
+        $list = $this->service->getHeader($where);
         return app('json')->success(compact('list'));
     }
 
@@ -238,7 +242,8 @@ class StoreProduct extends AuthController
             ['is_copy', 0],//是否是复制商品
             ['is_limit', 0],//是否限购
             ['limit_type', 0],//限购类型
-            ['limit_num', 0]//限购数量
+            ['limit_num', 0],//限购数量
+            ['min_qty', 1],//起购数量
         ]);
         $this->service->save((int)$id, $data);
         return app('json')->success(100000);
@@ -385,7 +390,7 @@ class StoreProduct extends AuthController
         $file = public_path() . substr($data['file'], 1);
         /** @var FileService $readExcelService */
         $readExcelService = app()->make(FileService::class);
-        $cardData = $readExcelService->readExcel($file);
+        $cardData = $readExcelService->readExcel($file, 'card');
         return app('json')->success($cardData);
     }
 

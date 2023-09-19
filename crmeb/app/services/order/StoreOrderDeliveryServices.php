@@ -370,7 +370,7 @@ class StoreOrderDeliveryServices extends BaseServices
      * @email 442384644@qq.com
      * @date 2023/02/21
      */
-    public function splitDelivery(int $id, array $data)
+    public function splitDelivery(int $id, array $data, $delivery_code = true)
     {
         $orderInfo = $this->dao->get($id, ['*'], ['pink']);
         if (!$orderInfo) {
@@ -391,7 +391,7 @@ class StoreOrderDeliveryServices extends BaseServices
             throw new AdminException(400475);
         }
 
-        if ($data['type'] == 1) {
+        if ($data['type'] == 1 && $delivery_code) {
             // 检测快递公司编码
             /** @var ExpressServices $expressServices */
             $expressServices = app()->make(ExpressServices::class);

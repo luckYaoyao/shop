@@ -32,11 +32,6 @@ class AccessTokenServeService extends HttpService
     protected $secret;
 
     /**
-     * @var Cache|null
-     */
-    protected $cache;
-
-    /**
      * @var string
      */
     protected $accessToken;
@@ -73,17 +68,11 @@ class AccessTokenServeService extends HttpService
      * AccessTokenServeService constructor.
      * @param string $account
      * @param string $secret
-     * @param Cache|null $cache
      */
-    public function __construct(string $account, string $secret, $cache = null)
+    public function __construct(string $account, string $secret)
     {
-        if (!$cache) {
-            /** @var CacheService $cache */
-            $cache = app()->make(CacheService::class);
-        }
         $this->account = $account;
         $this->secret = $secret;
-        $this->cache = $cache;
     }
 
     /**
@@ -106,10 +95,10 @@ class AccessTokenServeService extends HttpService
     public function getToken()
     {
         $accessTokenKey = md5($this->account . '_v2_' . $this->secret . $this->cacheTokenPrefix);
-        $cacheToken = $this->cache->get($accessTokenKey);
+        $cacheToken = CacheService::get($accessTokenKey);
         if (!$cacheToken) {
             $getToken = $this->getTokenFromServer();
-            $this->cache->set($accessTokenKey, $getToken['access_token'], $getToken['expires_in'] - 60);
+            CacheService::set($accessTokenKey, $getToken['access_token'], $getToken['expires_in'] - 60);
             $cacheToken = $getToken['access_token'];
         }
         $this->accessToken = $cacheToken;

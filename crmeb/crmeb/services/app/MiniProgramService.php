@@ -14,6 +14,7 @@ namespace crmeb\services\app;
 use app\services\order\StoreOrderTakeServices;
 use app\services\pay\PayServices;
 use crmeb\exceptions\AdminException;
+use crmeb\services\CacheService;
 use crmeb\services\easywechat\orderShipping\MiniOrderService;
 use crmeb\services\SystemConfigService;
 use app\services\pay\PayNotifyServices;
@@ -22,7 +23,6 @@ use EasyWeChat\Payment\Order;
 use think\facade\Event;
 use think\facade\Log;
 use crmeb\utils\Hook;
-use think\facade\Cache;
 use think\Response;
 
 /**
@@ -368,14 +368,14 @@ class MiniProgramService
     public static function paymentPrepare($openid, $out_trade_no, $total_fee, $attach, $body, $detail = '', $trade_type = 'JSAPI', $options = [])
     {
         $key = 'pay_' . $out_trade_no;
-        $result = Cache::get($key);
+        $result = CacheService::get($key);
         if ($result) {
             return $result;
         } else {
             $order = self::paymentOrder($openid, $out_trade_no, $total_fee, $attach, $body, $detail, $trade_type, $options);
             $result = self::paymentService()->prepare($order);
             if ($result->return_code == 'SUCCESS' && $result->result_code == 'SUCCESS') {
-                Cache::set($key, $result->prepay_id, 7000);
+                CacheService::set($key, $result->prepay_id, 7000);
                 return $result->prepay_id;
             } else {
                 if ($result->return_code == 'FAIL') {
@@ -405,14 +405,14 @@ class MiniProgramService
     public static function newPaymentPrepare($openid, $out_trade_no, $total_fee, $attach, $body, $detail = '', $options = [])
     {
         $key = 'pay_' . $out_trade_no;
-        $result = Cache::get($key);
+        $result = CacheService::get($key);
         if ($result) {
             return $result;
         } else {
             $order = self::paymentOrder($openid, $out_trade_no, $total_fee, $attach, $body, $detail, $options);
             $result = self::application()->minipay->createorder($order);
             if ($result->errcode === 0) {
-                Cache::set($key, $result->payment_params, 7000);
+                CacheService::set($key, $result->payment_params, 7000);
                 return $result->payment_params;
             } else {
                 exception('微信支付错误返回：' . '[' . $result->errcode . ']' . $result->errmsg);

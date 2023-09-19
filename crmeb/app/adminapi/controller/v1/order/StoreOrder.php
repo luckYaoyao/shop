@@ -12,7 +12,9 @@ namespace app\adminapi\controller\v1\order;
 
 use app\adminapi\controller\AuthController;
 use app\adminapi\validate\order\StoreOrderValidate;
+use app\jobs\OrderExpressJob;
 use app\services\serve\ServeServices;
+use crmeb\services\FileService;
 use app\services\order\{StoreOrderCartInfoServices,
     StoreOrderDeliveryServices,
     StoreOrderRefundServices,
@@ -861,5 +863,24 @@ class StoreOrder extends AuthController
         } else {
             return app('json')->fail('取消失败');
         }
+    }
+
+    /**
+     * 导入批量发货
+     * @return \think\Response|void
+     * @throws \PhpOffice\PhpSpreadsheet\Reader\Exception
+     */
+    public function importExpress()
+    {
+        [$file] = $this->request->getMore([
+            ['file', '']
+        ], true);
+        if (!$file) return app('json')->fail(400168);
+        $file = public_path() . substr($file, 1);
+        $expressData = app()->make(FileService::class)->readExcel($file, 'express', 2);
+        foreach ($expressData as $item) {
+            OrderExpressJob::dispatch([$item]);
+        }
+        return app('json')->success('批量发货成功');
     }
 }

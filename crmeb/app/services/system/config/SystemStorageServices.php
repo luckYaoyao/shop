@@ -15,6 +15,7 @@ namespace app\services\system\config;
 use app\dao\system\config\SystemStorageDao;
 use app\services\BaseServices;
 use crmeb\exceptions\AdminException;
+use crmeb\services\CacheService;
 use crmeb\services\FormBuilder;
 use app\services\other\UploadService;
 
@@ -73,8 +74,8 @@ class SystemStorageServices extends BaseServices
         $ruleConfig = [];
         if (!$config['accessKey']) {
             $ruleConfig = [
-                FormBuilder::input('accessKey', 'AccessKeyId：', $config['accessKey'] ?? '')->required(),
-                FormBuilder::input('secretKey', 'AccessKeySecret：：', $config['secretKey'] ?? '')->required(),
+                FormBuilder::input('accessKey', 'AccessKeyId', $config['accessKey'] ?? '')->required(),
+                FormBuilder::input('secretKey', 'AccessKeySecret', $config['secretKey'] ?? '')->required(),
             ];
         }
 
@@ -129,6 +130,8 @@ class SystemStorageServices extends BaseServices
                 $config = [
                     'accessKey' => sys_config('jd_accessKey', ''),
                     'secretKey' => sys_config('jd_secretKey', ''),
+                    'storageRegion' => sys_config('jd_storageRegion', ''),
+
                 ];
                 break;
             case 6:// cos 华为云
@@ -157,12 +160,16 @@ class SystemStorageServices extends BaseServices
         $config = $this->getStorageConfig($type);
         $rule = [
             FormBuilder::hidden('type', $type),
-            FormBuilder::input('accessKey', 'AccessKeyId:', $config['accessKey'] ?? '')->required(),
-            FormBuilder::input('secretKey', 'AccessKeySecret:', $config['secretKey'] ?? '')->required(),
+            FormBuilder::input('accessKey', 'AccessKeyId', $config['accessKey'] ?? '')->required(),
+            FormBuilder::input('secretKey', 'AccessKeySecret', $config['secretKey'] ?? '')->required(),
         ];
 
         if ($type === 4) {
             $rule[] = FormBuilder::input('appid', 'APPID', $config['appid'] ?? '')->required();
+        }
+
+        if ($type === 5) {
+            $rule[] = FormBuilder::input('storageRegion', 'storageRegion', $config['storageRegion'] ?? '')->required();
         }
 
 
@@ -199,7 +206,7 @@ class SystemStorageServices extends BaseServices
         $storageInfo->is_delete = 1;
         $storageInfo->save();
 
-        $this->cacheDriver()->clear();
+        CacheService::clear();
 
         return true;
     }
@@ -208,7 +215,7 @@ class SystemStorageServices extends BaseServices
     {
         //保存配置信息
         if (1 !== $type) {
-            $accessKey = $secretKey = $appid = '';
+            $accessKey = $secretKey = $appid = $storageRegion = '';
             if (isset($data['accessKey']) && isset($data['secretKey']) && $data['accessKey'] && $data['secretKey']) {
                 $accessKey = $data['accessKey'];
                 $secretKey = $data['secretKey'];
@@ -217,6 +224,10 @@ class SystemStorageServices extends BaseServices
             if (isset($data['appid']) && $data['appid']) {
                 $appid = $data['appid'];
                 unset($data['appid']);
+            }
+            if (isset($data['storageRegion']) && $data['storageRegion']) {
+                $storageRegion = $data['storageRegion'];
+                unset($data['storageRegion']);
             }
             if (!$accessKey || !$secretKey) {
                 return true;
@@ -240,6 +251,7 @@ class SystemStorageServices extends BaseServices
                 case 5:// oss 京东云
                     $make->update('jd_accessKey', ['value' => json_encode($accessKey)], 'menu_name');
                     $make->update('jd_secretKey', ['value' => json_encode($secretKey)], 'menu_name');
+                    $make->update('jd_storageRegion', ['value' => json_encode($storageRegion)], 'menu_name');
                     break;
                 case 6:// oss 华为云
                     $make->update('hw_accessKey', ['value' => json_encode($accessKey)], 'menu_name');
@@ -250,7 +262,7 @@ class SystemStorageServices extends BaseServices
                     $make->update('ty_secretKey', ['value' => json_encode($secretKey)], 'menu_name');
                     break;
             }
-            $make->cacheDriver()->clear();
+            CacheService::clear();
         }
     }
 
@@ -289,7 +301,7 @@ class SystemStorageServices extends BaseServices
         $config = $this->getStorageConfig($type);
         $data['access_key'] = $config['accessKey'];
 
-        $this->cacheDriver()->clear();
+        CacheService::clear();
 
         return $this->dao->save($data);
     }
@@ -373,7 +385,7 @@ class SystemStorageServices extends BaseServices
                 break;
             case 5:// cos 京东云
                 $upload = UploadService::init($type);
-                $res = $upload->listbuckets();
+                $res = $upload->listbuckets(sys_config('jd_storageRegion'));
                 $list = $res['Buckets'];
                 $location = explode('.', $res['@metadata']['effectiveUri'])[1] ?? 'cn-north-1';
                 $config = $this->getStorageConfig($type);
@@ -426,7 +438,7 @@ class SystemStorageServices extends BaseServices
             $this->dao->saveAll($data);
         }
 
-        $this->cacheDriver()->clear();
+        CacheService::clear();
 
         return true;
     }
@@ -558,7 +570,7 @@ class SystemStorageServices extends BaseServices
             $info->save();
         }
 
-        $this->cacheDriver()->clear();
+        CacheService::clear();
 
         return true;
     }

@@ -383,7 +383,7 @@ class StoreCouponIssueServices extends BaseServices
         $couponUserService = app()->make(StoreCouponUserServices::class);
         $this->transaction(function () use ($issueUserService, $uid, $id, $couponUserService, $issueCouponInfo, $is_receive) {
             $issueUserService->save(['uid' => $uid, 'issue_coupon_id' => $id, 'add_time' => time()]);
-            $couponUserService->addUserCoupon($uid, $issueCouponInfo, "send");
+            $couponUserService->addUserCoupon($uid, $issueCouponInfo, $is_receive ? 'get' : 'send');
             if ($issueCouponInfo['total_count'] > 0 && $is_receive) {
                 $issueCouponInfo['remain_count'] -= 1;
                 $issueCouponInfo->save();

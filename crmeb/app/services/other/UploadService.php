@@ -13,6 +13,7 @@ namespace app\services\other;
 
 use app\services\system\config\SystemStorageServices;
 use crmeb\exceptions\UploadException;
+use crmeb\services\CacheService;
 use crmeb\services\SystemConfigService;
 use crmeb\services\upload\Upload;
 use crmeb\utils\DownloadImage;
@@ -67,6 +68,7 @@ class UploadService
                 $config = [
                     'accessKey' => sys_config('jd_accessKey'),
                     'secretKey' => sys_config('jd_secretKey'),
+                    'storageRegion' => sys_config('jd_storageRegion'),
                 ];
                 break;
             case 6://华为云
@@ -94,7 +96,7 @@ class UploadService
             $res = $make->getConfig($type);
             $config['uploadUrl'] = $res['domain'];
             $config['storageName'] = $res['name'];
-            $config['storageRegion'] = $res['region'];
+            if (5 !== $type) $config['storageRegion'] = $res['region'];
             $config['cdn'] = $res['cdn'];
         }
 
@@ -134,7 +136,7 @@ class UploadService
         $fileHost = $fileArr['scheme'] . '://' . $fileArr['host'];
         /** @var SystemStorageServices $storageServices */
         $storageServices = app()->make(SystemStorageServices::class);
-        $storageArr = $storageServices->cacheDriver()->remember('storage_list', function () use ($storageServices) {
+        $storageArr = CacheService::remember('storage_list', function () use ($storageServices) {
             return $storageServices->selectList([], 'domain,type')->toArray();
         });
         foreach ($storageArr as $item) {
