@@ -115,9 +115,9 @@ Redis
 
 账号：demo 密码：crmeb.com
 
-H5端：http://v5.crmeb.net/（移动端打开）
+H5端：http://v5.crmeb.net/ （移动端打开）
 
-PC端：http://v5.crmeb.net/（电脑端打开）
+PC端：http://v5.crmeb.net/ （电脑端打开）
 
 APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CRMEB下载）
 
