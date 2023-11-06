@@ -1110,3 +1110,17 @@ if (!function_exists('dump_sql')) {
         });
     }
 }
+
+if (!function_exists('stringToIntArray')) {
+
+    /**
+     * 处理ids等并过滤参数
+     * @param string $string
+     * @param string $separator
+     * @return array
+     */
+    function stringToIntArray(string $string, string $separator = ',')
+    {
+        return !empty($string) ? array_unique(array_diff(array_map('intval', explode($separator, $string)), [0])) : [];
+    }
+}
