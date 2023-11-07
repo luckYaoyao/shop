@@ -299,7 +299,7 @@ body {
 .form-create .el-input-number {
   width: 100%;
 }
-.el-dialog /deep/ .form-create .el-button {
+.el-dialog ::v-deep .form-create .el-button {
   float: right;
 }
 .modalBody .ivu-modal-body {
@@ -754,6 +754,7 @@ body {
 .el-switch__label * {
   font-size: 12px;
   line-height: 20px !important;
+  font-weight: 400;
 }
 .defineSwitch .el-switch__label {
   position: absolute;
@@ -872,7 +873,7 @@ a {
     color: var(--prev-color-primary) !important;
   }
   .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
-    background-color: var(--prev-bg-menu-hover-ba-color) !important;
+    background-color: var(--prev-color-primary-light-9) !important;
     border-right: 2px solid var(--prev-color-primary);
   }
 }
@@ -900,7 +901,7 @@ a {
   align-items: center;
   background-color: rgba(255, 255, 255, 0.6) !important;
   backdrop-filter: blur(4px);
-  /deep/ .ivu-card-body {
+  ::v-deep .ivu-card-body {
     padding: 15px 16px 14px;
   }
 
@@ -908,7 +909,7 @@ a {
     margin-bottom: 0;
   }
 
-  /deep/ .ivu-form-item-content {
+  ::v-deep .ivu-form-item-content {
     margin-right: 124px;
     text-align: center;
   }
@@ -922,3 +923,4 @@ a {
     height: 15px;
   }
 }
+
