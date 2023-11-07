@@ -220,7 +220,8 @@ if (!function_exists('make_path')) {
         } catch (\Exception $e) {
             if ($force)
                 throw new \Exception($e->getMessage());
-            return '无法创建文件夹，请检查您的上传目录权限：' . app()->getRootPath() . 'public' . DS . 'uploads' . DS . 'attach' . DS;
+//            return '无法创建文件夹，请检查您的上传目录权限：' . app()->getRootPath() . 'public' . DS . 'uploads' . DS . 'attach' . DS;
+            return '';
         }
 
     }

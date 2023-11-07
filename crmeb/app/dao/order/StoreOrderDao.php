@@ -174,7 +174,7 @@ class StoreOrderDao extends BaseDao
             }
         })->when($realName && !$fieldKey, function ($query) use ($where) {
             $query->where(function ($que) use ($where) {
-                $que->whereLike('order_id|real_name', '%' . $where['real_name'] . '%')->whereOr('uid', 'in', function ($q) use ($where) {
+                $que->whereLike('order_id|real_name|user_phone', '%' . $where['real_name'] . '%')->whereOr('uid', 'in', function ($q) use ($where) {
                     $q->name('user')->whereLike('nickname|uid|phone', '%' . $where['real_name'] . '%')->field(['uid'])->select();
                 })->whereOr('id', 'in', function ($que) use ($where) {
                     $que->name('store_order_cart_info')->whereIn('product_id', function ($q) use ($where) {
