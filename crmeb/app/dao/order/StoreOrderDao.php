@@ -82,7 +82,7 @@ class StoreOrderDao extends BaseDao
                     $query->where('paid', 1)->where('status', 0)->where('refund_status', 0)->where('shipping_type', 2)->where('is_del', 0);
                     break;
                 case 6://已支付 已核销 没有退款
-                    $query->where('paid', 1)->where('status', 2)->where('refund_status', 0)->where('shipping_type', 2)->where('is_del', 0);
+                    $query->where('paid', 1)->whereIn('status', [2,3])->where('refund_status', 0)->where('shipping_type', 2)->where('is_del', 0);
                     break;
                 case -1://退款中
                     $query->where('paid', 1)->whereIn('refund_status', [1, 4])->where('is_del', 0);
