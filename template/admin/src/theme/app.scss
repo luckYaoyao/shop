@@ -259,10 +259,6 @@ body,
   padding: 40px;
 }
 
-.el-table tbody td .cell span:empty::after  {
-  content: '--' !important;
-}
-
 /* 字体大小全局样式
 ------------------------------- */
 @for $i from 10 through 32 {

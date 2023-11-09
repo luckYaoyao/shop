@@ -81,7 +81,7 @@
           </div>
           <div class="chat-textarea">
             <div class="chat-btn-wrapper">
-              <div class="left-wrapper">
+              <div class="left-wrappers">
                 <div class="icon-item" @click.stop="isEmoji = !isEmoji">
                   <span class="iconfont iconbiaoqing1"></span>
                 </div>
@@ -786,7 +786,7 @@ export default {
           justify-content: space-between;
           padding: 15px 0;
 
-          .left-wrapper {
+          .left-wrappers {
             display: flex;
             align-items: center;
 
