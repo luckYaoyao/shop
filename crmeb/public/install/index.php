@@ -32,7 +32,7 @@ header('Content-Type: text/html; charset=UTF-8');
 $sqlFile = 'crmeb.sql';
 $configFile = '.env';
 if (!file_exists(SITE_DIR . 'install/' . $sqlFile) || !file_exists(SITE_DIR . 'install/' . $configFile)) {
-    echo '缺少必要的安装文件!';
+    echo 'install目录缺少 .env 或 crmeb.sql 文件,请检查!';
     exit;
 }
 $Title = "CRMEB安装向导";
