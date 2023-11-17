@@ -435,7 +435,7 @@ class SystemConfigServices extends BaseServices
             'type' => 'div',
             'class' => 'tips-info',
             'domProps' => ['innerHTML' => $data['desc']]
-        ])->rows(6)->col(13);
+        ])->rows($data['high'])->col(13);
         return $formbuider;
     }
 
