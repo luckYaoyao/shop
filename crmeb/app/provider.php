@@ -14,6 +14,6 @@ use app\Request;
 
 // 容器Provider定义文件
 return [
-    'think\Request'          => Request::class,
-    'think\exception\Handle' => ExceptionHandle::class,
+    'think\Request'          => Request::class,//请求对象
+    'think\exception\Handle' => ExceptionHandle::class,//异常处理类 
 ];

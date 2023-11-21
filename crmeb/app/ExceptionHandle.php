@@ -30,11 +30,11 @@ class ExceptionHandle extends Handle
      * @var array
      */
     protected $ignoreReport = [
-        HttpException::class,
-        HttpResponseException::class,
-        ModelNotFoundException::class,
-        DataNotFoundException::class,
-        ValidateException::class,
+        HttpException::class,//HTTP异常
+        HttpResponseException::class,//http响应异常
+        ModelNotFoundException::class,//模型没找到异常
+        DataNotFoundException::class,//数据没找到异常
+        ValidateException::class,//验证器异常 
     ];
 
     /**

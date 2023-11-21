@@ -18,6 +18,9 @@ use app\services\system\SystemRouteServices;
 use crmeb\services\CacheService;
 use think\Response;
 
+/**
+ * 公共控制器   
+ */
 class PublicController
 {
 
@@ -29,12 +32,13 @@ class PublicController
     public function download(string $key = '')
     {
         if (!$key) {
-            return Response::create()->code(500);
+            return Response::create()->code(500);//参数错误 
         }
-        $fileName = CacheService::get($key);
+        $fileName = CacheService::get($key);//缓存中的文件路径
+        //判断文件是否存在  
         if (is_array($fileName) && isset($fileName['path']) && isset($fileName['fileName']) && $fileName['path'] && $fileName['fileName'] && file_exists($fileName['path'])) {
-            CacheService::delete($key);
-            return download($fileName['path'], $fileName['fileName']);
+            CacheService::delete($key);//删除缓存
+            return download($fileName['path'], $fileName['fileName']);//返回文件
         }
         return Response::create()->code(500);
     }
@@ -45,6 +49,7 @@ class PublicController
      */
     public function getWorkerManUrl()
     {
+        //获取当前长链接域名
         return app('json')->success(getWorkerManUrl());
     }
 
@@ -65,20 +70,25 @@ class PublicController
             ['uploadToken', ''],
             ['pid', 0]
         ], true);
+        //附件服务
         $service = app()->make(SystemAttachmentServices::class);
-        if (CacheService::get('scan_upload') != $uploadToken) {
-            return app('json')->fail(410086);
+        // 获取缓存中的上传令牌并与当前上传令牌比较
+        if (CacheService::get('scan_upload') != $uploadToken) { 
+            return app('json')->fail(410086); // 如果不一致则返回错误码410086
         }
+        //上传文件
         $service->upload((int)$pid, $file, $upload_type, $type, '', $uploadToken);
         return app('json')->success(100032);
     }
 
     public function import(Request $request)
     {
+        //获取文件路径
         $filePath = $request->param('file_path', '');
         if (empty($filePath)) {
             return app('json')->fail(12894);
         }
+        //导入数据
         app()->make(SystemRouteServices::class)->import($filePath);
         return app('json')->success(100010);
     }

@@ -11,5 +11,5 @@
 
 // 容器Provider定义文件
 return [
-    'think\exception\Handle' => \app\adminapi\AdminApiExceptionHandle::class,
+    'think\exception\Handle' => \app\adminapi\AdminApiExceptionHandle::class,//异常处理类
 ];

@@ -9,5 +9,5 @@
 // | Author: CRMEB Team <admin@crmeb.com>
 // +----------------------------------------------------------------------
 return [
-    \app\AppService::class
+    \app\AppService::class // 应用服务提供者
 ];

@@ -27,7 +27,7 @@ use Spatie\Macroable\Macroable;
  */
 class Request extends \think\Request
 {
-    use Macroable;
+    use Macroable;// 允许注入公共方法 
 
     /**
      * 不过滤变量名
@@ -45,30 +45,31 @@ class Request extends \think\Request
      */
     public function more(array $params, bool $suffix = false, bool $filter = true): array
     {
-        $p = [];
-        $i = 0;
-        foreach ($params as $param) {
-            if (!is_array($param)) {
+        $p = []; // 初始化一个空数组
+        $i = 0; // 初始化计数器
+        foreach ($params as $param) { // 遍历参数数组
+            if (!is_array($param)) { // 如果当前元素不是数组
                 $p[$suffix == true ? $i++ : $param] = $this->filterWord(is_string($this->param($param)) ? trim($this->param($param)) : $this->param($param), $filter && !in_array($param, $this->except));
-            } else {
-                if (!isset($param[1])) $param[1] = null;
-                if (!isset($param[2])) $param[2] = '';
-                if (is_array($param[0])) {
-                    $name = is_array($param[1]) ? $param[0][0] . '/a' : $param[0][0] . '/' . $param[0][1];
-                    $keyName = $param[0][0];
-                } else {
-                    $name = is_array($param[1]) ? $param[0] . '/a' : $param[0];
-                    $keyName = $param[0];
+            } else { // 如果当前元素是数组
+                if (!isset($param[1])) $param[1] = null; // 如果第二个元素不存在则设置为null
+                if (!isset($param[2])) $param[2] = ''; // 如果第三个元素不存在则设置为空字符串
+                if (is_array($param[0])) { // 如果第一个元素也是数组
+                    $name = is_array($param[1]) ? $param[0][0] . '/a' : $param[0][0] . '/' . $param[0][1]; // 根据第二个元素是否为数组来构造参数名
+                    $keyName = $param[0][0]; // 参数名作为键名
+                } else { // 如果当前元素是数组
+                        $name = is_array($param[1]) ? $param[0] . '/a' : $param[0]; // 根据第二个元素是否为数组来构造参数名
+                        $keyName = $param[0]; // 参数名作为键名
                 }
-
-                $p[$suffix == true ? $i++ : ($param[3] ?? $keyName)] = $this->filterWord(
-                    is_string($this->param($name, $param[1], $param[2])) ?
-                        trim($this->param($name, $param[1], $param[2])) :
-                        $this->param($name, $param[1], $param[2]),
-                    $filter && !in_array($keyName, $this->except));
+                // 获取当前元素的值并存入新数组 
+                $p[$suffix == true ? $i++ : ($param[3] ?? $keyName)] = $this->filterWord( // 对当前元素进行过滤并存入新数组
+                    is_string($this->param($name, $param[1], $param[2])) ? // 获取当前元素的值并去除首尾空格
+                                trim($this->param($name, $param[1], $param[2])) :
+                                $this->param($name, $param[1], $param[2]),
+                            $filter && !in_array($keyName, $this->except));
             }
         }
         return $p;
+
     }
 
     /**
@@ -92,7 +93,7 @@ class Request extends \think\Request
                 if (is_array($v)) {
                     foreach ($v as &$vv) {
                         if (!is_array($vv)) {
-                            $vv = $this->replaceWord($farr, $vv);
+                            $vv = $this->replaceWord($farr, $vv);// 替换特殊字符  
                         }
                     }
                 } else {
