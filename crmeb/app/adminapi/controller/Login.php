@@ -30,8 +30,8 @@ class Login extends AuthController
      */
     public function __construct(App $app, SystemAdminServices $services)
     {
-        parent::__construct($app);//调用父类构造函数
-        $this->services = $services;//初始化services    注入services   系统管理员服务层 SystemAdminServices 
+        parent::__construct($app);
+        $this->services = $services;
     }
 
     protected function initialize()
@@ -45,7 +45,7 @@ class Login extends AuthController
      */
     public function captcha()
     {
-        return app()->make(Captcha::class)->create();//验证码 
+        return app()->make(Captcha::class)->create();
     }
 
     /**

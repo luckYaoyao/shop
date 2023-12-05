@@ -1046,6 +1046,7 @@ class UpgradeController
      */
     public function upgradeList()
     {
+        return app('json')->success([]);
         return app('json')->success($this->services->getUpgradeList());
     }
 
@@ -1055,6 +1056,7 @@ class UpgradeController
      */
     public function upgradeableList()
     {
+        return app('json')->success([]);
         return app('json')->success($this->services->getUpgradeableList());
     }
 
@@ -1098,6 +1100,7 @@ class UpgradeController
      */
     public function upgradeStatus()
     {
+        return app('json')->success([]);
         $data = $this->services->getUpgradeStatus();
         return app('json')->success($data);
     }
@@ -1110,6 +1113,7 @@ class UpgradeController
      */
     public function upgradeLogList()
     {
+        return app('json')->success([]);
         $data = $this->services->getUpgradeLogList();
         return app('json')->success($data);
     }

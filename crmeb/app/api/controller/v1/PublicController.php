@@ -100,7 +100,7 @@ class PublicController
     public function share()
     {
         $data['img'] = sys_config('wechat_share_img');
-        if (strstr($data['img'], 'http') === false) {
+        if (strstr($data['img'], 'http') === false && $data['img'] != '') {
             $data['img'] = sys_config('site_url') . $data['img'];
         }
         $data['img'] = str_replace('\\', '/', $data['img']);

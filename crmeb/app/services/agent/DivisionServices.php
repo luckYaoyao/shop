@@ -56,7 +56,7 @@ class DivisionServices extends BaseServices
         ];
         $data = $userServices->getDivisionList($where + ['status' => 1], 'uid,nickname,avatar,division_percent,division_end_time,division_status');
         foreach ($data['list'] as &$item) {
-            $item['division_end_time'] = date('Y-m-d', $item['division_end_time']);
+//            $item['division_end_time'] = date('Y-m-d', $item['division_end_time']);
             $item['agent_count'] = $userServices->count([
                 $type == 2 ? 'division_id' : 'agent_id' => $item['uid'],
                 'division_type' => $type + 1,

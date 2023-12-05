@@ -37,9 +37,9 @@ class Common extends AuthController
     public function getLogo()
     {
         return app('json')->success([
-            'logo' => sys_config('site_logo'),//站点LOGO
-            'logo_square' => sys_config('site_logo_square'),//图标
-            'site_name' => sys_config('site_name')//站点名称
+            'logo' => sys_config('site_logo'),
+            'logo_square' => sys_config('site_logo_square'),
+            'site_name' => sys_config('site_name')
         ]);
     }
 
@@ -49,8 +49,8 @@ class Common extends AuthController
      */
     public function auth()
     {
-        $version = get_crmeb_version();//当前版本号
-        $host = $this->request->host();//当前域名
+        $version = get_crmeb_version();
+        $host = $this->request->host();
         // 正常域名
         $res = HttpService::request('http://authorize.crmeb.net/api/auth_cert_query', 'post', [
             'domain_name' => $host,
@@ -159,8 +159,8 @@ class Common extends AuthController
     public function homeStatics()
     {
         /** @var StoreOrderServices $orderServices */
-        $orderServices = app()->make(StoreOrderServices::class);//订单服务
-        $info = $orderServices->homeStatics();//订单统计
+        $orderServices = app()->make(StoreOrderServices::class);
+        $info = $orderServices->homeStatics();
         return app('json')->success(compact('info'));
     }
 
@@ -170,7 +170,7 @@ class Common extends AuthController
         if ($lastValue == 0 && $nowValue == 0) return 0;
         if ($lastValue == 0) return round($nowValue, 2);
         if ($nowValue == 0) return -round($lastValue, 2);
-        return bcmul(bcdiv((bcsub($nowValue, $lastValue, 2)), $lastValue, 2), 100, 2);//保留两位小数
+        return bcmul(bcdiv((bcsub($nowValue, $lastValue, 2)), $lastValue, 2), 100, 2);
     }
 
     /**
@@ -180,8 +180,8 @@ class Common extends AuthController
     {
         $cycle = $this->request->param('cycle') ?: 'thirtyday';//默认30天
         /** @var StoreOrderServices $orderServices */
-        $orderServices = app()->make(StoreOrderServices::class);//订单服务
-        $chartdata = $orderServices->orderCharts($cycle);//订单统计
+        $orderServices = app()->make(StoreOrderServices::class);
+        $chartdata = $orderServices->orderCharts($cycle);
         return app('json')->success($chartdata);
     }
 
@@ -215,22 +215,22 @@ class Common extends AuthController
     public function jnotice()
     {
         /** @var StoreOrderServices $orderServices */
-        $orderServices = app()->make(StoreOrderServices::class);//订单服务
-        $data['ordernum'] = $orderServices->storeOrderCount();//待发货
+        $orderServices = app()->make(StoreOrderServices::class);
+        $data['ordernum'] = $orderServices->storeOrderCount();
         $store_stock = sys_config('store_stock');
         if ($store_stock < 0) $store_stock = 2;
         /** @var StoreProductServices $storeServices */
-        $storeServices = app()->make(StoreProductServices::class);//商品服务
+        $storeServices = app()->make(StoreProductServices::class);
         $data['inventory'] = $storeServices->count(['type' => 5, 'store_stock' => $store_stock]);//警戒库存
         /** @var StoreProductReplyServices $replyServices */
-        $replyServices = app()->make(StoreProductReplyServices::class);//商品评价
-        $data['commentnum'] = $replyServices->replyCount();//评价
+        $replyServices = app()->make(StoreProductReplyServices::class);
+        $data['commentnum'] = $replyServices->replyCount();
         /** @var UserExtractServices $extractServices */
-        $extractServices = app()->make(UserExtractServices::class);//提现
+        $extractServices = app()->make(UserExtractServices::class);
         $data['reflectnum'] = $extractServices->userExtractCount();//提现
         $data['msgcount'] = intval($data['ordernum']) + intval($data['inventory']) + intval($data['commentnum']) + intval($data['reflectnum']);
         $data['newOrderId'] = $orderServices->newOrderId(1);
-        if (count($data['newOrderId'])) $orderServices->newOrderUpdate($data['newOrderId']);//更新订单查看状态
+        if (count($data['newOrderId'])) $orderServices->newOrderUpdate($data['newOrderId']);
         $value = [];
         if ($data['ordernum'] != 0) {
             $value[] = [
@@ -333,8 +333,8 @@ class Common extends AuthController
     public function menusList()
     {
         /** @var SystemMenusServices $menusServices */
-        $menusServices = app()->make(SystemMenusServices::class);//菜单服务
-        $list = $menusServices->getSearchList();//获取菜单列表
+        $menusServices = app()->make(SystemMenusServices::class);
+        $list = $menusServices->getSearchList();
         $counts = $menusServices->getColumn([
             ['is_show', '=', 1],
             ['auth_type', '=', 1],
@@ -362,8 +362,8 @@ class Common extends AuthController
      */
     public function copyright()
     {
-        $copyrightContext = sys_config('nncnL_crmeb_copyright', '');//版权内容
-        $copyrightImage = sys_config('nncnL_crmeb_copyright_image', '');//版权图片
+        $copyrightContext = sys_config('nncnL_crmeb_copyright', '');
+        $copyrightImage = sys_config('nncnL_crmeb_copyright_image', '');
         return app('json')->success(compact('copyrightContext', 'copyrightImage'));
     }
 
@@ -375,7 +375,7 @@ class Common extends AuthController
     {
         [$copyright, $copyrightImg] = $this->request->postMore(['copyright', 'copyright_img',], true);
         /** @var SystemConfigServices $services */
-        $services = app()->make(SystemConfigServices::class);//配置服务
+        $services = app()->make(SystemConfigServices::class);
         if ($services->count(['menu_name' => 'nncnL_crmeb_copyright'])) {
             $services->update(['menu_name' => 'nncnL_crmeb_copyright'], ['value' => json_encode($copyright)]);
         } else {
@@ -402,7 +402,7 @@ class Common extends AuthController
                 'info' => ''
             ]);
         }
-        CacheService::clear();//清除缓存
+        CacheService::clear();
         return app('json')->success(100000);
     }
 

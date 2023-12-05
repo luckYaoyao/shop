@@ -1104,8 +1104,8 @@ class StoreOrderRefundServices extends BaseServices
                     '_type' => $_type,
                     '_title' => $_title,
                 ];
-                $item['store_order_order_id'] = $orderInfoList[$item['store_order_id']]['order_id'];
-                $item['store_order_status'] = $store_order_status[$orderInfoList[$item['store_order_id']]['status']];
+                $item['store_order_order_id'] = $orderInfoList[$item['store_order_id']]['order_id'] ?? '';
+                $item['store_order_status'] = $store_order_status[$orderInfoList[$item['store_order_id']]['status'] ?? -3] ?? '';
             }
         }
         $data['list'] = $list;
@@ -1191,6 +1191,7 @@ class StoreOrderRefundServices extends BaseServices
         $orderData['routine_contact_type'] = sys_config('routine_contact_type', 0);
         $orderData['levelPrice'] = $this->getOrderSumPrice($orderData['cart_info'], 'level');//获取会员等级优惠
         $orderData['memberPrice'] = $this->getOrderSumPrice($orderData['cart_info'], 'member');//获取付费会员优惠
+        $orderData['pay_type'] = $orderInfo['pay_type'];
 
         switch ($orderInfo['pay_type']) {
             case PayServices::WEIXIN_PAY:

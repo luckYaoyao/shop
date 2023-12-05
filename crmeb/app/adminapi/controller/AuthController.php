@@ -45,9 +45,9 @@ class AuthController extends BaseController
      */
     protected function initialize()
     {
-        $this->adminId = $this->request->adminId();//获取当前登录管理员id
-        $this->adminInfo = $this->request->adminInfo();//获取当前登录管理员信息
-        $this->auth = $this->request->adminInfo['rule'] ?? [];//获取当前管理员权限
+        $this->adminId = $this->request->adminId();
+        $this->adminInfo = $this->request->adminInfo();
+        $this->auth = $this->request->adminInfo['rule'] ?? [];
     }
 
     /**
@@ -78,7 +78,7 @@ class AuthController extends BaseController
                 $v->scene($message);
             }
         }
-        
+
         if (is_array($message))
             $v->message($message);
 

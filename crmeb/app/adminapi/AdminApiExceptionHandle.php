@@ -31,11 +31,10 @@ class AdminApiExceptionHandle extends Handle
      * @var array
      */
     protected $ignoreReport = [
-        ValidateException::class,//验证错误
-        DbException::class,//数据库错误
-        AuthException::class,//权限错误
-        AdminException::class,//后台错误
-        ApiException::class,//接口错误
+        ValidateException::class,
+        AuthException::class,
+        AdminException::class,
+        ApiException::class,
     ];
 
     /**
@@ -49,10 +48,10 @@ class AdminApiExceptionHandle extends Handle
         if (!$this->isIgnoreReport($exception)) {
             try {
                 $data = [
-                    'file' => $exception->getFile(),//文件
-                    'line' => $exception->getLine(),//行数
-                    'message' => $this->getMessage($exception),//错误信息
-                    'code' => $this->getCode($exception),//错误码
+                    'file' => $exception->getFile(),
+                    'line' => $exception->getLine(),
+                    'message' => $this->getMessage($exception),
+                    'code' => $this->getCode($exception),
                 ];
 
                 //日志内容
@@ -67,9 +66,9 @@ class AdminApiExceptionHandle extends Handle
                     json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),             //报错数据
 
                 ];
-                Log::write(implode("|", $log), "error");//记录日志
+                Log::write(implode("|", $log), "error");
             } catch (\Throwable $e) {
-                Log::write($e->getMessage(), "error");//记录日志
+                Log::write($e->getMessage(), "error");
             }
         }
     }
@@ -83,24 +82,22 @@ class AdminApiExceptionHandle extends Handle
      */
     public function render($request, Throwable $e): Response
     {
-        // 如果是响应异常，直接返回
         if ($e instanceof HttpResponseException) {
-            return parent::render($request, $e);//直接返回
+            return parent::render($request, $e);
         }
-        // 调试模式下返回异常信息
         $massageData = Env::get('app_debug', false) ? [
-            'message' => $e->getMessage(),//错误信息
-            'file' => $e->getFile(),//文件
-            'line' => $e->getLine(),//行数
-            'trace' => $e->getTrace(),// 异常的追踪
-            'previous' => $e->getPrevious(),// 异常的上一个异常
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => $e->getTrace(),
+            'previous' => $e->getPrevious(),
         ] : [];
         $message = $e->getMessage();
         // 添加自定义异常处理机制
         if ($e instanceof AuthException || $e instanceof AdminException || $e instanceof ApiException || $e instanceof ValidateException) {
             return app('json')->make($e->getCode() ?: 400, $message, $massageData);
         } else {
-            return app('json')->fail($message, $massageData);//返回错误信息
+            return app('json')->fail($message, $massageData);
         }
     }
 

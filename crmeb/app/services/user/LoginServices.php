@@ -100,6 +100,7 @@ class LoginServices extends BaseServices
             $data['staff_id'] = $userInfo['uid'];
             $data['is_staff'] = $user['is_staff'] ?? 0;
             $data['division_type'] = 3;
+            $data['division_status'] = 1;
             $data['division_change_time'] = time();
             $data['division_end_time'] = $spreadInfo->division_end_time;
             //如果店员切换代理商，则店员在之前代理商下推广的用户，他们的直接上级从当前店员变为之前代理商

@@ -2273,7 +2273,7 @@ HTML;
      */
     public function getFriendDetail($orderId, $uid)
     {
-        $orderInfo = $this->dao->getOne(['order_id' => $orderId, 'is_del' => 0]);
+        $orderInfo = $this->dao->getOne(['id' => $orderId, 'is_del' => 0]);
         if ($orderInfo) {
             $orderInfo = $orderInfo->toArray();
         } else {
@@ -2688,7 +2688,7 @@ HTML;
 
         switch ($type) {
             case 'order':
-                $info = $this->dao->get(['order_id' => $orderId], ['pay_price', 'add_time', 'combination_id', 'seckill_id', 'bargain_id', 'pay_postage']);
+                $info = $this->dao->get(['order_id' => $orderId], ['id', 'pay_price', 'add_time', 'combination_id', 'seckill_id', 'bargain_id', 'pay_postage']);
                 if (!$info) {
                     throw new PayException('您支付的订单不存在');
                 }
@@ -2712,10 +2712,11 @@ HTML;
                 $data['pay_postage'] = $info['pay_postage'];
                 $data['offline_postage'] = (int)sys_config('offline_postage', 0);
                 $data['invalid_time'] = $time;
+                $data['oid'] = $info['id'];
 
                 break;
             case 'svip':
-                $info = app()->make(OtherOrderServices::class)->get(['order_id' => $orderId], ['pay_price', 'add_time']);
+                $info = app()->make(OtherOrderServices::class)->get(['order_id' => $orderId], ['id', 'pay_price', 'add_time']);
                 if (!$info) {
                     throw new PayException('您支付的订单不存在');
                 }
@@ -2723,7 +2724,7 @@ HTML;
                 $data['invalid_time'] = $info->add_time + 86400;
                 break;
             case 'recharge':
-                $info = app()->make(UserRechargeServices::class)->get(['order_id' => $orderId], ['price', 'add_time']);
+                $info = app()->make(UserRechargeServices::class)->get(['order_id' => $orderId], ['id', 'price', 'add_time']);
                 if (!$info) {
                     throw new PayException('您支付的订单不存在');
                 }

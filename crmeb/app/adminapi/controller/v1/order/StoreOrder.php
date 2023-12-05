@@ -188,6 +188,7 @@ class StoreOrder extends AuthController
             ['status', ''],
         ], true);
         if ($status != '') $data['status'] = $status;
+        if ($status == 'undefined') $data['status'] = 1;
         $data['is_show'] = 1;
         return app('json')->success($services->express($data));
     }

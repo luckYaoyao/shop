@@ -16,11 +16,9 @@ if (!function_exists('get_this_class_methods')) {
      */
     function get_this_class_methods($class, $unarray = [])
     {
-        $arrayall = get_class_methods($class);//获取当前类的方法
-        $parent_class = get_parent_class($class);//获取父类
-        //如果有父类
-        if ($parent_class) {
-            $arrayparent = get_class_methods($parent_class);//获取父类的方法
+        $arrayall = get_class_methods($class);
+        if ($parent_class = get_parent_class($class)) {
+            $arrayparent = get_class_methods($parent_class);
             $arraynow = array_diff($arrayall, $arrayparent);//去除父级的
         } else {
             $arraynow = $arrayall;
@@ -51,7 +49,7 @@ if (!function_exists('setconfig')) {
                 $pats[$i] = '/\'' . $pat[$i] . '\'(.*?),/';
                 $reps[$i] = "'" . $pat[$i] . "'" . "=>" . "'" . $rep[$i] . "',";
             }
-            $fileurl = app()->getConfigPath() . $name . ".php";//配置文件路径
+            $fileurl = app()->getConfigPath() . $name . ".php";
             $string = file_get_contents($fileurl); //加载配置文件
             $string = preg_replace($pats, $reps, $string); // 正则查找然后替换
             @file_put_contents($fileurl, $string); // 写入配置文件
@@ -64,7 +62,7 @@ if (!function_exists('setconfig')) {
                 $rep = str_replace('\'', "", $rep);
                 $reps = "'" . $pat . "'" . "=>" . "'" . $rep . "',";
             }
-            $fileurl = app()->getConfigPath() . $name . ".php";//配置文件路径
+            $fileurl = app()->getConfigPath() . $name . ".php";
             $string = file_get_contents($fileurl); //加载配置文件
             $string = preg_replace($pats, $reps, $string); // 正则查找然后替换
             @file_put_contents($fileurl, $string); // 写入配置文件
@@ -77,7 +75,7 @@ if (!function_exists('setconfig')) {
 }
 if (!function_exists('arrayToText')) {
     /**
-     * 将数组转成PHP文本
+     * 修改config的函数
      * @param $array
      * @return string
      */
@@ -116,8 +114,8 @@ if (!function_exists('attr_format')) {
      */
     function attr_format($arr): array
     {
-        $len = count($arr);//获取数组长度
-        $title = array_column($arr, 'value');//获取数组中的value值
+        $len = count($arr);
+        $title = array_column($arr, 'value');
         $result = [];
 
         if ($len > 0) {
@@ -151,8 +149,8 @@ if (!function_exists('verify_domain')) {
      */
     function verify_domain(string $domain): bool
     {
-        $res = "/^(?=^.{3,255}$)(http(s)?:\/\/)(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*$/";//正则验证
-        if (preg_match($res, $domain))//匹配正则
+        $res = "/^(?=^.{3,255}$)(http(s)?:\/\/)(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*$/";
+        if (preg_match($res, $domain))
             return true;
         else
             return false;

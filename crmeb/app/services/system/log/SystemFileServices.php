@@ -253,14 +253,15 @@ class SystemFileServices extends BaseServices
         } else {
             $dir = $dir . '/' . $fileDir;
         }
-        //获取目录列表
-        $list = array_diff(scandir($dir), array('.', '..'));
+        $list = scandir($dir);
         foreach ($list as $key => $v) {
-            if (is_dir($dir . DS . $v)) {
-                $fileAll['dir'][] = FileClass::listInfo($dir . DS . $v);
-            }
-            if (is_file($dir . DS . $v)) {
-                $fileAll['file'][] = FileClass::listInfo($dir . DS . $v);
+            if ($v != '.' && $v != '..') {
+                if (is_dir($dir . DS . $v)) {
+                    $fileAll['dir'][] = FileClass::listInfo($dir . DS . $v);
+                }
+                if (is_file($dir . DS . $v)) {
+                    $fileAll['file'][] = FileClass::listInfo($dir . DS . $v);
+                }
             }
         }
         //兼容windows

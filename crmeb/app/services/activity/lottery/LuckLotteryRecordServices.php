@@ -55,12 +55,7 @@ class LuckLotteryRecordServices extends BaseServices
         [$page, $limit] = $this->getPageValue();
         /** @var LuckLotteryServices $luckServices */
         $luckServices = app()->make(LuckLotteryServices::class);
-        $where['lottery_id'] = $luckServices->value(['factor' => $where['factor']], 'id');
-        if (!$where['lottery_id']) {
-            $list = [];
-            $count = 0;
-            return compact('list', 'count');
-        }
+        $where['lottery_id'] = $where['factor'] == '' ? '' : $luckServices->value(['factor' => $where['factor']], 'id');
         unset($where['factor']);
         $list = $this->dao->getList($where, '*', ['lottery', 'prize', 'user'], $page, $limit);
         foreach ($list as &$item) {
@@ -249,7 +244,7 @@ class LuckLotteryRecordServices extends BaseServices
         $deliver_info = $lotteryRecord['deliver_info'];
         $edit = [];
         //备注
-        if($data['deliver_name'] && $data['deliver_number']) {
+        if ($data['deliver_name'] && $data['deliver_number']) {
             if ($lotteryRecord['type'] != 6 && ($data['deliver_name'] || $data['deliver_number'])) {
                 throw new ApiException(410055);
             }
