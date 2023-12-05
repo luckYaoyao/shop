@@ -262,9 +262,10 @@ export default {
         };
         images.push(imageObject);
       });
+
       this.images = images;
       this.diyVal = selection;
-      // this.$emit('getProductId', selection);
+      this.$emit('getProductDiy', selection);
     },
     // 商品分类；
     goodsCategory() {
@@ -414,7 +415,7 @@ export default {
 }
 
 .goodList {
-  ::v-deep table {
+  ::v-deeptable {
     width: 100% !important;
   }
 }

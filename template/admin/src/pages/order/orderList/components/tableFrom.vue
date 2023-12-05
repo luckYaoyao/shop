@@ -11,11 +11,11 @@
       >
         <el-form-item label="订单状态：">
           <el-select
-              v-model="orderData.status"
-              clearable
-              @change="selectChange2"
-              placeholder="全部"
-              class="form_content_width"
+            v-model="orderData.status"
+            clearable
+            @change="selectChange2"
+            placeholder="全部"
+            class="form_content_width"
           >
             <el-option value="" label="全部"></el-option>
             <el-option value="0" label="未支付"></el-option>
@@ -31,42 +31,32 @@
         </el-form-item>
         <el-form-item label="支付方式：">
           <el-select
-              v-model="orderData.pay_type"
-              clearable
-              @change="userSearchs"
-              placeholder="全部"
-              class="form_content_width"
+            v-model="orderData.pay_type"
+            clearable
+            @change="userSearchs"
+            placeholder="全部"
+            class="form_content_width"
           >
-            <el-option
-                v-for="item in payList"
-                :value="item.val"
-                :label="item.label"
-                :key="item.id"
-            />
+            <el-option v-for="item in payList" :value="item.val" :label="item.label" :key="item.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="创建时间：">
           <el-date-picker
-              clearable
-              v-model="timeVal"
-              type="daterange"
-              @change="onchangeTime"
-              format="yyyy/MM/dd"
-              value-format="yyyy/MM/dd"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              :picker-options="pickerOptions"
-              style="width: 250px"
-              class="mr20"
+            clearable
+            v-model="timeVal"
+            type="daterange"
+            @change="onchangeTime"
+            format="yyyy/MM/dd"
+            value-format="yyyy/MM/dd"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            :picker-options="pickerOptions"
+            style="width: 250px"
+            class="mr20"
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="搜索：" prop="real_name" label-for="real_name">
-          <el-input
-              clearable
-              v-model="orderData.real_name"
-              placeholder="请输入"
-              class="form_content_width"
-          >
+          <el-input clearable v-model="orderData.real_name" placeholder="请输入" class="form_content_width">
             <el-select v-model="orderData.field_key" slot="prepend" style="width: 100px">
               <el-option value="all" label="全部"></el-option>
               <el-option value="order_id" label="订单号"></el-option>
@@ -157,9 +147,9 @@ export default {
         this.getPath();
       }
     },
-    'orderData.field_key':function(val,oval){
+    'orderData.field_key': function (val, oval) {
       this.getfieldKey(val);
-    }
+    },
   },
   created() {
     // this.timeVal = this.today;

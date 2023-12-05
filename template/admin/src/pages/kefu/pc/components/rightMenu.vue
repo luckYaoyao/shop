@@ -623,7 +623,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-::v-deep.ivu-select .ivu-select-dropdown, ::v-deep.ivu-date-picker .ivu-select-dropdown {
+::v-deep .ivu-select .ivu-select-dropdown, ::v-deep .ivu-date-picker .ivu-select-dropdown {
   top: unset !important;
 }
 .right-scroll{

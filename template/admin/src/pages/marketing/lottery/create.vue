@@ -1017,7 +1017,7 @@ export default {
   color: #999;
 }
 
-.maxW ::v-deep.ivu-select-dropdown {
+.maxW ::v-deep .ivu-select-dropdown {
   max-width: 600px;
 }
 

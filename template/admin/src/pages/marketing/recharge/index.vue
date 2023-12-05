@@ -633,7 +633,7 @@ export default {
   display: none;
 }
 
-::v-deep.ivu-form-item-content {
+::v-deep .ivu-form-item-content {
   margin-left: 0px !important;
 }
 
@@ -1372,20 +1372,20 @@ export default {
   // width 80px!important
 }
 
-::v-deep.i-layout-page-header {
+::v-deep .i-layout-page-header {
   height: 66px;
   background-color: #fff;
   border-bottom: 1px solid #e8eaec;
 }
 
-::v-deep.ivu-page-header {
+::v-deep .ivu-page-header {
   border-bottom: unset;
   position: fixed;
   z-index: 9;
   width: 100%;
 }
 
-::v-deep.i-layout-page-header {
+::v-deep .i-layout-page-header {
   height: 66px;
   background-color: #fff;
   border-bottom: 1px solid #e8eaec;

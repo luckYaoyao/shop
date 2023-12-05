@@ -531,7 +531,7 @@ export default {
 }
 
 .modelBox {
-  ::v-deep, .ivu-table-header {
+  ::v-deep , .ivu-table-header {
     width: 100% !important;
   }
 }

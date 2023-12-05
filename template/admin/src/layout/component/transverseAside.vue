@@ -230,7 +230,7 @@ export default {
     overflow-y: hidden !important;
     overflow-x: scroll !important;
   }
-  ::v-deep a {
+  ::v-deepa {
     width: 100%;
   }
   .el-menu.el-menu--horizontal {

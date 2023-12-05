@@ -676,7 +676,7 @@ export default {
   height: 28px !important;
   line-height: 28px !important;
 }
-::v-deep.el-input-group__prepend div.el-select .el-input--small .el-input__icon {
+::v-deep .el-input-group__prepend div.el-select .el-input--small .el-input__icon {
   line-height: 28px;
 }
 </style>

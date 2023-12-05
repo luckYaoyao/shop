@@ -1,5 +1,5 @@
 <template>
-	<view :style="colorStyle" style="background-color: var(--view-theme);height: 100vh; padding-bottom: 1rpx;">
+	<view :style="colorStyle" style="background-color: var(--view-theme);min-height: 100vh; padding-bottom: 1rpx;">
 		<view class='bargain-list'>
 			<!-- #ifndef APP-PLUS -->
 			<!-- 	<view class='iconfont icon-xiangzuo' @tap='goBack' :style="'top:'+ (navH/2  - 12) +'rpx'" v-if="returnShow">

@@ -83,7 +83,7 @@ export default {
 							this.$refs.classThree.tempArr = [];
 							this.$refs.classThree.loadend = false;
 							this.$refs.classThree.page = 1;
-							this.$refs.classThree.productslist();
+							// this.$refs.classThree.productslist();
 						}
 						// this.$refs.classThree.getAllCategory()
 					}

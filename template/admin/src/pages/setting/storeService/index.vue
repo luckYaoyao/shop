@@ -254,6 +254,7 @@ export default {
       selections: [],
       rows: {},
       rowRecord: {},
+      eidtLoading: false,
     };
   },
   created() {
@@ -375,13 +376,15 @@ export default {
     },
     // 编辑
     edit(row) {
-      this.$modalForm(kefuEditApi(row.id)).then(() => this.getList());
+      if (this.eidtLoading) return;
+      this.eidtLoading = true;
+      this.$modalForm(kefuEditApi(row.id)).then(() => {
+        this.getList();
+        this.eidtLoading = false;
+      });
     },
     // 添加
     add() {
-      // this.modals = true;
-      // this.formValidate.data = '';
-      // this.getListService();
       this.$modalForm(kefuaddApi()).then(() => this.getList());
     },
     // 全选

@@ -4,11 +4,10 @@
 			<!-- #ifndef APP-PLUS -->
 			<view class="navbar" :style="{ height: navH + 'rpx', opacity: opacity }">
 				<view class="navbarH" :style="'height:' + navH + 'rpx;'">
-					<view class="navbarCon acea-row row-center-wrapper"
-						:style="{ paddingRight: (navbarRight-20) + 'px' }">
+					<view class="navbarCon acea-row row-center-wrapper" :style="{ paddingRight: (navbarRight-20) + 'px' }">
 						<view class="header acea-row row-center-wrapper">
-							<view class="item" :class="navActive === index ? 'on' : ''" v-for="(item, index) in navList"
-								:key="index" @tap="tap(index)">{{ item }}</view>
+							<view class="item" :class="navActive === index ? 'on' : ''" v-for="(item, index) in navList" :key="index"
+								@tap="tap(index)">{{ item }}</view>
 						</view>
 					</view>
 				</view>
@@ -43,8 +42,8 @@
 						<!-- #ifdef APP-PLUS || MP -->
 						<view class="" :style="'width:100%;' + 'height:'+sysHeight"></view>
 						<!-- #endif -->
-						<productConSwiper ref="proSwiper" :imgUrls="storeInfo.slider_image"
-							:videoline="storeInfo.video_link" @videoPause="videoPause" @showSwiperImg="showSwiperImg">
+						<productConSwiper ref="proSwiper" :imgUrls="storeInfo.slider_image" :videoline="storeInfo.video_link"
+							@videoPause="videoPause" @showSwiperImg="showSwiperImg">
 						</productConSwiper>
 						<view class="wrapper">
 							<view class="share acea-row row-between row-bottom">
@@ -74,7 +73,7 @@
 								<text v-if='storeInfo.min_qty > 1'>{{$t(`起购`)}}{{ storeInfo.min_qty + storeInfo.unit_name }}</text>
 							</view>
 							<view class="label acea-row row-between-wrapper" style="padding-bottom: 20rpx">
-								<view class="">
+								<view class="delete-line">
 									{{$t(`划线价`)}} : {{$t(`￥`)}}{{storeInfo.ot_price || 0}}
 								</view>
 								<view class="">{{$t(`库存`)}} : {{storeInfo.stock || 0}}
@@ -96,8 +95,7 @@
 							<view class="presell_count" v-if="storeInfo.presale">
 								<view>
 									<view>{{$t(`预售活动时间`)}}：</view>
-									<view v-if="storeInfo.presale_start_time && storeInfo.presale_end_time"
-										class="presell_time">
+									<view v-if="storeInfo.presale_start_time && storeInfo.presale_end_time" class="presell_time">
 										<view class='iconfont icon-shijian1'></view>
 										{{storeInfo.presale_start_time}}
 										<span class='area_line'>~</span>
@@ -112,8 +110,8 @@
 										<view class='activity'>赠送 {{storeInfo.give_integral}} 积分</view>
 									</view>
 								</view> -->
-							<view v-if="couponList.length" class="coupon acea-row row-between-wrapper"
-								@click="couponTap" style="margin-top: 0rpx">
+							<view v-if="couponList.length" class="coupon acea-row row-between-wrapper" @click="couponTap"
+								style="margin-top: 0rpx">
 								<view class="hide line1 acea-row">
 									{{$t(`优惠券`)}}：
 									<template v-for="(item, index) in couponList">
@@ -168,8 +166,7 @@
 								</view>
 							</view>
 						</view>
-						<view class="attribute acea-row row-between-wrapper" @click="selecAttr"
-							v-if="attr.productAttr.length">
+						<view class="attribute acea-row row-between-wrapper" @click="selecAttr" v-if="attr.productAttr.length">
 							<view class="flex">
 								<view style="display: flex; align-items: center; width: 90%">
 									<view class="attr-txt"> {{attrTxt}}： </view>
@@ -182,8 +179,8 @@
 							<view class="acea-row row-between-wrapper" style="margin-top: 7px; padding-left: 60px"
 								v-if="skuArr.length > 1">
 								<view class="flexs">
-									<image :src="item.image" v-for="(item, index) in skuArr.slice(0, 4)" :key="index"
-										class="attrImg"></image>
+									<image :src="item.image" v-for="(item, index) in skuArr.slice(0, 4)" :key="index" class="attrImg">
+									</image>
 								</view>
 								<view class="switchTxt">{{$t(`共`)}}{{ skuArr.length }} {{$t(`种规格可选`)}}</view>
 							</view>
@@ -220,8 +217,7 @@
 								:style="'height:' + clientHeight + 'px'">
 								<swiper-item v-for="(item, indexw) in good_list" :key="indexw">
 									<view class="list acea-row row-middle" :id="'list' + indexw">
-										<view class="item" v-for="(val, indexn) in item.list" :key="indexn"
-											@click="goDetail(val)">
+										<view class="item" v-for="(val, indexn) in item.list" :key="indexn" @click="goDetail(val)">
 											<view class="pictrue">
 												<image :src="val.image"></image>
 												<span class="pictrue_log pictrue_log_class"
@@ -307,8 +303,7 @@
 								</button>
 							</form>
 							<form @submit="goBuy" class="buy bnts" :class="!storeInfo.cart_button ? 'virbnt' : ''">
-								<button class="buy bnts" :class="!storeInfo.cart_button ? 'virbnt' : ''"
-									form-type="submit">
+								<button class="buy bnts" :class="!storeInfo.cart_button ? 'virbnt' : ''" form-type="submit">
 									{{$t(`立即购买`)}}
 								</button>
 							</form>
@@ -326,8 +321,7 @@
 									form-type="submit">{{$t(`已售罄`)}}</button></form>
 						</view>
 						<view class="bnts acea-row" v-else-if="presale_pay_status === 2">
-							<form @submit="goBuy" class="bnts"><button class="bnts"
-									form-type="submit">{{$t(`立即购买`)}}</button>
+							<form @submit="goBuy" class="bnts"><button class="bnts" form-type="submit">{{$t(`立即购买`)}}</button>
 							</form>
 						</view>
 					</view>
@@ -344,21 +338,20 @@
 						</view>
 					</view> -->
 			</view>
-			<shareRedPackets :sharePacket="sharePacket" @listenerActionSheet="listenerActionSheet"
-				@closeChange="closeChange" :showAnimate="showAnimate" @boxStatus="boxStatus">
+			<shareRedPackets :sharePacket="sharePacket" @listenerActionSheet="listenerActionSheet" @closeChange="closeChange"
+				:showAnimate="showAnimate" @boxStatus="boxStatus">
 			</shareRedPackets>
 			<!-- 组件 -->
 			<productWindow :attr="attr" :isShow="1" :iSplus="1" :limitNum="storeInfo.limit_num" :minQty="storeInfo.min_qty"
-				:unitName="storeInfo.unit_name" @myevent="onMyEvent" @ChangeAttr="ChangeAttr"
-				@ChangeCartNum="ChangeCartNum" @attrVal="attrVal" @iptCartNum="iptCartNum" id="product-window"
-				:is_vip="is_vip" @getImg="showImg" :is_virtual="storeInfo.is_virtual">
+				:unitName="storeInfo.unit_name" @myevent="onMyEvent" @ChangeAttr="ChangeAttr" @ChangeCartNum="ChangeCartNum"
+				@attrVal="attrVal" @iptCartNum="iptCartNum" id="product-window" :is_vip="is_vip" @getImg="showImg"
+				:is_virtual="storeInfo.is_virtual">
 			</productWindow>
 			<cus-previewImg ref="cusPreviewImg" :list="skuArr" @changeSwitch="changeSwitch"
 				@shareFriend="listenerActionSheet" />
 			<swiperPrevie ref="cusSwiperImg" :list="storeInfo.slider_image"></swiperPrevie>
 			<couponListWindow :coupon="coupon" v-if="coupon" @ChangCouponsClone="ChangCouponsClone"
-				@ChangCoupons="ChangCoupons" @ChangCouponsUseState="ChangCouponsUseState"
-				@tabCouponType="tabCouponType">
+				@ChangCoupons="ChangCoupons" @ChangCouponsUseState="ChangCouponsUseState" @tabCouponType="tabCouponType">
 			</couponListWindow>
 			<!-- 分享按钮 -->
 			<view class="generate-posters acea-row row-middle" :class="posters ? 'on' : ''">
@@ -375,8 +368,7 @@
 				</button>
 				<!-- #endif -->
 				<!-- #ifdef H5  -->
-				<div class="item copy-data" v-if="storeInfo.command_word != ''"
-					:data-clipboard-text="storeInfo.command_word">
+				<div class="item copy-data" v-if="storeInfo.command_word != ''" :data-clipboard-text="storeInfo.command_word">
 					<view class="iconfont icon-fuzhikouling"></view>
 					<text>{{$t(`复制口令`)}}</text>
 				</div>
@@ -422,8 +414,8 @@
 			</kefuIcon>
 			<!-- #ifdef H5 || APP-PLUS -->
 			<zb-code ref="qrcode" :show="codeShow" :cid="cid" :val="codeVal" :size="size" :unit="unit"
-				:background="background" :foreground="foreground" :pdground="pdground" :icon="codeIcon"
-				:iconSize="iconsize" :onval="onval" :loadMake="loadMake" @result="qrR" />
+				:background="background" :foreground="foreground" :pdground="pdground" :icon="codeIcon" :iconSize="iconsize"
+				:onval="onval" :loadMake="loadMake" @result="qrR" />
 			<!-- #endif -->
 		</view>
 	</view>
@@ -2367,7 +2359,8 @@
 		font-size: 16rpx;
 		margin: 10rpx 30rpx;
 		color: red;
-		.line{
+
+		.line {
 			padding: 0 6rpx;
 		}
 	}
@@ -2445,5 +2438,9 @@
 		line-height: 76rpx;
 		color: #fff;
 		font-size: 28rpx;
+	}
+
+	.delete-line {
+		text-decoration: line-through;
 	}
 </style>

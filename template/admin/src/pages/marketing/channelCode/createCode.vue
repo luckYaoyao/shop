@@ -55,7 +55,6 @@
           <div v-show="isReceiveTime">
             <el-input-number
               :controls="false"
-              :min="1"
               :max="10000"
               :precision="0"
               v-model="formData.time"
@@ -195,7 +194,7 @@ export default {
       formData: {
         name: '',
         type: 'text',
-        time: 0,
+        time: undefined,
         label_id: [],
         image: '',
         cate_id: '',
@@ -459,7 +458,9 @@ export default {
   cursor: pointer;
   vertical-align: middle;
 }
-
+::v-deep .el-tag{
+  margin-right: 5px;
+}
 .upload-list img {
   display: block;
   width: 100%;
@@ -483,6 +484,7 @@ export default {
 }
 
 .trip {
+  font-size: 12px;
   color: #ccc;
 }
 
@@ -575,6 +577,7 @@ textarea {
   cursor: pointer;
 
   .span {
+    font-size: 12px;
     color: #c5c8ce;
   }
 

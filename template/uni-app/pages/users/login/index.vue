@@ -183,7 +183,7 @@
 				this.copyRight = uni.getStorageSync('copyRight').copyrightContext
 			}
 		},
-		mounted: function() {
+		mounted() {
 			// this.getCode();
 			this.getLogoImage();
 		},

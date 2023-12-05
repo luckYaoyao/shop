@@ -966,11 +966,11 @@ li {
             display: none;
           }
 
-          ::v-deep img {
+          ::v-deepimg {
             width: 100%;
           }
 
-          ::v-deep video {
+          ::v-deepvideo {
             width: 100%;
           }
         }

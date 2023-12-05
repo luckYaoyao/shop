@@ -16,9 +16,14 @@
                 <div class="labelInput acea-row row-between-wrapper" @click="openSelectLabel">
                   <div style="width: 222px">
                     <div v-if="selectDataLabel.length">
-                      <el-tag :closable="false" v-for="(item, index) in selectDataLabel" :key="index" class="mr10">{{
-                        item.label_name
-                      }}</el-tag>
+                      <el-tag
+                        v-for="(item, index) in selectDataLabel"
+                        :key="index"
+                        closable
+                        class="mr10"
+                        @close="handleClose(item)"
+                        >{{ item.label_name }}</el-tag
+                      >
                     </div>
                     <span class="span" v-else>选择用户关联标签</span>
                   </div>
@@ -690,7 +695,11 @@ export default {
         this.$message.warning('请选择要设置分组的用户');
       } else {
         let uids = { uids: this.ids };
-        this.$modalForm(userSetGroup(uids)).then(() => this.getList());
+        this.$modalForm(userSetGroup(uids)).then(() => {
+          this.ids = [];
+          this.selectedIds = [];
+          this.getList();
+        });
       }
     },
     // 批量设置标签；
@@ -967,6 +976,10 @@ export default {
       this.selectionList = [];
       this.getList();
     },
+    handleClose(tag) {
+      this.selectDataLabel.splice(this.selectDataLabel.indexOf(tag), 1);
+      this.userSearchs()
+    },
     // 搜索
     userSearchs() {
       this.userFrom.page = 1;
@@ -1221,7 +1234,7 @@ img {
 .search-form {
   display: flex;
   justify-content: space-between;
-  .search-form-box{
+  .search-form-box {
     display: flex;
     flex-wrap: wrap;
     flex: 1;

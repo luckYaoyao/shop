@@ -882,7 +882,7 @@ export default {
 .content_width{
   width: 460px;
 }
-.maxW ::v-deep.ivu-select-dropdown {
+.maxW ::v-deep .ivu-select-dropdown {
   max-width: 600px;
 }
 .grey{

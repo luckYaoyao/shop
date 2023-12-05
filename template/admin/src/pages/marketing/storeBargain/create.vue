@@ -939,7 +939,7 @@ export default {
   font-size 12px
 }
 
-.maxW ::v-deep.ivu-select-dropdown {
+.maxW ::v-deep .ivu-select-dropdown {
   max-width: 600px;
 }
 

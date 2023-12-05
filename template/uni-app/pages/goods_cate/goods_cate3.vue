@@ -697,7 +697,7 @@ export default {
 		closeTap() {
 			this.iSlong = true;
 		},
-		getAllCategory: function (type) {
+		getAllCategory(type) {
 			let that = this;
 			if (type || !uni.getStorageSync('CAT3_DATA')) {
 				getCategoryList().then((res) => {

@@ -276,7 +276,7 @@ export default {
 body ::v-deep .el-dialog .el-dialog__header {
   border: none !important;
 }
-::v-deep.el-form-item--small .el-form-item__label {
+::v-deep .el-form-item--small .el-form-item__label {
   line-height: 14px;
   margin-top: 10px;
 }

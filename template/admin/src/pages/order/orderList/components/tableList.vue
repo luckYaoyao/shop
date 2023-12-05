@@ -518,7 +518,7 @@ export default {
           break;
         case '13':
           let pathInfo = this.$router.resolve({
-            path: '/admin/order/print',
+            path: Setting.routePre + '/order/print',
             query: {
               id: row.order_id,
             },
@@ -956,7 +956,7 @@ img {
   }
 }
 
-.orderData ::v-deep.ivu-table-cell {
+.orderData ::v-deep .ivu-table-cell {
   padding-left: 0 !important;
 }
 

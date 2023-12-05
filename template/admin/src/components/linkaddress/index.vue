@@ -824,16 +824,16 @@ export default {
 ::v-deep .el-tree-node__content {
   height: 30px;
 }
-::v-deep.el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+::v-deep .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
   background-color: var(--prev-bg-menu-hover-ba-color) !important;
   border-right: 2px solid var(--prev-color-primary);
 }
-::v-deep.ivu-tree-title-selected, ::v-deep.ivu-tree-title-selected:hover, ::v-deep.ivu-tree-title:hover {
+::v-deep .ivu-tree-title-selected, ::v-deep .ivu-tree-title-selected:hover, ::v-deep .ivu-tree-title:hover {
   background-color: unset;
   color: var(--prev-color-primary);
 }
 
-::v-deep.ivu-table-cell-tree {
+::v-deep .ivu-table-cell-tree {
   border: 0;
   font-size: 15px;
   background-color: unset;
@@ -842,11 +842,11 @@ export default {
   display: flex;
   align-items: center;
 }
-::v-deep.ivu-table-cell-tree .ivu-icon-ios-add:before {
+::v-deep .ivu-table-cell-tree .ivu-icon-ios-add:before {
   content: '\F11F';
 }
 
-::v-deep.ivu-table-cell-tree .ivu-icon-ios-remove:before {
+::v-deep .ivu-table-cell-tree .ivu-icon-ios-remove:before {
   content: '\F116';
 }
 
@@ -905,7 +905,7 @@ export default {
   }
 }
 .radioGroup {
-  ::v-deep.ivu-radio-wrapper {
+  ::v-deep .ivu-radio-wrapper {
     margin-right: 30px;
   }
 }

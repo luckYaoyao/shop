@@ -56,7 +56,9 @@
                         </div>
                       </template>
                       <!-- 订单 -->
-                      <template v-if="item.msn_type == 6 && (item.orderInfo.length > 0 || item.orderInfo.id)">
+                      <template
+                        v-if="item.msn_type == 6 && item.orderInfo && (item.orderInfo.length > 0 || item.orderInfo.id)"
+                      >
                         <div class="order-wrapper pad16">
                           <div class="img-box">
                             <img :src="item.orderInfo.cartInfo[0].productInfo.image" alt="" />
@@ -72,6 +74,9 @@
                             </div>
                           </div>
                         </div>
+                      </template>
+                      <template v-if="item.msn_type == 6 && !item.orderInfo">
+                        <div class="txt-wrapper pad16" v-html="item.msn"></div>
                       </template>
                     </div>
                   </div>
@@ -622,10 +627,9 @@ export default {
 <style lang="stylus" scoped>
 @import '../../../styles/emoji-awesome/css/google.min.css';
 
-::v-deep textarea.ivu-input {
+::v-deeptextarea.ivu-input {
   border: none;
   resize: none;
-
 }
 
 .kefu-layouts {
@@ -902,7 +906,7 @@ export default {
   background: rgba(0, 0, 0, 0.5);
 }
 
-::v-deep.happy-scroll-content {
+::v-deep .happy-scroll-content {
   width: 100%;
 
   .demo-spin-icon-load {
@@ -935,14 +939,17 @@ export default {
     padding: 0;
   }
 }
+
 .emoji-box::-webkit-scrollbar {
   width: 0;
 }
-.textarea-box ::v-deep .ivu-input:focus{
+
+.textarea-box ::v-deep .ivu-input:focus {
   box-shadow: none;
 }
-.textarea-box ::v-deep .el-textarea__inner{
-  border:none;
+
+.textarea-box ::v-deep .el-textarea__inner {
+  border: none;
   resize: none;
 }
 </style>

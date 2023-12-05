@@ -275,7 +275,9 @@
 		},
 		//#endif
 		mounted() {
-			this.getCombinationPink();
+			if (this.isLogin) {
+				this.getCombinationPink();
+			}
 		},
 		methods: {
 			// app分享
