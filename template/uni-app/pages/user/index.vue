@@ -212,7 +212,7 @@
 						:duration="duration" indicator-color="rgba(255,255,255,0.6)" indicator-active-color="#fff">
 						<block v-for="(item,index) in imgUrls" :key="index">
 							<swiper-item>
-								<view @click="goMenuPage(item.url)" class='slide-navigator acea-row row-between-wrapper'
+								<view @click="goPages(item.url)" class='slide-navigator acea-row row-between-wrapper'
 									hover-class='none'>
 									<image :src="item.pic" class="slide-image"></image>
 								</view>
@@ -746,6 +746,9 @@
 					this.openAuto()
 					// #endif
 				}
+			},
+			goPages(url) {
+				this.$util.JumpPath(url);
 			},
 			goRouter(item) {
 				var pages = getCurrentPages();
