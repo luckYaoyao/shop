@@ -34,7 +34,7 @@ class Request extends \think\Request
      * @var array
      */
     protected $except = ['menu_path', 'api_url', 'unique_auth',
-        'description', 'custom_form', 'content', 'tableField','url'];
+        'description', 'custom_form', 'content', 'tableField', 'url'];
 
     /**
      * 获取请求的数据
