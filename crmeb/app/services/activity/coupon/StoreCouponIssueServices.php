@@ -279,11 +279,12 @@ class StoreCouponIssueServices extends BaseServices
                 $data['coupon_title'] = $item['title'];
                 $data['coupon_price'] = $item['coupon_price'];
                 $data['use_min_price'] = $item['use_min_price'];
+                $data['add_time'] = $time;
                 if ($item['coupon_time']) {
-                    $data['add_time'] = $time;
+                    $data['start_time'] = $time;
                     $data['end_time'] = $data['add_time'] + $item['coupon_time'] * 86400;
                 } else {
-                    $data['add_time'] = $item['start_use_time'];
+                    $data['start_time'] = $item['start_use_time'];
                     $data['end_time'] = $item['end_use_time'];
                 }
                 $data['type'] = 'send';

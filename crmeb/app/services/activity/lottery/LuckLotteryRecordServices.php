@@ -24,6 +24,8 @@ use app\services\wechat\WechatUserServices;
 use crmeb\exceptions\ApiException;
 use crmeb\services\app\WechatService;
 use think\facade\Log;
+use crmeb\services\pay\Pay;
+
 
 /**
  *  抽奖记录
@@ -185,7 +187,16 @@ class LuckLotteryRecordServices extends BaseServices
                 case 4:
                     /** @var WechatUserServices $wechatServices */
                     $wechatServices = app()->make(WechatUserServices::class);
-                    $openid = $wechatServices->getWechatOpenid($uid, 'wechat');
+                    $openid = $wechatServices->uidToOpenid((int)$uid, 'wechat');
+                    $type = 'JSAPI';
+                    if (!$openid) {
+                        $openid = $wechatServices->uidToOpenid((int)$uid, 'routine');
+                        $type = 'mini';
+                    }
+                    if (!$openid) {
+                        $openid = $wechatServices->uidToOpenid((int)$uid, 'app');
+                        $type = 'APP';
+                    }
                     if ($openid) {
                         /** @var StoreOrderCreateServices $services */
                         $services = app()->make(StoreOrderCreateServices::class);
@@ -200,7 +211,17 @@ class LuckLotteryRecordServices extends BaseServices
                             'nickname' => $userInfo['nickname'],
                             'phone' => $userInfo['phone']
                         ], 'luck');
-                        WechatService::merchantPay($openid, $wechat_order_id, $prize['num'], '抽奖中奖红包');
+                        if (sys_config('pay_wechat_type')) {
+                            $pay = new Pay('v3_wechat_pay');
+                            $pay->merchantPay($openid, $wechat_order_id, $prize['num'], [
+                                'type' => $type,
+                                'batch_name' => '抽奖中奖红包',
+                                'batch_remark' => '您于' . date('Y-m-d H:i:s') . '中奖.' . $prize['num'] . '元'
+                            ]);
+                        } else {
+                            WechatService::merchantPay($openid, $wechat_order_id, $prize['num'], '抽奖中奖红包');
+                        }
+
                     }
                     break;
                 case 5:
