@@ -283,7 +283,7 @@ class StoreOrderController
                 }
             case PayServices::OFFLINE_PAY:
                 if ($this->services->setOrderTypePayOffline($order['order_id'])) {
-                    event('NoticeListener', [$order, 'admin_pay_success_code']);
+                    event('NoticeListener', [$order->toArray(), 'admin_pay_success_code']);
                     return app('json')->status('success', 410203);
                 } else {
                     return app('json')->status('success', 410216);
