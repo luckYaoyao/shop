@@ -126,6 +126,7 @@ class StoreProductDao extends BaseDao
                 })->field('product_id')->select();
             });
         })->when(isset($where['coupon_category_id']) && $where['coupon_category_id'] != '', function ($query) use ($where) {
+            $where['coupon_category_id'] = stringToIntArray($where['coupon_category_id']);
             $query->whereIn('id', function ($query) use ($where) {
                 $query->name('store_product_cate')->whereIn('cate_id', function ($query) use ($where) {
                     $query->name('store_category')->whereIn('pid', $where['coupon_category_id'])->field('id')->select();
