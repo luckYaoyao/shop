@@ -15,13 +15,15 @@ return [
     //上传文件大小
     'filesize' => 2097152,
     //上传文件后缀类型
-    'fileExt' => ['jpg', 'jpeg', 'png', 'gif', 'pem', 'mp3', 'wma', 'wav', 'amr', 'mp4', 'key', 'xlsx', 'xls', 'txt', 'ico'],
+    'fileExt' => ['jpg', 'jpeg', 'png', 'gif', 'svg', 'pem', 'mp3', 'wma', 'wav', 'amr', 'mp4', 'key', 'xlsx', 'xls', 'txt', 'ico'],
     //上传文件类型
     'fileMime' => [
         'image/jpg',
         'image/jpeg',
         'image/gif',
         'image/png',
+        'image/svg',
+        'image/svg+xml',
         'text/plain',
         'audio/mpeg',
         'video/mp4',
