@@ -315,7 +315,7 @@ class CopyTaobaoServices extends BaseServices
                 $content = ob_get_contents();
                 ob_end_clean();
             } catch (\Exception $e) {
-                throw new AdminException($e->getMessage());
+                return '';
             }
         }
         $size = strlen(trim($content));
