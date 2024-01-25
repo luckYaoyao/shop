@@ -85,6 +85,10 @@ class SystemCrud extends AuthController
             ['deleteField', []],//删除的表字段
         ]);
 
+        if (!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z]+$/u', $data['menuName'])) return app('json')->fail('菜单名称只能是中文或者英文');
+        if (!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z]+$/u', $data['modelName'])) return app('json')->fail('模块名称只能是中文或者英文');
+        if (!preg_match('/^[a-zA-Z_]+$/u', $data['tableName'])) return app('json')->fail('表名称只能是英文和下划线组成');
+
         $fromField = $searchField = $hasOneField = $columnField = $tableIndex = [];
 
         $dictionaryids = array_column($data['tableField'], 'dictionary_id');
