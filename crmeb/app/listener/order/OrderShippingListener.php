@@ -48,7 +48,7 @@ class OrderShippingListener implements ListenerInterface
                     return;
                 }
             } else if ($order_type == 'recharge') {  // 充值订单
-                if ($order['recharge_type'] == 'weixin') {
+                if ($order['recharge_type'] == 'routine') {
                     $delivery_type = 3;
                     $item_desc = '用户充值' . $order['price'];
                     $out_trade_no = $order['order_id'];
@@ -59,7 +59,7 @@ class OrderShippingListener implements ListenerInterface
                     return;
                 }
             } else if ($order_type == 'member') {  // 会员订单
-                if ($order['pay_type'] == 'weixin') {
+                if ($order['pay_type'] == 'routine') {
                     $delivery_type = 3;
                     $item_desc = '用户购买' . $order['member_type'] . '会员卡';
                     $out_trade_no = $order['order_id'];
