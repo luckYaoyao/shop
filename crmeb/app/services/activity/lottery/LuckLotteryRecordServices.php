@@ -23,9 +23,8 @@ use app\services\user\UserServices;
 use app\services\wechat\WechatUserServices;
 use crmeb\exceptions\ApiException;
 use crmeb\services\app\WechatService;
-use think\facade\Log;
 use crmeb\services\pay\Pay;
-
+use think\facade\Log;
 
 /**
  *  抽奖记录
@@ -211,6 +210,7 @@ class LuckLotteryRecordServices extends BaseServices
                             'nickname' => $userInfo['nickname'],
                             'phone' => $userInfo['phone']
                         ], 'luck');
+
                         if (sys_config('pay_wechat_type')) {
                             $pay = new Pay('v3_wechat_pay');
                             $pay->merchantPay($openid, $wechat_order_id, $prize['num'], [
@@ -221,7 +221,6 @@ class LuckLotteryRecordServices extends BaseServices
                         } else {
                             WechatService::merchantPay($openid, $wechat_order_id, $prize['num'], '抽奖中奖红包');
                         }
-
                     }
                     break;
                 case 5:

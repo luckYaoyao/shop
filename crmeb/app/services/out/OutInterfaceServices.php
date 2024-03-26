@@ -31,6 +31,9 @@ class OutInterfaceServices extends BaseServices
         foreach ($authList as $item) {
             $rolesAuth[trim(strtolower($item['method']))][] = trim(strtolower(str_replace(' ', '', $item['path'])));
         }
+        if (in_array($rule, $rolesAuth[$method])) {
+            return true;
+        }
         $rule = str_replace('<', '{', $rule);
         $rule = str_replace('>', '}', $rule);
         if (in_array($rule, $rolesAuth[$method])) {

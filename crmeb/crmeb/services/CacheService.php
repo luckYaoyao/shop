@@ -39,7 +39,6 @@ class CacheService
         try {
             return Cache::tag($tag)->set($name, $value, $expire);
         } catch (\Throwable $e) {
-            crmebLog('写入缓存错误：' . $e->getMessage());
             return false;
         }
     }
@@ -110,7 +109,6 @@ class CacheService
     {
         return Cache::clear();
     }
-
 
     /**
      * 检查缓存是否存在

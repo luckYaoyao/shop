@@ -923,4 +923,18 @@ class MiniProgramService
             };
         });
     }
+
+    public static function getUrlScheme($jumpWxa = [], $expireType = -1, $expireNum = 0)
+    {
+        try {
+            $res = self::miniprogram()->mini_scheme->getUrlScheme($jumpWxa, $expireType, $expireNum);
+            if (isset($res['errcode']) && $res['errcode'] == 0) {
+                return $res['openlink'];
+            } else {
+                return '';
+            }
+        } catch (\Throwable $e) {
+            return $e->getMessage();
+        }
+    }
 }

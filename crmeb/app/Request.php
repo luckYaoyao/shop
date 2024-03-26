@@ -118,6 +118,7 @@ class Request extends \think\Request
     {
         if (filter_var($str, FILTER_VALIDATE_URL)) {
             $url = parse_url($str);
+            if (!isset($url['scheme'])) return $str;
             $host = $url['scheme'] . '://' . $url['host'];
             $str = $host . preg_replace($farr, '', str_replace($host, '', $str));
         } else {

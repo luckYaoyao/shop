@@ -112,6 +112,7 @@ class SystemCrud extends AuthController
         if (!preg_match('/^[a-zA-Z_]+$/u', $data['tableName'])) return app('json')->fail('表名称只能是英文和下划线组成');
         if (!$this->crudVerifyPath($data['filePath'])) return app('json')->fail('生成的文件位置有误，请检查后重新生成');
 
+
         $fromField = $searchField = $hasOneField = $columnField = $tableIndex = [];
 
         $dictionaryids = array_column($data['tableField'], 'dictionary_id');
@@ -924,6 +925,5 @@ class SystemCrud extends AuthController
         } else {
             return app('json')->fail('删除失败');
         }
-
     }
 }

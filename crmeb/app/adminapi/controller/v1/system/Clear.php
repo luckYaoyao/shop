@@ -33,7 +33,7 @@ class Clear extends AuthController
      */
     public function refresh_cache()
     {
-        $this->services->refreshCache();
+        $this->services->refresCache();
         return app('json')->success(400302);
     }
 

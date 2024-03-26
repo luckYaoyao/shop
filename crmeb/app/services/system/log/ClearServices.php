@@ -51,7 +51,7 @@ class ClearServices extends BaseServices
     /**
      * 刷新数据缓存
      */
-    public function refreshCache()
+    public function refresCache()
     {
         $root = app()->getRootPath() . 'runtime' . DS;
         $adminRoute = $root . 'admin';

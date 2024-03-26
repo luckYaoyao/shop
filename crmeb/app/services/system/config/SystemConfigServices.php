@@ -204,7 +204,8 @@ class SystemConfigServices extends BaseServices
         ],
         'mer_type' => [
             'son_type' => [
-                'pay_sub_merchant_id' => ''
+                'pay_sub_merchant_id' => '',
+                'sp_appid' => ''
             ],
             'show_value' => 1
         ],
