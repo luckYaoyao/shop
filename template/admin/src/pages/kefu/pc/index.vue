@@ -96,9 +96,10 @@
                     :headers="header"
                     :data="uploadData"
                     :on-success="handleSuccess"
-                    :format="['jpg', 'jpeg', 'png', 'gif']"
+                    accept="image/*"
                     :on-format-error="handleFormatError"
                     :action="upload"
+                    :before-upload="beforeUpload"
                   >
                     <span class="iconfont icontupian1"></span>
                   </el-upload>
@@ -188,6 +189,8 @@ import orderDetail from './components/order_detail';
 import { mapState } from 'vuex';
 import { getCookies, removeCookies, setCookies } from '@/libs/util';
 import { serviceInfo } from '@/api/kefu_mobile';
+import { isPicUpload } from '@/utils';
+
 const chunk = function (arr, num) {
   num = num * 1 || 1;
   var ret = [];
@@ -374,6 +377,9 @@ export default {
     // Socket.init(this,'kefu');
   },
   methods: {
+    beforeUpload(file) {
+     return isPicUpload(file);
+    },
     handleFormatError(file) {
       this.$message.error('上传图片只能是 jpg、jpg、jpeg、gif 格式!');
     },

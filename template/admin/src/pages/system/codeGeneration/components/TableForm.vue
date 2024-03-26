@@ -358,7 +358,6 @@ export default {
       }
       this.tableField = [];
       this.$nextTick((e) => {
-        console.log(arr);
         this.tableField = arr;
       });
     },

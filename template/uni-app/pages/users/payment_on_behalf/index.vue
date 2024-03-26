@@ -282,7 +282,7 @@ export default {
 		},
 		goOrderDetail() {
 			uni.navigateTo({
-				url: '/pages/goods/order_details/index?oid=' + this.oid
+				url: '/pages/goods/order_details/index?order_id=' + this.order_id
 			});
 		}
 	}

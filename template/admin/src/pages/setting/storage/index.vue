@@ -174,7 +174,7 @@
                 </div>
               </div>
             </div>
-            <divider />
+            <el-divider />
             <div class="content mt20">
               <el-form-item label="是否开启水印：" label-width="120px">
                 <el-switch
@@ -344,7 +344,7 @@
       </el-card>
     </div>
     <!-- 缩略图配置 -->
-    <div class="pt10" v-else-if="currentTab == 10">我去恶趣味我去</div>
+    <div class="pt10" v-else-if="currentTab == 10"></div>
     <div class="pt10" v-else>
       <el-card :bordered="false" shadow="never" class="ivu-mt">
         <el-row class="mb20">
@@ -422,7 +422,7 @@
             :total="total"
             :page.sync="list.page"
             :limit.sync="list.limit"
-            @pagination="getList"
+            @pagination="getlist"
           />
         </div>
       </el-card>

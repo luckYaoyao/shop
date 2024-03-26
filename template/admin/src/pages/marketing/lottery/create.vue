@@ -872,7 +872,6 @@ export default {
     },
     // 获取单张图片信息
     getPic(pc) {
-      console.log(pc, this.tableIndex, this.picTit, this.specsData);
       switch (this.picTit) {
         case 'danFrom':
           this.formValidate.image = pc.att_dir;
@@ -983,7 +982,6 @@ export default {
       }
       this.specsData = [];
       this.$nextTick((e) => {
-        console.log(arr);
         this.specsData = arr;
       });
     },

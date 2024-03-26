@@ -292,8 +292,4 @@ $ npm run build
 
 `$ VUE_APP_API_URL=''`
 
-### docker开发调试
-$ docker-compose up -d
 
-### 访问地址
-http://localhost:1617/admin

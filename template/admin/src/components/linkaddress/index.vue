@@ -57,8 +57,8 @@
             </div>
           </div>
         </div>
-        <div class="right_box" v-if="currenType == 'marketing_link'">
-          <div v-if="coupon.length">
+        <div class="right_box" v-if="currenType == 'marketing_link' && coupon.length">
+          <div>
             <div class="cont">优惠券</div>
             <div class="Box">
               <div
@@ -72,7 +72,8 @@
               </div>
             </div>
           </div>
-          <div v-if="basicsList.length">
+          <div >
+          <div v-permission="'seckill'" v-if="basicsList.length">
             <div class="cont">秒杀</div>
             <div class="Box">
               <div
@@ -86,7 +87,10 @@
               </div>
             </div>
           </div>
-          <div v-if="distributionList.length">
+          </div>
+          <div >
+
+          <div v-permission="'bargain'" v-if="distributionList.length">
             <div class="cont">砍价</div>
             <div class="Box">
               <div
@@ -100,7 +104,10 @@
               </div>
             </div>
           </div>
-          <div v-if="userList.length">
+          </div>
+          <div>
+
+          <div v-permission="'combination'" v-if="userList.length">
             <div class="cont">拼团</div>
             <div class="Box">
               <div
@@ -113,6 +120,7 @@
                 {{ item.name }}
               </div>
             </div>
+          </div>
           </div>
           <div v-if="integral.length">
             <div class="cont">积分</div>

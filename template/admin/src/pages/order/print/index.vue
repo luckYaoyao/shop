@@ -4,7 +4,7 @@
     <div class="putSupplier perpage" v-for="(item, index) in newArrayData" :key="index">
       <div class="header acea-row row-between-wrapper">
         <div class="left acea-row row-middle">
-          <div class="picture" :id="'qrCodeUrl' + index"></div>
+          <!-- <div class="picture" :id="'qrCodeUrl' + index"></div> -->
           <div class="info">
             <div><span class="name">收货人：</span>{{ orderData.user_name }}</div>
             <div><span class="name">收货地址：</span>{{ orderData.user_address }}</div>

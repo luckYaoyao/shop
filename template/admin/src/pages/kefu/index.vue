@@ -45,7 +45,7 @@
     </div>
     <div class="foot-box" v-if="copyright">{{ copyright }}</div>
     <div class="foot-box" v-else>
-      Copyright © 2014-2023 <a href="https://www.crmeb.com" target="_blank">{{ version }}</a>
+      Copyright © 2014-2024 <a href="https://www.crmeb.com" target="_blank">{{ version }}</a>
     </div>
   </div>
 </template>

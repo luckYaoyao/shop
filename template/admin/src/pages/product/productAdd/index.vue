@@ -146,6 +146,7 @@
                 :headers="header"
                 :multiple="false"
                 style="display: inline-block"
+                accept=".mp4"
               >
                 <div v-if="seletVideo === 0 && !formValidate.video_link" class="videbox">+</div>
               </el-upload>
@@ -1378,8 +1379,9 @@
                 </div>
               </div>
               <div class="add-more" v-if="disk_type == 2">
-                <el-button type="primary" @click="handleAdd">新增</el-button>
-                <el-upload class="ml10" :action="cardUrl" :data="uploadData" :headers="header" :on-success="upFile">
+                <el-button class="h-33" type="primary" @click="handleAdd">新增</el-button>
+                <el-upload class="ml10" :action="cardUrl" :data="uploadData" :headers="header" :on-success="upFile" :before-upload="beforeUpload"
+ >
                   <el-button>导入卡密</el-button>
                 </el-upload>
               </div>
@@ -1459,6 +1461,8 @@ import {
 import Setting from '@/setting';
 import { getCookies } from '@/libs/util';
 import { uploadByPieces } from '@/utils/upload'; //引入uploadByPieces方法
+import { isFileUpload, isVideoUpload } from '@/utils';
+import checkArray from '@/libs/permission';
 
 export default {
   name: 'product_productAdd',
@@ -1914,7 +1918,7 @@ export default {
         },
       ],
       columnsInstalM: [],
-      moveIndex: '',
+      moveIndex: ''
     };
   },
   computed: {
@@ -2004,6 +2008,7 @@ export default {
                 },
               ];
             }
+            this.watchActivity()
             this.spinShow = false;
           }
         })
@@ -2022,26 +2027,32 @@ export default {
     this.productGetTemplate();
     // this.userLabel();
     this.uploadType();
+    this.watchActivity()
   },
   methods: {
+    beforeUpload(file) {
+      return isFileUpload(file)
+    },
     // 分片上传
     videoSaveToUrl(file) {
-      uploadByPieces({
-        file: file, // 视频实体
-        pieceSize: 3, // 分片大小
-        success: (data) => {
-          this.formValidate.video_link = data.file_path;
-          this.progress = 100;
-        },
-        error: (e) => {
-          this.$message.error(e.msg);
-        },
-        uploading: (chunk, allChunk) => {
-          this.videoIng = true;
-          let st = Math.floor((chunk / allChunk) * 100);
-          this.progress = st;
-        },
-      });
+      if(isVideoUpload(file)){
+        uploadByPieces({
+          file: file, // 视频实体
+          pieceSize: 3, // 分片大小
+          success: (data) => {
+            this.formValidate.video_link = data.file_path;
+            this.progress = 100;
+          },
+          error: (e) => {
+            this.$message.error(e.msg);
+          },
+          uploading: (chunk, allChunk) => {
+            this.videoIng = true;
+            let st = Math.floor((chunk / allChunk) * 100);
+            this.progress = st;
+          },
+        });
+      }
       return false;
     },
     // 类型选择/填入内容判断
@@ -2231,6 +2242,7 @@ export default {
           },
         ];
       }
+      this.watchActivity()
     },
     //关闭淘宝弹窗并生成数据；
     onClose(data) {
@@ -2979,7 +2991,6 @@ export default {
     openLabel(row) {
       this.labelShow = true;
       this.$nextTick((e) => {
-        console.log(this.$refs.userLabel);
         // this.$refs.userLabel.userLabel(JSON.parse(JSON.stringify(this.dataLabel)));
       });
     },
@@ -2996,6 +3007,24 @@ export default {
     },
     handleRemoveRecommend(i) {
       this.formValidate.recommend_list.splice(i, 1);
+    },
+    watchActivity() {
+      let marketing = []
+       this.formValidate.activity.map((el) => {
+        if (el == '默认') {
+          marketing.push(el);
+        }
+        if (el == '秒杀' && checkArray('seckill')) {
+          marketing.push(el);
+        } 
+         if (el == '砍价' && checkArray('bargain')) {
+          marketing.push(el);
+        } 
+         if (el == '拼团' && checkArray('combination')) {
+          marketing.push(el);
+        } 
+      });
+      this.formValidate.activity = marketing
     },
   },
 };
@@ -3146,6 +3175,7 @@ export default {
   align-items: center;
   .item{
     display:flex;
+    flex-wrap: wrap;
   }
 }
 

@@ -126,7 +126,6 @@ export default {
 			// #ifdef MP || APP-PLUS
 			uni.scanCode({
 				success(res) {
-					console.log(res)
 					if (res.scanType == 'WX_CODE') {
 						self.verify_code = res.path.split('%3D')[1];
 					} else if (res.scanType == 'QR_CODE') {

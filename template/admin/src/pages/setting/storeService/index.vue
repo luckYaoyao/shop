@@ -378,10 +378,14 @@ export default {
     edit(row) {
       if (this.eidtLoading) return;
       this.eidtLoading = true;
-      this.$modalForm(kefuEditApi(row.id)).then(() => {
-        this.getList();
-        this.eidtLoading = false;
-      });
+      this.$modalForm(kefuEditApi(row.id))
+        .then(() => {
+          this.getList();
+          this.eidtLoading = false;
+        })
+        .catch(() => {
+          this.eidtLoading = false;
+        });
     },
     // 添加
     add() {
@@ -506,28 +510,38 @@ export default {
 </script>
 
 <style scoped lang="stylus">
-.tabBox_img
-    width 36px
-    height 36px
-    border-radius:4px;
-    cursor pointer
-    img
-        width 100%
-        height 100%
-.modelBox
-    ::v-deep
-    .ivu-table-header
-        width 100% !important
-.trees-coadd
+.tabBox_img {
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  cursor: pointer;
+
+  img {
     width: 100%;
-    height: 385px;
-    .scollhide
-        width: 100%;
-        height: 100%;
-        overflow-x: hidden;
-        overflow-y: scroll;
+    height: 100%;
+  }
+}
+
+.modelBox {
+  ::v-deep, .ivu-table-header {
+    width: 100% !important;
+  }
+}
+
+.trees-coadd {
+  width: 100%;
+  height: 385px;
+
+  .scollhide {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+  }
+}
+
 // margin-left: 18px;
 .scollhide::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 </style>
