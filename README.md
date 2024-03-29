@@ -62,7 +62,7 @@ CRMEB开源商城Java版：https://gitee.com/ZhongBangKeJi/crmeb_java
 
 ### 🫧 系统亮点
 ~~~
-1.前后端分离：后端TP6，管理端iView UI，移动端Uni-app；
+1.前后端分离：后端TP6，管理端Element UI，移动端Uni-app；
 2.代码规范：遵循PSR-2命名规范、Restful标准接口、代码严格分层、注释齐全、统一错误码；
 3.权限管理：内置强大灵活的权限管理，可以控制到每一个菜单；
 4.开发配置：低代码增加配置、系统组合数据模块；
