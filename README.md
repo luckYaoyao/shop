@@ -177,16 +177,16 @@ UI：xy-yyds、LXT
 ###  📺 代码版权
 1、允许用于个人学习、毕业设计、教学案例、公益事业、商业使用；
 
-2、如果商用必须保留版权信息，请自觉遵守；
+2、如果商用必须保留代码版权信息，请自觉遵守；
 
-
+3、允许二开销售。
 
 ---
 ###  💾 版权信息
 
 本项目包含的第三方源码和二进制文件之版权信息另行标注。
 
-版权所有Copyright © 2017-2023 by CRMEB (https://www.crmeb.com)
+版权所有Copyright © 2017-2024 by CRMEB (https://www.crmeb.com)
 
 All rights reserved。
 
