@@ -10,7 +10,7 @@ CRMEB开源商城系统PHP版
 
 <div align="center" >
     <a href="http://www.crmeb.com">
-        <img src="https://img.shields.io/badge/Licence-GPL3.0-green.svg?style=flat" />
+        <img src="https://img.shields.io/badge/Licence-apache2.0-green.svg?style=flat" />
     </a>
     <a href="http://www.crmeb.com">
         <img src="https://img.shields.io/badge/Edition-5.2-blue.svg" />
