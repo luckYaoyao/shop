@@ -171,9 +171,13 @@ switch ($step) {
                 $result = mysqli_query($conn, "SELECT @@global.sql_mode");
                 $result = $result->fetch_array();
                 $version = mysqli_get_server_info($conn);
-                if ($version >= 5.7) {
+                if ($version >= 5.7 && $version < 8.0) {
                     if (strstr($result[0], 'STRICT_TRANS_TABLES') || strstr($result[0], 'STRICT_ALL_TABLES') || strstr($result[0], 'TRADITIONAL') || strstr($result[0], 'ANSI'))
                         exit(json_encode(-2));//数据库配置需要修改
+                }
+                if ($version >= 8.0) {
+                    if (strstr($result[0], 'ONLY_FULL_GROUP_BY'))
+                        exit(json_encode(-22));//数据库配置需要修改
                 }
                 $result = mysqli_query($conn, "select count(table_name) as c from information_schema.`TABLES` where table_schema='$dbName'");
                 $result = $result->fetch_array();
