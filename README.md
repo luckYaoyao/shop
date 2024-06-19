@@ -112,7 +112,6 @@ APP下载：http://app.crmeb.cn/bzv （苹果手机直接在APP Store里搜索CR
 
 ---
 
-![输入图片说明](readme/pic/618.jpg)
 
 
 ###  📲 核心功能
