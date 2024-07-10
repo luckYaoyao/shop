@@ -29,7 +29,7 @@ CRMEB开源商城系统PHP版
 
 [官网](https://www.crmeb.com/) |
 [在线体验](http://v4.crmeb.net/admin/) |
-[帮助文档](https://doc.crmeb.com/single/v53/) |
+[帮助文档](https://doc.crmeb.com/single/v54/) |
 [应用市场](https://www.crmeb.com/market/)
 [技术社区](https://www.crmeb.com/ask/)
 
@@ -67,7 +67,7 @@ CRMEB开源商城Java版：https://gitee.com/ZhongBangKeJi/crmeb_java
 2.代码规范：遵循PSR-2命名规范、Restful标准接口、代码严格分层、注释齐全、统一错误码；
 3.权限管理：内置强大灵活的权限管理，可以控制到每一个菜单；
 4.开发配置：低代码增加配置、系统组合数据模块；
-5.二开效率：应用form-builder PHP快速生成表单、内置所有事件、后台接口管理调试、后台代码在线编辑器、代码生成，快速对接第三方接口；
+5.二开效率：应用form-builder PHP快速生成表单、内置所有事件、后台接口管理调试、后台代码在线编辑器、代码生成，快速对接第三方接口，自定义定时任务，自定义事件；
 6.快速上手：详细帮助文档、后台接口管理、后台数据库字典、系统文件管理备注、代码注释、一键安装；
 7.系统安全：系统操作日志、系统生产日志、文件校验、数据备份；
 8.高 性 能：支持Redis缓存、队列、长连接、多种云储存、支持集群部署。
