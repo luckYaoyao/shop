@@ -96,7 +96,6 @@ class UserExtractServices extends BaseServices
         $list = $this->dao->getExtractList($where, $field, $page, $limit);
         foreach ($list as &$item) {
             $item['nickname'] = $item['user']['nickname'] ?? '';
-            $item['receive_price'] = bcsub((string)$item['extract_price'], (string)$item['extract_fee'], 2);
         }
         $count = $this->dao->count($where);
         return compact('list', 'count');
