@@ -145,10 +145,6 @@ So~~想要用CRMEB开源商城系统做公益项目的朋友，可以来免费�
 ![输入图片说明](readme/pic/gongyi2.jpg)
 
 ---
-###  💎 捐赠
-赠人玫瑰，手留余香！CRMEB诚挚地邀请大家积极参与捐赠，我们会将捐赠获得的费用，悉数用于支持公益项目，让善意无限传递下去！
-在此深表感谢~
----
 [![输入图片说明](readme/pic/多商户.jpg)](https://www.crmeb.com/index/merchant)
 ---
 ###  📞 CRMEB互动
