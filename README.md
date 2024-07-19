@@ -1,6 +1,6 @@
 
 <div align="center" >
-    <img src="https://images.gitee.com/uploads/images/2021/1109/164354_0aafe3d2_892944.gif" />
+    <img src="https://www.crmeb.com/static/images/dark_logo.png" />
 </div>
 <div align="center">
 
@@ -13,7 +13,7 @@ CRMEB开源商城系统PHP版
         <img src="https://img.shields.io/badge/Licence-apache2.0-green.svg?style=flat" />
     </a>
     <a href="http://www.crmeb.com">
-        <img src="https://img.shields.io/badge/Edition-5.2-blue.svg" />
+        <img src="https://img.shields.io/badge/Edition-5.4-blue.svg" />
     </a>
      <a href="https://gitee.com/ZhongBangKeJi/CRMEB/repository/archive/master.zip">
         <img src="https://img.shields.io/badge/Download-240m-red.svg" />
