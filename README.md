@@ -45,7 +45,7 @@ CRMEB开源商城系统PHP版
 ### 📋 更新说明
 
 
-点击查看<a href="https://doc.crmeb.com/single/v53/12202" target="_blank">更新记录</a>
+点击查看<a href="https://doc.crmeb.com/single/v54/14013" target="_blank">更新记录</a>
 
 
 ### 用心做开源，我们也很需要你的鼓励！右上角Star🌟，等你点亮！
