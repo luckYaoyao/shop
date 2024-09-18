@@ -170,10 +170,8 @@ CMS管理
 
 ###  📖 UI界面展示
 
-![输入图片说明](readme/pic/PHP_01.jpg)
-![输入图片说明](readme/pic/PHP_02.jpg)
-![输入图片说明](readme/pic/PHP_03.jpg)
-![输入图片说明](readme/pic/PHP_04.jpg)
+![输入图片说明](readme/pic/PHP_05.jpg)
+![输入图片说明](readme/pic/PHP_06.jpg)
 
 ---
 
