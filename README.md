@@ -36,8 +36,10 @@ CRMEB开源商城系统PHP版
 [comment]: <> ([宽屏预览]&#40;https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md&#41;)
 
 </div>
+
 <div align="center" >
 <a href="https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md">宽屏预览</a>
+</div>
 </div>
 
 ---
