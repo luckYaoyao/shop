@@ -2,6 +2,7 @@
 <div align="center" >
     <img src="https://www.crmeb.com/static/images/dark_logo.png" />
 </div>
+
 <div align="center">
 
 CRMEB开源商城系统PHP版
@@ -40,7 +41,8 @@ CRMEB开源商城系统PHP版
 <div align="center" >
 <a href="https://gitee.com/ZhongBangKeJi/CRMEB/blob/master/README.md">宽屏预览</a>
 </div>
-</div>
+
+
 
 ---
 
